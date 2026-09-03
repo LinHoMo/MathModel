@@ -317,7 +317,7 @@ def main() -> int:
     ap.add_argument("--institution", help="机构名（大写、居中置于标题前）")
     ap.add_argument("--faculty", help="学院名")
     ap.add_argument("--department", help="系名（斜体）")
-    ap.add_argument("--instructor", label="指导教师")
+    ap.add_argument("--instructor", help="指导教师")
     ap.add_argument("--verbose", "-v", action="store_true")
     args = ap.parse_args()
 

@@ -45,7 +45,7 @@ hands:
         description: 文献检索与证据提取，支撑模型选择
         resources:
           - core/knowledge/data-sources/DATA-SOURCES.md
-          - core/knowledge/validation/scholar_fetch.py
+          - core/tools/scholar_fetch.py
           - core/schemas/literature_evidence.schema.json
           - core/env/loader.py
       - name: method-matcher
