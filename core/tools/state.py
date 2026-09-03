@@ -649,7 +649,11 @@ def main():
                     "qfail", "qfix", "qstatus",
                     "decision-add", "decision-show"])
     # hand/agent 仅用于 advance/fail/qfail/qfix 命令
-    ap.add_argument("hand", nargs="?", help="hand（modeler/programmer/writer）或 子问ID(qfail/qfix)")
+    # 手名从 PIPELINE 动态派生：此前硬编码「modeler/programmer/writer」漏了
+    # reviewer，让人以为评审手不受 state.py 管理。
+    _hands = "/".join(dict.fromkeys(h for h, _a, _s in PIPELINE))
+    ap.add_argument("hand", nargs="?",
+                    help=f"hand（{_hands}）或 子问ID(qfail/qfix)")
     ap.add_argument("agent", nargs="?", help="agent 名（advance/fail）或 责任环节(qfail)")
     ap.add_argument("--output", help="本步产物路径（会记录 sha256）")
     ap.add_argument("--reason", help="失败原因")

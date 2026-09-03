@@ -213,6 +213,19 @@ GATES = {
         lambda p: _check_latex_compiles(p),
         lambda p: _check_code_runs_lite(p),
         lambda p: _check_pdf(p),
+        # ---- 论文版面阈值（env: paper.*）----
+        # 必须排在 _check_latex_compiles 之后：check_paper_pages 与
+        # check_page_fill_ratio 依赖编译产生的 main.log。
+        # 只挂 final-validator，不挂 section-writer——写作中途页数必然不足，
+        # 挂硬门禁会卡死增量执行。
+        lambda p: _vp_check(p, "check_paper_pages"),
+        lambda p: _vp_check(p, "check_page_fill_ratio"),
+        lambda p: _vp_check(p, "check_paper_words"),
+        lambda p: _vp_check(p, "check_paper_tables"),
+        lambda p: _vp_check(p, "check_paper_figures"),
+        lambda p: _vp_check(p, "check_paper_equations"),
+        lambda p: _vp_check(p, "check_paper_references"),
+        lambda p: _vp_check(p, "check_pdf_compile_chain"),
     ],
 }
 
@@ -260,6 +273,73 @@ def _check_pdf(project):
     if size < 102400:
         return G.fail("PDF 大小", f"{size} 字节 < 100KB", hard=False)
     return G.ok("PDF 产物", f"{size // 1024} KB")
+
+
+# ---------------------------------------------------------------------------
+# 论文版面阈值：复用 validate_project.py 的实现
+# ---------------------------------------------------------------------------
+# 为什么是复用而不是重写：同一套 env 阈值若在两个脚本里各判一次，
+# 判据必然随时间漂移（此前 gate.py 压根不读 min_pages/min_words/min_tables/
+# page_fill_ratio，于是一篇 9 页 2738 字的论文拿到「全链路 0 硬失败」，
+# 而 validate_project.py 对同一产物报 10 个 HARD）。
+#
+# VP 的 check 函数不返回值，只向模块级 `results` 追加 (status, name, detail)，
+# 故适配器每次调用前快照长度、调完取增量并复位。
+
+_VP_PAPER_CHECKS = [
+    "check_paper_pages",        # -> "paper pages"       (env: paper.min_pages)
+    "check_page_fill_ratio",    # -> "page fill ratio"   (env: paper.page_fill_ratio)
+    "check_paper_words",        # -> "paper words"       (env: paper.min_words)
+    "check_paper_tables",       # -> "paper tables"      (env: paper.min_tables)
+    "check_paper_figures",      # -> "paper figures"     (env: paper.min_figures)
+    "check_paper_equations",    # -> "paper equations"   (env: paper.min_equations)
+    "check_paper_references",   # -> "paper references"  (env: paper.min_references)
+    "check_pdf_compile_chain",  # -> "pdf compile chain"
+]
+
+_VP_INIT_DONE: dict[str, bool] = {}
+
+
+def _vp_init(VP, project):
+    """按 validate_project.main() 的顺序初始化 VP 的三个模块级全局。"""
+    key = str(G.project_dir(project))
+    if _VP_INIT_DONE.get(key):
+        return
+    module, _err = VP._load_env_loader(G.ROOT)
+    if module is not None:
+        VP._ENV_GET = module.get
+    VP._STRICT_MODE = bool(VP._env_get("runtime.strict_mode", True))
+    _pt, is_physics = VP._detect_problem_type(G.project_dir(project))
+    VP._IS_PHYSICS = is_physics
+    _VP_INIT_DONE[key] = True
+
+
+def _vp_check(project, fname):
+    """跑 validate_project 里的单个检查函数，映射为 gatelib.Check。"""
+    import validate_project as VP
+
+    fn = getattr(VP, fname, None)
+    if fn is None:
+        return G.fail(f"版面检查/{fname}", "validate_project 无此检查函数")
+    _vp_init(VP, project)
+
+    mark = len(VP.results)
+    try:
+        fn(G.project_dir(project))
+    except Exception as e:  # noqa: BLE001 - 单个检查异常不应中断整条门禁
+        del VP.results[mark:]
+        return G.fail(f"版面检查/{fname}", f"执行异常: {e}", hard=False)
+
+    new = VP.results[mark:]
+    del VP.results[mark:]  # 复位，避免污染下一次调用
+    if not new:
+        return G.fail(f"版面检查/{fname}", "未产生任何判定", hard=False)
+
+    rank = {VP.HARD: 2, VP.WARN: 1, VP.PASS: 0}
+    status, name, detail = max(new, key=lambda t: rank.get(t[0], 0))
+    if status == VP.PASS:
+        return G.ok(name, detail)
+    return G.fail(name, detail, hard=(status == VP.HARD))
 
 
 def _check_latex_compiles(project):
@@ -354,9 +434,16 @@ def _infer_year(project_path):
 
 # lite 模式下放宽的检查：弱模型的产出在这些问题上不阻塞交付，
 # 但仍会提示，避免"弱模型跑不完全流程"。
+# 版面阈值 8 项与既有的「LaTeX 编译」「PDF 产物」「插图数」「公式数」同类：
+# 名字取自 validate_project.py 里 _pas/_warn/_hard 的首参（1:1 映射）。
+# 这是刻意取舍——runtime.profile 默认 standard，硬门禁照常生效；
+# lite 仅把"写不满 25 页"从阻塞降为提示，不重开漏洞。
 LITE_SOFTEN = {"公式数(W-env)", "插图数", "PDF 产物", "运行时护栏",
                 "Schema core/schemas/question_spec.schema.json",
-                "LaTeX 编译", "代码可复现"}
+                "LaTeX 编译", "代码可复现",
+                "paper pages", "page fill ratio", "paper words",
+                "paper tables", "paper figures", "paper equations",
+                "paper references", "pdf compile chain"}
 
 
 def _profile():
