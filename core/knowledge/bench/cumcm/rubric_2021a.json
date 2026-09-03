@@ -1,0 +1,64 @@
+{
+  "competition": "cumcm",
+  "year": 2021,
+  "topic": "A",
+  "title": "FAST 的主动反射面调控",
+  "source": "judge_insights",
+  "source_note": "2021 年国赛 A 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（基准球面与理想抛物面匹配）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "主索节点几何约束模型（相邻节点距离不变、下拉索长度限制、促动器伸缩范围 3 类约束正确处理）", "score": 12, "deduction_note": "仅考虑一个约束至多 4 分"},
+        {"criterion": "大规模非线性约束优化建模（2000+ 变量）", "score": 8, "deduction_note": "未明确指出问题规模至多 3 分"},
+        {"criterion": "算法设计（大规模非线性求解 / 智能算法）", "score": 8},
+        {"criterion": "结果正确：理想抛物面顶点坐标 / 焦距比", "score": 7, "deduction_note": "结果明显不收敛扣 3-5 分"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["仅考虑单一约束（如只考虑促动器范围）", "变量规模忽略", "目标函数不明确"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（接收效率实时调节）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "实时跟踪模型 / 索节点动态调整策略", "score": 10, "deduction_note": "仅静态分析至多 3 分"},
+        {"criterion": "馈源舱接收比计算模型（球冠面积 / 有效孔径比例）", "score": 10, "deduction_note": "忽略球冠形状至多 4 分"},
+        {"criterion": "大规模优化算法设计（2000+ 变量高效求解）", "score": 12, "deduction_note": "算法过早收敛或时间开销过大扣 3-5 分"},
+        {"criterion": "结果正确：接收比参考值", "score": 8, "deduction_note": "接收比 < 50% 扣 3-5 分"}
+      ],
+      "reference_results": [
+        {"label": "接收比参考值", "value": "约 69%（基准球面 5.6%）", "tolerance_pct": 3}
+      ],
+      "common_pitfalls": ["未考虑实时性", "接收比公式错误", "大规模算法收敛慢"]
+    },
+    {
+      "id": "bonus",
+      "name": "特色加分",
+      "max_score": 15,
+      "assessment_points": [
+        {"criterion": "多方法对比 / 大规模优化创新解法", "score": 5},
+        {"criterion": "结果显著优于基准方案", "score": 5},
+        {"criterion": "代码开源 / 实质创新", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["仅有形式对比"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

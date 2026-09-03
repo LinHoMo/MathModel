@@ -1,0 +1,62 @@
+{
+  "competition": "cumcm",
+  "year": 2021,
+  "topic": "D",
+  "title": "连铸坯优化切割问题",
+  "source": "judge_insights",
+  "source_note": "2021 年国赛 D 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（连铸坯切割基础模型）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "先明确目标函数再计算（而非直接枚举）", "score": 8, "deduction_note": "直接枚举而不说明目标至多 3 分"},
+        {"criterion": "切割长度与目标管桩需求的匹配建模", "score": 10},
+        {"criterion": "余料 / 付尺费用最小化策略", "score": 7},
+        {"criterion": "算法设计与求解", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["直接枚举忽略建模"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（尾坯切割与在线优化）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "尾坯切割的特殊处理逻辑（尾坯长度可变）", "score": 12, "deduction_note": "尾坯与首坯相同处理扣 5-8 分"},
+        {"criterion": "含 2 次以上离线二次切割时须调整当前段切割长度逻辑", "score": 12, "deduction_note": "未体现 2 次以上规则扣 5-8 分"},
+        {"criterion": "在线实时调整策略 / 反馈控制", "score": 8},
+        {"criterion": "算法设计与结果", "score": 8}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["尾坯处理与首坯相同", "未考虑离线切割影响"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（模型评价与拓展）",
+      "max_score": 20,
+      "assessment_points": [
+        {"criterion": "模型评价（误差率 / 算法效率）", "score": 8},
+        {"criterion": "拓展方向（多规格 / 多目标）", "score": 7},
+        {"criterion": "方案与建议可行性", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["评价流于表面", "拓展无实操性"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

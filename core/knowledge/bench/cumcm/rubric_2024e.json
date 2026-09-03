@@ -1,0 +1,63 @@
+{
+  "competition": "cumcm",
+  "year": 2024,
+  "topic": "E",
+  "title": "城市交通流量优化与信号协调",
+  "source": "judge_insights",
+  "source_note": "2024 年国赛 E 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（交通流量日期归类与分时段聚类）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "日期归类后分时段聚类（工作日 / 周末 / 节假日 + 早晚高峰）", "score": 12, "deduction_note": "日期归类缺失至多 5 分"},
+        {"criterion": "聚类方法合理（K-means / DBSCAN / 层次聚类）", "score": 8},
+        {"criterion": "聚类结果解释与可视化", "score": 7},
+        {"criterion": "算法设计与求解", "score": 8}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["日期归类缺失", "聚类方法不当"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（多路口信号协调控制）",
+      "max_score": 45,
+      "assessment_points": [
+        {"criterion": "多路口全局协调模型（绿灯时长 + 相位差协调）", "score": 14, "deduction_note": "仅单路口扣 7-9 分"},
+        {"criterion": "相位差优化方法（Webster / 最大绿波带宽 / 混合整数规划）", "score": 12},
+        {"criterion": "避免“建模三板斧”（简单取均值 / 仅看图表）", "score": 8, "deduction_note": "三板斧式建模扣 5-6 分"},
+        {"criterion": "参照对象选相近车流压力时段", "score": 6, "deduction_note": "参照时段不恰当扣 3-4 分"},
+        {"criterion": "结果验证 / 仿真评估", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["单路口非全局协调", "建模仅三板斧", "参照对象选取不当"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（突发事件下的应急疏散策略）",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "应急疏散模型（信号优先 / 路线引导）", "score": 5},
+        {"criterion": "疏散效果评价（疏散时间 / 拥堵指数）", "score": 3},
+        {"criterion": "方案可行性", "score": 2}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["应急方案无实际可行性"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

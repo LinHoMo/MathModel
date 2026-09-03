@@ -1,0 +1,62 @@
+{
+  "competition": "cumcm",
+  "year": 2024,
+  "topic": "D",
+  "title": "反潜深弹投放几何与毁伤优化",
+  "source": "judge_insights",
+  "source_note": "2024 年国赛 D 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（深弹投放毁伤几何建模）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "毁伤区域精确几何刻画（锥形 / 球形 / 圆柱毁伤区正确建模）", "score": 12, "deduction_note": "几何形状建模错误扣 6-8 分"},
+        {"criterion": "投放散布 / 潜艇目标运动 / 海流影响建模", "score": 10},
+        {"criterion": "条件概率正确分解（投放命中概率 / 毁伤概率链）", "score": 8, "deduction_note": "条件概率链未正确分解扣 4-5 分"},
+        {"criterion": "算法设计（几何判断 / 仿真）", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["毁伤几何建模错误", "条件概率未正确分解"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（投放参数优化设计）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "投放参数（深度 / 间隔 / 数量）对毁伤效果影响模型", "score": 12},
+        {"criterion": "非智能算法高效优化（遍历 / 黄金分割 / 均匀设计）", "score": 12, "deduction_note": "智能算法（GA/PSO）无高效性扣分"},
+        {"criterion": "毁伤概率灵敏度分析", "score": 8},
+        {"criterion": "结果最优性 / 可行性", "score": 8}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["智能算法未体现高效性", "优化目标不明确"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（多弹协同投放模型）",
+      "max_score": 15,
+      "assessment_points": [
+        {"criterion": "多弹投放协同策略 / 毁伤区重叠分析", "score": 8},
+        {"criterion": "联合毁伤概率计算", "score": 4},
+        {"criterion": "方案评价", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["多弹未协同"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

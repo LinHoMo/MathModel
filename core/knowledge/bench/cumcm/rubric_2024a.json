@@ -1,0 +1,108 @@
+{
+  "competition": "cumcm",
+  "year": 2024,
+  "topic": "A",
+  "title": "\"板凳龙\"闹元宵",
+  "source": "official_rubric",
+  "source_note": "2024 年国赛 A 题官方评分细则 + 出题人评阅综述合并",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（螺线运动递推）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "龙头/龙身/龙尾位置速度模型，必须有第 n→n+1 把手计算公式", "score": 15, "deduction_note": "缺递推公式至多 8 分"},
+        {"criterion": "算法设计与实现（递推迭代法）", "score": 10},
+        {"criterion": "结果正确：300 秒龙头位置、龙尾后把手位置、龙尾速度", "score": 5}
+      ],
+      "reference_results": [
+        {"label": "300 秒龙头位置 (x, y)", "value": "(4.4203, 2.3204)", "tolerance_pct": 1},
+        {"label": "300 秒龙尾后把手位置 (x, y)", "value": "(1.7805, 9.3011)", "tolerance_pct": 1},
+        {"label": "300 秒龙尾速度 (m/s)", "value": "0.9965", "tolerance_pct": 1}
+      ],
+      "common_pitfalls": ["递推公式缺失", "未考虑板凳长度约束"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（碰撞判断）",
+      "max_score": 20,
+      "assessment_points": [
+        {"criterion": "四个顶点盘入螺线时位置模型（坐标计算）", "score": 5},
+        {"criterion": "碰撞判断原则（最小距离 < 临界值）", "score": 5},
+        {"criterion": "算法设计（迭代搜索 / 二分法）", "score": 5},
+        {"criterion": "结果正确：碰撞时间与碰撞位置", "score": 5}
+      ],
+      "reference_results": [
+        {"label": "碰撞时间 (s)", "value": "412.4738", "tolerance_pct": 0.5},
+        {"label": "碰撞节段", "value": "第 8 节", "tolerance_pct": 0}
+      ],
+      "common_pitfalls": ["仅判断龙头未判断全部顶点", "碰撞阈值不合理"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（掉头螺线盘出）",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "掉头/盘出几何模型 + 最小螺距计算（二分法 50 次迭代）", "score": 5, "deduction_note": "无明确迭代至多 2 分"},
+        {"criterion": "结果正确：最小螺距", "score": 5}
+      ],
+      "reference_results": [
+        {"label": "最小螺距 (cm)", "value": "45.0337", "tolerance_pct": 0.5}
+      ],
+      "common_pitfalls": ["未明确迭代法", "螺距公式与直线段不匹配"]
+    },
+    {
+      "id": "q4",
+      "name": "问题4（S 形螺线约束）",
+      "max_score": 20,
+      "assessment_points": [
+        {"criterion": "S 形螺线圆心确定 + 各把手运动约束表达", "score": 10},
+        {"criterion": "算法设计（递推/迭代）", "score": 5},
+        {"criterion": "结果正确：50 秒龙头位置、第 51 节位置、第 51 节速度", "score": 5}
+      ],
+      "reference_results": [
+        {"label": "50 秒龙头位置 (x, y)", "value": "(1.3327, 6.1753)", "tolerance_pct": 1},
+        {"label": "50 秒第 51 节龙身位置 (x, y)", "value": "(-1.6714, -6.0767)", "tolerance_pct": 1},
+        {"label": "50 秒第 51 节速度 (m/s)", "value": "0.9499", "tolerance_pct": 1}
+      ],
+      "common_pitfalls": ["圆心约束不当", "S 形螺线与直线衔接不顺"]
+    },
+    {
+      "id": "q5",
+      "name": "问题5（最大行进速度）",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "模型 + 算法设计（约束优化求极值）", "score": 5},
+        {"criterion": "结果正确：最大行进速度", "score": 5}
+      ],
+      "reference_results": [
+        {"label": "最大行进速度 (m/s)", "value": "1.2465", "tolerance_pct": 1}
+      ],
+      "common_pitfalls": ["忽略把手约束求极值", "未验证全局最优"]
+    },
+    {
+      "id": "bonus",
+      "name": "特色加分",
+      "max_score": 5,
+      "assessment_points": [
+        {"criterion": "方法创新 / 结果精度突出 / 多方法对比", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["仅有形式对比"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

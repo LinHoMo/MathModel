@@ -1,0 +1,67 @@
+{
+  "competition": "cumcm",
+  "year": 2025,
+  "topic": "B",
+  "title": "碳化硅外延层厚度的确定",
+  "source": "official_rubric",
+  "source_note": "2025 年国赛 B 题官方评分细则 + 出题人评阅综述合并",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（单层膜折射率与厚度建模）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "折射率估计模型至少与波长有关，简化为常数不可取", "score": 10, "deduction_note": "将折射率简化为常数至多 3 分"},
+        {"criterion": "厚度模型与入射角/折射率等参数有关（菲涅耳+牛顿迭代最小二乘）", "score": 15, "deduction_note": "模型无明确入射角依赖至多 5 分"}
+      ],
+      "reference_results": [
+        {"label": "硅外延层典型折射率", "value": "约 2.6-2.7 (对应波长)", "tolerance_pct": 5}
+      ],
+      "common_pitfalls": ["折射率简化为常数", "未考虑入射角变化"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（厚度计算算法与可靠性）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "厚度计算结果（参考范围）求解", "score": 10, "deduction_note": "单片结果异常扣分"},
+        {"criterion": "算法实用性 / 鲁棒性 / 一致性（不需人工干预消除噪声、同一硅片厚度相近）", "score": 5, "deduction_note": "同片结果差异显著扣分"},
+        {"criterion": "可靠性分析十分必要：估计值反算干涉光谱与附件对比", "score": 10, "deduction_note": "无可靠性分析至多 3 分"}
+      ],
+      "reference_results": [
+        {"label": "厚度参考范围 (μm)", "value": "7-8 与 3-4（硅衬底）", "tolerance_pct": 5}
+      ],
+      "common_pitfalls": ["无算法鲁棒性", "未做反算光谱验证"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（多光束干涉进阶建模）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "多光束干涉必要条件理解（外延层 / 衬底折射率比值较大）", "score": 10, "deduction_note": "比值不大仍用多光束至多 1 分"},
+        {"criterion": "折射率估计只能使用附件数据，不可借助额外数据", "score": 10},
+        {"criterion": "附件中为什么会产生多光束干涉（振荡频率随波长升高而升高）解释", "score": 10, "deduction_note": "仅画图未解释至多 1 分"},
+        {"criterion": "厚度模型（基于多光束干涉公式建立；仅用波峰位置亦可；硅 3-4μm）", "score": 10, "deduction_note": "仅波峰计算扣 2-3 分但可接受"}
+      ],
+      "reference_results": [
+        {"label": "硅外延层典型厚度 (μm)", "value": "7-8", "tolerance_pct": 5},
+        {"label": "硅衬底典型厚度 (μm)", "value": "3-4", "tolerance_pct": 5}
+      ],
+      "common_pitfalls": ["折射率用外部数据", "未解释多光束振荡来源"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

@@ -1,0 +1,61 @@
+{
+  "competition": "cumcm",
+  "year": 2021,
+  "topic": "B",
+  "title": "C4 烯烃制备工艺优化",
+  "source": "judge_insights",
+  "source_note": "2021 年国赛 B 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（催化剂组合与温度对乙醇转化率及 C4 烯烃选择性的影响）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "机理分析 + 建模方法（催化反应机理 / 机理+数据混合模型）", "score": 10, "deduction_note": "仅数据回归无机理至多 4 分"},
+        {"criterion": "多因素 / 交互作用建模（催化剂组合与温度交互、装料方式差异）", "score": 10, "deduction_note": "忽略交互作用至多 4 分"},
+        {"criterion": "结果合理性（趋势解释 / 验证）", "score": 10}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["忽略催化机理", "未处理交互作用", "模型无解释性"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（不同催化剂组合与温度条件下产物分布与最优选择）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "产物分布模型建立（主产物/副产物 Logit / softmax 建模）", "score": 12, "deduction_note": "忽略副产物至多 5 分"},
+        {"criterion": "最优工艺条件求解（约束优化 / 多目标 Pareto）", "score": 12, "deduction_note": "未考虑约束至多 5 分"},
+        {"criterion": "C4 烯烃选择性最大化方案解释", "score": 6, "deduction_note": "仅数值结果无解释扣 3-4 分"},
+        {"criterion": "灵敏度分析 / 方案稳健性评估", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["忽略副产物分布", "最优解未说明可行性", "缺乏稳健性分析"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（进一步探索催化剂组合与温度的关系）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "深入建模（化学反应动力学 / 机理强化）", "score": 10, "deduction_note": "仅数据拟合不涉及机理至多 4 分"},
+        {"criterion": "工艺优化方案（参数空间寻优）", "score": 10},
+        {"criterion": "方案说明与验证", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["与前两问重复无创新", "方案无验证"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

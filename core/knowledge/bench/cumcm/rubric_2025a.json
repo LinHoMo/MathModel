@@ -1,0 +1,89 @@
+{
+  "competition": "cumcm",
+  "year": 2025,
+  "topic": "A",
+  "title": "烟幕干扰弹投放策略",
+  "source": "official_rubric",
+  "source_note": "2025 年国赛 A 题官方评分细则 + 出题人评阅综述合并",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（单机单弹完整通用模型）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "导弹/无人机/烟幕弹/烟幕运动 + 目标圆柱体的完整通用模型", "score": 15, "deduction_note": "模型不完整至多 8 分"},
+        {"criterion": "烟幕遮蔽判别 + 有效遮蔽时长计算（考虑目标圆柱体表面）", "score": 10, "deduction_note": "仅考虑目标几何中的一个点时扣 2-3 分"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["模型不完整", "仅单点代表目标"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（单发命中条件）",
+      "max_score": 15,
+      "assessment_points": [
+        {"criterion": "飞行方向 / 投放与起爆时间最佳选取分析", "score": 8, "deduction_note": "无最优化仅有验证不扣分"},
+        {"criterion": "结果合理性（命中时间范围 / 位置）", "score": 7}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["仅穷举无机理分析", "命中判定标准不当"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（单机三弹协同）",
+      "max_score": 15,
+      "assessment_points": [
+        {"criterion": "1 机 3 弹协同策略模型（时间序列分析 / 覆盖时序）", "score": 8},
+        {"criterion": "结果（覆盖范围与延时）+ 协同遮蔽思路鼓励", "score": 7, "deduction_note": "各烟幕协同遮蔽思路应予鼓励但不强制"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["三枚弹独立无协同", "覆盖范围分析不足"]
+    },
+    {
+      "id": "q4",
+      "name": "问题4（三机协同施放）",
+      "max_score": 15,
+      "assessment_points": [
+        {"criterion": "3 机运动模型及结果（位置/速度/时间协同）", "score": 8},
+        {"criterion": "协同施放策略模型（任务分配 / 时间同步）", "score": 7, "deduction_note": "仅位置协同无时间协同扣 3-4 分"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["三机独立模型未协同", "任务分配不合理"]
+    },
+    {
+      "id": "q5",
+      "name": "问题5（综合策略优化）",
+      "max_score": 15,
+      "assessment_points": [
+        {"criterion": "模型及策略（覆盖整个攻击阶段）", "score": 10, "deduction_note": "导弹命中仅几十秒，算法复杂性低"},
+        {"criterion": "求解分析（启发式须说明理由）", "score": 5, "deduction_note": "启发式算法未说明理由扣 2-3 分"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["启发式无理由", "仅局部优化忽略全局"]
+    },
+    {
+      "id": "bonus",
+      "name": "特色加分",
+      "max_score": 5,
+      "assessment_points": [
+        {"criterion": "方法创新 / 结果精度突出 / 多方案对比实质分析", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["仅有形式对比"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

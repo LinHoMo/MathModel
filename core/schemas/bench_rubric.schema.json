@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CUMCM 评分细则 Rubric",
+  "description": "单题评分细则 JSON 的结构定义，供 bench run / score 子命令校验消费。",
+  "type": "object",
+  "required": ["competition", "year", "topic", "source", "total_score", "dimensions"],
+  "properties": {
+    "competition": {
+      "type": "string",
+      "enum": ["cumcm"],
+      "description": "竞赛标识，本 schema 仅服务国赛"
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 2004,
+      "maximum": 2030,
+      "description": "赛题年份"
+    },
+    "topic": {
+      "type": "string",
+      "pattern": "^[A-E]$",
+      "description": "题目编号 A/B/C/D/E"
+    },
+    "title": {
+      "type": "string",
+      "description": "题目名称（可选，留空即待补）"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["official_rubric", "judge_insights", "generic_rule", "inferred"],
+      "description": "rubric 来源：official_rubric=官方评分细则；judge_insights=评委评阅概述提炼；generic_rule=跨题通用规则；inferred=推断（待补）"
+    },
+    "source_note": {
+      "type": "string",
+      "description": "来源补充说明（如‘广东赛区补充说明 + 出题人评阅综述合并’）"
+    },
+    "total_score": {
+      "type": "integer",
+      "minimum": 80,
+      "maximum": 110,
+      "description": "满分总值（通常 100，含特色加分可到 110）"
+    },
+    "dimensions": {
+      "type": "array",
+      "minItems": 2,
+      "description": "评分维度列表（顺序即评分顺序）",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "max_score"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "维度 ID，形如 abstract / q1 / q2 / bonus"
+          },
+          "name": {
+            "type": "string",
+            "description": "维度名称"
+          },
+          "max_score": {
+            "type": "number",
+            "minimum": 0,
+            "description": "本维度满分值"
+          },
+          "assessment_points": {
+            "type": "array",
+            "description": "评阅要点（本维度下的细分给分点）",
+            "items": {
+              "type": "object",
+              "required": ["criterion", "score"],
+              "properties": {
+                "criterion": {
+                  "type": "string",
+                  "description": "评阅要点描述"
+                },
+                "score": {
+                  "type": "number",
+                  "description": "本要点分值"
+                },
+                "reference_result": {
+                  "type": "string",
+                  "description": "参考结果/数值（可选，供 ground-truth 命中检查）"
+                },
+                "deduction_note": {
+                  "type": "string",
+                  "description": "扣分说明（如‘只考虑一个点扣 2-3 分’）"
+                }
+              }
+            }
+          },
+          "reference_results": {
+            "type": "array",
+            "description": "官方参考数值（如碰撞时间 412.4738 秒）",
+            "items": {
+              "type": "object",
+              "required": ["label", "value"],
+              "properties": {
+                "label": {"type": "string"},
+                "value": {"type": "string"},
+                "tolerance_pct": {"type": "number", "description": "容差百分比"}
+              }
+            }
+          },
+          "common_pitfalls": {
+            "type": "array",
+            "description": "评委评阅概述中该子问最常见的失分点",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "元信息",
+      "properties": {
+        "generated_by": {"type": "string"},
+        "generated_at": {"type": "string"},
+        "anchor": {"type": "string", "description": "本 rubric 在评分时对齐的锚定文件路径"},
+        "version": {"type": "string"}
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "competition": "cumcm",
+  "year": 2022,
+  "topic": "A",
+  "title": "波浪能装置能量转换优化",
+  "source": "judge_insights",
+  "source_note": "2022 年国赛 A 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（垂荡浮子直线发电机制与基本运动分析）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "拉格朗日两自由度耦合动力学模型（垂荡浮子 + 振子）", "score": 12, "deduction_note": "未指出两自由度耦合至多 5 分"},
+        {"criterion": "线性模型解析法（傅里叶变换 / 阻抗法 / 传递函数）", "score": 10, "deduction_note": "仅数值解析无解析法至多 4 分"},
+        {"criterion": "算法设计与求解", "score": 4},
+        {"criterion": "结果精度与合理性", "score": 4}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["未考虑两自由度耦合", "仅数值解析无解析法"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（多参数动态优化与阻尼设计）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "多参数优化模型（阻尼系数 / 振子质量 / 弹簧刚度）", "score": 12},
+        {"criterion": "阻尼器特性建模（线性 / 非线性阻尼）", "score": 10, "deduction_note": "阻尼建模错误扣 5-7 分"},
+        {"criterion": "优化算法与功率最大化求解", "score": 10},
+        {"criterion": "结果正确：功率输出 / 最优阻尼值", "score": 8}
+      ],
+      "reference_results": [
+        {"label": "最优阻尼系数参考值", "value": "约 1000-10000 N·s/m（视质量）", "tolerance_pct": 30}
+      ],
+      "common_pitfalls": ["阻尼建模错误", "优化算法不收敛"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（模型拓展与装置优化）",
+      "max_score": 20,
+      "assessment_points": [
+        {"criterion": "模型改进（非线性 / 三维运动）", "score": 8},
+        {"criterion": "装置优化建议与可行性", "score": 7},
+        {"criterion": "验证与结果", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["拓展无实质内容"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

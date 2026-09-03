@@ -1,0 +1,65 @@
+{
+  "competition": "cumcm",
+  "year": 2024,
+  "topic": "B",
+  "title": "生产抽样检验与成本控制决策",
+  "source": "judge_insights",
+  "source_note": "2024 年国赛 B 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（抽样检验方案设计与检验灵敏度）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "假设检验框架正确：H0: 不合格品率 >= DQL（可接受质量限）", "score": 10, "deduction_note": "H0 方向设反至多 3 分"},
+        {"criterion": "抽样方案灵敏度分析（两类错误概率计算）", "score": 8},
+        {"criterion": "算法设计", "score": 4},
+        {"criterion": "结果正确性", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["假设检验方向设反", "灵敏度分析缺失"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（序贯检验 SPRT 与 OC 曲线）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "SPRT（序贯概率比检验）模型完整建立", "score": 15, "deduction_note": "无 SPRT 扣 8-10 分"},
+        {"criterion": "OC 曲线精确计算（生产方 / 使用方风险）", "score": 12, "deduction_note": "OC 曲线错误扣 6-8 分"},
+        {"criterion": "算法设计（序贯抽样实现）", "score": 8},
+        {"criterion": "结果正确性（截断样本量 / 决策边界）", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["无 SPRT", "OC 曲线误差"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（单件成本优化与经济合理性）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "单件成本模型合理（含抽样成本 / 返工成本 / 全检成本）", "score": 10},
+        {"criterion": "单件成本应 > 29 元等经济合理性判断", "score": 8, "deduction_note": "明显不经济方案扣分"},
+        {"criterion": "算法设计与求解", "score": 4},
+        {"criterion": "灵敏度与稳健性分析", "score": 3}
+      ],
+      "reference_results": [
+        {"label": "单件成本参考值", "value": "应 > 29 元 (参考下限)", "tolerance_pct": 0}
+      ],
+      "common_pitfalls": ["成本不符合实际"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

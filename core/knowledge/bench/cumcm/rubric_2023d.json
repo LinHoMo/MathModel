@@ -1,0 +1,62 @@
+{
+  "competition": "cumcm",
+  "year": 2023,
+  "topic": "D",
+  "title": "圈养湖羊的空间与饲料优化",
+  "source": "judge_insights",
+  "source_note": "2023 年国赛 D 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（栏·天估算模型）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "先估算（栏·天）再进行后续优化", "score": 10, "deduction_note": "未估算直接优化扣 5-7 分"},
+        {"criterion": "生长模型（体重-日龄-饲料转化率）构建", "score": 10},
+        {"criterion": "算法与求解", "score": 5},
+        {"criterion": "结果合理性", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["跳过估算直接优化", "生长模型不合理"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（空间与饲料联合优化模型）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "模型须具有可推广性（不局限特定参数）", "score": 12, "deduction_note": "模型固死参数扣 5-7 分"},
+        {"criterion": "空间管理 / 饲料搭配 / 出栏节奏多目标优化", "score": 12},
+        {"criterion": "算法设计（多目标 / 整数规划）", "score": 10},
+        {"criterion": "结果正确性", "score": 6}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["模型不可推广", "忽略出栏节奏"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（仿真评价与管理策略）",
+      "max_score": 20,
+      "assessment_points": [
+        {"criterion": "仿真评估须具统计学意义（多情景 / 多次运行）", "score": 8, "deduction_note": "单次运行无统计意义扣 4-5 分"},
+        {"criterion": "管理策略（饲料采购 / 转栏 / 出栏）具体建议", "score": 7},
+        {"criterion": "策略可行性分析", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["仿真无统计学意义"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

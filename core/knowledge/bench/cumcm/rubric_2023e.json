@@ -1,0 +1,63 @@
+{
+  "competition": "cumcm",
+  "year": 2023,
+  "topic": "E",
+  "title": "黄河水沙通量变化趋势与调度优化",
+  "source": "judge_insights",
+  "source_note": "2023 年国赛 E 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（水沙通量趋势变化分析）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "Mann-Kendall 趋势检验 + 突变点检测", "score": 12, "deduction_note": "无 Mann-Kendall 扣 5-7 分"},
+        {"criterion": "水沙通量周期 / 季节性分析", "score": 7},
+        {"criterion": "结果解释与可视化", "score": 6}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["无 Mann-Kendall 检验"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（分时期差异化调度策略）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "枯 / 平 / 丰水期差异化监测频率设计", "score": 14, "deduction_note": "未差异化扣 8-10 分"},
+        {"criterion": "监测网络优化（站点位置 / 监测频率）", "score": 12},
+        {"criterion": "算法设计", "score": 8},
+        {"criterion": "结果正确性与可行性", "score": 6}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["未考虑差异化调度"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（精简测线方案与误差控制）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "精简测线方案（减少工作量）", "score": 8},
+        {"criterion": "精简测线相对误差 < 5%（与全测线对比）", "score": 10, "deduction_note": "相对误差 > 10% 扣 5-7 分"},
+        {"criterion": "方案评估与灵敏度", "score": 7}
+      ],
+      "reference_results": [
+        {"label": "精简测线相对误差上限", "value": "<5%", "tolerance_pct": 0}
+      ],
+      "common_pitfalls": ["相对误差超标"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

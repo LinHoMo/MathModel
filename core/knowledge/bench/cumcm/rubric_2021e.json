@@ -1,0 +1,61 @@
+{
+  "competition": "cumcm",
+  "year": 2021,
+  "topic": "E",
+  "title": "中药材的鉴别与分类",
+  "source": "judge_insights",
+  "source_note": "2021 年国赛 E 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（中药材光谱数据特征比较与分类）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "光谱数据预处理（去噪 / 归一化 / 异常值处理）", "score": 8},
+        {"criterion": "分类方法（SVM / 随机森林 / 距离判别）", "score": 10, "deduction_note": "仅聚类无分类扣 3-4 分"},
+        {"criterion": "分类结果与评估指标", "score": 7}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["预处理缺失", "仅聚类无分类"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（不同产地中药材的特征分析）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "分段光谱特征提取方法（波峰/波谷/波段分析）", "score": 12, "deduction_note": "不分段至多 5 分"},
+        {"criterion": "特征选择与降维（PCA / LDA / 方差筛选）", "score": 10, "deduction_note": "无特征选择至多 4 分"},
+        {"criterion": "不同地区特征差异表达 / 可视化", "score": 8}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["光谱分段不足", "特征提取不具可解释性"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（多分类与半监督学习）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "多分类问题建模（多标签 / 层级分类）", "score": 10},
+        {"criterion": "半监督学习（Label Spreading / UMAP / 自训练）应用", "score": 12, "deduction_note": "无半监督学习至多 5 分"},
+        {"criterion": "必须交叉验证（评估模型推广能力）", "score": 8, "deduction_note": "无交叉验证扣 4-6 分"},
+        {"criterion": "结果精度与模型稳健性", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["必须交叉验证（评委明确强调）", "半监督学习未使用"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

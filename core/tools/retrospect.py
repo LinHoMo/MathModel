@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -32,6 +33,70 @@ def _load_state(project_dir: Path) -> dict:
         raise FileNotFoundError(f"未找到状态文件: {state_path}")
     with open(state_path, encoding="utf-8") as f:
         return json.load(f)
+
+
+def _parse_ts(ts_str):
+    """解析 ISO8601 时间戳字符串为 datetime。失败返回 None。"""
+    if not ts_str or not isinstance(ts_str, str):
+        return None
+    try:
+        ts_str = ts_str.replace("Z", "+00:00")
+        return datetime.fromisoformat(ts_str)
+    except (ValueError, TypeError):
+        return None
+
+
+def _calc_timing(completed: list[dict]) -> dict:
+    """从 completed 的时间戳列表计算各阶段耗时统计。
+
+    每个 completed 项含 hand/agent/stimestamp。按 pipeline 顺序相邻项的时间差
+    即该 agent 的"主观耗时"（记录 agent runtime 完成间隔，非 CPU 时间）。
+    """
+    timed = []
+    for item in completed:
+        ts = _parse_ts(item.get("timestamp", ""))
+        if ts:
+            timed.append({**item, "_ts": ts})
+    timed.sort(key=lambda x: x["_ts"])
+
+    per_agent = []
+    prev_ts = None
+    prev_label = None
+    for item in timed:
+        cur_ts = item["_ts"]
+        label = f"{item.get('hand','?')}/{item.get('agent','?')}"
+        gap = round((cur_ts - prev_ts).total_seconds(), 1) if prev_ts else 0.0
+        per_agent.append({
+            "hand": item.get("hand"),
+            "agent": item.get("agent"),
+            "timestamp": item.get("timestamp"),
+            "gap_seconds": gap,
+        })
+        prev_ts, prev_label = cur_ts, label
+
+    total_wall = 0.0
+    if len(timed) >= 2:
+        total_wall = round((timed[-1]["_ts"] - timed[0]["_ts"]).total_seconds(), 1)
+    elif timed:
+        total_wall = 0.0
+
+    # 按手聚合
+    hand_gaps: dict[str, float] = {h: 0.0 for h in HANDS}
+    for p in per_agent:
+        h = p["hand"]
+        if h in hand_gaps:
+            hand_gaps[h] = round(hand_gaps[h] + p["gap_seconds"], 1)
+
+    # 最慢的前 5 步
+    top5 = sorted(per_agent, key=lambda x: x["gap_seconds"], reverse=True)[:5]
+
+    return {
+        "total_wall_seconds": total_wall,
+        "timed_steps": len(timed),
+        "hand_wall_seconds": hand_gaps,
+        "slowest_steps": top5,
+        "per_agent": per_agent,
+    }
 
 
 def build_report(state: dict) -> dict:
@@ -59,6 +124,11 @@ def build_report(state: dict) -> dict:
     qfix_used = sum(1 for v in q_states.values()
                     if isinstance(v, dict) and v.get("status") in ("fixed", "qfixed"))
 
+    timing = _calc_timing(completed)
+    prev_ts_list = [c.get("timestamp") for c in completed if c.get("timestamp")]
+    first_ts = prev_ts_list[0] if prev_ts_list else None
+    last_ts = prev_ts_list[-1] if prev_ts_list else None
+
     return {
         "project": state.get("project", ""),
         "total_steps": len(getattr(S, "PIPELINE", [])),
@@ -68,6 +138,9 @@ def build_report(state: dict) -> dict:
         "failed_by_hand": by_hand_fail,
         "failure_records": failed,
         "qfix_used": qfix_used,
+        "timing": timing,
+        "first_completed_ts": first_ts,
+        "last_completed_ts": last_ts,
         "review": {
             "rounds_used": review.get("round", 0),
             "max_rounds": review.get("max_rounds"),
@@ -100,15 +173,43 @@ def render_markdown(report: dict) -> str:
         )
 
     review = report["review"]
+    timing = report.get("timing") or {}
     lines += [
         "",
-        "## 2. 评审与判定",
+        "## 2. 时序与耗时",
+        "",
+    ]
+    if timing.get("timed_steps", 0) >= 2:
+        dur_min = round(timing.get("total_wall_seconds", 0) / 60, 1)
+        lines += [
+            f"- 全流程墙钟时间：**{timing['total_wall_seconds']} s** ({dur_min} min)",
+            f"- 有记录步数：{timing['timed_steps']} / {len(report.get('per_agent',[]) or [])}",
+            f"- 起点：{report.get('first_completed_ts', '')}",
+            f"- 终点：{report.get('last_completed_ts', '')}",
+            "",
+            "| 手 | 累计耗时 (s) |",
+            "|---|---|",
+        ]
+        hw = timing.get("hand_wall_seconds", {})
+        for hand in HANDS:
+            lines.append(f"| {hand} | {hw.get(hand, 0)} |")
+        top5 = timing.get("slowest_steps", [])
+        if top5:
+            lines += ["", "### 最慢 5 步", ""]
+            for i, p in enumerate(top5, 1):
+                lines.append(f"{i}. `{p['hand']}/{p['agent']}` — {p['gap_seconds']} s")
+    else:
+        lines += ["- 尚未有足够时序记录（需 ≥ 2 个带时间戳的完成步骤）。"]
+
+    lines += [
+        "",
+        "## 3. 评审与判定",
         "",
         f"- 评审轮次：{review['rounds_used']} / {review.get('max_rounds') or '?'}",
         f"- 判定：{review['verdict'] or '未评审'}；加权分：{review['weighted_score']}",
         f"- 薄弱维度：{'、'.join(review['weak_dimensions']) or '无'}",
         "",
-        "## 3. 失败与返修清单",
+        "## 4. 失败与返修清单",
         "",
     ]
     if report["failure_records"]:
@@ -119,14 +220,14 @@ def render_markdown(report: dict) -> str:
 
     lines += [
         "",
-        "## 4. 经验沉淀（人工填写）",
+        "## 5. 经验沉淀（人工填写）",
         "",
         "- [ ] 最耗时的一步是哪一步？根因是什么？",
         "- [ ] 哪个门禁警告反复出现？应写成哪条规则/反模式？",
         "- [ ] 哪个候选方法被放弃？放弃理由是否值得进 `pitfalls/`？",
         "- [ ] 薄弱维度的提升动作（对应 review.weak_dimensions）：",
         "",
-        "## 5. 知识库归档去向",
+        "## 6. 知识库归档去向",
         "",
         "| 教训 | 归档位置 | 状态 |",
         "|---|---|---|",

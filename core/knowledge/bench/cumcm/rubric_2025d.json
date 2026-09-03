@@ -1,0 +1,62 @@
+{
+  "competition": "cumcm",
+  "year": 2025,
+  "topic": "D",
+  "title": "矿井突水应急逃生优化",
+  "source": "inferred",
+  "source_note": "2025D PDF 提取乱码，基于标题推断评分细则，待无保护版本补正。评委评阅概述要点推断构建。",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（矿井突水流场物理建模与动态仿真）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "水流物理真实性：坡度 / 断面 / 突水量 / 流速建模", "score": 12, "deduction_note": "水流模型与实际物理不一致扣 6-8 分"},
+        {"criterion": "水流动态传播仿真（时间推进 / 多区域）", "score": 10, "deduction_note": "静态分析至多 4 分"},
+        {"criterion": "算法设计（浅水方程 / 元胞自动机）", "score": 5},
+        {"criterion": "结果合理性（与实测对比）", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["水流物理模型不合理", "忽略坡度 / 断面影响"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（基于水流模型的逃生路线优化）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "逃生方案须动态适应水流到达时间（非静态最优路径）", "score": 15, "deduction_note": "静态最优路径扣 8-10 分"},
+        {"criterion": "逃生路线与避难点规划模型", "score": 10, "deduction_note": "无避难点考虑扣 4-5 分"},
+        {"criterion": "算法设计（动态规划 / A* / 多目标）", "score": 5},
+        {"criterion": "结果正确性（逃生时间 / 存活概率）", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["逃生方案静态", "未考虑水流到达时间"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（多情景鲁棒性与应急预案）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "多情景鲁棒性分析（最坏情况 / 多种突水点）", "score": 10, "deduction_note": "单一情景不分析至多 4 分"},
+        {"criterion": "应急预案制定与触发条件", "score": 8, "deduction_note": "预案无触发条件扣 4-5 分"},
+        {"criterion": "方案评价与灵敏度", "score": 7}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["单一情景无鲁棒性分析", "预案无触发条件"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

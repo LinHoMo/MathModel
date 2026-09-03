@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "国赛复盘基准运行结果",
+  "description": "bench run 子命令产出的单题运行结果 schema。agent runtime 读 SKILL.md 主观产出 JSON 后由零依赖脚本校验。",
+  "type": "object",
+  "required": ["competition", "year", "topic", "rubric_ref", "response_summary", "dimension_scores", "total"],
+  "properties": {
+    "competition": {
+      "type": "string",
+      "enum": ["cumcm", "mcm", "icm", "diangong", "huawei", "huashu"]
+    },
+    "year": { "type": "integer", "minimum": 1995, "maximum": 2030 },
+    "topic": { "type": "string", "maxLength": 4 },
+    "rubric_ref": {
+      "type": "string",
+      "description": "所参照的 rubric 文件路径（相对项目根），如 core/knowledge/bench/cumcm/rubric_2024a.json"
+    },
+    "response_summary": {
+      "type": "object",
+      "required": ["modeled_problems"],
+      "properties": {
+        "modeled_problems": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "本 agent 响应中尝试了哪些子问题"
+        },
+        "claimed_results_count": {
+          "type": "integer",
+          "description": "产出数值结果条数"
+        },
+        "approach_summary": { "type": "string" }
+      }
+    },
+    "dimension_scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["dimension_id", "awarded", "max_score", "rationale"],
+        "properties": {
+          "dimension_id": {
+            "type": "string",
+            "description": "对应 rubric.dimensions[].id"
+          },
+          "awarded": { "type": "number" },
+          "max_score": { "type": "number" },
+          "rationale": { "type": "string" },
+          "ground_truth_hits": {
+            "type": "integer",
+            "description": "命中 rubric reference_results 的条数"
+          },
+          "ground_truth_misses": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "total": {
+      "type": "object",
+      "required": ["awarded", "max_score", "pct"],
+      "properties": {
+        "awarded": { "type": "number" },
+        "max_score": { "type": "number" },
+        "pct": { "type": "number", "minimum": 0, "maximum": 110 }
+      }
+    },
+    "flags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "评委视角的缺陷旗标"
+    },
+    "generated_by": { "type": "string" },
+    "generated_at": { "type": "string" }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "competition": "cumcm",
+  "year": 2023,
+  "topic": "C",
+  "title": "蔬菜类商品的自动定价与补货决策",
+  "source": "official_rubric",
+  "source_note": "2023 年国赛 C 题官方评分细则 + 出题人评阅综述合并",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（数据分析）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "异常数据（无销售/退货/打折/缺货）的识别与处理", "score": 5},
+        {"criterion": "单品銷售分布规律描絵：时辰效应分解（季候性/節假日/趨勢性）+ 分布類型（常態/指數等）", "score": 15, "reference_result": "時間效應 ≥3 類、分布類型明確", "deduction_note": "仅描述均值方差不給深层规律扣 3-5 分"},
+        {"criterion": "單品間關聯性描絵：Spearman/Pearson 相關 + t 檢驗加分", "score": 5, "deduction_note": "Pearson 無視正態前提或無顯著性檢驗扣 2-3 分"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["数据清洗缺失", "均值填充失真", "分布分析浅层化", "Pearson 无视前提"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（定价与补货联合优化）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "定性+定量相关性描絵：機理角度（品類/保質期/需求弹性）6 + 損耗率估計歷史補貨量 4", "score": 10, "deduction_note": "仅定性描絵無定量估計扣 3-4 分"},
+        {"criterion": "报童思想随机优化：完整正确模型 12 + 算法设计 5 + 时间因素（工作日/双休日）3", "score": 20, "deduction_note": "模型错误至多 5 分；缺时间因素扣 3"},
+        {"criterion": "结果分析：工作日與雙休日區別至少 2 + 合理说明", "score": 5, "deduction_note": "未分析工作日與雙休日之差異扣 2 分"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["定价-补货割裂", "目标单一", "未考虑时间因素"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（品类组合优化）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "可替代 / 互補單品亞分類降維（聚類/矩陣方法）", "score": 7},
+        {"criterion": "品種多樣性量化約束（基尼/熵/TopN 占比）", "score": 8},
+        {"criterion": "品類與單品決策差異處理（兩級決策/聯動）", "score": 10, "deduction_note": "仅品類層或仅單品層不扣分，但兩級聯動加分"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["僅單層決策", "多樣性未量化"]
+    },
+    {
+      "id": "q4",
+      "name": "问题4（开放建议）",
+      "max_score": 5,
+      "assessment_points": [
+        {"criterion": "建議新數據及改進模型的理由", "score": 3},
+        {"criterion": "可行性 / 經濟性分析", "score": 2}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["建議空洞無數據支撑"]
+    },
+    {
+      "id": "bonus",
+      "name": "特色加分",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "不同模型 / 方案对比加分（需有实质性对比分析）", "score": 5},
+        {"criterion": "方法创新 / 结果精度突出", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["仅有形式对比无实质分析"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

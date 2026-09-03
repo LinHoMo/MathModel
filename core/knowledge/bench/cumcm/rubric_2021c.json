@@ -1,0 +1,61 @@
+{
+  "competition": "cumcm",
+  "year": 2021,
+  "topic": "C",
+  "title": "原材料的订购与转运",
+  "source": "judge_insights",
+  "source_note": "2021 年国赛 C 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（供应商综合评判与预方案选择）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "供应商评价指标体系（产能/单价/历史违约/供货稳定性等，含持续供货特征）", "score": 10, "deduction_note": "缺持续供货特征至多 4 分"},
+        {"criterion": "综合评判方法（模糊/AHP/加权）", "score": 8},
+        {"criterion": "预方案解释与稳定性分析", "score": 7}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["未考虑持续供货特征", "评判方法单一"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（多周原材料订购与转运策略）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "随机需求建模 / 两阶段随机规划构建", "score": 12, "deduction_note": "未用两阶段规划至多 5 分"},
+        {"criterion": "确定性等价 / 场景树简化", "score": 8},
+        {"criterion": "大规模整数规划求解算法", "score": 8},
+        {"criterion": "结果合理性（成本 / 缺货风险）", "score": 7}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["未考虑随机性", "两阶段规划理解错误"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（策略稳健性与灵敏度分析）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "情景分析 / 极端情况测试（供应商停产 / 需求波动）", "score": 10, "deduction_note": "仅灵敏度分析无情景至多 4 分"},
+        {"criterion": "数值仿真验证策略稳定性", "score": 10, "deduction_note": "仅数据分析无仿真扣 5 分"},
+        {"criterion": "策略改进建议与实施可行性", "score": 10}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["缺乏情景分析", "数值仿真验证不足"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

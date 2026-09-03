@@ -1,0 +1,69 @@
+{
+  "competition": "cumcm",
+  "year": 2022,
+  "topic": "C",
+  "title": "气象观测站传输网络优化",
+  "source": "judge_insights",
+  "source_note": "2022 年国赛 C 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（传输时延优化与期望值计算）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "一般传输时延模型完整（路径选择 / 中继延迟 / 排队）", "score": 12, "deduction_note": "模型不完整至多 5 分"},
+        {"criterion": "四个传输时延期望值全对", "score": 16, "deduction_note": "每错一个扣 4 分"},
+        {"criterion": "算法设计", "score": 6},
+        {"criterion": "时延优化方案", "score": 6}
+      ],
+      "reference_results": [
+        {"label": "期望时延参考值 1", "value": "11", "tolerance_pct": 0},
+        {"label": "期望时延参考值 2", "value": "3", "tolerance_pct": 0},
+        {"label": "期望时延参考值 3", "value": "8", "tolerance_pct": 0},
+        {"label": "期望时延参考值 4", "value": "9", "tolerance_pct": 0}
+      ],
+      "common_pitfalls": ["模型不完整", "期望值仅 3 个对"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（最优调度与气象分队划分）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "调度优化模型（MMF / 最大最小公平）", "score": 12},
+        {"criterion": "最优气象分队方案：须发现可派 9 个分队", "score": 15, "deduction_note": "普遍只得 8 分队；实际最优 9 分队"},
+        {"criterion": "算法设计", "score": 8},
+        {"criterion": "方案解释与验证", "score": 5}
+      ],
+      "reference_results": [
+        {"label": "最优分队数量", "value": "9", "tolerance_pct": 0}
+      ],
+      "common_pitfalls": ["仅得 8 分队非最优", "分配不公平"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（动态调度与稳定性校验）",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "动态调度模型（时变需求 / 链路断裂）", "score": 5},
+        {"criterion": "稳定性分析 / 收敛性证明", "score": 3},
+        {"criterion": "结果评价", "score": 2}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["调度方案不收敛"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

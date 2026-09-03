@@ -1,0 +1,61 @@
+{
+  "competition": "cumcm",
+  "year": 2022,
+  "topic": "E",
+  "title": "小批量物料的生产安排",
+  "source": "judge_insights",
+  "source_note": "2022 年国赛 E 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（需求预测与预测方法比较）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "多种预测方法（移动平均 / ARIMA / Prophet / 机器学习等）实现", "score": 12, "deduction_note": "仅 1-2 种方法至多 5 分"},
+        {"criterion": "多预测方法 MAE 比较（须有客观指标）", "score": 10, "deduction_note": "无 MAE 比较至多 3 分"},
+        {"criterion": "预测结果合理性与可视化", "score": 8}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["预测方法单一", "无 MAE 比较"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（安全库存与服务水平概率建模）",
+      "max_score": 35,
+      "assessment_points": [
+        {"criterion": "安全库存概率建模（需求分布 / 服务水平）", "score": 12, "deduction_note": "无法用概率方式至多 5 分"},
+        {"criterion": "库存成本与服务水平权衡分析", "score": 10},
+        {"criterion": "算法设计（随机模拟 / 报童扩展）", "score": 8},
+        {"criterion": "结果正确与灵敏度分析", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["安全库存未用概率建模", "与服务水平割裂"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（考虑生产计划时滞与最优调度）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "注意生产计划时滞建模（订单-生产-交付延迟）", "score": 12, "deduction_note": "忽略时滞扣 5-7 分"},
+        {"criterion": "最优生产调度求解", "score": 8},
+        {"criterion": "方案验证与灵敏度", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["忽略生产计划时滞", "调度方案脱离实际"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

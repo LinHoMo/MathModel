@@ -1,0 +1,62 @@
+{
+  "competition": "cumcm",
+  "year": 2022,
+  "topic": "B",
+  "title": "无人机编队纯方位定位",
+  "source": "judge_insights",
+  "source_note": "2022 年国赛 B 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（无偏差无编号定位模型）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "纯方位模型：仅方向角信息，坐标不可直接使用、角度不可共享", "score": 12, "deduction_note": "用角度共享 / 坐标可得分 0"},
+        {"criterion": "三角定位 / 几何建模方法", "score": 8},
+        {"criterion": "算法设计（最小二乘 / MLE）", "score": 5},
+        {"criterion": "结果正确性与精度", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["角度共享", "坐标直接用"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（有偏差有编号统一模型）",
+      "max_score": 45,
+      "assessment_points": [
+        {"criterion": "统一模型须覆盖有 / 无偏差、编号知 / 未知四种情况", "score": 15, "deduction_note": "不同情况建不同模型扣 8-10 分"},
+        {"criterion": "偏差建模与参数估计", "score": 10},
+        {"criterion": "算法设计（迭代优化 / 网格搜索）", "score": 12},
+        {"criterion": "结果精度与稳健性", "score": 8}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["不同情况建不同模型不统一", "偏差建模缺失"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（模型校验与优化部署）",
+      "max_score": 15,
+      "assessment_points": [
+        {"criterion": "模型校验（仿真 / 实测对比）", "score": 6},
+        {"criterion": "部署优化（通信 / 能量消耗）", "score": 5},
+        {"criterion": "方案可行性", "score": 4}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["无模型校验"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

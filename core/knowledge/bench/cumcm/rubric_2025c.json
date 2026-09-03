@@ -1,0 +1,86 @@
+{
+  "competition": "cumcm",
+  "year": 2025,
+  "topic": "C",
+  "title": "NIPT 的时点选择与胎儿的异常判定",
+  "source": "official_rubric",
+  "source_note": "2025 年国赛 C 题官方评分细则 + 出题人评阅综述合并",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（母体 gag 相关性与关系建模）",
+      "max_score": 30,
+      "assessment_points": [
+        {"criterion": "相关性分析：重复测量数据须处理；混合效应模型 > 平均化 > GEE；直接独立样本抬高第一类错误", "score": 12, "deduction_note": "直接按独立样本处理且无说明扣 6-8 分"},
+        {"criterion": "关系模型：[0,1] 比例可 Logit 变换；弱相关时直接多元线性回归不理想", "score": 12, "deduction_note": "直接 Logistic/线性回归无转换至多 5 分"},
+        {"criterion": "效果检验及模型验证（交叉验证/残差分析）", "score": 6}
+      ],
+      "reference_results": [
+        {"label": "典型 gag 异常比例范围", "value": "约 0.1-0.3 (孕周不同)", "tolerance_pct": 10}
+      ],
+      "common_pitfalls": ["重复测量处理不当", "直接独立样本分析", "Logistic/线性回归不理想"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（基于 gag 风险分组的异常判定）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "分组模型直接得到风险分组结果；兼顾检测成功率与早检；直接聚类不是好方法；纯 ML/大数据评价标准不适合", "score": 10, "deduction_note": "仅聚类得到分组至多 3 分"},
+        {"criterion": "分组求解与检验（3-6 组为宜；组内/组间差异显著）", "score": 8, "deduction_note": "组数过多（>8）扣分"},
+        {"criterion": "分组效果灵敏度分析（总异常误判率、早检成功率）", "score": 7, "deduction_note": "无灵敏度至多 2 分"}
+      ],
+      "reference_results": [
+        {"label": "分组数量", "value": "3-6 组", "tolerance_pct": 0}
+      ],
+      "common_pitfalls": ["直接聚类分组", "纯 ML 评价标准", "灵敏度分析缺失"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（纳入多元化因素拓展）",
+      "max_score": 20,
+      "assessment_points": [
+        {"criterion": "纳入年龄 / 身高 / 体重等次要因素的合理性（多因素 Logistic/决策树）", "score": 10, "deduction_note": "仅主因素得 6 分但未扣分"},
+        {"criterion": "求解检验 + 分组结果与问题 2 结果的对比分析", "score": 5, "deduction_note": "与问题 2 分组结果对比值得奖励"},
+        {"criterion": "灵敏度分析", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["次要因素未纳入", "分组结果孤立不对比"]
+    },
+    {
+      "id": "q4",
+      "name": "问题4（染色体非整倍体异常判定）",
+      "max_score": 15,
+      "assessment_points": [
+        {"criterion": "染色体非整倍体异常与正常样本差异分析（统计检验/ML 区分）", "score": 10, "deduction_note": "仅描述无分析至多 3 分"},
+        {"criterion": "明确判定阈值与优良性分析（灵敏度/特异度/ROC）", "score": 5, "deduction_note": "仅有阈值无优良性至多 2 分"}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["无明确判定阈值", "未做优良性分析"]
+    },
+    {
+      "id": "bonus",
+      "name": "特色加分",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "方法创新 / 结果精度突出 / 多方法对比实质分析", "score": 5},
+        {"criterion": "模型推广性 / 结果超出预期", "score": 5}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["仅有形式对比"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}

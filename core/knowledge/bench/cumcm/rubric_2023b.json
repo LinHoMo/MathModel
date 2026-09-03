@@ -1,0 +1,62 @@
+{
+  "competition": "cumcm",
+  "year": 2023,
+  "topic": "B",
+  "title": "多波束测线优化设计",
+  "source": "judge_insights",
+  "source_note": "2023 年国赛 B 题评委评阅概述要点提炼",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "abstract",
+      "name": "摘要与写作",
+      "max_score": 10,
+      "assessment_points": [
+        {"criterion": "摘要完整性：背景、方法、结果、结论四要素", "score": 4},
+        {"criterion": "论文写作规范：结构清晰、公式规范、图表完整", "score": 3},
+        {"criterion": "逻辑连贯性：全文主线清晰、各问衔接自然", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["写作不规范", "摘要缺失关键要素"]
+    },
+    {
+      "id": "q1",
+      "name": "问题1（单测线覆盖宽度与重叠率）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "覆盖宽度公式推导（深度 / 坡度 / 波束角）", "score": 10, "deduction_note": "公式错误则后续全扣"},
+        {"criterion": "重叠率计算（相邻测线间距）", "score": 8},
+        {"criterion": "算法设计（单变量优化 / 数值）", "score": 4},
+        {"criterion": "结果正确与验证", "score": 3}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["覆盖宽度公式错误"]
+    },
+    {
+      "id": "q2",
+      "name": "问题2（多波束测线优化设计）",
+      "max_score": 40,
+      "assessment_points": [
+        {"criterion": "须导出一般性覆盖宽度公式", "score": 8, "deduction_note": "无一般性公式扣 4-6 分"},
+        {"criterion": "测线沿等深线方向（垂直坡面法线投影）考虑地形影响", "score": 10, "deduction_note": "忽略地形影响扣 5-7 分"},
+        {"criterion": "分块拟合 / 等深线提取与计算方法", "score": 12},
+        {"criterion": "算法与结果", "score": 10}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["未考虑地形影响", "一般性公式缺失"]
+    },
+    {
+      "id": "q3",
+      "name": "问题3（外业测量方案设计）",
+      "max_score": 25,
+      "assessment_points": [
+        {"criterion": "测量方案设计（路线 / 间距 / 效率）", "score": 10},
+        {"criterion": "实际重叠率验证（与设计对比）", "score": 8, "deduction_note": "无实际验证至多 3 分"},
+        {"criterion": "方案评价与灵敏度", "score": 7}
+      ],
+      "reference_results": [],
+      "common_pitfalls": ["无实际重叠率验证"]
+    }
+  ],
+  "meta": {"generated_by": "P1 rubric batch", "generated_at": "2026-09-03T00:00:00Z", "version": "1"}
+}
