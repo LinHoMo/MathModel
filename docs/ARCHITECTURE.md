@@ -14,6 +14,15 @@ MathModelSkills 采用角色化架构，把「一道赛题 → 一篇论文」�
 | **实例** | `projects/<项目>/` | 一个赛题的完整运行时产物：`inputs/` 赛题、`work/` 状态、`output/` 契约、`code/` 代码、`figures/` 结果、`paper/` 论文 | 每次跑题生成 |
 | **基础设施** | `docs/` / `tests/` / `.github/` | 架构与状态文档、unit/integration/e2e 测试、CI 入口 | 开发者 |
 
+引擎层新增工具文件：
+
+| 文件路径 | 作用 |
+|---|---|
+| `core/tools/citation_check.py` | 引用可信度静态扫描（占位符/格式/闭合/承诺兑现） |
+| `core/tools/benchmark.py bench *` | 国赛复盘基准（rubric 列表/模板/重算/报告） |
+| `core/tools/bench_mmbench.py` | LLM-MM-Agent MMBench 题库导入适配器 |
+| `core/knowledge/bench/cumcm/` | 22 年 CUMCM 评分细则 rubric |
+
 核心原则：**引擎（`core/`）是唯一可复用资产**，实例（`projects/`）是引擎在校验下跑出来的结果；
 两者分离，改引擎不动实例，换实例不伤引擎。
 

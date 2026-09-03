@@ -67,6 +67,14 @@ python core/tools/state.py <项目> status   # 看下一步做什么
 | `python core/tools/validate_project.py <项目>` | 单项目级校验 |
 | `python core/tools/diagram_gen.py flowchart --nodes "A,B,C" --edges "A->B" -o fig.svg` | 科学图表生成（流程图/DAG/结果图/对比图） |
 | `python core/tools/scholar_fetch.py bibtex <关键词>` | 学术文献检索 + BibTeX 获取（5源回退链） |
+| `python core/tools/citation_check.py project <项目> [--json]` | 引用可信度扫描（L5 护栏补充） |
+| `python core/tools/citation_check.py bib <file> [--json]` | BibTeX 格式校验 |
+| `python core/tools/benchmark.py bench list --json` | 列出可用 rubric |
+| `python core/tools/benchmark.py bench run --rubric <f>` | 生成得分响应模板 |
+| `python core/tools/benchmark.py bench score --rubric <f> --response <f>` | 重算校验响应 |
+| `python core/tools/benchmark.py bench report --rubric <f> --response <f>` | 生成可读报告 |
+| `python core/tools/bench_mmbench.py list` | 列出 MMBench 111 题 |
+| `python core/tools/bench_mmbench.py export --year <Y> --topic <A>` | 导出为 rubric 骨架 |
 
 > 用 `python` 或 `python3` 均可，`core/tools/` 下核心脚本零第三方依赖；`diagram_gen.py` 需 `pip install matplotlib`。
 

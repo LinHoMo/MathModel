@@ -161,3 +161,26 @@ MathModelSkills/
 ## 许可与边界
 
 本仓库是协作与质量控制工具，不是自动获奖系统。AI 生成的公式、代码、事实和引用必须人工复核；竞赛规则（页数、匿名、AI 使用披露）变化频繁，提交前须以当届官方通知为准。
+
+---
+
+## 命令速查（P0–P2 补充）
+
+### 引用检查
+
+```
+python core/tools/citation_check.py project <项目路径> [--json]
+python core/tools/citation_check.py bib <references.bib> [--json]
+```
+
+### 国赛复盘基准
+
+```
+python core/tools/benchmark.py bench list [--json]
+python core/tools/benchmark.py bench run --rubric <path>
+python core/tools/benchmark.py bench score --rubric <f> --response <f> [--json]
+python core/tools/benchmark.py bench report --rubric <f> --response <f>
+python core/tools/bench_mmbench.py list [--json]
+python core/tools/bench_mmbench.py export --year <Y> --topic <A> [--out <dir>]
+python core/tools/bench_mmbench.py path
+```

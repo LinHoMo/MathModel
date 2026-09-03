@@ -1,7 +1,7 @@
 # 项目度量（单一真源 · 脚本自动生成）
 
 > **本文件由 `core/tools/metrics.py --write` 自动生成，禁止手改。**
-> 最近扫描时间: `2026-09-03T13:10:30+00:00Z`
+> 最近扫描时间: `2026-09-03T14:05:35+00:00Z`
 > 生成脚本: `core/tools/metrics.py`
 
 ---
@@ -12,8 +12,8 @@
 |------|-----|
 | 手（hands）数 | 4 |
 | agent 数 | 29 |
-| tools 脚本数 | 28 |
-| tools 总行数 | 13735 |
+| tools 脚本数 | 30 |
+| tools 总行数 | 14714 |
 | `known_competitions()` | 9 |
 | methodology .md 数 | 53 |
 
