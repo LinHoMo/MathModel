@@ -159,6 +159,25 @@ def compute(dims, pass_score, weakness, type_weights=None):
     return weighted, min_score, min_names, issues
 
 
+def merge_blocking(weakness, card_blocking):
+    """把聚合卡的 blocking[] 折回 weakness counts，让 decide() 真的看得见它。
+
+    decide() 只读 weakness["counts"]["blocking"]；聚合卡的 blocking[] 此前是死数据，
+    对抗评分员的 fail 判定根本到不了 verdict。这里单向合并（不改 decide），
+    条数按合并去重后的实际条数写回。
+
+    返回 (weakness_with_merged_counts, merged_blocking)。
+    """
+    import aggregate_scores as AG  # 延迟 import：AG 在模块级 import 了本模块
+
+    merged = AG.dedupe(list(card_blocking or []) + AG.weakness_blocking(weakness))
+    w = dict(weakness) if isinstance(weakness, dict) else {}
+    counts = dict(w.get("counts") or {})
+    counts["blocking"] = len(merged)
+    w["counts"] = counts
+    return w, merged
+
+
 def decide(weighted, min_score, min_names, weakness, pass_score, max_rounds, round_no):
     """依据分数与阻塞项给出 verdict。"""
     blocking = (weakness or {}).get("counts", {}).get("blocking", 0)
@@ -228,11 +247,14 @@ def main():
     weakness = _load_json(base / "work" / "weakness_report.json")
 
     if card is None:
-        print("[score] 无 work/score_card.json，先跑 reviewer/judge-scorer",
-              file=sys.stderr)
+        print("[score] 无 work/score_card.json，先跑 "
+              "python core/tools/aggregate_scores.py <项目>", file=sys.stderr)
         return 2
 
     dims = card.get("dimensions", [])
+
+    # 聚合卡的 blocking[] 此前到不了 decide()，这里折回 counts
+    weakness, merged_blocking = merge_blocking(weakness, card.get("blocking") or [])
 
     # 题型差异化权重：优先 --type 覆盖，其次从项目产物解析
     topic_type = args.type_override or _resolve_topic_type(base)
@@ -284,11 +306,17 @@ def main():
             print(f"  最低维度: {min_score} — {', '.join(min_names)}")
         for d in dims:
             ev = "有证据" if d.get("evidence") else "无证据"
-            print(f"    - {d.get('name','?'):8s} {d.get('score')} 分  "
+            print(f"    - {d.get('name','?'):20s} {d.get('score')} 分  "
                   f"权重 {d.get('weight',1.0)}  [{ev}]")
         print("-" * 60)
         for i in issues:
             print(f"  [注意] {i}")
+        if merged_blocking:
+            print(f"  阻塞项（{len(merged_blocking)}）:")
+            for b in merged_blocking:
+                issue = str(b.get("issue", ""))
+                print(f"    - [{b.get('source','?')}] "
+                      f"{issue if len(issue) <= 90 else issue[:90] + '…'}")
         print(f"\n  verdict: {verdict}")
         print(f"  理由:   {reason}")
         print("=" * 60)

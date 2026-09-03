@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Score Card Schema (聚合评分卡)",
+  "description": "work/score_card.json —— 5 张评分卡经 core/tools/aggregate_scores.py 聚合后的产物，由 score_artifact.py 消费出 verdict。不要手写：gate.py 的 scorer-adversarial 门禁会调 aggregate_scores.py --verify 重算并逐维比对，手写卡一律判 FAIL。",
+  "type": "object",
+  "required": ["dimensions", "weighted_score", "blocking", "skeptic_additions_summary", "generated_by", "timestamp"],
+  "properties": {
+    "dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "score", "weight", "evidence"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "scorer-academic",
+              "scorer-engineering",
+              "scorer-judge",
+              "scorer-reader",
+              "scorer-adversarial"
+            ]
+          },
+          "score": { "type": "number", "minimum": 0, "maximum": 10 },
+          "weight": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "description": "由各分卡的 evidence_refs 拼接；为空会触发 score_artifact.compute() 的「无证据」告警"
+          }
+        }
+      }
+    },
+    "weighted_score": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Σ(score_i × weight_i) / Σ(weight_i)，保留 3 位小数"
+    },
+    "blocking": {
+      "type": "array",
+      "description": "两路归集后按 (source, issue) 去重：① 对抗卡 deductions 中含致命/fatal/blocking 的扣分项与 fail_reason；② weakness_report.hits[] 中 severity==blocking 的条目。score_artifact.merge_blocking() 把条数写回 counts.blocking，decide() 才看得见",
+      "items": {
+        "type": "object",
+        "required": ["source", "issue", "severity", "action_required"],
+        "properties": {
+          "source": { "type": "string", "minLength": 1 },
+          "issue": { "type": "string", "minLength": 1 },
+          "severity": { "type": "string", "enum": ["blocking"] },
+          "action_required": { "type": "string" }
+        }
+      }
+    },
+    "skeptic_additions_summary": {
+      "type": "object",
+      "description": "对抗卡 skeptic_additions 的原样透传（引用填充计数与位置、同行评审追问预测）"
+    },
+    "topic_type": {
+      "type": ["string", "null"],
+      "enum": ["A", "B", "C", "D", "E", "MCM", "ICM", null],
+      "description": "由 score_artifact._resolve_topic_type() 解析；为 null 时 dimensions[].weight 是固定回退权重"
+    },
+    "generated_by": {
+      "type": "string",
+      "const": "aggregate_scores.py"
+    },
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

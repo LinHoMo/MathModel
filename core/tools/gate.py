@@ -180,9 +180,9 @@ GATES = {
         lambda p: G.check_files_exist(p, ["work/score_card_adversarial.json"],
                                       "score_card_adversarial"),
         lambda p: G.check_json_valid(p, "work/score_card_adversarial.json"),
-        lambda p: G.check_files_exist(p, ["work/score_card.json"],
-                                      "score_card_aggregate"),
-        lambda p: G.check_json_valid(p, "work/score_card.json"),
+        # 聚合卡的存在性/合法性/generated_by 三件事由一次重算比对覆盖：
+        # 文件不存在或 JSON 坏了，--verify 同样报错，而且报得更具体。
+        lambda p: _check_score_card_aggregated(p),
     ],
     ("reviewer", "weakness-hunter"): [
         lambda p: G.check_files_exist(p, ["work/weakness_report.json"],
@@ -273,6 +273,53 @@ def _check_pdf(project):
     if size < 102400:
         return G.fail("PDF 大小", f"{size} 字节 < 100KB", hard=False)
     return G.ok("PDF 产物", f"{size // 1024} KB")
+
+
+def _check_score_card_aggregated(project):
+    """P0-2：work/score_card.json 必须由 aggregate_scores.py 生成。
+
+    这个文件同时是三个消费方的输入——本门禁、score_artifact.py 的 verdict 重算、
+    revision-planner 的修改清单——但此前没有任何 agent 声明产出它、也没有任何脚本
+    生成它，唯一的"生成者"是模型手写的 JSON。手写卡在 cumcm2024a 上的实际后果：
+    weighted_score 写 7.07（实算 6.99）、对抗评分员的 fail 判定整段丢失。
+
+    不检查磁盘上的 generated_by 字段——那个字段可以伪造。
+    直接让脚本重算并比对，重算结果伪造不了。
+    """
+    import os
+    import subprocess
+
+    script = Path(__file__).resolve().parent / "aggregate_scores.py"
+    if not script.exists():
+        return G.fail("聚合评分卡", "core/tools/aggregate_scores.py 缺失", hard=False)
+
+    env = dict(os.environ, PYTHONIOENCODING="utf-8")  # 子进程输出中文，避免 cp936 解码炸
+    try:
+        r = subprocess.run(
+            [sys.executable or "python", str(script),
+             str(G.project_dir(project)), "--verify"],
+            cwd=str(G.ROOT), capture_output=True, text=True,
+            encoding="utf-8", errors="replace", env=env, timeout=120)
+    except subprocess.TimeoutExpired:
+        return G.fail("聚合评分卡", "aggregate_scores.py --verify 超时(120s)")
+
+    out = (r.stdout or "") + (r.stderr or "")
+    if r.returncode != 0:
+        fails = [ln.strip().removeprefix("[FAIL]").strip()
+                 for ln in out.splitlines() if "[FAIL]" in ln]
+        if fails:
+            detail = f"{len(fails)} 处与重算不一致: {fails[0]}"
+        else:
+            # 分卡不全走 EXIT 2，原因打在 stderr 的 [aggregate] 行里
+            notes = [ln.strip().removeprefix("[aggregate]").strip()
+                     for ln in out.splitlines()
+                     if ln.strip() and "[注意]" not in ln]
+            detail = notes[-1] if notes else f"--verify EXIT {r.returncode}"
+        return G.fail("聚合评分卡", detail)
+
+    line = next((ln.strip().removeprefix("[PASS]").strip()
+                 for ln in out.splitlines() if "[PASS]" in ln), "")
+    return G.ok("聚合评分卡", line or "与重算一致")
 
 
 # ---------------------------------------------------------------------------

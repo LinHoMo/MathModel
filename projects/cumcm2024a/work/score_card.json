@@ -1,26 +1,98 @@
 {
   "dimensions": [
-    {"name": "scorer-academic", "score": 7.5, "weight": 0.25, "evidence": "推导完整（弧长闭式+链式递推），假设有失效判据，验证充分（守恒 1e-13），数学正确"},
-    {"name": "scorer-engineering", "score": 7.2, "weight": 0.20, "evidence": "种子 42 可复现，204s 运行可接受，约束重验证通过；w 灵敏度 NaN 未处理"},
-    {"name": "scorer-judge", "score": 6.9, "weight": 0.25, "evidence": "创新性 5 分偏低（标准运动学范式）；完整性/规范性/亮点均达标"},
-    {"name": "scorer-reader", "score": 7.5, "weight": 0.15, "evidence": "结构标准、语言专业、图表叙事完整、逻辑流畅"},
-    {"name": "scorer-adversarial", "score": 5.5, "weight": 0.15, "evidence": "blocking 内部矛盾（摘要 t*=412.83 vs 结果 360.25，差距 14.6%）；引用填充 2 处（optimization/modeling）；替代解法讨论缺失"}
+    {
+      "name": "scorer-academic",
+      "score": 7.5,
+      "weight": 0.2163,
+      "evidence": "main.tex:1-60 (abstract)；main.tex:150-400 (model derivation)；all_results.json:problem_1.arc_length_err=5e-13；all_results.json:sensitivity.parameter_w"
+    },
+    {
+      "name": "scorer-engineering",
+      "score": 7.2,
+      "weight": 0.25,
+      "evidence": "code/main.py；output/CODE_DELIVERABLES.md；work/test_report.json；all_results.json:summary.total_runtime_s=204.3"
+    },
+    {
+      "name": "scorer-judge",
+      "score": 6.9,
+      "weight": 0.2885,
+      "evidence": "main.tex:1-50 (abstract)；INNOVATION-TAGS.md；MODEL_SPEC.md；main.tex:model evaluation"
+    },
+    {
+      "name": "scorer-reader",
+      "score": 7.5,
+      "weight": 0.1154,
+      "evidence": "main.tex:1-50；main.tex:figure/table references；forbidden-words.md；paper/references.bib"
+    },
+    {
+      "name": "scorer-adversarial",
+      "score": 5.5,
+      "weight": 0.1298,
+      "evidence": "all_results.json:sensitivity.parameter_w (NaN range)；main.tex:sensitivity；main.tex:24 (摘要 t*=412.83)；all_results.json:problem_2.t_star=360.25；references.bib:optimization (弱相关)；references.bib:modeling (弱相关)；antipatterns.md:A3,A7"
+    }
   ],
-  "weighted_score": 7.07,
+  "weighted_score": 6.992,
   "blocking": [
     {
-      "source": "scorer-adversarial / weakness-hunter",
-      "issue": "摘要 t*=412.83 s 与 figures/all_results.json problem_2.t_star=360.25 s 内部数值不一致",
+      "source": "scorer-adversarial/deduction",
+      "issue": "摘要 t*=412.83 s 与 all_results.json t*=360.25 s 不一致（差距 14.6%，blocking 级内部矛盾）",
       "severity": "blocking",
-      "action_required": "修正摘要数值为 360.25 s 或重新运行代码确认正确值"
+      "action_required": "修正该项后重跑 scorer-adversarial 复核"
+    },
+    {
+      "source": "scorer-adversarial/verdict",
+      "issue": "blocking 级内部矛盾（摘要 vs 结果数值不一致 14.6%）+ 引用填充 2 处 + 替代解法讨论缺失",
+      "severity": "blocking",
+      "action_required": "修正该项后重跑 scorer-adversarial 复核"
+    },
+    {
+      "source": "weakness-hunter/skeptic#internal_contradiction",
+      "issue": "摘要声明 '碰撞终止时刻 t*=412.83 s'，但 figures/all_results.json problem_2.values.t_star=360.25，两个数值相差 52.58 s（约 14.6%）。这是内部数值不一致，属于铁律 W1（论文-数值不一致）的违反。",
+      "severity": "blocking",
+      "action_required": "立即修正：将摘要改为 t*=360.25 s（与 all_results.json 一致），或重新运行代码确认正确值以 all_results.json 为准"
     }
   ],
   "skeptic_additions_summary": {
-    "skeptic_dimensions_added": ["citation_padding", "internal_contradictions", "overclaims", "missing_alternatives"],
-    "reviewer_prediction_count": 5,
-    "citation_padding_found": 2,
-    "internal_contradictions_found": 1,
-    "cross_verified_no_doi": 9,
-    "cross_verified_offline": 1
-  }
+    "citation_padding_count": 2,
+    "citation_padding_examples": [
+      {
+        "location": "references.bib#optimization",
+        "issue": "袁亚湘《最优化理论与方法》在正文中仅为通用方法论引用，无具体定理/算法指向。本项目核心是运动学递推（弧长参数化 + 二分法 + 链式约束），优化理论仅在最外层的 S 形求解中有一点应用，但并未调用该文献中的具体算法。建议移除或替换。"
+      },
+      {
+        "location": "references.bib#modeling",
+        "issue": "姜启源《数学模型》为通用建模方法教材，在正文中无具体页码/定理引用。项目已有更专业的文献（spiral_kinematics, differential_geometry）提供具体技术支撑，建议移除。"
+      }
+    ],
+    "reviewer_prediction": [
+      {
+        "likelihood": "high",
+        "question": "摘要中 t*=412.83 s 与结果节/JSON 中 360.25 s 不一致，请解释：哪个是最终数值？是一稿二稿差异还是笔误？",
+        "rationale": "评委第一件事就是核对摘要与结论数值，14.6% 差距极度刺眼"
+      },
+      {
+        "likelihood": "high",
+        "question": "板凳实际为长矩形（2.20 m × 0.30 m），中心线判据与矩形边缘碰撞判据是否等价？在弯曲最大处（内圈）误差有多大？请给出薄矩形近似的误差上界估计。",
+        "rationale": "几何建模细节常被追问，尤其当题目给出宽度 w 暗示需要考虑宽度影响时"
+      },
+      {
+        "likelihood": "medium",
+        "question": "S 形掉头几何方程组是如何求解的？是否收敛？有无多解？若牛顿迭代不收敛如何回退？",
+        "rationale": "论文未详细说明 S 形求解的数值方法，评委通常会追问"
+      },
+      {
+        "likelihood": "medium",
+        "question": "问题 4 的盘出最大速度 2.414 m/s 出现在哪个把手？请说明该把手的物理位置，验证速度方向是否沿螺线切向。",
+        "rationale": "几何合理性验证，确认最大速度不是数值计算伪像"
+      },
+      {
+        "likelihood": "low",
+        "question": "若龙头速度不是恒定 1 m/s 而是可变的（如加速/减速），模型如何调整？",
+        "rationale": "开放性问题，非核心但能展示模型的鲁棒性思维"
+      }
+    ]
+  },
+  "topic_type": "A",
+  "generated_by": "aggregate_scores.py",
+  "timestamp": "2026-09-03T12:16:28Z"
 }

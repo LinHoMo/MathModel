@@ -14,6 +14,7 @@ inputs:
   - core/knowledge/pitfalls/numeric-edge-cases.md
 outputs:
   - work/score_card_adversarial.json
+  - work/score_card.json
 ---
 
 # Adversarial Scorer Skill (对抗视角评分员)
@@ -43,56 +44,65 @@ outputs:
    - 标注填充引用（padding）：移除不削弱论证的、跨领域未说明理由的、一个声明引 5+ 篇的
 7. **同行评审预测**（借鉴 opendraft-referee 模式）：模拟评委最可能的 major concern，给出「如果我是评委会追问什么」的预测列表
 8. **输出**：`work/score_card_adversarial.json` (含扣分明细 + 引用审查 + 评审预测)
+9. **聚合**：本 agent 是 5 个评分员的最后一个，跑 `python core/tools/aggregate_scores.py <项目>` 生成 `work/score_card.json`。**不要手写这个文件**——gate 会调 `--verify` 重算并逐维比对，手写卡一律判 FAIL
 
 ## Output Schema
+
+字段名以实际产物为准。`aggregate_scores.py` 也认旧拼写 `deductions[].category/points/evidence` 与 `blocking_issues`——认两套是因为只认一套时，按另一套写出来的卡一条 blocking 都提不出来，`counts.blocking` 归零，一篇本该拦下的论文就被放行了。
+
+本卡**没有 `weighted_score`**（其余 4 张评分卡有），聚合时取的是 `final_score`。
 
 ```json
 {
   "scorer": "scorer-adversarial",
-  "dimension": "adversarial_robustness",
+  "dimension": "adversarial_review",
   "weight": 0.15,
   "base_score": 10,
   "deductions": [
-    {"category": "numeric_consistency", "points": 0.5, "evidence": "摘要 Q2 遮蔽时长 28.12s，正文 Table 3 显示 28.1s，all_results.json 28.123456，四舍五入口径不一致"},
-    {"category": "assumption_consistency", "points": 0, "evidence": "假设 H1-H5 均在正文引用，灵敏度覆盖 H1/H3，代码实现一致"},
-    {"category": "edge_cases", "points": 1.0, "evidence": "未讨论导弹速度为零/云团扩散速率为零等退化边界，模型失效条件未给出"},
-    {"category": "fabrication_risk", "points": 0, "evidence": "引用年份均 ≤2024，DOI 可解析，Benford 律通过，AI 写作比例 12% < 30%"},
-    {"category": "antipatterns", "points": 1.5, "evidence": "命中 3 条反模式: A1(摘要无数值)、A7(灵敏度仅单参数)、A12(评价仅列优点)"}
+    {"amount": 0.0, "dimension": "numeric_consistency", "finding": "摘要 Q2 遮蔽时长 28.12s、正文 Table 3 的 28.1s、all_results.json 的 28.123456 四舍五入口径一致（按 freeze_numbers 口径）"},
+    {"amount": 0.0, "dimension": "fabrication_risk", "finding": "引用年份均 ≤2024，DOI 可解析，Benford 律通过，AI 写作比例 12% < 30%"},
+    {"amount": 1.0, "dimension": "boundary_edge_cases", "finding": "未讨论导弹速度为零/云团扩散速率为零等退化边界，模型失效条件未给出"},
+    {"amount": 1.5, "dimension": "internal_contradiction_Skeptic", "finding": "摘要 t*=412.83 s 与 all_results.json t*=360.25 s 不一致（差距 14.6%，blocking 级内部矛盾）"},
+    {"amount": 1.5, "dimension": "antipatterns", "finding": "命中 3 条反模式: A1(摘要无数值)、A7(灵敏度仅单参数)、A12(评价仅列优点)"}
   ],
-  "final_score": 7.0,
+  "final_score": 6.0,
   "evidence_refs": ["main.tex:1-50", "all_results.json:Q2", "antipatterns.md:A1,A7,A12"],
-  "verdict_contribution": "refine_partial",
-  "blocking_issues": ["edge_cases: 模型失效边界未讨论"],
+  "verdict_contribution": "fail",
+  "fail_reason": "blocking 级内部矛盾（摘要 vs 结果数值不一致 14.6%）+ 引用填充 2 处 + 替代解法讨论缺失",
   "skeptic_additions": {
     "citation_padding_count": 3,
     "citation_padding_examples": [
-      {"location": "main.tex:87", "issue": "引用 Smith2023 实为医学领域，用于类比信息扩散，未说明为何适用"}
+      {"location": "references.bib#smith2023", "issue": "实为医学领域，用于类比信息扩散，未说明为何适用；移除不削弱论证"}
     ],
     "reviewer_prediction": [
-      {"likelihood": "high", "question": "为何选择 GA 而非 NSGA-II 处理多目标？有无对比？"},
-      {"likelihood": "medium", "question": "假设 H3「市场恒定」在真实农业数据中是否成立？有无验证？"}
+      {"likelihood": "high", "question": "为何选择 GA 而非 NSGA-II 处理多目标？有无对比？", "rationale": "评委第一件事就是核对方法选型有无基线对照"},
+      {"likelihood": "medium", "question": "假设 H3「市场恒定」在真实农业数据中是否成立？有无验证？", "rationale": "假设有效性常被追问"}
     ]
   }
 }
 ```
+
+`deductions[].finding` 或 `fail_reason` 里出现「致命 / fatal / blocking」字样时，`aggregate_scores.py` 会把该条升格为 blocking 项并进 verdict。写清楚严重级别，不要靠猜。
 
 ## Self-Check
 
 - [ ] 输出文件存在且符合 schema
 - [ ] 扣分项有具体证据定位
 - [ ] 总扣分 ≤ 10，最终分数 ≥ 0
-- [ ] blocking_issues 非空时 verdict_contribution 必为 block/refine/refine_partial
+- [ ] `fail_reason` / `blocking_issues` 非空时 `verdict_contribution` 必为 fail/block/refine/refine_partial
 - [ ] 引用的反模式编号在 antipatterns.md 中存在
 - [ ] **Skeptic 引用审查**完成：填充引用已标注（数量 + 位置 + 问题类型）
 - [ ] **同行评审预测**已生成：≥2 条高概率 reviewer question，与 weakness_report 互补
 - [ ] score_card 中 skeptic_additions 字段已输出（可为空数组但不可缺位）
+- [ ] `work/score_card.json` 由 `aggregate_scores.py` 生成，且 `--verify` EXIT 0（gate 硬断言）
 
 ## Iteration
 
 - 最终分数 < 6 (扣分 > 4)：verdict = block，回退对应手整改
-- blocking_issues 非空：必须逐项整改，验收后重新评审
+- `fail_reason` / `blocking_issues` 非空：必须逐项整改，验收后重新评审
 - 逻辑自洽性扣分 > 1：回退 Writer/consistency-checker 核对数值、假设
 - 反模式命中多：回退 Writer/section-writer / Modeler/assumption-validator 逐项修正
+- `--verify` 报「疑似手写」或分数不一致：删掉手写的 `work/score_card.json`，重跑 `aggregate_scores.py <项目>`
 
 ## Env Bindings
 
