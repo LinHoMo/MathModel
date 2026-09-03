@@ -1,0 +1,13 @@
+interface:
+  display_name: "Result Verifier"
+  short_description: "数值验证 + 灵敏度分析"
+  default_prompt: "Use $result-verifier to verify results and run sensitivity analysis."
+runtime:
+  hand: programmer
+  utg_layer: L4
+  stage: 4
+  inputs:
+    - code/*.py
+    - figures/all_results.json
+  outputs:
+    - work/result_validation.json

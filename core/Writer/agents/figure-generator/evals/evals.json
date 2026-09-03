@@ -1,0 +1,16 @@
+{
+  "skill_name": "figure-generator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate figures for a paper that needs three plots, two of which already exist under figures/ and one of which is missing.",
+      "expected_output": "Success requires canonical naming; copies existing figures rather than regenerating; uses no placeholder images.",
+      "assertions": [
+        "names figures as fig_<problem_id>_<seq>",
+        "copies existing figures from figures/ rather than regenerating them",
+        "uses no placeholder images for the missing figure",
+        "records a figure manifest with source paths"
+      ]
+    }
+  ]
+}

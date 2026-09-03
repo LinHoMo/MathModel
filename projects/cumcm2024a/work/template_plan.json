@@ -1,0 +1,158 @@
+{
+  "spec_source": "output/MODEL_SPEC.md",
+  "problem_type": "A-physical（机理类-运动学/几何）",
+  "problem_title": "2024 CUMCM A 题 板凳龙：等距螺线盘入/盘出运动学",
+  "random_seed": 42,
+  "multi_run_count": 5,
+  "template": "custom_spiral_kinematics",
+  "template_reason": "等距螺线+链式约束无现成模板匹配，自定义实现。等距螺线弧长存在闭式积分公式，龙头匀速使弧长参数化最自然；把手 θ 沿链严格单调，二分法稳健无需初值猜测。从 optimization/differential_evolution.py 借鉴无梯度求根骨架（二分/牛顿），其余从 code-templates/utils/ 复用灵敏度分析与 IO 模板。",
+  "modules": [
+    "code/spiral.py (螺线弧长参数化: r/point/arc_length/inverse_arc_length/dtheta_dt_head)",
+    "code/chain.py (链式约束递推: solve_chain_thetas + chain_velocities 解析线性递推)",
+    "code/collision.py (碰撞检测: 相邻夹角 + 非相邻点到线段距离，圈层剪枝)",
+    "code/solve.py (5 个问题求解函数: solve_q1..q5)",
+    "code/main.py (入口: np.random.seed(42) + 调用 solve_q1..q5 + 写 all_results.json/result*.xlsx)"
+  ],
+  "main_method": "等距螺线弧长参数化 + 链式约束二分递推 + 速度线性递推 + 碰撞夹角/距离判据 + S形双圆弧相切方程组",
+  "selected_templates": [
+    {
+      "name": "optimization/gradient-free（牛顿迭代 + 二分求根）",
+      "template_path": "Programmer/knowledge/code-templates/optimization/differential_evolution.py",
+      "template_subdir": "Programmer/knowledge/code-templates/optimization/",
+      "usage": "借鉴无梯度求根骨架（二分/牛顿）实现弧长反解 theta_head 与链式约束 theta_i 求根；本题为运动学几何递推，非启发式优化，故从 template 借鉴迭代框架后从头编写核心算法",
+      "adaptation": "替换目标为弧长方程 s(theta)-s_target=0 与链式距离方程 ||P(theta_i)-P(theta_{i-1})||-L_i=0，采用二分法（单调区间，无需初值猜测）"
+    },
+    {
+      "name": "sensitivity-analysis",
+      "template_path": "Programmer/knowledge/code-templates/utils/sensitivity_analysis.py",
+      "template_subdir": "Programmer/knowledge/code-templates/utils/",
+      "usage": "直接复用单参数 ±5%/±10% 扰动 + CV 统计骨架，对 b / V_HEAD / w 做灵敏度分析，输出 t* 与 d_min 的变化",
+      "adaptation": "扰动参数为本题物理量（b 螺距、V_HEAD 龙头速度、w 板凳宽），结果指标为 t*、d_min"
+    },
+    {
+      "name": "data-io/excel",
+      "template_path": "Programmer/knowledge/code-templates/utils/data_pipeline.py",
+      "template_subdir": "Programmer/knowledge/code-templates/utils/",
+      "usage": "借鉴 pandas DataFrame → openpyxl xlsx 写出与编码检查骨架，落地 result1-5.xlsx",
+      "adaptation": "无外部数据输入，全部参数为题目常量；输出 5 个 xlsx（位置/速度表）至 tables/ 目录"
+    },
+    {
+      "name": "visualization/matplotlib",
+      "template_path": "Programmer/knowledge/code-templates/utils/eda_template.py",
+      "template_subdir": "Programmer/knowledge/code-templates/utils/",
+      "usage": "借鉴 matplotlib 画图骨架，画盘入/盘出轨迹图与碰撞时刻图",
+      "adaptation": "画等距螺线 + 222 把手折线轨迹，标注碰撞对，存 figures/*.png"
+    }
+  ],
+  "subproblems": [
+    {
+      "id": "problem_1",
+      "method": "等距螺线弧长参数化 + 链式约束二分递推 + 速度线性递推（解析运动学）",
+      "template_path": "Programmer/knowledge/code-templates/optimization/differential_evolution.py",
+      "methodology_ref": "Programmer/knowledge/methodology/numerical-methods.md",
+      "from_scratch": true,
+      "from_scratch_reason": "板凳龙运动学不在 15 类标准模板内，主方法为弧长闭式公式 + 二分求根 + 线性递推，借鉴 optimization 迭代框架从头编写",
+      "functions": [
+        {"name": "archimedes_r", "description": "等距螺线极径 r=a·θ", "inputs": "theta, b", "outputs": "r"},
+        {"name": "spiral_arc_length", "description": "等距螺线弧长闭式积分 s(θ)=b/(4π)·[θ√(1+θ²)+ln(θ+√(1+θ²))]", "inputs": "theta, b", "outputs": "s"},
+        {"name": "spiral_position", "description": "螺线位置 P(θ)=(r cosθ, r sinθ)", "inputs": "theta, b", "outputs": "(x, y)"},
+        {"name": "spiral_tangent", "description": "螺线切向 T(θ)=a(cosθ-θsinθ, sinθ+θcosθ)", "inputs": "theta, b", "outputs": "(Tx, Ty)"},
+        {"name": "inverse_arc_length", "description": "弧长反解 θ_head：二分法解 s(θ)-s_target=0", "inputs": "s_target, b", "outputs": "theta"},
+        {"name": "chain_recurse", "description": "链式约束递推：从 θ_head 出发二分求各 θ_i 使 |P(θ_i)-P(θ_{i-1})|=L_i", "inputs": "theta_head, L_list, b", "outputs": "theta_array[223]"},
+        {"name": "velocity_recurse", "description": "速度线性递推 θ̇_i=(u_i·T_{i-1})/(u_i·T_i)·θ̇_{i-1}", "inputs": "theta_array, theta_dot_head, b", "outputs": "speed_array[223]"},
+        {"name": "solve_problem_1", "description": "子问题1主函数：t=0..300s 步长1s，每秒算 223 把手位置+速度", "inputs": "params dict", "outputs": "{values, units, validation}"}
+      ],
+      "dependencies": ["numpy", "pandas", "openpyxl", "matplotlib"],
+      "notes": "盘入 θ 单调减小；θ_dot_head=-V_HEAD/(a·√(1+θ_head²))；输出 result1.xlsx 至 tables/"
+    },
+    {
+      "id": "problem_2",
+      "method": "碰撞判据（相邻夹角 min(L_i,L_{i+1})·sinα≥w + 非相邻点到线段距离≥w）+ 二分细化 t*",
+      "template_path": "Programmer/knowledge/code-templates/optimization/differential_evolution.py",
+      "methodology_ref": "Programmer/knowledge/methodology/numerical-methods.md",
+      "from_scratch": true,
+      "from_scratch_reason": "碰撞判据为自定义几何判据，需从头实现夹角叉积 + 点到线段距离",
+      "functions": [
+        {"name": "collision_check", "description": "碰撞判据：扫描相邻板凳夹角与非相邻板凳距离，圈层差≤1 剪枝", "inputs": "theta_array, L_list, w", "outputs": "(is_collision, collision_pair)"},
+        {"name": "find_t_star", "description": "二分细化定位 t*：先 1s 粗扫再 0.01s 二分", "inputs": "model_func, w", "outputs": "t_star"},
+        {"name": "solve_problem_2", "description": "子问题2主函数：求 t* 及该时刻位置速度", "inputs": "params dict", "outputs": "{values, units, validation}"}
+      ],
+      "dependencies": ["numpy", "pandas", "openpyxl"],
+      "notes": "t* 预期 400~450s 量级；扫描范围 [0, 600]；输出 result2.xlsx 至 tables/"
+    },
+    {
+      "id": "problem_3",
+      "method": "掉头最小直径 d_min = 2·r_head(t*) = (b/π)·θ_head(t*)",
+      "template_path": "Programmer/knowledge/code-templates/optimization/differential_evolution.py",
+      "methodology_ref": "Programmer/knowledge/methodology/numerical-methods.md",
+      "from_scratch": true,
+      "from_scratch_reason": "解析公式直接由子问题2结果给出，从头编写",
+      "functions": [
+        {"name": "solve_problem_3", "description": "子问题3主函数：d_min=2·r_head(t*)", "inputs": "params dict", "outputs": "{values, units, validation}"}
+      ],
+      "dependencies": ["numpy", "pandas", "openpyxl"],
+      "notes": "d_min 预期 4~5 m；输出 result3.xlsx 至 tables/"
+    },
+    {
+      "id": "problem_4",
+      "method": "盘出螺线 r=-b·θ/(2π) 中心对称 + 同构弧长参数化 + 速度递推 + 全局最大速度扫描",
+      "template_path": "Programmer/knowledge/code-templates/optimization/differential_evolution.py",
+      "methodology_ref": "Programmer/knowledge/methodology/numerical-methods.md",
+      "from_scratch": true,
+      "from_scratch_reason": "盘出与盘入同构（θ 取负，速度方向反转），复用 problem_1 框架从头编写",
+      "functions": [
+        {"name": "spiral_arc_length_out", "description": "盘出螺线弧长（θ<0，因 θ² 与符号无关同构）", "inputs": "theta, b", "outputs": "s"},
+        {"name": "solve_problem_4", "description": "子问题4主函数：扫描盘出全过程求 max_speed 及时刻位置", "inputs": "params dict", "outputs": "{values, units, validation}"}
+      ],
+      "dependencies": ["numpy", "pandas", "openpyxl"],
+      "notes": "v_max 预期 2~3 m/s；最大速度通常出现在最外侧把手且刚完成掉头时；输出 result4.xlsx 至 tables/"
+    },
+    {
+      "id": "problem_5",
+      "method": "S 形双圆弧相切几何方程组 + 牛顿迭代（或 scipy.optimize.fsolve）联立求 R 与 p'",
+      "template_path": "Programmer/knowledge/code-templates/optimization/differential_evolution.py",
+      "methodology_ref": "Programmer/knowledge/methodology/numerical-methods.md",
+      "from_scratch": true,
+      "from_scratch_reason": "S 形相切方程组为自定义非线性方程组，从头实现残差函数 + 雅可比 + 牛顿迭代；scipy 不可用时手写牛顿",
+      "functions": [
+        {"name": "s_curve_residual", "description": "S 形相切方程组残差：切线垂直 + 圆心距=2R + 直径约束", "inputs": "x=[R, theta_in, p_prime]", "outputs": "residual vector"},
+        {"name": "s_curve_solve", "description": "牛顿迭代解 S 形方程组求 R 与 p'", "inputs": "d_turn, b", "outputs": "(R, p_prime)"},
+        {"name": "solve_problem_5", "description": "子问题5主函数：求 R 与 p'", "inputs": "params dict", "outputs": "{values, units, validation}"}
+      ],
+      "dependencies": ["numpy", "scipy", "pandas", "openpyxl"],
+      "notes": "R 预期 1.5~2.5 m，p' 预期 0.55~0.75 m；输出 result5.xlsx 至 tables/"
+    }
+  ],
+  "file_plan": [
+    {"path": "code/spiral.py", "purpose": "等距螺线弧长参数化: r/point/arc_length/inverse_arc_length/dtheta_dt_head", "functions": ["spiral_r", "spiral_point", "spiral_tangent", "spiral_arc_length", "inverse_arc_length", "dtheta_dt_head"]},
+    {"path": "code/chain.py", "purpose": "链式约束递推: solve_chain_thetas (二分求各 θ_i) + chain_velocities (解析线性递推)", "functions": ["solve_chain_thetas", "chain_velocities"]},
+    {"path": "code/collision.py", "purpose": "碰撞检测: 相邻板凳夹角 + 非相邻板凳点到线段距离，圈层剪枝", "functions": ["check_collision", "point_to_segment_distance"]},
+    {"path": "code/solve.py", "purpose": "5 个问题求解函数 solve_q1..q5 + solve_problem_N 标准签名包装", "functions": ["solve_q1", "solve_q2", "solve_q3", "solve_q4", "solve_q5", "solve_problem_1", "solve_problem_2", "solve_problem_3", "solve_problem_4", "solve_problem_5"]},
+    {"path": "code/main.py", "purpose": "主入口: np.random.seed(42) + 调用 solve_q1..q5 + 写 figures/all_results.json + tables/result*.xlsx", "functions": ["main"]},
+    {"path": "code/test_main.py", "purpose": "pytest 单元测试：弧长公式/链式约束/速度龙头/碰撞判据/可复现性", "functions": ["test_arc_length_zero", "test_chain_constraint", "test_head_speed", "test_reproducibility"]}
+  ],
+  "runtime_notes": {
+    "numerical_methods": [
+      "弧长反解 theta_head：二分法（s(θ) 在 θ>0 单调递增），区间 [1e-6, theta0]，精度 1e-10",
+      "链式约束二分：盘入 θ_i > θ_{i-1}（向内排列，θ 递增），区间 [θ_{i-1}, θ_{i-1}+Δ]，距离单调递增，精度 1e-10",
+      "碰撞扫描 O(n²) 剪枝：仅扫圈层差 ≤1 的板凳对，n=222 时约 5 万对 → 剪枝后 ~2 千对",
+      "t* 二分细化：先 1s 粗扫定位违反区间 [t_k-1, t_k]，再 0.01s 二分",
+      "S 形牛顿迭代：初值 R0=1.5, theta_in0=2π·4.5/0.55, p_prime0=0.55；雅可比数值差分；不收敛回退网格搜索"
+    ],
+    "coordinate_convention": "原点为螺线几何中心，x 轴指向初始时刻龙头前把手方向；盘入 θ>0 递减，盘出 θ<0 递增（向外）",
+    "stability_guards": [
+      "θ 接近 0 时弧长公式 s(0)=0 正常（ln(1)=0）",
+      "链式二分区间上界 Δ=0.5 rad 足够覆盖单步 θ 增量（L_body/a ≈ 2.20/0.0875 ≈ 25 rad？实际单步 θ 增量很小，因为 r 大）",
+      "速度递推分母 u_i·T_i 可能接近 0 时加 1e-12 防除零"
+    ]
+  },
+  "self_check": {
+    "every_subproblem_has_template_path": true,
+    "every_template_path_points_to_real_file": true,
+    "from_scratch_subproblems_marked": true,
+    "every_subproblem_has_solve_function": true,
+    "file_plan_paths_start_with_code": true,
+    "random_seed_written": true,
+    "methodology_ref_attached": true
+  }
+}

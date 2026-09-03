@@ -1,0 +1,32 @@
+# 电工杯数学建模竞赛包
+
+competition: diangong
+name: 电工杯数学建模竞赛
+language: zh
+engine: xelatex
+compile_chain: xelatex -> bibtex -> xelatex -> xelatex
+
+template:
+  base: core/Writer/knowledge/templates/mathmodel/zh/cumcm/
+  note: 工程导向，可复用 CUMCM 的 ctex 模板骨架
+
+thresholds:
+  body_pages: 25
+  min_references: 10
+  no_toc: true
+
+structure:
+  order: [封面, 摘要, 正文, 附录]
+  toc: false
+  note: 官网要求无目录，摘要有指定起始页码
+
+ai_usage:
+  required: false
+  output: support_materials/ai_usage_disclosure.md
+  note: 官网暂无专门 AI 格式要求，仍建议随支撑材料一并提交
+
+anonymity:
+  forbid_in_body: [校名, 姓名, 指导教师]
+
+rules_verified: 2026-08-30
+rules_source: 见 rules.md 的「官方入口」

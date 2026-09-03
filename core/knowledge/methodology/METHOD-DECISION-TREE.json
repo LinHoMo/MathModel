@@ -1,0 +1,71 @@
+{
+  "version": "1.0",
+  "purpose": "method-matcher 选型的机器可读决策树：从问题特征收敛到方法族，再在族内对比候选",
+  "questions": {
+    "Q1": {"text": "机理是否主导？", "criteria": "可推出物理/化学/动力学定律"},
+    "Q2": {"text": "是否有题给数据？", "criteria": "附件提供观测/实验/统计数据"},
+    "Q3": {"text": "决策变量是否离散/含整数约束？", "criteria": "选址、指派、调度、开关量、路径"},
+    "Q4": {"text": "是否含时间演化？", "criteria": "状态随时间推进"},
+    "Q5": {"text": "是否为多目标/带权衡？", "criteria": "多个冲突目标或成本收益权衡"},
+    "Q6": {"text": "样本量水平？", "values": ["large(>=1000)", "medium(200-1000)", "small(<200)"]},
+    "Q7": {"text": "是否含不确定性？", "criteria": "参数随机、场景未知、鲁棒性要求"},
+    "Q8": {"text": "是否为空间/网络结构？", "criteria": "地理分布、图结构、网络流"}
+  },
+  "entries": {
+    "A": {
+      "description": "物理/连续机理",
+      "branches": [
+        {"if": {"Q1": true, "spatial_field": true}, "family": "pde_field", "methods": ["有限差分", "有限元", "解析解+数值校验"]},
+        {"if": {"Q1": true, "spatial_field": false, "Q4": true}, "family": "ode_dynamics", "methods": ["常微分方程组", "离散时间递推", "守恒律模型"]},
+        {"if": {"Q1": true, "need_param_fit": true}, "family": "hybrid_mechanism_data", "methods": ["参数辨识(最小二乘/贝叶斯)", "机理模型+残差修正"]}
+      ]
+    },
+    "B": {
+      "description": "离散/组合/决策",
+      "branches": [
+        {"if": {"Q3": true, "Q8": true}, "family": "graph_network", "methods": ["最短路/最小生成树/网络流", "启发式搜索"]},
+        {"if": {"Q3": true, "scale": "small"}, "family": "exact_optimization", "methods": ["整数/混合整数规划", "动态规划"]},
+        {"if": {"Q3": true, "scale": "large_or_nonconvex"}, "family": "metaheuristics", "methods": ["遗传算法", "粒子群", "模拟退火"], "requires": ["multi_start_check", "multi_run_count"]},
+        {"if": {"Q3": false, "Q7": true}, "family": "uncertain_decision", "methods": ["随机规划", "鲁棒优化", "蒙特卡洛+期望准则", "MDP"]}
+      ]
+    },
+    "C": {
+      "description": "数据/统计",
+      "branches": [
+        {"if": {"Q2": true, "Q4": true, "Q6": "small(<200)"}, "family": "classical_timeseries", "methods": ["ARIMA/指数平滑", "灰色模型", "Holt-Winters"]},
+        {"if": {"Q2": true, "Q4": true, "Q6": ["large(>=1000)", "medium(200-1000)"]}, "family": "timeseries_learning", "methods": ["LSTM/GRU", "树模型滚动预测", "ARIMA+机器学习组合"]},
+        {"if": {"Q2": true, "task": "supervised"}, "family": "supervised_learning", "methods": ["线性/逻辑回归", "随机森林", "XGBoost/LightGBM", "SVM"], "requires": ["cross_validation", "multi_metric"]},
+        {"if": {"Q2": true, "task": "unsupervised"}, "family": "unsupervised", "methods": ["KMeans/层次聚类", "PCA/因子分析"]},
+        {"if": {"Q2": true, "task": "ranking"}, "family": "composite_evaluation", "methods": ["熵权法+TOPSIS", "主成分综合评价", "组合赋权"], "requires": ["sensitivity_two_weightings"]}
+      ]
+    },
+    "D": {
+      "description": "多目标/工程系统",
+      "branches": [
+        {"if": {"Q5": true, "quantifiable": true}, "family": "multi_objective_optimization", "methods": ["NSGA-II/NSGA-III", "加权法/epsilon-约束", "理想点法"]},
+        {"if": {"Q5": true, "quantifiable": false}, "family": "decision_analysis", "methods": ["AHP/ANP", "模糊综合评价", "VIKOR"]},
+        {"if": {"Q1": true}, "family": "mechanism_then_optimize", "methods": ["先按 A 题入口建机理层，外层套优化/决策"]}
+      ]
+    },
+    "E": {
+      "description": "交叉/开放",
+      "branches": [
+        {"if": {"Q2": true}, "family": "goto_C", "methods": ["按 C 题入口分支"]},
+        {"if": {"Q2": false}, "family": "assumption_driven", "methods": ["机理简化模型", "Agent-Based 仿真", "系统动力学"]},
+        {"if": {"Q7": true}, "family": "overlay_uncertainty", "methods": ["蒙特卡洛传播", "情景分析", "Sobol 全局灵敏度"]}
+      ]
+    }
+  },
+  "overlays": [
+    {"name": "sensitivity", "when": "always", "methods": ["单参数扫描", "Morris", "Sobol"]},
+    {"name": "uncertainty", "when": "noisy_data_or_random_params", "methods": ["Bootstrap", "蒙特卡洛", "置信区间"]},
+    {"name": "validation", "when": "always", "methods": ["交叉验证", "留一法", "守恒量检查"]},
+    {"name": "interpretability", "when": "ml_model_stated_in_paper", "methods": ["特征重要性", "SHAP", "偏依赖"]}
+  ],
+  "rules": [
+    "叶节点不豁免候选对比：仍须 >= min_candidate_models 个实质不同候选",
+    "分支答案必须来自 question_spec.json / type_classification.json 的事实；信息不足记 unknown 并列入假设",
+    "物理/业务约束优先级高于拟合优度（铁律 M1）",
+    "选型产物须在候选中记录 decision_path（走过的分支序列）"
+  ]
+}

@@ -1,0 +1,13 @@
+interface:
+  display_name: "Hash Auditor"
+  short_description: "哈希链 + 错误归因 + 规则迭代"
+  default_prompt: "Use $hash-auditor to audit hash chain and attribute errors."
+runtime:
+  hand: programmer
+  utg_layer: L6
+  stage: 6
+  inputs:
+    - 所有产物
+  outputs:
+    - output/CODE_DELIVERABLES.md
+    - work/audit_chain.json

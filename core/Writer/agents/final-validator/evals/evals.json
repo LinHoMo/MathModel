@@ -1,0 +1,16 @@
+{
+  "skill_name": "final-validator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Final validate a paper whose PDF rendered with fewer pages than min_pages, whose hash chain is intact, and whose consistency and guardrails sub-reports pass.",
+      "expected_output": "Success requires schema valid; renders paper/main.pdf; all paper.* thresholds from env met; hash audit log complete.",
+      "assertions": [
+        "validates the PAPER_SPEC dict against schemas/paper_spec.schema.json",
+        "renders paper/main.pdf that a PDF reader can open",
+        "verifies all paper.* thresholds from env are met",
+        "completes the hash audit log with final_passed flag"
+      ]
+    }
+  ]
+}

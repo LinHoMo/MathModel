@@ -1,0 +1,186 @@
+% ==============================================================================
+% SIAM journal submission template (skeleton)
+% Official SIAM classes:
+%   * siamltex.cls      (legacy, 1995)  —  historically on CTAN as the `siam`
+%                                         package, but old and brittle
+%   * siamart220829.cls (current, 2022) —  distributed by SIAM, NOT in TeX Live
+% To submit to a SIAM journal, download siamart220829.cls (and the .bst files)
+% from https://www.siam.org/publications/journals/about-siam-journals/information-for-authors
+% and replace the preamble below with:  \documentclass{siamart220829}
+%
+% Editorial style (SIAM "Author Submission Guidelines"):
+%   Layout     : single column, 11pt, double-spaced for review
+%   Body font  : Times Roman
+%   Math font  : Times (mathptmx)  /  Computer Modern acceptable
+%   Captions   : 10pt, sentence case
+%   Citation   : numbered [1]  (natbib numeric)
+%   Figures    : single column only (~3.5in wide in the printed article)
+%   Sections   : 1. Introduction, 2. Background, ..., N. Conclusion
+% References  : siamplain.bst  (numeric, alphabetical by author)
+%               siamunbib.bst  (unsorted, citation order)
+% ==============================================================================
+\documentclass[11pt]{article}
+% For the real SIAM class (download siamart220829.cls from siam.org), use:
+% \documentclass[review]{siamart220829}
+% Or the legacy class (in TeX Live as the `siam` package):
+% \documentclass{siamltex}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}            % Times text + math (SIAM preference)
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}              % SIAM theorem environments
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{lineno}
+
+% ---- Citations: numbered, natbib ----
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{plain}        % close to siamplain (alphabetical, numeric)
+% With the real SIAM class, use:
+%   \bibliographystyle{siamplain}     % alphabetical, numbered
+%   \bibliographystyle{siamunbib}     % unsorted, citation order
+
+\linenumbers                     % review mode: line numbers
+
+% ---- SIAM-style theorem environments ----
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% ---- SIAM-style section numbering ----
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+
+% \usepackage{hyperref}           % load last if used
+
+\title{A Concise and Informative Title for the SIAM Submission}
+\author{First Author\thanks{Department of X, University of Y, City, Country
+  (\texttt{first.author@univ.edu}).} \and Second Author\thanks{Department of Z,
+  Institute of W, City, Country.}}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+% Abstract  (SIAM: unstructured, ~150-250 words, no cites, math allowed)
+% ==============================================================================
+\begin{abstract}
+% TODO: 150-250 words. State the problem, the approach, the main result (with
+% a key formula or theorem statement if applicable), and the significance.
+% No citations. Inline math ($x$) is fine.
+\end{abstract}
+
+% ==============================================================================
+% 1. Introduction
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: motivate the problem; summarise prior limitations; state contributions.
+% SIAM style: open with the broad problem, then the specific question, then
+% the approach, then a bulleted or enumerated contribution list, then a
+% paper roadmap. Cite prior work with \cite{ref_example}.
+
+% ==============================================================================
+% 2. Background / Related Work
+% ==============================================================================
+\section{Background}
+\label{sec:background}
+% TODO: required preliminaries, notation, and prior results that the rest of
+% the paper builds on. State lemmas with \begin{lemma}...\end{lemma}.
+
+\begin{lemma}
+\label{lem:example}
+% TODO: state a prior result that the analysis will rely on.
+\end{lemma}
+
+% ==============================================================================
+% 3. Problem Formulation
+% ==============================================================================
+\section{Problem Formulation}
+\label{sec:problem}
+% TODO: formal problem statement, assumptions, and the quantity of interest.
+
+\begin{definition}
+\label{def:example}
+% TODO: define a key term.
+\end{definition}
+
+% ==============================================================================
+% 4. Main Results
+% ==============================================================================
+\section{Main Results}
+\label{sec:results}
+% TODO: state and prove the main theorems; discuss tightness; give corollaries.
+
+\begin{theorem}
+\label{thm:main}
+% TODO: state the main result precisely.
+\end{theorem}
+
+\begin{proof}
+% TODO: proof of Theorem~\ref{thm:main}.
+\end{proof}
+
+% ==============================================================================
+% 5. Numerical Experiments
+% ==============================================================================
+\section{Numerical Experiments}
+\label{sec:experiments}
+% TODO: setup (datasets / parameters / baselines), main convergence / error
+% tables, runtime comparison, and a discussion of how the numerics corroborate
+% the theory.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=0.8\textwidth]{figures/result.pdf}
+\fbox{\rule{0pt}{5cm}\rule{0.7\textwidth}{0pt}}
+\caption{Figure caption goes BELOW the figure (SIAM convention).
+Captions are sentence case, 10pt.}
+\label{fig:result}
+\end{figure}
+
+\begin{table}[t]
+\caption{Table caption goes ABOVE the table (SIAM convention).}
+\label{tab:results}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Method   & Error          & Time (s)       \\
+\midrule
+Baseline & $1.2 \times 10^{-2}$          & 12.4          \\
+Ours     & $\mathbf{3.4 \times 10^{-4}}$ & $\mathbf{8.1}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ==============================================================================
+% 6. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: recap the main theorem, its significance, and open questions.
+
+% ==============================================================================
+% References
+% Compile:  pdflatex main  ->  bibtex main  ->  pdflatex main  ->  pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} F.~Author and S.~Author, \emph{Title of the paper},
+%   SIAM J.~X, YY (20YY), pp.~1--25.
+% \end{thebibliography}
+
+\end{document}

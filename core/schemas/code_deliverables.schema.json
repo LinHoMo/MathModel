@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CODE_DELIVERABLES",
+  "description": "Programmer输出的代码交付物清单 - 结构化格式保证可追溯性",
+  "type": "object",
+  "required": ["environment", "files", "results_ledger", "verification", "reproducibility"],
+  "properties": {
+    "environment": {
+      "type": "object",
+      "required": ["python_version", "dependencies", "random_seed"],
+      "properties": {
+        "python_version": { "type": "string" },
+        "dependencies": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "random_seed": { "type": "integer", "description": "固定为42" }
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "description": "代码文件清单",
+      "items": {
+        "type": "object",
+        "required": ["path", "purpose", "functions", "run_command"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^code/" },
+          "purpose": { "type": "string", "minLength": 5 },
+          "functions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "description", "inputs", "outputs"],
+              "properties": {
+                "name": { "type": "string" },
+                "description": { "type": "string" },
+                "inputs": { "type": "string" },
+                "outputs": { "type": "string" }
+              }
+            }
+          },
+          "run_command": { "type": "string" },
+          "estimated_time": { "type": "string" }
+        }
+      }
+    },
+    "results_ledger": {
+      "type": "object",
+      "required": ["metadata", "results"],
+      "description": "数值真相源 - 所有论文引用的数值必须追溯到这里",
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "required": ["timestamp", "problem_type", "random_seed"],
+          "properties": {
+            "timestamp": { "type": "string" },
+            "problem_type": { "type": "string" },
+            "random_seed": { "type": "integer" }
+          }
+        },
+        "results": {
+          "type": "object",
+          "minProperties": 1,
+          "description": "子问题结果，key必须为problem_N",
+          "patternProperties": {
+            "^problem_\\d+$": {
+              "type": "object",
+              "required": ["values", "units"],
+              "properties": {
+                "values": { "type": "object", "minProperties": 1 },
+                "units": { "type": "object", "minProperties": 1 },
+                "sensitivity": { "type": "object" },
+                "validation": { "type": "object" }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": ["tests_passed", "checks"],
+      "properties": {
+        "tests_passed": { "type": "boolean" },
+        "test_count": { "type": "integer", "minimum": 1 },
+        "failure_count": { "type": "integer", "minimum": 0 },
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "properties": {
+              "name": { "type": "string" },
+              "status": { "type": "string", "enum": ["pass", "fail", "warn"] },
+              "details": { "type": "string" }
+            }
+          }
+        },
+        "constraint_reverification": {
+          "type": "object",
+          "description": "约束重验证：最优解重新代入所有约束后的结果（P10）",
+          "properties": {
+            "passed": { "type": "boolean", "description": "是否所有约束均满足" },
+            "details": { "type": "string", "description": "每条约束的取值/边界/松弛量/是否活跃，整数变量取整后重验结果" }
+          }
+        }
+      }
+    },
+    "reproducibility": {
+      "type": "object",
+      "required": ["seed_fixed", "multi_run_stats"],
+      "properties": {
+        "seed_fixed": { "type": "boolean" },
+        "multi_run_count": { "type": "integer", "minimum": 1 },
+        "multi_run_stats": {
+          "type": "object",
+          "description": "启发式算法多次运行统计",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "mean": { "type": "number" },
+              "std": { "type": "number" },
+              "cv": { "type": "number", "description": "变异系数 std/mean" }
+            }
+          }
+        }
+      }
+    },
+    "sensitivity": {
+      "type": "array",
+      "description": "灵敏度分析结果",
+      "items": {
+        "type": "object",
+        "required": ["parameter", "perturbation", "result_change"],
+        "properties": {
+          "parameter": { "type": "string" },
+          "perturbation": { "type": "string", "description": "如 ±10%, ±20%" },
+          "result_change": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

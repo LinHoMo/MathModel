@@ -1,0 +1,14 @@
+interface:
+  display_name: "Academic Scorer"
+  short_description: "学术严谨性评分员：推导完整性、假设合理性、验证充分性、数学正确性，权重 25%"
+  default_prompt: "Use $scorer-academic to score academic rigor and emit score_card_academic.json."
+runtime:
+  hand: reviewer
+  utg_layer: L4
+  stage: 1
+  inputs:
+    - paper/main.tex
+    - figures/all_results.json
+    - work/weakness_report.json
+  outputs:
+    - work/score_card_academic.json

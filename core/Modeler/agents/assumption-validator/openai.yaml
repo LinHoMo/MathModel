@@ -1,0 +1,12 @@
+interface:
+  display_name: "Assumption Validator"
+  short_description: "假设四维评分验证"
+  default_prompt: "Use $assumption-validator to score assumptions on 4 dimensions."
+runtime:
+  hand: modeler
+  utg_layer: L4
+  stage: 5
+  inputs:
+    - work/model_draft.md
+  outputs:
+    - work/assumption_validation.json

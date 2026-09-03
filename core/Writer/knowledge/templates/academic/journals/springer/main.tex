@@ -1,0 +1,183 @@
+% ==============================================================================
+% Springer Nature journal submission template (skeleton)
+% Official class: sn-jnl.cls  (download from Springer Nature LaTeX template
+% page: https://www.springernature.com/gp/authors/campaigns/latex-author-help
+% or search "Springer Nature LaTeX Template" on Overleaf). The sn-jnl.cls is
+% NOT distributed in standard TeX Live, so to compile this skeleton out-of-the
+% box we use the standard `article` class with Springer-editorial styling. For
+% an actual Springer submission, replace the preamble below with:
+%
+%   \documentclass[sn-basic]{sn-jnl}      % numbered (Basic)
+%   \documentclass[sn-mathphys]{sn-jnl}   % math/physics numbered
+%   \documentclass[sn-apa]{sn-jnl}        % APA author-year
+%   \documentclass[sn-standardnature]{sn-jnl}  % Nature in-house style
+%   \documentclass[sn-vancouver]{sn-jnl}  % Vancouver numbered
+%   \documentclass[default,iicol]{sn-jnl} % two-column review style
+%
+% Editorial style (Springer Nature, "Key Style Points"):
+%   Layout     : single column, 10pt, double-spaced for review
+%   Body font  : Times Roman
+%   Math font  : Times (mathptmx)
+%   Citation   : numbered [1] OR author-year (Author 20YY) per journal
+%   Figures    : single column ~85 mm  |  double column ~170 mm
+%   Captions   : below figures, above tables
+% References  : sn-basic.bst, sn-mathphys.bst, sn-apa.bst, sn-vancouver.bst
+%               (shipped with the sn-jnl template archive)
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- To use the real Springer class, comment out the line above and use: ----
+% \documentclass[sn-basic]{sn-jnl}
+% \usepackage{sn-jnl.cls}  % (the cls is loaded by \documentclass, not \usepackage)
+
+\usepackage[a4paper,top=30mm,bottom=30mm,left=30mm,right=30mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}            % Times text + math
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{lineno}
+
+% ---- Citations: natbib (Springer uses natbib for both numbered and author-year) ----
+\usepackage[numbers,sort&compress]{natbib}   % numbered style (sn-basic)
+% For author-year (sn-apa) use instead:
+% \usepackage[authoryear]{natbib}
+\bibliographystyle{unsrtnat}                 % numeric, citation order
+% With the real sn-jnl class, use:
+%   \bibliographystyle{sn-basic}      % numbered
+%   \bibliographystyle{sn-mathphys}   % math/phys numbered
+%   \bibliographystyle{sn-apa}        % APA author-year
+%   \bibliographystyle{sn-vancouver}  % Vancouver
+
+\linenumbers                     % review mode
+
+% \usepackage{hyperref}           % load last if used
+
+\title{A Concise and Informative Title for the Springer Nature Submission}
+\author{First Author\textsuperscript{1,*} \and Second Author\textsuperscript{2} \and Senior Author\textsuperscript{1}}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---- Springer author block (mirrors sn-jnl \author*\affiliation* layout) ----
+\noindent\textsuperscript{1}Department of X, University of Y, City, Country\\
+\textsuperscript{2}Department of Z, Institute of W, City, Country\\
+\textsuperscript{*}Corresponding author: first.author@univ.edu
+
+\vspace{1em}
+
+% ==============================================================================
+% Abstract  (Springer: structured or unstructured, ~150-250 words, no cites)
+% ==============================================================================
+\begin{abstract}
+% TODO: 150-250 words. Many Springer journals request a structured abstract
+% (Background / Methods / Results / Conclusions); check the journal's guide
+% for authors. No citations, no undefined abbreviations.
+\end{abstract}
+
+\noindent\textbf{Keywords:} % TODO: 4-6 keywords separated by commas.
+keyword one, keyword two, keyword three
+
+\vspace{1em}
+
+% ==============================================================================
+% 1. Introduction
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: context -> gap -> approach -> contributions -> roadmap. Use \citep{}
+% (parenthetical) and \citet{} (textual) for author-year, or \cite{} for numbered.
+
+% ==============================================================================
+% 2. Related Work
+% ==============================================================================
+\section{Related Work}
+\label{sec:related}
+% TODO: cluster prior work and position your contribution.
+
+% ==============================================================================
+% 3. Methods
+% ==============================================================================
+\section{Methods}
+\label{sec:methods}
+% TODO: problem formulation, proposed method, theoretical justification.
+
+\subsection{Problem formulation}
+% TODO.
+
+\subsection{Proposed method}
+% TODO.
+
+% ==============================================================================
+% 4. Experiments
+% ==============================================================================
+\section{Experiments}
+\label{sec:experiments}
+% TODO: setup, main results, ablation, qualitative examples, statistics.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=0.9\textwidth]{figures/result.pdf}
+\fbox{\rule{0pt}{5cm}\rule{0.7\textwidth}{0pt}}
+\caption{Figure caption goes BELOW the figure (Springer convention).
+Single-column figures ~85 mm wide, double-column figures ~170 mm wide.}
+\label{fig:result}
+\end{figure}
+
+\begin{table}[t]
+\caption{Table caption goes ABOVE the table (Springer convention).}
+\label{tab:results}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Method   & Metric A       & Metric B       \\
+\midrule
+Baseline & 0.812          & 0.754          \\
+Ours     & \textbf{0.891} & \textbf{0.832} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ==============================================================================
+% 5. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: recap contribution and headline result; one sentence of future work.
+
+% ==============================================================================
+% Back matter
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funding, grant numbers.
+
+\section*{Funding}
+% TODO: grant IDs and agencies (Springer requires an explicit Funding section).
+
+\section*{Competing Interests}
+% TODO: declare competing interests, or "The authors have no competing interests."
+
+\section*{Data Availability}
+% TODO: state where data and code are deposited (DOIs preferred).
+
+\section*{Author Contributions}
+% TODO: e.g. "F.A. conceived the study, performed the analysis, and wrote the
+% manuscript. S.A. supervised the project."
+
+% ==============================================================================
+% References
+% Compile:  pdflatex main  ->  bibtex main  ->  pdflatex main  ->  pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} Author, F.: Title of the paper. J. Name XX, 1--10 (20YY)
+% \end{thebibliography}
+
+\end{document}

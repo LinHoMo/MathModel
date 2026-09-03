@@ -1,0 +1,15 @@
+interface:
+  display_name: "DAG Builder"
+  short_description: "构建子模型依赖有向无环图，指导并行化与级联风险定位"
+  default_prompt: "Use $dag-builder to build the submodel dependency DAG and render model_dag.svg."
+runtime:
+  hand: modeler
+  utg_layer: L4
+  stage: 4.5
+  inputs:
+    - work/model_draft.md
+    - work/method_candidates.json
+    - work/question_spec.json
+  outputs:
+    - work/model_dag.json
+    - work/model_dag.svg

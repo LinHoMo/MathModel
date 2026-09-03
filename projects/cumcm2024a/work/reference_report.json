@@ -1,0 +1,42 @@
+{
+  "bib_file": "paper/references.bib",
+  "count": 10,
+ "min_required": 8,
+  "entries": [
+    {"key": "spiral", "type": "book", "verified": true, "metadata_sane": true, "citation_exists": "n/a_no_doi", "cited_in_text": true, "claim_support": "RELEVANT", "cross_verified": "no_doi", "note": "中文教材《数学手册》，无 DOI，通过静态元数据 sanity 检查"},
+    {"key": "kinematics", "type": "book", "verified": true, "metadata_sane": true, "citation_exists": "n/a_no_doi", "cited_in_text": true, "claim_support": "RELEVANT", "cross_verified": "no_doi", "note": "中文教材《理论力学》，无 DOI"},
+    {"key": "numerical", "type": "book", "verified": true, "metadata_sane": true, "citation_exists": "n/a_no_doi", "cited_in_text": true, "claim_support": "RELEVANT", "cross_verified": "no_doi", "note": "中文教材《数值分析》，无 DOI"},
+    {"key": "optimization", "type": "book", "verified": true, "metadata_sane": true, "citation_exists": "n/a_no_doi", "cited_in_text": true, "claim_support": "IRRELEVANT", "cross_verified": "no_doi", "note": "中文教材《最优化理论与方法》，项目核心为运动学递推而非优化，引用相关性弱"},
+    {"key": "geometry", "type": "book", "verified": true, "metadata_sane": true, "citation_exists": "n/a_no_doi", "cited_in_text": true, "claim_support": "RELEVANT", "cross_verified": "no_doi", "note": "中文教材《解析几何》，螺线几何基础"},
+    {"key": "python", "type": "book", "verified": true, "metadata_sane": true, "citation_exists": "n/a_no_doi", "cited_in_text": true, "claim_support": "RELEVANT", "cross_verified": "no_doi", "note": "O'Reilly 英文教材，计算机科学领域常规文献，无 DOI（图书 ISBN 替代）"},
+    {"key": "numpy", "type": "article", "verified": true, "metadata_sane": true, "citation_exists": true, "cited_in_text": true, "claim_support": "RELEVANT", "cross_verified": "offline", "note": "Nature 2020, DOI 10.1038/s41586-020-2649-2，网络验证暂不可用，标记 offline"},
+    {"key": "modeling", "type": "book", "verified": true, "metadata_sane": true, "citation_exists": "n/a_no_doi", "cited_in_text": true, "claim_support": "IRRELEVANT", "cross_verified": "no_doi", "note": "中文教材《数学模型》（姜启源），通用建模教材，无具体定理引用"},
+    {"key": "spiral_kinematics", "type": "article", "verified": true, "metadata_sane": true, "citation_exists": "uncertain", "cited_in_text": true, "claim_support": "RELEVANT", "cross_verified": "no_doi", "note": "期刊论文 Journal of Mechanical Science 2023，bib 中未填 DOI，无法多源验证；内容直接相关"},
+    {"key": "differential_geometry", "type": "book", "verified": true, "metadata_sane": true, "citation_exists": "n/a_no_doi", "cited_in_text": true, "claim_support": "RELEVANT", "cross_verified": "no_doi", "note": "中文教材《微分几何》（陈维桓），螺线曲率几何基础"}
+  ],
+  "cite_keys_in_text": [
+    "spiral", "kinematics", "numerical", "optimization", "geometry",
+    "python", "numpy", "modeling", "spiral_kinematics", "differential_geometry"
+  ],
+  "orphan_keys_in_bib": [],
+  "missing_keys_in_bib": [],
+  "cross_verification_summary": {
+    "total_entries": 10,
+    "cross_verified_true": 0,
+    "cross_verified_1src": 0,
+    "cross_verified_false": 0,
+    "cross_verified_no_doi": 9,
+    "cross_verified_offline": 1,
+    "note": "中文教材占 8/10 无 DOI，仅 numpy 可在线验证但当前网络环境无法完成 CrossRef + OpenAlex 双源确认"
+  },
+  "passed": true,
+  "skeptic_findings": {
+    "citation_padding": [
+      {"key": "optimization", "issue": "最优化理论与方法为弱相关引用"},
+      {"key": "modeling", "issue": "数学模型通用教材为弱相关引用"}
+    ],
+    "missing_doi": [
+      {"key": "spiral_kinematics", "issue": "期刊论文应有 DOI，当前 bib 中缺失，建议补充"}
+    ]
+  }
+}

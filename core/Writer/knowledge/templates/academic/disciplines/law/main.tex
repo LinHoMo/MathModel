@@ -1,0 +1,184 @@
+% ==============================================================================
+% Law (Legal Scholarship) Paper Template
+% Structure: IRAC (Issue / Rule / Application / Conclusion) and Law-Review
+% style with heavy footnoted citations.
+%
+% Citation: Bluebook (US) / OSCOLA (UK) / AGLC (AU). Footnote-heavy; BibTeX
+% automation is partial. This skeleton uses standard \footnote{} with
+% manually formatted citations + plain.bst for any bibliography entries.
+%
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- Page geometry ----
+\usepackage[a4paper,top=25mm,bottom=25mm,left=30mm,right=25mm]{geometry}
+
+% ---- Fonts & encoding ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+
+% ---- Footnote styling: law reviews use footnotes heavily ----
+\usepackage[bottom,hang,flushmargin]{footmisc}  % hang footnotes, no indent
+\renewcommand{\footnoterule}{\vspace*{0.3em}\hrule width 0.4\textwidth\vspace*{0.3em}}
+\setlength{\footnotesep}{0.8em}
+
+% ---- Cross-references ----
+\usepackage{cleveref}             % \cref{} for smart cross-references
+
+% ---- Math, figures, tables ----
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+
+% ---- Citations: minimal BibTeX support; most cites go in \footnote{} ----
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{plain}         % law reviews rarely use BibTeX for citations;
+% use biblatex with style=oscola or style=british-legal if you want automation.
+
+% ---- Hyperref last ----
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% ---- Italic case names (legal convention) ----
+\newcommand{\case}[1]{\textit{#1}}  % e.g. \case{Brown v. Board of Education}
+
+\title{Title of the Legal Submission: \\ A Doctrinal and Policy Analysis}
+\author{First Author\textsuperscript{*}\\
+\textsuperscript{*}School of Law, University of Y, City, Country; e-mail: first.author@univ.edu}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+% Abstract  (~150-200 words; state the legal issue, thesis, and contribution)
+% ==============================================================================
+\begin{abstract}
+% TODO: ~150-200 words. Sentence 1: the legal problem. Sentence 2-3: the
+% gap in the doctrine or scholarship. Sentence 4-5: the thesis. Sentence 6:
+% the proposed solution and its implications.
+\end{abstract}
+
+\noindent\textbf{Keywords:} % TODO: 4-6 keywords.
+keyword one, keyword two, keyword three
+
+% ==============================================================================
+% 1. Introduction
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: open with the legal problem and its societal stakes; state the
+% thesis up front (law reviews favour front-loaded theses); preview the
+% roadmap of the article. Cite authorities in footnotes, e.g.
+% \footnote{See \case{Brown v. Board of Education}, 347 U.S. 483 (1954).}
+
+% ==============================================================================
+% 2. IRAC Analysis  (the doctrinal core)
+% ==============================================================================
+\section{Issue}
+\label{sec:issue}
+% TODO issue: frame the legal question as a "Whether..." statement.
+% Example: \textit{Whether [party]'s conduct constitutes [tort/crime]
+% under [statute] when [facts].}
+
+\section{Rule}
+\label{sec:rule}
+% TODO rule: state the controlling statutes, restatements, and leading
+% cases. Use \footnote{} for each citation in Bluebook form.
+% Example: Under the Restatement (Second) of Torts \S 281 (1965), a
+% plaintiff must prove duty, breach, causation, and damages.
+% \footnote{\textit{Restatement (Second) of Torts} \S 281 (Am. Law Inst. 1965).}
+
+\subsection{Statutory framework}
+% TODO: quote and analyse the relevant statute(s).
+
+\subsection{Case law}
+% TODO: trace the doctrinal evolution through leading cases; distinguish
+% majority / concurrence / dissent; note circuit splits.
+
+\section{Application}
+\label{sec:application}
+% TODO application: apply the rule to the facts step by step. Use analogical
+% reasoning to compare the facts at bar with those of leading cases; note
+% policy considerations where the doctrine is indeterminate.
+
+\subsection{Analogical reasoning from precedent}
+% TODO: for each analogous case, summarise facts + holding + reasoning, then
+% explain why the present facts are similar or distinguishable.
+
+\subsection{Counter-arguments}
+% TODO counter-argument: address the strongest counter-interpretation of
+% the rule; explain why the proposed reading is superior.
+
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO conclusion: state the outcome of the IRAC analysis; flag any
+% remaining ambiguities or circuit splits.
+
+% ==============================================================================
+% 3. Law-Review Style Sections  (for full-length law review articles)
+% ==============================================================================
+% The IRAC analysis above is the doctrinal core. The sections below extend
+% it into a full law-review article with background, proposal, and
+% implications. For a short case note, comment out sections 3-7.
+
+\section{Background}
+\label{sec:background}
+% TODO: trace the historical development of the doctrine; situate the issue
+% within the broader statutory and constitutional landscape.
+
+\section{The Problem}
+\label{sec:problem}
+% TODO: identify the doctrinal gap, contradiction, or injustice that this
+% article addresses; cite criticism in the scholarly literature.
+
+\section{Proposed Solution}
+\label{sec:proposal}
+% TODO: articulate a legislative, judicial, or administrative reform;
+% specify the textual changes to statutes, regulations, or doctrine.
+
+\section{Implications}
+\label{sec:implications}
+% TODO: assess how the proposed reform would affect adjacent areas of law
+% and the institutional roles of courts, legislatures, and agencies.
+
+% ==============================================================================
+% Final Conclusion  (for full law review articles)
+% ==============================================================================
+\section{Final Conclusion}
+\label{sec:final}
+% TODO: restate the thesis and the proposed solution in one paragraph.
+
+% ==============================================================================
+% Declarations
+% ==============================================================================
+\section*{Declarations}
+
+\noindent\textbf{Funding:} % TODO: grant numbers and funding bodies.
+
+\noindent\textbf{Conflicts of interest:} % TODO: declare or state none.
+
+% ==============================================================================
+% Acknowledgements
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funders, colleagues, librarians, research assistants.
+
+% ==============================================================================
+% References  —  supplementary (most citations are in footnotes)
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Law reviews rarely use a numbered bibliography; uncomment below only if the
+% target venue requires a "References" list in addition to footnotes.
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} Author, F. \emph{Title of the Book}. Publisher, Year.
+% \end{thebibliography}
+
+\end{document}

@@ -1,0 +1,268 @@
+% ==============================================================================
+% Generic thesis / dissertation template (skeleton)
+% Uses the standard `book` class (in every TeX Live install; book provides
+% \frontmatter / \mainmatter / \backmatter and \chapter, which report lacks)
+% so this file compiles out-of-the-box. Many universities ship their own .cls (e.g.
+% mit-thesis, stanford-thesis, Cambridge, TsinghuaThuThesis, UCASthesis);
+% for an actual submission download the institution's class and replace the
+% \documentclass line below.
+%
+% Conventions:
+%   Layout     : single-sided review copy (oneside) or print-ready (twoside)
+%   Body font  : Times Roman 12pt (mathptmx)
+%   Math font  : Times (mathptmx)
+%   Line spacing: 1.5 for body text (per most graduate-school style guides)
+%   Margin     : 1in (US letter) / 25 mm (A4) on all sides, check binding offset
+%   Citation   : numeric [1] (or author-year per institution)
+%   Headings   : \chapter / \section / \subsection, numbered
+% Frontmatter : title page, committee page, abstract, acknowledgements,
+%               dedication, TOC, list of figures, list of tables, notation
+% Main        : Introduction, Literature Review, Methods, Results, Conclusion
+% Backmatter  : bibliography, appendices
+% ==============================================================================
+\documentclass[12pt,a4paper,oneside]{book}
+% For a print-ready book:
+% \documentclass[12pt,a4paper,twoside,openright]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}            % Times text + math
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage[a4paper,top=30mm,bottom=30mm,left=35mm,right=25mm]{geometry}
+% For US letter use:
+% \usepackage[letterpaper,top=1in,bottom=1in,left=1.5in,right=1in]{geometry}
+
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{tocbibind}           % add bib/appendix entries to the TOC
+\usepackage{titlesec}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{acronym}             % first-use expansion of abbreviations
+\usepackage{lipsum}              % placeholder text (delete before submission)
+
+% ---- 1.5 line spacing for the body (most graduate-school guides require it) ----
+\onehalfspacing
+
+% ---- Headers / footers ----
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---- Section heading tweaks (matches most thesis guides) ----
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}{\chaptername\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-20pt}{40pt}
+
+% ---- Citations: numbered ----
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{plainnat}     % numbered, alphabetical; switch to unsrtnat for citation-order
+% For author-year use:
+% \usepackage[authoryear,round]{natbib}
+% \bibliographystyle{plainnat}
+
+% \usepackage{hyperref}           % load last if used
+% \usepackage{bookmark}
+
+% ==============================================================================
+% Frontmatter placeholders (edit each \newcommand below)
+% ==============================================================================
+\newcommand{\ThesisTitle}{A Concise and Informative Title of the Thesis}
+\newcommand{\ThesisAuthor}{Author Full Name}
+\newcommand{\ThesisDegree}{Doctor of Philosophy}
+\newcommand{\ThesisDepartment}{Department of X}
+\newcommand{\ThesisInstitution}{University of Y}
+\newcommand{\ThesisYear}{20YY}
+\newcommand{\ThesisAdvisor}{Advisor Full Name}
+% Committee members (add or remove as needed):
+\newcommand{\CommitteeChair}{Advisor Full Name, Chair}
+\newcommand{\CommitteeMemberA}{Committee Member A}
+\newcommand{\CommitteeMemberB}{Committee Member B}
+\newcommand{\CommitteeMemberC}{Committee Member C, External Examiner}
+
+\begin{document}
+
+% ==============================================================================
+% Front matter
+% ==============================================================================
+\frontmatter
+\pagenumbering{roman}
+
+% ---- Title page ----
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge \ThesisTitle \par}
+\vspace{2cm}
+{\Large \ThesisAuthor \par}
+\vspace{1cm}
+A dissertation submitted in partial fulfilment of\\
+the requirements for the degree of\\
+\ThesisDegree
+\vfill
+\ThesisDepartment\\
+\ThesisInstitution\\
+\ThesisYear
+\end{titlepage}
+
+% ---- Committee / examiner page ----
+\chapter*{Committee}
+\noindent This thesis has been examined and approved by the following committee:
+\vspace{1em}
+
+\noindent\textbf{\CommitteeChair}\\
+\ThesisDepartment, \ThesisInstitution
+
+\vspace{0.6em}
+\noindent\textbf{\CommitteeMemberA}\\
+\ThesisDepartment, \ThesisInstitution
+
+\vspace{0.6em}
+\noindent\textbf{\CommitteeMemberB}\\
+\ThesisDepartment, \ThesisInstitution
+
+\vspace{0.6em}
+\noindent\textbf{\CommitteeMemberC}\\
+Department of Z, External Institution
+
+% ---- Abstract ----
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+% TODO: 250-350 words. State the research question, the approach, the key
+% contributions, and the main findings. Many guides allow up to 350 words.
+
+% ---- Acknowledgements ----
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+% TODO: thank the advisor, committee, funding, collaborators, family.
+
+% ---- Dedication (optional) ----
+% \chapter*{Dedication}
+% \addcontentsline{toc}{chapter}{Dedication}
+% \begin{center}\textit{To ...}\end{center}
+
+% ---- Notation / abbreviations (optional but common in STEM theses) ----
+\chapter*{List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+% TODO: use the `acronym` package, e.g.
+% \begin{acronym}[TDMA]
+%   \acro{CNN}{Convolutional Neural Network}
+%   \acro{DNN}{Deep Neural Network}
+% \end{acronym}
+
+% ---- Table of contents, list of figures, list of tables ----
+\tableofcontents
+\listoffigures
+\listoftables
+
+% ==============================================================================
+% Main matter
+% ==============================================================================
+\mainmatter
+\pagenumbering{arabic}
+
+% ---- Chapter 1: Introduction ----
+\chapter{Introduction}
+\label{ch:intro}
+% TODO: research motivation, problem statement, research questions,
+% contributions, scope and limitations, thesis roadmap. End with a per-chapter
+% outline (the funnel: broad -> specific -> contributions -> roadmap).
+
+% ---- Chapter 2: Literature Review / Related Work ----
+\chapter{Literature Review}
+\label{ch:related}
+% TODO: a critical synthesis of prior work, organised by sub-problem.
+% Identify the gap that this thesis addresses. Do NOT just list papers.
+
+% ---- Chapter 3: Methods ----
+\chapter{Methods}
+\label{ch:methods}
+% TODO: problem formulation, notation, proposed method, theoretical analysis,
+% implementation details. State assumptions explicitly.
+
+\section{Problem formulation}
+% TODO.
+
+\section{Proposed method}
+% TODO.
+
+\begin{algorithm}[t]
+\caption{Outline of the proposed method}
+\label{alg:method}
+\begin{algorithmic}[1]
+\State \textbf{Input:} dataset $\mathcal{D}$, hyper-parameters $\Theta$
+\State initialise $\theta$
+\While{not converged}
+    \State $\theta \leftarrow \theta - \eta\,\nabla\mathcal{L}(\theta;\mathcal{D})$
+\EndWhile
+\State \textbf{return} $\theta$
+\end{algorithmic}
+\end{algorithm}
+
+% ---- Chapter 4: Results / Experiments ----
+\chapter{Results}
+\label{ch:results}
+% TODO: main results, ablation, qualitative examples, statistical significance,
+% and a discussion of how the results answer each research question.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=0.8\textwidth]{figures/result.pdf}
+\fbox{\rule{0pt}{6cm}\rule{0.7\textwidth}{0pt}}
+\caption{Figure caption goes BELOW the figure. In a thesis, full-text-width
+figures are common; use \texttt{\textbackslash textwidth}.}
+\label{fig:result}
+\end{figure}
+
+\begin{table}[t]
+\caption{Table caption goes ABOVE the table.}
+\label{tab:results}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Method   & Metric A       & Metric B       \\
+\midrule
+Baseline & 0.812          & 0.754          \\
+Ours     & \textbf{0.891} & \textbf{0.832} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ---- Chapter 5: Conclusion ----
+\chapter{Conclusion}
+\label{ch:conclusion}
+% TODO: recap the contributions and findings; state limitations; propose
+% future work. A thesis conclusion is typically 3-6 pages.
+
+% ==============================================================================
+% Back matter
+% ==============================================================================
+\backmatter
+
+% ---- Bibliography ----
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} F.~Author, \emph{Title of the paper}, Journal Name
+%   \textbf{XX} (20YY) 1--10.
+% \end{thebibliography}
+
+% ---- Appendices ----
+\appendix
+\chapter{Supplementary Derivations}
+\label{app:derivations}
+% TODO: proofs, extended tables, dataset descriptions.
+
+\chapter{Source Code Listings}
+\label{app:code}
+% TODO: key source-code listings; use the `listings` or `minted` package.
+
+\end{document}

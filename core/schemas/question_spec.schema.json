@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QUESTION_SPEC",
+  "description": "L1: 赛题结构化规约 - 从源头消除输入歧义",
+  "type": "object",
+  "required": ["metadata", "background", "problems", "constraints", "data", "delivery"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["contest", "year", "topic_id", "topic_type", "language"],
+      "properties": {
+        "contest": { "type": "string", "enum": ["CUMCM", "MCM", "ICM", "Other"] },
+        "year": { "type": "integer", "minimum": 2000, "maximum": 2030 },
+        "topic_id": { "type": "string", "pattern": "^[ABC]\\d{3}$" },
+        "topic_type": { "type": "string", "enum": ["A-physical", "B-experiment", "C-data", "D-operations", "E-interdisciplinary"] },
+        "language": { "type": "string", "enum": ["zh", "en"] }
+      }
+    },
+    "background": {
+      "type": "object",
+      "required": ["context", "domain_keywords"],
+      "properties": {
+        "context": { "type": "string", "minLength": 20, "description": "问题背景描述（>=20字）" },
+        "domain_keywords": {
+          "type": "array",
+          "minItems": 3,
+          "description": "领域关键词（至少3个）",
+          "items": { "type": "string" }
+        },
+        "physical_processes": {
+          "type": "array",
+          "description": "涉及的物理过程（A题必填）",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "problems": {
+      "type": "array",
+      "minItems": 1,
+      "description": "子问题列表 - 只认题面明确编号的顶层问题",
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "input_variables", "output_variables", "constraints", "dependencies"],
+        "properties": {
+          "id": { "type": "integer", "minimum": 1 },
+          "description": { "type": "string", "minLength": 10 },
+          "input_variables": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "type", "unit"],
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string", "enum": ["continuous", "discrete", "categorical", "string"] },
+                "unit": { "type": "string" },
+                "range": { "type": "string", "description": "如 '0-100' 或 'positive'" }
+              }
+            }
+          },
+          "output_variables": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "type", "unit"],
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "unit": { "type": "string" }
+              }
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type", "expression"],
+              "properties": {
+                "type": { "type": "string", "enum": ["equality", "inequality", "boundary", "physical", "logical"] },
+                "expression": { "type": "string" }
+              }
+            }
+          },
+          "dependencies": {
+            "type": "array",
+            "description": "依赖的前置问题编号",
+            "items": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["global_constraints"],
+      "properties": {
+        "global_constraints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "expression"],
+            "properties": {
+              "type": { "type": "string" },
+              "expression": { "type": "string" }
+            }
+          }
+        },
+        "time_constraints": { "type": "array", "items": { "type": "string" } },
+        "spatial_constraints": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "provided_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "format": { "type": "string", "enum": ["csv", "xlsx", "json", "txt", "pdf", "none"] },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "parameters": {
+          "type": "object",
+          "description": "题目给定的参数值"
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "required": ["requirements"],
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "page_limit": { "type": "integer" },
+        "submission_format": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

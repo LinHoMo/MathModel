@@ -1,0 +1,12 @@
+interface:
+  display_name: "Type Classifier"
+  short_description: "题型识别 A/B/C/D/E + 推荐方法方向"
+  default_prompt: "Use $type-classifier to classify problem type and recommend methods."
+runtime:
+  hand: modeler
+  utg_layer: L1
+  stage: 2
+  inputs:
+    - work/question_spec.json
+  outputs:
+    - work/type_classification.json

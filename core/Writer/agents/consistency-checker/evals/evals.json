@@ -1,0 +1,16 @@
+{
+  "skill_name": "consistency-checker",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check a paper whose results section quotes two numbers that do not appear anywhere in figures/all_results.json, under strict_mode.",
+      "expected_output": "Success requires traces every paper number to all_results.json; flags untraceable numbers; produces consistency_report.json; blocks in strict mode.",
+      "assertions": [
+        "traces every paper number to figures/all_results.json",
+        "flags untraceable numbers with location attribution",
+        "produces work/consistency_report.json",
+        "blocks progression on any untraceable number in strict_mode"
+      ]
+    }
+  ]
+}

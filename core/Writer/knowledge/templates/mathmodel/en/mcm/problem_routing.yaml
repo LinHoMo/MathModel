@@ -1,0 +1,408 @@
+# MCM/ICM Problem Type Routing Matrix
+# 题型关键词矩阵 + 题型 → 建模方法路由
+#
+# 使用方法:
+#   1. 读取题目描述, 扫描关键词匹配题型 (problem_type_keywords)
+#   2. 根据题型路由到建模方法 (modeling_methods) 与配方 (recipes)
+#   3. 强制产出 required_outputs 中的所有项
+#
+# 与 mathmodel.analyze/references/problem-type-router.md 关系:
+#   - problem-type-router.md 描述通用 7 类题型路由 (CUMCM 通用)
+#   - problem_routing.yaml 描述 MCM/ICM 6 题专项路由 (按 A-F 字母分配)
+# 两者互补, 不替换. MCM/ICM 比赛时优先使用本文件.
+
+# ======================== 题型关键词矩阵 ========================
+# 每个题型的关键词集合, 用于自动识别 MCM/ICM 题目类型
+problem_type_keywords:
+  A_continuous:
+    primary:           # 高置信度关键词 (出现即可路由)
+      - differential equation
+      - ODE
+      - PDE
+      - dynamical system
+      - continuous
+      - rate of change
+      - derivative
+      - integral
+      - numerical simulation
+    secondary:         # 辅助关键词 (累计匹配)
+      - physical process
+      - biological process
+      - chemical kinetics
+      - heat transfer
+      - fluid dynamics
+      - population dynamics
+      - epidemic model
+      - mechanical system
+    negative:          # 反向关键词 (出现应排除 A 题)
+      - discrete
+      - integer
+      - graph
+      - network
+
+  B_discrete:
+    primary:
+      - discrete
+      - graph
+      - network
+      - combinatorial
+      - scheduling
+      - routing
+      - assignment
+      - integer programming
+      - traveling salesman
+      - TSP
+      - VRP
+    secondary:
+      - shortest path
+      - minimum spanning tree
+      - max flow
+      - matching
+      - coloring
+      - partition
+      - set cover
+      - node
+      - edge
+      - adjacency
+    negative:
+      - differential equation
+      - continuous
+      - derivative
+
+  C_data_insights:
+    primary:
+      - data
+      - dataset
+      - data insights
+      - pattern
+      - trend
+      - prediction
+      - classification
+      - clustering
+      - regression
+      - machine learning
+    secondary:
+      - big data
+      - statistical analysis
+      - exploratory data analysis
+      - EDA
+      - visualization
+      - feature
+      - correlation
+      - time series
+      - forecasting
+      - anomaly detection
+    negative:
+      - differential equation
+      - physical process
+
+  D_operations_research:
+    primary:
+      - operations research
+      - optimization
+      - linear programming
+      - nonlinear programming
+      - integer programming
+      - queueing
+      - simulation
+      - resource allocation
+      - decision making
+    secondary:
+      - objective function
+      - constraints
+      - decision variables
+      - simplex
+      - LP
+      - MILP
+      - NLP
+      - Monte Carlo
+      - discrete event
+      - policy optimization
+    negative:
+      - differential equation
+
+  E_environmental:
+    primary:
+      - environmental
+      - sustainability
+      - pollution
+      - ecosystem
+      - climate
+      - carbon
+      - ecological
+      - environmental impact
+    secondary:
+      - life cycle assessment
+      - LCA
+      - system dynamics
+      - input-output
+      - indicator system
+      - scenario analysis
+      - biodiversity
+      - resource management
+      - green
+      - emission
+    negative:
+      - scheduling
+      - routing
+
+  F_policy:
+    primary:
+      - policy
+      - stakeholder
+      - governance
+      - regulation
+      - decision maker
+      - client
+      - recommendation
+      - advise
+    secondary:
+      - multi-criteria
+      - MCDA
+      - cost-benefit
+      - social
+      - economic
+      - political
+      - international
+      - memo
+      - strategic
+      - implementation
+    negative:
+      - differential equation
+      - scheduling
+
+# ======================== 题型 → 建模方法路由 ========================
+# 每个题型对应的建模方法, 配方, 模板与必须产出
+modeling_methods:
+  A_continuous:
+    description: Continuous mathematical modeling (differential equations, dynamical systems)
+    primary_methods:
+      - ODE/PDE modeling with physical justification
+      - Numerical integration (Runge-Kutta, finite difference, finite element)
+      - Parameter estimation (least squares, maximum likelihood)
+      - Sensitivity analysis (local + global)
+    secondary_methods:
+      - System identification
+      - Stability analysis
+      - Bifurcation analysis
+    recipes:
+      - MECH_#1
+      - SIM_#1
+    templates:
+      - core/Writer/knowledge/templates/mathmodel/en/mcm/main.tex
+    required_outputs:
+      - Differential equations with physical justification (each term explained)
+      - Initial/boundary conditions explicitly stated
+      - Numerical solution method (algorithm + step size + convergence check)
+      - Visualization of solution (time series, phase portrait, parametric)
+      - Parameter sensitivity analysis (at least 2 parameters varied)
+    common_mistakes:
+      - "写方程无物理意义解释 (each term must be justified)"
+      - "未做敏感性分析 (MCM 评分必查项)"
+      - "数值方法未说明步长选择与收敛性"
+      - "未对比 baseline 简化模型"
+
+  B_discrete:
+    description: Discrete mathematical modeling (graph theory, combinatorial optimization)
+    primary_methods:
+      - Graph modeling (nodes, edges, weights definition)
+      - Combinatorial optimization (TSP, VRP, scheduling, assignment)
+      - Integer programming (MILP formulation)
+      - Discrete event simulation
+    secondary_methods:
+      - Heuristic algorithms (GA, SA, ACO, PSO)
+      - Approximation algorithms
+      - Graph algorithms (Dijkstra, Floyd, max-flow, MST)
+    recipes:
+      - NET_#1
+      - NET_#3
+      - OPT_#1
+      - OPT_#2
+    templates:
+      - core/Writer/knowledge/templates/mathmodel/en/mcm/main.tex
+    required_outputs:
+      - Graph model definition (V, E, W with meaning)
+      - Problem formulation as IP/LP (decision variables, objective, constraints)
+      - Algorithm selection justification (complexity, optimality gap)
+      - Optimal/near-optimal solution with alternative comparison
+      - Computational experiments (runtime, solution quality)
+    common_mistakes:
+      - "图模型定义不清晰 (nodes/edges/weights 未说明物理意义)"
+      - "算法选择无 justification (e.g., 为什么用 GA 而非精确算法)"
+      - "未对比 baseline (e.g., 启发式 vs 贪心)"
+      - "未做 scalability 测试"
+
+  C_data_insights:
+    description: Data-driven modeling (EDA, statistical modeling, machine learning)
+    primary_methods:
+      - Exploratory data analysis (distribution, correlation, outlier)
+      - Statistical modeling (regression, time series, hypothesis testing)
+      - Machine learning (classification, clustering, regression)
+      - Data visualization (multi-panel, interactive if applicable)
+    secondary_methods:
+      - Feature engineering
+      - Dimensionality reduction (PCA, t-SNE, UMAP)
+      - Anomaly detection
+      - Natural language processing (if text data)
+    recipes:
+      - STAT_#1
+      - STAT_#2
+      - PRED_#1
+      - CLAS_#1
+      - CLAS_#2
+    templates:
+      - core/Writer/knowledge/templates/mathmodel/en/mcm/main.tex
+    required_outputs:
+      - EDA report (sample size, missing values, distribution, correlation)
+      - Model selection with justification (compare 2+ models)
+      - Validation (cross-validation, hold-out, RMSE/MAE/MAPE)
+      - Feature importance / model interpretability
+      - Insight extraction (business/scientific meaning, not just metrics)
+    common_mistakes:
+      - "缺 EDA (直接建模, 不理解数据)"
+      - "未对比 baseline (e.g., 复杂模型 vs 简单线性回归)"
+      - "结果仅给 RMSE 不给 insight"
+      - "未做 cross-validation"
+      - "过拟合未检测"
+
+  D_operations_research:
+    description: Operations research and network science (optimization, simulation)
+    primary_methods:
+      - Linear/nonlinear programming (LP, NLP, MIP)
+      - Queueing theory (M/M/1, M/M/c, networks)
+      - Monte Carlo simulation
+      - Network analysis (centrality, community, flow)
+    secondary_methods:
+      - Stochastic optimization
+      - Robust optimization
+      - Game theory
+      - Markov decision processes
+    recipes:
+      - OPT_#1
+      - OPT_#2
+      - SIM_#2
+    templates:
+      - core/Writer/knowledge/templates/mathmodel/en/mcm/main.tex
+    required_outputs:
+      - Mathematical programming formulation (objective, constraints, variables)
+      - Solution algorithm + complexity analysis
+      - Simulation validation (if applicable)
+      - Sensitivity analysis on key parameters
+      - Trade-off analysis (multi-objective if applicable)
+    common_mistakes:
+      - "模型 formulation 不完整 (missing constraints)"
+      - "未做 sensitivity analysis"
+      - "未对比不同算法"
+      - "simulation run 数过少 (统计显著性不足)"
+
+  E_environmental:
+    description: Environmental science modeling (sustainability, pollution, ecosystem)
+    primary_methods:
+      - System dynamics (causal loop, stock-flow)
+      - Input-output analysis (Leontief)
+      - Life cycle assessment (LCA)
+      - Environmental impact assessment (EIA)
+    secondary_methods:
+      - Agent-based modeling
+      - Spatial analysis (GIS)
+      - Indicator system construction (DPSIR, PSR)
+    recipes:
+      - EVAL_#1
+      - EVAL_#2
+      - SIM_#1
+    templates:
+      - core/Writer/knowledge/templates/mathmodel/en/mcm/main.tex
+    required_outputs:
+      - System boundary definition (what is included/excluded)
+      - Indicator system (environmental + economic + social)
+      - Scenario analysis (baseline + 2+ alternative scenarios)
+      - Policy recommendations (specific, actionable)
+      - Uncertainty analysis
+    common_mistakes:
+      - "未定义 system boundary"
+      - "indicator 系统不完整 (只考虑环境不考虑经济)"
+      - "scenario 仅 1 个 (无对比)"
+      - "policy recommendations 空泛"
+
+  F_policy:
+    description: Policy modeling (multi-stakeholder analysis, decision-making)
+    primary_methods:
+      - Multi-criteria decision analysis (MCDA, AHP, TOPSIS)
+      - Stakeholder analysis
+      - Cost-benefit analysis
+      - Scenario planning
+    secondary_methods:
+      - Game theory
+      - Network analysis (stakeholder networks)
+      - Social network analysis
+    recipes:
+      - EVAL_#3
+    templates:
+      - core/Writer/knowledge/templates/mathmodel/en/mcm/main.tex
+      - core/Writer/knowledge/templates/mathmodel/en/mcm/memo_template.tex     # F 题强制 Memo
+    required_outputs:
+      - Stakeholder identification (power-interest matrix)
+      - Policy option generation (3+ alternatives)
+      - Evaluation framework (criteria, weights, scoring)
+      - Memo to Client (MANDATORY, 1-2 pages, business letter style)
+      - Implementation roadmap
+    common_mistakes:
+      - "缺 Memo to Client (F 题直接 0 分项)"
+      - "stakeholder analysis 不完整 (only government)"
+      - "policy recommendations not actionable (空泛)"
+      - "未做 trade-off analysis"
+
+# ======================== 路由决策流程 ========================
+routing_workflow:
+  step_1_keyword_scan:
+    description: |
+      Scan the problem statement for primary keywords.
+      If 2+ primary keywords from one type match, route to that type.
+  step_2_secondary_match:
+    description: |
+      If no clear primary match, scan for secondary keywords.
+      Sum weighted matches to determine the type.
+  step_3_negative_check:
+    description: |
+      Check for negative keywords (contradictions).
+      If negative keyword strongly present, reconsider type.
+  step_4_method_assignment:
+    description: |
+      Once type confirmed, load modeling_methods[type] and apply
+      primary_methods, recipes, templates, required_outputs.
+  step_5_output_verification:
+    description: |
+      Before submission, verify all required_outputs are present.
+      Run py validate_project.py --project projects/<项目> for page check.
+
+# ======================== 路由示例 ========================
+examples:
+  - problem_text: "Model the spread of an invasive species over time..."
+    matched_keywords: ["spread", "over time", "invasive"]
+    matched_type: A_continuous
+    routing_reason: "Continuous time dynamics, differential equation modeling"
+
+  - problem_text: "Find the optimal routes for a fleet of delivery trucks..."
+    matched_keywords: ["routes", "fleet", "delivery"]
+    matched_type: B_discrete
+    routing_reason: "Network routing problem, VRP/TSP application"
+
+  - problem_text: "Analyze the provided dataset of 100,000 records to find..."
+    matched_keywords: ["dataset", "analyze", "records"]
+    matched_type: C_data_insights
+    routing_reason: "Data-driven analysis, EDA + ML"
+
+  - problem_text: "Optimize the allocation of hospital resources..."
+    matched_keywords: ["optimize", "allocation", "resources"]
+    matched_type: D_operations_research
+    routing_reason: "Resource allocation optimization, OR methods"
+
+  - problem_text: "Assess the impact of plastic pollution on marine ecosystems..."
+    matched_keywords: ["pollution", "ecosystem", "impact"]
+    matched_type: E_environmental
+    routing_reason: "Environmental impact assessment"
+
+  - problem_text: "Develop a policy recommendation for the local government on..."
+    matched_keywords: ["policy", "recommendation", "government"]
+    matched_type: F_policy
+    routing_reason: "Policy modeling, requires Memo to Client"

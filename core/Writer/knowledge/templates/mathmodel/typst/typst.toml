@@ -1,0 +1,18 @@
+# Typst package configuration for CUMCM/MCM templates.
+# See: https://github.com/typst/packages
+
+[package]
+name = "cumcm-mcm-templates"
+version = "0.1.0"
+entrypoint = "cumcm.typ"
+authors = ["skills project"]
+license = "MIT"
+description = "Typst templates for CUMCM (Chinese) and MCM/ICM (English) mathematical modeling contest papers."
+repository = "https://example.com/cumcm-mcm-templates"
+keywords = ["mathematical modeling", "CUMCM", "MCM", "ICM", "paper", "template"]
+categories = ["paper"]
+minimum-typst-version = "0.11.0"
+
+[template]
+entrypoint = "cumcm.typ"
+thumbnail = "thumbnail.png"

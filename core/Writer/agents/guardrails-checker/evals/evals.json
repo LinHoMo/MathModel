@@ -1,0 +1,16 @@
+{
+  "skill_name": "guardrails-checker",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check a paper whose text contains an internal absolute path, a placeholder token, an AI self-reference phrase, and a \\citep key missing from the bib.",
+      "expected_output": "Success requires detects forbidden words, placeholders, AI traces, internal paths, and missing bib keys.",
+      "assertions": [
+        "detects forbidden words in paper text",
+        "detects placeholder tokens and AI self-reference traces",
+        "detects internal absolute paths",
+        "detects missing or undefined bib keys"
+      ]
+    }
+  ]
+}

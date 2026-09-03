@@ -1,0 +1,175 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{whale}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title[Talk]{Paper Title}
+\subtitle{Subtitle if needed}
+\author{Author One \and Author Two}
+\institute{University / Institution}
+\date{\conference or date}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}{Background \& Motivation}
+\begin{itemize}
+    \item Context: What is the broader area?
+    \item Problem: What specific problem does this work address?
+    \item Gap: What is missing in existing approaches?
+    \item Goal: What does this paper aim to achieve?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Contributions}
+\begin{enumerate}
+    \item \textbf{Contribution 1}: Brief description
+    \item \textbf{Contribution 2}: Brief description
+    \item \textbf{Contribution 3}: Brief description
+\end{enumerate}
+\end{frame}
+
+\section{Related Work}
+
+\begin{frame}{Related Work}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Category A:}
+\begin{itemize}
+    \item Method X (Author, Year): Strength, weakness
+    \item Method Y (Author, Year): Strength, weakness
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Category B:}
+\begin{itemize}
+    \item Method Z (Author, Year): Strength, weakness
+    \item Method W (Author, Year): Strength, weakness
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{1em}
+\textbf{Research Gap:} [State the gap your work addresses]
+\end{frame}
+
+\section{Method}
+
+\begin{frame}{Problem Formulation}
+\begin{block}{Definition}
+    Given $\mathcal{X}$ and $\mathcal{Y}$, learn $f: \mathcal{X} \rightarrow \mathcal{Y}$
+\end{block}
+\end{frame}
+
+\begin{frame}{Proposed Approach}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\textbf{Overview:}
+\begin{enumerate}
+    \item Step 1: Description
+    \item Step 2: Description
+    \item Step 3: Description
+\end{enumerate}
+
+\textbf{Key Innovation:}
+Explain the core idea.
+\end{column}
+\begin{column}{0.42\textwidth}
+\includegraphics[width=\textwidth]{method_overview.pdf}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Experiments}
+
+\begin{frame}{Experimental Setup}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Datasets:}
+\begin{itemize}
+    \item Dataset 1: Description (N samples)
+    \item Dataset 2: Description (N samples)
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Baselines:}
+\begin{itemize}
+    \item Method A (Year)
+    \item Method B (Year)
+    \item Method C (Year)
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Main Results}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Method & Accuracy & F1 & RMSE \\
+\midrule
+Baseline A & 0.85 & 0.83 & 0.15 \\
+Baseline B & 0.87 & 0.85 & 0.13 \\
+Baseline C & 0.89 & 0.87 & 0.11 \\
+\textbf{Ours} & \textbf{0.93} & \textbf{0.91} & \textbf{0.08} \\
+\bottomrule
+\end{tabular}
+\caption{Comparison on Dataset 1}
+\end{table}
+\end{frame}
+
+\begin{frame}{Ablation Study}
+\includegraphics[width=0.8\textwidth]{ablation_results.pdf}
+
+\vspace{1em}
+\begin{itemize}
+    \item Removing component X drops accuracy by Y\%
+    \item Component Z is most important for performance
+\end{itemize}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Conclusions \& Future Work}
+\textbf{Key Takeaways:}
+\begin{enumerate}
+    \item Our method achieves state-of-the-art on [task]
+    \item The key insight is [core idea]
+    \item Analysis shows [finding]
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Limitations \& Future Work:}
+\begin{itemize}
+    \item Limitation 1 -> Future direction 1
+    \item Limitation 2 -> Future direction 2
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Thank You}
+\centering
+\Large Questions?
+
+\vspace{2em}
+\small
+Contact: email@university.edu
+
+Code: github.com/username/repo
+\end{frame}
+
+\end{document}

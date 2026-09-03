@@ -1,0 +1,14 @@
+interface:
+  display_name: "Spec Auditor"
+  short_description: "MODEL_SPEC 护栏检查 + 哈希审计"
+  default_prompt: "Use $spec-auditor to audit MODEL_SPEC guardrails and hash chain."
+runtime:
+  hand: modeler
+  utg_layer: "L5+L6"
+  stage: 6
+  inputs:
+    - work/model_draft.md
+    - work/assumption_validation.json
+  outputs:
+    - output/MODEL_SPEC.md
+    - work/audit_log.json

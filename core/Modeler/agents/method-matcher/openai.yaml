@@ -1,0 +1,12 @@
+interface:
+  display_name: "Method Matcher"
+  short_description: "方法匹配，从知识库选候选模型"
+  default_prompt: "Use $method-matcher to select candidate models from knowledge base."
+runtime:
+  hand: modeler
+  utg_layer: L2
+  stage: 3
+  inputs:
+    - work/type_classification.json
+  outputs:
+    - work/method_candidates.json

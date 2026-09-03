@@ -1,0 +1,14 @@
+interface:
+  display_name: "Revision Executor"
+  short_description: "按 revision_plan.json 执行修改并产出 execution_report.json"
+  default_prompt: "Use $revision-executor to apply revision_plan.json and emit execution_report.json."
+runtime:
+  hand: reviewer
+  utg_layer: L6
+  stage: 4
+  inputs:
+    - work/revision_plan.json
+    - paper/main.tex
+    - figures/all_results.json
+  outputs:
+    - work/execution_report.json

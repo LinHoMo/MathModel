@@ -1,0 +1,12 @@
+interface:
+  display_name: "Test Runner"
+  short_description: "单元测试 + 集成测试"
+  default_prompt: "Use $test-runner to run unit and integration tests."
+runtime:
+  hand: programmer
+  utg_layer: L3
+  stage: 3
+  inputs:
+    - code/*.py
+  outputs:
+    - work/test_report.json

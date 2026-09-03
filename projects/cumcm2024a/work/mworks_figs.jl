@@ -1,0 +1,166 @@
+using TyPlot
+using JSON
+using Printf
+
+const OUT = "C:/Users/Lin/Desktop/Programs/MathModel/projects/cumcm2024a/paper/figures"
+mkpath(OUT)
+
+calc = JSON.parsefile("C:/Users/Lin/Desktop/Programs/MathModel/projects/cumcm2024a/work/figdata.json")
+pdata = JSON.parsefile("C:/Users/Lin/Desktop/Programs/MathModel/projects/cumcm2024a/work/figdata_plot.json")
+
+xs(pts) = [Float64(p[1]) for p in pts]
+ys(pts) = [Float64(p[2]) for p in pts]
+
+# ============ Fig 1: 盘入螺线轨迹 (t=0,100,200,300) ============
+figure()
+hold("on")
+clrs = ["b", "r", "g", "m"]
+labels = ["t=0s", "t=100s", "t=200s", "t=300s"]
+for (i, entry) in enumerate(calc["fig1"])
+    pts = entry[2]
+    plot(xs(pts), ys(pts), string(clrs[i], "-"))
+end
+title("Inward spiral: bench dragon configurations")
+xlabel("x (m)")
+ylabel("y (m)")
+legend(labels)
+grid("on")
+axis("equal")
+saveas(gcf(), joinpath(OUT, "fig_1_1.png"))
+println("fig_1_1.png OK")
+
+# ============ Fig 2: 碰撞时刻 t*=412.83s 构型 ============
+figure()
+hold("on")
+pts2 = calc["fig2"]
+plot(xs(pts2), ys(pts2), "b-")
+plot([Float64(pts2[1][1])], [Float64(pts2[1][2])], "ro")
+plot([Float64(pts2[end][1])], [Float64(pts2[end][2])], "ks")
+title("Configuration at collision t* = 412.83 s")
+xlabel("x (m)")
+ylabel("y (m)")
+legend(["bench dragon", "head", "tail"])
+grid("on")
+axis("equal")
+saveas(gcf(), joinpath(OUT, "fig_2_1.png"))
+println("fig_2_1.png OK")
+
+# ============ Fig 3: 掉头最小直径 d_min = 4.55018 m ============
+figure()
+hold("on")
+x3 = [Float64(v) for v in pdata["fig3_x"]]
+y3 = [Float64(v) for v in pdata["fig3_y"]]
+plot(x3, y3, "b-")
+plot([Float64(pdata["fig3_head"][1])], [Float64(pdata["fig3_head"][2])], "ro")
+dmin = 4.55018
+theta_c = LinRange(0, 2 * pi, 200)
+cx = dmin / 2 .* cos.(theta_c)
+cy = dmin / 2 .* sin.(theta_c)
+plot(cx, cy, "r--")
+plot([0.0], [0.0], "k+")
+title("U-turn minimum diameter d_min = 4.55018 m")
+xlabel("x (m)")
+ylabel("y (m)")
+legend(["bench dragon at t*", "head", "turn circle", "center"])
+grid("on")
+axis("equal")
+saveas(gcf(), joinpath(OUT, "fig_3_1.png"))
+println("fig_3_1.png OK")
+
+# ============ Fig 4: 盘出速度分布 (t=407s) ============
+figure()
+hold("on")
+spd = [Float64(v) for v in pdata["fig4_speed"]]
+handles = 0:(length(spd)-1)
+bar(collect(handles), spd; color="b")
+vmax = 2.414211
+plot([0.0, length(spd)-1], [vmax, vmax], "r--")
+plot([189.0], [vmax], "ro")
+title("Speed distribution in outward phase (t = 407 s)")
+xlabel("handle index")
+ylabel("speed (m/s)")
+legend(["speed", "v_max = 2.414211"])
+grid("on")
+saveas(gcf(), joinpath(OUT, "fig_4_1.png"))
+println("fig_4_1.png OK")
+
+# ============ Fig 5: S形掉头圆弧 R = 1.9374 m ============
+figure()
+hold("on")
+R = 1.9374
+O1 = (2.2, 0.0)
+O2 = (-2.2, 0.0)
+th1 = LinRange(pi, 2 * pi, 100)
+arc1x = O1[1] .+ R .* cos.(th1)
+arc1y = O1[2] .+ R .* sin.(th1)
+th2 = LinRange(0, pi, 100)
+arc2x = O2[1] .+ R .* cos.(th2)
+arc2y = O2[2] .+ R .* sin.(th2)
+plot(arc1x, arc1y, "b-")
+plot(arc2x, arc2y, "r-")
+plot([O1[1]], [O1[2]], "k+")
+plot([O2[1]], [O2[2]], "k+")
+plot([O1[1]+R*cos(pi), O1[1]+R*cos(2*pi)], [O1[2]+R*sin(pi), O1[2]+R*sin(2*pi)], "g--")
+title("S-shaped U-turn arc, R = 1.9374 m")
+xlabel("x (m)")
+ylabel("y (m)")
+legend(["arc 1", "arc 2", "center 1", "center 2"])
+grid("on")
+axis("equal")
+saveas(gcf(), joinpath(OUT, "fig_5_1.png"))
+println("fig_5_1.png OK")
+
+# ============ Fig 6: 灵敏度分析 ============
+figure()
+pct = [Float64(v) for v in pdata["sens_pct"]]
+sens = pdata["sens"]
+
+subplot(2, 2, 1)
+hold("on")
+b_head = [Float64(v) for v in sens["parameter_b"]["head_r_300"]]
+b_R = [Float64(v) for v in sens["parameter_b"]["R"]]
+b_pp = [Float64(v) for v in sens["parameter_b"]["p_prime"]]
+plot(pct, b_head, "b-o")
+plot(pct, b_R, "r-s")
+plot(pct, b_pp, "g-^")
+title("Sensitivity to pitch b")
+xlabel("perturbation (%)")
+ylabel("change (%)")
+legend(["head_r_300", "R", "p'"])
+
+subplot(2, 2, 2)
+hold("on")
+v_ts = [Float64(v) for v in sens["parameter_v_head"]["t_star"]]
+v_head = [Float64(v) for v in sens["parameter_v_head"]["head_r_300"]]
+plot(pct, v_ts, "b-o")
+plot(pct, v_head, "r-s")
+title("Sensitivity to speed v1")
+xlabel("perturbation (%)")
+ylabel("change (%)")
+legend(["t*", "head_r_300"])
+
+subplot(2, 2, 3)
+hold("on")
+w_dmin = [Float64(v) for v in sens["parameter_w"]["d_min"]]
+w_ts = [Float64(v) for v in sens["parameter_w"]["t_star"]]
+keep = [i for i in 1:length(w_dmin) if !isnan(w_dmin[i])]
+plot([pct[i] for i in keep], [w_dmin[i] for i in keep], "b-o")
+keep2 = [i for i in 1:length(w_ts) if !isnan(w_ts[i])]
+plot([pct[i] for i in keep2], [w_ts[i] for i in keep2], "r-s")
+title("Sensitivity to width w")
+xlabel("perturbation (%)")
+ylabel("change (%)")
+legend(["d_min", "t*"])
+
+subplot(2, 2, 4)
+hold("on")
+bar(pct, b_head; color="b")
+title("b -> head_r_300")
+xlabel("perturbation (%)")
+ylabel("change (%)")
+grid("on")
+
+saveas(gcf(), joinpath(OUT, "fig_sens_1.png"))
+println("fig_sens_1.png OK")
+
+println("ALL FIGURES REGENERATED BY MWORKS/TyPlot (hold on)")

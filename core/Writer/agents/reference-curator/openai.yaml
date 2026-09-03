@@ -1,0 +1,14 @@
+interface:
+  display_name: "Reference Curator"
+  short_description: "参考文献整理 + 引用完整性"
+  default_prompt: "Use $reference-curator to curate references and check citations."
+runtime:
+  hand: writer
+  utg_layer: L3
+  stage: 4
+  inputs:
+    - paper/main.tex
+    - core/Writer/knowledge/templates/mathmodel/references.bib
+  outputs:
+    - paper/references.bib
+    - work/reference_report.json

@@ -1,0 +1,152 @@
+% ==============================================================================
+% Nature journal submission template (skeleton)
+% Nature does not ship an official document class on CTAN; the production
+% template is distributed via Nature's author services and Overleaf. This
+% skeleton uses the standard `article` class with Nature-editorial styling so
+% it compiles on any TeX Live install. Before final submission, download the
+% official Nature LaTeX template from Overleaf ("Nature template for papers")
+% or from https://www.nature.com/nature/for-authors/final-submission and
+% replace the preamble below.
+%
+% Editorial style (Nature, "Author submissions" guidelines):
+%   Layout     : single column, double-spaced, line numbers for review
+%   Body font  : Times Roman 11-12pt (Arial/Helvetica acceptable)
+%   Math font  : Times-compatible (mathptmx)
+%   Captions   : 8-9pt, sentence case
+%   Citation   : superscript numerals in text, numbered reference list
+%   Figures    : single column 89 mm  |  double column 180 mm
+%   Sections   : Introduction (no heading), Results, Discussion, Methods
+%   Abstract   : one paragraph, ~150 words, no heading, bold lead
+% References  : nature.bst (numeric, superscript), via natbib `super` option
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- Page geometry: A4 with generous review margins ----
+\usepackage[a4paper,top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+
+% ---- Fonts: Times text + Times math (Nature preference) ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}             % Times for body AND math
+\usepackage{helvet}               % Helvetica/Arial as sans companion
+\usepackage{courier}
+
+% ---- Line numbers + double spacing for review ----
+\usepackage{lineno}               % \linenumbers  for review mode
+\usepackage{setspace}
+\doublespacing                    % comment out for camera-ready
+
+% ---- Math, figures, tables ----
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+
+% ---- Citations: Nature superscript numerals ----
+\usepackage[super,sort&compress,comma]{natbib}
+\bibliographystyle{unsrtnat}      % numeric, citation-order; switch to nature.bst if available
+% If you have nature.bst on your system, replace the line above with:
+%   \bibliographystyle{nature}
+
+% ---- Hyperref last ----
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% ---- Nature-style section formatting (no section numbering) ----
+\setcounter{secnumdepth}{-1}      % unnumbered section headings; use \section*{} in body
+
+\title{\textbf{A concise, declarative title of the Nature submission}}
+\author{First Author\textsuperscript{1,*}, Second Author\textsuperscript{2}, Senior Author\textsuperscript{1,*}\\
+\textsuperscript{1}Department of X, University of Y, City, Country.\\
+\textsuperscript{2}Department of Z, Institute of W, City, Country.\\
+\textsuperscript{*}e-mail: first.author@univ.edu; senior.author@univ.edu}
+\date{}
+
+\begin{document}
+\linenumbers                     % review mode: show line numbers
+
+\maketitle
+
+% ==============================================================================
+% Abstract (Nature: one paragraph, ~150 words, no "Abstract" heading, bold lead)
+% ==============================================================================
+\noindent\textbf{Abstract.} % TODO: one paragraph, ~150 words. Lead with the
+% headline finding in bold, then the question, the approach, the key result
+% with effect sizes, and the broader implication. No citations.
+
+% ==============================================================================
+% Introduction (Nature: no section heading, opens with the broad question)
+% ==============================================================================
+\section*{Introduction}
+% TODO: 3-5 paragraphs. (i) broad context and why it matters, (ii) specific
+% gap in current knowledge, (iii) conceptual approach of this work, (iv) the
+% main finding stated up-front (Nature style: results preview).
+
+% ==============================================================================
+% Results (Nature: numbered sub-headings, figures referenced inline)
+% ==============================================================================
+\section*{Results}
+% TODO: open with a one-paragraph summary of the main finding; then sub-sections
+% each beginning with a topic sentence that states the result before the data.
+
+\subsection*{Result one: a short, declarative sub-heading}
+% TODO: present the result, reference the figure inline, e.g. (Fig. 1).
+% Describe controls and statistical support (n, test, p-value, effect size).
+
+\subsection*{Result two: another declarative sub-heading}
+% TODO: second result cluster.
+
+% ==============================================================================
+% Discussion (Nature: 2-4 paragraphs, no numbered sub-headings)
+% ==============================================================================
+\section*{Discussion}
+% TODO: (i) restate the main result and how it advances the field,
+% (ii) compare with prior work and reconcile differences, (iii) limitations,
+% (iv) future directions and broader implications.
+
+% ==============================================================================
+% Methods (Nature: detailed, reproducible; can be smaller type after refs)
+% ==============================================================================
+\section*{Methods}
+% TODO: data sources, experimental design, statistical analysis, code/data
+% availability. Nature requires enough detail for replication.
+
+% ==============================================================================
+% References  —  numbered, superscript in text
+% Compile:  pdflatex main  ->  bibtex main  ->  pdflatex main  ->  pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} Author, F. \& Author, S. Title of the paper.
+%   \emph{Nature} \textbf{XXX}, 1--10 (20YY).
+% \end{thebibliography}
+
+% ==============================================================================
+% Acknowledgements, Author Contributions, Competing Interests, Data Availability
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funding agencies, grant numbers, individuals.
+
+\section*{Author Contributions}
+% TODO: e.g. "F.A. designed the study, performed the analysis, and wrote the
+% paper. S.A. collected the data. S.A. supervised the project."
+
+\section*{Competing Interests}
+% TODO: declare any competing interests, or state "The authors declare no
+% competing interests."
+
+\section*{Data \& Code Availability}
+% TODO: state where data and code are deposited (with DOIs / repository links).
+
+% ==============================================================================
+% Figure Legends (Nature: legends grouped after the main text)
+% ==============================================================================
+\section*{Figure Legends}
+
+\noindent\textbf{Figure 1.} % TODO: title in bold, then a self-contained
+% description of what is plotted, the sample size, statistical test, and
+% error bars (e.g. "mean $\pm$ s.d., $n=10$ biological replicates").
+
+\end{document}

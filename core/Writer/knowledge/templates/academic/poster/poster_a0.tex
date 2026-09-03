@@ -1,0 +1,109 @@
+\documentclass[final]{beamer}
+\usetheme{Madrid}
+\usecolortheme{whale}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{tikz}
+
+\title[Poster]{Paper Title}
+\author{Author One\and Author Two}
+\institute{University / Institution}
+\date{\today}
+
+\begin{document}
+\begin{frame}[t]
+\frametitle{Background}
+\begin{multicols}{2}
+\textbf{Research Question:}\\
+What is the core problem being addressed?
+
+\textbf{Motivation:}\\
+Why is this problem important? What gap exists in current literature?
+
+\columnbreak
+
+\textbf{Contributions:}
+\begin{enumerate}
+    \item Contribution 1
+    \item Contribution 2
+    \item Contribution 3
+\end{enumerate}
+\end{multicols}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Method}
+\begin{multicols}{2}
+\textbf{Approach Overview}\\
+Brief description of the proposed method.
+
+\textbf{Key Formulas:}
+\begin{equation}
+    \mathcal{L} = \sum_{i=1}^{N} \ell(y_i, f(x_i; \theta))
+\end{equation}
+
+\columnbreak
+
+\includegraphics[width=\columnwidth]{method_diagram.pdf}
+\end{multicols}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Results}
+\begin{multicols}{2}
+\textbf{Experimental Setup:}
+\begin{itemize}
+    \item Dataset: Description
+    \item Baselines: Method A, Method B
+    \item Metrics: Accuracy, F1, RMSE
+\end{itemize}
+
+\columnbreak
+
+\textbf{Main Results:}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Method & Metric 1 & Metric 2 \\
+\midrule
+Baseline A & 0.85 & 0.82 \\
+Baseline B & 0.87 & 0.84 \\
+\textbf{Ours} & \textbf{0.92} & \textbf{0.89} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{multicols}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Conclusions \& Future Work}
+\begin{multicols}{2}
+\textbf{Key Findings:}
+\begin{enumerate}
+    \item Finding 1: Our method achieves X\% improvement
+    \item Finding 2: Analysis shows Y is the key factor
+    \item Finding 3: Generalizes well to Z
+\end{enumerate}
+
+\columnbreak
+
+\textbf{Limitations:}
+\begin{itemize}
+    \item Limitation 1
+    \item Limitation 2
+\end{itemize}
+
+\textbf{Future Directions:}
+\begin{itemize}
+    \item Direction 1
+    \item Direction 2
+\end{itemize}
+\end{multicols}
+\end{frame}
+
+\end{document}

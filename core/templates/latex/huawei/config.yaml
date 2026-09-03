@@ -1,0 +1,31 @@
+# 华为杯（中国研究生数学建模竞赛）竞赛包
+
+competition: huawei
+name: 中国研究生数学建模竞赛（华为杯）
+language: zh
+engine: xelatex
+compile_chain: xelatex -> bibtex -> xelatex -> xelatex
+
+template:
+  base: core/Writer/knowledge/templates/mathmodel/zh/cumcm/
+  note: 中文竞赛，可复用 CUMCM 的 ctex 模板骨架；页眉页脚与封面按当届模板替换
+
+thresholds:
+  note: 页数/字数门槛以当届官方通知为准；未发布前沿用 core/env/config.yaml 的 paper 组默认值
+  base: env.config.paper
+
+structure:
+  order: [封面/承诺书, 摘要, 正文, 参考文献, 附录]
+  note: 近年通常要求附诚信承诺书，具体以当届通知为准
+
+ai_usage:
+  required: varies
+  output: support_materials/ai_usage_disclosure.md
+  note: 近年赛事对 AI 使用有披露要求且逐年变化，提交前核对当届通知
+
+anonymity:
+  forbid_in_body: [校名, 姓名, 指导教师]
+  note: 参赛对象为在读研究生，组队一般不超过 3 人，以当届通知为准
+
+rules_verified: 2026-08-31
+rules_source: 见 rules.md 的「官方入口」

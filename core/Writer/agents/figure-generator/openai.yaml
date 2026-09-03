@@ -1,0 +1,13 @@
+interface:
+  display_name: "Figure Generator"
+  short_description: "图表生成与规范命名"
+  default_prompt: "Use $figure-generator to generate figures with canonical naming."
+runtime:
+  hand: writer
+  utg_layer: L2
+  stage: 3
+  inputs:
+    - figures/*.png
+    - work/paper_structure.json
+  outputs:
+    - paper/figures/

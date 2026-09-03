@@ -1,0 +1,41 @@
+{
+  "version": "1.0",
+  "project": "cumcm2024a",
+  "updated": "2026-08-30T08:40:35Z",
+  "verdict_hint": "refine",
+  "based_on": {
+    "score_card": "work/score_card.json",
+    "weakness_report": "work/weakness_report.json"
+  },
+  "tasks": [
+    {
+      "id": 1,
+      "severity": "major",
+      "scope": "全文",
+      "target_file": "paper/main.tex",
+      "location": "创新与亮点（评分 5.0，低于通过线 6.0）",
+      "action": "补充与常规做法的实质差异：说明闭式弧长参数化相比数值积分的精度与耗时收益，并给出可迁移的一般化结论（任意等距螺线串联刚体系统）",
+      "acceptance": "模型评价章节明确列出至少 2 项区别于标准套路的做法，并附数值对照"
+    },
+    {
+      "id": 2,
+      "severity": "major",
+      "scope": "Q3",
+      "target_file": "paper/main.tex",
+      "location": "第 6 节 灵敏度分析",
+      "action": "灵敏度扫描补充阈值通道参数（板凳宽度 w 已覆盖，需补螺距 b 与龙头速度 v1 的联合扰动）",
+      "acceptance": "至少 3 个参数、2 种扰动幅度的完整网格，结果写入 all_results.json 并重新冻结"
+    },
+    {
+      "id": 3,
+      "severity": "minor",
+      "scope": "全文",
+      "target_file": "paper/main.tex",
+      "location": "图表注释",
+      "action": "压缩过长的图注，控制在 15 个中文字符以内",
+      "acceptance": "逐图检查 caption 长度，可用正则统计验证"
+    }
+  ],
+  "blocking_cleared": true,
+  "notes": "本清单对应 verdict=refine（加权均分 7.04 达标，但最低维度「创新与亮点」5.0 < 6.0）。按 scope 区分回退范围：Q3 的任务只改该子问，全文类任务才涉及整体修改。"
+}

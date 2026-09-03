@@ -1,0 +1,16 @@
+interface:
+  display_name: "Weakness Hunter"
+  short_description: "逐条扫描反模式库挑缺陷，命中多少报多少"
+  default_prompt: "Use $weakness-hunter to scan antipatterns and emit weakness_report.json."
+runtime:
+  hand: reviewer
+  utg_layer: L4
+  stage: 2
+  inputs:
+    - paper/main.tex
+    - core/knowledge/pitfalls/antipatterns.md
+    - core/knowledge/pitfalls/numeric-edge-cases.md
+    - core/knowledge/review/scoring-criteria.md
+    - core/knowledge/review/judge-insights.md
+  outputs:
+    - work/weakness_report.json

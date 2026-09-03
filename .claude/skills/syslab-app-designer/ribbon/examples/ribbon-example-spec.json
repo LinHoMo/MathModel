@@ -1,0 +1,527 @@
+{
+  "toolstrip": {
+    "id": "wirelessWaveformToolstrip",
+    "tag": "wirelessWaveformToolstrip",
+    "enabled": true,
+    "visible": true,
+    "activeTab": "generatorTab",
+    "tabs": [
+      {
+        "id": "generatorTab",
+        "tag": "generatorTab",
+        "title": "Generator",
+        "sections": [
+          {
+            "id": "fileSection",
+            "tag": "fileSection",
+            "title": "File",
+            "layout": "columns",
+            "columns": [
+              {
+                "id": "sessionColumn",
+                "tag": "sessionColumn",
+                "layout": "stack",
+                "width": "92px",
+                "controls": [
+                  {
+                    "id": "newSessionButton",
+                    "tag": "newSessionButton",
+                    "controlType": "button",
+                    "displayMode": "small",
+                    "text": "New Session",
+                    "iconKind": "new",
+                    "commandId": "newSession",
+                    "buttonPushedFcn": "onNewSession"
+                  },
+                  {
+                    "id": "openSessionButton",
+                    "tag": "openSessionButton",
+                    "controlType": "splitbutton",
+                    "displayMode": "small",
+                    "text": "Open Session",
+                    "iconKind": "open",
+                    "commandId": "openSession",
+                    "buttonPushedFcn": "onOpenSession",
+                    "items": [
+                      {
+                        "label": "Recent Session 1",
+                        "value": "recentSession1",
+                        "commandId": "openRecentSession"
+                      },
+                      {
+                        "label": "Recent Session 2",
+                        "value": "recentSession2",
+                        "commandId": "openRecentSession"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "saveSessionButton",
+                    "tag": "saveSessionButton",
+                    "controlType": "button",
+                    "displayMode": "small",
+                    "text": "Save Session",
+                    "iconKind": "save",
+                    "commandId": "saveSession",
+                    "buttonPushedFcn": "onSaveSession"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "waveformTypeSection",
+            "tag": "waveformTypeSection",
+            "title": "Waveform Type",
+            "layout": "gallery",
+            "width": "360px",
+            "columns": [
+              {
+                "id": "ofdmWaveformColumn",
+                "tag": "ofdmWaveformColumn",
+                "width": "72px",
+                "controls": [
+                  {
+                    "id": "ofdmWaveformControl",
+                    "tag": "ofdmWaveformControl",
+                    "controlType": "button",
+                    "displayMode": "large",
+                    "variant": "tile",
+                    "text": "OFDM",
+                    "iconLabel": "OF",
+                    "commandId": "selectWaveformOfdm",
+                    "buttonPushedFcn": "onSelectWaveform",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "id": "fskWaveformColumn",
+                "tag": "fskWaveformColumn",
+                "width": "72px",
+                "controls": [
+                  {
+                    "id": "fskWaveformControl",
+                    "tag": "fskWaveformControl",
+                    "controlType": "button",
+                    "displayMode": "large",
+                    "variant": "tile",
+                    "text": "FSK",
+                    "iconLabel": "FS",
+                    "commandId": "selectWaveformFsk",
+                    "buttonPushedFcn": "onSelectWaveform",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "id": "qamWaveformColumn",
+                "tag": "qamWaveformColumn",
+                "width": "72px",
+                "controls": [
+                  {
+                    "id": "qamWaveformControl",
+                    "tag": "qamWaveformControl",
+                    "controlType": "button",
+                    "displayMode": "large",
+                    "variant": "tile",
+                    "text": "QAM",
+                    "iconLabel": "QM",
+                    "commandId": "selectWaveformQam",
+                    "buttonPushedFcn": "onSelectWaveform",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "id": "pskWaveformColumn",
+                "tag": "pskWaveformColumn",
+                "width": "72px",
+                "controls": [
+                  {
+                    "id": "pskWaveformControl",
+                    "tag": "pskWaveformControl",
+                    "controlType": "button",
+                    "displayMode": "large",
+                    "variant": "tile",
+                    "text": "PSK",
+                    "iconLabel": "PK",
+                    "commandId": "selectWaveformPsk",
+                    "buttonPushedFcn": "onSelectWaveform",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "id": "waveformMoreColumn",
+                "tag": "waveformMoreColumn",
+                "layout": "more-slot",
+                "controls": [
+                  {
+                    "id": "waveformMoreControl",
+                    "tag": "waveformMoreControl",
+                    "controlType": "collapse",
+                    "displayMode": "large",
+                    "text": "More",
+                    "galleryTitle": "Waveform Type",
+                    "items": [
+                      {
+                        "label": "CPM",
+                        "value": "cpm",
+                        "commandId": "selectWaveformCpm"
+                      },
+                      {
+                        "label": "AM",
+                        "value": "am",
+                        "commandId": "selectWaveformAm"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "analysisSection",
+            "tag": "analysisSection",
+            "title": "Analysis",
+            "layout": "columns",
+            "columns": [
+              {
+                "id": "analysisGalleryColumn",
+                "tag": "analysisGalleryColumn",
+                "width": "326px",
+                "controls": [
+                  {
+                    "id": "analysisGallery",
+                    "tag": "analysisGallery",
+                    "controlType": "matlab-gallery",
+                    "displayMode": "large",
+                    "text": "Analysis",
+                    "value": "dopplerSpectrum",
+                    "visibleCount": 3,
+                    "itemWidth": "96",
+                    "frameWidth": "326px",
+                    "menuSelectionMode": "single",
+                    "commandInvokedFcn": "onAnalysisGalleryChanged",
+                    "items": [
+                      {
+                        "label": "Doppler\nSpectrum",
+                        "value": "dopplerSpectrum",
+                        "iconKind": "scope",
+                        "commandId": "selectDopplerSpectrum",
+                        "checked": true
+                      },
+                      {
+                        "label": "Impulse\nResponse",
+                        "value": "impulseResponse",
+                        "iconKind": "scope",
+                        "commandId": "selectImpulseResponse"
+                      },
+                      {
+                        "label": "Frequency\nResponse",
+                        "value": "frequencyResponse",
+                        "iconKind": "scope",
+                        "commandId": "selectFrequencyResponse"
+                      }
+                    ],
+                    "buttonPushedFcn": "onAnalysisGalleryChanged"
+                  }
+                ]
+              },
+              {
+                "id": "analysisSettingsColumn",
+                "tag": "analysisSettingsColumn",
+                "width": "88px",
+                "controls": [
+                  {
+                    "id": "analysisSettingsButton",
+                    "tag": "analysisSettingsButton",
+                    "controlType": "button",
+                    "displayMode": "large",
+                    "text": "Analysis\nSettings",
+                    "iconKind": "scope",
+                    "commandId": "analysisSettings",
+                    "buttonPushedFcn": "onAnalysisSettings"
+                  }
+                ]
+              },
+              {
+                "id": "analysisModeColumn",
+                "tag": "analysisModeColumn",
+                "layout": "stack",
+                "width": "74px",
+                "controls": [
+                  {
+                    "id": "autoAnalysisRadio",
+                    "tag": "autoAnalysisRadio",
+                    "controlType": "radio",
+                    "displayMode": "small",
+                    "text": "Auto",
+                    "groupName": "analysisRunMode",
+                    "value": false,
+                    "valueChangedFcn": "onAnalysisModeChanged"
+                  },
+                  {
+                    "id": "manualAnalysisRadio",
+                    "tag": "manualAnalysisRadio",
+                    "controlType": "radio",
+                    "displayMode": "small",
+                    "text": "Manual",
+                    "groupName": "analysisRunMode",
+                    "value": true,
+                    "valueChangedFcn": "onAnalysisModeChanged"
+                  }
+                ]
+              },
+              {
+                "id": "analyzeColumn",
+                "tag": "analyzeColumn",
+                "width": "78px",
+                "controls": [
+                  {
+                    "id": "analyzeButton",
+                    "tag": "analyzeButton",
+                    "controlType": "button",
+                    "displayMode": "large",
+                    "text": "Analyze",
+                    "iconLabel": "▶",
+                    "commandId": "analyze",
+                    "buttonPushedFcn": "onAnalyze"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "generateSection",
+            "tag": "generateSection",
+            "title": "Generate",
+            "layout": "columns",
+            "columns": [
+              {
+                "id": "impairmentColumn",
+                "tag": "impairmentColumn",
+                "layout": "matrix",
+                "matrixColumns": 2,
+                "width": "156px",
+                "controls": [
+                  {
+                    "id": "phaseNoiseButton",
+                    "tag": "phaseNoiseButton",
+                    "controlType": "button",
+                    "displayMode": "small",
+                    "text": "Phase Noise",
+                    "commandId": "phaseNoise",
+                    "buttonPushedFcn": "onPhaseNoise"
+                  },
+                  {
+                    "id": "dcOffsetButton",
+                    "tag": "dcOffsetButton",
+                    "controlType": "button",
+                    "displayMode": "small",
+                    "text": "DC Offset",
+                    "commandId": "dcOffset",
+                    "buttonPushedFcn": "onDcOffset"
+                  },
+                  {
+                    "id": "iqImbalanceButton",
+                    "tag": "iqImbalanceButton",
+                    "controlType": "button",
+                    "displayMode": "small",
+                    "text": "IQ Imbalance",
+                    "commandId": "iqImbalance",
+                    "buttonPushedFcn": "onIqImbalance"
+                  },
+                  {
+                    "id": "memorylessPaButton",
+                    "tag": "memorylessPaButton",
+                    "controlType": "button",
+                    "displayMode": "small",
+                    "text": "Memoryless PA",
+                    "commandId": "memorylessPa",
+                    "buttonPushedFcn": "onMemorylessPa"
+                  }
+                ]
+              },
+              {
+                "id": "visualizeColumn",
+                "tag": "visualizeColumn",
+                "layout": "stack",
+                "width": "112px",
+                "controls": [
+                  {
+                    "id": "visualizeDropdownButton",
+                    "tag": "visualizeDropdownButton",
+                    "controlType": "dropdownbutton",
+                    "displayMode": "large",
+                    "layoutVariant": "two-line-dropdown-attached-arrow",
+                    "text": "Visualize\nOptions",
+                    "iconKind": "scope",
+                    "commandId": "visualize",
+                    "commandInvokedFcn": "onVisualize",
+                    "menuSelectionMode": "multiple",
+                    "menuItemMarkStyle": "check",
+                    "items": [
+                      {
+                        "label": "Spectrum",
+                        "value": "spectrum",
+                        "commandId": "visualizeSpectrum",
+                        "checked": true
+                      },
+                      {
+                        "label": "Constellation",
+                        "value": "constellation",
+                        "commandId": "visualizeConstellation",
+                        "checked": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "generateMainColumn",
+                "tag": "generateMainColumn",
+                "width": "82px",
+                "controls": [
+                  {
+                    "id": "generateButton",
+                    "tag": "generateButton",
+                    "controlType": "button",
+                    "displayMode": "large",
+                    "text": "Generate",
+                    "iconLabel": "GN",
+                    "commandId": "generateWaveform",
+                    "buttonPushedFcn": "onGenerateWaveform"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "exportSection",
+            "tag": "exportSection",
+            "title": "Export",
+            "layout": "columns",
+            "columns": [
+              {
+                "id": "exportColumn",
+                "tag": "exportColumn",
+                "width": "82px",
+                "controls": [
+                  {
+                    "id": "exportButton",
+                    "tag": "exportButton",
+                    "controlType": "button",
+                    "displayMode": "large",
+                    "text": "Export",
+                    "iconLabel": "EX",
+                    "commandId": "exportWaveform",
+                    "buttonPushedFcn": "onExportWaveform"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "transmitterTab",
+        "tag": "transmitterTab",
+        "title": "Transmitter",
+        "sections": [
+          {
+            "id": "transmitterSettingsSection",
+            "tag": "transmitterSettingsSection",
+            "title": "Settings",
+            "layout": "columns",
+            "columns": [
+              {
+                "id": "sampleRateColumn",
+                "tag": "sampleRateColumn",
+                "layout": "stack",
+                "width": "132px",
+                "controls": [
+                  {
+                    "id": "sampleRateCombo",
+                    "tag": "sampleRateCombo",
+                    "controlType": "combobox",
+                    "displayMode": "small",
+                    "text": "Sample Rate",
+                    "placeholder": "Select rate",
+                    "value": "30.72 MHz",
+                    "options": [
+                      {
+                        "label": "15.36 MHz",
+                        "value": "15.36 MHz"
+                      },
+                      {
+                        "label": "30.72 MHz",
+                        "value": "30.72 MHz"
+                      },
+                      {
+                        "label": "61.44 MHz",
+                        "value": "61.44 MHz"
+                      }
+                    ],
+                    "valueChangedFcn": "onSampleRateChanged"
+                  },
+                  {
+                    "id": "centerFrequencyCombo",
+                    "tag": "centerFrequencyCombo",
+                    "controlType": "combobox",
+                    "displayMode": "small",
+                    "text": "Center Frequency",
+                    "placeholder": "Select center",
+                    "value": "3.50 GHz",
+                    "options": [
+                      {
+                        "label": "2.40 GHz",
+                        "value": "2.40 GHz"
+                      },
+                      {
+                        "label": "3.50 GHz",
+                        "value": "3.50 GHz"
+                      },
+                      {
+                        "label": "5.80 GHz",
+                        "value": "5.80 GHz"
+                      }
+                    ],
+                    "valueChangedFcn": "onCenterFrequencyChanged"
+                  }
+                ]
+              },
+              {
+                "id": "transmitterOptionsColumn",
+                "tag": "transmitterOptionsColumn",
+                "layout": "stack",
+                "width": "138px",
+                "controls": [
+                  {
+                    "id": "loopPlaybackCheckbox",
+                    "tag": "loopPlaybackCheckbox",
+                    "controlType": "checkbox",
+                    "displayMode": "small",
+                    "text": "Loop Playback",
+                    "value": true,
+                    "valueChangedFcn": "onLoopPlaybackChanged"
+                  },
+                  {
+                    "id": "burstModeCheckbox",
+                    "tag": "burstModeCheckbox",
+                    "controlType": "checkbox",
+                    "displayMode": "small",
+                    "text": "Burst Mode",
+                    "value": false,
+                    "valueChangedFcn": "onBurstModeChanged"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

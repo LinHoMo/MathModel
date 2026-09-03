@@ -1,0 +1,205 @@
+% ==============================================================================
+% STEM (Science / Technology / Engineering / Mathematics) Paper Template
+% Structure: IMRaD  (Introduction / Methods / Results and Discussion)
+% Standardized by ANSI Z39.16-1972; introduction follows Swales' CARS model
+% (Create A Research Space, Swales 1990).
+%
+% This skeleton uses the standard `article` class + IEEEtran.bst so it compiles
+% on any TeX Live / MiKTeX install.  For journal-specific submission, swap the
+% preamble with the matching journal template under ../journals/ .
+%
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- Page geometry ----
+\usepackage[a4paper,top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+
+% ---- Fonts & encoding ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}             % Times for body + math
+\usepackage{helvet}
+\usepackage{courier}
+
+% ---- Math, figures, tables ----
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}               % theorem/lemma/proof environments
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{algorithm}            % algorithm floating environment
+\usepackage{algorithmic}          % IEEE-style pseudo-code commands
+
+% ---- Theorem-like environments (optional, for theory papers) ----
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% ---- Citations: numeric [1], [2], [3]-[5] in citation order ----
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{IEEEtran}      % swap with elsarticle-num / ACM-Reference-Format / siamplain / unsrtnat as needed
+
+% ---- Hyperref last ----
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% ---- Line numbers for review (uncomment for double-blind submission) ----
+% \usepackage{lineno} \linenumbers
+
+\title{A Concise and Informative Title of the STEM Submission}
+\author{First Author\textsuperscript{1,*}, Second Author\textsuperscript{2}, Senior Author\textsuperscript{1}\\
+\textsuperscript{1}Department of X, University of Y, City, Country\\
+\textsuperscript{2}Department of Z, Institute of W, City, Country\\
+\textsuperscript{*}e-mail: first.author@univ.edu}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+% Abstract  (150-250 words; no citations; state problem / approach / results / significance)
+% ==============================================================================
+\begin{abstract}
+% TODO: 150-250 words. Sentence 1-2: problem statement. Sentence 3-5: approach.
+% Sentence 6-8: key quantitative results with effect sizes. Sentence 9: significance.
+\end{abstract}
+
+\noindent\textbf{Keywords:} % TODO: 4-6 keywords separated by commas.
+keyword one, keyword two, keyword three, keyword four
+
+% ==============================================================================
+% 1. Introduction  (CARS model: territory -> niche -> occupy niche)
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO intro-CARS Move 1 (territory): claim centrality of the research area
+% and review recent prior work with \citep{ref_example}.
+% TODO intro-CARS Move 2 (niche): indicate a gap / contradiction / limitation
+% in the prior work reviewed above.
+% TODO intro-CARS Move 3 (occupy): state the purpose, the bulleted
+% contributions, and the paper roadmap. Use \citep{} for parenthetical cites.
+
+% ==============================================================================
+% 2. Related Work
+% ==============================================================================
+\section{Related Work}
+\label{sec:related}
+% TODO related-work: cluster prior work by approach family; for each cluster
+% compare methodology, data, and performance; explicitly position this work.
+
+% ==============================================================================
+% 3. Methods / System Model
+% ==============================================================================
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Problem formulation}
+% TODO: state the problem formally; introduce notation; list assumptions.
+
+\subsection{Proposed method}
+% TODO: describe the proposed method step by step; reference Algorithm 1.
+
+\begin{algorithm}[t]
+\caption{Outline of the proposed method}
+\label{alg:method}
+\begin{algorithmic}[1]
+\REQUIRE dataset $\mathcal{D}$, hyper-parameters $\Theta$
+\STATE initialise model parameters $\theta$
+\WHILE{not converged}
+    \STATE $\theta \leftarrow \theta - \eta \,\nabla \mathcal{L}(\theta;\mathcal{D})$
+\ENDWHILE
+\RETURN trained model with parameters $\theta$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Complexity analysis}
+% TODO: time complexity and space complexity in big-O notation.
+
+% ==============================================================================
+% 4. Experiments / Results
+% ==============================================================================
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experimental setup}
+% TODO experiment-setup: datasets (with citations), baselines, evaluation
+% metrics, hardware (CPU/GPU/RAM), software versions, random seed.
+
+\subsection{Main results}
+% TODO results: present quantitative results; reference Table 1 and Figure 1.
+% Report mean $\pm$ std over multiple runs; state statistical tests.
+
+\begin{table}[t]
+\caption{Main results. Caption ABOVE the table (STEM convention).}
+\label{tab:results}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Method   & Metric A       & Metric B       \\
+\midrule
+Baseline & 0.812          & 0.754          \\
+Ours     & \textbf{0.891} & \textbf{0.832} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=0.9\columnwidth]{figures/result.pdf}
+\fbox{\rule{0pt}{4cm}\rule{0.9\columnwidth}{0pt}}
+\caption{Single-column figure. Caption goes BELOW the figure. Use
+\texttt{\textbackslash columnwidth} or \texttt{\textbackslash textwidth}.}
+\label{fig:result}
+\end{figure}
+
+\subsection{Ablation study}
+% TODO: remove or replace each component to verify its individual contribution.
+
+\subsection{Statistical significance}
+% TODO: report t-test / Wilcoxon / bootstrap 95\% CI; state $p$-values.
+
+% ==============================================================================
+% 5. Discussion
+% ==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+% TODO: interpret results, reconcile with prior work, state limitations
+% (TODO: limitations) and threats to validity.
+
+% ==============================================================================
+% 6. Reproducibility Statement  (STEM-specific)
+% ==============================================================================
+\section*{Reproducibility Statement}
+% TODO reproducibility: state where code, data, pre-trained models, and
+% configuration files are deposited (GitHub URL + Zenodo DOI). Disclose the
+% random seed, framework versions, and hardware. If any data is restricted,
+% state the access procedure.
+
+% ==============================================================================
+% 7. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: recap contributions and the headline result; one sentence of future work.
+
+% ==============================================================================
+% Acknowledgements
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funding agencies, grant numbers, individuals.
+
+% ==============================================================================
+% References  —  IEEEtran numeric style [1], [2], [3]-[5]
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} F.~Author and S.~Author, ``Title of the paper,''
+%   \emph{Journal Name} XX (20YY) 1--10.
+% \end{thebibliography}
+
+\end{document}

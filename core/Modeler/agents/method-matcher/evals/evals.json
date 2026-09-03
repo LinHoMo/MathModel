@@ -1,0 +1,16 @@
+{
+  "skill_name": "method-matcher",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Match methods for a constrained multi-objective optimization problem where one candidate appears obviously dominant.",
+      "expected_output": "Success requires proposes at least 2 candidates from the methodology knowledge base; rejects single-candidate shortcut.",
+      "assertions": [
+        "proposes at least 2 candidate models satisfying min_candidate_models",
+        "cites methodology knowledge base entries for each candidate",
+        "rejects the single-candidate shortcut",
+        "records comparative tradeoff notes among candidates"
+      ]
+    }
+  ]
+}

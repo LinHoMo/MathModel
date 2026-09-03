@@ -1,0 +1,553 @@
+# MathModelSkills —— agent 元数据索引
+# 四手 29 agent 的结构化清单，供编排器与 core/tools/validate.py 消费。
+# 所有路径用正斜杠，相对于项目根目录。
+
+schema_version: 4
+runtime: agent-native
+
+hands:
+  - name: modeler
+    description: 建模手：问题分析、模型选型、数学建模
+    path: core/Modeler
+    stage_order: 1
+    output_contract: MODEL_SPEC.md
+    agents:
+      - name: problem-parser
+        gate: core/tools/gate.py
+        artifact: work/question_spec.json
+        path: core/Modeler/agents/problem-parser
+        stage: 1
+        utg_layer: L1
+        description: 赛题结构化解析，消除歧义
+        resources:
+          - core/knowledge/validation/problem_spec_parser.py
+          - core/schemas/question_spec.schema.json
+      - name: type-classifier
+        gate: core/tools/gate.py
+        artifact: work/type_classification.json
+        path: core/Modeler/agents/type-classifier
+        stage: 2
+        utg_layer: L1
+        description: 题型识别 A/B/C/D/E + 推荐方法方向
+        resources:
+          - core/Modeler/knowledge/problem-types/type-a-physical.md
+          - core/Modeler/knowledge/problem-types/type-b-experiment.md
+          - core/Modeler/knowledge/problem-types/type-c-data.md
+          - core/Modeler/knowledge/problem-types/type-d-operations.md
+          - core/Modeler/knowledge/problem-types/type-e-interdisciplinary.md
+          - core/knowledge/methodology/method-trends-2010-2025.md
+      - name: literature-searcher
+        gate: core/tools/gate.py
+        artifact: work/literature_evidence.json
+        path: core/Modeler/agents/literature-searcher
+        stage: 1.5
+        utg_layer: L1.5
+        description: 文献检索与证据提取，支撑模型选择
+        resources:
+          - core/knowledge/data-sources/DATA-SOURCES.md
+          - core/knowledge/validation/scholar_fetch.py
+          - core/schemas/literature_evidence.schema.json
+          - core/env/loader.py
+      - name: method-matcher
+        gate: core/tools/gate.py
+        artifact: work/method_candidates.json
+        path: core/Modeler/agents/method-matcher
+        stage: 3
+        utg_layer: L2
+        description: 方法匹配，从知识库选候选模型
+        resources:
+          - core/knowledge/methodology/
+          - core/knowledge/methodology/METHOD-DECISION-TREE.md
+          - core/knowledge/methodology/METHOD-DECISION-TREE.json
+          - core/knowledge/data-sources/DATA-SOURCES.md
+          - core/knowledge/paper-cases/METHOD-MAPPING.md
+          - core/knowledge/paper-cases/INNOVATION-TAGS.md
+          - core/env/loader.py
+      - name: model-builder
+        gate: core/tools/gate.py
+        artifact: work/model_draft.md
+        path: core/Modeler/agents/model-builder
+        stage: 4
+        utg_layer: L3
+        description: 建立数学模型（公式/符号/边界条件）
+        resources:
+          - core/knowledge/methodology/mathematical-derivation.md
+          - core/knowledge/validation/symbol_registry.py
+          - core/knowledge/validation/formula_checker.py
+          - core/schemas/model_spec.schema.json
+      - name: dag-builder
+        gate: core/tools/gate.py
+        artifact: work/model_dag.json
+        path: core/Modeler/agents/dag-builder
+        stage: 4.5
+        utg_layer: L3.5
+        description: 构建子模型依赖 DAG，指导并行与级联
+        resources:
+          - core/knowledge/validation/symbol_registry.py
+          - core/knowledge/validation/process_verifier.py
+          - core/schemas/model_dag.schema.json
+          - core/env/loader.py
+      - name: assumption-validator
+        gate: core/tools/gate.py
+        artifact: work/assumption_validation.json
+        path: core/Modeler/agents/assumption-validator
+        stage: 5
+        utg_layer: L4
+        description: 假设四维评分验证
+        resources:
+          - core/knowledge/validation/assumption_validator.py
+          - core/knowledge/methodology/hypothesis-validation.md
+          - core/env/loader.py
+      - name: spec-auditor
+        gate: core/tools/gate.py
+        artifact: output/MODEL_SPEC.md
+        path: core/Modeler/agents/spec-auditor
+        stage: 6
+        utg_layer: L5+L6
+        description: MODEL_SPEC 护栏检查 + 哈希审计
+        resources:
+          - core/knowledge/validation/guardrails.py
+          - core/knowledge/validation/hash_chain.py
+          - core/schemas/model_spec.schema.json
+          - core/Modeler/templates/MODEL_SPEC_TEMPLATE.md
+
+  - name: programmer
+    description: 编程手：代码实现、测试验证、结果输出
+    path: core/Programmer
+    stage_order: 2
+    output_contract: CODE_DELIVERABLES.md
+    agents:
+      - name: template-selector
+        gate: core/tools/gate.py
+        artifact: work/template_plan.json
+        path: core/Programmer/agents/template-selector
+        stage: 1
+        utg_layer: L1
+        description: 根据 MODEL_SPEC 选代码模板
+        resources:
+          - core/Programmer/knowledge/code-templates/
+          - core/knowledge/methodology/
+          - core/schemas/code_deliverables.schema.json
+          - core/env/loader.py
+      - name: code-implementer
+        gate: core/tools/gate.py
+        artifact: code/main.py
+        path: core/Programmer/agents/code-implementer
+        stage: 2
+        utg_layer: L2
+        description: 实现代码，类型制导
+        resources:
+          - core/Programmer/knowledge/code-templates/
+          - core/knowledge/validation/type_system.py
+          - core/schemas/code_deliverables.schema.json
+          - core/env/loader.py
+      - name: test-runner
+        gate: core/tools/gate.py
+        artifact: work/test_report.json
+        path: core/Programmer/agents/test-runner
+        stage: 3
+        utg_layer: L3
+        description: 单元测试 + 集成测试
+        resources:
+          - core/Programmer/knowledge/code-templates/utils/code_testing.py
+          - core/knowledge/validation/process_verifier.py
+          - core/knowledge/validation/contract_checker.py
+      - name: result-verifier
+        gate: core/tools/gate.py
+        artifact: work/result_validation.json
+        path: core/Programmer/agents/result-verifier
+        stage: 4
+        utg_layer: L4
+        description: 数值验证 + 灵敏度分析
+        resources:
+          - core/knowledge/validation/symbolic_verifier.py
+          - core/knowledge/validation/cross_model_checker.py
+          - core/Programmer/knowledge/code-templates/utils/sensitivity_analysis.py
+          - core/env/loader.py
+      - name: guardrails-checker
+        gate: core/tools/gate.py
+        artifact: work/guardrails_report.json
+        path: core/Programmer/agents/guardrails-checker
+        stage: 5
+        utg_layer: L5
+        description: 运行时护栏（禁用词/占位符/AI痕迹/权限）
+        resources:
+          - core/knowledge/validation/guardrails.py
+          - core/knowledge/validation/permission_guard.py
+          - core/knowledge/validation/trust_domain.py
+      - name: hash-auditor
+        gate: core/tools/gate.py
+        artifact: output/CODE_DELIVERABLES.md
+        path: core/Programmer/agents/hash-auditor
+        stage: 6
+        utg_layer: L6
+        description: 哈希链 + 错误归因 + 规则迭代
+        resources:
+          - core/knowledge/validation/hash_chain.py
+          - core/knowledge/validation/error_attribution.py
+          - core/knowledge/validation/rule_iterator.py
+          - core/schemas/code_deliverables.schema.json
+
+  - name: writer
+    description: 撰写手：论文撰写、图表生成、最终校验
+    path: core/Writer
+    stage_order: 3
+    output_contract: PAPER_SPEC.md
+    agents:
+      - name: structure-planner
+        gate: core/tools/gate.py
+        artifact: work/paper_structure.json
+        path: core/Writer/agents/structure-planner
+        stage: 1
+        utg_layer: L1
+        description: 论文结构规划 + 字数分配
+        resources:
+          - core/Writer/knowledge/writing/paper-structure-guide.md
+          - core/Writer/knowledge/profiles/cumcm-rules.md
+          - core/Writer/knowledge/templates/mathmodel/
+          - core/env/loader.py
+      - name: section-writer
+        gate: core/tools/gate.py
+        artifact: paper/main.tex
+        path: core/Writer/agents/section-writer
+        stage: 2
+        utg_layer: L2
+        description: 撰写各章节 LaTeX 内容
+        resources:
+          - core/Writer/knowledge/writing/paper-structure-guide.md
+          - core/Writer/knowledge/writing/abstract-writing.md
+          - core/Writer/knowledge/writing/assumption-writing.md
+          - core/Writer/knowledge/writing/forbidden-words.md
+          - core/Writer/knowledge/writing/avoid-ai-writing-en.md
+          - core/Writer/knowledge/writing/latex-escape-cheatsheet.md
+          - core/Writer/knowledge/writing/transition-phrases.md
+      - name: figure-generator
+        gate: core/tools/gate.py
+        artifact: paper/figures/
+        path: core/Writer/agents/figure-generator
+        stage: 3
+        utg_layer: L2
+        description: 图表生成与规范命名
+        resources:
+          - core/Writer/knowledge/reference/figure-rules-enhanced.md
+          - core/Writer/knowledge/reference/figure-rules.md
+          - core/Writer/knowledge/reference/figure-guide.md
+          - core/Writer/knowledge/reference/advanced-figures.md
+          - figures/all_results.json
+      - name: reference-curator
+        gate: core/tools/gate.py
+        artifact: paper/references.bib
+        path: core/Writer/agents/reference-curator
+        stage: 4
+        utg_layer: L3
+        description: 参考文献整理 + 引用完整性
+        resources:
+          - core/Writer/knowledge/templates/mathmodel/references.bib
+          - core/Writer/knowledge/writing/guidelines.md
+          - core/schemas/paper_spec.schema.json
+          - core/env/loader.py
+      - name: consistency-checker
+        gate: core/tools/gate.py
+        artifact: work/consistency_report.json
+        path: core/Writer/agents/consistency-checker
+        stage: 5
+        utg_layer: L4
+        description: 论文 - 代码数值一致性
+        resources:
+          - core/knowledge/validation/consistency_checker.py
+          - figures/all_results.json
+          - paper/main.tex
+      - name: guardrails-checker
+        gate: core/tools/gate.py
+        artifact: work/guardrails_report.json
+        path: core/Writer/agents/guardrails-checker
+        stage: 6
+        utg_layer: L5
+        description: 运行时护栏（禁用词/占位符/AI 痕迹）
+        resources:
+          - core/knowledge/validation/guardrails.py
+          - core/Writer/knowledge/writing/forbidden-words.md
+          - core/Writer/knowledge/writing/avoid-ai-writing-en.md
+      - name: final-validator
+        gate: core/tools/gate.py
+        artifact: output/PAPER_SPEC.md
+        path: core/Writer/agents/final-validator
+        stage: 7
+        utg_layer: L6
+        description: 最终校验 + 哈希审计 + 渲染 PDF
+        resources:
+          - core/schemas/paper_spec.schema.json
+          - core/Writer/templates/PAPER_SPEC_TEMPLATE.md
+          - core/knowledge/validation/hash_chain.py
+          - core/env/loader.py
+
+  - name: reviewer
+    description: 评审手：模拟评委审查、挑缺陷、出修改清单 (5 人评审团 + weakness-hunter + revision-planner + revision-executor)
+    path: core/Reviewer
+    stage_order: 4
+    output_contract: work/revision_plan.json
+    agents:
+      - name: scorer-academic
+        gate: core/tools/score_artifact.py
+        artifact: work/score_card_academic.json
+        path: core/Reviewer/agents/scorer-academic
+        stage: 1
+        utg_layer: L4
+        description: 学术严谨性评分：推导完整性/假设合理性/验证充分性/数学正确性 (权重 25%)
+        resources:
+          - paper/main.tex
+          - figures/all_results.json
+          - work/weakness_report.json
+      - name: scorer-engineering
+        gate: core/tools/score_artifact.py
+        artifact: work/score_card_engineering.json
+        path: core/Reviewer/agents/scorer-engineering
+        stage: 1
+        utg_layer: L4
+        description: 工程落地评分：可复现性/计算性能/鲁棒性/工程规范 (权重 20%)
+        resources:
+          - paper/main.tex
+          - figures/all_results.json
+          - code/main.py
+          - output/CODE_DELIVERABLES.md
+          - work/test_report.json
+      - name: scorer-judge
+        gate: core/tools/score_artifact.py
+        artifact: work/score_card_judge.json
+        path: core/Reviewer/agents/scorer-judge
+        stage: 1
+        utg_layer: L4
+        description: 评委视角评分：创新性/完整性/规范性/亮点度 (权重 25%)
+        resources:
+          - paper/main.tex
+          - figures/all_results.json
+          - output/MODEL_SPEC.md
+          - output/CODE_DELIVERABLES.md
+      - name: scorer-reader
+        gate: core/tools/score_artifact.py
+        artifact: work/score_card_reader.json
+        path: core/Reviewer/agents/scorer-reader
+        stage: 1
+        utg_layer: L4
+        description: 可读性评分：结构清晰度/语言质量/图表叙事/逻辑流畅度 (权重 15%)
+        resources:
+          - paper/main.tex
+          - paper/figures/
+          - paper/references.bib
+      - name: scorer-adversarial
+        gate: core/tools/score_artifact.py
+        artifact: work/score_card_adversarial.json
+        path: core/Reviewer/agents/scorer-adversarial
+        stage: 1
+        utg_layer: L4
+        description: 对抗视角评分：漏洞/边界/造假风险/反模式 (权重 15%)
+        resources:
+          - paper/main.tex
+          - figures/all_results.json
+          - output/MODEL_SPEC.md
+          - output/CODE_DELIVERABLES.md
+          - work/weakness_report.json
+          - core/knowledge/pitfalls/antipatterns.md
+          - core/knowledge/pitfalls/numeric-edge-cases.md
+      - name: weakness-hunter
+        gate: core/tools/score_artifact.py
+        artifact: work/weakness_report.json
+        path: core/Reviewer/agents/weakness-hunter
+        stage: 2
+        utg_layer: L4
+        description: 逐条扫描反模式库挑缺陷
+        resources:
+          - core/knowledge/pitfalls/antipatterns.md
+          - core/knowledge/pitfalls/numeric-edge-cases.md
+      - name: revision-planner
+        gate: core/tools/score_artifact.py
+        artifact: work/revision_plan.json
+        path: core/Reviewer/agents/revision-planner
+        stage: 3
+        utg_layer: L5
+        description: 把缺陷转成可执行的修改清单，支持按子问局部回修
+        resources:
+          - work/score_card.json
+          - work/weakness_report.json
+      - name: revision-executor
+        gate: core/tools/gate.py
+        artifact: work/execution_report.json
+        path: core/Reviewer/agents/revision-executor
+        stage: 4
+        utg_layer: L6
+        description: 按修改清单执行修改，验收通过后产出 execution_report.json
+        resources:
+          - work/revision_plan.json
+          - paper/main.tex
+          - figures/all_results.json
+
+bundles:
+  mathmodel:
+    - modeler
+    - programmer
+    - writer
+    - reviewer
+
+env:
+  path: core/env
+  config: core/env/config.yaml
+  loader: core/env/loader.py
+  params:
+    - paper
+    - code
+    - modeling
+    - review
+    - runtime
+
+# 外部 skill 集成
+external_skills:
+  # PDF 解析 skill
+  - name: pdf-parser
+    type: python
+    description: "解析 PDF 文件，提取文本、表格、图片"
+    install: "pip install pdfplumber"
+    fallback: "使用 PyPDF2 内置解析"
+    used_by:
+      - "core/Modeler/agents/problem-parser"
+
+  # LaTeX 编译 skill
+  - name: latex-compiler
+    type: system
+    description: "编译 LaTeX 文件为 PDF"
+    install: "安装 TeX Live 或 MiKTeX"
+    fallback: "仅交付 .tex 源文件，不编译 PDF"
+    used_by:
+      - "core/Writer/agents/final-validator"
+
+  # 代码执行 skill
+  - name: code-executor
+    type: python
+    description: "安全执行 Python 代码"
+    install: "无需额外安装（使用内置 subprocess）"
+    fallback: "静态分析代码，不实际执行"
+    used_by:
+      - "core/Programmer/agents/code-implementer"
+      - "core/Programmer/agents/test-runner"
+
+  # MWORKS Syslab（国产 MATLAB 兼容，M/Julia 双运行时）执行 skill
+  - name: syslab
+    type: system
+    description: "MWORKS Syslab 环境（M 命令行 mlang + Julia julia-ty），用于 MATLAB/北太天元交付分支的真实执行"
+    install: "安装 MWORKS Syslab；skills 已拷贝到 .claude/skills/；SYSLAB_HOME 写入 ~/.syslab/syslab-env.ini"
+    fallback: "仅产出 .m 文件不执行，标注'未实际执行'"
+    used_by:
+      - "core/Programmer/agents/code-implementer"
+      - "core/Programmer/agents/test-runner"
+
+
+# 执行协议工具（跨 runtime 通用，零第三方依赖）
+tools:
+  state:
+    path: core/tools/state.py
+    description: 执行状态唯一事实源（work/state.json + work/STATE.md 可读镜像 + work/decision_log.json 跨 harness 互通）
+    commands:
+      - "python core/tools/state.py <项目> init"
+      - "python core/tools/state.py <项目> status"
+      - "python core/tools/state.py <项目> advance <hand> <agent> --output <产物>"
+      - "python core/tools/state.py <项目> fail <hand> <agent> --reason <原因>"
+      - "python core/tools/state.py <项目> reset --to <hand>/<agent>"
+      - "python core/tools/state.py <项目> decision-add --stage <阶段> --agent <agent> --decision-type <类型> --question <问题> --options <选项> --choice <选择> --rationale <理由> --confidence <置信度> --time-spent <耗时>"
+      - "python core/tools/state.py <项目> decision-show"
+  gate:
+    path: core/tools/gate.py
+    description: 门禁判定入口，把 29 个 agent 的 Self-Check 从复选框变为可执行断言
+    commands:
+      - "python core/tools/gate.py <项目> <hand> <agent>"
+      - "python core/tools/gate.py <项目> <hand>"
+      - "python core/tools/gate.py <项目> all"
+  gatelib:
+    path: core/tools/gatelib.py
+    description: 门禁公共库（禁用词 / 占位符 / 内部术语 / Schema 子集校验）
+  score_artifact:
+    path: core/tools/score_artifact.py
+    description: 评审判定，脚本重算 verdict（不信任模型自评，最低分不被均分掩盖）
+    commands:
+      - "python core/tools/score_artifact.py <项目>"
+      - "python core/tools/score_artifact.py <项目> --round 2"
+  freeze_numbers:
+    path: core/tools/freeze_numbers.py
+    description: 数字冻结，论文数字单一真源（杜绝改代码后论文仍用旧数字）
+    commands:
+      - "python core/tools/freeze_numbers.py <项目> freeze"
+      - "python core/tools/freeze_numbers.py <项目> check"
+  render_ai_usage:
+    path: core/tools/render_ai_usage.py
+    description: AI 使用台账与披露生成器（CUMCM 支撑材料 / MCM AI Use Report）
+    commands:
+      - "python core/tools/render_ai_usage.py <项目> add --stage <环节> --tool <工具> --purpose <用途>"
+      - "python core/tools/render_ai_usage.py <项目> render --competition cumcm"
+  doctor:
+    path: core/tools/doctor.py
+    description: 环境预检（工具链 / 竞赛包 / 项目结构），开工前暴露问题
+    commands:
+      - "python core/tools/doctor.py"
+      - "python core/tools/doctor.py --project <项目> --competition cumcm"
+  retrospect:
+    path: core/tools/retrospect.py
+    description: 赛后回顾（Growth 阶段），汇总失败/返修/评审数据生成回顾报告，供教训归档到 _negative/ 与 pitfalls/
+    commands:
+      - "python core/tools/retrospect.py <项目>"
+  new_project:
+    path: core/tools/new_project.py
+    description: 新项目脚手架，创建标准目录结构并导入赛题文件（支持 cumcm / mcm / diangong 竞赛包）
+    commands:
+      - "python core/tools/new_project.py <项目名> --competition cumcm --problem <赛题文件>"
+  # 引擎演练与题库健康检查
+  benchmark:
+    path: core/tools/benchmark.py
+    description: 引擎演练与题库健康检查（pipeline 开工演练自动清理；library 检查赛题索引覆盖）
+    commands:
+      - "python core/tools/benchmark.py pipeline --competition cumcm"
+      - "python core/tools/benchmark.py library"
+
+  # 实测分位蒸馏工具
+  distill_empirical:
+    path: core/tools/distill_empirical.py
+    description: 从获奖论文 PDF 蒸馏实测分位统计，生成 empirical.json
+    commands:
+      - "python core/tools/distill_empirical.py --input-dir <PDF目录> --output <输出路径> --competition cumcm"
+      - "python core/tools/distill_empirical.py --from-index <INDEX.md> --output <输出路径>"
+
+  # 反思银行
+  reflection_bank:
+    path: core/tools/reflection_bank.py
+    description: 跨项目经验沉淀与检索（扫描回顾、搜索经验、工具接地验证、导出 pitfalls）
+    commands:
+      - "python core/tools/reflection_bank.py scan"
+      - "python core/tools/reflection_bank.py search <关键词>"
+      - "python core/tools/reflection_bank.py grounding"
+      - "python core/tools/reflection_bank.py stats"
+      - "python core/tools/reflection_bank.py export-pitfalls"
+
+  # 题型差异化权重
+  weight_profiles:
+    path: core/tools/weight_profiles.py
+    description: 按题型（A/B/C/D/E/MCM/ICM）计算评审权重（基础×乘子→clamp→归一化）
+    commands:
+      - "python core/tools/weight_profiles.py"
+      - "python core/tools/weight_profiles.py C"
+
+  # 云执行沙箱
+  cloud_sandbox:
+    path: core/tools/cloud_sandbox.py
+    description: 云端代码执行沙箱（E2B/Daytona/本地降级），支持隔离环境运行 Python 代码
+    commands:
+      - "python core/tools/cloud_sandbox.py status"
+      - "python core/tools/cloud_sandbox.py config"
+      - "python core/tools/cloud_sandbox.py run <脚本文件>"
+      - "python core/tools/cloud_sandbox.py run --code \"print(42)\""
+
+  # MATLAB/北太天元/MWORKS Syslab 环境检测
+  check_matlab_env:
+    path: core/tools/check_matlab_env.py
+    description: 检测 MATLAB/北太天元/MWORKS Syslab 可用性（路径、版本、工具箱、许可证、M/Julia 运行时）
+    commands:
+      - "python core/tools/check_matlab_env.py"
+      - "python core/tools/check_matlab_env.py --summary"
+      - "python core/tools/check_matlab_env.py --platform matlab"
+      - "python core/tools/check_matlab_env.py --platform syslab"

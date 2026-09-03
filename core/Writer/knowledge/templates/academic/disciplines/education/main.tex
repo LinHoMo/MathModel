@@ -1,0 +1,249 @@
+% ==============================================================================
+% Education Research Paper Template
+% Structure: APA 7 + intervention design + learning-outcomes assessment
+%
+% APA Publication Manual (7th ed.); WhatWorks Clearinghouse Standards 4.0
+% for intervention research; multilevel data (students nested in classes
+% nested in schools) requires HLM.
+%
+% Citation style: APA 7 author-year, approximated by natbib + apalike.bst.
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- Page geometry ----
+\usepackage[a4paper,top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+
+% ---- Fonts & encoding (APA 7: Times New Roman 11pt or Georgia 11pt) ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+
+% ---- Line numbers + double spacing for review (APA 7 manuscript) ----
+\usepackage{lineno}
+\usepackage{setspace}
+\doublespacing
+\linenumbers
+
+% ---- Math, figures, tables ----
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{multirow}
+
+% ---- Citations: APA-style author-year (approximated) ----
+\usepackage[round,authoryear]{natbib}
+\bibliographystyle{apalike}       % swap with plainnat or biblatex-apa for strict APA 7
+
+% ---- Hyperref last ----
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{A Concise and Informative Title of the Education Submission}
+\author{First Author\textsuperscript{1,*}, Second Author\textsuperscript{2}, Senior Author\textsuperscript{1}\\
+\textsuperscript{1}School of Education, University of Y, City, Country\\
+\textsuperscript{2}Department of Curriculum \& Instruction, University of W, City, Country\\
+\textsuperscript{*}e-mail: first.author@univ.edu}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+% Abstract  (150-250 words; APA 7)
+% ==============================================================================
+\begin{abstract}
+% TODO: 150-250 words. Sentence 1-2: purpose and research question. Sentence
+% 3-4: participants (n, grade level, setting) and design. Sentence 5-6: key
+% findings with effect sizes (Cohen's d or Hedges' g) and 95\% CI. Sentence
+% 7: practical implications for teachers / policy.
+\end{abstract}
+
+\noindent\textbf{Keywords:} % TODO: 3-5 keywords.
+keyword one, keyword two, keyword three
+
+% ==============================================================================
+% 1. Introduction  (no "Introduction" heading per APA 7; CARS model)
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: review prior literature; identify the gap; state the research
+% question (\texttt{\% TODO: research-question}) and hypotheses H1, H2, ...
+% Then articulate the theory of change for the intervention
+% (\texttt{\% TODO: theory-of-change}).
+
+% ==============================================================================
+% 2. Method
+% ==============================================================================
+\section{Method}
+\label{sec:method}
+
+\subsection{Participants}
+% TODO participants: describe the sampling of schools, classes, and
+% students; report the nested structure ($N_{\text{schools}}$,
+% $N_{\text{classes}}$, $N_{\text{students}}$); report demographic
+% breakdown by treatment arm; justify sample size via power analysis.
+
+\subsection{Research design}
+% TODO: state whether the design is RCT, cluster-randomised, quasi-
+% experimental (DiD, matching), or single-case; describe the
+% pre-test / post-test / delayed-post-test timeline.
+
+\subsection{Intervention}
+% TODO intervention: describe the intervention in detail (manualised
+% curriculum, dosage, duration, provider training); contrast with the
+% business-as-usual control; reference Appendix A for the full
+% intervention manual.
+
+\subsection{Fidelity of implementation}
+% TODO fidelity: describe how implementation fidelity was measured
+% (observation protocol, attendance, dosage); report the fidelity
+% statistics for each arm.
+
+\subsection{Measures}
+% TODO measures: list each outcome (primary: learning outcome; secondary:
+% motivation, engagement) with its source, number of items, scoring,
+% reliability (Cronbach's $\alpha$ in present sample), and validity
+% evidence (CFA).
+
+\subsection{Procedure}
+% TODO procedure: timeline from consent -> pre-test -> intervention ->
+% post-test -> delayed post-test; describe data-collection setting and
+% assessor training.
+
+\subsection{Data analysis}
+% TODO analysis: specify the multilevel model (students within classes
+% within schools), the fixed and random effects, the moderation and
+% mediation analyses, the handling of missing data, the alpha level
+% ($\alpha = 0.05$), and the effect-size metric (Cohen's $d$ / Hedges'
+% $g$ with 95\% CI).
+
+\subsection{Ethical considerations}
+% TODO irb: state IRB approval number, parental informed consent
+% procedure, child assent procedure, and safeguards for minors.
+
+\subsection{Pre-registration}
+% TODO preregistration: if the study was pre-registered, state the
+% registry (OSF / SREE / AsPredicted) and provide the URL.
+
+% ==============================================================================
+% 3. Results
+% ==============================================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Descriptive statistics}
+% TODO: Table 1 with means, SDs, and $n$ for each outcome by arm and time.
+
+\begin{table}[t]
+\caption{Descriptive statistics by arm and time. Caption ABOVE the table (APA convention).}
+\label{tab:descriptives}
+\centering
+\begin{tabular}{llccc}
+\toprule
+Outcome & Arm & $n$ & Pre-test $M (SD)$ & Post-test $M (SD)$ \\
+\midrule
+Math    & Intervention & --- & --- (---) & --- (---) \\
+        & Control      & --- & --- (---) & --- (---) \\
+Reading & Intervention & --- & --- (---) & --- (---) \\
+        & Control      & --- & --- (---) & --- (---) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Primary analysis}
+% TODO: report the multilevel model estimates; reference Table 2; state
+% the effect on the primary outcome with effect size and 95\% CI.
+
+\subsection{Moderation and mediation}
+% TODO: report pre-specified moderators (e.g. baseline score, gender) and
+% any mediator analyses (e.g. engagement $\rightarrow$ outcome).
+
+\subsection{Sensitivity analyses}
+% TODO: re-run the primary model under alternative specifications (e.g.
+% intention-to-treat vs per-protocol; alternative missing-data handling).
+
+% ==============================================================================
+% 4. Discussion
+% ==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+% TODO: (i) restate the key findings without statistics, (ii) interpret in
+% light of prior literature and the theory of change, (iii) theoretical
+% contribution, (iv) practical implications
+% (\texttt{\% TODO: practical-implications}) for teachers, school leaders,
+% and policy makers, (v) limitations, (vi) future research.
+
+\subsection{Limitations}
+% TODO: sample restriction, fidelity variation, self-report measures,
+% limited follow-up duration, etc.
+
+% ==============================================================================
+% 5. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: one paragraph stating the contribution and a forward-looking statement.
+
+% ==============================================================================
+% Declarations
+% ==============================================================================
+\section*{Declarations}
+
+\noindent\textbf{Funding:} % TODO: grant numbers and funding bodies.
+
+\noindent\textbf{Conflicts of interest:} % TODO: declare or state none.
+
+\noindent\textbf{Ethics approval:} % TODO irb: IRB name + approval number.
+
+\noindent\textbf{Informed consent:} % TODO: state parental consent + child
+% assent procedure.
+
+\noindent\textbf{Data \& materials availability:} % TODO: deposit data +
+% codebook + intervention manual in a public repository (with safeguards
+% for identifiable student data); state any restrictions.
+
+\noindent\textbf{Pre-registration:} % TODO preregistration: state the
+% registry URL and the date of pre-registration.
+
+% ==============================================================================
+% Acknowledgements
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funders, teachers, school districts, students, research assistants.
+
+% ==============================================================================
+% References  —  APA 7 author-year style
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} Author, F., \& Author, S. (20YY). Title of the paper.
+%   \emph{Journal of Educational Psychology, XX}(Y), 1--10.
+% \end{thebibliography}
+
+% ==============================================================================
+% Appendices  —  intervention manual, scales, coding scheme
+% ==============================================================================
+\appendix
+
+\section{Intervention Manual}
+\label{app:manual}
+% TODO: outline of the manualised intervention with session-by-session
+% learning objectives, materials, and scripts.
+
+\section{Measures}
+\label{app:measures}
+% TODO: list the full item wording for each scale and the scoring key.
+
+\section{Coding Scheme for Process Data}
+\label{app:coding}
+% TODO: if process data (e.g. classroom observation) are analysed, include
+% the coding scheme with definitions and exemplar codes.
+
+\end{document}

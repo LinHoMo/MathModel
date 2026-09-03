@@ -1,0 +1,12 @@
+interface:
+  display_name: "Template Selector"
+  short_description: "根据 MODEL_SPEC 选代码模板"
+  default_prompt: "Use $template-selector to pick code templates from MODEL_SPEC."
+runtime:
+  hand: programmer
+  utg_layer: L1
+  stage: 1
+  inputs:
+    - MODEL_SPEC.md
+  outputs:
+    - work/template_plan.json

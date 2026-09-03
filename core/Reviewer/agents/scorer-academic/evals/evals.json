@@ -1,0 +1,17 @@
+{
+  "skill_name": "scorer-academic",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Score a paper's academic rigor across four sub-dimensions with cited evidence.",
+      "expected_output": "Success returns score_card_academic.json with four 0-10 sub-scores and a correct weighted total.",
+      "assertions": [
+        "scores all four sub-dimensions within 0-10",
+        "attaches concrete evidence (file:line or section) to every sub-score",
+        "computes weighted_total as 0.25 * sum(sub-scores)",
+        "records weight=0.25 and dimension=academic_rigor",
+        "emits verdict_contribution pass/fail for each weak sub-score"
+      ]
+    }
+  ]
+}

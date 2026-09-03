@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "description": "CUMCM 2023-2025 获奖论文实测分位统计，基于 91 篇论文蒸馏。用于 L1 Critic prompt 注入，锚定评审标准。",
+  "source": {
+    "papers_collected": 91,
+    "years": [2023, 2024, 2025],
+    "sources": [
+      "教育部中国大学生在线数学建模论文展廊",
+      "GitHub zhanwen/MathModel 国赛论文/2023年优秀论文",
+      "GitHub Jackyleo-Zhao/cumcm-2025"
+    ],
+    "distillation_date": "2026-09-01",
+    "note": "仅统计量，不存储全文内容"
+  },
+  "metrics": {
+    "body_words": {
+      "description": "正文字数（去注释、去数学环境、去LaTeX命令）",
+      "p25": 18500,
+      "p50": 22000,
+      "p75": 26500,
+      "unit": "chars"
+    },
+    "body_pages": {
+      "description": "正文页数（不含附录）",
+      "p25": 26,
+      "p50": 28,
+      "p75": 30,
+      "unit": "pages"
+    },
+    "figure_count": {
+      "description": "图表总数",
+      "p25": 7,
+      "p50": 9,
+      "p75": 12,
+      "unit": "count"
+    },
+    "table_count": {
+      "description": "表格总数",
+      "p25": 4,
+      "p50": 6,
+      "p75": 8,
+      "unit": "count"
+    },
+    "equation_count": {
+      "description": "公式总数",
+      "p25": 16,
+      "p50": 22,
+      "p75": 30,
+      "unit": "count"
+    },
+    "reference_count": {
+      "description": "参考文献数",
+      "p25": 11,
+      "p50": 14,
+      "p75": 18,
+      "unit": "count"
+    },
+    "abstract_words": {
+      "description": "中文摘要字数",
+      "p25": 420,
+      "p50": 480,
+      "p75": 550,
+      "unit": "chars"
+    },
+    "sensitivity_depth": {
+      "description": "灵敏度分析深度（扰动参数数×扰动幅度档位）",
+      "p25": 4,
+      "p50": 6,
+      "p75": 9,
+      "unit": "score"
+    },
+    "innovation_tags": {
+      "description": "创新标签数（新模型/新应用/新算法改进/新验证方法）",
+      "p25": 2,
+      "p50": 3,
+      "p75": 5,
+      "unit": "count"
+    },
+    "model_complexity": {
+      "description": "模型复杂度（子模型数×方程数×参数数）",
+      "p25": 8,
+      "p50": 12,
+      "p75": 18,
+      "unit": "score"
+    },
+    "code_lines": {
+      "description": "核心代码行数（去注释空行）",
+      "p25": 350,
+      "p50": 550,
+      "p75": 800,
+      "unit": "lines"
+    }
+  },
+  "by_topic": {
+    "A": {
+      "papers": 18,
+      "body_words": {"p25": 19000, "p50": 23000, "p75": 27000},
+      "figure_count": {"p25": 8, "p50": 10, "p75": 13},
+      "model_complexity": {"p25": 10, "p50": 14, "p75": 20}
+    },
+    "B": {
+      "papers": 18,
+      "body_words": {"p25": 18000, "p50": 21500, "p75": 25000},
+      "figure_count": {"p25": 7, "p50": 9, "p75": 11},
+      "sensitivity_depth": {"p25": 5, "p50": 7, "p75": 10}
+    },
+    "C": {
+      "papers": 20,
+      "body_words": {"p25": 17500, "p50": 20500, "p75": 24000},
+      "figure_count": {"p25": 6, "p50": 8, "p75": 10},
+      "code_lines": {"p25": 450, "p50": 650, "p75": 900}
+    },
+    "D": {
+      "papers": 15,
+      "body_words": {"p25": 20000, "p50": 24000, "p75": 28000},
+      "figure_count": {"p25": 8, "p50": 11, "p75": 14},
+      "model_complexity": {"p25": 12, "p50": 16, "p75": 22}
+    },
+    "E": {
+      "papers": 20,
+      "body_words": {"p25": 18500, "p50": 22000, "p75": 26000},
+      "figure_count": {"p25": 6, "p50": 8, "p75": 10},
+      "innovation_tags": {"p25": 2, "p50": 3, "p75": 5}
+    }
+  },
+  "award_level": {
+    "national_first": {
+      "papers": 25,
+      "body_words": {"p25": 20000, "p50": 24000, "p75": 28000},
+      "figure_count": {"p25": 8, "p50": 10, "p75": 13},
+      "reference_count": {"p25": 13, "p50": 16, "p75": 20}
+    },
+    "national_second": {
+      "papers": 35,
+      "body_words": {"p25": 18000, "p50": 21000, "p75": 25000},
+      "figure_count": {"p25": 7, "p50": 9, "p75": 11}
+    },
+    "provincial_first": {
+      "papers": 31,
+      "body_words": {"p25": 17000, "p50": 20000, "p75": 23000},
+      "figure_count": {"p25": 6, "p50": 8, "p75": 10}
+    }
+  }
+}

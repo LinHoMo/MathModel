@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Reproducibility Checklist Schema",
+  "description": "复现清单：确保论文结果可精确复现的完整环境快照",
+  "type": "object",
+  "required": [
+    "reproduce_command",
+    "python_version",
+    "dependencies",
+    "random_seed",
+    "file_hashes",
+    "hardware_env",
+    "generated_at"
+  ],
+  "properties": {
+    "reproduce_command": {
+      "type": "string",
+      "description": "唯一复现命令（在 clean 环境中执行即可复现全部结果）",
+      "examples": [
+        "python code/main.py --seed 42 --output figures/",
+        "pip install -r code/requirements.txt && python code/main.py"
+      ]
+    },
+    "python_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Python 精确版本号"
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "所有 Python 依赖及精确版本",
+      "items": {
+        "type": "object",
+        "required": ["name", "version"],
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": "string" },
+          "sha256": {
+            "type": "string",
+            "description": "wheel 文件 SHA-256（可选，增强可复现性）"
+          }
+        }
+      }
+    },
+    "random_seed": {
+      "type": "integer",
+      "description": "全局随机种子",
+      "default": 42
+    },
+    "multi_run_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "启发式算法独立运行次数"
+    },
+    "file_hashes": {
+      "type": "object",
+      "description": "关键产物文件 SHA-256",
+      "properties": {
+        "main_py": { "type": "string" },
+        "all_results_json": { "type": "string" },
+        "model_spec_md": { "type": "string" },
+        "code_deliverables_md": { "type": "string" }
+      },
+      "patternProperties": {
+        "^code/.*": { "type": "string" },
+        "^figures/.*": { "type": "string" }
+      }
+    },
+    "hardware_env": {
+      "type": "object",
+      "properties": {
+        "os": { "type": "string", "examples": ["Windows 10", "Ubuntu 22.04", "macOS 14"] },
+        "cpu": { "type": "string" },
+        "ram_gb": { "type": "number" },
+        "gpu": { "type": "string", "description": "无 GPU 时填 null" }
+      }
+    },
+    "runtime_seconds": {
+      "type": "number",
+      "description": "完整运行耗时（秒）"
+    },
+    "data_sources": {
+      "type": "array",
+      "description": "输入数据来源及其哈希",
+      "items": {
+        "type": "object",
+        "required": ["name", "source"],
+        "properties": {
+          "name": { "type": "string" },
+          "source": { "type": "string", "description": "URL 或本地路径" },
+          "sha256": { "type": "string" },
+          "accessed_date": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

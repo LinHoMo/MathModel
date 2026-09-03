@@ -1,0 +1,16 @@
+{
+  "skill_name": "scorer-reader",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Score a paper's readability across structure, language, figure narrative, and logical flow.",
+      "expected_output": "Success returns score_card_reader.json with four sub-scores and a weighted total.",
+      "assertions": [
+        "scores structure clarity, language quality, figure narrative, and logic flow",
+        "flags itemize/enumerate misuse in body text as a readability defect",
+        "checks that figure captions carry a self-contained narrative",
+        "records weight=0.15 and correct weighted_total"
+      ]
+    }
+  ]
+}

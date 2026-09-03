@@ -1,0 +1,13 @@
+interface:
+  display_name: "Revision Planner"
+  short_description: "把缺陷转成可执行修改清单，支持按子问局部回修"
+  default_prompt: "Use $revision-planner to turn defects into revision_plan.json."
+runtime:
+  hand: reviewer
+  utg_layer: L5
+  stage: 3
+  inputs:
+    - work/score_card.json
+    - work/weakness_report.json
+  outputs:
+    - work/revision_plan.json

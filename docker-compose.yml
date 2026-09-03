@@ -1,0 +1,14 @@
+services:
+  mathmodel:
+    build: .
+    image: mathmodel-skills:latest
+    container_name: mathmodel-skills
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./projects:/app/projects
+      - ./core:/app/core:ro
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: bash

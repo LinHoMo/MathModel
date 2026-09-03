@@ -1,0 +1,16 @@
+{
+  "skill_name": "problem-parser",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Parse a contest problem whose wording contains vague descriptors like 'reasonable' and 'appropriate', with missing units and implicit conservation constraints.",
+      "expected_output": "Success requires flags ambiguous wording; surfaces implicit constraints and missing units; produces schema-valid question_spec.json.",
+      "assertions": [
+        "identifies all numbered subproblems without inventing subdivisions",
+        "flags ambiguous wording such as 'reasonable' or 'appropriate'",
+        "surfaces implicit constraints and missing units instead of silently skipping them",
+        "produces schema-valid work/question_spec.json with all required top-level fields"
+      ]
+    }
+  ]
+}

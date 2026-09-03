@@ -1,0 +1,207 @@
+% ==============================================================================
+% ACM journal / conference template (skeleton)
+% Based on acmart v2.19  —  CTAN: https://ctan.org/pkg/acmart
+% Repository: https://github.com/borisveytsman/acmart
+% Class acmart is contained in standard TeX Live / MiKTeX, so this file
+% compiles out-of-the-box with:  pdflatex -> bibtex -> pdflatex -> pdflatex
+%
+% Document-class formats (pick exactly one):
+%   manuscript  single-column, double-spaced, review copy
+%   acmsmall    small ACM journals (default if no format given)
+%   acmlarge    large ACM journals
+%   acmtog      ACM Transactions on Graphics
+%   sigconf     ACM conference proceedings (two-column)        <-- commonest
+%   siggraph    SIGGRAPH conference
+%   sigplan     SIGPLAN conferences (PLDI, POPL, ICFP, ...)
+%   sigchi      SIGCHI conferences (CHI, ...)
+%   acmengage   ACM EngageCSEducation
+%
+% Common options appended to the format:
+%   review        adds line numbers + reviewer-friendly spacing
+%   anonymous     double-blind anonymisation
+%   author-version, nonacm, timestamp, doi, isbn, ...
+%
+% Typography (acmart defaults):
+%   Body font  : Linux Libertine (serif) / Linux Biolinum (sans)
+%   Math font  : Libertinus Math
+%   Caption    : 8-9pt
+%   Line spacing: single (review: double)
+% Citation   : ACM Reference Format  (\bibliographystyle{ACM-Reference-Format})
+%              numbered by default; author-year where the journal requires it
+% Figures    : single column = \columnwidth  |  double = \textwidth (figure*)
+% Captions   : below figures, above tables
+% ==============================================================================
+\documentclass[sigconf,review]{acmart}
+% For a journal manuscript instead:
+% \documentclass[manuscript,review,anonymous]{acmart}
+% For SIGPLAN conferences:
+% \documentclass[sigplan,review]{acmart}
+
+% ---- Core packages: acmart already loads amsmath, hyperref, graphicx,
+%       booktabs, array, xcolor, natbib, etc. Do NOT reload them. ----
+% (Add only packages acmart does NOT provide, e.g. listings, minted.)
+
+% ---- ACM metadata helpers (required for camera-ready) ----
+\acmConference[Conference 'YY]{Conference Name}{Month DD--DD, 20YY}{City, Country}
+% \acmISBN{978-x-xxxx-xxxx-x/XX/XX}
+% \acmDOI{10.1145/XXXXXXXX.YYYYYYYY}
+\acmYear{20YY}
+\copyrightyear{20YY}
+% \acmPrice{\$15.00}
+
+% ---- Rights / permission (set when you receive the e-Rights form) ----
+\setcopyright{none}              % use 'acmcopyright' for camera-ready
+% \setcctype{cc}               % Creative Commons (some ACM journals)
+
+% ==============================================================================
+% Title, authors, affiliations
+% ==============================================================================
+\title{A Concise and Informative Title for the ACM Submission}
+
+% Each author block: \author, \authornote (optional), \affiliation, \email.
+\author{First Author}
+\authornote{Both authors contributed equally.}
+\email{first.author@univ.edu}
+\affiliation{%
+  \institution{University of Y}
+  \department{Department of X}
+  \city{City}
+  \country{Country}
+}
+
+\author{Second Author}
+\email{second.author@inst.edu}
+\affiliation{%
+  \institution{Institute of W}
+  \city{City}
+  \country{Country}
+}
+
+\author{Senior Author}
+\email{senior.author@univ.edu}
+\orcid{0000-0000-0000-0000}     % ACM encourages ORCID
+\affiliation{%
+  \institution{University of Y}
+  \department{Department of X}
+  \city{City}
+  \country{Country}
+}
+
+% ---- Abstract, CCS, keywords (must come BEFORE \maketitle in acmart) ----
+\begin{document}
+
+\begin{abstract}
+% TODO: 150-250 words. State the problem, the approach, the key results with
+% numbers, and the broader impact. No citations, no undefined abbreviations.
+\end{abstract}
+
+% ---- ACM Computing Classification System (required for camera-ready) ----
+% Generate the right codes at https://dl.acm.org/ccs, then paste the CCSXML
+% block and the \ccsdesc lines. The CCSXML block is commented out here so the
+% skeleton compiles without network access; uncomment it for camera-ready.
+% \begin{CCSXML}
+% <ccs2012>
+%    <concept>
+%        <concept_id>10003752.10003790.10011740</concept_id>
+%        <concept_desc>Computer systems organization~Embedded systems</concept_desc>
+%        <concept_significance>500</concept_significance>
+%    </concept>
+% </ccs2012>
+% \end{CCSXML}
+
+\ccsdesc[500]{Computer systems organization~Embedded systems}
+\ccsdesc[300]{Computer systems organization~Real-time systems}
+
+\keywords{
+% TODO: 3-6 keywords separated by semicolons (ACM convention).
+keyword one; keyword two; keyword three
+}
+
+\maketitle
+
+% ==============================================================================
+% 1. Introduction
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: context -> gap -> approach -> contributions -> roadmap. Use \cite{}
+% (ACM Reference Format numeric) or \citet{}/\citep{} if author-year is on.
+
+% ==============================================================================
+% 2. Related Work
+% ==============================================================================
+\section{Related Work}
+\label{sec:related}
+% TODO: cluster prior work and position your contribution.
+
+% ==============================================================================
+% 3. Methods
+% ==============================================================================
+\section{Methods}
+\label{sec:methods}
+% TODO: problem formulation, proposed approach, theoretical analysis.
+
+\subsection{Problem formulation}
+% TODO.
+
+\subsection{Proposed method}
+% TODO.
+
+% ==============================================================================
+% 4. Experiments
+% ==============================================================================
+\section{Experiments}
+\label{sec:experiments}
+% TODO: setup, main results, ablation, qualitative examples, statistics.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=\columnwidth]{figures/result.pdf}
+\fbox{\rule{0pt}{3cm}\rule{\columnwidth}{0pt}}
+\caption{Single-column figure. Caption goes BELOW the figure. Use
+\texttt{\textbackslash columnwidth} for single column; for a double-column
+figure use \texttt{figure*} and \texttt{\textbackslash textwidth}.}
+\label{fig:result}
+\end{figure}
+
+\begin{table}[t]
+\caption{Table caption goes ABOVE the table (ACM convention).}
+\label{tab:results}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Method   & Metric A       & Metric B       \\
+\midrule
+Baseline & 0.812          & 0.754          \\
+Ours     & \textbf{0.891} & \textbf{0.832} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ==============================================================================
+% 5. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: recap contribution and headline result; one sentence of future work.
+
+% ==============================================================================
+% Acknowledgements (use \section* to keep it out of the TOC; ACM formats it)
+% ==============================================================================
+% \begin{acks}
+% TODO: funding, grant numbers, individuals. ACM wraps this in a styled block.
+% \end{acks}
+
+% ==============================================================================
+% References  —  ACM Reference Format
+% Compile:  pdflatex main  ->  bibtex main  ->  pdflatex main  ->  pdflatex main
+% ==============================================================================
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} First Author and Second Author. 20YY. Title of the
+%   paper. \emph{ACM Trans. X} Y, Z (Mon. 20YY), 1--25.
+% \end{thebibliography}
+
+\end{document}

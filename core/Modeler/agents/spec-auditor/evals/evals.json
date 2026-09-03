@@ -1,0 +1,16 @@
+{
+  "skill_name": "spec-auditor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Audit a MODEL_SPEC that contains a placeholder token, a forbidden word, and a broken hash link between sections.",
+      "expected_output": "Success requires detects placeholders and forbidden words; verifies hash chain; blocks on schema violation.",
+      "assertions": [
+        "detects placeholder tokens and forbidden words in MODEL_SPEC",
+        "verifies hash chain integrity across sections",
+        "blocks progression on any schema violation",
+        "produces an audit report with severity-tagged issues"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model DAG Schema",
+  "type": "object",
+  "required": ["nodes", "edges", "topological_order", "parallel_groups", "critical_path", "stats", "generated_at"],
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "method", "inputs", "outputs", "params", "assumptions", "stage_order"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^Q\\d+$" },
+          "label": { "type": "string" },
+          "method": { "type": "string" },
+          "inputs": { "type": "array", "items": { "type": "string" } },
+          "outputs": { "type": "array", "items": { "type": "string" } },
+          "params": { "type": "array", "items": { "type": "string" } },
+          "assumptions": { "type": "array", "items": { "type": "string" } },
+          "stage_order": { "type": "integer", "minimum": 1 }
+        }
+      },
+      "minItems": 1
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "target", "type", "description", "critical", "sensitivity"],
+        "properties": {
+          "source": { "type": "string", "pattern": "^Q\\d+$" },
+          "target": { "type": "string", "pattern": "^Q\\d+$" },
+          "type": { "type": "string", "enum": ["data", "parameter", "constraint", "sequential"] },
+          "description": { "type": "string" },
+          "critical": { "type": "boolean" },
+          "sensitivity": { "type": "string", "enum": ["high", "medium", "low"] }
+        }
+      }
+    },
+    "topological_order": {
+      "type": "array",
+      "items": { "type": "array", "items": { "type": "string", "pattern": "^Q\\d+$" } },
+      "description": "拓扑排序层级，每层可并行"
+    },
+    "parallel_groups": {
+      "type": "array",
+      "items": { "type": "array", "items": { "type": "string", "pattern": "^Q\\d+$" } },
+      "description": "可并行执行的子问题组"
+    },
+    "critical_path": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^Q\\d+$" },
+      "description": "关键路径节点序列"
+    },
+    "stats": {
+      "type": "object",
+      "required": ["total_nodes", "total_edges", "max_parallelism", "critical_path_length"],
+      "properties": {
+        "total_nodes": { "type": "integer", "minimum": 1 },
+        "total_edges": { "type": "integer", "minimum": 0 },
+        "max_parallelism": { "type": "integer", "minimum": 1 },
+        "critical_path_length": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" }
+  }
+}

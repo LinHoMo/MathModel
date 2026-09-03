@@ -1,0 +1,17 @@
+{
+  "skill_name": "revision-executor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Apply a revision plan to the paper and results, then re-validate and report per-item status.",
+      "expected_output": "Success returns execution_report.json with per-item pass/fail after re-running the consistency gate.",
+      "assertions": [
+        "applies each revision_plan item to its target file",
+        "updates both paper/main.tex and figures/all_results.json as required",
+        "re-runs the consistency-checker gate after edits",
+        "reports a per-item pass/fail status with evidence",
+        "does not mark the report complete when any hard gate fails"
+      ]
+    }
+  ]
+}

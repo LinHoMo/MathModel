@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PAPER_SPEC",
+  "description": "Writer输出的论文交付物清单 - 结构化格式保证论文质量",
+  "type": "object",
+  "required": ["paper_info", "sections", "figures", "tables", "references", "traceability", "quality_checks"],
+  "properties": {
+    "paper_info": {
+      "type": "object",
+      "required": ["title", "template", "language", "target_pages", "word_count"],
+      "properties": {
+        "title": { "type": "string", "minLength": 5 },
+        "template": { "type": "string", "enum": ["cumcm-zh", "mcm-en", "generic"] },
+        "language": { "type": "string", "enum": ["zh", "en"] },
+        "target_pages": { "type": "integer", "minimum": 25, "maximum": 30 },
+        "word_count": { "type": "integer", "minimum": 18000 }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 5,
+      "description": "论文章节 - 必须包含规定章节",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "content_type", "has_equations", "has_figures"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "content_type": { "type": "string", "enum": ["analysis", "derivation", "results", "evaluation", "summary"] },
+          "has_equations": { "type": "boolean" },
+          "has_figures": { "type": "boolean" },
+          "has_tables": { "type": "boolean" },
+          "equation_count": { "type": "integer", "minimum": 0 },
+          "figure_count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "abstract": {
+      "type": "object",
+      "required": ["sub_problem_summaries"],
+      "description": "摘要 - 每个子问题必须有具体数值",
+      "properties": {
+        "sub_problem_summaries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["problem_id", "method", "key_result"],
+            "properties": {
+              "problem_id": { "type": "integer" },
+              "method": { "type": "string", "minLength": 3 },
+              "key_result": { "type": "string", "minLength": 3, "description": "必须包含具体数值" }
+            }
+          }
+        }
+      }
+    },
+    "figures": {
+      "type": "array",
+      "minItems": 6,
+      "description": "图表清单",
+      "items": {
+        "type": "object",
+        "required": ["id", "filename", "caption", "referenced_in_text"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^fig_" },
+          "filename": { "type": "string", "pattern": "\\.(png|pdf|eps)$" },
+          "caption": { "type": "string", "minLength": 5 },
+          "referenced_in_text": { "type": "boolean" },
+          "has_analysis": { "type": "boolean", "description": "图前后是否有分析文字" }
+        }
+      }
+    },
+    "tables": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["id", "caption", "referenced_in_text"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^tab_" },
+          "caption": { "type": "string", "minLength": 5 },
+          "referenced_in_text": { "type": "boolean" },
+          "has_analysis": { "type": "boolean" }
+        }
+      }
+    },
+    "references": {
+      "type": "object",
+      "required": ["bib_file", "count", "entries"],
+      "properties": {
+        "bib_file": { "type": "string", "pattern": "\\.bib$" },
+        "count": { "type": "integer", "minimum": 10 },
+        "entries": {
+          "type": "array",
+          "minItems": 10,
+          "items": {
+            "type": "object",
+            "required": ["key", "type", "verified"],
+            "properties": {
+              "key": { "type": "string" },
+              "type": { "type": "string", "enum": ["article", "book", "inproceedings", "standard", "online"] },
+              "verified": { "type": "boolean", "description": "是否真实检索核对过" }
+            }
+          }
+        },
+        "cite_keys_in_text": {
+          "type": "array",
+          "description": "论文中\\cite{}引用的key列表"
+        }
+      }
+    },
+    "traceability": {
+      "type": "object",
+      "required": ["numbers_traced", "all_results_json_path"],
+      "description": "数值可追溯性",
+      "properties": {
+        "numbers_traced": { "type": "boolean" },
+        "all_results_json_path": { "type": "string" },
+        "traceable_numbers": {
+          "type": "array",
+          "description": "论文中所有数值及其来源key",
+          "items": {
+            "type": "object",
+            "required": ["value", "source_key"],
+            "properties": {
+              "value": { "type": "string" },
+              "source_key": { "type": "string" },
+              "location": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "quality_checks": {
+      "type": "object",
+      "required": ["no_placeholders", "no_forbidden_words", "no_ai_traces", "no_internal_paths", "sensitivity_analysis_exists", "model_evaluation_exists"],
+      "properties": {
+        "no_placeholders": { "type": "boolean" },
+        "no_forbidden_words": { "type": "boolean" },
+        "no_ai_traces": { "type": "boolean" },
+        "no_internal_paths": { "type": "boolean" },
+        "sensitivity_analysis_exists": { "type": "boolean" },
+        "model_evaluation_exists": { "type": "boolean" },
+        "assumptions_have_necessity": { "type": "boolean" },
+        "figures_have_analysis": { "type": "boolean" },
+        "equation_count": { "type": "integer", "minimum": 15 },
+        "no_itemize_in_body": { "type": "boolean", "description": "正文（摘要/章节）禁止 itemize/enumerate 列表" },
+        "no_figure_as_subject": { "type": "boolean", "description": "禁止图表做主语句式（图X展示了/如图X所示/由图X可知/从图X可以看出）" },
+        "abstract_word_count_ok": { "type": "boolean", "description": "中文摘要字数在 400-600 字规格内" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

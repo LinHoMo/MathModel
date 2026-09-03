@@ -1,0 +1,402 @@
+{
+  "overall_passed": true,
+  "expected_comparison": [
+    {
+      "problem": "problem_2",
+      "metric": "t_star",
+      "actual": 419.53125000000057,
+      "expected_range": "400~450 s",
+      "passed": true,
+      "error_pct": 0.0,
+      "note": "MODEL_SPEC §7 预期 400~450 s 量级"
+    },
+    {
+      "problem": "problem_3",
+      "metric": "d_min",
+      "actual": 4.001913454984975,
+      "expected_range": "4~5 m",
+      "passed": true,
+      "error_pct": 0.0,
+      "note": "MODEL_SPEC §7 预期 4~5 m 量级"
+    },
+    {
+      "problem": "problem_4",
+      "metric": "v_max",
+      "actual": 2.41421143688806,
+      "expected_range": "2~3 m/s",
+      "passed": true,
+      "error_pct": 0.0,
+      "note": "MODEL_SPEC §7 预期 2~3 m/s"
+    },
+    {
+      "problem": "problem_5",
+      "metric": "R",
+      "actual": 1.9373506171516905,
+      "expected_range": "1.5~2.5 m",
+      "passed": true,
+      "error_pct": 0.0,
+      "note": "MODEL_SPEC §7 预期 R≈1.5~2.5 m"
+    },
+    {
+      "problem": "problem_5",
+      "metric": "p_prime",
+      "actual": 0.6265822784810127,
+      "expected_range": "> 0.55 m",
+      "passed": true,
+      "error_pct": 0.0,
+      "note": "MODEL_SPEC §7 预期 p' 略大于 0.55 m"
+    }
+  ],
+  "range_checks": [
+    {
+      "name": "head_speed_equals_v_head",
+      "value": 1.0,
+      "min": 0.99,
+      "max": 1.01,
+      "passed": true
+    },
+    {
+      "name": "head_r_at_300s_in_range",
+      "value": 4.9923152979821985,
+      "min": 0.0,
+      "max": 8.8,
+      "passed": true
+    },
+    {
+      "name": "n_handles_correct",
+      "value": 223,
+      "min": 223,
+      "max": 223,
+      "passed": true
+    },
+    {
+      "name": "tail_speed_positive",
+      "value": 0.9985905912265505,
+      "min": 0.0,
+      "max": 5.0,
+      "passed": true
+    }
+  ],
+  "constraint_checks": [
+    {
+      "name": "arc_length_conservation",
+      "satisfied": true,
+      "detail": "相对误差 5.07e-13 < 1e-6"
+    },
+    {
+      "name": "chain_length_constraint",
+      "satisfied": true,
+      "detail": "最大误差 3.32e-10 m < 1e-8 m"
+    },
+    {
+      "name": "head_speed_constraint",
+      "satisfied": true,
+      "detail": "龙头速度误差 0.00e+00 m/s < 1e-10"
+    },
+    {
+      "name": "diameter_constraint_2R_le_9m",
+      "satisfied": true,
+      "detail": "2R=3.8747 m <= 9.0 m"
+    },
+    {
+      "name": "collision_localization_precision",
+      "satisfied": true,
+      "detail": "二分细化至 0.01s（见 solve_q2 _binary_refine）"
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "b",
+      "perturbation": "-20%",
+      "metric": "head_r_at_300s",
+      "base_value": 8.699964553169771,
+      "perturbed_value": 6.939820371143142,
+      "result_change": "-20.2316%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "-10%",
+      "metric": "head_r_at_300s",
+      "base_value": 8.699964553169771,
+      "perturbed_value": 7.81990057512594,
+      "result_change": "-10.1157%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "+10%",
+      "metric": "head_r_at_300s",
+      "base_value": 8.699964553169771,
+      "perturbed_value": 9.580016777035391,
+      "result_change": "10.1156%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "+20%",
+      "metric": "head_r_at_300s",
+      "base_value": 8.699964553169771,
+      "perturbed_value": 10.460060213516108,
+      "result_change": "20.2311%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "-20%",
+      "metric": "R",
+      "base_value": 1.9373506171516905,
+      "perturbed_value": 2.006532973791398,
+      "result_change": "3.5710%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "-20%",
+      "metric": "p_prime",
+      "base_value": 0.6265822784810127,
+      "perturbed_value": 0.4876847290640395,
+      "result_change": "-22.1675%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "-10%",
+      "metric": "R",
+      "base_value": 1.9373506171516905,
+      "perturbed_value": 1.972406749117749,
+      "result_change": "1.8095%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "-10%",
+      "metric": "p_prime",
+      "base_value": 0.6265822784810127,
+      "perturbed_value": 0.556179775280899,
+      "result_change": "-11.2360%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "+10%",
+      "metric": "R",
+      "base_value": 1.9373506171516905,
+      "perturbed_value": 1.901327259180028,
+      "result_change": "-1.8594%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "+10%",
+      "metric": "p_prime",
+      "base_value": 0.6265822784810127,
+      "perturbed_value": 0.6989730423620027,
+      "result_change": "11.5533%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "+20%",
+      "metric": "R",
+      "base_value": 1.9373506171516905,
+      "perturbed_value": 1.8642975078041246,
+      "result_change": "-3.7708%"
+    },
+    {
+      "parameter": "b",
+      "perturbation": "+20%",
+      "metric": "p_prime",
+      "base_value": 0.6265822784810127,
+      "perturbed_value": 0.7734375000000001,
+      "result_change": "23.4375%"
+    },
+    {
+      "parameter": "v_head",
+      "perturbation": "-10%",
+      "metric": "head_r_at_300s",
+      "base_value": 8.699964553169771,
+      "perturbed_value": 8.710019794069778,
+      "result_change": "0.1156%"
+    },
+    {
+      "parameter": "v_head",
+      "perturbation": "+10%",
+      "metric": "head_r_at_300s",
+      "base_value": 8.699964553169771,
+      "perturbed_value": 8.68989767835195,
+      "result_change": "-0.1157%"
+    }
+  ],
+  "multi_run_stats": {
+    "problem_1_head_r_at_300s": {
+      "mean": 8.750125219837987,
+      "std": 0.0,
+      "cv": 0.0,
+      "runs": 5,
+      "stable": true,
+      "values": [
+        8.750125219837987,
+        8.750125219837987,
+        8.750125219837987,
+        8.750125219837987,
+        8.750125219837987
+      ]
+    },
+    "problem_1_tail_speed": {
+      "mean": 0.9985905912265505,
+      "std": 0.0,
+      "cv": 0.0,
+      "runs": 5,
+      "stable": true,
+      "values": [
+        0.9985905912265505,
+        0.9985905912265505,
+        0.9985905912265505,
+        0.9985905912265505,
+        0.9985905912265505
+      ]
+    },
+    "problem_1_arc_length_err": {
+      "mean": 1.5001033634282426e-13,
+      "std": 0.0,
+      "cv": 0.0,
+      "runs": 5,
+      "stable": true,
+      "values": [
+        1.5001033634282426e-13,
+        1.5001033634282426e-13,
+        1.5001033634282426e-13,
+        1.5001033634282426e-13,
+        1.5001033634282426e-13
+      ]
+    }
+  },
+  "cross_validation": [
+    {
+      "method": "arc_length_closed_vs_numerical_integration",
+      "passed": true,
+      "diff": 2.948758037746302e-08,
+      "rel_err": 6.662501025941079e-11,
+      "detail": "闭式 442.590256 vs 数值积分 442.590256, 相对误差 6.66e-11"
+    },
+    {
+      "method": "chain_constraint_brentq_independent_distance_check",
+      "passed": true,
+      "diff": 3.3214231365263913e-10,
+      "rel_err": 9.74024380213018e-11,
+      "detail": "brentq 求解后独立距离验证: 链长最大误差 3.32e-10 m < 1e-8"
+    },
+    {
+      "method": "head_speed_angular_x_tangent_vs_v_head",
+      "passed": true,
+      "diff": 0.0,
+      "rel_err": 0.0,
+      "detail": "|dtheta|*|dP/dtheta|=1.0000000000 vs v_head=1.000000"
+    }
+  ],
+  "symbolic_check": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "arc_length_monotonic_increasing",
+        "passed": true,
+        "note": "s(theta) 关于 theta 单调递增（ds/dtheta = a*sqrt(1+theta^2) > 0）"
+      },
+      {
+        "name": "r_theta_linear_relation",
+        "passed": true,
+        "note": "r(theta) = a*theta 线性关系成立"
+      },
+      {
+        "name": "tangent_speed_factor_positive",
+        "passed": true,
+        "note": "a*sqrt(1+theta^2) > 0 对所有 theta>0 成立"
+      },
+      {
+        "name": "spiral_out_central_symmetry",
+        "passed": true,
+        "note": "盘出 P_out=-P_in 中心对称: |P_out|=0.875352=|P_in|, 点积<0(反向)"
+      }
+    ],
+    "note": "符号/不变量校验：弧长单调性、线性关系、切向因子正性、盘出对称性"
+  },
+  "constraint_reverification": {
+    "passed": true,
+    "checks": {
+      "problem_3_d_min": [
+        {
+          "name": "d_min_equality",
+          "description": "d_min = 2 * r_head(t*)",
+          "value": 4.001913454984975,
+          "bound": 4.001913454984975,
+          "slack": 0.0,
+          "active": true,
+          "type": "equality"
+        },
+        {
+          "name": "collision_radius_within_spiral",
+          "description": "r_head(t*) <= r0 = 8.8 m",
+          "value": 2.0009567274924875,
+          "bound": 8.8,
+          "slack": 6.799043272507513,
+          "active": false,
+          "type": "inequality"
+        }
+      ],
+      "problem_4_max_speed": [
+        {
+          "name": "max_speed_amplification",
+          "description": "盘出最大速度 v_max >= 龙头速度 v_head",
+          "value": 2.41421143688806,
+          "bound": 1.0,
+          "slack": 1.4142114368880598,
+          "active": false,
+          "type": "inequality"
+        }
+      ],
+      "problem_5_s_curve": [
+        {
+          "name": "diameter_constraint",
+          "description": "2R <= d_turn = 9.0 m",
+          "value": 3.874701234303381,
+          "bound": 9.0,
+          "slack": 5.125298765696619,
+          "active": false,
+          "type": "inequality"
+        },
+        {
+          "name": "pitch_increase",
+          "description": "调整螺距 p' > 原螺距 b",
+          "value": 0.6265822784810127,
+          "bound": 0.55,
+          "slack": 0.07658227848101262,
+          "active": false,
+          "type": "inequality"
+        },
+        {
+          "name": "tangency_radius_formula",
+          "description": "R = |P_in|*sqrt(1+theta_in^2)/(2*theta_in)",
+          "value": 1.9373506171516905,
+          "bound": 1.9373506171516905,
+          "slack": 0.0,
+          "active": false,
+          "type": "equality"
+        }
+      ],
+      "chain_constraint": [
+        {
+          "name": "chain_length_max_err",
+          "description": "链长约束最大误差 <= 1e-8 m",
+          "value": 3.3214231365263913e-10,
+          "bound": 1e-08,
+          "slack": 9.667857686347361e-09,
+          "active": false,
+          "type": "inequality"
+        }
+      ],
+      "collision_criterion": [
+        {
+          "name": "clearance_at_tstar",
+          "description": "碰撞时刻最小间隙 min_clearance <= w = 0.30 m（阈值判定，含二分精度容差）",
+          "value": 0.29999585771264514,
+          "bound": 0.3,
+          "slack": 4.142287354846896e-06,
+          "active": true,
+          "type": "inequality"
+        }
+      ]
+    }
+  },
+  "constraint_reverification_passed": true
+}

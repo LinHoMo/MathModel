@@ -1,0 +1,21 @@
+interface:
+  display_name: "Final Validator"
+  short_description: "最终校验 + 哈希审计 + 渲染 PDF"
+  default_prompt: "Use $final-validator to final-validate, hash-audit, and render PDF."
+runtime:
+  hand: writer
+  utg_layer: L6
+  stage: 7
+  inputs:
+    - paper/main.tex
+    - paper/references.bib
+    - paper/figures/
+    - figures/all_results.json
+    - work/paper_structure.json
+    - work/consistency_report.json
+    - work/guardrails_report.json
+    - core/env/config.yaml
+  outputs:
+    - output/PAPER_SPEC.md
+    - paper/main.pdf
+    - work/audit_log.json

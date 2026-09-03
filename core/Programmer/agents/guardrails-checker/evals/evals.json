@@ -1,0 +1,16 @@
+{
+  "skill_name": "guardrails-checker",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check code that contains a TODO comment, an absolute internal path, a placeholder variable, and a subprocess call to an external command.",
+      "expected_output": "Success requires detects forbidden words, placeholders, AI traces, internal paths, and permission violations.",
+      "assertions": [
+        "detects forbidden words such as TODO or FIXME in code",
+        "detects placeholder tokens like your_xxx or [fill in]",
+        "detects AI traces and internal absolute paths",
+        "detects permission violations such as subprocess or os.system calls"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+interface:
+  display_name: "Structure Planner"
+  short_description: "论文结构规划 + 字数分配"
+  default_prompt: "Use $structure-planner to plan paper structure and word allocation."
+runtime:
+  hand: writer
+  utg_layer: L1
+  stage: 1
+  inputs:
+    - CODE_DELIVERABLES.md
+    - core/env/config.yaml
+  outputs:
+    - work/paper_structure.json

@@ -1,0 +1,17 @@
+{
+  "skill_name": "dag-builder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a dependency DAG across submodels that share derived parameters and data.",
+      "expected_output": "Success emits an acyclic model_dag.json plus a rendered model_dag.svg with a critical path.",
+      "assertions": [
+        "every submodel appears as exactly one node",
+        "edges capture data and parameter dependencies between submodels",
+        "detects and reports cycles instead of emitting an invalid graph",
+        "identifies the critical path to guide Programmer parallelization",
+        "renders work/model_dag.svg without overwriting model_dag.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+interface:
+  display_name: "Problem Parser"
+  short_description: "赛题结构化解析，消除歧义"
+  default_prompt: "Use $problem-parser to parse the contest problem into question_spec.json."
+runtime:
+  hand: modeler
+  utg_layer: L1
+  stage: 1
+  inputs:
+    - inputs/赛题文件 (PDF/Word/TXT)
+  outputs:
+    - work/question_spec.json

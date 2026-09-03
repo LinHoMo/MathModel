@@ -1,0 +1,34 @@
+# MCM/ICM（美赛）竞赛包
+# 模板来源：core/Writer/knowledge/templates/mathmodel/en/mcm/
+
+competition: mcm
+name: MCM/ICM（美国大学生数学建模竞赛）
+language: en
+engine: pdflatex
+compile_chain: pdflatex -> bibtex -> pdflatex -> pdflatex
+
+template:
+  dir: core/Writer/knowledge/templates/mathmodel/en/mcm/
+  note: 英文论文通常用 article 类即可，无需 ctex
+
+thresholds:
+  max_pages: 25
+  min_font_pt: 12
+  min_references: 10
+  note: COMAP 页数限制含摘要页、正文、参考文献与附录
+
+citation:
+  style: plain 或 COMAP 指定格式
+  format: [n] 或作者-年份，按当届要求
+
+ai_usage:
+  required: true
+  output: paper/ai_usage_report.md
+  note: COMAP 要求 AI Use Report 随论文一起提交，须接入主模板
+
+summary_sheet:
+  required: true
+  note: 第一页必须是 Summary Sheet，且不超过一页
+
+rules_verified: 2026-08-30
+rules_source: 见 rules.md 的「官方入口」

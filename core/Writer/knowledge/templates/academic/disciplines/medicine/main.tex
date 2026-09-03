@@ -1,0 +1,245 @@
+% ==============================================================================
+% Medicine (Clinical / Epidemiology / Public Health) Paper Template
+% Structure: IMRaD + Ethics + Trial Registration + CONSORT/STROBE checklist
+%
+% Reporting standards:
+%   CONSORT 2010  (RCT)            Schulz KF, Altman DG, Moher D. BMJ 2010;340:c332
+%   STROBE        (observational)  von Elm E, et al. PLoS Med 2007;4(10):e296
+%   PRISMA 2020   (systematic rev) Page MJ, et al. BMJ 2021;372:n71
+% Citation style: Vancouver (ICMJE Recommendations), numeric, citation order
+%
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- Page geometry ----
+\usepackage[a4paper,top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+
+% ---- Fonts & encoding ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+
+% ---- Line numbers + double spacing for review (most medical journals require) ----
+\usepackage{lineno}
+\usepackage{setspace}
+\doublespacing                    % comment out for camera-ready
+\linenumbers
+
+% ---- Math, figures, tables ----
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{multirow}             % CONSORT flow diagram often uses multirow tables
+
+% ---- Citations: Vancouver numeric, citation order (ICMJE) ----
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{vancouver}     % ICMJE / Vancouver style; alternatives: unsrtnat, nature, elsarticle-vancouver
+
+% ---- Hyperref last ----
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{Title of the Medical Submission: \\ A Randomized Controlled Trial}
+\author{First Author\textsuperscript{1,*}, Second Author\textsuperscript{2}, Senior Author\textsuperscript{1}\\
+\textsuperscript{1}Department of X, University Hospital of Y, City, Country\\
+\textsuperscript{2}Department of Z, Institute of W, City, Country\\
+\textsuperscript{*}Corresponding author: first.author@hospital.org}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+% Structured Abstract  (Background / Methods / Results / Conclusions; 200-300 words)
+% ==============================================================================
+\section*{Abstract}
+% TODO structured-abstract: write four labelled paragraphs:
+% \textbf{Background:} ... knowledge gap and rationale ...
+% \textbf{Methods:} ... design, setting, participants, intervention, primary outcome ...
+% \textbf{Results:} ... n randomized, primary outcome effect size with 95\% CI and p ...
+% \textbf{Conclusions:} ... clinical implication ...
+
+\noindent\textbf{Keywords:} % TODO: 3-10 MeSH-style keywords.
+keyword one; keyword two; keyword three
+
+% ==============================================================================
+% Trial Registration  (ICMJE mandatory for RCTs)
+% ==============================================================================
+\noindent\textbf{Trial Registration:} % TODO trial-registration:
+% ClinicalTrials.gov NCTXXXXYYYY; registered DD Mon YYYY; URL.
+
+% ==============================================================================
+% 1. Introduction
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: 3-4 paragraphs. (i) background and burden of disease, (ii) gap in
+% current evidence, (iii) rationale for the intervention, (iv) study aim and
+% hypothesis. Use \citep{} for citations.
+
+% ==============================================================================
+% 2. Methods
+% ==============================================================================
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Study design}
+% TODO: state design (RCT / cohort / case-control / cross-sectional), setting,
+% and reporting guideline followed (CONSORT / STROBE / PRISMA).
+
+\subsection{Participants}
+% TODO participants: inclusion and exclusion criteria, recruitment setting,
+% and timeframe.
+
+\subsection{Interventions}
+% TODO intervention: detailed description of intervention and comparator,
+% including dose, frequency, duration, and provider training.
+
+\subsection{Outcomes}
+% TODO outcomes: primary outcome with measurement timepoint; secondary
+% outcomes; safety outcomes; how and when assessed.
+
+\subsection{Sample size}
+% TODO sample-size: state the power, two-sided $\alpha$, assumed effect size,
+% and dropout rate; cite the calculation method.
+
+\subsection{Randomisation and blinding}
+% TODO randomisation: random sequence generation, allocation concealment,
+% and blinding of participants / providers / outcome assessors / analysts.
+
+\subsection{Statistical analysis}
+% TODO statistical-analysis: define the intention-to-treat / per-protocol
+% population, the primary analysis model, pre-specified subgroup analyses,
+% handling of missing data, and the significance level ($\alpha = 0.05$).
+
+\subsection{Ethics}
+% TODO ethics: state the IRB / ethics committee approval (with reference
+% number), informed consent procedure, and adherence to the Declaration of
+% Helsinki. For drug trials, state GCP compliance.
+
+% ==============================================================================
+% 3. Results
+% ==============================================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Participant flow}
+% TODO consort-flow: insert CONSORT flow diagram (Figure 1) showing numbers
+% assessed / randomised / lost to follow-up / analysed.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=0.9\textwidth]{figures/consort_flow.pdf}
+\fbox{\rule{0pt}{6cm}\rule{0.9\textwidth}{0pt}}
+\caption{CONSORT 2010 flow diagram of participant progress through the trial.}
+\label{fig:consort}
+\end{figure}
+
+\subsection{Baseline characteristics}
+% TODO: Table 1 with baseline demographic and clinical characteristics by
+% study arm. State between-group differences (no significance testing per
+% CONSORT guidance).
+
+\subsection{Primary outcome}
+% TODO: effect estimate with 95\% CI and $p$-value; reference Table 2.
+
+\begin{table}[t]
+\caption{Primary and secondary outcomes. Caption ABOVE the table.}
+\label{tab:outcomes}
+\centering
+\begin{tabular}{lccc}
+\toprule
+Outcome        & Intervention   & Control        & Difference (95\% CI) \\
+\midrule
+Primary        & ---            & ---            & --- (--- to ---)      \\
+Secondary 1    & ---            & ---            & --- (--- to ---)      \\
+Secondary 2    & ---            & ---            & --- (--- to ---)      \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Secondary outcomes}
+% TODO: report each pre-specified secondary outcome with effect size and 95\% CI.
+
+\subsection{Adverse events}
+% TODO adverse-events: tabulate serious and non-serious adverse events by arm.
+
+% ==============================================================================
+% 4. Discussion
+% ==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+% TODO: (i) principal findings, (ii) comparison with prior literature,
+% (iii) mechanism / biological plausibility, (iv) strengths and limitations,
+% (v) generalisability, (vi) clinical implications, (vii) future research.
+
+\subsection{Limitations}
+% TODO: selection bias, residual confounding (observational), generalisability.
+
+% ==============================================================================
+% 5. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: one paragraph stating the clinical implication, avoiding over-claiming.
+
+% ==============================================================================
+% Declarations  (ICMJE-mandated blocks)
+% ==============================================================================
+\section*{Declarations}
+
+\noindent\textbf{Ethics approval and consent to participate:} % TODO ethics:
+% IRB name, approval number, consent procedure.
+
+\noindent\textbf{Consent for publication:} % TODO: consent for identifiable
+% patient data / images, if applicable.
+
+\noindent\textbf{Trial registration:} % TODO trial-registration: registry
+% name, identifier, date of registration.
+
+\noindent\textbf{Data sharing statement:} % TODO data-sharing: per ICMJE 2018,
+% state availability of de-identified individual participant data, access
+% criteria, and where to request.
+
+\noindent\textbf{Funding:} % TODO: grant numbers and funding bodies.
+
+\noindent\textbf{Conflicts of interest:} % TODO: declare all financial and
+% non-financial competing interests per ICMJE form.
+
+\noindent\textbf{Authors' contributions:} % TODO: use CRediT taxonomy
+% (Conceptualization, Methodology, Investigation, Formal analysis, Writing --
+% Original Draft, Writing -- Review \& Editing, Supervision, Funding acquisition).
+
+% ==============================================================================
+% Acknowledgements
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funders, trial staff, participants, and data safety monitoring board.
+
+% ==============================================================================
+% References  —  Vancouver numeric style
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} Author F, Author S, Author T, et al. Title of the paper.
+%   \emph{N Engl J Med} 20YY;CCC(NN):PP--PP.
+% \end{thebibliography}
+
+% ==============================================================================
+% Supplementary Materials  —  reporting checklists
+% ==============================================================================
+% TODO: attach the completed CONSORT 2010 Checklist (25 items) or STROBE
+% Checklist (22 items) as Supplementary File 1. The official checklists are
+% available from:
+%   CONSORT: https://www.consort-statement.org/
+%   STROBE:  https://www.strobe-statement.org/
+%   PRISMA:  https://www.prisma-statement.org/
+
+\end{document}

@@ -1,0 +1,15 @@
+interface:
+  display_name: "Judge Scorer"
+  short_description: "评委视角评分员：创新性、完整性、规范性、亮点度，权重 25%"
+  default_prompt: "Use $scorer-judge to score from a judge's perspective and emit score_card_judge.json."
+runtime:
+  hand: reviewer
+  utg_layer: L4
+  stage: 1
+  inputs:
+    - paper/main.tex
+    - figures/all_results.json
+    - output/MODEL_SPEC.md
+    - output/CODE_DELIVERABLES.md
+  outputs:
+    - work/score_card_judge.json

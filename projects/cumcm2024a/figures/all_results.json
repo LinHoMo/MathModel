@@ -1,0 +1,128 @@
+{
+  "problem_1": {
+    "values": {
+      "time_range": "0-300 s, step=1 s",
+      "n_handles": 223,
+      "n_timesteps": 301,
+      "head_pos_t0": [
+        8.8,
+        -0.0
+      ],
+      "head_pos_t300": [
+        4.420274,
+        2.320429
+      ],
+      "tail_pos_t0": [
+        1.217841,
+        12.720983
+      ],
+      "max_speed": 1.0,
+      "max_speed_time": 0,
+      "max_speed_handle": 0
+    },
+    "units": {
+      "positions": "m",
+      "speeds": "m/s",
+      "time": "s"
+    },
+    "validation": {
+      "head_speed_at_t0": 1.0,
+      "expected_head_speed": 1.0,
+      "chain_length_ok": true,
+      "n_samples": 301
+    }
+  },
+  "problem_2": {
+    "values": {
+      "t_star": 360.25,
+      "head_r_at_t_star": 3.791797,
+      "head_pos_at_t_star": [
+        2.984047,
+        -2.339485
+      ],
+      "head_speed_at_t_star": 1.0,
+      "tail_pos_at_t_star": [
+        1.452815,
+        9.918938
+      ],
+      "collision_type": "sagitta_overlap"
+    },
+    "units": {
+      "t_star": "s",
+      "positions": "m",
+      "speeds": "m/s"
+    },
+    "validation": {
+      "method": "coarse_scan_1s + binary_refine_0.01s",
+      "scan_range": "0-600 s",
+      "collision_detected": true,
+      "note": ""
+    }
+  },
+  "problem_3": {
+    "values": {
+      "d_min": 7.583594,
+      "t_star": 360.25,
+      "r_collision": 3.791797
+    },
+    "units": {
+      "d_min": "m",
+      "r_collision": "m",
+      "t_star": "s"
+    },
+    "validation": {
+      "formula": "d_min = 2 * r_head(t*)",
+      "source": "problem_2"
+    }
+  },
+  "problem_4": {
+    "values": {
+      "v_max": 2.414211,
+      "t_at_vmax": 407.0,
+      "pos_at_vmax": [
+        -2.698463,
+        1.994786
+      ],
+      "handle_at_vmax": 189
+    },
+    "units": {
+      "v_max": "m/s",
+      "t_at_vmax": "s",
+      "pos": "m"
+    },
+    "validation": {
+      "method": "scan_0_to_500s_step_1s + analytic_fallback",
+      "scan_direction": "outward",
+      "start_radius": 3.7918,
+      "spiral_out_symmetry": "盘出螺线 r=-b*theta/(2*pi) 中心对称于盘入",
+      "speed_formula": "|v_i| = |dtheta_i/dt| * a * sqrt(1+theta_i^2)",
+      "analytic": "盘出与盘入同构（phi=-theta>0 参数化），链式约束复用"
+    }
+  },
+  "problem_5": {
+    "values": {
+      "R_arc": 1.9374,
+      "p_adjusted": 0.6266,
+      "d_turn": 9.0,
+      "k": 1,
+      "r_in": 3.8748,
+      "theta_in": 38.8415,
+      "constraint": "tangency + symmetry + 2*|O1| <= d_turn"
+    },
+    "units": {
+      "R_arc": "m",
+      "p_adjusted": "m",
+      "d_turn": "m",
+      "k": "dimensionless",
+      "r_in": "m",
+      "theta_in": "rad"
+    },
+    "validation": {
+      "method": "analytic_R_from_tangency + grid_search_p_prime",
+      "tangency_condition": "圆弧切线=螺线切线",
+      "symmetry_condition": "P_out=-P_in, O2=-O1",
+      "diameter_constraint": "2*|O1| <= d_turn=9.0",
+      "position_continuity": "theta_orig - theta_adj = 2*pi*k, k=1"
+    }
+  }
+}

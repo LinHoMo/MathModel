@@ -1,0 +1,16 @@
+{
+  "skill_name": "structure-planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Plan paper structure for a five-problem contest whose page minimums and word minimums are configured in env/config.yaml.",
+      "expected_output": "Success requires allocates words per section; reads env paper.* thresholds; produces paper_structure.json; total words meet min.",
+      "assertions": [
+        "allocates word counts per section",
+        "reads env paper.* thresholds via env.loader",
+        "produces work/paper_structure.json",
+        "ensures total allocated words are at least min_words"
+      ]
+    }
+  ]
+}

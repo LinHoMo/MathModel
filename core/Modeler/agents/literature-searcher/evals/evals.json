@@ -1,0 +1,18 @@
+{
+  "skill_name": "literature-searcher",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Retrieve and rate literature for a data-driven forecasting problem, then emit structured evidence.",
+      "expected_output": "Success returns literature_evidence.json with 5-8 selected papers, venue tiers, and per-subproblem coverage.",
+      "assertions": [
+        "performs at most modeling.literature_max_searches (5) searches",
+        "never includes a paper whose year is later than the contest year",
+        "assigns venue_tier and score to every selected paper",
+        "coverage maps every subproblem to at least one paper",
+        "method_evidence_map is non-empty and feeds method-matcher",
+        "marks skipped=true with a reason instead of fabricating DOIs when no results"
+      ]
+    }
+  ]
+}

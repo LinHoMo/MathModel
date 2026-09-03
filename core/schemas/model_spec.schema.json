@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MODEL_SPEC",
+  "description": "Modeler输出的模型规格说明书 - 结构化格式保证完整性",
+  "type": "object",
+  "required": ["problem_understanding", "assumptions", "symbols", "models", "sub_problems", "verification"],
+  "properties": {
+    "problem_understanding": {
+      "type": "object",
+      "required": ["contest", "topic_type", "sub_problem_count", "sub_problems"],
+      "properties": {
+        "contest": { "type": "string", "minLength": 1, "description": "赛题来源" },
+        "topic_type": { "type": "string", "enum": ["A-physical", "B-experiment", "C-data", "D-operations", "E-interdisciplinary"], "description": "题型分类" },
+        "sub_problem_count": { "type": "integer", "minimum": 1, "maximum": 10, "description": "子问题数量" },
+        "sub_problems": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "description", "input", "output", "dependencies"],
+            "properties": {
+              "id": { "type": "integer", "minimum": 1 },
+              "description": { "type": "string", "minLength": 5 },
+              "input": { "type": "string", "minLength": 1 },
+              "output": { "type": "string", "minLength": 1 },
+              "dependencies": { "type": "array", "items": { "type": "integer" } }
+            }
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "模型假设列表 - 每个假设必须有验证分数",
+      "items": {
+        "type": "object",
+        "required": ["id", "content", "type", "necessity", "validation"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^H\\d+$" },
+          "content": { "type": "string", "minLength": 5 },
+          "type": { "type": "string", "enum": ["critical", "secondary", "simplification"] },
+          "necessity": { "type": "string", "minLength": 10, "description": "为什么需要这个假设" },
+          "validation": {
+            "type": "object",
+            "required": ["physical_rationality", "math_consistency", "data_support", "impact_degree", "composite_score"],
+            "properties": {
+              "physical_rationality": { "type": "number", "minimum": 0, "maximum": 10, "description": "物理合理性(30%)" },
+              "math_consistency": { "type": "number", "minimum": 0, "maximum": 10, "description": "数学一致性(25%)" },
+              "data_support": { "type": "number", "minimum": 0, "maximum": 10, "description": "数据支撑度(25%)" },
+              "impact_degree": { "type": "number", "minimum": 0, "maximum": 10, "description": "影响程度(20%)" },
+              "composite_score": { "type": "number", "minimum": 0, "maximum": 10, "description": "综合评分, >=6才通过" }
+            }
+          }
+        }
+      }
+    },
+    "symbols": {
+      "type": "array",
+      "minItems": 1,
+      "description": "符号说明表",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "meaning", "unit"],
+        "properties": {
+          "symbol": { "type": "string", "minLength": 1 },
+          "meaning": { "type": "string", "minLength": 1 },
+          "unit": { "type": "string", "minLength": 1 },
+          "first_appearance": { "type": "string" }
+        }
+      }
+    },
+    "models": {
+      "type": "array",
+      "minItems": 2,
+      "description": "候选模型对比 - 至少2个",
+      "items": {
+        "type": "object",
+        "required": ["name", "pros", "cons", "applicability", "selected"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "pros": { "type": "string", "minLength": 1 },
+          "cons": { "type": "string", "minLength": 1 },
+          "applicability": { "type": "string", "minLength": 1 },
+          "selected": { "type": "boolean" }
+        }
+      }
+    },
+    "sub_problems": {
+      "type": "array",
+      "minItems": 1,
+      "description": "每个子问题的完整建模方案",
+      "items": {
+        "type": "object",
+        "required": ["id", "method", "formulas", "boundary_conditions", "solution_approach"],
+        "properties": {
+          "id": { "type": "integer", "minimum": 1 },
+          "method": { "type": "string", "minLength": 3 },
+          "formulas": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "boundary_conditions": { "type": "array", "items": { "type": "string" } },
+          "solution_approach": { "type": "string", "minLength": 5 }
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": ["methods", "sensitivity_parameters", "expected_ranges"],
+      "properties": {
+        "methods": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "sensitivity_parameters": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "expected_ranges": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

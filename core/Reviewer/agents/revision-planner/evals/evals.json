@@ -1,0 +1,16 @@
+{
+  "skill_name": "revision-planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Convert a defect list into an actionable revision plan with per-subquestion scoping.",
+      "expected_output": "Success returns revision_plan.json mapping each defect to a source file and a local fix.",
+      "assertions": [
+        "maps every defect to at least one concrete fix step",
+        "scopes each fix to the affected subquestion or section",
+        "avoids a full-paper rewrite for a single localized defect",
+        "records the target source file and acceptance criteria per fix"
+      ]
+    }
+  ]
+}

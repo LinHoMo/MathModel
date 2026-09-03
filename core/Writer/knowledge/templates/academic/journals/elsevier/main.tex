@@ -1,0 +1,187 @@
+% ==============================================================================
+% Elsevier journal submission template (skeleton)
+% Based on elsarticle v3.5  —  CTAN: https://ctan.org/pkg/elsarticle
+% Class elsarticle is contained in standard TeX Live / MiKTeX, so this file
+% compiles out-of-the-box with:  pdflatex -> bibtex -> pdflatex -> pdflatex
+%
+% Class modes (pick exactly one):
+%   1p   single-column, preprint style (loosest)
+%   3p   single-column, review style with line numbers  (DEFAULT for review)
+%   5p   two-column, final typeset style (closest to published article)
+% Class options:
+%   times           use Times font (recommended)
+%   review          double-spacing + line numbers (review copy)
+%   authoryear      author-year citation
+%   number          numbered citation
+%   nonatbib        do not load natbib
+%
+% Typography (elsarticle defaults, with `times` option):
+%   Body font : Times Roman 10pt
+%   Math font : Times (mathptmx)
+%   Spacing   : single (review: double)
+% Citation   : natbib, [1] or (Author, Year) depending on options
+% Bibliography:
+%   elsarticle-num         numbered, citation order
+%   elsarticle-num-names   numbered, with author names
+%   elsarticle-harv        author-year (Harvard)
+% Figures    : single column = \columnwidth (3.5in) | double = \textwidth
+% Captions   : below figures, above tables; 9pt
+% ==============================================================================
+\documentclass[3p,times]{elsarticle}
+% For a two-column final look:
+% \documentclass[5p,times]{elsarticle}
+% For a preprint look:
+% \documentclass[1p,times]{elsarticle}
+% For author-year citations, use \documentclass[3p,times]{elsarticle} with
+%   \usepackage[authoryear]{natbib}  (requires the `nonatbib` class option)
+
+% ---- Core packages (natbib is auto-loaded by elsarticle; lineno is too) ----
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+% \usepackage{hyperref}          % load last if used
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% \modulolinenumbers[1]          % uncomment for line numbers (review mode)
+
+% ==============================================================================
+% Frontmatter: title, authors, affiliations, abstract, keywords
+% ==============================================================================
+\begin{document}
+
+\begin{frontmatter}
+
+\title{A Concise and Informative Title for the Elsevier Submission}
+
+\author[a]{First Author\corref{cor1}}
+\ead{first.author@univ.edu}
+\cortext[cor1]{Corresponding author.}
+
+\author[b]{Second Author}
+
+\author[a]{Senior Author}
+
+\address[a]{Department of X, University of Y, City, Country}
+\address[b]{Department of Z, Institute of W, City, Country}
+
+\begin{abstract}
+% TODO: a single structured abstract (typically 150-250 words). State the
+% problem, approach, key results with effect sizes, and the conclusion.
+% Elsevier journals often prefer a structured abstract; check the journal's
+% guide for authors. No citations in the abstract.
+\end{abstract}
+
+\begin{keyword}
+% TODO: 4-6 keywords separated by `;`  (Elsevier convention).
+keyword one \sep keyword two \sep keyword three \sep keyword four
+\end{keyword}
+
+\end{frontmatter}
+
+% ==============================================================================
+% 1. Introduction
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: context -> gap -> approach -> contributions -> roadmap. Use \citep{}
+% for parenthetical citations and \citet{} for textual citations (natbib).
+
+% ==============================================================================
+% 2. Related Work
+% ==============================================================================
+\section{Related Work}
+\label{sec:related}
+% TODO: cluster prior work; contrast methodology, data, and findings;
+% explicitly state how this work differs.
+
+% ==============================================================================
+% 3. Methods
+% ==============================================================================
+\section{Methods}
+\label{sec:methods}
+% TODO: problem formulation, notation, proposed method, theoretical analysis.
+
+\subsection{Problem formulation}
+% TODO: state the problem formally; define notation in a table if heavy.
+
+\subsection{Proposed method}
+% TODO: describe the method; include pseudo-code via the algorithm environment.
+
+\begin{algorithm}[t]
+\caption{Outline of the proposed method}
+\label{alg:method}
+\begin{algorithmic}[1]
+\STATE \textbf{Input:} dataset $\mathcal{D}$, hyper-parameters $\Theta$
+\STATE initialise $\theta$
+\WHILE{not converged}
+    \STATE $\theta \leftarrow \theta - \eta\,\nabla\mathcal{L}(\theta;\mathcal{D})$
+\ENDWHILE
+\STATE \textbf{return} $\theta$
+\end{algorithmic}
+\end{algorithm}
+
+% ==============================================================================
+% 4. Experiments
+% ==============================================================================
+\section{Experiments}
+\label{sec:experiments}
+% TODO: setup (datasets / baselines / metrics / hardware), main results,
+% ablation, qualitative examples, statistical significance.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=\columnwidth]{figures/result.pdf}
+\fbox{\rule{0pt}{4cm}\rule{\columnwidth}{0pt}}
+\caption{Single-column figure. Caption goes BELOW the figure. Use
+\texttt{\textbackslash columnwidth} for single-column, \texttt{\textbackslash textwidth}
+or \texttt{figure*} for double-column.}
+\label{fig:result}
+\end{figure}
+
+\begin{table}[t]
+\caption{Table caption goes ABOVE the table (Elsevier convention).}
+\label{tab:results}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Method   & Metric A       & Metric B       \\
+\midrule
+Baseline & 0.812          & 0.754          \\
+Ours     & \textbf{0.891} & \textbf{0.832} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ==============================================================================
+% 5. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: recap contribution and headline result; one sentence of future work.
+
+% ==============================================================================
+% Acknowledgements
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funding, grant numbers, individuals.
+
+% ==============================================================================
+% References  —  pick the .bst that matches your class options:
+%   elsarticle-num         (numbered)            for [1p/3p/5p, number]
+%   elsarticle-num-names   (numbered + names)
+%   elsarticle-harv        (author-year)         for [*, authoryear]
+% Compile:  pdflatex main  ->  bibtex main  ->  pdflatex main  ->  pdflatex main
+% ==============================================================================
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} F.~Author and S.~Author, Title of the paper,
+%   \emph{Journal Name} XX (20YY) 1--10.
+% \end{thebibliography}
+
+\end{document}

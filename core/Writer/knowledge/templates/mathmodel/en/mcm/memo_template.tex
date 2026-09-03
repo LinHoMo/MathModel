@@ -1,0 +1,193 @@
+% ============================================================
+% Memo to Client Template (MCM/ICM Problem F)
+% ============================================================
+% COMAP Requirement:
+%   F-problem teams MUST submit a Memo to Client addressed to the
+%   decision maker described in the problem statement.
+%
+% Format Requirements:
+%   - Business letter style (To / From / Date / Subject)
+%   - 1-2 pages (does NOT count toward the 25-page main paper limit)
+%   - Professional tone (not academic)
+%   - Actionable recommendations (not vague suggestions)
+%   - Three-section structure:
+%       1. Executive Summary
+%       2. Recommendations
+%       3. Supporting Analysis
+%
+% Usage:
+%   1. Compile this file separately OR include it as an appendix
+%   2. Replace all [PLACEHOLDER] content with your actual memo
+%   3. Reference the main paper for detailed analysis (e.g., "see Section 4.2")
+% ============================================================
+
+\documentclass[12pt, a4paper]{article}
+
+% ======================== Packages ========================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+% ======================== Page settings ========================
+% Memo to Client does NOT count toward the 25-page main paper limit
+% Limit to 1-2 pages
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% ======================== Title ========================
+\begin{document}
+\thispagestyle{empty}
+
+% ============================================================
+% Header (Business Letter Style)
+% ============================================================
+\begin{center}
+{\Large\textbf{MEMORANDUM}} \\[0.3cm]
+\rule{\textwidth}{0.5pt}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{tabular}{@{}ll}
+\textbf{To:} & [Client Name / Title / Organization] \\
+\textbf{From:} & Team \# [TEAM CONTROL NUMBER] \\
+\textbf{Date:} & \today \\
+\textbf{Subject:} & [Concise subject line, e.g., Recommendations on Urban Water Policy] \\
+\textbf{Re:} & MCM/ICM Problem F -- [Problem Title] \\
+\end{tabular}
+
+\vspace{0.5cm}
+\rule{\textwidth}{0.5pt}
+\vspace{0.5cm}
+
+% ============================================================
+% Section 1: Executive Summary (1 paragraph, 5-7 sentences)
+% ============================================================
+\section*{1.\quad Executive Summary}
+
+[Write a single paragraph of 5--7 sentences that:
+
+  -- Identifies the client's decision problem in plain language
+  -- States the key recommendation in one sentence
+  -- Summarizes the expected impact (quantified if possible)
+  -- Notes the confidence level / key uncertainty
+  -- Closes with the implementation horizon
+
+Example: On behalf of Team \#0000000, we are pleased to submit the
+following recommendations regarding [problem domain]. Based on our
+multi-criteria analysis of [N] policy alternatives, we recommend
+[primary recommendation], which is projected to [expected impact]
+within [time horizon]. This recommendation balances [trade-off 1]
+and [trade-off 2], and is robust to [key uncertainty]. The
+supporting analysis is detailed in our full report (Sections 3--6).
+We estimate implementation can begin within [timeframe] given
+[prerequisite].]
+
+% ============================================================
+% Section 2: Recommendations (Numbered, Actionable)
+% ============================================================
+\section*{2.\quad Recommendations}
+
+We recommend the following actions, listed in order of priority:
+
+\begin{enumerate}[label=\textbf{R\arabic*.}, leftmargin=2.5em]
+    \item \textbf{[Primary Recommendation Title].}
+    [Action description: WHAT should be done, by WHOM, by WHEN, and
+    HOW it should be measured. Reference the main paper for detailed
+    justification, e.g., ``See Section 4.2 for the full derivation.'']
+
+    \textit{Expected impact:} [quantified outcome, e.g., 15--20\% reduction in X] \\
+    \textit{Time horizon:} [short/medium/long term] \\
+    \textit{Key risk:} [main risk and mitigation]
+
+    \item \textbf{[Secondary Recommendation Title].}
+    [Action description with the same WHAT/WHOM/WHEN/HOW structure.
+    Cross-reference the supporting section in the main paper.]
+
+    \textit{Expected impact:} [outcome] \\
+    \textit{Time horizon:} [timeframe] \\
+    \textit{Key risk:} [risk and mitigation]
+
+    \item \textbf{[Tertiary Recommendation Title].}
+    [Action description.]
+
+    \textit{Expected impact:} [outcome] \\
+    \textit{Time horizon:} [timeframe] \\
+    \textit{Key risk:} [risk and mitigation]
+\end{enumerate}
+
+% ============================================================
+% Section 3: Supporting Analysis (Brief, References Main Paper)
+% ============================================================
+\section*{3.\quad Supporting Analysis}
+
+\subsection*{Methodology}
+Our recommendations are based on [methodology name, e.g., a
+stakeholder-weighted multi-criteria decision analysis] applied to
+[N] policy alternatives across [M] evaluation criteria. The full
+methodology, including assumptions and limitations, is documented
+in Section 3 of the main report.
+
+\subsection*{Key Findings}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{[Finding 1]:} [One-sentence summary with the key
+    number. See Section 4.1 of the main report.]
+    \item \textbf{[Finding 2]:} [One-sentence summary. See Section 4.2.]
+    \item \textbf{[Finding 3]:} [One-sentence summary. See Section 4.3.]
+\end{itemize}
+
+\subsection*{Trade-offs and Limitations}
+The recommended policy involves the following trade-offs:
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{[Trade-off 1]:} [brief description of what is
+    gained vs. what is sacrificed]
+    \item \textbf{[Trade-off 2]:} [brief description]
+\end{itemize}
+
+Key limitations of our analysis include: (i) [data limitation],
+(ii) [modeling limitation], and (iii) [scope limitation]. See
+Section 6 of the main report for a full discussion of limitations
+and directions for future work.
+
+\subsection*{Next Steps}
+We suggest the following immediate next steps for the client:
+\begin{itemize}[leftmargin=2em]
+    \item Convene a stakeholder review meeting within [timeframe]
+    to validate the recommendation criteria.
+    \item Commission a pilot study in [pilot scope] to test the
+    feasibility of R1 before full-scale implementation.
+    \item Establish a monitoring framework with the following KPIs:
+    [KPI 1], [KPI 2], [KPI 3].
+\end{itemize}
+
+% ============================================================
+% Closing
+% ============================================================
+\vspace{0.5cm}
+\rule{\textwidth}{0.5pt}
+
+\vspace{0.3cm}
+
+\noindent
+We appreciate the opportunity to provide these recommendations and
+are available for any clarification or further analysis you may
+require. For technical details, please refer to the full report
+(MCM/ICM Team \# [TEAM CONTROL NUMBER], Problem F).
+
+\vspace{0.5cm}
+
+\noindent
+Respectfully submitted, \\[1cm]
+
+\noindent
+\textbf{Team \# [TEAM CONTROL NUMBER]} \\
+MCM/ICM Problem F \\
+\today
+
+\end{document}

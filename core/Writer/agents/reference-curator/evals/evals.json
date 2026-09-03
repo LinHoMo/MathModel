@@ -1,0 +1,16 @@
+{
+  "skill_name": "reference-curator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Curate references for a paper whose .bib contains one fabricated entry, two consecutive duplicate citations, and a \\citep key not defined in the bib.",
+      "expected_output": "Success requires keeps only real searched references; merges consecutive citations; flags undefined keys; rejects fabricated entries.",
+      "assertions": [
+        "keeps only real searched references",
+        "merges consecutive duplicate citations",
+        "flags undefined bib keys",
+        "rejects fabricated references"
+      ]
+    }
+  ]
+}

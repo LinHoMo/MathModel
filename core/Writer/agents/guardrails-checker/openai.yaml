@@ -1,0 +1,14 @@
+interface:
+  display_name: "Guardrails Checker"
+  short_description: "运行时护栏（禁用词/占位符/AI痕迹）"
+  default_prompt: "Use $guardrails-checker to check paper guardrails."
+runtime:
+  hand: writer
+  utg_layer: L5
+  stage: 6
+  inputs:
+    - paper/main.tex
+    - paper/references.bib
+    - paper/figures/
+  outputs:
+    - work/guardrails_report.json

@@ -1,0 +1,14 @@
+interface:
+  display_name: "Section Writer"
+  short_description: "撰写各章节 LaTeX 内容"
+  default_prompt: "Use $section-writer to draft LaTeX sections."
+runtime:
+  hand: writer
+  utg_layer: L2
+  stage: 2
+  inputs:
+    - work/paper_structure.json
+    - CODE_DELIVERABLES.md
+    - figures/all_results.json
+  outputs:
+    - paper/main.tex

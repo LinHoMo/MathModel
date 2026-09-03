@@ -1,0 +1,16 @@
+{
+  "skill_name": "section-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write LaTeX sections from the structure plan, where the results section references figures and tables and includes two numbers not present in all_results.json.",
+      "expected_output": "Success requires follows word allocation; compiles without LaTeX errors; cites figures and tables; introduces no untraceable numbers.",
+      "assertions": [
+        "follows the allocated word counts per section",
+        "compiles without LaTeX errors",
+        "cites figures and tables with proper refs",
+        "does not introduce numbers absent from figures/all_results.json"
+      ]
+    }
+  ]
+}

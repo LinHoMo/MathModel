@@ -1,0 +1,298 @@
+{
+  "version": "1.0",
+  "project": "cumcm2024a",
+  "created": "2026-08-30T08:39:43Z",
+  "updated": "2026-09-03T11:29:53Z",
+  "current": null,
+  "completed": [
+    {
+      "hand": "modeler",
+      "agent": "problem-parser",
+      "stage": 1,
+      "timestamp": "",
+      "output": "work/question_spec.json",
+      "output_hash": "sha256:4082792a0e6994203e110efdc066c9e7f949c7072ac765e38ef4a6c72daa2f0c",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "modeler",
+      "agent": "type-classifier",
+      "stage": 2,
+      "timestamp": "",
+      "output": "work/type_classification.json",
+      "output_hash": "sha256:ec75b0ca14bc0937db7d17f31090e0036e2bf587c8f04ea159b5db1c7754e806",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "modeler",
+      "agent": "literature-searcher",
+      "stage": 1.5,
+      "timestamp": "",
+      "output": "work/literature_evidence.json",
+      "output_hash": "sha256:734195481c95512ba4159f886def22f17e520e45bceea499f17bedc10165d057",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "modeler",
+      "agent": "method-matcher",
+      "stage": 3,
+      "timestamp": "",
+      "output": "work/method_candidates.json",
+      "output_hash": "sha256:96eaf3c56777197d3cafd4eb551e7519da1212958c63d53becdfc31cd8d3086b",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "modeler",
+      "agent": "model-builder",
+      "stage": 4,
+      "timestamp": "",
+      "output": "work/model_draft.md",
+      "output_hash": "sha256:7153bf02cd84f2543c86111ad1dad49e7e7d6b320ccda779dd08107d95520850",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "modeler",
+      "agent": "dag-builder",
+      "stage": 4.5,
+      "timestamp": "",
+      "output": "work/model_dag.json",
+      "output_hash": "sha256:4fd3eccaf587ccd3354c23175257a0004d901e8b065cb5c235665561012a803f",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "modeler",
+      "agent": "assumption-validator",
+      "stage": 5,
+      "timestamp": "",
+      "output": "work/assumption_validation.json",
+      "output_hash": "sha256:fd40c4b5275f05619688e9e5a9e98bb0cabe5ca95b50ada20f8391da458129e2",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "modeler",
+      "agent": "spec-auditor",
+      "stage": 6,
+      "timestamp": "2026-09-01T04:35:29Z",
+      "output": "output/MODEL_SPEC.md",
+      "output_hash": ""
+    },
+    {
+      "hand": "programmer",
+      "agent": "template-selector",
+      "stage": 1,
+      "timestamp": "",
+      "output": "work/template_plan.json",
+      "output_hash": "sha256:f2de9b139af7930583bda3a10da9aa922cf706ce09c2c856e84e673bbb990fd0",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "programmer",
+      "agent": "code-implementer",
+      "stage": 2,
+      "timestamp": "2026-09-01T06:12:11Z",
+      "output": "code/main.py",
+      "output_hash": ""
+    },
+    {
+      "hand": "programmer",
+      "agent": "test-runner",
+      "stage": 3,
+      "timestamp": "",
+      "output": "work/test_report.json",
+      "output_hash": "sha256:99b0da93f1483904ec7180d293efcd0226768f0f02a61992ce43346e307ff007",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "programmer",
+      "agent": "result-verifier",
+      "stage": 4,
+      "timestamp": "",
+      "output": "work/result_validation.json",
+      "output_hash": "sha256:a9446e6a50d4a93b56707b6623c31d0bf3642597e3600d01152dae654edbdca7",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "programmer",
+      "agent": "guardrails-checker",
+      "stage": 5,
+      "timestamp": "",
+      "output": "work/guardrails_report.json",
+      "output_hash": "sha256:ad0c36d40a1190fb4b505d4efd200651cfcde521a0b4178f905a8ee60d1fa0a1",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "programmer",
+      "agent": "hash-auditor",
+      "stage": 6,
+      "timestamp": "2026-09-01T11:37:26Z",
+      "output": "output/CODE_DELIVERABLES.md",
+      "output_hash": ""
+    },
+    {
+      "hand": "writer",
+      "agent": "structure-planner",
+      "stage": 1,
+      "timestamp": "",
+      "output": "work/paper_structure.json",
+      "output_hash": "sha256:20578d948b17d6d1462dddfc5661378e53608c86e08184e0b1093d65d0ccc3c1",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "writer",
+      "agent": "section-writer",
+      "stage": 2,
+      "timestamp": "2026-09-01T11:40:09Z",
+      "output": "paper/main.tex",
+      "output_hash": ""
+    },
+    {
+      "hand": "writer",
+      "agent": "figure-generator",
+      "stage": 3,
+      "timestamp": "2026-09-01T11:42:17Z",
+      "output": "paper/figures/",
+      "output_hash": ""
+    },
+    {
+      "hand": "writer",
+      "agent": "reference-curator",
+      "stage": 4,
+      "timestamp": "2026-09-01T11:42:17Z",
+      "output": "paper/references.bib",
+      "output_hash": ""
+    },
+    {
+      "hand": "writer",
+      "agent": "consistency-checker",
+      "stage": 5,
+      "timestamp": "",
+      "output": "work/consistency_report.json",
+      "output_hash": "sha256:4c420defebc5110ae5c57bd5a19930ac7ad8498d928ed053f995a2097ff4542d",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "writer",
+      "agent": "guardrails-checker",
+      "stage": 6,
+      "timestamp": "",
+      "output": "work/guardrails_report.json",
+      "output_hash": "sha256:ad0c36d40a1190fb4b505d4efd200651cfcde521a0b4178f905a8ee60d1fa0a1",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "writer",
+      "agent": "final-validator",
+      "stage": 7,
+      "timestamp": "2026-09-01T11:43:14Z",
+      "output": "output/PAPER_SPEC.md",
+      "output_hash": ""
+    },
+    {
+      "hand": "reviewer",
+      "agent": "scorer-academic",
+      "stage": 1,
+      "timestamp": "",
+      "output": "work/score_card_academic.json",
+      "output_hash": "sha256:56f72e50ea2c8b11e0ffa5af2f1923595d322c7ab0cf9bfaa664768d76d9fd7d",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "reviewer",
+      "agent": "scorer-engineering",
+      "stage": 1,
+      "timestamp": "",
+      "output": "work/score_card_engineering.json",
+      "output_hash": "sha256:ddf89cc2b2b1ab992746af1310d34c147b7cd4cf24c84d58ec35f70f5a7cb421",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "reviewer",
+      "agent": "scorer-judge",
+      "stage": 1,
+      "timestamp": "",
+      "output": "work/score_card_judge.json",
+      "output_hash": "sha256:0acb59a462335d31a2efa5f5e071e1f7d40f703003e2779ff2f67aefc3285103",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "reviewer",
+      "agent": "scorer-reader",
+      "stage": 1,
+      "timestamp": "",
+      "output": "work/score_card_reader.json",
+      "output_hash": "sha256:b6c52f08ff8816048b5380b9fcb05be7239c540852f71daba3cf3fed7be6e57e",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "reviewer",
+      "agent": "scorer-adversarial",
+      "stage": 1,
+      "timestamp": "",
+      "output": "work/score_card_adversarial.json",
+      "output_hash": "sha256:1e02873484f7dc6375ba71992c19b8d6573f4601451fbf7be0a556a6af6dda56",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "reviewer",
+      "agent": "weakness-hunter",
+      "stage": 2,
+      "timestamp": "",
+      "output": "work/weakness_report.json",
+      "output_hash": "sha256:cde1c3c3514d9f06b1ba741351852f02931830f6cd80cadbd241acdc5a200613",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "reviewer",
+      "agent": "revision-planner",
+      "stage": 3,
+      "timestamp": "",
+      "output": "work/revision_plan.json",
+      "output_hash": "sha256:0e25bcf9b7f0ab70ea4db330f9763d02e46d3298ee1e5a85cfb3c0cd956e5611",
+      "source": "artifact-scan"
+    },
+    {
+      "hand": "reviewer",
+      "agent": "revision-executor",
+      "stage": 4,
+      "timestamp": "",
+      "output": "work/execution_report.json",
+      "output_hash": "sha256:2f2e905668167d4babffcc6bd51edc34232ab850622e96e82e132de324d83ff9",
+      "source": "artifact-scan"
+    }
+  ],
+  "failed": [],
+  "q_states": {},
+  "ai_usage_ledger": {},
+  "legacy": {
+    "work/audit_log.json": "sha256:e31e113a84cf847cb0a5054d62bade3f7ca4b56a2fa2f960f95ccec7e962ae06",
+    "work/audit_chain.json": "sha256:a617f3c1e6224ce0400504e1e4260b091d52f0c38096b03d16aa978817601dfa",
+    "work/final_audit_log.json": "sha256:923b75e9c18abb4cde0b89be77fc6807299e7c65c00c7fd699ddac46a45de2c3"
+  },
+  "numbers_frozen": {
+    "stale": true,
+    "last_check": "2026-09-03T11:29:53Z"
+  },
+  "review": {
+    "project": "cumcm2024a",
+    "round": 1,
+    "max_rounds": 4,
+    "pass_score": 6.0,
+    "topic_type": "A",
+    "weight_profile": {
+      "scorer-academic": 0.2163,
+      "scorer-engineering": 0.25,
+      "scorer-judge": 0.2885,
+      "scorer-reader": 0.1154,
+      "scorer-adversarial": 0.1298
+    },
+    "weighted": 6.992,
+    "min_score": 5.5,
+    "min_dimensions": [
+      "scorer-adversarial"
+    ],
+    "verdict": "block",
+    "reason": "存在 1 个阻塞项，禁止提交",
+    "issues": [],
+    "timestamp": "2026-09-03T11:29:53Z"
+  }
+}

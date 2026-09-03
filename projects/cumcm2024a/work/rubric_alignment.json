@@ -1,0 +1,93 @@
+{
+  "version": "1.0",
+  "project": "cumcm2024a",
+  "competition": "cumcm",
+  "updated": "2026-08-30T07:41:05Z",
+  "items": [
+    {
+      "id": "R1",
+      "requirement": "计算盘入 300 s 内每秒各板凳前把手的位置与速度",
+      "source": "问题一",
+      "section": "4.1",
+      "status": "covered"
+    },
+    {
+      "id": "R2",
+      "requirement": "给出盘入终止（碰撞）时刻与判定依据",
+      "source": "问题二",
+      "section": "4.2",
+      "status": "covered"
+    },
+    {
+      "id": "R3",
+      "requirement": "给出掉头所需最小空间直径",
+      "source": "问题三",
+      "section": "4.3",
+      "status": "covered"
+    },
+    {
+      "id": "R4",
+      "requirement": "确定盘出过程的最大速度",
+      "source": "问题四",
+      "section": "4.4",
+      "status": "covered"
+    },
+    {
+      "id": "R5",
+      "requirement": "给出 S 形圆弧半径与螺距调整方案",
+      "source": "问题五",
+      "section": "4.5",
+      "status": "covered"
+    },
+    {
+      "id": "R6",
+      "requirement": "结果分析与检验（误差、不确定度、交叉验证）",
+      "source": "通用评分维度",
+      "section": "5",
+      "status": "covered"
+    },
+    {
+      "id": "R7",
+      "requirement": "灵敏度分析（多参数、多幅度）",
+      "source": "通用评分维度",
+      "section": "6",
+      "status": "covered"
+    },
+    {
+      "id": "R8",
+      "requirement": "模型评价（优点、局限、改进与推广）",
+      "source": "通用评分维度",
+      "section": "8",
+      "status": "covered"
+    },
+    {
+      "id": "R9",
+      "requirement": "摘要含各子问题的方法与具体数值结果",
+      "source": "格式规范",
+      "section": "摘要",
+      "status": "covered"
+    },
+    {
+      "id": "R10",
+      "requirement": "参考文献 ≥10 篇且真实可核",
+      "source": "格式规范",
+      "section": "参考文献",
+      "status": "covered"
+    },
+    {
+      "id": "R11",
+      "requirement": "AI 使用已披露并生成支撑材料",
+      "source": "合规",
+      "section": "support_materials",
+      "status": "covered"
+    },
+    {
+      "id": "R12",
+      "requirement": "匿名（正文无校名/姓名/指导教师）",
+      "source": "合规",
+      "section": "全文",
+      "status": "covered"
+    }
+  ],
+  "notes": "评分点由赛题子问题 + 通用评审维度 + 格式合规三部分构成。每个评分点必须映射到具体论文章节，未映射的会被门禁拦下。"
+}

@@ -1,0 +1,11 @@
+import re
+t = open('main.tex', encoding='utf-8').read()
+t = re.sub(r'(?m)%.*$', '', t)
+cjk = len(re.findall(r'[一-鿿]', t))
+eq = len(re.findall(r'\\begin\{equation', t)) + len(re.findall(r'\\begin\{align', t))
+fig = len(re.findall(r'\\includegraphics', t))
+tab = len(re.findall(r'\\begin\{table', t))
+print('CJK chars:', cjk)
+print('equations:', eq)
+print('figures:', fig)
+print('tables:', tab)

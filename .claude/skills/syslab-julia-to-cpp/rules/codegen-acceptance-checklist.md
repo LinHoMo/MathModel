@@ -1,0 +1,23 @@
+# 验收清单
+
+- 已确认 `scc -h` 或 `scc --help` 可用，且记录了实际运行环境。
+- 已明确目标产物模式：`app`、`shared` 或 `source`。
+- 已识别入口文件与入口函数。
+- `app` 模式下已确认存在 `main()`，且若使用 `build.jl`，已记录 `build.jl` 与用户源文件的 `include` 关系，以及用户明确指定的 `main()` 目标函数。
+- `shared` 模式下已列出全部 `SyslabCC.static_compile(...)` 导出项，且若使用 `build.jl`，已记录 `build.jl` 与用户源文件的 `include` 关系，以及用户明确指定的导出函数/符号/签名。
+- `source` 模式下已确认 `artifacts/{entry-name}/source/` 中存在源码工程与构建脚本，且最终命令中已正确使用 `-c` / `--no-compile`、`-d <dir>` 和底层 `--mode app|shared`。
+- 已检查非 `const` 全局变量、未定义变量和显著类型不稳定点。
+- 最终 `scc` 命令已写入文档。
+- 已记录关键编译选项及使用原因。
+- 已确认生成产物结构符合预期。
+- 若请求头文件，已确认 `.h` 文件确实存在，或已将缺失情况写入 `docs/{entry-name}/issues.md`。
+- 若未获授权直接修改用户 Julia 源码，已先评估并优先采用同目录 `build.jl`；只有 `build.jl` 方案不足时，才生成 `docs/{entry-name}/source_change_suggestions.md`。
+- `app` 模式下已生成 `tests/{entry-name}/app/runtests.jl`，并已实际运行验证通过。
+- `shared` 模式下已生成 `tests/{entry-name}/shared/` 下验证脚本，并已实际运行验证通过。
+- 已完成至少一类有效验证：
+  - 产物直接运行
+  - C++ 调用验证
+  - Python 调用验证
+  - C++ 工程构建验证
+- 若使用了 `--collect-instance`，已记录用例来源与限制策略。
+- 若仍存在不支持特性或残余风险，已写入 `docs/{entry-name}/issues.md`。

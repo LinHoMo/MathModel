@@ -1,0 +1,14 @@
+interface:
+  display_name: "Consistency Checker"
+  short_description: "论文-代码数值一致性"
+  default_prompt: "Use $consistency-checker to verify paper-code numeric consistency."
+runtime:
+  hand: writer
+  utg_layer: L4
+  stage: 5
+  inputs:
+    - paper/main.tex
+    - figures/all_results.json
+    - work/paper_structure.json
+  outputs:
+    - work/consistency_report.json

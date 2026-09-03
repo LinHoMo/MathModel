@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "contest": "CUMCM",
+    "year": 2024,
+    "topic_id": "A024",
+    "topic_type": "A-physical",
+    "language": "zh"
+  },
+  "background": {
+    "context": "舞龙队由多节板凳串联而成，龙头前把手沿等距螺线轨迹盘入，盘入过程中龙头沿螺线向中心收拢，盘出过程沿另一条螺线向外展开并完成掉头。每节板凳两端各有一个把手，相邻板凳以前后把手铰接，形成一条可弯曲的龙。本赛题要求对盘入盘出全过程进行运动学建模，求解各板凳位置与速度、碰撞时刻、掉头空间直径与盘出最大速度等。",
+    "domain_keywords": ["等距螺线", "运动学", "链式约束", "碰撞检测", "圆弧相切", "板凳龙"],
+    "physical_processes": ["刚体平面运动", "铰接链式约束递推", "螺线弧长参数化", "矩形板凳几何碰撞", "S形圆弧相切几何"]
+  },
+  "problems": [
+    {
+      "id": 1,
+      "description": "盘入过程中龙头前把手速度 v1=1 m/s，计算从初始时刻到 300 s 内每秒整个舞龙队每节板凳前把手的位置与速度。",
+      "input_variables": [
+        {"name": "t", "type": "continuous", "unit": "s", "range": "0-300"},
+        {"name": "v1", "type": "continuous", "unit": "m/s", "range": "1.0"},
+        {"name": "b", "type": "continuous", "unit": "m", "range": "0.55"},
+        {"name": "r0", "type": "continuous", "unit": "m", "range": "8.8"},
+        {"name": "n_bench", "type": "discrete", "unit": "dimensionless", "range": "222"},
+        {"name": "L_head", "type": "continuous", "unit": "m", "range": "3.41"},
+        {"name": "L_body", "type": "continuous", "unit": "m", "range": "2.20"},
+        {"name": "w", "type": "continuous", "unit": "m", "range": "0.30"}
+      ],
+      "output_variables": [
+        {"name": "x_i", "type": "continuous", "unit": "m"},
+        {"name": "y_i", "type": "continuous", "unit": "m"},
+        {"name": "v_i", "type": "continuous", "unit": "m/s"}
+      ],
+      "constraints": [
+        {"type": "physical", "expression": "r = b*theta/(2*pi), 龙头前把手始终在螺线上"},
+        {"type": "equality", "expression": "|P(theta_i) - P(theta_{i-1})| = L_i, 相邻把手间距等于板凳长"},
+        {"type": "boundary", "expression": "theta_0(0) = 32*pi (对应 r0=8.8 m, 第16圈起点)"},
+        {"type": "equality", "expression": "ds(theta_head)/dt = v1 = 1 m/s"}
+      ],
+      "dependencies": []
+    },
+    {
+      "id": 2,
+      "description": "求盘入过程中出现碰撞的终止时刻 t*，并给出该时刻每节板凳的位置和速度。",
+      "input_variables": [
+        {"name": "t", "type": "continuous", "unit": "s", "range": "0-t*"},
+        {"name": "b", "type": "continuous", "unit": "m", "range": "0.55"},
+        {"name": "w", "type": "continuous", "unit": "m", "range": "0.30"}
+      ],
+      "output_variables": [
+        {"name": "t_star", "type": "continuous", "unit": "s"},
+        {"name": "x_i_at_t_star", "type": "continuous", "unit": "m"},
+        {"name": "y_i_at_t_star", "type": "continuous", "unit": "m"},
+        {"name": "v_i_at_t_star", "type": "continuous", "unit": "m/s"}
+      ],
+      "constraints": [
+        {"type": "inequality", "expression": "相邻板凳矩形不重叠: min(L_i, L_{i+1}) * sin(alpha_i) >= w"},
+        {"type": "inequality", "expression": "非相邻板凳中心线最小距离 >= w"},
+        {"type": "boundary", "expression": "t* = inf{t : 上述约束首次被违反}"}
+      ],
+      "dependencies": [1]
+    },
+    {
+      "id": 3,
+      "description": "从盘入到盘出需要掉头，掉头空间为以螺线中心为圆心、直径为 d 的圆形区域，求能完成掉头的最小直径 d。",
+      "input_variables": [
+        {"name": "b", "type": "continuous", "unit": "m", "range": "0.55"},
+        {"name": "v1", "type": "continuous", "unit": "m/s", "range": "1.0"}
+      ],
+      "output_variables": [
+        {"name": "d_min", "type": "continuous", "unit": "m"}
+      ],
+      "constraints": [
+        {"type": "physical", "expression": "盘入阶段未发生碰撞: r_head(t) >= r_collision"},
+        {"type": "boundary", "expression": "d_min = 2 * r_collision, 其中 r_collision 为问题2碰撞时刻龙头前把手半径"}
+      ],
+      "dependencies": [2]
+    },
+    {
+      "id": 4,
+      "description": "盘出螺线与盘入螺线关于原点中心对称，盘出过程保持龙头前把手速度 v1=1 m/s，求盘出过程中所有板凳的最大速度及其出现的时刻与位置。",
+      "input_variables": [
+        {"name": "v1", "type": "continuous", "unit": "m/s", "range": "1.0"},
+        {"name": "b", "type": "continuous", "unit": "m", "range": "0.55"}
+      ],
+      "output_variables": [
+        {"name": "v_max", "type": "continuous", "unit": "m/s"},
+        {"name": "t_at_vmax", "type": "continuous", "unit": "s"},
+        {"name": "x_at_vmax", "type": "continuous", "unit": "m"},
+        {"name": "y_at_vmax", "type": "continuous", "unit": "m"}
+      ],
+      "constraints": [
+        {"type": "physical", "expression": "盘出螺线 r = -b*theta/(2*pi) (中心对称于盘入)"},
+        {"type": "equality", "expression": "ds(theta_head_out)/dt = v1 = 1 m/s"}
+      ],
+      "dependencies": [1]
+    },
+    {
+      "id": 5,
+      "description": "掉头空间为以螺线中心为圆心、直径 9 m 的圆，掉头由两段半径相等的圆弧相切连接( S 形)，求掉头圆弧半径及盘入螺线最后一圈需调整的螺距，使圆弧与盘入/盘出螺线相切。",
+      "input_variables": [
+        {"name": "d_turn", "type": "continuous", "unit": "m", "range": "9.0"},
+        {"name": "b", "type": "continuous", "unit": "m", "range": "0.55"}
+      ],
+      "output_variables": [
+        {"name": "R_arc", "type": "continuous", "unit": "m"},
+        {"name": "p_adjusted", "type": "continuous", "unit": "m"}
+      ],
+      "constraints": [
+        {"type": "physical", "expression": "两段圆弧半径相等 R, 在公共点相切且曲率反向"},
+        {"type": "equality", "expression": "圆弧在入口与盘入螺线相切(切线方向一致)"},
+        {"type": "equality", "expression": "圆弧在出口与盘出螺线相切(切线方向一致)"},
+        {"type": "inequality", "expression": "S形整体包含于直径 9 m 的圆内"}
+      ],
+      "dependencies": [3, 4]
+    }
+  ],
+  "constraints": {
+    "global_constraints": [
+      {"type": "physical", "expression": "全部采用 SI 单位 (m, s, m/s, rad)"},
+      {"type": "physical", "expression": "板凳为刚体, 把手为铰接点无摩擦"},
+      {"type": "logical", "expression": "相邻把手连线长度等于板凳长, 把手落在螺线上"},
+      {"type": "physical", "expression": "龙头前把手速度沿螺线弧长方向恒为 1 m/s"}
+    ],
+    "time_constraints": ["t in [0, 300] s (问题1)", "t in [0, t*] s (问题2)", "t >= 0 (问题4 盘出)"],
+    "spatial_constraints": ["theta in [theta_collision, theta_0]", "r in [r_min, r_0]", "掉头区域 r <= d/2"]
+  },
+  "data": {
+    "provided_files": [],
+    "parameters": {
+      "b": {"value": 0.55, "unit": "m", "description": "等距螺线系数, 螺距 p=b=0.55 m"},
+      "p": {"value": 0.55, "unit": "m", "description": "螺距"},
+      "v1": {"value": 1.0, "unit": "m/s", "description": "龙头前把手速度"},
+      "r0": {"value": 8.8, "unit": "m", "description": "初始龙头前把手半径, 第16圈起点"},
+      "theta_0": {"value": 100.531, "unit": "rad", "description": "初始极角 = 32*pi, 对应第16圈起点"},
+      "n_bench": {"value": 222, "unit": "dimensionless", "description": "板凳总数(龙头1+龙身221)"},
+      "L_head": {"value": 3.41, "unit": "m", "description": "龙头板凳把手间距"},
+      "L_body": {"value": 2.20, "unit": "m", "description": "龙身板凳把手间距"},
+      "w": {"value": 0.30, "unit": "m", "description": "板凳宽度"},
+      "init_circle": {"value": 16, "unit": "dimensionless", "description": "初始所在圈数"}
+    }
+  },
+  "delivery": {
+    "requirements": [
+      "问题1结果存入 result1.xlsx, 含时刻/板凳编号/x/y/速度大小",
+      "问题2结果存入 result2.xlsx, 含 t* 及该时刻每节板凳位置与速度",
+      "问题3结果存入 result3.xlsx, 含最小直径 d",
+      "问题4结果存入 result4.xlsx, 含最大速度及出现时刻位置",
+      "问题5结果存入 result5.xlsx, 含圆弧半径与调整后螺距"
+    ],
+    "submission_format": "Excel (xlsx)"
+  }
+}

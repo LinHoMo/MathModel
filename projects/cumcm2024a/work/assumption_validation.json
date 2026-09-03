@@ -1,0 +1,100 @@
+{
+  "threshold": 6.0,
+  "env_source": "env/config.yaml -> modeling.assumption_score_threshold = 6.0",
+  "weights": {"physical_rationality": 0.30, "math_consistency": 0.25, "data_support": 0.25, "impact_degree": 0.20},
+  "assumptions": [
+    {
+      "id": "H1",
+      "content": "板凳为刚体，把手为质点",
+      "necessity": "因为板凳在盘入过程中不发生弹性形变，把手间距严格等于板凳长，刚体假设使链式约束 |P(θ_i)-P(θ_{i-1})|=L_i 严格成立，是全部运动学递推的前提。",
+      "type": "critical",
+      "validation": {
+        "physical_rationality": 8.0,
+        "math_consistency": 8.0,
+        "data_support": 7.0,
+        "impact_degree": 6.0,
+        "composite_score": 7.35
+      },
+      "passed": true,
+      "rationale": "板凳为木质刚性结构，刚体假设物理上充分合理；链式约束推导完整；题目给定板凳长数据；若放松则需引入弹性形变模型，影响中等。"
+    },
+    {
+      "id": "H2",
+      "content": "板凳按矩形平面处理，忽略厚度与三维倾角",
+      "necessity": "由于仅关心 xy 平面内的碰撞，矩形平面简化使几何碰撞判据可解析表达（夹角判据与中心线段距离判据），无需三维体积干涉计算。",
+      "type": "simplification",
+      "validation": {
+        "physical_rationality": 7.0,
+        "math_consistency": 8.0,
+        "data_support": 7.0,
+        "impact_degree": 5.0,
+        "composite_score": 6.85
+      },
+      "passed": true,
+      "rationale": "板凳厚度远小于长度，平面矩形简化合理；碰撞判据数学推导完整；题目给定宽度 0.30 m；忽略厚度对碰撞时刻影响有限。"
+    },
+    {
+      "id": "H3",
+      "content": "龙头前把手沿螺线弧长方向匀速 v₁=1 m/s",
+      "necessity": "题目明确给定匀速条件，该假设使龙头 θ_head(t) 由弧长方程 s(θ_head)-s(θ₀)=-v₁·t 直接反解，为整个链提供时间参数化基准。",
+      "type": "critical",
+      "validation": {
+        "physical_rationality": 9.0,
+        "math_consistency": 9.0,
+        "data_support": 9.0,
+        "impact_degree": 8.0,
+        "composite_score": 8.8
+      },
+      "passed": true,
+      "rationale": "题目直接给定匀速 1 m/s，物理上为驱动约束；弧长反解数学严格；数据充分；若不匀速需另给速度时间函数，影响较大。"
+    },
+    {
+      "id": "H4",
+      "content": "相邻把手铰接无摩擦、无间隙",
+      "necessity": "因为铰接无摩擦使把手仅传递位置约束不传递力矩，相邻板凳夹角由螺线几何唯一确定，避免引入动力学方程。",
+      "type": "secondary",
+      "validation": {
+        "physical_rationality": 7.0,
+        "math_consistency": 7.0,
+        "data_support": 6.0,
+        "impact_degree": 4.0,
+        "composite_score": 6.15
+      },
+      "passed": true,
+      "rationale": "实际铰接有微小摩擦但运动学建模中可忽略；约束方程自洽；无实测摩擦数据；摩擦仅影响力不影响位置几何，影响小。"
+    },
+    {
+      "id": "H5",
+      "content": "盘出螺线关于原点与盘入螺线中心对称",
+      "necessity": "由于题目要求盘出与盘入中心对称，该假设使盘出螺线方程 r=-b·θ/(2π) 与盘入同构，弧长参数化与链式约束可完全复用，仅需镜像变换。",
+      "type": "critical",
+      "validation": {
+        "physical_rationality": 8.0,
+        "math_consistency": 8.0,
+        "data_support": 5.0,
+        "impact_degree": 7.0,
+        "composite_score": 7.05
+      },
+      "passed": true,
+      "rationale": "题目明确要求中心对称，物理上合理；盘出方程与盘入同构数学自洽；题面未给盘出独立参数，数据支撑有限；对称性假设影响盘出速度结果。"
+    },
+    {
+      "id": "H6",
+      "content": "掉头 S 形由两段半径相等的圆弧相切连接",
+      "necessity": "因为题目限定 S 形掉头，两段等半径相切圆弧使几何关系可由切线方程与圆心方程联立解析求解，未知量数与方程数匹配。",
+      "type": "critical",
+      "validation": {
+        "physical_rationality": 8.0,
+        "math_consistency": 9.0,
+        "data_support": 6.0,
+        "impact_degree": 7.0,
+        "composite_score": 7.55
+      },
+      "passed": true,
+      "rationale": "S 形掉头为题目给定几何，等半径相切物理合理；圆弧相切方程组数学推导完整；半径值需数值求解，数据支撑中等；圆弧半径选择影响掉头可行性。"
+    }
+  ],
+  "all_passed": true,
+  "contradictions": [],
+  "contradiction_check_notes": "逐对检查假设间矛盾对（理想/实际、刚体/弹性、忽略/考虑、线性/非线性、均匀/非均匀、稳态/瞬态、无摩擦/有摩擦、无阻力/有阻力）：H1 刚体与 H2 平面简化一致（均刚性假设）；H3 匀速与 H4 无摩擦一致（运动学不涉及动力学）；H5 中心对称与 H6 等半径相切一致（几何对称性兼容）；H4 无摩擦与刚体假设一致。未发现矛盾对。"
+}

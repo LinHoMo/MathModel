@@ -1,0 +1,530 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""统一门禁入口 —— 跨 runtime 执行协议的卡点层。
+
+用法
+----
+    python core/tools/gate.py <project> <hand> <agent>   # 单步门禁
+    python core/tools/gate.py <project> <hand>           # 整手门禁
+    python core/tools/gate.py <project> all              # 全链路门禁
+
+退出码
+------
+    0  全部通过（含 SKIP）
+    1  存在 HARD 失败（阻塞，须按 SKILL.md 的 Iteration 修正后重跑）
+    2  参数错误
+
+设计要点
+--------
+此前 19 个 agent 的 `## Self-Check` 全是人读的 `[ ]` 复选框——
+模型可以勾完所有框然后继续，等于没有门禁。
+这里把 Self-Check 转成**可执行断言**，由脚本判定 PASS/FAIL，
+与宿主 agent 无关：任何 runtime 都能 `python core/tools/gate.py`。
+"""
+
+import argparse
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import gatelib as G
+import state as S
+
+# ---------------------------------------------------------------------------
+# 每个 agent 的门禁断言
+# ---------------------------------------------------------------------------
+# 产物路径取自各 SKILL.md 的 Contract 段。
+# 断言强度分两级：HARD（阻塞）/ 非阻塞（历史项目可能未产出该文件）。
+
+GATES = {
+    # ---------------- Modeler ----------------
+    ("modeler", "problem-parser"): [
+        lambda p: _check_inputs_readonly(p),
+        lambda p: G.check_files_exist(p, ["work/question_spec.json"], "question_spec"),
+        lambda p: G.check_json_valid(p, "work/question_spec.json"),
+        lambda p: G.check_schema(p, "work/question_spec.json",
+                                 "core/schemas/question_spec.schema.json"),
+    ],
+    ("modeler", "type-classifier"): [
+        lambda p: G.check_files_exist(p, ["work/type_classification.json"],
+                                      "type_classification"),
+        lambda p: G.check_json_valid(p, "work/type_classification.json"),
+    ],
+    ("modeler", "literature-searcher"): [
+        lambda p: G.check_files_exist(p, ["work/literature_evidence.json"],
+                                      "literature_evidence"),
+        lambda p: G.check_json_valid(p, "work/literature_evidence.json"),
+        lambda p: G.check_schema(p, "work/literature_evidence.json",
+                                 "core/schemas/literature_evidence.schema.json"),
+    ],
+    ("modeler", "method-matcher"): [
+        lambda p: G.check_files_exist(p, ["work/method_candidates.json"],
+                                      "method_candidates"),
+        lambda p: G.check_json_valid(p, "work/method_candidates.json"),
+        # P2-3：编码前风险探针——在投入实现前暴露方法不可行
+        lambda p: G.check_risk_probe(p),
+    ],
+    ("modeler", "model-builder"): [
+        lambda p: G.check_files_exist(p, ["work/model_draft.md"], "model_draft"),
+    ],
+    ("modeler", "dag-builder"): [
+        lambda p: G.check_files_exist(p, ["work/model_dag.json"], "model_dag"),
+        lambda p: G.check_json_valid(p, "work/model_dag.json"),
+        lambda p: G.check_schema(p, "work/model_dag.json",
+                                 "core/schemas/model_dag.schema.json"),
+        lambda p: G.check_files_exist(p, ["work/model_dag.svg"], "model_dag.svg"),
+    ],
+    ("modeler", "assumption-validator"): [
+        lambda p: G.check_files_exist(p, ["work/assumption_validation.json"],
+                                      "assumption_validation"),
+        lambda p: G.check_json_valid(p, "work/assumption_validation.json"),
+    ],
+    ("modeler", "spec-auditor"): [
+        lambda p: G.check_files_exist(p, ["output/MODEL_SPEC.md"], "MODEL_SPEC"),
+        # 工程产物允许提及内部路径（all_results.json / work/ 等）。
+        # 铁律 W7「禁止内部术语」只约束论文正文，不约束交付给下游的工程文档。
+        lambda p: G.check_guardrails(p, ["output/MODEL_SPEC.md"], allow_internal=True),
+    ],
+
+    # ---------------- Programmer ----------------
+    ("programmer", "template-selector"): [
+        lambda p: G.check_files_exist(p, ["work/template_plan.json"], "template_plan"),
+        lambda p: G.check_json_valid(p, "work/template_plan.json"),
+    ],
+    ("programmer", "code-implementer"): [
+        lambda p: G.check_risk_probe(p),   # 编码前必须已通过风险探针
+        lambda p: G.check_files_exist(p, ["code/main.py"], "main.py"),
+    ],
+    ("programmer", "test-runner"): [
+        lambda p: G.check_files_exist(p, ["work/test_report.json"], "test_report"),
+        lambda p: G.check_json_valid(p, "work/test_report.json"),
+    ],
+    ("programmer", "result-verifier"): [
+        lambda p: G.check_files_exist(p, ["work/result_validation.json"],
+                                      "result_validation"),
+        lambda p: G.check_json_valid(p, "work/result_validation.json"),
+        lambda p: G.check_files_exist(p, ["figures/all_results.json"],
+                                      "all_results"),
+    ],
+    ("programmer", "guardrails-checker"): [
+        lambda p: G.check_files_exist(p, ["work/guardrails_report.json"],
+                                      "guardrails_report"),
+        lambda p: G.check_json_valid(p, "work/guardrails_report.json"),
+    ],
+    ("programmer", "hash-auditor"): [
+        lambda p: G.check_files_exist(p, ["output/CODE_DELIVERABLES.md"],
+                                      "CODE_DELIVERABLES"),
+        lambda p: G.check_guardrails(p, ["output/CODE_DELIVERABLES.md"],
+                                     allow_internal=True),
+    ],
+
+    # ---------------- Writer ----------------
+    ("writer", "structure-planner"): [
+        lambda p: G.check_files_exist(p, ["work/paper_structure.json"],
+                                      "paper_structure"),
+        lambda p: G.check_json_valid(p, "work/paper_structure.json"),
+        # P2-7：评委视角——评分点必须映射到论文章节
+        lambda p: G.check_rubric_alignment(p),
+    ],
+    ("writer", "section-writer"): [
+        lambda p: G.check_files_exist(p, ["paper/main.tex"], "main.tex"),
+        lambda p: G.check_tex_no_lists(p, "paper/main.tex"),
+        # P2-9 内容级校验：不只是"文件在不在"，而是"内容对不对"
+        lambda p: G.check_symbols_consistency(p),
+        lambda p: G.check_assumptions_referenced(p),
+        lambda p: G.check_figures_referenced(p),
+        lambda p: G.check_min_count(p, "paper/main.tex",
+                                    r"\\begin\{(equation|align|gather|multline)\*?\}",
+                                    15, "公式数(W-env)"),
+    ],
+    ("writer", "figure-generator"): [
+        lambda p: _check_figures(p),
+    ],
+    ("writer", "reference-curator"): [
+        lambda p: G.check_files_exist(p, ["paper/references.bib"], "references.bib"),
+        lambda p: G.check_min_count(p, "paper/references.bib", r"@\w+\{",
+                                    10, "参考文献数"),
+        lambda p: _check_no_future_refs(p),
+    ],
+    ("writer", "consistency-checker"): [
+        lambda p: G.check_files_exist(p, ["work/consistency_report.json"],
+                                      "consistency_report"),
+        lambda p: G.check_json_valid(p, "work/consistency_report.json"),
+    ],
+    ("writer", "guardrails-checker"): [
+        lambda p: G.check_guardrails(p, ["paper/main.tex"]),
+    ],
+    # ---------------- Reviewer（P2 新增评审手）----------------
+    ("reviewer", "scorer-academic"): [
+        lambda p: G.check_files_exist(p, ["work/score_card_academic.json"],
+                                      "score_card_academic"),
+        lambda p: G.check_json_valid(p, "work/score_card_academic.json"),
+    ],
+    ("reviewer", "scorer-engineering"): [
+        lambda p: G.check_files_exist(p, ["work/score_card_engineering.json"],
+                                      "score_card_engineering"),
+        lambda p: G.check_json_valid(p, "work/score_card_engineering.json"),
+    ],
+    ("reviewer", "scorer-judge"): [
+        lambda p: G.check_files_exist(p, ["work/score_card_judge.json"],
+                                      "score_card_judge"),
+        lambda p: G.check_json_valid(p, "work/score_card_judge.json"),
+    ],
+    ("reviewer", "scorer-reader"): [
+        lambda p: G.check_files_exist(p, ["work/score_card_reader.json"],
+                                      "score_card_reader"),
+        lambda p: G.check_json_valid(p, "work/score_card_reader.json"),
+    ],
+    ("reviewer", "scorer-adversarial"): [
+        lambda p: G.check_files_exist(p, ["work/score_card_adversarial.json"],
+                                      "score_card_adversarial"),
+        lambda p: G.check_json_valid(p, "work/score_card_adversarial.json"),
+        lambda p: G.check_files_exist(p, ["work/score_card.json"],
+                                      "score_card_aggregate"),
+        lambda p: G.check_json_valid(p, "work/score_card.json"),
+    ],
+    ("reviewer", "weakness-hunter"): [
+        lambda p: G.check_files_exist(p, ["work/weakness_report.json"],
+                                      "weakness_report"),
+        lambda p: G.check_json_valid(p, "work/weakness_report.json"),
+    ],
+    ("reviewer", "revision-planner"): [
+        lambda p: G.check_files_exist(p, ["work/revision_plan.json"],
+                                      "revision_plan"),
+        lambda p: G.check_json_valid(p, "work/revision_plan.json"),
+    ],
+    ("reviewer", "revision-executor"): [
+        lambda p: G.check_files_exist(p, ["work/execution_report.json"],
+                                      "execution_report"),
+        lambda p: G.check_json_valid(p, "work/execution_report.json"),
+        lambda p: _check_execution_verdict(p),
+    ],
+
+    ("writer", "final-validator"): [
+        lambda p: G.check_files_exist(p, ["output/PAPER_SPEC.md"], "PAPER_SPEC"),
+        lambda p: G.check_guardrails(p, ["output/PAPER_SPEC.md"], allow_internal=True),
+        lambda p: G.check_files_exist(p, ["paper/main.tex"], "main.tex"),
+        lambda p: G.check_sensitivity_really_scanned(p),
+        # ---- 国赛验收（目标 A）：固化 6verity 硬项为可执行断言 ----
+        lambda p: G.check_cumcm_placeholders(p),
+        lambda p: G.check_cumcm_internal_leaks(p),
+        lambda p: G.check_cumcm_section_structure(p),
+        lambda p: _check_latex_compiles(p),
+        lambda p: _check_code_runs_lite(p),
+        lambda p: _check_pdf(p),
+    ],
+}
+
+
+def _check_execution_verdict(project):
+    """revision-executor：execution_report.json 的 verdict 必须为 pass。"""
+    import json
+    path = G.project_dir(project) / "work" / "execution_report.json"
+    try:
+        report = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        return G.fail("execution_report", f"读取失败: {e}")
+    verdict = report.get("verdict", "")
+    if verdict != "pass":
+        unresolved = report.get("blocking_unresolved", [])
+        detail = f"blocking_unresolved={unresolved}" if unresolved else "见 execution_report.json"
+        return G.fail("execution_verdict", f"verdict={verdict!r}，{detail}")
+    failed_tasks = [t for t in report.get("tasks", []) if t.get("acceptance_check") != "pass"]
+    if failed_tasks:
+        ids = [t.get("id") for t in failed_tasks]
+        return G.fail("execution_tasks", f"以下任务未通过验收: {ids}")
+    if report.get("consistency_gate") != "pass":
+        return G.fail("consistency_gate", "consistency-checker 门禁未通过")
+    return G.ok("execution_verdict", "所有修改任务验收通过，consistency-checker 门禁放行")
+
+
+def _check_figures(project):
+    """论文插图：figures/ 下至少 6 张 png/pdf。"""
+    d = G.project_dir(project) / "paper" / "figures"
+    if not d.exists():
+        return G.fail("插图数", "paper/figures 目录不存在")
+    imgs = [f for f in d.iterdir()
+            if f.suffix.lower() in (".png", ".pdf", ".jpg", ".eps")]
+    if len(imgs) < 6:
+        return G.fail("插图数", f"{len(imgs)} < 6（env: paper.min_figures）")
+    return G.ok("插图数", f"{len(imgs)} >= 6")
+
+
+def _check_pdf(project):
+    """最终 PDF：存在且不小于 100KB（env: paper.pdf_min_bytes）。"""
+    pdf = G.project_dir(project) / "paper" / "main.pdf"
+    if not pdf.exists():
+        return G.fail("PDF 产物", "无 paper/main.pdf", hard=False)
+    size = pdf.stat().st_size
+    if size < 102400:
+        return G.fail("PDF 大小", f"{size} 字节 < 100KB", hard=False)
+    return G.ok("PDF 产物", f"{size // 1024} KB")
+
+
+def _check_latex_compiles(project):
+    """国赛验收（6verity Step7）：LaTeX 真实编译。
+
+    只检查 main.pdf 存在是不够的——必须真实跑 xelatex 确认能编译。
+    在 paper/ 目录内编译（跑两遍解决交叉引用），随后验证 PDF 非空。
+    """
+    import shutil
+    import subprocess
+    paper = G.project_dir(project) / "paper"
+    main = paper / "main.tex"
+    if not main.exists():
+        return G.fail("LaTeX 编译", "无 paper/main.tex", hard=False)
+    xelatex = shutil.which("xelatex") or shutil.which("pdflatex")
+    if not xelatex:
+        return G.fail("LaTeX 编译", "环境无 xelatex/pdflatex，跳过真实编译", hard=False)
+    try:
+        for _ in range(2):
+            r = subprocess.run(
+                [xelatex, "-interaction=nonstopmode", "-halt-on-error", "main.tex"],
+                cwd=str(paper), capture_output=True, text=True, timeout=300)
+            if r.returncode != 0:
+                tail = (r.stdout or "") + "\n" + (r.stderr or "")
+                errs = [ln for ln in tail.splitlines() if ln.startswith("!")]
+                return G.fail("LaTeX 编译",
+                              f"xelatex 失败: {errs[0][:120] if errs else '未知错误'}")
+    except subprocess.TimeoutExpired:
+        return G.fail("LaTeX 编译", "编译超时(300s)")
+    pdf = paper / "main.pdf"
+    if not pdf.exists() or pdf.stat().st_size < 1024:
+        return G.fail("LaTeX 编译", "编译后 main.pdf 缺失或为空")
+    return G.ok("LaTeX 编译", f"{pdf.stat().st_size // 1024} KB")
+
+
+def _check_code_runs_lite(project):
+    """国赛验收（6verity Step 代码复现）：代码可复现性（轻量）。
+
+    轻量验证：语法编译 code/ 下全部 .py，并确认数值真相源
+    figures/all_results.json 可解析且非空。完整重跑由 test-runner 阶段负责。
+    """
+    import json
+    import subprocess
+    import sys as _sys
+    code_dir = G.project_dir(project) / "code"
+    if not code_dir.exists():
+        return G.fail("代码可复现", "code/ 目录不存在", hard=False)
+    py_files = sorted(code_dir.glob("*.py"))
+    if not py_files:
+        return G.fail("代码可复现", "code/ 下无 .py 文件", hard=False)
+    try:
+        r = subprocess.run(
+            [_sys.executable, "-m", "py_compile"] + [str(f) for f in py_files],
+            capture_output=True, text=True, timeout=120)
+    except subprocess.TimeoutExpired:
+        return G.fail("代码可复现", "语法编译超时")
+    if r.returncode != 0:
+        tail = (r.stderr or r.stdout or "").strip()
+        return G.fail("代码可复现", f"语法编译失败: {tail[:160]}")
+
+    ar = G.project_dir(project) / "figures" / "all_results.json"
+    if not ar.exists():
+        return G.fail("代码可复现", "缺 figures/all_results.json", hard=False)
+    try:
+        json.loads(ar.read_text(encoding="utf-8"))
+    except Exception as e:
+        return G.fail("代码可复现", f"all_results.json 解析失败: {e}")
+    return G.ok("代码可复现", f"{len(py_files)} 个 .py 语法通过，all_results.json 可解析")
+
+
+def _check_no_future_refs(project):
+    """未来文献检测：年份晚于赛题年份即判 HARD（引用造假信号）。"""
+    import re
+    bib = G.project_dir(project) / "paper" / "references.bib"
+    text = G.read(bib)
+    if text is None:
+        return G.fail("未来文献", "无法读取 references.bib", hard=False)
+    base_year = _infer_year(G.project_dir(project))
+    years = [int(y) for y in re.findall(r"year\s*=\s*\{?(\d{4})\}?", text)]
+    future = [y for y in years if y > base_year]
+    if future:
+        return G.fail("未来文献",
+                      f"存在年份晚于赛题年 {base_year} 的文献: {sorted(set(future))}")
+    return G.ok("未来文献", f"无（基准年 {base_year}）")
+
+
+def _infer_year(project_path):
+    import re
+    m = re.search(r"((?:19|20)\d{2})", Path(project_path).name)
+    return int(m.group(1)) if m else 2026
+
+
+# lite 模式下放宽的检查：弱模型的产出在这些问题上不阻塞交付，
+# 但仍会提示，避免"弱模型跑不完全流程"。
+LITE_SOFTEN = {"公式数(W-env)", "插图数", "PDF 产物", "运行时护栏",
+                "Schema core/schemas/question_spec.schema.json",
+                "LaTeX 编译", "代码可复现"}
+
+
+def _profile():
+    """读取能力分层（standard / lite）。"""
+    try:
+        import sys as _s
+        _s.path.insert(0, str(Path(__file__).resolve().parents[1]))
+        from env.loader import get
+        return str(get("runtime.profile", default="standard") or "standard").lower()
+    except Exception:
+        return "standard"
+
+
+def _check_inputs_readonly(project):
+    """P2-12：原始数据只读。
+
+    赛题与原始数据被意外改写后，所有基于它的分析都失去意义，
+    而且很难被发现。这里比对 inputs/ 下文件的哈希与基线。
+    """
+    import json as _json
+    d = G.project_dir(project) / "inputs"
+    if not d.exists():
+        return G.fail("原始数据存在性", "inputs/ 目录不存在", hard=False)
+    base_file = G.project_dir(project) / "work" / "inputs_baseline.json"
+    current = {f.name: G.sha256(f.read_bytes()) for f in sorted(d.iterdir()) if f.is_file()}
+    if not current:
+        return G.fail("原始数据", "inputs/ 为空", hard=False)
+
+    if not base_file.exists():
+        base_file.parent.mkdir(parents=True, exist_ok=True)
+        base_file.write_text(_json.dumps(current, ensure_ascii=False, indent=2) + "\n",
+                             encoding="utf-8")
+        return G.ok("原始数据基线", f"已建立基线（{len(current)} 个文件），后续将检测篡改")
+
+    try:
+        baseline = _json.loads(base_file.read_text(encoding="utf-8"))
+    except Exception:
+        return G.fail("原始数据基线", "基线文件损坏", hard=False)
+
+    changed = [k for k, v in current.items() if k in baseline and baseline[k] != v]
+    added = [k for k in current if k not in baseline]
+    if changed:
+        return G.fail("原始数据只读", f"文件已被修改: {', '.join(changed[:5])}")
+    if added:
+        return G.fail("原始数据只读", f"新增文件（需重新建立基线）: {', '.join(added[:5])}",
+                      hard=False)
+    return G.ok("原始数据只读", f"{len(current)} 个文件与基线一致")
+
+
+
+def run_gate(project, hand, agent, state=None, profile=None):
+    key = (hand, agent)
+    if key not in GATES:
+        print(f"  [SKIP] {hand}/{agent} - 未定义门禁")
+        return []
+    # 未执行到的步骤不判失败
+    if state is not None:
+        done = {(c.get("hand"), c.get("agent")) for c in state.get("completed", [])}
+        if key not in done:
+            exists = any(
+                G.project_dir(project).exists()
+                for _ in [0]
+            ) and _likely_done(project, hand, agent)
+            if not exists:
+                print(f"  [SKIP] {hand}/{agent} - 尚未执行")
+                return []
+    prof = profile or _profile()
+    results = []
+    for fn in GATES[key]:
+        try:
+            r = fn(project)
+        except Exception as e:
+            r = G.fail(f"{hand}/{agent} 断言异常", str(e))
+        # lite 模式：把软性检查从 HARD 降级为不阻塞，避免弱模型卡死
+        if prof == "lite" and (not r.ok) and r.hard and r.name in LITE_SOFTEN:
+            r = G.fail(r.name, r.detail + "  [lite 模式：不阻塞]", hard=False)
+        results.append(r)
+    return results
+
+
+def _likely_done(project, hand, agent):
+    """粗略判断该步是否已产出（用于历史项目没有 state.json 的情况）。"""
+    base = G.project_dir(project)
+    probe = {
+        ("modeler", "problem-parser"): "work/question_spec.json",
+        ("modeler", "type-classifier"): "work/type_classification.json",
+        ("modeler", "literature-searcher"): "work/literature_evidence.json",
+        ("modeler", "method-matcher"): "work/method_candidates.json",
+        ("modeler", "model-builder"): "work/model_draft.md",
+        ("modeler", "dag-builder"): "work/model_dag.json",
+        ("modeler", "assumption-validator"): "work/assumption_validation.json",
+        ("modeler", "spec-auditor"): "output/MODEL_SPEC.md",
+        ("programmer", "template-selector"): "work/template_plan.json",
+        ("programmer", "code-implementer"): "code/main.py",
+        ("programmer", "test-runner"): "work/test_report.json",
+        ("programmer", "result-verifier"): "work/result_validation.json",
+        ("programmer", "guardrails-checker"): "work/guardrails_report.json",
+        ("programmer", "hash-auditor"): "output/CODE_DELIVERABLES.md",
+        ("writer", "structure-planner"): "work/paper_structure.json",
+        ("writer", "section-writer"): "paper/main.tex",
+        ("writer", "figure-generator"): "paper/figures",
+        ("writer", "reference-curator"): "paper/references.bib",
+        ("writer", "consistency-checker"): "work/consistency_report.json",
+        ("writer", "guardrails-checker"): "work/guardrails_report.json",
+        ("writer", "final-validator"): "output/PAPER_SPEC.md",
+        ("reviewer", "scorer-academic"): "work/score_card_academic.json",
+        ("reviewer", "scorer-engineering"): "work/score_card_engineering.json",
+        ("reviewer", "scorer-judge"): "work/score_card_judge.json",
+        ("reviewer", "scorer-reader"): "work/score_card_reader.json",
+        ("reviewer", "scorer-adversarial"): "work/score_card_adversarial.json",
+        ("reviewer", "weakness-hunter"): "work/weakness_report.json",
+        ("reviewer", "revision-planner"): "work/revision_plan.json",
+        ("reviewer", "revision-executor"): "work/execution_report.json",
+    }.get((hand, agent))
+    return bool(probe) and (base / probe).exists()
+
+
+def main():
+    ap = argparse.ArgumentParser(description="门禁判定（跨 runtime 执行协议）")
+    ap.add_argument("project", help="项目目录名或路径")
+    ap.add_argument("hand", help="modeler / programmer / writer / all")
+    ap.add_argument("agent", nargs="?", help="agent 名；hand=all 时省略")
+    args = ap.parse_args()
+
+    project = args.project
+    base = G.project_dir(project)
+    if not base.exists():
+        print(f"[gate] 项目不存在: {base}", file=sys.stderr)
+        return 2
+
+    state = S.load(project)
+
+    print("=" * 60)
+    print(f"门禁判定: {base.name}")
+    print("=" * 60)
+
+    results = []
+    if args.hand == "all":
+        for hand, agent, _ in S.PIPELINE:
+            results += run_gate(project, hand, agent, state)
+    elif args.agent:
+        results += run_gate(project, args.hand, args.agent, state)
+    else:
+        for hand, agent, _ in S.PIPELINE:
+            if hand == args.hand:
+                results += run_gate(project, hand, agent, state)
+
+    passed = sum(1 for r in results if r.ok)
+    hard_fail = [r for r in results if not r.ok and r.hard]
+    soft_fail = [r for r in results if not r.ok and not r.hard]
+
+    print("-" * 60)
+    for r in results:
+        print("  " + repr(r))
+
+    print("-" * 60)
+    print(f"通过 {passed} / 硬失败 {len(hard_fail)} / 软失败 {len(soft_fail)}")
+
+    if hard_fail:
+        print("\n阻塞项（须按 SKILL.md 的 ## Iteration 修正后重跑）:")
+        for r in hard_fail:
+            print(f"  - {r.name}: {r.detail}")
+        print("=" * 60)
+        return 1
+
+    print("=" * 60)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

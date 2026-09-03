@@ -1,0 +1,229 @@
+# OpenAI Agents SDK 兼容配置
+# 用于在 OpenAI Agents SDK 中加载 MathModelSkills 技能
+
+name: "mathmodeling-skills"
+version: "2.0.0"
+description: "数学建模竞赛全流程 AI 技能包"
+
+# 核心指令文件
+instructions_file: "core/AGENTS.md"
+
+# 状态管理工具
+tools:
+  - name: "state_init"
+    description: "初始化/恢复项目状态"
+    function: "python core/tools/state.py {project} init"
+    
+  - name: "state_status"
+    description: "查看当前执行进度"
+    function: "python core/tools/state.py {project} status"
+    
+  - name: "state_advance"
+    description: "推进到下一步"
+    function: "python core/tools/state.py {project} advance {hand} {agent} --output {output}"
+    
+  - name: "gate_check"
+    description: "运行单步/全链路门禁"
+    function: "python core/tools/gate.py {project} {hand} {agent}"
+    
+  - name: "validate_project"
+    description: "项目级完整性校验"
+    function: "python core/tools/validate_project.py {project}"
+
+# 环境配置
+env:
+  config_file: "core/env/config.yaml"
+  loader: "core/env/loader.py"
+
+# 友好模式配置
+friendly_mode:
+  enabled: true
+  description: "关键决策以编号选项呈现，用户输入数字即可推进"
+  fallback_prompt: "让我决定 (推荐 X)"
+
+# 执行流水线定义
+pipeline:
+  - hand: "modeler"
+    agents:
+      - name: "problem-parser"
+        stage: 1
+        utg_layer: "L1"
+        description: "赛题结构化解析，消除歧义"
+        artifact: "work/question_spec.json"
+        
+      - name: "type-classifier"
+        stage: 2
+        utg_layer: "L1"
+        description: "题型识别 A/B/C/D/E + 推荐方法方向"
+        artifact: "work/type_classification.json"
+        
+      - name: "literature-searcher"
+        stage: 1.5
+        utg_layer: "L1.5"
+        description: "文献检索与证据提取，支撑模型选择"
+        artifact: "work/literature_evidence.json"
+        
+      - name: "method-matcher"
+        stage: 3
+        utg_layer: "L2"
+        description: "方法匹配，从知识库选 ≥2 候选模型"
+        artifact: "work/method_candidates.json"
+        
+      - name: "model-builder"
+        stage: 4
+        utg_layer: "L3"
+        description: "建立数学模型（公式/符号/边界条件）"
+        artifact: "work/model_draft.md"
+        
+      - name: "dag-builder"
+        stage: 4.5
+        utg_layer: "L3.5"
+        description: "构建子模型依赖 DAG，指导并行与级联"
+        artifact: "work/model_dag.json"
+        
+      - name: "assumption-validator"
+        stage: 5
+        utg_layer: "L4"
+        description: "假设四维评分验证"
+        artifact: "work/assumption_validation.json"
+        
+      - name: "spec-auditor"
+        stage: 6
+        utg_layer: "L5+L6"
+        description: "MODEL_SPEC 护栏检查 + 哈希审计"
+        artifact: "output/MODEL_SPEC.md"
+        
+  - hand: "programmer"
+    agents:
+      - name: "template-selector"
+        stage: 1
+        utg_layer: "L1"
+        description: "根据 MODEL_SPEC 选代码模板"
+        artifact: "work/template_plan.json"
+        
+      - name: "code-implementer"
+        stage: 2
+        utg_layer: "L2"
+        description: "实现代码，类型制导"
+        artifact: "code/main.py"
+        
+      - name: "test-runner"
+        stage: 3
+        utg_layer: "L3"
+        description: "单元测试 + 集成测试"
+        artifact: "work/test_report.json"
+        
+      - name: "result-verifier"
+        stage: 4
+        utg_layer: "L4"
+        description: "数值验证 + 灵敏度分析"
+        artifact: "work/result_validation.json"
+        
+      - name: "guardrails-checker"
+        stage: 5
+        utg_layer: "L5"
+        description: "运行时护栏"
+        artifact: "work/guardrails_report.json"
+        
+      - name: "hash-auditor"
+        stage: 6
+        utg_layer: "L6"
+        description: "哈希链 + 错误归因 + 规则迭代"
+        artifact: "output/CODE_DELIVERABLES.md"
+        
+  - hand: "writer"
+    agents:
+      - name: "structure-planner"
+        stage: 1
+        utg_layer: "L1"
+        description: "论文结构规划 + 字数分配"
+        artifact: "work/paper_structure.json"
+        
+      - name: "section-writer"
+        stage: 2
+        utg_layer: "L2"
+        description: "撰写各章节 LaTeX 内容"
+        artifact: "paper/main.tex"
+        
+      - name: "figure-generator"
+        stage: 3
+        utg_layer: "L2"
+        description: "图表生成与规范命名"
+        artifact: "paper/figures/"
+        
+      - name: "reference-curator"
+        stage: 4
+        utg_layer: "L3"
+        description: "参考文献整理 + 引用完整性"
+        artifact: "paper/references.bib"
+        
+      - name: "consistency-checker"
+        stage: 5
+        utg_layer: "L4"
+        description: "论文-代码数值一致性"
+        artifact: "work/consistency_report.json"
+        
+      - name: "guardrails-checker"
+        stage: 6
+        utg_layer: "L5"
+        description: "运行时护栏"
+        artifact: "paper/main.tex"
+        
+      - name: "final-validator"
+        stage: 7
+        utg_layer: "L6"
+        description: "最终校验 + 哈希审计 + 渲染 PDF"
+        artifact: "output/PAPER_SPEC.md"
+        
+  - hand: "reviewer"
+    agents:
+      - name: "judge-scorer"
+        stage: 1
+        utg_layer: "L4"
+        description: "按评分维度打分"
+        artifact: "work/score_card.json"
+        
+      - name: "weakness-hunter"
+        stage: 2
+        utg_layer: "L4"
+        description: "扫描反模式库挑缺陷"
+        artifact: "work/weakness_report.json"
+        
+      - name: "revision-planner"
+        stage: 3
+        utg_layer: "L5"
+        description: "生成修改清单"
+        artifact: "work/revision_plan.json"
+        
+      - name: "revision-executor"
+        stage: 4
+        utg_layer: "L6"
+        description: "执行修改并验收"
+        artifact: "work/execution_report.json"
+
+# 契约文件（手间接口）
+contracts:
+  modeler_output: "output/MODEL_SPEC.md"
+  programmer_output: "output/CODE_DELIVERABLES.md"
+  writer_output: "output/PAPER_SPEC.md"
+
+# 知识库引用
+knowledge_base:
+  methodology: "core/knowledge/methodology/"
+  cookbooks: "core/knowledge/cookbooks/"
+  playbooks: "core/knowledge/playbooks/"
+  paper_cases: "core/knowledge/paper-cases/"
+  empirical: "core/knowledge/empirical/"
+  validation: "core/knowledge/validation/"
+  writing: "core/Writer/knowledge/writing/"
+  templates: "core/Writer/knowledge/templates/"
+
+# 验证脚本
+validation_scripts:
+  gate: "core/tools/gate.py"
+  score: "core/tools/score_artifact.py"
+  freeze: "core/tools/freeze_numbers.py"
+  validate: "core/tools/validate.py"
+  doctor: "core/tools/doctor.py"
+  retrospect: "core/tools/retrospect.py"
+  render_ai_usage: "core/tools/render_ai_usage.py"

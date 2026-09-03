@@ -1,0 +1,16 @@
+{
+  "skill_name": "template-selector",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Select a code template for a genetic-algorithm optimization problem where one candidate template path does not exist.",
+      "expected_output": "Success requires selects a matching template from code-templates; rejects nonexistent paths; records template_plan.json.",
+      "assertions": [
+        "selects a matching template from the code-templates knowledge base",
+        "rejects nonexistent template paths instead of falling back silently",
+        "records work/template_plan.json",
+        "rejects templates that lack required solver capabilities"
+      ]
+    }
+  ]
+}

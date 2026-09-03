@@ -1,0 +1,249 @@
+% ==============================================================================
+% Social Science Paper Template  (dual-track: quantitative / qualitative)
+%
+% APA Publication Manual (7th ed.) for quantitative; Braun & Clarke (2006)
+% thematic analysis for qualitative; Lincoln & Guba (1985) trustworthiness.
+% Citation style: APA 7 author-year, approximated by natbib + apalike.bst.
+%
+% >>> PICK ONE TRACK <<<
+%   QUANTITATIVE: keep Method / Results / Discussion sections as-is.
+%   QUALITATIVE:  replace Method -> Methodology, Results -> Findings; expand
+%                 the interview-transcript appendix and reflexivity block.
+%
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- Page geometry ----
+\usepackage[a4paper,top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+
+% ---- Fonts & encoding (APA 7 recommends Times New Roman 11pt or Georgia 11pt) ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+
+% ---- Line numbers + double spacing for review ----
+\usepackage{lineno}
+\usepackage{setspace}
+\doublespacing                    % APA 7 manuscript: double-spaced
+\linenumbers
+
+% ---- Math, figures, tables ----
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{longtable}            % interview transcript tables
+\usepackage{multirow}
+
+% ---- Citations: APA-style author-year (approximated) ----
+\usepackage[round,authoryear]{natbib}
+\bibliographystyle{apalike}       % swap with plainnat / asa / chicago for sub-disciplines
+
+% ---- Hyperref last ----
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{A Concise and Informative Title of the Social Science Submission}
+\author{First Author\textsuperscript{1,*}, Second Author\textsuperscript{2}, Senior Author\textsuperscript{1}\\
+\textsuperscript{1}Department of X, University of Y, City, Country\\
+\textsuperscript{2}Department of Z, Institute of W, City, Country\\
+\textsuperscript{*}e-mail: first.author@univ.edu}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+% Abstract  (150-250 words; APA 7)
+% ==============================================================================
+\begin{abstract}
+% TODO: 150-250 words. State the research question, method (paradigm +
+% sample size + analysis), key findings, and implications. For quantitative
+% papers list effect sizes and 95\% CIs.
+\end{abstract}
+
+\noindent\textbf{Keywords:} % TODO: 3-5 keywords separated by commas.
+keyword one, keyword two, keyword three
+
+% ==============================================================================
+% 1. Introduction  (no "Introduction" heading per APA 7; CARS model)
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: review prior literature; identify the gap; state the research
+% question or hypotheses. For qualitative papers also include a brief
+% research-paradigm statement (\texttt{\% TODO: research-paradigm}).
+
+% ==============================================================================
+% 2. Literature Review  (sometimes folded into Introduction; kept separate here)
+% ==============================================================================
+\section{Literature Review}
+\label{sec:litreview}
+% TODO: synthesise prior work; build the conceptual framework; for
+% quantitative papers derive the testable hypotheses here (\texttt{\% TODO:
+% hypothesis}).
+
+% ==============================================================================
+% 3. Methodology / Method
+% ==============================================================================
+% >>> QUANTITATIVE TRACK: section name = Method
+% >>> QUALITATIVE TRACK:  section name = Methodology
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Research paradigm} % QUALITATIVE only
+% TODO research-paradigm: state constructivist / interpretivist / critical
+% stance and the methodological congruence rationale.
+
+\subsection{Participants}
+% TODO participants: sampling strategy (purposive / snowball / stratified
+% random), inclusion criteria, sample size justification (saturation for
+% qualitative; power analysis for quantitative), demographics table.
+
+\subsection{Measures} % QUANTITATIVE only
+% TODO measures: list each scale with its source, number of items, scoring,
+% and reported reliability/validity evidence; report Cronbach's $\alpha$ in
+% the present sample.
+
+\subsection{Data collection}
+% TODO procedure: interview protocol / focus-group guide / survey
+% administration details; setting; language; duration; recording method.
+
+\subsection{Data analysis}
+% TODO analysis-quant: descriptive statistics, assumption checks, primary
+% model (ANOVA / regression / SEM), software + version.
+% TODO analysis-qual: Braun \& Clarke (2006) six-phase thematic analysis OR
+% grounded-theory open/axial/selective coding; coder agreement; software
+% (NVivo / ATLAS.ti / MAXQDA).
+
+\subsection{Trustworthiness / Validity}
+% QUALITATIVE: TODO: address Lincoln \& Guba (1985) credibility,
+% transferability, dependability, confirmability.
+% QUANTITATIVE: TODO: report construct validity (CFA), internal consistency,
+% test-retest reliability.
+
+\subsection{Ethical considerations}
+% TODO irb: IRB approval number, informed consent procedure, confidentiality
+% safeguards, protection of vulnerable populations, and any compensation.
+
+% ==============================================================================
+% 4. Findings / Results
+% ==============================================================================
+% >>> QUANTITATIVE TRACK: section name = Results
+% >>> QUALITATIVE TRACK:  section name = Findings
+\section{Findings}
+\label{sec:findings}
+
+% --- QUALITATIVE: thematic tree presentation ---
+\subsection{Theme 1: a short, descriptive theme title}
+% TODO themes: open with one paragraph summarising the theme, then 2-3
+% indented participant quotations with identifiers, e.g.
+% \begin{quote}``...'' (P7, female, age 34)\end{quote}
+% followed by interpretive commentary linking back to the literature.
+
+\subsection{Theme 2: another descriptive theme title}
+% TODO: as above.
+
+% --- QUANTITATIVE: descriptive + inferential ---
+% \subsection{Descriptive statistics}
+% \subsection{Primary analysis}
+% \subsection{Supplementary analyses}
+
+\begin{table}[t]
+\caption{Participant demographics. Caption ABOVE the table (APA convention).}
+\label{tab:demographics}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Characteristic & Category & $n$ (\%) \\
+\midrule
+Gender         & Female   & --- (---) \\
+               & Male     & --- (---) \\
+Age (years)    & $M \pm SD$ & --- $\pm$ --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ==============================================================================
+% 5. Discussion
+% ==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+% TODO: (i) restate the key findings without statistics, (ii) interpret in
+% light of prior literature, (iii) theoretical contribution, (iv) practical
+% / policy implications, (v) limitations, (vi) future research.
+
+\subsection{Reflexivity} % QUALITATIVE only
+% TODO reflexivity: discuss the researcher's positionality, prior
+% assumptions, and how the researcher-participant relationship may have
+% shaped the findings.
+
+\subsection{Limitations}
+% TODO: sampling bias, self-report bias, single-setting generalisability,
+% cross-sectional design, etc.
+
+% ==============================================================================
+% 6. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: one paragraph on the contribution and a forward-looking statement.
+
+% ==============================================================================
+% Declarations
+% ==============================================================================
+\section*{Declarations}
+
+\noindent\textbf{Funding:} % TODO: grant numbers and funding bodies.
+
+\noindent\textbf{Conflicts of interest:} % TODO: declare or state none.
+
+\noindent\textbf{Ethics approval:} % TODO irb: IRB name + approval number.
+
+\noindent\textbf{Informed consent:} % TODO: state written / verbal consent procedure.
+
+\noindent\textbf{Data availability:} % TODO: for quantitative, deposit data
+% + codebook; for qualitative, state how transcripts are anonymised and
+% whether they can be shared (often restricted to protect participants).
+
+% ==============================================================================
+% Acknowledgements
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funders, translators, transcribers, community partners, participants.
+
+% ==============================================================================
+% References  —  APA 7 author-year style
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} Author, F., \& Author, S. (20YY). Title of the paper.
+%   \emph{Journal Name, XX}(Y), 1--10.
+% \end{thebibliography}
+
+% ==============================================================================
+% Appendices  —  interview guide, codebook, full transcripts (qualitative)
+% ==============================================================================
+\appendix
+
+\section{Interview Guide}
+\label{app:interview-guide}
+% TODO: list the semi-structured interview questions and probes.
+
+\section{Codebook}
+\label{app:codebook}
+% TODO qualitative: list themes, sub-themes, definitions, and exemplar quotes.
+
+\section{Interview Transcripts}
+\label{app:transcripts}
+% TODO transcripts: provide de-identified transcripts formatted as longtable
+% rows (timestamp | participant ID | utterance), or state the repository
+% where the transcripts are deposited (with access criteria).
+
+\end{document}

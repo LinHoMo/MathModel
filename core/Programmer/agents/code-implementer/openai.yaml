@@ -1,0 +1,12 @@
+interface:
+  display_name: "Code Implementer"
+  short_description: "实现代码，类型制导"
+  default_prompt: "Use $code-implementer to implement code with type safety."
+runtime:
+  hand: programmer
+  utg_layer: L2
+  stage: 2
+  inputs:
+    - work/template_plan.json
+  outputs:
+    - code/*.py

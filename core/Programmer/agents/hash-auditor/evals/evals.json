@@ -1,0 +1,16 @@
+{
+  "skill_name": "hash-auditor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Audit the hash chain after one code artifact was tampered with post-hoc, leaving the chain broken.",
+      "expected_output": "Success requires hashes all artifacts; verifies chain; attributes failures to agent and rule; emits audit_log.json.",
+      "assertions": [
+        "hashes all code and result artifacts",
+        "verifies chain integrity and detects the tampered artifact",
+        "attributes failures to a specific agent and rule",
+        "emits work/audit_log.json with an explicit final_passed flag"
+      ]
+    }
+  ]
+}

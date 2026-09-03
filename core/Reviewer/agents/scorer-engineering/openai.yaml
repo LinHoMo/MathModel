@@ -1,0 +1,16 @@
+interface:
+  display_name: "Engineering Scorer"
+  short_description: "工程落地评分员：可复现性、计算性能、鲁棒性、工程规范，权重 20%"
+  default_prompt: "Use $scorer-engineering to score engineering quality and emit score_card_engineering.json."
+runtime:
+  hand: reviewer
+  utg_layer: L4
+  stage: 1
+  inputs:
+    - paper/main.tex
+    - figures/all_results.json
+    - code/main.py
+    - output/CODE_DELIVERABLES.md
+    - work/test_report.json
+  outputs:
+    - work/score_card_engineering.json

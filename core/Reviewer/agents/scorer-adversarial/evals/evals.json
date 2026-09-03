@@ -1,0 +1,16 @@
+{
+  "skill_name": "scorer-adversarial",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Adversarially probe a solution for holes, boundary failures, fabrication risk, and logic breaks.",
+      "expected_output": "Success returns score_card_adversarial.json with concrete defects and a weighted total.",
+      "assertions": [
+        "searches for counterexamples and boundary-condition failures",
+        "checks that numbers trace back to all_results.json to catch fabrication",
+        "flags internal logical self-contradictions across sections",
+        "records weight=0.15 with concrete evidence for each defect"
+      ]
+    }
+  ]
+}

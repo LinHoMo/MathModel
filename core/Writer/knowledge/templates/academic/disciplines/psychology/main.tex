@@ -1,0 +1,246 @@
+% ==============================================================================
+% Psychology Paper Template  (strict APA 7th edition structure)
+%
+% APA Publication Manual (7th ed.); APA 7 statistical reporting (2019):
+% effect sizes + 95% CIs + exact p-values; pre-registration via OSF /
+% AsPredicted; open-science data / materials / code sharing.
+%
+% Citation style: APA 7 author-year, approximated by natbib + apalike.bst.
+% For strict APA 7, replace with biblatex [style=apa] + biber.
+%
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- Page geometry ----
+\usepackage[a4paper,top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+
+% ---- Fonts & encoding (APA 7: Times New Roman 11pt or Georgia 11pt) ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+
+% ---- Line numbers + double spacing for review (APA 7 manuscript) ----
+\usepackage{lineno}
+\usepackage{setspace}
+\doublespacing                    % APA 7 manuscript: double-spaced throughout
+\linenumbers                      % APA 7 submission requires line numbers
+
+% ---- Math, figures, tables ----
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{multirow}
+
+% ---- APA-style section heading formatting (APA 7 Level 1: bold, centered) ----
+% The article class defaults are close enough; for strict APA 7 typography
+% use the `apa7` document class from CTAN instead.
+
+% ---- Citations: APA-style author-year (approximated) ----
+\usepackage[round,authoryear]{natbib}
+\bibliographystyle{apalike}       % swap with plainnat or biblatex-apa for strict APA 7
+
+% ---- Hyperref last ----
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{A Concise and Informative Title of the Psychology Submission}
+\author{First Author\textsuperscript{1,*}, Second Author\textsuperscript{2}, Senior Author\textsuperscript{1}\\
+\textsuperscript{1}Department of Psychology, University of Y, City, Country\\
+\textsuperscript{2}Department of Psychological Sciences, Institute of W, City, Country\\
+\textsuperscript{*}e-mail: first.author@univ.edu}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+% Abstract  (150-250 words; APA 7)
+% ==============================================================================
+\begin{abstract}
+% TODO: 150-250 words. Sentence 1-2: purpose and research question. Sentence
+% 3-4: participants (n, demographics) and design. Sentence 5-6: key findings
+% with effect sizes (Cohen's $d$ or $\eta^2$) and 95\% CIs. Sentence 7:
+% theoretical or practical implications.
+\end{abstract}
+
+\noindent\textbf{Keywords:} % TODO: 3-5 keywords separated by commas.
+keyword one, keyword two, keyword three
+
+% ==============================================================================
+% 1. Introduction  (no "Introduction" heading per APA 7; CARS model)
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO: review prior literature; identify the gap; state the research
+% question and the testable hypotheses H1, H2, ... (\texttt{\% TODO:
+% hypothesis}). APA 7 does not print an "Introduction" heading.
+
+% ==============================================================================
+% 2. Method  (APA 7: subsections Participants / Design / Materials /
+% Procedure / Data Analysis)
+% ==============================================================================
+\section{Method}
+\label{sec:method}
+
+\subsection{Participants}
+% TODO participants: report $N$, recruitment channel (e.g. university subject
+% pool, Prolific, MTurk), inclusion / exclusion criteria, demographic
+% breakdown (gender, age $M \pm SD$, ethnicity), and an a-priori power
+% analysis justifying the sample size. State IRB approval and informed
+% consent procedure here (\texttt{\% TODO: irb}). Disclose any data
+% exclusion (e.g. attention-check failures) with the count.
+
+\subsection{Research Design}
+% TODO design: state the design (e.g. 2 (Condition: experimental vs.
+% control) $\times$ 2 (Time: pre vs. post) mixed-factorial design, with
+% Condition as the between-subjects factor and Time as the
+% within-subjects factor). List the independent variables and their levels,
+% the dependent variable(s) with their scale of measurement, and any
+% control variables.
+
+\subsection{Materials}
+% TODO materials: list each scale / stimulus with its source citation,
+% number of items, scoring, and reliability evidence (Cronbach's $\alpha$
+% from the original study AND from the present sample). For experimental
+% stimuli, describe selection rationale and counterbalancing. For equipment
+% (e.g. eye-tracker, EEG), state the model and manufacturer.
+
+\subsection{Procedure}
+% TODO procedure: step-by-step description -- informed consent ->
+% instructions -> practice trials -> experimental task -> debriefing.
+% State the randomisation method (e.g. complete randomisation via
+% Qualtrics), the number of trials, the trial timing, and the
+% compensation.
+
+\subsection{Data Analysis}
+% TODO analysis: specify the primary analysis model (e.g. mixed ANOVA,
+% multilevel model, Bayesian regression), the effect-size metric
+% (Cohen's $d$, $\eta_p^2$, $\omega^2$, OR), the 95\% CI method, the
+% handling of missing data, the alpha level ($\alpha = .05$), and the
+% software + version (e.g. R 4.3.1 with lme4 1.1-34).
+
+% ==============================================================================
+% 3. Results
+% ==============================================================================
+\section{Results}
+\label{sec:results}
+% TODO: report each hypothesis test in order. APA 7 statistical reporting:
+%   - report exact $p$ values to three decimals ($p = .034$), use $p < .001$
+%     for very small values; do NOT use $p < .05$.
+%   - report effect sizes with 95\% CIs: $d = 0.45$, 95\% CI [0.21, 0.69].
+%   - report descriptive statistics: $M = 5.32$, $SD = 1.24$, $n = 120$.
+%   - reference each table and figure inline.
+
+\subsection{Preliminary analyses}
+% TODO: data screening, assumption checks (normality, homogeneity of
+% variance, sphericity), and any data exclusions.
+
+\subsection{Primary analysis}
+% TODO: test of the primary hypothesis; reference Table 1 and Figure 1.
+
+\begin{table}[t]
+\caption{Descriptive statistics and primary hypothesis tests. Caption ABOVE the table (APA convention).}
+\label{tab:primary}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Condition & $n$ & $M$ & $SD$ & Statistic \\
+\midrule
+Experimental & --- & --- & --- & --- \\
+Control      & --- & --- & --- & --- \\
+\multicolumn{5}{l}{Cohen's $d$ = ---, 95\% CI [---, ---], $p$ = ---} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Secondary analyses}
+% TODO: exploratory or pre-specified secondary analyses.
+
+\subsection{Sensitivity analyses}
+% TODO: re-run the primary model under alternative specifications (e.g.
+% intention-to-treat vs per-protocol; alternative missing-data handling;
+% Bayesian re-analysis with informed prior).
+
+% ==============================================================================
+% 4. Discussion
+% ==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+% TODO: (i) restate the key findings without statistics, (ii) interpret in
+% light of prior literature and theory, (iii) theoretical contribution,
+% (iv) practical implications, (v) limitations
+% (\texttt{\% TODO: limitations}), (vi) future research.
+
+\subsection{Limitations and Future Research}
+% TODO: sample restrictions, self-report bias, single-method, external
+% validity, demand characteristics, etc.
+
+% ==============================================================================
+% 5. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: one paragraph stating the contribution and a forward-looking statement.
+
+% ==============================================================================
+% Declarations  (APA 7 + Open Science)
+% ==============================================================================
+\section*{Declarations}
+
+\noindent\textbf{Funding:} % TODO: grant numbers and funding bodies.
+
+\noindent\textbf{Conflicts of interest:} % TODO: declare or state none.
+
+\noindent\textbf{Ethics approval:} % TODO irb: IRB name + approval number.
+
+\noindent\textbf{Informed consent:} % TODO: state written / verbal consent
+% procedure; for minors, state parental consent + child assent.
+
+\noindent\textbf{Pre-registration:} % TODO preregistration: state the
+% registry (OSF / AsPredicted) and provide the URL and date.
+
+\noindent\textbf{Open science:} % TODO open-science: provide the OSF / GitHub
+% / Zenodo link to data, materials, and analysis code. State any
+% restrictions (e.g. clinical data cannot be shared publicly).
+
+% ==============================================================================
+% Acknowledgements
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funders, research assistants, participants.
+
+% ==============================================================================
+% References  —  APA 7 author-year style
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} Author, F., \& Author, S. (20YY). Title of the paper.
+%   \emph{Journal of Experimental Psychology: General, XX}(Y), 1--10.
+%   https://doi.org/XX.XXXX/xxxxxxxx
+% \end{thebibliography}
+
+% ==============================================================================
+% Appendices  —  full scales, stimuli, supplementary analyses
+% ==============================================================================
+\appendix
+
+\section{Full Scale Items}
+\label{app:scales}
+% TODO: list the full wording of each scale item with the response anchors.
+
+\section{Stimuli}
+\label{app:stimuli}
+% TODO: list the full set of experimental stimuli with counterbalancing.
+
+\section{Supplementary Analyses}
+\label{app:supp}
+% TODO: Bayesian re-analyses, equivalence tests, per-participant data plots.
+
+\end{document}

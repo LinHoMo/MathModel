@@ -1,0 +1,16 @@
+{
+  "skill_name": "code-implementer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Implement model code with stochastic components from the selected template, where env thresholds must not be hardcoded.",
+      "expected_output": "Success requires seed fixed to 42; docstrings present; no syntax or type errors; thresholds read from env.",
+      "assertions": [
+        "includes np.random.seed(42) or equivalent seeding",
+        "has module and function docstrings",
+        "passes static syntax and type checks",
+        "does not hardcode env thresholds and reads them via env.loader"
+      ]
+    }
+  ]
+}

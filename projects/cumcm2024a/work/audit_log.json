@@ -1,0 +1,46 @@
+{
+  "agent": "final-validator",
+  "timestamp": "2026-09-01T11:42:59.026311+00:00",
+  "checks": [
+    {
+      "name": "main.tex存在",
+      "passed": true
+    },
+    {
+      "name": "references.bib存在",
+      "passed": true
+    },
+    {
+      "name": "插图数>=6",
+      "passed": true
+    },
+    {
+      "name": "all_results.json存在",
+      "passed": true
+    },
+    {
+      "name": "公式数>=8",
+      "passed": true
+    },
+    {
+      "name": "无列表环境",
+      "passed": true
+    },
+    {
+      "name": "参考文献>=8",
+      "passed": true
+    }
+  ],
+  "all_pass": true,
+  "hashes": {
+    "paper/figures/fig_1_1.png": "6b7fa434f92a8b80",
+    "paper/figures/fig_2_1.png": "6b7fa434f92a8b80",
+    "paper/figures/fig_3_1.png": "6b7fa434f92a8b80",
+    "paper/figures/fig_4_1.png": "6b7fa434f92a8b80",
+    "paper/figures/fig_5_1.png": "6b7fa434f92a8b80",
+    "paper/figures/fig_sens_1.png": "6b7fa434f92a8b80",
+    "paper/figures/fig_{}.png": "6b7fa434f92a8b80",
+    "paper/main.tex": "0d6c5bdbbd993021",
+    "paper/references.bib": "7874931fdef15239"
+  }
+}

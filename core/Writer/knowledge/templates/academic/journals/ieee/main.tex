@@ -1,0 +1,169 @@
+% ==============================================================================
+% IEEE Transactions / Conference Paper Template (skeleton)
+% Based on IEEEtran v1.8b  —  CTAN: https://ctan.org/pkg/ieeetran
+% Class IEEEtran is contained in standard TeX Live / MiKTeX, so this file
+% compiles out-of-the-box with:  pdflatex -> bibtex -> pdflatex -> pdflatex
+%
+% Document-class modes (pick one):
+%   journal      IEEE Transactions / Journals (default; 10pt, twocolumn)
+%   conference   IEEE conference proceedings (10pt, twocolumn, looser margins)
+%   lettersize   IEEE Letters
+%   technotes    Technical notes / letters
+% Class options:
+%   10pt/11pt/12pt   letterpaper/a4paper   twoside/oneside
+%   final/draft      compsoc (Computer Society style)   amsart (math hooks)
+%
+% Typography (IEEEtran defaults):
+%   Body font  : Times Roman (10pt journal) via OT1/T1 encoding
+%   Math font  : Computer Modern math symbols (or mathptmx if enabled)
+%   Line spacing: single (1.0); captions 8pt
+% Citation style: numeric [1], [2], [3]-[5]  (package: cite)
+% Bibliography  : \bibliographystyle{IEEEtran}  (IEEEtran.bst)
+% Figures       : single column = \columnwidth (3.5in / 88mm)
+%                 double column = \textwidth  or figure*  (7.16in / 180mm)
+% Caption       : below for figures, above for tables; 8pt font
+% ==============================================================================
+\documentclass[10pt,journal,final]{IEEEtran}
+% For a conference paper instead:
+% \documentclass[conference]{IEEEtran}
+% For Computer Society journals:
+% \documentclass[compsoc]{IEEEtran}
+
+% ---- Core packages ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{cite}                 % IEEE numeric citation sorting/compression
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}            % algorithm floating environment
+\usepackage{algorithmic}          % IEEE-style algorithm pseudo-code
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}             % professional table rules
+\usepackage{url}                  % \url{} inside bib entries
+\usepackage{array}
+% Optional (load hyperref LAST if used):
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=red,citecolor=blue,urlcolor=magenta}
+
+% ---- IEEEtran helper commands (provided by the class) ----
+% \IEEEPARstart{D}{rop}  drop-cap first letter of the introduction
+% \IEEEpubid{...}        publication ID footer
+% \IEEEtriggeratref{N}   trigger a column break in the reference list
+
+% ==============================================================================
+% Title and authors
+% ==============================================================================
+\title{Title of the IEEE Transactions Submission:\\
+A Two-Line Informative Title}
+
+\author{First~Author,~Second~Author,~and~Senior~Author,~\IEEEmembership{Fellow,~IEEE}%
+  \thanks{Manuscript received Month DD, YYYY; revised Month DD, YYYY. (Corresponding author: First Author.)}%
+  \thanks{The authors are with the Department of X, University of Y, City, Country (e-mail: first.author@univ.edu).}}
+
+\begin{document}
+
+\maketitle
+
+% ==============================================================================
+% Abstract & Index Terms  (IEEE style: <= 200 words, single paragraph, no cites)
+% ==============================================================================
+\begin{abstract}
+% TODO: 150-200 words, single paragraph. State the problem (1-2 sentences),
+% the approach (2-3 sentences), the key quantitative results (2-3 sentences),
+% and the significance (1 sentence). No citations, no undefined abbreviations.
+\end{abstract}
+
+\begin{IEEEkeywords}
+% TODO: 3-6 keywords separated by commas (IEEE indexing terms).
+keyword one, keyword two, keyword three.
+\end{IEEEkeywords}
+
+% ==============================================================================
+% I. Introduction
+% ==============================================================================
+\section{Introduction}
+\IEEEPARstart{D}{rop}~the first letter here. % TODO: replace with your real opening word.
+% TODO: motivate the problem; summarise prior limitations; state contributions.
+% Recommended structure: (i) context, (ii) gap, (iii) approach, (iv) bulleted
+% contribution list, (v) paper roadmap. Reference prior work with \cite{ref_example}.
+
+% ==============================================================================
+% II. Related Work
+% ==============================================================================
+\section{Related Work}
+% TODO: cluster prior work by approach; compare on methodology, data, performance;
+% explicitly position your contribution against each cluster in 1-2 sentences.
+
+% ==============================================================================
+% III. Methods / System Model
+% ==============================================================================
+\section{Methods}
+% TODO: problem formulation, notation table, model assumptions, the proposed
+% method with algorithm pseudo-code, and complexity analysis.
+
+\begin{algorithm}[t]
+\caption{Outline of the proposed method}
+\label{alg:method}
+\begin{algorithmic}[1]
+\State \textbf{Input:} dataset $\mathcal{D}$, hyper-parameters $\Theta$
+\State initialise model parameters $\theta$
+\While{not converged}
+    \State update $\theta \leftarrow \theta - \eta \,\nabla \mathcal{L}(\theta;\mathcal{D})$
+\EndWhile
+\State \textbf{return} trained model
+\end{algorithmic}
+\end{algorithm}
+
+% ==============================================================================
+% IV. Experiments
+% ==============================================================================
+\section{Experiments}
+% TODO: experimental setup (datasets, baselines, metrics, hardware),
+% main results table, ablation study, qualitative examples, statistical tests.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=\columnwidth]{figures/result.pdf}
+\fbox{\rule{0pt}{2.5cm}\rule{\columnwidth}{0pt}}
+\caption{Single-column figure. Caption goes BELOW the figure. Use
+\texttt{\textbackslash columnwidth} for single column; for a double-column
+figure use \texttt{figure*} and \texttt{\textbackslash textwidth}.}
+\label{fig:result}
+\end{figure}
+
+\begin{table}[t]
+\caption{Table caption goes ABOVE the table (IEEE convention).}
+\label{tab:results}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Method   & Metric A       & Metric B       \\
+\midrule
+Baseline & 0.812          & 0.754          \\
+Ours     & \textbf{0.891} & \textbf{0.832} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ==============================================================================
+% V. Conclusion
+% ==============================================================================
+\section{Conclusion}
+% TODO: one paragraph recapping the contribution and the headline result,
+% followed by one sentence of future work. No new citations or claims here.
+
+% ==============================================================================
+% References  —  IEEEtran numeric style [1], [2], [3]-[5]
+% Compile with:  pdflatex main  ->  bibtex main  ->  pdflatex main  ->  pdflatex main
+% ==============================================================================
+\bibliographystyle{IEEEtran}
+% Drop your .bib file as references.bib in the same folder:
+\bibliography{references}
+% --- Inline fallback (uncomment if you do not use BibTeX) ---------------------
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} A.~Author and B.~Author, ``Title of the paper,''
+%   \emph{IEEE Trans. Signal Process.}, vol.~XX, no.~Y, pp.~1--10, Mon. 20YY.
+% \end{thebibliography}
+
+\end{document}

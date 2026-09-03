@@ -1,0 +1,128 @@
+% ============================================================
+% MCM/ICM Summary Sheet Template (English)
+% ============================================================
+% COMAP Requirement:
+%   The Summary Sheet is a single-page summary that precedes the
+%   main paper. It does NOT count toward the 25-page limit.
+%
+% Usage:
+%   In main.tex, after \begin{document}, add \input{summary_sheet}
+%   then \newpage before the main body begins.
+%
+% Six-Section Structure (R9 optimization, supersedes R1-R6 Chinese version):
+%   1. Problem       -- concise problem restatement
+%   2. Assumptions   -- key assumptions with brief justification
+%   3. Model         -- model overview (no derivation details)
+%   4. Results       -- headline numerical results
+%   5. Conclusions   -- actionable conclusions
+%   6. Sensitivity   -- sensitivity-analysis finding
+%
+% Single page limit: keep total length under ~500 words to fit 1 page.
+% ============================================================
+
+\thispagestyle{empty}
+\begin{center}
+\vspace*{0.5cm}
+{\Large\textbf{Summary Sheet}} \\[0.3cm]
+{\large Team \# [TEAM CONTROL NUMBER] \quad Problem [A/B/C/D/E/F]}
+\vspace{0.5cm}
+\end{center}
+
+\rule{\textwidth}{0.5pt}
+
+\begin{description}[leftmargin=0pt, itemindent=0pt, labelsep=0.5em, font=\bfseries]
+
+% ============================================================
+% Section 1: Problem
+% ============================================================
+\item[Problem.]
+Restate the client's problem in one or two short sentences using
+plain English (no jargon, no equations). State what decision or
+insight the client needs and the time horizon.
+
+\textit{Template:} The [client] needs to [decision/insight] in order
+to [goal] within [time horizon].
+
+% ============================================================
+% Section 2: Assumptions
+% ============================================================
+\item[Assumptions.]
+List the two or three most consequential assumptions. Each must be
+followed by a one-clause justification (why it is reasonable, or
+what evidence supports it).
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=0pt]
+    \item \textbf{[Assumption 1].} \textit{Justification:} [brief
+    reason or supporting reference].
+    \item \textbf{[Assumption 2].} \textit{Justification:} [brief
+    reason].
+    \item \textbf{[Assumption 3].} \textit{Justification:} [brief
+    reason].
+\end{enumerate}
+
+% ============================================================
+% Section 3: Model
+% ============================================================
+\item[Model.]
+Name the primary modeling approach (e.g., ``a system-dynamics model
+coupled with Monte Carlo simulation'') and state the key state
+variables or decision variables in one sentence. Do \emph{not} include
+full equations here -- those belong in the main paper.
+
+\textit{Template:} We construct a [model type] with [state/decision
+variables] over [spatial/temporal scope], solved via [method].
+
+% ============================================================
+% Section 4: Results
+% ============================================================
+\item[Results.]
+Report the headline numerical findings. Use specific numbers with
+units and uncertainty ranges where applicable. Avoid vague phrases
+like ``good performance'' -- the judges will look for concrete results.
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0pt]
+    \item \textbf{[Result 1]:} [number $\pm$ uncertainty] [unit],
+    [comparison to baseline if any].
+    \item \textbf{[Result 2]:} [number] [unit], representing [%
+    change] over [reference].
+    \item \textbf{[Result 3]:} [number] [unit], validated against
+    [validation method].
+\end{itemize}
+
+% ============================================================
+% Section 5: Conclusions
+% ============================================================
+\item[Conclusions.]
+State the actionable conclusion the client should draw. If the
+problem is an F-problem, this is the headline recommendation that
+the Memo to Client will elaborate. Be specific: ``do X to achieve
+Y'' beats ``X is recommended''.
+
+\textit{Template:} We recommend that [client] [specific action] to
+[achieve specific outcome] within [timeframe].
+
+% ============================================================
+% Section 6: Sensitivity
+% ============================================================
+\item[Sensitivity.]
+Identify the most sensitive parameter(s) and the direction of
+sensitivity. State whether the conclusion is robust (holds across
+plausible parameter ranges) or fragile (reverses for some values).
+
+\textit{Template:} The conclusion is [robust / fragile] to
+[parameter X] in the range [lo, hi]; [parameter Y] is the most
+influential, with [direction] sensitivity.
+
+\end{description}
+
+\vspace{0.3cm}
+\rule{\textwidth}{0.5pt}
+
+\begin{center}
+\textit{Keywords:} [keyword 1]; [keyword 2]; [keyword 3]; [keyword 4]
+\end{center}
+
+\vfill
+\begin{flushright}
+\textit{Summary Sheet does NOT count toward the 25-page limit.}
+\end{flushright}

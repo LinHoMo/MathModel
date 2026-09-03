@@ -1,0 +1,26 @@
+{
+  "dimensions": [
+    {"name": "scorer-academic", "score": 7.5, "weight": 0.25, "evidence": "推导完整（弧长闭式+链式递推），假设有失效判据，验证充分（守恒 1e-13），数学正确"},
+    {"name": "scorer-engineering", "score": 7.2, "weight": 0.20, "evidence": "种子 42 可复现，204s 运行可接受，约束重验证通过；w 灵敏度 NaN 未处理"},
+    {"name": "scorer-judge", "score": 6.9, "weight": 0.25, "evidence": "创新性 5 分偏低（标准运动学范式）；完整性/规范性/亮点均达标"},
+    {"name": "scorer-reader", "score": 7.5, "weight": 0.15, "evidence": "结构标准、语言专业、图表叙事完整、逻辑流畅"},
+    {"name": "scorer-adversarial", "score": 5.5, "weight": 0.15, "evidence": "blocking 内部矛盾（摘要 t*=412.83 vs 结果 360.25，差距 14.6%）；引用填充 2 处（optimization/modeling）；替代解法讨论缺失"}
+  ],
+  "weighted_score": 7.07,
+  "blocking": [
+    {
+      "source": "scorer-adversarial / weakness-hunter",
+      "issue": "摘要 t*=412.83 s 与 figures/all_results.json problem_2.t_star=360.25 s 内部数值不一致",
+      "severity": "blocking",
+      "action_required": "修正摘要数值为 360.25 s 或重新运行代码确认正确值"
+    }
+  ],
+  "skeptic_additions_summary": {
+    "skeptic_dimensions_added": ["citation_padding", "internal_contradictions", "overclaims", "missing_alternatives"],
+    "reviewer_prediction_count": 5,
+    "citation_padding_found": 2,
+    "internal_contradictions_found": 1,
+    "cross_verified_no_doi": 9,
+    "cross_verified_offline": 1
+  }
+}

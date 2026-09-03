@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Checkpoint Schema",
+  "type": "object",
+  "required": ["version", "hand", "stage", "timestamp", "output_hash"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Checkpoint 格式版本号"
+    },
+    "hand": {
+      "type": "string",
+      "enum": ["modeler", "programmer", "writer"],
+      "description": "当前执行的手"
+    },
+    "stage": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "当前执行的 stage"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "checkpoint 创建时间"
+    },
+    "output_hash": {
+      "type": "string",
+      "description": "当前阶段输出文件的哈希值"
+    },
+    "completed_agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_name", "stage", "timestamp", "output_hash"],
+        "properties": {
+          "agent_name": {"type": "string"},
+          "stage": {"type": "integer"},
+          "timestamp": {"type": "string", "format": "date-time"},
+          "output_hash": {"type": "string"}
+        }
+      },
+      "description": "已完成的 agent 列表"
+    }
+  }
+}

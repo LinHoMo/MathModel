@@ -1,0 +1,16 @@
+{
+  "skill_name": "test-runner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run unit and integration tests where one integration test fails and another crashes mid-run.",
+      "expected_output": "Success requires runs all tests; attributes failures to file and line; treats crashes as failures; blocks progression.",
+      "assertions": [
+        "runs all unit and integration tests",
+        "reports failures with file and line attribution",
+        "treats test crashes as failures rather than skips",
+        "blocks progression on any test failure"
+      ]
+    }
+  ]
+}

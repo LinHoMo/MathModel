@@ -1,0 +1,179 @@
+% withoutpreface: 跳过承诺书页 + 编号专用页(电子版论文不需此两页)
+% 用户纸质提交时手动添加,详见 cls 中 \@mcm@preface 开关
+\documentclass[withoutpreface]{cumcmthesis}
+
+% ======================== 包引入 ========================
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[titles]{tocloft}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{appendix}
+\usepackage{longtable}
+
+% ======================== 目录紧凑设置 ========================
+\setcounter{tocdepth}{2}  % 显示到 subsection
+\setlength{\cftbeforesecskip}{0pt plus 0pt}
+\setlength{\cftbeforesubsecskip}{0pt plus 0pt}
+\renewcommand{\cftdotsep}{2}
+
+% ======================== 页面设置 ========================
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+% 摘要左右边距与正文统一：去掉默认 \quotation 造成的左右内缩（约 2.5em），
+% 使摘要正文占满全文宽度，与正文段落左右边距一致。
+\renewenvironment{abstract}{%
+  \small
+  \begin{center}%
+    {\bfseries\abstractname\vspace{-.5em}}%
+  \end{center}%
+  \par\noindent\ignorespaces
+}{%
+  \par
+}
+\setlength{\parskip}{2pt plus 0.5pt minus 0.5pt}
+\linespread{1.0}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+
+% ======================== 图表搜索路径 ========================
+\graphicspath{{../figures/}{figures/}}
+
+% ======================== 标题信息 ========================
+\title{全国大学生数学建模竞赛论文}
+\author{作者1 \and 作者2 \and 作者3}
+\date{\today}
+
+% ======================== 正文 ========================
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+在此填写摘要内容。摘要应包含问题概述、模型方法、主要结果和结论。
+\par\textbf{关键词：} 关键词1；关键词2；关键词3
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ======================== 问题重述 ========================
+\section{问题重述}
+\subsection{问题背景}
+在此简述问题背景。
+
+\subsection{问题提出}
+\begin{enumerate}[label=(\arabic*)]
+    \item 问题一的描述。
+    \item 问题二的描述。
+    \item 问题三的描述。
+\end{enumerate}
+
+% ======================== 模型假设 ========================
+\section{模型假设}
+\begin{enumerate}[label=\textbf{假设\arabic*：}]
+    \item 假设内容一。
+    \item 假设内容二。
+    \item 假设内容三。
+\end{enumerate}
+
+% ======================== 符号说明 ========================
+\section{符号说明}
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{符号} & \textbf{含义} & \textbf{单位} \\
+\midrule
+$x$ & 示例符号 & 示例单位 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ======================== 问题一 ========================
+\section{问题一的分析与求解}
+\subsection{问题分析}
+在此分析问题一。
+
+\subsection{模型建立}
+在此建立模型。
+
+\subsection{模型求解}
+在此求解模型。
+
+\subsection{结果}
+在此展示结果。
+
+% ======================== 问题二 ========================
+\section{问题二的分析与求解}
+\subsection{问题分析}
+在此分析问题二。
+
+\subsection{模型建立}
+在此建立模型。
+
+\subsection{模型求解}
+在此求解模型。
+
+\subsection{结果}
+在此展示结果。
+
+% ======================== 问题三 ========================
+\section{问题三的分析与求解}
+\subsection{问题分析}
+在此分析问题三。
+
+\subsection{模型建立}
+在此建立模型。
+
+\subsection{模型求解}
+在此求解模型。
+
+\subsection{结果}
+在此展示结果。
+
+% ======================== 灵敏度分析 ========================
+\section{灵敏度分析}
+对模型参数进行灵敏度分析，验证模型的稳定性。
+
+% ======================== 模型评价与推广 ========================
+\section{模型的评价与推广}
+\subsection{模型优点}
+\begin{enumerate}
+    \item 优点一。
+    \item 优点二。
+\end{enumerate}
+
+\subsection{模型缺点}
+\begin{enumerate}
+    \item 缺点一。
+    \item 缺点二。
+\end{enumerate}
+
+\subsection{模型推广}
+在此讨论模型的推广方向。
+
+% ======================== 参考文献 ========================
+\begin{thebibliography}{99}
+\bibitem{ref1} 参考文献1
+\bibitem{ref2} 参考文献2
+\end{thebibliography}
+
+% ======================== 附录 ========================
+\begin{appendices}
+\section{代码}
+\begin{lstlisting}[language=Python]
+# Python代码示例
+print("Hello, World!")
+\end{lstlisting}
+\end{appendices}
+
+\end{document}

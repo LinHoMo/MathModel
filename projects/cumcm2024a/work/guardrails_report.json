@@ -1,0 +1,45 @@
+{
+  "scanned_files": ["paper/main.tex", "paper/references.bib"],
+  "violations": {
+    "forbidden_words": [],
+    "placeholders": [],
+    "ai_traces": [],
+    "internal_paths": [],
+    "missing_bib_keys": [],
+    "missing_figure_files": []
+  },
+  "checks": {
+    "no_placeholders": true,
+    "no_forbidden_words": true,
+    "no_ai_traces": true,
+    "no_internal_paths": true,
+    "no_missing_bib_keys": true,
+    "no_missing_figure_files": true,
+    "no_orphan_labels": true,
+    "no_dangling_refs": true
+  },
+  "forbidden_words_scanned": [
+    "赋能", "抓手", "闭环", "颗粒度", "底层逻辑", "打法", "对齐",
+    "倒逼", "复盘", "首先", "其次", "最后", "综上所述", "众所周知",
+    "显而易见", "PaperCritic", "Prompt", "token", "作为 AI"
+  ],
+  "placeholders_scanned": ["TODO", "FIXME", "TBD", "XXX", "[待补]", "[TBD]", "示例数据", "模板数据"],
+  "ai_traces_scanned": ["作为 AI", "由 AI 生成", "I am an AI", "language model", "我是 AI", "作为一个 AI"],
+  "internal_paths_scanned": [".py", ".ipynb", "code/", "/tmp/", "__pycache__", ".pytest_cache"],
+  "cite_keys_in_text": [
+    "stewart2015calculus", "weissteinArchimedean", "burden2011numerical",
+    "press2007numerical", "shabana2013dynamics", "schneider2002geometric",
+    "lockwood1961curves", "jiang2018mathmodel"
+  ],
+  "bib_keys": [
+    "jiang2018mathmodel", "stewart2015calculus", "lockwood1961curves",
+    "schneider2002geometric", "press2007numerical", "burden2011numerical",
+    "shabana2013dynamics", "weissteinArchimedean", "yang1999mathmodel",
+    "cormen2009algorithms"
+  ],
+  "figure_refs_in_text": ["figures/fig_1_1.png", "figures/fig_2_1.png", "figures/fig_4_1.png"],
+  "figure_files_exist": ["paper/figures/fig_1_1.png", "paper/figures/fig_2_1.png", "paper/figures/fig_4_1.png"],
+  "summary": "all checks passed, 0 violations",
+  "has_errors": false,
+  "passed": true
+}

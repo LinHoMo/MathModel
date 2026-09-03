@@ -1,0 +1,234 @@
+% ============================================================
+% AI Use Report Template for MCM/ICM
+% ============================================================
+% COMAP 2024+ Mandatory Requirement:
+%   All teams MUST submit an AI Use Report disclosing any AI tool usage.
+%   This report does NOT count toward the 25-page limit.
+%
+% Usage:
+%   1. Compile this file separately OR include it as an appendix to main.tex
+%   2. Replace all [PLACEHOLDER] content with your actual AI usage logs
+%   3. Be exhaustive: undisclosed AI usage may result in disqualification
+%
+% Reference: https://www.comap.com/contests/mcm-icm-contest-rules
+% ============================================================
+
+\documentclass[12pt, a4paper]{article}
+
+% ======================== Packages ========================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{caption}
+
+% ======================== Page settings ========================
+% AI Use Report does NOT count toward the 25-page main paper limit
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+% ======================== Title ========================
+\title{\textbf{AI Use Report} \\ \large MCM/ICM Team \# [TEAM CONTROL NUMBER]}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{center}
+\textbf{Team Control Number:} [0000000] \\
+\textbf{Problem Choice:} [A/B/C/D/E/F] \\
+\textbf{AI Use Report Required Since:} 2024 \\
+\textbf{This document does NOT count toward the 25-page limit.}
+\end{center}
+
+\vspace{1cm}
+
+% ============================================================
+% Section 1: Tool List
+% ============================================================
+\section{AI Tools Used}
+
+List all AI tools (chatbots, code assistants, translation tools, etc.)
+used during the contest, including version numbers and access method.
+
+\begin{table}[h]
+\centering
+\caption{AI Tools Inventory}
+\label{tab:ai_tools}
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Tool Name} & \textbf{Version} & \textbf{Access Method} & \textbf{Primary Use} \\
+\midrule
+ChatGPT & GPT-4o (2024-06) & Web UI & Brainstorming, code debugging \\
+Claude & Claude 3.5 Sonnet & API & Literature summarization \\
+GitHub Copilot & v2.1 & VS Code extension & Code completion \\
+DeepL & Pro v3 & Web UI & Translation (CN $\to$ EN) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ============================================================
+% Section 2: Query Log
+% ============================================================
+\section{Query Log}
+
+A complete log of all queries/prompts submitted to AI tools, with
+timestamps. Paraphrased queries are acceptable but must capture the
+intent of the original prompt.
+
+\begin{longtable}{p{2.5cm} p{2.5cm} p{1.5cm} p{8cm}}
+\caption{AI Query Log} \\
+\toprule
+\textbf{Timestamp} & \textbf{Tool} & \textbf{Query ID} & \textbf{Query Content (or paraphrased summary)} \\
+\midrule
+\endfirsthead
+
+\caption[]{AI Query Log (continued)} \\
+\toprule
+\textbf{Timestamp} & \textbf{Tool} & \textbf{Query ID} & \textbf{Query Content (or paraphrased summary)} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+2024-02-02 09:15 & ChatGPT & Q001 & What are common differential equation models for population dynamics? \\
+2024-02-02 09:42 & ChatGPT & Q002 & Help me debug a Runge-Kutta 4 implementation in Python (provided code snippet). \\
+2024-02-02 10:30 & Claude & Q003 & Summarize the key findings of [paper title] in 3 sentences. \\
+2024-02-02 14:20 & GitHub Copilot & Q004 & Auto-completed \texttt{matplotlib} plotting code in cell 12. \\
+2024-02-02 16:05 & DeepL & Q005 & Translated paragraph from Section 3.1 (Chinese draft $\to$ English). \\
+% Add additional rows as needed
+
+\end{longtable}
+
+% ============================================================
+% Section 3: Output Log
+% ============================================================
+\section{Output Log}
+
+A log of all AI-generated outputs (text, code, or otherwise) that
+were used, paraphrased, or adapted in the final submission. Outputs
+that were consulted but not used should also be disclosed.
+
+\begin{longtable}{p{1.5cm} p{2cm} p{3.5cm} p{3.5cm} p{4cm}}
+\caption{AI Output Log} \\
+\toprule
+\textbf{Query ID} & \textbf{Tool} & \textbf{Output Summary} & \textbf{Used?} & \textbf{Section of Paper} \\
+\midrule
+\endfirsthead
+
+\caption[]{AI Output Log (continued)} \\
+\toprule
+\textbf{Query ID} & \textbf{Tool} & \textbf{Output Summary} & \textbf{Used?} & \textbf{Section of Paper} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{5}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Q001 & ChatGPT & List of 5 population models (Verhulst, Gompertz, etc.) & Yes (paraphrased) & Section 3.1 Model Selection \\
+Q002 & ChatGPT & Fixed Python code (corrected index bug) & Yes (adapted) & Appendix A.3 \\
+Q003 & Claude & 3-sentence summary of paper findings & Yes (verbatim) & Section 2 Related Work, paragraph 2 \\
+Q004 & GitHub Copilot & Completed \texttt{plt.legend()} and axis labels & Yes (adapted) & Figure 4 caption \\
+Q005 & DeepL & English translation of paragraph & Yes (post-edited) & Section 3.1 paragraph 1 \\
+% Add additional rows as needed
+
+\end{longtable}
+
+% ============================================================
+% Section 4: Use Context
+% ============================================================
+\section{Use Context}
+
+For each AI-generated output used in the paper, describe how it was
+incorporated (verbatim, paraphrased, adapted, or as inspiration only)
+and any post-processing applied.
+
+\subsection{Verbatim Use}
+\textit{None.} We did not include any AI-generated text verbatim in
+the final submission.
+
+\subsection{Paraphrased Use}
+\begin{itemize}
+    \item \textbf{Section 3.1 (Model Selection):} ChatGPT's list of
+    population models (Q001) was paraphrased into a comparison table
+    in our own words. We added model equations and references not
+    provided by the AI.
+    \item \textbf{Section 3.2 (Parameter Estimation):} Claude's
+    summary of estimation techniques was paraphrased and integrated
+    with our own derivation.
+\end{itemize}
+
+\subsection{Adapted Use}
+\begin{itemize}
+    \item \textbf{Appendix A.3 (Code):} ChatGPT's bug fix (Q002) was
+    adapted to fit our variable naming convention. We added comments
+    and type hints.
+    \item \textbf{Figure 4:} GitHub Copilot auto-completion was
+    adapted with custom labels and color scheme.
+\end{itemize}
+
+\subsection{Inspiration Only}
+\begin{itemize}
+    \item \textbf{Section 4 (Results):} ChatGPT's suggestions for
+    visualization inspired our final plot design, but the figure was
+    generated entirely from our own code.
+\end{itemize}
+
+\subsection{Translation}
+\begin{itemize}
+    \item \textbf{Throughout the paper:} DeepL was used to translate
+    initial Chinese drafts into English. All translations were
+    post-edited for technical accuracy by team members.
+\end{itemize}
+
+% ============================================================
+% Section 5: Attestation
+% ============================================================
+\section{Attestation}
+
+We, the undersigned team members, attest that:
+
+\begin{enumerate}
+    \item This AI Use Report is complete and accurate to the best of
+    our knowledge.
+    \item All AI tools used during the contest have been disclosed.
+    \item All AI-generated content used in our submission has been
+    documented in the Output Log.
+    \item We understand that undisclosed AI usage may result in
+    disqualification.
+    \item We take full responsibility for the accuracy and originality
+    of the final submission, including any AI-assisted content.
+\end{enumerate}
+
+\vspace{1cm}
+
+\noindent
+\textbf{Team Member 1:} \hrulefill \\
+\textit{Signature} \\[1cm]
+
+\noindent
+\textbf{Team Member 2:} \hrulefill \\
+\textit{Signature} \\[1cm]
+
+\noindent
+\textbf{Team Member 3:} \hrulefill \\
+\textit{Signature} \\[1cm]
+
+\end{document}

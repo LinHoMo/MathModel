@@ -1,0 +1,266 @@
+% ==============================================================================
+% Economics / Management Paper Template  (dual-track: theory / empirical)
+%
+% Empirical economics convention (AEA journals): the Introduction states the
+% main finding and mechanism in the first paragraph, then locates the paper
+% in the literature, describes the identification strategy, and lists
+% contributions. Robustness checks are a mandatory separate section.
+%
+% Citation style: author-year (Author, Year), alphabetical; natbib + plainnat.
+% Management (AMJ/ASQ) style: APA-like (Author, Year); switch to apalike.bst.
+%
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---- Page geometry ----
+\usepackage[a4paper,top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+
+% ---- Fonts & encoding ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+
+% ---- Math, figures, tables ----
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}               % propositions / lemmas for theory track
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{dcolumn}              % alignment on decimal point for regression tables
+\usepackage{multirow}
+
+% ---- Theorem-like environments (theory track) ----
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{corollary}[proposition]{Corollary}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+
+% ---- Citations: author-year, alphabetical (economics convention) ----
+\usepackage[round,authoryear]{natbib}
+\bibliographystyle{plainnat}      % swap with aea / econometrica / apalike / chicago / elsarticle-harv
+
+% ---- Hyperref last ----
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{A Concise and Informative Title of the Economics / Management Submission}
+\author{First Author\textsuperscript{1,*}, Second Author\textsuperscript{2}, Senior Author\textsuperscript{1}\\
+\textsuperscript{1}Department of Economics, University of Y, City, Country\\
+\textsuperscript{2}Business School, Institute of W, City, Country\\
+\textsuperscript{*}e-mail: first.author@univ.edu}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+% Abstract  (~150 words; state the question, identification, headline result, policy implication)
+% ==============================================================================
+\begin{abstract}
+% TODO: ~150 words. Sentence 1: research question. Sentence 2-3: data and
+% identification strategy. Sentence 4-5: headline result with magnitude.
+% Sentence 6: mechanism. Sentence 7: policy implication.
+\end{abstract}
+
+\noindent\textbf{JEL classification:} % TODO: 3-5 JEL codes (e.g. D83, J24, O33).
+
+\noindent\textbf{Keywords:} % TODO: 4-6 keywords.
+keyword one, keyword two, keyword three
+
+% ==============================================================================
+% 1. Introduction  (AEA convention: lead with the main finding)
+% ==============================================================================
+\section{Introduction}
+\label{sec:intro}
+% TODO lead-finding: first paragraph -- state the research question, the
+% identification strategy, and the headline finding (with magnitude) up front.
+% Then: (i) locate the paper in the literature, (ii) describe the data and
+% identification, (iii) state the mechanism, (iv) list the contributions.
+
+% ==============================================================================
+% 2. Institutional Background
+% ==============================================================================
+\section{Institutional Background}
+\label{sec:background}
+% TODO institutional-background: describe the policy / market / regulatory
+% environment that motivates the identification strategy.
+
+% ==============================================================================
+% 3. Theoretical Framework  (with testable hypotheses)
+% ==============================================================================
+\section{Theoretical Framework}
+\label{sec:theory}
+% TODO theoretical-framework: present a parsimonious model; derive the
+% testable hypotheses H1, H2, ...; for pure-theory papers, expand this
+% section into Model / Equilibrium / Comparative Statics.
+
+\begin{assumption}[Baseline]\label{ass:baseline}
+% TODO: state the key modelling assumption.
+\end{assumption}
+
+\begin{proposition}[Main result]\label{prop:main}
+% TODO: state the proposition; proof in Appendix.
+\end{proposition}
+
+% ==============================================================================
+% 4. Data
+% ==============================================================================
+\section{Data}
+\label{sec:data}
+
+\subsection{Data sources}
+% TODO data-sources: name each dataset, the provider, the access mechanism
+% (public / restricted / proprietary), the years used, and the unit of
+% observation. Disclose any data-use agreement.
+
+\subsection{Sample construction}
+% TODO: describe the cleaning steps and the final sample size; reference
+% Appendix Table A1 for the sample-construction flow.
+
+\subsection{Summary statistics}
+% TODO: Table 1 with summary statistics by treatment and control group.
+
+\begin{table}[t]
+\caption{Summary statistics. Caption ABOVE the table.}
+\label{tab:summary}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Variable      & $N$ & Mean & SD   & Median \\
+\midrule
+Outcome       & --- & ---  & ---  & ---    \\
+Treatment     & --- & ---  & ---  & ---    \\
+Control 1     & --- & ---  & ---  & ---    \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ==============================================================================
+% 5. Empirical Strategy  (identification is the heart of the empirical paper)
+% ==============================================================================
+\section{Empirical Strategy}
+\label{sec:empirical}
+% TODO identification: state the main estimating equation, the identifying
+% assumption (parallel trends / exclusion restriction / continuity of RD
+% density), and the estimator (OLS / 2SLS / DiD / RDD / event study).
+% Example:
+% \begin{equation}
+%   Y_{it} = \alpha + \beta\,D_{it} + X_{it}'\gamma + \mu_i + \delta_t + \varepsilon_{it}
+%   \label{eq:main}
+% \end{equation}
+% where $\mu_i$ are unit fixed effects, $\delta_t$ are time fixed effects,
+% and $\beta$ is the parameter of interest. Standard errors are clustered at
+% the [unit] level.
+
+% ==============================================================================
+% 6. Results
+% ==============================================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Main results}
+% TODO main-regression: present Table 2 with the main estimates; interpret
+% the coefficient on the treatment variable in economic terms.
+
+\subsection{Heterogeneity}
+% TODO heterogeneity: subgroup analyses by pre-specified covariates.
+
+\subsection{Mechanism}
+% TODO mechanism: tests that distinguish the proposed mechanism from
+% alternatives; often mediator regressions or supplementary outcomes.
+
+% ==============================================================================
+% 7. Robustness Checks  (mandatory in empirical economics)
+% ==============================================================================
+\section{Robustness Checks}
+\label{sec:robust}
+% TODO robustness: include, as appropriate,
+% (a) alternative sample restrictions,
+% (b) alternative control variables,
+% (c) alternative standard-error clustering,
+% (d) placebo / falsification tests,
+% (e) pre-trend / parallel-trend tests,
+% (f) instrument validity (first-stage F-stat; over-identification),
+% (g) randomisation inference,
+% (h) bounding exercises for selection (Oster 2019).
+
+% ==============================================================================
+% 8. Discussion and Policy Implications
+% ==============================================================================
+\section{Discussion and Policy Implications}
+\label{sec:discussion}
+% TODO policy-implications: translate the estimates into a welfare or
+% policy-relevant magnitude; discuss external validity and the relevant
+% counterfactual.
+
+\subsection{Limitations}
+% TODO: external validity, measurement error, selection on unobservables.
+
+% ==============================================================================
+% 9. Conclusion
+% ==============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO: recap the question, the identification, the headline finding, and
+% the policy implication in one paragraph.
+
+% ==============================================================================
+% Declarations
+% ==============================================================================
+\section*{Declarations}
+
+\noindent\textbf{Funding:} % TODO: grant numbers and funding bodies.
+
+\noindent\textbf{Conflicts of interest:} % TODO: declare or state none.
+
+\noindent\textbf{Data \& code availability:} % TODO replication-data: state
+% the repository (ICPSR / openICPSR / Zenodo / journal replication archive)
+% with DOI; for proprietary data, state the procedure for replication
+% access (e.g. via a data-use agreement at the provider's secure data
+% center). Most AEA journals require a replication archive.
+
+% ==============================================================================
+% Acknowledgements
+% ==============================================================================
+\section*{Acknowledgements}
+% TODO: funders, data providers, seminar participants, discussants.
+
+% ==============================================================================
+% References  —  author-year, alphabetical
+% Compile:  pdflatex main -> bibtex main -> pdflatex main -> pdflatex main
+% ==============================================================================
+\bibliography{references}
+% Inline fallback (uncomment if not using BibTeX):
+% \begin{thebibliography}{99}
+% \bibitem{ref_example} Author, F., and S.~Author. 20YY. ``Title of the paper.''
+%   \emph{Journal Name} XX(Y):1--10.
+% \end{thebibliography}
+
+% ==============================================================================
+% Appendices  —  proofs, supplementary tables, data construction
+% ==============================================================================
+\appendix
+
+\section{Proofs}
+\label{app:proofs}
+% TODO theory: provide full proofs of Propositions \ref{prop:main} and beyond.
+
+\begin{proof}[Proof of Proposition \ref{prop:main}]
+% TODO: ...
+\end{proof}
+
+\section{Data-Construction Details}
+\label{app:data}
+% TODO: step-by-step sample construction; variable definitions table.
+
+\section{Supplementary Tables and Figures}
+\label{app:supp}
+% TODO: first-stage F-statistics, event-study plots, alternative-specification
+% tables, balance tests.
+
+\end{document}

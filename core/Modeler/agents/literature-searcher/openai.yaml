@@ -1,0 +1,13 @@
+interface:
+  display_name: "Literature Searcher"
+  short_description: "文献检索与证据提取，标注期刊含金量，支撑模型选择"
+  default_prompt: "Use $literature-searcher to retrieve 5-8 high-quality references and emit literature_evidence.json."
+runtime:
+  hand: modeler
+  utg_layer: L2
+  stage: 1.5
+  inputs:
+    - work/question_spec.json
+    - work/type_classification.json
+  outputs:
+    - work/literature_evidence.json

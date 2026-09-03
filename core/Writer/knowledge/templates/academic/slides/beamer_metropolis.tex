@@ -1,0 +1,231 @@
+% ============================================================
+% beamer_metropolis.tex — Beamer 现代化模板（P2-11 / R3-G5）
+% ------------------------------------------------------------
+% 主题：metropolis（进度条 + 分数页码 + 章节页进度条）
+% 中文支持：ctex（xelatex 编译）+ fallback xeCJK 注释
+% 不修改既有 beamer_academic.tex（Madrid 主题保留作为对照）
+%
+% 编译方法（必须 xelatex，因 ctex 包要求）：
+%   xelatex beamer_metropolis.tex
+%   xelatex beamer_metropolis.tex   （二次编译以解决目录引用）
+%
+% 依赖：
+%   - ctex 包（CTAN 自带，TeX Live / MiKTeX 默认安装）
+%   - metropolis 主题（beamertheme-metropolis 包，TeX Live 2020+ 自带）
+%   - 若 metropolis 不可用：取消注释 fallback 行（注释 \usetheme{metropolis}）
+%
+% 来源：R3-G5（PLAN_V2.md）；交叉验证：metropolis 主题官方文档
+% ============================================================
+
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ---------- 中文支持（xelatex 编译） ----------
+\usepackage[UTF8]{ctex}
+% fallback：若 ctex 不可用，改用 xeCJK（确保 xelatex 编译）
+% \usepackage{xeCJK}
+% \setCJKmainfont{SimSun}
+
+% ---------- 主题：metropolis ----------
+% 进度条放在 frametitle 下方，页码用分数格式 (3/15)，章节页带进度条
+\usetheme[progressbar=frametitle,
+          numbering=fraction,
+          sectionpage=progressbar,
+          subsectionpage=progressbar,
+          block=fill]{metropolis}
+
+% ---------- 数学与图形 ----------
+\usepackage{amsmath,amssymb,amsfonts,mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, calc, fit, shapes.geometric}
+
+% ---------- 超链接 ----------
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=,
+  urlcolor=mDarkTeal,
+  citecolor=mDarkTeal,
+}
+
+% ---------- 字体（metropolis 默认 Fira Sans，无则回退） ----------
+% metropolis 自动尝试加载 Fira Sans；若不可用回退到默认无衬线字体
+% 中文跟随 ctex 默认（SimSun / SimHei），无需额外配置
+
+% ---------- 颜色微调（metropolis 默认深青色 mDarkTeal） ----------
+\definecolor{accent}{HTML}{23373B}     % 深青灰，作为强调色
+\definecolor{accentlight}{HTML}{EB811B} % 橙色辅助强调
+\setbeamercolor{progress bar}{fg=accent}
+\setbeamercolor{frametitle}{bg=accent}
+\setbeamercolor{alerted text}{fg=accentlight}
+
+% ---------- 通用设置 ----------
+\setbeamertemplate{navigation symbols}{}  % 去掉默认导航符号
+\setbeamersize{text margin left=10mm, text margin right=10mm}
+
+% ---------- 元信息 ----------
+\title{论文标题（中文）}
+\subtitle{Paper Subtitle (English)}
+\author{作者一 \and 作者二}
+\institute{所在单位 / 院系}
+\date{\today}
+
+\begin{document}
+
+% ============================================================
+% 帧 1：标题页
+% ============================================================
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ============================================================
+% 帧 2：目录
+% ============================================================
+\begin{frame}{目录}
+  \tableofcontents
+\end{frame}
+
+% ============================================================
+% 章节 1：引言
+% ============================================================
+\section{引言}
+
+\begin{frame}{研究背景与动机}
+  \begin{itemize}
+    \item \textbf{背景}：本研究领域的 broader context。
+    \item \textbf{问题}：现有方法未能解决的具体问题。
+    \item \textbf{差距}：已有方法在哪些方面存在不足。
+    \item \textbf{目标}：本论文旨在解决的核心问题。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{贡献}
+  \begin{enumerate}
+    \item \alert{贡献一}：方法层面的核心创新。
+    \item \alert{贡献二}：理论或实证的新发现。
+    \item \alert{贡献三}：应用层面的拓展。
+  \end{enumerate}
+\end{frame}
+
+% ============================================================
+% 章节 2：方法
+% ============================================================
+\section{方法}
+
+\begin{frame}{问题形式化}
+  \begin{block}{定义}
+    给定输入空间 $\mathcal{X}$ 与输出空间 $\mathcal{Y}$，
+    学习映射 $f: \mathcal{X} \rightarrow \mathcal{Y}$ 使得期望风险最小：
+    \[
+      f^* = \arg\min_{f \in \mathcal{F}} \mathbb{E}_{(x,y) \sim \mathcal{D}}
+            \left[ \ell(f(x), y) \right]
+    \]
+  \end{block}
+\end{frame}
+
+\begin{frame}{方法概述}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.55\textwidth}
+      \textbf{三步流程}：
+      \begin{enumerate}
+        \item 数据预处理与特征工程
+        \item 模型训练与正则化
+        \item 后处理与不确定性估计
+      \end{enumerate}
+      \vspace{0.5em}
+      \textbf{核心创新}：在第二步引入自适应权重机制。
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \centering
+      \begin{tikzpicture}[node distance=6mm, every node/.style={font=\small}]
+        \node[draw, rounded corners, fill=accent!10, minimum width=22mm] (a) {输入};
+        \node[draw, rounded corners, fill=accent!20, below=of a, minimum width=22mm] (b) {编码器};
+        \node[draw, rounded corners, fill=accentlight!30, below=of b, minimum width=22mm] (c) {自适应层};
+        \node[draw, rounded corners, fill=accent!10, below=of c, minimum width=22mm] (d) {输出};
+        \draw[-Stealth, thick] (a) -- (b);
+        \draw[-Stealth, thick] (b) -- (c);
+        \draw[-Stealth, thick] (c) -- (d);
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+% 章节 3：实验
+% ============================================================
+\section{实验}
+
+\begin{frame}{实验设置}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \textbf{数据集}：
+      \begin{itemize}
+        \item Dataset A：N=10,000 样本
+        \item Dataset B：N=50,000 样本
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{基线方法}：
+      \begin{itemize}
+        \item Baseline 1 (2023)
+        \item Baseline 2 (2024)
+        \item Baseline 3 (2025)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.5em}
+  \textbf{评价指标}：Accuracy / F1 / RMSE；
+  \textbf{硬件}：单卡 NVIDIA RTX 4090。
+\end{frame}
+
+\begin{frame}{主结果}
+  \begin{table}
+    \centering
+    \small
+    \begin{tabular}{lccc}
+      \toprule
+      方法 & Accuracy & F1 & RMSE \\
+      \midrule
+      Baseline 1 & 0.85 & 0.83 & 0.15 \\
+      Baseline 2 & 0.87 & 0.85 & 0.13 \\
+      Baseline 3 & 0.89 & 0.87 & 0.11 \\
+      \textbf{本文方法} & \textbf{0.93} & \textbf{0.91} & \textbf{0.08} \\
+      \bottomrule
+    \end{tabular}
+    \caption{在 Dataset A 上的对比结果}
+  \end{table}
+  \vspace{0.3em}
+  \alert{本文方法}在三项指标上均显著优于最强基线（$p < 0.01$）。
+\end{frame}
+
+% ============================================================
+% 章节 4：结论
+% ============================================================
+\section{结论}
+
+\begin{frame}{结论与未来工作}
+  \textbf{关键结论}：
+  \begin{enumerate}
+    \item 本文方法在 [任务] 上取得 SOTA 表现。
+    \item 核心洞察是 [一句话总结]。
+    \item 实验分析显示 [关键发现]。
+  \end{enumerate}
+  \vspace{0.5em}
+  \textbf{局限与未来工作}：
+  \begin{itemize}
+    \item 局限 1 $\rightarrow$ 未来方向 1
+    \item 局限 2 $\rightarrow$ 未来方向 2
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[standout]
+  谢谢！\\[1em]
+  \normalsize Questions?\\[0.5em]
+  \footnotesize Contact: email@university.edu\\
+  Code: github.com/username/repo
+\end{frame}
+
+\end{document}

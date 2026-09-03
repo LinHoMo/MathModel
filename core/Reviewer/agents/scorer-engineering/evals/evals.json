@@ -1,0 +1,17 @@
+{
+  "skill_name": "scorer-engineering",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Score a solution's engineering quality: reproducibility, performance, robustness, and engineering norms.",
+      "expected_output": "Success returns score_card_engineering.json with four sub-scores and a weighted total.",
+      "assertions": [
+        "checks reproducibility via seed, dependency, and run command evidence",
+        "assesses computational performance with concrete timing or complexity",
+        "evaluates robustness with sensitivity or repeated-run evidence",
+        "scores engineering norms from code structure and test_report.json",
+        "records weight=0.20 and correct weighted_total"
+      ]
+    }
+  ]
+}

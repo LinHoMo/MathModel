@@ -1,0 +1,16 @@
+{
+  "skill_name": "type-classifier",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Classify a contest problem about heat diffusion and material transport whose topic is initially unclear.",
+      "expected_output": "Success requires classifies into A/B/C/D/E; recommends method direction; flags physics keywords.",
+      "assertions": [
+        "classifies the problem into exactly one of A/B/C/D/E",
+        "recommends a concrete method direction consistent with the topic",
+        "flags physics-topic keywords into background.domain_keywords",
+        "records the prior topic_type from problem-parser as preliminary rather than final"
+      ]
+    }
+  ]
+}

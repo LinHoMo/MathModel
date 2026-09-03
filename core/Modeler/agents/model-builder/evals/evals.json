@@ -1,0 +1,16 @@
+{
+  "skill_name": "model-builder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a mathematical model whose derivation spans multiple steps from assumptions to governing equations, with several symbols and boundary conditions.",
+      "expected_output": "Success requires complete derivation chain; symbols registered; boundary conditions explicit.",
+      "assertions": [
+        "keeps the derivation chain complete without skipped steps",
+        "registers all symbols in the symbol registry",
+        "states boundary conditions explicitly rather than burying them in prose",
+        "links model inputs back to question_spec variables"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "skill_name": "weakness-hunter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Scan a paper against the antipattern and numeric-edge-case libraries and report every hit.",
+      "expected_output": "Success returns weakness_report.json listing each hit with evidence location and severity.",
+      "assertions": [
+        "reports every antipattern hit without under-reporting to pass",
+        "attaches an evidence location to each weakness",
+        "assigns a severity level to each weakness",
+        "references the antipattern or numeric-edge-case source for each hit"
+      ]
+    }
+  ]
+}

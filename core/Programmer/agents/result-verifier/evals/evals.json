@@ -1,0 +1,16 @@
+{
+  "skill_name": "result-verifier",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Verify numerical results of a heuristic solver that exhibits high variance across independent runs.",
+      "expected_output": "Success requires multi-run >= 5 with seed=42; reports mean and std; flags CV > 10%; records provenance.",
+      "assertions": [
+        "runs the solver at least 5 times with seed=42",
+        "reports mean and standard deviation per key metric",
+        "flags coefficient of variation above 10%",
+        "records provenance to figures/all_results.json"
+      ]
+    }
+  ]
+}

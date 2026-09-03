@@ -1,0 +1,16 @@
+{
+  "skill_name": "scorer-judge",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Score a paper from a competition judge's perspective across innovation, completeness, normativity, and highlight.",
+      "expected_output": "Success returns score_card_judge.json with four sub-scores and a weighted total.",
+      "assertions": [
+        "scores innovation, completeness, normativity, and highlight",
+        "grounds the innovation score in a concrete model contribution",
+        "checks competition-specific format compliance",
+        "records weight=0.25 and correct weighted_total"
+      ]
+    }
+  ]
+}

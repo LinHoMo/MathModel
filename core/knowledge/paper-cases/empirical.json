@@ -1,0 +1,150 @@
+{
+  "_meta": {
+    "description": "117篇获奖论文实证分位锚定（p25/p50/p75）",
+    "source": "core/knowledge/paper-cases/ (117篇: A题18 + B题17 + C题21 + D题7 + E题8 + 江苏10 + 参考36)",
+    "version": "1.0",
+    "updated": "2026-09-01",
+    "usage": "Writer/Programmer 用此锚定产物规模，避免过少（低于p25）或过多（高于p75）"
+  },
+  "overall": {
+    "pages":            { "p25": 22, "p50": 26, "p75": 30 },
+    "figures":           { "p25": 8,  "p50": 12, "p75": 18 },
+    "tables":            { "p25": 5,  "p50": 8,  "p75": 12 },
+    "equations":         { "p25": 15, "p50": 22, "p75": 35 },
+    "references":        { "p25": 10, "p50": 15, "p75": 22 },
+    "sub_questions":     { "p25": 3,  "p50": 4,  "p75": 5 },
+    "methods_used":      { "p25": 3,  "p50": 5,  "p75": 7 },
+    "assumptions":       { "p25": 4,  "p50": 6,  "p75": 9 },
+    "abstract_words":    { "p25": 350, "p50": 450, "p75": 580 },
+    "innovation_points": { "p25": 2,  "p50": 3,  "p75": 4 },
+    "sensitivity_count": { "p25": 1,  "p50": 2,  "p75": 4 }
+  },
+  "by_topic": {
+    "A": {
+      "description": "物理建模/机理分析",
+      "paper_count": 18,
+      "pages":            { "p25": 24, "p50": 28, "p75": 32 },
+      "figures":           { "p25": 10, "p50": 14, "p75": 20 },
+      "tables":            { "p25": 4,  "p50": 6,  "p75": 9 },
+      "equations":         { "p25": 20, "p50": 30, "p75": 45 },
+      "references":        { "p25": 8,  "p50": 12, "p75": 18 },
+      "methods_used":      { "p25": 3,  "p50": 5,  "p75": 7 },
+      "assumptions":       { "p25": 4,  "p50": 6,  "p75": 8 },
+      "sensitivity_count": { "p25": 2,  "p50": 3,  "p75": 5 },
+      "dominant_methods": ["机理建模", "数值模拟", "多目标优化", "灵敏度分析", "参数优化"],
+      "typical_combos": [
+        "机理建模+多目标优化",
+        "数值模拟+灵敏度分析",
+        "几何建模+参数优化"
+      ]
+    },
+    "B": {
+      "description": "实验/优化/调度",
+      "paper_count": 17,
+      "pages":            { "p25": 22, "p50": 26, "p75": 30 },
+      "figures":           { "p25": 8,  "p50": 12, "p75": 16 },
+      "tables":            { "p25": 6,  "p50": 9,  "p75": 13 },
+      "equations":         { "p25": 12, "p50": 18, "p75": 28 },
+      "references":        { "p25": 10, "p50": 14, "p75": 20 },
+      "methods_used":      { "p25": 4,  "p50": 5,  "p75": 7 },
+      "assumptions":       { "p25": 4,  "p50": 6,  "p75": 9 },
+      "sensitivity_count": { "p25": 1,  "p50": 2,  "p75": 3 },
+      "dominant_methods": ["回归分析", "启发式算法", "蒙特卡洛", "方差分析", "动态规划"],
+      "typical_combos": [
+        "回归分析+方差分析",
+        "启发式算法+蒙特卡洛",
+        "动态规划+贝叶斯估计"
+      ]
+    },
+    "C": {
+      "description": "数据分析/预测/决策",
+      "paper_count": 21,
+      "pages":            { "p25": 20, "p50": 25, "p75": 28 },
+      "figures":           { "p25": 10, "p50": 14, "p75": 18 },
+      "tables":            { "p25": 6,  "p50": 9,  "p75": 12 },
+      "equations":         { "p25": 10, "p50": 16, "p75": 24 },
+      "references":        { "p25": 12, "p50": 16, "p75": 24 },
+      "methods_used":      { "p25": 4,  "p50": 6,  "p75": 8 },
+      "assumptions":       { "p25": 3,  "p50": 5,  "p75": 8 },
+      "sensitivity_count": { "p25": 1,  "p50": 2,  "p75": 4 },
+      "dominant_methods": ["优化算法", "机器学习", "统计分析", "多目标优化", "时间序列"],
+      "typical_combos": [
+        "优化算法+机器学习",
+        "统计分析+多目标优化",
+        "聚类分析+回归建模"
+      ]
+    },
+    "D": {
+      "description": "多目标优化/运筹",
+      "paper_count": 7,
+      "pages":            { "p25": 22, "p50": 26, "p75": 30 },
+      "figures":           { "p25": 8,  "p50": 11, "p75": 15 },
+      "tables":            { "p25": 5,  "p50": 7,  "p75": 10 },
+      "equations":         { "p25": 15, "p50": 22, "p75": 30 },
+      "references":        { "p25": 10, "p50": 14, "p75": 18 },
+      "methods_used":      { "p25": 3,  "p50": 5,  "p75": 6 },
+      "assumptions":       { "p25": 4,  "p50": 6,  "p75": 8 },
+      "sensitivity_count": { "p25": 1,  "p50": 2,  "p75": 3 },
+      "dominant_methods": ["NSGA-II", "多目标规划", "启发式", "Pareto分析", "鲁棒优化"],
+      "typical_combos": [
+        "NSGA-II+Pareto分析",
+        "多目标规划+鲁棒优化",
+        "启发式+灵敏度分析"
+      ]
+    },
+    "E": {
+      "description": "交叉学科/综合评价",
+      "paper_count": 8,
+      "pages":            { "p25": 20, "p50": 24, "p75": 28 },
+      "figures":           { "p25": 8,  "p50": 12, "p75": 16 },
+      "tables":            { "p25": 5,  "p50": 8,  "p75": 11 },
+      "equations":         { "p25": 12, "p50": 18, "p75": 25 },
+      "references":        { "p25": 12, "p50": 18, "p75": 25 },
+      "methods_used":      { "p25": 4,  "p50": 6,  "p75": 8 },
+      "assumptions":       { "p25": 5,  "p50": 7,  "p75": 10 },
+      "sensitivity_count": { "p25": 1,  "p50": 2,  "p75": 3 },
+      "dominant_methods": ["综合评价", "系统动力学", "AHP", "蒙特卡洛", "政策仿真"],
+      "typical_combos": [
+        "AHP+综合评价",
+        "系统动力学+政策仿真",
+        "蒙特卡洛+不确定性分析"
+      ]
+    }
+  },
+  "code_metrics": {
+    "description": "代码产物实证分位（基于获奖论文复现统计）",
+    "main_py_lines":     { "p25": 150, "p50": 280, "p75": 450 },
+    "total_code_lines":  { "p25": 300, "p50": 550, "p75": 900 },
+    "figure_count":      { "p25": 6,   "p50": 10,  "p75": 16 },
+    "runtime_seconds":   { "p25": 5,   "p50": 30,  "p75": 120 },
+    "random_seed_runs":  { "p25": 5,   "p50": 10,  "p75": 30 }
+  },
+  "quality_benchmarks": {
+    "description": "获奖论文质量基准（频率统计）",
+    "abstract_four_part": 0.95,
+    "problem_analysis_present": 0.92,
+    "assumptions_listed": 0.88,
+    "model_derivation_detailed": 0.90,
+    "algorithm_flowchart": 0.88,
+    "comparison_table": 0.92,
+    "sensitivity_analysis": 0.85,
+    "innovation_claimed": 0.75,
+    "from_first_principles": 0.90,
+    "symbol_definitions_clear": 0.88
+  },
+  "method_frequency": {
+    "description": "各方法在获奖论文中的使用频率（归一化）",
+    "A": {
+      "机理建模": 0.67, "数值模拟": 0.56, "灵敏度分析": 0.61,
+      "多目标优化": 0.44, "参数优化": 0.50, "几何建模": 0.39
+    },
+    "B": {
+      "回归分析": 0.59, "启发式算法": 0.53, "蒙特卡洛": 0.47,
+      "方差分析": 0.41, "动态规划": 0.29, "假设检验": 0.35
+    },
+    "C": {
+      "优化算法": 0.62, "统计分析": 0.57, "机器学习": 0.43,
+      "多目标优化": 0.38, "时间序列": 0.24, "聚类分析": 0.29
+    }
+  }
+}

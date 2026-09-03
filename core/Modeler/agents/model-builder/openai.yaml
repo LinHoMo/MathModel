@@ -1,0 +1,12 @@
+interface:
+  display_name: "Model Builder"
+  short_description: "建立数学模型（公式/符号/边界条件）"
+  default_prompt: "Use $model-builder to construct the mathematical model."
+runtime:
+  hand: modeler
+  utg_layer: L3
+  stage: 4
+  inputs:
+    - work/method_candidates.json
+  outputs:
+    - work/model_draft.md

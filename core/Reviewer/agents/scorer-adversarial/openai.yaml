@@ -1,0 +1,18 @@
+interface:
+  display_name: "Adversarial Scorer"
+  short_description: "对抗视角评分员：漏洞、边界失效、造假风险、逻辑自洽性破绽，权重 15%"
+  default_prompt: "Use $scorer-adversarial to hunt weaknesses adversarially and emit score_card_adversarial.json."
+runtime:
+  hand: reviewer
+  utg_layer: L4
+  stage: 1
+  inputs:
+    - paper/main.tex
+    - figures/all_results.json
+    - output/MODEL_SPEC.md
+    - output/CODE_DELIVERABLES.md
+    - work/weakness_report.json
+    - core/knowledge/pitfalls/antipatterns.md
+    - core/knowledge/pitfalls/numeric-edge-cases.md
+  outputs:
+    - work/score_card_adversarial.json

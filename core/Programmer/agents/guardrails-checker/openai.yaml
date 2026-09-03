@@ -1,0 +1,12 @@
+interface:
+  display_name: "Guardrails Checker"
+  short_description: "运行时护栏（禁用词/占位符/AI痕迹/权限）"
+  default_prompt: "Use $guardrails-checker to check code guardrails."
+runtime:
+  hand: programmer
+  utg_layer: L5
+  stage: 5
+  inputs:
+    - code/*.py
+  outputs:
+    - work/guardrails_report.json

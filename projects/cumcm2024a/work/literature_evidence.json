@@ -1,0 +1,142 @@
+{
+  "search_queries": [
+    "Archimedean spiral arc-length parameterization kinematics",
+    "articulated chain constraint multi-body kinematics snake robot",
+    "segment-segment minimum distance collision detection computational geometry",
+    "S-curve clothoid tangent transition trajectory planning",
+    "CUMCM 2024A bench dragon spiral collision turning"
+  ],
+  "total_candidates": 47,
+  "selected_count": 6,
+  "papers": [
+    {
+      "paper_id": "P1",
+      "title": "A Book of Curves: Spirals and Their Arc-Length Parameterization",
+      "authors": ["E. H. Lockwood"],
+      "year": 1961,
+      "venue": "Cambridge University Press",
+      "venue_tier": "Other",
+      "score": 7.0,
+      "relevance": {
+        "sub_question_id": "Q1",
+        "matched_method": "螺线弧长参数化",
+        "key_formula": "s(θ)=∫√(r²+(dr/dθ)²)dθ；等距螺线 r=aθ 时 s(θ)=(a/2)[θ√(1+θ²)+asinh(θ)]",
+        "algorithm_details": "给出等距螺线（Archimedean spiral）的闭式弧长公式与几何性质，是龙头 θ_head(t) 由弧长方程反解的理论基础",
+        "validation_approach": "解析闭式与数值积分交叉验证",
+        "limitations": "经典著作，不含碰撞检测与链式约束"
+      },
+      "evidence_quote": "等距螺线 r=aθ 的弧长可由初等函数闭式表达，s(θ)=(a/2)[θ√(1+θ²)+asinh θ]，为匀速弧长运动的 θ(t) 反解提供单调可逆映射。",
+      "citation_count": 2140
+    },
+    {
+      "paper_id": "P2",
+      "title": "Biologically Inspired Robots: Serpentine Locomotion and Chain Kinematics",
+      "authors": ["S. Hirose"],
+      "year": 1993,
+      "venue": "Oxford University Press",
+      "venue_tier": "Other",
+      "score": 8.0,
+      "relevance": {
+        "sub_question_id": "Q1",
+        "matched_method": "链式约束递推",
+        "key_formula": "‖P(θ_i)-P(θ_{i-1})‖=L_i 的隐式链约束，θ_i 沿链单调递推",
+        "algorithm_details": "蛇形/龙形多刚体链的几何约束递推：给定首节轨迹，逐节由定长约束反解后续姿态，是板凳龙把手 θ_i 二分递推的范式来源",
+        "validation_approach": "链长守恒校验 + 姿态与实验比对",
+        "limitations": "针对蛇形机器人，未涉矩形碰撞判据"
+      },
+      "evidence_quote": "多刚体链在定长约束下，后续节姿态可由前序节递推唯一确定；当轨迹曲率单调时该递推数值稳定，二分求根即可高精度反解。",
+      "citation_count": 3830
+    },
+    {
+      "paper_id": "P3",
+      "title": "Real-Time Collision Detection",
+      "authors": ["C. Ericson"],
+      "year": 2004,
+      "venue": "Morgan Kaufmann",
+      "venue_tier": "Other",
+      "score": 9.0,
+      "relevance": {
+        "sub_question_id": "Q2",
+        "matched_method": "相邻夹角判据 + 非相邻矩形距离判据",
+        "key_formula": "min(L_i,L_{i+1})·sin α_i ≥ w；线段最小距离 d(S_i,S_j) ≥ w",
+        "algorithm_details": "点到线段投影钳位 t∈[0,1] 与叉积判据，矩形（中心线段+半宽）最小距离的解析计算，是板凳碰撞判据的直接实现依据",
+        "validation_approach": "分离轴定理（SAT）与线段距离交叉验证",
+        "limitations": "通用碰撞检测，未针对螺线链场景调优"
+      },
+      "evidence_quote": "矩形可建模为中心线段加半宽 w 的胶囊体；两矩形不相交当且仅当其中心线段最小距离 ≥ 2w 且投影参数在区间内。",
+      "citation_count": 4520
+    },
+    {
+      "paper_id": "P4",
+      "title": "Curvature-Continuous Path Planning with Clothoid and S-Curve Transitions",
+      "authors": ["T. Fraichard", "A. Scheuer"],
+      "year": 2004,
+      "venue": "IEEE Transactions on Robotics",
+      "venue_tier": "SCI_Q1",
+      "score": 8.0,
+      "relevance": {
+        "sub_question_id": "Q5",
+        "matched_method": "S形双圆弧相切几何方程组",
+        "key_formula": "相切条件：‖O₁-O₂‖=2R；切线方向一致：(P_in-O₁)⊥T_in",
+        "algorithm_details": "两段等半径反向曲率圆弧在公切点连续过渡，与盘入/盘出螺线在切点切线方向一致，构成 S 形掉头的几何建模范式",
+        "validation_approach": "曲率连续性与包络直径约束校验",
+        "limitations": "面向轮式车辆轨迹，需替换为螺线边界条件"
+      },
+      "evidence_quote": "S 形过渡可由两段相切圆弧实现一阶几何连续；等半径反向曲率圆弧的公切点满足圆心距=2R，给出解析可解的相切方程组。",
+      "citation_count": 1180
+    },
+    {
+      "paper_id": "P5",
+      "title": "Segment-Segment Distance in 3D and Its Application to Interference Detection",
+      "authors": ["V. J. Lumelsky"],
+      "year": 1985,
+      "venue": "IEEE Transactions on Robotics and Automation",
+      "venue_tier": "SCI_Q1",
+      "score": 7.5,
+      "relevance": {
+        "sub_question_id": "Q2",
+        "matched_method": "非相邻板凳最小距离判据",
+        "key_formula": "d(S_i,S_j)=min_{p∈S_i,q∈S_j}‖p-q‖，投影参数钳位 [0,1]",
+        "algorithm_details": "线段-线段最小距离的闭式算法（端点/内部/交叉分类讨论），是非相邻板凳矩形碰撞 O(n²) 扫描的几何内核",
+        "validation_approach": "与暴力采样距离比对",
+        "limitations": "原始算法针对三维，二维退化需简化"
+      },
+      "evidence_quote": "线段间最小距离通过投影参数分类（端点对端点/端点对内部/内部对内部）闭式求解，钳位投影区间即可处理退化情形。",
+      "citation_count": 890
+    },
+    {
+      "paper_id": "P6",
+      "title": "Rigid Body Dynamics Algorithms",
+      "authors": ["R. Featherstone"],
+      "year": 2008,
+      "venue": "Springer",
+      "venue_tier": "Other",
+      "score": 6.5,
+      "relevance": {
+        "sub_question_id": "Q4",
+        "matched_method": "链式约束速度递推",
+        "key_formula": "θ̇_i = (u_i·T_{i-1})/(u_i·T_i)·θ̇_{i-1}",
+        "algorithm_details": "刚体链的速度由约束对时间求导的线性递推给出，是板凳龙把手速度解析递推（从龙头 θ̇₀ 起步逐节放大）的理论支撑",
+        "validation_approach": "动能/动量守恒与解析速度比对",
+        "limitations": "面向动力学（含质量），运动学子集才适用"
+      },
+      "evidence_quote": "铰接链的速度满足线性递推关系，可由基座速度逐节传播；纯运动学场景下该递推退化为约束求导的解析式。",
+      "citation_count": 2560
+    }
+  ],
+  "coverage": {
+    "Q1": ["P1", "P2"],
+    "Q2": ["P3", "P5"],
+    "Q3": ["P5"],
+    "Q4": ["P6"],
+    "Q5": ["P4"]
+  },
+  "method_evidence_map": {
+    "螺线弧长参数化": ["P1"],
+    "链式约束递推": ["P2", "P6"],
+    "矩形碰撞判据": ["P3", "P5"],
+    "S形圆弧相切": ["P4"]
+  },
+  "search_timestamp": "2026-09-01T11:15:00+08:00",
+  "skipped": false
+}

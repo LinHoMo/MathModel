@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Literature Evidence Schema",
+  "type": "object",
+  "required": ["search_queries", "total_candidates", "selected_count", "papers", "coverage", "method_evidence_map", "search_timestamp", "skipped"],
+  "properties": {
+    "search_queries": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 5,
+      "description": "执行的检索查询语句"
+    },
+    "total_candidates": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "去重后的候选文献总数"
+    },
+    "selected_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 8,
+      "description": "最终入选文献数"
+    },
+    "papers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["paper_id", "title", "authors", "year", "venue", "venue_tier", "score", "relevance", "evidence_quote", "citation_count"],
+        "properties": {
+          "paper_id": { "type": "string" },
+          "title": { "type": "string" },
+          "authors": { "type": "array", "items": { "type": "string" } },
+          "year": { "type": "integer", "minimum": 1900, "maximum": 2030 },
+          "venue": { "type": "string" },
+          "venue_tier": { "type": "string", "enum": ["SCI_Q1", "SCI_Q2", "SCI_Q3", "SCI_Q4", "CCF_A", "CCF_B", "CCF_C", "Chinese_Core", "ArXiv", "Other"] },
+          "score": { "type": "number", "minimum": 0, "maximum": 10 },
+          "relevance": {
+            "type": "object",
+            "required": ["sub_question_id", "matched_method", "key_formula", "algorithm_details", "validation_approach", "limitations"],
+            "properties": {
+              "sub_question_id": { "type": "string", "pattern": "^Q\\d+$" },
+              "matched_method": { "type": "string" },
+              "key_formula": { "type": "string" },
+              "algorithm_details": { "type": "string" },
+              "validation_approach": { "type": "string" },
+              "limitations": { "type": "string" }
+            }
+          },
+          "evidence_quote": { "type": "string", "maxLength": 300 },
+          "citation_count": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "minItems": 0,
+      "maxItems": 8
+    },
+    "coverage": {
+      "type": "object",
+      "patternProperties": {
+        "^Q\\d+$": { "type": "array", "items": { "type": "string" } }
+      },
+      "description": "每个子问题覆盖的文献 paper_id 列表"
+    },
+    "method_evidence_map": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "type": "array", "items": { "type": "string" } }
+      },
+      "description": "方法名到支撑文献 paper_id 列表的映射"
+    },
+    "search_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "skipped": {
+      "type": "boolean",
+      "description": "是否跳过检索"
+    }
+  }
+}

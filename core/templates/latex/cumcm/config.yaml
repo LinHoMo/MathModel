@@ -1,0 +1,43 @@
+# CUMCM（全国大学生数学建模竞赛）竞赛包
+# 模板来源：core/Writer/knowledge/templates/mathmodel/zh/cumcm/（cumcmthesis.cls）
+
+competition: cumcm
+name: 全国大学生数学建模竞赛
+language: zh
+engine: xelatex
+compile_chain: xelatex -> bibtex -> xelatex -> xelatex
+
+template:
+  cls: core/Writer/knowledge/templates/mathmodel/zh/cumcm/cumcmthesis.cls
+  cfg: core/Writer/knowledge/templates/mathmodel/zh/cumcm/cumcmthesis.cfg
+  main: core/Writer/knowledge/templates/mathmodel/zh/cumcm/main.tex
+  fonts: [simsun.ttc, simkai.ttf]
+
+thresholds:
+  min_pages: 25
+  max_pages: 30
+  min_words: 18000
+  min_figures: 6
+  min_tables: 4
+  min_equations: 15
+  min_references: 10
+  abstract_words: [400, 600]
+  page_fill_ratio: 0.8
+
+citation:
+  style: gbt7714-numerical
+  biblatex: false
+  format: 顺序编码制上标 [n]
+  forbid: [citep, citet]
+
+ai_usage:
+  required: true
+  output: support_materials/ai_usage_disclosure.md
+  note: 按当届通知提交支撑材料 PDF；若明确未使用 AI 则提交正文声明
+
+anonymity:
+  forbid_in_body: [校名, 姓名, 指导教师, 队员编号]
+  note: 封面信息由官方模板单独填写
+
+rules_verified: 2026-08-30
+rules_source: 见 rules.md 的「官方入口」

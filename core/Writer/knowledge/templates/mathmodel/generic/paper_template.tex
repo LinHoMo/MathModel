@@ -1,0 +1,203 @@
+\documentclass[12pt,a4paper]{article}
+
+% 中文支持 fontset=none (CJK 字体族手动设置; AutoFakeBold 在 \setCJKmainfont 选项中启用)
+\usepackage[fontset=none,UTF8]{ctex}
+% 手动设置 CJK 字体族 (fontset=none 时必须)
+\setCJKmainfont[AutoFakeBold,AutoFakeSlant]{SimSun}
+\setCJKsansfont[AutoFakeBold,AutoFakeSlant]{SimHei}
+\setCJKfamilyfont{zhsong}[AutoFakeBold]{SimSun}
+\setCJKfamilyfont{zhhei}[AutoFakeBold]{SimHei}
+\setCJKfamilyfont{zhkai}[AutoFakeBold]{KaiTi}
+\setCJKfamilyfont{zhfs}[AutoFakeBold]{FangSong}
+
+% 微调排版 + 数学增强
+\usepackage[protrusion=true,expansion=false]{microtype}
+% 数学包
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{mathtools}
+
+% 算法 (algorithm2e 替代旧 algorithm+algorithmic 组合)
+\usepackage[ruled,linesnumbered]{algorithm2e}
+
+% 图表
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+% 引用和链接
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+% 页面设置
+\usepackage[margin=2.5cm]{geometry}
+
+% 摘要左右边距与正文统一：去掉 article.cls 默认 \quotation 造成的左右内缩（约 2.5em），
+% 使摘要正文占满全文宽度，与正文段落左右边距一致。
+\renewenvironment{abstract}{%
+  \small
+  \begin{center}%
+    {\bfseries\abstractname\vspace{-.5em}}%
+  \end{center}%
+  \par\noindent\ignorespaces
+}{%
+  \par
+}
+
+% 代码
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+    language=Python,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true,
+    captionpos=b
+}
+
+% 标题信息
+\title{基于[方法名称]的[问题名称]研究}
+\author{作者姓名\\[0.5em]
+\small 单位名称\\
+\small \texttt{email@example.com}}
+\date{\today}
+
+% 定理类环境（论文常用）
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+本文研究了[问题描述]。针对现有方法的[局限性]，提出了一种基于[方法]的[改进方法]。该方法的主要特点包括：(1) [特点1]；(2) [特点2]；(3) [特点3]。在[数据集/实验环境]上的实验结果表明，所提方法在[指标1]上达到了[数值]，相比基线方法提升了[百分比]。理论分析和实验验证均表明，该方法具有[优势]。
+\textbf{关键词}：关键词1；关键词2；关键词3；关键词4
+\end{abstract}
+
+\section{引言}
+
+\subsection{研究背景}
+[描述研究问题的背景和重要性]
+
+\subsection{问题描述}
+[正式描述要解决的问题]
+
+\subsection{主要贡献}
+本文的主要贡献包括：
+\begin{itemize}
+    \item 贡献1：[详细描述]
+    \item 贡献2：[详细描述]
+    \item 贡献3：[详细描述]
+\end{itemize}
+
+\subsection{论文组织}
+本文其余部分组织如下：第2节回顾相关工作；第3节描述所提方法；第4节给出实验结果；第5节得出结论。
+
+\section{相关工作}
+
+\subsection{[相关领域1]}
+[描述相关工作1]
+
+\subsection{[相关领域2]}
+[描述相关工作2]
+
+\section{方法}
+
+\subsection{问题定义}
+\begin{definition}[问题名称]
+给定输入 $X = \{x_1, x_2, \ldots, x_n\}$，目标是找到映射 $f: X \rightarrow Y$，使得...
+\end{definition}
+
+\subsection{模型架构}
+[描述整体模型架构]
+
+\subsection{目标函数}
+优化目标为：
+\begin{equation}
+\mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \ell(f(x_i), y_i) + \lambda \Omega(\theta)
+\label{eq:loss}
+\end{equation}
+其中，$\ell$ 是损失函数，$\Omega$ 是正则化项，$\lambda$ 是平衡参数。
+
+\subsection{算法流程}
+\begin{algorithm}[H]
+\caption{算法名称}
+\label{alg:algorithm}
+\KwIn{训练数据 $D = \{(x_i, y_i)\}_{i=1}^N$，学习率 $\eta$，迭代次数 $T$}
+\KwOut{模型参数 $\theta^*$}
+初始化参数 $\theta$\;
+\For{$t = 1$ \KwTo $T$}{
+    采样mini-batch $B \subset D$\;
+    计算梯度 $g_t = \nabla_\theta \mathcal{L}_B(\theta)$\;
+    更新参数 $\theta \leftarrow \theta - \eta g_t$\;
+}
+\Return $\theta^* = \theta$\;
+\end{algorithm}
+
+\section{实验}
+
+\subsection{实验设置}
+\subsubsection{数据集}
+[描述使用的数据集]
+
+\subsubsection{评估指标}
+[描述评估指标]
+
+\subsubsection{基线方法}
+[描述基线方法]
+
+\subsubsection{实现细节}
+[描述实现细节]
+
+\subsection{实验结果}
+
+\begin{table}[H]
+\centering
+\caption{主要实验结果}
+\label{tab:main_results}
+\begin{tabular}{lcc}
+\toprule
+方法 & 指标1 & 指标2 \\
+\midrule
+基线1 & xx.x & xx.x \\
+基线2 & xx.x & xx.x \\
+基线3 & xx.x & xx.x \\
+\textbf{本文方法} & \textbf{xx.x} & \textbf{xx.x} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{分析与讨论}
+
+\subsubsection{消融实验}
+[描述消融实验结果]
+
+\subsubsection{参数敏感性分析}
+[描述参数敏感性分析]
+
+\subsubsection{案例分析}
+[描述案例分析]
+
+\section{结论}
+本文提出了[方法名称]，用于解决[问题]。实验结果表明，所提方法在[指标]上取得了优异的性能。未来工作将包括：(1) [未来工作1]；(2) [未来工作2]。
+
+\section*{致谢}
+[致谢内容]
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

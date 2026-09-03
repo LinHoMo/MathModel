@@ -1,0 +1,16 @@
+{
+  "skill_name": "assumption-validator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Validate a set of model assumptions whose rationale, sensitivity, and testability vary widely, with one assumption scoring well below the threshold.",
+      "expected_output": "Success requires 4-dimension scoring; flags assumptions below threshold 6.0; emits assumption_validation.json; requests revision instead of silently passing.",
+      "assertions": [
+        "scores all 4 dimensions for every assumption",
+        "flags any assumption scoring below threshold 6.0",
+        "produces assumption_validation.json",
+        "requests revision rather than silently passing weak assumptions"
+      ]
+    }
+  ]
+}

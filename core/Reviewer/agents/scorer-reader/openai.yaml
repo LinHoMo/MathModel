@@ -1,0 +1,14 @@
+interface:
+  display_name: "Reader Scorer"
+  short_description: "可读性评分员：结构清晰度、语言质量、图表叙事、逻辑流畅度，权重 15%"
+  default_prompt: "Use $scorer-reader to score readability and emit score_card_reader.json."
+runtime:
+  hand: reviewer
+  utg_layer: L4
+  stage: 1
+  inputs:
+    - paper/main.tex
+    - paper/figures/
+    - paper/references.bib
+  outputs:
+    - work/score_card_reader.json

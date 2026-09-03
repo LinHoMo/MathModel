@@ -1,0 +1,67 @@
+"""精确搜索碰撞时刻：在 420-440s 之间密集扫描。"""
+import sys, os
+import numpy as np
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from spiral import spiral_arc_length, inverse_arc_length, spiral_point, spiral_r
+from chain import solve_chain_thetas
+
+B = 0.55
+V1 = 1.0
+THETA_0 = 32 * np.pi
+N_BENCH = 222
+L_HEAD = 3.41
+L_BODY = 2.20
+W = 0.30
+
+L_list = [L_HEAD] + [L_BODY] * (N_BENCH - 1)
+s0 = spiral_arc_length(THETA_0, B)
+
+def seg_dist(p1, p2, p3, p4):
+    """两线段最短距离。"""
+    d = (p2[0]-p1[0], p2[1]-p1[1])
+    e = (p4[0]-p3[0], p4[1]-p3[1])
+    denom = d[0]*d[0]+d[1]*d[1] * (e[0]*e[0]+e[1]*e[1]) - (d[0]*e[0]+d[1]*e[1])**2
+    if abs(denom) < 1e-18:
+        return min(np.hypot(p1[0]-p3[0], p1[1]-p3[1]),
+                   np.hypot(p1[0]-p4[0], p1[1]-p4[1]),
+                   np.hypot(p2[0]-p3[0], p2[1]-p3[1]),
+                   np.hypot(p2[0]-p4[0], p2[1]-p4[1]))
+    t = ((d[0]*e[0]+d[1]*e[1])*((p3[0]-p1[0])*e[0]+(p3[1]-p1[1])*e[1])
+         - (e[0]*e[0]+e[1]*e[1])*((p3[0]-p1[0])*d[0]+(p3[1]-p1[1])*d[1])) / denom
+    s = ((d[0]*d[0]+d[1]*d[1])*((p3[0]-p1[0])*e[0]+(p3[1]-p1[1])*e[1])
+         - (d[0]*e[0]+d[1]*e[1])*((p3[0]-p1[0])*d[0]+(p3[1]-p1[1])*d[1])) / denom
+    t = max(0, min(1, t))
+    s = max(0, min(1, s))
+    cx = p1[0]+t*d[0]; cy = p1[1]+t*d[1]
+    dx = p3[0]+s*e[0]; dy = p3[1]+s*e[1]
+    return np.hypot(cx-dx, cy-dy)
+
+for t in np.arange(415, 445, 0.5):
+    s_target = s0 - V1 * t
+    if s_target <= 0:
+        break
+    theta_head = inverse_arc_length(s_target, B)
+    r_head = spiral_r(theta_head, B)
+    
+    theta_array = solve_chain_thetas(theta_head, L_list, B)
+    positions = [spiral_point(th, B) for th in theta_array]
+    
+    min_nonadj = float('inf')
+    min_pair = None
+    for i in range(N_BENCH):
+        for j in range(i+2, N_BENCH):
+            d_est = min(
+                np.hypot(positions[i][0]-positions[j][0], positions[i][1]-positions[j][1]),
+                np.hypot(positions[i+1][0]-positions[j+1][0], positions[i+1][1]-positions[j+1][1]),
+            )
+            if d_est > 1.0:
+                continue
+            d = seg_dist(positions[i], positions[i+1], positions[j], positions[j+1])
+            if d < min_nonadj:
+                min_nonadj = d
+                min_pair = (i, j)
+    
+    col = "COLLISION!" if min_nonadj < W else ""
+    if min_nonadj < 0.35:
+        print("t={:6.1f}s  r_head={:6.3f}m  min_dist={:.4f}m pair={}  {}".format(
+            t, r_head, min_nonadj, min_pair, col))
