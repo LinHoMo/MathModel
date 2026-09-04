@@ -75,6 +75,8 @@ python core/tools/state.py <项目> status   # 看下一步做什么
 | `python core/tools/benchmark.py bench report --rubric <f> --response <f>` | 生成可读报告 |
 | `python core/tools/bench_mmbench.py list` | 列出 MMBench 111 题 |
 | `python core/tools/bench_mmbench.py export --year <Y> --topic <A>` | 导出为 rubric 骨架 |
+| `python core/tools/orchestrator.py <项目>` | 一键执行 29 步流水线（含重试/回退） |
+| `python core/tools/score_compute.py <项目>` | 自动化 5 维评分卡生成（学术/工程/评委/读者/对抗） |
 
 > 用 `python` 或 `python3` 均可，`core/tools/` 下核心脚本零第三方依赖；`diagram_gen.py` 需 `pip install matplotlib`。
 
@@ -85,6 +87,13 @@ python core/tools/state.py <项目> status   # 看下一步做什么
 3. **按上述执行协议逐步推进**：Modeler（8 步）→ Programmer（6 步）→ Writer（7 步）→ Reviewer（8 步）。每步都跑门禁。
 4. **运行验证**：`python core/tools/validate.py` 验证产物完整性（schema / 哈希链 / 数值一致性 / 护栏）。
 5. **回退规则**：任一阶段失败，按各 agent SKILL.md 的 `## Iteration` 在本手内回退修正，不向下游推进。
+
+### 一键执行（可选）
+
+```bash
+python core/tools/orchestrator.py <项目>           # 一键执行 29 步（含重试/回退）
+python core/tools/score_compute.py <项目>          # 自动生成 5 维评分卡
+```
 
 ## 项目结构
 

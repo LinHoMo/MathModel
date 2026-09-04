@@ -110,8 +110,13 @@ MathModelSkills/
 │   ├── schemas/                     # 结构化输出 Schema
 │   └── tools/                       # 工具脚本（state / gate / validate 等）
 ├── projects/                        # 项目实例
-│   └── （参考样例归档于 archives/cumcm2024a；库模式 projects/ 为空，无活跃实例）
+│   └── cumcm2024anew/               # 示例项目（CUMCM 2024 A题：防空导弹拦截）
 ├── docs/                            # 架构与状态文档
+│   ├── mathmodel-architecture.html  # 系统架构图（交互式）
+│   ├── mathmodel-pipeline.html      # 29步流水线图
+│   ├── mathmodel-lifecycle.html     # 状态机流程图
+│   ├── mathmodel-dataflow.html      # 数据流图
+│   └── mathmodel-sequence.html      # 交互时序图
 ├── tests/                           # unit / integration / e2e
 ├── AGENTS.md                        # 唯一权威入口
 ├── catalog.yaml                     # agent 元数据索引
@@ -150,7 +155,7 @@ MathModelSkills/
 
 ## 项目定位
 
-- **不做自有品牌 CLI**。目标是任意通用 agent（WorkBuddy / Claude Code / Trae / opencode / Cursor 等）进入本目录即可执行，通过「入口统一 + 状态外置 + 门禁脚本化」实现，而非写一个 orchestrator 接管推理。
+- **编排器辅助**：`orchestrator.py` 可一键执行 29 步流水线（含重试/回退），但核心仍靠「入口统一 + 状态外置 + 门禁脚本化」，任意通用 agent 均可接入。
 - **引擎与实例分离**：`core/` 是唯一可复用引擎，`projects/<项目>/` 是引擎在校验下跑出来的实例；改引擎不动实例，换实例不伤引擎。
 - **赛道瓶颈不在流程编排**，而在内容质量与合规安全。
 - **最高优先级缺口是 AI 使用披露**（CUMCM 需支撑材料、MCM 需 AI use report），属合规范畴而非体验问题。
