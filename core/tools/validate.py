@@ -1186,7 +1186,11 @@ def check_agents_self_check(project_path):
 
 
 def check_catalog_yaml(project_path):
-    """L1: catalog.yaml 存在且含全部 29 个 agent name（正则解析，零依赖）"""
+    """L1: catalog.yaml 存在且含全部 29 个 agent name（正则解析，零依赖）
+
+    V3 P5 起额外校验 v5 双视图结构（schema_version 5 + v3 节 +
+    roles/nodes/validators 键）；深度三方一致性由 catalog_check.py 承担。
+    """
     catalog_path = project_path / "catalog.yaml"
     if not catalog_path.exists():
         return False, "catalog.yaml 不存在"
@@ -1203,7 +1207,17 @@ def check_catalog_yaml(project_path):
     missing = [n for n in expected_set if n not in name_set]
     if missing:
         return False, f"catalog.yaml 缺 agent: {', '.join(sorted(missing))}"
-    return True, "catalog.yaml 含全部29个agent"
+    # v5 双视图结构检查
+    if not re.search(r"^schema_version:\s*5\s*$", content, re.MULTILINE):
+        return False, "catalog.yaml schema_version 应为 5（v3 双视图）"
+    v3_block = re.search(r"^v3:\s*$", content, re.MULTILINE)
+    if not v3_block:
+        return False, "catalog.yaml 缺少 v3 视图节"
+    tail = content[v3_block.end():]
+    for key in ("roles:", "nodes:", "validators:"):
+        if not re.search(rf"^[ ]+{key}[ ]*(#.*)?$", tail, re.MULTILINE):
+            return False, f"catalog.yaml v3 节缺少 {key.rstrip(':')}"
+    return True, "catalog.yaml v5：legacy 29 agent + v3 双视图齐全"
 
 
 def check_agents_md(project_path):

@@ -109,7 +109,7 @@
   - `.codex-plugin/plugin.json` (Codex 插件清单)
   - `agents/openai.yaml` (OpenAI Agents SDK 兼容)
   - `skills/mathmodeling/` (Codex skill shim)
-- **协议**：`references/harness_compat.md` 定义跨运行时行为约定
+- **协议**：`docs/integration/harness-compat.md` 定义跨运行时行为约定
 - **状态互通**：`decision_log.json` 跨 Claude Code / Codex CLI / opencode / Cursor 共享
 
 #### 2.3 实测分位锚定

@@ -75,7 +75,10 @@ python core/tools/state.py <项目> status   # 看下一步做什么
 | `python core/tools/benchmark.py bench report --rubric <f> --response <f>` | 生成可读报告 |
 | `python core/tools/bench_mmbench.py list` | 列出 MMBench 111 题 |
 | `python core/tools/bench_mmbench.py export --year <Y> --topic <A>` | 导出为 rubric 骨架 |
-| `python core/tools/orchestrator.py <项目>` | 一键执行 29 步流水线（含重试/回退） |
+| `python core/tools/orchestrator.py <项目>` | 默认 V3 DAG 干跑（波次并行计划） |
+| `python core/tools/orchestrator.py <项目> --legacy` | V2 legacy：一键执行 29 步流水线（含重试/回退） |
+| `python core/tools/catalog_check.py --check` | catalog v5 双视图三方一致性校验 |
+| `python core/tools/knowledge.py recommend --types <题型>` | V3 方法卡检索（16 卡 + 失败记忆 + 创新模式） |
 | `python core/tools/score_compute.py <项目>` | 自动化 5 维评分卡生成（学术/工程/评委/读者/对抗） |
 
 > 用 `python` 或 `python3` 均可，`core/tools/` 下核心脚本零第三方依赖；`diagram_gen.py` 需 `pip install matplotlib`。
@@ -91,9 +94,28 @@ python core/tools/state.py <项目> status   # 看下一步做什么
 ### 一键执行（可选）
 
 ```bash
-python core/tools/orchestrator.py <项目>           # 一键执行 29 步（含重试/回退）
+python core/tools/orchestrator.py <项目>           # 默认 V3 DAG 模式（组合 DAG + 角色校验 + 波次干跑）
+python core/tools/orchestrator.py <项目> --legacy  # V2 legacy：一键执行 29 步（含重试/回退）
 python core/tools/score_compute.py <项目>          # 自动生成 5 维评分卡
 ```
+
+## V3 Cognitive Workflow Runtime（双视图）
+
+本仓库同时承载两代执行架构，`catalog.yaml`（schema_version 5）是双视图单一真源：
+
+- **legacy 视图（hands）**：四手 29 agent 线性流水线，由 `state.py` / `gate.py` 驱动，本节上文协议即 legacy 协议。
+- **v3 视图（v3 节）**：V3.1 认知工作流运行时——Artifact Registry（Stable ID + 生命周期）+ Typed Evidence Graph（14 种关系 + 失效传播）+ Workflow DAG（15 节点，条件边/反馈环/Per-Qi 展开）+ 5 Role + 6 Validator + Knowledge 层（Method Cards / Failure Memory / Patterns / Decision Log）。
+
+V3 关键入口：
+
+| 命令 | 作用 |
+|---|---|
+| `python core/tools/orchestrator.py <项目>` | 默认 V3 DAG 干跑（波次并行计划） |
+| `python core/tools/catalog_check.py --check` | 双视图三方一致性校验（roles/DAG/validators） |
+| `python core/tools/knowledge.py recommend --types <题型>` | 方法卡检索（打分规则显式可测试） |
+| `python core/tools/state.py <项目> init` | 状态初始化（自动识别 V3 workspace 并桥接） |
+
+V3 架构细节见 `docs/architecture/V3.1_ARCHITECTURE.md`，迁移映射见 `docs/architecture/V3_MIGRATION_MAP.md`，最终审计见 `docs/architecture/V3_FINAL_AUDIT.md`。
 
 ## 项目结构
 

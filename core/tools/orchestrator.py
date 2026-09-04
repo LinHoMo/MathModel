@@ -429,13 +429,16 @@ def _run_v3(project_dir: Path, dry_run: bool = True,
 
 
 def main():
-    ap = argparse.ArgumentParser(description="自动化编排器：一键跑完 29 步")
+    ap = argparse.ArgumentParser(
+        description="自动化编排器：默认 V3 DAG 模式，--legacy 走 29 步流水线")
     ap.add_argument("project", help="项目路径或名称")
-    ap.add_argument("--max-rounds", type=int, default=DEFAULT_MAX_ROUNDS, help="最大评审轮次")
-    ap.add_argument("--resume", action="store_true", help="从当前状态继续")
+    ap.add_argument("--max-rounds", type=int, default=DEFAULT_MAX_ROUNDS, help="最大评审轮次（legacy 模式）")
+    ap.add_argument("--resume", action="store_true", help="从当前状态继续（legacy 模式）")
     ap.add_argument("--dry-run", action="store_true", help="仅打印计划不执行")
+    ap.add_argument("--legacy", action="store_true",
+                    help="V2 legacy 模式：29 步线性流水线（state/gate 驱动）")
     ap.add_argument("--v3", action="store_true",
-                    help="V3 DAG 模式：组合 Workflow DAG + 角色校验 + 波次干跑")
+                    help="V3 DAG 模式（P5 起为默认，此 flag 仅为兼容保留）")
     ap.add_argument("--competition", default=None,
                     help="V3 模式赛事 profile（cumcm/mcm...，缺省用 base）")
     args = ap.parse_args()
@@ -452,11 +455,12 @@ def main():
         print(f"[ERROR] 项目不存在: {base}", file=sys.stderr)
         return 2
 
-    if args.v3:
-        # P3: V3 模式仅支持干跑（实际执行在 P4 接入 executor）
-        return _run_v3(base, dry_run=True, competition=args.competition)
+    if args.legacy:
+        # V2 legacy：29 步线性流水线（P5 前的默认行为，保留一个版本周期）
+        return _run_pipeline(str(base), args.max_rounds, args.dry_run)
 
-    return _run_pipeline(str(base), args.max_rounds, args.dry_run)
+    # P5 起默认 V3 DAG 模式（组合 Workflow DAG + 角色校验 + 波次干跑）
+    return _run_v3(base, dry_run=True, competition=args.competition)
 
 
 if __name__ == "__main__":

@@ -1,15 +1,15 @@
 # 执行状态（由 core/tools/state.py 自动维护，请勿手改）
 
 - 项目：`cumcm2024anew`
-- 进度：**11/29**（37%）
-- 更新时间：2026-09-04T07:10:57Z
+- 进度：**12/29**（41%）
+- 更新时间：2026-09-04T09:31:29Z
 
 ## 下一步
 
 - **手**：`programmer`
-- **Agent**：`result-verifier`（stage 4）
-- **读**：`Programmer/agents/result-verifier/SKILL.md`
-- **门禁**：`python core/tools/gate.py cumcm2024anew programmer result-verifier`
+- **Agent**：`guardrails-checker`（stage 5）
+- **读**：`Programmer/agents/guardrails-checker/SKILL.md`
+- **门禁**：`python core/tools/gate.py cumcm2024anew programmer guardrails-checker`
 
 ## 已完成
 
@@ -26,6 +26,7 @@
 | 9 | programmer | template-selector | 1 | `work/template_plan.json` | 2026-09-04T06:55:34 |
 | 10 | programmer | code-implementer | 2 | `code/main.py` | 2026-09-04T06:55:35 |
 | 11 | programmer | test-runner | 3 | `work/test_report.json` | 2026-09-04T07:10:57 |
+| 12 | programmer | result-verifier | 4 | `work/result_validation.json` | 2026-09-04T09:31:29 |
 
 ---
 

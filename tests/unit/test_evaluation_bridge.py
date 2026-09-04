@@ -66,3 +66,35 @@ class TestSingleInstance:
         assert tools_dir in sys.path
         import weight_profiles  # 裸名导入（aggregate_scores 内部同样写法）
         assert callable(weight_profiles.get_weights)
+
+
+class TestBenchmarkBridge:
+    """P5: evaluation.benchmark 桥接（benchmark / bench_mmbench）。"""
+
+    def test_modules_mapped(self):
+        from evaluation import benchmark
+        assert callable(getattr(benchmark.benchmark, "main", None))
+        assert callable(getattr(benchmark.bench_mmbench, "main", None))
+
+    def test_single_instance_with_tools_import(self):
+        sys.path.insert(0, str(REPO / "core" / "tools"))
+        import benchmark as BM_direct
+        from evaluation import benchmark as EB
+        assert EB.benchmark is BM_direct
+
+
+class TestAdaptersBridge:
+    """P5: runtime.adapters 桥接（manifest / cloud_sandbox / runtime_compat）。"""
+
+    def test_modules_mapped(self):
+        from runtime import adapters
+        assert callable(getattr(adapters.manifest, "load_catalog", None))
+        assert callable(getattr(adapters.cloud_sandbox, "run_code", None))
+        assert hasattr(adapters.runtime_compat, "RuntimeTester")
+
+    def test_manifest_single_instance(self):
+        """与 test_openai_manifest 的 `import gen_runtime_manifest` 保持单实例。"""
+        sys.path.insert(0, str(REPO / "core" / "tools"))
+        import gen_runtime_manifest as GRM_direct
+        from runtime import adapters
+        assert adapters.manifest is GRM_direct

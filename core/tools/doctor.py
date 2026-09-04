@@ -112,6 +112,26 @@ def check_agent_count(r):
             r.block_(f"{hand} agent 数", f"{actual} != {n}")
 
 
+def check_catalog_v3(r):
+    """catalog.yaml v5 双视图一致性（roles/DAG/validators 三方对齐）。"""
+    import subprocess
+    script = ROOT / "core" / "tools" / "catalog_check.py"
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(script), "--check"],
+            cwd=str(ROOT), capture_output=True, text=True, timeout=60)
+    except Exception as e:
+        r.add(False, "catalog v5 双视图", f"catalog_check 执行失败: {e}")
+        return
+    if proc.returncode == 0:
+        r.add(True, "catalog v5 双视图", "v3 与 roles/DAG/validators 三方一致")
+    else:
+        out = (proc.stdout or proc.stderr).strip().splitlines()
+        detail = out[0] if out else "不一致"
+        r.add(False, "catalog v5 双视图", detail)
+        r.block_("catalog v5 双视图", detail)
+
+
 def check_latex(r, competition, skip):
     if skip:
         r.add(True, "LaTeX 工具链", "已跳过（--skip-tools）")
@@ -195,6 +215,7 @@ def main():
     check_tools(r)
     check_dirs(r)
     check_agent_count(r)
+    check_catalog_v3(r)
     check_latex(r, args.competition, args.skip_tools)
     check_competition_pack(r, args.competition)
     if args.project:
