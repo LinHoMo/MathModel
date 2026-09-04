@@ -1,8 +1,11 @@
 # MathModelSkills —— agent 元数据索引
-# 四手 29 agent 的结构化清单，供编排器与 core/tools/validate.py 消费。
+# 双视图单一真源：
+#   hands = legacy 29 agent 线性流水线（V2，编排器 state.py/gate.py 消费）
+#   v3    = V3.1 Cognitive Workflow Runtime（15 节点 DAG + 5 角色 + 6 validator）
+# 双视图一致性由 core/tools/catalog_check.py --check 强制。
 # 所有路径用正斜杠，相对于项目根目录。
 
-schema_version: 4
+schema_version: 5
 runtime: agent-native
 
 hands:
@@ -551,3 +554,101 @@ tools:
       - "python core/tools/check_matlab_env.py --summary"
       - "python core/tools/check_matlab_env.py --platform matlab"
       - "python core/tools/check_matlab_env.py --platform syslab"
+
+# =====================================================================
+# V3.1 Cognitive Workflow Runtime 视图（P4 起与 hands 并存，P5 切换主引擎）
+# =====================================================================
+v3:
+  description: V3.1 认知工作流运行时（Artifact 层 + Typed Evidence Graph + Workflow DAG）
+  runtime: cognitive-workflow
+  workflows_dir: core/workflows
+  state_dir: state            # projects/<p>/state/ = registry + graph + decisions
+  roles:                      # 5 角色（与 core/roles/*.yaml 一致）
+    - name: analyst
+      path: core/roles/analyst.yaml
+      capabilities: 赛题结构化解析、文献检索与证据提取
+    - name: modeler
+      path: core/roles/modeler.yaml
+      capabilities: 方法选型竞技场、数学建模
+    - name: experimenter
+      path: core/roles/experimenter.yaml
+      capabilities: 实验规划、执行、证据登记
+    - name: critic
+      path: core/roles/critic.yaml
+      capabilities: 前置批判（model/experiment/evidence/judge 四道门禁）
+    - name: writer
+      path: core/roles/writer.yaml
+      capabilities: 研究叙事提炼、论文投影、章节撰写
+  nodes:                      # 15 节点（与组合 DAG 模板一致，per_question 节点按 Question 展开）
+    - name: problem_analysis
+      role: analyst
+      stage: problem-analysis
+    - name: literature_search
+      role: analyst
+      stage: problem-analysis
+    - name: model_selection
+      role: modeler
+      stage: modeling
+    - name: model_construction
+      role: modeler
+      stage: modeling
+    - name: model_critique
+      role: critic
+      validator: model-critic
+      stage: modeling
+    - name: assumption_check
+      role: critic
+      validator: assumption-checker
+      stage: modeling
+    - name: experiment_design
+      role: experimenter
+      stage: experiment
+    - name: experiment
+      role: experimenter
+      per_question: true
+      stage: experiment
+    - name: experiment_critique
+      role: critic
+      validator: experiment-critic
+      per_question: true
+      stage: experiment
+    - name: evidence_build
+      role: experimenter
+      stage: evidence
+    - name: evidence_gate
+      role: critic
+      validator: evidence-gate
+      stage: evidence
+    - name: research_direction
+      role: writer
+      stage: paper
+    - name: paper_projection
+      role: writer
+      stage: paper
+    - name: paper_sections
+      role: writer
+      per_question: true
+      stage: paper
+    - name: paper_review
+      role: critic
+      validator: judge-critic
+      stage: paper
+  validators:                 # 6 validator（DAG validator 绑定 + judge 内部聚合的 narrative-critic）
+    - name: evidence-gate
+      kind: runtime
+      path: core/validators/evidence/evidence_gate.py
+    - name: narrative-critic
+      kind: runtime
+      path: core/runtime/writing/narrative_critic.py
+    - name: judge-critic
+      kind: runtime
+      path: core/runtime/writing/judge_critic.py
+    - name: model-critic
+      kind: skill
+      path: core/skills/critics/model-critic/SKILL.md
+    - name: experiment-critic
+      kind: skill
+      path: core/skills/critics/experiment-critic/SKILL.md
+    - name: assumption-checker
+      kind: runtime
+      path: core/knowledge/validation/assumption_validator.py
