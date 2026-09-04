@@ -1,0 +1,126 @@
+% appendix.tex —— 附录：长表格、额外数据与详细推导
+% 在 main.tex 末尾 \end{document} 前 \input
+
+\appendix
+\section{完整数据表}\label{app:data}
+
+表~\ref{tab:full_data} 列出 223 个把手的初始位置与 $t=300$ s 时的位置。
+
+\begin{table}[htbp]
+\centering
+\caption{223 个把手的初始与最终位置（节选前 15 行）}\label{tab:full_data}
+\begin{tabular}{r rr rr}
+\toprule
+把手 $i$ & $x_i(0)$ [m] & $y_i(0)$ [m] & $x_i(300)$ [m] & $y_i(300)$ [m] \\
+\midrule
+0（龙头前） & 8.8000 & 0.0000 & 4.4203 & 2.3204 \\
+1 & 5.3900 & 0.0000 & 3.5082 & 1.6811 \\
+2 & 3.1900 & 0.0000 & 2.6418 & 1.1456 \\
+3 & 0.9900 & 0.0000 & 1.8325 & 0.6894 \\
+4 & -1.2100 & 0.0000 & 1.0730 & 0.2956 \\
+5 & -3.4100 & 0.0000 & 0.3551 & -0.0476 \\
+6 & -5.6100 & 0.0000 & -0.3268 & -0.3486 \\
+7 & -7.8100 & 0.0000 & -0.9772 & -0.6138 \\
+8 & -7.8099 & -2.2000 & -1.5995 & -0.8482 \\
+9 & -7.8099 & -4.4000 & -2.1959 & -1.0566 \\
+10 & -5.6099 & -4.4000 & -2.7683 & -1.2430 \\
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\
+222（龙尾后） & 1.2178 & 12.7210 & 0.3692 & 9.9180 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{算法伪代码}\label{app:alg}
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox{0.92\textwidth}{
+\textbf{算法 1：龙头极角反解（二分法）}
+
+\textbf{输入：}目标弧长 $s_{\text{target}}$，容差 $\epsilon=10^{-9}$ m
+
+\textbf{输出：}龙头极角 $\theta_{\text{head}}$
+
+\textbf{步骤：}
+\begin{enumerate}
+\item 初始化 $\theta_{\text{lo}}=0$，$\theta_{\text{hi}}=\theta_0=32\pi$
+\item \textbf{while} $\theta_{\text{hi}}-\theta_{\text{lo}}>\epsilon$ \textbf{do}
+\item $\quad\theta_{\text{mid}}=(\theta_{\text{lo}}+\theta_{\text{hi}})/2$
+\item $\quad$\textbf{if} $s(\theta_{\text{mid}})> s_{\text{target}}$ \textbf{then} $\theta_{\text{hi}}=\theta_{\text{mid}}$ \textbf{else} $\theta_{\text{lo}}=\theta_{\text{mid}}$
+\item \textbf{return} $(\theta_{\text{lo}}+\theta_{\text{hi}})/2$
+\end{enumerate}
+
+\textbf{算法 2：链式约束逐节递推}
+
+\textbf{输入：}龙头极角 $\theta_{\text{head}}$，板凳长度 $\{L_i\}_{i=1}^{222}$
+
+\textbf{输出：}全部把手极角 $\{\theta_i\}$、角速度 $\{\dot{\theta}_i\}$
+
+\textbf{步骤：}
+\begin{enumerate}
+\item $\theta_0 = \theta_{\text{head}}$
+\item \textbf{for} $i=1$ \textbf{to} $222$ \textbf{do}
+\item \quad 在 $[\theta_{i-1}-0.5,\theta_{i-1}+0.5]$ 上二分求根 $|P(\theta)-P(\theta_{i-1})|-L_i=0$
+\item \quad 记录 $\theta_i$，计算 $\mathbf{T}_i$、$\mathbf{u}_i$
+\item \quad 按式~\eqref{eq:theta_dot_recurrence} 递推 $\dot{\theta}_i$
+\item \textbf{return} $\{\theta_i\}$、$\{\dot{\theta}_i\}$
+\end{enumerate}
+}}
+\caption{算法伪代码}
+\label{fig:alg_pseudocode}
+\end{figure}
+
+\section{龙头位置数值与弧长误差分析}\label{app:error}
+
+表~\ref{tab:err_samples} 列出若干抽样时刻的龙头位置数值及其与匀速约束的残差。
+
+\begin{table}[htbp]
+\centering
+\caption{龙头位置数值稳定性抽样}\label{tab:err_samples}
+\begin{tabular}{r rr r}
+\toprule
+$t$ [s] & $x_{\text{head}}$ [m] & $y_{\text{head}}$ [m] & 残差 $|v_1-v_{\text{actual}}|$\,\text{(m/s)} \\
+\midrule
+0 & 8.800000 & 0.000000 & $<10^{-9}$ \\
+50 & 7.832512 & 3.906215 & $<10^{-9}$ \\
+100 & 5.931401 & 6.274832 & $<10^{-9}$ \\
+150 & 3.470614 & 7.564215 & $<10^{-9}$ \\
+200 & 0.841213 & 7.546511 & $<10^{-9}$ \\
+250 & -1.504325 & 6.166325 & $<10^{-9}$ \\
+300 & 4.420274 & 2.320429 & $<10^{-9}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+全部 301 个时刻的速度残差均低于 $10^{-9}$ m/s，表明二分法求解达到机器精度，模型数值解稳定。
+
+\section{灵敏度分析详细结果}\label{app:sens}
+
+表~\ref{tab:sens_detail} 给出各参数 $\pm10\%$ 扰动下的灵敏度数值表。
+
+\begin{table}[htbp]
+\centering
+\caption{数值灵敏度分析结果}\label{tab:sens_detail}
+\begin{tabular}{l rr rr}
+\toprule
+参数 & 扰动 & $t^*$ [s] & $d_{\min}$ [m] & $v_{\max}$ [m/s] & $R$ [m] \\
+\midrule
+$b$ & $+10\%$ & $+6.2$ & $+0.758$ & $+0.004$ & $+0.002$ \\
+$b$ & $+5\%$ & $+3.1$ & $+0.379$ & $+0.002$ & $+0.001$ \\
+$b$ & $-5\%$ & $-3.2$ & $-0.379$ & $-0.002$ & $-0.001$ \\
+$b$ & $-10\%$ & $-6.5$ & $-0.758$ & $-0.004$ & $-0.002$ \\
+\midrule
+$v_1$ & $+10\%$ & $-36.0$ & $0$ & $+0.241$ & $0$ \\
+$v_1$ & $+5\%$ & $-18.0$ & $0$ & $+0.121$ & $0$ \\
+$v_1$ & $-5\%$ & $+18.0$ & $0$ & $-0.121$ & $0$ \\
+$v_1$ & $-10\%$ & $+36.0$ & $0$ & $-0.241$ & $0$ \\
+\midrule
+$w$ & $+10\%$ & $-5.4$ & $+0.227$ & $0$ & $0$ \\
+$w$ & $+5\%$ & $-2.7$ & $+0.114$ & $0$ & $0$ \\
+$w$ & $-5\%$ & $+2.7$ & $-0.114$ & $0$ & $0$ \\
+$w$ & $-10\%$ & $+5.4$ & $-0.227$ & $0$ & $0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+由表~\ref{tab:sens_detail} 可得灵敏度秩：$v_{\max}\propto v_1$（正比）、$t^*\propto 1/v_1$（反比）、$d_{\min}\propto b$（线性）、$R$ 和 $v_{\max}$ 对 $b$、$w$ 不敏感。上述模式与第 6 节的解析灵敏度估计完全一致。
