@@ -1,0 +1,14 @@
+# experimenter — 实验执行角色
+role: experimenter
+description: 实验规划（baseline/灵敏度/多起点）、代码实现、测试执行、证据构建，产出 Code/Experiment/Result/Figure/Table artifacts
+capabilities:
+  - experiment-planning
+  - template-selection
+  - coding
+  - testing
+  - result-verification
+  - evidence-building
+executes:
+  - experiment_design
+  - experiment
+  - evidence_build

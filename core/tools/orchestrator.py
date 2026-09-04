@@ -11,6 +11,7 @@
 
 用法：
     python core/tools/orchestrator.py <项目> [--max-rounds N] [--resume] [--dry-run]
+    python core/tools/orchestrator.py <项目> --v3 [--competition cumcm]   # V3 DAG 干跑
 """
 from __future__ import annotations
 
@@ -344,12 +345,99 @@ def _run_pipeline(project: str, max_rounds: int, dry_run: bool = False) -> int:
     return 0
 
 
+def _run_v3(project_dir: Path, dry_run: bool = True,
+            competition: str | None = None) -> int:
+    """V3 模式：组合 Workflow DAG → 角色校验 → 波次干跑。
+
+    P3 交付 dry-run（P4 接 executor 后支持实际执行）。
+    """
+    sys.path.insert(0, str(ROOT / "core"))
+    from runtime.execution.composer import ComposeError, WorkflowComposer
+    from runtime.roles import RoleError, load_roles, validate_dag_roles
+
+    composer = WorkflowComposer(ROOT / "core" / "workflows")
+
+    # Question 列表：优先 V3 registry，其次 V2 状态反推，最后演示用 Q001
+    questions: list[str] = []
+    reg_path = project_dir / "state" / "registry.json"
+    if reg_path.exists():
+        try:
+            reg = json.loads(reg_path.read_text(encoding="utf-8"))
+            questions = sorted(
+                aid for aid, a in reg.get("artifacts", {}).items()
+                if str(aid).startswith("Q"))
+        except (json.JSONDecodeError, OSError):
+            pass
+    if not questions:
+        v2_state = project_dir / "work" / "state.json"
+        if v2_state.exists():
+            try:
+                st = json.loads(v2_state.read_text(encoding="utf-8"))
+                questions = sorted(st.get("q_states", {}).keys()) or []
+            except (json.JSONDecodeError, OSError):
+                pass
+    if not questions:
+        questions = ["Q001"]
+
+    print(f"[V3] 项目: {project_dir.name}  questions: {questions}")
+    try:
+        dag = composer.compose_executable(questions, competition)
+        roles = load_roles(ROOT / "core" / "roles")
+    except (ComposeError, RoleError) as exc:
+        print(f"[V3][FAIL] {'; '.join(str(x) for x in exc.args)}", file=sys.stderr)
+        return 2
+
+    role_problems = validate_dag_roles(dag, roles)
+    if role_problems:
+        print(f"[V3][FAIL] 角色校验未通过:", file=sys.stderr)
+        for p in role_problems:
+            print(f"  - {p}", file=sys.stderr)
+        return 2
+
+    print(f"[V3] DAG: {dag.name}  节点 {len(dag.nodes)} 个  "
+          f"(角色: {', '.join(sorted(roles))})")
+
+    if not dry_run:
+        print("[V3][ERROR] V3 实际执行在 P4 接入 executor；当前请使用 --dry-run",
+              file=sys.stderr)
+        return 2
+
+    # ---- 波次干跑：迭代 ready 集合（同 wave 内可并行）
+    completed: set[str] = set()
+    wave = 0
+    while True:
+        ready = dag.ready_nodes(completed)
+        if not ready:
+            break
+        wave += 1
+        print(f"\n-- Wave {wave} ({len(ready)} 节点, 可并行) --")
+        for nid in ready:
+            n = dag.nodes[nid]
+            bits = [f"type={n.type}"]
+            if n.role:
+                bits.append(f"role={n.role}")
+            if n.validator:
+                bits.append(f"validator={n.validator}")
+            if n.per_question:
+                bits.append("per_question")
+            if n.on_fail:
+                bits.append(f"on_fail→{n.on_fail}")
+            print(f"  {nid:32s} {'  '.join(bits)}")
+        completed |= set(ready)
+    print(f"\n[V3][DRY-RUN] 共 {wave} 波 / {len(dag.nodes)} 节点，计划合法")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description="自动化编排器：一键跑完 29 步")
     ap.add_argument("project", help="项目路径或名称")
     ap.add_argument("--max-rounds", type=int, default=DEFAULT_MAX_ROUNDS, help="最大评审轮次")
     ap.add_argument("--resume", action="store_true", help="从当前状态继续")
     ap.add_argument("--dry-run", action="store_true", help="仅打印计划不执行")
+    ap.add_argument("--v3", action="store_true",
+                    help="V3 DAG 模式：组合 Workflow DAG + 角色校验 + 波次干跑")
+    ap.add_argument("--competition", default=None,
+                    help="V3 模式赛事 profile（cumcm/mcm...，缺省用 base）")
     args = ap.parse_args()
 
     project = args.project
@@ -363,6 +451,10 @@ def main():
     if not base.exists():
         print(f"[ERROR] 项目不存在: {base}", file=sys.stderr)
         return 2
+
+    if args.v3:
+        # P3: V3 模式仅支持干跑（实际执行在 P4 接入 executor）
+        return _run_v3(base, dry_run=True, competition=args.competition)
 
     return _run_pipeline(str(base), args.max_rounds, args.dry_run)
 

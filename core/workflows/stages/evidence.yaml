@@ -8,7 +8,7 @@ nodes:
     type: reasoning
     role: experimenter
     description: 从实验产物构建 R/F/T artifacts + typed relations（Evidence Graph）
-    depends_on: [experiment*]
+    depends_on: [experiment_critique*]
     outputs: [state/evidence_graph.json]
   evidence_gate:
     type: validation

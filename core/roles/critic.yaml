@@ -1,0 +1,15 @@
+# critic — 前置批判角色
+role: critic
+description: Critic 前置架构：在产物进入下游前批判（模型/实验/证据/叙事/评委视角），fail 触发反馈环而非事后评分
+capabilities:
+  - model-critique
+  - experiment-critique
+  - evidence-gating
+  - assumption-checking
+  - weakness-hunting
+executes:
+  - model_critique
+  - assumption_check
+  - evidence_gate
+  - experiment_critique
+  - paper_review

@@ -1,0 +1,16 @@
+# writer — 论文投影角色
+role: writer
+description: 从 Research State（Registry + Graph）投影论文：大纲、章节、图表、参考文献与最终装配，Paper 只是投影不是终点
+capabilities:
+  - outline-projection
+  - section-writing
+  - figure-generation
+  - reference-curation
+  - paper-assembly
+executes:
+  - research_direction
+  - paper_projection
+  - paper_sections
+  - paper_figures
+  - paper_references
+  - paper_assembly

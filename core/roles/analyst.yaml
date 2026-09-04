@@ -1,0 +1,11 @@
+# analyst — 问题分析角色
+role: analyst
+description: 赛题结构化解析、题型识别、文献检索与证据提取，产出 Problem/Question artifacts
+capabilities:
+  - problem-analysis
+  - type-classification
+  - literature-search
+  - question-decomposition
+executes:
+  - problem_analysis
+  - literature_search

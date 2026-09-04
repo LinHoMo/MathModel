@@ -115,9 +115,12 @@ class TestComposer:
         # 模板节点被移除
         assert "experiment" not in exp.nodes
         assert "paper_sections" not in exp.nodes
-        # evidence_build 依赖全部实验实例
+        # evidence_build 依赖全部实验批判实例（P3 起 experiment_critique 前置）
         assert set(exp.nodes["evidence_build"].depends_on) == {
-            f"experiment@{q}" for q in ("Q001", "Q002", "Q003", "Q004")}
+            f"experiment_critique@{q}" for q in ("Q001", "Q002", "Q003", "Q004")}
+        # experiment_critique 依赖实验实例并带反馈环
+        assert set(exp.nodes["experiment_critique@Q001"].depends_on) == {"experiment@Q001"}
+        assert exp.nodes["experiment_critique@Q001"].on_fail == "experiment@Q001"
         assert exp.validate() == []
 
     def test_executable_dag_runs_end_to_end(self):

@@ -16,3 +16,12 @@ nodes:
     per_question: true
     depends_on: [experiment_design]
     outputs: [artifacts/code/, artifacts/results/]
+  experiment_critique:
+    type: critique
+    role: critic
+    validator: experiment-critic
+    description: 实验质量前置审查（验证完整性/基线对比/泄漏/数值合理性），evidence_gate 前哨
+    per_question: true
+    depends_on: [experiment*]
+    on_fail: experiment*
+    max_retries: 2
