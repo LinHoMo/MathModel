@@ -415,6 +415,35 @@ def cmd_advance(project, args):
             )
             return 1
 
+    # ---- 门禁耦合：先判定，再写入 completed ----
+    # 任何 HARD 或 ERROR 都禁止推进，避免"台账绿了但产物不达标"。
+    gate_summary = {}
+    gate_rc = 0
+    if not getattr(args, "no_gate", False):
+        gate_rc, gate_summary = _run_advance_gate(project, args.hand, args.agent)
+        if gate_rc in (2, 3):  # EXIT_HARD / EXIT_ERROR：fail-closed
+            if gate_rc == 2:
+                print(
+                    f"[state] 拒绝推进 {args.hand}/{args.agent}：门禁存在 "
+                    f"{gate_summary.get('hard_fail_count', 0)} 项硬失败",
+                    file=sys.stderr,
+                )
+                for hf in gate_summary.get("hard_fail", []):
+                    print(f"          - {hf.get('name')}: {hf.get('detail')}",
+                          file=sys.stderr)
+            else:
+                print(
+                    f"[state] 拒绝推进 {args.hand}/{args.agent}：门禁执行异常，"
+                    "无法证明产物通过",
+                    file=sys.stderr,
+                )
+            print("[state] 请修正门禁问题后重跑 gate.py，再 advance。",
+                  file=sys.stderr)
+            return gate_rc
+        if gate_rc == 1:  # EXIT_SOFT：允许推进，但保留审计信息
+            print(f"[state] 提示：{args.hand}/{args.agent} 门禁有 "
+                  f"{gate_summary.get('soft_fail_count', 0)} 项软失败（不阻塞推进）")
+
     out_hash = _sha256_file(args.output) if args.output else ""
     rec = {
         "hand": args.hand,
@@ -424,6 +453,15 @@ def cmd_advance(project, args):
         "output": args.output or "",
         "output_hash": out_hash,
     }
+    if not getattr(args, "no_gate", False):
+        rec["gate"] = {
+            "exit_code": gate_rc,
+            "hard_fail_count": gate_summary.get("hard_fail_count", 0),
+            "soft_fail_count": gate_summary.get("soft_fail_count", 0),
+            "hard_fail": gate_summary.get("hard_fail", []),
+            "soft_fail": gate_summary.get("soft_fail", []),
+        }
+
     # 避免重复登记
     st["completed"] = [
         c for c in st.get("completed", [])
@@ -431,30 +469,6 @@ def cmd_advance(project, args):
     ]
     st["completed"].append(rec)
     st["completed"].sort(key=_sort_key)
-
-    # ---- 门禁耦合：硬失败拒绝推进（语义化退出码见 gate.py）----
-    # 这是 REFACTOR_PLAN §7 的 P0-F：advance 内部调用 gate.py，
-    # 任何 HARD 失败都禁止推进，避免"台账绿了但产物不达标"。
-    if not getattr(args, "no_gate", False):
-        gate_rc, gate_summary = _run_advance_gate(project, args.hand, args.agent)
-        if gate_rc == 2:  # EXIT_HARD
-            print(
-                f"[state] 拒绝推进 {args.hand}/{args.agent}：门禁存在 "
-                f"{gate_summary.get('hard_fail_count', 0)} 项硬失败",
-                file=sys.stderr,
-            )
-            for hf in gate_summary.get("hard_fail", []):
-                print(f"          - {hf.get('name')}: {hf.get('detail')}",
-                      file=sys.stderr)
-            print("[state] 请按该 agent 的 SKILL.md ## Iteration 修正后重跑 "
-                  "gate.py，再 advance。", file=sys.stderr)
-            return 2
-        if gate_rc == 1:  # EXIT_SOFT
-            print(f"[state] 提示：{args.hand}/{args.agent} 门禁有 "
-                  f"{gate_summary.get('soft_fail_count', 0)} 项软失败（不阻塞推进）")
-        elif gate_rc == 3:  # EXIT_ERROR：门禁脚本异常，放行但告警
-            print("[state] 警告：门禁脚本未能执行（EXIT_ERROR），已放行 advance；"
-                  "请稍后手动运行 gate.py 复核。", file=sys.stderr)
 
     save(project, st)
     print(f"[state] 已登记 {args.hand}/{args.agent}")
@@ -464,7 +478,7 @@ def cmd_advance(project, args):
 def _run_advance_gate(project, hand, agent):
     """运行 gate.py（JSON 模式）供 advance 判定。返回 (exit_code, summary_dict)。
 
-    exit_code 语义：0=全过 1=仅软失败 2=硬失败(阻塞) 3=脚本异常(放行+告警)。
+    exit_code 语义：0=全过 1=仅软失败 2=硬失败(阻塞) 3=脚本异常(阻塞)。
     把 gate.py 当作黑盒调用，state.py 不重复实现任何判定逻辑。
     """
     gate_script = ROOT / "core" / "tools" / "gate.py"

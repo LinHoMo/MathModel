@@ -59,8 +59,8 @@ L1 形式化规约层：消除输入语义歧义。本 agent 把 `CODE_DELIVERAB
 
 ```python
 from core.env.loader import get
-min_pages    = get("paper.min_pages")        # 默认 25
-min_words    = get("paper.min_words")        # 默认 18000
+min_pages    = get("paper.min_pages")        # 默认 17（软目标，硬上限 20）
+min_words    = get("paper.min_words")        # 默认 13000
 min_figures  = get("paper.min_figures")      # 默认 6
 min_tables   = get("paper.min_tables")       # 默认 4
 min_equations= get("paper.min_equations")   # 默认 15
@@ -86,9 +86,9 @@ LaTeX 模板选择规则：
 
 ### Step 4: 字数分配（以 `min_words` 为基准）
 
-字数分配指南（以 **18000 字** 为基准，按 `min_words` 等比缩放；摘要受 writing_rules 400-600 字硬上限约束，不按百分比放大，其余章节按比例分配以保证总和 ≥ `get("paper.min_words")`）：
+字数分配指南（以 **13000 字** 为基准，按 `min_words` 等比缩放；摘要受 writing_rules 400-600 字硬上限约束，不按百分比放大，其余章节按比例分配以保证总和 ≥ `get("paper.min_words")`）：
 
-| 章节 | 字数占比 | 最低字数（18000 基准） | 说明 |
+| 章节 | 字数占比 | 最低字数（13000 基准） | 说明 |
 |------|---------|---------------------|------|
 | 摘要 | 8% | 400-600字（硬上限） | 每个子问题：方法+结果+数值；末尾须含 3-5 个关键词（`\noindent\textbf{关键词：}`），GB/T 7714 引用上标 |
 | 问题重述与分析 | 10% | 1890字 | 不是照抄题目，是分析思路 |
@@ -109,7 +109,7 @@ LaTeX 模板选择规则：
 
 ### Step 4.5: 页数预检
 
-分配完成后做一次页数预检：`est_pages = 总字符数 / 800`，须满足 `est_pages >= get("paper.max_pages") × get("paper.page_fill_ratio")`（即 `≥ 30 × 0.8 = 24 页`）。若 `est_pages < 24`，按比例放大各章节 `word_budget`（摘要保持 400-600 字），保证排版后页数达到下限。
+分配完成后做一次页数预检：`est_pages = 总字符数 / 800`，须满足 `est_pages >= get("paper.max_pages") × get("paper.page_fill_ratio")`（即 `≥ 20 × 0.85 = 17 页`）。若 `est_pages < 17`，按比例放大各章节 `word_budget`（摘要保持 400-600 字），保证排版后页数达到下限。
 
 ### Step 5: 写出 `work/paper_structure.json`
 
@@ -151,9 +151,9 @@ LaTeX 模板选择规则：
 
 - [ ] `work/paper_structure.json` 存在且能被 `json.load` 解析
 - [ ] `sections` 数组至少包含 5 项且覆盖必填章节（摘要/问题重述/假设/模型建立/结果分析/灵敏度/评价/参考文献/附录）
-- [ ] 各章节 `word_budget` 之和 >= `get("paper.min_words")`（默认 18000，铁律 W13 基准）
+- [ ] 各章节 `word_budget` 之和 >= `get("paper.min_words")`（默认 13000，铁律 W13 基准）
 - [ ] 摘要 `word_budget` 在 `get("paper.abstract_min_words")`（默认 400）– `get("paper.abstract_max_words")`（默认 600）范围内（铁律 W13）
-- [ ] 页数预检 `est_pages = 总字符数 / get("paper.chars_per_page")`（默认 800）>= `get("paper.max_pages")`（默认 30）× `get("paper.page_fill_ratio")`（默认 0.8，即 80%，铁律 W14）
+- [ ] 页数预检 `est_pages = 总字符数 / get("paper.chars_per_page")`（默认 800）>= `get("paper.max_pages")`（默认 20，国赛硬上限）× `get("paper.page_fill_ratio")`（默认 0.85，即 85%，铁律 W14）
 - [ ] `figure_plan` 长度 >= `get("paper.min_figures")`
 - [ ] `table_plan` 长度 >= `get("paper.min_tables")`
 - [ ] `equation_target` >= `get("paper.min_equations")` 且每个子问题节 >=3

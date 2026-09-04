@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathModelSkills 交互时序</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+  h1 { font-size: 24px; font-weight: 600; color: #58a6ff; margin-bottom: 8px; }
+  .subtitle { font-size: 13px; color: #8b949e; margin-bottom: 30px; }
+  .diagram { width: 1000px; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 30px; overflow-x: auto; }
+  svg { width: 100%; height: auto; }
+  .participant rect { rx: 6; ry: 6; stroke-width: 2; }
+  .participant text { font-size: 12px; font-weight: 600; fill: #fff; text-anchor: middle; }
+  .lifeline { stroke: #30363d; stroke-width: 1; stroke-dasharray: 4; }
+  .message { stroke-width: 1.5; fill: none; marker-end: url(#arrowmsg); }
+  .message-label { font-size: 10px; fill: #c9d1d9; }
+  .activation { fill: #1f6feb22; stroke: #58a6ff; stroke-width: 1; }
+</style>
+</head>
+<body>
+<h1>MathModelSkills 交互时序</h1>
+<p class="subtitle">orchestrator 调度 → agent 执行 → gate 校验 → state 推进</p>
+
+<div class="diagram">
+<svg viewBox="0 0 960 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowmsg" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#58a6ff"/>
+    </marker>
+    <marker id="arrowreturn" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#8b949e"/>
+    </marker>
+  </defs>
+
+  <!-- Participants -->
+  <g class="participant" transform="translate(50,20)">
+    <rect width="100" height="40" fill="#238636" stroke="#2ea043"/>
+    <text x="50" y="25">orchestrator</text>
+  </g>
+  <g class="participant" transform="translate(200,20)">
+    <rect width="100" height="40" fill="#1f6feb" stroke="#58a6ff"/>
+    <text x="50" y="25">state.py</text>
+  </g>
+  <g class="participant" transform="translate(350,20)">
+    <rect width="100" height="40" fill="#1f6feb" stroke="#58a6ff"/>
+    <text x="50" y="25">gate.py</text>
+  </g>
+  <g class="participant" transform="translate(500,20)">
+    <rect width="100" height="40" fill="#8957e5" stroke="#a371f7"/>
+    <text x="50" y="25">agent</text>
+  </g>
+  <g class="participant" transform="translate(650,20)">
+    <rect width="100" height="40" fill="#f0883e" stroke="#f0883e"/>
+    <text x="50" y="25">SKILL.md</text>
+  </g>
+  <g class="participant" transform="translate(800,20)">
+    <rect width="120" height="40" fill="#0d1117" stroke="#484f58"/>
+    <text x="60" y="25">products/</text>
+  </g>
+
+  <!-- Lifelines -->
+  <line x1="100" y1="60" x2="100" y2="680" class="lifeline"/>
+  <line x1="250" y1="60" x2="250" y2="680" class="lifeline"/>
+  <line x1="400" y1="60" x2="400" y2="680" class="lifeline"/>
+  <line x1="550" y1="60" x2="550" y2="680" class="lifeline"/>
+  <line x1="700" y1="60" x2="700" y2="680" class="lifeline"/>
+  <line x1="860" y1="60" x2="860" y2="680" class="lifeline"/>
+
+  <!-- Activations -->
+  <rect x="94" y="80" width="12" height="600" class="activation" rx="3"/>
+  <rect x="244" y="100" width="12" height="200" class="activation" rx="3"/>
+  <rect x="394" y="140" width="12" height="300" class="activation" rx="3"/>
+  <rect x="544" y="180" width="12" height="250" class="activation" rx="3"/>
+
+  <!-- Messages -->
+  <!-- Step 1: init -->
+  <text x="50" y="90" font-size="11" fill="#3fb950" font-weight="600">Phase 1: 初始化</text>
+  <path d="M 106 100 L 244 100" class="message" marker-end="url(#arrowmsg)"/>
+  <text x="175" y="95" class="message-label">init(project)</text>
+
+  <path d="M 256 120 L 854 120" class="message" marker-end="url(#arrowreturn)" stroke-dasharray="4"/>
+  <text x="555" y="115" class="message-label" fill="#8b949e">扫描产物 → STATE.md</text>
+
+  <!-- Step 2: status -->
+  <text x="50" y="150" font-size="11" fill="#3fb950" font-weight="600">Phase 2: 逐步执行</text>
+  <path d="M 106 160 L 244 160" class="message" marker-end="url(#arrowmsg)"/>
+  <text x="175" y="155" class="message-label">status(project)</text>
+
+  <path d="M 256 180 L 106 180" class="message" marker-end="url(#arrowreturn)"/>
+  <text x="175" y="195" class="message-label" fill="#8b949e">下一步: agent-x</text>
+
+  <!-- Step 3: read SKILL.md -->
+  <path d="M 106 210 L 694 210" class="message" marker-end="url(#arrowmsg)"/>
+  <text x="400" y="205" class="message-label">读取 SKILL.md</text>
+
+  <!-- Step 4: execute agent -->
+  <path d="M 106 240 L 544 240" class="message" marker-end="url(#arrowmsg)"/>
+  <text x="325" y="235" class="message-label">执行 agent Procedure</text>
+
+  <!-- Step 5: write product -->
+  <path d="M 556 260 L 854 260" class="message" marker-end="url(#arrowmsg)"/>
+  <text x="705" y="255" class="message-label">写入产物文件</text>
+
+  <!-- Step 6: gate check -->
+  <text x="50" y="300" font-size="11" fill="#f85149" font-weight="600">Phase 3: 门禁校验</text>
+  <path d="M 106 320 L 394 320" class="message" marker-end="url(#arrowmsg)"/>
+  <text x="250" y="315" class="message-label">gate(project, hand, agent)</text>
+
+  <path d="M 406 340 L 854 340" class="message" marker-end="url(#arrowmsg)"/>
+  <text x="630" y="335" class="message-label">校验产物文件</text>
+
+  <path d="M 854 360 L 406 360" class="message" marker-end="url(#arrowreturn)"/>
+  <text x="630" y="375" class="message-label" fill="#8b949e">EXIT 0/1/2/3</text>
+
+  <!-- Step 7: gate result -->
+  <path d="M 394 390 L 106 390" class="message" marker-end="url(#arrowreturn)"/>
+  <text x="250" y="405" class="message-label" fill="#8b949e">exit_code + violations</text>
+
+  <!-- Step 8: advance or fail -->
+  <text x="50" y="440" font-size="11" fill="#f0883e" font-weight="600">Phase 4: 状态推进</text>
+
+  <!-- PASS branch -->
+  <rect x="60" y="450" width="200" height="80" fill="none" stroke="#3fb950" stroke-dasharray="4" rx="6"/>
+  <text x="70" y="465" font-size="10" fill="#3fb950">if EXIT == 0 (PASS)</text>
+  <path d="M 106 480 L 244 480" class="message" marker-end="url(#arrowmsg)" stroke="#3fb950"/>
+  <text x="175" y="475" class="message-label" fill="#3fb950">advance(hand, agent)</text>
+  <path d="M 256 500 L 854 500" class="message" marker-end="url(#arrowreturn)" stroke="#3fb950" stroke-dasharray="4"/>
+  <text x="555" y="495" class="message-label" fill="#3fb950">状态更新 → 下一步</text>
+
+  <!-- FAIL branch -->
+  <rect x="300" y="450" width="200" height="80" fill="none" stroke="#f85149" stroke-dasharray="4" rx="6"/>
+  <text x="310" y="465" font-size="10" fill="#f85149">if EXIT == 2 (FAIL)</text>
+  <path d="M 106 530 L 244 530" class="message" marker-end="url(#arrowmsg)" stroke="#f85149"/>
+  <text x="175" y="525" class="message-label" fill="#f85149">fail(hand, agent)</text>
+
+  <!-- RETRY loop -->
+  <text x="50" y="580" font-size="11" fill="#f0883e" font-weight="600">Phase 5: 重试/回退</text>
+  <rect x="60" y="590" width="350" height="80" fill="none" stroke="#f0883e" stroke-dasharray="4" rx="6"/>
+  <text x="70" y="605" font-size="10" fill="#f0883e">if retry_count &lt; 3 → 重新执行 agent</text>
+  <text x="70" y="620" font-size="10" fill="#f0883e">if retry_count >= 3 → rollback 到上游 agent</text>
+  <text x="70" y="635" font-size="10" fill="#f0883e">上游 agent 重新执行后，当前 agent 重置重试计数</text>
+
+  <!-- Complete -->
+  <text x="50" y="670" font-size="11" fill="#3fb950" font-weight="600">29步全绿 → deliver gate → validate.py → 论文交付</text>
+</svg>
+</div>
+</body>
+</html>

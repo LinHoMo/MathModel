@@ -39,6 +39,8 @@
 
 import argparse
 import json
+import shutil
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -54,9 +56,9 @@ COMPETITIONS = {
     "cumcm": {
         "name": "全国大学生数学建模竞赛（CUMCM）",
         "lang": "zh",
-        "out": "support_materials/ai_usage_disclosure.md",
-        "note": "按当届通知要求，将本材料作为支撑材料 PDF 随论文提交；"
-                "若明确未使用 AI，则按通知要求提交正文声明。",
+        "out": "deliverables/ai_usage_disclosure.md",
+        "note": "按当届通知要求，将本材料（编译后的「AI工具使用详情.pdf」）"
+                "作为支撑材料随论文提交；若明确未使用 AI，则按通知要求提交正文声明。",
     },
     "mcm": {
         "name": "MCM/ICM（美赛）",
@@ -67,13 +69,13 @@ COMPETITIONS = {
     "diangong": {
         "name": "电工杯数学建模竞赛",
         "lang": "zh",
-        "out": "support_materials/ai_usage_disclosure.md",
+        "out": "deliverables/ai_usage_disclosure.md",
         "note": "官网暂无专门 AI 格式要求，仍建议随支撑材料一并提交。",
     },
     "huawei": {
         "name": "华为杯研究生数学建模竞赛",
         "lang": "zh",
-        "out": "support_materials/ai_usage_disclosure.md",
+        "out": "deliverables/ai_usage_disclosure.md",
         "note": "按当届通知核对披露要求。",
     },
 }
@@ -280,6 +282,117 @@ def _render_en(project, lg, comp):
     return "\n".join(L)
 
 
+# ---------------------------------------------------------------------------
+# 国赛支撑材料 LaTeX 源生成（编译后即为「AI工具使用详情.pdf」）
+# ---------------------------------------------------------------------------
+def _ai_report_name():
+    """支撑材料文件名，取自 env: deliverables.ai_report_name（可插拔）。"""
+    try:
+        import sys as _s
+        _s.path.insert(0, str(ROOT / "core"))
+        from env.loader import get
+        return str(get("deliverables.ai_report_name", default="AI工具使用详情")
+                   or "AI工具使用详情")
+    except Exception:
+        return "AI工具使用详情"
+
+
+def _escape_tex(s):
+    """转义 LaTeX 特殊字符，避免披露文档编译失败。"""
+    if not isinstance(s, str):
+        s = str(s)
+    return (s.replace("\\", r"\textbackslash ")
+             .replace("&", r"\&").replace("%", r"\%").replace("$", r"\$")
+             .replace("#", r"\#").replace("_", r"\_").replace("{", r"\{")
+             .replace("}", r"\}").replace("^", r"\^{}").replace("~", r"\~{}"))
+
+
+def _render_disclosure_tex(project, lg, comp):
+    """生成支撑材料 LaTeX 源（与 _render_zh 内容对齐）。"""
+    name = _ai_report_name()
+    entries = lg["entries"]
+    L = [
+        r"\documentclass[UTF8, 11pt]{ctexart}",
+        r"\usepackage[margin=2.5cm]{geometry}",
+        r"\begin{document}",
+        r"\section*{AI 使用情况说明}",
+        "",
+        f"竞赛：{_escape_tex(comp['name'])}",
+        "",
+        f"参赛项目：{_escape_tex(str(lg.get('project')))}",
+        "",
+        f"记录条数：{len(entries)}",
+        "",
+    ]
+    if not entries:
+        L += [
+            "本队在本次竞赛的建模、求解与撰写过程中未使用人工智能工具。",
+            "",
+        ]
+    else:
+        reviewed = sum(1 for e in entries
+                       if str(e.get("reviewed", "")).lower() in ("yes", "y", "是", "true"))
+        L += [
+            f"本队在本次竞赛中使用人工智能工具辅助完成部分工作，共记录 "
+            f"{len(entries)} 项，其中 {reviewed} 项已人工复核确认。",
+            "",
+            "责任声明：论文中的全部公式、代码、数据、事实与引用，"
+            "均由本队成员逐一复核并负责。AI 生成内容仅作辅助参考，未经复核不得作为结论依据。",
+            "",
+            r"\begin{tabular}{c|c|c|c|c|c}",
+            "序号 & 环节 & 工具 & 用途 & 采用内容 & 人工复核 \\\\",
+            r"\hline",
+        ]
+        for i, e in enumerate(entries, 1):
+            rv = e.get("reviewed", "")
+            rv = "是" if str(rv).lower() in ("yes", "y", "是", "true") else "否"
+            if e.get("reviewer"):
+                rv += f"（{e['reviewer']}）"
+            L.append(" & ".join([
+                str(i),
+                _escape_tex(str(e.get("stage", ""))),
+                _escape_tex(str(e.get("tool", ""))),
+                _escape_tex(str(e.get("purpose", ""))),
+                _escape_tex(str(e.get("adopted", "") or "—")),
+                rv,
+            ]) + r" \\")
+        L.append(r"\hline")
+        L.append(r"\end{tabular}")
+        L.append("")
+        L.append("使用边界：本队在赛题理解与方法选择、假设合理性判断、"
+                 "结论可靠性评估、最终署名与提交环节，未使用 AI 替代人工判断。")
+        L.append("")
+    L.append(_escape_tex(comp.get("note", "")))
+    L.append("")
+    L.append(r"\end{document}")
+    return "\n".join(L)
+
+
+def _emit_disclosure_pdf(project, lg, comp):
+    """写出支撑材料 .tex 并尽力编译为「AI工具使用详情.pdf」到 deliverables/。"""
+    name = _ai_report_name()
+    tex = S.project_dir(project) / "deliverables" / f"{name}.tex"
+    tex.parent.mkdir(parents=True, exist_ok=True)
+    tex.write_text(_render_disclosure_tex(project, lg, comp) + "\n", encoding="utf-8")
+    print(f"[ai-usage] 已生成支撑材料源 {tex}")
+    xelatex = shutil.which("xelatex")
+    if not xelatex:
+        print("[ai-usage] 环境无 xelatex：未生成 PDF（.tex 已生成，可在有 TeX 环境处编译）")
+        return
+    try:
+        r = subprocess.run(
+            [xelatex, "-interaction=nonstopmode", "-halt-on-error", f"{name}.tex"],
+            cwd=str(tex.parent), capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=120)
+        pdf = tex.with_suffix(".pdf")
+        if r.returncode == 0 and pdf.exists():
+            print(f"[ai-usage] 已编译支撑材料 PDF {pdf}")
+        else:
+            print("[ai-usage] xelatex 编译支撑材料失败（.tex 已生成，请检查后手动编译）")
+    except subprocess.TimeoutExpired:
+        print("[ai-usage] 支撑材料编译超时（.tex 已生成）")
+
+
 def cmd_render(project, args):
     comp = COMPETITIONS.get(args.competition)
     if not comp:
@@ -298,6 +411,9 @@ def cmd_render(project, args):
     print(f"[ai-usage] 竞赛: {comp['name']}   记录数: {len(lg['entries'])}")
     if args.competition == "mcm":
         print("[ai-usage] 请将本文件接入 paper/main.tex 主模板")
+    elif args.competition == "cumcm":
+        # 国赛要求支撑材料 PDF 命名为「AI工具使用详情」，随论文提交
+        _emit_disclosure_pdf(project, lg, comp)
     return 0
 
 

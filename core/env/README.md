@@ -13,18 +13,20 @@
 ## 五组参数
 
 > 下列默认值均对标参考系统 `mmagent-codex-main`。
+>
+> ⚠️ **本表为历史可读镜像，非单一真源。** 真值以 `core/env/schema.yaml`（参数定义与分层）与各 `core/env/profiles/<竞赛>.yaml`（差量覆盖）为准；本表数值可能滞后。运行 `python core/tools/env_doctor.py` 查看当前生效值。国赛页数/字数旧值（min_pages=25 / max_pages=30 / min_words=18000）已按 2025 官方规范作废。
 
 ### 1. paper（论文规格）
 
 | 参数名 | 含义 | 默认值 | 影响范围（读取方 agent） | 对标说明 |
 | --- | --- | --- | --- | --- |
-| `min_pages` | 最低页数 | `25` | Writer：`final-validator`、`section-writer` | 国赛 25-30 页，est_pages ≥ max_pages×0.8=24 |
-| `min_words` | 最低字数 | `18000` | Writer：`section-writer`、`final-validator` | 国赛 18000-25000 字 |
+| `min_pages` | 正文页数软目标下限 | `17` | Writer：`final-validator`、`section-writer` | 国赛官方第四条：正文尽量≤20页（附录不限）；17 页为经验软目标，旧值 25 已作废 |
+| `min_words` | 正文字数软目标下限 | `13000` | Writer：`section-writer`、`final-validator` | 官方未规定字数下限；经验软目标 13000–16000 字（约17页×800），旧值 18000 已作废 |
 | `min_figures` | 最低图数 | `6` | Writer：`figure-generator`、`final-validator` | 3-4 子问题×每问≥1-2 图+灵敏度≥1 图 |
 | `min_tables` | 最低表数 | `4` | Writer：`section-writer`、`final-validator` | 符号说明表+每问结果表+对比表 |
 | `min_equations` | 最低公式数 | `15` | Writer：`section-writer`、`final-validator` | 华为杯每子问题 8-15 式逐式编号 |
 | `min_references` | 最低参考文献数 | `10` | Writer：`reference-curator`、`final-validator` | 国赛参考文献 ≥10 |
-| `max_pages` | 最高页数上限 | `30` | Writer：`final-validator`、`section-writer` | _COMP_RULES.cumcm MAX_PAGES=30 |
+| `max_pages` | 正文页数硬上限（OFFICIAL 层） | `20` | Writer：`final-validator`、`section-writer` | 国赛官方第四条：正文尽量控制在 20 页以内；旧值 30 已作废 |
 | `abstract_min_words` | 中文摘要最少字数 | `400` | Writer：`section-writer` | writing_rules.md：400-600 字 |
 | `abstract_max_words` | 中文摘要最多字数 | `600` | Writer：`section-writer` | writing_rules.md：400-600 字 |
 | `chars_per_page` | 每页中文字数基准 | `800` | Writer：`structure-planner` | workflow_engine.py `_check_paper_body_pages` |
@@ -90,12 +92,12 @@ from core.env.loader import load_config, get
 
 # 方式一：一次性拿到完整 config dict
 cfg = load_config()
-print(cfg["paper"]["min_pages"])        # 25
+print(cfg["paper"]["min_pages"])        # 17（软目标；国赛官方硬上限 20 页，见 official.body_max_pages）
 print(cfg["code"]["random_seed"])       # 42
 print(cfg["runtime"]["strict_mode"])    # True
 
 # 方式二：按点号路径读取单个值（推荐，agent 内部使用）
-get("paper.min_pages")                  # 25
+get("paper.min_pages")                  # 17（软目标；国赛官方硬上限 20 页）
 get("code.random_seed")                 # 42
 get("modeling.assumption_score_threshold")  # 6.0
 get("runtime.template")                 # "cumcm-zh"

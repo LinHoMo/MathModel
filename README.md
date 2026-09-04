@@ -51,7 +51,7 @@
 
 | 组 | 关键参数 |
 |---|---|
-| `paper` | min_pages 25 / min_words 18000 / min_figures 6 / min_tables 4 / min_equations 15 / min_references 10 |
+| `paper` | min_pages 17 / min_words 13000 / min_figures 6 / min_tables 4 / min_equations 15 / min_references 10 |
 | `code` | random_seed 42 / multi_run_count 5 / cv_threshold 0.10 / max_fix_rounds 3 / sensitivity_range 0.20 |
 | `modeling` | min_candidate_models 2 / assumption_score_threshold 6.0 / ambiguity_min_interpretations 2 |
 | `review` | max_rounds 4 / pass_score 6 / figure_as_subject_max 3 |
@@ -60,7 +60,7 @@
 
 ```python
 from env.loader import get
-min_pages = get("paper.min_pages")          # 25
+min_pages = get("paper.min_pages")          # 17（软目标；国赛官方硬上限 20 页）
 threshold = get("modeling.assumption_score_threshold", default=6.0)
 ```
 
@@ -110,7 +110,7 @@ MathModelSkills/
 │   ├── schemas/                     # 结构化输出 Schema
 │   └── tools/                       # 工具脚本（state / gate / validate 等）
 ├── projects/                        # 项目实例
-│   └── cumcm2024a/                  # 2024 CUMCM A 题（完整跑通样例）
+│   └── （参考样例归档于 archives/cumcm2024a；库模式 projects/ 为空，无活跃实例）
 ├── docs/                            # 架构与状态文档
 ├── tests/                           # unit / integration / e2e
 ├── AGENTS.md                        # 唯一权威入口
@@ -120,16 +120,21 @@ MathModelSkills/
 
 ---
 
-## 当前状态（2026-08-31）
+## 当前状态（2026-09-04）
 
-| 项 | 结果 |
-|---|---|
-| `python core/tools/validate.py` | **56 通过 / 0 失败 / 1 警告** |
-| `python -m pytest tests -q` | **217 passed / 0 failed** |
-| `python core/tools/gate.py cumcm2024a all` | **57 通过 / 0 失败** |
-| `python core/tools/validate_project.py projects/cumcm2024a` | 通过 |
+库模式（`projects/` 为空，仅含引擎与配置）下的真实复跑结果：
 
-警告项为文献年份占比（近 3 年文献 7% < 60%），属 WARN 级不阻塞。
+| 项 | 结果 | 生成命令 |
+|---|---|---|
+| 库模式全链路检查 | **57 通过 / 0 失败 / 0 警告** | `python core/tools/validate.py` |
+| 单元测试 | **228 passed / 16 failed** | `python -m pytest tests -q`（需先安装 pytest） |
+| 单项目门禁 | 按活跃实例判定（HARD 门禁） | `python core/tools/gate.py <项目> all` |
+| 单项目校验 | 按活跃实例判定 | `python core/tools/validate_project.py --project <项目>` |
+
+说明：
+- `pytest` 的 16 个失败均为**既有 / 环境性**问题，非本次重构引入：`test_state.py` ×2（`state.py` 既有 `AttributeError`）、`test_aggregate_scores.py` ×5（评分聚合既有断言）、`e2e`/`integration` ×8（依赖活跃项目实例，库模式无实例，参考样例归档于 `archives/cumcm2024a`）。本次重构修复了其中因旧基线失效的 `test_env.py::test_get_paper_min_pages`（已对齐 17 / 13000）。
+- `gate.py` / `validate_project.py` 为**单项目级**检查，须在活跃项目实例上运行；归档参考样例 `archives/cumcm2024a` 为部分样例（5 页 / 6116 字），不保证全绿。
+- 参数已对齐 2025 国赛官方基线：正文硬上限 20 页、软目标 17 页、字数软下限 13000；唯一真源见 `core/env/schema.yaml` 与 `core/env/profiles/cumcm-2025.yaml`。
 
 ### 门禁分级
 

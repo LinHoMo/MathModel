@@ -1,127 +1,18 @@
-# MathModelSkills 环境变量配置层
-# 用户可在不修改 skill 逻辑的前提下，通过本文件调整交付规格与运行阈值。
-# 缺失字段会由 core/env/loader.py 回退到 DEFAULT_CONFIG 内置默认值并打印警告，不阻塞流程。
-# 本次升级对标基准：mmagent-codex-main
+# MathModelSkills 用户配置（瘦身版）
+#
+# 参数的定义、默认值与分层，见 core/env/schema.yaml —— 唯一真源
+# 各竞赛的差量覆盖，见 core/env/profiles/<竞赛>.yaml
+#
+# 本文件只做两件事：
+#   1. profile   选择使用哪个竞赛参数包
+#   2. overrides 覆盖 TUNABLE / DERIVED 参数（OFFICIAL 层不可覆盖）
+#
+# 改完想知道有没有生效，运行：
+#   python core/tools/env_doctor.py
 
-# 论文规格（Writer 手读取，尤其 final-validator / section-writer / figure-generator / reference-curator）
-paper:
-  min_pages: 25          # 最低页数（国赛 25-30 页，est_pages ≥ max_pages×0.8=24）。对标 mmagent-codex-main
-  min_words: 18000       # 最低字数（国赛 18000-25000 字）。对标 mmagent-codex-main
-  min_figures: 6         # 最低图数（3-4 子问题×每问≥1-2 图+灵敏度≥1 图）。对标 mmagent-codex-main
-  min_tables: 4          # 最低表数（符号说明表+每问结果表+对比表）。对标 mmagent-codex-main
-  min_equations: 15      # 最低公式数（华为杯每子问题 8-15 式逐式编号）。对标 mmagent-codex-main
-  min_references: 10     # 最低参考文献数（国赛参考文献 ≥10）。对标 mmagent-codex-main
-  max_pages: 30          # 最高页数上限（_COMP_RULES.cumcm MAX_PAGES=30）。对标 mmagent-codex-main
-  abstract_min_words: 400  # 中文摘要最少字数（writing_rules.md：400-600 字）。对标 mmagent-codex-main
-  abstract_max_words: 600  # 中文摘要最多字数（writing_rules.md：400-600 字）。对标 mmagent-codex-main
-  chars_per_page: 800    # 每页中文字数基准（workflow_engine.py _check_paper_body_pages）。对标 mmagent-codex-main
-  page_fill_ratio: 0.8   # 正文填充比例下限（est_pages < max_pages×80% 即 FAIL）。对标 mmagent-codex-main
-  pdf_min_bytes: 102400  # PDF 最小字节数（100KB gate，auto-review-loop）。对标 mmagent-codex-main
-  recent_ref_ratio: 0.6  # 近 3 年文献占比下限（quality-check：≥60%）。对标 mmagent-codex-main
-  figure_min_width: 0.85 # 图最小宽度（单位 \textwidth，下限 0.8，comp-paper-zh）。对标 mmagent-codex-main
-  table_max_rows_inline: 12  # 正文表格最大行数（>12 行禁放正文，comp-paper-zh）。对标 mmagent-codex-main
-  table_longtable_threshold: 15  # 结果表转 longtable 的行数阈值（>15 行放附录）。对标 mmagent-codex-main
+profile: cumcm-2025
 
-# 代码规格（Programmer 手读取，尤其 code-implementer / test-runner / result-verifier）
-code:
-  random_seed: 42        # 随机种子（保证可复现，comp-code 第432行）。对标 mmagent-codex-main
-  multi_run_count: 5     # 启发式算法多次运行次数（≥5 次，math_modeling_norms 第272行）。对标 mmagent-codex-main
-  cv_threshold: 0.10     # 交叉验证/稳定性阈值（10%，原 P6 硬编码显式化入配置层）。对标 mmagent-codex-main
-  solver_timeout_small: 300    # 求解器超时（<100 变量，秒，comp-code 第409-413行）。对标 mmagent-codex-main
-  solver_timeout_medium: 600   # 求解器超时（100-1000 变量，秒）。对标 mmagent-codex-main
-  solver_timeout_large: 1200   # 求解器超时（>1000 变量，秒）。对标 mmagent-codex-main
-  max_fix_rounds: 3      # 单子问题自检修复轮数上限（3 轮不过回退 Modeler，comp-code 第288行）。对标 mmagent-codex-main
-  sensitivity_range: 0.20 # 灵敏度扰动范围（±20% 内扫描，comp-code 第314行）。对标 mmagent-codex-main
-  sensitivity_steps: 10  # 灵敏度扫描步数（10 步，兼容 ±10% 采样点）。对标 mmagent-codex-main
-  min_main_py_bytes: 500 # main.py 最少字节（comp-code 完成铁律）。对标 mmagent-codex-main
-  min_deliverables_bytes: 1024  # CODE_DELIVERABLES 最少字节（≥1KB）。对标 mmagent-codex-main
-  target_platform: python  # 主线代码平台：python / matlab / beitian（北太天元）/ syslab（MWORKS Syslab）。python 为主线（产出 all_results.json），其余为交付分支，默认 python 不产出分支
-
-# 建模规格（Modeler 手读取，尤其 method-matcher / model-builder / assumption-validator / literature-searcher / dag-builder）
-modeling:
-  min_candidate_models: 2          # 候选模型最少数量（铁律 M1 ≥2，一致）。对标 mmagent-codex-main
-  assumption_score_threshold: 6.0  # 假设综合评分通过阈值（保留四维评分）。对标 mmagent-codex-main
-  ambiguity_min_interpretations: 2 # 歧义至少两种解释 + 验算裁决（2analysis-modeling 假设敏感性预检）。对标 mmagent-codex-main
-  multi_start_check: true          # 非凸/启发式必做多起点或多种子稳定性检查（norms 第52行）。对标 mmagent-codex-main
-  # 文献检索 (Stage 1.5)
-  literature_search_enabled: true  # 文献检索总开关
-  literature_max_searches: 5       # 最大检索次数（硬上限）
-  literature_target_count: 7       # 目标入选文献数
-  literature_score_threshold: 6.0  # 入选最低评分
-  literature_chinese_ratio: 0.5    # 中文文献最低占比
-  # DAG 构建 (Stage 4.5)
-  dag_enable_visualization: true   # 是否生成 SVG 可视化
-  dag_critical_sensitivity: high   # 关键路径灵敏度阈值
-  # Actor-Critic 迭代修正（借鉴 MM-Agent modeling_critic，model-builder 读取）
-  problem_modeling_round: 1        # 建模推导迭代轮次（1-3 轮，默认 1；2-3 轮可暴露更深层缺陷）
-  problem_analysis_round: 1        # 问题分析迭代轮次（借鉴 MM-Agent analysis_actor/analysis_critic/analysis_improvement 环）
-
-# 评审规格（新增组，auto-review-loop / auto-paper-improvement-loop 读取）
-review:
-  max_rounds: 4              # 评审最大轮数（auto-review-loop MAX_ROUNDS=4）。对标 mmagent-codex-main
-  improvement_max_rounds: 2  # 论文改进最大轮数（auto-paper-improvement-loop MAX_ROUNDS=2）。对标 mmagent-codex-main
-  pass_score: 6              # 评审通过分（满分 10，POSITIVE_THRESHOLD score≥6/10）。对标 mmagent-codex-main
-  figure_as_subject_max: 3   # 图表做主语句式最大次数（≥3 次记 MAJOR，improvement-loop 第62行）。对标 mmagent-codex-main
-  # 题型差异化权重（各评分员基础权重 × 题型乘子，clamp [0.7, 1.5] 后归一化）
-  # 由 score_artifact.py / aggregate_verdict 消费
-  weight_profiles:
-    base:  # 基础权重（5 评分员）
-      scorer-academic: 0.25
-      scorer-engineering: 0.20
-      scorer-judge: 0.25
-      scorer-reader: 0.15
-      scorer-adversarial: 0.15
-    multipliers:
-      # A 题：物理/机理建模 → 工程实现与模型判定更重要
-      A: {scorer-engineering: 1.3, scorer-judge: 1.2, scorer-academic: 0.9, scorer-reader: 0.8, scorer-adversarial: 0.9}
-      # B 题：运筹优化 → 工程实现与模型判定并重
-      B: {scorer-engineering: 1.2, scorer-judge: 1.2, scorer-academic: 0.9, scorer-reader: 0.8, scorer-adversarial: 1.0}
-      # C 题：数据分析 → 学术严谨性最重要
-      C: {scorer-academic: 1.3, scorer-adversarial: 1.2, scorer-judge: 1.0, scorer-engineering: 0.8, scorer-reader: 0.8}
-      # D 题：综合评价 → 可读性与学术性并重
-      D: {scorer-reader: 1.3, scorer-academic: 1.2, scorer-judge: 1.0, scorer-engineering: 0.8, scorer-adversarial: 0.8}
-      # E 题：连续/离散混合 → 均衡偏工程
-      E: {scorer-engineering: 1.2, scorer-judge: 1.1, scorer-academic: 1.0, scorer-reader: 0.9, scorer-adversarial: 0.9}
-      # MCM（美赛 M 题）→ 沟通表达权重最高
-      MCM: {scorer-reader: 1.4, scorer-academic: 1.1, scorer-judge: 1.0, scorer-engineering: 0.8, scorer-adversarial: 0.8}
-      # ICM（美赛 I 题/政策类）→ 可读性 + 对抗审查
-      ICM: {scorer-reader: 1.3, scorer-adversarial: 1.2, scorer-academic: 1.0, scorer-judge: 0.9, scorer-engineering: 0.7}
-    clamp: [0.7, 1.5]  # 乘子裁剪范围
-
-# 运行时（所有 agent 共享，尤其 final-validator / spec-auditor / guardrails-checker）
-runtime:
-  language: zh           # 语言 zh/en
-  template: cumcm-zh     # 论文模板 cumcm-zh/mcm-en/generic
-  strict_mode: true      # 严格模式（阈值不达则退回修正）
-  traceability_min_ratio: 0.90  # 数值可追溯比例下限（≥90%，norms 第70行"所有引用数值必须可追溯"）。对标 mmagent-codex-main
-  numeric_tolerance_rel: 0.005 # 数值相对容差上限（rel ≤0.5%，统一 consistency-checker 口径）。对标 mmagent-codex-main
-  numeric_tolerance_abs: 0.01  # 数值绝对容差上限（abs ≤0.01，统一 validate_project 口径）。对标 mmagent-codex-main
-  # 能力分层：standard=完整 23 步 + 全门禁；lite=弱模型，合并非关键 stage、放宽软性门禁、强制分步确认
-  profile: standard      # standard / lite
-  compile_pdf: auto      # PDF 编译策略：auto=检测到 xelatex/latexmk 则自动编译，无工具链则仅交付 main.tex（PDF 检查降级 WARN）；always=必须编译（无工具链即 HARD 失败）；never=只交付 TEX 不编译
-  latex_engine: xelatex  # LaTeX 引擎（编译链固定 xelatex→bibtex→xelatex→xelatex，或 latexmk -xelatex）
-  deliver_docx: never   # DOCX 交付策略：never=不产出 Word（默认，零成本）；auto=检 pandoc 则高质量转换，无则纯文本降级版；always=必须产出 DOCX（缺失仅说明不阻塞）
-
-# Checkpoint 配置（断点恢复机制）
-checkpoint:
-  # 是否启用 checkpoint（默认 false）
-  enabled: false
-  # checkpoint 文件路径（相对于项目根目录）
-  path: output/checkpoint.json
-  # 保存间隔（每完成 N 个 agent 保存一次，默认 1）
-  save_interval: 1
-
-# 云执行沙箱（可选，code-executor skill 的云端后端）
-cloud_sandbox:
-  enabled: false             # 是否启用云端执行（默认关闭，使用本地 subprocess）
-  provider: e2b              # 云端提供商：e2b / daytona / local
-  e2b:
-    api_key_env: E2B_API_KEY  # API Key 的环境变量名
-    template: python3         # 沙箱模板（预装依赖镜像）
-    timeout_seconds: 300      # 单次执行超时
-    memory_mb: 512            # 内存限制
-  daytona:
-    api_key_env: DAYTONA_API_KEY
-    workspace: default
-    timeout_seconds: 300
-  fallback: local            # 云端不可用时回退策略：local=本地执行，skip=跳过执行
+overrides:
+  # 示例：只想把图数提到 8，取消下面两行注释即可
+  # paper:
+  #   min_figures: 8

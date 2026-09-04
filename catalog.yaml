@@ -166,7 +166,7 @@ hands:
           - core/env/loader.py
       - name: guardrails-checker
         gate: core/tools/gate.py
-        artifact: work/guardrails_report.json
+        artifact: work/guardrails_report_programmer.json
         path: core/Programmer/agents/guardrails-checker
         stage: 5
         utg_layer: L5
@@ -259,7 +259,7 @@ hands:
           - paper/main.tex
       - name: guardrails-checker
         gate: core/tools/gate.py
-        artifact: work/guardrails_report.json
+        artifact: work/guardrails_report_writer.json
         path: core/Writer/agents/guardrails-checker
         stage: 6
         utg_layer: L5

@@ -11,7 +11,7 @@ inputs:
   - figures/all_results.json
   - work/paper_structure.json
   - work/consistency_report.json
-  - work/guardrails_report.json
+  - work/guardrails_report_writer.json
   - core/env/config.yaml
 outputs:
   - output/PAPER_SPEC.md
@@ -57,8 +57,8 @@ L6 事后验证层：在前 5 层都通过后，对全部产物做一次"事后"
 from core.env.loader import get
 
 thresholds = {
-    "min_pages":      get("paper.min_pages"),       # >=25
-    "min_words":      get("paper.min_words"),       # >=18000
+    "min_pages":      get("paper.min_pages"),       # >=17（软目标，国赛正文硬上限 20）
+    "min_words":      get("paper.min_words"),       # >=13000
     "min_figures":    get("paper.min_figures"),     # >=6
     "min_tables":     get("paper.min_tables"),      # >=4
     "min_equations":  get("paper.min_equations"),   # >=15
@@ -97,8 +97,8 @@ jsonschema.validate(spec, schema)
 各字段约束（与 schema 一致）：
 - `paper_info.title` minLength 5
 - `paper_info.template` enum [cumcm-zh, mcm-en, generic]
-- `paper_info.target_pages` minimum 25
-- `paper_info.word_count` minimum 18000
+- `paper_info.target_pages` minimum 8（官方硬上限 20 页）
+- `paper_info.word_count` minimum 13000
 - `sections` minItems 5
 - `figures` minItems 6，`id` 匹配 `^fig_`
 - `tables` minItems 4，`id` 匹配 `^tab_`
@@ -109,7 +109,7 @@ jsonschema.validate(spec, schema)
 
 读取并复核下游子报告：
 - `work/consistency_report.json`：`passed == true` 且 `numbers_traced == true`
-- `work/guardrails_report.json`：`passed == true` 且 `has_errors == false`
+- `work/guardrails_report_writer.json`：`passed == true` 且 `has_errors == false`
 - `work/reference_report.json`（reference-curator 输出）：`passed == true`
 
 任一子报告不通过即阻塞。
@@ -248,8 +248,8 @@ artifacts = {
 
 - [ ] [HARD*] `paper/main.pdf` 存在且字节数 >= `get("paper.pdf_min_bytes")`（默认 102400，即 100KB）→ core/tools/validate_project.py: check_pdf（*仅当实际执行编译时为 HARD；`compile_pdf=auto` 且主机无 LaTeX 工具链、或 `compile_pdf=never` 时降级 WARN，改为 HARD 校验 main.tex 完整可编译）
 - [ ] [HARD] `paper/main.tex`（或 main.md/main.typ）存在 → core/tools/validate_project.py: check_source
-- [ ] [HARD*] PDF 页数 >= `get("paper.min_pages")`（默认 25）且 <= `get("paper.max_pages")`（默认 30）→ core/tools/validate_project.py: check_paper_pages（*未编译时降级 WARN，用 est_pages=总字符/`chars_per_page` 估算校验）
-- [ ] [HARD] 字数 >= `get("paper.min_words")`（默认 18000）→ core/tools/validate_project.py: check_paper_words
+- [ ] [HARD*] PDF 页数 >= `get("paper.min_pages")`（默认 17，软目标）且 <= `get("paper.max_pages")`（默认 20，国赛硬上限）→ core/tools/validate_project.py: check_paper_pages（*未编译时降级 WARN，用 est_pages=总字符/`chars_per_page` 估算校验）
+- [ ] [HARD] 字数 >= `get("paper.min_words")`（默认 13000）→ core/tools/validate_project.py: check_paper_words
 - [ ] [HARD] 图数 >= `get("paper.min_figures")`（默认 6）→ core/tools/validate_project.py: check_paper_figures
 - [ ] [HARD] 表数 >= `get("paper.min_tables")`（默认 4）→ core/tools/validate_project.py: check_paper_tables
 - [ ] [HARD] 公式数 >= `get("paper.min_equations")`（默认 15）→ core/tools/validate_project.py: check_paper_equations
@@ -261,7 +261,7 @@ artifacts = {
 - [ ] [HARD] 构造的 PAPER_SPEC dict 通过 `core/schemas/paper_spec.schema.json` 校验 → core/schemas/paper_spec.schema.json
 - [ ] [HARD] 哈希链 `verify_chain() == True` → core/knowledge/validation/hash_chain.py
 - [ ] [HARD] `work/consistency_report.json` `passed == true`
-- [ ] [HARD] `work/guardrails_report.json` `passed == true`
+- [ ] [HARD] `work/guardrails_report_writer.json` `passed == true`
 - [ ] [HARD] 子报告全 passed（consistency/guardrails/reference）
 - [ ] [HARD] 编译产物无 undefined references（`grep 'undefined' main.log` 为空；交叉引用/文献均解析）→ core/tools/validate_project.py: check_no_undefined_refs
 - [ ] [HARD] 正文（非附录）无 `\begin{itemize}` / `\begin{enumerate}` 列表（铁律 W11）→ core/tools/validate_project.py: check_body_no_lists
@@ -313,7 +313,7 @@ artifacts = {
 - `core/env/loader.py`（读取所有 `paper.*` 与 `runtime.*` 阈值）
 - `core/Writer/laws/rules.md`（W1-W14 全部对应本 agent 的最终复核项）
 - `core/Writer/laws/COMPLETE_PAPER_LAW.md`（最终交付规则单一真相源，本 agent 执行其"最终门禁"）
-- `work/paper_structure.json` / `work/consistency_report.json` / `work/guardrails_report.json` / `work/reference_report.json`（下游子报告）
+- `work/paper_structure.json` / `work/consistency_report.json` / `work/guardrails_report_writer.json` / `work/reference_report.json`（下游子报告）
 
 ## Iteration
 

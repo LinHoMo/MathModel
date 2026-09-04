@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathModelSkills 29步流水线</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+  h1 { font-size: 24px; font-weight: 600; color: #58a6ff; margin-bottom: 8px; }
+  .subtitle { font-size: 13px; color: #8b949e; margin-bottom: 30px; }
+  .diagram { width: 1100px; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 30px; overflow-x: auto; }
+  .hand-row { margin-bottom: 24px; }
+  .hand-label { font-size: 14px; font-weight: 600; margin-bottom: 8px; padding: 4px 12px; border-radius: 6px; display: inline-block; }
+  .modeler { background: #1f6feb22; color: #58a6ff; border: 1px solid #1f6feb; }
+  .programmer { background: #23863622; color: #3fb950; border: 1px solid #238636; }
+  .writer { background: #8957e522; color: #a371f7; border: 1px solid #8957e5; }
+  .reviewer { background: #f8514922; color: #f85149; border: 1px solid #f85149; }
+  .steps { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .step { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: 1px solid #30363d; background: #0d1117; }
+  .step:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .step.utg-l1 { border-color: #58a6ff; color: #58a6ff; }
+  .step.utg-l2 { border-color: #3fb950; color: #3fb950; }
+  .step.utg-l3 { border-color: #a371f7; color: #a371f7; }
+  .step.utg-l4 { border-color: #f0883e; color: #f0883e; }
+  .step.utg-l5 { border-color: #f85149; color: #f85149; }
+  .step.utg-l6 { border-color: #db61a2; color: #db61a2; }
+  .arrow { color: #484f58; font-size: 16px; }
+  .gate-divider { width: 100%; height: 1px; background: #30363d; margin: 16px 0; position: relative; }
+  .gate-label { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #161b22; padding: 0 12px; font-size: 11px; color: #f85149; }
+  .legend { display: flex; gap: 16px; margin-top: 20px; font-size: 11px; color: #8b949e; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<h1>MathModelSkills 29步流水线</h1>
+<p class="subtitle">Modeler(8) → Programmer(6) → Writer(7) → Reviewer(8) · 每步门禁校验 · 3次重试/回退</p>
+
+<div class="diagram">
+  <!-- Modeler Hand -->
+  <div class="hand-row">
+    <div class="hand-label modeler">Modeler 手（建模）</div>
+    <div class="steps">
+      <div class="step utg-l1" title="L1: 赛题结构化解析，消除歧义">① problem-parser</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l1" title="L1: 题型识别 A/B/C/D/E + 推荐方法方向">② type-classifier</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l2" title="L2: 文献检索与证据提取">③ literature-searcher</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l2" title="L2: 方法匹配，从知识库选候选模型">④ method-matcher</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l3" title="L3: 建立数学模型（公式/符号/边界条件）">⑤ model-builder</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l3" title="L3: 构建模型依赖 DAG + 可视化">⑥ dag-builder</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l4" title="L4: 假设四维评分验证">⑦ assumption-validator</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l5" title="L5+L6: MODEL_SPEC 护栏检查 + 哈希审计">⑧ spec-auditor</div>
+    </div>
+  </div>
+
+  <div class="gate-divider"><span class="gate-label">▼ Hand Gate: programmer 进入条件 ▼</span></div>
+
+  <!-- Programmer Hand -->
+  <div class="hand-row">
+    <div class="hand-label programmer">Programmer 手（编程）</div>
+    <div class="steps">
+      <div class="step utg-l1" title="L1: 根据 MODEL_SPEC 选代码模板">⑨ template-selector</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l2" title="L2: 实现代码，类型制导">⑩ code-implementer</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l3" title="L3: 单元测试 + 集成测试">⑪ test-runner</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l4" title="L4: 数值验证 + 灵敏度分析">⑫ result-verifier</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l5" title="L5: 运行时护栏（禁用词/占位符/AI痕迹）">⑬ guardrails-checker</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l6" title="L6: 哈希链 + 错误归因 + 规则迭代">⑭ hash-auditor</div>
+    </div>
+  </div>
+
+  <div class="gate-divider"><span class="gate-label">▼ Hand Gate: writer 进入条件 ▼</span></div>
+
+  <!-- Writer Hand -->
+  <div class="hand-row">
+    <div class="hand-label writer">Writer 手（撰写）</div>
+    <div class="steps">
+      <div class="step utg-l1" title="L1: 论文结构规划 + 字数分配">⑮ structure-planner</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l2" title="L2: 撰写各章节 LaTeX 内容">⑯ section-writer</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l2" title="L2: 图表生成与规范命名">⑰ figure-generator</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l3" title="L3: 参考文献整理 + 引用完整性">⑱ reference-curator</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l4" title="L4: 论文-代码数值一致性">⑲ consistency-checker</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l5" title="L5: 运行时护栏（禁用词/占位符/AI痕迹）">⑳ guardrails-checker</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l6" title="L6: 最终校验 + 哈希审计 + 渲染 PDF">㉑ final-validator</div>
+    </div>
+  </div>
+
+  <div class="gate-divider"><span class="gate-label">▼ Delivery Gate: reviewer 进入条件 ▼</span></div>
+
+  <!-- Reviewer Hand -->
+  <div class="hand-row">
+    <div class="hand-label reviewer">Reviewer 手（评审）</div>
+    <div class="steps">
+      <div class="step utg-l4" title="L4: 学术创新性评分">㉒ scorer-academic</div>
+      <div class="step utg-l4" title="L4: 工程实现质量评分">㉓ scorer-engineering</div>
+      <div class="step utg-l4" title="L4: 评委视角评分（竞赛评分标准）">㉔ scorer-judge</div>
+      <div class="step utg-l4" title="L4: 读者可读性评分">㉕ scorer-reader</div>
+      <div class="step utg-l4" title="L4: 对抗性审查（挑刺/反例）">㉖ scorer-adversarial</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l4" title="L4: 逐条扫描反模式库挑缺陷">㉗ weakness-hunter</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l5" title="L5: 把缺陷转成可执行修改清单">㉘ revision-planner</div>
+      <span class="arrow">→</span>
+      <div class="step utg-l6" title="L6: 按修改清单执行修改">㉙ revision-executor</div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#58a6ff"></div>L1 形式化规约</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#3fb950"></div>L2 工具调用</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a371f7"></div>L3 过程验证</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f0883e"></div>L4 异构验证</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f85149"></div>L5 运行时护栏</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#db61a2"></div>L6 哈希审计</div>
+</div>
+
+<script>
+document.querySelectorAll('.step').forEach(step => {
+  step.addEventListener('click', () => {
+    const tip = step.getAttribute('title');
+    if (tip) alert(tip);
+  });
+});
+</script>
+</body>
+</html>

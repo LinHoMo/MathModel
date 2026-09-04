@@ -65,8 +65,8 @@ class TestEnvLoader:
             assert group in cfg, f"缺少配置组: {group}"
 
     def test_get_paper_min_pages(self, env_loader):
-        """get('paper.min_pages') 返回 25（对标 mmagent-codex-main：国赛 25-30 页）"""
-        assert env_loader.get("paper.min_pages") == 25
+        """get('paper.min_pages') 返回 17（国赛 2025 官方硬上限 20 页，17 为经验软目标）"""
+        assert env_loader.get("paper.min_pages") == 17
 
     def test_get_code_random_seed(self, env_loader):
         """get('code.random_seed') 返回 42"""

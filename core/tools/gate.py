@@ -11,8 +11,9 @@
 退出码
 ------
     0  全部通过（含 SKIP）
-    1  存在 HARD 失败（阻塞，须按 SKILL.md 的 Iteration 修正后重跑）
-    2  参数错误
+    1  仅软失败（WARN），可推进
+    2  存在 HARD 失败（阻塞，须按 SKILL.md 的 Iteration 修正后重跑）
+    3  参数错误 / 项目不存在 / 脚本异常
 
 设计要点
 --------
@@ -23,6 +24,7 @@
 """
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -108,9 +110,9 @@ GATES = {
                                       "all_results"),
     ],
     ("programmer", "guardrails-checker"): [
-        lambda p: G.check_files_exist(p, ["work/guardrails_report.json"],
-                                      "guardrails_report"),
-        lambda p: G.check_json_valid(p, "work/guardrails_report.json"),
+        lambda p: G.check_files_exist(p, ["work/guardrails_report_programmer.json"],
+                                      "guardrails_report_programmer"),
+        lambda p: G.check_json_valid(p, "work/guardrails_report_programmer.json"),
     ],
     ("programmer", "hash-auditor"): [
         lambda p: G.check_files_exist(p, ["output/CODE_DELIVERABLES.md"],
@@ -226,6 +228,85 @@ GATES = {
         lambda p: _vp_check(p, "check_paper_equations"),
         lambda p: _vp_check(p, "check_paper_references"),
         lambda p: _vp_check(p, "check_pdf_compile_chain"),
+        # ---- 国赛官方披露合规 + 内联引用（CUMCM 2025 硬性要求）----
+        lambda p: G.check_cumcm_inline_citation(p),
+        lambda p: G.check_cumcm_ai_disclosure_body(p),
+        lambda p: G.check_cumcm_ai_support(p),
+        lambda p: G.check_cumcm_ai_referenced(p),
+    ],
+}
+
+
+# 交付门禁：验证各手的最终交付契约（复用 validate_project 检查）
+def _vp_check_delivery(project, fname):
+    """跑 validate_project 里的单个检查函数，映射为 gatelib.Check。"""
+    import validate_project as VP
+
+    fn = getattr(VP, fname, None)
+    if fn is None:
+        return G.fail(f"交付检查/{fname}", "validate_project 无此检查函数")
+    # 初始化 VP 全局变量（复用 gate.py 中的 _vp_init 逻辑）
+    module, _err = VP._load_env_loader(G.ROOT)
+    if module is not None:
+        VP._ENV_GET = module.get
+    VP._STRICT_MODE = bool(VP._ENV_GET("runtime.strict_mode") or True)
+    _pt, is_physics = VP._detect_problem_type(G.project_dir(project))
+    VP._IS_PHYSICS = is_physics
+
+    mark = len(VP.results)
+    try:
+        fn(G.project_dir(project))
+    except Exception as e:
+        del VP.results[mark:]
+        return G.fail(f"交付检查/{fname}", f"执行异常: {e}", hard=False)
+
+    new = VP.results[mark:]
+    del VP.results[mark:]
+    if not new:
+        return G.fail(f"交付检查/{fname}", "未产生任何判定", hard=False)
+
+    rank = {VP.HARD: 2, VP.WARN: 1, VP.PASS: 0}
+    status, name, detail = max(new, key=lambda t: rank.get(t[0], 0))
+    if status == VP.PASS:
+        return G.ok(name, detail)
+    return G.fail(name, detail, hard=(status == VP.HARD))
+
+
+DELIVERY_GATES = {
+    "modeler": [
+        lambda p: G.check_files_exist(p, ["output/MODEL_SPEC.md"], "MODEL_SPEC"),
+        lambda p: G.check_guardrails(p, ["output/MODEL_SPEC.md"], allow_internal=True),
+        lambda p: G.check_schema(p, "output/MODEL_SPEC.md", "core/schemas/model_spec.schema.json"),
+    ],
+    "programmer": [
+        lambda p: G.check_files_exist(p, ["output/CODE_DELIVERABLES.md"], "CODE_DELIVERABLES"),
+        lambda p: G.check_guardrails(p, ["output/CODE_DELIVERABLES.md"], allow_internal=True),
+        lambda p: G.check_files_exist(p, ["figures/all_results.json"], "all_results"),
+        lambda p: G.check_files_exist(p, ["code/main.py"], "main.py"),
+    ],
+    "writer": [
+        lambda p: G.check_files_exist(p, ["output/PAPER_SPEC.md"], "PAPER_SPEC"),
+        lambda p: G.check_guardrails(p, ["output/PAPER_SPEC.md"], allow_internal=True),
+        lambda p: G.check_files_exist(p, ["paper/main.tex"], "main.tex"),
+        lambda p: G.check_files_exist(p, ["paper/references.bib"], "references.bib"),
+        # 复用 validate_project 的深度检查
+        lambda p: _vp_check_delivery(p, "check_citation_integrity"),
+        lambda p: _vp_check_delivery(p, "check_figure_refs"),
+        lambda p: _vp_check_delivery(p, "check_pdf_compile_chain"),
+        lambda p: _vp_check_delivery(p, "check_placeholders"),
+        lambda p: _vp_check_delivery(p, "check_forbidden_words"),
+        # CUMCM 合规检查（通过 gatelib 直接调用）
+        lambda p: G.check_cumcm_inline_citation(p),
+        lambda p: G.check_cumcm_ai_disclosure_body(p),
+        lambda p: G.check_cumcm_ai_support(p),
+        lambda p: G.check_cumcm_ai_referenced(p),
+    ],
+    "reviewer": [
+        lambda p: G.check_files_exist(p, ["work/revision_plan.json"], "revision_plan"),
+        lambda p: G.check_json_valid(p, "work/revision_plan.json"),
+        lambda p: G.check_files_exist(p, ["work/execution_report.json"], "execution_report"),
+        lambda p: G.check_json_valid(p, "work/execution_report.json"),
+        lambda p: _check_execution_verdict(p),
     ],
 }
 
@@ -355,7 +436,7 @@ def _vp_init(VP, project):
     module, _err = VP._load_env_loader(G.ROOT)
     if module is not None:
         VP._ENV_GET = module.get
-    VP._STRICT_MODE = bool(VP._env_get("runtime.strict_mode", True))
+    VP._STRICT_MODE = bool(VP._ENV_GET("runtime.strict_mode") or True)
     _pt, is_physics = VP._detect_problem_type(G.project_dir(project))
     VP._IS_PHYSICS = is_physics
     _VP_INIT_DONE[key] = True
@@ -484,7 +565,7 @@ def _infer_year(project_path):
 # 版面阈值 8 项与既有的「LaTeX 编译」「PDF 产物」「插图数」「公式数」同类：
 # 名字取自 validate_project.py 里 _pas/_warn/_hard 的首参（1:1 映射）。
 # 这是刻意取舍——runtime.profile 默认 standard，硬门禁照常生效；
-# lite 仅把"写不满 25 页"从阻塞降为提示，不重开漏洞。
+# lite 仅把"写不满 min_pages（国赛软目标 17 页）"从阻塞降为提示，不重开漏洞。
 LITE_SOFTEN = {"公式数(W-env)", "插图数", "PDF 产物", "运行时护栏",
                 "Schema core/schemas/question_spec.schema.json",
                 "LaTeX 编译", "代码可复现",
@@ -587,14 +668,14 @@ def _likely_done(project, hand, agent):
         ("programmer", "code-implementer"): "code/main.py",
         ("programmer", "test-runner"): "work/test_report.json",
         ("programmer", "result-verifier"): "work/result_validation.json",
-        ("programmer", "guardrails-checker"): "work/guardrails_report.json",
+        ("programmer", "guardrails-checker"): "work/guardrails_report_programmer.json",
         ("programmer", "hash-auditor"): "output/CODE_DELIVERABLES.md",
         ("writer", "structure-planner"): "work/paper_structure.json",
         ("writer", "section-writer"): "paper/main.tex",
         ("writer", "figure-generator"): "paper/figures",
         ("writer", "reference-curator"): "paper/references.bib",
         ("writer", "consistency-checker"): "work/consistency_report.json",
-        ("writer", "guardrails-checker"): "work/guardrails_report.json",
+        ("writer", "guardrails-checker"): "work/guardrails_report_writer.json",
         ("writer", "final-validator"): "output/PAPER_SPEC.md",
         ("reviewer", "scorer-academic"): "work/score_card_academic.json",
         ("reviewer", "scorer-engineering"): "work/score_card_engineering.json",
@@ -608,43 +689,96 @@ def _likely_done(project, hand, agent):
     return bool(probe) and (base / probe).exists()
 
 
+# 语义化退出码 —— state.py advance 依赖它决定是否放行推进
+EXIT_PASS = 0        # 全部通过
+EXIT_SOFT = 1        # 仅软失败（WARN），可推进
+EXIT_HARD = 2        # 有硬失败，禁止推进
+EXIT_ERROR = 3       # 项目不存在 / 参数错误 / 脚本异常
+
+
+# 门禁层级：artifact / hand / delivery
+GATE_LEVELS = ("artifact", "hand", "delivery")
+
+
 def main():
     ap = argparse.ArgumentParser(description="门禁判定（跨 runtime 执行协议）")
     ap.add_argument("project", help="项目目录名或路径")
-    ap.add_argument("hand", help="modeler / programmer / writer / all")
-    ap.add_argument("agent", nargs="?", help="agent 名；hand=all 时省略")
+    ap.add_argument("hand", nargs="?", help="modeler / programmer / writer / reviewer / all")
+    ap.add_argument("agent", nargs="?", help="agent 名；hand=all/delivery 时省略")
+    ap.add_argument("--level", default="artifact",
+                    choices=["artifact", "hand", "delivery", "all"],
+                    help="门禁层级：artifact(单agent)/hand(整手)/delivery(交付契约)/all(全链路)")
+    ap.add_argument("--json", action="store_true",
+                    help="输出 JSON 供脚本消费（state.py advance 使用）")
+    ap.add_argument("--quiet", action="store_true", help="只输出结论行")
     args = ap.parse_args()
 
     project = args.project
     base = G.project_dir(project)
     if not base.exists():
         print(f"[gate] 项目不存在: {base}", file=sys.stderr)
-        return 2
+        return EXIT_ERROR
 
     state = S.load(project)
 
-    print("=" * 60)
-    print(f"门禁判定: {base.name}")
-    print("=" * 60)
+    if not args.json and not args.quiet:
+        print("=" * 60)
+        print(f"门禁判定: {base.name} [层级: {args.level}]")
+        print("=" * 60)
 
     results = []
-    if args.hand == "all":
+    if args.level == "all":
         for hand, agent, _ in S.PIPELINE:
             results += run_gate(project, hand, agent, state)
-    elif args.agent:
-        results += run_gate(project, args.hand, args.agent, state)
-    else:
+    elif args.level == "delivery":
+        target_hands = [args.hand] if args.hand else list(DELIVERY_GATES.keys())
+        for hand in target_hands:
+            if hand in DELIVERY_GATES:
+                for fn in DELIVERY_GATES[hand]:
+                    try:
+                        r = fn(project)
+                    except Exception as e:
+                        r = G.fail(f"{hand}/delivery 断言异常", str(e))
+                    results.append(r)
+            else:
+                print(f"  [SKIP] {hand}/delivery - 未定义交付门禁", file=sys.stderr)
+    elif args.level == "hand":
+        if not args.hand:
+            print("[gate] hand 层级需要指定 hand", file=sys.stderr)
+            return EXIT_ERROR
         for hand, agent, _ in S.PIPELINE:
             if hand == args.hand:
                 results += run_gate(project, hand, agent, state)
+    else:  # artifact
+        if not args.hand or not args.agent:
+            print("[gate] artifact 层级需要指定 hand 和 agent", file=sys.stderr)
+            return EXIT_ERROR
+        results += run_gate(project, args.hand, args.agent, state)
 
     passed = sum(1 for r in results if r.ok)
     hard_fail = [r for r in results if not r.ok and r.hard]
     soft_fail = [r for r in results if not r.ok and not r.hard]
 
-    print("-" * 60)
-    for r in results:
-        print("  " + repr(r))
+    if args.json:
+        print(json.dumps({
+            "project": base.name,
+            "hand": args.hand,
+            "agent": args.agent or "",
+            "passed": passed,
+            "hard_fail_count": len(hard_fail),
+            "soft_fail_count": len(soft_fail),
+            "ok": len(hard_fail) == 0,
+            "hard_fail": [{"name": r.name, "detail": r.detail} for r in hard_fail],
+            "soft_fail": [{"name": r.name, "detail": r.detail} for r in soft_fail],
+        }, ensure_ascii=False, indent=2))
+        return EXIT_PASS if not hard_fail and not soft_fail else (
+            EXIT_HARD if hard_fail else EXIT_SOFT
+        )
+
+    if not args.quiet:
+        print("-" * 60)
+        for r in results:
+            print("  " + repr(r))
 
     print("-" * 60)
     print(f"通过 {passed} / 硬失败 {len(hard_fail)} / 软失败 {len(soft_fail)}")
@@ -654,10 +788,15 @@ def main():
         for r in hard_fail:
             print(f"  - {r.name}: {r.detail}")
         print("=" * 60)
-        return 1
+        return EXIT_HARD
+
+    if soft_fail:
+        print("\n软失败（不阻塞，建议改进）:")
+        for r in soft_fail:
+            print(f"  - {r.name}: {r.detail}")
 
     print("=" * 60)
-    return 0
+    return EXIT_PASS if not soft_fail else EXIT_SOFT
 
 
 if __name__ == "__main__":

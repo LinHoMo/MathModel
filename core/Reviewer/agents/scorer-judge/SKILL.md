@@ -75,7 +75,7 @@ outputs:
 
 | 参数 | 默认值 | 作用 |
 |------|--------|------|
-| `paper.min_pages` | 25 | 页数下限 |
-| `paper.min_words` | 18000 | 字数下限 |
+| `paper.min_pages` | 17 | 页数下限（TUNABLE 软目标，国赛 20 页硬上限） |
+| `paper.min_words` | 13000 | 字数下限（DERIVED，17 页 x 800 字/页） |
 | `paper.min_figures` | 6 | 图表下限 |
 | `review.figure_as_subject_max` | 3 | 图表主语句式容忍度 |

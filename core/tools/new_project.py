@@ -6,8 +6,12 @@
 零第三方依赖。不覆盖已存在的项目。
 
 用法:
-    python core/tools/new_project.py <项目名> --competition cumcm|mcm|diangong
+    python core/tools/new_project.py <项目名> --competition <赛事>
                                      [--problem <赛题文件> ...] [--force]
+
+--competition 的取值动态读取 core/env/profiles/*.yaml 的 meta.competition
+（单一真源），覆盖所有已配置赛事包（cumcm / mcm / diangong / huashu / huawei /
+apmcm / mathorcup / renzhengbei / shuweibei）。
 """
 from __future__ import annotations
 
@@ -18,6 +22,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# 项目目录结构（单一事实源，供脚手架创建）。与 REFACTOR_PLAN §6.3 对齐：
+# - 删除 tables/（表格直接写进 tex，无独立目录必要）
+# - _debug/ → _scratch/（临时区，显式创建，可随时清空，不再污染 code/）
+# - 新增 deliverables/（投稿交付物：论文PDF/支撑材料ZIP/AI工具使用详情PDF）
+# - 新增 support_materials 不再单独建目录；披露材料统一落到 deliverables/
 PROJECT_DIRS = (
     "inputs",
     "inputs/external",
@@ -27,6 +36,8 @@ PROJECT_DIRS = (
     "figures",
     "paper",
     "paper/figures",
+    "deliverables",
+    "_scratch",
 )
 NAME_RE = re.compile(r"^[a-z][a-z0-9-]{1,63}$")
 
@@ -39,10 +50,46 @@ NEXT_STEPS = """\
 
 
 def known_competitions() -> list[str]:
+    """动态读取 core/env/profiles/*.yaml 的 meta.competition（单一真源）。
+
+    原实现读 core/templates/latex 目录名，只覆盖有 LaTeX 模板的 6 个赛事，
+    遗漏了有 profile 但复用国赛模板的 diangong / huashu / huawei。
+    现以 profile 为准，所有赛事包均可建；profile 目录缺失时回退到模板目录兜底。
+    """
+    prof_dir = ROOT / "core" / "env" / "profiles"
+    if prof_dir.is_dir():
+        comps: set[str] = set()
+        for f in sorted(prof_dir.glob("*.yaml")):
+            if f.name.startswith("_"):
+                continue
+            comp = _profile_meta_competition(f.read_text(encoding="utf-8"))
+            if comp:
+                comps.add(comp)
+        if comps:
+            return sorted(comps)
+    # 回退：模板目录
     base = ROOT / "core" / "templates" / "latex"
-    if not base.is_dir():
-        return []
-    return sorted(p.name for p in base.iterdir() if p.is_dir())
+    if base.is_dir():
+        return sorted(p.name for p in base.iterdir() if p.is_dir())
+    return []
+
+
+def _profile_meta_competition(text: str) -> str | None:
+    """零依赖提取 profile 中 meta.competition 的值。"""
+    in_meta = False
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped == "meta:":
+            in_meta = True
+            continue
+        if in_meta:
+            if line and not line[0].isspace():
+                in_meta = False
+                continue
+            m = re.match(r"competition:\s*(\S+)", stripped)
+            if m:
+                return m.group(1)
+    return None
 
 
 def _write_time_budget(proj_dir: Path, competition: str) -> None:
@@ -170,7 +217,8 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="新项目脚手架：创建目录结构并导入赛题")
     parser.add_argument("project", help="项目名（如 cumcm2025c / mcm2026e）")
     parser.add_argument("--competition", required=True,
-                        help="竞赛包：cumcm / mcm / diangong")
+                        help="竞赛包（动态读取 core/env/profiles/*.yaml，如 cumcm / mcm / "
+                             "diangong / huashu / huawei / apmcm / mathorcup / renzhengbei / shuweibei）")
     parser.add_argument("--problem", action="append", default=[],
                         help="赛题文件路径（可多次指定）")
     parser.add_argument("--force", action="store_true",

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathModelSkills 数据流</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+  h1 { font-size: 24px; font-weight: 600; color: #58a6ff; margin-bottom: 8px; }
+  .subtitle { font-size: 13px; color: #8b949e; margin-bottom: 30px; }
+  .diagram { width: 1000px; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 30px; }
+  svg { width: 100%; height: auto; }
+  .store { cursor: pointer; }
+  .store rect { rx: 6; ry: 6; stroke-width: 2; }
+  .store text { font-size: 12px; font-weight: 600; fill: #fff; text-anchor: middle; }
+  .flow { stroke-width: 2; fill: none; marker-end: url(#arrowflow); }
+  .flow-label { font-size: 10px; fill: #c9d1d9; text-anchor: middle; }
+  .hand-box { fill: none; stroke-width: 1; stroke-dasharray: 6; rx: 12; }
+  .hand-label { font-size: 14px; font-weight: 700; }
+</style>
+</head>
+<body>
+<h1>MathModelSkills 数据流</h1>
+<p class="subtitle">赛题 → Model Spec → Code Deliverables → Paper → 评分 → 修改 → 论文交付</p>
+
+<div class="diagram">
+<svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowflow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#58a6ff"/>
+    </marker>
+    <marker id="arrowgreen" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#3fb950"/>
+    </marker>
+    <marker id="arroworange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#f0883e"/>
+    </marker>
+  </defs>
+
+  <!-- Hand boxes -->
+  <rect x="20" y="60" width="220" height="400" class="hand-box" stroke="#1f6feb"/>
+  <text x="130" y="50" class="hand-label" fill="#58a6ff" text-anchor="middle">Modeler</text>
+
+  <rect x="280" y="60" width="180" height="400" class="hand-box" stroke="#238636"/>
+  <text x="370" y="50" class="hand-label" fill="#3fb950" text-anchor="middle">Programmer</text>
+
+  <rect x="500" y="60" width="180" height="400" class="hand-box" stroke="#8957e5"/>
+  <text x="590" y="50" class="hand-label" fill="#a371f7" text-anchor="middle">Writer</text>
+
+  <rect x="720" y="60" width="220" height="400" class="hand-box" stroke="#f85149"/>
+  <text x="830" y="50" class="hand-label" fill="#f85149" text-anchor="middle">Reviewer</text>
+
+  <!-- Input -->
+  <g class="store" transform="translate(40,120)">
+    <rect width="180" height="50" fill="#238636" stroke="#2ea043"/>
+    <text x="90" y="20">赛题文件</text>
+    <text x="90" y="38" font-size="10" fill="#c9d1d9">problem_*.txt</text>
+  </g>
+
+  <!-- Modeler outputs -->
+  <g class="store" transform="translate(40,200)">
+    <rect width="180" height="50" fill="#1f6feb22" stroke="#58a6ff"/>
+    <text x="90" y="20">question_spec.json</text>
+    <text x="90" y="38" font-size="10" fill="#8b949e">L1 问题解析</text>
+  </g>
+
+  <g class="store" transform="translate(40,270)">
+    <rect width="180" height="50" fill="#1f6feb22" stroke="#58a6ff"/>
+    <text x="90" y="20">type_classification.json</text>
+    <text x="90" y="38" font-size="10" fill="#8b949e">L1 题型识别</text>
+  </g>
+
+  <g class="store" transform="translate(40,340)">
+    <rect width="180" height="50" fill="#1f6feb22" stroke="#58a6ff"/>
+    <text x="90" y="20">literature_report.json</text>
+    <text x="90" y="38" font-size="10" fill="#8b949e">L2 文献证据</text>
+  </g>
+
+  <g class="store" transform="translate(40,410)">
+    <rect width="180" height="80" fill="#1f6feb" stroke="#58a6ff"/>
+    <text x="90" y="20">MODEL_SPEC.md</text>
+    <text x="90" y="38" font-size="10" fill="#c9d1d9">L3-L6 模型规格</text>
+    <text x="90" y="55" font-size="10" fill="#c9d1d9">核心交付契约</text>
+  </g>
+
+  <!-- Programmer inputs/outputs -->
+  <g class="store" transform="translate(300,120)">
+    <rect width="140" height="40" fill="#161b22" stroke="#484f58"/>
+    <text x="70" y="16">template_plan.json</text>
+    <text x="70" y="30" font-size="10" fill="#8b949e">L1 模板选择</text>
+  </g>
+
+  <g class="store" transform="translate(300,180)">
+    <rect width="140" height="40" fill="#23863622" stroke="#3fb950"/>
+    <text x="70" y="16">main.py</text>
+    <text x="70" y="30" font-size="10" fill="#8b949e">L2 代码实现</text>
+  </g>
+
+  <g class="store" transform="translate(300,240)">
+    <rect width="140" height="40" fill="#23863622" stroke="#3fb950"/>
+    <text x="70" y="16">test_report.json</text>
+    <text x="70" y="30" font-size="10" fill="#8b949e">L3 测试报告</text>
+  </g>
+
+  <g class="store" transform="translate(300,310)">
+    <rect width="140" height="40" fill="#23863622" stroke="#3fb950"/>
+    <text x="70" y="16">verification.json</text>
+    <text x="70" y="30" font-size="10" fill="#8b949e">L4 数值验证</text>
+  </g>
+
+  <g class="store" transform="translate(300,380)">
+    <rect width="140" height="80" fill="#238636" stroke="#2ea043"/>
+    <text x="70" y="16">CODE_DELIVERABLES.md</text>
+    <text x="70" y="34" font-size="10" fill="#fff">L5-L6 代码交付</text>
+    <text x="70" y="52" font-size="10" fill="#fff">核心交付契约</text>
+  </g>
+
+  <!-- Writer inputs/outputs -->
+  <g class="store" transform="translate(520,120)">
+    <rect width="140" height="40" fill="#161b22" stroke="#484f58"/>
+    <text x="70" y="16">paper_plan.json</text>
+    <text x="70" y="30" font-size="10" fill="#8b949e">L1 结构规划</text>
+  </g>
+
+  <g class="store" transform="translate(520,180)">
+    <rect width="140" height="40" fill="#8957e522" stroke="#a371f7"/>
+    <text x="70" y="16">main.tex</text>
+    <text x="70" y="30" font-size="10" fill="#8b949e">L2 LaTeX 内容</text>
+  </g>
+
+  <g class="store" transform="translate(520,240)">
+    <rect width="140" height="40" fill="#8957e522" stroke="#a371f7"/>
+    <text x="70" y="16">references.bib</text>
+    <text x="70" y="30" font-size="10" fill="#8b949e">L3 参考文献</text>
+  </g>
+
+  <g class="store" transform="translate(520,310)">
+    <rect width="140" height="40" fill="#8957e522" stroke="#a371f7"/>
+    <text x="70" y="16">consistency.json</text>
+    <text x="70" y="30" font-size="10" fill="#8b949e">L4 一致性</text>
+  </g>
+
+  <g class="store" transform="translate(520,380)">
+    <rect width="140" height="80" fill="#8957e5" stroke="#a371f7"/>
+    <text x="70" y="16">PAPER_SPEC.md</text>
+    <text x="70" y="34" font-size="10" fill="#fff">L5-L6 论文交付</text>
+    <text x="70" y="52" font-size="10" fill="#fff">核心交付契约</text>
+  </g>
+
+  <!-- Reviewer inputs/outputs -->
+  <g class="store" transform="translate(740,120)">
+    <rect width="180" height="40" fill="#f8514922" stroke="#f85149"/>
+    <text x="90" y="16">score_cards/*.json</text>
+    <text x="90" y="30" font-size="10" fill="#8b949e">5维评分卡</text>
+  </g>
+
+  <g class="store" transform="translate(740,180)">
+    <rect width="180" height="40" fill="#f8514922" stroke="#f85149"/>
+    <text x="90" y="16">score_card.json</text>
+    <text x="90" y="30" font-size="10" fill="#8b949e">聚合评分</text>
+  </g>
+
+  <g class="store" transform="translate(740,240)">
+    <rect width="180" height="40" fill="#f8514922" stroke="#f85149"/>
+    <text x="90" y="16">weakness_report.json</text>
+    <text x="90" y="30" font-size="10" fill="#8b949e">缺陷清单</text>
+  </g>
+
+  <g class="store" transform="translate(740,310)">
+    <rect width="180" height="40" fill="#f8514922" stroke="#f85149"/>
+    <text x="90" y="16">revision_plan.json</text>
+    <text x="90" y="30" font-size="10" fill="#8b949e">修改计划</text>
+  </g>
+
+  <g class="store" transform="translate(740,380)">
+    <rect width="180" height="80" fill="#f85149" stroke="#da3633"/>
+    <text x="90" y="16">execution_report.json</text>
+    <text x="90" y="34" font-size="10" fill="#fff">L6 修改验收</text>
+    <text x="90" y="52" font-size="10" fill="#fff">最终交付</text>
+  </g>
+
+  <!-- Data flow arrows -->
+  <path d="M 220 145 L 300 145" class="flow" marker-end="url(#arrowflow)"/>
+  <path d="M 220 450 L 300 420" class="flow" marker-end="url(#arrowflow)"/>
+  <path d="M 440 420 L 520 420" class="flow" marker-end="url(#arrowflow)"/>
+  <path d="M 660 420 L 740 420" class="flow" marker-end="url(#arroworange)"/>
+
+  <!-- Flow labels -->
+  <text x="260" y="138" class="flow-label">MODEL_SPEC</text>
+  <text x="260" y="440" class="flow-label">CODE_DELIVERABLES</text>
+  <text x="480" y="410" class="flow-label">PAPER_SPEC</text>
+  <text x="700" y="410" class="flow-label" fill="#f0883e">论文+代码</text>
+
+  <!-- Shared stores -->
+  <g class="store" transform="translate(380,470)">
+    <rect width="120" height="30" fill="#0d1117" stroke="#f0883e" stroke-dasharray="3"/>
+    <text x="60" y="18" font-size="10" fill="#f0883e">all_results.json</text>
+  </g>
+  <g class="store" transform="translate(540,470)">
+    <rect width="120" height="30" fill="#0d1117" stroke="#f0883e" stroke-dasharray="3"/>
+    <text x="60" y="18" font-size="10" fill="#f0883e">STATE.md</text>
+  </g>
+</svg>
+</div>
+
+<script>
+document.querySelectorAll('.store').forEach(store => {
+  store.addEventListener('click', () => {
+    const name = store.querySelector('text')?.textContent || '';
+    const desc = store.querySelectorAll('text')[1]?.textContent || '';
+    alert(`文件: ${name}\n${desc}`);
+  });
+});
+</script>
+</body>
+</html>

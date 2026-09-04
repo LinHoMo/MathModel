@@ -147,7 +147,8 @@ projects/<项目>/
 │   ├── template_plan.json
 │   ├── test_report.json
 │   ├── result_validation.json
-│   ├── guardrails_report.json
+│   ├── guardrails_report_programmer.json
+│   ├── guardrails_report_writer.json
 │   ├── paper_structure.json
 │   ├── consistency_report.json
 │   ├── score_card.json

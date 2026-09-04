@@ -7,15 +7,15 @@ stage: 5
 inputs:
   - code/*.py
 outputs:
-  - work/guardrails_report.json
+  - work/guardrails_report_programmer.json
 ---
 
 ## 执行卡片（先读这里，不必通读全文）
 
 - **门禁**：`python core/tools/gate.py <项目> programmer guardrails-checker`
 - **输入**：code/ 与 output/
-- **输出**：`work/guardrails_report.json`
-- **核心步骤**：1. 扫禁用词 → 2. 扫占位符 → 3. 扫 AI 痕迹 → 4. 写 guardrails_report.json
+- **输出**：`work/guardrails_report_programmer.json`
+- **核心步骤**：1. 扫禁用词 → 2. 扫占位符 → 3. 扫 AI 痕迹 → 4. 写 guardrails_report_programmer.json
 - **失败**：按本文件末尾 `## Iteration` 修正，最多 3 轮；仍失败则回退上游
 
 ---
@@ -25,7 +25,7 @@ outputs:
 
 ## Role
 
-护栏检查器：对 `code/*.py` 做运行时护栏审查——禁用词、占位符、AI 痕迹、内部路径、权限越界，输出 guardrails_report.json。
+护栏检查器：对 `code/*.py` 做运行时护栏审查——禁用词、占位符、AI 痕迹、内部路径、权限越界，输出 guardrails_report_programmer.json。
 
 ## UTG Layer
 
@@ -40,7 +40,7 @@ outputs:
 ## Contract
 
 - **输入**：`code/*.py`
-- **输出**：`work/guardrails_report.json`
+- **输出**：`work/guardrails_report_programmer.json`
 - **schema（建议字段）**：
   ```json
   {
@@ -94,13 +94,13 @@ for py_file in Path("code").glob("*.py"):
 - 异常处理：数据加载/文件 IO 有 try-except（P5）
 - 数据校验：编码/列名/形状/缺失值检查存在（P8）
 
-### Step 6: 汇总 guardrails_report.json
+### Step 6: 汇总 guardrails_report_programmer.json
 
-聚合所有发现写入 `work/guardrails_report.json`，`passed` 仅当无 error 级别发现。
+聚合所有发现写入 `work/guardrails_report_programmer.json`，`passed` 仅当无 error 级别发现。
 
 ### Step 7: 运行可执行门禁
 
-运行 `py core/tools/validate_project.py --project <项目路径>`，确认本 agent 对接的 [HARD] 检查全部 PASS。任一 HARD 失败按 ## Iteration 回退修正后重跑。WARN 项记录到 work/guardrails_report.json 但不阻塞。
+运行 `py core/tools/validate_project.py --project <项目路径>`，确认本 agent 对接的 [HARD] 检查全部 PASS。任一 HARD 失败按 ## Iteration 回退修正后重跑。WARN 项记录到 work/guardrails_report_programmer.json 但不阻塞。
 
 ## Self-Check
 

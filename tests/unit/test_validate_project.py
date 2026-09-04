@@ -129,12 +129,15 @@ class TestValidateProjectStructure:
         assert "PHYSICS_KEYWORDS" in src, "缺少 PHYSICS_KEYWORDS 关键词列表"
 
     def test_env_threshold_injection(self):
-        """含 env 阈值动态注入（_env_get 辅助函数）"""
+        """含 env 阈值动态注入（通过 _ENV_GET 直接调用 loader.get）"""
         src = _read_validate_project_source()
-        assert re.search(r"^def\s+_env_get\s*\(", src, re.MULTILINE), \
-            "缺少 _env_get 函数"
+        # 不再有本地 _env_get 封装，直接使用 _ENV_GET(key) 调用 loader.get
+        assert "_ENV_GET" in src, "缺少 _ENV_GET 全局引用"
         assert re.search(r"^def\s+_load_env_loader\s*\(", src, re.MULTILINE), \
             "缺少 _load_env_loader 函数"
+        # 验证 main() 中正确加载 loader.get 和 loader.require
+        assert "_ENV_GET = module.get" in src, "main() 未正确赋值 _ENV_GET"
+        assert "_ENV_REQUIRE = module.require" in src, "main() 未正确赋值 _ENV_REQUIRE"
 
     def test_checks_grouped(self):
         """CHECKS 列表把 36 个检查函数分 7 组"""

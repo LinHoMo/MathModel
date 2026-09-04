@@ -12,8 +12,8 @@
         "title": { "type": "string", "minLength": 5 },
         "template": { "type": "string", "enum": ["cumcm-zh", "mcm-en", "generic"] },
         "language": { "type": "string", "enum": ["zh", "en"] },
-        "target_pages": { "type": "integer", "minimum": 25, "maximum": 30 },
-        "word_count": { "type": "integer", "minimum": 18000 }
+        "target_pages": { "type": "integer", "minimum": 8, "maximum": 20 },
+        "word_count": { "type": "integer", "minimum": 13000 }
       }
     },
     "sections": {

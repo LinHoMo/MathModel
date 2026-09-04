@@ -2,7 +2,7 @@
 # 用于在 OpenAI Agents SDK 中加载 MathModelSkills 技能
 # *** 本文件由 core/tools/gen_runtime_manifest.py 自动生成 ***
 # *** 请勿手工编辑 —— 以 catalog.yaml 为单一真源 ***
-# 最近生成时间: 2026-09-03T13:03:12+00:00Z
+# 最近生成时间: 2026-09-04T03:46:30+00:00Z
 
 # 4 手 29 agent（自动生成）
 name: "mathmodeling-skills"
@@ -128,7 +128,7 @@ pipeline:
         stage: 5
         utg_layer: "L5"
         description: "运行时护栏（禁用词/占位符/AI痕迹/权限）"
-        artifact: "work/guardrails_report.json"
+        artifact: "work/guardrails_report_programmer.json"
 
       - name: "hash-auditor"
         stage: 6
@@ -173,7 +173,7 @@ pipeline:
         stage: 6
         utg_layer: "L5"
         description: "运行时护栏（禁用词/占位符/AI 痕迹）"
-        artifact: "work/guardrails_report.json"
+        artifact: "work/guardrails_report_writer.json"
 
       - name: "final-validator"
         stage: 7

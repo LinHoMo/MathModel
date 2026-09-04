@@ -103,8 +103,8 @@ def _scan_tests():
 
 
 def _scan_gate():
-    """对 cumcm2024a 跑 gate.py all，返回 EXIT + 通过/失败计数。"""
-    rc, out = _run([sys.executable, "core/tools/gate.py", "cumcm2024a", "all"], timeout=180)
+    """对归档样例 cumcm2024a 跑 gate.py all，返回 EXIT + 通过/失败计数。"""
+    rc, out = _run([sys.executable, "core/tools/gate.py", "archives/cumcm2024a", "all"], timeout=180)
     pass_m = re.search(r"通过\s+(\d+)", out)
     hard_m = re.search(r"硬失败\s+(\d+)", out)
     soft_m = re.search(r"软失败\s+(\d+)", out)
@@ -117,8 +117,8 @@ def _scan_gate():
 
 
 def _scan_validate():
-    """对 cumcm2024a 跑 validate_project.py，返回 EXIT + 通过/警告/硬失败。"""
-    rc, out = _run([sys.executable, "core/tools/validate_project.py", "--project", "projects/cumcm2024a"], timeout=180)
+    """对归档样例 cumcm2024a 跑 validate_project.py，返回 EXIT + 通过/警告/硬失败。"""
+    rc, out = _run([sys.executable, "core/tools/validate_project.py", "--project", "archives/cumcm2024a"], timeout=180)
     # 汇总行: "汇总: 38 passed, 9 warnings, 8 hard errors"
     m = re.search(r"汇总:\s*(\d+)\s*passed,\s*(\d+)\s*warnings?,\s*(\d+)\s*hard\s*errors?", out)
     if m:
@@ -164,13 +164,13 @@ def _scan_traceability():
     # 3. freeze_numbers.py 口径
     # 4. validate_project.py 口径
     # 简单实测部分
-    code_dir = ROOT / "projects" / "cumcm2024a" / "code"
-    figures_dir = ROOT / "projects" / "cumcm2024a" / "figures"
+    code_dir = ROOT / "archives" / "cumcm2024a" / "code"
+    figures_dir = ROOT / "archives" / "cumcm2024a" / "figures"
     return {
         "note": "追溯率四口径不在 P0 合并，需独立实测；仅公示以下脚本可计算",
         "scripts": [
-            "core/tools/freeze_numbers.py cumcm2024a check (数字冻结口径)",
-            "core/tools/validate_project.py --project projects/cumcm2024a (综合校验口径)",
+            "core/tools/freeze_numbers.py archives/cumcm2024a check (数字冻结口径)",
+            "core/tools/validate_project.py --project archives/cumcm2024a (综合校验口径)",
         ]
     }
 

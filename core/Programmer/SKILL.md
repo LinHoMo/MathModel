@@ -23,7 +23,7 @@ description: "编程手编排器：串联 6 个编程 agent（模板选择 → �
 | 2 | code-implementer | L2 | 2 | 实现代码，类型制导 | code/*.py |
 | 3 | test-runner | L3 | 3 | 单元测试 + 集成测试 + 契约/过程验证 | work/test_report.json |
 | 4 | result-verifier | L4 | 4 | 数值验证 + 灵敏度 + 跨方法交叉验证 | work/result_validation.json |
-| 5 | guardrails-checker | L5 | 5 | 运行时护栏（禁用词/占位符/AI痕迹/权限） | work/guardrails_report.json |
+| 5 | guardrails-checker | L5 | 5 | 运行时护栏（禁用词/占位符/AI痕迹/权限） | work/guardrails_report_programmer.json |
 | 6 | hash-auditor | L6 | 6 | 哈希链 + 错误归因 + 规则迭代，输出交付物 | output/CODE_DELIVERABLES.md + work/audit_chain.json |
 
 串联顺序：template-selector → code-implementer → test-runner → result-verifier → guardrails-checker → hash-auditor。各 agent 定义见 `core/Programmer/agents/<name>/SKILL.md`。

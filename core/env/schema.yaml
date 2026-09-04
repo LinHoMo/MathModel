@@ -1,0 +1,571 @@
+# MathModelSkills 参数唯一真源（schema）
+#
+# 分层语义：
+#   OFFICIAL  官方硬约束 —— 来自竞赛组委会规范条文，违反可能取消评奖资格。
+#                          profile 可声明但不可放宽；用户 override 覆盖即报错。
+#   DERIVED   派生值     —— 由 OFFICIAL 推算而来（如字数 = 页数 x 每页字数）。
+#                          可微调，但改动会被一致性验算检查。
+#   TUNABLE   经验软目标 —— 无官方规定，来自获奖论文统计。用户可自由调整。
+#
+# 合并优先级（后者覆盖前者，但 OFFICIAL 在 profile 层之后锁定）：
+#   schema.yaml 的 value  <  profiles/<竞赛>.yaml  <  config.yaml 的 overrides
+#
+# 每个参数字段：
+#   value    默认值
+#   layer    OFFICIAL / DERIVED / TUNABLE
+#   type     int / float / bool / str / list
+#   range    [min, max]（数值型可选）
+#   source   依据出处（官方条文编号 或 经验值说明）
+
+schema_version: 3
+
+# ---------------------------------------------------------------------------
+# 论文规格
+# ---------------------------------------------------------------------------
+paper:
+  max_pages:
+    value: 20
+    layer: OFFICIAL
+    type: int
+    range: [10, 40]
+    source: 2025规范第四条：正文尽量控制在20页以内（附录页数不限）
+  min_pages:
+    value: 17
+    layer: TUNABLE
+    type: int
+    range: [8, 39]
+    source: 经验值：20页上限留3页余量给图表与参考文献
+  min_words:
+    value: 13000
+    layer: DERIVED
+    type: int
+    range: [3000, 40000]
+    source: 派生：目标17页 x 800字/页，取整13000
+  max_words:
+    value: 16000
+    layer: DERIVED
+    type: int
+    range: [5000, 50000]
+    source: 派生：20页 x 800字/页，超出将突破页数上限
+  min_figures:
+    value: 6
+    layer: TUNABLE
+    type: int
+    range: [0, 30]
+    source: 经验值：3-4个子问题每问1-2图 + 灵敏度1图
+  min_tables:
+    value: 4
+    layer: TUNABLE
+    type: int
+    range: [0, 20]
+    source: 经验值：符号说明表 + 各问结果表 + 对比表
+  min_equations:
+    value: 15
+    layer: TUNABLE
+    type: int
+    range: [0, 60]
+    source: 经验值：主模型逐式编号
+  min_references:
+    value: 10
+    layer: TUNABLE
+    type: int
+    range: [0, 60]
+    source: 经验值：官方无数量规定
+  abstract_min_words:
+    value: 400
+    layer: TUNABLE
+    type: int
+    range: [100, 900]
+    source: 经验值，同时受 abstract_single_page 硬约束
+  abstract_max_words:
+    value: 600
+    layer: TUNABLE
+    type: int
+    range: [200, 1000]
+    source: 经验值，同时受 abstract_single_page 硬约束
+  chars_per_page:
+    value: 800
+    layer: TUNABLE
+    type: int
+    range: [300, 1500]
+    source: 派生系数：每页中文字数基准
+  page_fill_ratio:
+    value: 0.85
+    layer: DERIVED
+    type: float
+    range: [0.5, 1.0]
+    source: 派生：目标17页 / 上限20页
+  pdf_min_bytes:
+    value: 102400
+    layer: TUNABLE
+    type: int
+    range: [0, 20971520]
+    source: 经验值：PDF下限100KB，过小说明未渲染图
+  pdf_max_bytes:
+    value: 20971520
+    layer: OFFICIAL
+    type: int
+    range: [1048576, 20971520]
+    source: 2025规范第十条：电子版文件大小不超过20MB
+  recent_ref_ratio:
+    value: 0.3
+    layer: TUNABLE
+    type: float
+    range: [0.0, 1.0]
+    source: 经验值：原设0.6过严导致长期WARN，放宽至0.3
+  figure_min_width:
+    value: 0.85
+    layer: TUNABLE
+    type: float
+    range: [0.5, 1.0]
+    source: 经验值：图宽下限（单位 textwidth）
+  table_max_rows_inline:
+    value: 12
+    layer: TUNABLE
+    type: int
+    range: [5, 30]
+    source: 经验值：正文表格最大行数，超过转附录
+  table_longtable_threshold:
+    value: 15
+    layer: TUNABLE
+    type: int
+    range: [5, 40]
+    source: 经验值：结果表转 longtable 的行数阈值
+
+# ---------------------------------------------------------------------------
+# 官方硬约束（国赛 2025 规范 + AI 工具使用规定 2025 试行）
+# 来源：https://www.cmathc.org.cn/mcm/tz/303.html
+# ---------------------------------------------------------------------------
+official:
+  body_max_pages:
+    value: 20
+    layer: OFFICIAL
+    type: int
+    source: 第四条：正文尽量控制在20页以内
+  appendix_pages_unlimited:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第四条：附录页数不限
+  no_toc:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第四条：不要目录
+  abstract_single_page:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第三条：摘要内容（含标题和关键词）不能超过一页
+  abstract_no_english:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第三条：无需翻译成英文
+  pagination_start_page:
+    value: 3
+    layer: OFFICIAL
+    type: int
+    source: 第三条：从第三页开始编写页码
+  pagination_position:
+    value: footer_center
+    layer: OFFICIAL
+    type: str
+    source: 第三条：页码位于页脚中部，阿拉伯数字从1开始
+  margin_cm:
+    value: 2.5
+    layer: OFFICIAL
+    type: float
+    source: 第一条：上下左右各留出至少2.5厘米
+  no_header:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第六条：论文不能有页眉
+  electronic_format:
+    value: [pdf, docx]
+    layer: OFFICIAL
+    type: list
+    source: 第十条：文件格式只能为PDF或者Word格式之一
+  electronic_max_bytes:
+    value: 20971520
+    layer: OFFICIAL
+    type: int
+    source: 第十条：参赛论文电子版文件大小不超过20MB
+  electronic_no_compress:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第十条：参赛论文电子版文件不要压缩
+  electronic_no_commitment_page:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第十条：承诺书和编号专用页不要放在电子版论文中
+  support_format:
+    value: [zip, rar]
+    layer: OFFICIAL
+    type: list
+    source: 第十一条：使用WinRAR压缩为一个文件（后缀RAR或ZIP）
+  support_max_bytes:
+    value: 20971520
+    layer: OFFICIAL
+    type: int
+    source: 第十一条：支撑材料大小不超过20MB
+  support_must_include_source:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第五条+第十一条：附录与支撑材料须含建模所用全部可运行源程序
+  support_must_include_filelist:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第十一条：支撑材料的文件列表应放入论文附录
+  citation_inline_required:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 第七条：引用必须在正文引用处予以标注
+  citation_style:
+    value: gbt7714-numerical
+    layer: OFFICIAL
+    type: str
+    source: 第七条：按科技论文规范列出参考文献
+  ai_disclosure_in_body:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: AI工具使用规定2025试行：在正文相应位置进行标注
+  ai_disclosure_in_references:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: AI工具使用规定2025试行：在参考文献中列出所用AI工具
+  ai_support_pdf_name:
+    value: AI工具使用详情
+    layer: OFFICIAL
+    type: str
+    source: AI工具使用规定2025试行：支撑材料须含该PDF，文件名固定
+  ai_support_pdf_format:
+    value: pdf
+    layer: OFFICIAL
+    type: str
+    source: AI工具使用规定2025试行：以PDF格式提交
+  ai_exclude_from_appendix:
+    value: true
+    layer: OFFICIAL
+    type: bool
+    source: 附录参与查重，AI内容相似度高会抬高查重率，禁止放入附录
+  anonymity_scope:
+    value: [摘要页, 正文, 附录, 支撑材料]
+    layer: OFFICIAL
+    type: list
+    source: 第六条+第十一条：任何地方都不能有参赛者身份和学校信息
+
+# ---------------------------------------------------------------------------
+# 代码规格
+# ---------------------------------------------------------------------------
+code:
+  random_seed:
+    value: 42
+    layer: TUNABLE
+    type: int
+    source: 经验值：固定种子保证可复现
+  multi_run_count:
+    value: 5
+    layer: TUNABLE
+    type: int
+    range: [1, 50]
+    source: 经验值：启发式算法多次运行次数
+  cv_threshold:
+    value: 0.10
+    layer: TUNABLE
+    type: float
+    range: [0.0, 1.0]
+    source: 经验值：交叉验证稳定性阈值
+  solver_timeout_small:
+    value: 300
+    layer: TUNABLE
+    type: int
+    source: 经验值：求解器超时（<100变量，秒）
+  solver_timeout_medium:
+    value: 600
+    layer: TUNABLE
+    type: int
+    source: 经验值：求解器超时（100-1000变量，秒）
+  solver_timeout_large:
+    value: 1200
+    layer: TUNABLE
+    type: int
+    source: 经验值：求解器超时（>1000变量，秒）
+  max_fix_rounds:
+    value: 3
+    layer: TUNABLE
+    type: int
+    range: [1, 10]
+    source: 经验值：单子问题自检修复轮数上限
+  sensitivity_range:
+    value: 0.20
+    layer: TUNABLE
+    type: float
+    range: [0.01, 1.0]
+    source: 经验值：灵敏度扰动范围
+  sensitivity_steps:
+    value: 10
+    layer: TUNABLE
+    type: int
+    range: [3, 50]
+    source: 经验值：灵敏度扫描步数
+  min_main_py_bytes:
+    value: 500
+    layer: TUNABLE
+    type: int
+    source: 经验值：main.py 最少字节
+  min_deliverables_bytes:
+    value: 1024
+    layer: TUNABLE
+    type: int
+    source: 经验值：CODE_DELIVERABLES 最少字节
+  target_platform:
+    value: python
+    layer: TUNABLE
+    type: str
+    source: 主线代码平台：python/matlab/beitian/syslab
+
+# ---------------------------------------------------------------------------
+# 建模规格
+# ---------------------------------------------------------------------------
+modeling:
+  min_candidate_models:
+    value: 2
+    layer: TUNABLE
+    type: int
+    range: [1, 10]
+    source: 铁律 M1：候选模型至少2个
+  assumption_score_threshold:
+    value: 6.0
+    layer: TUNABLE
+    type: float
+    range: [0.0, 10.0]
+    source: 经验值：假设四维评分通过阈值
+  ambiguity_min_interpretations:
+    value: 2
+    layer: TUNABLE
+    type: int
+    range: [1, 5]
+    source: 经验值：歧义至少两种解释并验算裁决
+  multi_start_check:
+    value: true
+    layer: TUNABLE
+    type: bool
+    source: 经验值：非凸/启发式必做多起点稳定性检查
+  literature_search_enabled:
+    value: true
+    layer: TUNABLE
+    type: bool
+    source: 文献检索总开关
+  literature_max_searches:
+    value: 5
+    layer: TUNABLE
+    type: int
+    source: 经验值：最大检索次数
+  literature_target_count:
+    value: 7
+    layer: TUNABLE
+    type: int
+    source: 经验值：目标入选文献数
+  literature_score_threshold:
+    value: 6.0
+    layer: TUNABLE
+    type: float
+    source: 经验值：入选最低评分
+  literature_chinese_ratio:
+    value: 0.5
+    layer: TUNABLE
+    type: float
+    source: 经验值：中文文献最低占比
+  dag_enable_visualization:
+    value: true
+    layer: TUNABLE
+    type: bool
+    source: 是否生成 DAG 的 SVG 可视化
+  problem_modeling_round:
+    value: 1
+    layer: TUNABLE
+    type: int
+    range: [1, 3]
+    source: 建模推导迭代轮次
+  problem_analysis_round:
+    value: 1
+    layer: TUNABLE
+    type: int
+    range: [1, 3]
+    source: 问题分析迭代轮次
+
+# ---------------------------------------------------------------------------
+# 评审规格
+# ---------------------------------------------------------------------------
+review:
+  max_rounds:
+    value: 4
+    layer: TUNABLE
+    type: int
+    range: [1, 10]
+    source: 经验值：评审最大轮数
+  improvement_max_rounds:
+    value: 2
+    layer: TUNABLE
+    type: int
+    range: [1, 10]
+    source: 经验值：论文改进最大轮数
+  pass_score:
+    value: 6
+    layer: TUNABLE
+    type: int
+    range: [0, 10]
+    source: 经验值：评审通过分（满分10）
+  figure_as_subject_max:
+    value: 3
+    layer: TUNABLE
+    type: int
+    range: [0, 20]
+    source: 经验值：图表做主语句式最大次数
+
+# ---------------------------------------------------------------------------
+# 运行时
+# ---------------------------------------------------------------------------
+runtime:
+  language:
+    value: zh
+    layer: TUNABLE
+    type: str
+    source: 语言 zh/en
+  template:
+    value: cumcm-zh
+    layer: TUNABLE
+    type: str
+    source: 论文模板标识
+  strict_mode:
+    value: true
+    layer: TUNABLE
+    type: bool
+    source: 严格模式：阈值不达则退回修正
+  traceability_min_ratio:
+    value: 0.90
+    layer: TUNABLE
+    type: float
+    range: [0.0, 1.0]
+    source: 经验值：数值可追溯比例下限
+  numeric_tolerance_rel:
+    value: 0.005
+    layer: TUNABLE
+    type: float
+    source: 数值相对容差上限
+  numeric_tolerance_abs:
+    value: 0.01
+    layer: TUNABLE
+    type: float
+    source: 数值绝对容差上限
+  profile:
+    value: standard
+    layer: TUNABLE
+    type: str
+    source: 能力分层：standard / lite
+  compile_pdf:
+    value: auto
+    layer: TUNABLE
+    type: str
+    source: PDF编译策略：auto / always / never
+  latex_engine:
+    value: xelatex
+    layer: TUNABLE
+    type: str
+    source: LaTeX 引擎
+  deliver_docx:
+    value: never
+    layer: TUNABLE
+    type: str
+    source: DOCX 交付策略：never / auto / always
+
+# ---------------------------------------------------------------------------
+# 断点与沙箱
+# ---------------------------------------------------------------------------
+checkpoint:
+  enabled:
+    value: false
+    layer: TUNABLE
+    type: bool
+    source: 是否启用 checkpoint
+  path:
+    value: output/checkpoint.json
+    layer: TUNABLE
+    type: str
+    source: checkpoint 文件路径
+  save_interval:
+    value: 1
+    layer: TUNABLE
+    type: int
+    source: 每完成 N 个 agent 保存一次
+
+cloud_sandbox:
+  enabled:
+    value: false
+    layer: TUNABLE
+    type: bool
+    source: 是否启用云端执行
+  provider:
+    value: e2b
+    layer: TUNABLE
+    type: str
+    source: 云端提供商：e2b / daytona / local
+  fallback:
+    value: local
+    layer: TUNABLE
+    type: str
+    source: 云端不可用时回退策略
+
+# ---------------------------------------------------------------------------
+# 模板工程配置（由竞赛 profile 覆盖）
+# ---------------------------------------------------------------------------
+template:
+  dir:
+    value: core/templates/latex/cumcm/
+    layer: TUNABLE
+    type: str
+    source: LaTeX 模板目录
+  cls:
+    value: cumcmthesis.cls
+    layer: TUNABLE
+    type: str
+    source: 文档类文件
+  engine:
+    value: xelatex
+    layer: TUNABLE
+    type: str
+    source: 编译引擎
+  compile_chain:
+    value: [xelatex, bibtex, xelatex, xelatex]
+    layer: TUNABLE
+    type: list
+    source: 完整编译链，单跑一次引擎会导致交叉引用与参考文献缺失
+
+# ---------------------------------------------------------------------------
+# 交付物命名
+# ---------------------------------------------------------------------------
+deliverables:
+  paper_name:
+    value: 参赛论文
+    layer: TUNABLE
+    type: str
+    source: 参赛论文文件名
+  support_name:
+    value: 支撑材料
+    layer: TUNABLE
+    type: str
+    source: 支撑材料压缩包文件名
+  ai_report_name:
+    value: AI工具使用详情
+    layer: OFFICIAL
+    type: str
+    source: AI工具使用规定2025试行：支撑材料中的AI使用详情PDF文件名固定为此

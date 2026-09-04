@@ -47,7 +47,8 @@ def _hard(name, detail=""):
 # ===========================================================================
 _IS_PHYSICS = False      # 机理类赛题标志（题型触发用）
 _STRICT_MODE = True      # env.runtime.strict_mode
-_ENV_GET = None          # env.loader.get 函数（动态加载，缺失时回退默认值）
+_ENV_GET = None          # env.loader.get 函数（动态加载）
+_ENV_REQUIRE = None      # env.loader.require 函数（缺失即报错）
 
 
 def _threshold_fail(name, detail):
@@ -64,16 +65,6 @@ def _physics_fail(name, detail):
         _hard(name, detail)
     else:
         _warn(name, detail)
-
-
-def _env_get(key, default=None):
-    """通过动态加载的 env.loader.get 读取阈值；加载失败时回退 default。"""
-    if _ENV_GET is not None:
-        try:
-            return _ENV_GET(key, default=default)
-        except Exception:
-            return default
-    return default
 
 
 # ===========================================================================
@@ -198,7 +189,7 @@ def _pdf_check_is_hard():
     always: 恒为 HARD
     never : 恒为 WARN（只交付 TEX 不编译）
     """
-    policy = str(_env_get("runtime.compile_pdf", "auto")).lower()
+    policy = str(_ENV_GET("runtime.compile_pdf") or "auto").lower()
     if policy == "always":
         return True
     if policy == "never":
@@ -217,7 +208,7 @@ def check_pdf(p):
     if not f.exists():
         return fail("paper/main.pdf", "not found")
     size = f.stat().st_size
-    min_bytes = int(_env_get("paper.pdf_min_bytes", 102400))
+    min_bytes = int(_ENV_GET("paper.pdf_min_bytes") or 102400)
     if size < min_bytes:
         return fail("paper/main.pdf", f"too small ({size}B < {min_bytes}B)")
     _pas("paper/main.pdf", f"{size // 1024}KB")
@@ -493,7 +484,7 @@ def check_figure_as_subject(p):
     t = _read_source(p)
     if t is None:
         return _warn("figure as subject", "no source")
-    max_count = int(_env_get("review.figure_as_subject_max", 3))
+    max_count = int(_ENV_GET("review.figure_as_subject_max") or 3)
     pats = [r"图\d+展示了", r"如图\d+所示", r"由图\d+可知", r"从图\d+可以看出"]
     count = 0
     for line in t.split("\n"):
@@ -544,8 +535,8 @@ def check_abstract_words(p):
     if not m:
         return _warn("abstract words", "未找到 abstract 环境")
     zh = len(re.findall(r"[\u4e00-\u9fff]", m.group(1)))
-    lo = int(_env_get("paper.abstract_min_words", 400))
-    hi = int(_env_get("paper.abstract_max_words", 600))
+    lo = int(_ENV_GET("paper.abstract_min_words") or 400)
+    hi = int(_ENV_GET("paper.abstract_max_words") or 600)
     if zh < lo or zh > hi:
         return _warn("abstract words", f"摘要 {zh} 字 (建议 {lo}-{hi})")
     _pas("abstract words", f"{zh} 字 (范围 {lo}-{hi})")
@@ -567,7 +558,7 @@ def check_recent_refs(p):
              re.findall(r"(?:year|年份)\s*=\s*['\"]?\{?\s*(\d{4})", text, re.IGNORECASE)]
     recent = sum(1 for y in years if 2024 <= y <= 2026)
     ratio = recent / total
-    threshold = float(_env_get("paper.recent_ref_ratio", 0.6))
+    threshold = float(_ENV_GET("paper.recent_ref_ratio") or 0.6)
     if ratio < threshold:
         return _warn("recent refs",
                      f"近3年占比 {ratio:.0%} ({recent}/{total}) < {threshold:.0%}")
@@ -579,7 +570,7 @@ def check_inline_table_rows(p):
     t = _read_source(p)
     if t is None:
         return _warn("inline table rows", "no source")
-    max_rows = int(_env_get("paper.table_max_rows_inline", 12))
+    max_rows = int(_ENV_GET("paper.table_max_rows_inline") or 12)
     tables = re.findall(r"\\begin\{tabular\}.*?\\end\{tabular\}", t, re.DOTALL)
     over = [tb.count("\\\\") for tb in tables if tb.count("\\\\") > max_rows]
     if over:
@@ -597,8 +588,8 @@ def check_deliverables_size(p):
 
     来自 Programmer/hash-auditor 的硬性交付物体积门禁。缺失或过小为 HARD。
     """
-    min_md = int(_env_get("code.min_deliverables_bytes", 1024))
-    min_py = int(_env_get("code.min_main_py_bytes", 500))
+    min_md = int(_ENV_GET("code.min_deliverables_bytes") or 1024)
+    min_py = int(_ENV_GET("code.min_main_py_bytes") or 500)
     md = p / "output" / "CODE_DELIVERABLES.md"
     py = p / "code" / "main.py"
     if not md.exists():
@@ -791,9 +782,9 @@ def check_numeric_traceability(p):
     result_nums = [n for n in paper_nums if n <= 10000]  # 排除年份/页码/大坐标
     if not result_nums:
         return _warn("traceability", "no numbers in paper")
-    tolb = float(_env_get("runtime.numeric_tolerance_abs", 0.01))
-    tolr = float(_env_get("runtime.numeric_tolerance_rel", 0.005))
-    min_ratio = float(_env_get("runtime.traceability_min_ratio", 0.90))
+    tolb = float(_ENV_GET("runtime.numeric_tolerance_abs") or 0.01)
+    tolr = float(_ENV_GET("runtime.numeric_tolerance_rel") or 0.005)
+    min_ratio = float(_ENV_GET("runtime.traceability_min_ratio") or 0.90)
     traceable = 0
     for pn in result_nums:
         for lv in ledger_values:
@@ -1057,7 +1048,7 @@ def check_imports(p):
 # ===========================================================================
 def check_paper_pages(p):
     """31. PDF 页数 >= get("paper.min_pages")。"""
-    min_pages = int(_env_get("paper.min_pages", 25))
+    min_pages = int(_ENV_GET("paper.min_pages") or 17)
     log_file = p / "paper" / "main.log"
     if not log_file.exists():
         return _warn("paper pages", f"无 main.log，需人工确认 >= {min_pages}")
@@ -1084,8 +1075,8 @@ def check_pdf_compile_chain(p):
     此前 final-validator/SKILL.md 已把该项列为 HARD 门禁，但本函数缺失，
     属于"门禁只写在纸上"，故补齐实现。
     """
-    engine = _env_get("runtime.latex_engine", "xelatex")
-    compile_mode = _env_get("runtime.compile_pdf", "auto")
+    engine = _ENV_GET("runtime.latex_engine") or "xelatex"
+    compile_mode = _ENV_GET("runtime.compile_pdf") or "auto"
 
     if compile_mode == "never":
         return _warn("pdf compile chain", "compile_pdf=never，跳过")
@@ -1144,9 +1135,9 @@ def check_page_fill_ratio(p):
 
     此前 final-validator/SKILL.md 已把该项列为 HARD 门禁，但本函数缺失，故补齐。
     """
-    min_ratio = float(_env_get("paper.page_fill_ratio", 0.8))
-    max_pages = int(_env_get("paper.max_pages", 30))
-    chars_per_page = int(_env_get("paper.chars_per_page", 800))
+    min_ratio = float(_ENV_GET("paper.page_fill_ratio") or 0.85)
+    max_pages = int(_ENV_GET("paper.max_pages") or 20)
+    chars_per_page = int(_ENV_GET("paper.chars_per_page") or 800)
 
     log = p / "paper" / "main.log"
     if log.exists():
@@ -1188,13 +1179,27 @@ def check_page_fill_ratio(p):
 
 
 def check_paper_words(p):
-    """32. 论文源字数 >= get("paper.min_words")（中文字符+英文词）。"""
-    min_words = int(_env_get("paper.min_words", 18000))
+    """32. 论文源字数 >= get("paper.min_words")（中文字符+英文词）。
+
+    只统计**正文**字数：摘要（abstract）与附录（appendix）不计入正文篇幅下限。
+    此前把附录/摘要一并计入，会把"堆在附录里的字数"当成正文达标，造成假通过；
+    反过来若某合规论文正文达标但附录很短也不会误判。这里统一只量正文。
+    """
+    min_words = int(_ENV_GET("paper.min_words") or 13000)
     t = _read_source(p)
     if t is None:
         return _warn("paper words", "no source")
-    chinese_chars = len(re.findall(r"[\u4e00-\u9fff]", t))
-    english_words = len(re.findall(r"[a-zA-Z]+", t))
+    body = t.split(r"\begin{document}")[-1]
+    # 剔除摘要环境
+    body = re.sub(r"\\begin\{abstract\}.*?\\end\{abstract\}", " ",
+                  body, flags=re.DOTALL)
+    # 剔除附录环境
+    body = re.sub(r"\\begin\{appendix\}.*?\\end\{appendix\}", " ",
+                  body, flags=re.DOTALL)
+    # 剔除 \appendix 命令及其之后全部内容（无环境写法的附录）
+    body = re.sub(r"\\appendix\b.*", " ", body, flags=re.DOTALL)
+    chinese_chars = len(re.findall(r"[\u4e00-\u9fff]", body))
+    english_words = len(re.findall(r"[a-zA-Z]+", body))
     total = chinese_chars + english_words
     if total >= min_words:
         return _pas("paper words", f"{total} 字符/词 (>= {min_words})")
@@ -1203,7 +1208,7 @@ def check_paper_words(p):
 
 def check_paper_figures(p):
     """33. \\includegraphics 数 >= get("paper.min_figures")。"""
-    min_figures = int(_env_get("paper.min_figures", 6))
+    min_figures = int(_ENV_GET("paper.min_figures") or 6)
     t = _read_source(p)
     if t is None:
         return _warn("paper figures", "no source")
@@ -1215,7 +1220,7 @@ def check_paper_figures(p):
 
 def check_paper_tables(p):
     """34. \\begin{table} 数 >= get("paper.min_tables")。"""
-    min_tables = int(_env_get("paper.min_tables", 4))
+    min_tables = int(_ENV_GET("paper.min_tables") or 4)
     t = _read_source(p)
     if t is None:
         return _warn("paper tables", "no source")
@@ -1227,7 +1232,7 @@ def check_paper_tables(p):
 
 def check_paper_equations(p):
     """35. \\begin{equation}+\\begin{align}+\\begin{gather}+\\$\\$ 数 >= min_equations。"""
-    min_eq = int(_env_get("paper.min_equations", 15))
+    min_eq = int(_ENV_GET("paper.min_equations") or 15)
     t = _read_source(p)
     if t is None:
         return _warn("paper equations", "no source")
@@ -1240,7 +1245,7 @@ def check_paper_equations(p):
 
 def check_paper_references(p):
     """36. references.bib 的 @type 条目数 >= get("paper.min_references")。"""
-    min_refs = int(_env_get("paper.min_references", 10))
+    min_refs = int(_ENV_GET("paper.min_references") or 10)
     bib = p / "paper" / "references.bib"
     if not bib.exists():
         return _hard("paper references", "references.bib not found")
@@ -1482,11 +1487,12 @@ def main():
     module, err = _load_env_loader(repo_root)
     if module is not None:
         _ENV_GET = module.get
+        _ENV_REQUIRE = module.require
     else:
         print(f"[env] 警告：{err}，env 阈值回退默认值")
 
     # 读取 strict_mode（影响阈值不达的分级）
-    _STRICT_MODE = bool(_env_get("runtime.strict_mode", True))
+    _STRICT_MODE = bool(_ENV_GET("runtime.strict_mode", True))
 
     # 读取题型（影响 Physics model 组的分级）
     pt, is_physics = _detect_problem_type(p)

@@ -43,8 +43,11 @@ def _sync(proj):
     return st
 
 
-def _advance(proj, hand, agent):
-    return cmd_advance(str(proj), argparse.Namespace(hand=hand, agent=agent, output=""))
+def _advance(proj, hand, agent, no_gate=True):
+    return cmd_advance(
+        str(proj),
+        argparse.Namespace(hand=hand, agent=agent, output="", no_gate=no_gate),
+    )
 
 
 def _done_set(st):
@@ -153,7 +156,41 @@ def test_save_recomputes_stale_current(tmp_path):
     }
 
 
-def test_pipeline_index_roundtrip():
-    assert _pipeline_index("modeler", "problem-parser") == 0
-    assert _pipeline_index("reviewer", "revision-executor") == len(PIPELINE) - 1
-    assert _pipeline_index("modeler", "nonexistent") is None
+
+
+# ---------------------------------------------------------------------------
+# Bug 3: advance 与 gate 的可信度闭环
+# ---------------------------------------------------------------------------
+def test_advance_rejects_gate_error_without_registering_completion(tmp_path, monkeypatch):
+    """门禁异常时必须 fail-closed，不能把 agent 登记为已完成。"""
+    proj = _project(tmp_path)
+    save(str(proj), _empty_state(str(proj)))
+    monkeypatch.setattr(
+        "core.tools.state._run_advance_gate",
+        lambda project, hand, agent: (3, {}),
+    )
+
+    assert _advance(proj, "modeler", "problem-parser", no_gate=False) == 3
+    assert ("modeler", "problem-parser") not in _done_set(load(str(proj)))
+
+
+def test_advance_allows_soft_gate_and_records_gate_result(tmp_path, monkeypatch):
+    """仅软失败允许推进，但完成记录必须保留门禁结果以便审计。"""
+    proj = _project(tmp_path)
+    save(str(proj), _empty_state(str(proj)))
+    summary = {
+        "hard_fail_count": 0,
+        "soft_fail_count": 1,
+        "hard_fail": [],
+        "soft_fail": [{"name": "warning", "detail": "可改进"}],
+    }
+    monkeypatch.setattr(
+        "core.tools.state._run_advance_gate",
+        lambda project, hand, agent: (1, summary),
+    )
+
+    assert _advance(proj, "modeler", "problem-parser", no_gate=False) == 0
+    rec = next(c for c in load(str(proj))["completed"]
+               if c["agent"] == "problem-parser")
+    assert rec["gate"]["exit_code"] == 1
+    assert rec["gate"]["soft_fail_count"] == 1

@@ -569,3 +569,135 @@ def check_cumcm_section_structure(project, rel_path="paper/main.tex"):
                     f"核心章节齐全；建议补充: {', '.join(missing_rec)}",
                     hard=False)
     return ok("国赛章节结构", "摘要/问题/假设/符号/建模求解/评价/参考文献 齐全")
+
+
+# ======================================================================
+# 国赛官方披露合规（P2-1 / 目标 A）—— CUMCM 2025 硬性要求
+# 1) 正文须含 AI 使用声明（且不在附录）
+# 2) 支撑材料须有「AI工具使用详情」(.tex 必备，.pdf 力争)
+# 3) 正文应提及该支撑材料便于评委定位
+# 4) 参考文献必须正文内联引用（不得只在文末堆砌）
+# ======================================================================
+
+def _ai_report_name():
+    """支撑材料文件名，取自 env: deliverables.ai_report_name（可插拔）。"""
+    try:
+        import sys as _s
+        _s.path.insert(0, str(ROOT / "core"))
+        from env.loader import get
+        return str(get("deliverables.ai_report_name", default="AI工具使用详情")
+                   or "AI工具使用详情")
+    except Exception:
+        return "AI工具使用详情"
+
+
+def _competition():
+    """从 env profile 推导赛事简称（如 cumcm-2025 -> cumcm）。"""
+    try:
+        import sys as _s
+        _s.path.insert(0, str(ROOT / "core"))
+        from env.loader import get
+        prof = str(get("profile", default="") or "")
+        return prof.split("-")[0]
+    except Exception:
+        return ""
+
+
+def check_cumcm_ai_disclosure_body(project, rel_path="paper/main.tex"):
+    """国赛验收：正文（附录之前）须含 AI 使用声明。
+
+    CUMCM 2025 要求 AI 使用情况在**正文**声明，不能只在附录。
+    若把声明写在附录里，此处判 HARD——索引到附录之前的内容即可。
+    非国赛（mcm/huawei/...）无此硬性要求，跳过以免阻塞。
+    """
+    if _competition() != "cumcm":
+        return ok("AI披露-正文声明", "非国赛，跳过")
+    text = read(project_dir(project) / rel_path)
+    if text is None:
+        return fail("AI披露-正文声明", f"无法读取 {rel_path}", hard=False)
+    body = text.split(r"\begin{document}")[-1]
+    # 定位附录起点：\begin{appendix} 或 \appendix 命令
+    ai = body.find(r"\begin{appendix}")
+    if ai < 0:
+        ai = body.find(r"\appendix")
+    if ai < 0:
+        ai = len(body)
+    pre = body[:ai]
+    patterns = ["AI 工具", "AI工具", "人工智能工具", "人工智能辅助",
+                "AI 使用", "AI使用", "生成式人工智能", "大语言模型"]
+    if not any(p in pre for p in patterns):
+        return fail("AI披露-正文声明",
+                    "正文（附录之前）未找到 AI 使用声明，国赛要求正文须声明 AI 使用情况")
+    return ok("AI披露-正文声明", "正文含 AI 使用声明（位于附录之前）")
+
+
+def check_cumcm_ai_support(project):
+    """国赛验收：支撑材料「AI工具使用详情」(.tex 必备；.pdf 力争)。
+
+    落在 deliverables/（投稿交付物目录，见 REFACTOR_PLAN §6.2）。
+    .tex 由 render_ai_usage.py 必然生成，故缺失即 HARD；
+    .pdf 依赖 xelatex 环境，缺失仅 SOFT（评委处可编译）。
+    非国赛跳过。
+    """
+    if _competition() != "cumcm":
+        return ok("AI披露-支撑材料", "非国赛，跳过")
+    name = _ai_report_name()
+    base = project_dir(project) / "deliverables"
+    tex = base / f"{name}.tex"
+    pdf = base / f"{name}.pdf"
+    if not tex.exists() and not pdf.exists():
+        return fail("AI披露-支撑材料",
+                    f"缺少 {name}.tex / .pdf（先运行 render_ai_usage.py render --competition cumcm）")
+    if not pdf.exists():
+        return fail("AI披露-支撑材料",
+                    f"{name}.pdf 未生成（需 xelatex 编译；.tex 已存在，不阻塞）",
+                    hard=False)
+    return ok("AI披露-支撑材料", f"{name}.pdf 存在")
+
+
+def check_cumcm_ai_referenced(project, rel_path="paper/main.tex"):
+    """国赛验收：正文应提及支撑材料，便于评委定位（软失败）。非国赛跳过。"""
+    if _competition() != "cumcm":
+        return ok("AI披露-正文提及", "非国赛，跳过")
+    text = read(project_dir(project) / rel_path)
+    if text is None:
+        return fail("AI披露-正文提及", f"无法读取 {rel_path}", hard=False)
+    name = _ai_report_name()
+    if name in text or "AI工具使用详情" in text or r"\input{" in text:
+        return ok("AI披露-正文提及", "正文提及 AI 使用支撑材料")
+    return fail("AI披露-正文提及",
+                "正文未提及 AI 使用支撑材料（建议在正文或参考文献处标注其存在）",
+                hard=False)
+
+
+def check_cumcm_inline_citation(project, rel_path="paper/main.tex"):
+    r"""国赛验收：参考文献必须正文内联引用（不得只在文末堆砌）。
+
+    取 references.bib 的全部 @type{key}，核对正文 \cite/\citep/\citet 等
+    是否逐条引用；存在未被引用的孤儿文献即 HARD。
+    """
+    text = read(project_dir(project) / rel_path)
+    if text is None:
+        return fail("内联引用", f"无法读取 {rel_path}", hard=False)
+    bib = project_dir(project) / "paper" / "references.bib"
+    bib_keys = set()
+    if bib.exists():
+        try:
+            bib_keys = set(re.findall(
+                r"@\w+\{(\w[\w-]*)", bib.read_text(encoding="utf-8", errors="replace")))
+        except Exception:
+            pass
+    body = text.split(r"\begin{document}")[-1]
+    cited = re.findall(r"\\(?:cite|citep|citet|autocite|textcite|nocite)\*?\{([^}]*)\}",
+                       body)
+    cited_keys = set()
+    for grp in cited:
+        cited_keys |= {k.strip() for k in grp.split(",") if k.strip()}
+    if bib_keys and not cited_keys:
+        return fail("内联引用", "references.bib 有条目但正文无任何 \\cite 引用")
+    orphan = bib_keys - cited_keys
+    if orphan:
+        return fail("内联引用",
+                    f"{len(orphan)} 条参考文献未被正文引用: "
+                    f"{', '.join(sorted(orphan)[:6])}")
+    return ok("内联引用", f"全部 {len(bib_keys)} 条参考文献均被正文引用")

@@ -29,7 +29,7 @@ description: "撰写手编排器：串联 7 个写作 agent（结构规划 → �
 | 3 | figure-generator | L2 | 3 | 图表生成与规范命名（`fig_<problem_id>_<seq>.png`） | `paper/figures/` |
 | 4 | reference-curator | L3 | 4 | 参考文献整理 + 引用完整性核验 | `paper/references.bib` + `work/reference_report.json` |
 | 5 | consistency-checker | L4 | 5 | 论文-代码数值一致性回溯 | `work/consistency_report.json` |
-| 6 | guardrails-checker | L5 | 6 | 运行时护栏（禁用词/占位符/AI痕迹/内部路径/缺失bib key/缺失图片） | `work/guardrails_report.json` |
+| 6 | guardrails-checker | L5 | 6 | 运行时护栏（禁用词/占位符/AI痕迹/内部路径/缺失bib key/缺失图片） | `work/guardrails_report_writer.json` |
 | 7 | final-validator | L6 | 7 | 最终校验 + 哈希审计 + 渲染 PDF + 输出 PAPER_SPEC.md | `output/PAPER_SPEC.md` + `paper/main.pdf` + `work/audit_log.json` |
 
 **串联顺序**（任一 stage 失败即在本手内回退，不向下游推进）：
@@ -46,7 +46,7 @@ reference-curator (L3)
 consistency-checker (L4)
         ↓ work/consistency_report.json
 guardrails-checker (L5)
-        ↓ work/guardrails_report.json
+        ↓ work/guardrails_report_writer.json
 final-validator (L6)
         ↓ output/PAPER_SPEC.md + paper/main.pdf + work/audit_log.json
 ```
@@ -75,8 +75,8 @@ final-validator (L6)
 
 | env 键 | 默认值 | 读取者 | 用途 |
 |---|---|---|---|
-| `paper.min_pages` | 25 | structure-planner / final-validator | 目标页数下限（上限 `paper.max_pages`=30） |
-| `paper.min_words` | 18000 | structure-planner / final-validator | 总字数下限，按比例分配到各章节 |
+| `paper.min_pages` | 17 | structure-planner / final-validator | 目标页数软下限（硬上限 `paper.max_pages`=20，国赛官方） |
+| `paper.min_words` | 13000 | structure-planner / final-validator | 总字数下限，按比例分配到各章节 |
 | `paper.min_figures` | 6 | structure-planner / final-validator / figure-generator | 图表数量下限 |
 | `paper.min_tables` | 4 | structure-planner / final-validator | 表格数量下限 |
 | `paper.min_equations` | 15 | structure-planner / final-validator / section-writer | 公式数量下限，每个子问题节 >=3 |
@@ -89,8 +89,8 @@ final-validator (L6)
 
 ```python
 from core.env.loader import get
-min_pages = get("paper.min_pages")          # 25
-min_words = get("paper.min_words")          # 18000
+min_pages = get("paper.min_pages")          # 17（软目标，硬上限 20）
+min_words = get("paper.min_words")          # 13000
 template  = get("runtime.template")         # "cumcm-zh"
 language = get("runtime.language")         # "zh"
 strict   = get("runtime.strict_mode")       # True

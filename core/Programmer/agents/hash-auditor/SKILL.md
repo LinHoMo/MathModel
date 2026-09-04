@@ -62,7 +62,7 @@ chain_record = chain.seal()  # 含每文件 hash + 链头
 
 ### Step 2: 错误归因（error_attribution）
 
-调用 `core/knowledge/validation/error_attribution.py`，汇总前序 agent 的报告（template_plan / test_report / result_validation / guardrails_report），将任一失败归因到具体 agent 与规则编号（P1-P9），生成归因表。
+调用 `core/knowledge/validation/error_attribution.py`，汇总前序 agent 的报告（template_plan / test_report / result_validation / guardrails_report_programmer），将任一失败归因到具体 agent 与规则编号（P1-P9），生成归因表。
 
 ### Step 3: 规则迭代（rule_iterator）
 
@@ -70,7 +70,7 @@ chain_record = chain.seal()  # 含每文件 hash + 链头
 
 ### Step 4: 阶段门复核（stage_gate）
 
-调用 `core/knowledge/validation/stage_gate.py`，确认 L1-L5 各 stage 门均已放行（template_plan / code / test_report / result_validation / guardrails_report 全部 passed）。任一未过则停止输出并回退。
+调用 `core/knowledge/validation/stage_gate.py`，确认 L1-L5 各 stage 门均已放行（template_plan / code / test_report / result_validation / guardrails_report_programmer 全部 passed）。任一未过则停止输出并回退。
 
 ### Step 5: 生成 CODE_DELIVERABLES.md
 

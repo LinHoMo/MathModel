@@ -205,12 +205,12 @@
   4. 摘要不得使用 itemize/enumerate 列表
 - **违反后果**: 摘要字数不达标或缺少数值，L1 Schema FAIL，必须重写摘要
 
-### W14: 版面规格（页数 25-30，填充率 ≥80%）
+### W14: 版面规格（正文硬上限 20 页，软目标 17 页，填充率 ≥85%）
 - **防御层次**: L1 结构化输出
 - **执行机制**: Schema 检查 target_pages 字段
 - **规则**:
-  1. 论文正文页数（不含附录）必须在 25-30 页之间（从 env/paper.min_pages / max_pages 读取）
-  2. 正文填充率 ≥80%（正文页数 ≥ max_pages × page_fill_ratio）
-  3. 附录页数不计入正文页数，但总页数不得超过 40 页
-  4. 排版后 estimate_pages = total_chars / chars_per_page，若 < max_pages × 0.8 则 FAIL
+  1. 论文正文页数（不含附录）尽量控制在 20 页以内（官方硬上限），软目标 17 页（从 env/paper.min_pages / max_pages 读取）
+  2. 正文填充率 ≥85%（正文页数 ≥ max_pages × page_fill_ratio，国赛 0.85）
+  3. 附录页数不计入正文页数，且附录页数不限（官方明文）
+  4. 排版后 estimate_pages = total_chars / chars_per_page，若 < max_pages × page_fill_ratio 则 FAIL
 - **违反后果**: 页数不达标或填充率不足，L1 Schema FAIL，必须扩充内容或调整排版

@@ -15,7 +15,7 @@
 - 数值账本：`projects/<项目>/figures/all_results.json`。
 - 论文源：`projects/<项目>/paper/main.tex`（或 main.typ）。
 - 最终论文：`projects/<项目>/paper/main.pdf`。
-- 验证记录：`projects/<项目>/work/audit_log.json`、`consistency_report.json`、`guardrails_report.json`。
+- 验证记录：`projects/<项目>/work/audit_log.json`、`consistency_report.json`、`guardrails_report_writer.json`。
 - 改进记录：`work/execution_report.json`（Reviewer 手产出）。
 
 论文中的每个定量结果必须能从账本追溯到计算入口、参数、单位和产物。不得直接修改正文数字来掩盖计算差异（铁律 W1 / P2）。

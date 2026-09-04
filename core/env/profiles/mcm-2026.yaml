@@ -1,0 +1,58 @@
+# MCM/ICM（美国大学生数学建模竞赛） 竞赛 profile
+#
+# 本文件只写「相对通用基线的差量」，未声明的参数全部继承 core/env/schema.yaml。
+# verified: false 表示本包阈值尚未逐条对照官方原文核验，使用前须以当届官方通知为准。
+
+meta:
+  competition: mcm
+  name: MCM/ICM（美国大学生数学建模竞赛）
+  year: 2026
+  language: en
+  verified: false
+  verified_date: 2026-09-04
+  rules_source: https://www.comap.com/
+  note: 页数上限与 AI Use Report 要求以当届 COMAP 通知为准
+
+inherits: _base
+
+paper:
+  max_pages: 25
+  min_pages: 18
+  min_words: 8000
+  max_words: 12000
+  min_figures: 6
+  min_tables: 3
+  min_equations: 12
+  min_references: 10
+  page_fill_ratio: 0.75
+
+official:
+  body_max_pages: 25
+  abstract_single_page: true
+  abstract_no_english: false
+  pagination_start_page: 1
+  no_toc: true
+  electronic_format: [pdf]
+  electronic_max_bytes: 20971520
+  ai_disclosure_in_body: true
+  ai_disclosure_in_references: true
+  ai_support_pdf_name: AI Use Report
+  ai_support_pdf_format: pdf
+  ai_exclude_from_appendix: true
+  citation_style: comap
+  anonymity_scope: [摘要页, 正文, 附录, 支撑材料]
+
+runtime:
+  language: en
+  template: mcm-en
+  latex_engine: pdflatex
+
+template:
+  dir: core/templates/latex/mcm/
+  engine: pdflatex
+  compile_chain: [pdflatex, bibtex, pdflatex, pdflatex]
+
+deliverables:
+  paper_name: Solution Paper
+  support_name: Supporting Materials
+  ai_report_name: AI Use Report

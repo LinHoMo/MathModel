@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathModelSkills 状态机</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+  h1 { font-size: 24px; font-weight: 600; color: #58a6ff; margin-bottom: 8px; }
+  .subtitle { font-size: 13px; color: #8b949e; margin-bottom: 30px; }
+  .diagram { width: 1000px; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 30px; }
+  svg { width: 100%; height: auto; }
+  .state { cursor: pointer; }
+  .state rect { rx: 8; ry: 8; stroke-width: 2; transition: filter 0.2s; }
+  .state:hover rect { filter: brightness(1.2); }
+  .state text { font-size: 13px; font-weight: 600; fill: #fff; text-anchor: middle; dominant-baseline: middle; }
+  .transition { stroke: #30363d; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+  .transition-label { font-size: 11px; fill: #8b949e; text-anchor: middle; }
+  .gate-box { fill: none; stroke: #f85149; stroke-width: 1; stroke-dasharray: 4; rx: 4; }
+  .gate-text { font-size: 10px; fill: #f85149; text-anchor: middle; }
+</style>
+</head>
+<body>
+<h1>MathModelSkills 状态机</h1>
+<p class="subtitle">29步推进 · fail-closed · 3次重试 · 回退上游</p>
+
+<div class="diagram">
+<svg viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#58a6ff"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f85149"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3fb950"/>
+    </marker>
+  </defs>
+
+  <!-- Start -->
+  <circle cx="80" cy="300" r="12" fill="#3fb950" stroke="#238636" stroke-width="2"/>
+  <text x="80" y="330" font-size="11" fill="#8b949e" text-anchor="middle">开始</text>
+
+  <!-- State: init -->
+  <g class="state" transform="translate(140,270)">
+    <rect width="100" height="60" fill="#0d1117" stroke="#58a6ff"/>
+    <text x="50" y="25">init</text>
+    <text x="50" y="45" font-size="10" fill="#8b949e">扫描产物</text>
+  </g>
+
+  <!-- State: running -->
+  <g class="state" transform="translate(300,270)">
+    <rect width="100" height="60" fill="#1f6feb22" stroke="#58a6ff"/>
+    <text x="50" y="25">running</text>
+    <text x="50" y="45" font-size="10" fill="#8b949e">执行 agent</text>
+  </g>
+
+  <!-- Gate check -->
+  <rect x="440" y="260" width="80" height="80" class="gate-box"/>
+  <text x="480" y="295" class="gate-text">gate.py</text>
+  <text x="480" y="310" class="gate-text">EXIT?</text>
+
+  <!-- State: pass -->
+  <g class="state" transform="translate(570,270)">
+    <rect width="100" height="60" fill="#23863622" stroke="#3fb950"/>
+    <text x="50" y="25">pass</text>
+    <text x="50" y="45" font-size="10" fill="#8b949e">推进下一步</text>
+  </g>
+
+  <!-- State: fail -->
+  <g class="state" transform="translate(570,400)">
+    <rect width="100" height="60" fill="#f8514922" stroke="#f85149"/>
+    <text x="50" y="25">fail</text>
+    <text x="50" y="45" font-size="10" fill="#8b949e">记录失败</text>
+  </g>
+
+  <!-- State: retry -->
+  <g class="state" transform="translate(440,400)">
+    <rect width="80" height="50" fill="#f0883e22" stroke="#f0883e"/>
+    <text x="40" y="20">retry</text>
+    <text x="40" y="38" font-size="10" fill="#8b949e">≤3次</text>
+  </g>
+
+  <!-- State: blocked -->
+  <g class="state" transform="translate(300,400)">
+    <rect width="100" height="60" fill="#f8514922" stroke="#f85149"/>
+    <text x="50" y="25">blocked</text>
+    <text x="50" y="45" font-size="10" fill="#8b949e">3次失败</text>
+  </g>
+
+  <!-- State: rollback -->
+  <g class="state" transform="translate(140,400)">
+    <rect width="100" height="60" fill="#f0883e22" stroke="#f0883e"/>
+    <text x="50" y="25">rollback</text>
+    <text x="50" y="45" font-size="10" fill="#8b949e">退回上游</text>
+  </g>
+
+  <!-- State: completed -->
+  <g class="state" transform="translate(730,270)">
+    <rect width="120" height="60" fill="#238636" stroke="#2ea043"/>
+    <text x="60" y="25">completed</text>
+    <text x="60" y="45" font-size="10" fill="#fff">29步全绿</text>
+  </g>
+
+  <!-- Transitions -->
+  <path d="M 92 300 L 140 300" class="transition" marker-end="url(#arrow)"/>
+  <path d="M 240 300 L 300 300" class="transition" marker-end="url(#arrow)"/>
+  <path d="M 400 300 L 440 300" class="transition" marker-end="url(#arrow)"/>
+
+  <!-- Gate → pass -->
+  <path d="M 520 300 L 570 300" class="transition" marker-end="url(#arrow-green)"/>
+  <text x="545" y="290" class="transition-label" fill="#3fb950">EXIT 0</text>
+
+  <!-- Gate → fail -->
+  <path d="M 480 340 L 480 400" class="transition" marker-end="url(#arrow-red)"/>
+  <text x="500" y="370" class="transition-label" fill="#f85149">EXIT 2</text>
+
+  <!-- fail → retry -->
+  <path d="M 570 430 L 520 430" class="transition" marker-end="url(#arrow)"/>
+  <text x="545" y="445" class="transition-label">重试</text>
+
+  <!-- retry → running -->
+  <path d="M 440 400 L 440 340 L 350 340 L 350 330" class="transition" marker-end="url(#arrow)" stroke-dasharray="4"/>
+
+  <!-- retry → blocked -->
+  <path d="M 440 430 L 400 430" class="transition" marker-end="url(#arrow-red)"/>
+  <text x="420" y="445" class="transition-label" fill="#f85149">>3次</text>
+
+  <!-- blocked → rollback -->
+  <path d="M 300 430 L 240 430" class="transition" marker-end="url(#arrow-red)"/>
+
+  <!-- rollback → init -->
+  <path d="M 190 400 L 190 340 L 140 340 L 140 330" class="transition" marker-end="url(#arrow)" stroke-dasharray="4"/>
+
+  <!-- pass → completed (when all 29 done) -->
+  <path d="M 670 300 L 730 300" class="transition" marker-end="url(#arrow-green)"/>
+  <text x="700" y="290" class="transition-label" fill="#3fb950">29/29</text>
+
+  <!-- pass → running (next step) -->
+  <path d="M 620 270 L 620 200 L 250 200 L 250 270 L 300 270" class="transition" marker-end="url(#arrow)" stroke-dasharray="4"/>
+  <text x="435" y="190" class="transition-label">下一步</text>
+
+  <!-- Legend -->
+  <g transform="translate(730,400)">
+    <text x="0" y="0" font-size="12" fill="#8b949e" font-weight="600">图例</text>
+    <line x1="0" y1="20" x2="30" y2="20" stroke="#58a6ff" stroke-width="1.5"/>
+    <text x="35" y="24" font-size="10" fill="#8b949e">正常流转</text>
+    <line x1="0" y1="40" x2="30" y2="40" stroke="#f85149" stroke-width="1.5"/>
+    <text x="35" y="44" font-size="10" fill="#8b949e">失败/阻塞</text>
+    <line x1="0" y1="60" x2="30" y2="60" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4"/>
+    <text x="35" y="64" font-size="10" fill="#8b949e">循环/回退</text>
+    <rect x="0" y="75" width="20" height="12" class="gate-box" style="stroke-dasharray:4"/>
+    <text x="35" y="85" font-size="10" fill="#f85149">门禁判定</text>
+  </g>
+</svg>
+</div>
+
+<script>
+document.querySelectorAll('.state').forEach(state => {
+  state.addEventListener('click', () => {
+    const name = state.querySelector('text').textContent;
+    const desc = state.querySelectorAll('text')[1]?.textContent || '';
+    alert(`状态: ${name}\n${desc}`);
+  });
+});
+</script>
+</body>
+</html>

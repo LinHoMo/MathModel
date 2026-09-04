@@ -1,0 +1,62 @@
+# 亚太地区大学生数学建模竞赛（APMCM） 竞赛 profile
+#
+# 本文件只写「相对通用基线的差量」，未声明的参数全部继承 core/env/schema.yaml。
+# verified: false 表示本包阈值尚未逐条对照官方原文核验，使用前须以当届官方通知为准。
+
+meta:
+  competition: apmcm
+  name: 亚太地区大学生数学建模竞赛（APMCM）
+  year: 2025
+  language: zh
+  verified: false
+  verified_date: 2026-09-04
+  rules_source: 见 core/templates/latex/apmcm/rules.md
+  note: 原配置阈值为复制粘贴（25页/18000字）未做官方核验，已回退继承国赛基线，待核验后单独覆盖
+
+inherits: _base
+
+paper:
+  max_pages: 20
+  min_pages: 17
+  min_words: 13000
+  max_words: 16000
+  min_figures: 6
+  min_tables: 4
+  min_equations: 15
+  min_references: 10
+
+official:
+  body_max_pages: 20
+  no_toc: true
+  abstract_single_page: true
+  abstract_no_english: true
+  pagination_start_page: 3
+  margin_cm: 2.5
+  no_header: true
+  electronic_format: [pdf, docx]
+  electronic_max_bytes: 20971520
+  support_format: [zip, rar]
+  support_max_bytes: 20971520
+  citation_inline_required: true
+  citation_style: gbt7714-numerical
+  ai_disclosure_in_body: true
+  ai_disclosure_in_references: true
+  ai_support_pdf_name: AI工具使用详情
+  ai_support_pdf_format: pdf
+  ai_exclude_from_appendix: true
+  anonymity_scope: [摘要页, 正文, 附录, 支撑材料]
+
+runtime:
+  language: zh
+  template: cumcm-zh
+  latex_engine: xelatex
+
+template:
+  dir: core/templates/latex/apmcm/
+  engine: xelatex
+  compile_chain: [xelatex, bibtex, xelatex, xelatex]
+
+deliverables:
+  paper_name: 参赛论文
+  support_name: 支撑材料
+  ai_report_name: AI工具使用详情

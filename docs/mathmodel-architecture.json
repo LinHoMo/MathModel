@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "type": "architecture",
+  "meta": {
+    "title": "MathModelSkills 架构图",
+    "subtitle": "基于 UTG 六层防御的数学建模四手协作系统",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": "0 0 1200 800"
+  },
+  "nodes": [
+    {
+      "id": "input",
+      "label": "赛题输入",
+      "type": "external",
+      "variant": "emphasis",
+      "x": 100,
+      "y": 400,
+      "card": "接收赛题文件（CUMCM/MCM/华为赛题）"
+    },
+    {
+      "id": "modeler",
+      "label": "Modeler 手",
+      "type": "backend",
+      "variant": "emphasis",
+      "x": 300,
+      "y": 200,
+      "card": "8 个 agent：问题分析→类型识别→文献检索→方法匹配→建模→DAG构建→假设验证→规格审计"
+    },
+    {
+      "id": "programmer",
+      "label": "Programmer 手",
+      "type": "backend",
+      "variant": "default",
+      "x": 500,
+      "y": 400,
+      "card": "6 个 agent：模板选择→代码实现→测试运行→结果验证→护栏检查→哈希审计"
+    },
+    {
+      "id": "writer",
+      "label": "Writer 手",
+      "type": "backend",
+      "variant": "default",
+      "x": 700,
+      "y": 200,
+      "card": "7 个 agent：结构规划→章节撰写→图表生成→参考文献→一致性检查→护栏检查→最终验证"
+    },
+    {
+      "id": "reviewer",
+      "label": "Reviewer 手",
+      "type": "backend",
+      "variant": "security",
+      "x": 900,
+      "y": 400,
+      "card": "8 个 agent：5维评分(学术/工程/评委/读者/对抗)→缺陷猎手→修改规划→修改执行"
+    },
+    {
+      "id": "state",
+      "label": "状态机",
+      "type": "database",
+      "variant": "emphasis",
+      "x": 300,
+      "y": 600,
+      "card": "STATE.md：29步进度跟踪，init/advance/fail/reset"
+    },
+    {
+      "id": "gate",
+      "label": "门禁系统",
+      "type": "security",
+      "variant": "emphasis",
+      "x": 600,
+      "y": 600,
+      "card": "3层级 gate.py：artifact/hand/delivery，退出码 0/1/2/3"
+    },
+    {
+      "id": "validate",
+      "label": "验证器",
+      "type": "cloud",
+      "variant": "default",
+      "x": 900,
+      "y": 600,
+      "card": "validate.py：57项校验，schema/哈希链/数值一致性/护栏"
+    },
+    {
+      "id": "config",
+      "label": "env 配置",
+      "type": "database",
+      "variant": "dashed",
+      "x": 100,
+      "y": 600,
+      "card": "config.yaml：5组参数(paper/code/modeling/review/runtime)"
+    },
+    {
+      "id": "knowledge",
+      "label": "知识库",
+      "type": "database",
+      "variant": "dashed",
+      "x": 100,
+      "y": 200,
+      "card": "方法论50篇/论文案例/反模式库/历史赛题/数据源"
+    },
+    {
+      "id": "output",
+      "label": "论文输出",
+      "type": "external",
+      "variant": "emphasis",
+      "x": 1100,
+      "y": 400,
+      "card": "paper/main.tex + main.pdf + references.bib"
+    },
+    {
+      "id": "orchestrator",
+      "label": "编排器",
+      "type": "backend",
+      "variant": "emphasis",
+      "x": 600,
+      "y": 100,
+      "card": "orchestrator.py：一键执行29步，含重试/回退"
+    }
+  ],
+  "edges": [
+    {"from": "input", "to": "modeler", "label": "赛题文件"},
+    {"from": "modeler", "to": "programmer", "label": "MODEL_SPEC.md"},
+    {"from": "programmer", "to": "writer", "label": "CODE_DELIVERABLES.md"},
+    {"from": "writer", "to": "reviewer", "label": "PAPER_SPEC.md"},
+    {"from": "reviewer", "to": "output", "label": "修改后论文"},
+    {"from": "modeler", "to": "state", "label": "推进状态", "style": "dashed"},
+    {"from": "programmer", "to": "gate", "label": "门禁检查", "style": "dashed"},
+    {"from": "writer", "to": "validate", "label": "最终验证", "style": "dashed"},
+    {"from": "config", "to": "modeler", "label": "参数注入", "style": "dashed"},
+    {"from": "knowledge", "to": "modeler", "label": "方法匹配", "style": "dashed"},
+    {"from": "orchestrator", "to": "state", "label": "调度", "style": "dashed"},
+    {"from": "orchestrator", "to": "gate", "label": "门禁调用", "style": "dashed"}
+  ]
+}

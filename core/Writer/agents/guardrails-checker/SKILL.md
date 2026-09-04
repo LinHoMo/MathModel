@@ -9,7 +9,7 @@ inputs:
   - paper/references.bib
   - paper/figures/
 outputs:
-  - work/guardrails_report.json
+  - work/guardrails_report_writer.json
 ---
 
 ## 执行卡片（先读这里，不必通读全文）
@@ -39,7 +39,7 @@ L5 运行时护栏层：在 L4 异构验证通过后、L6 最终验证之前，�
   - `paper/main.tex`（section-writer 输出）
   - `paper/references.bib`（reference-curator 输出）
   - `paper/figures/`（figure-generator 输出，校验 `\includegraphics{}` 引用）
-- 输出：`work/guardrails_report.json`
+- 输出：`work/guardrails_report_writer.json`
 
 ## Procedure
 
@@ -100,7 +100,7 @@ for tex_file in Path("paper").glob("*.tex"):
 
 ### Step 4: 写出报告
 
-`work/guardrails_report.json`：
+`work/guardrails_report_writer.json`：
 
 ```json
 {
@@ -137,7 +137,7 @@ for tex_file in Path("paper").glob("*.tex"):
 
 ### Step 5: 运行可执行门禁
 
-运行 `py core/tools/validate_project.py --project <项目路径>`，确认本 agent 对接的 [HARD] 检查全部 PASS。任一 HARD 失败按 ## Iteration 回退修正后重跑。WARN 项记录到 work/guardrails_report.json 但不阻塞。
+运行 `py core/tools/validate_project.py --project <项目路径>`，确认本 agent 对接的 [HARD] 检查全部 PASS。任一 HARD 失败按 ## Iteration 回退修正后重跑。WARN 项记录到 work/guardrails_report_writer.json 但不阻塞。
 
 ## Self-Check
 
@@ -160,7 +160,7 @@ for tex_file in Path("paper").glob("*.tex"):
 
 ### WARN 项（记录但不阻塞）
 
-- [ ] [WARN] `work/guardrails_report.json` 存在且可被 `json.load` 解析 → core/tools/validate_project.py: check_verify_report
+- [ ] [WARN] `work/guardrails_report_writer.json` 存在且可被 `json.load` 解析 → core/tools/validate_project.py: check_verify_report
 - [ ] [WARN] `checks.no_orphan_labels == true` 且 `checks.no_dangling_refs == true`
 - [ ] [WARN] 正文无全角中文分点式（`（1）（2）` / `（一）（二）` / `①②③`），若有则改写为段落式（铁律 W11 配套，Para 写作禁令 A-1）→ core/tools/validate_project.py: check_body_chinese_list
 - [ ] [WARN] 无连续段落相同句式开头（如连续 `本文...` / `通过...` / `模型...`）→ core/tools/validate_project.py: check_consecutive_same_opening

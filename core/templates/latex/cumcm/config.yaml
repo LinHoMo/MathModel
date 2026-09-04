@@ -13,16 +13,8 @@ template:
   main: core/Writer/knowledge/templates/mathmodel/zh/cumcm/main.tex
   fonts: [simsun.ttc, simkai.ttf]
 
-thresholds:
-  min_pages: 25
-  max_pages: 30
-  min_words: 18000
-  min_figures: 6
-  min_tables: 4
-  min_equations: 15
-  min_references: 10
-  abstract_words: [400, 600]
-  page_fill_ratio: 0.8
+# 注意：本竞赛包不再内置页/字数阈值。唯一真源见 core/env/profiles/cumcm-2025.yaml
+# （字段定义与分层语义见 core/env/schema.yaml）。阈值修改只改 profile，不要在此重复。
 
 citation:
   style: gbt7714-numerical

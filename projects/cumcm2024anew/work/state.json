@@ -1,0 +1,183 @@
+{
+  "version": "1.0",
+  "project": "cumcm2024anew",
+  "created": "2026-09-04T06:54:47Z",
+  "updated": "2026-09-04T07:10:57Z",
+  "current": {
+    "hand": "programmer",
+    "agent": "result-verifier",
+    "stage": 4
+  },
+  "completed": [
+    {
+      "hand": "modeler",
+      "agent": "problem-parser",
+      "stage": 1,
+      "timestamp": "2026-09-04T06:55:33Z",
+      "output": "work/question_spec.json",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "modeler",
+      "agent": "type-classifier",
+      "stage": 2,
+      "timestamp": "2026-09-04T06:55:33Z",
+      "output": "work/type_classification.json",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "modeler",
+      "agent": "literature-searcher",
+      "stage": 1.5,
+      "timestamp": "2026-09-04T06:55:33Z",
+      "output": "work/literature_evidence.json",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "modeler",
+      "agent": "method-matcher",
+      "stage": 3,
+      "timestamp": "2026-09-04T06:55:34Z",
+      "output": "work/method_candidates.json",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "modeler",
+      "agent": "model-builder",
+      "stage": 4,
+      "timestamp": "2026-09-04T06:55:34Z",
+      "output": "work/model_draft.md",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "modeler",
+      "agent": "dag-builder",
+      "stage": 4.5,
+      "timestamp": "2026-09-04T06:55:34Z",
+      "output": "work/model_dag.json",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "modeler",
+      "agent": "assumption-validator",
+      "stage": 5,
+      "timestamp": "2026-09-04T06:55:34Z",
+      "output": "work/assumption_validation.json",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "modeler",
+      "agent": "spec-auditor",
+      "stage": 6,
+      "timestamp": "2026-09-04T06:55:34Z",
+      "output": "output/MODEL_SPEC.md",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "programmer",
+      "agent": "template-selector",
+      "stage": 1,
+      "timestamp": "2026-09-04T06:55:34Z",
+      "output": "work/template_plan.json",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "programmer",
+      "agent": "code-implementer",
+      "stage": 2,
+      "timestamp": "2026-09-04T06:55:35Z",
+      "output": "code/main.py",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    },
+    {
+      "hand": "programmer",
+      "agent": "test-runner",
+      "stage": 3,
+      "timestamp": "2026-09-04T07:10:57Z",
+      "output": "work/test_report.json",
+      "output_hash": "",
+      "gate": {
+        "exit_code": 0,
+        "hard_fail_count": 0,
+        "soft_fail_count": 0,
+        "hard_fail": [],
+        "soft_fail": []
+      }
+    }
+  ],
+  "failed": [],
+  "q_states": {},
+  "ai_usage_ledger": {},
+  "legacy": {},
+  "decision_log_path": "work/decision_log.json"
+}

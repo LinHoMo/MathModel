@@ -11,11 +11,8 @@ template:
   dir: core/Writer/knowledge/templates/mathmodel/en/mcm/
   note: 英文论文通常用 article 类即可，无需 ctex
 
-thresholds:
-  max_pages: 25
-  min_font_pt: 12
-  min_references: 10
-  note: COMAP 页数限制含摘要页、正文、参考文献与附录
+# 注意：本竞赛包不再内置页/字数阈值。唯一真源见 core/env/profiles/mcm-2026.yaml
+# （字段定义与分层语义见 core/env/schema.yaml）。阈值修改只改 profile，不要在此重复。
 
 citation:
   style: plain 或 COMAP 指定格式
