@@ -1,0 +1,21 @@
+# evidence.yaml — 证据 stage
+# evidence_build 构建 Evidence Graph；evidence_gate 是准入门禁:
+# 没有真实证据不允许进入论文投影（fail → 回补实验设计）
+schema_version: 3
+stage: evidence
+nodes:
+  evidence_build:
+    type: reasoning
+    role: experimenter
+    description: 从实验产物构建 R/F/T artifacts + typed relations（Evidence Graph）
+    depends_on: [experiment*]
+    outputs: [state/evidence_graph.json]
+  evidence_gate:
+    type: validation
+    role: critic
+    validator: evidence-gate
+    gate_type: evidence
+    description: 证据门禁: 每个 claim 有实验支撑 / 每个实验有真实结果 / 关键实验有灵敏度与基线对比
+    depends_on: [evidence_build]
+    on_fail: experiment_design
+    max_retries: 2

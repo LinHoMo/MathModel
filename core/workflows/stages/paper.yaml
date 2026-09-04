@@ -1,0 +1,32 @@
+# paper.yaml — 论文投影 stage
+# Paper 是 Research State + Evidence Graph 的投影（不是 Source of Truth）
+# paper_sections 按 per_question 投影; judge_critique 为终审 Critic
+schema_version: 3
+stage: paper
+nodes:
+  research_direction:
+    type: reasoning
+    role: writer
+    description: 从 Evidence Graph 提炼研究叙事（Research Story），产出 N artifacts
+    depends_on: [evidence_gate]
+    outputs: [state/registry.json]
+  paper_projection:
+    type: projection
+    role: writer
+    description: 从叙事 + 证据图投影论文大纲与章节
+    depends_on: [research_direction]
+    outputs: [paper/]
+  paper_sections:
+    type: generation
+    role: writer
+    description: 撰写各章节（claim appears_in 回写 graph）
+    per_question: true
+    depends_on: [paper_projection]
+  paper_review:
+    type: critique
+    role: critic
+    validator: judge-critic
+    description: 终审: PASS/WEAK/FAIL/UNKNOWN + 风险清单（分数仅辅助）
+    depends_on: [paper_sections*]
+    on_fail: paper_projection
+    max_retries: 2

@@ -1,0 +1,32 @@
+# modeling.yaml — 建模决策 stage
+# 产出: M/A artifacts + assumes/solved_by 边
+# model_critique 为前置 Critic（fail 触发反馈环回 model_construction）
+schema_version: 3
+stage: modeling
+nodes:
+  model_selection:
+    type: reasoning
+    role: modeler
+    description: 从 Method Card Registry + Decision Log 选择候选模型（Model Selection Arena）
+    depends_on: [literature_search]
+    outputs: [state/registry.json]
+  model_construction:
+    type: reasoning
+    role: modeler
+    description: 建立数学模型（公式/符号/边界）+ 模型依赖 DAG，产出 M artifacts
+    depends_on: [model_selection]
+    outputs: [state/registry.json]
+  model_critique:
+    type: critique
+    role: critic
+    validator: model-critic
+    description: 模型质量前置审查（假设合理性/可解性/复杂度/与题目匹配度）
+    depends_on: [model_construction]
+    on_fail: model_construction
+    max_retries: 2
+  assumption_check:
+    type: validation
+    role: critic
+    validator: assumption-checker
+    description: 假设四维评分验证，产出 A artifacts
+    depends_on: [model_critique]

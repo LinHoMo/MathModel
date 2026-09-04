@@ -1,0 +1,16 @@
+# problem-analysis.yaml — 问题认知 stage
+# 产出: P/Q artifacts（注册 Registry），问题分解为 Question 实体
+schema_version: 3
+stage: problem-analysis
+nodes:
+  problem_analysis:
+    type: reasoning
+    role: analyst
+    description: 赛题结构化解析 + 题型识别 + 歧义消除，产出 P artifact 与 Q artifacts
+    outputs: [state/registry.json]
+  literature_search:
+    type: reasoning
+    role: analyst
+    description: 文献检索与证据提取，关联 Method Cards
+    depends_on: [problem_analysis]
+    outputs: [state/literature_evidence.json]

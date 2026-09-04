@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "v3/state/status.schema.json",
+  "title": "V3 Project Status (Multi-dimensional State)",
+  "description": "系统现在处于什么状态——派生视图，不存储研究内容。",
+  "type": "object",
+  "required": ["schema_version", "state", "workflow", "run"],
+  "properties": {
+    "schema_version": { "const": 3 },
+    "project": { "type": "string" },
+    "state": {
+      "type": "object",
+      "required": ["problem", "questions", "models", "experiments", "evidence",
+                   "narrative", "paper", "review"],
+      "properties": {
+        "problem": { "$ref": "#/definitions/dimension" },
+        "questions": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/question" }
+        },
+        "models": { "$ref": "#/definitions/dimension" },
+        "experiments": { "$ref": "#/definitions/dimension" },
+        "evidence": { "$ref": "#/definitions/dimension" },
+        "narrative": { "$ref": "#/definitions/dimension" },
+        "paper": { "$ref": "#/definitions/dimension" },
+        "review": { "$ref": "#/definitions/dimension" }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "required": ["current_nodes", "completed_nodes", "blocked_nodes"],
+      "properties": {
+        "current_nodes": { "type": "array", "items": { "type": "string" } },
+        "completed_nodes": { "type": "array", "items": { "type": "string" } },
+        "blocked_nodes": { "type": "array", "items": { "type": "string" } },
+        "waiting_approval": { "type": "array", "items": { "type": "string" } },
+        "retries": { "type": "object" },
+        "notes": { "type": "array" }
+      }
+    },
+    "run": {
+      "type": "object",
+      "required": ["phase"],
+      "properties": {
+        "phase": { "type": "string" },
+        "started_at": { "type": "string" },
+        "updated_at": { "type": "string" }
+      }
+    },
+    "legacy": { "type": "object" }
+  },
+  "definitions": {
+    "dimension": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pending", "in_progress", "partial", "complete", "blocked"] }
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "enum": ["pending", "analyzing", "modeled", "experimenting",
+                   "validated", "complete", "failed", "blocked"]
+        },
+        "models": { "type": "array", "items": { "type": "string" } },
+        "experiments": { "type": "array", "items": { "type": "string" } },
+        "claims": { "type": "array", "items": { "type": "string" } },
+        "dependencies": { "type": "array", "items": { "type": "string" } },
+        "retry_count": { "type": "integer" },
+        "failure_reason": { "type": ["string", "null"] },
+        "last_updated": { "type": "string" }
+      }
+    }
+  }
+}

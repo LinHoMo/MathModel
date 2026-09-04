@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parents[2]
 # - 新增 deliverables/（投稿交付物：论文PDF/支撑材料ZIP/AI工具使用详情PDF）
 # - 新增 support_materials 不再单独建目录；披露材料统一落到 deliverables/
 PROJECT_DIRS = (
+    # --- V2 legacy 布局（29-agent 线性流水线，保持兼容不删除） ---
     "inputs",
     "inputs/external",
     "work",
@@ -38,6 +39,16 @@ PROJECT_DIRS = (
     "paper/figures",
     "deliverables",
     "_scratch",
+    # --- V3 workspace（Cognitive Workflow Runtime，P1+） ---
+    # state/       多维状态（state/status.json + workflow 视图，state.py v3 子命令消费）
+    # artifacts/   Artifact Layer 落盘区，按 kind 分目录存原文件（registry 索引在根）
+    "state",
+    "artifacts",
+    "artifacts/data",
+    "artifacts/code",
+    "artifacts/figures",
+    "artifacts/tables",
+    "artifacts/results",
 )
 NAME_RE = re.compile(r"^[a-z][a-z0-9-]{1,63}$")
 
@@ -46,6 +57,9 @@ NEXT_STEPS = """\
   1. python core/tools/state.py {name} init
   2. python core/tools/doctor.py --project {name} --competition {comp}
   3. python core/tools/state.py {name} status   # 从 modeler/problem-parser 开始
+
+V3 Runtime（可选，与 V2 并行）:
+  python core/tools/state.py {name} v3          # V2→V3 自动转换 + 多维状态视图
 """
 
 

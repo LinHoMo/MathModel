@@ -1,0 +1,12 @@
+# base.yaml — 工作流骨架（stage 顺序）
+# 组合规则: base + stages/*.yaml + competition/<赛事>.yaml → 可执行 DAG
+# 详见 docs/architecture/V3.1_ARCHITECTURE.md §1.4
+schema_version: 3
+name: mathmodel-base
+description: 数学建模认知工作流骨架（问题分析 → 建模 → 实验 → 证据 → 论文投影）
+stages:
+  - problem-analysis
+  - modeling
+  - experiment
+  - evidence
+  - paper

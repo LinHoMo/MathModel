@@ -1,0 +1,18 @@
+# experiment.yaml — 实验 stage（Per-Qi 展开）
+# experiment 节点带 per_question: true，引擎按 Question 列表展开为 experiment@Q00x
+schema_version: 3
+stage: experiment
+nodes:
+  experiment_design:
+    type: reasoning
+    role: experimenter
+    description: 实验规划（baseline / sensitivity / 多起点），选择代码模板
+    depends_on: [assumption_check]
+    outputs: [state/experiment_plan.json]
+  experiment:
+    type: execution
+    role: experimenter
+    description: 按 Qi 实现/执行/测试，产出 CODE/E artifacts 与 R results
+    per_question: true
+    depends_on: [experiment_design]
+    outputs: [artifacts/code/, artifacts/results/]

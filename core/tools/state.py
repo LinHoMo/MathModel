@@ -711,13 +711,45 @@ def cmd_decision_show(project, args):
     return 0
 
 
+def cmd_v3(project, args):
+    """V3 多维状态视图（桥接 runtime/state + runtime/legacy 转换器）。
+
+    - 项目尚无 state/status.json 时自动执行 V2→V3 转换（幂等，不动 V2 文件）
+    - 已有时直接展示多维状态摘要
+    """
+    sys.path.insert(0, str(ROOT / "core"))
+    from runtime.legacy.convert import convert_project
+    from runtime.state.model import ProjectState
+
+    pdir = project_dir(project)
+    status_path = pdir / "state" / "status.json"
+    if not status_path.exists():
+        print("[state] 未发现 V3 state/，执行 V2→V3 转换（幂等，V2 文件不动）…")
+        report = convert_project(pdir)
+        print(f"[state] 转换完成: artifacts={report['registry']['total']} "
+              f"relations={report['graph_relations']}")
+    st = ProjectState(status_path)
+    s = st.summary()
+    print(f"项目: {s['project']}   phase: {s['phase']}")
+    print(f"problem: {s['problem']}")
+    for qid, qstatus in s["questions"].items():
+        print(f"  {qid}: {qstatus}")
+    ev = s["evidence"]
+    print(f"evidence: graph v{ev['graph_version']}  "
+          f"claims {ev['claims_supported']}/{ev['claims_total']}")
+    wf = s["workflow"]
+    print(f"workflow: completed={wf['completed']} blocked={wf['blocked']} "
+          f"waiting={wf['waiting']}")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description="执行状态管理（跨 runtime 执行协议）")
     ap.add_argument("project", help="项目目录名或路径，如 cumcm2024a")
     ap.add_argument("command",
                     choices=["init", "status", "sync", "advance", "fail", "reset",
                     "qfail", "qfix", "qstatus",
-                    "decision-add", "decision-show"])
+                    "decision-add", "decision-show", "v3"])
     # hand/agent 仅用于 advance/fail/qfail/qfix 命令
     # 手名从 PIPELINE 动态派生：此前硬编码「modeler/programmer/writer」漏了
     # reviewer，让人以为评审手不受 state.py 管理。
@@ -754,6 +786,7 @@ def main():
         "qstatus": cmd_qstatus,
         "decision-add": cmd_decision_add,
         "decision-show": cmd_decision_show,
+        "v3": cmd_v3,
     }[args.command]
     return fn(args.project, args)
 

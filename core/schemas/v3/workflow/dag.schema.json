@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "v3/workflow/dag.schema.json",
+  "title": "V3 Workflow DAG",
+  "description": "工作流 DAG 定义（base/stages/competition 组合产物或手写）。",
+  "type": "object",
+  "required": ["name", "nodes"],
+  "properties": {
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "nodes": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/node" }
+    }
+  },
+  "definitions": {
+    "node": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": ["reasoning", "generation", "execution", "validation",
+                   "critique", "projection", "assembly"]
+        },
+        "role": { "type": "string" },
+        "depends_on": { "type": "array", "items": { "type": "string" } },
+        "per_question": { "type": "boolean" },
+        "on_fail": { "type": "string" },
+        "max_retries": { "type": "integer", "minimum": 0 },
+        "validator": { "type": "string" },
+        "human_approval": { "type": "boolean" },
+        "parallel_group": { "type": "string" },
+        "gate_type": { "type": "string" },
+        "inputs": { "type": "array", "items": { "type": "string" } },
+        "outputs": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
