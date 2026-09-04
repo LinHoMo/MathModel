@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "mathmodel:v3/artifact/artifact.schema.json",
+  "title": "V3 Artifact Contract",
+  "description": "V3.1 统一对象契约：identity/type/version/status/provenance/dependency/validation/relations/lifecycle/invalidation",
+  "type": "object",
+  "required": ["schema_version", "artifact_id", "type", "version", "status", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "const": "3.1" },
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^(P|Q|M|A|DATA|CODE|E|R|F|T|C|D|N|S|DELIV)\\d{1,6}$",
+      "description": "稳定 ID，项目内唯一、终身不复用；前缀必须与 type 匹配"
+    },
+    "type": {
+      "enum": ["problem", "question", "assumption", "model", "dataset", "code",
+               "experiment", "result", "figure", "table", "claim", "decision",
+               "narrative", "paper_section", "deliverable"]
+    },
+    "version": { "type": "integer", "minimum": 1 },
+    "status": {
+      "enum": ["draft", "active", "validated", "published", "blocked",
+               "invalidated", "superseded", "deprecated"]
+    },
+    "title": { "type": "string" },
+    "question": {
+      "type": "string",
+      "pattern": "^Q\\d{1,6}$",
+      "description": "所属子问题（Per-Qi 执行单元归属）"
+    },
+    "created_by": { "type": "string", "description": "产生者（workflow 节点 / role / agent）" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "payload": {
+      "type": "array", "items": { "type": "string" },
+      "description": "相对项目根的文件路径列表；文件是载荷，不是身份"
+    },
+    "parent": { "type": "array", "items": { "type": "string" }, "description": "同型派生来源" },
+    "depends_on": { "type": "array", "items": { "type": "string" }, "description": "硬依赖上游 Artifact ID" },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "to"],
+        "properties": {
+          "type": { "enum": ["motivates", "solved_by", "assumes", "implemented_by",
+                             "validated_by", "tests", "uses", "produces", "visualized_by",
+                             "supports", "appears_in", "selects", "based_on", "derived_from"] },
+          "to": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "description": "Evidence Graph 同步的只读视图，真源在 evidence_graph.json"
+    },
+    "provenance": { "type": "object" },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "validators": { "type": "array", "items": { "type": "string" } },
+        "passed": { "type": "boolean" },
+        "report": { "type": "object" },
+        "at": { "type": "string" }
+      }
+    },
+    "lifecycle_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "at"],
+        "properties": {
+          "from": { "type": ["string", "null"] },
+          "to": { "type": "string" },
+          "at": { "type": "string" },
+          "by": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "invalidation": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["invalidated", "requires_revalidation", "dirty"] },
+        "reason": { "type": "string" },
+        "invalidated_by": { "type": "string" },
+        "at": { "type": "string" }
+      }
+    },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "data": { "type": "object", "description": "轻量内联数据（result 数值快照等）" }
+  }
+}
