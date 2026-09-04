@@ -1,0 +1,14 @@
+# 熵权法全同列除零
+failure_id: fm-entropy-identical-columns
+title: 熵权法遇到全相同指标列，权重计算除零/NaN
+problem_context: 某指标所有方案取值相同（信息量为零），归一化后 p_ij 列全零或公式除零
+method: 熵权法
+method_family: composite_evaluation
+failure_mode: numerical
+symptom: 权重出现 NaN/inf 或程序崩溃；有人为补 0.5 之类的魔法数
+root_cause: 零信息列的熵定义退化；未做除零保护与零方差列剔除
+detection: 归一化前检查每列方差；计算中捕获除零；NaN 检查进自测
+fix: 剔除零方差指标并在论文说明"该指标无区分度"；或加平移项保护
+avoidance: 熵权实现必须含零方差列检测；发现零方差列时显式报告而非静默处理
+applies_to: [mc-entropy-weight]
+source: pitfalls/numeric-edge-cases.md

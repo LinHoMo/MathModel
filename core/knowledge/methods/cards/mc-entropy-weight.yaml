@@ -1,0 +1,31 @@
+# 熵权法 — 客观赋权
+card_id: mc-entropy-weight
+name: 熵权法客观赋权
+family: composite_evaluation
+version: 1
+problem_types: [evaluation, ranking, weighting]
+match:
+  requires_data: true
+  sample_size: [small, medium, large]
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 完全由数据离散度决定权重的客观赋权，避免主观拍权
+  - 与 TOPSIS/灰色关联/理想点法组合成完整评价管线
+requires:
+  - 方案×指标矩阵；指标先同向化与标准化
+  - 指标存在信息量差异（全同列无意义）
+risks:
+  - 权重只反映离散度，不代表指标真实重要性（离散≠重要）
+  - 极端值/异常值会扭曲权重，需先做稳健化处理
+  - 全同列导致熵权计算除零
+validation:
+  - 与主观赋权（AHP）对比做组合赋权或双权重敏感性
+  - 检查归一化后每列是否存在 p_ij=0（加平移项避免 log(0)）
+often_combined_with: [mc-topsis, mc-ahp]
+anti_patterns:
+  - 把熵权当作"重要性"解释
+  - 标准化后直接套公式不管除零
+known_failures: [fm-entropy-identical-columns]
+reference: methodology/evaluation-methods.md

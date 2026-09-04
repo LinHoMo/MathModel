@@ -1,0 +1,15 @@
+# 帕累托前沿 + 决策选解
+pattern_id: ip-pareto-select
+title: NSGA-II 帕累托前沿 + TOPSIS 二阶段选解
+problem_types: [optimization, multi-objective]
+baseline_method: 加权合成单目标 + GA 求单点解
+innovation: NSGA-II 生成帕累托前沿呈现完整权衡空间，再用 TOPSIS/理想点法在前沿上做二阶段选解，决策过程透明可辩护
+required_evidence:
+  - 加权法单点解 与 帕累托解集的位置关系图
+  - 前沿质量指标（HV 或非支配率）+ 选解决策依据表
+risks:
+  - 目标不真冲突时前沿退化为单点，需先验证目标冲突性
+  - 前沿给一堆点不选解，把决策推给评委
+examples:
+  - 选址/调度/资源配置类多目标题的标准升级路线
+cards: [mc-nsga2, mc-topsis]

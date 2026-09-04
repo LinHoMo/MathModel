@@ -1,0 +1,14 @@
+# 时序预测无样本外回测
+failure_id: fm-timeseries-no-backtest
+title: 时序模型只报拟合优度，不做样本外回测
+problem_context: ARIMA 拟合 R²=0.98 即宣称预测可靠，未留出样本外期验证
+method: ARIMA/指数平滑/灰色预测等预测类方法
+method_family: classical_timeseries
+failure_mode: no-evidence
+symptom: 论文只有拟合曲线与 R²，无样本外误差指标（MAPE/RMSE）
+root_cause: 拟合能力 ≠ 预测能力；时序易过拟合历史（尤其长预测期）
+detection: 检查是否存在留出期回测指标；无则打回
+fix: 留出最后 10-20% 期做滚动回测，报告 MAPE/RMSE 与预测区间
+avoidance: 预测类结论必须有样本外回测证据；拟合指标与回测指标分开展示
+applies_to: [mc-arima, mc-grey-gm11]
+source: pitfalls/TYPE-ANTIPATTERNS-CHECKLIST.md

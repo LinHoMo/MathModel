@@ -1,0 +1,15 @@
+# 主客观组合赋权
+pattern_id: ip-combined-weighting
+title: 主客观组合赋权（AHP + 熵权）
+problem_types: [evaluation, ranking]
+baseline_method: 单一赋权（纯 AHP 或纯熵权）+ TOPSIS 排序
+innovation: 主观（AHP 专家判断）与客观（熵权数据离散度）按凸组合/博弈论组合赋权，权重兼顾政策导向与数据信息量
+required_evidence:
+  - 三组权重（纯主观/纯客观/组合）下的排序对比表
+  - 排序 Spearman 相关系数，证明组合结果稳健
+risks:
+  - 组合系数 λ 无依据拍定（需说明取值准则或做 λ 敏感性）
+  - 为主观性而组合，两者结论矛盾时无解释
+examples:
+  - CUMCM 评价类赛题（供应商/城市/方案综合评价）常见加分组合
+cards: [mc-ahp, mc-entropy-weight, mc-topsis]

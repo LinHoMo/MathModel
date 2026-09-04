@@ -1,0 +1,14 @@
+# AHP 一致性不通过硬用
+failure_id: fm-ahp-consistency-ignored
+title: AHP 判断矩阵 CR > 0.1 未修正继续使用
+problem_context: 8 阶判断矩阵一致性比率 0.17，超出 0.1 阈值，论文未提及直接取权重
+method: 层次分析法（AHP）
+method_family: decision_analysis
+failure_mode: wrong-usage
+symptom: 权重结果被追问来源时暴露判断矩阵不一致；结论可复现性差
+root_cause: 一致性检验是 AHP 权重有效性的前提；跳过检验等于权重无根据
+detection: 计算并报告 CR；CR > 0.1（或 > 0.12 高阶）必须修正或降阶
+fix: 迭代修正判断矩阵（最大特征向量反馈调整）或拆分为低阶子问题
+avoidance: AHP 流程中一致性检验为硬门禁；判断矩阵与 CR 必须进论文正文
+applies_to: [mc-ahp]
+source: pitfalls/TYPE-ANTIPATTERNS-CHECKLIST.md

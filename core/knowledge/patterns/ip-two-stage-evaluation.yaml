@@ -1,0 +1,15 @@
+# 指标体系精简后评价
+pattern_id: ip-two-stage-evaluation
+title: PCA/相关性指标精简 + 综合评价两阶段管线
+problem_types: [evaluation, ranking]
+baseline_method: 原始全指标直接赋权评价
+innovation: 第一阶段用相关性/PCA 剔除冗余指标（消除信息重复计数），第二阶段在精简体系上做熵权+TOPSIS，指标体系本身有论证过程
+required_evidence:
+  - 精简前后评价结果一致性（排序 Spearman）
+  - 剔除每个指标的依据（相关系数/载荷）清单
+risks:
+  - 剔除指标被质疑"丢信息"，必须量化信息损失
+  - PCA 主成分可解释性差时强行命名反而扣分
+examples:
+  - 指标多的评价类赛题（20+ 指标城市/企业评价）
+cards: [mc-pca, mc-entropy-weight, mc-topsis]

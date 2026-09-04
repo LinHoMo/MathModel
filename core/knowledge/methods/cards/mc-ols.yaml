@@ -1,0 +1,31 @@
+# 最小二乘回归/拟合 — 参数辨识基线
+card_id: mc-ols
+name: 最小二乘回归与曲线拟合
+family: statistical_modeling
+version: 1
+problem_types: [fitting, prediction]
+match:
+  requires_data: true
+  sample_size: [small, medium, large]
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 机理已知形式的参数辨识（SIR 系数、增长指数、多项式拟合）
+  - 变量关系探索与显著性检验的统计基线
+requires:
+  - 残差独立同分布近似成立；异方差需加权或稳健修正
+  - 形式选择（线性/指数/幂律）应有机理或数据依据
+risks:
+  - 多项式阶数拍高导致过拟合与 Runge 振荡
+  - 强相关变量共线性使系数符号错乱
+  - 只报 R² 不做残差诊断
+validation:
+  - 残差图诊断 + 参数置信区间报告
+  - 样本外回测；拟合形式 AIC/BIC 对比
+often_combined_with: [mc-grey-gm11, mc-monte-carlo]
+anti_patterns:
+  - 高阶多项式拟合硬贴噪声
+  - R² 高即宣称模型正确
+known_failures: [fm-perfect-fit-zero-error]
+reference: methodology/data-preprocessing.md

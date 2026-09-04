@@ -1,0 +1,30 @@
+# 遗传算法 — 大规模非凸组合优化
+card_id: mc-ga
+name: 遗传算法（GA）
+family: metaheuristics
+version: 1
+problem_types: [optimization]
+match:
+  requires_data: false
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 大规模/非凸/混合整数问题，精确求解器超时或不可用时
+  - 解空间结构复杂、梯度不可得的黑箱优化
+requires:
+  - 合理的编码（二进制/实数/排列）与适应度函数
+  - 多次独立运行（不同随机种子）取最优/统计
+risks:
+  - 只能给出近似解，不可宣称全局最优
+  - 参数（种群/代数/变异率）敏感，收敛慢
+  - 单次运行结果当作最终答案
+validation:
+  - 小规模实例与精确解（枚举/求解器）对比验证
+  - ≥10 次独立运行报告最优值分布与收敛曲线
+often_combined_with: [mc-sa, mc-pso, mc-nsga2]
+anti_patterns:
+  - 启发式结果宣称"全局最优解"
+  - 只跑一次不报运行方差
+known_failures: [fm-heuristic-global-optimum-claim]
+reference: methodology/genetic-algorithms.md

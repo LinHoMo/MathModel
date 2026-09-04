@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "v3/decision/decision.schema.json",
+  "title": "Decision Log（V3 决策日志）",
+  "description": "参与未来决策的连续决策记忆（非历史日志）。升级自 V2 decision_log.schema.json：新增 reversible / invalidated_by / consequences / criteria / evidence_ids。",
+  "type": "object",
+  "required": [
+    "decision_id", "question", "chosen", "alternatives", "criteria",
+    "evidence_ids", "reasoning", "confidence", "reversible", "created_by",
+    "created_at", "status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "decision_id": {"type": "string", "pattern": "^D\\d{1,6}$"},
+    "question": {"type": "string", "description": "决策问题（如：Q002 排序方法选型）"},
+    "question_type": {"type": "string", "description": "问题类型标签（evaluation/optimization/prediction...），供检索"},
+    "chosen": {"type": "string", "description": "选定的方法/方案（card_id 或描述）"},
+    "alternatives": {"type": "array", "minItems": 1, "items": {"type": "string"}, "description": "落选候选及原因"},
+    "criteria": {"type": "array", "minItems": 1, "items": {"type": "string"}, "description": "决策依据的准则"},
+    "evidence_ids": {"type": "array", "items": {"type": "string"}, "description": "支撑决策的 artifact/evidence ID"},
+    "reasoning": {"type": "string", "minLength": 1, "description": "决策推理（为何胜出）"},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "reversible": {"type": "boolean", "description": "是否可逆（可逆决策允许低成本推翻）"},
+    "consequences": {"type": "array", "items": {"type": "string"}, "description": "决策后果记录（追加式）"},
+    "created_by": {"type": "string", "description": "产生节点（model_selection / evidence_gate...）"},
+    "created_at": {"type": "string"},
+    "status": {"type": "string", "enum": ["active", "invalidated"]},
+    "invalidated_by": {"type": ["string", "null"], "description": "推翻本决策的新决策 ID或 invalidation 事件"},
+    "invalidated_reason": {"type": ["string", "null"], "description": "为何被推翻（检索时随附展示）"},
+    "invalidated_at": {"type": ["string", "null"]}
+  }
+}

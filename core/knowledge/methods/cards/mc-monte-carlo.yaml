@@ -1,0 +1,30 @@
+# 蒙特卡洛模拟 — 不确定性传播
+card_id: mc-monte-carlo
+name: 蒙特卡洛模拟
+family: uncertainty_propagation
+version: 1
+problem_types: [uncertainty, simulation, prediction]
+match:
+  requires_data: false
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: true
+good_for:
+  - 参数/输入带分布不确定性的结果分布估计（代替点估计）
+  - 复杂系统无解析解时的仿真评估（排队/库存/风险）
+requires:
+  - 不确定性来源识别与分布假设（须给出依据）
+  - 收敛性检查（样本量 vs 结果稳定性）；固定随机种子可复现
+risks:
+  - 分布假设拍脑袋，垃圾进垃圾出
+  - 样本量不足时分布估计噪声大
+  - 把仿真结果当精确值报告（丢掉区间信息）
+validation:
+  - 样本量收敛性曲线（结果统计量随 N 的稳定性）
+  - 分布假设敏感性（换一种合理分布看结论是否翻转）
+often_combined_with: [mc-sa, mc-xgboost, mc-ols]
+anti_patterns:
+  - 无分布假设说明的一次性模拟
+  - 报告均值不报告分位数区间
+known_failures: [fm-mc-distribution-assumption]
+reference: methodology/evaluation-methods.md

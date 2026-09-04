@@ -1,0 +1,30 @@
+# KMeans/层次聚类 — 无监督分组
+card_id: mc-kmeans
+name: KMeans 与层次聚类
+family: unsupervised
+version: 1
+problem_types: [clustering, classification]
+match:
+  requires_data: true
+  sample_size: [medium, large]
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 无标签样本分组（用户分群/区域分区/状态识别）
+  - 分层建模前的基础分组（先聚类后分组各自建模）
+requires:
+  - 特征标准化；k 值选择依据（肘部/轮廓系数）
+  - KMeans 需多起点避免局部最优（n_init）
+risks:
+  - 对初始中心与离群点敏感；非凸簇效果差
+  - k 值拍脑袋无依据
+validation:
+  - 轮廓系数/CH 指标 + 肘部法双证据定 k
+  - 聚类稳定性（子采样重复聚类的一致性）
+often_combined_with: [mc-pca, mc-xgboost]
+anti_patterns:
+  - 未标准化直接聚类
+  - k 无任何依据
+known_failures: []
+reference: methodology/clustering.md

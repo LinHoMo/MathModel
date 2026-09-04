@@ -1,0 +1,14 @@
+# 灰色 GM(1,1) 硬套振荡序列
+failure_id: fm-grey-oscillating-data
+title: GM(1,1) 用于振荡/周期序列，外推完全失真
+problem_context: 月度销量数据带明显周期波动，参赛队用 GM(1,1) 预测下一年度
+method: 灰色预测 GM(1,1)
+method_family: classical_timeseries
+failure_mode: wrong-method
+symptom: 拟合尚可但预测呈平滑单调趋势，周期性完全丢失；级比检验未做或未通过
+root_cause: GM(1,1) 建模假设近似单调指数规律；振荡序列违反准指数性前提
+detection: 级比检验（级比须落在可容覆盖区间）；画原始序列图人工确认单调性
+fix: 换 SARIMA/ Holt-Winters 等含季节项方法，或先提取趋势再用残差建模
+avoidance: GM(1,1) 前置级比检验为硬门禁；预测期长度不超过样本期的一半
+applies_to: [mc-grey-gm11]
+source: pitfalls/numeric-edge-cases.md

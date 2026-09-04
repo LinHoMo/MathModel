@@ -1,0 +1,14 @@
+# 时序数据泄漏
+failure_id: fm-timeseries-leakage
+title: 时序任务随机划分训练测试集，指标虚高
+problem_context: LSTM 销量预测用 shuffle 随机划分；树模型 CV 同样随机分折
+method: 深度时序网络/树模型
+method_family: timeseries_learning
+failure_mode: wrong-usage
+symptom: 验证指标极好，实际滚动预测完全失真；滑窗构造时用到未来特征
+root_cause: 时间依赖被随机打乱，模型"偷看"未来信息；滑窗特征包含 t+1 信息
+detection: 检查划分方式是否按时间切分；检查特征矩阵是否存在未来时刻列
+fix: 改为按时间先后划分 + 滚动/ expanding window 验证
+avoidance: 时序任务一律时间切分；特征构造后审查每个特征的时间戳来源
+applies_to: [mc-lstm, mc-xgboost]
+source: pitfalls/TYPE-ANTIPATTERNS-CHECKLIST.md

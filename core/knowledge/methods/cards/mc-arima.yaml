@@ -1,0 +1,31 @@
+# ARIMA — 经典平稳时间序列建模
+card_id: mc-arima
+name: ARIMA 差分整合移动平均自回归
+family: classical_timeseries
+version: 1
+problem_types: [prediction, timeseries]
+match:
+  requires_data: true
+  sample_size: [medium, large]
+  time_series: true
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 中等长度（≥50 期）单变量时间序列的短期预测
+  - 有明确趋势/季节性的统计建模，模型可解释（AIC 定阶可交代）
+requires:
+  - 序列平稳化检验（ADF 检验）与必要差分
+  - 残差白噪声检验（Ljung-Box）
+risks:
+  - 样本过短时定阶不稳定；长期预测退化为均值/趋势线
+  - 忽略季节性 SARIMA 需求导致残差自相关
+  - 结构突变（政策/事件）使历史规律失效
+validation:
+  - ADF 平稳性 + 残差 Ljung-Box 白噪声检验
+  - 样本外滚动回测报告 MAPE/RMSE
+often_combined_with: [mc-grey-gm11, mc-ols]
+anti_patterns:
+  - 不做平稳性检验直接定阶
+  - 只报 AIC 不做残差诊断
+known_failures: [fm-timeseries-no-backtest]
+reference: methodology/evaluation-methods.md

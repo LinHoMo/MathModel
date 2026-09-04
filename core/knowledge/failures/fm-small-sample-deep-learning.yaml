@@ -1,0 +1,14 @@
+# 小样本硬套神经网络
+failure_id: fm-small-sample-deep-learning
+title: 小样本硬套神经网络，过拟合且无法解释
+problem_context: 题目附件仅给出 8 年年度数据，参赛队直接训练 LSTM 做未来 5 年预测
+method: LSTM 深度时序网络
+method_family: timeseries_learning
+failure_mode: wrong-method
+symptom: 训练误差极小、测试期预测完全失真；评委问"8 个点凭什么支撑门控网络"无法回答
+root_cause: 模型容量与样本量严重失配；且未与简单基线对比，无法证明复杂度必要
+detection: 检查样本量与模型参数量之比；用均值/线性基线同口径对比，若基线不差则复杂模型不成立
+fix: 换灰色 GM(1,1)/ARIMA/机理拟合等小样本方法，或说明数据增强来源
+avoidance: 小样本（<200）默认禁用深度网络；使用前必须通过"基线对比 + 容量论证"两道门
+applies_to: [mc-lstm, mc-xgboost]
+source: _negative/case-01-小样本硬套神经网络.md

@@ -1,0 +1,33 @@
+# TOPSIS 逼近理想解排序法 — 高频评价排序方法卡
+card_id: mc-topsis
+name: TOPSIS 逼近理想解排序
+family: composite_evaluation
+version: 1
+problem_types: [evaluation, ranking]
+match:
+  requires_data: true
+  sample_size: [small, medium, large]
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 多方案综合排序（已知方案×指标矩阵，需给出全序而非单选）
+  - 与客观/主观赋权法组合形成完整评价管线（赋权 → 归一 → 距离排序）
+  - 结果可解释性强：贴近度 C 值有明确几何含义，评委易接受
+requires:
+  - 方案×指标数据矩阵，指标方向明确（效益型/成本型）
+  - 指标先做标准化（向量归一或极差归一），消除量纲
+  - 一套权重（常与熵权/AHP 联用）
+risks:
+  - 距离度量对量纲与权重极端敏感，权重拍脑袋则结论不可信
+  - 只能排序不能论证"最优唯一性"；贴近度差小时排序不稳定
+  - 指标间强相关时信息重复计数
+validation:
+  - 双赋权法敏感性分析（如熵权 vs AHP），报告排序 Spearman 相关系数
+  - 指标增删敏感性（leave-one-out）验证排序稳定性
+often_combined_with: [mc-entropy-weight, mc-ahp, mc-pca]
+anti_patterns:
+  - 未标准化直接算距离
+  - 用 TOPSIS "证明"某方案绝对最优（overclaim）
+known_failures: [fm-topsis-no-normalization]
+reference: methodology/evaluation-methods.md

@@ -1,0 +1,15 @@
+# 不确定性叠加层
+pattern_id: ip-uncertainty-overlay
+title: 确定性模型 + 不确定性传播叠加层
+problem_types: [uncertainty, prediction, evaluation]
+baseline_method: 确定性模型直接给点估计结论
+innovation: 主模型保持确定性可解释，在其外层叠加蒙特卡洛传播/情景分析，把结论从点估计升级为区间/分布与风险概率，回答评委"参数不准怎么办"
+required_evidence:
+  - 点估计 vs 区间估计的结论对照
+  - 关键参数分布假设敏感性（至少两种合理假设）
+risks:
+  - 分布假设无依据沦为形式化装饰
+  - 只给分布不下结论（区间太宽等于没说），需给出风险阈值判断
+examples:
+  - 储量/产量预测、投资评估、应急调度类赛题的稳健性章节
+cards: [mc-monte-carlo, mc-ols]

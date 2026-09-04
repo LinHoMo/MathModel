@@ -1,0 +1,31 @@
+# 层次分析法 AHP — 主观赋权/决策分析
+card_id: mc-ahp
+name: 层次分析法（AHP）
+family: decision_analysis
+version: 1
+problem_types: [evaluation, ranking, weighting, decision]
+match:
+  requires_data: false
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 无客观数据时的结构化主观赋权（专家两两比较）
+  - 指标层次结构清晰（目标-准则-指标）的多准则决策
+  - 与熵权组合做主客观组合赋权（比单一赋权更有说服力）
+requires:
+  - 可构建的指标层次结构
+  - 两两比较判断矩阵；CR < 0.1 的一致性检验必须通过
+risks:
+  - 主观性强的判断矩阵经不起追问；CR 不通过时硬凑一致性
+  - 阶数大时两两比较次数爆炸且一致性难保证
+  - 单独使用易被评委质疑权重来源
+validation:
+  - 报告一致性比率 CR 并展示判断矩阵
+  - 与客观赋权对比；权重扰动 ±10% 看排序稳定性
+often_combined_with: [mc-entropy-weight, mc-topsis, mc-fuzzy-evaluation]
+anti_patterns:
+  - CR > 0.1 不修正继续用
+  - 判断矩阵来源不交代（谁的专家判断）
+known_failures: [fm-ahp-consistency-ignored]
+reference: methodology/evaluation-methods.md

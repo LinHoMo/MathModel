@@ -1,0 +1,29 @@
+# 模拟退火 — 逃逸局部最优的元启发式
+card_id: mc-sa
+name: 模拟退火（SA）
+family: metaheuristics
+version: 1
+problem_types: [optimization]
+match:
+  requires_data: false
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 邻域结构清晰的组合优化（TSP/调度/选址），实现简单
+  - 与 GA/PSO 互为对照的多算法验证（算法独立性证据）
+requires:
+  - 降温计划（初温/终温/速率）设计与邻域算子定义
+  - 多起点/多种子运行
+risks:
+  - 降温过快陷入局部最优，过慢耗时爆炸
+  - 与 GA 同样只能给近似解
+validation:
+  - 与 GA/精确解对比；多次独立运行统计
+  - 降温计划敏感性（快/中/慢三档）
+often_combined_with: [mc-ga, mc-pso]
+anti_patterns:
+  - 单次运行即报告最优
+  - 无降温计划说明，温度参数无交代
+known_failures: [fm-heuristic-global-optimum-claim]
+reference: methodology/global-optimization.md

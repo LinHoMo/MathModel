@@ -1,0 +1,31 @@
+# 灰色预测 GM(1,1) — 小样本单调序列预测
+card_id: mc-grey-gm11
+name: 灰色预测 GM(1,1)
+family: classical_timeseries
+version: 1
+problem_types: [prediction, timeseries]
+match:
+  requires_data: true
+  sample_size: [small, medium]
+  time_series: true
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 数据点少（4-10 个）且近似单调/指数规律的增长量预测
+  - 无需分布假设的贫信息建模，CUMCM 高频（如产量/人口/污染预测）
+requires:
+  - 序列准指数性检验（级比检验落界）
+  - 数据非负（或平移非负）
+risks:
+  - 对振荡/周期序列失效，硬套会给出貌似合理的错误预测
+  - 长期外推误差放大，预测期超过样本期即高危
+  - 后验差检验不通过仍宣称"精度高"
+validation:
+  - 级比检验 + 后验差比 C 与小误差概率 P 报告
+  - 留出最后 1-2 期做样本外回测（滚动验证）
+often_combined_with: [mc-ols, mc-arima]
+anti_patterns:
+  - 振荡序列硬套 GM(1,1)
+  - 只报告拟合优度不报告样本外误差
+known_failures: [fm-grey-oscillating-data]
+reference: methodology/grey-system.md

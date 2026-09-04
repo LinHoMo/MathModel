@@ -1,0 +1,14 @@
+# 启发式算法宣称全局最优
+failure_id: fm-heuristic-global-optimum-claim
+title: 遗传/模拟退火结果被表述为"全局最优解"
+problem_context: 选址-路径组合优化，GA 跑出方案后论文写"求得全局最优方案"
+method: 遗传算法/模拟退火/粒子群
+method_family: metaheuristics
+failure_mode: overclaim
+symptom: 论文出现"全局最优"字样但无证明；单次运行无方差报告
+root_cause: 混淆"启发式近似解"与"最优性证明"；元启发式不提供最优性证书
+detection: 全文检索"全局最优/最优解"字样；检查是否附最优性证明（枚举/下界/精确求解器）
+fix: 改述为"近似最优/目前搜索到的最优"；补充多次独立运行的统计与小规模精确解验证
+avoidance: 启发式结论一律写"近似最优"，并附 ≥10 次运行分布与收敛曲线
+applies_to: [mc-ga, mc-sa, mc-pso, mc-nsga2]
+source: _negative/case-02-启发式宣称全局最优.md

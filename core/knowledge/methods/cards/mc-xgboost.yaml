@@ -1,0 +1,30 @@
+# XGBoost/树模型 — 表格数据监督学习
+card_id: mc-xgboost
+name: XGBoost/LightGBM 梯度提升树
+family: supervised_learning
+version: 1
+problem_types: [classification, prediction]
+match:
+  requires_data: true
+  sample_size: [medium, large]
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 中大样本表格数据分类/回归，精度-可解释性平衡好
+  - 特征重要性可输出，比深度网络更好向评委交代
+requires:
+  - 交叉验证调参（深度/学习率/正则）；类别不平衡处理
+  - 特征工程与数据泄漏检查
+risks:
+  - 小样本过拟合；未做泄漏检查的 CV 分数虚高
+  - 外推能力弱（树不外推训练范围外的趋势）
+validation:
+  - 交叉验证多指标（不只 accuracy：F1/AUC/APE）
+  - 与线性基线对比；特征重要性合理性检查
+often_combined_with: [mc-pca, mc-kmeans]
+anti_patterns:
+  - 只报 accuracy 不看混淆矩阵
+  - 时序特征随机 CV（泄漏）
+known_failures: [fm-timeseries-leakage]
+reference: methodology/ensemble-learning.md

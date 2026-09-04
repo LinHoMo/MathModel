@@ -1,0 +1,28 @@
+# 模糊综合评价 — 处理边界模糊的定性评价
+card_id: mc-fuzzy-evaluation
+name: 模糊综合评价
+family: decision_analysis
+version: 1
+problem_types: [evaluation, ranking]
+match:
+  requires_data: false
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: true
+good_for:
+  - 指标边界模糊、等级隶属有过渡的评价问题（如"满意度/舒适度"）
+  - 定性与定量指标混合的评价体系
+requires:
+  - 合理的隶属度函数构造（三角形/梯形/统计频率法）
+  - 权重向量（常与 AHP 联用）
+risks:
+  - 隶属度函数选择主观性大，不同函数结论可能不同
+  - 最大隶属度原则在隶属度接近时失效
+validation:
+  - 隶属度函数形状敏感性对比（至少两种构造方式）
+  - 加权平均算子与主因素突出算子对比
+often_combined_with: [mc-ahp, mc-entropy-weight]
+anti_patterns:
+  - 隶属度函数无来源无论证直接拍
+known_failures: []
+reference: methodology/fuzzy-mathematics.md

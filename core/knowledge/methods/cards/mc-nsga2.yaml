@@ -1,0 +1,30 @@
+# NSGA-II 多目标进化 — 帕累托前沿
+card_id: mc-nsga2
+name: NSGA-II 非支配排序遗传算法
+family: multi_objective_optimization
+version: 1
+problem_types: [optimization, multi-objective]
+match:
+  requires_data: false
+  time_series: false
+  multi_objective: true
+  handles_uncertainty: false
+good_for:
+  - 多个冲突目标的优化，需要给出帕累托前沿而非单点解
+  - 决策者需要在"成本-效益"等权衡曲线上选点的工程问题
+requires:
+  - 目标可量化且相互冲突；种群规模与代数设置
+  - 前沿上选解的决策规则（理想点/TOPSIS/偏好权重）
+risks:
+  - 目标不真冲突（线性相关）时帕累托前沿退化
+  - 只给前沿不给选解依据，等于把决策推给评委
+  - 收敛性与多样性（拥挤度）需检查
+validation:
+  - 超体积（HV）/IGD 指标或与加权法对比验证前沿质量
+  - 不同种子前沿稳定性对比
+often_combined_with: [mc-topsis, mc-ga]
+anti_patterns:
+  - 加权合成单目标却宣称"多目标优化"
+  - 前沿点不报告是否非支配
+known_failures: [fm-heuristic-global-optimum-claim]
+reference: methodology/genetic-algorithms.md

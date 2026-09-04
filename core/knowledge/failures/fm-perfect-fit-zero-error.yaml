@@ -1,0 +1,14 @@
+# 拟合过度完美误差为零
+failure_id: fm-perfect-fit-zero-error
+title: 拟合结果"过于完美"，误差恒为零或小数点后多位一致
+problem_context: 插值/拟合模型在样本点上误差为零，论文宣称"完美拟合"
+method: 高阶多项式插值/过参数拟合
+method_family: statistical_modeling
+failure_mode: overclaim
+symptom: 误差列全零；或精度虚高到不合理（如 R²=1.0000）；评委怀疑数据编造或过拟合
+root_cause: 插值天然过零误差被当作模型精度；高阶多项式过拟合噪声
+detection: 留出验证点检查样本外误差；检查参数量与样本量之比
+fix: 改用低阶拟合+样本外验证；如实报告训练/测试误差分离
+avoidance: 插值与拟合区分表述；任何"完美"结果必须附留出验证反证
+applies_to: [mc-ols]
+source: _negative/case-05-结果过于完美误差恒为零.md

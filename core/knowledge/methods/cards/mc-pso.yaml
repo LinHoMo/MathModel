@@ -1,0 +1,29 @@
+# 粒子群优化 PSO — 连续空间快速收敛
+card_id: mc-pso
+name: 粒子群优化（PSO）
+family: metaheuristics
+version: 1
+problem_types: [optimization]
+match:
+  requires_data: false
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 连续变量非凸优化，实现与调参比 GA 简单，收敛快
+  - 函数优化/神经网络超参搜索/参数标定
+requires:
+  - 惯性权重与学习因子设置；速度边界约束
+  - 多种子运行统计
+risks:
+  - 早熟收敛（粒子群坍缩到局部最优）
+  - 离散/组合问题需改造编码，不如 GA 自然
+validation:
+  - 标准测试函数（Rastrigin/Rosenbrock）验证性能
+  - 与 GA/SA 同题对比，多次运行报告
+often_combined_with: [mc-ga, mc-sa]
+anti_patterns:
+  - 参数（w/c1/c2）无交代
+  - 用 PSO 解强约束问题不做约束处理
+known_failures: [fm-heuristic-global-optimum-claim]
+reference: methodology/global-optimization.md

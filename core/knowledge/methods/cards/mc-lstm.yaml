@@ -1,0 +1,31 @@
+# LSTM/深度时序模型 — 大样本非线性时序
+card_id: mc-lstm
+name: LSTM/GRU 深度时序网络
+family: timeseries_learning
+version: 1
+problem_types: [prediction, timeseries, classification]
+match:
+  requires_data: true
+  sample_size: [large]
+  time_series: true
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 大样本（≥1000）非线性复杂时序模式（多变量耦合、长程依赖）
+  - 需要滚动多步预测且经典方法残差仍有结构时
+requires:
+  - 大样本量与合理特征工程；序列滑窗构造
+  - 训练/验证/测试时间切分（不可随机打乱）；固定随机种子
+risks:
+  - 小样本（<200）严重过拟合，赛场上常见硬套翻车
+  - 可解释性弱，评委追问机理答不上
+  - 训练方差大：不同 seed 结果差异可能超过方法间差异
+validation:
+  - 与朴素基线（均值/最近值）和经典方法（ARIMA）同口径对比
+  - 多种子（≥3）重复实验报告均值±标准差
+often_combined_with: [mc-arima, mc-xgboost]
+anti_patterns:
+  - 小样本硬套神经网络并宣称"深度学习优势"
+  - 时序数据随机划分训练测试集（数据泄漏）
+known_failures: [fm-small-sample-deep-learning, fm-timeseries-leakage]
+reference: methodology/deep-learning.md

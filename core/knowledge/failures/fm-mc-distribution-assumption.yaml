@@ -1,0 +1,14 @@
+# 蒙特卡洛分布假设无依据
+failure_id: fm-mc-distribution-assumption
+title: 蒙特卡洛输入分布随手拍，结果分布不可信
+problem_context: 参数不确定性传播模拟，不确定参数直接假设服从正态分布（无数据支持）
+method: 蒙特卡洛模拟
+method_family: uncertainty_propagation
+failure_mode: no-evidence
+symptom: 分布假设无来源说明；结果只报均值不报区间；样本量未论证
+root_cause: GIGO——分布假设错误则仿真结论系统性偏移；样本量不足则估计噪声大
+detection: 检查每个随机输入是否有分布依据（历史拟合/文献/敏感性说明）；检查 N 的收敛性
+fix: 补分布拟合检验（K-S 检验）或至少做两种分布假设的敏感性对比
+avoidance: 蒙特卡洛报告规范：分布依据 + 样本量收敛曲线 + 分位数区间
+applies_to: [mc-monte-carlo]
+source: pitfalls/TYPE-ANTIPATTERNS-CHECKLIST.md

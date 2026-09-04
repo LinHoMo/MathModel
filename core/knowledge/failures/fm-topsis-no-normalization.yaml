@@ -1,0 +1,14 @@
+# TOPSIS 未标准化直接算距离
+failure_id: fm-topsis-no-normalization
+title: TOPSIS 指标未归一化，距离被大量纲指标主导
+problem_context: 指标含"产量（万件）"与"合格率（0-1）"，未标准化直接计算欧氏距离
+method: TOPSIS
+method_family: composite_evaluation
+failure_mode: wrong-usage
+symptom: 排序结果几乎只由大量纲指标决定；权重分析结论与排序不一致
+root_cause: 欧氏距离对量纲敏感，未消除量纲前距离无意义
+detection: 检查计算流程是否含归一化步骤；将指标单位人为放大 100 倍重跑，排序应不变（不变性检验）
+fix: 补向量归一/极差归一后重算全流程
+avoidance: TOPSIS 流程固定为"同向化 → 归一化 → 加权 → 距离"，归一化作为必检步骤
+applies_to: [mc-topsis]
+source: pitfalls/numeric-edge-cases.md

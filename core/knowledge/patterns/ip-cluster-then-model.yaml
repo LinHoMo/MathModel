@@ -1,0 +1,15 @@
+# 先聚类后分组建模
+pattern_id: ip-cluster-then-model
+title: 聚类分层 + 分组建模（异质性处理）
+problem_types: [prediction, classification, evaluation]
+baseline_method: 全样本单一模型
+innovation: 无监督聚类发现样本异质性（不同类型对象规律不同），每组建独立模型，提升整体精度且分组本身有业务含义可写
+required_evidence:
+  - 单一模型 vs 分组建模的留出集误差对比
+  - 聚类质量证据（轮廓系数）与分组稳定性
+risks:
+  - 分组数 k 无依据；样本少时分组后每组样本更少反而更差
+  - 新样本归属判别环节引入额外误差需一并评估
+examples:
+  - 客户分群预测需求、区域分区评价、设备分状态建模类赛题
+cards: [mc-kmeans, mc-xgboost, mc-pca]

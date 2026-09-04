@@ -1,0 +1,15 @@
+# 机理模型 + 残差机器学习
+pattern_id: ip-mechanism-data-hybrid
+title: 机理模型 + 残差数据修正（混合建模）
+problem_types: [prediction, fitting]
+baseline_method: 纯机理模型（ODE/物理定律）或纯数据模型（回归/树模型）
+innovation: 机理模型捕捉主规律，机器学习拟合机理残差（grey-box），兼得可解释性与精度
+required_evidence:
+  - 纯机理 / 纯数据 / 混合三者同口径误差对比
+  - 残差部分的可解释性检查（残差不应仍含明显趋势）
+risks:
+  - 残差模型过拟合导致外推崩坏；残差修正只在训练域内有效需说明
+  - 机理部分本身错误时，残差修正掩盖问题
+examples:
+  - CUMCM 2020A 炉温曲线、CUMCM 2021A FAST 调度等机理类题目的精度提升方案
+cards: [mc-ols, mc-xgboost]

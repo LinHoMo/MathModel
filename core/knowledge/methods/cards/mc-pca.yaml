@@ -1,0 +1,31 @@
+# PCA 主成分分析 — 降维与指标压缩
+card_id: mc-pca
+name: 主成分分析（PCA）
+family: dimensionality_reduction
+version: 1
+problem_types: [dimensionality-reduction, evaluation]
+match:
+  requires_data: true
+  sample_size: [medium, large]
+  time_series: false
+  multi_objective: false
+  handles_uncertainty: false
+good_for:
+  - 强相关指标体系的降维压缩（评价前置步骤）
+  - 高维数据可视化与去共线性（回归前处理）
+requires:
+  - 数据标准化（z-score）后再做 PCA
+  - 主成分个数依据（累计方差贡献率 ≥80% 或碎石图）
+risks:
+  - 主成分可解释性弱时"PC1 是什么"答不上
+  - 混合量纲不标准化导致方差被大尺度指标主导
+  - 把 PCA 当特征选择（它是线性组合不是选择）
+validation:
+  - 累计方差贡献率 + 主成分载荷可解释性说明
+  - 与不降维基线对比验证信息损失可接受
+often_combined_with: [mc-topsis, mc-kmeans, mc-entropy-weight]
+anti_patterns:
+  - 不标准化直接 PCA
+  - 主成分个数随意取
+known_failures: []
+reference: methodology/dimensionality-reduction.md
