@@ -28,6 +28,8 @@
 import argparse
 import hashlib
 import json
+import os
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -241,14 +243,14 @@ ARTIFACT_PROBE = {
     ("programmer", "code-implementer"): "code/main.py",
     ("programmer", "test-runner"): "work/test_report.json",
     ("programmer", "result-verifier"): "work/result_validation.json",
-    ("programmer", "guardrails-checker"): "work/guardrails_report.json",
+    ("programmer", "guardrails-checker"): "work/guardrails_report_programmer.json",
     ("programmer", "hash-auditor"): "output/CODE_DELIVERABLES.md",
     ("writer", "structure-planner"): "work/paper_structure.json",
     ("writer", "section-writer"): "paper/main.tex",
     ("writer", "figure-generator"): "paper/figures",
     ("writer", "reference-curator"): "paper/references.bib",
     ("writer", "consistency-checker"): "work/consistency_report.json",
-    ("writer", "guardrails-checker"): "work/guardrails_report.json",
+    ("writer", "guardrails-checker"): "work/guardrails_report_writer.json",
     ("writer", "final-validator"): "output/PAPER_SPEC.md",
     ("reviewer", "scorer-academic"): "work/score_card_academic.json",
     ("reviewer", "scorer-engineering"): "work/score_card_engineering.json",
@@ -430,9 +432,63 @@ def cmd_advance(project, args):
     st["completed"].append(rec)
     st["completed"].sort(key=_sort_key)
 
+    # ---- 门禁耦合：硬失败拒绝推进（语义化退出码见 gate.py）----
+    # 这是 REFACTOR_PLAN §7 的 P0-F：advance 内部调用 gate.py，
+    # 任何 HARD 失败都禁止推进，避免"台账绿了但产物不达标"。
+    if not getattr(args, "no_gate", False):
+        gate_rc, gate_summary = _run_advance_gate(project, args.hand, args.agent)
+        if gate_rc == 2:  # EXIT_HARD
+            print(
+                f"[state] 拒绝推进 {args.hand}/{args.agent}：门禁存在 "
+                f"{gate_summary.get('hard_fail_count', 0)} 项硬失败",
+                file=sys.stderr,
+            )
+            for hf in gate_summary.get("hard_fail", []):
+                print(f"          - {hf.get('name')}: {hf.get('detail')}",
+                      file=sys.stderr)
+            print("[state] 请按该 agent 的 SKILL.md ## Iteration 修正后重跑 "
+                  "gate.py，再 advance。", file=sys.stderr)
+            return 2
+        if gate_rc == 1:  # EXIT_SOFT
+            print(f"[state] 提示：{args.hand}/{args.agent} 门禁有 "
+                  f"{gate_summary.get('soft_fail_count', 0)} 项软失败（不阻塞推进）")
+        elif gate_rc == 3:  # EXIT_ERROR：门禁脚本异常，放行但告警
+            print("[state] 警告：门禁脚本未能执行（EXIT_ERROR），已放行 advance；"
+                  "请稍后手动运行 gate.py 复核。", file=sys.stderr)
+
     save(project, st)
     print(f"[state] 已登记 {args.hand}/{args.agent}")
     return 0
+
+
+def _run_advance_gate(project, hand, agent):
+    """运行 gate.py（JSON 模式）供 advance 判定。返回 (exit_code, summary_dict)。
+
+    exit_code 语义：0=全过 1=仅软失败 2=硬失败(阻塞) 3=脚本异常(放行+告警)。
+    把 gate.py 当作黑盒调用，state.py 不重复实现任何判定逻辑。
+    """
+    gate_script = ROOT / "core" / "tools" / "gate.py"
+    if not gate_script.exists():
+        return 3, {}
+    env = dict(os.environ, PYTHONIOENCODING="utf-8")
+    try:
+        r = subprocess.run(
+            [sys.executable or "python", str(gate_script),
+             project, hand, agent, "--json"],
+            cwd=str(ROOT), capture_output=True, text=True,
+            encoding="utf-8", errors="replace", env=env, timeout=360)
+    except subprocess.TimeoutExpired:
+        return 3, {}
+    summary = {"hard_fail_count": 0, "soft_fail_count": 0, "hard_fail": [], "soft_fail": []}
+    # gate.py --json 输出的是带缩进的多行 JSON；取首个 '{' 到末个 '}' 之间的整段解析
+    raw = (r.stdout or "").strip()
+    s, e = raw.find("{"), raw.rfind("}")
+    if s >= 0 and e > s:
+        try:
+            summary = json.loads(raw[s:e + 1])
+        except Exception:
+            pass
+    return r.returncode, summary
 
 
 def cmd_fail(project, args):
@@ -668,6 +724,8 @@ def main():
     ap.add_argument("--confidence", help="置信度 0-1")
     ap.add_argument("--alternatives", help="考虑的备选方案，空格分隔")
     ap.add_argument("--time-spent", help="决策耗时秒数")
+    ap.add_argument("--no-gate", action="store_true",
+                    help="advance 时跳过门禁校验（紧急情况用，会绕过硬失败拦截）")
     args = ap.parse_args()
 
     fn = {
