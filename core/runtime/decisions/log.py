@@ -44,6 +44,11 @@ class Decision:
     created_at: str
     status: str = "active"
     question_type: str = ""
+    # ---- P8-8 Decision Trace：知识版本绑定（历史决策可重现，CI-07）----
+    knowledge_refs: list[dict] = field(default_factory=list)  # [{id, version}]
+    failure_refs: list[str] = field(default_factory=list)     # 影响决策的失败记忆
+    required_validation: list[str] = field(default_factory=list)
+    score_breakdown: dict = field(default_factory=dict)
     consequences: list[str] = field(default_factory=list)
     invalidated_by: str | None = None
     invalidated_reason: str | None = None
@@ -76,6 +81,8 @@ class Decision:
             raise DecisionLogError(f"{where}: confidence 须为 [0,1] 数值")
         if not isinstance(d.get("reversible"), bool):
             raise DecisionLogError(f"{where}: reversible 须为 bool")
+        if not isinstance(d.get("knowledge_refs", []), list)                 or not isinstance(d.get("failure_refs", []), list)                 or not isinstance(d.get("required_validation", []), list)                 or not isinstance(d.get("score_breakdown", {}), dict):
+            raise DecisionLogError(f"{where}: P8 追踪字段类型非法")
         status = d.get("status", "active")
         if status not in ("active", "invalidated"):
             raise DecisionLogError(f"{where}: status 非法 {status!r}")
@@ -94,6 +101,10 @@ class Decision:
             status=status,
             question_type=d.get("question_type", "") or "",
             consequences=d.get("consequences", []) or [],
+            knowledge_refs=d.get("knowledge_refs", []) or [],
+            failure_refs=d.get("failure_refs", []) or [],
+            required_validation=d.get("required_validation", []) or [],
+            score_breakdown=d.get("score_breakdown", {}) or {},
             invalidated_by=d.get("invalidated_by"),
             invalidated_reason=d.get("invalidated_reason"),
             invalidated_at=d.get("invalidated_at"),
@@ -160,19 +171,29 @@ class DecisionLog:
             reversible: bool, created_by: str,
             evidence_ids: list[str] | None = None,
             question_type: str = "",
-            decision_id: str | None = None) -> Decision:
+            decision_id: str | None = None,
+            knowledge_refs: list[dict] | None = None,
+            failure_refs: list[str] | None = None,
+            required_validation: list[str] | None = None,
+            score_breakdown: dict | None = None) -> Decision:
         """登记决策。缺省自动分配下一个 D 编号。"""
         with self._lock:
             return self._add_locked(question, chosen, alternatives, criteria,
                                     reasoning, confidence, reversible,
                                     created_by, evidence_ids=evidence_ids,
                                     question_type=question_type,
-                                    decision_id=decision_id)
+                                    decision_id=decision_id,
+                                    knowledge_refs=knowledge_refs,
+                                    failure_refs=failure_refs,
+                                    required_validation=required_validation,
+                                    score_breakdown=score_breakdown)
 
     def _add_locked(self, question, chosen, alternatives, criteria,
                     reasoning, confidence, reversible, created_by,
                     evidence_ids=None, question_type="",
-                    decision_id=None) -> Decision:
+                    decision_id=None, knowledge_refs=None,
+                    failure_refs=None, required_validation=None,
+                    score_breakdown=None) -> Decision:
         did = decision_id or self.next_id()
         dec = Decision.from_dict({
             "decision_id": did,
@@ -187,6 +208,10 @@ class DecisionLog:
             "created_by": created_by,
             "created_at": _now(),
             "question_type": question_type,
+            "knowledge_refs": knowledge_refs or [],
+            "failure_refs": failure_refs or [],
+            "required_validation": required_validation or [],
+            "score_breakdown": score_breakdown or {},
         }, where=f"add({did})")
         if dec.decision_id in self.decisions:
             raise DecisionLogError(f"decision_id 已存在: {dec.decision_id}")

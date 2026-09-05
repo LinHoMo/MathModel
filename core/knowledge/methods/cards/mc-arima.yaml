@@ -29,3 +29,42 @@ anti_patterns:
   - 只报 AIC 不做残差诊断
 known_failures: [fm-timeseries-no-backtest]
 reference: methodology/evaluation-methods.md
+
+# ---- P8 决策字段（Competition Intelligence）----
+objective_types: [prediction]
+applicability:
+  positive:
+    - temporal_dependency
+    - stationary_or_transformable
+  negative:
+    - strong_non_linear_interaction
+    - high_dimensional_features
+  required_conditions: []
+risk:
+  overfitting: medium
+  data_sensitivity: high
+  numerical_instability: medium
+  interpretability: low
+  competition_risk: medium
+evidence_requirements:
+  minimum:
+    - out_of_sample_backtest
+    - residual_diagnostics
+  recommended:
+    - prediction_interval
+typical_metrics: [MAPE, RMSE]
+compatible_methods: [mc-grey-gm11, mc-ols]
+incompatible_methods: []
+prerequisites: [序列长度 >= 50 期]
+costs:
+  data: medium
+  compute: low
+robustness: medium
+overfitting_risk: medium
+competition_suitability: medium
+innovation_potential: low
+interpretability: medium
+status: active
+source_refs: [methodology/evaluation-methods.md, pitfalls/TYPE-ANTIPATTERNS-CHECKLIST.md]
+confidence: 0.85
+source_type: expert_knowledge

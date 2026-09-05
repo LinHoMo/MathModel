@@ -28,3 +28,44 @@ anti_patterns:
   - 时序特征随机 CV（泄漏）
 known_failures: [fm-timeseries-leakage]
 reference: methodology/ensemble-learning.md
+
+# ---- P8 决策字段（Competition Intelligence）----
+objective_types: [prediction, classification]
+applicability:
+  positive:
+    - large_sample
+    - high_dimensional_features
+    - strong_non_linear_interaction
+  negative:
+    - small_sample_friendly
+    - interpretability_required
+  required_conditions: []
+risk:
+  overfitting: high
+  data_sensitivity: medium
+  numerical_instability: low
+  interpretability: high
+  competition_risk: medium
+evidence_requirements:
+  minimum:
+    - cross_validation
+    - baseline_comparison
+  recommended:
+    - feature_importance_analysis
+    - shap_explainability
+typical_metrics: [RMSE, MAE, AUC]
+compatible_methods: [mc-pca, mc-kmeans]
+incompatible_methods: []
+prerequisites: [特征工程完成]
+costs:
+  data: high
+  compute: medium
+robustness: medium
+overfitting_risk: high
+competition_suitability: medium
+innovation_potential: medium
+interpretability: low
+status: active
+source_refs: [methodology/]
+confidence: 0.85
+source_type: empirical

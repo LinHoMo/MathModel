@@ -29,3 +29,40 @@ anti_patterns:
   - 判断矩阵来源不交代（谁的专家判断）
 known_failures: [fm-ahp-consistency-ignored]
 reference: methodology/evaluation-methods.md
+
+# ---- P8 决策字段（Competition Intelligence）----
+objective_types: [evaluation, ranking]
+applicability:
+  positive:
+    - interpretability_required
+    - small_sample_friendly
+  negative:
+    - high_dimensional_features
+  required_conditions: []
+risk:
+  overfitting: low
+  data_sensitivity: medium
+  numerical_instability: low
+  interpretability: low
+  competition_risk: medium
+evidence_requirements:
+  minimum:
+    - consistency_check
+  recommended:
+    - weight_sensitivity_analysis
+typical_metrics: [CR 一致性比率, 排序稳定性]
+compatible_methods: [mc-entropy-weight, mc-topsis]
+incompatible_methods: []
+prerequisites: [专家两两比较矩阵可得]
+costs:
+  data: low
+  compute: low
+robustness: medium
+overfitting_risk: low
+competition_suitability: high
+innovation_potential: low
+interpretability: high
+status: active
+source_refs: [methodology/evaluation-methods.md]
+confidence: 0.9
+source_type: expert_knowledge

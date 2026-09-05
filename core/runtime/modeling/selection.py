@@ -95,13 +95,17 @@ class MethodArena:
                     for r in recs[1:]],
                 criteria=["检索得分", "适用条件匹配", "验证代价",
                           "历史决策一致性"],
-                reasoning="; ".join(top.matched) or
+                reasoning=top.reasoning() or
                           f"{top.card.name} 在候选中得分最高",
                 confidence=min(0.5 + 0.1 * top.score, 0.95),
                 reversible=True,
                 created_by=created_by,
                 evidence_ids=[],
                 question_type=(features.get("problem_types") or [""])[0],
+                knowledge_refs=top.knowledge_refs,
+                failure_refs=[f.failure_id for f in top.related_failures],
+                required_validation=list(top.required_experiments),
+                score_breakdown=top.score_detail.as_dict(),
             )
             outcome.decision_id = dec.decision_id
         return outcome

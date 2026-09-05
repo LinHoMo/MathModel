@@ -31,3 +31,40 @@ anti_patterns:
   - 用 TOPSIS "证明"某方案绝对最优（overclaim）
 known_failures: [fm-topsis-no-normalization]
 reference: methodology/evaluation-methods.md
+
+# ---- P8 决策字段（Competition Intelligence）----
+objective_types: [evaluation, ranking]
+applicability:
+  positive:
+    - has_data
+    - interpretability_required
+  negative: []
+  required_conditions: []
+risk:
+  overfitting: low
+  data_sensitivity: medium
+  numerical_instability: low
+  interpretability: low
+  competition_risk: low
+evidence_requirements:
+  minimum:
+    - baseline_comparison
+  recommended:
+    - weight_sensitivity_analysis
+    - ranking_stability_check
+typical_metrics: [相对贴近度 Ci, 排序一致性]
+compatible_methods: [mc-ahp, mc-entropy-weight, mc-pca]
+incompatible_methods: []
+prerequisites: [指标同向化与无量纲化口径确定]
+costs:
+  data: low
+  compute: low
+robustness: medium
+overfitting_risk: low
+competition_suitability: high
+innovation_potential: low
+interpretability: high
+status: active
+source_refs: [methodology/evaluation-methods.md]
+confidence: 0.95
+source_type: expert_knowledge

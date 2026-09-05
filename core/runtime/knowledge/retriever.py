@@ -214,9 +214,9 @@ class KnowledgeRetriever:
             if score > 0:
                 related = self.failures_for(card.card_id)
                 sd, caps, missing, violations, risks, req_exp =                     self._capability_match(card, features, related, pts)
-                total = score + _dim_bonus(sd)
+                sd.fit += score          # legacy 标签分并入 fit（拆解恒等）
                 rec = Recommendation(
-                    card=card, score=total, matched=matched,
+                    card=card, score=sd.total, matched=matched,
                     warnings=list(card.risks), related_failures=related,
                     related_patterns=[p for p in self.patterns_for(list(pts))
                                       if card.card_id in p.cards],
@@ -314,12 +314,6 @@ class KnowledgeRetriever:
 
 
 _LEVELS = {"low", "medium", "high"}
-
-
-def _dim_bonus(sd: RecommendationScore) -> int:
-    """维度分并入 total（legacy score 仍是主分，维度分提供可解释增量）。"""
-    d = sd.as_dict()
-    return sum(v for k, v in d.items() if k != "risk_penalty") // 2         + sd.risk_penalty
 
 
 def _cond_key(cond: str) -> str:

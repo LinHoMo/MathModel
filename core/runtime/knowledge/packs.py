@@ -119,19 +119,17 @@ def detect_knowledge_conflicts(cards, failures, patterns) -> list[KnowledgeConfl
     conflicts: list[KnowledgeConflict] = []
     by_id = cards
 
-    # C1: 一张卡声称与 X compatible，另一张声明 X incompatible（含反向）
+    # C1: A 声明 incompatible B，B 却声明 compatible A → 矛盾
+    # （B 也声明 incompatible A = 一致的双向互斥，无冲突）
     for cid, card in by_id.items():
         for other in card.incompatible_methods:
             other_card = by_id.get(other)
-            if other_card and cid in other_card.incompatible_methods:
+            if not other_card:
+                continue
+            if cid in other_card.incompatible_methods:
                 continue  # 双向互斥：一致，无冲突
-            if other_card and other in card.incompatible_methods:
-                continue
-            if other_card and cid in other_card.compatible_methods \
-                    and other in card.compatible_methods:
-                continue
             # A 说和 B incompatible，B 却说和 A compatible → 矛盾
-            if other_card and cid in other_card.compatible_methods:
+            if cid in other_card.compatible_methods:
                 conflicts.append(KnowledgeConflict(
                     entity=f"{cid}×{other}", field="compatible_incompatible",
                     source_a=f"{cid}.incompatible_methods 含 {other}",
