@@ -1,0 +1,56 @@
+# CUMCM 竞赛知识包（结构化画像；来源：bench/cumcm rubrics + TEAM_GUIDE）
+pack_id: cp-cumcm
+competition_type: cumcm
+version: 1
+status: active
+problem_characteristics:
+  - 三题开放问题（A 机理/物理，B 离散优化，C 数据分析/评价）
+  - 题给数据以 Excel/CSV 为主，允许引用公开统计数据
+common_problem_patterns:
+  - 评价+排序类（C 题高频）：指标体系 → 赋权 → 排序 → 灵敏度
+  - 预测类：时序/回归 + 残差诊断 + 样本外回测
+  - 优化类：规划模型 + 求解 + 多起点/灵敏度
+recommended_methods:
+  - composite_evaluation
+  - decision_analysis
+  - classical_timeseries
+  - mc-topsis
+  - mc-ahp
+high_risk_methods:
+  - metaheuristics        # 无多起点报告 = P1/P6 铁律违规
+  - deep_learning         # 小样本 + 黑盒解释性弱，评委常质疑
+typical_model_combinations:
+  - AHP + 熵权组合赋权 + TOPSIS 排序
+  - 回归 + 残差修正（机理 + 数据混合）
+  - 聚类分层 + 分组建模
+typical_experiments:
+  - baseline_comparison
+  - sensitivity_analysis
+  - robustness_test
+common_failure_modes:
+  - fm-timeseries-no-backtest
+  - fm-ahp-consistency-ignored
+  - fm-entropy-identical-columns
+innovation_patterns:
+  - ip-combined-weighting
+  - ip-mechanism-data-hybrid
+evaluation_dimensions:
+  - 假设合理性
+  - 建模创新性
+  - 结果正确性
+  - 表述清晰性
+judging_preferences:
+  - 摘要必须含每问数值结论
+  - 模型有可解释的假设与灵敏度分析
+  - 图表规范、公式编号完整
+paper_structure_expectations:
+  - 问题重述与分析 / 模型假设 / 模型建立与求解 / 灵敏度 / 模型评价
+time_constraints:
+  total_hours: 72
+  experiment_budget_ratio: 0.3
+data_constraints:
+  - 优先题给数据；外部数据须标注来源+URL+访问日期
+source_refs:
+  - core/knowledge/bench/cumcm/
+  - docs/TEAM_GUIDE.md
+source_type: competition_archive

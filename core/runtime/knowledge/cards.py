@@ -67,6 +67,28 @@ class MethodCard:
     time_series: bool | None = None
     multi_objective: bool = False
     handles_uncertainty: bool = False
+    # ---- P8 决策字段（全部可选，向后兼容旧卡）----
+    objective_types: list[str] = field(default_factory=list)
+    applicability_positive: list[str] = field(default_factory=list)
+    applicability_negative: list[str] = field(default_factory=list)
+    required_conditions: list[str] = field(default_factory=list)
+    risk: dict = field(default_factory=dict)          # 5 维 → low/medium/high
+    evidence_minimum: list[str] = field(default_factory=list)
+    evidence_recommended: list[str] = field(default_factory=list)
+    typical_metrics: list[str] = field(default_factory=list)
+    compatible_methods: list[str] = field(default_factory=list)
+    incompatible_methods: list[str] = field(default_factory=list)
+    prerequisites: list[str] = field(default_factory=list)
+    costs: dict = field(default_factory=dict)          # {data, compute}
+    robustness: str = ""                               # low/medium/high
+    overfitting_risk: str = ""
+    competition_suitability: str = ""
+    innovation_potential: str = ""
+    interpretability: str = ""
+    status: str = "active"                             # active/draft/deprecated
+    source_refs: list[str] = field(default_factory=list)
+    confidence: float | None = None
+    source_type: str = ""
 
     @classmethod
     def from_dict(cls, d: dict, where: str) -> "MethodCard":
@@ -115,7 +137,97 @@ class MethodCard:
             card.time_series = ts
             card.multi_objective = bool(match.get("multi_objective", False))
             card.handles_uncertainty = bool(match.get("handles_uncertainty", False))
+        _parse_card_p8(card, d, where)
         return card
+
+
+_LEVELS = {"low", "medium", "high"}
+
+
+def _parse_p8_simple(d: dict, where: str, severity: bool = False) -> str:
+    v = d.get("severity", "medium") if severity else d.get(d.get("_k", ""), "")
+    v = v or ("medium" if severity else "")
+    if v not in _LEVELS:
+        raise CardError(f"{where}: severity 须为 low|medium|high")
+    return v
+
+
+def _parse_confidence(d: dict, where: str) -> float | None:
+    c = d.get("confidence")
+    if c is None:
+        return None
+    if not isinstance(c, (int, float)) or not 0 <= c <= 1:
+        raise CardError(f"{where}: confidence 须在 [0,1]")
+    return float(c)
+
+
+def _opt_level(d: dict, key: str, where: str) -> str:
+    v = d.get(key, "") or ""
+    if v and v not in _LEVELS:
+        raise CardError(f"{where}: {key} 须为 low|medium|high，实际 {v!r}")
+    return v
+
+
+def _parse_card_p8(card: MethodCard, d: dict, where: str) -> None:
+    """P8 决策字段解析（全部可选；fail-closed 校验取值域）。"""
+    card.objective_types = _require_str_list(d, "objective_types", where)
+    app = d.get("applicability", {})
+    if app:
+        if not isinstance(app, dict):
+            raise CardError(f"{where}: applicability 须为映射")
+        unknown = set(app) - {"positive", "negative", "required_conditions"}
+        if unknown:
+            raise CardError(f"{where}: applicability 含未知键 {sorted(unknown)}")
+        card.applicability_positive = _require_str_list(app, "positive", where)
+        card.applicability_negative = _require_str_list(app, "negative", where)
+        card.required_conditions = _require_str_list(app, "required_conditions", where)
+    risk = d.get("risk", {})
+    if risk:
+        if not isinstance(risk, dict):
+            raise CardError(f"{where}: risk 须为映射")
+        unknown = set(risk) - {"overfitting", "data_sensitivity",
+                               "numerical_instability", "interpretability",
+                               "competition_risk"}
+        if unknown:
+            raise CardError(f"{where}: risk 含未知键 {sorted(unknown)}")
+        for k, v in risk.items():
+            if v not in _LEVELS:
+                raise CardError(f"{where}: risk.{k} 须为 low|medium|high")
+        card.risk = dict(risk)
+    ev = d.get("evidence_requirements", {})
+    if ev:
+        if not isinstance(ev, dict):
+            raise CardError(f"{where}: evidence_requirements 须为映射")
+        unknown = set(ev) - {"minimum", "recommended"}
+        if unknown:
+            raise CardError(f"{where}: evidence_requirements 含未知键 {sorted(unknown)}")
+        card.evidence_minimum = _require_str_list(ev, "minimum", where)
+        card.evidence_recommended = _require_str_list(ev, "recommended", where)
+    card.typical_metrics = _require_str_list(d, "typical_metrics", where)
+    card.compatible_methods = _require_str_list(d, "compatible_methods", where)
+    card.incompatible_methods = _require_str_list(d, "incompatible_methods", where)
+    card.prerequisites = _require_str_list(d, "prerequisites", where)
+    costs = d.get("costs", {})
+    if costs:
+        unknown = set(costs) - {"data", "compute"}
+        if unknown or any(v not in _LEVELS for v in costs.values()):
+            raise CardError(f"{where}: costs 须为 {{data|compute: low|medium|high}}")
+        card.costs = dict(costs)
+    card.robustness = _opt_level(d, "robustness", where)
+    card.overfitting_risk = _opt_level(d, "overfitting_risk", where)
+    card.competition_suitability = _opt_level(d, "competition_suitability", where)
+    card.innovation_potential = _opt_level(d, "innovation_potential", where)
+    card.interpretability = _opt_level(d, "interpretability", where)
+    card.status = d.get("status", "active") or "active"
+    if card.status not in {"active", "draft", "deprecated"}:
+        raise CardError(f"{where}: status 非法: {card.status!r}")
+    card.source_refs = _require_str_list(d, "source_refs", where)
+    conf = d.get("confidence")
+    if conf is not None:
+        if not isinstance(conf, (int, float)) or not 0 <= conf <= 1:
+            raise CardError(f"{where}: confidence 须在 [0,1]")
+        card.confidence = float(conf)
+    card.source_type = d.get("source_type", "") or ""
 
 
 # ---------------------------------------------------------------- 失败记忆
@@ -135,6 +247,13 @@ class FailureMemory:
     avoidance: str
     applies_to: list[str] = field(default_factory=list)
     source: str = ""
+    # ---- P8 决策字段 ----
+    severity: str = "medium"           # low/medium/high → risk penalty 权重
+    confidence: float | None = None
+    detection_signal: str = ""
+    recovery: list[str] = field(default_factory=list)
+    version: int = 1
+    status: str = "active"
 
     @classmethod
     def from_dict(cls, d: dict, where: str) -> "FailureMemory":
@@ -158,6 +277,12 @@ class FailureMemory:
             avoidance=_require_str(d, "avoidance", where),
             applies_to=_require_str_list(d, "applies_to", where),
             source=d.get("source", "") or "",
+            severity=_parse_p8_simple(d, where, severity=True),
+            confidence=_parse_confidence(d, where),
+            detection_signal=d.get("detection_signal", "") or "",
+            recovery=_require_str_list(d, "recovery", where),
+            version=d.get("version", 1) or 1,
+            status=d.get("status", "active") or "active",
         )
 
 
@@ -174,6 +299,14 @@ class Pattern:
     risks: list[str] = field(default_factory=list)
     examples: list[str] = field(default_factory=list)
     cards: list[str] = field(default_factory=list)
+    # ---- P8 决策字段 ----
+    expected_benefit: str = ""
+    implementation_cost: str = ""      # low/medium/high
+    novelty_level: str = ""            # incremental/notable/high
+    validation_protocol: list[str] = field(default_factory=list)
+    competition_fit: str = ""          # low/medium/high
+    version: int = 1
+    status: str = "active"
 
     @classmethod
     def from_dict(cls, d: dict, where: str) -> "Pattern":
@@ -190,6 +323,13 @@ class Pattern:
             risks=_require_str_list(d, "risks", where),
             examples=_require_str_list(d, "examples", where),
             cards=_require_str_list(d, "cards", where),
+        expected_benefit=d.get("expected_benefit", "") or "",
+        implementation_cost=_opt_level(d, "implementation_cost", where),
+        novelty_level=d.get("novelty_level", "") or "",
+        validation_protocol=_require_str_list(d, "validation_protocol", where),
+        competition_fit=_opt_level(d, "competition_fit", where),
+        version=d.get("version", 1) or 1,
+        status=d.get("status", "active") or "active",
         )
 
 

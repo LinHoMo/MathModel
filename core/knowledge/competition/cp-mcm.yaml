@@ -1,0 +1,45 @@
+# MCM/ICM 竞赛知识包（结构化画像）
+pack_id: cp-mcm
+competition_type: mcm
+version: 1
+status: active
+problem_characteristics:
+  - A 连续/机理，B 离散，C 数据洞察（大数据集），D 运筹/网络，E 可持续，F 政策
+  - 英文论文，强调 assumptions 与 sensitivity analysis 独立成节
+common_problem_patterns:
+  - 大数据集探索性分析 + 可解释模型组合
+  - 政策类问题需要多情景仿真
+recommended_methods:
+  - supervised_learning
+  - statistical_modeling
+  - uncertainty_propagation
+high_risk_methods:
+  - deep_learning         # MCM 评委更看重解释与假设而非黑盒精度
+typical_model_combinations:
+  - 机理模型 + ML 残差修正
+  - 多情景仿真 + 稳健性排序
+typical_experiments:
+  - baseline_comparison
+  - sensitivity_analysis
+common_failure_modes: []
+innovation_patterns:
+  - ip-cluster-then-model
+evaluation_dimensions:
+  - Summary quality
+  - Assumptions justification
+  - Model sophistication & validity
+  - Sensitivity analysis
+  - Strengths & weaknesses
+judging_preferences:
+  - 一页 Summary 定生死
+  - assumptions 必须逐条辩护
+paper_structure_expectations:
+  - Summary / Assumptions / Notation / Model / Sensitivity / Strengths-Weaknesses / References
+time_constraints:
+  total_hours: 96
+  experiment_budget_ratio: 0.25
+data_constraints:
+  - C 题附大数据集；禁止使用题外未披露的个人数据
+source_refs:
+  - core/knowledge/bench/
+source_type: competition_archive
