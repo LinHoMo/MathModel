@@ -5,8 +5,17 @@
   "description": "结构化失败记忆：failure_id / problem_context / method / failure_mode / symptom / root_cause / detection / fix / avoidance。来源：_negative/ 案例 + pitfalls/ 数值边界蒸馏。",
   "type": "object",
   "required": [
-    "failure_id", "title", "problem_context", "method", "method_family",
-    "failure_mode", "symptom", "root_cause", "detection", "fix", "avoidance"
+    "failure_id",
+    "title",
+    "problem_context",
+    "method",
+    "method_family",
+    "failure_mode",
+    "symptom",
+    "root_cause",
+    "detection",
+    "fix",
+    "avoidance"
   ],
   "additionalProperties": false,
   "properties": {
@@ -15,24 +24,110 @@
       "pattern": "^fm-[a-z0-9-]{2,48}$",
       "description": "稳定失败 ID，如 fm-small-sample-deep-learning"
     },
-    "title": {"type": "string", "minLength": 2},
-    "problem_context": {"type": "string", "description": "出问题的题目/任务背景"},
-    "method": {"type": "string", "description": "当时使用的方法"},
-    "method_family": {"type": "string", "description": "方法族（用于方法卡关联），通用类用 general"},
+    "title": {
+      "type": "string",
+      "minLength": 2
+    },
+    "problem_context": {
+      "type": "string",
+      "description": "出问题的题目/任务背景"
+    },
+    "method": {
+      "type": "string",
+      "description": "当时使用的方法"
+    },
+    "method_family": {
+      "type": "string",
+      "description": "方法族（用于方法卡关联），通用类用 general"
+    },
     "failure_mode": {
       "type": "string",
-      "enum": ["wrong-method", "wrong-usage", "no-evidence", "overclaim", "presentation", "numerical", "consistency"],
+      "enum": [
+        "wrong-method",
+        "wrong-usage",
+        "no-evidence",
+        "overclaim",
+        "presentation",
+        "numerical",
+        "consistency"
+      ],
       "description": "失败模式分类"
     },
-    "symptom": {"type": "string", "description": "外在表现（评委可见的病症）"},
-    "root_cause": {"type": "string", "description": "根因"},
-    "detection": {"type": "string", "description": "如何在提交前检测出（可执行的检查）"},
-    "fix": {"type": "string", "description": "出问题后的补救"},
-    "avoidance": {"type": "string", "description": "下次如何避免（前置动作）"},
+    "symptom": {
+      "type": "string",
+      "description": "外在表现（评委可见的病症）"
+    },
+    "root_cause": {
+      "type": "string",
+      "description": "根因"
+    },
+    "detection": {
+      "type": "string",
+      "description": "如何在提交前检测出（可执行的检查）"
+    },
+    "fix": {
+      "type": "string",
+      "description": "出问题后的补救"
+    },
+    "avoidance": {
+      "type": "string",
+      "description": "下次如何避免（前置动作）"
+    },
     "applies_to": {
-      "type": "array", "items": {"type": "string"},
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
       "description": "适用的 card_id 列表（除 method_family 外的精确关联）"
     },
-    "source": {"type": "string", "description": "蒸馏来源（如 _negative/case-01），便于溯源"}
+    "source": {
+      "type": "string",
+      "description": "蒸馏来源（如 _negative/case-01），便于溯源"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "detection_signal": {
+      "type": "string"
+    },
+    "recovery": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "draft",
+        "deprecated"
+      ]
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "official",
+        "paper",
+        "competition_archive",
+        "expert_knowledge",
+        "empirical",
+        "generated"
+      ]
+    }
   }
 }

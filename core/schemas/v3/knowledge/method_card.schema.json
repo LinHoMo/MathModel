@@ -5,9 +5,17 @@
   "description": "机器可读方法卡片：good_for / requires / risks / validation / often_combined_with / anti_patterns。检索输出候选方法 + 适用条件 + 风险 + 验证方式 + 历史失败案例。",
   "type": "object",
   "required": [
-    "card_id", "name", "family", "version", "problem_types",
-    "good_for", "requires", "risks", "validation",
-    "often_combined_with", "anti_patterns"
+    "card_id",
+    "name",
+    "family",
+    "version",
+    "problem_types",
+    "good_for",
+    "requires",
+    "risks",
+    "validation",
+    "often_combined_with",
+    "anti_patterns"
   ],
   "additionalProperties": false,
   "properties": {
@@ -16,15 +24,26 @@
       "pattern": "^mc-[a-z0-9-]{2,48}$",
       "description": "稳定卡片 ID，如 mc-topsis"
     },
-    "name": {"type": "string", "minLength": 2, "description": "方法人类可读名称"},
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "description": "方法人类可读名称"
+    },
     "family": {
       "type": "string",
       "description": "方法族（与 METHOD-DECISION-TREE.json 的 family 对齐），如 composite_evaluation / metaheuristics / classical_timeseries"
     },
-    "version": {"type": "integer", "minimum": 1},
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
     "problem_types": {
-      "type": "array", "minItems": 1, "uniqueItems": true,
-      "items": {"type": "string"},
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      },
       "description": "适配的问题类型标签：evaluation / ranking / prediction / classification / optimization / uncertainty / simulation / fitting ..."
     },
     "match": {
@@ -32,23 +51,296 @@
       "description": "检索打分特征（可选，缺省时不参与硬过滤）",
       "additionalProperties": false,
       "properties": {
-        "requires_data": {"type": "boolean"},
+        "requires_data": {
+          "type": "boolean"
+        },
         "sample_size": {
-          "type": "array", "items": {"enum": ["small", "medium", "large"]},
+          "type": "array",
+          "items": {
+            "enum": [
+              "small",
+              "medium",
+              "large"
+            ]
+          },
           "description": "兼容样本档（small<200 / medium 200-1000 / large>=1000）"
         },
-        "time_series": {"type": ["boolean", "null"], "description": "null 表示与是否时序无关"},
-        "multi_objective": {"type": "boolean"},
-        "handles_uncertainty": {"type": "boolean"}
+        "time_series": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "null 表示与是否时序无关"
+        },
+        "multi_objective": {
+          "type": "boolean"
+        },
+        "handles_uncertainty": {
+          "type": "boolean"
+        }
       }
     },
-    "good_for": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-    "requires": {"type": "array", "items": {"type": "string"}, "description": "使用前提（数据/假设/规模条件）"},
-    "risks": {"type": "array", "items": {"type": "string"}},
-    "validation": {"type": "array", "items": {"type": "string"}, "description": "必做验证（灵敏度/交叉检验/多起点）"},
-    "often_combined_with": {"type": "array", "items": {"type": "string"}, "description": "常组合方法 card_id"},
-    "anti_patterns": {"type": "array", "items": {"type": "string"}, "description": "误用形态（对应 Failure Memory）"},
-    "known_failures": {"type": "array", "items": {"type": "string"}, "description": "关联 failure_id 列表"},
-    "reference": {"type": "string", "description": "human-readable 详档（core/knowledge/methodology/ 相对路径），不强制"}
+    "good_for": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "requires": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "使用前提（数据/假设/规模条件）"
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "必做验证（灵敏度/交叉检验/多起点）"
+    },
+    "often_combined_with": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "常组合方法 card_id"
+    },
+    "anti_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "误用形态（对应 Failure Memory）"
+    },
+    "known_failures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "关联 failure_id 列表"
+    },
+    "reference": {
+      "type": "string",
+      "description": "human-readable 详档（core/knowledge/methodology/ 相对路径），不强制"
+    },
+    "objective_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "positive": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "negative": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overfitting": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "data_sensitivity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "numerical_instability": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "interpretability": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "competition_risk": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "evidence_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minimum": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommended": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "typical_metrics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "compatible_methods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "incompatible_methods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "costs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "compute": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "robustness": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "overfitting_risk": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "competition_suitability": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "innovation_potential": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "interpretability": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "draft",
+        "deprecated"
+      ]
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "official",
+        "paper",
+        "competition_archive",
+        "expert_knowledge",
+        "empirical",
+        "generated"
+      ]
+    }
   }
 }

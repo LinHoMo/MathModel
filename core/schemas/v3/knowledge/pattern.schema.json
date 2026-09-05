@@ -5,8 +5,13 @@
   "description": "创新模式卡：pattern_id / problem_type / baseline_method / innovation / required_evidence / risks / examples。检索时按问题特征推荐组合式创新路径。",
   "type": "object",
   "required": [
-    "pattern_id", "title", "problem_types", "baseline_method",
-    "innovation", "required_evidence", "risks"
+    "pattern_id",
+    "title",
+    "problem_types",
+    "baseline_method",
+    "innovation",
+    "required_evidence",
+    "risks"
   ],
   "additionalProperties": false,
   "properties": {
@@ -14,13 +19,110 @@
       "type": "string",
       "pattern": "^ip-[a-z0-9-]{2,48}$"
     },
-    "title": {"type": "string", "minLength": 2},
-    "problem_types": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
-    "baseline_method": {"type": "string", "description": "常规做法（对照基线）"},
-    "innovation": {"type": "string", "description": "创新点：在基线上叠加什么"},
-    "required_evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}, "description": "创新成立必需的对比证据（基线 vs 创新）"},
-    "risks": {"type": "array", "items": {"type": "string"}, "description": "为创新而创新的风险"},
-    "examples": {"type": "array", "items": {"type": "string"}, "description": "历史赛题应用示例"},
-    "cards": {"type": "array", "items": {"type": "string"}, "description": "涉及的方法卡 card_id"}
+    "title": {
+      "type": "string",
+      "minLength": 2
+    },
+    "problem_types": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "baseline_method": {
+      "type": "string",
+      "description": "常规做法（对照基线）"
+    },
+    "innovation": {
+      "type": "string",
+      "description": "创新点：在基线上叠加什么"
+    },
+    "required_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "description": "创新成立必需的对比证据（基线 vs 创新）"
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "为创新而创新的风险"
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "历史赛题应用示例"
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "涉及的方法卡 card_id"
+    },
+    "expected_benefit": {
+      "type": "string"
+    },
+    "implementation_cost": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "novelty_level": {
+      "type": "string",
+      "enum": [
+        "incremental",
+        "notable",
+        "high"
+      ]
+    },
+    "validation_protocol": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "competition_fit": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "draft",
+        "deprecated"
+      ]
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "official",
+        "paper",
+        "competition_archive",
+        "expert_knowledge",
+        "empirical",
+        "generated"
+      ]
+    }
   }
 }

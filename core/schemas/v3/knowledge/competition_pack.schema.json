@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "v3/knowledge/competition_pack.schema.json",
+  "title": "Competition Pack（竞赛知识包，P8-4）",
+  "description": "结构化竞赛画像：消费方为 ModelArena / ExperimentPlanner / Innovation 评估 / JudgeCritic。不直接改 Runtime 状态（CI-08）。",
+  "type": "object",
+  "required": [
+    "pack_id",
+    "competition_type",
+    "evaluation_dimensions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "pack_id": {
+      "type": "string",
+      "pattern": "^cp-[a-z0-9-]{2,32}$"
+    },
+    "competition_type": {
+      "type": "string",
+      "description": "cumcm / mcm / huawei / diangong / huashu"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "draft",
+        "deprecated"
+      ]
+    },
+    "problem_characteristics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "common_problem_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_methods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "family 或 card_id，命中 → competition 维度加分"
+    },
+    "high_risk_methods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "family 或 card_id，命中 → competition_risk 罚分"
+    },
+    "typical_model_combinations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "typical_experiments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "common_failure_modes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "innovation_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evaluation_dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "judging_preferences": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "paper_structure_expectations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "time_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "total_hours": {
+          "type": "number"
+        },
+        "experiment_budget_ratio": {
+          "type": "number"
+        }
+      }
+    },
+    "data_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "official",
+        "paper",
+        "competition_archive",
+        "expert_knowledge",
+        "empirical",
+        "generated"
+      ]
+    }
+  }
+}
