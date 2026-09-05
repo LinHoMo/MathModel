@@ -179,6 +179,7 @@ class TestEndToEnd:
         outline = PaperProjection(reg, g).project(nar)
         report = NarrativeCritic().evaluate(nar, outline)
         assert report.verdict == "FAIL"
-        assert "N2" in codes(report)   # 死主张仍在叙事
-        assert "N5" in codes(report)   # 死主张被投影剔除 → 结果章节空
+        # N2 语义已精化：director 保留死弧供审计，投影正确排除 → 不再误报 N2；
+        # 死主张被剔除后结果章节空 → N5 FAIL（需重跑实验补新主张）
+        assert "N5" in codes(report)
         assert outline["dead_claims_excluded"] == ["C001"]

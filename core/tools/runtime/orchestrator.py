@@ -347,6 +347,41 @@ def _run_pipeline(project: str, max_rounds: int, dry_run: bool = False) -> int:
     return 0
 
 
+def _execute_v3(project_dir: Path, questions: list[str],
+                competition: str | None = None) -> int:
+    """V3 实际执行（P6）：RuntimeSession + WaveExecutor 跑通完整认知管线。
+
+    默认确定性节点执行器（零 LLM）：知识检索 → 方法竞技场 → 实验规划 →
+    实验/结果登记 → 证据门禁 → 研究叙事 → 论文投影 → 判审。
+    产物落盘 state/{registry,evidence_graph,decision_log,status,engine_progress}.json。
+    """
+    sys.path.insert(0, str(ROOT / "core"))
+    from runtime.execution.session import RuntimeSession
+
+    print(f"[V3][EXEC] questions: {questions}")
+    session = RuntimeSession(project_dir, questions, max_workers=1)
+    try:
+        report = session.run()
+    except Exception as exc:
+        print(f"[V3][FAIL] 执行中断: {exc}", file=sys.stderr)
+        return 1
+    prog = report["progress"]
+    print(f"\n[V3][EXEC] 波次 {len(report['waves'])} · "
+          f"完成 {len(prog['completed'])}/{prog['total']} · "
+          f"阻塞 {len(prog['blocked'])} · 失败 {len(prog['failures'])}")
+    st = session.state.data["state"]
+    print(f"[V3][EXEC] claims {st['evidence']['claims_supported']}/"
+          f"{st['evidence']['claims_total']} · "
+          f"registry {len(session.registry)} artifacts · "
+          f"graph {len(session.graph.relations)} relations")
+    if prog["blocked"] or prog["failures"]:
+        for nid, why in list(prog["blocked"].items()) +                 list(prog["failures"].items()):
+            print(f"  [BLOCKED] {nid}: {why}", file=sys.stderr)
+        return 1
+    print("[V3][EXEC] 研究运行完成（论文投影就绪，可进入 Writer 层渲染）")
+    return 0
+
+
 def _run_v3(project_dir: Path, dry_run: bool = True,
             competition: str | None = None) -> int:
     """V3 模式：组合 Workflow DAG → 角色校验 → 波次干跑。
@@ -400,9 +435,7 @@ def _run_v3(project_dir: Path, dry_run: bool = True,
           f"(角色: {', '.join(sorted(roles))})")
 
     if not dry_run:
-        print("[V3][ERROR] V3 实际执行在 P4 接入 executor；当前请使用 --dry-run",
-              file=sys.stderr)
-        return 2
+        return _execute_v3(project_dir, questions, competition)
 
     # ---- 波次干跑：迭代 ready 集合（同 wave 内可并行）
     completed: set[str] = set()
@@ -436,7 +469,9 @@ def main():
     ap.add_argument("project", help="项目路径或名称")
     ap.add_argument("--max-rounds", type=int, default=DEFAULT_MAX_ROUNDS, help="最大评审轮次（legacy 模式）")
     ap.add_argument("--resume", action="store_true", help="从当前状态继续（legacy 模式）")
-    ap.add_argument("--dry-run", action="store_true", help="仅打印计划不执行")
+    ap.add_argument("--dry-run", action="store_true", help="仅打印计划不执行（默认干跑）")
+    ap.add_argument("--execute", action="store_true",
+                    help="V3 实际执行：RuntimeSession 跑通认知管线（P6）")
     ap.add_argument("--legacy", action="store_true",
                     help="V2 legacy 模式：29 步线性流水线（state/gate 驱动）")
     ap.add_argument("--v3", action="store_true",
@@ -462,7 +497,8 @@ def main():
         return _run_pipeline(str(base), args.max_rounds, args.dry_run)
 
     # P5 起默认 V3 DAG 模式（组合 Workflow DAG + 角色校验 + 波次干跑）
-    return _run_v3(base, dry_run=True, competition=args.competition)
+    return _run_v3(base, dry_run=not args.execute,
+                   competition=args.competition)
 
 
 if __name__ == "__main__":

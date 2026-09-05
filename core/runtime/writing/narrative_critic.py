@@ -54,11 +54,20 @@ class NarrativeCritic:
             return NarrativeReport("FAIL", [NFinding(
                 "N1", SEV_FAIL, "无任何 claim：没有故事可讲")])
 
-        # N2
+        # N2: 死主张未从叙事剔除 —— 判定口径是"仍被投影"：
+        # director 保留死弧供审计（dead_arcs 可见），但投影必须排除它；
+        # 死主张出现在结果章节 = 剔除失败（弱证据强叙事）
         dead = [a.claim_id for a in narrative.dead_arcs]
         if dead:
-            findings.append(NFinding(
-                "N2", SEV_FAIL, "死主张未从叙事剔除（证据已失效）", dead))
+            result_section = next(
+                (s for s in outline.get("sections", [])
+                 if s.get("section") == "结果与分析"), {})
+            placed = {c.get("claim") for c in result_section.get("claims", [])}
+            leaked = [c for c in dead if c in placed]
+            if leaked:
+                findings.append(NFinding(
+                    "N2", SEV_FAIL, "死主张未从叙事剔除（仍在结果章节投影中）",
+                    leaked))
 
         # N3: 无支撑主张出现在结果章节投影中
         result_section = next(

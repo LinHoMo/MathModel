@@ -26,6 +26,7 @@ WEAK_VERDICT = "WEAK"
 FAIL_VERDICT = "FAIL"
 
 DEFAULT_MIN_COVERAGE = 0.8
+_TERMINAL_STATUSES = ("invalidated", "superseded", "deprecated")
 EVIDENCE_TAGS = ("sensitivity", "baseline")
 
 
@@ -88,15 +89,19 @@ def evaluate(registry, graph, min_coverage: float = DEFAULT_MIN_COVERAGE) -> Gat
     findings: list[Finding] = []
     coverage = graph.coverage()
 
-    claims = [a.artifact_id for a in registry.list_by_type("claim")]
+    # 双口径：E1/E2 清点"活跃 claim"（终态不计入，失效由 E3 报告）；
+    # E3 的证据闭包排查必须走全部 claim（死 claim 的死链正是要抓的）
+    all_claims = [a.artifact_id for a in registry.list_by_type("claim")]
+    claims = [c for c in all_claims
+              if registry.artifacts[c].status
+              not in ("invalidated", "superseded", "deprecated")]
 
-    # E1: 无 claim
+    # E1: 无活跃 claim（不提前返回——死 claim 的死链仍需 E3 报告）
     if not claims:
         findings.append(Finding(
-            "E1", FAIL, "无任何 claim：论文无主张可支撑，禁止进入论文投影"))
-        return GateReport(FAIL_VERDICT, coverage, findings)
+            "E1", FAIL, "无任何活跃 claim：论文无主张可支撑，禁止进入论文投影"))
 
-    # E2: claim 无 supports 边
+    # E2: 活跃 claim 无 supports 边
     unsupported = [c for c in claims if not any(
         e["relation"] == "supports" and e["to"] == c for e in graph.relations)]
     if unsupported:
@@ -109,7 +114,7 @@ def evaluate(registry, graph, min_coverage: float = DEFAULT_MIN_COVERAGE) -> Gat
     draft_in_chain: set[str] = set()
     dead_in_chain: set[str] = set()
     reval_in_chain: set[str] = set()
-    for c in claims:
+    for c in all_claims:
         for aid in _evidence_closure(graph, c):
             if aid not in registry.artifacts:
                 continue
@@ -132,8 +137,9 @@ def evaluate(registry, graph, min_coverage: float = DEFAULT_MIN_COVERAGE) -> Gat
             "E6", WEAK, "证据链含需复查 artifact（invalidation 传播命中）",
             sorted(reval_in_chain)))
 
-    # E4: 实验无结果产物
-    experiments = [a.artifact_id for a in registry.list_by_type("experiment")]
+    # E4: 实验无结果产物（终态实验不计入——其 produces 边已随失效剪除）
+    experiments = [a.artifact_id for a in registry.list_by_type("experiment")
+                   if a.status not in _TERMINAL_STATUSES]
     barren = [e for e in experiments if not any(
         rel["relation"] == "produces" and rel["from"] == e
         for rel in graph.relations)]
@@ -141,8 +147,9 @@ def evaluate(registry, graph, min_coverage: float = DEFAULT_MIN_COVERAGE) -> Gat
         findings.append(Finding(
             "E4", FAIL, "实验无 produces 结果产物（实验没有真东西）", barren))
 
-    # E5: 结果无实验来源
-    results = [a.artifact_id for a in registry.list_by_type("result")]
+    # E5: 结果无实验来源（终态结果不计入）
+    results = [a.artifact_id for a in registry.list_by_type("result")
+               if a.status not in _TERMINAL_STATUSES]
     orphan = [r for r in results if not any(
         rel["relation"] == "produces" and rel["to"] == r
         for rel in graph.relations)]

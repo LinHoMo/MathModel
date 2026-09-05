@@ -76,6 +76,7 @@ python core/tools/state.py <项目> status   # 看下一步做什么
 | `python core/tools/bench_mmbench.py list` | 列出 MMBench 111 题 |
 | `python core/tools/bench_mmbench.py export --year <Y> --topic <A>` | 导出为 rubric 骨架 |
 | `python core/tools/orchestrator.py <项目>` | 默认 V3 DAG 干跑（波次并行计划） |
+| `python core/tools/orchestrator.py <项目> --execute` | **P6 V3 实际执行**：RuntimeSession 跑通认知管线（登记 Artifact/Evidence/State） |
 | `python core/tools/orchestrator.py <项目> --legacy` | V2 legacy：一键执行 29 步流水线（含重试/回退） |
 | `python core/tools/catalog_check.py --check` | catalog v5 双视图三方一致性校验 |
 | `python core/tools/knowledge.py recommend --types <题型>` | V3 方法卡检索（16 卡 + 失败记忆 + 创新模式） |
@@ -111,6 +112,7 @@ V3 关键入口：
 | 命令 | 作用 |
 |---|---|
 | `python core/tools/orchestrator.py <项目>` | 默认 V3 DAG 干跑（波次并行计划） |
+| `python core/tools/orchestrator.py <项目> --execute` | **P6 V3 实际执行**：RuntimeSession 跑通认知管线（登记 Artifact/Evidence/State） |
 | `python core/tools/catalog_check.py --check` | 双视图三方一致性校验（roles/DAG/validators） |
 | `python core/tools/knowledge.py recommend --types <题型>` | 方法卡检索（打分规则显式可测试） |
 | `python core/tools/state.py <项目> init` | 状态初始化（自动识别 V3 workspace 并桥接） |

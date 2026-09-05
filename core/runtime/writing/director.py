@@ -81,8 +81,12 @@ class ResearchDirector:
                     if aid in self.registry.artifacts
                     and self.registry.artifacts[aid].status in
                     ("invalidated", "superseded", "deprecated")]
-            arc.dead_evidence = dead
-            if dead:
+            if claim.status in ("invalidated", "superseded", "deprecated"):
+                # claim 本身已死（失效传播命中）→ 弧即死
+                arc.dead_evidence = [claim.artifact_id] + dead
+                arc.status = "dead"
+            elif dead:
+                arc.dead_evidence = dead
                 arc.status = "dead"
             elif supported:
                 arc.status = "supported"

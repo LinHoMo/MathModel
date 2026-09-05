@@ -261,7 +261,9 @@ class EvidenceGraph:
 
     def coverage(self) -> dict:
         """Claim 支撑覆盖率（Evidence Gate 的核心指标）。"""
-        claims = [a.artifact_id for a in self.registry.list_by_type("claim")]
+        terminal = {"invalidated", "superseded", "deprecated"}
+        claims = [a.artifact_id for a in self.registry.list_by_type("claim")
+                  if a.status not in terminal]
         supported = [c for c in claims
                      if any(e["relation"] == "supports" and e["to"] == c
                             for e in self.relations)]
@@ -271,6 +273,24 @@ class EvidenceGraph:
             "claims_unsupported": len(claims) - len(supported),
             "coverage_ratio": round(len(supported) / len(claims), 4) if claims else None,
         }
+
+    def retract_invalidated(self) -> int:
+        """剪除触及终态产物（invalidated/superseded/deprecated）的关系边。
+
+        invalidate() 只标记不删除（审计语义）；但失效传播完成后，健康链重建
+        需要剪掉死边，否则 Evidence Gate 的 E3（链含失效产物）永远 FAIL。
+        剪边不回滚已登记的失效标记；返回剪除条数（0 = 无死边，幂等）。
+        """
+        terminal = {"invalidated", "superseded", "deprecated"}
+        dead = {a.artifact_id for a in self.registry.all()
+                if a.status in terminal}
+        before = len(self.relations)
+        self.relations = [e for e in self.relations
+                          if e["from"] not in dead and e["to"] not in dead]
+        removed = before - len(self.relations)
+        if removed:
+            self.graph_version += 1
+        return removed
 
     def evidence_chain(self, claim_id: str) -> list[dict]:
         """返回支撑某 Claim 的完整证据链（claim ← result ← experiment ← model/data）。"""

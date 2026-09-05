@@ -80,9 +80,10 @@ class PaperProjection:
             "coverage": narrative.coverage,
             "pending_placement": [
                 a.claim_id for a in narrative.arcs
-                if not any(e["relation"] == "appears_in"
-                           and e["from"] == a.claim_id
-                           for e in self.graph.relations)],
+                if a.status != "dead"      # 死主张是被有意排除的，不是待归属
+                and not any(e["relation"] == "appears_in"
+                            and e["from"] == a.claim_id
+                            for e in self.graph.relations)],
             "dead_claims_excluded": [a.claim_id for a in narrative.dead_arcs],
         }
         return outline

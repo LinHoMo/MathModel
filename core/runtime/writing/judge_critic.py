@@ -58,6 +58,19 @@ class JudgeCritic:
         """
         risks: list[Risk] = []
 
+        # ---- 硬证据优先：证据门禁 FAIL 是确定性判定，不得被 UNKNOWN 掩盖
+        #（全部 claim 失效时叙事为空，属"已判死"而非"信息不足"）
+        if evidence_report is not None and evidence_report.verdict == FAIL:
+            for f in evidence_report.findings:
+                risks.append(Risk("evidence-gate", f.code, f.severity, f.message))
+            from .narrative_critic import NarrativeCritic
+            nar_report = NarrativeCritic().evaluate(narrative, outline)
+            for f in nar_report.findings:
+                risks.append(Risk("narrative-critic", f.code, f.severity, f.message))
+            risks.sort(key=lambda r: (0 if r.severity == "fail" else 1,
+                                      r.source, r.code))
+            return JudgeReport(FAIL, risks, evidence_report.coverage)
+
         # ---- UNKNOWN 判定（信息不足，不得瞎判）
         if not narrative.arcs or not outline.get("sections"):
             return JudgeReport(UNKNOWN, risks, narrative.coverage)
