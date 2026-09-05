@@ -68,6 +68,12 @@ class DefaultNodeExecutor:
         self.retriever = KnowledgeRetriever(knowledge_root or REPO / "core" / "knowledge")
         self.arena = MethodArena(self.retriever, decisions)
         self.planner = ExperimentPlanner(self.retriever)
+        # P8：Competition Intelligence 接入 Runtime（候选竞技场 + 竞赛包只读修饰）
+        from runtime.knowledge.packs import load_competition_packs
+        from runtime.modeling.candidates import CandidateArena
+        _packs = load_competition_packs(knowledge_root or REPO / "core" / "knowledge")
+        _pack = _packs.get("cp-cumcm") or next(iter(_packs.values()), None)
+        self.candidate_arena = CandidateArena(self.retriever, _pack)
         # 跨节点共享（session 级）：qid -> {"model": aid, "plan": ..., ...}
         self.shared: dict = {}
         # P7 Rerun 语义：显式重跑的节点强制新建谱系（旧产物 superseded 审计保留）
@@ -206,6 +212,14 @@ class DefaultNodeExecutor:
                 mid = m.artifact_id
             ev.append({"from": qid, "relation": "solved_by", "to": mid})
             self.shared.setdefault(qid, {})["card_id"] = outcome.chosen
+            # P8-4：生成候选方案（baseline/improved/hybrid/innovation）供规划消费
+            try:
+                cands = self.candidate_arena.generate_candidates(
+                    qid, self.features)
+                self.shared[qid]["candidates"] = [
+                    c.as_dict() for c in self.candidate_arena.rank(cands)]
+            except Exception as e:      # 候选生成失败不阻断选型（降级记录）
+                self.shared[qid]["candidates_error"] = str(e)
             if self.state:
                 self._advance_question(qid, "modeled")
             self.shared[qid]["model"] = mid
@@ -269,6 +283,27 @@ class DefaultNodeExecutor:
                 return NodeResult(FAIL, f"{qid}: 无选型结果，无法规划实验")
             if info.get("plan"):
                 continue    # 幂等：计划已存在
+            # P8-4→P8-7 通道：最优候选直接生成结构化计划（含创新验证条目）
+            cands = info.get("candidates")
+            if cands:
+                from runtime.modeling.candidates import Candidate
+                top = cands[0]
+                cand = Candidate(
+                    candidate_id=top["candidate_id"], kind=top["kind"],
+                    composition=list(top["composition"]),
+                    base_card=top["base_card"], rationale=top["rationale"],
+                    score=top["score"], required_experiments=list(
+                        top["required_experiments"]),
+                    knowledge_refs=list(top["knowledge_refs"]))
+                plan = self.planner.plan_from_candidate(cand, qid)
+                d = self.registry.create(
+                    "decision", title=f"{qid} 实验计划",
+                    payload=plan.methods, data=plan.as_dict(),
+                    depends_on=[mid] if mid else [],
+                    activate=True, created_by=node_id)
+                info["plan"] = plan.as_dict()
+                ev.append({"from": d.artifact_id, "relation": "based_on", "to": mid})
+                continue
             shortlist = [c["card_id"] if isinstance(c, dict) else c
                          for c in (info.get("shortlist") or [])]
             if not shortlist and mid:

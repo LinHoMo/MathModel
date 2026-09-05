@@ -200,8 +200,9 @@ class TestLifecycleInvariants:
             reg = ArtifactRegistry(Path(td) / "r.json")
             reg.project = "t"
             reg.create("question", title="q", activate=True)
-            reg.create("model", title="m", activate=True)
+            reg.create("experiment", title="e", activate=True)
             reg.create("result", title="r", activate=True)
+            reg.create("claim", title="c", activate=True)
             g = EvidenceGraph(reg)
             g.add_relation("E001", "produces", "R001")
             g.add_relation("R001", "supports", "C001")
