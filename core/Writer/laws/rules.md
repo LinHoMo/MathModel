@@ -23,13 +23,18 @@
 
 ## 铁律（不可违反）
 
-### W1: 论文中每个数值必须能追溯到 figures/all_results.json
+### W1: 论文中每个事实/数值必须经 Evidence Graph 解析到已验证的 Result Artifact
 - **防御层次**: L1 + L6 结构化输出 + 事后验证
+- **V3 语义（权威）**: 每个数值/事实性陈述必须沿 Evidence Graph 的 `supports` / `produces`
+  关系解析到一个 `validated` 状态的 Result Artifact（`core/runtime/graph/evidence_graph.py`）。
+  论文数值来源 = Result Artifact，而不是写作时重新估算。
+- **V2 物理载体（兼容）**: legacy 流水线中 `figures/all_results.json` 仍是 Result 的物理
+  载体与 L5/L6 校验对象；V3 下它被 Registry 登记为 result Artifact 的 provenance。
 - **典型反例**:
   - 摘要写 95.2% 正文写 95.3%，口径不一致，评委质疑数据真实性
   - 图表数值与账本差 0.01（四舍五入口径不同），追溯失败
   - 论文阶段重新估算或换四舍五入口径，与账本脱节
-- 论文中每个数字必须能追溯到 `figures/all_results.json`
+- 论文中每个数字必须能经 Evidence Graph 追溯到 Result Artifact（legacy：`figures/all_results.json`）
 - 摘要和正文数值必须一致
 - 图表中的数值必须与代码输出一致
 - 禁止在论文阶段重新估算或换一套四舍五入口径
@@ -154,8 +159,8 @@
 | 错误类型 | 典型表现 | 防错方法 |
 |---------|---------|---------|
 | 口径不一致 | 摘要 0.832 正文 0.8317，四舍五入不同 | 统一四舍五入口径（如统一 4 位小数），从账本复制 |
-| 不可追溯 | 数值在 all_results.json 找不到对应记录 | 每个数值标注账本 key，写入追溯表 |
-| 论文阶段重估 | 论文阶段重新计算或估算数值 | 禁止重估；数值必须来自代码产出 all_results.json |
+| 不可追溯 | 数值经 Evidence Graph 解析不到 validated Result Artifact（legacy：all_results.json 无对应记录） | 每个数值标注 Artifact ID / 账本 key，写入追溯表 |
+| 论文阶段重估 | 论文阶段重新计算或估算数值 | 禁止重估；数值必须来自 Result Artifact（legacy：代码产出 all_results.json） |
 
 ### 引用防错速查表
 

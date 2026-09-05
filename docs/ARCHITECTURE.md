@@ -1,5 +1,16 @@
 # Architecture
 
+> **⚠️ 权威声明（V3 Documentation Authority Cutover）**
+> 本文件描述的「四手 29 agent」线性流水线自 V3 起降级为 **legacy 视图**。
+> 当前架构真源是 **V3.1 Cognitive Workflow Runtime**：
+> **[docs/architecture/V3.1_ARCHITECTURE.md](architecture/V3.1_ARCHITECTURE.md)**
+> （Artifact Registry + Typed Evidence Graph + Workflow DAG + 5 Role + 6 Validator + Knowledge 层）。
+> 迁移映射见 [V3_MIGRATION_MAP.md](architecture/V3_MIGRATION_MAP.md)，最终审计见 [V3_FINAL_AUDIT.md](architecture/V3_FINAL_AUDIT.md)。
+> `catalog.yaml`（schema_version 5）是双视图（legacy hands / v3）的单一真源；
+> `core/tools/` 脚本已按职责归入六类子包（runtime / validation / evaluation /
+> knowledge / devtools / rendering），根目录保留兼容 shim，AGENTS.md 协议命令不变。
+> 下文 legacy 描述仅在维护 `state.py` legacy 流水线时参考。
+
 MathModelSkills 采用角色化架构，把「一道赛题 → 一篇论文」拆成四个独立角色（四手），
 每手内部多 agent 按 UTG 六层防御串联，最终交付可追溯、可复现、无 AI 痕迹的论文。
 
@@ -18,9 +29,9 @@ MathModelSkills 采用角色化架构，把「一道赛题 → 一篇论文」�
 
 | 文件路径 | 作用 |
 |---|---|
-| `core/tools/citation_check.py` | 引用可信度静态扫描（占位符/格式/闭合/承诺兑现） |
-| `core/tools/benchmark.py bench *` | 国赛复盘基准（rubric 列表/模板/重算/报告） |
-| `core/tools/bench_mmbench.py` | LLM-MM-Agent MMBench 题库导入适配器 |
+| `core/tools/validation/citation_check.py` | 引用可信度静态扫描（占位符/格式/闭合/承诺兑现） |
+| `core/tools/evaluation/benchmark.py bench *` | 国赛复盘基准（rubric 列表/模板/重算/报告） |
+| `core/tools/evaluation/bench_mmbench.py` | LLM-MM-Agent MMBench 题库导入适配器 |
 | `core/knowledge/bench/cumcm/` | 22 年 CUMCM 评分细则 rubric |
 
 核心原则：**引擎（`core/`）是唯一可复用资产**，实例（`projects/`）是引擎在校验下跑出来的结果；

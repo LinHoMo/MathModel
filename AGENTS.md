@@ -142,7 +142,7 @@ MathModelSkills/
 │   ├── env/                      # 环境变量配置层（config.yaml + loader.py）
 │   ├── schemas/                  # 结构化输出 Schema
 │   ├── templates/                # LaTeX 竞赛包（cumcm / mcm / diangong / huawei / huashu）
-│   └── tools/                    # 全部工具脚本（state / gate / validate / doctor 等）
+│   └── tools/                    # 工具脚本：runtime/ validation/ evaluation/ knowledge/ devtools/ rendering/ 六类子包，根目录保留同名兼容 shim（命令路径不变）
 ├── projects/                     # 项目实例
 ├── docs/                         # 文档（ARCHITECTURE.md + STATUS.md）
 ├── tests/                        # unit / integration / e2e 测试
@@ -317,7 +317,7 @@ external_skills:
 以下铁律贯穿四手，由各 agent 的 Self-Check 与 Stage Gates 强制执行：
 
 - **最终必有完整可编译的 `paper/main.tex`（+ `references.bib`）**：TEX 源文件是必交付物。PDF 渲染受 `env` `runtime.compile_pdf` 策略控制：`auto`（默认）时若主机存在 LaTeX 工具链（xelatex/latexmk）则 final-validator 必须编译出可打开的 `paper/main.pdf`（HARD）；无工具链时仅交付 main.tex，PDF 检查降级 WARN；`always` 强制编译；`never` 只交付 TEX。
-- **所有数值可追溯到 `figures/all_results.json`**：论文中每个数值必须能回溯到 Programmer 手产出的 `figures/all_results.json`，不允许在论文阶段重新估算或换四舍五入口径（铁律 W1 / P2）。
+- **所有数值可追溯到已验证的 Result Artifact**：论文中每个数值必须经 Evidence Graph（V3）解析到一个 `validated` 状态的 Result Artifact；legacy 流水线中其物理载体为 Programmer 手产出的 `figures/all_results.json`。不允许在论文阶段重新估算或换四舍五入口径（铁律 W1 / P2）。
 - **无占位符 / AI 痕迹 / 伪造引用**：L5 护栏全绿（无禁用词、无占位符、无 AI 痕迹、无内部路径），参考文献必须真实存在不可捏造（铁律 W5–W8）。
 - **随机种子固定为 42**：所有代码必须含 `np.random.seed(42)` 或等效设置，启发式算法须多次运行（≥5 次）报告均值与标准差（铁律 P1 / P6）。
 - **不修改 `.gitignore` / `.git/`**：任何 agent 不得修改版本控制元数据与忽略规则。
