@@ -106,9 +106,11 @@ class RuntimeSession:
         return self.run()
 
     def checkpoint(self) -> None:
-        """Registry / Graph / State 三件套落盘 + State 从 Registry/Graph 派生。"""
+        """Registry / Graph / State / DecisionLog 落盘 + State 派生。"""
         self.registry.save()
         self.graph.save()
+        if getattr(self.decisions, "_dirty", False) or                 not self.decisions.path.exists():
+            self.decisions.save()
         self.state.refresh_from(self.registry, self.graph)
         self.state.save()
 
