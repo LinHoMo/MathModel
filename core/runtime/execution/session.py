@@ -152,6 +152,21 @@ class RuntimeSession:
         return {"invalidation": report, "reset_nodes": sorted(affected),
                 "resume_ready": self.engine.ready()}
 
+    def rerun(self, node_id: str, reason: str = "manual rerun") -> dict:
+        """P7 Rerun：研究者主动重跑（区别于 Recompute）。
+
+        重置 node 及其下游；该节点强制新建谱系，旧产物显式 superseded
+        （审计保留，不可再成为活跃证据）。返回受影响节点与恢复入口。
+        """
+        if node_id not in self.engine.dag.nodes:
+            raise SessionError(f"未知节点: {node_id}")
+        affected = self.engine.reset_to(node_id)
+        self.executor_impl.force_new_lineage.add(node_id)
+        self.engine._record(node_id, "rerun", reason)
+        self.checkpoint()
+        return {"reset_nodes": sorted(affected), "reason": reason,
+                "resume_ready": self.engine.ready()}
+
     def _reset_all(self) -> set[str]:
         affected: set[str] = set()
         for nid in list(self.engine.dag.nodes):

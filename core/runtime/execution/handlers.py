@@ -70,6 +70,8 @@ class DefaultNodeExecutor:
         self.planner = ExperimentPlanner(self.retriever)
         # 跨节点共享（session 级）：qid -> {"model": aid, "plan": ..., ...}
         self.shared: dict = {}
+        # P7 Rerun 语义：显式重跑的节点强制新建谱系（旧产物 superseded 审计保留）
+        self.force_new_lineage: set[str] = set()
 
     # ------------------------------------------------------------ 工具
 
@@ -83,6 +85,27 @@ class DefaultNodeExecutor:
         """该问题的活跃模型（终态 invalidated/superseded/deprecated 不计入）。"""
         return [a.artifact_id for a in self.registry.list_by_type("model")
                 if a.question == qid and a.status not in _TERMINAL]
+
+    def _results_of(self, qid: str) -> list[str]:
+        """该问题的活跃 result（P7：Registry 派生，崩溃/resume 后仍可重建）。"""
+        return [a.artifact_id for a in self.registry.list_by_type("result")
+                if a.question == qid and a.status not in _TERMINAL]
+
+    def _claim_of(self, qid: str) -> str:
+        """该问题的活跃 claim（无则空串）。"""
+        for a in self.registry.list_by_type("claim"):
+            if a.question == qid and a.status not in _TERMINAL:
+                return a.artifact_id
+        return ""
+
+    def _card_id_of(self, qid: str, mid: str) -> str:
+        """问题的选型 card_id：shared 缓存优先，回退 model.data（Registry 真源）。"""
+        info = self.shared.get(qid, {})
+        if info.get("card_id"):
+            return info["card_id"]
+        if mid:
+            return str(self.registry.get(mid).data.get("card_id", ""))
+        return ""
 
     def _advance_question(self, qid: str, target: str) -> None:
         """沿问题状态机推进（非法转换静默跳过，由 state fail-closed 兜底）。"""
@@ -158,13 +181,27 @@ class DefaultNodeExecutor:
             outcome = self.arena.select(qid, self.features, created_by=node_id)
             card = outcome.chosen_card
             models = self._models_of(qid)
+            if node_id in self.force_new_lineage:
+                from runtime.artifacts.lifecycle import LifecycleError
+                self.shared.pop(qid, None)   # 清缓存：旧 shared 指向将死谱系
+                for old_m in models:
+                    try:
+                        self.registry.get(old_m).transition(
+                            "superseded", by=node_id,
+                            reason="superseded by explicit rerun")
+                    except LifecycleError:
+                        pass
+                self.force_new_lineage.discard(node_id)
+                models = []
             mid = models[-1] if models else ""
             if not mid:
                 m = self.registry.create(
                     "model", title=card.get("name") or outcome.chosen,
                     question=qid,
                     depends_on=[qid],
-                    data={"card_id": outcome.chosen, "family": card.get("family", "")},
+                    data={"card_id": outcome.chosen,
+                          "family": card.get("family", ""),
+                          "shortlist": [c["card_id"] for c in outcome.shortlist]},
                     activate=True, created_by=node_id)
                 mid = m.artifact_id
             ev.append({"from": qid, "relation": "solved_by", "to": mid})
@@ -172,7 +209,7 @@ class DefaultNodeExecutor:
             if self.state:
                 self._advance_question(qid, "modeled")
             self.shared[qid]["model"] = mid
-            self.shared[qid]["shortlist"] = outcome.shortlist
+            self.shared[qid]["shortlist"] = [c["card_id"] for c in outcome.shortlist]
             count += 1
         return NodeResult(PASS, f"{count} 个问题完成选型",
                           outputs={"artifacts": [], "evidence": ev})
@@ -182,13 +219,14 @@ class DefaultNodeExecutor:
         ev = []
         n_assumed = 0
         for qid in self._question_ids():
-            mid = self.shared.get(qid, {}).get("model")
-            if not mid:
+            models = self._models_of(qid)
+            if not models:
                 return NodeResult(FAIL, f"{qid}: 尚无已选模型（上游缺失）")
+            mid = models[-1]
             if any(r["from"] == mid and r["relation"] == "assumes"
                    for r in self.graph.relations):
                 continue    # 幂等：rollback 后重跑不重复登记假设
-            card = self.retriever.cards.get(self.shared[qid].get("card_id", ""))
+            card = self.retriever.cards.get(self._card_id_of(qid, mid))
             risks = list(card.risks)[:2] if card else []
             if not risks:
                 risks = ["所选方法的前提条件成立（数据规模/类型/独立性）"]
@@ -224,16 +262,20 @@ class DefaultNodeExecutor:
         """实验规划器：主方法 + 对照基线 + 灵敏度 → decision artifact。"""
         ev = []
         for qid in self._question_ids():
-            info = self.shared.get(qid, {})
-            card_id = info.get("card_id")
+            info = self.shared.setdefault(qid, {})
+            mid = info.get("model") or (self._models_of(qid) or [None])[-1]
+            card_id = self._card_id_of(qid, mid)
             if not card_id:
                 return NodeResult(FAIL, f"{qid}: 无选型结果，无法规划实验")
             if info.get("plan"):
                 continue    # 幂等：计划已存在
-            shortlist = [c["card_id"] for c in info.get("shortlist", [])]
+            shortlist = [c["card_id"] if isinstance(c, dict) else c
+                         for c in (info.get("shortlist") or [])]
+            if not shortlist and mid:
+                # P7：shortlist 持久化于 model.data（Registry 真源），崩溃后可重建
+                shortlist = list(self.registry.get(mid).data.get("shortlist", []))
             baseline = next((c for c in shortlist if c != card_id), None)
             plan = self.planner.plan(qid, [card_id], baseline_card_id=baseline)
-            mid = info.get("model")
             d = self.registry.create(
                 "decision", title=f"{qid} 实验计划",
                 payload=plan.methods,
@@ -251,11 +293,15 @@ class DefaultNodeExecutor:
         if not qid:
             return NodeResult(FAIL, "experiment 节点必须 per_question")
         info = self.shared.setdefault(qid, {})
-        mid = info.get("model")
+        mid = info.get("model") or (self._models_of(qid) or [None])[-1]
         if not mid:
             return NodeResult(FAIL, f"{qid}: 无模型可实验")
-        live_results = [rid for rid in info.get("results", [])
-                        if self.registry.get(rid).status not in _TERMINAL]
+        info["model"] = mid
+        if node_id in self.force_new_lineage:
+            self.force_new_lineage.discard(node_id)
+            # Rerun 语义：旧链（E/R/F/C）整链 superseded，强制全新谱系
+            self._supersede_question_chain(qid, node_id)
+        live_results = self._results_of(qid)
         if live_results:
             # 幂等：rollback 后重跑复用既有（非终态）实验链
             r = live_results[-1]
@@ -266,15 +312,8 @@ class DefaultNodeExecutor:
                               outputs={"artifacts": [], "evidence": [
                                   {"from": r, "relation": "visualized_by", "to": f}]})
         info["results"] = live_results   # 清掉已失效的旧结果，走全新链
-        # 退役旧实验链（reval 命中但未终态的 E）：新链替代，E4 不再误报
-        from runtime.artifacts.lifecycle import LifecycleError
-        for old_e in self.registry.list_by_type("experiment"):
-            if old_e.question == qid and old_e.status not in _TERMINAL:
-                try:
-                    old_e.transition("superseded", by=node_id,
-                                     reason="replaced by re-run after invalidation")
-                except LifecycleError:
-                    pass
+        # 退役旧实验链（fresh 分支触发，如 recompute 后重建）
+        self._supersede_question_chain(qid, node_id)
         e = self.registry.create("experiment", title=f"{qid} 实验",
                                  question=qid, depends_on=[mid],
                                  activate=True, created_by=node_id)
@@ -297,15 +336,32 @@ class DefaultNodeExecutor:
             {"from": r.artifact_id, "relation": "visualized_by", "to": f.artifact_id},
         ]
         info.setdefault("results", []).append(r.artifact_id)
+        info["results"] = self._results_of(qid)   # 以 Registry 为准
         if self.state:
             self._advance_question(qid, "experimenting")
         return NodeResult(PASS, f"{qid}: 实验/结果/图已登记",
                           outputs={"artifacts": [], "evidence": ev})
 
+    def _supersede_question_chain(self, qid: str, by_node: str) -> None:
+        """退役该问题的整条实验链（E/R/F/C → superseded，审计保留）。
+
+        Rerun 与 Recompute 重建共用：旧 claim 失去支撑后由 evidence_build
+        重建新 claim；E4 不再误报旧实验。
+        """
+        from runtime.artifacts.lifecycle import LifecycleError
+        for art in self.registry.all():
+            if art.question == qid and art.type in (
+                    "experiment", "result", "figure", "claim")                     and art.status not in _TERMINAL:
+                try:
+                    art.transition("superseded", by=by_node,
+                                   reason="replaced by re-run")
+                except LifecycleError:
+                    pass
+        self.shared.pop(qid, None)
+
     def do_experiment_critique(self, node_id: str) -> NodeResult:
         qid = self._question_of(node_id)
-        results = [rid for rid in self.shared.get(qid, {}).get("results", [])
-                   if self.registry.get(rid).status not in _TERMINAL]
+        results = self._results_of(qid)
         if not results:
             return NodeResult(FAIL, f"{qid}: 实验无有效结果产出，批判不通过")
         for rid in results:
@@ -319,10 +375,19 @@ class DefaultNodeExecutor:
         ev = []
         n = 0
         for qid in self._question_ids():
-            results = self.shared.get(qid, {}).get("results", [])
+            results = self._results_of(qid)
             if not results:
                 return NodeResult(FAIL, f"{qid}: 无 result，证据链断裂")
-            claim_id = self.shared.get(qid, {}).get("claim")
+            claim_id = self.shared.get(qid, {}).get("claim") or self._claim_of(qid)
+            if node_id in self.force_new_lineage and claim_id                     and self.registry.get(claim_id).status not in _TERMINAL:
+                self.shared.pop(qid, None)
+                from runtime.artifacts.lifecycle import LifecycleError
+                try:
+                    self.registry.get(claim_id).transition(
+                        "superseded", by=node_id,
+                        reason="superseded by explicit rerun")
+                except LifecycleError:
+                    pass
             if claim_id and self.registry.get(claim_id).status not in _TERMINAL:
                 continue    # 幂等：有效 claim 已登记（终态则重建）
             c = self.registry.create("claim", title=f"{qid} 结论",
@@ -332,6 +397,7 @@ class DefaultNodeExecutor:
             ev.append({"from": results[-1], "relation": "supports",
                        "to": c.artifact_id})
             self.shared.setdefault(qid, {})["claim"] = c.artifact_id
+            self.shared[qid]["results"] = results
             n += 1
         return NodeResult(PASS, f"{n} 条结论已登记",
                           outputs={"artifacts": [], "evidence": ev})
@@ -375,7 +441,7 @@ class DefaultNodeExecutor:
         narrative = self.shared.get("narrative")
         if outline is None or narrative is None:
             return NodeResult(FAIL, "outline/narrative 缺失（paper_projection 未完成）")
-        claim = self.shared.get(qid, {}).get("claim")
+        claim = self.shared.get(qid, {}).get("claim") or self._claim_of(qid)
         claim = claim if claim and self.registry.get(claim).status not in _TERMINAL             else None
         sections = {a.title: a.artifact_id
                     for a in self.registry.list_by_type("paper_section")

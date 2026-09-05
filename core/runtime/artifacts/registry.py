@@ -36,6 +36,9 @@ class ArtifactRegistry:
         self.counters: dict[str, int] = {}         # type → 已发放数量
         self.project: str = ""
         self._dirty = False
+        # P7 并发契约：并行波次下多节点同时登记，ID 分配与写入必须互斥
+        import threading
+        self._lock = threading.RLock()
         if self.path.exists():
             self.load()
         else:
@@ -107,6 +110,18 @@ class ArtifactRegistry:
                parent=None, provenance=None, data=None, tags=None,
                activate: bool = False) -> Artifact:
         """登记新 Artifact（状态 draft；activate=True 直接进入 active）。"""
+        with self._lock:
+            return self._create_locked(artifact_type, title=title,
+                                       payload=payload,
+                                       created_by=created_by, question=question,
+                                       depends_on=depends_on, parent=parent,
+                                       provenance=provenance, data=data,
+                                       tags=tags, activate=activate)
+
+    def _create_locked(self, artifact_type, *, title="", payload=None,
+                       created_by="", question="", depends_on=None,
+                       parent=None, provenance=None, data=None, tags=None,
+                       activate=False) -> Artifact:
         aid = self.next_id(artifact_type)
         art = Artifact(
             artifact_id=aid, type=artifact_type, title=title or aid,
@@ -168,10 +183,11 @@ class ArtifactRegistry:
 
     def transition(self, artifact_id: str, target: str, *, by: str = "",
                    reason: str = "") -> Artifact:
-        art = self.get(artifact_id)
-        art.transition(target, by=by, reason=reason)
-        self._dirty = True
-        return art
+        with self._lock:
+            art = self.get(artifact_id)
+            art.transition(target, by=by, reason=reason)
+            self._dirty = True
+            return art
 
     def activate(self, artifact_id: str, by: str = "") -> Artifact:
         return self.transition(artifact_id, "active", by=by, reason="activated")

@@ -113,6 +113,9 @@ class EvidenceGraph:
         self.path = Path(path) if path else None
         self.relations: list[dict] = []   # [{from, relation, to, at}]
         self.graph_version: int = 0
+        # P7 并发契约：并行节点同时登记关系/剪边必须互斥
+        import threading
+        self._lock = threading.RLock()
         if self.path and self.path.exists():
             self.load()
 
@@ -156,6 +159,12 @@ class EvidenceGraph:
     def add_relation(self, from_id: str, relation: str, to_id: str,
                      *, check_types: bool = True) -> dict:
         """登记 typed relation（fail-closed：ID 不存在 / 类型不匹配 / 自环 / 重复 均拒绝）。"""
+        with self._lock:
+            return self._add_relation_locked(from_id, relation, to_id,
+                                             check_types=check_types)
+
+    def _add_relation_locked(self, from_id, relation, to_id,
+                             *, check_types=True) -> dict:
         if relation not in RELATION_TYPES:
             raise GraphError(f"未知 relation 类型: {relation!r}（合法: {sorted(RELATION_TYPES)}）")
         if from_id == to_id:
@@ -281,16 +290,17 @@ class EvidenceGraph:
         需要剪掉死边，否则 Evidence Gate 的 E3（链含失效产物）永远 FAIL。
         剪边不回滚已登记的失效标记；返回剪除条数（0 = 无死边，幂等）。
         """
-        terminal = {"invalidated", "superseded", "deprecated"}
-        dead = {a.artifact_id for a in self.registry.all()
-                if a.status in terminal}
-        before = len(self.relations)
-        self.relations = [e for e in self.relations
-                          if e["from"] not in dead and e["to"] not in dead]
-        removed = before - len(self.relations)
-        if removed:
-            self.graph_version += 1
-        return removed
+        with self._lock:
+            terminal = {"invalidated", "superseded", "deprecated"}
+            dead = {a.artifact_id for a in self.registry.all()
+                    if a.status in terminal}
+            before = len(self.relations)
+            self.relations = [e for e in self.relations
+                              if e["from"] not in dead and e["to"] not in dead]
+            removed = before - len(self.relations)
+            if removed:
+                self.graph_version += 1
+            return removed
 
     def evidence_chain(self, claim_id: str) -> list[dict]:
         """返回支撑某 Claim 的完整证据链（claim ← result ← experiment ← model/data）。"""

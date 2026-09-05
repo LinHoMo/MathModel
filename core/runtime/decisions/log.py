@@ -107,6 +107,9 @@ class DecisionLog:
         self.path = Path(path)
         self.decisions: dict[str, Decision] = {}
         self._counter = 0
+        # P7 并发契约：并行节点同时登记决策必须互斥
+        import threading
+        self._lock = threading.RLock()
         if self.path.exists():
             self.load()
 
@@ -159,6 +162,17 @@ class DecisionLog:
             question_type: str = "",
             decision_id: str | None = None) -> Decision:
         """登记决策。缺省自动分配下一个 D 编号。"""
+        with self._lock:
+            return self._add_locked(question, chosen, alternatives, criteria,
+                                    reasoning, confidence, reversible,
+                                    created_by, evidence_ids=evidence_ids,
+                                    question_type=question_type,
+                                    decision_id=decision_id)
+
+    def _add_locked(self, question, chosen, alternatives, criteria,
+                    reasoning, confidence, reversible, created_by,
+                    evidence_ids=None, question_type="",
+                    decision_id=None) -> Decision:
         did = decision_id or self.next_id()
         dec = Decision.from_dict({
             "decision_id": did,
