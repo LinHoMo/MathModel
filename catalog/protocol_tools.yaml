@@ -1,0 +1,117 @@
+# catalog/protocol_tools.yaml —— 执行协议工具注册表（跨 runtime 通用，零第三方依赖）
+# 从 catalog.yaml 拆出；load_catalog() 合并时键名映射为 tools。
+# 执行协议工具（跨 runtime 通用，零第三方依赖）
+tools:
+  state:
+    path: core/tools/state.py
+    description: 执行状态唯一事实源（work/state.json + work/STATE.md 可读镜像 + work/decision_log.json 跨 harness 互通）
+    commands:
+      - "python core/tools/state.py <项目> init"
+      - "python core/tools/state.py <项目> status"
+      - "python core/tools/state.py <项目> advance <hand> <agent> --output <产物>"
+      - "python core/tools/state.py <项目> fail <hand> <agent> --reason <原因>"
+      - "python core/tools/state.py <项目> reset --to <hand>/<agent>"
+      - "python core/tools/state.py <项目> decision-add --stage <阶段> --agent <agent> --decision-type <类型> --question <问题> --options <选项> --choice <选择> --rationale <理由> --confidence <置信度> --time-spent <耗时>"
+      - "python core/tools/state.py <项目> decision-show"
+  gate:
+    path: core/tools/gate.py
+    description: 门禁判定入口，把 29 个 agent 的 Self-Check 从复选框变为可执行断言
+    commands:
+      - "python core/tools/gate.py <项目> <hand> <agent>"
+      - "python core/tools/gate.py <项目> <hand>"
+      - "python core/tools/gate.py <项目> all"
+  gatelib:
+    path: core/tools/gatelib.py
+    description: 门禁公共库（禁用词 / 占位符 / 内部术语 / Schema 子集校验）
+  score_artifact:
+    path: core/tools/score_artifact.py
+    description: 评审判定，脚本重算 verdict（不信任模型自评，最低分不被均分掩盖）
+    commands:
+      - "python core/tools/score_artifact.py <项目>"
+      - "python core/tools/score_artifact.py <项目> --round 2"
+  freeze_numbers:
+    path: core/tools/freeze_numbers.py
+    description: 数字冻结，论文数字单一真源（杜绝改代码后论文仍用旧数字）
+    commands:
+      - "python core/tools/freeze_numbers.py <项目> freeze"
+      - "python core/tools/freeze_numbers.py <项目> check"
+  render_ai_usage:
+    path: core/tools/render_ai_usage.py
+    description: AI 使用台账与披露生成器（CUMCM 支撑材料 / MCM AI Use Report）
+    commands:
+      - "python core/tools/render_ai_usage.py <项目> add --stage <环节> --tool <工具> --purpose <用途>"
+      - "python core/tools/render_ai_usage.py <项目> render --competition cumcm"
+  doctor:
+    path: core/tools/doctor.py
+    description: 环境预检（工具链 / 竞赛包 / 项目结构），开工前暴露问题
+    commands:
+      - "python core/tools/doctor.py"
+      - "python core/tools/doctor.py --project <项目> --competition cumcm"
+  retrospect:
+    path: core/tools/retrospect.py
+    description: 赛后回顾（Growth 阶段），汇总失败/返修/评审数据生成回顾报告，供教训归档到 _negative/ 与 pitfalls/
+    commands:
+      - "python core/tools/retrospect.py <项目>"
+  new_project:
+    path: core/tools/new_project.py
+    description: 新项目脚手架，创建标准目录结构并导入赛题文件（支持 cumcm / mcm / diangong 竞赛包）
+    commands:
+      - "python core/tools/new_project.py <项目名> --competition cumcm --problem <赛题文件>"
+  # 引擎演练与题库健康检查
+  benchmark:
+    path: core/tools/benchmark.py
+    description: 引擎演练与题库健康检查（pipeline 开工演练自动清理；library 检查赛题索引覆盖）
+    commands:
+      - "python core/tools/benchmark.py pipeline --competition cumcm"
+      - "python core/tools/benchmark.py library"
+
+  # 实测分位蒸馏工具
+  distill_empirical:
+    path: core/tools/distill_empirical.py
+    description: 从获奖论文 PDF 蒸馏实测分位统计，生成 empirical.json
+    commands:
+      - "python core/tools/distill_empirical.py --input-dir <PDF目录> --output <输出路径> --competition cumcm"
+      - "python core/tools/distill_empirical.py --from-index <INDEX.md> --output <输出路径>"
+
+  # 反思银行
+  reflection_bank:
+    path: core/tools/reflection_bank.py
+    description: 跨项目经验沉淀与检索（扫描回顾、搜索经验、工具接地验证、导出 pitfalls）
+    commands:
+      - "python core/tools/reflection_bank.py scan"
+      - "python core/tools/reflection_bank.py search <关键词>"
+      - "python core/tools/reflection_bank.py grounding"
+      - "python core/tools/reflection_bank.py stats"
+      - "python core/tools/reflection_bank.py export-pitfalls"
+
+  # 题型差异化权重
+  weight_profiles:
+    path: core/tools/weight_profiles.py
+    description: 按题型（A/B/C/D/E/MCM/ICM）计算评审权重（基础×乘子→clamp→归一化）
+    commands:
+      - "python core/tools/weight_profiles.py"
+      - "python core/tools/weight_profiles.py C"
+
+  # 云执行沙箱
+  cloud_sandbox:
+    path: core/tools/cloud_sandbox.py
+    description: 云端代码执行沙箱（E2B/Daytona/本地降级），支持隔离环境运行 Python 代码
+    commands:
+      - "python core/tools/cloud_sandbox.py status"
+      - "python core/tools/cloud_sandbox.py config"
+      - "python core/tools/cloud_sandbox.py run <脚本文件>"
+      - "python core/tools/cloud_sandbox.py run --code \"print(42)\""
+
+  # MATLAB/北太天元/MWORKS Syslab 环境检测
+  check_matlab_env:
+    path: core/tools/check_matlab_env.py
+    description: 检测 MATLAB/北太天元/MWORKS Syslab 可用性（路径、版本、工具箱、许可证、M/Julia 运行时）
+    commands:
+      - "python core/tools/check_matlab_env.py"
+      - "python core/tools/check_matlab_env.py --summary"
+      - "python core/tools/check_matlab_env.py --platform matlab"
+      - "python core/tools/check_matlab_env.py --platform syslab"
+
+# =====================================================================
+# V3.1 Cognitive Workflow Runtime 视图（P4 起与 hands 并存，P5 切换主引擎）
+# =====================================================================

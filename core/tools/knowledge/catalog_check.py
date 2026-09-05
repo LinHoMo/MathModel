@@ -53,6 +53,8 @@ def load_catalog() -> dict:
         from runtime.execution.yamlio import load_file
         data = load_file(CATALOG_PATH)
         if isinstance(data, dict) and "hands" in data:
+            import gen_runtime_manifest as GRM
+            GRM.merge_registries(data)
             _unwrap_v3(data)
             return data
     except Exception:

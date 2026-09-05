@@ -1,0 +1,43 @@
+# catalog/external_skills.yaml —— 从 catalog.yaml 拆出的外部 Skill 注册表
+# 由 load_catalog() 合并回主视图；单独编辑本文件即可增删外部 Skill。
+# 外部 skill 集成
+external_skills:
+  # PDF 解析 skill
+  - name: pdf-parser
+    type: python
+    description: "解析 PDF 文件，提取文本、表格、图片"
+    install: "pip install pdfplumber"
+    fallback: "使用 PyPDF2 内置解析"
+    used_by:
+      - "core/Modeler/agents/problem-parser"
+
+  # LaTeX 编译 skill
+  - name: latex-compiler
+    type: system
+    description: "编译 LaTeX 文件为 PDF"
+    install: "安装 TeX Live 或 MiKTeX"
+    fallback: "仅交付 .tex 源文件，不编译 PDF"
+    used_by:
+      - "core/Writer/agents/final-validator"
+
+  # 代码执行 skill
+  - name: code-executor
+    type: python
+    description: "安全执行 Python 代码"
+    install: "无需额外安装（使用内置 subprocess）"
+    fallback: "静态分析代码，不实际执行"
+    used_by:
+      - "core/Programmer/agents/code-implementer"
+      - "core/Programmer/agents/test-runner"
+
+  # MWORKS Syslab（国产 MATLAB 兼容，M/Julia 双运行时）执行 skill
+  - name: syslab
+    type: system
+    description: "MWORKS Syslab 环境（M 命令行 mlang + Julia julia-ty），用于 MATLAB/北太天元交付分支的真实执行"
+    install: "安装 MWORKS Syslab；skills 已拷贝到 .claude/skills/；SYSLAB_HOME 写入 ~/.syslab/syslab-env.ini"
+    fallback: "仅产出 .m 文件不执行，标注'未实际执行'"
+    used_by:
+      - "core/Programmer/agents/code-implementer"
+      - "core/Programmer/agents/test-runner"
+
+
