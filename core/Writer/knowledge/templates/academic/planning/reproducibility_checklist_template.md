@@ -151,14 +151,14 @@
   - 公式编号 → 代码行号映射表：`[填写]`（建议作为附录）
 - [ ] 论文中所有超参数均与代码一致
 - [ ] 论文中所有架构描述均与代码一致
-- [ ] 检查工具：`[core/knowledge/validation/formula_checker.py]` 已运行并通过
+- [ ] 检查工具：`[core/validators/modules/formula_checker.py]` 已运行并通过
 
 ### 4.2 图表数据来源（必填）
 
 - [ ] 每张图/表的数据均可在 `figures/all_results.json` 或类似文件中找到
 - [ ] 图表生成脚本：`[填写]`
 - [ ] 图表数据与正文数值一致（无矛盾）
-- [ ] 检查工具：`[core/knowledge/validation/consistency_checker.py]` 已运行并通过
+- [ ] 检查工具：`[core/validators/modules/consistency_checker.py]` 已运行并通过
 
 ### 4.3 参考文献完整性（必填）
 
@@ -224,7 +224,7 @@
 # 完整论文 PDF 硬门禁 + 质量门禁 + 公式/图表/引用/占位符统一校验
 py validate_project.py --project projects/<项目>
 
-# 底层校验器（如需单独运行，见 core/knowledge/validation/）
+# 底层校验器（如需单独运行，见 core/validators/modules/）
 #   formula_checker.py      —— 公式-代码一致性
 #   consistency_checker.py  —— 图表数据-正文数值一致性
 #   guardrails.py           —— 引用完整性 / 占位符 / AI 痕迹检测

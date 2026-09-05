@@ -49,7 +49,7 @@ outputs:
 
 ### Step 1: 哈希链锚定（hash_chain）
 
-调用 `core/knowledge/validation/hash_chain.py`，对 code/figures/tables/work 下所有文件计算哈希，构建有序哈希链：
+调用 `core/validators/modules/hash_chain.py`，对 code/figures/tables/work 下所有文件计算哈希，构建有序哈希链：
 ```python
 from core.knowledge.validation.hash_chain import HashChain
 chain = HashChain()
@@ -62,15 +62,15 @@ chain_record = chain.seal()  # 含每文件 hash + 链头
 
 ### Step 2: 错误归因（error_attribution）
 
-调用 `core/knowledge/validation/error_attribution.py`，汇总前序 agent 的报告（template_plan / test_report / result_validation / guardrails_report_programmer），将任一失败归因到具体 agent 与规则编号（P1-P9），生成归因表。
+调用 `core/validators/modules/error_attribution.py`，汇总前序 agent 的报告（template_plan / test_report / result_validation / guardrails_report_programmer），将任一失败归因到具体 agent 与规则编号（P1-P9），生成归因表。
 
 ### Step 3: 规则迭代（rule_iterator）
 
-调用 `core/knowledge/validation/rule_iterator.py`，把本次发现的失败模式回流到规则库，标记需强化的规则项，记录迭代建议（不修改 laws/rules.md，仅记录）。
+调用 `core/validators/modules/rule_iterator.py`，把本次发现的失败模式回流到规则库，标记需强化的规则项，记录迭代建议（不修改 laws/rules.md，仅记录）。
 
 ### Step 4: 阶段门复核（stage_gate）
 
-调用 `core/knowledge/validation/stage_gate.py`，确认 L1-L5 各 stage 门均已放行（template_plan / code / test_report / result_validation / guardrails_report_programmer 全部 passed）。任一未过则停止输出并回退。
+调用 `core/validators/modules/stage_gate.py`，确认 L1-L5 各 stage 门均已放行（template_plan / code / test_report / result_validation / guardrails_report_programmer 全部 passed）。任一未过则停止输出并回退。
 
 ### Step 5: 生成 CODE_DELIVERABLES.md
 
@@ -98,17 +98,17 @@ chain_record = chain.seal()  # 含每文件 hash + 链头
 
 ### HARD 项（必须 PASS，任一失败阻塞交付）
 
-- [ ] [HARD] code/figures/tables/work 所有文件哈希入链，audit_chain.json 含链头 → core/knowledge/validation/hash_chain.py verify_chain()==True
+- [ ] [HARD] code/figures/tables/work 所有文件哈希入链，audit_chain.json 含链头 → core/validators/modules/hash_chain.py verify_chain()==True
 - [ ] [HARD] `figures/all_results.json` 合法 JSON 且非空 dict → core/tools/validate_project.py: check_results_ledger
 - [ ] [HARD] 随机种子存在（`np.random.seed(42)` 或等效）→ core/tools/validate_project.py: check_reproducibility
 - [ ] [HARD] 数值可追溯比例 ≥ 90%（`env/runtime.traceability_min_ratio`，默认 0.90）→ core/tools/validate_project.py: check_numeric_traceability
 - [ ] [HARD] `output/CODE_DELIVERABLES.md` 符合 `core/schemas/code_deliverables.schema.json`（必填字段齐全）→ core/schemas/code_deliverables.schema.json
 - [ ] [HARD] `output/CODE_DELIVERABLES.md` 体积 >= 1KB（`env/code.min_deliverables_bytes`，默认 1024）→ core/tools/validate_project.py: check_deliverables_size
-- [ ] [HARD] stage_gate L1-L5 全部放行 → core/knowledge/validation/stage_gate.py
+- [ ] [HARD] stage_gate L1-L5 全部放行 → core/validators/modules/stage_gate.py
 - [ ] [HARD] environment.random_seed = 42（P1）→ core/tools/validate_project.py: check_reproducibility
 - [ ] [HARD] files[].path 均以 `code/` 开头（P3）→ core/tools/validate_project.py: check_code_in_code_dir
 - [ ] [HARD] CODE_DELIVERABLES.md 数值与 all_results.json 完全一致（P2）→ core/tools/validate_project.py: check_numeric_traceability
-- [ ] [HARD] 前序 5 层报告均已 collected，失败已归因到 agent + 规则编号 → core/knowledge/validation/error_attribution.py
+- [ ] [HARD] 前序 5 层报告均已 collected，失败已归因到 agent + 规则编号 → core/validators/modules/error_attribution.py
 - [ ] [HARD] 含运行说明（P9）
 
 ### WARN 项（记录但不阻塞）
@@ -142,10 +142,10 @@ chain_record = chain.seal()  # 含每文件 hash + 链头
 
 ## Resources
 
-- `core/knowledge/validation/hash_chain.py`（哈希链）
-- `core/knowledge/validation/error_attribution.py`（错误归因）
-- `core/knowledge/validation/rule_iterator.py`（规则迭代）
-- `core/knowledge/validation/stage_gate.py`（阶段门）
+- `core/validators/modules/hash_chain.py`（哈希链）
+- `core/validators/modules/error_attribution.py`（错误归因）
+- `core/validators/modules/rule_iterator.py`（规则迭代）
+- `core/validators/modules/stage_gate.py`（阶段门）
 - `core/schemas/code_deliverables.schema.json`（结构化输出 Schema）
 - `core/Programmer/templates/CODE_DELIVERABLES_TEMPLATE.md`（输出模板）
 - `core/Programmer/laws/rules.md`（P1-P9 全量）

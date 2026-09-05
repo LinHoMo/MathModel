@@ -189,7 +189,7 @@ output = {
 
 ### Step 5: 类型自校验
 
-调用 `core/knowledge/validation/type_system.py` 对每个 `solve_problem_N` 的返回结构做类型校验，确保 `values`/`units` 为非空 dict，键名匹配 schema 的 `^problem_\d+$`。
+调用 `core/validators/modules/type_system.py` 对每个 `solve_problem_N` 的返回结构做类型校验，确保 `values`/`units` 为非空 dict，键名匹配 schema 的 `^problem_\d+$`。
 
 ### Step 6: 模块/函数 docstring 补全（P4）
 
@@ -240,7 +240,7 @@ output = {
 
 - `core/Programmer/knowledge/code-templates/`（15 个子目录代码模板）
 - `core/Programmer/knowledge/platform-guide.md`（多平台交付分支：单主线 python + matlab/beitian 等价交付件）
-- `core/knowledge/validation/type_system.py`（类型契约校验）
+- `core/validators/modules/type_system.py`（类型契约校验）
 - `core/env/loader.py`：`get("code.random_seed", 42)`
 - `core/schemas/code_deliverables.schema.json`（results.problem_N 结构约束）
 - `core/Programmer/laws/rules.md`（P1/P2/P3/P4/P5/P7/P8）

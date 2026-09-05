@@ -76,7 +76,7 @@ outputs:
 
 ### Step 3: 契约校验（contract_checker）
 
-调用 `core/knowledge/validation/contract_checker.py` 校验：
+调用 `core/validators/modules/contract_checker.py` 校验：
 - 每个 `solve_problem_N` 签名为 `(params: dict) -> dict`
 - 返回结构含 `values`/`units`
 - `main()` 调用所有子问题并写出 all_results.json
@@ -137,8 +137,8 @@ result = verifier.verify_programmer_output()
 
 - `core/Programmer/knowledge/code-templates/utils/code_testing.py`（测试模板）
 - `core/Programmer/knowledge/code-templates/utils/cross_validation.py`（交叉验证模板）
-- `core/knowledge/validation/process_verifier.py`（过程验证器）
-- `core/knowledge/validation/contract_checker.py`（契约校验器）
+- `core/validators/modules/process_verifier.py`（过程验证器）
+- `core/validators/modules/contract_checker.py`（契约校验器）
 - `core/Programmer/laws/rules.md`（P1/P2/P3/P4）
 
 ## Iteration

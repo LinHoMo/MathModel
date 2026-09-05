@@ -130,7 +130,7 @@ Stage 1.5 承载 Agent：在 `type-classifier` 完成题型识别后、 `method-
 ## Resources
 
 - `core/knowledge/data-sources/DATA-SOURCES.md` - 权威数据源目录与检索策略
-- `core/knowledge/validation/scholar_fetch.py` - 学术检索工具 (已有 scholar_fetch.py)
+- `core/validators/modules/scholar_fetch.py` - 学术检索工具 (已有 scholar_fetch.py)
 - `core/env/loader.py` - 读取 `modeling.literature_*` 参数
 - `core/schemas/literature_evidence.schema.json` - 输出 Schema (需新建)
 

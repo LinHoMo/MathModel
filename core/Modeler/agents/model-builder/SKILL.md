@@ -57,8 +57,8 @@ L3 过程验证层。本层确保推导链路完整且每步有依据，对应�
 
 - **Step 2：写假设与必要性** — 为每个子问题列出模型假设，每个假设必须有 `necessity`（>=10 字），编号统一 `H1, H2...` 格式。
 - **Step 3：写公式与推导** — 参考 `core/knowledge/methodology/mathematical-derivation.md`，从基本定律推导到最终模型，每步注明依据。每个子问题至少 1 个公式。
-- **Step 4：注册符号** — 用 `core/knowledge/validation/symbol_registry.py` 注册全部符号，调用 `check_consistency()` 确认无冲突。
-- **Step 5：校验公式语法** — 用 `core/knowledge/validation/formula_checker.py` 逐条校验公式括号、LaTeX 命令完整性。
+- **Step 4：注册符号** — 用 `core/validators/modules/symbol_registry.py` 注册全部符号，调用 `check_consistency()` 确认无冲突。
+- **Step 5：校验公式语法** — 用 `core/validators/modules/formula_checker.py` 逐条校验公式括号、LaTeX 命令完整性。
 - **Step 6：列边界条件** — 明确 `boundary_conditions`（初始/约束/边界），给出 `solution_approach`。
 
 ### Step 3: Critic 批判（Actor-Critic 环，借鉴 MM-Agent 的 ProblemUnderstanding.modeling_critic）
@@ -184,8 +184,8 @@ max_rounds = get("modeling.problem_modeling_round", default=1)  # 默认 1 轮�
 - `core/knowledge/methodology/mathematical-derivation.md` —— 推导规范
 - `core/knowledge/methodology/CUMCM-HMML.md` —— 三级方法知识库（HMML 节点含「常见扣分点」，Critic 步骤引用）
 - `core/knowledge/review/scoring-criteria.md` —— 评分细则（Critic 步骤引用，对齐评阅扣分点）
-- `core/knowledge/validation/symbol_registry.py` —— 符号注册与一致性
-- `core/knowledge/validation/formula_checker.py` —— 公式语法检查
+- `core/validators/modules/symbol_registry.py` —— 符号注册与一致性
+- `core/validators/modules/formula_checker.py` —— 公式语法检查
 - `core/schemas/model_spec.schema.json` —— 草稿结构对齐目标
 - `core/Modeler/templates/MODEL_SPEC_TEMPLATE.md` —— 章节模板
 

@@ -23,7 +23,7 @@ hands:
         utg_layer: L1
         description: 赛题结构化解析，消除歧义
         resources:
-          - core/knowledge/validation/problem_spec_parser.py
+          - core/validators/modules/problem_spec_parser.py
           - core/schemas/question_spec.schema.json
       - name: type-classifier
         gate: core/tools/gate.py
@@ -75,8 +75,8 @@ hands:
         description: 建立数学模型（公式/符号/边界条件）
         resources:
           - core/knowledge/methodology/mathematical-derivation.md
-          - core/knowledge/validation/symbol_registry.py
-          - core/knowledge/validation/formula_checker.py
+          - core/validators/modules/symbol_registry.py
+          - core/validators/modules/formula_checker.py
           - core/schemas/model_spec.schema.json
       - name: dag-builder
         gate: core/tools/gate.py
@@ -86,8 +86,8 @@ hands:
         utg_layer: L3.5
         description: 构建子模型依赖 DAG，指导并行与级联
         resources:
-          - core/knowledge/validation/symbol_registry.py
-          - core/knowledge/validation/process_verifier.py
+          - core/validators/modules/symbol_registry.py
+          - core/validators/modules/process_verifier.py
           - core/schemas/model_dag.schema.json
           - core/env/loader.py
       - name: assumption-validator
@@ -98,7 +98,7 @@ hands:
         utg_layer: L4
         description: 假设四维评分验证
         resources:
-          - core/knowledge/validation/assumption_validator.py
+          - core/validators/modules/assumption_validator.py
           - core/knowledge/methodology/hypothesis-validation.md
           - core/env/loader.py
       - name: spec-auditor
@@ -109,8 +109,8 @@ hands:
         utg_layer: L5+L6
         description: MODEL_SPEC 护栏检查 + 哈希审计
         resources:
-          - core/knowledge/validation/guardrails.py
-          - core/knowledge/validation/hash_chain.py
+          - core/validators/modules/guardrails.py
+          - core/validators/modules/hash_chain.py
           - core/schemas/model_spec.schema.json
           - core/Modeler/templates/MODEL_SPEC_TEMPLATE.md
 
@@ -141,7 +141,7 @@ hands:
         description: 实现代码，类型制导
         resources:
           - core/Programmer/knowledge/code-templates/
-          - core/knowledge/validation/type_system.py
+          - core/validators/modules/type_system.py
           - core/schemas/code_deliverables.schema.json
           - core/env/loader.py
       - name: test-runner
@@ -153,8 +153,8 @@ hands:
         description: 单元测试 + 集成测试
         resources:
           - core/Programmer/knowledge/code-templates/utils/code_testing.py
-          - core/knowledge/validation/process_verifier.py
-          - core/knowledge/validation/contract_checker.py
+          - core/validators/modules/process_verifier.py
+          - core/validators/modules/contract_checker.py
       - name: result-verifier
         gate: core/tools/gate.py
         artifact: work/result_validation.json
@@ -163,8 +163,8 @@ hands:
         utg_layer: L4
         description: 数值验证 + 灵敏度分析
         resources:
-          - core/knowledge/validation/symbolic_verifier.py
-          - core/knowledge/validation/cross_model_checker.py
+          - core/validators/modules/symbolic_verifier.py
+          - core/validators/modules/cross_model_checker.py
           - core/Programmer/knowledge/code-templates/utils/sensitivity_analysis.py
           - core/env/loader.py
       - name: guardrails-checker
@@ -175,9 +175,9 @@ hands:
         utg_layer: L5
         description: 运行时护栏（禁用词/占位符/AI痕迹/权限）
         resources:
-          - core/knowledge/validation/guardrails.py
-          - core/knowledge/validation/permission_guard.py
-          - core/knowledge/validation/trust_domain.py
+          - core/validators/modules/guardrails.py
+          - core/validators/modules/permission_guard.py
+          - core/validators/modules/trust_domain.py
       - name: hash-auditor
         gate: core/tools/gate.py
         artifact: output/CODE_DELIVERABLES.md
@@ -186,9 +186,9 @@ hands:
         utg_layer: L6
         description: 哈希链 + 错误归因 + 规则迭代
         resources:
-          - core/knowledge/validation/hash_chain.py
-          - core/knowledge/validation/error_attribution.py
-          - core/knowledge/validation/rule_iterator.py
+          - core/validators/modules/hash_chain.py
+          - core/validators/modules/error_attribution.py
+          - core/validators/modules/rule_iterator.py
           - core/schemas/code_deliverables.schema.json
 
   - name: writer
@@ -257,7 +257,7 @@ hands:
         utg_layer: L4
         description: 论文 - 代码数值一致性
         resources:
-          - core/knowledge/validation/consistency_checker.py
+          - core/validators/modules/consistency_checker.py
           - figures/all_results.json
           - paper/main.tex
       - name: guardrails-checker
@@ -268,7 +268,7 @@ hands:
         utg_layer: L5
         description: 运行时护栏（禁用词/占位符/AI 痕迹）
         resources:
-          - core/knowledge/validation/guardrails.py
+          - core/validators/modules/guardrails.py
           - core/Writer/knowledge/writing/forbidden-words.md
           - core/Writer/knowledge/writing/avoid-ai-writing-en.md
       - name: final-validator
@@ -281,7 +281,7 @@ hands:
         resources:
           - core/schemas/paper_spec.schema.json
           - core/Writer/templates/PAPER_SPEC_TEMPLATE.md
-          - core/knowledge/validation/hash_chain.py
+          - core/validators/modules/hash_chain.py
           - core/env/loader.py
 
   - name: reviewer

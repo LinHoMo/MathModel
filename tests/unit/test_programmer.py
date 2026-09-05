@@ -61,7 +61,7 @@ class TestProgrammerKnowledge:
     
     def test_validation_directory_exists(self):
         """validation目录存在"""
-        assert os.path.isdir("core/knowledge/validation")
+        assert os.path.isdir("core/validators/modules")
     
     def test_methodology_files_count(self):
         """methodology文件数量"""

@@ -189,7 +189,7 @@ fi
 
 ### Step 5: 哈希链审计
 
-参考 `core/knowledge/validation/hash_chain.py`：
+参考 `core/validators/modules/hash_chain.py`：
 
 ```python
 from core.knowledge.validation.hash_chain import compute_hash, verify_chain
@@ -259,13 +259,13 @@ artifacts = {
 - [ ] [HARD] `output/PAPER_SPEC.md` 存在且非空 → core/schemas/paper_spec.schema.json
 - [ ] [HARD] `output/PAPER_SPEC.md` 符合 `core/Writer/templates/PAPER_SPEC_TEMPLATE.md` 格式
 - [ ] [HARD] 构造的 PAPER_SPEC dict 通过 `core/schemas/paper_spec.schema.json` 校验 → core/schemas/paper_spec.schema.json
-- [ ] [HARD] 哈希链 `verify_chain() == True` → core/knowledge/validation/hash_chain.py
+- [ ] [HARD] 哈希链 `verify_chain() == True` → core/validators/modules/hash_chain.py
 - [ ] [HARD] `work/consistency_report.json` `passed == true`
 - [ ] [HARD] `work/guardrails_report_writer.json` `passed == true`
 - [ ] [HARD] 子报告全 passed（consistency/guardrails/reference）
 - [ ] [HARD] 编译产物无 undefined references（`grep 'undefined' main.log` 为空；交叉引用/文献均解析）→ core/tools/validate_project.py: check_no_undefined_refs
 - [ ] [HARD] 正文（非附录）无 `\begin{itemize}` / `\begin{enumerate}` 列表（铁律 W11）→ core/tools/validate_project.py: check_body_no_lists
-- [ ] [HARD] `work/audit_log.json` 含所有产物的 sha256 哈希 → core/knowledge/validation/hash_chain.py
+- [ ] [HARD] `work/audit_log.json` 含所有产物的 sha256 哈希 → core/validators/modules/hash_chain.py
 - [ ] [HARD] `final_passed == true`
 
 ### WARN 项（记录但不阻塞；机理类赛题 is_physics=True 时升 HARD）
@@ -306,8 +306,8 @@ artifacts = {
 
 - `core/schemas/paper_spec.schema.json`（最终结构化校验 schema）
 - `core/Writer/templates/PAPER_SPEC_TEMPLATE.md`（输出格式模板）
-- `core/knowledge/validation/hash_chain.py`（哈希链审计实现，跨手共享）
-- `core/knowledge/validation/process_verifier.py`（可选：上游 Programmer 的过程验证器，复核 traceability）
+- `core/validators/modules/hash_chain.py`（哈希链审计实现，跨手共享）
+- `core/validators/modules/process_verifier.py`（可选：上游 Programmer 的过程验证器，复核 traceability）
 - `core/Writer/knowledge/docx-delivery.md`（DOCX 交付线规则：LaTeX 主线 + DOCX 交付分支，策略 never/auto/always）
 - `core/tools/tex_to_docx.py`（LaTeX→DOCX 转换工具，零依赖，优先 pandoc 无则纯文本降级）
 - `core/env/loader.py`（读取所有 `paper.*` 与 `runtime.*` 阈值）

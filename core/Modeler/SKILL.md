@@ -160,7 +160,7 @@ UTG 六层由本手 8 个 agent 承载（L1.5/L3.5 为细化层）：
 - `core/Modeler/knowledge/domain/` - 43 个领域知识文档（type-classifier / method-matcher 消费）
 - `core/Modeler/knowledge/problem-types/` - 5 个题型专项文档 A/B/C/D/E（type-classifier 消费，含题型识别决策树）
 - `core/knowledge/paper-cases/` - 116 篇论文拆解 + METHOD-MAPPING.md + INNOVATION-TAGS.md（method-matcher 消费）
-- `core/knowledge/validation/` - problem_spec_parser.py / symbol_registry.py / formula_checker.py / assumption_validator.py / scholar_fetch.py（各 agent 工具调用）
+- `core/validators/modules/` - problem_spec_parser.py / symbol_registry.py / formula_checker.py / assumption_validator.py / scholar_fetch.py（各 agent 工具调用）
 - `core/knowledge/cookbooks/` - 8 大类算法手册（优化/ML/评价/机理/统计/网络/聚类/博弈），method-matcher 消费
 - `core/knowledge/playbooks/` - 12 个端到端例题（国赛 9 + 美赛 3），含拆题→代码→论文全流程
 - `core/Modeler/knowledge/paper-bridge.md` - MODEL_SPEC 到论文章节的映射规则与数值占位符协议

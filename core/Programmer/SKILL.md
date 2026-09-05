@@ -125,7 +125,7 @@ UTG 六层防御由以下 agent 承载（与 `core/Programmer/laws/rules.md` 的
 
 - `core/knowledge/methodology/` - 12个方法论文档（数值/优化/统计/时序/ML）
 - `core/Programmer/knowledge/code-templates/` - 46个代码模板（15个子目录）
-- `core/knowledge/validation/` - 验证模块（contract_checker / cross_model_checker / error_attribution / guardrails / hash_chain / incremental_checker / invariant_tracker / output_validator / permission_guard / process_verifier / rule_iterator / stage_gate / symbolic_verifier / trust_domain / type_system）
+- `core/validators/modules/` - 验证模块（contract_checker / cross_model_checker / error_attribution / guardrails / hash_chain / incremental_checker / invariant_tracker / output_validator / permission_guard / process_verifier / rule_iterator / stage_gate / symbolic_verifier / trust_domain / type_system）
 - `core/Programmer/agents/` - 6 个 UTG agent（template-selector / code-implementer / test-runner / result-verifier / guardrails-checker / hash-auditor）
 - `core/Programmer/laws/rules.md` - 编程手铁律（P1-P9）
 - `core/schemas/code_deliverables.schema.json` - 结构化输出Schema（L1）

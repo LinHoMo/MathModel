@@ -138,9 +138,9 @@ MathModelSkills/
 │   │   ├── problems/             # 历史赛题索引（CUMCM 2015–2025 + MCM/ICM 1995–2025 已核实题名）
 │   │   ├── data-sources/         # 权威公开数据源目录（外部数据引用规范 + 美赛题型映射）
 │   │   ├── review/               # 评分细则与评委洞察（judge-scorer / weakness-hunter 消费）
-│   │   └── validation/           # 验证模块（guardrails / hash_chain / stage_gate 等）
 │   ├── env/                      # 环境变量配置层（config.yaml + loader.py）
 │   ├── schemas/                  # 结构化输出 Schema
+│   ├── validators/modules/       # 20 个可执行验证模块（guardrails / hash_chain / stage_gate 等；自 knowledge/validation 迁出）
 │   ├── templates/                # LaTeX 竞赛包（cumcm / mcm / diangong / huawei / huashu）
 │   └── tools/                    # 工具脚本：runtime/ validation/ evaluation/ knowledge/ devtools/ rendering/ 六类子包，根目录保留同名兼容 shim（命令路径不变）
 ├── projects/                     # 项目实例

@@ -57,7 +57,7 @@ REQUIRED_DIRS = [
     ("core/Writer/agents", "撰写手 7 个 agent"),
     ("core/Reviewer/agents", "评审手 8 个 agent"),
     ("core/knowledge/methodology", "方法论知识库"),
-    ("core/knowledge/validation", "验证模块"),
+    ("core/validators/modules", "验证模块"),
     ("core/env", "配置层"),
     ("core/schemas", "结构化输出 Schema"),
 ]

@@ -79,7 +79,7 @@ L4 异构验证层：用与生成端异构的另一条链路（论文文本 vs �
 
 ### Step 6: 调用 consistency_checker.py
 
-参考 `core/knowledge/validation/consistency_checker.py` 实现的校验逻辑；如该模块已暴露可调用接口，直接调用：
+参考 `core/validators/modules/consistency_checker.py` 实现的校验逻辑；如该模块已暴露可调用接口，直接调用：
 
 ```python
 from core.knowledge.validation.consistency_checker import check_consistency
@@ -168,8 +168,8 @@ report = check_consistency(
 
 ## Resources
 
-- `core/knowledge/validation/consistency_checker.py`（本手的数值一致性校验脚本）
-- `core/knowledge/validation/process_verifier.py`（上游 Programmer 的过程验证器，可参考其数值键命名约定）
+- `core/validators/modules/consistency_checker.py`（本手的数值一致性校验脚本）
+- `core/validators/modules/process_verifier.py`（上游 Programmer 的过程验证器，可参考其数值键命名约定）
 - `figures/all_results.json`（数值回溯的唯一来源）
 - `paper/main.tex`（待校验文本）
 - `core/Writer/laws/rules.md`（W1 数值可追溯、W2 摘要数值一致）

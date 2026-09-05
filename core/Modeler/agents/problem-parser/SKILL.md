@@ -52,7 +52,7 @@ L1 形式化规约层。本层目标是在建模之前消除三类输入风险�
 
 ### Step 2: 结构化解析
 
-- 调用 `core/knowledge/validation/problem_spec_parser.py` 的 `ProblemSpecParser.parse(text)` 生成六段式 spec。
+- 调用 `core/validators/modules/problem_spec_parser.py` 的 `ProblemSpecParser.parse(text)` 生成六段式 spec。
 - 子问题只认题面明确编号的顶层问题（"问题一/问题二"或"Question 1"），不臆造细分。
 
 ### Step 3: 消除歧义与补缺
@@ -150,7 +150,7 @@ L1 形式化规约层。本层目标是在建模之前消除三类输入风险�
 
 ## Resources
 
-- `core/knowledge/validation/problem_spec_parser.py` —— 解析与校验实现
+- `core/validators/modules/problem_spec_parser.py` —— 解析与校验实现
 - `core/schemas/question_spec.schema.json` —— 输出结构契约
 
 ## Iteration

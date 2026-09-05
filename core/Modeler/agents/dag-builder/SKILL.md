@@ -120,8 +120,8 @@ Stage 4.5 承载 Agent：在 `model-builder` 完成数学模型建立后、 `ass
 
 ## Resources
 
-- `core/knowledge/validation/symbol_registry.py` - 符号表复用，识别跨子问题共享符号
-- `core/knowledge/validation/process_verifier.py` - 过程验证器，检查依赖完整性
+- `core/validators/modules/symbol_registry.py` - 符号表复用，识别跨子问题共享符号
+- `core/validators/modules/process_verifier.py` - 过程验证器，检查依赖完整性
 - Graphviz (系统工具) - SVG 渲染
 - `core/env/loader.py` - 读取配置
 

@@ -133,7 +133,7 @@
 
 ### 4.3 与过度宣称检测的关系
 
-- 写完反例段后，运行 `core/knowledge/validation/guardrails.py` 检查是否过度宣称
+- 写完反例段后，运行 `core/validators/modules/guardrails.py` 检查是否过度宣称
 - 反例段中"不影响核心结论"等表述需有数据支撑，否则会被 guardrails 标记
 
 ---

@@ -85,11 +85,11 @@ RUNS = get("code.multi_run_count", 5)  # 默认 5
 
 ### Step 4: 跨方法交叉验证（cross_model_checker）
 
-调用 `core/knowledge/validation/cross_model_checker.py`，用异构方法（如解析解 vs 数值解、scipy.optimize vs 自实现 GA）复核关键数值，记录差异。
+调用 `core/validators/modules/cross_model_checker.py`，用异构方法（如解析解 vs 数值解、scipy.optimize vs 自实现 GA）复核关键数值，记录差异。
 
 ### Step 5: 符号验证（symbolic_verifier）
 
-调用 `core/knowledge/validation/symbolic_verifier.py`，对关键公式/不变量做符号层面校验（量纲一致、守恒律、单调性等）。
+调用 `core/validators/modules/symbolic_verifier.py`，对关键公式/不变量做符号层面校验（量纲一致、守恒律、单调性等）。
 
 ### Step 6: 汇总 result_validation.json
 
@@ -134,8 +134,8 @@ RUNS = get("code.multi_run_count", 5)  # 默认 5
 
 ## Resources
 
-- `core/knowledge/validation/symbolic_verifier.py`（符号验证）
-- `core/knowledge/validation/cross_model_checker.py`（跨方法校验）
+- `core/validators/modules/symbolic_verifier.py`（符号验证）
+- `core/validators/modules/cross_model_checker.py`（跨方法校验）
 - `core/Programmer/knowledge/code-templates/utils/sensitivity_analysis.py`（灵敏度分析模板）
 - `core/env/loader.py`：`get("code.multi_run_count", 5)`
 - `core/Programmer/laws/rules.md`（P6）

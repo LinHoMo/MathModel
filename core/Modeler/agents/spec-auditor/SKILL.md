@@ -61,7 +61,7 @@ L5 运行时护栏 + L6 事后哈希审计。
 
 ### Step 3: L5 运行时护栏
 
-- 调用 `core/knowledge/validation/guardrails.py`：
+- 调用 `core/validators/modules/guardrails.py`：
   ```python
   from core.knowledge.validation.guardrails import Guardrails
   g = Guardrails()
@@ -72,7 +72,7 @@ L5 运行时护栏 + L6 事后哈希审计。
 
 ### Step 4: L6 哈希链审计
 
-- 调用 `core/knowledge/validation/hash_chain.py`：
+- 调用 `core/validators/modules/hash_chain.py`：
   ```python
   from core.knowledge.validation.hash_chain import HashChain
   chain = HashChain()
@@ -110,8 +110,8 @@ L5 运行时护栏 + L6 事后哈希审计。
 - [ ] [HARD] `Guardrails.has_errors() == False`（无禁用词/占位符/内部路径/AI 痕迹）→ core/tools/validate_project.py: check_placeholders + check_forbidden_words
 - [ ] [HARD] 候选模型 >=2（M1），每个假设 `composite_score >= threshold`（M2）→ core/schemas/model_spec.schema.json
 - [ ] [HARD] 假设 `validation` 五项评分已回填（非空）→ core/schemas/model_spec.schema.json
-- [ ] [HARD] `HashChain.verify_chain() == True`，链未断裂 → core/knowledge/validation/hash_chain.py
-- [ ] [HARD] `work/audit_log.json` 含全部 6 个中间产物的哈希条目 → core/knowledge/validation/hash_chain.py
+- [ ] [HARD] `HashChain.verify_chain() == True`，链未断裂 → core/validators/modules/hash_chain.py
+- [ ] [HARD] `work/audit_log.json` 含全部 6 个中间产物的哈希条目 → core/validators/modules/hash_chain.py
 
 ### WARN 项（记录但不阻塞）
 
@@ -144,8 +144,8 @@ L5 运行时护栏 + L6 事后哈希审计。
 
 ## Resources
 
-- `core/knowledge/validation/guardrails.py` —— L5 运行时护栏引擎
-- `core/knowledge/validation/hash_chain.py` —— L6 SHA-256 哈希链
+- `core/validators/modules/guardrails.py` —— L5 运行时护栏引擎
+- `core/validators/modules/hash_chain.py` —— L6 SHA-256 哈希链
 - `core/schemas/model_spec.schema.json` —— 最终输出结构契约
 - `core/Modeler/templates/MODEL_SPEC_TEMPLATE.md` —— 渲染模板
 

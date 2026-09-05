@@ -43,7 +43,7 @@
 | 两套符号各写各的 | 建模后跑一次符号闭合检查：`正文出现的每个数学符号 ∈ 符号表` 且 `符号表每个符号被正文引用 ≥1 次`，两边对不上的逐一修正 |
 
 可转成 revision-planner 验收标准：用脚本提取正文 LaTeX 数学模式中的符号与符号表比对，
-两侧都闭合即通过（可对标 `core/knowledge/validation/symbol_registry.py` 的检查逻辑）。
+两侧都闭合即通过（可对标 `core/validators/modules/symbol_registry.py` 的检查逻辑）。
 
 ## 涉及阶段
 

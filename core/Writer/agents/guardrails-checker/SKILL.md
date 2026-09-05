@@ -45,7 +45,7 @@ L5 运行时护栏层：在 L4 异构验证通过后、L6 最终验证之前，�
 
 ### Step 1: 调用护栏模块
 
-参考 `core/knowledge/validation/guardrails.py`：
+参考 `core/validators/modules/guardrails.py`：
 
 ```python
 from core.knowledge.validation.guardrails import Guardrails
@@ -192,7 +192,7 @@ for tex_file in Path("paper").glob("*.tex"):
 
 ## Resources
 
-- `core/knowledge/validation/guardrails.py`（护栏模块实现，跨手共享）
+- `core/validators/modules/guardrails.py`（护栏模块实现，跨手共享）
 - `core/Writer/knowledge/writing/forbidden-words.md`（中文禁用词清单）
 - `core/Writer/knowledge/writing/avoid-ai-writing-en.md`（英文禁用词清单）
 - `core/Writer/knowledge/writing/academic-style-methods.md`（文风自然化方法论：名家写作 5 原则 + 反 AI 痕迹改写三手法 + 成文检查清单）

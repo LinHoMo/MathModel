@@ -104,19 +104,21 @@ MathModelSkills/
 │   │   ├── problems/                # 赛题索引（CUMCM 2015–2025 + MCM/ICM）
 │   │   ├── data-sources/            # 权威公开数据源目录
 │   │   ├── review/                  # 评分细则与评委洞察
-│   │   ├── pitfalls/ _negative/     # 反模式与失败案例库
-│   │   └── validation/              # 20 个验证模块
+│   │   └── pitfalls/ _negative/     # 反模式与失败案例库
+│   ├── validators/modules/          # 20 个可执行验证模块（guardrails / hash_chain / stage_gate 等）
 │   ├── env/                         # 配置层（config.yaml + loader.py）
-│   ├── schemas/                     # 结构化输出 Schema
-│   └── tools/                       # 工具脚本（state / gate / validate 等）
-├── projects/                        # 项目实例
-│   └── cumcm2024anew/               # 示例项目（CUMCM 2024 A题：防空导弹拦截）
+│   ├── schemas/                     # 结构化输出 Schema（含 v3/ 六域）
+│   ├── roles/ workflows/ runtime/ validators/  # V3：5 角色 / Workflow DAG / 执行引擎 / 验证器
+│   ├── evaluation/ skills/          # V3：评分 / critics
+│   └── tools/                       # 工具脚本：runtime/ validation/ evaluation/ knowledge/ devtools/ rendering/ 六类子包（根目录保留兼容 shim）
+├── projects/                        # 用户运行实例（跑题时创建）
+├── archives/                        # 历史样例归档（不计入实时校验）
+├── adapters/                        # 运行时适配 manifest（openai.yaml，自动生成）
 ├── docs/                            # 架构与状态文档
-│   ├── mathmodel-architecture.html  # 系统架构图（交互式）
-│   ├── mathmodel-pipeline.html      # 29步流水线图
-│   ├── mathmodel-lifecycle.html     # 状态机流程图
-│   ├── mathmodel-dataflow.html      # 数据流图
-│   └── mathmodel-sequence.html      # 交互时序图
+│   ├── architecture/                # V3 架构真源（V3.1_ARCHITECTURE.md 等）
+│   │   └── diagrams/                # 交互式图表（HTML，生成物）
+│   ├── decisions/                   # 决策记录
+│   └── integration/                 # 跨 harness 集成说明
 ├── tests/                           # unit / integration / e2e
 ├── AGENTS.md                        # 唯一权威入口
 ├── catalog.yaml                     # agent 元数据索引

@@ -17,7 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 CATALOG_PATH = ROOT / "catalog.yaml"
-OPENAI_PATH = ROOT / "agents" / "openai.yaml"
+OPENAI_PATH = ROOT / "adapters" / "openai.yaml"
 
 
 # ---------------------------------------------------------------------------
@@ -295,7 +295,7 @@ def generate_openai_yaml(catalog):
         '  playbooks: "core/knowledge/playbooks/"',
         '  paper_cases: "core/knowledge/paper-cases/"',
         '  empirical: "core/knowledge/empirical/"',
-        '  validation: "core/knowledge/validation/"',
+        '  validation: "core/validators/modules/"',
         '  writing: "core/Writer/knowledge/writing/"',
         '  templates: "core/Writer/knowledge/templates/"',
         "",

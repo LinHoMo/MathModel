@@ -64,7 +64,7 @@ L4 异构验证层。本层用结构化评分替代主观判断，对应铁律 M
 
 ### Step 1: 提取假设
 
-- 用 `core/knowledge/validation/assumption_validator.py` 的 `AssumptionValidator.extract_from_text(model_draft_text)` 提取假设，或直接读取草稿中的假设段。提取时记录**假设敏感性预检**（铁律 M8）：模糊表述、≥2 种解释与验算过程、最终采用解释；关键假设须标记 `parameterizable: true` 以便代码层可切换（如 `get("modeling.assumption.<name>")`）。
+- 用 `core/validators/modules/assumption_validator.py` 的 `AssumptionValidator.extract_from_text(model_draft_text)` 提取假设，或直接读取草稿中的假设段。提取时记录**假设敏感性预检**（铁律 M8）：模糊表述、≥2 种解释与验算过程、最终采用解释；关键假设须标记 `parameterizable: true` 以便代码层可切换（如 `get("modeling.assumption.<name>")`）。
 
 ### Step 2: 四维评分
 
@@ -143,7 +143,7 @@ composite_score = 0.30*physical_rationality + 0.25*math_consistency + 0.25*data_
 
 ## Resources
 
-- `core/knowledge/validation/assumption_validator.py` —— 评分与矛盾检查实现
+- `core/validators/modules/assumption_validator.py` —— 评分与矛盾检查实现
 - `core/knowledge/methodology/hypothesis-validation.md` —— 验证方法学
 - `core/env/loader.py` —— `get("modeling.assumption_score_threshold")`
 

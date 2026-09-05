@@ -20,7 +20,7 @@ MathModelSkills 采用角色化架构，把「一道赛题 → 一篇论文」�
 
 | 层 | 目录 | 内容 | 谁维护 |
 |---|---|---|---|
-| **引擎** | `core/` | 四手的 SKILL.md / agents / laws / knowledge / templates，共享知识库 `core/knowledge/`，验证模块 `core/knowledge/validation/`，`core/env/` 配置层，`core/schemas/` 输出 Schema，`core/tools/` 工具脚本 | 开发者 |
+| **引擎** | `core/` | 四手的 SKILL.md / agents / laws / knowledge / templates，共享知识库 `core/knowledge/`，验证模块 `core/validators/modules/`，`core/env/` 配置层，`core/schemas/` 输出 Schema，`core/tools/` 工具脚本 | 开发者 |
 | **入口** | 根目录 | `AGENTS.md`（唯一权威入口）+ 各 runtime 转发文件（`CLAUDE.md` / `.cursorrules` / `.trae/rules/` 等）+ `catalog.yaml`（agent 元数据索引）+ 安装脚本 | 开发者 |
 | **实例** | `projects/<项目>/` | 一个赛题的完整运行时产物：`inputs/` 赛题、`work/` 状态、`output/` 契约、`code/` 代码、`figures/` 结果、`paper/` 论文 | 每次跑题生成 |
 | **基础设施** | `docs/` / `tests/` / `.github/` | 架构与状态文档、unit/integration/e2e 测试、CI 入口 | 开发者 |
@@ -181,7 +181,7 @@ MathModelSkills 采用角色化架构，把「一道赛题 → 一篇论文」�
 | L5 | 运行时护栏（禁用词 / 占位符 / AI 痕迹 / 权限） | spec-auditor | guardrails-checker | guardrails-checker |
 | L6 | 事后哈希审计（篡改检测 + 错误归因） | spec-auditor | hash-auditor | final-validator |
 
-### 验证模块清单（统一位于 `core/knowledge/validation/`）
+### 验证模块清单（统一位于 `core/validators/modules/`）
 
 | 层 | 模块 | 功能 |
 |---|---|---|

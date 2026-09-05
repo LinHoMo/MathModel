@@ -24,7 +24,7 @@ def extract_file_references(skill_md_path):
 SHARED_PREFIXES = (
     "knowledge/methodology",
     "knowledge/paper-cases",
-    "knowledge/validation",
+    "core/validators/modules",
     "knowledge/templates",
     "schemas/",
     "env/",
@@ -37,11 +37,11 @@ def _ref_exists(ref, hand):
     三类路径的解析规则（重构后统一加 `core/` 前缀）：
     1. 带手前缀（Modeler/… Programmer/… Writer/…）→ `core/` + 仓库根相对
     2. 共享层（knowledge/methodology、knowledge/paper-cases、
-       knowledge/validation、knowledge/templates、schemas、env）→ `core/` + 仓库根相对
+       core/validators/modules、knowledge/templates、schemas、env）→ `core/` + 仓库根相对
     3. 本手私有层（laws/、templates/、agents/、knowledge/domain 等）→ `core/{hand}/` 前缀
 
     此前只实现了 1 和 3，导致 Writer/SKILL.md 中对共享层
-    knowledge/validation/*.py 的引用被误判为缺失。
+    core/validators/modules/*.py 的引用被误判为缺失。
     """
     if ref.startswith(("Modeler/", "Programmer/", "Writer/")):
         return os.path.exists("core/" + ref)

@@ -61,7 +61,7 @@ outputs:
 
 ### Step 1: 护栏扫描（guardrails）
 
-调用 `core/knowledge/validation/guardrails.py`：
+调用 `core/validators/modules/guardrails.py`：
 ```python
 from core.knowledge.validation.guardrails import Guardrails
 g = Guardrails()
@@ -74,7 +74,7 @@ for py_file in Path("code").glob("*.py"):
 
 ### Step 2: 权限守卫（permission_guard）
 
-调用 `core/knowledge/validation/permission_guard.py`，拦截：
+调用 `core/validators/modules/permission_guard.py`，拦截：
 - `subprocess` / `os.system` / `exec` / `eval` 执行外部命令
 - 写系统目录（`/etc`、`C:\Windows`、用户主目录外）
 - 网络下载（`urllib.request`、`requests.get` 写盘）未经许可
@@ -82,11 +82,11 @@ for py_file in Path("code").glob("*.py"):
 
 ### Step 3: 信任域校验（trust_domain）
 
-调用 `core/knowledge/validation/trust_domain.py`，确认代码只引用知识库内可信模板/工具，不引入未授权外部依赖。
+调用 `core/validators/modules/trust_domain.py`，确认代码只引用知识库内可信模板/工具，不引入未授权外部依赖。
 
 ### Step 4: 增量检查（incremental_checker）
 
-调用 `core/knowledge/validation/incremental_checker.py`，对本次新增/修改的代码段做增量护栏复查，避免回归。
+调用 `core/validators/modules/incremental_checker.py`，对本次新增/修改的代码段做增量护栏复查，避免回归。
 
 ### Step 5: 确认 P1/P5/P8 落地
 
@@ -112,7 +112,7 @@ for py_file in Path("code").glob("*.py"):
 - [ ] [HARD] 代码语法正确（py_compile 全部通过）→ core/tools/validate_project.py: check_python_syntax
 - [ ] [HARD] 代码在 `code/` 目录下，不在根目录 → core/tools/validate_project.py: check_code_in_code_dir
 - [ ] [HARD] 项目根目录无散落产物（.py/.xlsx/.csv/.png/.pdf 等）→ core/tools/validate_project.py: check_directory_structure
-- [ ] [HARD] 无权限越界（subprocess/系统目录写/未授权网络下载/误删）→ core/knowledge/validation/permission_guard.py
+- [ ] [HARD] 无权限越界（subprocess/系统目录写/未授权网络下载/误删）→ core/validators/modules/permission_guard.py
 - [ ] [HARD] 种子固定 `np.random.seed(42)` 存在（P1）→ core/tools/validate_project.py: check_reproducibility
 
 ### WARN 项（记录但不阻塞）
@@ -148,10 +148,10 @@ for py_file in Path("code").glob("*.py"):
 
 ## Resources
 
-- `core/knowledge/validation/guardrails.py`（禁用词/占位符/AI 痕迹/路径扫描）
-- `core/knowledge/validation/permission_guard.py`（权限守卫）
-- `core/knowledge/validation/trust_domain.py`（信任域）
-- `core/knowledge/validation/incremental_checker.py`（增量检查）
+- `core/validators/modules/guardrails.py`（禁用词/占位符/AI 痕迹/路径扫描）
+- `core/validators/modules/permission_guard.py`（权限守卫）
+- `core/validators/modules/trust_domain.py`（信任域）
+- `core/validators/modules/incremental_checker.py`（增量检查）
 - `core/Programmer/laws/rules.md`（P1/P5/P8）
 
 ## Iteration

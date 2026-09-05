@@ -2,7 +2,7 @@
 # 用于在 OpenAI Agents SDK 中加载 MathModelSkills 技能
 # *** 本文件由 core/tools/gen_runtime_manifest.py 自动生成 ***
 # *** 请勿手工编辑 —— 以 catalog.yaml 为单一真源 ***
-# 最近生成时间: 2026-09-04T03:46:30+00:00Z
+# 最近生成时间: 2026-09-05T12:43:13+00:00Z
 
 # 4 手 29 agent（自动生成）
 name: "mathmodeling-skills"
@@ -246,7 +246,7 @@ knowledge_base:
   playbooks: "core/knowledge/playbooks/"
   paper_cases: "core/knowledge/paper-cases/"
   empirical: "core/knowledge/empirical/"
-  validation: "core/knowledge/validation/"
+  validation: "core/validators/modules/"
   writing: "core/Writer/knowledge/writing/"
   templates: "core/Writer/knowledge/templates/"
 

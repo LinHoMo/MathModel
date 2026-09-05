@@ -190,7 +190,7 @@
 - [ ] 在论文 Limitations 章节如实列出所有"致命局限"和"重要局限"
 - [ ] 在 Discussion 或 Future Work 中列出"次要局限"的改进方向
 - [ ] 不在 Abstract / Conclusion 中过度宣称（违反 [forbidden-words.md](../../../knowledge/writing/forbidden-words.md) §一）
-- [ ] 已运行 `core/knowledge/validation/guardrails.py`（过度宣称检测）通过
+- [ ] 已运行 `core/validators/modules/guardrails.py`（过度宣称检测）通过
 
 ### 7.3 与既有工作的对比
 

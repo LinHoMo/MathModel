@@ -139,7 +139,7 @@
 - **输出**：`work/score_card_multi.json` + `work/panel_consensus.md`
 
 #### 3.2 学术诚信门控
-- **新增**：`core/knowledge/validation/integrity_gate.py`
+- **新增**：`core/validators/modules/integrity_gate.py`
 - **7 类阻断检查**：
   1. 文本相似度（Turnitin式 n-gram，阈值 15%）
   2. 数据造假特征（Benford/分布异常/过度拟合）

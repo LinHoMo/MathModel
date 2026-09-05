@@ -637,7 +637,7 @@ pytest:              244 passed（README 声称 217 passed）
 frontmatter:         29/29 均含 description ✅
 知识库路径引用:       403 处引用 / 15 处断链（3.7%）
   - cookbook 引用的 12 个代码模板全部不存在
-  - core/knowledge/validation/scholar_fetch.py 不存在（实际在 core/tools/）
+  - core/validators/modules/scholar_fetch.py 不存在（实际在 core/tools/）
 catalog artifact:    29 条声明 / 28 个唯一路径（guardrails_report.json 冲突）
 git:                 7 次提交，9 项未提交变更
 脚手架目录:          inputs, inputs/external, work, output, code, figures, paper, paper/figures

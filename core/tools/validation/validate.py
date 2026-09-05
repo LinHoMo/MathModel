@@ -660,7 +660,7 @@ def check_question_spec_schema(project_path):
 
 def check_symbol_registry(project_path):
     """L1.2: 检查符号注册表"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "symbol_registry.py"
+    py_path = project_path / "core" / "validators" / "modules" / "symbol_registry.py"
     if not py_path.exists():
         return False, "symbol_registry.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -671,7 +671,7 @@ def check_symbol_registry(project_path):
 
 def check_assumption_validator(project_path):
     """L1.3: 检查假设验证器"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "assumption_validator.py"
+    py_path = project_path / "core" / "validators" / "modules" / "assumption_validator.py"
     if not py_path.exists():
         return False, "assumption_validator.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -686,7 +686,7 @@ def check_assumption_validator(project_path):
 
 def check_type_system(project_path):
     """L2.1: 检查类型系统"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "type_system.py"
+    py_path = project_path / "core" / "validators" / "modules" / "type_system.py"
     if not py_path.exists():
         return False, "type_system.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -697,7 +697,7 @@ def check_type_system(project_path):
 
 def check_formula_checker(project_path):
     """L2.2: 检查公式检查器"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "formula_checker.py"
+    py_path = project_path / "core" / "validators" / "modules" / "formula_checker.py"
     if not py_path.exists():
         return False, "formula_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -708,7 +708,7 @@ def check_formula_checker(project_path):
 
 def check_output_validator(project_path):
     """L2.3: 检查输出验证器"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "output_validator.py"
+    py_path = project_path / "core" / "validators" / "modules" / "output_validator.py"
     if not py_path.exists():
         return False, "output_validator.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -723,7 +723,7 @@ def check_output_validator(project_path):
 
 def check_invariant_tracker(project_path):
     """L3.1: 检查不变式跟踪"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "invariant_tracker.py"
+    py_path = project_path / "core" / "validators" / "modules" / "invariant_tracker.py"
     if not py_path.exists():
         return False, "invariant_tracker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -734,7 +734,7 @@ def check_invariant_tracker(project_path):
 
 def check_contract_checker(project_path):
     """L3.2: 检查契约校验"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "contract_checker.py"
+    py_path = project_path / "core" / "validators" / "modules" / "contract_checker.py"
     if not py_path.exists():
         return False, "contract_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -745,7 +745,7 @@ def check_contract_checker(project_path):
 
 def check_stage_gate(project_path):
     """L3.3: 检查阶段门禁"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "stage_gate.py"
+    py_path = project_path / "core" / "validators" / "modules" / "stage_gate.py"
     if not py_path.exists():
         return False, "stage_gate.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -760,7 +760,7 @@ def check_stage_gate(project_path):
 
 def check_symbolic_verifier(project_path):
     """L4.1: 检查符号验证器"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "symbolic_verifier.py"
+    py_path = project_path / "core" / "validators" / "modules" / "symbolic_verifier.py"
     if not py_path.exists():
         return False, "symbolic_verifier.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -771,7 +771,7 @@ def check_symbolic_verifier(project_path):
 
 def check_cross_model_checker(project_path):
     """L4.2: 检查异构模型"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "cross_model_checker.py"
+    py_path = project_path / "core" / "validators" / "modules" / "cross_model_checker.py"
     if not py_path.exists():
         return False, "cross_model_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -782,7 +782,7 @@ def check_cross_model_checker(project_path):
 
 def check_consistency_checker(project_path):
     """L4.3: 检查一致性校验"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "consistency_checker.py"
+    py_path = project_path / "core" / "validators" / "modules" / "consistency_checker.py"
     if not py_path.exists():
         return False, "consistency_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -797,7 +797,7 @@ def check_consistency_checker(project_path):
 
 def check_trust_domain(project_path):
     """L5.1: 检查信任域定义"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "trust_domain.py"
+    py_path = project_path / "core" / "validators" / "modules" / "trust_domain.py"
     if not py_path.exists():
         return False, "trust_domain.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -808,7 +808,7 @@ def check_trust_domain(project_path):
 
 def check_permission_guard(project_path):
     """L5.2: 检查权限守卫"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "permission_guard.py"
+    py_path = project_path / "core" / "validators" / "modules" / "permission_guard.py"
     if not py_path.exists():
         return False, "permission_guard.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -819,7 +819,7 @@ def check_permission_guard(project_path):
 
 def check_incremental_checker(project_path):
     """L5.3: 检查增量校验"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "incremental_checker.py"
+    py_path = project_path / "core" / "validators" / "modules" / "incremental_checker.py"
     if not py_path.exists():
         return False, "incremental_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -834,7 +834,7 @@ def check_incremental_checker(project_path):
 
 def check_hash_chain(project_path):
     """L6.8: 检查哈希追溯链"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "hash_chain.py"
+    py_path = project_path / "core" / "validators" / "modules" / "hash_chain.py"
     if not py_path.exists():
         return False, "hash_chain.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -845,7 +845,7 @@ def check_hash_chain(project_path):
 
 def check_error_attribution(project_path):
     """L6.9: 检查错误归因"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "error_attribution.py"
+    py_path = project_path / "core" / "validators" / "modules" / "error_attribution.py"
     if not py_path.exists():
         return False, "error_attribution.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -856,7 +856,7 @@ def check_error_attribution(project_path):
 
 def check_rule_iterator(project_path):
     """L6.10: 检查规则迭代"""
-    py_path = project_path / "core" / "knowledge" / "validation" / "rule_iterator.py"
+    py_path = project_path / "core" / "validators" / "modules" / "rule_iterator.py"
     if not py_path.exists():
         return False, "rule_iterator.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -944,7 +944,7 @@ def check_directory_structure(project_path):
         "core/Programmer/knowledge/code-templates",
         "core/Writer", "core/Writer/laws", "core/Writer/knowledge",
         "core/Writer/knowledge/writing", "core/Writer/knowledge/templates",
-        "core/knowledge", "core/knowledge/methodology", "core/knowledge/paper-cases", "core/knowledge/validation",
+        "core/knowledge", "core/knowledge/methodology", "core/knowledge/paper-cases", "core/validators/modules",
         "core/schemas", "tests",
     ]
     

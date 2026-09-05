@@ -306,7 +306,7 @@ Text to rewrite:
    ↓
 运行 §六 执行检查（脚本硬匹配）
    ↓
-运行 core/knowledge/validation/guardrails.py（D1-D5 维度 AI 痕迹检测）
+运行 core/validators/modules/guardrails.py（D1-D5 维度 AI 痕迹检测）
    ↓
 最终稿
 ```
@@ -316,7 +316,7 @@ Text to rewrite:
 | 工具 | 职责 | 触发时机 |
 |------|------|---------|
 | §一 至 §六 规则 | 硬匹配（关键词/正则） | 写作完成后立即检查 |
-| `core/knowledge/validation/guardrails.py` | 占位符 / AI 痕迹（D1-D5）/ 句式人性化检测 | 终稿前 |
+| `core/validators/modules/guardrails.py` | 占位符 / AI 痕迹（D1-D5）/ 句式人性化检测 | 终稿前 |
 | **本节减法层 prompt** | 软重写（语义级 AI tells 识别） | 规则检测后、guardrails 前 |
 | **本节加法层 prompt** | 软重写（注入个人 voice） | 减法层之后、guardrails 前 |
 

@@ -164,14 +164,14 @@ UTG 六层防御体系在本手由 7 个 agent 承载，对应关系如下（与
 - `core/Writer/knowledge/reference/` - 3 个图表规范文档（figure-rules / figure-rules-enhanced / figure-guide）
 - `core/Writer/knowledge/profiles/` - 10 个竞赛配置文档（cumcm-profile / cumcm-rules / profile-{classification,evaluation,mechanism,network,optimization,prediction,simulation,statistics}）
 - `core/knowledge/paper-cases/` - 分析文档（INDEX / METHOD-MAPPING / INNOVATION-TAGS / CROSS-ANALYSIS / CODE-FRAMEWORKS + 2 个 JSON 图）
-- `core/knowledge/validation/consistency_checker.py` - 本手数值一致性校验脚本
+- `core/validators/modules/consistency_checker.py` - 本手数值一致性校验脚本
 - `core/Writer/laws/rules.md` - 论文手铁律（W1-W10）
 - `core/schemas/paper_spec.schema.json` - 结构化输出 Schema（L1）
 - `core/Writer/templates/PAPER_SPEC_TEMPLATE.md` - PAPER_SPEC.md 输出格式模板
 - `core/env/loader.py` - 环境变量加载器（`load_config()` / `get(key)`）
-- `core/knowledge/validation/guardrails.py` - 运行时护栏（跨手共享）
-- `core/knowledge/validation/hash_chain.py` - 哈希链审计（跨手共享）
-- `core/knowledge/validation/process_verifier.py` - 上游过程验证器（参考）
+- `core/validators/modules/guardrails.py` - 运行时护栏（跨手共享）
+- `core/validators/modules/hash_chain.py` - 哈希链审计（跨手共享）
+- `core/validators/modules/process_verifier.py` - 上游过程验证器（参考）
 
 ## Output Contract
 

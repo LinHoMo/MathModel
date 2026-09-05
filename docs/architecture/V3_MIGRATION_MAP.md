@@ -12,7 +12,7 @@
 |---|---|---|---|
 | `core/Modeler|Programmer|Writer|Reviewer/agents/*/SKILL.md` | `core/agents/<role>/<name>/SKILL.md`（重组后子集） | 迁移（被吸收的 agent） | P3-P4 |
 | `core/<Hand>/agents/`（未被吸收部分） | `core/legacy/hands/`（原位保留亦可） | 保留为 legacy | P5 评估 |
-| `core/knowledge/validation/`（42 个 .py） | `core/validators/`（结构化收编）+ 原 knowledge/validation 保留软链/转发 | 迁移 | P1 |
+| `core/validators/modules/`（42 个 .py） | `core/validators/`（结构化收编）+ 原 core/validators/modules 保留软链/转发 | 迁移 | P1 |
 | `core/schemas/*.json`（13 个 V2 schema） | 原位保留（V2 兼容） | 保留 | — |
 | —（新增） | `core/schemas/v3/artifact|question|claim|decision|workflow|evidence|method_card|failure|pattern/*.schema.json` | 新增 | P0-P2 |
 | —（新增） | `core/runtime/{artifacts,state,graph,execution,decisions,knowledge,legacy,adapters}/` | 新增 | P0-P1 |
