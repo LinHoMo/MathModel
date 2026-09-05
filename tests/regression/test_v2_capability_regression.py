@@ -8,7 +8,7 @@
     R2  state init / status / advance / fail（legacy 状态机）
     R3  gate CLI 可调用（gatelib 门禁库加载）
     R4  catalog v5 双视图 --check 通过
-    R5  agents/openai.yaml 与 catalog 无漂移
+    R5  adapters/openai.yaml 与 catalog 无漂移
     R6  orchestrator 默认 V3 DAG 干跑 + --legacy 干跑
     R7  validate.py 项目级校验入口可用
     R8  doctor.py 环境预检通过

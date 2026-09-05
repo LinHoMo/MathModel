@@ -155,7 +155,7 @@ class TestDeliveryGateAIDisclosure:
         _write_minimal_tex(proj)
         tex = (proj / "paper" / "main.tex").read_text(encoding="utf-8")
         # 添加 AI 使用标注（按 CUMCM 要求：正文标注、参考文献列出、支撑材料含PDF）
-        tex = tex.replace(r"\section{问题重述}", r"\section{问题重述}\n本文使用了 ChatGPT 协助编写代码。")
+        tex = tex.replace(r"\section{问题重述}", r"\section{问题重述}\n本文使用了 ChatGPT 协助编写代码（AI 使用声明：生成式人工智能辅助）。")
         (proj / "paper" / "main.tex").write_text(tex, encoding="utf-8")
         _write_minimal_bib(proj)
         _write_all_results(proj)
@@ -164,7 +164,7 @@ class TestDeliveryGateAIDisclosure:
 
         rc, out = _run_delivery_gate(proj, "writer")
         # 可能因其他原因失败，但不应因正文 AI 披露失败
-        ai_body_fail = any("ai" in line.lower() and ("disclosure" in line.lower() or "披露" in line or "标注" in line) for line in out.splitlines())
+        ai_body_fail = any("[fail]" in line.lower() and "ai" in line.lower() and ("disclosure" in line.lower() or "披露" in line or "标注" in line) for line in out.splitlines())
         assert not ai_body_fail, f"不应报告正文 AI 披露失败: {out}"
 
 

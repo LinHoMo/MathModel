@@ -1210,13 +1210,21 @@ def check_catalog_yaml(project_path):
     # v5 双视图结构检查
     if not re.search(r"^schema_version:\s*5\s*$", content, re.MULTILINE):
         return False, "catalog.yaml schema_version 应为 5（v3 双视图）"
-    v3_block = re.search(r"^v3:\s*$", content, re.MULTILINE)
-    if not v3_block:
-        return False, "catalog.yaml 缺少 v3 视图节"
-    tail = content[v3_block.end():]
+    # v3 节自 catalog.yaml 拆分后位于 catalog/v3.yaml（入口文件保留引用注释）
+    v3_file = project_path / "catalog" / "v3.yaml"
+    if v3_file.exists():
+        try:
+            v3_content = v3_file.read_text(encoding="utf-8")
+        except Exception as e:
+            return False, f"catalog/v3.yaml 读取失败: {e}"
+    else:
+        v3_block = re.search(r"^v3:\s*$", content, re.MULTILINE)
+        if not v3_block:
+            return False, "catalog.yaml 缺少 v3 视图节（catalog/v3.yaml 也未找到）"
+        v3_content = content[v3_block.end():]
     for key in ("roles:", "nodes:", "validators:"):
-        if not re.search(rf"^[ ]+{key}[ ]*(#.*)?$", tail, re.MULTILINE):
-            return False, f"catalog.yaml v3 节缺少 {key.rstrip(':')}"
+        if not re.search(rf"^[ ]+{key}[ ]*(#.*)?$", v3_content, re.MULTILINE):
+            return False, f"catalog v3 节缺少 {key.rstrip(':')}"
     return True, "catalog.yaml v5：legacy 29 agent + v3 双视图齐全"
 
 

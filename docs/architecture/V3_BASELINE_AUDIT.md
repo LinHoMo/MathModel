@@ -37,7 +37,7 @@ V2 是一个**工程化程度很高但认知模型扁平**的系统：29 个 age
 
 - **`core/tools/state.py`（762 行）**：单一事实源 `projects/<p>/work/state.json` + 人类可读镜像 `work/STATE.md` 双写。29 步以 `PIPELINE` 列表硬编码 `(hand, agent, stage)` 三元组；`current` 永远由 `completed[]` 推导（杜绝过期）；`advance` **已强制跑门禁**（fail-closed，rc=2/3 拒绝推进，含 `--no-gate` 逃生口）；`init` 可从产物反推进度（中断恢复）；另有 `q_states`（Per-Qi 雏形）与 `ai_usage_ledger`。
 - **`core/tools/gate.py`（803 行）+ gatelib.py（703 行）**：每个 (hand, agent) 一组 lambda 断言，HARD/WARN 分级，退出码契约 0/1/2/3；后置检查复用 validate_project.py 的 42 项。
-- **`catalog.yaml`（schema_version 4）**：29 agent 的单一真源（name/gate/artifact/path/stage/utg_layer），派生 `agents/openai.yaml`（gen_runtime_manifest.py 生成，勿手编）。
+- **`catalog.yaml`（schema_version 4）**：29 agent 的单一真源（name/gate/artifact/path/stage/utg_layer），派生 `adapters/openai.yaml`（gen_runtime_manifest.py 生成，勿手编）。
 - **UTG 六层**：L1 形式化规约 → L6 哈希审计，映射到 29 agent 无空缺。
 
 ### 2.3 已验证修复的 V2 历史断点（来自 REFACTOR_PLAN.md 体检，commit 395c0f7 已修）
@@ -142,7 +142,7 @@ latex 下 9 个竞赛包（cumcm/mcm/diangong/huashu/huawei/apmcm/mathorcup/renz
 ### 3.8 外部技能与生成物
 
 - `.claude/skills/`：10 个 syslab 系列 skill（MWORKS Syslab 外部能力包），与 core/ 无复制关系，由 catalog external_skills 声明 → 语义上是 host adapter 下的外部技能，V3 应明确其位置
-- `agents/openai.yaml`：catalog 的自动派生物（263 行）→ V3 的 agent manifest 雏形
+- `adapters/openai.yaml`：catalog 的自动派生物（263 行）→ V3 的 agent manifest 雏形
 - `archify-skill/`：**空目录**，无任何内容 → 删除或补充说明
 
 ---

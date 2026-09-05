@@ -3,16 +3,19 @@
 """兼容 shim：实现位于 core/tools/evaluation/weight_profiles.py。
 
 - CLI:  python core/tools/weight_profiles.py ...      （AGENTS.md 协议命令不受影响）
-- import: from core.tools.weight_profiles import x  （转发到新位置）
+- import: from core.tools.weight_profiles import x  （转发到新位置，共享同一命名空间）
 """
-import runpy
+import sys
 from pathlib import Path
 
 _TARGET = Path(__file__).resolve().parent / "evaluation" / "weight_profiles.py"
 
 if __name__ == "__main__":
+    import runpy
     runpy.run_path(str(_TARGET), run_name="__main__")
 else:
-    _g = runpy.run_path(str(_TARGET), run_name=__name__)
-    for _k, _v in _g.items():
-        globals().setdefault(_k, _v)
+    # import 转发：把实现文件 exec 进本模块的 globals ——
+    # 函数的 __globals__ 与本模块同一命名空间，monkeypatch / 属性访问全部生效；
+    # __file__ 必须指向实现文件，否则实现里基于 __file__ 的 ROOT 推导会错位
+    globals()["__file__"] = str(_TARGET)
+    exec(compile(_TARGET.read_text(encoding="utf-8"), str(_TARGET), "exec"), globals())

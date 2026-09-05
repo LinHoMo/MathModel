@@ -1,4 +1,4 @@
-"""测试 agents/openai.yaml 与 catalog.yaml 一致（gen_runtime_manifest.py）+ catalog v5 双视图。"""
+"""测试 adapters/openai.yaml 与 catalog.yaml 一致（gen_runtime_manifest.py）+ catalog v5 双视图。"""
 
 import json
 import sys
@@ -13,7 +13,7 @@ import state as S
 
 
 class TestOpenAiManifest(unittest.TestCase):
-    """agents/openai.yaml 必须与 catalog.yaml 单一真源一致。"""
+    """adapters/openai.yaml 必须与 catalog.yaml 单一真源一致。"""
 
     def setUp(self):
         self.catalog = GRM.load_catalog()

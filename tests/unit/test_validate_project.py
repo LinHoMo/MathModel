@@ -19,7 +19,7 @@ import pytest
 # ---------------------------------------------------------------------------
 # 被测文件路径
 # ---------------------------------------------------------------------------
-VALIDATE_PROJECT_PATH = os.path.join(os.getcwd(), "core", "tools", "validate_project.py")
+VALIDATE_PROJECT_PATH = os.path.join(os.getcwd(), "core", "tools", "validation", "validate_project.py")
 
 
 # ---------------------------------------------------------------------------

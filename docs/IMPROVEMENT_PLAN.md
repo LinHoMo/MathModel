@@ -41,7 +41,7 @@
 | **决策日志/时间预算** | 无 | decision_log.json + time_budget.yaml + handoff.md | ~~P2~~ ✅ 已完成（schema + friendly + new_project 脚手架） |
 | **反思银行/记忆** | retrospect.py 赛后 | 持久化反思银行 + 记忆架构 + 工具接地验证 | ~~P3~~ ✅ 已完成（reflection_bank.py：scan/search/grounding/stats/export-pitfalls 五命令 + _bank/reflections.json 聚合索引，+4 测试） |
 | **题型差异化权重** | 固定权重 | A优化/C数据/MCM沟通/F政策 动态权重 clamp[0.7,1.5] | ~~P3~~ ✅ 已完成（weight_profiles.py + config.yaml + 已接入 score_artifact.py：题型自动解析 + 5 评分员映射 + 旧 8 维回退兼容，+7 测试） |
-| **Codex/插件原生** | 无 | .codex-plugin/plugin.json + agents/openai.yaml | ~~P3~~ ✅ 已完成（plugin.json 更新：29 agent + 10 竞赛枚举 + catalog.yaml 注册新工具） |
+| **Codex/插件原生** | 无 | .codex-plugin/plugin.json + adapters/openai.yaml | ~~P3~~ ✅ 已完成（plugin.json 更新：29 agent + 10 竞赛枚举 + catalog.yaml 注册新工具） |
 | **团队协作指南** | 无 | 角色分工、时间轴、工具配置、冲突解决 | ~~P3~~ ✅ 已完成（docs/TEAM_GUIDE.md：三手映射 + 72h/96h 时间轴 + 协作模式 + 冲突解决 + 反模式） |
 | **Docker 部署** | 无 | Dockerfile + docker-compose.yml 一键启动 | ~~P1~~ ✅ 已完成 |
 | **华数杯竞赛支持** | 4 竞赛（cumcm/mcm/diangong/huawei） | 新增 huashu 竞赛模板 | ~~P1~~ ✅ 已完成 |
@@ -107,7 +107,7 @@
 #### 2.2 Harness-Agnostic 与 Codex-Native
 - **新增**：
   - `.codex-plugin/plugin.json` (Codex 插件清单)
-  - `agents/openai.yaml` (OpenAI Agents SDK 兼容)
+  - `adapters/openai.yaml` (OpenAI Agents SDK 兼容)
   - `skills/mathmodeling/` (Codex skill shim)
 - **协议**：`docs/integration/harness-compat.md` 定义跨运行时行为约定
 - **状态互通**：`decision_log.json` 跨 Claude Code / Codex CLI / opencode / Cursor 共享
@@ -294,7 +294,7 @@ MathModelSkills/
 3. **设计 `work/decision_log.json` schema 并更新 `core/tools/state.py` 支持**
 4. **编写 `core/knowledge/empirical/` 采集脚本，启动 91 篇论文蒸馏流水线**
 5. **补充 Modeler/Programmer/Writer 缺失铁律 (M8/M9, P10-P12, W11-W14)**
-6. **创建 `.codex-plugin/plugin.json` 和 `agents/openai.yaml` 最小可用版本**
+6. **创建 `.codex-plugin/plugin.json` 和 `adapters/openai.yaml` 最小可用版本**
 
 ---
 

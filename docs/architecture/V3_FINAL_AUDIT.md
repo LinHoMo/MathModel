@@ -113,7 +113,7 @@ $ python core/tools/orchestrator.py cumcm2024anew
   [V3] DAG: mathmodel-base:expanded  节点 15 个 ... 共 13 波，计划合法
 
 $ python core/tools/gen_runtime_manifest.py --check
-  [check] agents/openai.yaml 与 catalog.yaml 一致，无漂移
+  [check] adapters/openai.yaml 与 catalog.yaml 一致，无漂移
 
 $ python -m pytest tests/regression -q
   10 passed
