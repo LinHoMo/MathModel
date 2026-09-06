@@ -1,0 +1,42 @@
+{
+  "problem_title": "MCM/ICM 2000 C — 大象避孕飞镖种群控制",
+  "per_question": {
+    "Q001": {
+      "problem_types": ["fitting", "prediction", "uncertainty"],
+      "has_data": true,
+      "sample_size": "large",
+      "time_series": false,
+      "objectives": 1,
+      "uncertainty": true,
+      "note": "Task1：生存率估计（年龄分布分段回归 → fitting）+ 年龄结构投影（prediction）；不确定性传播"
+    },
+    "Q002": {
+      "problem_types": ["simulation", "uncertainty", "optimization"],
+      "has_data": true,
+      "sample_size": "large",
+      "time_series": false,
+      "objectives": 1,
+      "uncertainty": true,
+      "note": "Task2/3：Leslie 投影模拟 + 避孕配额；bootstrap 不确定性；避孕 vs 搬迁权衡（单目标约束均衡，非多目标优化）"
+    },
+    "Q003": {
+      "problem_types": ["simulation", "prediction", "uncertainty"],
+      "has_data": true,
+      "sample_size": "large",
+      "time_series": false,
+      "objectives": 1,
+      "uncertainty": true,
+      "note": "Task4：灾难性损失后种群恢复模拟"
+    },
+    "Q004": {
+      "problem_types": ["simulation", "optimization"],
+      "has_data": true,
+      "sample_size": "large",
+      "time_series": false,
+      "objectives": 1,
+      "uncertainty": true,
+      "note": "Task5/6：规模泛化方案表（5 规模 × 3 生存档）"
+    }
+  },
+  "note": "条件 C（Per-question Profile）：逐题任务特征由题面 6 个 Task 映射到 P8 冻结词表；time_series=false 的理由=机制投影而非统计时序拟合。DTO 仅六键 + note，非问题本体。"
+}

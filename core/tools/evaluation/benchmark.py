@@ -394,15 +394,29 @@ def e2e_prepare(problem_id: str, project: str, competition: str = "mcm") -> dict
 
 
 def e2e_run(problem_id: str, project: str, questions: list[str],
-            competition: str = "mcm") -> dict:
+            competition: str = "mcm", profile: str | None = None) -> dict:
     """端到端基线一次跑：导入 → V3 认知管线 → 八项指标落盘。
 
+    profile: Problem Profile DTO（能力接口，非本体）——
+        {"problem_title": ..., "problem_types": [...], ..., "per_question":
+         {qid: {六键特征, "note": 映射理由}}}
+    传入时经 RuntimeSession(features=...) 进入选型（P13-1 接口），
+    副本存 work/e2e_profile.json 作 provenance。
     本命令只完成确定性部分（脚手架/管线/指标）；真实建模与 rubric 评分
     由 agent 会话按 SKILL.md 执行后经 `e2e metrics --response` 重算。
     """
     report: dict = {"mode": "e2e_run", "project": project,
                     "problem": problem_id, "questions": questions,
-                    "steps": {}}
+                    "profile": profile or "", "steps": {}}
+    features: dict = {}
+    if profile:
+        p_path = Path(profile) if Path(profile).is_absolute() else ROOT / profile
+        prof = _load_json(p_path)
+        if "_error" in prof:
+            report["steps"]["profile"] = f"FAIL: {prof['_error']}"
+            return report
+        features = prof
+        report["steps"]["profile"] = "PASS"
     try:
         meta = e2e_prepare(problem_id, project, competition)
         report["steps"]["prepare"] = "PASS"
@@ -412,11 +426,14 @@ def e2e_run(problem_id: str, project: str, questions: list[str],
         return report
 
     proj_dir = ROOT / "projects" / project
+    if features:
+        _save_json(proj_dir / "work" / "e2e_profile.json", features)
     try:
         if str(ROOT / "core") not in sys.path:
             sys.path.insert(0, str(ROOT / "core"))
         from runtime.execution.session import RuntimeSession
-        session = RuntimeSession(proj_dir, questions, max_workers=1)
+        session = RuntimeSession(proj_dir, questions, max_workers=1,
+                                 features=features or None)
         prog = session.run()["progress"]
         report["steps"]["pipeline"] = (
             f"PASS（完成 {len(prog['completed'])}/{prog['total']}，"
@@ -523,6 +540,7 @@ def main(argv=None) -> int:
     p_er.add_argument("--questions", required=True,
                       help="问题分解（逗号分隔，如 Q001,Q002,Q003）")
     p_er.add_argument("--competition", default="mcm")
+    p_er.add_argument("--profile", help="Problem Profile DTO JSON（P13-1 能力接口）")
     p_em = e2e_sub.add_parser("metrics", help="重算八项指标")
     p_em.add_argument("--project", required=True)
     p_em.add_argument("--gt", help="金标准 JSON（sub_questions/methods）")
@@ -565,7 +583,7 @@ def main(argv=None) -> int:
         if args.e2e_cmd == "run":
             rep = e2e_run(args.problem, args.project,
                           [q.strip() for q in args.questions.split(",") if q.strip()],
-                          args.competition)
+                          args.competition, profile=args.profile)
             print(json.dumps(rep, ensure_ascii=False, indent=2))
             failed = [k for k, v in rep.get("steps", {}).items()
                       if not str(v).startswith("PASS")]

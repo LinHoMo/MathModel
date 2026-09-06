@@ -1,0 +1,210 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-06T05:31:28+00:00",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "Q001 方法选型",
+      "chosen": "mc-topsis",
+      "alternatives": [
+        "mc-ahp（score=68，非时序特征匹配）",
+        "mc-monte-carlo（score=63，问题类型命中: prediction, uncertainty；非时序特征匹配；不确定性处理能力）"
+      ],
+      "criteria": [
+        "检索得分",
+        "适用条件匹配",
+        "验证代价",
+        "历史决策一致性"
+      ],
+      "evidence_ids": [],
+      "reasoning": "total=71（fit=33 data=15 interpretable=10 robust=6 innovation=2 competition=10 risk_penalty=-13）；命中: has_data；缺失: interpretability_required；必做实验: baseline_comparison",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:31:28+00:00",
+      "status": "active",
+      "question_type": "fitting",
+      "knowledge_refs": [
+        {
+          "id": "mc-topsis",
+          "version": 1
+        }
+      ],
+      "failure_refs": [
+        "fm-topsis-no-normalization",
+        "fm-entropy-identical-columns"
+      ],
+      "required_validation": [
+        "baseline_comparison"
+      ],
+      "score_breakdown": {
+        "fit": 33,
+        "data": 15,
+        "interpretability": 10,
+        "robustness": 6,
+        "complexity": 5,
+        "innovation": 2,
+        "competition": 10,
+        "evidence_cost": 3,
+        "risk_penalty": -13
+      },
+      "consequences": [],
+      "invalidated_by": null,
+      "invalidated_reason": null,
+      "invalidated_at": null
+    },
+    {
+      "decision_id": "D002",
+      "question": "Q002 方法选型",
+      "chosen": "mc-topsis",
+      "alternatives": [
+        "mc-ahp（score=68，非时序特征匹配）",
+        "mc-monte-carlo（score=63，问题类型命中: simulation, uncertainty；非时序特征匹配；不确定性处理能力）"
+      ],
+      "criteria": [
+        "检索得分",
+        "适用条件匹配",
+        "验证代价",
+        "历史决策一致性"
+      ],
+      "evidence_ids": [],
+      "reasoning": "total=71（fit=33 data=15 interpretable=10 robust=6 innovation=2 competition=10 risk_penalty=-13）；命中: has_data；缺失: interpretability_required；必做实验: baseline_comparison",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:31:28+00:00",
+      "status": "active",
+      "question_type": "simulation",
+      "knowledge_refs": [
+        {
+          "id": "mc-topsis",
+          "version": 1
+        }
+      ],
+      "failure_refs": [
+        "fm-topsis-no-normalization",
+        "fm-entropy-identical-columns"
+      ],
+      "required_validation": [
+        "baseline_comparison"
+      ],
+      "score_breakdown": {
+        "fit": 33,
+        "data": 15,
+        "interpretability": 10,
+        "robustness": 6,
+        "complexity": 5,
+        "innovation": 2,
+        "competition": 10,
+        "evidence_cost": 3,
+        "risk_penalty": -13
+      },
+      "consequences": [],
+      "invalidated_by": null,
+      "invalidated_reason": null,
+      "invalidated_at": null
+    },
+    {
+      "decision_id": "D003",
+      "question": "Q003 方法选型",
+      "chosen": "mc-topsis",
+      "alternatives": [
+        "mc-ahp（score=68，非时序特征匹配）",
+        "mc-monte-carlo（score=66，问题类型命中: prediction, simulation, uncertainty；非时序特征匹配；不确定性处理能力）"
+      ],
+      "criteria": [
+        "检索得分",
+        "适用条件匹配",
+        "验证代价",
+        "历史决策一致性"
+      ],
+      "evidence_ids": [],
+      "reasoning": "total=71（fit=33 data=15 interpretable=10 robust=6 innovation=2 competition=10 risk_penalty=-13）；命中: has_data；缺失: interpretability_required；必做实验: baseline_comparison",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:31:28+00:00",
+      "status": "active",
+      "question_type": "simulation",
+      "knowledge_refs": [
+        {
+          "id": "mc-topsis",
+          "version": 1
+        }
+      ],
+      "failure_refs": [
+        "fm-topsis-no-normalization",
+        "fm-entropy-identical-columns"
+      ],
+      "required_validation": [
+        "baseline_comparison"
+      ],
+      "score_breakdown": {
+        "fit": 33,
+        "data": 15,
+        "interpretability": 10,
+        "robustness": 6,
+        "complexity": 5,
+        "innovation": 2,
+        "competition": 10,
+        "evidence_cost": 3,
+        "risk_penalty": -13
+      },
+      "consequences": [],
+      "invalidated_by": null,
+      "invalidated_reason": null,
+      "invalidated_at": null
+    },
+    {
+      "decision_id": "D004",
+      "question": "Q004 方法选型",
+      "chosen": "mc-topsis",
+      "alternatives": [
+        "mc-ahp（score=68，非时序特征匹配）",
+        "mc-monte-carlo（score=60，问题类型命中: simulation；非时序特征匹配；不确定性处理能力）"
+      ],
+      "criteria": [
+        "检索得分",
+        "适用条件匹配",
+        "验证代价",
+        "历史决策一致性"
+      ],
+      "evidence_ids": [],
+      "reasoning": "total=71（fit=33 data=15 interpretable=10 robust=6 innovation=2 competition=10 risk_penalty=-13）；命中: has_data；缺失: interpretability_required；必做实验: baseline_comparison",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:31:28+00:00",
+      "status": "active",
+      "question_type": "simulation",
+      "knowledge_refs": [
+        {
+          "id": "mc-topsis",
+          "version": 1
+        }
+      ],
+      "failure_refs": [
+        "fm-topsis-no-normalization",
+        "fm-entropy-identical-columns"
+      ],
+      "required_validation": [
+        "baseline_comparison"
+      ],
+      "score_breakdown": {
+        "fit": 33,
+        "data": 15,
+        "interpretability": 10,
+        "robustness": 6,
+        "complexity": 5,
+        "innovation": 2,
+        "competition": 10,
+        "evidence_cost": 3,
+        "risk_penalty": -13
+      },
+      "consequences": [],
+      "invalidated_by": null,
+      "invalidated_reason": null,
+      "invalidated_at": null
+    }
+  ]
+}

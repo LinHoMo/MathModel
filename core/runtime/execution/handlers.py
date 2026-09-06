@@ -49,6 +49,19 @@ def _base(node_id: str) -> str:
     return node_id.split("@", 1)[0]
 
 
+def features_for(features: dict | None, qid: str) -> dict:
+    """P13-1 Problem→Method 接口：全局特征与逐题画像合并（已批准例外）。
+
+    features["per_question"][qid] 的键覆盖全局同名键（逐题任务特征优先）；
+    无 per_question 或该题无画像时恒等返回全局特征。Problem Profile 是
+    Method Retriever 的输入 DTO（P8 冻结六键 + note），不是对问题本体的
+    描述——见 docs/architecture/P13_1_REPORT.md 与 CAPABILITY_ROADMAP。
+    """
+    f = features or {}
+    own = (f.get("per_question") or {}).get(qid) or {}
+    return {**f, **own} if own else f
+
+
 class DefaultNodeExecutor:
     """按节点基名分发的默认执行器。共享上下文经 ctx 传递（跨节点接力）。"""
 
@@ -192,7 +205,8 @@ class DefaultNodeExecutor:
         ev = []
         count = 0
         for qid in self._question_ids():
-            outcome = self.arena.select(qid, self.features, created_by=node_id)
+            qf = features_for(self.features, qid)
+            outcome = self.arena.select(qid, qf, created_by=node_id)
             card = outcome.chosen_card
             models = self._models_of(qid)
             if node_id in self.force_new_lineage:
@@ -222,8 +236,7 @@ class DefaultNodeExecutor:
             self.shared.setdefault(qid, {})["card_id"] = outcome.chosen
             # P8-4：生成候选方案（baseline/improved/hybrid/innovation）供规划消费
             try:
-                cands = self.candidate_arena.generate_candidates(
-                    qid, self.features)
+                cands = self.candidate_arena.generate_candidates(qid, qf)
                 self.shared[qid]["candidates"] = [
                     c.as_dict() for c in self.candidate_arena.rank(cands)]
             except Exception as e:      # 候选生成失败不阻断选型（降级记录）
