@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""benchmark.py — 引擎演练 / 题库健康检查 / 国赛复盘基准
+"""benchmark.py — 引擎演练 / 题库健康检查 / 国赛复盘基准 / 端到端能力基线
 
-借鉴 MM-Bench 理念，用脚本化方式回答三类问题：
+借鉴 MM-Bench 理念，用脚本化方式回答四类问题：
 1. `pipeline`: 引擎对某个竞赛包能否健康开工？（临时项目脚手架 → state init → doctor → 清理）
 2. `library`:  赛题库索引是否完整？（年份覆盖、待补标记、已核实题名数）
 3. `bench`:    国赛复盘基准（rubric 列表 / run 模板 / 打分重算 / 报告）
+4. `e2e`:      端到端能力基线（P13.0：真题导入 → V3 管线 → 八项指标）
 
-    bench list                列出所有 rubric 文件
-    bench run --rubrict 打印 agent 调用模板（不调用 LLM）
-    bench score --rubric <f> --response <f>   重算校验响应 JSON
-    bench report --rubric <f> --response <f>  生成人类可读报告
+    e2e run --problem 2000_C --project <name> --questions "Q001,Q002,Q003"
+    e2e metrics --project <name> [--gt f] [--response f]
+    e2e report --project <name>
+
+指标定义见 docs/architecture/CAPABILITY_ROADMAP_P13_P17.md §1；
+实现 core/tools/evaluation/e2e_metrics.py（确定性，零 LLM）。
 
 零第三方依赖。pipeline 模式的临时项目命名 `_bench-*`，结束后自动删除。
 """
@@ -18,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -341,6 +345,143 @@ def bench_report(rubric_file: str, response_file: str) -> str:
     return text
 
 
+# ---------------------------------------------------------------------------
+# e2e 子命令：端到端能力基线（P13.0）
+# ---------------------------------------------------------------------------
+
+_DEFAULT_MMBENCH = ROOT.parent / "_mm_analysis" / "LLM-MM-Agent" / "MMBench"
+MMBENCH_ROOT = Path(os.environ.get("MMBENCH_ROOT", str(_DEFAULT_MMBENCH)))
+
+
+def _load_mmbench_problem(problem_id: str) -> dict:
+    p = MMBENCH_ROOT / "problem" / f"{problem_id}.json"
+    if not p.exists():
+        raise ValueError(f"MMBench 题目不存在: {p}")
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def e2e_prepare(problem_id: str, project: str, competition: str = "mcm") -> dict:
+    """真题导入：题面 + 数据文件 + 元信息写入项目脚手架。返回元信息。"""
+    prob = _load_mmbench_problem(problem_id)
+    proj_dir = new_project.scaffold(project, competition, [])
+    inputs = proj_dir / "inputs"
+    parts = [f"# {problem_id}\n"]
+    for key in ("background", "problem_requirement", "addendum"):
+        if prob.get(key):
+            parts.append(f"## {key}\n\n{prob[key]}\n")
+    (inputs / "problem.md").write_text("\n".join(parts), encoding="utf-8")
+
+    data_files: list[str] = []
+    for rel in prob.get("dataset_path") or []:
+        src = MMBENCH_ROOT / "dataset" / problem_id.replace("_", "_") / rel
+        if not src.exists():
+            # dataset 目录名形如 2000_C（与 problem_id 一致）
+            src = MMBENCH_ROOT / "dataset" / problem_id / rel
+        if src.exists():
+            ddir = inputs / "data"
+            ddir.mkdir(exist_ok=True)
+            shutil.copy2(src, ddir / rel)
+            data_files.append(f"inputs/data/{rel}")
+    meta = {
+        "problem_id": problem_id,
+        "title": prob.get("title", problem_id),
+        "background_excerpt": str(prob.get("background", ""))[:300],
+        "dataset_files": data_files,
+        "source": str(MMBENCH_ROOT),
+    }
+    _save_json(proj_dir / "work" / "e2e_problem.json", meta)
+    return meta
+
+
+def e2e_run(problem_id: str, project: str, questions: list[str],
+            competition: str = "mcm") -> dict:
+    """端到端基线一次跑：导入 → V3 认知管线 → 八项指标落盘。
+
+    本命令只完成确定性部分（脚手架/管线/指标）；真实建模与 rubric 评分
+    由 agent 会话按 SKILL.md 执行后经 `e2e metrics --response` 重算。
+    """
+    report: dict = {"mode": "e2e_run", "project": project,
+                    "problem": problem_id, "questions": questions,
+                    "steps": {}}
+    try:
+        meta = e2e_prepare(problem_id, project, competition)
+        report["steps"]["prepare"] = "PASS"
+        report["meta"] = meta
+    except Exception as exc:  # noqa: BLE001
+        report["steps"]["prepare"] = f"FAIL: {exc}"
+        return report
+
+    proj_dir = ROOT / "projects" / project
+    try:
+        if str(ROOT / "core") not in sys.path:
+            sys.path.insert(0, str(ROOT / "core"))
+        from runtime.execution.session import RuntimeSession
+        session = RuntimeSession(proj_dir, questions, max_workers=1)
+        prog = session.run()["progress"]
+        report["steps"]["pipeline"] = (
+            f"PASS（完成 {len(prog['completed'])}/{prog['total']}，"
+            f"阻塞 {len(prog['blocked'])}，失败 {len(prog['failures'])}）")
+        if prog["blocked"] or prog["failures"]:
+            report["steps"]["pipeline"] += f" — {prog['blocked']} {prog['failures']}"
+    except Exception as exc:  # noqa: BLE001
+        report["steps"]["pipeline"] = f"FAIL: {exc}"
+        return report
+
+    try:
+        import e2e_metrics as em
+        m = em.compute_e2e_metrics(proj_dir)
+        _save_json(proj_dir / "work" / "e2e_metrics.json", m)
+        report["steps"]["metrics"] = "PASS"
+        report["summary"] = m["summary"]
+    except Exception as exc:  # noqa: BLE001
+        report["steps"]["metrics"] = f"FAIL: {exc}"
+        return report
+
+    report["next_steps"] = [
+        f"1. agent 真实解题（题面 inputs/problem.md，数据 inputs/data/）："
+        f"分解/方法/建模/实验/结果 → 按 V3 产物登记",
+        f"2. 写金标准 work/e2e_gt.json（sub_questions/methods）+ 评分响应 "
+        f"work/e2e_response.json",
+        f"3. 重算: python core/tools/benchmark.py e2e metrics --project "
+        f"{project} --gt work/e2e_gt.json --response work/e2e_response.json",
+        f"4. 报告: python core/tools/benchmark.py e2e report --project {project}",
+    ]
+    return report
+
+
+def e2e_metrics_cmd(project: str, gt_file: str | None = None,
+                    response_file: str | None = None) -> dict:
+    """重算八项指标（可携带金标准与评分响应）。"""
+    proj_dir = ROOT / "projects" / project
+    if not proj_dir.exists():
+        return {"_error": f"项目不存在: {proj_dir}"}
+    gt = _load_json(Path(gt_file)) if gt_file else None
+    resp = _load_json(Path(response_file)) if response_file else None
+    for d in (gt, resp):
+        if isinstance(d, dict) and "_error" in d:
+            return d
+    import e2e_metrics as em
+    m = em.compute_e2e_metrics(proj_dir, gt, resp)
+    _save_json(proj_dir / "work" / "e2e_metrics.json", m)
+    print(json.dumps(m, ensure_ascii=False, indent=2))
+    return m
+
+
+def e2e_report(project: str) -> dict:
+    """渲染端到端基线的 markdown 报告到 work/E2E_REPORT.md。"""
+    proj_dir = ROOT / "projects" / project
+    m = _load_json(proj_dir / "work" / "e2e_metrics.json")
+    if "_error" in m:
+        return m
+    meta = _load_json(proj_dir / "work" / "e2e_problem.json")
+    import e2e_metrics as em
+    text = em.render_report(m, meta if "_error" not in meta else None)
+    out = proj_dir / "work" / "E2E_REPORT.md"
+    out.write_text(text, encoding="utf-8")
+    print(text)
+    return {"mode": "e2e_report", "written": str(out)}
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="引擎演练 / 题库健康 / 国赛复盘基准")
     sub = parser.add_subparsers(dest="mode", required=True)
@@ -374,6 +515,21 @@ def main(argv=None) -> int:
     p_brep.add_argument("--rubric", required=True)
     p_brep.add_argument("--response", required=True)
 
+    p_e2e = sub.add_parser("e2e", help="端到端能力基线（run/metrics/report）")
+    e2e_sub = p_e2e.add_subparsers(dest="e2e_cmd", required=True)
+    p_er = e2e_sub.add_parser("run", help="导入真题 → V3 管线 → 指标落盘")
+    p_er.add_argument("--problem", required=True, help="MMBench 题目 ID，如 2000_C")
+    p_er.add_argument("--project", required=True, help="项目名（小写字母开头）")
+    p_er.add_argument("--questions", required=True,
+                      help="问题分解（逗号分隔，如 Q001,Q002,Q003）")
+    p_er.add_argument("--competition", default="mcm")
+    p_em = e2e_sub.add_parser("metrics", help="重算八项指标")
+    p_em.add_argument("--project", required=True)
+    p_em.add_argument("--gt", help="金标准 JSON（sub_questions/methods）")
+    p_em.add_argument("--response", help="评分响应 JSON（rubric 打分）")
+    p_erep = e2e_sub.add_parser("report", help="渲染 markdown 报告")
+    p_erep.add_argument("--project", required=True)
+
     args = parser.parse_args(argv)
 
     if args.mode == "pipeline":
@@ -390,18 +546,36 @@ def main(argv=None) -> int:
         return 0 if "error" not in report.get("cumcm", {}) else 1
 
     # bench 子命令
-    if args.bench_cmd == "list":
-        bench_list(as_json=getattr(args, "as_json", False))
-        return 0
-    if args.bench_cmd == "run":
-        res = bench_run(args.rubric)
-        return 0 if "_error" not in res else 1
-    if args.bench_cmd == "score":
-        res = bench_score(args.rubric, args.response, as_json=getattr(args, "as_json", False))
-        return 0 if "_error" not in res and res.get("summary", {}).get("checks_passed") else 1
-    if args.bench_cmd == "report":
-        bench_report(args.rubric, args.response)
-        return 0
+    if args.mode == "bench":
+        if args.bench_cmd == "list":
+            bench_list(as_json=getattr(args, "as_json", False))
+            return 0
+        if args.bench_cmd == "run":
+            res = bench_run(args.rubric)
+            return 0 if "_error" not in res else 1
+        if args.bench_cmd == "score":
+            res = bench_score(args.rubric, args.response, as_json=getattr(args, "as_json", False))
+            return 0 if "_error" not in res and res.get("summary", {}).get("checks_passed") else 1
+        if args.bench_cmd == "report":
+            bench_report(args.rubric, args.response)
+            return 0
+
+    # e2e 子命令
+    if args.mode == "e2e":
+        if args.e2e_cmd == "run":
+            rep = e2e_run(args.problem, args.project,
+                          [q.strip() for q in args.questions.split(",") if q.strip()],
+                          args.competition)
+            print(json.dumps(rep, ensure_ascii=False, indent=2))
+            failed = [k for k, v in rep.get("steps", {}).items()
+                      if not str(v).startswith("PASS")]
+            return 1 if failed else 0
+        if args.e2e_cmd == "metrics":
+            res = e2e_metrics_cmd(args.project, args.gt, args.response)
+            return 0 if "_error" not in res else 1
+        if args.e2e_cmd == "report":
+            res = e2e_report(args.project)
+            return 0 if "_error" not in res else 1
 
     return 0
 
