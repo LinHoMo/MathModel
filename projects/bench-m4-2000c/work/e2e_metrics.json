@@ -1,7 +1,7 @@
 {
   "mode": "e2e_metrics",
   "project": "bench-m4-2000c",
-  "computed_at": "2026-09-06T13:10:47",
+  "computed_at": "2026-09-06T13:29:28",
   "metrics": {
     "decomposition_coverage": {
       "value": 100.0,
@@ -100,6 +100,29 @@
           "max_score": 100
         }
       }
+    }
+  },
+  "measurement_integrity": {
+    "criterion": "created_by startswith 'agent'（provenance-based, v1）",
+    "experiment_realization": {
+      "numerator": 4,
+      "denominator": 8,
+      "value": 50.0
+    },
+    "validation_realization": {
+      "numerator": 4,
+      "denominator": 8,
+      "value": 50.0
+    },
+    "writing_realization": {
+      "numerator": 0,
+      "denominator": 20,
+      "value": 0.0
+    },
+    "overall_real_artifact": {
+      "numerator": 12,
+      "denominator": 70,
+      "value": 17.1
     }
   },
   "summary": {
