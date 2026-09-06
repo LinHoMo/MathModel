@@ -153,9 +153,14 @@ class ResearchQuality:
             return []
         recorded = []
         for b in report.blockers:
+            question = (f"[quality] {b.subject_type}:{b.subject_id} "
+                        f"{b.check_id or b.dimension}")
+            # 去重：同一 blocker 不重复登记（审计保留首次）
+            if any(d.question == question and d.status == "active"
+                   for d in self.decisions.decisions.values()):
+                continue
             dec = self.decisions.add(
-                question=f"[quality] {b.subject_type}:{b.subject_id} "
-                         f"{b.check_id or b.dimension}",
+                question=question,
                 chosen=f"{b.status}:{b.reason[:80]}",
                 alternatives=["ignore", "fix", "defer"],
                 criteria=["quality_contract"],

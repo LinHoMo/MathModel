@@ -470,6 +470,10 @@ class DefaultNodeExecutor:
         except Exception:
             pass
         if report.blockers:
+            try:
+                rq.record_blockers(report)      # P9-12 Quality Memory
+            except Exception:
+                pass
             actions = ResearchQuality.workflow_feedback(report)
             return NodeResult(
                 FAIL,
