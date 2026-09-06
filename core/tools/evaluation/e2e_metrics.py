@@ -126,29 +126,43 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
         decomp_value = round(100.0 * min(int(aligned), len(sub_qs))
                              / len(sub_qs), 1)
 
-    # 2 method selection：每问题 top-3 候选（chosen + shortlist 前 2）命中 GT
+    # 2 method selection。口径（P13-1 v2 最终版）：
+    #   top-3 GT hit = GT 方法至少有一个 canonical method 与该 question 的
+    #   top-3 candidate/shortlist 方法匹配（候选去重保序：chosen + shortlist）。
+    #   value = top-3 命中率；top-1 / top-3 / diversity / shortlist 全进 detail，
+    #   使失败可定位：画像未传入 → matcher 未召回 → 有候选但排序错 → GT 归一不匹配。
     methods_gt = gt.get("methods") or []
     method_value = None
     method_detail: dict = {"gt_methods": methods_gt,
+                           "definition": "top-3 GT hit（chosen+shortlist 去重前3）",
                            "per_question": {}}
     if methods_gt and models:
-        hits = []
+        t1_hits, t3_hits = [], []
         for q in questions:
             qm = [m for m in models if m.question == q.artifact_id]
             if not qm:
                 continue
             m0 = qm[0]
             data = m0.data or {}
-            top3 = [data.get("card_id", "")] + list(
-                (data.get("shortlist") or [])[:2])
-            hit = _method_hit(top3, card_names, methods_gt)
-            hits.append(hit)
+            chosen = str(data.get("card_id", ""))
+            shortlist = [c["card_id"] if isinstance(c, dict) else str(c)
+                         for c in (data.get("shortlist") or [])]
+            cands = [chosen] + [c for c in shortlist if c != chosen]
+            top3 = [c for c in cands if c][:3]
+            t1 = _method_hit([chosen], card_names, methods_gt)
+            t3 = _method_hit(top3, card_names, methods_gt)
+            t1_hits.append(t1)
+            t3_hits.append(t3)
             method_detail["per_question"][q.artifact_id] = {
-                "top3": [t for t in top3 if t], "hit": hit}
-        if hits:
-            method_value = round(100.0 * sum(hits) / len(hits), 1)
-        method_detail["distinct_chosen"] = len(
-            {(m.data or {}).get("card_id", "") for m in models})
+                "top1_chosen": chosen, "top1_hit": t1,
+                "top3": top3, "top3_hit": t3,
+                "shortlist": shortlist}
+        if t3_hits:
+            method_value = round(100.0 * sum(t3_hits) / len(t3_hits), 1)
+            method_detail["top1_hit_rate"] = round(
+                100.0 * sum(t1_hits) / len(t1_hits), 1)
+            method_detail["distinct_chosen"] = len(
+                {(m.data or {}).get("card_id", "") for m in models})
 
     # 3 model correctness：来自 agent 对照 rubric 的评分（缺评分 → n/a）
     mc = response.get("model_correctness_pct")

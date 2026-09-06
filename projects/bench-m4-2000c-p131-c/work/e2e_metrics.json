@@ -1,7 +1,7 @@
 {
   "mode": "e2e_metrics",
   "project": "bench-m4-2000c-p131-c",
-  "computed_at": "2026-09-06T13:31:37",
+  "computed_at": "2026-09-06T13:40:18",
   "metrics": {
     "decomposition_coverage": {
       "value": 50.0,
@@ -12,7 +12,7 @@
       }
     },
     "method_selection": {
-      "value": 0.0,
+      "value": 100.0,
       "detail": {
         "gt_methods": [
           "leslie matrix",
@@ -22,40 +22,70 @@
           "monte carlo",
           "sensitivity analysis"
         ],
+        "definition": "top-3 GT hit（chosen+shortlist 去重前3）",
         "per_question": {
           "Q001": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
             "top3": [
               "mc-topsis",
-              "mc-topsis",
-              "mc-ahp"
+              "mc-ahp",
+              "mc-monte-carlo"
             ],
-            "hit": false
+            "top3_hit": true,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-monte-carlo"
+            ]
           },
           "Q002": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
             "top3": [
               "mc-topsis",
-              "mc-topsis",
-              "mc-ahp"
+              "mc-ahp",
+              "mc-monte-carlo"
             ],
-            "hit": false
+            "top3_hit": true,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-monte-carlo"
+            ]
           },
           "Q003": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
             "top3": [
               "mc-topsis",
-              "mc-topsis",
-              "mc-ahp"
+              "mc-ahp",
+              "mc-monte-carlo"
             ],
-            "hit": false
+            "top3_hit": true,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-monte-carlo"
+            ]
           },
           "Q004": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
             "top3": [
               "mc-topsis",
-              "mc-topsis",
-              "mc-ahp"
+              "mc-ahp",
+              "mc-monte-carlo"
             ],
-            "hit": false
+            "top3_hit": true,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-monte-carlo"
+            ]
           }
         },
+        "top1_hit_rate": 0.0,
         "distinct_chosen": 1
       }
     },
@@ -126,6 +156,6 @@
   "summary": {
     "computed": 5,
     "absent": 3,
-    "mean_of_available": 50.0
+    "mean_of_available": 70.0
   }
 }

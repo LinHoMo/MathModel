@@ -49,13 +49,15 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
 
 - **P13-0 Measurement / Baseline（✅ 已完成）**：`bench e2e` + 八项指标 +
   2000C 真实解题基线（`BASELINE_REPORT.md`）+ Measurement Integrity 仪表盘。
-- **P13-1 Problem→Method 接口（✅ 已完成，Case D）**：`problem_profile`
-  DTO（六冻结键+note，非本体）+ `features_for()` + A/B/C 消融。官方结果
-  0/0/0 → 接口验证打通、但打分权重结构压制语义证据；metric top-3 实现bug
-  一并定位。详见 `P13_1_REPORT.md`。
-- **P13-2 Retriever 打分再平衡 + metric 修复**：top-3 候选实现修复（用冻结
-  GT 重测 A/B/C）+ 类型命中权重 vs applicability 基线/质量维度的再平衡
-  （任何权重改动须 ≥2 题消融）。**不加 Profile 字段、暂缓新方法卡**。
+- **P13-1 Problem→Method 接口（✅ 已完成，v2 最终版）**：`problem_profile`
+  DTO（六冻结键+note，非本体）+ `features_for()` + A/B/C 消融。口径钉死为
+  top-3 shortlist GT hit 后官方结果 **A=0 / B=100 / C=100（top-1 仍 0）**：
+  接口修复有效、全局画像已够用、失败分支锁定"有候选但排序错"。详见
+  `P13_1_REPORT.md`。
+- **P13-2 Retriever 打分再平衡**：唯一靶点 = 类型证据权重 vs applicability
+  基线/质量维度，验收 = 同题集 top-1 从 TOPSIS 变为语义合理卡（≥2 题
+  消融防反向调参）。**不加 Profile 字段、不复杂化 per-question、暂缓新
+  方法卡**（16 卡已有 MC，加卡不是瓶颈）。
 - **P13-3 Model Construction**：从"选对方法"到"正确建模"（假设/推导链/
   模型比较）。
 - **P13-4 Real Experiment**：真执行、真结果、真验证（agent 结果正式接入

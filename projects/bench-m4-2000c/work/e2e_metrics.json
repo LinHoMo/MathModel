@@ -1,14 +1,14 @@
 {
   "mode": "e2e_metrics",
   "project": "bench-m4-2000c",
-  "computed_at": "2026-09-06T13:29:28",
+  "computed_at": "2026-09-06T13:40:17",
   "metrics": {
     "decomposition_coverage": {
-      "value": 100.0,
+      "value": 50.0,
       "detail": {
         "gt_sub_questions": 8,
         "produced_questions": 4,
-        "mode": "aligned（agent 对照 GT 判定）"
+        "mode": "count_ratio（无语义对齐评分，退化口径）"
       }
     },
     "method_selection": {
@@ -22,46 +22,77 @@
           "monte carlo",
           "sensitivity analysis"
         ],
+        "definition": "top-3 GT hit（chosen+shortlist 去重前3）",
         "per_question": {
           "Q001": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
             "top3": [
               "mc-topsis",
-              "mc-topsis",
-              "mc-ahp"
+              "mc-ahp",
+              "mc-pca"
             ],
-            "hit": false
+            "top3_hit": false,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-pca"
+            ]
           },
           "Q002": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
             "top3": [
               "mc-topsis",
-              "mc-topsis",
-              "mc-ahp"
+              "mc-ahp",
+              "mc-pca"
             ],
-            "hit": false
+            "top3_hit": false,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-pca"
+            ]
           },
           "Q003": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
             "top3": [
               "mc-topsis",
-              "mc-topsis",
-              "mc-ahp"
+              "mc-ahp",
+              "mc-pca"
             ],
-            "hit": false
+            "top3_hit": false,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-pca"
+            ]
           },
           "Q004": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
             "top3": [
               "mc-topsis",
-              "mc-topsis",
-              "mc-ahp"
+              "mc-ahp",
+              "mc-pca"
             ],
-            "hit": false
+            "top3_hit": false,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-pca"
+            ]
           }
-        }
+        },
+        "top1_hit_rate": 0.0,
+        "distinct_chosen": 1
       }
     },
     "model_correctness": {
-      "value": 70.0,
+      "value": null,
       "detail": {
-        "source": "response.rubric"
+        "source": "缺评分响应（n/a）"
       }
     },
     "experiment_validity": {
@@ -93,12 +124,9 @@
       }
     },
     "end_to_end": {
-      "value": 71.0,
+      "value": null,
       "detail": {
-        "rubric_total": {
-          "awarded": 71,
-          "max_score": 100
-        }
+        "rubric_total": null
       }
     }
   },
@@ -126,8 +154,8 @@
     }
   },
   "summary": {
-    "computed": 7,
-    "absent": 1,
-    "mean_of_available": 63.0
+    "computed": 5,
+    "absent": 3,
+    "mean_of_available": 50.0
   }
 }
