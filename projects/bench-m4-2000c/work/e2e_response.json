@@ -1,0 +1,21 @@
+{
+  "problem_id": "2000_C",
+  "decomposition_aligned": 8,
+  "decomposition_note": "Q001→Task1 两项；Q002→Task2/3 三项；Q003→Task4；Q004→Task5+Task6。8/8 金标准要求项均有对应问题承载。",
+  "model_correctness_pct": 70,
+  "model_correctness_rationale": "Leslie 矩阵/年龄结构模型是该题公认正确方法族（+）；搬迁均衡额独立复现 700 头/年，与题面 600-800 一致（+）；双情景直接量化数据不确定性对结论的影响（+）；bootstrap 5 批 ×200 次给出 CI（+）。扣分：校准乘子 m=4.42 过大，校准口径幼龄份额 61% 偏高，提示矩阵幼体存活高估（-）；仅雌性矩阵且生存率不分性别（-）；无密度制约/环境随机性（-）。",
+  "end_to_end_breakdown": {
+    "Task1_生存率与年龄结构": {"max": 25, "awarded": 21, "note": "方法正确、双口径、缺性别区分与逐龄平滑"},
+    "Task2_避孕配额与不确定性": {"max": 25, "awarded": 22, "note": "配额+CI+老龄化评述+权衡完整；未给 600-800 区间的配额区间表"},
+    "Task4_灾难恢复": {"max": 15, "awarded": 13, "note": "双情景恢复年数完整；未做损失结构（幼体优先）分型"},
+    "Task5_管理层报告": {"max": 10, "awarded": 8, "note": "通俗、具体、含增信建议；非 LaTeX 排版"},
+    "Task6_泛化方案": {"max": 10, "awarded": 7, "note": "15 行方案表完整；未含搬迁可能性差异维度"},
+    "技术论文": {"max": 15, "awarded": 0, "note": "未生成 paper/main.tex（P13 backlog）"}
+  },
+  "total": {"awarded": 71, "max_score": 100},
+  "scored_by": "agent-self-scored（对照 GT 与可复现代码，评分口径见 BASELINE_REPORT.md）",
+  "flags": [
+    "无 paper/main.tex：写作完整度记 n/a，总分扣 15 分维度",
+    "确定性管线选出的方法卡与金标准方法族不匹配（知识库无种群动力学卡）"
+  ]
+}

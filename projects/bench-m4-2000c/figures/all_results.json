@@ -1,0 +1,196 @@
+{
+  "problem": "MCM/ICM 2000 C — elephant population control",
+  "seed": 42,
+  "n_runs": 5,
+  "boots_per_run": 200,
+  "data": {
+    "pooled_elephants": 4811,
+    "female_share": 0.5105,
+    "fix_age49_to_40": true
+  },
+  "Q1_survival_age_structure": {
+    "segment_survival_S": {
+      "juvenile_0_2": 0.8346,
+      "adult_2_50": 0.9811,
+      "senescent_50_70": 0.8555
+    },
+    "survival_examples": {
+      "S(2)": 0.9811,
+      "S(5)": 0.9811,
+      "S(10)": 0.9811,
+      "S(20)": 0.9811,
+      "S(30)": 0.9811,
+      "S(40)": 0.9811,
+      "S(50)": 0.8555,
+      "S(55)": 0.8555,
+      "S(60)": 0.8555
+    },
+    "age_structure_11000": {
+      "per_band_headcount_at_11000": {
+        "0-10": 6728.3,
+        "11-20": 2430.3,
+        "21-30": 1083.6,
+        "31-40": 483.2,
+        "41-50": 215.4,
+        "51-60": 53.1,
+        "61-70": 6.0
+      },
+      "calf_share_pct": 61.17,
+      "cows_total": 5615.0,
+      "fertile_cows": 2366.0
+    },
+    "method_note": "迁出样本≈稳态年龄分布投影（A1）；ln N(a) 分段回归（0-2 / 2-50 / 50-70）；年龄结构用校准口径稳定分布"
+  },
+  "Q2_darting_quota": {
+    "scenario_A_data_driven": {
+      "b0": 0.0594,
+      "lambda": 1.0031,
+      "implied_surplus_pct": 0.31,
+      "p_star": 0.007,
+      "cows_per_year": 25.4,
+      "relocation_eq_per_year": 34.2,
+      "note": "幼象在迁出样本中系统性低估 → λ 明显偏低（与捕杀记录矛盾），仅作下界参考"
+    },
+    "scenario_B_culling_calibrated": {
+      "b0": 0.2624,
+      "lambda_target": 1.0636,
+      "fertility_scale_m": 4.42,
+      "p_star": 0.1727,
+      "cows_per_year": 115.1,
+      "relocation_eq_per_year": 700.0,
+      "validation": "内部一致性校验通过：搬迁模块独立解出的均衡额 （700 头/年）与校准锚（捕杀记录 600-800 头/年）一致；注意 λ 本身由该记录校准，非独立外部验证"
+    },
+    "uncertainty": {
+      "runs": 5,
+      "boots_per_run": 200,
+      "seed": 42,
+      "cows_per_year_run_means": [
+        114.6,
+        114.0,
+        114.2,
+        114.3,
+        114.3
+      ],
+      "cows_per_year_mean": 114.3,
+      "cows_per_year_std": 0.2,
+      "cows_per_year_ci95": [
+        108.1,
+        119.6
+      ]
+    },
+    "age_structure_effect_darting": {
+      "calf_share_pct_before": 61.17,
+      "calf_share_pct_after_60y": 17.83,
+      "conclusion": "避孕使幼龄份额下降 → 种群老龄化，观赏/旅游体验受影响（Task2 要求的评述）"
+    },
+    "darting_vs_relocation": {
+      "relocation_individuals_per_year_eq": 700.0,
+      "cows_darted_per_year_eq": 115.1,
+      "note": "搬迁每年移除整头个体（含幼体），操作量大但立竿见影；避孕年度操作量小、不物理移除，但对年龄结构扰动更大（幼龄份额被持续压低）"
+    }
+  },
+  "Q3_catastrophe_recovery": {
+    "A_data_driven_kill_30pct_recovery_years": 115,
+    "A_data_driven_kill_50pct_recovery_years": 224,
+    "A_data_driven_kill_70pct_recovery_years": ">300",
+    "B_calibrated_kill_30pct_recovery_years": 6,
+    "B_calibrated_kill_50pct_recovery_years": 12,
+    "B_calibrated_kill_70pct_recovery_years": 20,
+    "conclusion": "情景 B（校准口径）下 50% 灾难损失可在 12 年内恢复——避孕未不可逆地破坏恢复力；情景 A 因 λ 低估而显得悲观，恰说明数据不确定性对结论的影响（Task2/Task4 双重要求）"
+  },
+  "Q4_generalization": {
+    "plan_table": [
+      {
+        "park_size": 300,
+        "survival_scale": 0.9,
+        "p_star": 0.1748,
+        "cows_darted_per_year": 11.5
+      },
+      {
+        "park_size": 2000,
+        "survival_scale": 0.9,
+        "p_star": 0.1748,
+        "cows_darted_per_year": 77.0
+      },
+      {
+        "park_size": 5000,
+        "survival_scale": 0.9,
+        "p_star": 0.1748,
+        "cows_darted_per_year": 192.4
+      },
+      {
+        "park_size": 11000,
+        "survival_scale": 0.9,
+        "p_star": 0.1748,
+        "cows_darted_per_year": 423.3
+      },
+      {
+        "park_size": 25000,
+        "survival_scale": 0.9,
+        "p_star": 0.1748,
+        "cows_darted_per_year": 962.1
+      },
+      {
+        "park_size": 300,
+        "survival_scale": 1.0,
+        "p_star": 0.1727,
+        "cows_darted_per_year": 11.1
+      },
+      {
+        "park_size": 2000,
+        "survival_scale": 1.0,
+        "p_star": 0.1727,
+        "cows_darted_per_year": 74.3
+      },
+      {
+        "park_size": 5000,
+        "survival_scale": 1.0,
+        "p_star": 0.1727,
+        "cows_darted_per_year": 185.7
+      },
+      {
+        "park_size": 11000,
+        "survival_scale": 1.0,
+        "p_star": 0.1727,
+        "cows_darted_per_year": 408.6
+      },
+      {
+        "park_size": 25000,
+        "survival_scale": 1.0,
+        "p_star": 0.1727,
+        "cows_darted_per_year": 928.7
+      },
+      {
+        "park_size": 300,
+        "survival_scale": 1.1,
+        "p_star": 0.171,
+        "cows_darted_per_year": 10.8
+      },
+      {
+        "park_size": 2000,
+        "survival_scale": 1.1,
+        "p_star": 0.171,
+        "cows_darted_per_year": 71.8
+      },
+      {
+        "park_size": 5000,
+        "survival_scale": 1.1,
+        "p_star": 0.171,
+        "cows_darted_per_year": 179.6
+      },
+      {
+        "park_size": 11000,
+        "survival_scale": 1.1,
+        "p_star": 0.171,
+        "cows_darted_per_year": 395.1
+      },
+      {
+        "park_size": 25000,
+        "survival_scale": 1.1,
+        "p_star": 0.171,
+        "cows_darted_per_year": 898.0
+      }
+    ],
+    "memo": "output/management_memo.md（Task5 管理层报告）"
+  }
+}

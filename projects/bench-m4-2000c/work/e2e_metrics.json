@@ -1,0 +1,110 @@
+{
+  "mode": "e2e_metrics",
+  "project": "bench-m4-2000c",
+  "computed_at": "2026-09-06T13:10:47",
+  "metrics": {
+    "decomposition_coverage": {
+      "value": 100.0,
+      "detail": {
+        "gt_sub_questions": 8,
+        "produced_questions": 4,
+        "mode": "aligned（agent 对照 GT 判定）"
+      }
+    },
+    "method_selection": {
+      "value": 0.0,
+      "detail": {
+        "gt_methods": [
+          "leslie matrix",
+          "age-structured population model",
+          "survival estimation",
+          "bootstrap",
+          "monte carlo",
+          "sensitivity analysis"
+        ],
+        "per_question": {
+          "Q001": {
+            "top3": [
+              "mc-topsis",
+              "mc-topsis",
+              "mc-ahp"
+            ],
+            "hit": false
+          },
+          "Q002": {
+            "top3": [
+              "mc-topsis",
+              "mc-topsis",
+              "mc-ahp"
+            ],
+            "hit": false
+          },
+          "Q003": {
+            "top3": [
+              "mc-topsis",
+              "mc-topsis",
+              "mc-ahp"
+            ],
+            "hit": false
+          },
+          "Q004": {
+            "top3": [
+              "mc-topsis",
+              "mc-topsis",
+              "mc-ahp"
+            ],
+            "hit": false
+          }
+        }
+      }
+    },
+    "model_correctness": {
+      "value": 70.0,
+      "detail": {
+        "source": "response.rubric"
+      }
+    },
+    "experiment_validity": {
+      "value": 100.0,
+      "detail": {
+        "results": 8,
+        "with_robustness_tags": 8,
+        "multi_run_ge5": 1
+      }
+    },
+    "validation_reliability": {
+      "value": 100.0,
+      "detail": {
+        "claims_supported": 8,
+        "claims_total": 8,
+        "paper_present": false
+      }
+    },
+    "innovation": {
+      "value": 0.0,
+      "detail": {
+        "declared_patterns": 0
+      }
+    },
+    "writing_completeness": {
+      "value": null,
+      "detail": {
+        "main_tex": false
+      }
+    },
+    "end_to_end": {
+      "value": 71.0,
+      "detail": {
+        "rubric_total": {
+          "awarded": 71,
+          "max_score": 100
+        }
+      }
+    }
+  },
+  "summary": {
+    "computed": 7,
+    "absent": 1,
+    "mean_of_available": 63.0
+  }
+}

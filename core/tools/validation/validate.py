@@ -86,11 +86,17 @@ def _live_project_dirs(project_path):
     本仓库是技能库，projects/ 可能为空（无活跃实例）。项目级存在性检查
     （all_results.json / 随机种子 / 论文 .tex）仅在存在活跃实例时才应报失败，
     否则库模式下的空 projects/ 会持续产生假失败。
+
+    bench e2e 基线项目（含 work/e2e_problem.json）不计入：它们由
+    `benchmark.py e2e` 的八项能力指标度量，不适用论文交付门禁
+    （误报修正，见 docs/architecture/BASELINE_REPORT.md）。
     """
     pdir = project_path / "projects"
     if not pdir.is_dir():
         return []
-    return [d for d in pdir.iterdir() if d.is_dir() and not d.name.startswith(".")]
+    return [d for d in pdir.iterdir()
+            if d.is_dir() and not d.name.startswith(".")
+            and not (d / "work" / "e2e_problem.json").exists()]
 
 
 # === env 阈值读取（动态加载 env/loader.get；缺失时回退默认值）===
