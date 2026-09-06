@@ -1,0 +1,198 @@
+{
+ "problem_id": "2025_B",
+ "mma_raw_output": {
+  "eda": "机理+优化混合题（无数据集，参数为情景设定）：EDA 聚焦朱诺旅游系统结构——访客到达（邮轮/航空构成与季节峰）、承载力瓶颈（港口泊位、步道容量、居民容忍度）、收入漏损（邮轮经济渗漏率）、稳定措施清单（访客上限/时段错峰/停留税/营销转向）。不做描述性统计。可视化：系统因果回路图（访客→收入→措施→承载力→体验）。",
+  "ques1": "问题类型判断：优化类（题面要求 State clearly which factors are optimized / constrained）。模型选择：约束优化 LP/NLP——目标 max 长期净收入（或加权含居民满意度），约束 = 生态承载力、社区容忍度阈值、基础设施容量；备选加权和法。建模思路：决策变量 = 访客上限 V_cap、停留税 τ、营销转向比例 m；支出反馈 = 税收 → 基础设施/保护投入 → 承载力与体验提升。求解方法：递推优化/最优控制近似。验证策略：参数文献值域稳健性。可视化：V_cap-τ-满意度等高线。",
+  "ques2": "问题类型判断：迁移分析。模型选择：同一框架换参数（目的地规模、渗漏率、承载瓶颈类型），讨论措施重要性排序如何随参数变化。建模思路：敏感性扫描定位'哪类瓶颈主导'→ 决定措施优先级。求解方法：参数化情景。验证策略：两类典型目的地（邮轮型/陆路型）对照。可视化：瓶颈类型-措施优先级矩阵。",
+  "sensitivity_analysis": "关键参数：承载力 K、渗漏率、访客弹性（税收对需求抑制）、措施投入产出系数。评估指标：长期净收入、居民满意度、生态指标。可视化：龙卷风图。鲁棒性：蒙特卡洛参数采样。"
+ },
+ "problem_interpretation": "显式优化/约束结构 + 收入-支出反馈回路 + 跨目的地参数迁移的三段框架。",
+ "assumptions": [
+  {
+   "id": "A1",
+   "statement": "访客需求对有效价格（含税 τ）弹性为负、对体验质量弹性为正",
+   "justification": "需求机制设定"
+  },
+  {
+   "id": "A2",
+   "statement": "承载力 K 可通过投入提升但边际递减",
+   "justification": "反馈回路设定"
+  },
+  {
+   "id": "A3",
+   "statement": "居民满意度随拥挤度下降、随人均公共服务上升",
+   "justification": "稳定措施机制"
+  }
+ ],
+ "variables": [
+  {
+   "id": "V_t",
+   "name": "年度访客量",
+   "description": "决策/状态",
+   "unit": "人/yr",
+   "role": "decision",
+   "domain": "[0, V_cap(t)]"
+  },
+  {
+   "id": "tau",
+   "name": "停留税率",
+   "description": "政策变量",
+   "unit": "1",
+   "role": "decision",
+   "domain": "[0, τ_max]"
+  },
+  {
+   "id": "m",
+   "name": "营销转向比例",
+   "description": "政策变量",
+   "unit": "1",
+   "role": "decision",
+   "domain": "[0,1]"
+  },
+  {
+   "id": "K_t",
+   "name": "承载力",
+   "description": "投入反馈提升",
+   "unit": "人/yr",
+   "role": "state",
+   "domain": "≥0"
+  },
+  {
+   "id": "sat_t",
+   "name": "居民满意度",
+   "description": "稳定措施目标",
+   "unit": "1",
+   "role": "derived",
+   "domain": "[0,1]"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "p1",
+   "name": "人均消费 c 与渗漏率 leak",
+   "value_or_source": "旅游经济典型值",
+   "unit": "USD",
+   "source": "literature"
+  },
+  {
+   "id": "p2",
+   "name": "需求弹性（对 τ、对体验）",
+   "value_or_source": "旅游经济学文献区间",
+   "unit": "1",
+   "source": "literature"
+  },
+  {
+   "id": "p3",
+   "name": "承载力投入产出系数",
+   "value_or_source": "情景",
+   "unit": "1",
+   "source": "assumed"
+  },
+  {
+   "id": "p4",
+   "name": "拥挤-满意度系数",
+   "value_or_source": "情景",
+   "unit": "1",
+   "source": "assumed"
+  }
+ ],
+ "constraints": [
+  {
+   "id": "C1",
+   "expression": "V_t ≤ K_t",
+   "rationale": "承载力约束（显式）"
+  },
+  {
+   "id": "C2",
+   "expression": "sat_t ≥ sat_min（社区容忍度下限）",
+   "rationale": "社区约束（显式）"
+  },
+  {
+   "id": "C3",
+   "expression": "支出 ≤ 税收收入",
+   "rationale": "预算平衡"
+  }
+ ],
+ "objective": [
+  {
+   "id": "O1",
+   "expression": "max Σ_t [c·(1−leak)·V_t·(1+τ)·V_t − 措施成本]（长期净收入，题面要求显式化）",
+   "kind": "maximize",
+   "rationale": "任务1 目标显式"
+  },
+  {
+   "id": "O2",
+   "expression": "s.t. C1-C3（约束显式）",
+   "kind": "simulate",
+   "rationale": "任务1 约束显式"
+  }
+ ],
+ "mechanism": [
+  {
+   "id": "M1",
+   "name": "需求",
+   "equation": "V_t = V0·(1+g)^t·(p̄/p_eff_t)^{e_p}·sat_t^{e_s}",
+   "derivation_notes": "价格与体验弹性"
+  },
+  {
+   "id": "M2",
+   "name": "收入-支出反馈",
+   "equation": "K_{t+1} = K_t + p3·τ·c·V_t·(1−leak)",
+   "derivation_notes": "税收→承载力提升（题面反馈要求）"
+  },
+  {
+   "id": "M3",
+   "name": "满意度",
+   "equation": "sat_t = 1 − p4·V_t/K_t + f(公共服务)",
+   "derivation_notes": "拥挤负效应 + 服务正效应"
+  }
+ ],
+ "candidate_models": [
+  {
+   "model": "约束优化 + 反馈回路（本框架）",
+   "pros": "题面要求的目标/约束显式 + 反馈",
+   "cons": "参数情景化"
+  },
+  {
+   "model": "纯时间序列预测",
+   "pros": "简单",
+   "cons": "无决策变量"
+  },
+  {
+   "model": "系统动力学",
+   "pros": "反馈丰富",
+   "cons": "优化弱"
+  }
+ ],
+ "selected_model": "约束优化（LP/NLP）+ 收入-承载力反馈",
+ "selection_reason": "题面显式要求声明优化与约束；反馈回路为题面要求",
+ "uncertainties": [
+  {
+   "source": "弹性参数",
+   "handling": "propagated",
+   "effect": "蒙特卡洛"
+  },
+  {
+   "source": "渗漏率",
+   "handling": "scenario",
+   "effect": "净收入"
+  }
+ ],
+ "sensitivity_plan": [
+  {
+   "parameter": "承载力 K",
+   "range": "±30%",
+   "metric": "最优 V_cap/净收入"
+  },
+  {
+   "parameter": "弹性 e_p",
+   "range": "文献区间",
+   "metric": "τ 的最优值"
+  },
+  {
+   "parameter": "p3 投入产出",
+   "range": "±50%",
+   "metric": "反馈回路强度"
+  }
+ ]
+}

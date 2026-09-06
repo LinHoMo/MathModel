@@ -1,0 +1,60 @@
+{
+ "problem_id": "2021_B",
+ "mma_raw_output": {
+  "eda": "机理+优化混合题（无数据集，火灾规模/频率为参数）：EDA 聚焦维多利亚州地形（海岸 0m 至 Mt. Bogong 1986m）对通信视距的影响、火灾事件规模/频率的分布假设（泊松到达 + 规模分布）、SSA 与中继无人机的任务差异（侦察 vs 通信中继）与性能参数核对。不做描述性统计。可视化：地形剖面与视距示意。",
+  "ques1": "问题类型判断：优化类（整数资源组合）。模型选择：MILP——决策变量 n_ssa, n_rr ∈ ℤ≥0，约束 = 预算 + 任务覆盖（观测覆盖率与通信中继覆盖率的最低要求），目标 = 期望能力 − 成本；备选加权和 LP 松弛。选择理由：数量为整数且覆盖约束不可缺。建模思路：火灾事件规模 s 与到达频率 λ 作为参数进入期望覆盖需求。求解方法：分支定界。验证策略：LP 松弛上界对照。可视化：预算-能力前沿。",
+  "ques2": "问题类型判断：情景/敏感性。模型选择：极端火灾概率十年演化情景（λ(t) 上升）滚动 MILP；成本恒定假设下投影采购追加。建模思路：λ(t) 年增 g_fire → 期望覆盖需求上升 → 最优解轨迹。求解方法：逐年重解 MILP。验证策略：g_fire ±50% 稳健性。可视化：机队组合随 λ(t) 演化堆叠图。",
+  "ques3": "问题类型判断：选址优化。模型选择：中继无人机悬停位置优化 = 最大覆盖/视距模型（海拔 h、地球曲率与菲涅尔区修正），备选 p-median。选择理由：通信中继的有效性由视距决定，地形海拔直接进入约束。建模思路：候选悬停点集合（按地形网格生成），约束 = 对火线与指挥站的视距连通，目标 = 覆盖火线长度最大。求解方法：贪心/整数规划。验证策略：不同火灾规模的选址变化。可视化：选址-覆盖地图。",
+  "ques4": "问题类型判断：报告生成。模型选择：由 Q1-Q3 最优解派生预算请求（单价 × 最优数量 + 运维），逐项注解模型依据。可视化：预算表。",
+  "sensitivity_analysis": "关键参数：火灾到达率 λ（±50%）、单价（±20%）、覆盖率要求（80-95%）、地形分辨率。评估指标：最优组合、期望能力、总成本、覆盖率。可视化：λ-预算-能力曲面。鲁棒性：Monte Carlo 火灾情景采样。"
+ },
+ "problem_interpretation": "火灾事件参数（规模/频率分布）驱动的 MILP 机队组合 + 演化适应 + 选址优化 + 预算派生的四段框架。",
+ "assumptions": [
+  {"id": "A1", "statement": "火灾到达为泊松过程（率 λ(t)），规模服从对数正态分布", "justification": "火灾事件标准参数化"},
+  {"id": "A2", "statement": "SSA 侦察覆盖半径 R_obs、中继通信半径 R_com 为地形修正后的有效值（海拔/遮挡折减）", "justification": "工程参数化"},
+  {"id": "A3", "statement": "无人机系统成本恒定（题面 Q2 假设）", "justification": "题面设定"}
+ ],
+ "variables": [
+  {"id": "n_ssa", "name": "SSA 无人机数量", "description": "侦察任务", "unit": "架", "role": "decision", "domain": "≥0 整数"},
+  {"id": "n_rr", "name": "中继无人机数量", "description": "通信任务", "unit": "架", "role": "decision", "domain": "≥0 整数"},
+  {"id": "y_l", "name": "悬停选址指示", "description": "候选点 l 是否使用（Q3）", "unit": "1", "role": "decision", "domain": "{0,1}"},
+  {"id": "cov", "name": "期望覆盖能力", "description": "观测+通信的综合覆盖", "unit": "1", "role": "derived", "domain": "[0,1]"}
+ ],
+ "parameters": [
+  {"id": "p1", "name": "火灾到达率 λ 及十年演化 g_fire", "value_or_source": "历史火灾统计 + 趋势情景", "unit": "次/yr", "source": "data"},
+  {"id": "p2", "name": "火灾规模分布（对数正态 μ, σ）", "value_or_source": "历史统计", "unit": "ha", "source": "data"},
+  {"id": "p3", "name": "单价 c_ssa, c_rr 与运维", "value_or_source": "题面 Q2 假设恒定", "unit": "AUD", "source": "assumed"},
+  {"id": "p4", "name": "有效覆盖半径 R_obs, R_com（地形折减后）", "value_or_source": "工程参数 × 地形折减", "unit": "km", "source": "literature"},
+  {"id": "p5", "name": "最低覆盖率要求", "value_or_source": "政策情景 80-95%", "unit": "1", "source": "assumed"},
+  {"id": "p6", "name": "能力-安全-经济权衡权重", "value_or_source": "CFA 偏好（显式声明）", "unit": "1", "source": "assumed"}
+ ],
+ "constraints": [
+  {"id": "C1", "expression": "c_ssa·n_ssa + c_rr·n_rr ≤ Budget_t", "rationale": "预算约束"},
+  {"id": "C2", "expression": "cov(n_ssa, n_rr; s) ≥ p5 对全部火灾规模情景 s", "rationale": "最低覆盖要求（按规模分层）"},
+  {"id": "C3", "expression": "n_ssa, n_rr ∈ ℤ≥0", "rationale": "整数采购"},
+  {"id": "C4", "expression": "中继选址：视距连通（火线—悬停点—指挥站），海拔修正", "rationale": "Q3 地形约束"}
+ ],
+ "objective": [
+  {"id": "O1", "expression": "Q1 承载：max E_s[cov(n; s)]·w_cap − w_cost·Cost(n) − w_safety·Risk(n)，权重 p6 显式声明", "kind": "maximize", "rationale": "对齐点 Q1（能力/安全/经济平衡的显式形式）"},
+  {"id": "O2", "expression": "Q2 承载：λ(t) 演化下逐年重解 MILP → 机队组合轨迹 + 追加成本投影", "kind": "simulate", "rationale": "对齐点 Q2"},
+  {"id": "O3", "expression": "Q3 承载：max Σ_l y_l·覆盖火线长度 s.t. C4 视距连通（不同规模 s → 不同火线长度）", "kind": "maximize", "rationale": "对齐点 Q3"},
+  {"id": "O4", "expression": "Q4 承载：预算请求 = O1 最优解的成本分解，逐项注解模型依据（p1-p6）", "kind": "estimand", "rationale": "对齐点 Q4"}],
+  "mechanism": [
+   {"id": "M1", "name": "期望覆盖", "equation": "cov(n; s) = 1 − exp(−(n_ssa·a_obs(s) + n_rr·a_com(s))/A_fire(s))", "derivation_notes": "指数覆盖模型，规模 s 进入火线面积 A_fire(s)（p2 分布）"},
+   {"id": "M2", "name": "地形折减半径", "equation": "R_eff = R0·f(海拔剖面, 地球曲率, 菲涅尔区)", "derivation_notes": "Q3 选址的几何载体"},
+   {"id": "M3", "name": "十年演化", "equation": "λ(t) = λ0·(1+g_fire)^t", "derivation_notes": "Q2 情景"}],
+  "candidate_models": [
+   {"model": "MILP + 指数覆盖（本框架）", "pros": "整数+覆盖约束+火灾参数化", "cons": "覆盖函数形式假设"},
+   {"model": "LP 松弛", "pros": "快", "cons": "整数采购失真"},
+   {"model": "排队论视角", "pros": "响应时间", "cons": "超出题面需要"}],
+  "selected_model": "MILP（机队组合）+ 最大覆盖选址 + 演化情景",
+  "selection_reason": "数量整数性、覆盖最低要求、火灾规模/频率参数化（题面明确要求 incorporate）全部有约束/目标承载",
+  "uncertainties": [
+   {"source": "λ 演化 g_fire", "handling": "propagated", "effect": "Q2 组合轨迹区间"},
+   {"source": "火灾规模分布 p2", "handling": "propagated", "effect": "覆盖概率（蒙特卡洛）"},
+   {"source": "权重 p6", "handling": "scenario", "effect": "帕累托对照"}],
+  "sensitivity_plan": [
+   {"parameter": "g_fire", "range": "±50%", "metric": "Q2 组合轨迹"},
+   {"parameter": "p5 覆盖要求", "range": "80-95%", "metric": "最优成本"},
+   {"parameter": "p6 权重", "range": "三准则扰动", "metric": "组合变化"}]
+}

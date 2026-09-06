@@ -330,3 +330,73 @@ Same Paper Writer → Final Paper
 ```
 
 目标不是证明"我们全面更强"，而是**识别 pipeline 每个阶段最强的组件**。
+
+
+## 8. P13-3C-R5 结果 — Controlled Cross-Question Validation（✅ 7 题三臂 21 artifact 全部盲评）
+
+执行纪律：验证不创新（无新干预）；三臂固定；question_profile 先于 artifact 冻结
+（10 题全部 pre_registered difficulty）；自评不参与；评委输出标签置换再次发生，
+按内容特征追溯解盲（全程可审计）。
+
+### 8.1 首表：分维度（7 题 mean，Composite 垫后）
+
+| Arm | Structural | Mathematical | Alignment | Claim Cov | Support Cov | Composite(mean) |
+|---|---|---|---|---|---|---|
+| B0 | 28.4 | **73.6** | 9.3 | 9.3 | 14.3 | **37.1** |
+| MMA | 72.9 | 59.3 | 76.2 | 76.2 | 41.7 | **69.5** |
+| B1-F | **94.3** | 71.4 | **92.9** | 92.9 | 55.9 | **86.2** |
+
+（逐题 composite：B0 = 43.3/38.3/63.7/34.4/23.3/30.0/26.4；
+MMA = 46.0/35.0/80.7/86.7/73.3/81.7/82.8；B1 = 81.7/86.7/96.7/95.0/85.0/**60.0**/98.3）
+
+### 8.2 假设判定
+
+- **H5 ✅（7/7）**：B1-F > B0 在全部 7 道未见题成立，跨 4 regime（含 hybrid）。
+- **H6 部分（6/7）**：B1-F > MMA 在 6/7 成立（mean 差 +16.7，比 3 题时的 +10 扩大）。
+  **例外：2025_B（可持续旅游）MMA 81.7 > B1 60**——见 8.3。
+- **H7 ✅（最强形式）**：Mathematical 维 B1（71.4）**低于 B0（73.6）**、三臂几乎无差
+  ——B1 的优势不是数学计算能力，而是 Structural（94.3 vs 28.4）与 Alignment
+  （92.9 vs 9.3）。与你的预判完全一致且更强。
+
+### 8.3 2025_B 失利剖析（R5 最重要的诚实读数）
+
+盲评在 B1-F 的 2025_B 产物中抓到**真实符号错误**：需求模型
+"(p̄/p_eff)^{e_p} 配 e_p<0" → 价格上升需求反增（sign_error），叠加多个未声明
+参数（V0/p̄/shift/Foot_max）→ math 50。而 MMA 臂恰好强在"优化-约束显式结构"
+（其 Modeler prompt 的决策树对本题型是强先验）→ 81.7。
+
+结论：**清单干预不是万能护身符**——它系统性地修复"结构/对齐"类失败，但不
+保证消除所有数学错误；在"优化-约束显式化"这类 MMA 决策树已覆盖的题型上，
+MMA 臂可以反超。**这不是清单失败，是能力剖面互补的证据。**
+
+### 8.4 Claim×Support 平面（7 题均值）
+
+```text
+Support Cov
+ 100 │
+     │              ● B1(55.9)
+  50 │       ● MMA(41.7)
+     │  ● B0(14.3)
+   0 └──────────────────→ Claim Cov
+       9.3      76.2    92.9
+```
+
+三臂在 7 题上保持了 Pilot 预测的空间关系（B0 低主张/中支持、MMA 中-中、
+B1 高主张/高支持）；**B1-F 的 Support Coverage（55.9）仍未达满**——
+残差缺口 = 逐臂未声明参数/符号类缺陷的总和，即清单的下一步靶点。
+
+### 8.5 缺陷计数（R5 major 缺陷/产物，均值）
+
+B0 ≈ 3.6、MMA ≈ 2.4、B1 ≈ 2.3——B1 与 MMA 的缺陷数接近，但 B1 的缺陷
+集中在"参数声明/量纲"类（可机械核查），MMA 集中在"约束空置/对齐缺承载"
+类（需人工判断）。P13-3D 的 Fidelity Gate 应优先机械化前一类。
+
+## 9. P13-3 收口判定
+
+- H5/H7 成立、H6 6/7 成立且均值差扩大 → **P13-3C 通过，正式收口**。
+- 不再继续优化 Model Construction checklist（收益递减；2025_B 失利指向
+  的是"优化-约束显式化"先验，属 Planner 层问题，非 Construction 层）。
+- 下一阶段：**P13-3D Model → Paper**（三臂产物冻结 → 同一 Writer →
+  Paper Quality + Model Fidelity Gate / Unauthorized Model Mutation）。
+- 保留资产：MODEL_ARTIFACT v1 schema、10 题 profile（difficulty 前置）、
+  盲评协议（内容追溯解盲）、Claim/Support/Gap 指标、缺陷计数仪表盘。

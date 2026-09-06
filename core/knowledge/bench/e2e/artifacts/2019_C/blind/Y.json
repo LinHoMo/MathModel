@@ -1,0 +1,214 @@
+{
+ "problem_id": "2019_C",
+ "mma_raw_output": {
+  "eda": "数据驱动题（23 个 NFLIS/人口普查文件）：EDA 涵盖①州-县-年事件计数的热力图与时间趋势分解；②药物类别（合成阿片 vs 海洛因）构成变化；③县级人口规模归一化（率 vs 计数）；④缺失县与阈值变化的断点检测；⑤社会经济协变量的相关矩阵与共线性诊断。可视化：五州趋势热力图 + 县级排名条形图。",
+  "ques1": "问题类型判断：预测类（时空扩散）。模型选择：XGBoost（县-月面板：滞后计数、邻县计数、人口密度）+ DBSCAN 起点簇识别，备选空间 Durbin 模型；选择理由：扩散受空间邻接与时间滞后共同驱动且非线性。建模思路：以县为单位构建滞后特征矩阵，识别持续性上升前沿；起点 = 最早出现持续超阈值的县簇。求解方法：滚动外推 3 年。验证策略：留县留年交叉验证 MAE。可视化：扩散前沿年际动画 + 起点簇地图。",
+  "ques2": "问题类型判断：关联分析（因果谨慎）。模型选择：面板固定效应回归（县固定效应 + 年固定效应）+ SHAP，备选随机森林重要性；选择理由：控制县级不观测异质性后估计社会经济协变量关联，SHAP 给非线性贡献。建模思路：使用率（率而非计数）对失业率、收入中位数、教育、人口结构回归；声明关联≠因果。求解方法：固定效应估计。验证策略：稳健性（逐步加入协变量）。可视化：SHAP 汇总图 + 系数森林图。",
+  "ques3": "问题类型判断：策略评估（情景干预）。模型选择：把 P1 模型的增长参数按干预情景调制（预防/执法/治疗三通道），比较 5 年累计事件；参数边界 = 使拐点出现的最小干预强度。求解方法：情景仿真。验证策略：历史类比（已有下降州）对照。可视化：策略-累计事件曲线。",
+  "sensitivity_analysis": "关键参数：扩散系数（±30%）、阈值水平（按 NFLIS 检出下限情景）、协变量系数、干预强度（0-100%）。评估指标：MAE、起点簇稳定性、5 年累计事件。可视化：龙卷风图。鲁棒性：Bootstrap 县采样。"
+ },
+ "problem_interpretation": "县-月面板上的扩散建模 + 起点簇识别 + 社会经济关联（因果谨慎）+ 干预情景检验的四段框架。",
+ "assumptions": [
+  {
+   "id": "A1",
+   "statement": "NFLIS 报告事件与真实使用规模成正比（检出阈值恒定段内）",
+   "justification": "数据代理"
+  },
+  {
+   "id": "A2",
+   "statement": "县际扩散通过地理邻接与人口流动通道",
+   "justification": "空间结构设定"
+  },
+  {
+   "id": "A3",
+   "statement": "社会经济协变量为关联性证据，不做因果断言",
+   "justification": "观察数据因果限制"
+  }
+ ],
+ "variables": [
+  {
+   "id": "c_ijt",
+   "name": "县 i 州 j 时期 t 事件数",
+   "description": "按药物类别分",
+   "unit": "count",
+   "role": "state",
+   "domain": "≥0 整数"
+  },
+  {
+   "id": "rate_ijt",
+   "name": "人均使用率",
+   "description": "计数/人口",
+   "unit": "1/10万人",
+   "role": "derived",
+   "domain": "≥0"
+  },
+  {
+   "id": "se_i",
+   "name": "社会经济协变量",
+   "description": "失业/收入/教育/人口结构",
+   "unit": "混合",
+   "role": "input",
+   "domain": "普查口径"
+  },
+  {
+   "id": "intensity",
+   "name": "干预强度",
+   "description": "策略情景参数",
+   "unit": "1",
+   "role": "decision",
+   "domain": "[0,1]"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "p1",
+   "name": "扩散系数（邻接滞后权重）",
+   "value_or_source": "面板估计",
+   "unit": "1",
+   "source": "data"
+  },
+  {
+   "id": "p2",
+   "name": "检出阈值水平",
+   "value_or_source": "NFLIS 检出下限情景",
+   "unit": "mg",
+   "source": "data"
+  },
+  {
+   "id": "p3",
+   "name": "起点判定阈值",
+   "value_or_source": "持续超基数倍 × 持续期",
+   "unit": "1",
+   "source": "assumed"
+  },
+  {
+   "id": "p4",
+   "name": "协变量系数",
+   "value_or_source": "固定效应估计",
+   "unit": "混合",
+   "source": "data"
+  },
+  {
+   "id": "p5",
+   "name": "干预通道弹性",
+   "value_or_source": "历史类比校准",
+   "unit": "1",
+   "source": "calibrated"
+  }
+ ],
+ "constraints": [
+  {
+   "id": "C1",
+   "expression": "c_ijt ≥ 0 整数（计数模型用泊松/负二项）",
+   "rationale": "计数非负"
+  },
+  {
+   "id": "C2",
+   "expression": "起点判定须持续 ≥ p3 期，单月峰值不算",
+   "rationale": "防止噪声误判起点"
+  },
+  {
+   "id": "C3",
+   "expression": "关联结论禁止因果措辞（面板固定效应仅为关联）",
+   "rationale": "因果谨慎"
+  }
+ ],
+ "objective": [
+  {
+   "id": "O1",
+   "expression": "P1 承载：扩散模型拟合 + 起点识别 + 阈值情景（p2）下的未来预测",
+   "kind": "estimand",
+   "rationale": "对齐点 P1"
+  },
+  {
+   "id": "O2",
+   "expression": "P2 承载：社会经济协变量关联（固定效应 + SHAP）并并入 P1 模型",
+   "kind": "estimand",
+   "rationale": "对齐点 P2"
+  },
+  {
+   "id": "O3",
+   "expression": "P3 承载：干预情景下累计事件对比 + 成功/失败的参数边界（intensity 与 p5）",
+   "kind": "estimand",
+   "rationale": "对齐点 P3"
+  }
+ ],
+ "mechanism": [
+  {
+   "id": "M1",
+   "name": "时空扩散",
+   "equation": "log c_ijt = α_i + τ_t + p1·(邻县滞后加权) + p4·se_i + ε",
+   "derivation_notes": "面板负二项；P1/P2 载体"
+  },
+  {
+   "id": "M2",
+   "name": "起点识别",
+   "equation": "起点簇 = DBSCAN(最早持续超阈县) 且满足 C2",
+   "derivation_notes": "C2 载体"
+  },
+  {
+   "id": "M3",
+   "name": "干预情景",
+   "equation": "log c' = M1 − p5·intensity·(治疗/预防通道项)",
+   "derivation_notes": "P3 情景调制"
+  }
+ ],
+ "candidate_models": [
+  {
+   "model": "面板负二项 + DBSCAN（本框架）",
+   "pros": "计数非负 + 起点可识别",
+   "cons": "空间权重设定敏感"
+  },
+  {
+   "model": "纯 XGBoost 预测",
+   "pros": "拟合强",
+   "cons": "无起点/阈值解释"
+  },
+  {
+   "model": "SEIR 类机理扩散",
+   "pros": "机制清晰",
+   "cons": "药物扩散不满足传染假设"
+  }
+ ],
+ "selected_model": "面板负二项 + DBSCAN 起点识别 + 干预情景",
+ "selection_reason": "计数非负、过度离散 → 负二项；起点需持续判据；因果谨慎声明嵌入约束",
+ "uncertainties": [
+  {
+   "source": "检出阈值 p2",
+   "handling": "scenario",
+   "effect": "趋势断点与预测（P1 阈值问题）"
+  },
+  {
+   "source": "协变量系数 p4",
+   "handling": "propagated",
+   "effect": "关联稳健性（P2）"
+  },
+  {
+   "source": "干预弹性 p5",
+   "handling": "scenario",
+   "effect": "策略成功/失败边界（P3）"
+  }
+ ],
+ "sensitivity_plan": [
+  {
+   "parameter": "p2 阈值水平",
+   "range": "检出下限 ×{0.5,1,2}",
+   "metric": "起点簇位置与预测"
+  },
+  {
+   "parameter": "p1 扩散系数",
+   "range": "±30%",
+   "metric": "MAE 与前沿"
+  },
+  {
+   "parameter": "p5 干预弹性",
+   "range": "0-100%",
+   "metric": "5 年累计事件拐点"
+  },
+  {
+   "parameter": "县采样",
+   "range": "Bootstrap 500 次",
+   "metric": "起点簇稳定性"
+  }
+ ]
+}

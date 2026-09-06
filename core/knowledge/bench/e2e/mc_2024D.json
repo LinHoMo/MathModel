@@ -1,0 +1,42 @@
+{
+  "problem_id": "2024_D",
+  "version": 1,
+  "note": "五大湖网络流控制（hybrid：数据→机制→控制优化）（P13-3C-R5 预注册，建模前落盘）",
+  "questions": {
+    "ALL": {
+      "task_type": "",
+      "structural_required": {
+        "variables": "变量定义（五湖水位、流入流出、大坝出流）",
+        "assumptions": "假设显式",
+        "network_flow_model": "五湖-河流网络流机制模型（Superior→Atlantic）",
+        "control_algorithm": "维持最优水位的控制算法",
+        "stakeholder_objectives": "利益相关者目标向量（成本/受益不同）",
+        "sensitivity_analysis_framework": "控制算法对环境条件（降水/雪pack/冰塞）的敏感性框架",
+        "historical_calibration": "历史数据标定与 2017 年对照"
+      },
+      "alignment_points": [
+        "总: 网络流模型+管理计划",
+        "C1: 五湖最优水位×利益相关者",
+        "C2: 维持最优水位的算法",
+        "C3: 两大坝出流敏感性+2017 对照",
+        "C4: 环境条件敏感性",
+        "C5: Lake Ontario 深度分析"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {
+    "structural": 1,
+    "mathematical": 1,
+    "alignment": 1
+  }
+}

@@ -1,0 +1,36 @@
+{
+ "problem_id": "2021_B",
+ "problem_interpretation": "CFA 快速火灾响应分部应采购多少 SSA 侦察无人机与中继无人机：能力、安全与经济的平衡。",
+ "assumptions": [
+  {"id": "A1", "statement": "能力与采购数量成正比", "justification": "线性近似"},
+  {"id": "A2", "statement": "经济约束为总预算", "justification": "常识"}
+ ],
+ "variables": [
+  {"id": "n_ssa", "name": "SSA 无人机数量", "description": "侦察用", "unit": "架", "role": "decision", "domain": "≥0 整数"},
+  {"id": "n_rr", "name": "中继无人机数量", "description": "通信用", "unit": "架", "role": "decision", "domain": "≥0 整数"}
+ ],
+ "parameters": [
+  {"id": "p1", "name": "单价", "value_or_source": "假设", "unit": "AUD", "source": "assumed"}
+ ],
+ "constraints": [
+  {"id": "C1", "expression": "p1·(n_ssa + n_rr) ≤ 预算", "rationale": "预算"}
+ ],
+ "objective": [
+  {"id": "O1", "expression": "max 能力（数量加权）", "kind": "maximize", "rationale": "采购目标"}
+ ],
+ "mechanism": [
+  {"id": "M1", "name": "能力", "equation": "capability = a·n_ssa + b·n_rr", "derivation_notes": "线性"}
+ ],
+ "candidate_models": [
+  {"model": "线性规划", "pros": "简单", "cons": "忽略火灾随机性"},
+  {"model": "MILP", "pros": "整数", "cons": "复杂"}
+ ],
+ "selected_model": "线性规划",
+ "selection_reason": "线性近似足够",
+ "uncertainties": [
+  {"source": "火灾频率", "handling": "qualitative", "effect": "讨论"}
+ ],
+ "sensitivity_plan": [
+  {"parameter": "预算", "range": "±20%", "metric": "最优数量"}
+ ]
+}

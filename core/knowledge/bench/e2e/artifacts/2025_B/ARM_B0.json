@@ -1,0 +1,36 @@
+{
+ "problem_id": "2025_B",
+ "problem_interpretation": "朱诺可持续旅游：访客量、收入、稳定措施之间的权衡。",
+ "assumptions": [
+  {"id": "A1", "statement": "收入与访客数成正比", "justification": "线性近似"},
+  {"id": "A2", "statement": "可持续性为定性讨论", "justification": "简化"}
+ ],
+ "variables": [
+  {"id": "V_t", "name": "年度访客数", "description": "游客量", "unit": "人/yr", "role": "state", "domain": "≥0"},
+  {"id": "Rev", "name": "年度收入", "description": "旅游收入", "unit": "USD/yr", "role": "derived", "domain": "≥0"}
+ ],
+ "parameters": [
+  {"id": "p1", "name": "人均消费", "value_or_source": "假设", "unit": "USD/人", "source": "assumed"}
+ ],
+ "constraints": [
+  {"id": "C1", "expression": "V_t ≥ 0", "rationale": "非负"}
+ ],
+ "objective": [
+  {"id": "O1", "expression": "max Rev", "kind": "maximize", "rationale": "收入"}
+ ],
+ "mechanism": [
+  {"id": "M1", "name": "收入", "equation": "Rev = p1·V_t", "derivation_notes": "线性"}
+ ],
+ "candidate_models": [
+  {"model": "线性收入", "pros": "简单", "cons": "无可持续约束"},
+  {"model": "容量约束模型", "pros": "合理", "cons": "参数"}
+ ],
+ "selected_model": "线性收入",
+ "selection_reason": "最简",
+ "uncertainties": [
+  {"source": "访客增长", "handling": "qualitative", "effect": "讨论"}
+ ],
+ "sensitivity_plan": [
+  {"parameter": "p1", "range": "±20%", "metric": "Rev"}
+ ]
+}

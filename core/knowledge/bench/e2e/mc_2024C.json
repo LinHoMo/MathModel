@@ -1,0 +1,38 @@
+{
+  "problem_id": "2024_C",
+  "version": 1,
+  "note": "体育动量量化（温网逐分数据）（P13-3C-R5 预注册，建模前落盘）",
+  "questions": {
+    "ALL": {
+      "task_type": "",
+      "structural_required": {
+        "variables": "特征/变量定义（逐分事件、发球方、比分状态）",
+        "assumptions": "假设显式（含发球优势）",
+        "momentum_quantification": "动量量化模型（流势+占优幅度）",
+        "serving_correction": "发球优势的显式修正",
+        "swing_prediction_model": "动量转折预测模型（Q3）",
+        "generalization_assessment": "跨比赛/场地/运动泛化性评估"
+      },
+      "alignment_points": [
+        "Q1: flow-of-play 模型+占优识别+可视化（含发球修正）",
+        "Q2: 教练'随机论'主张的统计检验",
+        "Q3: 转折预测模型+因素+跨赛泛化评估"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {
+    "structural": 1,
+    "mathematical": 1,
+    "alignment": 1
+  }
+}

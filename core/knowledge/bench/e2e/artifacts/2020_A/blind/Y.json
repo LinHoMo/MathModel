@@ -1,0 +1,102 @@
+{
+ "problem_id": "2020_A",
+ "problem_interpretation": "海水升温驱动两种鱼北移：预测位置、可捕时间、渔业策略。",
+ "assumptions": [
+  {
+   "id": "A1",
+   "statement": "鱼种栖息地由偏好温度决定",
+   "justification": "thermal niche"
+  },
+  {
+   "id": "A2",
+   "statement": "种群中心随等温线移动",
+   "justification": "常识"
+  }
+ ],
+ "variables": [
+  {
+   "id": "T",
+   "name": "海水温度",
+   "description": "随时间升温",
+   "unit": "°C",
+   "role": "input",
+   "domain": "单调上升"
+  },
+  {
+   "id": "X",
+   "name": "种群中心位置",
+   "description": "纬度",
+   "unit": "°lat",
+   "role": "state",
+   "domain": "≥0"
+  },
+  {
+   "id": "d",
+   "name": "离港距离",
+   "description": "种群中心到苏格兰港口距离",
+   "unit": "km",
+   "role": "derived",
+   "domain": "≥0"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "p1",
+   "name": "升温速率",
+   "value_or_source": "情景",
+   "unit": "°C/yr",
+   "source": "assumed"
+  }
+ ],
+ "constraints": [
+  {
+   "id": "C1",
+   "expression": "d ≥ 0",
+   "rationale": "非负"
+  }
+ ],
+ "objective": [
+  {
+   "id": "O1",
+   "expression": "X(t) 轨迹外推 50 年",
+   "kind": "simulate",
+   "rationale": "Q1"
+  }
+ ],
+ "mechanism": [
+  {
+   "id": "M1",
+   "name": "栖息地迁移",
+   "equation": "X(t) = X0 + v·t，v 由升温速率折算",
+   "derivation_notes": "线性近似"
+  }
+ ],
+ "candidate_models": [
+  {
+   "model": "线性迁移",
+   "pros": "简单",
+   "cons": "忽略生态细节"
+  },
+  {
+   "model": "物种分布模型",
+   "pros": "标准",
+   "cons": "无数据"
+  }
+ ],
+ "selected_model": "线性迁移外推",
+ "selection_reason": "无数据下最简",
+ "uncertainties": [
+  {
+   "source": "升温速率",
+   "handling": "scenario",
+   "effect": "三情景"
+  }
+ ],
+ "sensitivity_plan": [
+  {
+   "parameter": "v",
+   "range": "±30%",
+   "metric": "d(t)"
+  }
+ ]
+}

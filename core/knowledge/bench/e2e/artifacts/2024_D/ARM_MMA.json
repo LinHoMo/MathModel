@@ -1,0 +1,44 @@
+{
+ "problem_id": "2024_D",
+ "mma_raw_output": {
+  "eda": "hybrid 题（xlsx 数据：五大湖水位/流入流出/大坝记录）：EDA 涵盖①五湖水位与 Net Basin Supply 的时序分解；②两坝出流的可操作区间（工程规格）；③2017 年高水位事件复盘；④利益相关者清单（航运/湖岸产权/水电/生态）的受损阈值。可视化：五湖水位时序 + 2017 事件标注。",
+  "ques1": "问题类型判断：优化控制。模型选择：五湖网络流模型（级联水库：Superior→Michigan-Huron→St. Clair→Erie→Ontario→Atlantic，两控制坝）+ MPC 模型预测控制；备选线性规则。选择理由：级联时滞与多目标适合滚动优化。建模思路：每湖质量守恒，出流=大坝函数+自然项；MPC 以利益相关者目标向量为代价。求解方法：滚动时域。验证策略：2017 数据回放。可视化：控制前后水位对比。",
+  "ques2": "问题类型判断：多目标水位设定。模型选择：分湖利益相关者目标向量 → 加权/字典序；选择理由：各湖利益不同需显式。建模思路：最优水位带 = 各利益相关者可接受区间的交/加权。求解方法：区间优化。可视化：目标兼容区间图。",
+  "ques3": "问题类型判断：敏感性分析。模型选择：出流上下界扰动 + MPC 重放。建模思路：控制算法对出流边界变化的鲁棒性。求解方法：情景重放。验证策略：2017 对照。可视化：敏感性龙卷风图。",
+  "ques4": "问题类型判断：情景敏感性。模型选择：降水/雪pack/冰塞情景进入 Net Basin Supply。求解方法：NBS 情景重放。验证策略：历史 NBS 分布采样。可视化：NBS 情景水位带。",
+  "sensitivity_analysis": "关键参数：NBS（±情景）、出流边界（±10%）、权重向量。评估指标：水位越界频率、航运成本、发电量、湖岸损失。可视化：多准则龙卷风图。鲁棒性：Monte Carlo NBS。"
+ },
+ "problem_interpretation": "数据（水位/流入流出）→ 五湖网络机制 → MPC 控制优化 → 2017 回放验证 → 敏感性框架的 hybrid 串联链。",
+ "assumptions": [
+  {"id": "A1", "statement": "五湖级联质量守恒，Net Basin Supply（降水−蒸发）为随机输入", "justification": "水文标准"},
+  {"id": "A2", "statement": "两坝出流有工程上下界", "justification": "工程规格"},
+  {"id": "A3", "statement": "MPC 滚动时域控制近似实际决策", "justification": "控制标准"}],
+  "variables": [
+   {"id": "L_l,t", "name": "湖 l 水位", "description": "五湖状态", "unit": "m", "role": "state", "domain": "工程区间"},
+   {"id": "q_dam,t", "name": "大坝出流", "description": "两坝决策", "unit": "m³/s", "role": "decision", "domain": "[q_min, q_max]"},
+   {"id": "NBS_l,t", "name": "净流域供给", "description": "降水−蒸发−入渗（数据）", "unit": "m³/s", "role": "input", "domain": "可正可负"}],
+  "parameters": [
+   {"id": "p1", "name": "湖面积与出流曲线", "value_or_source": "数据/工程表", "unit": "混合", "source": "data"},
+   {"id": "p2", "name": "MPC 时域与权重", "value_or_source": "控制参数", "unit": "混合", "source": "calibrated"},
+   {"id": "p3", "name": "利益相关者目标向量", "value_or_source": "题面枚举 + 情景权重", "unit": "1", "source": "assumed"}],
+  "constraints": [
+   {"id": "C1", "expression": "各湖质量守恒（网络拓扑）", "rationale": "水文守恒"},
+   {"id": "C2", "expression": "出流工程边界", "rationale": "大坝规格"}],
+  "objective": [
+   {"id": "O1", "expression": "MPC 代价 = Σ 利益相关者加权的水位偏差", "kind": "minimize", "rationale": "控制目标"},
+   {"id": "O2", "expression": "2017 回放偏差 = |模拟水位 − 实测水位|", "kind": "estimand", "rationale": "验证"}],
+  "mechanism": [
+   {"id": "M1", "name": "级联守恒", "equation": "V_{l,t+1} = V_{l,t} + (NBS + 入流 − 出流)·Δt", "derivation_notes": "网络拓扑"},
+   {"id": "M2", "name": "MPC", "equation": "滚动时域最小化代价", "derivation_notes": "控制"}],
+  "candidate_models": [
+   {"model": "网络 MPC（本框架）", "pros": "级联+多目标", "cons": "权重设定"},
+   {"model": "线性规则", "pros": "简单", "cons": "次优"}],
+  "selected_model": "五湖网络 MPC",
+  "selection_reason": "级联与多目标标准控制框架",
+  "uncertainties": [
+   {"source": "NBS", "handling": "propagated", "effect": "情景重放"},
+   {"source": "权重", "handling": "scenario", "effect": "多目标"}],
+  "sensitivity_plan": [
+   {"parameter": "NBS", "range": "历史分布采样", "metric": "水位越界频率"},
+   {"parameter": "出流边界", "range": "±10%", "metric": "控制性能"}]
+}

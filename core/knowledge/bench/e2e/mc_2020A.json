@@ -1,0 +1,39 @@
+{
+  "problem_id": "2020_A",
+  "version": 1,
+  "note": "气候驱动栖息地迁移 + 渔业可达性（P13-3C-R5 预注册，建模前落盘）",
+  "questions": {
+    "ALL": {
+      "task_type": "",
+      "structural_required": {
+        "variables": "变量定义（温度、栖息地适宜性、种群位置、捕捞距离）",
+        "assumptions": "假设显式",
+        "thermal_niche_model": "温度-栖息地适宜性机制（两鱼种）",
+        "population_shift_dynamics": "种群位置随温度迁移的动力学",
+        "harvest_accessibility_model": "可达性/耗尽时间模型（距港距离阈值）",
+        "strategy_assessment": "策略评估机制（搬迁/远洋作业等的经济与可行性）"
+      },
+      "alignment_points": [
+        "Q1: 未来 50 年两鱼种最可能位置",
+        "Q2: best/worst/likely 可捕时间",
+        "Q3a: 渔业策略识别与评估（搬迁/远洋等）",
+        "Q4: 部分鱼群进入他国领海的影响"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {
+    "structural": 1,
+    "mathematical": 1,
+    "alignment": 1
+  }
+}

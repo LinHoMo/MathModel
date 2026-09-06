@@ -1,0 +1,231 @@
+{
+ "problem_id": "2024_C",
+ "problem_interpretation": "五问共享一条证据链：发球条件胜率基线 →（残差定义）→ 动量 →（置换检验）→ 随机论判定 →（滚动特征）→ 转折预测 →（跨赛声明）→ 泛化边界。主张-支持配对：每个主张（动量存在/转折可预测/泛化范围）都有形式化检验或度量承载，且检验的零假设显式声明。",
+ "assumptions": [
+  {
+   "id": "A1",
+   "statement": "发球条件逐分胜率 p_base 为可估计基线；动量 = 对该基线的系统性偏离的持续性（EWM 残差），天然有界",
+   "justification": "残差定义使动量与发球优势正交（清单：域一致）"
+  },
+  {
+   "id": "A2",
+   "statement": "随机论的零假设 H0：给定发球方与比分状态，逐分结果独立同分布。动量存在 ⟺ 拒绝 H0（run 长度/条件残差自相关）",
+   "justification": "把'随机论'翻译为可形式化检验（主张-支持配对）"
+  },
+  {
+   "id": "A3",
+   "statement": "转折预测的评估使用时间前滚 + 留场验证；泛化性声明按数据范围（2023 温网男子草地）显式限定",
+   "justification": "防泄漏与过度声明"
+  },
+  {
+   "id": "A4",
+   "statement": "比赛内状态（局/盘/破发点）作为条件变量进入基线，避免把比分状态误归因为动量",
+   "justification": "混杂控制"
+  }
+ ],
+ "variables": [
+  {
+   "id": "feat",
+   "name": "逐分特征",
+   "description": "发球方、比分状态（局/盘/破发点）、run 长度、比赛序号",
+   "unit": "混合",
+   "role": "input",
+   "domain": "编码"
+  },
+  {
+   "id": "y_t",
+   "name": "该分结果",
+   "description": "发球方得分手工编码",
+   "unit": "1",
+   "role": "input",
+   "domain": "{0,1}"
+  },
+  {
+   "id": "p_base_t",
+   "name": "条件胜率基线",
+   "description": "仅含状态与发球（不含动量项）",
+   "unit": "1",
+   "role": "derived",
+   "domain": "(0,1)"
+  },
+  {
+   "id": "mom_t",
+   "name": "动量残差（EWM）",
+   "description": "对 p_base 的偏离滑动加权",
+   "unit": "1",
+   "role": "derived",
+   "domain": "[−1,1]"
+  },
+  {
+   "id": "sw_t",
+   "name": "转折指示",
+   "description": "未来 k 分胜率方向翻转",
+   "unit": "1",
+   "role": "derived",
+   "domain": "{0,1}"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "p1",
+   "name": "EWM 半衰期",
+   "value_or_source": "{2,4,8,16} 分网格，留场选择",
+   "unit": "分",
+   "source": "calibrated"
+  },
+  {
+   "id": "p2",
+   "name": "基线模型参数 θ",
+   "value_or_source": "logistic（状态特征）留场拟合",
+   "unit": "1",
+   "source": "calibrated"
+  },
+  {
+   "id": "p3",
+   "name": "置换次数与统计量",
+   "value_or_source": "10000 次；统计量 = max run 长度 + 残差 lag-1 自相关",
+   "unit": "1",
+   "source": "assumed"
+  },
+  {
+   "id": "p4",
+   "name": "转折前瞻窗口 k",
+   "value_or_source": "{3,6,12} 分网格",
+   "unit": "分",
+   "source": "calibrated"
+  },
+  {
+   "id": "p5",
+   "name": "显著性水平 α",
+   "value_or_source": "0.05（Bonferroni 按场数校正）",
+   "unit": "1",
+   "source": "assumed"
+  }
+ ],
+ "constraints": [
+  {
+   "id": "C1",
+   "expression": "mom_t ∈ [−1,1]（胜率差滑动加权天然有界——域一致）",
+   "rationale": "动量量纲"
+  },
+  {
+   "id": "C2",
+   "expression": "任何 t 时点的动量/预测仅用 < t 的信息（前滚 + 留场）",
+   "rationale": "无泄漏约束"
+  },
+  {
+   "id": "C3",
+   "expression": "H0 显式：发球条件下逐分独立同分布；检验统计量 = max run 长度与残差 lag-1 自相关的联合",
+   "rationale": "Q2 主张的形式化零假设"
+  },
+  {
+   "id": "C4",
+   "expression": "泛化性声明限定于数据范围（2023 温网男子草地）；跨场地/女子/其他运动的结论标记为外推假设",
+   "rationale": "声明边界与数据一致"
+  },
+  {
+   "id": "C5",
+   "expression": "多重检验校正：跨场检验按 Bonferroni 校正 α",
+   "rationale": "多场检验的假阳性控制"
+  }
+ ],
+ "objective": [
+  {
+   "id": "O1",
+   "expression": "Q1 承载：p_base 模型（状态+发球）与 mom_t 曲线 = 流势可视化（发球修正前后对照）",
+   "kind": "simulate",
+   "rationale": "对齐点 Q1"
+  },
+  {
+   "id": "O2",
+   "expression": "Q2 承载：C3 零假设下的置换检验 → 每场 p 值（C5 校正）+ 效应量（残差自相关 ρ）",
+   "kind": "estimand",
+   "rationale": "对齐点 Q2 随机论"
+  },
+  {
+   "id": "O3",
+   "expression": "Q3 承载：sw_t 预测（M4）留场 AUROC + 特征重要性 + C4 泛化边界",
+   "kind": "estimand",
+   "rationale": "对齐点 Q3 转折"
+  }
+ ],
+ "mechanism": [
+  {
+   "id": "M1",
+   "name": "条件胜率基线",
+   "equation": "p_base_t = σ(θ·feat_state_t)（仅状态+发球，无动量项——与 M2 正交化）",
+   "derivation_notes": "A4 混杂控制"
+  },
+  {
+   "id": "M2",
+   "name": "动量残差",
+   "equation": "mom_t = (1−λ)·mom_{t−1} + λ·(y_t − p_base_t)，λ = ln2/p1",
+   "derivation_notes": "EWM；C1"
+  },
+  {
+   "id": "M3",
+   "name": "随机论置换检验",
+   "equation": "在 C3 零假设内置换 y_t（保持发球序列不变）→ 统计量零分布 → 单场 p 值 → C5 校正",
+   "derivation_notes": "Q2 载体"
+  },
+  {
+   "id": "M4",
+   "name": "转折预测",
+   "equation": "sw_t = σ(g(mom 窗口, feat_t..t−m))，留场 AUROC + 前滚验证",
+   "derivation_notes": "Q3 载体；C2"
+  }
+ ],
+ "candidate_models": [
+  {
+   "model": "状态基线 + EWM 残差 + 置换检验 + 前滚转折分类（本框架）",
+   "pros": "三问同源、可检验、无泄漏",
+   "cons": "线性基线可能欠拟合"
+  },
+  {
+   "model": "纯累计差（基线对照）",
+   "pros": "最简",
+   "cons": "发球混杂、无检验"
+  },
+  {
+   "model": "XGBoost 逐分胜率 + LSTM 转折",
+   "pros": "拟合强",
+   "cons": "解释性与数据量限制"
+  }
+ ],
+ "selected_model": "状态基线 + EWM 动量残差 + 置换检验 + 前滚转折分类",
+ "selection_reason": "主张-支持配对：动量定义（A1/C1）、随机论（A2/C3 置换）、转折（M4 前滚）、泛化（C4 声明边界）四主张全部有形式化承载",
+ "uncertainties": [
+  {
+   "source": "半衰期 p1 与窗口 p4",
+   "handling": "propagated",
+   "effect": "网格化敏感性（AUROC/p 值）"
+  },
+  {
+   "source": "数据范围",
+   "handling": "qualitative",
+   "effect": "C4 泛化边界声明"
+  },
+  {
+   "source": "比赛采样",
+   "handling": "propagated",
+   "effect": "Bootstrap 比赛采样的 p 值分布"
+  }
+ ],
+ "sensitivity_plan": [
+  {
+   "parameter": "p1 半衰期",
+   "range": "2-16 分",
+   "metric": "AUROC、p 值"
+  },
+  {
+   "parameter": "k 窗口",
+   "range": "3-12 分",
+   "metric": "转折 AUROC"
+  },
+  {
+   "parameter": "统计量选择",
+   "range": "max run / 残差自相关 / 两者联合",
+   "metric": "检验结论稳定性"
+  }
+ ]
+}

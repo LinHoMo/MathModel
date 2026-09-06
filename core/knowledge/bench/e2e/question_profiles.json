@@ -49,12 +49,106 @@
       "mechanism_depth": "medium（两库质量守恒 + 水头耦合）",
       "optimization_depth": "high（多目标 + 分层短缺 + 情景传播）",
       "ambiguity_level": "medium（竞争利益准则需自行显式化）"
+    },
+    {
+      "id": "2023_B",
+      "regime": "mechanism",
+      "difficulty": "medium",
+      "difficulty_status": "pre_registered",
+      "subproblem_count": 4,
+      "data_dependency": "none",
+      "model_family": "ecology/resource management mechanism",
+      "mechanism_depth": "high",
+      "optimization_depth": "medium",
+      "ambiguity_level": "medium"
+    },
+    {
+      "id": "2020_A",
+      "regime": "mechanism",
+      "difficulty": "medium",
+      "difficulty_status": "pre_registered",
+      "subproblem_count": 3,
+      "data_dependency": "none",
+      "model_family": "habitat thermal-niche dynamics",
+      "mechanism_depth": "high",
+      "optimization_depth": "low",
+      "ambiguity_level": "medium"
+    },
+    {
+      "id": "2019_C",
+      "regime": "data",
+      "difficulty": "hard",
+      "difficulty_status": "pre_registered",
+      "subproblem_count": 5,
+      "data_dependency": "high（23 个数据文件，NFLIS）",
+      "model_family": "spatiotemporal epidemiology",
+      "mechanism_depth": "low",
+      "optimization_depth": "low",
+      "ambiguity_level": "high"
+    },
+    {
+      "id": "2024_C",
+      "regime": "data",
+      "difficulty": "medium",
+      "difficulty_status": "pre_registered",
+      "subproblem_count": 4,
+      "data_dependency": "medium",
+      "model_family": "sports analytics（动量量化）",
+      "mechanism_depth": "low",
+      "optimization_depth": "low",
+      "ambiguity_level": "high（momentum 概念本身待定义）"
+    },
+    {
+      "id": "2021_B",
+      "regime": "optimization",
+      "difficulty": "medium",
+      "difficulty_status": "pre_registered",
+      "subproblem_count": 3,
+      "data_dependency": "none",
+      "model_family": "fleet mix optimization（MILP 候选）",
+      "mechanism_depth": "low",
+      "optimization_depth": "high",
+      "ambiguity_level": "medium"
+    },
+    {
+      "id": "2025_B",
+      "regime": "optimization",
+      "difficulty": "medium",
+      "difficulty_status": "pre_registered",
+      "subproblem_count": 4,
+      "data_dependency": "low",
+      "model_family": "sustainable tourism carrying-capacity/incentive design",
+      "mechanism_depth": "medium",
+      "optimization_depth": "high",
+      "ambiguity_level": "medium"
+    },
+    {
+      "id": "2024_D",
+      "regime": "hybrid",
+      "difficulty": "hard",
+      "difficulty_status": "pre_registered",
+      "subproblem_count": 5,
+      "data_dependency": "high（Great Lakes xlsx）",
+      "model_family": "water system control：data → mechanism → optimization 串联",
+      "mechanism_depth": "high",
+      "optimization_depth": "high",
+      "ambiguity_level": "medium"
     }
   ],
   "pending_selection": {
-    "matrix": {"mechanism": 3, "data": 3, "optimization": 3, "hybrid": 1},
-    "filled": {"mechanism": 1, "data": 1, "optimization": 1, "hybrid": 0},
-    "to_select": 7,
+    "matrix": {
+      "mechanism": 3,
+      "data": 3,
+      "optimization": 3,
+      "hybrid": 1
+    },
+    "filled": {
+      "mechanism": 3,
+      "data": 3,
+      "optimization": 3,
+      "hybrid": 1
+    },
+    "to_select": 0,
     "hybrid_criterion": "必须真实串联 ≥2 个 construction regime（如 data → mechanism → optimization），不是多模型拼盘",
     "selection_rule": "从 MMBench 未触碰题中按 regime 配额与 difficulty 分层挑选；profile 于该题三臂开跑前锁定"
   }

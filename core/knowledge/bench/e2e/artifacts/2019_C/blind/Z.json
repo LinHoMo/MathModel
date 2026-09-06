@@ -1,0 +1,94 @@
+{
+ "problem_id": "2019_C",
+ "problem_interpretation": "用 NFLIS 数据回答阿片危机的扩散、起源、社会经济关联与干预策略。",
+ "assumptions": [
+  {
+   "id": "A1",
+   "statement": "报告事件数与真实使用规模成正比",
+   "justification": "数据代理"
+  },
+  {
+   "id": "A2",
+   "statement": "各州独立拟合即可",
+   "justification": "简化"
+  }
+ ],
+ "variables": [
+  {
+   "id": "c_s,t",
+   "name": "州 s 年度事件数",
+   "description": "NFLIS 计数",
+   "unit": "count/yr",
+   "role": "state",
+   "domain": "≥0"
+  },
+  {
+   "id": "t",
+   "name": "年份",
+   "description": "数据年份",
+   "unit": "yr",
+   "role": "input",
+   "domain": "数据期"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "p1",
+   "name": "指数增长率",
+   "value_or_source": "拟合",
+   "unit": "1/yr",
+   "source": "data"
+  }
+ ],
+ "constraints": [
+  {
+   "id": "C1",
+   "expression": "c ≥ 0",
+   "rationale": "计数"
+  }
+ ],
+ "objective": [
+  {
+   "id": "O1",
+   "expression": "各州指数拟合外推",
+   "kind": "estimand",
+   "rationale": "P1"
+  }
+ ],
+ "mechanism": [
+  {
+   "id": "M1",
+   "name": "指数扩散",
+   "equation": "c_s,t = c_s,0·e^{p1·t}",
+   "derivation_notes": "计数拟合"
+  }
+ ],
+ "candidate_models": [
+  {
+   "model": "指数拟合",
+   "pros": "简单",
+   "cons": "无空间结构"
+  },
+  {
+   "model": "面板回归",
+   "pros": "可加协变量",
+   "cons": "复杂"
+  }
+ ],
+ "selected_model": "指数拟合",
+ "selection_reason": "数据量有限先做基线",
+ "uncertainties": [
+  {
+   "source": "社会经济因素",
+   "handling": "qualitative",
+   "effect": "讨论"
+  }
+ ],
+ "sensitivity_plan": [
+  {
+   "parameter": "p1",
+   "range": "±20%",
+   "metric": "外推 c"
+  }
+ ]
+}

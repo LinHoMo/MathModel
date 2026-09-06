@@ -1,0 +1,256 @@
+{
+ "problem_id": "2025_B",
+ "problem_interpretation": "可持续旅游的优化-反馈框架：题面显式要求声明优化什么、约束什么、支出如何反馈。主张-支持配对：每个政策主张（上限/税收/营销转向/支出计划）都要指认到目标-约束结构中的位置，且反馈回路闭合（收入→承载力→体验→需求）。",
+ "assumptions": [
+  {
+   "id": "A1",
+   "statement": "需求侧：V_t 对有效价格（含税）弹性 e_p < 0，对拥挤调整后的体验质量弹性 e_q > 0；需求实现有界且非负（乘性弹性模型保证 V ≥ 0）",
+   "justification": "需求机制 + 域一致（清单）"
+  },
+  {
+   "id": "A2",
+   "statement": "承载力 K_t 由基础设施与保护投入提升，边际递减：K_{t+1} = K_t + a·sqrt(投入)（约束形式的反馈）",
+   "justification": "反馈回路（题面要求 show how expenditures feed back）"
+  },
+  {
+   "id": "A3",
+   "statement": "居民满意度 sat_t = 1 − p4·V_t/K_t + p5·服务投入/K_t，进入需求（体验弹性）与约束（C2）",
+   "justification": "稳定措施的机制化"
+  },
+  {
+   "id": "A4",
+   "statement": "邮轮渗漏率 leak 使本地留存的每访客收入为 c·(1−leak)；营销转向比例 m 把部分需求引导至低拥挤景点（不影响总量约束，只改善体验分布）",
+   "justification": "措施机制"
+  }
+ ],
+ "variables": [
+  {
+   "id": "V_t",
+   "name": "年度访客量",
+   "description": "决策（上限即优化对象）",
+   "unit": "人/yr",
+   "role": "decision",
+   "domain": "[0, K_t]"
+  },
+  {
+   "id": "tau",
+   "name": "停留税率",
+   "description": "政策",
+   "unit": "1",
+   "role": "decision",
+   "domain": "[0, tau_max]"
+  },
+  {
+   "id": "m",
+   "name": "营销转向比例",
+   "description": "政策",
+   "unit": "1",
+   "role": "decision",
+   "domain": "[0,1]"
+  },
+  {
+   "id": "K_t",
+   "name": "承载力",
+   "description": "反馈状态",
+   "unit": "人/yr",
+   "role": "state",
+   "domain": "≥0"
+  },
+  {
+   "id": "I_t",
+   "name": "措施/保护投入",
+   "description": "支出计划",
+   "unit": "USD/yr",
+   "role": "decision",
+   "domain": "≥0"
+  },
+  {
+   "id": "sat_t",
+   "name": "居民满意度",
+   "description": "约束指标",
+   "unit": "1",
+   "role": "derived",
+   "domain": "[0,1]"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "p1",
+   "name": "人均消费 c、渗漏率 leak",
+   "value_or_source": "旅游经济文献",
+   "unit": "USD / 1",
+   "source": "literature"
+  },
+  {
+   "id": "p2",
+   "name": "需求弹性 e_p（价格）、e_q（体验）",
+   "value_or_source": "旅游经济学文献区间 ±50%",
+   "unit": "1",
+   "source": "literature"
+  },
+  {
+   "id": "p3",
+   "name": "承载力投入产出 a",
+   "value_or_source": "情景 ±50%",
+   "unit": "1",
+   "source": "assumed"
+  },
+  {
+   "id": "p4",
+   "name": "拥挤-满意度系数 p4 与服务系数 p5",
+   "value_or_source": "情景",
+   "unit": "1",
+   "source": "assumed"
+  },
+  {
+   "id": "p5",
+   "name": "税率上限 tau_max 与满意度下限 sat_min",
+   "value_or_source": "政策可行域",
+   "unit": "1",
+   "source": "assumed"
+  },
+  {
+   "id": "p6",
+   "name": "生态压力系数（每访客生态足迹）",
+   "value_or_source": "情景",
+   "unit": "1",
+   "source": "assumed"
+  }
+ ],
+ "constraints": [
+  {
+   "id": "C1",
+   "expression": "V_t ≤ K_t（承载力，显式——题面要求 state constraints）",
+   "rationale": "生态/基础设施瓶颈"
+  },
+  {
+   "id": "C2",
+   "expression": "sat_t ≥ sat_min（社区容忍度，显式）",
+   "rationale": "社区稳定约束"
+  },
+  {
+   "id": "C3",
+   "expression": "I_t ≤ τ·c·(1−leak)·V_t（措施支出由税收收入支撑）",
+   "rationale": "预算平衡——反馈回路的资金侧"
+  },
+  {
+   "id": "C4",
+   "expression": "生态足迹 Foot_t = p6·V_t ≤ Foot_max（情景约束）",
+   "rationale": "生态可持续的显式形式"
+  },
+  {
+   "id": "C5",
+   "expression": "V_t ≥ 0（乘性弹性模型自动满足——域一致）",
+   "rationale": "需求非负"
+  }
+ ],
+ "objective": [
+  {
+   "id": "O1",
+   "expression": "任务1 承载：max Σ_t [c(1−leak)·V_t + τ·c·V_t − I_t]（长期净收入，贴现）——目标显式声明为净收入+满意度加权",
+   "kind": "maximize",
+   "rationale": "对齐点 任务1（优化目标显式）"
+  },
+  {
+   "id": "O2",
+   "expression": "任务1 承载：约束显式 = C1-C4（承载力/满意度/预算/生态）+ 敏感性计划",
+   "kind": "simulate",
+   "rationale": "对齐点 任务1（约束显式）"
+  },
+  {
+   "id": "O3",
+   "expression": "任务2 承载：迁移分析 = 框架参数重置（目的地规模 K0、渗漏率、瓶颈类型）→ 措施重要性排序随参数变化",
+   "kind": "estimand",
+   "rationale": "对齐点 任务2"
+  }
+ ],
+ "mechanism": [
+  {
+   "id": "M1",
+   "name": "需求（含税与体验弹性）",
+   "equation": "V_t = V0·((p̄)/(c(1+tau)))^{e_p}·sat_t^{e_q}·(1−m·shift)",
+   "derivation_notes": "p2；A1 域一致"
+  },
+  {
+   "id": "M2",
+   "name": "收入-支出-承载力反馈",
+   "equation": "I_t = min(τ·c(1−leak)·V_t, 需要额)；K_{t+1} = K_t + a·sqrt(I_t)",
+   "derivation_notes": "A2；C3 闭环（题面反馈要求）"
+  },
+  {
+   "id": "M3",
+   "name": "满意度",
+   "equation": "sat_t = 1 − p4·V_t/K_t + p5·I_t/K_t",
+   "derivation_notes": "A3；进入 M1 需求与 C2 约束"
+  },
+  {
+   "id": "M4",
+   "name": "生态足迹",
+   "equation": "Foot_t = p6·V_t（C4 承载）",
+   "derivation_notes": "生态约束"
+  }
+ ],
+ "candidate_models": [
+  {
+   "model": "显式约束优化 + 反馈闭环（本框架）",
+   "pros": "题面要求的显式优化/约束/反馈全部形式化",
+   "cons": "参数情景化"
+  },
+  {
+   "model": "纯预测模型",
+   "pros": "简单",
+   "cons": "无决策变量（题面要求优化）"
+  },
+  {
+   "model": "系统动力学",
+   "pros": "反馈丰富",
+   "cons": "优化弱（题面要求 state clearly optimizing）"
+  }
+ ],
+ "selected_model": "显式约束优化 + 收入-承载力反馈闭环",
+ "selection_reason": "主张-支持配对：目标/约束显式（O1/O2 + C1-C4）、反馈闭环（M2 题面要求）、迁移（O3 参数重置）；全部参数声明",
+ "uncertainties": [
+  {
+   "source": "弹性 e_p/e_q",
+   "handling": "propagated",
+   "effect": "蒙特卡洛 → 最优 τ/V_cap 区间"
+  },
+  {
+   "source": "渗漏率 leak",
+   "handling": "scenario",
+   "effect": "净收入与反馈强度"
+  },
+  {
+   "source": "投入产出 a",
+   "handling": "propagated",
+   "effect": "反馈回路强度"
+  },
+  {
+   "source": "生态系数 p6",
+   "handling": "scenario",
+   "effect": "C4 约束松紧"
+  }
+ ],
+ "sensitivity_plan": [
+  {
+   "parameter": "承载力 K0",
+   "range": "±30%",
+   "metric": "最优 V_cap/净收入"
+  },
+  {
+   "parameter": "e_p 弹性",
+   "range": "文献区间端点",
+   "metric": "最优 τ"
+  },
+  {
+   "parameter": "p3 投入产出",
+   "range": "±50%",
+   "metric": "长期 K 增长"
+  },
+  {
+   "parameter": "leak",
+   "range": "0.3-0.7",
+   "metric": "反馈强度与措施排序"
+  }
+ ]
+}

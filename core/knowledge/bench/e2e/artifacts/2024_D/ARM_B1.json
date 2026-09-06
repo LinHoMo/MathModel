@@ -1,0 +1,59 @@
+{
+ "problem_id": "2024_D",
+ "problem_interpretation": "hybrid 建模链：**数据**（2017 前后五湖水位/流入流出/大坝记录）→ **机制**（五湖级联质量守恒 + 流量-水位关系）→ **控制优化**（两坝出流的 MPC + 利益相关者目标向量）→ **验证**（2017 实测对照）→ **敏感性**（NBS/出流边界/环境条件）。主张-支持配对：每个管理主张都由网络模型中的守恒方程、约束与控制目标承载；Ontario 深度分析单独展开。",
+ "assumptions": [
+  {"id": "A1", "statement": "五湖级联拓扑：Superior → Michigan-Huron → St. Clair River → Erie → Niagara/Welland → Ontario → St. Lawrence（Moses-Saunders）→ Atlantic；Superior 经 Compensating Works 入 Michigan-Huron", "justification": "地理拓扑（题面 Addendum）"},
+  {"id": "A2", "statement": "Net Basin Supply（NBS）= 降水 − 蒸发 − 入渗，各湖独立的随机过程，分布由历史数据估计（2017 事件作为高 NBS 情景而非均值回归）", "justification": "水文学标准处理 + 干预③"},
+  {"id": "A3", "statement": "出流量-水位关系由阶段-流量曲线（stage-discharge）给定，两坝出流受工程上下界约束", "justification": "大坝工程规格"},
+  {"id": "A4", "statement": "控制目标 = 各利益相关者（航运/湖岸产权/水电/生态/娱乐）损失函数加权和，权重显式声明并做扰动稳健性", "justification": "C1 显式准则（清单：主张-支持配对）"}
+ ],
+ "variables": [
+  {"id": "L_l,t", "name": "湖 l 第 t 月水位", "description": "五湖状态", "unit": "m", "role": "state", "domain": "[历史最低, 历史最高]×1.1（域一致情景界）"},
+  {"id": "q_C,t", "name": "Compensating Works 出流", "description": "坝1 决策", "unit": "m³/s", "role": "decision", "domain": "[qC_min, qC_max]"},
+  {"id": "q_MS,t", "name": "Moses-Saunders 出流", "description": "坝2 决策", "unit": "m³/s", "role": "decision", "domain": "[qMS_min, qMS_max]"},
+  {"id": "NBS_l,t", "name": "湖 l 净流域供给", "description": "数据驱动随机输入", "unit": "m³/s", "role": "input", "domain": "可正可负"},
+  {"id": "loss_st,t", "name": "利益相关者 st 的月损失", "description": "水位偏离其可接受带的损失", "unit": "加权单位", "role": "derived", "domain": "≥0"}
+ ],
+ "parameters": [
+  {"id": "p1", "name": "湖面积-水位关系与 stage-discharge 曲线", "value_or_source": "NOAA/大坝工程表（数据）", "unit": "混合", "source": "data"},
+  {"id": "p2", "name": "NBS 过程参数（均值/方差/月自相关）", "value_or_source": "历史 NBS 估计（数据）", "unit": "混合", "source": "data"},
+  {"id": "p3", "name": "两坝出流工程上下界", "value_or_source": "大坝规格", "unit": "m³/s", "source": "data"},
+  {"id": "p4", "name": "利益相关者损失函数形状（各 st 的可接受水位带 + 二次罚系数）", "value_or_source": "题面枚举 + 情景权重", "unit": "1", "source": "assumed"},
+  {"id": "p5", "name": "MPC 预测时域 T_h 与折扣", "value_or_source": "控制参数（网格标定）", "unit": "月", "source": "calibrated"},
+  {"id": "p6", "name": "环境情景参数（降水距平、雪pack 指数、冰塞频率）", "value_or_source": "气候情景", "unit": "1", "source": "assumed"}
+ ],
+ "constraints": [
+  {"id": "C1", "expression": "五湖逐月质量守恒：V_{l,t+1} = V_{l,t} + (NBS_l,t + inflow_l,t − outflow_l,t)·Δt，inflow/outflow 由级联拓扑与 M2 曲线给出", "rationale": "机制核心（hybrid 的 mechanism 环节）"},
+  {"id": "C2", "expression": "q_C,t ∈ [qC_min, qC_max]；q_MS,t ∈ [qMS_min, qMS_max]（工程边界形式化）", "rationale": "干预②：大坝能力边界"},
+  {"id": "C3", "expression": "各湖水位不得超出历史极值域外 10%（域一致 + 物理边界）", "rationale": "变量域一致性（清单）"},
+  {"id": "C4", "expression": "冰塞情景下 St. Clair 出流能力折减（环境条件进入约束而非仅讨论）", "rationale": "干预②：环境条件的约束化"}
+ ],
+ "objective": [
+  {"id": "O1", "expression": "总承载：五湖网络模型 + 控制算法 + 管理计划（题面总要求）", "kind": "simulate", "rationale": "对齐点 总"},
+  {"id": "O2", "expression": "C1 承载：各湖最优水位带 = argmin Σ_st loss_st（利益相关者目标向量 p4，权重显式）", "kind": "minimize", "rationale": "对齐点 C1"},
+  {"id": "O3", "expression": "C2 承载：MPC 控制算法（M3）由 NBS/入流-出流数据在线维持最优水位带", "kind": "minimize", "rationale": "对齐点 C2"},
+  {"id": "O4", "expression": "C3 承载：出流边界扰动（±10%）下的控制性能退化曲线 + 2017 年实测对照（backtest：模拟水位 vs 实测水位的月度 RMSE 与越界天数）", "kind": "estimand", "rationale": "对齐点 C3"},
+  {"id": "O5", "expression": "C4 承载：降水/雪pack/冰塞情景（p6）下的水位带变化", "kind": "estimand", "rationale": "对齐点 C4"},
+  {"id": "O6", "expression": "C5 承载：Ontario 深度分析 = Ontario 子系统的损失分解（5 类利益相关者逐一）+ 与既有管理计划（Plan 2014）对照", "kind": "estimand", "rationale": "对齐点 C5"}],
+  "mechanism": [
+   {"id": "M1", "name": "级联质量守恒（hybrid 机制环节）", "equation": "见 C1；出流 outflow_l = q_dam(控制湖) + 自然段流量(由上下游水位差的 stage-discharge 曲线 p1)", "derivation_notes": "p1/p3；数据驱动的网络机制"},
+   {"id": "M2", "name": "stage-discharge", "equation": "outflow_nat = κ_l·(H_up − H_down)^β_l（曲线拟合于历史数据，参数声明）", "derivation_notes": "p1 数据标定"},
+   {"id": "M3", "name": "MPC 控制律", "equation": "q*_t = argmin Σ_{τ=t..t+T_h} Σ_st p4_st·loss_st(水位_τ) s.t. C2-C4，滚动执行首期", "derivation_notes": "p5；O3 载体"},
+   {"id": "M4", "name": "NBS 随机情景", "equation": "NBS ~ 历史月分布自助采样 + p6 环境情景调制", "derivation_notes": "p2/p6；干预③"}],
+  "candidate_models": [
+   {"model": "数据驱动网络 MPC（本框架）", "pros": "hybrid 链完整：数据→机制→控制→验证", "cons": "MPC 参数标定"},
+   {"model": "单库守恒", "pros": "最简", "cons": "级联时滞丢失（上游操作 1-2 月后才影响 Ontario）"},
+   {"model": "线性规则（Plan 2014 式）", "pros": "可对照", "cons": "非优化"}],
+  "selected_model": "数据驱动五湖网络 + MPC 控制 + 2017 回放 + 环境情景",
+  "selection_reason": "hybrid 链主张-支持配对：数据（NBS/曲线标定 p1/p2）→ 机制（M1/M2 守恒）→ 控制（M3 MPC + O2/O3）→ 验证（O4 的 2017 backtest）→ 深度（O6 Ontario）；全部环境条件以情景参数进入约束/输入",
+  "uncertainties": [
+   {"source": "NBS 随机性（p2）", "handling": "propagated", "effect": "水位带与越界频率（蒙特卡洛 500 年重现采样）"},
+   {"source": "利益相关者权重 p4", "handling": "propagated", "effect": "O2 水位带的稳健性"},
+   {"source": "环境情景 p6", "handling": "scenario", "effect": "C4/O5 响应"},
+   {"source": "MPC 参数 p5", "handling": "propagated", "effect": "控制性能曲线"}],
+  "sensitivity_plan": [
+   {"parameter": "NBS 分布", "range": "历史采样 ± 干旱/丰水情景", "metric": "越界频率、RMSE"},
+   {"parameter": "出流边界", "range": "±10%", "metric": "O4 退化曲线"},
+   {"parameter": "权重 p4", "range": "五类利益相关者两两扰动", "metric": "Ontario 水位带"},
+   {"parameter": "环境情景 p6", "range": "干旱/丰水/冰塞", "metric": "控制性能"}]
+}

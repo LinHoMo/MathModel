@@ -1,0 +1,94 @@
+{
+ "problem_id": "2024_C",
+ "problem_interpretation": "用温网逐分数据定义并量化 momentum，回答随机论之争与转折预测。",
+ "assumptions": [
+  {
+   "id": "A1",
+   "statement": "momentum 可用累计得分差代理",
+   "justification": "直觉"
+  },
+  {
+   "id": "A2",
+   "statement": "发球影响忽略",
+   "justification": "简化"
+  }
+ ],
+ "variables": [
+  {
+   "id": "D_t",
+   "name": "累计得分差",
+   "description": "逐分累计",
+   "unit": "分",
+   "role": "state",
+   "domain": "可负"
+  },
+  {
+   "id": "t",
+   "name": "分序号",
+   "description": "比赛内",
+   "unit": "1",
+   "role": "input",
+   "domain": "≥1"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "p1",
+   "name": "无",
+   "value_or_source": "—",
+   "unit": "1",
+   "source": "assumed"
+  }
+ ],
+ "constraints": [
+  {
+   "id": "C1",
+   "expression": "D_t 无界",
+   "rationale": "差值"
+  }
+ ],
+ "objective": [
+  {
+   "id": "O1",
+   "expression": "D_t 曲线即流势",
+   "kind": "simulate",
+   "rationale": "Q1"
+  }
+ ],
+ "mechanism": [
+  {
+   "id": "M1",
+   "name": "累计差",
+   "equation": "D_t = Σ (s_i − s_j)",
+   "derivation_notes": "直接累计"
+  }
+ ],
+ "candidate_models": [
+  {
+   "model": "累计差",
+   "pros": "简单",
+   "cons": "忽略发球"
+  },
+  {
+   "model": "EWM",
+   "pros": "平滑",
+   "cons": "参数"
+  }
+ ],
+ "selected_model": "累计得分差",
+ "selection_reason": "最直接",
+ "uncertainties": [
+  {
+   "source": "随机性",
+   "handling": "qualitative",
+   "effect": "讨论"
+  }
+ ],
+ "sensitivity_plan": [
+  {
+   "parameter": "无",
+   "range": "—",
+   "metric": "—"
+  }
+ ]
+}

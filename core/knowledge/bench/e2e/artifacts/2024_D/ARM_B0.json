@@ -1,0 +1,36 @@
+{
+ "problem_id": "2024_D",
+ "problem_interpretation": "五大湖水位管理：两座大坝（Compensating Works / Moses-Saunders）如何操作。",
+ "assumptions": [
+  {"id": "A1", "statement": "以 Lake Ontario 单库质量守恒近似", "justification": "简化"},
+  {"id": "A2", "statement": "利益相关者影响定性讨论", "justification": "简化"}
+ ],
+ "variables": [
+  {"id": "L_t", "name": "Ontario 水位", "description": "状态", "unit": "m", "role": "state", "domain": "≥0"},
+  {"id": "q_t", "name": "Moses-Saunders 出流", "description": "决策", "unit": "m³/s", "role": "decision", "domain": "≥0"}
+ ],
+ "parameters": [
+  {"id": "p1", "name": "湖面积", "value_or_source": "地理常量", "unit": "km²", "source": "data"}
+ ],
+ "constraints": [
+  {"id": "C1", "expression": "q_t ≥ 0", "rationale": "非负"}
+ ],
+ "objective": [
+  {"id": "O1", "expression": "水位维持在中位附近", "kind": "simulate", "rationale": "管理目标"}
+ ],
+ "mechanism": [
+  {"id": "M1", "name": "水量守恒", "equation": "L_{t+1} = L_t + (inflow − q_t)/A", "derivation_notes": "单库"}
+ ],
+ "candidate_models": [
+  {"model": "单库守恒", "pros": "简单", "cons": "无网络"},
+  {"model": "网络流", "pros": "完整", "cons": "复杂"}
+ ],
+ "selected_model": "单库守恒",
+ "selection_reason": "最简",
+ "uncertainties": [
+  {"source": "来水", "handling": "qualitative", "effect": "讨论"}
+ ],
+ "sensitivity_plan": [
+  {"parameter": "inflow", "range": "±20%", "metric": "L_t"}
+ ]
+}

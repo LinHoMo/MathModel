@@ -1,0 +1,54 @@
+{
+ "problem_id": "2023_B",
+ "mma_raw_output": {
+  "eda": "机理类问题（无数据集）：聚焦马赛马拉生态-人居系统的结构梳理——核心区/缓冲区/社区区的空间结构、野生动物迁徙通道、人兽冲突热点、居民生计构成。不做描述性统计。可视化：系统因果回路图（野生动物→旅游收入→居民福祉→政策压力）。",
+  "ques1": "问题类型判断：仿真+政策设计。模型选择：系统动力学（物种-栖息地-人类活动三子系统）+ 分区机制（核心区禁入/缓冲区限游/社区共管）；备选元胞自动机。选择理由：分区政策的作用对象是空间异质的人兽界面，系统动力学+分区结构可直接刻画政策差异。建模思路：各分区野生动物密度、人类活动强度、冲突率分别建模，冲突率 = f(重叠度, 缓解措施)。求解方法：情景仿真（政策组合枚举）。验证策略：参数文献值域内的稳健性检查。可视化：分区地图 + 冲突率热力图。",
+  "ques2": "问题类型判断：评价决策类（政策排序）。模型选择：AHP 定权（生态/经济/社会三准则）+ TOPSIS 排序 + 蒙特卡洛稳健性；备选加权求和。选择理由：多准则政策排序是 AHP+TOPSIS 的标准适用域，主观权重可由利益相关者偏好显式化。建模思路：每个政策组合仿真输出三准则值（野生动物保有率、居民收入变化、冲突率）→ TOPSIS 排序。求解方法：枚举政策组合 × 蒙特卡洛。验证策略：权重扰动下排序稳定性。可视化：帕累托前沿 + 排序条形图。",
+  "ques3": "问题类型判断：预测类（长期趋势）。模型选择：延续 Q1 仿真至 20 年 + 情景置信带；迁徙走廊情景作为扩展。求解方法：长期仿真输出野生动物保有率、冲突率、居民收入的趋势与置信带，方法迁移性 = 参数化后换保护区参数。验证策略：与历史保护区数据（文献值）量级对照。可视化：20 年趋势带图。",
+  "sensitivity_analysis": "关键参数：繁殖率（±20%）、冲突响应系数（±20%）、旅游弹性（±20%）、AHP 权重（扰动 0.1）。评估指标：野生动物保有率、居民收入变化、冲突率、TOPSIS 排序翻转次数。可视化：龙卷风图 + 排序稳定性矩阵。鲁棒性：蒙特卡洛参数采样。"
+ },
+ "problem_interpretation": "分区政策组合 → 野生动物-人交互 → 经济影响 → 多准则排序 → 长期趋势的完整决策链。",
+ "assumptions": [
+  {"id": "A1", "statement": "冲突率随人兽空间重叠度上升，随缓解措施投入下降", "justification": "Q1 机制设定"},
+  {"id": "A2", "statement": "居民机会损失可通过社区共管收益部分补偿", "justification": "政策机制设定"},
+  {"id": "A3", "statement": "旅游收入随野生动物保有率上升", "justification": "观赏价值机制"}
+ ],
+ "variables": [
+  {"id": "N_z", "name": "分区野生动物密度", "description": "核心/缓冲/社区区分别建模", "unit": "ind/km²", "role": "state", "domain": "≥0"},
+  {"id": "conf", "name": "人兽冲突率", "description": "负面交互频率", "unit": "次/yr", "role": "derived", "domain": "≥0"},
+  {"id": "inc", "name": "居民收入变化", "description": "相对基线", "unit": "%", "role": "derived", "domain": "可负"},
+  {"id": "pol", "name": "政策组合", "description": "分区策略枚举向量", "unit": "1", "role": "decision", "domain": "有限集"}
+ ],
+ "parameters": [
+  {"id": "p1", "name": "野生动物繁殖率", "value_or_source": "文献典型值", "unit": "1/yr", "source": "literature"},
+  {"id": "p2", "name": "冲突响应系数", "value_or_source": "情景参数", "unit": "1", "source": "assumed"},
+  {"id": "p3", "name": "旅游弹性 α", "value_or_source": "情景参数", "unit": "1", "source": "assumed"},
+  {"id": "p4", "name": "AHP 准则权重", "value_or_source": "利益相关者偏好（生态/经济/社会）", "unit": "1", "source": "assumed"}
+ ],
+ "constraints": [],
+ "objective": [
+  {"id": "O1", "expression": "max TOPSIS 综合分（生态保有率、居民收入变化、低冲突率三准则）", "kind": "maximize", "rationale": "Q2 排序"},
+  {"id": "O2", "expression": "20 年趋势带输出（保有率/冲突率/收入）", "kind": "simulate", "rationale": "Q3"}
+ ],
+ "mechanism": [
+  {"id": "M1", "name": "分区野生动物动态", "equation": "dN_z/dt = p1·N_z·(1−N_z/K_z) − interact_z(pol)", "derivation_notes": "分区参数化"},
+  {"id": "M2", "name": "人兽冲突", "equation": "conf_z = p2·N_z·hum_z·(1−mit_z)", "derivation_notes": "重叠度×缓解"},
+  {"id": "M3", "name": "经济影响", "equation": "inc_z = α·ΔN_z − L_z + comp_z(pol)", "derivation_notes": "收益-损失-补偿"}
+ ],
+ "candidate_models": [
+  {"model": "系统动力学 + AHP/TOPSIS", "pros": "政策排序可解释", "cons": "权重主观"},
+  {"model": "元胞自动机", "pros": "空间显式", "cons": "参数更多"},
+  {"model": "加权求和", "pros": "简单", "cons": "无排序几何"}
+ ],
+ "selected_model": "系统动力学（分区）+ AHP/TOPSIS 排序 + 蒙特卡洛",
+ "selection_reason": "分区政策的空间异质性 → 系统动力学；多准则排序 → AHP+TOPSIS 标准域；蒙特卡洛给稳健性",
+ "uncertainties": [
+  {"source": "参数（繁殖/冲突/弹性）", "handling": "propagated", "effect": "蒙特卡洛分布"},
+  {"source": "AHP 权重", "handling": "propagated", "effect": "排序稳定性"},
+  {"source": "政策组合空间", "handling": "scenario", "effect": "枚举对比"}
+ ],
+ "sensitivity_plan": [
+  {"parameter": "p1/p2/α", "range": "±20%", "metric": "三准则值"},
+  {"parameter": "AHP 权重", "range": "扰动 0.1", "metric": "排序翻转次数"}
+ ]
+}

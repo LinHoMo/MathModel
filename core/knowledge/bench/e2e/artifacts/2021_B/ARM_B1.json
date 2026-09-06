@@ -1,0 +1,56 @@
+{
+ "problem_id": "2021_B",
+ "problem_interpretation": "机队采购的每个主张（能力、安全、经济、适应、选址、预算）都需要可执行的数学承载：火灾事件随机性显式参数化（泊松到达+对数正态规模）、覆盖函数有界、整数决策、选址视距几何、预算由最优解派生。主张-支持配对贯穿四问。",
+ "assumptions": [
+  {"id": "A1", "statement": "火灾到达泊松过程 λ(t)（十年演化情景），单场规模对数正态（μ_s, σ_s）；机队需在概率意义下覆盖 p5 比例的事件", "justification": "火灾随机性的显式参数化（题面要求 incorporate fire event size and frequency as parameters）"},
+  {"id": "A2", "statement": "覆盖函数有界：cov = 1 − exp(−capability/A_fire(s))，capability 由两型无人机线性组合但被 A_fire 归一——能力主张不外推超出物理覆盖", "justification": "覆盖量域一致（清单：域一致）"},
+  {"id": "A3", "statement": "侦察覆盖 R_obs 与中继通信 R_com 经地形折减（海拔剖面 + 地球曲率 + 菲涅尔区），折减函数显式", "justification": "Q3 选址的几何真实性"},
+  {"id": "A4", "statement": "安全风险 Risk(n) = 覆盖缺口 × 火灾期望损失（损失随规模超线性）——安全项不并入能力项（防止权重掩盖缺口）", "justification": "清单：主张-支持配对（安全主张独立承载）"}],
+  "variables": [
+   {"id": "n_ssa", "name": "SSA 数量", "description": "侦察", "unit": "架", "role": "decision", "domain": "≥0 整数"},
+   {"id": "n_rr", "name": "中继数量", "description": "通信", "unit": "架", "role": "decision", "domain": "≥0 整数"},
+   {"id": "y_l", "name": "悬停选址", "description": "候选点（Q3）", "unit": "1", "role": "decision", "domain": "{0,1}"},
+   {"id": "gap_s", "name": "规模 s 事件的覆盖缺口", "description": "max(0, 要求 − 实际覆盖)", "unit": "1", "role": "derived", "domain": "[0,1]"},
+   {"id": "Cost_t", "name": "第 t 年机队成本", "description": "采购摊销 + 运维", "unit": "AUD/yr", "role": "derived", "domain": "≥0"}],
+  "parameters": [
+   {"id": "p1", "name": "火灾到达率 λ0 与十年趋势 g_fire", "value_or_source": "历史统计 + 情景（±50%）", "unit": "次/yr", "source": "data"},
+   {"id": "p2", "name": "规模分布 (μ_s, σ_s)", "value_or_source": "历史火灾面积统计", "unit": "ha", "source": "data"},
+   {"id": "p3", "name": "成本参数 c_ssa, c_rr, 运维率", "value_or_source": "Q2 假设恒定 + 敏感性", "unit": "AUD", "source": "assumed"},
+   {"id": "p4", "name": "有效半径 R_obs0, R_com0 与地形折减函数 f_terrain", "value_or_source": "工程参数 × 显式折减", "unit": "km", "source": "literature"},
+   {"id": "p5", "name": "覆盖概率要求 p_cov（按规模分层）", "value_or_source": "政策情景 0.8-0.95", "unit": "1", "source": "assumed"},
+   {"id": "p6", "name": "权衡权重 (w_cap, w_cost, w_safety)", "value_or_source": "CFA 偏好显式声明 + 扰动", "unit": "1", "source": "assumed"},
+   {"id": "p7", "name": "火灾期望损失函数 L(s)", "value_or_source": "随规模超线性（安全项承载）", "unit": "AUD", "source": "literature"}
+  ],
+  "constraints": [
+   {"id": "C1", "expression": "c_ssa·n_ssa + c_rr·n_rr + 运维(n) ≤ Budget_t", "rationale": "年度预算（含运维——采购主张的资金承载）"},
+   {"id": "C2", "expression": "P(覆盖成功 | 事件规模 s) ≥ p_cov(s)，对 s ∈ {小, 中, 大} 分层（由 cov 有界函数与泊松-对数正态事件模型生成）", "rationale": "覆盖主张的概率形式化（分层防平均掩盖大事件缺口）"},
+   {"id": "C3", "expression": "n_ssa, n_rr ∈ ℤ≥0", "rationale": "整数采购"},
+   {"id": "C4", "expression": "选址：Σ_l y_l ≤ n_rr 且视距连通约束（f_terrain 几何），通信链 = 火线—悬停点—指挥站三段", "rationale": "Q3 选址的几何形式化"},
+   {"id": "C5", "expression": "十年轨迹：n(t) 逐年单调可增（采购不退役），Cost_t 由此派生", "rationale": "Q2 成本投影的口径"}],
+  "objective": [
+   {"id": "O1", "expression": "Q1 承载：max w_cap·E_s[cov(n;s)] − w_cost·Cost(n)/Budget − w_safety·E_s[gap_s·L(s)]（三权重的显式标量化的可行域上求解）", "kind": "maximize", "rationale": "对齐点 Q1（能力/安全/经济的显式权衡）"},
+   {"id": "O2", "expression": "Q2 承载：λ(t) = λ0(1+g_fire)^t 逐年重解 → 机队组合轨迹与 Cost_t 投影（单价恒定假设下）", "kind": "simulate", "rationale": "对齐点 Q2"},
+   {"id": "O3", "expression": "Q3 承载：max Σ_l y_l·L_fire(s, y, f_terrain)（覆盖火线长度），按规模 s 分情景解选址", "kind": "maximize", "rationale": "对齐点 Q3"},
+   {"id": "O4", "expression": "Q4 承载：预算请求 = O1/O2 最优 n*(t) 的 Cost 分解表，每行注解其约束/参数依据（p1-p7）", "kind": "estimand", "rationale": "对齐点 Q4"}],
+  "mechanism": [
+   {"id": "M1", "name": "期望覆盖（有界）", "equation": "cov(n; s) = 1 − exp(−(n_ssa·a_obs(s) + n_rr·a_com(s))/A_fire(s))，A_fire(s) 由 p2 规模分布生成", "derivation_notes": "A2；s 进入暴露面积"},
+   {"id": "M2", "name": "地形折减", "equation": "R_eff(l) = R0·f_terrain(h_l, 视距几何)（Q3 选址）", "derivation_notes": "A3；C4"},
+   {"id": "M3", "name": "十年演化", "equation": "λ(t) = λ0·(1+g_fire)^t", "derivation_notes": "p1；Q2"},
+   {"id": "M4", "name": "安全风险", "equation": "Risk(n) = E_s[gap_s(n)·L(s)]，L(s) 超线性", "derivation_notes": "A4；安全主张的独立承载"}],
+  "candidate_models": [
+   {"model": "概率覆盖 MILP（本框架）", "pros": "火灾随机性、整数性、分层覆盖、安全独立承载全部形式化", "cons": "覆盖函数形式假设"},
+   {"model": "确定性 LP", "pros": "简单", "cons": "火灾随机性被平均掉（大事件缺口不可见）"},
+   {"model": "鲁棒优化", "pros": "最坏情况", "cons": "过度保守"}],
+  "selected_model": "概率覆盖 MILP + 最大覆盖选址 + 演化情景",
+  "selection_reason": "主张-支持配对：Q1 三准则权衡、Q2 演化、Q3 选址几何、Q4 预算派生全部有承载；火灾随机性按题面要求成为模型参数而非讨论",
+  "uncertainties": [
+   {"source": "λ(t) 趋势 g_fire", "handling": "propagated", "effect": "Q2 轨迹区间（±50%）"},
+   {"source": "规模分布 (μ_s, σ_s)", "handling": "propagated", "effect": "C2 覆盖概率（蒙特卡洛）"},
+   {"source": "成本参数 p3", "handling": "scenario", "effect": "预算表（Q4）"},
+   {"source": "权重 p6", "handling": "scenario", "effect": "组合帕累托对照"}],
+  "sensitivity_plan": [
+   {"parameter": "g_fire", "range": "±50%", "metric": "机队轨迹"},
+   {"parameter": "p5 分层覆盖要求", "range": "0.8-0.95", "metric": "成本与组合"},
+   {"parameter": "p6 权重", "range": "三准则扰动 ±0.1", "metric": "组合变化与排序"},
+   {"parameter": "p2 规模分布", "range": "μ ±20%", "metric": "大事件缺口"}]
+}

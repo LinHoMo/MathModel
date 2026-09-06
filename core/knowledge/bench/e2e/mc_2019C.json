@@ -1,0 +1,38 @@
+{
+  "problem_id": "2019_C",
+  "version": 1,
+  "note": "阿片类药物时空扩散（流行病学数据）（P13-3C-R5 预注册，建模前落盘）",
+  "questions": {
+    "ALL": {
+      "task_type": "",
+      "structural_required": {
+        "variables": "特征/变量定义（县-月事件计数、药物类型、社会经济协变量）",
+        "assumptions": "假设显式（报告/阈值偏差）",
+        "spread_model": "州际+县际时空扩散模型",
+        "origin_identification": "起点识别方法（每州）",
+        "socioeconomic_covariate_model": "社会经济协变量关联模型（Q2，含因果谨慎声明）",
+        "strategy_testing": "干预策略有效性检验与参数边界（P3）"
+      },
+      "alignment_points": [
+        "P1: 扩散特征+起点识别+阈值水平+未来预测",
+        "P2: 社会经济数据关联并并入模型",
+        "P3: 干预策略有效性检验与成功/失败的参数边界"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {
+    "structural": 1,
+    "mathematical": 1,
+    "alignment": 1
+  }
+}

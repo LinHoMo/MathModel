@@ -1,0 +1,38 @@
+{
+ "problem_id": "2023_B",
+ "problem_interpretation": "马赛马拉保护区的资源管理：在保护野生动物与保障周边居民利益之间找分区政策组合，并给出排序方法与长期预测。",
+ "assumptions": [
+  {"id": "A1", "statement": "野生动物种群按 Logistic 增长，人类活动对其有负向压力", "justification": "常识近似"},
+  {"id": "A2", "statement": "旅游收入与野生动物观赏价值成正比", "justification": "常识近似"}
+ ],
+ "variables": [
+  {"id": "N", "name": "野生动物种群", "description": "保护区代表性物种丰度", "unit": "ind", "role": "state", "domain": "≥0"},
+  {"id": "V", "name": "旅游收入", "description": "年度旅游收入", "unit": "KES/yr", "role": "state", "domain": "≥0"},
+  {"id": "L", "name": "居民机会损失", "description": "因保护限制的发展机会损失", "unit": "KES/yr", "role": "input", "domain": "≥0"}
+ ],
+ "parameters": [
+  {"id": "p1", "name": "种群增长率", "value_or_source": "文献典型值", "unit": "1/yr", "source": "literature"}
+ ],
+ "constraints": [
+  {"id": "C1", "expression": "N ≥ 0", "rationale": "非负"}
+ ],
+ "objective": [
+  {"id": "O1", "expression": "V 与 N 的轨迹在若干政策情景下的对比", "kind": "simulate", "rationale": "比较政策"}
+ ],
+ "mechanism": [
+  {"id": "M1", "name": "野生动物动态", "equation": "dN/dt = p1·N·(1−N/K) − pressure·N", "derivation_notes": "人类压力线性项"},
+  {"id": "M2", "name": "旅游收入", "equation": "V = α·N", "derivation_notes": "观赏价值正比"}
+ ],
+ "candidate_models": [
+  {"model": "Logistic + 情景", "pros": "简单", "cons": "无分区结构"},
+  {"model": "系统动力学", "pros": "反馈", "cons": "参数多"}
+ ],
+ "selected_model": "Logistic + 情景对比",
+ "selection_reason": "无数据条件下最可解释",
+ "uncertainties": [
+  {"source": "参数", "handling": "qualitative", "effect": "讨论"}
+ ],
+ "sensitivity_plan": [
+  {"parameter": "p1", "range": "±20%", "metric": "N(t)"}
+ ]
+}

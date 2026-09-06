@@ -1,0 +1,247 @@
+{
+ "problem_id": "2020_A",
+ "problem_interpretation": "两鱼种热生态位迁移的可预测性是全部四问的共同源头：主张-支持配对要求 Q1 的位置预测、Q2 的时间阈值、Q3 的策略矩阵、Q4 的跨界比例全部由同一迁移机制生成，且升温速率的不确定性显式传播到每一问。",
+ "assumptions": [
+  {
+   "id": "A1",
+   "statement": "热生态位：两鱼种各自有偏好温度 T_pref 与耐受带宽 w，适宜度 = exp(−(T−T_pref)²/2w²)",
+   "justification": "生态位标准形式，文献参数"
+  },
+  {
+   "id": "A2",
+   "statement": "SST 升温速率三情景：best/likely/worst = {0.01, 0.03, 0.05}°C/yr（IPCC 区间）",
+   "justification": "干预③：源不确定性的显式情景"
+  },
+  {
+   "id": "A3",
+   "statement": "温度纬度梯度 g 在预测期内为常数（文献值域 ±30% 敏感性）",
+   "justification": "一阶近似"
+  },
+  {
+   "id": "A4",
+   "statement": "远洋比例 φ 的有效半径扩展与成本均为线性（一阶策略近似）",
+   "justification": "策略机制一阶形式"
+  }
+ ],
+ "variables": [
+  {
+   "id": "N_i_t",
+   "name": "鱼种 i 的种群中心纬度",
+   "description": "i ∈ {haddock, mackerel}",
+   "unit": "°lat",
+   "role": "state",
+   "domain": "≥0"
+  },
+  {
+   "id": "d_i_t",
+   "name": "离港距离",
+   "description": "渔场中心到苏格兰港口",
+   "unit": "km",
+   "role": "derived",
+   "domain": "≥0"
+  },
+  {
+   "id": "phi",
+   "name": "远洋作业比例",
+   "description": "Q3 策略变量",
+   "unit": "1",
+   "role": "decision",
+   "domain": "[0,1]"
+  },
+  {
+   "id": "pi_i_t",
+   "name": "跨界渔获比例",
+   "description": "Q4",
+   "unit": "1",
+   "role": "derived",
+   "domain": "[0,1]"
+  }
+ ],
+ "parameters": [
+  {
+   "id": "p1",
+   "name": "热生态位 (T_pref_i, w_i)",
+   "value_or_source": "两鱼种文献值",
+   "unit": "°C",
+   "source": "literature"
+  },
+  {
+   "id": "p2",
+   "name": "温度纬度梯度 g",
+   "value_or_source": "文献 0.5-1.0 °C/°lat，±30% 敏感性",
+   "unit": "°C/°lat",
+   "source": "literature"
+  },
+  {
+   "id": "p3",
+   "name": "升温速率 ΔT_rate",
+   "value_or_source": "IPCC 三情景",
+   "unit": "°C/yr",
+   "source": "literature"
+  },
+  {
+   "id": "p4",
+   "name": "作业半径 D_max",
+   "value_or_source": "小型渔船工程参数 ±20%",
+   "unit": "km",
+   "source": "literature"
+  },
+  {
+   "id": "p5",
+   "name": "远洋半径扩展系数 r_max 与成本系数",
+   "value_or_source": "策略机制（一阶）",
+   "unit": "1",
+   "source": "assumed"
+  },
+  {
+   "id": "p6",
+   "name": "领海边界纬度 B_border 与水域宽度 W_zone",
+   "value_or_source": "地理常量",
+   "unit": "°lat",
+   "source": "data"
+  }
+ ],
+ "constraints": [
+  {
+   "id": "C1",
+   "expression": "d_i_t ≤ D_max·(1+phi·r_max) 可捕；否则不可捕",
+   "rationale": "可达性硬约束（Q2 阈值判据的载体）"
+  },
+  {
+   "id": "C2",
+   "expression": "phi ∈ [0,1]",
+   "rationale": "策略比例"
+  },
+  {
+   "id": "C3",
+   "expression": "pi_i_t ∈ [0,1]",
+   "rationale": "比例量"
+  },
+  {
+   "id": "C4",
+   "expression": "适宜度截断：A_i(x,t) < ε 的海域不计入分布（生态位硬边界）",
+   "rationale": "分布预测的域一致性"
+  }
+ ],
+ "objective": [
+  {
+   "id": "O1",
+   "expression": "Q1 承载：分布 A_i(x,t) = f(T(x,t); p1) 的 50 年质心/前沿预测（两鱼种 × 三情景）",
+   "kind": "simulate",
+   "rationale": "对齐点 Q1"
+  },
+  {
+   "id": "O2",
+   "expression": "Q2 承载：T_exceed_i(情景) = min{t: d_i_t > D_max(1+phi·r_max)}，best/worst/likely 由 ΔT_rate 端点与中位生成",
+   "kind": "estimand",
+   "rationale": "对齐点 Q2"
+  },
+  {
+   "id": "O3",
+   "expression": "Q3 承载：策略集 {搬迁 s∈[0,1], 远洋 phi, 维持} × 三情景的有效捕捞量与成本差矩阵 + 盈亏平衡线",
+   "kind": "maximize",
+   "rationale": "对齐点 Q3a"
+  },
+  {
+   "id": "O4",
+   "expression": "Q4 承载：pi_i_t 进入有效捕捞量修正，回答跨界对提案的影响",
+   "kind": "estimand",
+   "rationale": "对齐点 Q4"
+  }
+ ],
+ "mechanism": [
+  {
+   "id": "M1",
+   "name": "温度场",
+   "equation": "T(x,t) = T(x,0) + ΔT_rate·t",
+   "derivation_notes": "p3 三情景"
+  },
+  {
+   "id": "M2",
+   "name": "热生态位分布",
+   "equation": "A_i(x,t) = exp(−(T(x,t)−T_pref_i)²/2w_i²)；分布中心 N_i_t = argmax A",
+   "derivation_notes": "p1；C4 截断"
+  },
+  {
+   "id": "M3",
+   "name": "可达性",
+   "equation": "d_i_t = d0_i + (N_i_t − N_i,0)·cos(theta_i)",
+   "derivation_notes": "港口几何投影"
+  },
+  {
+   "id": "M4",
+   "name": "策略成本-捕捞",
+   "equation": "有效捕捞 ∝ A∩(d ≤ D_max(1+phi·r_max))·(1−c·phi)；成本 = C0(1+c·phi) + 搬迁固定成本",
+   "derivation_notes": "p5；Q3 策略矩阵"
+  },
+  {
+   "id": "M5",
+   "name": "跨界比例",
+   "equation": "pi_i_t = clip((N_i_t − B_border)/W_zone, 0, 1)",
+   "derivation_notes": "p6；Q4 载体"
+  }
+ ],
+ "candidate_models": [
+  {
+   "model": "热生态位 + 等温线迁移（本框架）",
+   "pros": "四问同源、参数文献可标",
+   "cons": "无种群动态反馈"
+  },
+  {
+   "model": "SDM 物种分布模型",
+   "pros": "生态标准",
+   "cons": "需要 occurrence 数据（无）"
+  },
+  {
+   "model": "离散迁移决策模型",
+   "pros": "个体理性",
+   "cons": "过参数化无数据"
+  }
+ ],
+ "selected_model": "热生态位 + 等温线迁移 + 可达性/策略/跨界判据",
+ "selection_reason": "四问同源于 M1；升温速率三情景是唯一源不确定性并传播至 O2/O3/O4；全部参数文献锚定或显式情景",
+ "uncertainties": [
+  {
+   "source": "ΔT_rate（三情景）",
+   "handling": "propagated",
+   "effect": "O2 时间区间、O1 位置带"
+  },
+  {
+   "source": "g 梯度",
+   "handling": "propagated",
+   "effect": "位置 ±30% 区间"
+  },
+  {
+   "source": "D_max",
+   "handling": "scenario",
+   "effect": "T_exceed 阈值"
+  },
+  {
+   "source": "策略成本系数",
+   "handling": "scenario",
+   "effect": "Q3 盈亏平衡点"
+  }
+ ],
+ "sensitivity_plan": [
+  {
+   "parameter": "g",
+   "range": "±30%",
+   "metric": "N(t)/T_exceed"
+  },
+  {
+   "parameter": "D_max",
+   "range": "±20%",
+   "metric": "T_exceed"
+  },
+  {
+   "parameter": "phi",
+   "range": "0-1",
+   "metric": "捕捞-成本前沿"
+  },
+  {
+   "parameter": "ΔT_rate",
+   "range": "三情景端点",
+   "metric": "全部下游读数"
+  }
+ ]
+}

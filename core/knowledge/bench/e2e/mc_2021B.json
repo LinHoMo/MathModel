@@ -1,0 +1,38 @@
+{
+  "problem_id": "2021_B",
+  "version": 1,
+  "note": "无人机机队优化（火灾响应）（P13-3C-R5 预注册，建模前落盘）",
+  "questions": {
+    "ALL": {
+      "task_type": "",
+      "structural_required": {
+        "variables": "决策变量（SSA/中继无人机数量组合）",
+        "assumptions": "假设显式",
+        "capability_economics_tradeoff_model": "能力-安全-经济权衡模型（观测+通信任务+地形）",
+        "demand_scenario_adaptation": "火灾规模/频率参数化与十年演化适应（Q2）",
+        "repeater_placement_optimization": "中继无人机选址优化（地形/海拔，Q3）"
+      },
+      "alignment_points": [
+        "Q1: 最优数量与组合（能力/安全/经济平衡）",
+        "Q2: 极端火灾概率演化适应+成本投影",
+        "Q3: 中继无人机选址优化（不同火灾规模×地形）",
+        "Q4: 预算请求的模型支撑"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {
+    "structural": 1,
+    "mathematical": 1,
+    "alignment": 1
+  }
+}

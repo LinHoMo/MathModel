@@ -1,0 +1,60 @@
+{
+ "problem_id": "2023_B",
+ "problem_interpretation": "分区政策组合的评价框架：每个政策组合声称改善四类结局（生态保有率、居民收入、冲突率、长期趋势），框架的职责是让每个声称都有机制承载并可被排序比较——主张-支持逐条配对。",
+ "assumptions": [
+  {"id": "A1", "statement": "保护区分三区：核心区（禁入）、缓冲区（限游）、社区共管区（特许利用）；政策组合 = 三区措施向量", "justification": "Q1 分区政策的结构化"},
+  {"id": "A2", "statement": "人兽冲突率 = 重叠暴露 × 缓解效率：conf_z = p2·N_z·hum_z·(1−mit_z)，mit_z ∈ [0, mit_max) 且 mit_max < 1", "justification": "缓解效率有界的约束形式化（清单：松弛不得放松约束）"},
+  {"id": "A3", "statement": "居民收入变化 inc_z = α·ΔN_z − L_z + comp_z，补偿 comp_z 来自共管收益分配，受旅游收入预算约束 Σ comp_z ≤ β·V", "justification": "补偿机制的预算约束形式化"},
+  {"id": "A4", "statement": "长期预测的不确定性来自参数（繁殖率/冲突响应/旅游弹性）——三角分布情景传播，20 年趋势给置信带而非点线", "justification": "干预③：不确定性传播"}
+ ],
+ "variables": [
+  {"id": "N_z", "name": "分区野生动物密度", "description": "三区分别建模", "unit": "ind/km²", "role": "state", "domain": "≥0"},
+  {"id": "hum_z", "name": "分区人类活动强度", "description": "居民+游客活动", "unit": "人·km/日", "role": "input", "domain": "≥0"},
+  {"id": "conf_z", "name": "分区冲突率", "description": "负交互频率", "unit": "次/yr", "role": "derived", "domain": "≥0"},
+  {"id": "inc_z", "name": "分区居民收入变化", "description": "相对政策前基线", "unit": "%", "role": "derived", "domain": "可负"},
+  {"id": "mit_z", "name": "缓解投入强度", "description": "政策组合分量", "unit": "1", "role": "decision", "domain": "[0, mit_max)"},
+  {"id": "comp_z", "name": "社区补偿额", "description": "共管收益分配", "unit": "KES/yr", "role": "decision", "domain": "≥0"}
+ ],
+ "parameters": [
+  {"id": "p1", "name": "野生动物繁殖率", "value_or_source": "大型哺乳动物文献典型值", "unit": "1/yr", "source": "literature"},
+  {"id": "p2", "name": "冲突响应系数", "value_or_source": "情景（量纲 1/(ind·km²·日)）", "unit": "1/(ind·km²·日)", "source": "assumed"},
+  {"id": "p3", "name": "旅游弹性 α", "value_or_source": "情景", "unit": "KES/ind", "source": "assumed"},
+  {"id": "p4", "name": "补偿预算比例 β", "value_or_source": "旅游收入分成（情景 0.1-0.25）", "unit": "1", "source": "assumed"},
+  {"id": "p5", "name": "缓解投入上界 mit_max", "value_or_source": "政策可行性（<1 保证冲突不归零）", "unit": "1", "source": "assumed"},
+  {"id": "p6", "name": "AHP 准则权重向量", "value_or_source": "利益相关者偏好 + 扰动 ±0.1 稳健性", "unit": "1", "source": "assumed"}
+ ],
+ "constraints": [
+  {"id": "C1", "expression": "N_z ≥ 0 且 Σ_z comp_z ≤ β·V(pol)", "rationale": "补偿预算约束——补偿主张有资金承载"},
+  {"id": "C2", "expression": "mit_z ∈ [0, mit_max), mit_max < 1", "rationale": "缓解效率有界——政策压低冲突但不归零"},
+  {"id": "C3", "expression": "conf_z = p2·N_z·hum_z·(1−mit_z) ≥ 0", "rationale": "冲突机制与有界缓解一致"},
+  {"id": "C4", "expression": "排序准则权重 p6 显式声明并做 ±0.1 扰动稳健性", "rationale": "排序主张可审计"}
+ ],
+ "objective": [
+  {"id": "O1", "expression": "Q1 承载：分区政策向量 pol = (mit_z, comp_z) 的枚举空间 + 三区结局（N_z, conf_z, inc_z）", "kind": "simulate", "rationale": "对齐点 Q1 → 分区结构 A1"},
+  {"id": "O2", "expression": "Q2 承载：TOPSIS 排序于三准则（N_z 保有率、inc_z、conf_z），权重 p6 声明并扰动", "kind": "maximize", "rationale": "对齐点 Q2 → 排序方法学"},
+  {"id": "O3", "expression": "Q3 承载：最优组合 20 年蒙特卡洛趋势带（三角参数分布传播）+ 方法迁移说明（换保护区仅换参数）", "kind": "simulate", "rationale": "对齐点 Q3 → 长期预测与可迁移性"}
+ ],
+ "mechanism": [
+  {"id": "M1", "name": "分区野生动物动态", "equation": "dN_z/dt = p1·N_z·(1−N_z/K_z) − p2·hum_z·N_z·(1−mit_z)", "derivation_notes": "压力项受缓解调节（与 A2 一致）"},
+  {"id": "M2", "name": "冲突机制", "equation": "conf_z = p2·N_z·hum_z·(1−mit_z)", "derivation_notes": "C2/C3 的机制载体"},
+  {"id": "M3", "name": "经济机制", "equation": "inc_z = α·(N_z−N_z0)/N_z0 − L_z + comp_z，Σ comp_z ≤ β·V", "derivation_notes": "C1 预算约束的承载"},
+  {"id": "M4", "name": "TOPSIS 排序", "equation": "准则矩阵归一 → 加权（p6）→ 理想解距离排序", "derivation_notes": "Q2 排序方法学"}
+ ],
+ "candidate_models": [
+  {"model": "分区系统动力学 + TOPSIS（本框架）", "pros": "四类主张全部有机制承载", "cons": "参数情景化"},
+  {"model": "单种群情景对比", "pros": "最简", "cons": "无分区/无排序承载"},
+  {"model": "元胞自动机", "pros": "空间显式", "cons": "参数无法无数据标定"}
+ ],
+ "selected_model": "分区系统动力学 + TOPSIS + 蒙特卡洛趋势带",
+ "selection_reason": "主张-支持配对：Q1→分区结构、Q2→M4 排序、Q3→M1 蒙特卡洛带、经济→M3 预算约束；全部参数声明且约束有界",
+ "uncertainties": [
+  {"source": "p1/p2/p3 参数", "handling": "propagated", "effect": "三角分布 → 20 年置信带（O3）"},
+  {"source": "AHP 权重 p6", "handling": "propagated", "effect": "排序翻转计数"},
+  {"source": "政策组合空间", "handling": "scenario", "effect": "枚举"}
+ ],
+ "sensitivity_plan": [
+  {"parameter": "p1/p2/p3", "range": "±20% 三角分布", "metric": "20 年趋势带宽度"},
+  {"parameter": "p6 权重", "range": "±0.1 扰动", "metric": "TOPSIS 排序翻转次数"},
+  {"parameter": "β 预算比例", "range": "0.1-0.25", "metric": "最优政策组合变化"}
+ ]
+}
