@@ -14,6 +14,12 @@
 
 规则: 输入缺失的指标如实记 null（不臆造分数）；能从产物确定性计算的
 尽量计算。所有指标值域 0-100。
+
+Measurement Integrity（measurement metadata，不是第 9 项能力指标）:
+    provenance-based realization（v1）——回答"这个分数有多少是 agent
+    真实产物支撑的"。判据 v1 = created_by.startswith("agent")（本仓库
+    基线实验约定，不冻结为通用语义）；分子/分母全保留可审计；不计算
+    均值、不与 Capability 合并。
 """
 from __future__ import annotations
 
@@ -141,6 +147,8 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
                 "top3": [t for t in top3 if t], "hit": hit}
         if hits:
             method_value = round(100.0 * sum(hits) / len(hits), 1)
+        method_detail["distinct_chosen"] = len(
+            {(m.data or {}).get("card_id", "") for m in models})
 
     # 3 model correctness：来自 agent 对照 rubric 的评分（缺评分 → n/a）
     mc = response.get("model_correctness_pct")
@@ -227,15 +235,46 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
     }
 
 
+def _measurement_integrity(registry) -> dict:
+    """Provenance-based realization（v1，measurement metadata）。
+
+    回答"分数有多少由 agent 真实登记的产物支撑"，不是能力分数：
+    不求均值、不进能力总分。分子/分母全保留供审计。
+    """
+    agent = lambda a: str(getattr(a, "created_by", "") or "").startswith("agent")  # noqa: E731
+    agent_created = sum(1 for a in registry.all() if agent(a))
+    total = len(registry.all())
+
+    def ratio(art_type: str) -> dict:
+        arts = registry.list_by_type(art_type)
+        num = sum(1 for a in arts if agent(a))
+        den = len(arts)
+        return {"numerator": num, "denominator": den,
+                "value": round(100.0 * num / den, 1) if den else None}
+
+    return {
+        "criterion": "created_by startswith 'agent'（provenance-based, v1）",
+        "experiment_realization": ratio("experiment"),
+        "validation_realization": ratio("claim"),
+        "writing_realization": ratio("paper_section"),
+        "overall_real_artifact": {"numerator": agent_created,
+                                  "denominator": total,
+                                  "value": round(100.0 * agent_created / total, 1)
+                                  if total else None},
+    }
+
+
 def compute_e2e_metrics(project_dir: str | Path, gt: dict | None = None,
                         response: dict | None = None) -> dict:
-    """计算八项能力指标。返回可直接落盘的 JSON 兼容 dict。"""
+    """计算八项能力指标 + Measurement Integrity 仪表盘。"""
     pdir = Path(project_dir)
+    loaded = _load_project(pdir)
     report = {
         "mode": "e2e_metrics",
         "project": pdir.name,
         "computed_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
-        "metrics": _metrics(pdir, gt, response, _load_project(pdir)),
+        "metrics": _metrics(pdir, gt, response, loaded),
+        "measurement_integrity": _measurement_integrity(loaded["registry"]),
     }
     values = [m["value"] for m in report["metrics"].values()
               if m["value"] is not None]
@@ -243,7 +282,7 @@ def compute_e2e_metrics(project_dir: str | Path, gt: dict | None = None,
         "computed": len(values), "absent": 8 - len(values),
         "mean_of_available": round(sum(values) / len(values), 1)
         if values else None,
-    }
+    }   # summary 只覆盖 Capability；Measurement Integrity 不参与任何均值
     return report
 
 
@@ -267,6 +306,21 @@ def render_report(metrics_report: dict, problem_meta: dict | None = None) -> str
     lines.append(f"可计算指标 {s['computed']}/8，缺失 {s['absent']}（n/a 不计分），"
                  f"可得均值 **{s['mean_of_available']}**。")
     lines.append("")
+    mi = metrics_report.get("measurement_integrity")
+    if mi:
+        lines.append("### Measurement Integrity"
+                     "（measurement metadata，非能力分数，不并入均值）")
+        lines.append("")
+        lines.append(f"判据: {mi['criterion']}")
+        lines.append("")
+        lines.append("| 量 | 值 | 分子 / 分母 |")
+        lines.append("|---|---|---|")
+        for k in ("experiment_realization", "validation_realization",
+                  "writing_realization", "overall_real_artifact"):
+            v = mi[k]
+            val = "n/a" if v["value"] is None else f"{v['value']}%"
+            lines.append(f"| {k} | {val} | {v['numerator']} / {v['denominator']} |")
+        lines.append("")
     return "\n".join(lines)
 
 

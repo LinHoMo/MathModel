@@ -37,11 +37,22 @@ bench e2e metrics    八项指标重算落盘 work/e2e_metrics.json
 | end-to-end 最终成绩 | **71** | 分解：T1 21/25 + T2 22/25 + T4 13/15 + T5 8/10 + T6 7/10 + 论文 0/15 |
 | **可得均值** | **63.0**（7/8 可算） | |
 
-\* 口径披露：这两项由 V3 产物记账计算，其中确定性管线的占位产物与
-agent 真实产物共同计入（占位产物自带稳健性标签）；它们度量的是
-**证据链完整性与实验记账规范**，不是"实验做得对"——后者由 model
-correctness 与评委 rubric 承担。写作侧校验（fact_check / 引用 / 数值
-一致性）在论文缺席时不计入。
+\* 口径升级（2026-09-06，P13-0 后续）：这两项的 100 分由 **Measurement
+Integrity 仪表盘**（provenance-based realization v1，measurement metadata，
+非能力分数、不并入均值）监督——它回答"分数有多少由 agent 真实登记的产物
+支撑"：
+
+| 量 | 值 | 分子 / 分母 |
+|---|---|---|
+| experiment_realization | 50% | 4 / 8（R005-R008 真实 / 含管线占位 R001-R004） |
+| validation_realization | 50% | 4 / 8（C005-C008 真实 / 含占位 C001-C004） |
+| writing_realization | 0% | 0 / 20 |
+| overall_real_artifact | 17.1% | 12 / 70 |
+
+判据 v1 = `created_by.startswith("agent")`（本仓库基线实验约定，不冻结为
+通用语义）。**结论：63.0 的能力均值中，实验与验证两维各有一半由确定性
+管线的占位产物支撑——占位产物记账规范但不是 agent 的数学工作。** 论文侧
+校验（fact_check / 引用 / 数值一致性）在论文缺席时不计入。
 
 ## 3. 测量回路当场抓到的 bug（基线的第一次胜利）
 
