@@ -1,0 +1,56 @@
+{
+  "problem_id": "2024_A",
+  "problem_interpretation": "七鳃鳗性别比随资源可变的影响。本产物按消融臂 B1-C 构造：仅施加约束干预（约束形式化 + 变量域一致性 + 边界完备）——繁殖的两性瓶颈、性比有界、资源过程域一致全部形式化为约束/方程结构；对齐点映射与寄生者承载通道不在本臂干预范围。",
+  "assumptions": [
+    {"id": "A1", "statement": "两性种群分别建模，繁殖瓶颈由 min(F, κM) 决定（一雄可配多雌）", "justification": "有性繁殖约束的形式化"},
+    {"id": "A2", "statement": "出生性比 b(R) 有界：b ∈ [b_min, 1−b_min]，b_min > 0", "justification": "排除单性吸收态的约束形式化"},
+    {"id": "A3", "statement": "资源过程域一致：R(t) 的随机实现必须有下界保护（反射下界 R_min > 0）", "justification": "变量域一致性约束"}
+  ],
+  "variables": [
+    {"id": "F", "name": "雌性数量", "description": "雌性成体状态", "unit": "ind", "role": "state", "domain": "F ≥ 0"},
+    {"id": "M", "name": "雄性数量", "description": "雄性成体状态", "unit": "ind", "role": "state", "domain": "M ≥ 0"},
+    {"id": "R", "name": "资源指数", "description": "有界随机过程（反射下界）", "unit": "1", "role": "state", "domain": "R ≥ R_min > 0"},
+    {"id": "N", "name": "种群总规模", "description": "F + M", "unit": "ind", "role": "derived", "domain": "N ≥ 0"}
+  ],
+  "parameters": [
+    {"id": "p1", "name": "性比下界 b_min", "value_or_source": "约束常数（情景 0.1）", "unit": "1", "source": "assumed"},
+    {"id": "p2", "name": "配偶比 κ", "value_or_source": "约束常数（情景 3）", "unit": "1", "source": "assumed"},
+    {"id": "p3", "name": "资源下界 R_min", "value_or_source": "约束常数（情景 0.2）", "unit": "1", "source": "assumed"},
+    {"id": "p4", "name": "容纳量 K", "value_or_source": "情景设定", "unit": "ind", "source": "assumed"}
+  ],
+  "constraints": [
+    {"id": "C1", "expression": "b(R) ∈ [b_min, 1−b_min]（对一切资源实现）", "rationale": "性比有界——结构约束形式化"},
+    {"id": "C2", "expression": "出生项 = γ·b(R)·min(F, κM)·(1−N/K) ≥ 0，且 F=0 或 M=0 ⇒ 出生项 = 0", "rationale": "两性繁殖瓶颈的形式化（缺一不可）"},
+    {"id": "C3", "expression": "R(t) ≥ R_min（反射下界实现：R' = max(R_min, R0+φ(R−R0)+ε)）", "rationale": "变量域一致性——随机实现不得违反资源非负/正下界"},
+    {"id": "C4", "expression": "F, M ≥ 0（ births/deaths 结构保证）", "rationale": "种群非负"}
+  ],
+  "objective": [
+    {"id": "O1", "expression": "两性轨迹 (F(t), M(t)) 在性别比可变 vs 固定下的对比", "kind": "simulate", "rationale": "种群动态对比"}
+  ],
+  "mechanism": [
+    {"id": "M1", "name": "两性状态转移（含配偶瓶颈）",
+     "equation": "dF/dt = γ·b(R)·min(F, κM)·(1−N/K) − μF；dM/dt = γ·(1−b(R))·min(F, κM)·(1−N/K) − μM",
+     "derivation_notes": "瓶颈 min(F, κM) 即 C2 的机制载体"},
+    {"id": "M2", "name": "有界出生性比",
+     "equation": "b(R) = b_min + (1−2b_min)·σ(s(R−R0))",
+     "derivation_notes": "sigmoid 保证 C1 对一切 R 成立"},
+    {"id": "M3", "name": "域一致资源过程",
+     "equation": "R(t+1) = max(R_min, R0 + φ(R(t)−R0) + ε_t)，ε_t 有界或正态（经反射下界截断）",
+     "derivation_notes": "C3 的实现"}
+  ],
+  "candidate_models": [
+    {"model": "单种群 Logistic + 外生性比", "pros": "最简", "cons": "无法形式化两性瓶颈约束"},
+    {"model": "两性状态模型 + 有界性比 + 域一致资源过程（本模型）", "pros": "全部约束可形式化且机制载体明确", "cons": "参数增多"}
+  ],
+  "selected_model": "两性状态模型 + 有界性比 + 域一致资源过程",
+  "selection_reason": "约束干预优先：配偶瓶颈、性比有界、资源下界三类约束全部获得机制载体与形式化表达；生态耦合与稳定性分析不在本臂干预范围",
+  "uncertainties": [
+    {"source": "资源波动", "handling": "propagated", "effect": "有界随机过程进入轨迹"},
+    {"source": "性比机制强度 s", "handling": "scenario", "effect": "机制开/关对比"}
+  ],
+  "sensitivity_plan": [
+    {"parameter": "b_min", "range": "0.05-0.2", "metric": "轨迹方差"},
+    {"parameter": "κ", "range": "1-4", "metric": "雄性稀缺代价"},
+    {"parameter": "R_min", "range": "0.1-0.4", "metric": "灭绝边界"}
+  ]
+}

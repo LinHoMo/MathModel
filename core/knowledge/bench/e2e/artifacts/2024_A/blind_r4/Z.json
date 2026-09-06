@@ -1,0 +1,56 @@
+{
+  "problem_id": "2024_A",
+  "problem_interpretation": "七鳃鳗性别比随资源可变的影响：四问（生态冲击/种群得失/稳定性/寄生者）各自需要模型中的承载通道。本产物按消融臂 B1-A 构造：仅施加对齐干预（对齐点→承载变量/方程映射 + 参数全声明）。",
+  "assumptions": [
+    {"id": "A1", "statement": "种群按 Logistic 增长，容纳量 K 由资源决定", "justification": "标准种群动力学近似"},
+    {"id": "A2", "statement": "性别比 r 是资源可用性的函数，资源匮乏时雄性占比升高", "justification": "题面设定"},
+    {"id": "A3", "statement": "繁殖速率与雌性数量成正比", "justification": "有性繁殖常识"},
+    {"id": "A4", "statement": "成年七鳃鳗阶段营寄生生活，寄生者丰度与其宿主（七鳃鳗）密度正相关", "justification": "Q4 对齐所需承载通道（生物学常识）"}
+  ],
+  "variables": [
+    {"id": "N", "name": "七鳃鳗种群规模", "description": "湖/河中种群总量", "unit": "ind", "role": "state", "domain": "N ≥ 0"},
+    {"id": "r", "name": "雌性占比", "description": "性别比，资源的函数", "unit": "1", "role": "input", "domain": "0 ≤ r ≤ 1"},
+    {"id": "R", "name": "资源可用性指数", "description": "无量纲资源指数", "unit": "1", "role": "input", "domain": "R ≥ 0"},
+    {"id": "P", "name": "寄生者丰度", "description": "Q1/Q4 的生态耦合承载变量：以七鳃鳗为宿主的寄生种群", "unit": "ind", "role": "state", "domain": "P ≥ 0"}
+  ],
+  "parameters": [
+    {"id": "p1", "name": "内禀增长率 r_max", "value_or_source": "文献典型值 0.5-1.5 /yr", "unit": "1/yr", "source": "literature"},
+    {"id": "p2", "name": "容纳量 K", "value_or_source": "情景设定 1e5", "unit": "ind", "source": "assumed"},
+    {"id": "p3", "name": "性别比响应幅度 Δr", "value_or_source": "情景参数", "unit": "1", "source": "assumed"},
+    {"id": "p4", "name": "寄生耦合强度 γ_p", "value_or_source": "情景参数", "unit": "1/yr", "source": "assumed"},
+    {"id": "p5", "name": "寄生者死亡率 δ_P", "value_or_source": "情景参数", "unit": "1/yr", "source": "assumed"},
+    {"id": "p6", "name": "资源情景函数 s(t)", "value_or_source": "情景设定（方波/正弦）", "unit": "1", "source": "assumed"}
+  ],
+  "constraints": [
+    {"id": "C1", "expression": "0 ≤ r ≤ 1", "rationale": "比例量"}
+  ],
+  "objective": [
+    {"id": "O1", "expression": "Q1 承载：P(t) 与 N(t) 的联合轨迹对比（可变 vs 固定性比情景）——生态冲击经由寄生者丰度与宿主密度压力读出", "kind": "simulate", "rationale": "对齐点 Q1 → 变量 P/方程 M2"},
+    {"id": "O2", "expression": "Q2 承载：可变 vs 固定 r 情景下 N 的灭绝概率与规模方差对比", "kind": "estimand", "rationale": "对齐点 Q2 → O2 可测表述"},
+    {"id": "O3", "expression": "Q3 承载：均衡点 N*、r* 的局部稳定性（Jacobian 特征值实部符号）在两组情景下的对比", "kind": "estimand", "rationale": "对齐点 Q3 → 稳定性分析方法承载"},
+    {"id": "O4", "expression": "Q4 承载：寄生者获益判定 = P 的均衡丰度与方差在可变 vs 固定性比下的差异方向", "kind": "estimand", "rationale": "对齐点 Q4 → M2 方程"}
+  ],
+  "mechanism": [
+    {"id": "M1", "name": "Logistic 种群增长（性别比修正）",
+     "equation": "dN/dt = r_max · r(R) · N · (1 − N/K)",
+     "derivation_notes": "繁殖由雌性占比驱动；r(R) 情景函数形式未定（本臂不含该形式化干预）"},
+    {"id": "M2", "name": "寄生者耦合（Q1/Q4 承载方程）",
+     "equation": "dP/dt = γ_p · N · P − δ_P · P",
+     "derivation_notes": "寄生者增长率与宿主密度成正比；对齐点 Q1（生态冲击）与 Q4（寄生者获益）由本方程与 O1/O4 承载"}
+  ],
+  "candidate_models": [
+    {"model": "Logistic + 性别比情景 + 寄生者耦合通道", "pros": "四问均有承载", "cons": "性别比机制形式未定"},
+    {"model": "Lotka-Volterra 两物种耦合", "pros": "标准寄生-宿主型", "cons": "无数据标定难"}
+  ],
+  "selected_model": "Logistic + 性别比情景 + 寄生者耦合通道",
+  "selection_reason": "对齐优先：四问逐一指认承载变量与方程（Q1/Q4→M2 的 P，Q2→O2 情景对比，Q3→O3 特征值分析）；寄生者耦合是 Q1/Q4 的唯一承载通道，必须入模",
+  "uncertainties": [
+    {"source": "r(R) 函数形式未知", "handling": "scenario", "effect": "Δr 情景对比"},
+    {"source": "K 未知", "handling": "qualitative", "effect": "敏感性分析"}
+  ],
+  "sensitivity_plan": [
+    {"parameter": "r_max", "range": "±20%", "metric": "种群规模变化"},
+    {"parameter": "Δr", "range": "±0.1", "metric": "种群规模与寄生者丰度变化"},
+    {"parameter": "γ_p / δ_P", "range": "±20%", "metric": "寄生者均衡变化"}
+  ]
+}

@@ -93,14 +93,21 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
   **禁令（P13-3 生效）**：不碰 Cross-question synthesis / 新 Relation /
   新 IR / 新 Validator / 新 Artifact / Agent 数量扩张——P13-3 只在
   Brain / Knowledge / Evaluation 层工作。
-- **P13-3C Generalization & Comparative Benchmark（✅ 3 题三臂完成）**：
+- **P13-3C Generalization & Comparative Benchmark（✅ 三题三臂 + 消融完成）**：
   B0/MMA/B1 × 2024_A(机理)/2021_C(数据)/2022_B(优化) = 9 份 MODEL_ARTIFACT
   全部匿名盲评。**B1 mean 93.9 > MMA 83.9 > B0 50.0，三 regime 全胜**
   （H2 n=3 支持）；分维度：structural B1 满分、alignment B1 满分、
-  **mathematical 最平（B1 81.7 / B0 76.7 / MMA 73.3）**；B0 的失败签名
-  跨 regime 稳定（math 尚可 60-90，alignment 0-40 崩塌）。盲评三轮累计
-  抓到 B1 七项真缺陷（全部入清单 v2）。消融（B1-align/B1-constraint）
-  已预注册。详见 `P13_3C_REPORT.md`。
+  **mathematical 最平（B1 81.7 / B0 76.7 / MMA 73.3）**。详见
+  `P13_3C_REPORT.md`。
+- **P13-3C Round 4 消融（✅ 核心科学结论）**：B0/B1-A(仅对齐)/B1-C(仅约束)/
+  B1-F 全干预四臂 × 两题盲评。**H4a 被否定**：对齐干预单独施加时 math
+  暴跌（65→45、85→20）、major 缺陷反超基线——对齐映射扩大主张面而支持
+  纪律缺位时，每个新主张都是无支持主张（无生成通道的估计量、发散的新
+  耦合）。**交互效应确认**：B1-F = A 的对齐收益 + C 的纪律部分包含其损伤
+  （超可加 composite）。**Model Construction 分解 = Problem Alignment
+  （主张面）× Formal Consistency（支持面），缺一不可，先扩主张面后补
+  支持面 = 中间态更差**。缺陷计数指标启用（rubric score ≠ absolute
+  correctness）。
 - **P13-3D Model → Paper Conversion（待 P13-3C ≥3 题）**：三臂模型产物 →
   同一 Writer/模板/检查器 → 论文，测 Paper Conversion Efficiency（模型分 →
   论文分的转化率）；若外部系统模型弱但论文强，则识别并吸收其

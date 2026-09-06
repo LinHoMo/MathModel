@@ -1,0 +1,55 @@
+{
+  "problem_id": "2022_B",
+  "problem_interpretation": "两库调度的约束形式化产物（消融臂 B1-C）：水量守恒（含蒸发）、死水位边界、输水能力、需求平衡的显式短缺变量、发电最低水位、短缺优先级分层——全部约束化；对齐点映射与需求情景方程不在本臂干预范围。",
+  "assumptions": [
+    {"id": "A1", "statement": "Powell→Mead 单向输水，通过能力 Cap_pipe", "justification": "工程约束形式化所需"},
+    {"id": "A2", "statement": "月步长；蒸发为水位与表面积函数（显式建模，可关闭）", "justification": "水量守恒完整性"}
+  ],
+  "variables": [
+    {"id": "M_t", "name": "Mead 水位", "description": "状态", "unit": "ft", "role": "state", "domain": "[M_dead, M_max]"},
+    {"id": "P_t", "name": "Powell 水位", "description": "状态", "unit": "ft", "role": "state", "domain": "[P_dead, P_max]"},
+    {"id": "x_P,t", "name": "Powell 抽水量", "description": "决策", "unit": "acre-ft/月", "role": "decision", "domain": "[0, Cap_pipe]"},
+    {"id": "x_M,t", "name": "Mead 抽水量", "description": "决策", "unit": "acre-ft/月", "role": "decision", "domain": "≥0"},
+    {"id": "s_w,t", "name": "用水短缺", "description": "分层短缺变量", "unit": "acre-ft/月", "role": "derived", "domain": "≥0"},
+    {"id": "s_e,t", "name": "发电短缺", "description": "发电过水缺口", "unit": "acre-ft/月", "role": "derived", "domain": "≥0"},
+    {"id": "q_t", "name": "发电过流量", "description": "过水轮机流量", "unit": "acre-ft/月", "role": "decision", "domain": "≥0"}
+  ],
+  "parameters": [
+    {"id": "p1", "name": "容量曲线 V(·)", "value_or_source": "题面附表插值", "unit": "acre-ft", "source": "data"},
+    {"id": "p2", "name": "死水位 M_dead, P_dead 与上限", "value_or_source": "工程规范（约束边界）", "unit": "ft", "source": "data"},
+    {"id": "p3", "name": "输水能力 Cap_pipe", "value_or_source": "工程参数（约束上界）", "unit": "acre-ft/月", "source": "assumed"},
+    {"id": "p4", "name": "短缺优先级序", "value_or_source": "residential > industrial > agricultural（约束分层序）", "unit": "1", "source": "literature"},
+    {"id": "p5", "name": "最低发电水位约束值", "value_or_source": "工程规范", "unit": "ft", "source": "data"},
+    {"id": "p6", "name": "蒸发系数 e_0", "value_or_source": "湖泊蒸发文献值（情景开关）", "unit": "ft/月", "source": "literature"}
+  ],
+  "constraints": [
+    {"id": "C1", "expression": "V_P(t+1) = V_P(t) − x_P,t − E_P(t)；V_M(t+1) = V_M(t) + x_P,t − x_M,t − E_M(t)，E_·(t) = e_0·A_surf(·)（情景开关）", "rationale": "两库守恒 + 蒸发显式"},
+    {"id": "C2", "expression": "M_dead ≤ M_t ≤ M_max；P_dead ≤ P_t ≤ P_max", "rationale": "死水位/上限边界形式化"},
+    {"id": "C3", "expression": "x_M,t + s_w,t = D_w(t)；q_t + s_e,t = D_e(t)", "rationale": "需求平衡——短缺为显式变量"},
+    {"id": "C4", "expression": "0 ≤ x_P,t ≤ min(Cap_pipe, V_P(t) − V_P(P_dead))", "rationale": "输水能力 + 死水位以下不可抽取"},
+    {"id": "C5", "expression": "q_t ≤ x_M,t；P_t ≥ 最低发电水位约束值", "rationale": "发电过流不得超过实际可泄水量；最低发电水位形式化"},
+    {"id": "C6", "expression": "短缺分层：s_w,t = s_res + s_ind + s_agr，且 s_res > 0 ⇒ s_ind = s_agr = 其上限（字典序：低层未耗尽前高层不短缺）", "rationale": "Q3 优先级的约束形式化"}
+  ],
+  "objective": [
+    {"id": "O1", "expression": "逐期可行调度下 Σ_t s_w,t + s_e,t 最小", "kind": "minimize", "rationale": "约束框架内的总短缺最小化"}
+  ],
+  "mechanism": [
+    {"id": "M1", "name": "水位-库容", "equation": "V(·) 附表插值", "derivation_notes": "p1"},
+    {"id": "M2", "name": "守恒滚动（含蒸发）", "equation": "见 C1", "derivation_notes": "逐期"},
+    {"id": "M3", "name": "发电过流约束耦合", "equation": "q_t ≤ x_M,t 且水头条件由 C5 承载", "derivation_notes": "过机流量不得超过实际可泄水量"}
+  ],
+  "candidate_models": [
+    {"model": "约束形式化分层 LP（本产物）", "pros": "全部工程边界可执行", "cons": "准则声明与情景传播不在本臂"},
+    {"model": "无短缺显式变量的隐式 LP", "pros": "简单", "cons": "C3 类不可行情形无报告通道"}
+  ],
+  "selected_model": "约束形式化分层 LP",
+  "selection_reason": "约束干预优先：守恒（含蒸发）、死水位、输水能力、显式短缺、发电水位、优先级分层全部形式化；准则声明与需求情景不在本臂范围",
+  "uncertainties": [
+    {"source": "蒸发 e_0", "handling": "scenario", "effect": "开关对照"},
+    {"source": "Cap_pipe", "handling": "scenario", "effect": "可行域"}
+  ],
+  "sensitivity_plan": [
+    {"parameter": "e_0", "range": "0 vs 文献典型值", "metric": "总短缺"},
+    {"parameter": "Cap_pipe", "range": "±50%", "metric": "可行域与短缺频率"}
+  ]
+}

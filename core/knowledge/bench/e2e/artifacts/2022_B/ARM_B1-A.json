@@ -1,0 +1,58 @@
+{
+  "problem_id": "2022_B",
+  "problem_interpretation": "四问同源于两库调度框架。本产物按消融臂 B1-A 构造：仅施加对齐干预——四问逐一指认承载变量/目标/准则，全部参数（含工程常数）显式声明；约束形式化不在本臂干预范围。",
+  "assumptions": [
+    {"id": "A1", "statement": "Powell→Mead 单向输水", "justification": "题面工程设定"},
+    {"id": "A2", "statement": "月步长滚动", "justification": "离散化近似"},
+    {"id": "A3", "statement": "发电量 ∝ 过水流量 × 水头，水头由 Mead 水位决定", "justification": "水电常识（Q2 对齐所需承载）"}
+  ],
+  "variables": [
+    {"id": "M_t", "name": "Mead 水位", "description": "状态", "unit": "ft", "role": "state", "domain": "≥0"},
+    {"id": "P_t", "name": "Powell 水位", "description": "状态", "unit": "ft", "role": "state", "domain": "≥0"},
+    {"id": "x_P,t", "name": "Powell 期抽水量", "description": "Q1 决策承载变量", "unit": "acre-ft/月", "role": "decision", "domain": "≥0"},
+    {"id": "x_M,t", "name": "Mead 期抽水量", "description": "Q1 决策承载变量", "unit": "acre-ft/月", "role": "decision", "domain": "≥0"},
+    {"id": "short_t", "name": "第 t 期短缺量", "description": "Q3 承载变量：需求未满足部分", "unit": "acre-ft/月", "role": "derived", "domain": "≥0"},
+    {"id": "E_t", "name": "第 t 期发电量", "description": "Q2 承载变量", "unit": "MWh", "role": "derived", "domain": "≥0"}
+  ],
+  "parameters": [
+    {"id": "p1", "name": "容量曲线 V(·)", "value_or_source": "题面附表插值", "unit": "acre-ft", "source": "data"},
+    {"id": "p2", "name": "需求基线 D_w0, D_e0", "value_or_source": "题面给定", "unit": "acre-ft/yr", "source": "data"},
+    {"id": "p3", "name": "需求增长率 g_e（发电侧）", "value_or_source": "Q4 情景参数", "unit": "1/yr", "source": "assumed"},
+    {"id": "p4", "name": "发电效率 η 与水电转换系数", "value_or_source": "水电工程典型值", "unit": "1", "source": "literature"},
+    {"id": "p5", "name": "尾水位 H_tail", "value_or_source": "水轮机安装高程（工程参数）", "unit": "ft", "source": "literature"},
+    {"id": "p6", "name": "最低发电水位 H_min_power", "value_or_source": "工程规范", "unit": "ft", "source": "literature"},
+    {"id": "p7", "name": "用水-发电权衡权重 λ", "value_or_source": "决策者给定（帕累托扫描）", "unit": "1", "source": "assumed"},
+    {"id": "p8", "name": "短缺优先级序", "value_or_source": "residential > industrial > agricultural > hydropower（水法惯例）", "unit": "1", "source": "literature"}
+  ],
+  "constraints": [
+    {"id": "C1", "expression": "x_P + x_M + short_t = D_w + D_e", "rationale": "需求平衡（Q3 短缺放开后）"}
+  ],
+  "objective": [
+    {"id": "O1", "expression": "Q1 承载：x_P,t, x_M,t 决策 + T_exhaust = min{t: 任一库无法维持需求抽水} + ΔW = Σ short_t（维持需求所需累积补水）", "kind": "estimand", "rationale": "对齐点 Q1 三分量各自指认承载"},
+    {"id": "O2", "expression": "Q2 承载：显式准则 = 字典序（residential > industrial > agricultural > hydropower，见 p8）+ λ 加权连续化对照（min λ·缺水率 − (1−λ)·发电量）并给帕累托前沿", "kind": "minimize", "rationale": "对齐点 Q2 → O2/p7/p8"},
+    {"id": "O3", "expression": "Q3 承载：短缺处置政策 = 按 p8 优先级序逐层削减（agricultural 先于 industrial 先于 residential），发电转为缺口报告", "kind": "simulate", "rationale": "对齐点 Q3 → short_t/p8"},
+    {"id": "O4", "expression": "Q4 承载：D_w(t) = D_w0·(1+g)^t·(1−c)；D_e(t) = D_e0·(1+g_e)^t·(1−η_ren(t))——增长率/节水/可再生占比三参数的情景传播", "kind": "simulate", "rationale": "对齐点 Q4 → 情景方程"}
+  ],
+  "mechanism": [
+    {"id": "M1", "name": "水位-库容", "equation": "V(M_t), V(P_t) 由容量曲线插值", "derivation_notes": "p1"},
+    {"id": "M2", "name": "两库水量守恒", "equation": "V_P(t+1) = V_P(t) − x_P,t；V_M(t+1) = V_M(t) + x_P,t − x_M,t", "derivation_notes": "单向输水"},
+    {"id": "M3", "name": "发电-水位耦合", "equation": "E_t = η·ρ·g·H(M_t)·q_t，H(M_t) = M_t − H_tail", "derivation_notes": "p4/p5；水头衰减使用水与发电在低水位冲突（Q2 竞争的数学根源）"},
+    {"id": "M4", "name": "需求情景（Q4 承载）", "equation": "见 O4；可再生占比 η_ren(t) 削减 D_e", "derivation_notes": "p3/p7"}
+  ],
+  "candidate_models": [
+    {"model": "对齐映射调度框架（本产物）", "pros": "四问全部有承载", "cons": "约束形式化不在本臂"},
+    {"model": "动态规划", "pros": "非线性水头", "cons": "维数高"}
+  ],
+  "selected_model": "对齐映射调度框架（字典序 + λ 对照）",
+  "selection_reason": "Q2 要求显式准则——字典序声明即准则且可审计；四问逐一指认承载（Q1→O1 三分量、Q2→O2/p7/p8、Q3→O3/p8、Q4→O4/M4）；全部工程常数（H_tail/H_min_power/g_e/λ/优先级序）显式声明",
+  "uncertainties": [
+    {"source": "需求增长 g / g_e", "handling": "propagated", "effect": "Q4 情景传播"},
+    {"source": "可再生占比 η_ren(t)", "handling": "propagated", "effect": "D_e 下降 → 短缺缓解"},
+    {"source": "蒸发损失", "handling": "ignored", "effect": "本臂未建模（约束形式化不在干预范围）"}
+  ],
+  "sensitivity_plan": [
+    {"parameter": "λ", "range": "0-1 扫描", "metric": "帕累托前沿"},
+    {"parameter": "g", "range": "−2% 至 +3%/yr", "metric": "T_exhaust 曲面"},
+    {"parameter": "η_ren", "range": "初始值至 50%", "metric": "短缺缓解"}
+  ]
+}
