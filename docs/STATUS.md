@@ -1,40 +1,57 @@
 # 项目状态
 
-> 本文件由对齐流程维护；数字由 `core/tools/metrics.py` 自动注入。
+> 更新：2026-09-06（P12 收口 + 方向修正落地）。架构治理见
+> `docs/architecture/THREE_LAYER_ARCHITECTURE.md`。
 
-## V3.1 迁移（2026-09-04 完成）
+## 当前定位
 
-| 阶段 | 状态 | Commit |
-|---|---|---|
-| 审计轮 1-3（基线 + V3.1 架构 + 迁移映射） | ✅ 完成 | `1140e96` |
-| V3-P0 Artifact Layer（Stable ID / Contract / Lifecycle / Registry） | ✅ 完成 | `a97991e` |
-| V3-P1 State + Evidence Graph + Workflow DAG + Legacy 双向转换 | ✅ 完成 | `e5c3049` |
-| V3-P2 Knowledge 层（16 方法卡 / 10 失败记忆 / 6 模式 / Decision Log） | ✅ 完成 | `3087cb0` |
-| V3-P3 Modeling 层（5 Roles / MethodArena / Evidence Gate E1-E8） | ✅ 完成 | `4df9cc7` |
-| V3-P4 Writing 层（ResearchDirector / Projection / 四态 Judge）+ catalog v5 | ✅ 完成 | `4487cd8` |
-| V3-P5 收尾（目录重构 / orchestrator 默认 V3 / 回归测试 / 最终审计） | ✅ 完成 | 本次提交 |
+**数模 Agent**：给一道赛题 → Agent 理解问题 → 找方法 → 建模 → 实验 →
+比较 → 验证 → 写出论文。全部资产归位三层：
 
-测试：**542 passed / 10 skipped / 1 pre-existing fail**（V2 基线 382 → 净增 +160）。
-详见 `docs/architecture/V3_FINAL_AUDIT.md` 与 `V3_IMPLEMENTATION_REPORT.md`。
+- **Agent Brain**（29 agent 指令 + 知识层）——研发主战场（P13–P17）；
+- **Research Runtime**（`core/runtime/`，P6–P12 产物）——**已冻结**；
+- **Guardrails**（validators + gates + 评分链）——**已冻结**（仅修 bug）。
 
-## 阶段完成度（V2 改进计划，早于 V3 迁移）
+新工作准入走三问门禁（Q1 能力 / Q2 可靠性 / Q3 仅内部语义 → 仅 Q3 不做）；
+能力进步以基线 Δscore 度量（八项指标，见 `bench e2e`），不再以
+"新增契约/测试数量"度量。
 
-| 阶段 | 状态 | Commit |
-|---|---|---|
-| P0 诚信基线（gate 接入 + manifest + metrics + aggregate） | ✅ 完成 | `5967940` |
-| P1 国赛复盘基准（rubric 22 年 + bench 4 命令 + MMBench + 时序回顾） | ✅ 完成 | `d147bda` |
-| P2 引用可信（citation_check + citation schema） | ✅ 完成 | `9b3c77a` |
-| P3 交付物与图表（figure template + 配色常量 + diagram_gen） | ⚠️ 部分（在 v1/v2 阶段已完成图表模板、配色、diagram_gen.py） | — |
-| P4 知识与方法层（HMML 注册 + lazy loading + MCM 2026 规则） | ⏳ 待补 | — |
-| P5 定位重写（数字一致性 + README 命令对齐） | 🔄 进行中 | — |
+## 阶段历史
 
-## 当前数字（由 metrics.py 自动注入）
+| 阶段 | 内容 | 状态 | 锚点 |
+|---|---|---|---|
+| V2 P0–P5 | 诚信基线 / rubric / 引用 / 图表 / 知识层 / 定位 | ✅ | `5967940`… |
+| V3.1 迁移 | Artifact / Evidence Graph / DAG / Knowledge / Modeling / Writing | ✅ | `1140e96`…`4487cd8` |
+| P6 | Runtime Execution（RuntimeSession / 失效传播 / resume） | ✅ | `938227c` |
+| P7 | Runtime Integrity & Contract Freeze（rerun/recompute/审计） | ✅ | `4fbea67` |
+| P8 | Competition Intelligence（方法卡检索进入决策） | ✅ | `258ea02`… |
+| P9 / P9.5 | Research Quality + 红队 | ✅ | `530cd93`… |
+| P10 | Paper Intelligence（Finding Graph / Narrative IR） | ✅ | `97d7e7c`… |
+| P11 | Scientific Writing（Expression Contract / ParagraphPlan / 红队 W1–W15） | ✅ | `bfd1e84`… |
+| P12 | Cross-Question：P12-0 审计 → P12-1 依赖 → P12-2 关系 → **P12-3-lite 上下文 → 全阶段冻结** | ✅ 收口 | `856d369`/`92b9efa`/`0302228` |
 
-运行 `python core/tools/metrics.py --write` 获取最新数字，或查看 docs/METRICS.md。
+P12 取消项：P12-7/8/9/10（见 `CROSS_QUESTION_SYNTHESIS_CONTRACT.md` 不做清单）。
+
+## 当前数字
+
+- 测试：**751 passed / 11 skipped**（`python -m pytest tests -q`）；
+- `core/tools/validate.py`：**57/57 通过**；
+- 测试数量自此仅用于守住冻结层不回归，**不作为进度度量**。
+
+## 下一步（Capability Roadmap，见 `docs/architecture/CAPABILITY_ROADMAP_P13_P17.md`）
+
+1. **基线已建立（2026-09-06）**：MMBench 2000_C 首跑，8 项指标 7 项可算、
+   可得均值 63.0 → 见 `BASELINE_REPORT.md`；此后所有能力改动以 Δscore 验收；
+2. P13 数学推理底座：按基线 backlog 顺序攻关（问题语义接入 → 方法卡扩充
+   → 论文生成 → 创新模式消费），exit criteria = ≥5 题基线且至少一项指标
+   +10 个百分点；
+3. P14 模型构建 → P15 实验智能 → P16 竞赛策略 → P17 全量测评。
 
 ## 风险与待办
 
-- **V3 下一步**：WaveExecutor 实装（orchestrator V3 从干跑转实际执行）；修复 test_delivery_gates AI 披露 1 个 pre-existing fail；metrics.py 历史基线死引用清理
-- P4 HMML 注册需在 methodology/INDEX.md 中加 HMML 条目（当前 methodology 共 53 篇）
-- P5 ARCHITECTURE 与 STATUS 文档需要与 AGENTS.md 统一措辞（避免"评委评分"与"bench 复盘"概念混淆）
-- P3 diagram_gen.py 已被增强，但 SVG 渲染需要 matplotlib（可选依赖）
+- CUMCM 22 份 rubric 中 13 份 `reference_results` 为空——**不凭记忆伪造
+  GT**；诚实补齐方式是每实际解出一题回填一份（见 BASELINE_REPORT §6）；
+- 完整 CUMCM 题面语料未导入（现有仅题名索引 + 1 份合成示例）；
+- 基线暴露的三个 backlog：问题语义未接入选型、方法卡缺种群动力学家族、
+  创新模式卡未被管线消费（详见 BASELINE_REPORT §4/§5）；
+- `docs/IMPROVEMENT_PLAN.md` 为 V2 时代文档，仅存档不再维护。

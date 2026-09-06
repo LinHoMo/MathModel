@@ -119,6 +119,18 @@ V3 关键入口：
 
 V3 架构细节见 `docs/architecture/V3.1_ARCHITECTURE.md`，迁移映射见 `docs/architecture/V3_MIGRATION_MAP.md`，最终审计见 `docs/architecture/V3_FINAL_AUDIT.md`。
 
+## 三层架构与方向门禁（2026-09-06 起，治理级）
+
+项目自 P12 收口起按三层治理（全文见 `docs/architecture/THREE_LAYER_ARCHITECTURE.md`）：
+
+- **Agent Brain**（29 agent 指令 + 知识层）= 研发主战场（P13–P17）；
+- **Research Runtime**（`core/runtime/`，P6–P12 全部契约）= **冻结**（change-by-exception；P12 不做清单见 `CROSS_QUESTION_SYNTHESIS_CONTRACT.md`）；
+- **Guardrails**（validators + gates + 评分链）= **冻结**（仅修 bug）。
+
+**三问门禁**——任何新阶段/能力 PR 先答：Q1 提升解题能力？Q2 提升可靠性？Q3 仅内部语义更严谨？→ **仅 Q3 成立则不做**。
+
+**Δscore 判据**——能力 PR 必须回答"相比 `BASELINE_REPORT.md` 哪个指标提升了"；只加 行数/tests/contracts 而八项指标无 Δ = 无能力进步。路线图见 `CAPABILITY_ROADMAP_P13_P17.md`。
+
 ## 项目结构
 
 ```
