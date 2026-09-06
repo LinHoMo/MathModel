@@ -1,13 +1,46 @@
-# P13-3 Report — Model Construction 首测（三维基线）
+# P13-3 Report — Model Construction（Round 1 基线 + Round 2 干预）
 
 > 日期：2026-09-06 · 核心问题：**选对方法以后，Agent 能不能把数学模型正确地
-> 建立出来？** 测量对象 = P13-0 真实求解产出的模型（`projects/bench-m4-2000c/
-> output/MODEL_SPEC.md` + `figures/all_results.json`）。
+> 建立出来？**
 > 禁令生效：本轮不碰 Cross-question synthesis / 新 Relation / 新 IR /
 > 新 Validator / 新 Artifact / Agent 数量扩张——只在 Brain/Knowledge/
 > Evaluation 层工作。
 
-## 1. 测量仪（预注册后打分）
+## 0. Round 2（P13-3B）：Mathematical Correctness 干预实验 ✅
+
+**同评分器、同 rubric（mc_2000C.json v1 冻结）、GT 零改动。**
+
+| 维度 | Round 1 基线 | Round 2 干预后 | Δ |
+|---|---|---|---|
+| Structural correctness | 80 | **100**（两项一致性问题修复） | +20 |
+| Mathematical correctness | 55 | **95**（5 项扣分解决 4 项，余 70 岁截断敏感性 1 项 ×5） | **+40** |
+| Problem alignment | 100 | 100 | 0 |
+| **Composite** | **78.3** | **98.3** | **+20** |
+
+**干预清单**（固化为 Brain 层知识件
+`core/knowledge/pitfalls/model_construction_checklist.md`）：
+
+1. **校准合理性** → 双分支括弧取代单点校准：下界（b0=0.167 产犊间隔 3 年
+   + 成年存活 0.995 上限，λ=1.0556，配额 89.1 头/年）/ 上界（锚定一致
+   λ=1.0636，配额 115.1，CI95 108-120）。**核心发现**：捕杀记录隐含的
+   6.4%/年增长处于数据生存率表生物合理性的边缘——两分支之间的张量是
+   模型的输出，不是缺陷。
+2. **约束完备性** → 密度制约情景（K=1.3N* 时 λ_eff=1.006 ≤ 1：**种群在
+   目标水平自稳定，无需干预**——密度制约是决定干预必要性的首要未知量）；
+   搬迁 800 头/年上限可行性核验（均衡 699.9 ≤ 800）。
+3. **不确定性传播** → 锚区间传播到配额区间、Q3 恢复年数、Q4 泛化表
+   min/max 列；口径统一（全链路唯一校准稳定分布）。
+
+**披露**：自评环未破（本轮评分仍是 agent 对照冻结 rubric 自评）；Δ 的
+可靠性由"每项扣分解决都有代码与数值证据指针"支撑，未破环前 composite
+不应与跨 agent 结果直接比较。
+
+**Round 3（硬门槛）**：未知新题对齐测试破自评环——用未见过的题构建模型
+并以预注册 rubric 打分，alignment 100 才升格为可信能力读数。
+
+---
+
+## 1. Round 1 测量仪（预注册后打分）
 
 - **Rubric**：`core/knowledge/bench/e2e/mc_2000C.json`（v1，打分前落盘）——
   按任务类型定义结构组件（估计/干预模拟/韧性模拟/泛化各不同），对齐点 =

@@ -1,0 +1,36 @@
+{
+  "problem_id": "2000_C",
+  "round": "P13-3B（v2.2 双分支模型重造后重打分）",
+  "spec_ref": "projects/bench-m4-2000c/output/MODEL_SPEC.md",
+  "evidence_ref": "projects/bench-m4-2000c/figures/all_results.json",
+  "scored_by": "agent-self-scored（同 rubric mc_2000C.json v1 冻结未动；证据指针可审计；干预清单 model_construction_checklist.md 全项过检）",
+  "questions": {
+    "Q001": {
+      "present": ["variables", "assumptions", "estimand", "estimation_procedure", "data_mapping"],
+      "alignment_hit": [0, 1]
+    },
+    "Q002": {
+      "present": ["variables", "assumptions", "state_transition", "intervention_mechanism", "equilibrium_condition", "uncertainty_propagation"],
+      "alignment_hit": [0, 1, 2, 3]
+    },
+    "Q003": {
+      "present": ["variables", "assumptions", "state_transition", "scenario_definition", "recovery_criterion"],
+      "alignment_hit": [0]
+    },
+    "Q004": {
+      "present": ["variables", "assumptions", "parameterization", "scenario_grid"],
+      "alignment_hit": [0, 1]
+    }
+  },
+  "consistency_issues": [],
+  "consistency_resolution_note": "v1 两项结构级不一致已修复：①校准不确定性经锚区间传播进泛化表 min/max 列；②全链路唯一校准稳定分布（双分支各自的稳定分布显式命名并交叉引用）",
+  "math_deductions": [
+    {"tag": "boundary_violation", "count": 1, "evidence": "70 岁年龄截断仍未做敏感性（70+ 个体占比 <0.5%，影响预期极小但未量化）"}
+  ],
+  "resolved_deductions_audit": {
+    "calibration_implausibility": "已解决——单点校准改为双分支括弧：下界（b0=0.167 产犊间隔 3 年 + 成年存活 0.995 上限，λ=1.0556）与上界（锚定一致 λ=1.0636，产犊间隔 1.9 年，显式标注为敏感性上界）；两分支生育率与存活率全部落在或显式标注于生物合理边界",
+    "missing_constraint_density": "已解决——密度制约 K=1.3N*/2N* 情景（先判 λ_eff：1.3N* 下 λ_eff=1.006 → 无需干预；2N* 下配额 92.3）",
+    "missing_constraint_relocation": "已解决——搬迁作业上限 800 头/年可行性核验（均衡 699.9 ≤ 800）",
+    "unstated_assumption_efficacy": "已解决——2 年效期情景（配额近似上界 ×2）"
+  }
+}

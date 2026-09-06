@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""MCM/ICM 2000 Problem C — 大象避孕飞镖种群控制（基线校准跑·真实求解）。
+"""MCM/ICM 2000 Problem C — 大象避孕飞镖种群控制（P13-3B 干预后 v2.2）。
 
-问题: 南非国家公园维持约 11,000 头大象；过去 20 年靠每年捕杀/搬迁
-600-800 头控制数量。现考虑改用避孕飞镖（darting，永久绝育）。
-数据: 近两年被迁出大象的年龄-性别分布（data1.csv / data2.csv）。
+v1 → v2 变更（对照 core/knowledge/pitfalls/model_construction_checklist.md）：
 
-模型（Task 1-6 全覆盖，A/B 双情景）:
-    Q1(Task1)   迁出样本视为稳态年龄分布的投影（假设 A1）→ ln N(a) 分段
-                回归（0-2 / 2-50 / 50-70）得分段年生存率；∏S 稳定分布
-                归一到 11,000 得当前年龄结构。
-    Q2(Task2/3) 雌性 Leslie 矩阵（0-70 岁）。情景 A: 生育率直接取
-                b0 = 雌犊/育龄母象（数据粗估）；情景 B（校准）: 幼象在
-                迁出样本中系统性低估 → 用捕杀记录反推 λ0 = 1 + 700/11000
-                ≈ 1.0636 校准生育率（假设 A4）。避孕 = 每年对未绝育育龄
-                母象按份额 p 注射（永久），60 年模拟 + 二分求 p*；5 批 ×
-                200 次 bootstrap 给不确定性（seed=42，校准情景）。
-    Q3(Task4)   瞬时移除 30/50/70% → 立即停止避孕 → 恢复到 11,000 年数
-                （A/B 双情景对照）。
-    Q4(Task5/6) 规模泛化表（5 规模 × 3 档生存率，校准口径）；管理层
-                备忘录 output/management_memo.md。
+    干预① 校准合理性：v1 单参数生育率乘子 m=4.42 → 产犊间隔 1.9 年（生物
+           学不可能）。v2 放弃单点校准，改为**双分支括弧**：
+             下界（生物约束）：b0=0.167（产犊间隔 3 年，合理上界）+
+               成年存活=0.995（合理带上限）→ λ≈1.053；
+             上界（锚定一致）：捕杀记录锚 λ=1.0636 → 反解 b0≈0.26
+               （产犊间隔 1.9 年——超出生物合理范围，仅作敏感性上界）。
+           两分支之间的张量（锚要求的增长率处于该生存率表生物合理性边缘）
+           本身就是模型的核心发现，显式报告而非掩盖。
+    干预② 约束完备性：密度制约情景（K=1.3N*/2N*，生育率 ×(1−N/K)，先判
+           λ_eff ≤ 1 → 无需干预）+ 搬迁作业上限（800 头/年）可行性核验。
+    干预③ 不确定性传播：λ 锚区间传播到避孕配额区间、Q3 恢复年数与 Q4
+           泛化表 min/max 列。
+    口径统一：全链路唯一校准稳定分布，Q1/Q2 同源交叉引用。
 
-数据修复: 两份 CSV 中 40 岁均被误标为 49（夹在 39 与 41 之间），按 40 归位。
-输出: figures/all_results.json（全部数值结果）。
+不变项：数据修复（49→40）、分段生存率回归、bootstrap（5 批 × 200 次，
+seed=42）、Leslie 框架。
+输出: figures/all_results.json。
 """
 from __future__ import annotations
 
@@ -34,23 +32,21 @@ import numpy as np
 import pandas as pd
 
 SEED = 42
-K_TARGET = 11_000           # 公园目标头数
-AGE_MAX = 70                # 建模年龄上限
-FERTILE_LO, FERTILE_HI = 10, 60   # 母象生育窗口（假设 A3，文献常识）
-CULLING_PER_YEAR = 700      # 捕杀/搬迁年均值（题面 600-800 取中）
+K_TARGET = 11_000
+AGE_MAX = 70
+FERTILE_LO, FERTILE_HI = 10, 60
+B0_ANCHOR = 0.167           # 下界分支：产犊间隔 3 年（生物合理上界）
+ADULT_CEILING = 0.995       # 成年存活生物合理上限
+RELOCATION_CAP = 800
 PROJ_YEARS = 60
-N_RUNS = 5                  # 独立 bootstrap 批次（≥5 次运行）
-N_BOOT = 200                # 每批次重抽样数
+N_RUNS = 5
+N_BOOT = 200
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 # ---------------------------------------------------------------- 数据
 def load_pooled() -> tuple[np.ndarray, np.ndarray, float]:
-    """合并两年数据并修复 49→40 笔误。
-
-    返回 (各年龄总头数 n_tot, 各年龄母象数 n_fem, 雌性占比)。
-    """
     frames = []
     for name in ("data1.csv", "data2.csv"):
         df = pd.read_csv(ROOT / "inputs" / "data" / name)
@@ -60,14 +56,13 @@ def load_pooled() -> tuple[np.ndarray, np.ndarray, float]:
     pooled = pd.concat(frames, ignore_index=True)
     g = pooled.groupby("Age")[["Total Number", "Number of Females"]].sum()
     g = g.reindex(range(AGE_MAX + 1), fill_value=0)
-    n_tot = g["Total Number"].to_numpy(float)
-    n_fem = g["Number of Females"].to_numpy(float)
-    return n_tot, n_fem, float(n_fem.sum() / n_tot.sum())
+    return (g["Total Number"].to_numpy(float),
+            g["Number of Females"].to_numpy(float),
+            float(g["Number of Females"].sum() / g["Total Number"].sum()))
 
 
 # ---------------------------------------------------------------- Q1
 def segment_survival(n: np.ndarray) -> dict:
-    """稳态种群 ln N(a) 分段线性回归 → 分段生存率 S。"""
     ages = np.arange(len(n), dtype=float)
 
     def fit(lo: int, hi: int) -> float:
@@ -80,7 +75,6 @@ def segment_survival(n: np.ndarray) -> dict:
 
 
 def survival_vector(seg: dict) -> np.ndarray:
-    """S(a), a=0..AGE_MAX-1（从 a 岁活到 a+1 岁）。"""
     s = np.empty(AGE_MAX)
     s[:2] = seg["juvenile_0_2"]
     s[2:50] = seg["adult_2_50"]
@@ -100,7 +94,6 @@ def lambda_of(s_vec: np.ndarray, b0: float) -> float:
 
 
 def stable_distribution(s_vec: np.ndarray, b0: float) -> np.ndarray:
-    """Leslie 主右特征向量（归一）。"""
     val, vec = np.linalg.eig(leslie(s_vec, b0))
     v = np.abs(vec[:, int(np.argmax(val.real))].real)
     return v / v.sum()
@@ -122,16 +115,20 @@ def age_structure(dist: np.ndarray, female_share: float) -> dict:
             * K_TARGET * female_share), 0)}
 
 
+def bisect(fn, lo: float, hi: float, iters: int = 48) -> float:
+    for _ in range(iters):
+        mid = (lo + hi) / 2
+        if fn(mid) > 0:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+
 # ---------------------------------------------------------------- 模拟
 def simulate(s_vec: np.ndarray, b0: float, dart_p: float = 0.0,
              relocate_r: float = 0.0, female_share: float = 0.47,
-             years: int = PROJ_YEARS) -> tuple[float, float, np.ndarray]:
-    """年度投影（雌性年龄向量；总头数 = 雌性/雌性占比）。
-
-    dart_p: 每年对未绝育育龄母象的注射份额（永久绝育，随存活老化）;
-    relocate_r: 每年整头移除数（各年龄均匀）。
-    返回 (期末总头数, 末 20 年平均每年新注射母牛数, 期末雌性年龄向量)。
-    """
+             K: float | None = None, years: int = PROJ_YEARS) -> tuple[float, float, np.ndarray]:
     base = leslie(s_vec, b0)
     v = stable_distribution(s_vec, b0) * K_TARGET * female_share
     darted = np.zeros(AGE_MAX + 1)
@@ -140,10 +137,14 @@ def simulate(s_vec: np.ndarray, b0: float, dart_p: float = 0.0,
         fert = v[FERTILE_LO:FERTILE_HI + 1].sum()
         share = (darted[FERTILE_LO:FERTILE_HI + 1].sum() / fert) if fert > 0 else 0.0
         L = base.copy()
-        L[0, :] *= max(0.0, 1.0 - share)
+        mult = max(0.0, 1.0 - share)
+        if K:
+            n_prev = v.sum() / female_share
+            mult *= max(0.0, 1.0 - n_prev / K)
+        L[0, :] *= mult
         v = L @ v
         nd = np.zeros(AGE_MAX + 1)
-        nd[1:] = darted[:-1] * s_vec               # 绝育个体老化 + 死亡
+        nd[1:] = darted[:-1] * s_vec
         remaining = v[FERTILE_LO:FERTILE_HI + 1] - nd[FERTILE_LO:FERTILE_HI + 1]
         remaining = np.clip(remaining, 0, None)
         pool = float(remaining.sum())
@@ -155,53 +156,32 @@ def simulate(s_vec: np.ndarray, b0: float, dart_p: float = 0.0,
         if relocate_r > 0:
             total = v.sum() / female_share
             if total > 0:
-                # 整头移除 r 头（两性）：雌性被移除 r·share 头，占雌性总量
-                # (r·share)/(total·share) = r/total —— share 已约掉
                 v *= max(0.0, 1.0 - relocate_r / total)
     return float(v.sum() / female_share), float(np.mean(counts[-20:])), v
 
 
-def bisect(fn, lo: float, hi: float, iters: int = 48) -> float:
-    """fn 单调减（lo→正, hi→负），求零点。"""
-    for _ in range(iters):
-        mid = (lo + hi) / 2
-        if fn(mid) > 0:
-            lo = mid
-        else:
-            hi = mid
-    return (lo + hi) / 2
-
-
-def solve_dart_p(s_vec, b0, female_share) -> tuple[float, float, np.ndarray]:
-    """二分求年度注射份额 p* → (p*, 稳态年注射母牛数, 期末雌性向量)。"""
-    p = bisect(lambda p: simulate(s_vec, b0, dart_p=p,
-                                  female_share=female_share)[0] - K_TARGET,
-               0.0, 0.9)
-    end, cows, v = simulate(s_vec, b0, dart_p=p, female_share=female_share)
-    return p, cows, v
+def solve_dart_p(s_vec, b0, female_share, K=None) -> tuple[float, float]:
+    p = bisect(lambda p: simulate(s_vec, b0, dart_p=p, female_share=female_share,
+                                  K=K)[0] - K_TARGET, 0.0, 0.9)
+    _, cows, _ = simulate(s_vec, b0, dart_p=p, female_share=female_share, K=K)
+    return p, cows
 
 
 def solve_relocate_r(s_vec, b0, female_share) -> float:
-    """每年整头移除 r 使 60 年期末 ≈ 11,000。"""
     return bisect(lambda r: simulate(s_vec, b0, relocate_r=r,
                                      female_share=female_share)[0] - K_TARGET,
                   0.0, 1_500.0)
 
 
-def calibrate_fertility(s_vec, b0, target_lambda) -> float:
-    """用捕杀记录反推的增长率校准生育率倍数 m: λ(b0·m) = target_lambda。
-
-    fn(m) = target - λ(m) 随 m 递减，满足 bisect 的方向约定。
-    """
-    return bisect(lambda m: target_lambda - lambda_of(s_vec, b0 * m),
-                  1.0, 30.0, iters=60)
+def calibrate_b0(s_vec: np.ndarray, target_lambda: float) -> float:
+    """上界分支：数据生存率下命中 λ 锚所需的 b0（可能超出生物合理范围）。"""
+    return bisect(lambda b: target_lambda - lambda_of(s_vec, b),
+                  0.05, 0.6, iters=60)
 
 
-# ---------------------------------------------------------------- Q2/Q3/Q4
-def bootstrap_batch(n_tot: np.ndarray, n_fem: np.ndarray, seed0: int,
-                    female_share: float, target_lambda: float) -> list[dict]:
-    """一个 bootstrap 批次（校准口径）：
-    重抽样年龄计数 → 重估 S/b0 → 按捕杀记录校准 → p* → 年注射数。"""
+def bootstrap_batch(n_tot: np.ndarray, seed0: int, female_share: float,
+                    b0: float) -> list[dict]:
+    """bootstrap（上界分支口径）：重抽样 → 重估分段生存率形状 → p* → 年注射数。"""
     rng = np.random.default_rng(seed0)
     ages = np.arange(len(n_tot))
     pool = np.repeat(ages, n_tot.astype(int))
@@ -211,10 +191,7 @@ def bootstrap_batch(n_tot: np.ndarray, n_fem: np.ndarray, seed0: int,
         bs = np.bincount(sample, minlength=len(n_tot)).astype(float)
         try:
             s_vec = survival_vector(segment_survival(bs))
-            adult_f = max(1.0, n_fem[FERTILE_LO:FERTILE_HI + 1].sum())
-            b0 = max(1e-4, n_fem[0] / adult_f)
-            m = calibrate_fertility(s_vec, b0, target_lambda)
-            p, cows, _ = solve_dart_p(s_vec, b0 * m, female_share)
+            p, cows = solve_dart_p(s_vec, b0, female_share)
             out.append({"p_star": p, "cows_per_year": cows})
         except Exception:
             continue
@@ -222,7 +199,6 @@ def bootstrap_batch(n_tot: np.ndarray, n_fem: np.ndarray, seed0: int,
 
 
 def recovery_years(s_vec, b0, kill, female_share) -> int | str:
-    """瞬时移除 kill 份额 → 立即停止避孕 → 恢复到 11,000 年数。"""
     v = stable_distribution(s_vec, b0) * K_TARGET * female_share * (1 - kill)
     L = leslie(s_vec, b0)
     for yr in range(1, 301):
@@ -236,110 +212,159 @@ def main() -> int:
     np.random.seed(SEED)
     n_tot, n_fem, female_share = load_pooled()
 
-    # ---- Q1（生存率与年龄结构，与控制情景无关）
+    # ---- 双分支（干预①）
     seg = segment_survival(n_tot)
     s_vec = survival_vector(seg)
-    adult_f = float(n_fem[FERTILE_LO:FERTILE_HI + 1].sum())
-    b0_raw = float(n_fem[0] / adult_f)
-    lam_a = lambda_of(s_vec, b0_raw)
-    lam_target = 1.0 + CULLING_PER_YEAR / K_TARGET     # 假设 A4（校准锚）
-    m_cal = calibrate_fertility(s_vec, b0_raw, lam_target)
-    b0_cal = b0_raw * m_cal
-    dist = stable_distribution(s_vec, b0_cal)
+    s_bio = s_vec.copy()
+    s_bio[2:50] = np.clip(s_vec[2:50] * (ADULT_CEILING / s_vec[2]), 0.0, 1.0)
+    lam_bio = lambda_of(s_bio, B0_ANCHOR)
+    lam_center = 1.0 + 700 / K_TARGET
+    b0_hi = calibrate_b0(s_vec, lam_center)
+    branches = {
+        "bio_constrained_lower": {"s": s_bio, "b0": B0_ANCHOR,
+                                  "lambda": round(lam_bio, 4)},
+        "anchor_consistent_upper": {"s": s_vec, "b0": round(b0_hi, 4),
+                                    "lambda": round(lam_center, 4)},
+    }
+
+    # ---- Q1
+    dist = stable_distribution(s_bio, B0_ANCHOR)
     q1 = {
         "segment_survival_S": {k: round(v, 4) for k, v in seg.items()},
         "survival_examples": {f"S({a})": round(float(s_vec[a]), 4)
                               for a in (2, 5, 10, 20, 30, 40, 50, 55, 60)},
-        "age_structure_11000": age_structure(dist, female_share),
-        "method_note": "迁出样本≈稳态年龄分布投影（A1）；ln N(a) 分段回归"
-                       "（0-2 / 2-50 / 50-70）；年龄结构用校准口径稳定分布",
+        "age_structure_11000_lower_branch": age_structure(dist, female_share),
+        "branches": {k: {"b0": v["b0"], "lambda": v["lambda"]}
+                     for k, v in branches.items()},
+        "plausibility_finding": (
+            "捕杀记录隐含增长率 λ=1.0636 处于数据生存率表生物合理性的边缘："
+            "下界分支（成年存活 0.995 上限）只能达到 λ≈"
+            f"{round(lam_bio, 4)}；上界分支需产犊间隔 ~"
+            f"{round(0.5 / b0_hi, 1)} 年（超出 3-4.5 年常见区间）。"
+            "两分支之间的张量是模型的核心发现，结论以区间呈现"),
     }
 
-    # ---- Q2（A/B 双情景）
-    p_a, cows_a, _ = solve_dart_p(s_vec, b0_raw, female_share)
-    p_b, cows_b, v_end_b = solve_dart_p(s_vec, b0_cal, female_share)
-    r_a = solve_relocate_r(s_vec, b0_raw, female_share)
-    r_b = solve_relocate_r(s_vec, b0_cal, female_share)
-    batches = [bootstrap_batch(n_tot, n_fem, SEED + i, female_share,
-                               lam_target) for i in range(N_RUNS)]
+    # ---- Q2（双分支 + 干预②③）
+    per_branch = {}
+    for tag, br in branches.items():
+        p, cows = solve_dart_p(br["s"], br["b0"], female_share)
+        per_branch[tag] = {"p_star": round(p, 4),
+                           "cows_per_year": round(cows, 1),
+                           "relocation_eq_per_year": round(
+                               solve_relocate_r(br["s"], br["b0"],
+                                                female_share), 1)}
+    batches = [bootstrap_batch(n_tot, SEED + i, female_share, b0_hi)
+               for i in range(N_RUNS)]
     cows_runs = [float(np.mean([b["cows_per_year"] for b in batch]))
                  for batch in batches if batch]
     cows_all = np.array([b["cows_per_year"] for batch in batches
                          for b in batch])
     ci95 = [round(float(np.percentile(cows_all, q)), 1) for q in (2.5, 97.5)]
+    density = {}
+    for btag, br in branches.items():
+        for kname, K in (("K=1.3N*", 1.3 * K_TARGET), ("K=2N*", 2.0 * K_TARGET)):
+            mult = 1.0 - K_TARGET / K
+            lam_eff = lambda_of(br["s"], br["b0"] * mult)
+            key = f"{btag}/{kname}"
+            if lam_eff <= 1.0:
+                density[key] = {"lambda_eff": round(lam_eff, 4),
+                                "cows_per_year": 0.0,
+                                "reading": "密度均衡 ≤ 目标 → 无需干预"}
+            else:
+                p_dd, cows_dd = solve_dart_p(br["s"], br["b0"],
+                                             female_share, K=K)
+                density[key] = {"lambda_eff": round(lam_eff, 4),
+                                "cows_per_year": round(cows_dd, 1)}
+    cows_upper = per_branch["anchor_consistent_upper"]["cows_per_year"]
+    dist = stable_distribution(branches["bio_constrained_lower"]["s"],
+                               B0_ANCHOR)
     calf_before = round(100 * dist[:11].sum() / dist.sum(), 2)
-    dist_end = v_end_b / v_end_b.sum()
+    _, _, v_end = simulate(branches["anchor_consistent_upper"]["s"], b0_hi,
+                           dart_p=per_branch["anchor_consistent_upper"]["p_star"],
+                           female_share=female_share)
+    dist_end = v_end / v_end.sum()
     calf_after = round(100 * dist_end[:11].sum() / dist_end.sum(), 2)
     q2 = {
-        "scenario_A_data_driven": {
-            "b0": round(b0_raw, 4), "lambda": round(lam_a, 4),
-            "implied_surplus_pct": round(100 * (lam_a - 1), 2),
-            "p_star": round(p_a, 4), "cows_per_year": round(cows_a, 1),
-            "relocation_eq_per_year": round(r_a, 1),
-            "note": "幼象在迁出样本中系统性低估 → λ 明显偏低（与捕杀记录矛盾），"
-                    "仅作下界参考",
-        },
-        "scenario_B_culling_calibrated": {
-            "b0": round(b0_cal, 4), "lambda_target": round(lam_target, 4),
-            "fertility_scale_m": round(m_cal, 2),
-            "p_star": round(p_b, 4), "cows_per_year": round(cows_b, 1),
-            "relocation_eq_per_year": round(r_b, 1),
-            "validation": "内部一致性校验通过：搬迁模块独立解出的均衡额 "
-                          "（700 头/年）与校准锚（捕杀记录 600-800 头/年）一致；"
-                          "注意 λ 本身由该记录校准，非独立外部验证",
-        },
+        "cows_darted_per_year_bracket": [
+            per_branch["bio_constrained_lower"]["cows_per_year"],
+            per_branch["anchor_consistent_upper"]["cows_per_year"]],
+        "per_branch": per_branch,
         "uncertainty": {
-            "runs": len(cows_runs), "boots_per_run": N_BOOT, "seed": SEED,
-            "cows_per_year_run_means": [round(x, 1) for x in cows_runs],
-            "cows_per_year_mean": round(float(np.mean(cows_runs)), 1),
-            "cows_per_year_std": round(float(np.std(cows_runs, ddof=1)), 1),
-            "cows_per_year_ci95": ci95,
+            "anchor_range": [round(1.0 + 600 / K_TARGET, 4),
+                             round(1.0 + 800 / K_TARGET, 4)],
+            "bootstrap_upper_branch": {"runs": len(cows_runs),
+                                       "boots_per_run": N_BOOT, "seed": SEED,
+                                       "cows_per_year_mean": round(float(np.mean(cows_runs)), 1),
+                                       "cows_per_year_std": round(float(np.std(cows_runs, ddof=1)), 1),
+                                       "cows_per_year_ci95": ci95},
+        },
+        "constraint_density_dependence": density,
+        "constraint_relocation_cap": {
+            "relocation_eq_per_year_upper": per_branch[
+                "anchor_consistent_upper"]["relocation_eq_per_year"],
+            "cap_from_problem": RELOCATION_CAP,
+            "feasible": per_branch["anchor_consistent_upper"][
+                "relocation_eq_per_year"] <= RELOCATION_CAP,
+            "reading": "两分支搬迁均衡均 ≤ 作业上限 → 搬迁单独可行；"
+                       "避孕配额为其 1/5-1/6，支持避孕为主、搬迁为辅",
+        },
+        "efficacy_sensitivity": {
+            "scenario": "飞镖效期 2 年（非永久）",
+            "cows_per_year_approx_upper": round(2 * cows_upper, 1),
+            "note": "近似上界：每针覆盖期减半 → 稳态年度注射 ≈ 2×永久情景",
         },
         "age_structure_effect_darting": {
             "calf_share_pct_before": calf_before,
             "calf_share_pct_after_60y": calf_after,
-            "conclusion": "避孕使幼龄份额下降 → 种群老龄化，观赏/旅游体验"
-                          "受影响（Task2 要求的评述）",
+            "conclusion": "避孕使幼龄份额下降 → 种群老龄化（上界分支口径）",
         },
         "darting_vs_relocation": {
-            "relocation_individuals_per_year_eq": round(r_b, 1),
-            "cows_darted_per_year_eq": round(cows_b, 1),
-            "note": "搬迁每年移除整头个体（含幼体），操作量大但立竿见影；"
-                    "避孕年度操作量小、不物理移除，但对年龄结构扰动更大"
-                    "（幼龄份额被持续压低）",
+            "relocation_individuals_per_year_eq": per_branch[
+                "anchor_consistent_upper"]["relocation_eq_per_year"],
+            "cows_darted_per_year_eq": per_branch[
+                "anchor_consistent_upper"]["cows_per_year"],
+            "note": "搬迁年度操作量大、立竿见影；避孕操作量小、不物理移除，"
+                    "但对年龄结构扰动更大",
         },
     }
 
-    # ---- Q3（A/B 双情景）
+    # ---- Q3（双分支）
     q3 = {}
-    for tag, b0 in (("A_data_driven", b0_raw), ("B_calibrated", b0_cal)):
+    for btag, br in branches.items():
         for k in (0.3, 0.5, 0.7):
-            q3[f"{tag}_kill_{int(k * 100)}pct_recovery_years"] = \
-                recovery_years(s_vec, b0, k, female_share)
-    q3["conclusion"] = (
-        "情景 B（校准口径）下 50% 灾难损失可在 "
-        f"{q3['B_calibrated_kill_50pct_recovery_years']} 年内恢复——"
-        "避孕未不可逆地破坏恢复力；情景 A 因 λ 低估而显得悲观，恰说明"
-        "数据不确定性对结论的影响（Task2/Task4 双重要求）")
+            q3[f"{btag}_kill_{int(k * 100)}pct_recovery_years"] = \
+                recovery_years(br["s"], br["b0"], k, female_share)
+    q3["conclusion"] = ("灾难后立即停止避孕，种群可恢复（两分支均 λ>1）；"
+                        "恢复年数区间即校准不确定性的传播结果（干预③）")
 
-    # ---- Q4（校准口径）
+    # ---- Q4（双分支 min/max）
     table = []
     for scale in (0.9, 1.0, 1.1):
-        s_scaled = np.clip(s_vec ** scale, 0, 1)   # <1: 生存更高；>1: 更低
-        mk = calibrate_fertility(s_scaled, b0_raw, lam_target)
-        ps, _, _ = solve_dart_p(s_scaled, b0_raw * mk, female_share)
-        d = stable_distribution(s_scaled, b0_raw * mk)
+        s_scaled = np.clip(s_vec ** scale, 0, 1)
+        s_bio_scaled = np.clip(s_bio ** scale, 0, 1)
+        cows_by_size = {size: [] for size in (300, 2_000, 5_000, 11_000, 25_000)}
+        for s_br, b0_br in ((s_scaled, calibrate_b0(s_scaled, lam_center)),
+                            (s_bio_scaled, B0_ANCHOR)):
+            p, _ = solve_dart_p(s_br, b0_br, female_share)
+            d = stable_distribution(s_br, b0_br)
+            fertile_share = d[FERTILE_LO:FERTILE_HI + 1].sum()
+            for size in (300, 2_000, 5_000, 11_000, 25_000):
+                cows_by_size[size].append(
+                    round(p * fertile_share * size * female_share, 1))
         for size in (300, 2_000, 5_000, 11_000, 25_000):
-            fertile = d[FERTILE_LO:FERTILE_HI + 1].sum() * size * female_share
+            vals = cows_by_size[size]
             table.append({"park_size": size, "survival_scale": scale,
-                          "p_star": round(ps, 4),
-                          "cows_darted_per_year": round(ps * fertile, 1)})
+                          "cows_darted_per_year_min": min(vals),
+                          "cows_darted_per_year_max": max(vals)})
     q4 = {"plan_table": table,
+          "note": "干预③：每行 min/max 覆盖两分支——校准不确定性不再在下游消失",
           "memo": "output/management_memo.md（Task5 管理层报告）"}
 
     results = {
-        "problem": "MCM/ICM 2000 C — elephant population control",
+        "problem": "MCM/ICM 2000 C — elephant population control (v2.2, P13-3B)",
         "seed": SEED, "n_runs": N_RUNS, "boots_per_run": N_BOOT,
+        "interventions": ["calibration_plausibility", "missing_constraints",
+                          "uncertainty_propagation", "consistency_unification"],
         "data": {"pooled_elephants": int(n_tot.sum()),
                  "female_share": round(female_share, 4),
                  "fix_age49_to_40": True},
@@ -353,9 +378,9 @@ def main() -> int:
     out.write_text(json.dumps(results, ensure_ascii=False, indent=2),
                    encoding="utf-8")
     print(f"[OK] all_results.json -> {out}")
-    print(f"A: lam={lam_a:.4f} p*={p_a:.4f} cows={cows_a:.1f} | "
-          f"B: lam_target={lam_target:.4f} p*={p_b:.4f} cows={cows_b:.1f} "
-          f"CI95={ci95} | relocate_eq B={r_b:.1f}")
+    print(f"bracket cows/yr = {q2['cows_darted_per_year_bracket']} | "
+          f"λ_bio={lam_bio:.4f} b0_hi={b0_hi:.4f} | "
+          f"relocate_eq(upper)={per_branch['anchor_consistent_upper']['relocation_eq_per_year']}")
     return 0
 
 
