@@ -1,0 +1,79 @@
+{
+  "problem_id": "2000_C",
+  "version": 1,
+  "note": "P13-3 Model Construction 三独立测量 rubric（预注册于基线打分前）。结构组件按任务类型定义（估计/干预模拟/韧性模拟/泛化），对齐点 = 题目要求到模型元素的强制映射。",
+  "questions": {
+    "Q001": {
+      "task_type": "estimation",
+      "structural_required": {
+        "variables": "量与符号定义（生存率 S_a、年龄分布 N(a)）",
+        "assumptions": "假设显式陈述",
+        "estimand": "被估量明确（2-60 岁生存率）",
+        "estimation_procedure": "估计方程（稳态投影下的 ln N(a) 分段回归）",
+        "data_mapping": "数据到模型输入的映射（含数据缺陷处理）"
+      },
+      "alignment_points": [
+        "Task1: 估计 2-60 岁生存率",
+        "Task1: 推测当前年龄结构"
+      ]
+    },
+    "Q002": {
+      "task_type": "intervention_simulation",
+      "structural_required": {
+        "variables": "量与符号定义（Leslie 矩阵、b0、p*）",
+        "assumptions": "假设显式陈述（含避孕机制 A5）",
+        "state_transition": "状态转移方程（年龄结构年度投影）",
+        "intervention_mechanism": "干预机制在模型中的表达（永久绝育份额 p）",
+        "equilibrium_condition": "均衡/目标条件（期末头数回到 11,000）",
+        "uncertainty_propagation": "不确定性传播机制（bootstrap）"
+      },
+      "alignment_points": [
+        "Task2: 维持 11,000 头的年度避孕母牛数",
+        "Task2: 数据不确定性对估计的影响",
+        "Task2: 年龄结构变化与游客影响",
+        "Task3: 避孕与搬迁的权衡"
+      ]
+    },
+    "Q003": {
+      "task_type": "resilience_simulation",
+      "structural_required": {
+        "variables": "量与符号定义",
+        "assumptions": "假设显式陈述（停止避孕=满生育）",
+        "state_transition": "状态转移方程",
+        "scenario_definition": "灾难情景定义（30/50/70% 瞬时损失）",
+        "recovery_criterion": "恢复判据（总头数 ≥ 11,000）"
+      },
+      "alignment_points": [
+        "Task4: 灾难性损失后种群恢复能力评估"
+      ]
+    },
+    "Q004": {
+      "task_type": "generalization",
+      "structural_required": {
+        "variables": "量与符号定义",
+        "assumptions": "假设显式陈述",
+        "parameterization": "公园规模与生存率差异的参数化",
+        "scenario_grid": "方案情景网格（5 规模 × 3 生存档）"
+      },
+      "alignment_points": [
+        "Task6: 不同规模公园（300-25,000）飞镖方案",
+        "Task5: 管理层报告的模型支撑"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {
+    "structural": 1,
+    "mathematical": 1,
+    "alignment": 1
+  }
+}
