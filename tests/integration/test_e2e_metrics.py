@@ -63,3 +63,12 @@ def test_overall_real_artifact(tmp_path):
     mi = report["measurement_integrity"]["overall_real_artifact"]
     assert mi["numerator"] == 3 and mi["denominator"] > mi["numerator"]
     assert mi["value"] == round(100.0 * mi["numerator"] / mi["denominator"], 1)
+
+
+def test_method_hit_compact_canonicalization():
+    """P13-2：GT 串与卡族连写 token 的归一化伪影修复（统一规则，非单题特判）。"""
+    em = importlib.import_module("e2e_metrics")
+    names = {"mc-arima": "ARIMA 差分整合移动平均自回归 classical_timeseries"}
+    assert em._method_hit(["mc-arima"], names, ["time series"]) is True
+    assert em._method_hit(["mc-topsis"], {"mc-topsis": "TOPSIS evaluation"},
+                          ["time series"]) is False

@@ -63,12 +63,21 @@ def _norm(text: str) -> str:
 
 def _method_hit(candidate_ids: list[str], card_names: dict[str, str],
                 gt_methods: list[str]) -> bool:
-    """top-k 候选与金标准方法做归一化包含匹配（双向）。"""
+    """top-k 候选与金标准方法做归一化包含匹配（双向）。
+
+    P13-2：在空格规整外增加**紧凑匹配**（去空格后包含）——修复 GT 串
+    "time series" 永远无法命中卡族 classical_timeseries 这类连写 token 的
+    归一化伪影。紧凑匹配统一适用于所有 GT 与卡（非针对单题）。
+    """
     gts = [_norm(g) for g in gt_methods if _norm(g)]
+    gts_compact = [g.replace(" ", "") for g in gts]
     for cid in candidate_ids:
         hay = " ".join(filter(None, {_norm(cid), _norm(card_names.get(cid, ""))}))
-        for gt in gts:
+        hay_compact = hay.replace(" ", "")
+        for gt, gt_c in zip(gts, gts_compact):
             if gt and (gt in hay or hay in gt):
+                return True
+            if gt_c and (gt_c in hay_compact or hay_compact in gt_c):
                 return True
     return False
 

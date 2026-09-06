@@ -1,0 +1,13 @@
+{
+  "case": "reverse_evaluation",
+  "features": {
+    "problem_title": "反向检查 — 多方案综合评价排序（评价类任务）",
+    "problem_types": ["evaluation", "ranking", "weighting"],
+    "has_data": false,
+    "time_series": false,
+    "objectives": 1,
+    "uncertainty": false
+  },
+  "gt": ["ahp", "topsis"],
+  "note": "反向选择检查：语义再平衡后，评价类问题的正确答案（AHP/TOPSIS）必须仍然 top-1。GT = 方法卡 canonical id。"
+}

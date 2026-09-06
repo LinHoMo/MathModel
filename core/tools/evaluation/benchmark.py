@@ -415,8 +415,11 @@ def e2e_run(problem_id: str, project: str, questions: list[str],
         if "_error" in prof:
             report["steps"]["profile"] = f"FAIL: {prof['_error']}"
             return report
-        features = prof
+        # 兼容两种输入：纯 profile DTO，或消融 case 文件（features 内嵌）
+        features = prof.get("features", prof) if isinstance(prof, dict) else {}
         report["steps"]["profile"] = "PASS"
+        report["profile_keys"] = sorted(k for k in features
+                                        if k != "per_question")
     try:
         meta = e2e_prepare(problem_id, project, competition)
         report["steps"]["prepare"] = "PASS"

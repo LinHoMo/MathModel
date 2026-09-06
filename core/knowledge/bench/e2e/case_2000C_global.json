@@ -1,0 +1,14 @@
+{
+  "case": "2000C_global",
+  "features": {
+    "problem_title": "MCM/ICM 2000 C — 大象避孕飞镖种群控制",
+    "problem_types": ["simulation", "uncertainty", "prediction", "optimization", "fitting"],
+    "has_data": true,
+    "sample_size": "large",
+    "time_series": false,
+    "objectives": 1,
+    "uncertainty": true
+  },
+  "gt": ["leslie matrix", "age-structured population model", "survival estimation", "bootstrap", "monte carlo", "sensitivity analysis"],
+  "note": "GT 冻结自基线 e2e_gt.json（P13-0），先于 P13-2 实验存在。"
+}

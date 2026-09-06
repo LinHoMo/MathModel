@@ -1,0 +1,14 @@
+{
+  "case": "2023C_global",
+  "features": {
+    "problem_title": "MCM/ICM 2023 C — Wordle 报告数与结果分布预测",
+    "problem_types": ["prediction", "timeseries", "uncertainty"],
+    "has_data": true,
+    "sample_size": "medium",
+    "time_series": true,
+    "objectives": 1,
+    "uncertainty": true
+  },
+  "gt": ["time series", "trend analysis", "prediction interval"],
+  "note": "GT 于 P13-2 实验前预注册：Task1（报告数变化解释 + 2023-03-01 预测区间）的公认方法族为时间序列/趋势建模；时间序列 = canonical family（对应 classical_timeseries 卡族）。"
+}

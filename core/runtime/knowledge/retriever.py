@@ -5,7 +5,9 @@ objectives / uncertainty），输出排序后的决策建议包：候选方法�
 必做验证 + 关联失败记忆 + 关联创新模式。
 
 打分规则（全部显式、可测试）:
-    problem_types 交集     每命中 +3
+    problem_types 交集     每命中 +6（P13-2 语义证据 ×2：消融证明 +3 时类型
+                           命中被质量维度净抵消、语义正确卡无法进入 top-1；
+                           两题消融 + 反向检查验证，见 P13_2_REPORT.md）
     requires_data 矛盾     无数据却要数据 → 排除
     sample_size 不兼容     样本档不在卡兼容集 → 排除（未知样本档不排除）
     time_series 匹配       相同 +1 / 相反 -4（纯时序方法不得进入非时序问题；null 卡不参与）
@@ -182,7 +184,11 @@ class KnowledgeRetriever:
 
             overlap = pts & set(card.problem_types)
             if overlap:
-                score += 3 * len(overlap)
+                # P13-2 例外登记（THREE_LAYER §3）：语义类型证据 ×2（3→6）。
+                # 消融证据：+3 时类型命中被质量维度净抵消（MC +9 vs -16），
+                # 语义正确卡进不了 top-1；×2 后 2000C top-1 修复、2023C 与
+                # 评价类反向检查零回退（ranking_ablation.py 可复现）。
+                score += 6 * len(overlap)
                 matched.append(f"问题类型命中: {', '.join(sorted(overlap))}")
 
             if card.requires_data and has_data is False:
