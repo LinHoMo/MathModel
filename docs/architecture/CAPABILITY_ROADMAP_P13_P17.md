@@ -93,14 +93,14 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
   **禁令（P13-3 生效）**：不碰 Cross-question synthesis / 新 Relation /
   新 IR / 新 Validator / 新 Artifact / Agent 数量扩张——P13-3 只在
   Brain / Knowledge / Evaluation 层工作。
-- **P13-3C Generalization & Comparative Benchmark（进行中，pilot ✅）**：
-  三臂对照（B0 原始核心 / MMA=MathModelAgent Modeler 提示词同 LLM 忠实
-  执行 / B1=P13-3B 核心）× 未见题（2024_A/2021_C/2022_B，题型覆盖），
-  只评 MODEL_ARTIFACT v1（`core/schemas/model_artifact.schema.json` 冻结），
-  匿名化 + 独立评委盲评。**Pilot（2024_A）：B1 96.7 > MMA 83.3 > B0 55.7**
-  ——H2 迁移性成立、H3 三维同步成立；盲评抓到自评漏掉的两个 B1 缺陷
-  （→ 清单 v2）。2021_C/2022_B 待跑，≥3 题齐后出统计性结论。详见
-  `P13_3C_REPORT.md`。
+- **P13-3C Generalization & Comparative Benchmark（✅ 3 题三臂完成）**：
+  B0/MMA/B1 × 2024_A(机理)/2021_C(数据)/2022_B(优化) = 9 份 MODEL_ARTIFACT
+  全部匿名盲评。**B1 mean 93.9 > MMA 83.9 > B0 50.0，三 regime 全胜**
+  （H2 n=3 支持）；分维度：structural B1 满分、alignment B1 满分、
+  **mathematical 最平（B1 81.7 / B0 76.7 / MMA 73.3）**；B0 的失败签名
+  跨 regime 稳定（math 尚可 60-90，alignment 0-40 崩塌）。盲评三轮累计
+  抓到 B1 七项真缺陷（全部入清单 v2）。消融（B1-align/B1-constraint）
+  已预注册。详见 `P13_3C_REPORT.md`。
 - **P13-3D Model → Paper Conversion（待 P13-3C ≥3 题）**：三臂模型产物 →
   同一 Writer/模板/检查器 → 论文，测 Paper Conversion Efficiency（模型分 →
   论文分的转化率）；若外部系统模型弱但论文强，则识别并吸收其
