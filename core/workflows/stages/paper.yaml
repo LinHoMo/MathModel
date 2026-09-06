@@ -8,7 +8,7 @@ nodes:
     type: reasoning
     role: writer
     description: 从 Evidence Graph 提炼研究叙事（Research Story），产出 N artifacts
-    depends_on: [evidence_gate]
+    depends_on: [quality_evaluation]
     outputs: [state/registry.json]
   paper_projection:
     type: projection

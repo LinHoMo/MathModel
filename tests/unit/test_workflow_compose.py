@@ -84,13 +84,16 @@ class TestComposer:
         assert "problem_analysis" in dag.nodes["literature_search"].depends_on
         assert "literature_search" in dag.nodes["model_selection"].depends_on
         assert "assumption_check" in dag.nodes["experiment_design"].depends_on
-        assert "evidence_gate" in dag.nodes["research_direction"].depends_on
+        # P9: quality_evaluation 插入 evidence_gate 与 research_direction 之间
+        assert "quality_evaluation" in dag.nodes["research_direction"].depends_on
+        assert "evidence_gate" in dag.nodes["quality_evaluation"].depends_on
 
     def test_feedback_loops_present(self):
         comp = WorkflowComposer(WF)
         dag = comp.compose()
         assert dag.nodes["model_critique"].on_fail == "model_construction"
         assert dag.nodes["evidence_gate"].on_fail == "experiment_design"
+        assert dag.nodes["quality_evaluation"].on_fail == "evidence_build"
         assert dag.nodes["paper_review"].on_fail == "paper_projection"
 
     def test_compose_with_competition(self):

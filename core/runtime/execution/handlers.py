@@ -449,6 +449,44 @@ class DefaultNodeExecutor:
                               outputs={"metrics": {"coverage": report.coverage}})
         return NodeResult(FAIL, f"证据门禁未通过: {report.summary()}")
 
+    def do_quality_evaluation(self, node_id: str) -> NodeResult:
+        """P9-10/11：研究质量评估节点（七维 → 四态 → 反馈）。
+
+        FAIL  → 反馈重建（on_fail→evidence_build，复用 P7 语义）
+        WEAK/UNKNOWN → PASS + advisory（refine / request_evidence 记录在案，
+                       不阻断确定性流程，避免同输入死循环）
+        """
+        import sys as _sys
+        if str(REPO) not in _sys.path:
+            _sys.path.insert(0, str(REPO))
+        from validators.quality import ResearchQuality
+
+        rq = ResearchQuality(knowledge=self.retriever, decisions=self.decisions)
+        report = rq.evaluate(self.registry, self.graph)
+        self.shared["quality_report"] = report.as_dict()
+        # P9-12：报告落盘 state/（Registry 路径 parents[1] = 项目根）
+        try:
+            rq.persist(report, self.registry.path.parents[1])
+        except Exception:
+            pass
+        if report.blockers:
+            actions = ResearchQuality.workflow_feedback(report)
+            return NodeResult(
+                FAIL,
+                f"quality FAIL: {len(report.blockers)} 项阻塞"
+                f"（{', '.join(b['check_id'] or b['dimension'] for b in report.blockers[:4])}）",
+                outputs={"metrics": {"blockers": len(report.blockers),
+                                     "actions": len(actions["rerun"] or []) +
+                                     len(actions["recompute"] or [])}})
+        detail = (f"quality {report.overall_status}: "
+                  f"{len(report.warnings)} warnings / "
+                  f"{len(report.unknowns)} unknowns")
+        return NodeResult(PASS, detail,
+                          outputs={"metrics": {
+                              "overall": report.overall_status,
+                              "warnings": len(report.warnings),
+                              "unknowns": len(report.unknowns)}})
+
     def do_research_direction(self, node_id: str) -> NodeResult:
         """研究叙事：从 claims 闭包构建 story arcs。"""
         narrative = ResearchDirector(self.registry, self.graph).build()

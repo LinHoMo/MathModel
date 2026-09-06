@@ -61,6 +61,10 @@ v3:
       role: critic
       validator: evidence-gate
       stage: evidence
+    - name: quality_evaluation
+      role: critic
+      validator: research-quality
+      stage: evidence
     - name: research_direction
       role: writer
       stage: paper
@@ -79,6 +83,9 @@ v3:
     - name: evidence-gate
       kind: runtime
       path: core/validators/evidence/evidence_gate.py
+    - name: research-quality
+      kind: runtime
+      path: core/validators/quality/
     - name: narrative-critic
       kind: runtime
       path: core/runtime/writing/narrative_critic.py

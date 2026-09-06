@@ -19,3 +19,12 @@ nodes:
     depends_on: [evidence_build]
     on_fail: experiment_design
     max_retries: 2
+  quality_evaluation:
+    type: validation
+    role: critic
+    validator: research-quality
+    gate_type: quality
+    description: 研究质量评估（P9 七维）: FAIL → 反馈重建（复用 P7 语义）；WEAK/UNKNOWN → advisory
+    depends_on: [evidence_gate]
+    on_fail: evidence_build
+    max_retries: 2

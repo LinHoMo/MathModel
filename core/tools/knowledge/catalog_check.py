@@ -194,7 +194,7 @@ def check_validators(v3: dict) -> list[str]:
         if kind not in ("runtime", "skill"):
             problems.append(f"v3.validators[{name}].kind 非法: {kind!r}（runtime|skill）")
         path = ROOT / str(v.get("path", ""))
-        if not path.is_file():
+        if not (path.is_file() or path.is_dir()):   # 包型 validator 允许目录
             problems.append(f"v3.validators[{name}] 路径不存在: {v.get('path')}")
     return problems
 
