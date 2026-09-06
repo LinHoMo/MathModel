@@ -104,6 +104,14 @@ class DefaultNodeExecutor:
                 return a.artifact_id
         return ""
 
+    def _plan_artifact_for(self, qid: str, mid: str):
+        """该问题的活跃实验计划（P9.5 红队修复：Registry 派生，不依赖内存 shared）。"""
+        for a in self.registry.list_by_type("decision"):
+            if "实验计划" in (a.title or "") and a.status == "active":
+                if not a.depends_on or mid in a.depends_on:
+                    return a
+        return None
+
     def _card_id_of(self, qid: str, mid: str) -> str:
         """问题的选型 card_id：shared 缓存优先，回退 model.data（Registry 真源）。"""
         info = self.shared.get(qid, {})
@@ -296,6 +304,17 @@ class DefaultNodeExecutor:
                         top["required_experiments"]),
                     knowledge_refs=list(top["knowledge_refs"]))
                 plan = self.planner.plan_from_candidate(cand, qid)
+                # P9.5 红队修复：新计划建立前退役旧计划（R3 谱系语义，
+                # 旧计划 superseded 审计保留，不得双 active）
+                from runtime.artifacts.lifecycle import LifecycleError
+                for old_pa in self.registry.list_by_type("decision"):
+                    if "实验计划" in (old_pa.title or "")                             and old_pa.status == "active"                             and mid in (old_pa.depends_on or []):
+                        try:
+                            old_pa.transition(
+                                "superseded", by=node_id,
+                                reason="superseded by re-planned lineage")
+                        except LifecycleError:
+                            pass
                 d = self.registry.create(
                     "decision", title=f"{qid} 实验计划",
                     payload=plan.methods, data=plan.as_dict(),
@@ -338,27 +357,59 @@ class DefaultNodeExecutor:
             self._supersede_question_chain(qid, node_id)
         live_results = self._results_of(qid)
         if live_results:
-            # 幂等：rollback 后重跑复用既有（非终态）实验链
+            # 幂等：rollback 后重跑复用既有（非终态）实验链；
+            # 并回填缺失的 tags/provenance（resume 后 shared 丢失的场景）
             r = live_results[-1]
+            r_art = self.registry.get(r)
+            plan_art = self._plan_artifact_for(qid, mid)
+            plan = (plan_art.data if plan_art else {}) or info.get("plan") or {}
+            tags = [t for t, key in (("sensitivity", "sensitivity"),
+                                     ("baseline", "baseline_comparison"))
+                    if plan.get(key)]
+            if tags and not r_art.tags:
+                r_art.tags = tags
+            e_art = self.registry.get(
+                next(f for f, r2, t2 in
+                     [(x["from"], x["relation"], x["to"])
+                      for x in self.graph.relations]
+                     if r2 == "produces" and t2 == r))
+            if plan_art and not e_art.data.get("plan_ref"):
+                entries = plan.get("entries") or [{}]
+                e_art.data.update({
+                    "plan_ref": plan_art.artifact_id,
+                    "plan_entry": entries[0].get("experiment_id", ""),
+                    "hypothesis_ref": entries[0].get("hypothesis", "")})
             f = next((a.artifact_id for a in self.registry.list_by_type("figure")
                       if a.question == qid
                       and a.status not in _TERMINAL), r)
+            self._clear_revalidation_marks(qid, node_id)   # 复验存活链
             return NodeResult(PASS, f"{qid}: 复用既有实验链",
                               outputs={"artifacts": [], "evidence": [
                                   {"from": r, "relation": "visualized_by", "to": f}]})
         info["results"] = live_results   # 清掉已失效的旧结果，走全新链
         # 退役旧实验链（fresh 分支触发，如 recompute 后重建）
         self._supersede_question_chain(qid, node_id)
-        e = self.registry.create("experiment", title=f"{qid} 实验",
-                                 question=qid, depends_on=[mid],
-                                 activate=True, created_by=node_id)
-        plan = info.get("plan") or {}
+        # P9.5：计划 provenance 从 Registry 派生（resume 后 shared 不可信），
+        # 挂在 experiment（计划的执行者）上
+        plan_art = self._plan_artifact_for(qid, mid)
+        plan = (plan_art.data if plan_art else None) or info.get("plan") or {}
+        entries = plan.get("entries") or [{}]
         tags = [t for t, key in (("sensitivity", "sensitivity"),
                                  ("baseline", "baseline_comparison"))
                 if plan.get(key)]
+        e = self.registry.create("experiment", title=f"{qid} 实验",
+                                 question=qid, depends_on=[mid],
+                                 data={"card_id": self._card_id_of(qid, mid),
+                                       "plan_ref": plan_art.artifact_id
+                                       if plan_art else "",
+                                       "plan_entry": (entries[0] or {})
+                                       .get("experiment_id", ""),
+                                       "hypothesis_ref": (entries[0] or {})
+                                       .get("hypothesis", "")},
+                                 activate=True, created_by=node_id)
         r = self.registry.create("result", title=f"{qid} 结果",
                                  question=qid, depends_on=[e.artifact_id],
-                                 data={"card_id": info.get("card_id", "")},
+                                 data={"card_id": self._card_id_of(qid, mid)},
                                  tags=tags,
                                  activate=True, created_by=node_id)
         f = self.registry.create("figure", title=f"{qid} 结果图",
@@ -372,10 +423,26 @@ class DefaultNodeExecutor:
         ]
         info.setdefault("results", []).append(r.artifact_id)
         info["results"] = self._results_of(qid)   # 以 Registry 为准
+        self._clear_revalidation_marks(qid, node_id)   # 重建即复验通过
         if self.state:
             self._advance_question(qid, "experimenting")
         return NodeResult(PASS, f"{qid}: 实验/结果/图已登记",
                           outputs={"artifacts": [], "evidence": ev})
+
+    def _clear_revalidation_marks(self, qid: str, by_node: str) -> None:
+        """P9.5 红队修复（E6 死循环）：链重建/复验即复验通过——
+
+        清除该问题活跃产物上的 requires_revalidation/dirty 传播标记。
+        只清标记（bookkeeping），不改 lifecycle 状态；终态产物不可清除
+        （lifecycle fail-closed）。若无此清除，Evidence Gate E6 将永久 WEAK。
+        """
+        from runtime.artifacts.lifecycle import LifecycleError
+        for a in self.registry.all():
+            if a.question == qid and a.status not in _TERMINAL                     and a.invalidation:
+                try:
+                    a.clear_invalidation()
+                except LifecycleError:
+                    pass
 
     def _supersede_question_chain(self, qid: str, by_node: str) -> None:
         """退役该问题的整条实验链（E/R/F/C → superseded，审计保留）。

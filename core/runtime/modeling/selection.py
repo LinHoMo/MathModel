@@ -108,4 +108,14 @@ class MethodArena:
                 score_breakdown=top.score_detail.as_dict(),
             )
             outcome.decision_id = dec.decision_id
+            # P9.5 红队修复（R3）：新选型落地后，同问题的旧 active 选型决策
+            # 必须显式失效（审计保留），不得静默共存双 current
+            for d in outcome.prior_decisions:
+                if d.get("status") == "active"                         and str(d.get("question", "")).startswith(question)                         and "方法选型" in str(d.get("question", "")):
+                    self.decisions.invalidate(
+                        d["decision_id"], invalidated_by=dec.decision_id,
+                        reason=f"superseded by new selection {dec.decision_id}")
+                    outcome.notes.append(
+                        f"旧选型决策 {d['decision_id']} 已被 "
+                        f"{dec.decision_id} 取代（invalidated）")
         return outcome

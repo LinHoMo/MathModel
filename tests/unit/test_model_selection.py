@@ -70,7 +70,8 @@ class TestMethodArena:
                                      "objectives": 2})
         out2 = MethodArena(retriever, decisions).select(
             "Q001", {"problem_types": ["optimization"]})
-        decisions.invalidate(out1.decision_id, out2.decision_id, "重新选型")
+        # P9.5 R3 修复后：重选型自动失效旧决策（无需手动 invalidate）
+        assert decisions.decisions[out1.decision_id].status == "invalidated"
         out3 = MethodArena(retriever, decisions).select(
             "Q001", {"problem_types": ["optimization"]})
         assert not any("冲突" in n for n in out3.notes)
