@@ -39,16 +39,34 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
 
 ## 2. 阶段
 
-### P13 — 数学推理底座（Real Mathematical Reasoning）
+### P13 — 数学推理基线（压缩为 P13-0..5，实验先行）
 
-- **起点不是设计新模块，而是一张真实 MMBench 题**：Agent 真正做题
-  （理解 → 方法 → 建模 → 实验 → 验证 → 写作），产出首个
-  `BASELINE_REPORT.md`。
-- Scope：① `bench e2e` 测评工具 + 八项指标落盘（P13.0，已随 M4 交付）；
-  ② 用基线缺口驱动 Brain 层改进——SKILL.md 推理指令、方法卡补强、
-  分解策略——每项改动以 Δscore 验收。
-- Exit criteria：≥5 题（跨 ≥2 年）可复现基线；且至少一项指标相比首跑
-  **+10 个百分点**（预期候选：method selection / decomposition）。
+> 定位修正（2026-09-06，P13-1 后）：**end-to-end 是最终指标，不是开发指标**；
+> 开发指标 = 7 项分指标，每个改动只认"它让哪个分指标动了多少"。
+> 新增 **Measurement Integrity**（provenance-based realization v1，
+> measurement metadata，非能力分数、不并入均值）——回答"分数有多少由
+> agent 真实产物支撑"（见 `e2e_metrics.py` 与 BASELINE_REPORT §2）。
+
+- **P13-0 Measurement / Baseline（✅ 已完成）**：`bench e2e` + 八项指标 +
+  2000C 真实解题基线（`BASELINE_REPORT.md`）+ Measurement Integrity 仪表盘。
+- **P13-1 Problem→Method 接口（✅ 已完成，Case D）**：`problem_profile`
+  DTO（六冻结键+note，非本体）+ `features_for()` + A/B/C 消融。官方结果
+  0/0/0 → 接口验证打通、但打分权重结构压制语义证据；metric top-3 实现bug
+  一并定位。详见 `P13_1_REPORT.md`。
+- **P13-2 Retriever 打分再平衡 + metric 修复**：top-3 候选实现修复（用冻结
+  GT 重测 A/B/C）+ 类型命中权重 vs applicability 基线/质量维度的再平衡
+  （任何权重改动须 ≥2 题消融）。**不加 Profile 字段、暂缓新方法卡**。
+- **P13-3 Model Construction**：从"选对方法"到"正确建模"（假设/推导链/
+  模型比较）。
+- **P13-4 Real Experiment**：真执行、真结果、真验证（agent 结果正式接入
+  节点，experiment realization 50% → 目标 >90%）。
+- **P13-5 Re-run Benchmark**：同题集复测 → Δscore；exit criteria = ≥5 题
+  （跨 ≥2 年）可复现基线且至少一项指标 +10 个百分点。
+
+**纪律（P13-1 确立）**：实验结果为 0 时本轮就地停止，不为让 Δ 变正继续
+修改；只允许增加"题目语义 → 已有方法选择器"的信息流，不允许增加新的
+认知层。若出现"架构缺口"，先过三问门禁——通常答案是改 Brain 指令/知识
+或修真实 bug，**绝不为此开新 P 阶段**。
 
 ### P14 — 模型构建智能（Model Construction）
 

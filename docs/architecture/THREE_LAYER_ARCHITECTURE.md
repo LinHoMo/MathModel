@@ -51,6 +51,12 @@
 - **Guardrails 冻结**：仅接受 bug 修复与误报修正，不接受新语义层。
 - 例外流程：出现**真实需求**（来自真实赛题执行，而非推演）→ 按下节门禁
   评估 → 修订契约文档 → 再动代码。禁止"顺手加固"。
+- **已批准例外登记**：
+  - 2026-09-06 `handlers.features_for()`（~6 行，P13-1 Problem→Method
+    接口，Q1 门禁通过）：`RuntimeSession(features)` 现有插座的逐题画像
+    合并。见 `P13_1_REPORT.md`。
+  - 2026-09-06 `validate.py _live_project_dirs` 误报修正：bench e2e 基线
+    项目不适用论文交付门禁。见 `BASELINE_REPORT.md`。
 
 ## 4. 三问门禁（每个新阶段 / 能力 PR 的准入检查）
 
