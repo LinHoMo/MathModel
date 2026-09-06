@@ -60,8 +60,21 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
   管线集成验证：2000C top-1 0→100、2023C top-1 100、评价类反向检查零回退；
   **B 明显 > C**（top-1 100 vs 25）——per-question 画像不值得复杂化。
   详见 `P13_2_REPORT.md`。
-- **P13-3 Model Construction**：从"选对方法"到"正确建模"（假设/推导链/
-  模型比较）。
+- **P13-3 Model Construction（进行中，首测 ✅）**：核心问题——**选对
+  方法以后，Agent 能不能把数学模型正确地建立出来**。三个独立测量：
+  1. **Structural correctness**：变量/参数/目标函数/约束/状态转移是否完整
+     且相互一致；
+  2. **Mathematical correctness**：推导错误、量纲/边界/符号/索引问题
+     （错误分类学扣分制）；
+  3. **Problem alignment**：模型是否真的回答题目——"数学上正确但解决了
+     另一个问题"是数模 Agent 最典型的失败，此项独立测量。
+  首测（2000C，测量仪 `model_construction.py` + 预注册 rubric
+  `mc_2000C.json`）：structural 80 / mathematical 55 / alignment 100 /
+  composite 78.3——短板分布"结构好、数学弱"被三维拆分暴露。详见
+  `P13_3_REPORT.md`。
+  **禁令（P13-3 生效）**：不碰 Cross-question synthesis / 新 Relation /
+  新 IR / 新 Validator / 新 Artifact / Agent 数量扩张——P13-3 只在
+  Brain / Knowledge / Evaluation 层工作。
 - **P13-4 Real Experiment**：真执行、真结果、真验证（agent 结果正式接入
   节点，experiment realization 50% → 目标 >90%）。
 - **P13-5 Re-run Benchmark**：同题集复测 → Δscore；exit criteria = ≥5 题

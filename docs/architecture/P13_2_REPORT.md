@@ -58,7 +58,23 @@ score 结构：MC fit 41(+18) > TOPSIS 33(+0)。
 不进入下一轮的项：不加权重（一次到位，未叠加变体）；不加 Profile 字段；
 不复杂化 per-question；暂缓新方法卡（两题均被现有 16 卡覆盖）。
 
-## 7. 遗留（记录，不阻塞）
+## 7. 治理结论（P13-2 收口，正式）
+
+1. **Per-question DTO 治理**：保留为接口，**冻结其 schema 与复杂度**；当前
+   Method Selection 不再投入 per-question 建模（top-1 25% vs 100% 已证明
+   当前复杂化方向是错的）。未来只有在真实题目上证明其产生**正 Δscore**
+   才允许重新打开。
+2. **测量层修正 ≠ 能力提升（边界披露，长期有效）**：2023C 的 0→100 中，
+   `_method_hit` 紧凑匹配修复属 **measurement-layer correction，不计入
+   Agent capability improvement**。真正属于 P13-2 的能力 Δ 只有：
+   > **在 GT 冻结、测量规则统一后，语义 ranking 从 MC 非 top-1 → MC
+   > top-1（2000C，GT 未动）。**
+   2023C 的 100 是 canonicalization 修复后的首次可测读数——其排序基线
+   本就正确（classical_timeseries 族基线即 #1）。
+3. **P13-2 全部结果冻结**：不为把 per-question 的 25% 提上去继续优化——
+   25% 本身已证明该方向是错的。
+
+## 8. 遗留（记录，不阻塞）
 
 - 候选多样性仍是低值（全局画像下 distinct_chosen=1）：排序修正后单选收敛
   到语义正确卡——多样性的价值留待 P13-3 模型比较阶段评估；
