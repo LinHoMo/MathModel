@@ -495,6 +495,10 @@ class DefaultNodeExecutor:
             c = self.registry.create("claim", title=f"{qid} 结论",
                                      question=qid,
                                      depends_on=[results[-1]],
+                                     data={"statement": f"{qid} 结论",
+                                           "claim_type": "comparative",
+                                           "experiment_refs": [results[-1]],
+                                           "literature_refs": []},
                                      activate=True, created_by=node_id)
             ev.append({"from": results[-1], "relation": "supports",
                        "to": c.artifact_id})

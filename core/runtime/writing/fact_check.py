@@ -36,10 +36,13 @@ class Reference:
     retrieved_at: str = ""
     used_by: list[str] = field(default_factory=list)   # 引用它的 tex 位置/claim
 
+    usage_type: str = "background"     # background/method_origin/parameter_source/comparison/external_validation
+    supports_claims: list[str] = field(default_factory=list)
+
     def as_dict(self) -> dict:
         return {k: getattr(self, k) for k in (
             "ref_id", "source_type", "title", "authors", "year", "doi_url",
-            "retrieved_at", "used_by")}
+            "retrieved_at", "used_by", "usage_type", "supports_claims")}
 
 
 def parse_bib(bib_text: str) -> dict[str, Reference]:
@@ -226,6 +229,21 @@ class PaperFactChecker:
         # P8/P9/P10 一致性：abstract/conclusion 由 IR 从 validated findings
         # 派生（P10-11），论文层若出现 Registry 不存在的结论文本，
         # 已被 P1/P2/P11 覆盖——此处不再重复计一项。
+        # W9: literature claim 不得伪装成本项目实验结论
+        for c in self.registry.list_by_type("claim"):
+            if c.status in TERMINAL:
+                continue
+            lit = (c.data.get("literature_refs") or [])
+            exp_refs = (c.data.get("experiment_refs")
+                        or [t for f, r, t in
+                            [(x["from"], x["relation"], x["to"])
+                             for x in self.graph.relations]
+                            if r == "supports" and t == c.artifact_id])
+            if lit and not exp_refs and self._claim_text(c) in tex:
+                findings.append(PaperFinding(
+                    "P2", "fail", "FAIL", c.artifact_id,
+                    "文献支撑的结论被当作本项目实验结果表述"
+                    "（literature ≠ own experiment）", [c.artifact_id]))
         # P11 dead claim leakage
         for c in terminal_claims:
             if self._claim_text(c) in tex:

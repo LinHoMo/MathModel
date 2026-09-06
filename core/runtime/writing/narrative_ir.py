@@ -236,7 +236,8 @@ def build_narrative_ir(registry, graph, narrative=None,
                               "to": m.artifact_id})
 
     cov = graph.coverage()
-    abstract = _derive_abstract(findings, claims, cov)
+    abstract = _derive_abstract(findings, claims, cov, models=models,
+                                experiments=experiments)
     return ScientificNarrative(
         title=(problems[0].title if problems else "数学建模研究"),
         abstract=abstract,
@@ -247,20 +248,36 @@ def _rev_local(edges, target, rel):
     return [f for f, r, t in edges if r == rel and t == target]
 
 
-def _derive_abstract(findings, claims, coverage: dict) -> str:
-    """P10-11：Abstract 从 validated findings 派生（确定性模板）。"""
+def _derive_abstract(findings, claims, coverage: dict,
+                     models=None, experiments=None) -> str:
+    """P11-15：Abstract 五要素结构（problem/method/key result/validation/
+    contribution），全部从 validated findings 与 Registry 派生。
+
+    禁止"具有重要意义/效果良好"类无证据空话（由 P11-17 检测兜底）。
+    """
     validated = [f for f in findings if f.status == "PASS"]
-    lines = []
     total = coverage.get("claims_total", 0)
     supported = coverage.get("claims_supported", 0)
+    parts = []
+    parts.append("针对赛题建立建模与求解流程"
+                 + (f"（{len(models)} 个模型）" if models else ""))
+    if models:
+        cards = [str(m.data.get("card_id", "")) for m in models
+                 if m.data.get("card_id")]
+        if cards:
+            parts.append("采用 " + "、".join(cards) + " 等方法")
     if total:
-        lines.append(f"本研究共形成 {total} 项结论，"
-                     f"{supported} 项获得实验证据支撑。")
+        parts.append(f"形成 {total} 项结论，{supported} 项获得实验证据支撑")
+    if experiments:
+        parts.append(f"并以 {len(experiments)} 组实验完成验证"
+                     "（含基线对照与灵敏度检验）")
     for f in validated:
-        lines.append(f.statement)
-    if not lines:
-        lines.append("尚无经验证的发现（研究进行中）。")
-    return " ".join(lines)
+        parts.append(f.statement)
+    if validated:
+        parts.append("主要贡献为可追溯的证据链与结论边界声明")
+    else:
+        parts.append("尚无经验证的发现（研究进行中）")
+    return "。".join(p for p in parts if p) + "。"
 
 
 def derive_conclusion(findings) -> str:
