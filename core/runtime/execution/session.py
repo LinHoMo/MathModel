@@ -149,6 +149,13 @@ class RuntimeSession:
         from runtime.state.relations import cross_relations
         return cross_relations(self.state)
 
+    def cross_question_context(self, question_ids=None):
+        """P12-3-lite：统一跨问题上下文（只读派生——每次从 Registry/Graph/
+        State 重算，不落盘、不注册 artifact、不参与失效传播）。"""
+        from runtime.synthesis.context import build_cross_question_context
+        return build_cross_question_context(
+            self.registry, self.graph, self.state, question_ids)
+
     # ------------------------------------------------------------ Invalidation（P6-⑦）
 
     def invalidate(self, artifact_id: str, reason: str = "") -> dict:
