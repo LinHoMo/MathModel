@@ -575,8 +575,21 @@ class DefaultNodeExecutor:
             return NodeResult(FAIL, "narrative 缺失（上游未完成）")
         outline = PaperProjection(self.registry, self.graph).project(narrative)
         self.shared["outline"] = outline
-        return NodeResult(PASS, f"{len(outline.get('sections', []))} 个章节投影",
-                          outputs={"artifacts": [], "evidence": []})
+        # P10：Research State → Claim Graph → Finding Graph → Narrative IR
+        from runtime.writing.findings import FindingGraph
+        from runtime.writing.narrative_ir import build_narrative_ir
+        fg = FindingGraph(self.registry, self.graph)
+        ir = build_narrative_ir(self.registry, self.graph,
+                                findings_graph=fg)
+        self.shared["narrative_ir"] = ir.as_dict()
+        self.shared["findings"] = fg.as_dict()
+        return NodeResult(
+            PASS, f"{len(outline.get('sections', []))} 个章节投影 · "
+                  f"{len(fg.findings)} findings（validated "
+                  f"{len(fg.validated())}）",
+            outputs={"artifacts": [], "evidence": [],
+                     "metrics": {"findings": len(fg.findings),
+                                 "validated": len(fg.validated())}})
 
     def do_paper_sections(self, node_id: str) -> NodeResult:
         """Per-Qi 章节投影：为该问题创建 paper_section 并挂 appears_in。"""
