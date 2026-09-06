@@ -108,6 +108,12 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
   （主张面）× Formal Consistency（支持面），缺一不可，先扩主张面后补
   支持面 = 中间态更差**。缺陷计数指标启用（rubric score ≠ absolute
   correctness）。
+- **P13-3C-R5 Expanded Benchmark（下一轮，已预注册）**：恢复三臂
+  （B0/MMA/B1-F）× 4×3+1 题型矩阵（Mechanism 3/Data 3/Optimization 3/
+  Hybrid 1）+ question_profile 难度控制（difficulty 先于结果锁定）+
+  Claim Coverage/Support Coverage/Claim-Support Gap 派生指标 +
+  H5/H6/H7 预注册。自评降级为 diagnostic only。详见
+  `P13_3C_REPORT.md` §5。
 - **P13-3D Model → Paper Conversion（待 P13-3C ≥3 题）**：三臂模型产物 →
   同一 Writer/模板/检查器 → 论文，测 Paper Conversion Efficiency（模型分 →
   论文分的转化率）；若外部系统模型弱但论文强，则识别并吸收其

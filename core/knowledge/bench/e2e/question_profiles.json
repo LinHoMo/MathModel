@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "purpose": "P13-3C-R5 题目剖面（difficulty control）。规则：difficulty 必须在看到三臂结果之前锁定；结果已见的题目标注 post_hoc，不进入难度控制分析。",
+  "profile_fields": {
+    "id": "MMBench 题 id",
+    "regime": "mechanism | data | optimization | hybrid",
+    "difficulty": "easy | medium | hard（独立评委仅评难度、不看三臂结果）",
+    "difficulty_status": "pre_registered | post_hoc",
+    "subproblem_count": "子问题数",
+    "data_dependency": "none | low | medium | high",
+    "model_family": "主导模型族",
+    "mechanism_depth": "low | medium | high（机理建模深度要求）",
+    "optimization_depth": "low | medium | high（优化建模深度要求）",
+    "ambiguity_level": "low | medium | high（题面歧义度）"
+  },
+  "profiles": [
+    {
+      "id": "2024_A",
+      "regime": "mechanism",
+      "difficulty": "medium",
+      "difficulty_status": "post_hoc（R1-R4 结果已见）",
+      "subproblem_count": 4,
+      "data_dependency": "none",
+      "model_family": "population dynamics + sex-structure feedback",
+      "mechanism_depth": "high",
+      "optimization_depth": "none",
+      "ambiguity_level": "medium（性比机制的具体函数形式题面未定）"
+    },
+    {
+      "id": "2021_C",
+      "regime": "data",
+      "difficulty": "hard",
+      "difficulty_status": "post_hoc（R1-R4 结果已见）",
+      "subproblem_count": 5,
+      "data_dependency": "high（4440 报告 + 3305 图像 + 标签删失）",
+      "model_family": "classification + spatiotemporal prediction + decision",
+      "mechanism_depth": "low",
+      "optimization_depth": "low（预算排序）",
+      "ambiguity_level": "high（报告偏差、根除判据、删失机制）"
+    },
+    {
+      "id": "2022_B",
+      "regime": "optimization",
+      "difficulty": "medium",
+      "difficulty_status": "post_hoc（R1-R4 结果已见）",
+      "subproblem_count": 4,
+      "data_dependency": "medium（容量曲线附表）",
+      "model_family": "LP / resource allocation",
+      "mechanism_depth": "medium（两库质量守恒 + 水头耦合）",
+      "optimization_depth": "high（多目标 + 分层短缺 + 情景传播）",
+      "ambiguity_level": "medium（竞争利益准则需自行显式化）"
+    }
+  ],
+  "pending_selection": {
+    "matrix": {"mechanism": 3, "data": 3, "optimization": 3, "hybrid": 1},
+    "filled": {"mechanism": 1, "data": 1, "optimization": 1, "hybrid": 0},
+    "to_select": 7,
+    "hybrid_criterion": "必须真实串联 ≥2 个 construction regime（如 data → mechanism → optimization），不是多模型拼盘",
+    "selection_rule": "从 MMBench 未触碰题中按 regime 配额与 difficulty 分层挑选；profile 于该题三臂开跑前锁定"
+  }
+}

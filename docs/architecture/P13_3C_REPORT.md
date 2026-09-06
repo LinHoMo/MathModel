@@ -49,7 +49,15 @@
 
 ### 4.3 核心发现：对齐干预在无约束纪律时**制造不被模型支持的主张**
 
-H4a 被否定的机理（评委逐条实锤）：
+**因果措辞纪律**：n=2 题 × 4 臂足以发现现象，不足以稳定估计交互效应量。
+正式表述（全文以此为准）：
+
+> 在本轮两个题目、四个实验臂的条件下，**单独施加 Alignment intervention
+> 与 Mathematical Correctness 的下降同时出现，且该负向效应在两个 regime
+> 中复现**；Full intervention 显著缓解该负向效应，提示 Alignment 与
+> Formal Consistency 两类干预之间存在 **interaction**。
+
+机理（评委逐条实锤，作为该现象的解释候选而非因果断言）：
 
 1. **无生成通道的估计量**：B1-A 承诺"灭绝概率与规模方差对比"（Q2），
    但其确定性、无死亡项的模型根本不能生成该量——文字有映射、模型无
@@ -88,7 +96,72 @@ major 缺陷数（评委独立列出）：B1-C 在两题均低于 B0（4→1、3
 是唯一"加干预、减缺陷"的臂；B1-A 在两题均高于 B0（4→6、3→5）。
 **rubric 分与缺陷数在 B1-A 上出现背离**（composite 52.7/70.0 但缺陷
 更多）——验证了"rubric score ≠ absolute correctness"，缺陷计数作为
-独立仪表盘保留。
+独立仪表盘保留（severity/category/evidence 三字段永久记录）。
+
+### 4.6 核心抽象：Claim Surface × Support Surface（P13-3 的中心概念）
+
+四轮实验（干预 → 泛化 → 消融）共同指向同一个二维分解：
+
+```text
+                    Support Surface
+                  （Formal Consistency：
+                   方程/参数/约束/域——
+                   模型能兑现什么）
+                         ↑
+                         │      ● B1-F（大主张 + 强支持）
+                         │
+                         │  ● MMA（中主张 + 中支持：
+                         │    方案强、形式化缺）
+          ● B0（小主张 + 中支持：      │
+            少说所以少错）             │
+                         │   ● B1-A（大主张 + 弱支持
+                         │      = unsupported claims）
+                         └──────────────────→
+                              Claim Surface
+                         （Problem Alignment：
+                          模型声称回答什么）
+```
+
+四轮故事的同一机制四种读法：
+
+| 轮 | 臂/现象 | Claim Surface | Support Surface | 结果 |
+|---|---|---|---|---|
+| R1-2 泛化 | B0 | 小（alignment 0-40） | 中（math 60-90） | "数学还能做但答非所问" |
+| R1-2 泛化 | MMA | 中（alignment 58.3） | 中（方案强、形式化缺） | 结构↑对齐↑但 constraints 空置 |
+| R4 消融 | B1-A | 大（alignment 50-100） | **未同步扩大** | unsupported claims → math 暴跌 |
+| R4 消融 | B1-F | 大 | **同步扩大** | alignment 100 + structural 100 |
+
+**因果故事（四轮串联）**：
+
+```text
+P13-3B Intervention Discovery（55→95 自评）
+   ↓
+P13-3C Cross-regime Generalization（3 regime，B1>MMA>B0）
+   ↓
+P13-3C-R4 Ablation / Interaction（H4a 否定 + 交互确认）
+   ↓
+★ Claim Surface × Support Surface ★
+   ↓
+P13-3C-R5 Expanded Benchmark（≥10 题验证）
+   ↓
+P13-3D Model → Paper
+```
+
+### 4.7 派生指标预注册：Claim Coverage / Support Coverage
+
+把上述定性机制变成可量化变量（R5 起由盲评评委直接输出）：
+
+- **Claim Coverage** = 题目要求中被产物明确承载的对齐点比例
+  （即 alignment 维度，已有）。
+- **Support Coverage** = 产物主张（objective/estimand/mechanism 声称）中
+  **有正式数学承载**的比例。判定三条件逐条核验：
+  ①存在能生成该主张的机制方程；②方程引用的参数全部已声明；
+  ③主张类型与模型结构相容（确定性模型不得声称随机量）。
+  Support Coverage = 支持的主张数 / 总主张数。
+- **Claim-Support Gap** = Claim Coverage − Support Coverage（B1-A 预期
+  为大正值、B0 为负值、B1-F 接近 0）。
+- 预期复现（R5 待验）：B0 claim↓/support 中；B1-A claim↑↑/support↓；
+  B1-F claim↑/support↑。
 
 ## 1. 预注册（建模前落盘）
 
@@ -175,22 +248,85 @@ major 缺陷数（评委独立列出）：B1-C 在两题均低于 B0（4→1、3
 3. MMA 为提示词级操作化（非其 runtime 复刻）；
 4. 产物为构造层（无代码执行验证），实验正确性属 P14。
 
-## 5. Step 4 消融预注册（下一轮执行）
+## 5. P13-3C-R5 预注册（Expanded Benchmark，≥10 题，下一轮执行）
 
-问题：B1 的提升由哪些可独立干预的子能力贡献？
+### 5.1 设计变更（相对 Round 1-2）
 
-- **臂**：B0 / B1-full / **B1-alignment**（仅对齐点→变量承载 + 参数声明）/
-  **B1-constraint**（仅约束形式化 + 随机过程域一致 + 工程边界）。
-- **题**：2022_B（优化 regime，B0 差距最大、扣分结构最丰富）+ 2024_A（复验）。
-- **预注册判读**：若 B1-align ≈ B1-full ≫ B1-constraint → 对齐承载是主因子；
-  若 B1-constraint ≈ B1-full ≫ B1-align → 约束完备性是主因子。
-- 评分协议同本轮（匿名 + 独立评委 + 内容追溯解盲）。
+- **恢复三臂**：B0 / MMA / B1-F——消融已完成归因（Round 4），R5 的任务
+  是验证既定 Full intervention 的泛化性，不重复消融（成本纪律）。
+- **4×3+1 题型矩阵**：Mechanism 3 / Data 3 / Optimization 3 / Hybrid 1
+  = 10 题（已有 2024_A、2021_C、2022_B 计入各 regime 首席）。
+  **Hybrid 判据**：必须真实串联 ≥2 个 construction regime
+  （data → mechanism → optimization 类），不是多模型拼盘。
+- **difficulty control**：每题跑前生成 `question_profile`
+  （id / regime / difficulty / subproblem_count / data_dependency /
+  model_family / mechanism_depth / optimization_depth / ambiguity_level），
+  **difficulty 在看到三臂结果之前锁定**；已有三题的 profile 标注为
+  post-hoc（结果已见），不进入难度控制分析。
+- **自评降级**：agent self-score 全面降级为 diagnostic only；主结果 =
+  匿名产物 → 独立评委 → rubric score + critical defect log
+  （severity / category / evidence）。
 
-## 6. 下一步
+### 5.2 预注册假设
 
-1. 消融（上表）→ 认知干预的因果归因；
-2. 扩题至 ≥10（H2 统计性）；
-3. **P13-3D Model → Paper Conversion**：三臂 artifact 冻结 → 同一 Writer/
-   模板/检查器 → 论文 + **Model Fidelity 指标**（论文中凭空出现的新变量/
-   约束/目标 = Unauthorized model mutation）；
-4. P14 = Model Validation & Experiment Design（Model → Experiment → Evidence）。
+- **H5 Cross-regime generalization**：B1-F > B0 在 Mechanism / Data /
+  Optimization / Hybrid 四 regime 分别成立。
+- **H6 External baseline advantage**：B1-F > MMA 的 +10 分差在 ≥10 题上
+  保持稳定（3 题现状：93.9 vs 83.9）。
+- **H7 Dimension-specific effect**：Alignment 呈 B1 ≫ MMA > B0、
+  Structural 呈 B1 > MMA > B0、Mathematical 差距最小——若在 10 题复现，
+  则结论固化为"**B1 的优势不是数学计算能力，而是模型规格完整性与问题
+  承载能力**"。
+
+### 5.3 新增派生指标
+
+Claim Coverage / Support Coverage / **Claim-Support Gap**（定义见 §4.7）
+由盲评评委随 rubric 分一并输出。
+
+### 5.4 统计计划
+
+mean / median / per-question Δ / per-regime Δ / per-dimension Δ /
+major defect count；三臂同题 = 天然 paired design，报告配对差值而非
+独立样本比较；n≥10 后做 simple paired analysis（Wilcoxon signed-rank）。
+
+## 6. P13-3D 预注册（Model → Paper Causal Transmission）
+
+### 6.1 设计
+
+三臂产物（B0 / MMA / B1-F）**冻结后**送入**完全相同的** Writer / 模板 /
+检查器 / 数据 → 论文。Writer 禁止重新建模：Model Artifact 是唯一真源。
+
+### 6.2 双指标
+
+1. **Paper Quality**：数学正确、逻辑、完整性、结果、表达、结构
+   （评委 rubric，盲评同协议）。
+2. **Model Fidelity Gate**：论文 vs Artifact 逐项核对
+   （variables / objective / constraints / assumptions）——论文中出现
+   Artifact 没有的新变量/约束/目标/假设 = **Unauthorized Model
+   Mutation**，单独记录（不计入 Paper Quality，作为 Writer 行为的独立
+   仪表盘）。没有 Fidelity Gate，"好模型 → 好论文"的传导实验会被
+   Writer 的暗中重建模污染。
+
+### 6.3 核心问题
+
+- **能力层**（P13-3C 已答）：干预是否提高 Model Construction？
+- **产品层**（P13-3D 待答）：更好的 Model Construction 是否自然转化成
+  更好的论文（Paper Conversion Efficiency）？若外部臂"模型弱、论文强"，
+  则识别并吸收其 Model→Paper compiler。
+
+## 7. 终局架构方向（Round 4 consolidation 确立）
+
+MathModelAgent Modeler 强在"知道该往哪走"（决策树/EDA/方案规划），
+我们的核心强在"走到之后把模型造完整"（主张-支持配对）。终局形态：
+
+```text
+MMA-style Planner（方法选型/规划）
+        ↓
+Our Model Construction Core（形式化/约束/对齐/传播）
+        ↓
+Formal Model → Experiment → Evidence
+        ↓
+Same Paper Writer → Final Paper
+```
+
+目标不是证明"我们全面更强"，而是**识别 pipeline 每个阶段最强的组件**。
