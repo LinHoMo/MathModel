@@ -54,10 +54,12 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
   top-3 shortlist GT hit 后官方结果 **A=0 / B=100 / C=100（top-1 仍 0）**：
   接口修复有效、全局画像已够用、失败分支锁定"有候选但排序错"。详见
   `P13_1_REPORT.md`。
-- **P13-2 Retriever 打分再平衡**：唯一靶点 = 类型证据权重 vs applicability
-  基线/质量维度，验收 = 同题集 top-1 从 TOPSIS 变为语义合理卡（≥2 题
-  消融防反向调参）。**不加 Profile 字段、不复杂化 per-question、暂缓新
-  方法卡**（16 卡已有 MC，加卡不是瓶颈）。
+- **P13-2 Retriever 打分再平衡（✅ 已完成）**：守卫式影子评分器消融
+  （`ranking_ablation.py`）定位唯一断点 = 类型命中 +3 被质量维度净抵消；
+  落地 w_sem 3→6（例外已登记），修复 `_method_hit` 连写 token 归一化伪影。
+  管线集成验证：2000C top-1 0→100、2023C top-1 100、评价类反向检查零回退；
+  **B 明显 > C**（top-1 100 vs 25）——per-question 画像不值得复杂化。
+  详见 `P13_2_REPORT.md`。
 - **P13-3 Model Construction**：从"选对方法"到"正确建模"（假设/推导链/
   模型比较）。
 - **P13-4 Real Experiment**：真执行、真结果、真验证（agent 结果正式接入

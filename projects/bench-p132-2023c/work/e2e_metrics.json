@@ -1,0 +1,127 @@
+{
+  "mode": "e2e_metrics",
+  "project": "bench-p132-2023c",
+  "computed_at": "2026-09-06T13:56:11",
+  "metrics": {
+    "decomposition_coverage": {
+      "value": null,
+      "detail": {
+        "gt_sub_questions": 0,
+        "produced_questions": 2
+      }
+    },
+    "method_selection": {
+      "value": 100.0,
+      "detail": {
+        "gt_methods": [
+          "time series",
+          "trend analysis",
+          "prediction interval"
+        ],
+        "definition": "top-3 GT hit（chosen+shortlist 去重前3）",
+        "per_question": {
+          "Q001": {
+            "top1_chosen": "mc-grey-gm11",
+            "top1_hit": true,
+            "top3": [
+              "mc-grey-gm11",
+              "mc-monte-carlo",
+              "mc-arima"
+            ],
+            "top3_hit": true,
+            "shortlist": [
+              "mc-grey-gm11",
+              "mc-monte-carlo",
+              "mc-arima"
+            ]
+          },
+          "Q002": {
+            "top1_chosen": "mc-grey-gm11",
+            "top1_hit": true,
+            "top3": [
+              "mc-grey-gm11",
+              "mc-monte-carlo",
+              "mc-arima"
+            ],
+            "top3_hit": true,
+            "shortlist": [
+              "mc-grey-gm11",
+              "mc-monte-carlo",
+              "mc-arima"
+            ]
+          }
+        },
+        "top1_hit_rate": 100.0,
+        "distinct_chosen": 1
+      }
+    },
+    "model_correctness": {
+      "value": null,
+      "detail": {
+        "source": "缺评分响应（n/a）"
+      }
+    },
+    "experiment_validity": {
+      "value": 100.0,
+      "detail": {
+        "results": 2,
+        "with_robustness_tags": 2,
+        "multi_run_ge5": 0
+      }
+    },
+    "validation_reliability": {
+      "value": 100.0,
+      "detail": {
+        "claims_supported": 2,
+        "claims_total": 2,
+        "paper_present": false
+      }
+    },
+    "innovation": {
+      "value": 0.0,
+      "detail": {
+        "declared_patterns": 0
+      }
+    },
+    "writing_completeness": {
+      "value": null,
+      "detail": {
+        "main_tex": false
+      }
+    },
+    "end_to_end": {
+      "value": null,
+      "detail": {
+        "rubric_total": null
+      }
+    }
+  },
+  "measurement_integrity": {
+    "criterion": "created_by startswith 'agent'（provenance-based, v1）",
+    "experiment_realization": {
+      "numerator": 0,
+      "denominator": 2,
+      "value": 0.0
+    },
+    "validation_realization": {
+      "numerator": 0,
+      "denominator": 2,
+      "value": 0.0
+    },
+    "writing_realization": {
+      "numerator": 0,
+      "denominator": 10,
+      "value": 0.0
+    },
+    "overall_real_artifact": {
+      "numerator": 0,
+      "denominator": 30,
+      "value": 0.0
+    }
+  },
+  "summary": {
+    "computed": 4,
+    "absent": 4,
+    "mean_of_available": 75.0
+  }
+}

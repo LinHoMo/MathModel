@@ -57,6 +57,9 @@
     合并。见 `P13_1_REPORT.md`。
   - 2026-09-06 `validate.py _live_project_dirs` 误报修正：bench e2e 基线
     项目不适用论文交付门禁。见 `BASELINE_REPORT.md`。
+  - 2026-09-06 `retriever.py` 类型命中权重 +3→+6（P13-2 Ranking 修正，
+    Q1 门禁通过）：两题消融 + 评价类反向检查 + 零测试回归验证。见
+    `P13_2_REPORT.md`。
 
 ## 4. 三问门禁（每个新阶段 / 能力 PR 的准入检查）
 

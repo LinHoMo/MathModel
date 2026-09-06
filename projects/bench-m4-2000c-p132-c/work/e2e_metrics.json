@@ -1,0 +1,161 @@
+{
+  "mode": "e2e_metrics",
+  "project": "bench-m4-2000c-p132-c",
+  "computed_at": "2026-09-06T13:56:11",
+  "metrics": {
+    "decomposition_coverage": {
+      "value": 50.0,
+      "detail": {
+        "gt_sub_questions": 8,
+        "produced_questions": 4,
+        "mode": "count_ratio（无语义对齐评分，退化口径）"
+      }
+    },
+    "method_selection": {
+      "value": 100.0,
+      "detail": {
+        "gt_methods": [
+          "leslie matrix",
+          "age-structured population model",
+          "survival estimation",
+          "bootstrap",
+          "monte carlo",
+          "sensitivity analysis"
+        ],
+        "definition": "top-3 GT hit（chosen+shortlist 去重前3）",
+        "per_question": {
+          "Q001": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
+            "top3": [
+              "mc-topsis",
+              "mc-monte-carlo",
+              "mc-ahp"
+            ],
+            "top3_hit": true,
+            "shortlist": [
+              "mc-topsis",
+              "mc-monte-carlo",
+              "mc-ahp"
+            ]
+          },
+          "Q002": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
+            "top3": [
+              "mc-topsis",
+              "mc-monte-carlo",
+              "mc-ahp"
+            ],
+            "top3_hit": true,
+            "shortlist": [
+              "mc-topsis",
+              "mc-monte-carlo",
+              "mc-ahp"
+            ]
+          },
+          "Q003": {
+            "top1_chosen": "mc-monte-carlo",
+            "top1_hit": true,
+            "top3": [
+              "mc-monte-carlo",
+              "mc-topsis",
+              "mc-ahp"
+            ],
+            "top3_hit": true,
+            "shortlist": [
+              "mc-monte-carlo",
+              "mc-topsis",
+              "mc-ahp"
+            ]
+          },
+          "Q004": {
+            "top1_chosen": "mc-topsis",
+            "top1_hit": false,
+            "top3": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-monte-carlo"
+            ],
+            "top3_hit": true,
+            "shortlist": [
+              "mc-topsis",
+              "mc-ahp",
+              "mc-monte-carlo"
+            ]
+          }
+        },
+        "top1_hit_rate": 25.0,
+        "distinct_chosen": 2
+      }
+    },
+    "model_correctness": {
+      "value": null,
+      "detail": {
+        "source": "缺评分响应（n/a）"
+      }
+    },
+    "experiment_validity": {
+      "value": 100.0,
+      "detail": {
+        "results": 4,
+        "with_robustness_tags": 4,
+        "multi_run_ge5": 0
+      }
+    },
+    "validation_reliability": {
+      "value": 100.0,
+      "detail": {
+        "claims_supported": 4,
+        "claims_total": 4,
+        "paper_present": false
+      }
+    },
+    "innovation": {
+      "value": 0.0,
+      "detail": {
+        "declared_patterns": 0
+      }
+    },
+    "writing_completeness": {
+      "value": null,
+      "detail": {
+        "main_tex": false
+      }
+    },
+    "end_to_end": {
+      "value": null,
+      "detail": {
+        "rubric_total": null
+      }
+    }
+  },
+  "measurement_integrity": {
+    "criterion": "created_by startswith 'agent'（provenance-based, v1）",
+    "experiment_realization": {
+      "numerator": 0,
+      "denominator": 4,
+      "value": 0.0
+    },
+    "validation_realization": {
+      "numerator": 0,
+      "denominator": 4,
+      "value": 0.0
+    },
+    "writing_realization": {
+      "numerator": 0,
+      "denominator": 20,
+      "value": 0.0
+    },
+    "overall_real_artifact": {
+      "numerator": 0,
+      "denominator": 58,
+      "value": 0.0
+    }
+  },
+  "summary": {
+    "computed": 5,
+    "absent": 3,
+    "mean_of_available": 70.0
+  }
+}

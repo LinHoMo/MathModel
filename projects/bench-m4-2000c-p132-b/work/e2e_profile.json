@@ -1,0 +1,16 @@
+{
+  "problem_title": "MCM/ICM 2000 C — 大象避孕飞镖种群控制",
+  "problem_types": [
+    "simulation",
+    "uncertainty",
+    "prediction",
+    "optimization",
+    "fitting"
+  ],
+  "has_data": true,
+  "sample_size": "large",
+  "time_series": false,
+  "objectives": 1,
+  "uncertainty": true,
+  "note": "条件 B（Global Profile）：题目级六键特征。任务为机制模拟+不确定性量化+预测+配额优化；数据为两年运输记录（合并 n≈2664 → large）；投影为机制动力学而非统计时序拟合 → time_series=false。DTO 仅 P8 冻结六键 + note，非问题本体。"
+}

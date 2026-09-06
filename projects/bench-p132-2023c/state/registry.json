@@ -1,0 +1,1689 @@
+{
+  "registry_version": 3,
+  "project": "bench-p132-2023c",
+  "updated_at": "2026-09-06T05:55:57+00:00",
+  "counters": {
+    "question": 2,
+    "problem": 1,
+    "decision": 3,
+    "model": 2,
+    "assumption": 4,
+    "experiment": 2,
+    "result": 2,
+    "figure": 2,
+    "claim": 2,
+    "paper_section": 10
+  },
+  "artifacts": {
+    "A001": {
+      "schema_version": "3.1",
+      "artifact_id": "A001",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M001 假设1: 对振荡/周期序列失效，硬套会给出貌似合理的错误预测",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A002": {
+      "schema_version": "3.1",
+      "artifact_id": "A002",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M001 假设2: 长期外推误差放大，预测期超过样本期即高危",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A002",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A003": {
+      "schema_version": "3.1",
+      "artifact_id": "A003",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M002 假设1: 对振荡/周期序列失效，硬套会给出貌似合理的错误预测",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M002"
+      ],
+      "relations": [
+        {
+          "from": "M002",
+          "relation": "assumes",
+          "to": "A003",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A004": {
+      "schema_version": "3.1",
+      "artifact_id": "A004",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M002 假设2: 长期外推误差放大，预测期超过样本期即高危",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M002"
+      ],
+      "relations": [
+        {
+          "from": "M002",
+          "relation": "assumes",
+          "to": "A004",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "C001": {
+      "schema_version": "3.1",
+      "artifact_id": "C001",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 结论",
+      "question": "Q001",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R001"
+      ],
+      "relations": [
+        {
+          "from": "C001",
+          "relation": "appears_in",
+          "to": "S003",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "R001",
+          "relation": "supports",
+          "to": "C001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "evidence_build",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "evidence_build",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "statement": "Q001 结论",
+        "claim_type": "comparative",
+        "experiment_refs": [
+          "R001"
+        ],
+        "literature_refs": []
+      }
+    },
+    "C002": {
+      "schema_version": "3.1",
+      "artifact_id": "C002",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 结论",
+      "question": "Q002",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R002"
+      ],
+      "relations": [
+        {
+          "from": "C002",
+          "relation": "appears_in",
+          "to": "S008",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "R002",
+          "relation": "supports",
+          "to": "C002",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "evidence_build",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "evidence_build",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "statement": "Q002 结论",
+        "claim_type": "comparative",
+        "experiment_refs": [
+          "R002"
+        ],
+        "literature_refs": []
+      }
+    },
+    "D001": {
+      "schema_version": "3.1",
+      "artifact_id": "D001",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "文献检索与证据提取",
+      "question": "",
+      "created_by": "literature_search",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "mc-grey-gm11",
+        "mc-monte-carlo",
+        "mc-arima"
+      ],
+      "parent": [],
+      "depends_on": [
+        "P001"
+      ],
+      "relations": [
+        {
+          "from": "D001",
+          "relation": "based_on",
+          "to": "P001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "literature_search",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "literature_search",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "recommendations": [
+          {
+            "card_id": "mc-grey-gm11",
+            "score": 64,
+            "matched": [
+              "问题类型命中: prediction, timeseries",
+              "时序特征匹配"
+            ]
+          },
+          {
+            "card_id": "mc-monte-carlo",
+            "score": 64,
+            "matched": [
+              "问题类型命中: prediction, uncertainty",
+              "不确定性处理能力"
+            ]
+          },
+          {
+            "card_id": "mc-arima",
+            "score": 63,
+            "matched": [
+              "问题类型命中: prediction, timeseries",
+              "时序特征匹配"
+            ]
+          }
+        ]
+      }
+    },
+    "D002": {
+      "schema_version": "3.1",
+      "artifact_id": "D002",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 实验计划",
+      "question": "",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "mc-grey-gm11"
+      ],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "D002",
+          "relation": "based_on",
+          "to": "M001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment_design",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment_design",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "question": "Q001",
+        "methods": [
+          "mc-grey-gm11"
+        ],
+        "required_checks": [
+          "[mc-grey-gm11] 级比检验 + 后验差比 C 与小误差概率 P 报告",
+          "[mc-grey-gm11] 留出最后 1-2 期做样本外回测（滚动验证）"
+        ],
+        "preflight_guards": [
+          "GM(1,1) 前置级比检验为硬门禁；预测期长度不超过样本期的一半",
+          "预测类结论必须有样本外回测证据；拟合指标与回测指标分开展示"
+        ],
+        "failure_watchlist": [
+          {
+            "failure_id": "fm-grey-oscillating-data",
+            "method": "灰色预测 GM(1,1)",
+            "symptom": "拟合尚可但预测呈平滑单调趋势，周期性完全丢失；级比检验未做或未通过",
+            "detection": "级比检验（级比须落在可容覆盖区间）；画原始序列图人工确认单调性"
+          },
+          {
+            "failure_id": "fm-timeseries-no-backtest",
+            "method": "ARIMA/指数平滑/灰色预测等预测类方法",
+            "symptom": "论文只有拟合曲线与 R²，无样本外误差指标（MAPE/RMSE）",
+            "detection": "检查是否存在留出期回测指标；无则打回"
+          }
+        ],
+        "baseline_comparison": [
+          "朴素基线（均值/最近值/穷举小规模等同口径对照）"
+        ],
+        "sensitivity": [
+          "[mc-grey-gm11] 默认: 关键参数 ±10% 扰动对结论的影响"
+        ],
+        "entries": [
+          {
+            "experiment_id": "E-Q001-01",
+            "purpose": "方法学对照：主方法必须战胜朴素基线才有意义",
+            "hypothesis": "灰色预测 GM(1,1) 优于朴素基线",
+            "method": "同口径基线对比实验",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "primary_metric"
+            ],
+            "controls": [
+              "相同数据划分",
+              "相同评价指标"
+            ],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "primary_metric",
+              "accept_if": "improvement >= 3%",
+              "reject_if": "improvement < 0%",
+              "refine_if": "0% <= improvement < 3%"
+            },
+            "priority": 1,
+            "cost": 1,
+            "expected_information_gain": 0.9
+          }
+        ]
+      }
+    },
+    "D003": {
+      "schema_version": "3.1",
+      "artifact_id": "D003",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 实验计划",
+      "question": "",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "mc-grey-gm11"
+      ],
+      "parent": [],
+      "depends_on": [
+        "M002"
+      ],
+      "relations": [
+        {
+          "from": "D003",
+          "relation": "based_on",
+          "to": "M002",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment_design",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment_design",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "question": "Q002",
+        "methods": [
+          "mc-grey-gm11"
+        ],
+        "required_checks": [
+          "[mc-grey-gm11] 级比检验 + 后验差比 C 与小误差概率 P 报告",
+          "[mc-grey-gm11] 留出最后 1-2 期做样本外回测（滚动验证）"
+        ],
+        "preflight_guards": [
+          "GM(1,1) 前置级比检验为硬门禁；预测期长度不超过样本期的一半",
+          "预测类结论必须有样本外回测证据；拟合指标与回测指标分开展示"
+        ],
+        "failure_watchlist": [
+          {
+            "failure_id": "fm-grey-oscillating-data",
+            "method": "灰色预测 GM(1,1)",
+            "symptom": "拟合尚可但预测呈平滑单调趋势，周期性完全丢失；级比检验未做或未通过",
+            "detection": "级比检验（级比须落在可容覆盖区间）；画原始序列图人工确认单调性"
+          },
+          {
+            "failure_id": "fm-timeseries-no-backtest",
+            "method": "ARIMA/指数平滑/灰色预测等预测类方法",
+            "symptom": "论文只有拟合曲线与 R²，无样本外误差指标（MAPE/RMSE）",
+            "detection": "检查是否存在留出期回测指标；无则打回"
+          }
+        ],
+        "baseline_comparison": [
+          "朴素基线（均值/最近值/穷举小规模等同口径对照）"
+        ],
+        "sensitivity": [
+          "[mc-grey-gm11] 默认: 关键参数 ±10% 扰动对结论的影响"
+        ],
+        "entries": [
+          {
+            "experiment_id": "E-Q002-01",
+            "purpose": "方法学对照：主方法必须战胜朴素基线才有意义",
+            "hypothesis": "灰色预测 GM(1,1) 优于朴素基线",
+            "method": "同口径基线对比实验",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "primary_metric"
+            ],
+            "controls": [
+              "相同数据划分",
+              "相同评价指标"
+            ],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "primary_metric",
+              "accept_if": "improvement >= 3%",
+              "reject_if": "improvement < 0%",
+              "refine_if": "0% <= improvement < 3%"
+            },
+            "priority": 1,
+            "cost": 1,
+            "expected_information_gain": 0.9
+          }
+        ]
+      }
+    },
+    "E001": {
+      "schema_version": "3.1",
+      "artifact_id": "E001",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 实验",
+      "question": "Q001",
+      "created_by": "experiment@Q001",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "E001",
+          "relation": "tests",
+          "to": "M001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "E001",
+          "relation": "produces",
+          "to": "R001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "validated_by",
+          "to": "E001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-grey-gm11",
+        "plan_ref": "D002",
+        "plan_entry": "E-Q001-01",
+        "hypothesis_ref": "灰色预测 GM(1,1) 优于朴素基线"
+      }
+    },
+    "E002": {
+      "schema_version": "3.1",
+      "artifact_id": "E002",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 实验",
+      "question": "Q002",
+      "created_by": "experiment@Q002",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M002"
+      ],
+      "relations": [
+        {
+          "from": "E002",
+          "relation": "tests",
+          "to": "M002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "E002",
+          "relation": "produces",
+          "to": "R002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "M002",
+          "relation": "validated_by",
+          "to": "E002",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-grey-gm11",
+        "plan_ref": "D003",
+        "plan_entry": "E-Q002-01",
+        "hypothesis_ref": "灰色预测 GM(1,1) 优于朴素基线"
+      }
+    },
+    "F001": {
+      "schema_version": "3.1",
+      "artifact_id": "F001",
+      "type": "figure",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 结果图",
+      "question": "Q001",
+      "created_by": "experiment@Q001",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R001"
+      ],
+      "relations": [
+        {
+          "from": "R001",
+          "relation": "visualized_by",
+          "to": "F001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "F002": {
+      "schema_version": "3.1",
+      "artifact_id": "F002",
+      "type": "figure",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 结果图",
+      "question": "Q002",
+      "created_by": "experiment@Q002",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R002"
+      ],
+      "relations": [
+        {
+          "from": "R002",
+          "relation": "visualized_by",
+          "to": "F002",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "M001": {
+      "schema_version": "3.1",
+      "artifact_id": "M001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "灰色预测 GM(1,1)",
+      "question": "Q001",
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "Q001"
+      ],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "validated_by",
+          "to": "E001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "D002",
+          "relation": "based_on",
+          "to": "M001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "E001",
+          "relation": "tests",
+          "to": "M001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_selection",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_selection",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-grey-gm11",
+        "family": "classical_timeseries",
+        "shortlist": [
+          "mc-grey-gm11",
+          "mc-monte-carlo",
+          "mc-arima"
+        ]
+      }
+    },
+    "M002": {
+      "schema_version": "3.1",
+      "artifact_id": "M002",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "灰色预测 GM(1,1)",
+      "question": "Q002",
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "Q002"
+      ],
+      "relations": [
+        {
+          "from": "M002",
+          "relation": "assumes",
+          "to": "A003",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "M002",
+          "relation": "assumes",
+          "to": "A004",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "M002",
+          "relation": "validated_by",
+          "to": "E002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "Q002",
+          "relation": "solved_by",
+          "to": "M002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "D003",
+          "relation": "based_on",
+          "to": "M002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "E002",
+          "relation": "tests",
+          "to": "M002",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_selection",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "model_selection",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-grey-gm11",
+        "family": "classical_timeseries",
+        "shortlist": [
+          "mc-grey-gm11",
+          "mc-monte-carlo",
+          "mc-arima"
+        ]
+      }
+    },
+    "P001": {
+      "schema_version": "3.1",
+      "artifact_id": "P001",
+      "type": "problem",
+      "version": 1,
+      "status": "active",
+      "title": "MCM/ICM 2023 C — Wordle 报告数与结果分布预测",
+      "question": "",
+      "created_by": "problem_analysis",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "D001",
+          "relation": "based_on",
+          "to": "P001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "problem_analysis",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "problem_analysis",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "Q001": {
+      "schema_version": "3.1",
+      "artifact_id": "Q001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q001",
+      "question": "",
+      "created_by": "session",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "session",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "session",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "Q002": {
+      "schema_version": "3.1",
+      "artifact_id": "Q002",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q002",
+      "question": "",
+      "created_by": "session",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q002",
+          "relation": "solved_by",
+          "to": "M002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q002",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "session",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "session",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "R001": {
+      "schema_version": "3.1",
+      "artifact_id": "R001",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 结果",
+      "question": "Q001",
+      "created_by": "experiment@Q001",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "E001"
+      ],
+      "relations": [
+        {
+          "from": "R001",
+          "relation": "visualized_by",
+          "to": "F001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "R001",
+          "relation": "supports",
+          "to": "C001",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "E001",
+          "relation": "produces",
+          "to": "R001",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "sensitivity",
+        "baseline"
+      ],
+      "data": {
+        "card_id": "mc-grey-gm11"
+      }
+    },
+    "R002": {
+      "schema_version": "3.1",
+      "artifact_id": "R002",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 结果",
+      "question": "Q002",
+      "created_by": "experiment@Q002",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "E002"
+      ],
+      "relations": [
+        {
+          "from": "R002",
+          "relation": "visualized_by",
+          "to": "F002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "R002",
+          "relation": "supports",
+          "to": "C002",
+          "at": "2026-09-06T05:55:57+00:00"
+        },
+        {
+          "from": "E002",
+          "relation": "produces",
+          "to": "R002",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "experiment@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "sensitivity",
+        "baseline"
+      ],
+      "data": {
+        "card_id": "mc-grey-gm11"
+      }
+    },
+    "S001": {
+      "schema_version": "3.1",
+      "artifact_id": "S001",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 问题重述与分析",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "问题重述与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S002": {
+      "schema_version": "3.1",
+      "artifact_id": "S002",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 模型建立",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "模型建立"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S003": {
+      "schema_version": "3.1",
+      "artifact_id": "S003",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 结果与分析",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "结果与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "C001",
+          "relation": "appears_in",
+          "to": "S003",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S004": {
+      "schema_version": "3.1",
+      "artifact_id": "S004",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 灵敏度与稳健性",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "灵敏度与稳健性"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S005": {
+      "schema_version": "3.1",
+      "artifact_id": "S005",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 结论",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "结论"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S006": {
+      "schema_version": "3.1",
+      "artifact_id": "S006",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 问题重述与分析",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "问题重述与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S007": {
+      "schema_version": "3.1",
+      "artifact_id": "S007",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 模型建立",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "模型建立"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S008": {
+      "schema_version": "3.1",
+      "artifact_id": "S008",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 结果与分析",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "结果与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "C002",
+          "relation": "appears_in",
+          "to": "S008",
+          "at": "2026-09-06T05:55:57+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S009": {
+      "schema_version": "3.1",
+      "artifact_id": "S009",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 灵敏度与稳健性",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "灵敏度与稳健性"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S010": {
+      "schema_version": "3.1",
+      "artifact_id": "S010",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 结论",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "updated_at": "2026-09-06T05:55:57+00:00",
+      "payload": [
+        "结论"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:57+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    }
+  },
+  "history": {}
+}

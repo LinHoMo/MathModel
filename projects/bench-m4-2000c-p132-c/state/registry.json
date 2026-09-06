@@ -1,0 +1,3735 @@
+{
+  "registry_version": 3,
+  "project": "bench-m4-2000c-p132-c",
+  "updated_at": "2026-09-06T05:55:24+00:00",
+  "counters": {
+    "question": 4,
+    "problem": 1,
+    "decision": 5,
+    "model": 4,
+    "assumption": 8,
+    "experiment": 4,
+    "result": 4,
+    "figure": 4,
+    "claim": 4,
+    "paper_section": 20
+  },
+  "artifacts": {
+    "A001": {
+      "schema_version": "3.1",
+      "artifact_id": "A001",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M001 假设1: 距离度量对量纲与权重极端敏感，权重拍脑袋则结论不可信",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A002": {
+      "schema_version": "3.1",
+      "artifact_id": "A002",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M001 假设2: 只能排序不能论证\"最优唯一性\"；贴近度差小时排序不稳定",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A002",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A003": {
+      "schema_version": "3.1",
+      "artifact_id": "A003",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M002 假设1: 距离度量对量纲与权重极端敏感，权重拍脑袋则结论不可信",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M002"
+      ],
+      "relations": [
+        {
+          "from": "M002",
+          "relation": "assumes",
+          "to": "A003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A004": {
+      "schema_version": "3.1",
+      "artifact_id": "A004",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M002 假设2: 只能排序不能论证\"最优唯一性\"；贴近度差小时排序不稳定",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M002"
+      ],
+      "relations": [
+        {
+          "from": "M002",
+          "relation": "assumes",
+          "to": "A004",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A005": {
+      "schema_version": "3.1",
+      "artifact_id": "A005",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M003 假设1: 分布假设拍脑袋，垃圾进垃圾出",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M003"
+      ],
+      "relations": [
+        {
+          "from": "M003",
+          "relation": "assumes",
+          "to": "A005",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A006": {
+      "schema_version": "3.1",
+      "artifact_id": "A006",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M003 假设2: 样本量不足时分布估计噪声大",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M003"
+      ],
+      "relations": [
+        {
+          "from": "M003",
+          "relation": "assumes",
+          "to": "A006",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A007": {
+      "schema_version": "3.1",
+      "artifact_id": "A007",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M004 假设1: 距离度量对量纲与权重极端敏感，权重拍脑袋则结论不可信",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M004"
+      ],
+      "relations": [
+        {
+          "from": "M004",
+          "relation": "assumes",
+          "to": "A007",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A008": {
+      "schema_version": "3.1",
+      "artifact_id": "A008",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M004 假设2: 只能排序不能论证\"最优唯一性\"；贴近度差小时排序不稳定",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M004"
+      ],
+      "relations": [
+        {
+          "from": "M004",
+          "relation": "assumes",
+          "to": "A008",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "C001": {
+      "schema_version": "3.1",
+      "artifact_id": "C001",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 结论",
+      "question": "Q001",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R001"
+      ],
+      "relations": [
+        {
+          "from": "C001",
+          "relation": "appears_in",
+          "to": "S003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "R001",
+          "relation": "supports",
+          "to": "C001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "evidence_build",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "evidence_build",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "statement": "Q001 结论",
+        "claim_type": "comparative",
+        "experiment_refs": [
+          "R001"
+        ],
+        "literature_refs": []
+      }
+    },
+    "C002": {
+      "schema_version": "3.1",
+      "artifact_id": "C002",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 结论",
+      "question": "Q002",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R002"
+      ],
+      "relations": [
+        {
+          "from": "C002",
+          "relation": "appears_in",
+          "to": "S008",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "R002",
+          "relation": "supports",
+          "to": "C002",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "evidence_build",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "evidence_build",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "statement": "Q002 结论",
+        "claim_type": "comparative",
+        "experiment_refs": [
+          "R002"
+        ],
+        "literature_refs": []
+      }
+    },
+    "C003": {
+      "schema_version": "3.1",
+      "artifact_id": "C003",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 结论",
+      "question": "Q003",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R003"
+      ],
+      "relations": [
+        {
+          "from": "C003",
+          "relation": "appears_in",
+          "to": "S013",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "R003",
+          "relation": "supports",
+          "to": "C003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "evidence_build",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "evidence_build",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "statement": "Q003 结论",
+        "claim_type": "comparative",
+        "experiment_refs": [
+          "R003"
+        ],
+        "literature_refs": []
+      }
+    },
+    "C004": {
+      "schema_version": "3.1",
+      "artifact_id": "C004",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 结论",
+      "question": "Q004",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R004"
+      ],
+      "relations": [
+        {
+          "from": "C004",
+          "relation": "appears_in",
+          "to": "S018",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "R004",
+          "relation": "supports",
+          "to": "C004",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "evidence_build",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "evidence_build",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "statement": "Q004 结论",
+        "claim_type": "comparative",
+        "experiment_refs": [
+          "R004"
+        ],
+        "literature_refs": []
+      }
+    },
+    "D001": {
+      "schema_version": "3.1",
+      "artifact_id": "D001",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "文献检索与证据提取",
+      "question": "",
+      "created_by": "literature_search",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "P001"
+      ],
+      "relations": [
+        {
+          "from": "D001",
+          "relation": "based_on",
+          "to": "P001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "literature_search",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "literature_search",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "recommendations": []
+      }
+    },
+    "D002": {
+      "schema_version": "3.1",
+      "artifact_id": "D002",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 实验计划",
+      "question": "",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "mc-topsis",
+        "mc-ahp"
+      ],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "D002",
+          "relation": "based_on",
+          "to": "M001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment_design",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment_design",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "question": "Q001",
+        "methods": [
+          "mc-topsis",
+          "mc-ahp"
+        ],
+        "required_checks": [
+          "[mc-topsis] 双赋权法敏感性分析（如熵权 vs AHP），报告排序 Spearman 相关系数",
+          "[mc-topsis] 指标增删敏感性（leave-one-out）验证排序稳定性",
+          "[mc-ahp] 报告一致性比率 CR 并展示判断矩阵",
+          "[mc-ahp] 与客观赋权对比；权重扰动 ±10% 看排序稳定性"
+        ],
+        "preflight_guards": [
+          "TOPSIS 流程固定为\"同向化 → 归一化 → 加权 → 距离\"，归一化作为必检步骤",
+          "熵权实现必须含零方差列检测；发现零方差列时显式报告而非静默处理",
+          "AHP 流程中一致性检验为硬门禁；判断矩阵与 CR 必须进论文正文"
+        ],
+        "failure_watchlist": [
+          {
+            "failure_id": "fm-topsis-no-normalization",
+            "method": "TOPSIS",
+            "symptom": "排序结果几乎只由大量纲指标决定；权重分析结论与排序不一致",
+            "detection": "检查计算流程是否含归一化步骤；将指标单位人为放大 100 倍重跑，排序应不变（不变性检验）"
+          },
+          {
+            "failure_id": "fm-entropy-identical-columns",
+            "method": "熵权法",
+            "symptom": "权重出现 NaN/inf 或程序崩溃；有人为补 0.5 之类的魔法数",
+            "detection": "归一化前检查每列方差；计算中捕获除零；NaN 检查进自测"
+          },
+          {
+            "failure_id": "fm-ahp-consistency-ignored",
+            "method": "层次分析法（AHP）",
+            "symptom": "权重结果被追问来源时暴露判断矩阵不一致；结论可复现性差",
+            "detection": "计算并报告 CR；CR > 0.1（或 > 0.12 高阶）必须修正或降阶"
+          }
+        ],
+        "baseline_comparison": [
+          "朴素基线（均值/最近值/穷举小规模等同口径对照）"
+        ],
+        "sensitivity": [
+          "[mc-topsis] 双赋权法敏感性分析（如熵权 vs AHP），报告排序 Spearman 相关系数",
+          "[mc-topsis] 指标增删敏感性（leave-one-out）验证排序稳定性",
+          "[mc-ahp] 默认: 关键参数 ±10% 扰动对结论的影响"
+        ],
+        "entries": [
+          {
+            "experiment_id": "E-Q001-01",
+            "purpose": "方法学对照：主方法必须战胜朴素基线才有意义",
+            "hypothesis": "TOPSIS 逼近理想解排序 优于朴素基线",
+            "method": "同口径基线对比实验",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "相对贴近度 Ci",
+              "排序一致性"
+            ],
+            "controls": [
+              "相同数据划分",
+              "相同评价指标"
+            ],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "primary_metric",
+              "accept_if": "improvement >= 3%",
+              "reject_if": "improvement < 0%",
+              "refine_if": "0% <= improvement < 3%"
+            },
+            "priority": 1,
+            "cost": 1,
+            "expected_information_gain": 0.9
+          },
+          {
+            "experiment_id": "E-Q001-02",
+            "purpose": "方法卡最低证据要求: baseline_comparison",
+            "hypothesis": "TOPSIS 逼近理想解排序 在 baseline_comparison 上可复现且达标",
+            "method": "baseline_comparison",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "相对贴近度 Ci",
+              "排序一致性"
+            ],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "baseline_comparison",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 1,
+            "cost": 2,
+            "expected_information_gain": 0.7
+          },
+          {
+            "experiment_id": "E-Q001-03",
+            "purpose": "方法卡推荐增强证据: weight_sensitivity_analysis",
+            "hypothesis": "weight_sensitivity_analysis 提升结论稳健性",
+            "method": "weight_sensitivity_analysis",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "weight_sensitivity_analysis",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 3,
+            "expected_information_gain": 0.4
+          },
+          {
+            "experiment_id": "E-Q001-04",
+            "purpose": "方法卡推荐增强证据: ranking_stability_check",
+            "hypothesis": "ranking_stability_check 提升结论稳健性",
+            "method": "ranking_stability_check",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "ranking_stability_check",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 3,
+            "expected_information_gain": 0.4
+          },
+          {
+            "experiment_id": "E-Q001-05",
+            "purpose": "消融对照: 组合方法 mc-ahp 的边际贡献",
+            "hypothesis": "组合优于单一主方法",
+            "method": "仅用 mc-ahp 同口径对照",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "marginal_gain",
+              "accept_if": "marginal_gain > 0",
+              "reject_if": "marginal_gain <= 0",
+              "refine_if": "量级不显著"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q001-06",
+            "purpose": "候选方案要求: baseline_comparison",
+            "hypothesis": "baseline_comparison 验证通过",
+            "method": "baseline_comparison",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "baseline_comparison",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q001-07",
+            "purpose": "候选方案要求: recommended: weight_sensitivity_analysis",
+            "hypothesis": "recommended: weight_sensitivity_analysis 验证通过",
+            "method": "recommended: weight_sensitivity_analysis",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "recommended: weight_sensitivity_analysis",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q001-08",
+            "purpose": "候选方案要求: recommended: ranking_stability_check",
+            "hypothesis": "recommended: ranking_stability_check 验证通过",
+            "method": "recommended: ranking_stability_check",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "recommended: ranking_stability_check",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          }
+        ]
+      }
+    },
+    "D003": {
+      "schema_version": "3.1",
+      "artifact_id": "D003",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 实验计划",
+      "question": "",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "mc-topsis",
+        "mc-ahp"
+      ],
+      "parent": [],
+      "depends_on": [
+        "M002"
+      ],
+      "relations": [
+        {
+          "from": "D003",
+          "relation": "based_on",
+          "to": "M002",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment_design",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment_design",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "question": "Q002",
+        "methods": [
+          "mc-topsis",
+          "mc-ahp"
+        ],
+        "required_checks": [
+          "[mc-topsis] 双赋权法敏感性分析（如熵权 vs AHP），报告排序 Spearman 相关系数",
+          "[mc-topsis] 指标增删敏感性（leave-one-out）验证排序稳定性",
+          "[mc-ahp] 报告一致性比率 CR 并展示判断矩阵",
+          "[mc-ahp] 与客观赋权对比；权重扰动 ±10% 看排序稳定性"
+        ],
+        "preflight_guards": [
+          "TOPSIS 流程固定为\"同向化 → 归一化 → 加权 → 距离\"，归一化作为必检步骤",
+          "熵权实现必须含零方差列检测；发现零方差列时显式报告而非静默处理",
+          "AHP 流程中一致性检验为硬门禁；判断矩阵与 CR 必须进论文正文"
+        ],
+        "failure_watchlist": [
+          {
+            "failure_id": "fm-topsis-no-normalization",
+            "method": "TOPSIS",
+            "symptom": "排序结果几乎只由大量纲指标决定；权重分析结论与排序不一致",
+            "detection": "检查计算流程是否含归一化步骤；将指标单位人为放大 100 倍重跑，排序应不变（不变性检验）"
+          },
+          {
+            "failure_id": "fm-entropy-identical-columns",
+            "method": "熵权法",
+            "symptom": "权重出现 NaN/inf 或程序崩溃；有人为补 0.5 之类的魔法数",
+            "detection": "归一化前检查每列方差；计算中捕获除零；NaN 检查进自测"
+          },
+          {
+            "failure_id": "fm-ahp-consistency-ignored",
+            "method": "层次分析法（AHP）",
+            "symptom": "权重结果被追问来源时暴露判断矩阵不一致；结论可复现性差",
+            "detection": "计算并报告 CR；CR > 0.1（或 > 0.12 高阶）必须修正或降阶"
+          }
+        ],
+        "baseline_comparison": [
+          "朴素基线（均值/最近值/穷举小规模等同口径对照）"
+        ],
+        "sensitivity": [
+          "[mc-topsis] 双赋权法敏感性分析（如熵权 vs AHP），报告排序 Spearman 相关系数",
+          "[mc-topsis] 指标增删敏感性（leave-one-out）验证排序稳定性",
+          "[mc-ahp] 默认: 关键参数 ±10% 扰动对结论的影响"
+        ],
+        "entries": [
+          {
+            "experiment_id": "E-Q002-01",
+            "purpose": "方法学对照：主方法必须战胜朴素基线才有意义",
+            "hypothesis": "TOPSIS 逼近理想解排序 优于朴素基线",
+            "method": "同口径基线对比实验",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "相对贴近度 Ci",
+              "排序一致性"
+            ],
+            "controls": [
+              "相同数据划分",
+              "相同评价指标"
+            ],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "primary_metric",
+              "accept_if": "improvement >= 3%",
+              "reject_if": "improvement < 0%",
+              "refine_if": "0% <= improvement < 3%"
+            },
+            "priority": 1,
+            "cost": 1,
+            "expected_information_gain": 0.9
+          },
+          {
+            "experiment_id": "E-Q002-02",
+            "purpose": "方法卡最低证据要求: baseline_comparison",
+            "hypothesis": "TOPSIS 逼近理想解排序 在 baseline_comparison 上可复现且达标",
+            "method": "baseline_comparison",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "相对贴近度 Ci",
+              "排序一致性"
+            ],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "baseline_comparison",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 1,
+            "cost": 2,
+            "expected_information_gain": 0.7
+          },
+          {
+            "experiment_id": "E-Q002-03",
+            "purpose": "方法卡推荐增强证据: weight_sensitivity_analysis",
+            "hypothesis": "weight_sensitivity_analysis 提升结论稳健性",
+            "method": "weight_sensitivity_analysis",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "weight_sensitivity_analysis",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 3,
+            "expected_information_gain": 0.4
+          },
+          {
+            "experiment_id": "E-Q002-04",
+            "purpose": "方法卡推荐增强证据: ranking_stability_check",
+            "hypothesis": "ranking_stability_check 提升结论稳健性",
+            "method": "ranking_stability_check",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "ranking_stability_check",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 3,
+            "expected_information_gain": 0.4
+          },
+          {
+            "experiment_id": "E-Q002-05",
+            "purpose": "消融对照: 组合方法 mc-ahp 的边际贡献",
+            "hypothesis": "组合优于单一主方法",
+            "method": "仅用 mc-ahp 同口径对照",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "marginal_gain",
+              "accept_if": "marginal_gain > 0",
+              "reject_if": "marginal_gain <= 0",
+              "refine_if": "量级不显著"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q002-06",
+            "purpose": "候选方案要求: baseline_comparison",
+            "hypothesis": "baseline_comparison 验证通过",
+            "method": "baseline_comparison",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "baseline_comparison",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q002-07",
+            "purpose": "候选方案要求: recommended: weight_sensitivity_analysis",
+            "hypothesis": "recommended: weight_sensitivity_analysis 验证通过",
+            "method": "recommended: weight_sensitivity_analysis",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "recommended: weight_sensitivity_analysis",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q002-08",
+            "purpose": "候选方案要求: recommended: ranking_stability_check",
+            "hypothesis": "recommended: ranking_stability_check 验证通过",
+            "method": "recommended: ranking_stability_check",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "recommended: ranking_stability_check",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          }
+        ]
+      }
+    },
+    "D004": {
+      "schema_version": "3.1",
+      "artifact_id": "D004",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 实验计划",
+      "question": "",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "mc-monte-carlo"
+      ],
+      "parent": [],
+      "depends_on": [
+        "M003"
+      ],
+      "relations": [
+        {
+          "from": "D004",
+          "relation": "based_on",
+          "to": "M003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment_design",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment_design",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "question": "Q003",
+        "methods": [
+          "mc-monte-carlo"
+        ],
+        "required_checks": [
+          "[mc-monte-carlo] 样本量收敛性曲线（结果统计量随 N 的稳定性）",
+          "[mc-monte-carlo] 分布假设敏感性（换一种合理分布看结论是否翻转）"
+        ],
+        "preflight_guards": [
+          "蒙特卡洛报告规范：分布依据 + 样本量收敛曲线 + 分位数区间"
+        ],
+        "failure_watchlist": [
+          {
+            "failure_id": "fm-mc-distribution-assumption",
+            "method": "蒙特卡洛模拟",
+            "symptom": "分布假设无来源说明；结果只报均值不报区间；样本量未论证",
+            "detection": "检查每个随机输入是否有分布依据（历史拟合/文献/敏感性说明）；检查 N 的收敛性"
+          }
+        ],
+        "baseline_comparison": [
+          "朴素基线（均值/最近值/穷举小规模等同口径对照）"
+        ],
+        "sensitivity": [
+          "[mc-monte-carlo] 分布假设敏感性（换一种合理分布看结论是否翻转）"
+        ],
+        "entries": [
+          {
+            "experiment_id": "E-Q003-01",
+            "purpose": "方法学对照：主方法必须战胜朴素基线才有意义",
+            "hypothesis": "蒙特卡洛模拟 优于朴素基线",
+            "method": "同口径基线对比实验",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "primary_metric"
+            ],
+            "controls": [
+              "相同数据划分",
+              "相同评价指标"
+            ],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "primary_metric",
+              "accept_if": "improvement >= 3%",
+              "reject_if": "improvement < 0%",
+              "refine_if": "0% <= improvement < 3%"
+            },
+            "priority": 1,
+            "cost": 1,
+            "expected_information_gain": 0.9
+          },
+          {
+            "experiment_id": "E-Q003-02",
+            "purpose": "候选方案要求: 点估计 vs 区间估计的结论对照",
+            "hypothesis": "点估计 vs 区间估计的结论对照 验证通过",
+            "method": "点估计 vs 区间估计的结论对照",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "点估计 vs 区间估计的结论对照",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q003-03",
+            "purpose": "候选方案要求: 关键参数分布假设敏感性（至少两种合理假设）",
+            "hypothesis": "关键参数分布假设敏感性（至少两种合理假设） 验证通过",
+            "method": "关键参数分布假设敏感性（至少两种合理假设）",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "关键参数分布假设敏感性（至少两种合理假设）",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          }
+        ]
+      }
+    },
+    "D005": {
+      "schema_version": "3.1",
+      "artifact_id": "D005",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 实验计划",
+      "question": "",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "mc-topsis",
+        "mc-ahp"
+      ],
+      "parent": [],
+      "depends_on": [
+        "M004"
+      ],
+      "relations": [
+        {
+          "from": "D005",
+          "relation": "based_on",
+          "to": "M004",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment_design",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment_design",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "question": "Q004",
+        "methods": [
+          "mc-topsis",
+          "mc-ahp"
+        ],
+        "required_checks": [
+          "[mc-topsis] 双赋权法敏感性分析（如熵权 vs AHP），报告排序 Spearman 相关系数",
+          "[mc-topsis] 指标增删敏感性（leave-one-out）验证排序稳定性",
+          "[mc-ahp] 报告一致性比率 CR 并展示判断矩阵",
+          "[mc-ahp] 与客观赋权对比；权重扰动 ±10% 看排序稳定性"
+        ],
+        "preflight_guards": [
+          "TOPSIS 流程固定为\"同向化 → 归一化 → 加权 → 距离\"，归一化作为必检步骤",
+          "熵权实现必须含零方差列检测；发现零方差列时显式报告而非静默处理",
+          "AHP 流程中一致性检验为硬门禁；判断矩阵与 CR 必须进论文正文"
+        ],
+        "failure_watchlist": [
+          {
+            "failure_id": "fm-topsis-no-normalization",
+            "method": "TOPSIS",
+            "symptom": "排序结果几乎只由大量纲指标决定；权重分析结论与排序不一致",
+            "detection": "检查计算流程是否含归一化步骤；将指标单位人为放大 100 倍重跑，排序应不变（不变性检验）"
+          },
+          {
+            "failure_id": "fm-entropy-identical-columns",
+            "method": "熵权法",
+            "symptom": "权重出现 NaN/inf 或程序崩溃；有人为补 0.5 之类的魔法数",
+            "detection": "归一化前检查每列方差；计算中捕获除零；NaN 检查进自测"
+          },
+          {
+            "failure_id": "fm-ahp-consistency-ignored",
+            "method": "层次分析法（AHP）",
+            "symptom": "权重结果被追问来源时暴露判断矩阵不一致；结论可复现性差",
+            "detection": "计算并报告 CR；CR > 0.1（或 > 0.12 高阶）必须修正或降阶"
+          }
+        ],
+        "baseline_comparison": [
+          "朴素基线（均值/最近值/穷举小规模等同口径对照）"
+        ],
+        "sensitivity": [
+          "[mc-topsis] 双赋权法敏感性分析（如熵权 vs AHP），报告排序 Spearman 相关系数",
+          "[mc-topsis] 指标增删敏感性（leave-one-out）验证排序稳定性",
+          "[mc-ahp] 默认: 关键参数 ±10% 扰动对结论的影响"
+        ],
+        "entries": [
+          {
+            "experiment_id": "E-Q004-01",
+            "purpose": "方法学对照：主方法必须战胜朴素基线才有意义",
+            "hypothesis": "TOPSIS 逼近理想解排序 优于朴素基线",
+            "method": "同口径基线对比实验",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "相对贴近度 Ci",
+              "排序一致性"
+            ],
+            "controls": [
+              "相同数据划分",
+              "相同评价指标"
+            ],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "primary_metric",
+              "accept_if": "improvement >= 3%",
+              "reject_if": "improvement < 0%",
+              "refine_if": "0% <= improvement < 3%"
+            },
+            "priority": 1,
+            "cost": 1,
+            "expected_information_gain": 0.9
+          },
+          {
+            "experiment_id": "E-Q004-02",
+            "purpose": "方法卡最低证据要求: baseline_comparison",
+            "hypothesis": "TOPSIS 逼近理想解排序 在 baseline_comparison 上可复现且达标",
+            "method": "baseline_comparison",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [
+              "相对贴近度 Ci",
+              "排序一致性"
+            ],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "baseline_comparison",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 1,
+            "cost": 2,
+            "expected_information_gain": 0.7
+          },
+          {
+            "experiment_id": "E-Q004-03",
+            "purpose": "方法卡推荐增强证据: weight_sensitivity_analysis",
+            "hypothesis": "weight_sensitivity_analysis 提升结论稳健性",
+            "method": "weight_sensitivity_analysis",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "weight_sensitivity_analysis",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 3,
+            "expected_information_gain": 0.4
+          },
+          {
+            "experiment_id": "E-Q004-04",
+            "purpose": "方法卡推荐增强证据: ranking_stability_check",
+            "hypothesis": "ranking_stability_check 提升结论稳健性",
+            "method": "ranking_stability_check",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "ranking_stability_check",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 3,
+            "expected_information_gain": 0.4
+          },
+          {
+            "experiment_id": "E-Q004-05",
+            "purpose": "消融对照: 组合方法 mc-ahp 的边际贡献",
+            "hypothesis": "组合优于单一主方法",
+            "method": "仅用 mc-ahp 同口径对照",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "marginal_gain",
+              "accept_if": "marginal_gain > 0",
+              "reject_if": "marginal_gain <= 0",
+              "refine_if": "量级不显著"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q004-06",
+            "purpose": "候选方案要求: baseline_comparison",
+            "hypothesis": "baseline_comparison 验证通过",
+            "method": "baseline_comparison",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "baseline_comparison",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q004-07",
+            "purpose": "候选方案要求: recommended: weight_sensitivity_analysis",
+            "hypothesis": "recommended: weight_sensitivity_analysis 验证通过",
+            "method": "recommended: weight_sensitivity_analysis",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "recommended: weight_sensitivity_analysis",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          },
+          {
+            "experiment_id": "E-Q004-08",
+            "purpose": "候选方案要求: recommended: ranking_stability_check",
+            "hypothesis": "recommended: ranking_stability_check 验证通过",
+            "method": "recommended: ranking_stability_check",
+            "baseline": "朴素基线（均值/最近值/穷举小规模等同口径对照）",
+            "metrics": [],
+            "controls": [],
+            "required_artifacts": [],
+            "required_evidence": [],
+            "failure_detection": "",
+            "decision_rule": {
+              "metric": "recommended: ranking_stability_check",
+              "accept_if": "criteria_pass",
+              "reject_if": "criteria_fail",
+              "refine_if": "borderline"
+            },
+            "priority": 2,
+            "cost": 2,
+            "expected_information_gain": 0.5
+          }
+        ]
+      }
+    },
+    "E001": {
+      "schema_version": "3.1",
+      "artifact_id": "E001",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 实验",
+      "question": "Q001",
+      "created_by": "experiment@Q001",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "E001",
+          "relation": "tests",
+          "to": "M001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E001",
+          "relation": "produces",
+          "to": "R001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "validated_by",
+          "to": "E001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-topsis",
+        "plan_ref": "D002",
+        "plan_entry": "E-Q001-01",
+        "hypothesis_ref": "TOPSIS 逼近理想解排序 优于朴素基线"
+      }
+    },
+    "E002": {
+      "schema_version": "3.1",
+      "artifact_id": "E002",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 实验",
+      "question": "Q002",
+      "created_by": "experiment@Q002",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M002"
+      ],
+      "relations": [
+        {
+          "from": "E002",
+          "relation": "tests",
+          "to": "M002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E002",
+          "relation": "produces",
+          "to": "R002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M002",
+          "relation": "validated_by",
+          "to": "E002",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-topsis",
+        "plan_ref": "D003",
+        "plan_entry": "E-Q002-01",
+        "hypothesis_ref": "TOPSIS 逼近理想解排序 优于朴素基线"
+      }
+    },
+    "E003": {
+      "schema_version": "3.1",
+      "artifact_id": "E003",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 实验",
+      "question": "Q003",
+      "created_by": "experiment@Q003",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M003"
+      ],
+      "relations": [
+        {
+          "from": "E003",
+          "relation": "tests",
+          "to": "M003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E003",
+          "relation": "produces",
+          "to": "R003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M003",
+          "relation": "validated_by",
+          "to": "E003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q003",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q003",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-monte-carlo",
+        "plan_ref": "D004",
+        "plan_entry": "E-Q003-01",
+        "hypothesis_ref": "蒙特卡洛模拟 优于朴素基线"
+      }
+    },
+    "E004": {
+      "schema_version": "3.1",
+      "artifact_id": "E004",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 实验",
+      "question": "Q004",
+      "created_by": "experiment@Q004",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M004"
+      ],
+      "relations": [
+        {
+          "from": "E004",
+          "relation": "tests",
+          "to": "M004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E004",
+          "relation": "produces",
+          "to": "R004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M004",
+          "relation": "validated_by",
+          "to": "E004",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q004",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q004",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-topsis",
+        "plan_ref": "D005",
+        "plan_entry": "E-Q004-01",
+        "hypothesis_ref": "TOPSIS 逼近理想解排序 优于朴素基线"
+      }
+    },
+    "F001": {
+      "schema_version": "3.1",
+      "artifact_id": "F001",
+      "type": "figure",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 结果图",
+      "question": "Q001",
+      "created_by": "experiment@Q001",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R001"
+      ],
+      "relations": [
+        {
+          "from": "R001",
+          "relation": "visualized_by",
+          "to": "F001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "F002": {
+      "schema_version": "3.1",
+      "artifact_id": "F002",
+      "type": "figure",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 结果图",
+      "question": "Q002",
+      "created_by": "experiment@Q002",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R002"
+      ],
+      "relations": [
+        {
+          "from": "R002",
+          "relation": "visualized_by",
+          "to": "F002",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "F003": {
+      "schema_version": "3.1",
+      "artifact_id": "F003",
+      "type": "figure",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 结果图",
+      "question": "Q003",
+      "created_by": "experiment@Q003",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R003"
+      ],
+      "relations": [
+        {
+          "from": "R003",
+          "relation": "visualized_by",
+          "to": "F003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q003",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q003",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "F004": {
+      "schema_version": "3.1",
+      "artifact_id": "F004",
+      "type": "figure",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 结果图",
+      "question": "Q004",
+      "created_by": "experiment@Q004",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "R004"
+      ],
+      "relations": [
+        {
+          "from": "R004",
+          "relation": "visualized_by",
+          "to": "F004",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q004",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q004",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "M001": {
+      "schema_version": "3.1",
+      "artifact_id": "M001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "TOPSIS 逼近理想解排序",
+      "question": "Q001",
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "Q001"
+      ],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "validated_by",
+          "to": "E001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "D002",
+          "relation": "based_on",
+          "to": "M001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E001",
+          "relation": "tests",
+          "to": "M001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_selection",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_selection",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-topsis",
+        "family": "composite_evaluation",
+        "shortlist": [
+          "mc-topsis",
+          "mc-monte-carlo",
+          "mc-ahp"
+        ]
+      }
+    },
+    "M002": {
+      "schema_version": "3.1",
+      "artifact_id": "M002",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "TOPSIS 逼近理想解排序",
+      "question": "Q002",
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "Q002"
+      ],
+      "relations": [
+        {
+          "from": "M002",
+          "relation": "assumes",
+          "to": "A003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M002",
+          "relation": "assumes",
+          "to": "A004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M002",
+          "relation": "validated_by",
+          "to": "E002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "Q002",
+          "relation": "solved_by",
+          "to": "M002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "D003",
+          "relation": "based_on",
+          "to": "M002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E002",
+          "relation": "tests",
+          "to": "M002",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_selection",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_selection",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-topsis",
+        "family": "composite_evaluation",
+        "shortlist": [
+          "mc-topsis",
+          "mc-monte-carlo",
+          "mc-ahp"
+        ]
+      }
+    },
+    "M003": {
+      "schema_version": "3.1",
+      "artifact_id": "M003",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "蒙特卡洛模拟",
+      "question": "Q003",
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "Q003"
+      ],
+      "relations": [
+        {
+          "from": "M003",
+          "relation": "assumes",
+          "to": "A005",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M003",
+          "relation": "assumes",
+          "to": "A006",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M003",
+          "relation": "validated_by",
+          "to": "E003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "Q003",
+          "relation": "solved_by",
+          "to": "M003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "D004",
+          "relation": "based_on",
+          "to": "M003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E003",
+          "relation": "tests",
+          "to": "M003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_selection",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_selection",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-monte-carlo",
+        "family": "uncertainty_propagation",
+        "shortlist": [
+          "mc-monte-carlo",
+          "mc-topsis",
+          "mc-ahp"
+        ]
+      }
+    },
+    "M004": {
+      "schema_version": "3.1",
+      "artifact_id": "M004",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "TOPSIS 逼近理想解排序",
+      "question": "Q004",
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "Q004"
+      ],
+      "relations": [
+        {
+          "from": "M004",
+          "relation": "assumes",
+          "to": "A007",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M004",
+          "relation": "assumes",
+          "to": "A008",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "M004",
+          "relation": "validated_by",
+          "to": "E004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "Q004",
+          "relation": "solved_by",
+          "to": "M004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "D005",
+          "relation": "based_on",
+          "to": "M004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E004",
+          "relation": "tests",
+          "to": "M004",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_selection",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "model_selection",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-topsis",
+        "family": "composite_evaluation",
+        "shortlist": [
+          "mc-topsis",
+          "mc-ahp",
+          "mc-monte-carlo"
+        ]
+      }
+    },
+    "P001": {
+      "schema_version": "3.1",
+      "artifact_id": "P001",
+      "type": "problem",
+      "version": 1,
+      "status": "active",
+      "title": "MCM/ICM 2000 C — 大象避孕飞镖种群控制",
+      "question": "",
+      "created_by": "problem_analysis",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "D001",
+          "relation": "based_on",
+          "to": "P001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "problem_analysis",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "problem_analysis",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "Q001": {
+      "schema_version": "3.1",
+      "artifact_id": "Q001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q001",
+      "question": "",
+      "created_by": "session",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "session",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "session",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "Q002": {
+      "schema_version": "3.1",
+      "artifact_id": "Q002",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q002",
+      "question": "",
+      "created_by": "session",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q002",
+          "relation": "solved_by",
+          "to": "M002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q002",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "session",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "session",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "Q003": {
+      "schema_version": "3.1",
+      "artifact_id": "Q003",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q003",
+      "question": "",
+      "created_by": "session",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q003",
+          "relation": "solved_by",
+          "to": "M003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "session",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "session",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "Q004": {
+      "schema_version": "3.1",
+      "artifact_id": "Q004",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q004",
+      "question": "",
+      "created_by": "session",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q004",
+          "relation": "solved_by",
+          "to": "M004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q004",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "session",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "session",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "R001": {
+      "schema_version": "3.1",
+      "artifact_id": "R001",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 结果",
+      "question": "Q001",
+      "created_by": "experiment@Q001",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "E001"
+      ],
+      "relations": [
+        {
+          "from": "R001",
+          "relation": "visualized_by",
+          "to": "F001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "R001",
+          "relation": "supports",
+          "to": "C001",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E001",
+          "relation": "produces",
+          "to": "R001",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "sensitivity",
+        "baseline"
+      ],
+      "data": {
+        "card_id": "mc-topsis"
+      }
+    },
+    "R002": {
+      "schema_version": "3.1",
+      "artifact_id": "R002",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 结果",
+      "question": "Q002",
+      "created_by": "experiment@Q002",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "E002"
+      ],
+      "relations": [
+        {
+          "from": "R002",
+          "relation": "visualized_by",
+          "to": "F002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "R002",
+          "relation": "supports",
+          "to": "C002",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E002",
+          "relation": "produces",
+          "to": "R002",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "sensitivity",
+        "baseline"
+      ],
+      "data": {
+        "card_id": "mc-topsis"
+      }
+    },
+    "R003": {
+      "schema_version": "3.1",
+      "artifact_id": "R003",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 结果",
+      "question": "Q003",
+      "created_by": "experiment@Q003",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "E003"
+      ],
+      "relations": [
+        {
+          "from": "R003",
+          "relation": "visualized_by",
+          "to": "F003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "R003",
+          "relation": "supports",
+          "to": "C003",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E003",
+          "relation": "produces",
+          "to": "R003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q003",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q003",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "sensitivity",
+        "baseline"
+      ],
+      "data": {
+        "card_id": "mc-monte-carlo"
+      }
+    },
+    "R004": {
+      "schema_version": "3.1",
+      "artifact_id": "R004",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 结果",
+      "question": "Q004",
+      "created_by": "experiment@Q004",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "E004"
+      ],
+      "relations": [
+        {
+          "from": "R004",
+          "relation": "visualized_by",
+          "to": "F004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "R004",
+          "relation": "supports",
+          "to": "C004",
+          "at": "2026-09-06T05:55:24+00:00"
+        },
+        {
+          "from": "E004",
+          "relation": "produces",
+          "to": "R004",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q004",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "experiment@Q004",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "sensitivity",
+        "baseline"
+      ],
+      "data": {
+        "card_id": "mc-topsis"
+      }
+    },
+    "S001": {
+      "schema_version": "3.1",
+      "artifact_id": "S001",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 问题重述与分析",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "问题重述与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S002": {
+      "schema_version": "3.1",
+      "artifact_id": "S002",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 模型建立",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "模型建立"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S003": {
+      "schema_version": "3.1",
+      "artifact_id": "S003",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 结果与分析",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "结果与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "C001",
+          "relation": "appears_in",
+          "to": "S003",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S004": {
+      "schema_version": "3.1",
+      "artifact_id": "S004",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 灵敏度与稳健性",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "灵敏度与稳健性"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S005": {
+      "schema_version": "3.1",
+      "artifact_id": "S005",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 结论",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "结论"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S006": {
+      "schema_version": "3.1",
+      "artifact_id": "S006",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 问题重述与分析",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "问题重述与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S007": {
+      "schema_version": "3.1",
+      "artifact_id": "S007",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 模型建立",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "模型建立"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S008": {
+      "schema_version": "3.1",
+      "artifact_id": "S008",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 结果与分析",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "结果与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "C002",
+          "relation": "appears_in",
+          "to": "S008",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S009": {
+      "schema_version": "3.1",
+      "artifact_id": "S009",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 灵敏度与稳健性",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "灵敏度与稳健性"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S010": {
+      "schema_version": "3.1",
+      "artifact_id": "S010",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q002 · 结论",
+      "question": "Q002",
+      "created_by": "paper_sections@Q002",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "结论"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q002",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S011": {
+      "schema_version": "3.1",
+      "artifact_id": "S011",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 · 问题重述与分析",
+      "question": "Q003",
+      "created_by": "paper_sections@Q003",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "问题重述与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S012": {
+      "schema_version": "3.1",
+      "artifact_id": "S012",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 · 模型建立",
+      "question": "Q003",
+      "created_by": "paper_sections@Q003",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "模型建立"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S013": {
+      "schema_version": "3.1",
+      "artifact_id": "S013",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 · 结果与分析",
+      "question": "Q003",
+      "created_by": "paper_sections@Q003",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "结果与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "C003",
+          "relation": "appears_in",
+          "to": "S013",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S014": {
+      "schema_version": "3.1",
+      "artifact_id": "S014",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 · 灵敏度与稳健性",
+      "question": "Q003",
+      "created_by": "paper_sections@Q003",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "灵敏度与稳健性"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S015": {
+      "schema_version": "3.1",
+      "artifact_id": "S015",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q003 · 结论",
+      "question": "Q003",
+      "created_by": "paper_sections@Q003",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "结论"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q003",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S016": {
+      "schema_version": "3.1",
+      "artifact_id": "S016",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 · 问题重述与分析",
+      "question": "Q004",
+      "created_by": "paper_sections@Q004",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "问题重述与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S017": {
+      "schema_version": "3.1",
+      "artifact_id": "S017",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 · 模型建立",
+      "question": "Q004",
+      "created_by": "paper_sections@Q004",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "模型建立"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S018": {
+      "schema_version": "3.1",
+      "artifact_id": "S018",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 · 结果与分析",
+      "question": "Q004",
+      "created_by": "paper_sections@Q004",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "结果与分析"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "C004",
+          "relation": "appears_in",
+          "to": "S018",
+          "at": "2026-09-06T05:55:24+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S019": {
+      "schema_version": "3.1",
+      "artifact_id": "S019",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 · 灵敏度与稳健性",
+      "question": "Q004",
+      "created_by": "paper_sections@Q004",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "灵敏度与稳健性"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S020": {
+      "schema_version": "3.1",
+      "artifact_id": "S020",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q004 · 结论",
+      "question": "Q004",
+      "created_by": "paper_sections@Q004",
+      "created_at": "2026-09-06T05:55:24+00:00",
+      "updated_at": "2026-09-06T05:55:24+00:00",
+      "payload": [
+        "结论"
+      ],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-06T05:55:24+00:00",
+          "by": "paper_sections@Q004",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    }
+  },
+  "history": {}
+}

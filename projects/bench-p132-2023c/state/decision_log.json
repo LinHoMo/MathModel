@@ -1,0 +1,104 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-06T05:55:57+00:00",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "Q001 方法选型",
+      "chosen": "mc-grey-gm11",
+      "alternatives": [
+        "mc-monte-carlo（score=64，问题类型命中: prediction, uncertainty；不确定性处理能力）",
+        "mc-arima（score=63，问题类型命中: prediction, timeseries；时序特征匹配）"
+      ],
+      "criteria": [
+        "检索得分",
+        "适用条件匹配",
+        "验证代价",
+        "历史决策一致性"
+      ],
+      "evidence_ids": [],
+      "reasoning": "total=64（fit=33 data=10 interpretable=5 robust=5 innovation=4 competition=5 risk_penalty=-6）",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "status": "active",
+      "question_type": "prediction",
+      "knowledge_refs": [
+        {
+          "id": "mc-grey-gm11",
+          "version": 1
+        }
+      ],
+      "failure_refs": [
+        "fm-grey-oscillating-data",
+        "fm-timeseries-no-backtest"
+      ],
+      "required_validation": [],
+      "score_breakdown": {
+        "fit": 33,
+        "data": 10,
+        "interpretability": 5,
+        "robustness": 5,
+        "complexity": 3,
+        "innovation": 4,
+        "competition": 5,
+        "evidence_cost": 5,
+        "risk_penalty": -6
+      },
+      "consequences": [],
+      "invalidated_by": null,
+      "invalidated_reason": null,
+      "invalidated_at": null
+    },
+    {
+      "decision_id": "D002",
+      "question": "Q002 方法选型",
+      "chosen": "mc-grey-gm11",
+      "alternatives": [
+        "mc-monte-carlo（score=64，问题类型命中: prediction, uncertainty；不确定性处理能力）",
+        "mc-arima（score=63，问题类型命中: prediction, timeseries；时序特征匹配）"
+      ],
+      "criteria": [
+        "检索得分",
+        "适用条件匹配",
+        "验证代价",
+        "历史决策一致性"
+      ],
+      "evidence_ids": [],
+      "reasoning": "total=64（fit=33 data=10 interpretable=5 robust=5 innovation=4 competition=5 risk_penalty=-6）",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_selection",
+      "created_at": "2026-09-06T05:55:57+00:00",
+      "status": "active",
+      "question_type": "prediction",
+      "knowledge_refs": [
+        {
+          "id": "mc-grey-gm11",
+          "version": 1
+        }
+      ],
+      "failure_refs": [
+        "fm-grey-oscillating-data",
+        "fm-timeseries-no-backtest"
+      ],
+      "required_validation": [],
+      "score_breakdown": {
+        "fit": 33,
+        "data": 10,
+        "interpretability": 5,
+        "robustness": 5,
+        "complexity": 3,
+        "innovation": 4,
+        "competition": 5,
+        "evidence_cost": 5,
+        "risk_penalty": -6
+      },
+      "consequences": [],
+      "invalidated_by": null,
+      "invalidated_reason": null,
+      "invalidated_at": null
+    }
+  ]
+}
