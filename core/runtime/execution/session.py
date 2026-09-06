@@ -114,6 +114,25 @@ class RuntimeSession:
         self.state.refresh_from(self.registry, self.graph)
         self.state.save()
 
+    # ------------------------------------------------------------ P12-1 Question Dependency
+
+    def declare_dependency(self, source_question: str, target_question: str,
+                           dependency_type: str, reason: str,
+                           created_by: str = "session") -> dict:
+        """显式声明科学依赖（P12-1）：State records + 调度镜像 + Registry
+        depends_on 镜像三处双写。D2：依赖只能由此显式产生。"""
+        from runtime.state.dependencies import declare_dependency
+        rec = declare_dependency(self.state, self.registry, source_question,
+                                 target_question, dependency_type, reason,
+                                 created_by=created_by)
+        self.checkpoint()
+        return rec
+
+    def dependency_integrity(self) -> list[str]:
+        """D1：双写一致性检查（问题清单，空 = 一致）。"""
+        from runtime.state.dependencies import dependency_integrity_problems
+        return dependency_integrity_problems(self.registry, self.state)
+
     # ------------------------------------------------------------ Invalidation（P6-⑦）
 
     def invalidate(self, artifact_id: str, reason: str = "") -> dict:
@@ -129,6 +148,15 @@ class RuntimeSession:
         report = self.graph.invalidate(artifact_id, reason=reason)
         # 传播完成后剪除触及终态产物的死边（否则 E3 永远 FAIL，健康链无法重建）
         self.graph.retract_invalidated()
+        # P12-1 D3/D4：跨问题失效传播——只沿 evidential/extension 依赖打
+        # requires_revalidation 标记（execution 依赖永不传播，D3 钉死）
+        art0 = self.registry.get(artifact_id)
+        src_q = art0.question or (art0.artifact_id
+                                  if art0.type == "question" else "")
+        if src_q:
+            from runtime.state.dependencies import propagate_to_dependents
+            self._cross_question_propagation = propagate_to_dependents(
+                self.registry, self.state, src_q, reason)
         art = self.registry.get(artifact_id)
         t = art.type
         if t == "question":
