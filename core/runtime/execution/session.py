@@ -133,6 +133,22 @@ class RuntimeSession:
         from runtime.state.dependencies import dependency_integrity_problems
         return dependency_integrity_problems(self.registry, self.state)
 
+    def declare_cross_relation(self, source: str, target: str,
+                               relation_type: str,
+                               dependency_refs: list[dict],
+                               created_by: str = "session") -> dict:
+        """P12-2：显式声明跨问题科学关系（compares/extends/derived_from）。"""
+        from runtime.state.relations import declare_cross_relation
+        rec = declare_cross_relation(self.state, self.registry, source, target,
+                                     relation_type, dependency_refs,
+                                     created_by=created_by)
+        self.checkpoint()
+        return rec
+
+    def cross_relations(self) -> list[dict]:
+        from runtime.state.relations import cross_relations
+        return cross_relations(self.state)
+
     # ------------------------------------------------------------ Invalidation（P6-⑦）
 
     def invalidate(self, artifact_id: str, reason: str = "") -> dict:
@@ -157,6 +173,10 @@ class RuntimeSession:
             from runtime.state.dependencies import propagate_to_dependents
             self._cross_question_propagation = propagate_to_dependents(
                 self.registry, self.state, src_q, reason)
+            # P12-2: 上游失效 → 参与的跨问题关系进入 requires_revalidation
+            from runtime.state.relations import mark_relations_for_revalidation
+            self._relation_revalidation = mark_relations_for_revalidation(
+                self.state, src_q, reason)
         art = self.registry.get(artifact_id)
         t = art.type
         if t == "question":
