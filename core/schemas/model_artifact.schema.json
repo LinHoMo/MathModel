@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MODEL_ARTIFACT v1（P13-3C 冻结评分契约）",
+  "description": "三臂对照实验（B0/MMA/B1）的唯一评分对象。只含建模产物，不含代码执行结果与论文。arm 身份不入本文件（评分前剥离，盲评）。",
+  "type": "object",
+  "required": [
+    "problem_id", "problem_interpretation", "assumptions", "variables",
+    "parameters", "constraints", "objective", "mechanism",
+    "candidate_models", "selected_model", "selection_reason",
+    "uncertainties", "sensitivity_plan"
+  ],
+  "properties": {
+    "problem_id": {"type": "string"},
+    "problem_interpretation": {
+      "type": "string", "minLength": 50,
+      "description": "对题目的理解：要回答什么、成功标准是什么"
+    },
+    "assumptions": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["id", "statement"],
+        "properties": {
+          "id": {"type": "string"},
+          "statement": {"type": "string"},
+          "justification": {"type": "string", "description": "为什么该假设可接受"}
+        }
+      }
+    },
+    "variables": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["id", "name", "description"],
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "description": {"type": "string"},
+          "unit": {"type": "string"},
+          "role": {"type": "string",
+                   "enum": ["decision", "state", "input", "derived", "index"]},
+          "domain": {"type": "string", "description": "取值范围/非负/整数等"}
+        }
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "name", "source"],
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "value_or_source": {"type": "string"},
+          "unit": {"type": "string"},
+          "source": {"type": "string",
+                     "enum": ["data", "literature", "assumed", "calibrated"]}
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "expression"],
+        "properties": {
+          "id": {"type": "string"},
+          "expression": {"type": "string"},
+          "rationale": {"type": "string"}
+        }
+      }
+    },
+    "objective": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["id", "expression", "kind"],
+        "properties": {
+          "id": {"type": "string"},
+          "expression": {"type": "string"},
+          "kind": {"type": "string",
+                   "enum": ["minimize", "maximize", "estimand", "simulate"]},
+          "rationale": {"type": "string"}
+        }
+      }
+    },
+    "mechanism": {
+      "type": "array", "minItems": 1,
+      "description": "模型机理/方程：模型如何运转的数学表达",
+      "items": {
+        "type": "object", "required": ["id", "name", "equation"],
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "equation": {"type": "string"},
+          "derivation_notes": {"type": "string"}
+        }
+      }
+    },
+    "candidate_models": {
+      "type": "array", "minItems": 2,
+      "items": {
+        "type": "object", "required": ["model"],
+        "properties": {
+          "model": {"type": "string"},
+          "pros": {"type": "string"},
+          "cons": {"type": "string"}
+        }
+      }
+    },
+    "selected_model": {"type": "string"},
+    "selection_reason": {"type": "string", "minLength": 30},
+    "uncertainties": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["source", "handling"],
+        "properties": {
+          "source": {"type": "string"},
+          "handling": {"type": "string",
+                       "enum": ["propagated", "scenario", "ignored", "qualitative"]},
+          "effect": {"type": "string"}
+        }
+      }
+    },
+    "sensitivity_plan": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["parameter", "range"],
+        "properties": {
+          "parameter": {"type": "string"},
+          "range": {"type": "string"},
+          "metric": {"type": "string"}
+        }
+      }
+    }
+  }
+}

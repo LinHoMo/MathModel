@@ -1,0 +1,36 @@
+{
+  "problem_id": "2022_B",
+  "version": 1,
+  "note": "P13-3C 预注册 rubric（建模前落盘）。资源分配-优化-政策任务：Mead/Powell 两库水平衡。",
+  "questions": {
+    "ALL": {
+      "task_type": "resource_optimization",
+      "structural_required": {
+        "variables": "变量定义（M、P 水位、抽水量、需求、发电量）",
+        "assumptions": "假设显式陈述",
+        "water_balance_mechanism": "两库水量平衡机制（质量守恒方程）",
+        "allocation_objective": "分配目标（满足固定需求的抽水决策）",
+        "competing_interests_criteria": "Q2 竞争利益解决的显式准则",
+        "shortage_policy": "Q3 短缺情形的处置政策",
+        "demand_growth_sensitivity": "Q4 需求变化/增长/可再生能源占比/保护的响应"
+      },
+      "alignment_points": [
+        "Q1: 抽水决策 + 耗尽时间 + 补水量",
+        "Q2: 竞争利益的显式解决准则",
+        "Q3: 水电短缺的处置",
+        "Q4: 需求/增长/可再生能源/保护变化的模型响应"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {"structural": 1, "mathematical": 1, "alignment": 1}
+}

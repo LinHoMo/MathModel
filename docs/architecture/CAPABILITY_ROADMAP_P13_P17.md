@@ -7,6 +7,10 @@
 
 ## 0. 研发闭环（自 P13 起唯一的工作方式）
 
+> **治理铁律（P13-3C 起）：任何能力升级，如果没有 baseline，就不算能力
+> 升级。** 干预实验（同题前后对照，如 P13-3B）与能力实验（跨题迁移 +
+> 外部基线对照，如 P13-3C）是两种不同的证明，治理上分开锁死。
+
 ```text
 BASELINE（首跑分数，预期很低——这正是价值）
    → 针对短板修改 Brain（指令 / 知识卡 / 策略）
@@ -15,8 +19,22 @@ BASELINE（首跑分数，预期很低——这正是价值）
    → 有 Δ 才算能力进步；无 Δ 的改动回滚或存档
 ```
 
-首跑的意义不是分数高，而是让"这个系统到底是不是数模 Agent"第一次变得
+首跑的意义不是分数高，而是让"这个系统到底会不会做数学建模题"第一次变得
 可测量、可比较、可归因。
+
+### 实验矩阵（冻结，能力层 + 产品层分离）
+
+| Experiment | Question | Baseline | Intervention | External |
+|---|---|---|---|---|
+| E1 | 已见题 | B0 | B1 | — |
+| E2 | 未见题 | B0 | B1 | — |
+| E3 | 未见题 | B0 | MMA（MathModelAgent） | ✓ |
+| E4 | 未见题 | MMA | B1 | ✓ |
+| E5 | 未见题 | 同 Model Artifact | 同 Writer | ✓（P13-3D） |
+
+能力层结论：干预是否提高 Model Construction；产品层结论（P13-3D）：
+更好的 Model Construction 是否转化成更好的论文（Paper Conversion
+Efficiency = 同一 Writer 下模型分 → 论文分的转化率）。
 
 ## 1. 八项能力指标（可计算定义）
 
@@ -75,8 +93,21 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
   **禁令（P13-3 生效）**：不碰 Cross-question synthesis / 新 Relation /
   新 IR / 新 Validator / 新 Artifact / Agent 数量扩张——P13-3 只在
   Brain / Knowledge / Evaluation 层工作。
-- **P13-4 Real Experiment**：真执行、真结果、真验证（agent 结果正式接入
-  节点，experiment realization 50% → 目标 >90%）。
+- **P13-3C Generalization & Comparative Benchmark（进行中，pilot ✅）**：
+  三臂对照（B0 原始核心 / MMA=MathModelAgent Modeler 提示词同 LLM 忠实
+  执行 / B1=P13-3B 核心）× 未见题（2024_A/2021_C/2022_B，题型覆盖），
+  只评 MODEL_ARTIFACT v1（`core/schemas/model_artifact.schema.json` 冻结），
+  匿名化 + 独立评委盲评。**Pilot（2024_A）：B1 96.7 > MMA 83.3 > B0 55.7**
+  ——H2 迁移性成立、H3 三维同步成立；盲评抓到自评漏掉的两个 B1 缺陷
+  （→ 清单 v2）。2021_C/2022_B 待跑，≥3 题齐后出统计性结论。详见
+  `P13_3C_REPORT.md`。
+- **P13-3D Model → Paper Conversion（待 P13-3C ≥3 题）**：三臂模型产物 →
+  同一 Writer/模板/检查器 → 论文，测 Paper Conversion Efficiency（模型分 →
+  论文分的转化率）；若外部系统模型弱但论文强，则识别并吸收其
+  Model→Paper compiler。
+- **P13-4 Real Experiment（P14，定位修正）**：**Model → Evidence**——模型
+  → 应该测什么 → 实验设计 → 模拟/优化/统计检验 → 证据 → 证据是否支持
+  模型 → 模型修正。对比基线 = "模型 → 直接跑实验"。
 - **P13-5 Re-run Benchmark**：同题集复测 → Δscore；exit criteria = ≥5 题
   （跨 ≥2 年）可复现基线且至少一项指标 +10 个百分点。
 

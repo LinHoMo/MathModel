@@ -1,0 +1,35 @@
+{
+  "problem_id": "2024_A",
+  "version": 1,
+  "note": "P13-3C 预注册 rubric（建模前落盘）。机理-生态类任务：无数据集，结构组件围绕机制建模与稳定性分析。",
+  "questions": {
+    "ALL": {
+      "task_type": "mechanism_simulation",
+      "structural_required": {
+        "variables": "变量定义（性别比、雌/雄种群、资源量、寄生者等）",
+        "assumptions": "假设显式陈述",
+        "state_transition": "种群动态状态转移方程",
+        "sex_ratio_mechanism": "资源→性别比的反馈机制（模型核心）",
+        "ecosystem_coupling": "与生态系统/寄生者的耦合通道",
+        "stability_analysis_method": "稳定性分析方法（均衡点/特征值/情景）"
+      },
+      "alignment_points": [
+        "Q1: 性别比可变对更大生态系统的冲击",
+        "Q2: 对七鳃鳗种群自身的优劣势",
+        "Q3: 性别比变化下生态系统的稳定性",
+        "Q4: 对其他物种（如寄生者）是否有利"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {"structural": 1, "mathematical": 1, "alignment": 1}
+}

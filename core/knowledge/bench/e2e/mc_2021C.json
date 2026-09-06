@@ -1,0 +1,37 @@
+{
+  "problem_id": "2021_C",
+  "version": 1,
+  "note": "P13-3C 预注册 rubric（建模前落盘）。数据-分类-优先级混合任务：五个方面逐一对应。",
+  "questions": {
+    "ALL": {
+      "task_type": "data_classification_prioritization",
+      "structural_required": {
+        "variables": "特征/变量定义（时空 sighting、误报特征等）",
+        "assumptions": "假设显式陈述（数据质量/报告偏差）",
+        "spread_prediction_model": "Q1 扩散可预测性模型与精度口径",
+        "misclassification_model": "Q2 误判概率模型（仅用提供数据集）",
+        "prioritization_rule": "Q3 由分类结果到调查优先级的决策规则",
+        "update_mechanism": "Q4 新报告到达的模型更新机制与频率",
+        "eradication_evidence_criterion": "Q5 根除证据的判定准则"
+      },
+      "alignment_points": [
+        "Q1: 扩散可否预测及精度",
+        "Q2: 误判概率模型",
+        "Q3: 调查优先级排序",
+        "Q4: 模型更新机制与频率",
+        "Q5: 根除证据判定"
+      ]
+    }
+  },
+  "math_error_taxonomy": {
+    "calibration_implausibility": 15,
+    "missing_constraint": 10,
+    "unstated_assumption": 5,
+    "boundary_violation": 5,
+    "dimensional_inconsistency": 15,
+    "index_error": 10,
+    "sign_error": 10
+  },
+  "consistency_penalty_per_issue": 10,
+  "weights": {"structural": 1, "mathematical": 1, "alignment": 1}
+}
