@@ -1,8 +1,24 @@
 # MathModelSkills
 
-基于 UTG（通用可信生成架构）的数学建模技能库。四手分工、29 个 agent 串联，把一道赛题变成一篇可追溯、可复现、无 AI 痕迹的 LaTeX 论文。
+**V3 Cognitive Workflow Runtime** —— 数学建模研究运行时：把一道赛题变成一条
+可追溯、可失效传播、可局部重建的研究证据链，论文是这条链的**投影**而非终点。
 
-**当前版本**：2.0.0 ｜ **技术选型**：LaTeX（单一主线，竞赛差异用 template pack 表达）
+```text
+Problem → Research State → Workflow DAG → Artifact + Evidence Graph
+        → Research Quality（七维） → Paper Projection
+```
+
+核心组件：Artifact Registry（稳定 ID + 生命周期）· Typed Evidence Graph（失效传播）·
+Workflow DAG（16 节点，反馈环）· Competition Intelligence（知识改变决策）·
+Research Quality（质量改变流程）· Runtime Contract（P7 冻结语义）。
+
+> 架构真源：[docs/architecture/V3.1_ARCHITECTURE.md](docs/architecture/V3.1_ARCHITECTURE.md)
+> ｜ 运行时契约：[RUNTIME_CONTRACTS.md](docs/architecture/RUNTIME_CONTRACTS.md)
+> ｜ 质量契约：[RESEARCH_QUALITY_CONTRACT.md](docs/architecture/RESEARCH_QUALITY_CONTRACT.md)
+> ｜ 红队报告：[V3_RED_TEAM_REPORT.md](docs/architecture/V3_RED_TEAM_REPORT.md)
+
+**当前版本**：3.0.0-dev（V3 P9.5）｜ legacy 双视图（四手 29 agent 流水线）保留兼容，
+见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。**技术选型**：LaTeX（单一主线，竞赛差异用 template pack 表达）。
 
 ---
 
