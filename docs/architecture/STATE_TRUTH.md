@@ -65,3 +65,15 @@ Resume Truth（断点续跑真源，原子写）
 测试数字。自 Hardening P0 起：数字只来自三条机器命令（pytest / validate /
 catalog_check）+ commit hash（见 HARDENING_PROGRAM.md §3 基线表）；本文件约束
 的是**项目目录内**的运行时状态真源，两者共同构成「无双真源」验收（RC 第 4 条）。
+
+## 6. 并发语义（Wave 并行契约，Hardening P3 补录）
+
+- 波次内并行度 ≤ max_workers；跨波次严格拓扑序（波次划分由 WorkflowDAG 静态确定）。
+- per-question 隔离：`experiment_Qi` 等节点按 Question 展开，不同 Question 产物
+  互不写入；验收用例 `tests/unit/test_run_provenance.py::TestParallelIsolation`
+  （双问并行 → 产物各归其问 → reconcile 全绿）。
+- 同一 Artifact 写冲突裁决：Registry 稳定 ID 终身不复用（artifact_id 唯一分配）
+  + 终态不可变（RUNTIME_CONTRACTS），并发登记同型产物只可能得到不同 ID，
+  无覆盖竞态。
+- 落盘串行化：checkpoint / save_progress 由会话主线程在 run() 末尾统一执行，
+  不存在并发写同一状态文件。

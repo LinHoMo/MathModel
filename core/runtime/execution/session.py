@@ -46,12 +46,16 @@ class RuntimeSession:
 
     def __init__(self, project_dir: str | Path, questions: list[str],
                  features: dict | None = None, knowledge_root=None,
-                 max_workers: int = 1, min_coverage: float = 0.6):
+                 max_workers: int = 1, min_coverage: float = 0.6,
+                 run_meta: dict | None = None):
         self.project_dir = Path(project_dir)
         self.project_dir.mkdir(parents=True, exist_ok=True)
         if not questions:
             raise SessionError("questions 不能为空")
         self.questions = list(questions)
+        # Hardening P3：外部 executor 溯源（model_provider/model_version/
+        # token_cost/decision）；additive，None 时记录为 null
+        self.run_meta = run_meta or {}
 
         sdir = self.project_dir / "state"
         self.state = ProjectState(sdir / "status.json")
@@ -92,11 +96,37 @@ class RuntimeSession:
 
     def run(self, save: bool = True) -> dict:
         """跑完整个 DAG（含反馈环/重试），落盘并派生聚合状态。"""
+        import time as _time
+        _t0 = _time.time()
         report = self.waves.run()
         self.engine.save_progress(self.project_dir / "state" / "engine_progress.json")
         if save:
             self.checkpoint()
+        self._emit_run_record(_t0, report)
         return report
+
+    def _emit_run_record(self, t0: float, report: dict) -> None:
+        """Hardening P3：checkpoint 后落盘 RunRecord（best-effort，不阻断主流程）。"""
+        try:
+            from runtime.state.runs import emit_run_record, list_run_records
+            if self.run_meta.get("_parent_run_id"):
+                parent = self.run_meta["_parent_run_id"]
+            else:
+                prev = list_run_records(self.project_dir)
+                parent = prev[-1]["run_id"] if prev else None
+            failures = report.get("progress", {}).get("failures", {})
+            status = "completed" if not failures else "failed"
+            emit_run_record(
+                self.project_dir, self.questions, status=status, started_at=t0,
+                run_meta=self.run_meta, parent_run_id=parent,
+                engine_summary={
+                    "completed": len(getattr(self.engine, "completed", [])),
+                    "retries": len(getattr(self.engine, "retries", {})),
+                    "failures": list(failures.keys()),
+                })
+        except Exception as e:  # noqa: BLE001 —— 记录失败不得阻断研究主流程
+            import sys
+            print(f"[runs] RunRecord 记录失败（不阻断）: {e}", file=sys.stderr)
 
     def resume(self) -> dict:
         """从断点继续（进度文件存在时恢复引擎，否则等价于 run）。"""

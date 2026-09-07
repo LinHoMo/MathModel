@@ -59,7 +59,7 @@
 - [x] P0 Architecture Freeze —— baseline 固化 + 治理登记 + 定位文档（本文件 + README/AGENTS/STATUS/METRICS）
 - [x] P1 Contract Freeze
 - [x] P2 State Truth + Crash Consistency
-- [ ] P3 Deterministic Replay / Concurrency / Observability
+- [x] P3 Deterministic Replay / Concurrency / Observability
 - [ ] P4 Legacy Isolation
 - [ ] P5 Regression Gate
 - [ ] P6 Release Candidate

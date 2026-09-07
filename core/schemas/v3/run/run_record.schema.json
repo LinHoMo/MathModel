@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "mathmodel:v3/run/run_record.schema.json",
+  "title": "V3 Run Record（Observability + Deterministic Replay 载体）",
+  "description": "System Hardening P3：每次运行的完整溯源。内容真源为 state/runs/<run_id>.json；所有哈希为 sha256 前 16 或全 64 均可（保持项目内一致）；model_*/token_cost 由外部 executor 填写，runtime 零 LLM 调用时允许为 null。",
+  "type": "object",
+  "required": ["schema_version", "run_id", "status", "workflow_version", "tool_version", "input_hash", "prompt_hash", "artifact_hash", "evidence_hash", "started_at"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "run_id": { "type": "string", "description": "sha1(project|questions|workflow_version|input_hash) 前 12 位，幂等派生" },
+    "parent_run_id": { "type": ["string", "null"], "description": "rerun/retry 链的上级 run" },
+    "project": { "type": "string" },
+    "questions": { "type": "array", "items": { "type": "string" } },
+    "status": { "enum": ["completed", "failed", "interrupted"] },
+    "workflow_version": { "type": "string", "description": "组合 DAG + roles/yml 哈希（工作流定义版本）" },
+    "skill_version": { "type": ["string", "null"], "description": "skills 指令包哈希" },
+    "tool_version": { "type": "string", "description": "工具链版本（catalog schema_version@git hash）" },
+    "model_provider": { "type": ["string", "null"] },
+    "model_version": { "type": ["string", "null"] },
+    "prompt_hash": { "type": "string", "description": "roles/workflows/skills 指令文件的组合哈希" },
+    "input_hash": { "type": "string", "description": "inputs/ 目录文件组合哈希（无输入为空串哈希）" },
+    "artifact_hash": { "type": "string", "description": "落盘后 state/registry.json 的哈希" },
+    "evidence_hash": { "type": "string", "description": "落盘后 state/evidence_graph.json 的哈希" },
+    "decision_log_hash": { "type": ["string", "null"] },
+    "latency": {
+      "type": "object",
+      "properties": {
+        "started_at": { "type": "string" },
+        "finished_at": { "type": ["string", "null"] },
+        "seconds": { "type": ["number", "null"] }
+      }
+    },
+    "started_at": { "type": "string" },
+    "token_cost": { "type": ["object", "null"], "description": "外部 executor 填写" },
+    "engine": {
+      "type": "object",
+      "properties": {
+        "completed_nodes": { "type": "integer" },
+        "retries": { "type": "integer" },
+        "failures": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "decision": { "type": ["string", "null"], "description": "本轮关键决策摘要（供 diff 归因）" }
+  }
+}
