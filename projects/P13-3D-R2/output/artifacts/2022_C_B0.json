@@ -1,0 +1,95 @@
+{
+  "problem_id": "2022_C",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "玻璃成分数据服从多元正态分布",
+      "justification": "化学分析通例"
+    },
+    {
+      "id": "A2",
+      "statement": "不同类型的玻璃有可区分的成分特征",
+      "justification": "题面前提"
+    }
+  ],
+  "variables": [
+    {
+      "id": "X",
+      "name": "成分向量",
+      "description": "SiO2, Na2O, CaO 等含量",
+      "unit": "%",
+      "role": "input",
+      "domain": "X ≥ 0, ΣX = 100%"
+    },
+    {
+      "id": "label",
+      "name": "玻璃类型标签",
+      "description": "分类目标",
+      "unit": "1",
+      "role": "state",
+      "domain": "离散类别"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "p1",
+      "name": "聚类数 K",
+      "value_or_source": "待确定",
+      "unit": "1",
+      "source": "calibrated"
+    },
+    {
+      "id": "p2",
+      "name": "主成分保留数",
+      "value_or_source": "方差贡献率 > 85%",
+      "unit": "1",
+      "source": "calibrated"
+    }
+  ],
+  "constraints": [
+    {
+      "id": "C1",
+      "expression": "各成分含量 ≥ 0 且总和 = 100%",
+      "rationale": "化学约束"
+    }
+  ],
+  "objective": [
+    {
+      "id": "O1",
+      "expression": "最大化聚类/判别准确率",
+      "kind": "maximize",
+      "rationale": "分类质量"
+    }
+  ],
+  "mechanism": [
+    {
+      "id": "M1",
+      "name": "PCA 降维",
+      "equation": "Z = X·W (W 为特征向量矩阵)",
+      "derivation_notes": "主成分分析"
+    },
+    {
+      "id": "M2",
+      "name": "K-means 聚类",
+      "equation": "argmin Σ||x_i - μ_k||²",
+      "derivation_notes": "欧氏距离聚类"
+    }
+  ],
+  "candidate_models": [
+    {
+      "model": "PCA + K-means + LDA",
+      "pros": "经典组合",
+      "cons": "假设正态"
+    },
+    {
+      "model": "t-SNE + DBSCAN",
+      "pros": "非线性",
+      "cons": "参数敏感"
+    }
+  ],
+  "selected_model": "PCA + K-means + LDA",
+  "selection_reason": "高维小样本适用 PCA 降维",
+  "uncertainties": [],
+  "sensitivity_plan": [],
+  "problem_interpretation": "利用化学成分数据对古代玻璃制品进行分类和鉴别，建立聚类和判别模型。"
+}

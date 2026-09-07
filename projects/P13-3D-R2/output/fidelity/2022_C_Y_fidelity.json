@@ -1,0 +1,112 @@
+{
+  "coverage_fidelity": 0.824,
+  "mutation_audit": {
+    "additions": [],
+    "deletions": [
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "PCA + K-means + LDA",
+        "artifact_ref": "candidate_models.PCA + K-means + LDA",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'PCA + K-means + LDA' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "t-SNE + DBSCAN",
+        "artifact_ref": "candidate_models.t-SNE + DBSCAN",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 't-SNE + DBSCAN' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "selected_model",
+        "affected_object": "PCA + K-means + LDA",
+        "artifact_ref": "selected_model.PCA + K-means + LDA",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'PCA + K-means + LDA' not found in paper"
+      }
+    ],
+    "modifications": [],
+    "renamings": [],
+    "total": 3
+  },
+  "semantic_fidelity": 0.912,
+  "element_coverage": {
+    "variables": {
+      "total": 2,
+      "found": 2,
+      "missing": []
+    },
+    "parameters": {
+      "total": 2,
+      "found": 2,
+      "missing": []
+    },
+    "constraints": {
+      "total": 1,
+      "found": 1,
+      "missing": []
+    },
+    "objective": {
+      "total": 1,
+      "found": 1,
+      "missing": []
+    },
+    "mechanism": {
+      "total": 4,
+      "found": 4,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 4,
+      "found": 4,
+      "missing": []
+    },
+    "candidate_models": {
+      "total": 2,
+      "found": 0,
+      "missing": [
+        "PCA + K-means + LDA",
+        "t-SNE + DBSCAN"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "PCA + K-means + LDA"
+      ]
+    },
+    "uncertainties": {
+      "total": 0,
+      "found": 0,
+      "missing": []
+    },
+    "sensitivity_plan": {
+      "total": 0,
+      "found": 0,
+      "missing": []
+    }
+  },
+  "total_elements": 17,
+  "found_elements": 14,
+  "writer_failures": [
+    {
+      "code": "P1",
+      "detail": "Artifact element 'PCA + K-means + LDA' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 't-SNE + DBSCAN' not found in paper"
+    }
+  ],
+  "summary": "Coverage: 82.4% (14/17). Mutations: 3 deletions (0C/3M/0m), 0 additions. Writer failures: P1. Semantic: 91.2%.",
+  "problem_id": "2022_C",
+  "arm": "B1-F",
+  "letter": "Y"
+}

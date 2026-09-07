@@ -1,0 +1,377 @@
+{
+  "fidelity_score": 0.705,
+  "total_elements": 40,
+  "found_elements": 12,
+  "element_coverage": {
+    "variables": {
+      "total": 6,
+      "found": 6,
+      "missing": []
+    },
+    "parameters": {
+      "total": 6,
+      "found": 0,
+      "missing": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6"
+      ]
+    },
+    "constraints": {
+      "total": 4,
+      "found": 0,
+      "missing": [
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+      ]
+    },
+    "objective": {
+      "total": 3,
+      "found": 1,
+      "missing": [
+        "O1",
+        "O3"
+      ]
+    },
+    "mechanism": {
+      "total": 5,
+      "found": 5,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 4,
+      "found": 0,
+      "missing": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ]
+    },
+    "candidate_models": {
+      "total": 3,
+      "found": 0,
+      "missing": [
+        "单种群 Logistic + 外生性比情景",
+        "两性状态模型 + 资源反馈 + 寄生耦合（本模型）",
+        "进化博弈式性比适应"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "两性状态模型（M1-M5）+ 寄生耦合"
+      ]
+    },
+    "uncertainties": {
+      "total": 4,
+      "found": 0,
+      "missing": [
+        "资源波动 σ_R、φ",
+        "性比响应强度 s",
+        "寄生耦合强度 η/h",
+        "γ、K0 绝对水平"
+      ]
+    },
+    "sensitivity_plan": {
+      "total": 4,
+      "found": 0,
+      "missing": [
+        "性比响应斜率 s",
+        "资源波动 σ_R",
+        "配偶比 κ",
+        "寄生耦合 η/h"
+      ]
+    }
+  },
+  "mutations": [
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p1",
+      "artifact_ref": "parameters.p1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p2",
+      "artifact_ref": "parameters.p2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p3",
+      "artifact_ref": "parameters.p3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p4",
+      "artifact_ref": "parameters.p4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p5",
+      "artifact_ref": "parameters.p5",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p5' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p6",
+      "artifact_ref": "parameters.p6",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p6' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C1",
+      "artifact_ref": "constraints.C1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C2",
+      "artifact_ref": "constraints.C2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C3",
+      "artifact_ref": "constraints.C3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C4",
+      "artifact_ref": "constraints.C4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O1",
+      "artifact_ref": "objective.O1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O3",
+      "artifact_ref": "objective.O3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A1",
+      "artifact_ref": "assumptions.A1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A2",
+      "artifact_ref": "assumptions.A2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A3",
+      "artifact_ref": "assumptions.A3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A4",
+      "artifact_ref": "assumptions.A4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "单种群 Logistic + 外生性比情景",
+      "artifact_ref": "candidate_models.单种群 Logistic + 外生性比情景",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '单种群 Logistic + 外生性比情景' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "两性状态模型 + 资源反馈 + 寄生耦合（本模型）",
+      "artifact_ref": "candidate_models.两性状态模型 + 资源反馈 + 寄生耦合（本模型）",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '两性状态模型 + 资源反馈 + 寄生耦合（本模型）' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "进化博弈式性比适应",
+      "artifact_ref": "candidate_models.进化博弈式性比适应",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '进化博弈式性比适应' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "selected_model",
+      "affected_object": "两性状态模型（M1-M5）+ 寄生耦合",
+      "artifact_ref": "selected_model.两性状态模型（M1-M5）+ 寄生耦合",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '两性状态模型（M1-M5）+ 寄生耦合' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "资源波动 σ_R、φ",
+      "artifact_ref": "uncertainties.资源波动 σ_R、φ",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '资源波动 σ_R、φ' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "性比响应强度 s",
+      "artifact_ref": "uncertainties.性比响应强度 s",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '性比响应强度 s' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "寄生耦合强度 η/h",
+      "artifact_ref": "uncertainties.寄生耦合强度 η/h",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '寄生耦合强度 η/h' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "γ、K0 绝对水平",
+      "artifact_ref": "uncertainties.γ、K0 绝对水平",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'γ、K0 绝对水平' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "性比响应斜率 s",
+      "artifact_ref": "sensitivity_plan.性比响应斜率 s",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '性比响应斜率 s' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "资源波动 σ_R",
+      "artifact_ref": "sensitivity_plan.资源波动 σ_R",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '资源波动 σ_R' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "配偶比 κ",
+      "artifact_ref": "sensitivity_plan.配偶比 κ",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '配偶比 κ' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "寄生耦合 η/h",
+      "artifact_ref": "sensitivity_plan.寄生耦合 η/h",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '寄生耦合 η/h' not found in paper"
+    }
+  ],
+  "additions": [
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "R_0",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'R_0' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "K_0",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'K_0' appears in paper but not in artifact"
+    }
+  ],
+  "addition_count": 2,
+  "mutation_count": {
+    "total": 28,
+    "critical": 2,
+    "major": 18,
+    "minor": 8
+  },
+  "summary": "Fidelity: MODERATE FIDELITY (70.5%). Mutations: 2 critical, 18 major, 8 minor, 2 additions. Missing categories: parameters, constraints, objective, assumptions, candidate_models, selected_model, uncertainties, sensitivity_plan.",
+  "problem_id": "2024_A",
+  "arm": "B1-F"
+}

@@ -1,0 +1,169 @@
+{
+  "coverage_fidelity": 0.8,
+  "mutation_audit": {
+    "additions": [],
+    "deletions": [
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "单自由度受迫振动",
+        "artifact_ref": "candidate_models.单自由度受迫振动",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '单自由度受迫振动' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "多自由度振动",
+        "artifact_ref": "candidate_models.多自由度振动",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '多自由度振动' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "selected_model",
+        "affected_object": "单自由度受迫振动",
+        "artifact_ref": "selected_model.单自由度受迫振动",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '单自由度受迫振动' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "弹簧刚度 k",
+        "artifact_ref": "sensitivity_plan.弹簧刚度 k",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '弹簧刚度 k' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "PTO 阻尼 c",
+        "artifact_ref": "sensitivity_plan.PTO 阻尼 c",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'PTO 阻尼 c' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "波浪频率 ω",
+        "artifact_ref": "sensitivity_plan.波浪频率 ω",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '波浪频率 ω' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "波浪幅值 F0",
+        "artifact_ref": "sensitivity_plan.波浪幅值 F0",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '波浪幅值 F0' not found in paper"
+      }
+    ],
+    "modifications": [],
+    "renamings": [],
+    "total": 7
+  },
+  "semantic_fidelity": 0.9,
+  "element_coverage": {
+    "variables": {
+      "total": 4,
+      "found": 4,
+      "missing": []
+    },
+    "parameters": {
+      "total": 8,
+      "found": 8,
+      "missing": []
+    },
+    "constraints": {
+      "total": 3,
+      "found": 3,
+      "missing": []
+    },
+    "objective": {
+      "total": 2,
+      "found": 2,
+      "missing": []
+    },
+    "mechanism": {
+      "total": 5,
+      "found": 5,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 6,
+      "found": 6,
+      "missing": []
+    },
+    "candidate_models": {
+      "total": 2,
+      "found": 0,
+      "missing": [
+        "单自由度受迫振动",
+        "多自由度振动"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "单自由度受迫振动"
+      ]
+    },
+    "uncertainties": {
+      "total": 0,
+      "found": 0,
+      "missing": []
+    },
+    "sensitivity_plan": {
+      "total": 4,
+      "found": 0,
+      "missing": [
+        "弹簧刚度 k",
+        "PTO 阻尼 c",
+        "波浪频率 ω",
+        "波浪幅值 F0"
+      ]
+    }
+  },
+  "total_elements": 35,
+  "found_elements": 28,
+  "writer_failures": [
+    {
+      "code": "P1",
+      "detail": "Artifact element '单自由度受迫振动' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '多自由度振动' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '弹簧刚度 k' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'PTO 阻尼 c' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '波浪频率 ω' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '波浪幅值 F0' not found in paper"
+    }
+  ],
+  "summary": "Coverage: 80.0% (28/35). Mutations: 7 deletions (0C/7M/0m), 0 additions. Writer failures: P1. Semantic: 90.0%.",
+  "problem_id": "2022_A",
+  "arm": "B1-F",
+  "letter": "X"
+}

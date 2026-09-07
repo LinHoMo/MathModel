@@ -1,0 +1,302 @@
+{
+  "coverage_fidelity": 0.333,
+  "mutation_audit": {
+    "additions": [],
+    "deletions": [
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "parameters",
+        "affected_object": "p1",
+        "artifact_ref": "parameters.p1",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'p1' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "parameters",
+        "affected_object": "p2",
+        "artifact_ref": "parameters.p2",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'p2' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "critical",
+        "category": "objective",
+        "affected_object": "O1",
+        "artifact_ref": "objective.O1",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'O1' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "minor",
+        "category": "assumptions",
+        "affected_object": "A1",
+        "artifact_ref": "assumptions.A1",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'A1' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "minor",
+        "category": "assumptions",
+        "affected_object": "A2",
+        "artifact_ref": "assumptions.A2",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'A2' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "Logistic + 蒙特卡洛",
+        "artifact_ref": "candidate_models.Logistic + 蒙特卡洛",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'Logistic + 蒙特卡洛' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "Lotka-Volterra 耦合",
+        "artifact_ref": "candidate_models.Lotka-Volterra 耦合",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'Lotka-Volterra 耦合' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "寄生-宿主标准型",
+        "artifact_ref": "candidate_models.寄生-宿主标准型",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '寄生-宿主标准型' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "selected_model",
+        "affected_object": "Logistic 种群动力学 + 蒙特卡洛（Q4 加寄生耦合）",
+        "artifact_ref": "selected_model.Logistic 种群动力学 + 蒙特卡洛（Q4 加寄生耦合）",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'Logistic 种群动力学 + 蒙特卡洛（Q4 加寄生耦合）' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "minor",
+        "category": "uncertainties",
+        "affected_object": "资源波动",
+        "artifact_ref": "uncertainties.资源波动",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '资源波动' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "minor",
+        "category": "uncertainties",
+        "affected_object": "参数（r_max/K/耦合强度）",
+        "artifact_ref": "uncertainties.参数（r_max/K/耦合强度）",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '参数（r_max/K/耦合强度）' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "minor",
+        "category": "uncertainties",
+        "affected_object": "性别决定机制的具体函数形式",
+        "artifact_ref": "uncertainties.性别决定机制的具体函数形式",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '性别决定机制的具体函数形式' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "r_max",
+        "artifact_ref": "sensitivity_plan.r_max",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'r_max' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "K",
+        "artifact_ref": "sensitivity_plan.K",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'K' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "Δr（性别比响应幅度）",
+        "artifact_ref": "sensitivity_plan.Δr（性别比响应幅度）",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'Δr（性别比响应幅度）' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "寄生耦合强度",
+        "artifact_ref": "sensitivity_plan.寄生耦合强度",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '寄生耦合强度' not found in paper"
+      }
+    ],
+    "modifications": [],
+    "renamings": [],
+    "total": 16
+  },
+  "semantic_fidelity": 0.729,
+  "element_coverage": {
+    "variables": {
+      "total": 4,
+      "found": 4,
+      "missing": []
+    },
+    "parameters": {
+      "total": 3,
+      "found": 1,
+      "missing": [
+        "p1",
+        "p2"
+      ]
+    },
+    "constraints": {
+      "total": 0,
+      "found": 0,
+      "missing": []
+    },
+    "objective": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "O1"
+      ]
+    },
+    "mechanism": {
+      "total": 2,
+      "found": 2,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 3,
+      "found": 1,
+      "missing": [
+        "A1",
+        "A2"
+      ]
+    },
+    "candidate_models": {
+      "total": 3,
+      "found": 0,
+      "missing": [
+        "Logistic + 蒙特卡洛",
+        "Lotka-Volterra 耦合",
+        "寄生-宿主标准型"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "Logistic 种群动力学 + 蒙特卡洛（Q4 加寄生耦合）"
+      ]
+    },
+    "uncertainties": {
+      "total": 3,
+      "found": 0,
+      "missing": [
+        "资源波动",
+        "参数（r_max/K/耦合强度）",
+        "性别决定机制的具体函数形式"
+      ]
+    },
+    "sensitivity_plan": {
+      "total": 4,
+      "found": 0,
+      "missing": [
+        "r_max",
+        "K",
+        "Δr（性别比响应幅度）",
+        "寄生耦合强度"
+      ]
+    }
+  },
+  "total_elements": 24,
+  "found_elements": 8,
+  "writer_failures": [
+    {
+      "code": "P6",
+      "detail": "Artifact element 'p1' not found in paper"
+    },
+    {
+      "code": "P6",
+      "detail": "Artifact element 'p2' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'O1' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'A1' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'A2' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'Logistic + 蒙特卡洛' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'Lotka-Volterra 耦合' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '寄生-宿主标准型' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'Logistic 种群动力学 + 蒙特卡洛（Q4 加寄生耦合）' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '资源波动' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '参数（r_max/K/耦合强度）' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '性别决定机制的具体函数形式' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'r_max' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'K' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'Δr（性别比响应幅度）' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '寄生耦合强度' not found in paper"
+    }
+  ],
+  "summary": "Coverage: 33.3% (8/24). Mutations: 16 deletions (1C/10M/5m), 0 additions. Writer failures: P1, P6. Semantic: 72.9%.",
+  "problem_id": "2024_A",
+  "arm": "MMA"
+}

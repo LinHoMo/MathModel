@@ -1,0 +1,408 @@
+{
+  "fidelity_score": 0.667,
+  "total_elements": 46,
+  "found_elements": 14,
+  "element_coverage": {
+    "variables": {
+      "total": 6,
+      "found": 6,
+      "missing": []
+    },
+    "parameters": {
+      "total": 6,
+      "found": 1,
+      "missing": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5"
+      ]
+    },
+    "constraints": {
+      "total": 5,
+      "found": 0,
+      "missing": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    },
+    "objective": {
+      "total": 5,
+      "found": 0,
+      "missing": [
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "O5"
+      ]
+    },
+    "mechanism": {
+      "total": 6,
+      "found": 6,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 4,
+      "found": 1,
+      "missing": [
+        "A1",
+        "A2",
+        "A4"
+      ]
+    },
+    "candidate_models": {
+      "total": 3,
+      "found": 0,
+      "missing": [
+        "泊松观测层 + 平流-扩散丰度场 + 删失感知分类（本框架）",
+        "XGBoost 时空 + 随机森林分类（轻量替代）",
+        "图像 CNN 辅助"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "候选1（泊松观测 + 平流-扩散 + 删失感知分类 + 预算决策 + 努力对照根除判定）"
+      ]
+    },
+    "uncertainties": {
+      "total": 5,
+      "found": 0,
+      "missing": [
+        "报告偏差系数 κ 与注意力 e(t)",
+        "标签删失比例",
+        "分类器 θ（交叉验证）",
+        "扩散参数 (ρ, v, w)",
+        "根除判定 (k, α, λ*)"
+      ]
+    },
+    "sensitivity_plan": {
+      "total": 5,
+      "found": 0,
+      "missing": [
+        "报告偏差 κ",
+        "删失比例",
+        "分类阈值/预算 B",
+        "判定参数 (k, α)",
+        "时空核带宽"
+      ]
+    }
+  },
+  "mutations": [
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p1",
+      "artifact_ref": "parameters.p1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p2",
+      "artifact_ref": "parameters.p2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p3",
+      "artifact_ref": "parameters.p3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p4",
+      "artifact_ref": "parameters.p4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p5",
+      "artifact_ref": "parameters.p5",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p5' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C1",
+      "artifact_ref": "constraints.C1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C2",
+      "artifact_ref": "constraints.C2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C3",
+      "artifact_ref": "constraints.C3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C4",
+      "artifact_ref": "constraints.C4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C5",
+      "artifact_ref": "constraints.C5",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C5' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O1",
+      "artifact_ref": "objective.O1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O2",
+      "artifact_ref": "objective.O2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O3",
+      "artifact_ref": "objective.O3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O4",
+      "artifact_ref": "objective.O4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O5",
+      "artifact_ref": "objective.O5",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O5' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A1",
+      "artifact_ref": "assumptions.A1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A2",
+      "artifact_ref": "assumptions.A2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A4",
+      "artifact_ref": "assumptions.A4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "泊松观测层 + 平流-扩散丰度场 + 删失感知分类（本框架）",
+      "artifact_ref": "candidate_models.泊松观测层 + 平流-扩散丰度场 + 删失感知分类（本框架）",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '泊松观测层 + 平流-扩散丰度场 + 删失感知分类（本框架）' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "XGBoost 时空 + 随机森林分类（轻量替代）",
+      "artifact_ref": "candidate_models.XGBoost 时空 + 随机森林分类（轻量替代）",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'XGBoost 时空 + 随机森林分类（轻量替代）' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "图像 CNN 辅助",
+      "artifact_ref": "candidate_models.图像 CNN 辅助",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '图像 CNN 辅助' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "selected_model",
+      "affected_object": "候选1（泊松观测 + 平流-扩散 + 删失感知分类 + 预算决策 + 努力对照根除判定）",
+      "artifact_ref": "selected_model.候选1（泊松观测 + 平流-扩散 + 删失感知分类 + 预算决策 + 努力对照根除判定）",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '候选1（泊松观测 + 平流-扩散 + 删失感知分类 + 预算决策 + 努力对照根除判定）' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "报告偏差系数 κ 与注意力 e(t)",
+      "artifact_ref": "uncertainties.报告偏差系数 κ 与注意力 e(t)",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '报告偏差系数 κ 与注意力 e(t)' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "标签删失比例",
+      "artifact_ref": "uncertainties.标签删失比例",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '标签删失比例' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "分类器 θ（交叉验证）",
+      "artifact_ref": "uncertainties.分类器 θ（交叉验证）",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '分类器 θ（交叉验证）' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "扩散参数 (ρ, v, w)",
+      "artifact_ref": "uncertainties.扩散参数 (ρ, v, w)",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '扩散参数 (ρ, v, w)' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "根除判定 (k, α, λ*)",
+      "artifact_ref": "uncertainties.根除判定 (k, α, λ*)",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '根除判定 (k, α, λ*)' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "报告偏差 κ",
+      "artifact_ref": "sensitivity_plan.报告偏差 κ",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '报告偏差 κ' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "删失比例",
+      "artifact_ref": "sensitivity_plan.删失比例",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '删失比例' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "分类阈值/预算 B",
+      "artifact_ref": "sensitivity_plan.分类阈值/预算 B",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '分类阈值/预算 B' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "判定参数 (k, α)",
+      "artifact_ref": "sensitivity_plan.判定参数 (k, α)",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '判定参数 (k, α)' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "时空核带宽",
+      "artifact_ref": "sensitivity_plan.时空核带宽",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '时空核带宽' not found in paper"
+    }
+  ],
+  "additions": [
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "x_t",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'x_t' appears in paper but not in artifact"
+    }
+  ],
+  "addition_count": 1,
+  "mutation_count": {
+    "total": 32,
+    "critical": 5,
+    "major": 19,
+    "minor": 8
+  },
+  "summary": "Fidelity: LOW FIDELITY (66.7%). Mutations: 5 critical, 19 major, 8 minor, 1 additions. Missing categories: parameters, constraints, objective, assumptions, candidate_models, selected_model, uncertainties, sensitivity_plan.",
+  "problem_id": "2021_C",
+  "arm": "B1-F"
+}

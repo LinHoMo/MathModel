@@ -1,0 +1,288 @@
+{
+  "problem_id": "2020_B",
+  "arm": "B1-F",
+  "claim_inventory": [
+    {
+      "id": "C1",
+      "claim_type": "model_selection",
+      "text": "选定模型：动态规划 / MDP",
+      "artifact_ref": "selected_model",
+      "paper_target": "Section 6"
+    },
+    {
+      "id": "C2",
+      "claim_type": "model_justification",
+      "text": "随机环境下的序贯决策问题",
+      "artifact_ref": "selection_reason",
+      "paper_target": "Section 6"
+    },
+    {
+      "id": "C3",
+      "claim_type": "assumption",
+      "text": "天气状态服从马尔可夫链（晴/阴/雨），转移概率已知",
+      "artifact_ref": "assumptions.0",
+      "paper_target": "Section 3"
+    },
+    {
+      "id": "C4",
+      "claim_type": "assumption",
+      "text": "资源消耗率与速度和天气相关",
+      "artifact_ref": "assumptions.1",
+      "paper_target": "Section 3"
+    },
+    {
+      "id": "C5",
+      "claim_type": "assumption",
+      "text": "绿洲位置和补给量已知",
+      "artifact_ref": "assumptions.2",
+      "paper_target": "Section 3"
+    },
+    {
+      "id": "C6",
+      "claim_type": "assumption",
+      "text": "队伍速度可连续调节",
+      "artifact_ref": "assumptions.3",
+      "paper_target": "Section 3"
+    },
+    {
+      "id": "C7",
+      "claim_type": "assumption",
+      "text": "目标为最小化期望到达时间或最大化安全概率",
+      "artifact_ref": "assumptions.4",
+      "paper_target": "Section 3"
+    }
+  ],
+  "element_map": [
+    {
+      "id": "E1",
+      "artifact_type": "variables",
+      "artifact_id": "s",
+      "artifact_name": "位置",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E2",
+      "artifact_type": "variables",
+      "artifact_id": "r",
+      "artifact_name": "剩余资源",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E3",
+      "artifact_type": "variables",
+      "artifact_id": "v",
+      "artifact_name": "行进速度",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E4",
+      "artifact_type": "parameters",
+      "artifact_id": "p1",
+      "artifact_name": "总距离 L",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E5",
+      "artifact_type": "parameters",
+      "artifact_id": "p2",
+      "artifact_name": "天气状态转移概率",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E6",
+      "artifact_type": "constraints",
+      "artifact_id": "C1",
+      "artifact_name": "C1",
+      "artifact_expression": "r(t) ≥ 0 ∀t",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E7",
+      "artifact_type": "mechanism",
+      "artifact_id": "M1",
+      "artifact_name": "位置动态",
+      "artifact_expression": "s(t+1) = s(t) + v(t)·Δt",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E8",
+      "artifact_type": "mechanism",
+      "artifact_id": "M2",
+      "artifact_name": "资源消耗",
+      "artifact_expression": "r(t+1) = r(t) - c(v, weather)·Δt",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E9",
+      "artifact_type": "mechanism",
+      "artifact_id": "M3",
+      "artifact_name": "天气转移",
+      "artifact_expression": "P(w'=j | w=i) = T_ij",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E10",
+      "artifact_type": "mechanism",
+      "artifact_id": "M4",
+      "artifact_name": "Bellman 方程",
+      "artifact_expression": "V(s,w) = min_a [cost(s,w,a) + γ·Σ_w' T(w,w')·V(s',w')]",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E11",
+      "artifact_type": "objective",
+      "artifact_id": "O1",
+      "artifact_name": "O1",
+      "artifact_expression": "min E[总时间] 或 max P(安全到达)",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    }
+  ],
+  "question_map": [
+    {
+      "question_id": "Q1",
+      "question_text": "沙漠穿越的随机序贯决策优化问题",
+      "primary_elements": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "mechanism_elements": [
+        "E7"
+      ],
+      "paper_section": "Section 5.1"
+    },
+    {
+      "question_id": "Q2",
+      "question_text": "需要回答：(1)环境模型的建立（地形、天气、资源消耗）；(2)最优决策策略的求解（MDP/DP）；(",
+      "primary_elements": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "mechanism_elements": [
+        "E7"
+      ],
+      "paper_section": "Section 5.2"
+    },
+    {
+      "question_id": "Q3",
+      "question_text": "成功标准：策略在随机天气下显著优于贪心策略",
+      "primary_elements": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "mechanism_elements": [
+        "E7"
+      ],
+      "paper_section": "Section 5.3"
+    }
+  ],
+  "candidate_model_map": [
+    {
+      "model_id": "M1",
+      "model_name": "动态规划",
+      "pros": "全局最优",
+      "cons": "状态空间大",
+      "artifact_ref": "candidate_models.0",
+      "is_selected": false,
+      "selection_reason_ref": null
+    },
+    {
+      "model_id": "M2",
+      "model_name": "MDP + 蒙特卡洛",
+      "pros": "可处理连续状态",
+      "cons": "近似解",
+      "artifact_ref": "candidate_models.1",
+      "is_selected": false,
+      "selection_reason_ref": null
+    }
+  ],
+  "sensitivity_map": [],
+  "section_map": [
+    {
+      "section_id": "S1",
+      "section_name": "摘要",
+      "required_elements": [],
+      "required_claims": []
+    },
+    {
+      "section_id": "S2",
+      "section_name": "问题重述",
+      "required_elements": [],
+      "required_claims": []
+    },
+    {
+      "section_id": "S3",
+      "section_name": "模型假设",
+      "required_elements": [],
+      "required_claims": [
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7"
+      ]
+    },
+    {
+      "section_id": "S4",
+      "section_name": "符号说明",
+      "required_elements": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ],
+      "required_claims": []
+    },
+    {
+      "section_id": "S5",
+      "section_name": "模型建立",
+      "required_elements": [
+        "E6",
+        "E7",
+        "E8",
+        "E9",
+        "E10",
+        "E11"
+      ],
+      "required_claims": []
+    },
+    {
+      "section_id": "S6",
+      "section_name": "候选模型对比",
+      "required_elements": [],
+      "required_claims": [
+        "C1",
+        "C2"
+      ]
+    },
+    {
+      "section_id": "S7",
+      "section_name": "灵敏度分析",
+      "required_elements": [
+        "E4",
+        "E5"
+      ],
+      "required_claims": []
+    },
+    {
+      "section_id": "S8",
+      "section_name": "模型评价",
+      "required_elements": [],
+      "required_claims": []
+    }
+  ]
+}

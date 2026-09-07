@@ -1,0 +1,218 @@
+{
+  "fidelity_score": 0.73,
+  "total_elements": 20,
+  "found_elements": 7,
+  "element_coverage": {
+    "variables": {
+      "total": 4,
+      "found": 4,
+      "missing": []
+    },
+    "parameters": {
+      "total": 2,
+      "found": 0,
+      "missing": [
+        "p1",
+        "p2"
+      ]
+    },
+    "constraints": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "C1"
+      ]
+    },
+    "objective": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "O1"
+      ]
+    },
+    "mechanism": {
+      "total": 2,
+      "found": 2,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 3,
+      "found": 1,
+      "missing": [
+        "A1",
+        "A2"
+      ]
+    },
+    "candidate_models": {
+      "total": 2,
+      "found": 0,
+      "missing": [
+        "Logistic + 性别比情景",
+        "Lotka-Volterra 两物种耦合"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "Logistic + 性别比情景"
+      ]
+    },
+    "uncertainties": {
+      "total": 2,
+      "found": 0,
+      "missing": [
+        "r(R) 函数形式未知",
+        "K 未知"
+      ]
+    },
+    "sensitivity_plan": {
+      "total": 2,
+      "found": 0,
+      "missing": [
+        "r_max",
+        "Δr"
+      ]
+    }
+  },
+  "mutations": [
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p1",
+      "artifact_ref": "parameters.p1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p2",
+      "artifact_ref": "parameters.p2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C1",
+      "artifact_ref": "constraints.C1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O1",
+      "artifact_ref": "objective.O1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A1",
+      "artifact_ref": "assumptions.A1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A2",
+      "artifact_ref": "assumptions.A2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "Logistic + 性别比情景",
+      "artifact_ref": "candidate_models.Logistic + 性别比情景",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'Logistic + 性别比情景' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "Lotka-Volterra 两物种耦合",
+      "artifact_ref": "candidate_models.Lotka-Volterra 两物种耦合",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'Lotka-Volterra 两物种耦合' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "selected_model",
+      "affected_object": "Logistic + 性别比情景",
+      "artifact_ref": "selected_model.Logistic + 性别比情景",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'Logistic + 性别比情景' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "r(R) 函数形式未知",
+      "artifact_ref": "uncertainties.r(R) 函数形式未知",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'r(R) 函数形式未知' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "K 未知",
+      "artifact_ref": "uncertainties.K 未知",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'K 未知' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "r_max",
+      "artifact_ref": "sensitivity_plan.r_max",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'r_max' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "Δr",
+      "artifact_ref": "sensitivity_plan.Δr",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'Δr' not found in paper"
+    }
+  ],
+  "additions": [
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "r_0",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'r_0' appears in paper but not in artifact"
+    }
+  ],
+  "addition_count": 1,
+  "mutation_count": {
+    "total": 13,
+    "critical": 1,
+    "major": 8,
+    "minor": 4
+  },
+  "summary": "Fidelity: MODERATE FIDELITY (73.0%). Mutations: 1 critical, 8 major, 4 minor, 1 additions. Missing categories: parameters, constraints, objective, assumptions, candidate_models, selected_model, uncertainties, sensitivity_plan.",
+  "problem_id": "2024_A",
+  "arm": "B0"
+}

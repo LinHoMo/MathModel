@@ -1,0 +1,159 @@
+{
+  "coverage_fidelity": 0.812,
+  "mutation_audit": {
+    "additions": [],
+    "deletions": [
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "ODE + 伯努利",
+        "artifact_ref": "candidate_models.ODE + 伯努利",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'ODE + 伯努利' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "CFD 数值模拟",
+        "artifact_ref": "candidate_models.CFD 数值模拟",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'CFD 数值模拟' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "selected_model",
+        "affected_object": "ODE + 伯努利方程",
+        "artifact_ref": "selected_model.ODE + 伯努利方程",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'ODE + 伯努利方程' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "流量系数 Cd",
+        "artifact_ref": "sensitivity_plan.流量系数 Cd",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '流量系数 Cd' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "凸轮转速",
+        "artifact_ref": "sensitivity_plan.凸轮转速",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '凸轮转速' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "喷嘴面积 A_out",
+        "artifact_ref": "sensitivity_plan.喷嘴面积 A_out",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '喷嘴面积 A_out' not found in paper"
+      }
+    ],
+    "modifications": [],
+    "renamings": [],
+    "total": 6
+  },
+  "semantic_fidelity": 0.906,
+  "element_coverage": {
+    "variables": {
+      "total": 5,
+      "found": 5,
+      "missing": []
+    },
+    "parameters": {
+      "total": 6,
+      "found": 6,
+      "missing": []
+    },
+    "constraints": {
+      "total": 4,
+      "found": 4,
+      "missing": []
+    },
+    "objective": {
+      "total": 2,
+      "found": 2,
+      "missing": []
+    },
+    "mechanism": {
+      "total": 4,
+      "found": 4,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 5,
+      "found": 5,
+      "missing": []
+    },
+    "candidate_models": {
+      "total": 2,
+      "found": 0,
+      "missing": [
+        "ODE + 伯努利",
+        "CFD 数值模拟"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "ODE + 伯努利方程"
+      ]
+    },
+    "uncertainties": {
+      "total": 0,
+      "found": 0,
+      "missing": []
+    },
+    "sensitivity_plan": {
+      "total": 3,
+      "found": 0,
+      "missing": [
+        "流量系数 Cd",
+        "凸轮转速",
+        "喷嘴面积 A_out"
+      ]
+    }
+  },
+  "total_elements": 32,
+  "found_elements": 26,
+  "writer_failures": [
+    {
+      "code": "P1",
+      "detail": "Artifact element 'ODE + 伯努利' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'CFD 数值模拟' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element 'ODE + 伯努利方程' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '流量系数 Cd' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '凸轮转速' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '喷嘴面积 A_out' not found in paper"
+    }
+  ],
+  "summary": "Coverage: 81.2% (26/32). Mutations: 6 deletions (0C/6M/0m), 0 additions. Writer failures: P1. Semantic: 90.6%.",
+  "problem_id": "2019_A",
+  "arm": "B1-F",
+  "letter": "Z"
+}

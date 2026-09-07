@@ -1,0 +1,117 @@
+{
+  "problem_id": "2022_C",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "成分数据经对数比变换后近似多元正态",
+      "justification": "成分数据统计通例（clr 变换）"
+    },
+    {
+      "id": "A2",
+      "statement": "不同年代/产地的玻璃有可区分的成分指纹",
+      "justification": "题面前提"
+    },
+    {
+      "id": "A3",
+      "statement": "样本量较小（n<100），适用小样本方法",
+      "justification": "古代样品稀缺"
+    },
+    {
+      "id": "A4",
+      "statement": "成分含量总和 = 100%（闭合约束）",
+      "justification": "化学分析约束"
+    }
+  ],
+  "variables": [
+    {
+      "id": "X",
+      "name": "成分向量",
+      "description": "SiO2, Na2O, CaO 等含量",
+      "unit": "%",
+      "role": "input",
+      "domain": "X ≥ 0, ΣX = 100%"
+    },
+    {
+      "id": "label",
+      "name": "玻璃类型标签",
+      "description": "分类目标",
+      "unit": "1",
+      "role": "state",
+      "domain": "离散类别"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "p1",
+      "name": "聚类数 K",
+      "value_or_source": "待确定",
+      "unit": "1",
+      "source": "calibrated"
+    },
+    {
+      "id": "p2",
+      "name": "主成分保留数",
+      "value_or_source": "方差贡献率 > 85%",
+      "unit": "1",
+      "source": "calibrated"
+    }
+  ],
+  "constraints": [
+    {
+      "id": "C1",
+      "expression": "各成分含量 ≥ 0 且总和 = 100%",
+      "rationale": "化学约束"
+    }
+  ],
+  "objective": [
+    {
+      "id": "O1",
+      "expression": "最大化聚类/判别准确率",
+      "kind": "maximize",
+      "rationale": "分类质量"
+    }
+  ],
+  "mechanism": [
+    {
+      "id": "M1",
+      "name": "CLR 变换",
+      "equation": "clr(x) = [ln(x_i/g(x))] 其中 g(x) 为几何均值",
+      "derivation_notes": "消除闭合约束"
+    },
+    {
+      "id": "M2",
+      "name": "PCA",
+      "equation": "Z = X·W, W = eigenvectors(Σ)",
+      "derivation_notes": "主成分分析"
+    },
+    {
+      "id": "M3",
+      "name": "K-means",
+      "equation": "迭代: 分配 x_i → nearest μ_k; 更新 μ_k = mean(cluster_k)",
+      "derivation_notes": "无监督聚类"
+    },
+    {
+      "id": "M4",
+      "name": "LDA 判别",
+      "equation": "w = S_w^{-1}(μ_1 - μ_2), score = w^T x",
+      "derivation_notes": "Fisher 线性判别"
+    }
+  ],
+  "candidate_models": [
+    {
+      "model": "PCA + K-means + LDA",
+      "pros": "经典组合",
+      "cons": "假设正态"
+    },
+    {
+      "model": "t-SNE + DBSCAN",
+      "pros": "非线性",
+      "cons": "参数敏感"
+    }
+  ],
+  "selected_model": "PCA + K-means + LDA",
+  "selection_reason": "高维小样本适用 PCA 降维",
+  "uncertainties": [],
+  "sensitivity_plan": [],
+  "problem_interpretation": "古代玻璃制品成分数据的多方法统计分析与鉴别体系。需要回答：(1)成分数据的探索性分析与降维；(2)基于成分的聚类分类；(3)判别模型的建立与验证；(4)各成分指标的分类贡献。成功标准：聚类结果有物理意义，判别模型准确率>85%。"
+}

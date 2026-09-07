@@ -1,0 +1,181 @@
+# 数学建模论文撰写
+
+## 题目原文
+
+题目 2024_A
+
+## 匿名建模产物（Identity: Y）
+
+```json
+{
+  "problem_id": "2024_A",
+  "problem_interpretation": "研究七鳃鳗种群能够随资源可用性改变性别比这一能力的影响：对生态系统、对种群自身、对稳定性、对其他物种（寄生者）的意义。",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "种群按 Logistic 增长，环境容纳量 K 由资源决定",
+      "justification": "标准种群动力学近似"
+    },
+    {
+      "id": "A2",
+      "statement": "性别比 r 是资源可用性的函数，资源越匮乏雄性比例越高",
+      "justification": "题面设定"
+    },
+    {
+      "id": "A3",
+      "statement": "繁殖速率与雌性数量成正比",
+      "justification": "有性繁殖常识"
+    }
+  ],
+  "variables": [
+    {
+      "id": "N",
+      "name": "七鳃鳗种群规模",
+      "description": "湖/河中七鳃鳗总数量",
+      "unit": "ind",
+      "role": "state",
+      "domain": "N ≥ 0"
+    },
+    {
+      "id": "r",
+      "name": "雌性占比（性别比）",
+      "description": "雌性个体占比，随资源变化",
+      "unit": "1",
+      "role": "input",
+      "domain": "0 ≤ r ≤ 1"
+    },
+    {
+      "id": "R",
+      "name": "资源可用性指数",
+      "description": "无量纲资源指数",
+      "unit": "1",
+      "role": "input",
+      "domain": "R ≥ 0"
+    },
+    {
+      "id": "K",
+      "name": "环境容纳量",
+      "description": "由资源决定的容纳量",
+      "unit": "ind",
+      "role": "parameter",
+      "domain": "K > 0"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "p1",
+      "name": "内禀增长率 r_max",
+      "value_or_source": "文献典型值 0.5-1.5 /yr",
+      "unit": "1/yr",
+      "source": "literature"
+    },
+    {
+      "id": "p2",
+      "name": "容纳量 K",
+      "value_or_source": "情景设定 10^5",
+      "unit": "ind",
+      "source": "assumed"
+    }
+  ],
+  "constraints": [
+    {
+      "id": "C1",
+      "expression": "0 ≤ r ≤ 1",
+      "rationale": "比例量"
+    }
+  ],
+  "objective": [
+    {
+      "id": "O1",
+      "expression": "N(t), r(t) 轨迹在不同 r(R) 情景下的对比",
+      "kind": "simulate",
+      "rationale": "比较固定与可变性别比情景"
+    }
+  ],
+  "mechanism": [
+    {
+      "id": "M1",
+      "name": "Logistic 种群增长（性别比修正）",
+      "equation": "dN/dt = r_max · r · N · (1 − N/K)",
+      "derivation_notes": "繁殖只由雌性驱动，r 为雌性占比"
+    },
+    {
+      "id": "M2",
+      "name": "性别比情景",
+      "equation": "r(t) = r0 + Δr·s(t)，s(t) 为资源情景函数",
+      "derivation_notes": "资源变动作为外生情景输入"
+    }
+  ],
+  "candidate_models": [
+    {
+      "model": "Logistic + 性别比情景",
+      "pros": "简单可解释",
+      "cons": "性别比与资源耦合弱"
+    },
+    {
+      "model": "Lotka-Volterra 两物种耦合",
+      "pros": "可加寄生者",
+      "cons": "参数多，无数据标定困难"
+    }
+  ],
+  "selected_model": "Logistic + 性别比情景",
+  "selection_reason": "无数据条件下优先可解释的机理模型；寄生者耦合作为扩展讨论",
+  "uncertainties": [
+    {
+      "source": "r(R) 函数形式未知",
+      "handling": "scenario",
+      "effect": "不同 Δr 情景对比"
+    },
+    {
+      "source": "K 未知",
+      "handling": "qualitative",
+      "effect": "敏感性分析"
+    }
+  ],
+  "sensitivity_plan": [
+    {
+      "parameter": "r_max",
+      "range": "±20%",
+      "metric": "种群规模变化"
+    },
+    {
+      "parameter": "Δr",
+      "range": "±0.1",
+      "metric": "种群规模变化"
+    }
+  ]
+}
+```
+
+---
+
+# 数学建模论文撰写
+
+请根据提供的建模产物，撰写完整的数学建模论文。
+
+## 撰写要求
+
+1. **问题重述**：用自己的语言重新描述题目要求，明确要回答的子问题。
+2. **假设**：列出建模产物中明确声明的假设，说明每个假设的合理性。
+3. **符号说明**：整理建模产物中的变量和参数，用表格呈现。
+4. **模型建立**：
+   - 目标函数/估计量：完整写出数学表达式。
+   - 约束条件：逐条列出，附物理/工程解释。
+   - 机理方程：写出状态转移方程或核心方程组。
+   - 模型选择理由：为什么选这个模型而非其他候选。
+5. **求解方法**：描述求解思路（数值/解析/仿真），给出算法步骤。
+
+## 格式要求
+
+- 公式用 LaTeX（$$...$$ 或 \[...\]）
+- 无实验数据处以"待实验验证"或占位符标注
+- 不要编造数据或实验结果
+- 中文撰写
+- 标题用 `# 建模论文`
+
+## 重要提醒
+
+- 严格基于提供的建模产物撰写，不要自行添加产物中没有的变量、约束或假设。
+- 如果产物中缺少某个子问题的模型，如实说明"该子问题的模型待补充"。
+- 保持学术论文的客观、严谨风格。
+

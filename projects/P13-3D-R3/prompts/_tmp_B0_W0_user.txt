@@ -1,0 +1,138 @@
+## 模型构件 (MODEL_ARTIFACT)
+
+### 基本信息
+- 问题ID：2017_B
+- 问题类型：unknown
+- 问题标题：拍照赚钱的任务定价
+
+### 变量 (variables)
+```json
+[
+  {
+    "id": "price",
+    "name": "任务价格",
+    "description": "单任务报酬",
+    "unit": "yuan",
+    "role": "decision",
+    "domain": "price > 0"
+  },
+  {
+    "id": "completion_rate",
+    "name": "任务完成率",
+    "description": "完成比例",
+    "unit": "1",
+    "role": "derived",
+    "domain": "[0,1]"
+  },
+  {
+    "id": "distance",
+    "name": "用户到任务距离",
+    "description": "地理距离",
+    "unit": "km",
+    "role": "input",
+    "domain": "distance ≥ 0"
+  }
+]
+```
+
+### 参数 (parameters)
+```json
+[
+  {
+    "id": "p1",
+    "name": "价格敏感系数 β",
+    "value_or_source": "回归估计",
+    "unit": "1",
+    "source": "calibrated"
+  },
+  {
+    "id": "p2",
+    "name": "距离衰减系数 α",
+    "value_or_source": "回归估计",
+    "unit": "1",
+    "source": "calibrated"
+  }
+]
+```
+
+### 机制 (mechanism)
+```json
+[
+  {
+    "id": "M1",
+    "name": "完成率模型",
+    "equation": "completion_rate = σ(β·price - α·distance + b)",
+    "derivation_notes": "logistic 回归"
+  }
+]
+```
+
+### 目标 (objective)
+```json
+[
+  {
+    "id": "O1",
+    "expression": "max E[收益] = Σ price_i · completion_rate_i",
+    "kind": "maximize",
+    "rationale": "总期望收益最大"
+  }
+]
+```
+
+### 约束 (constraints)
+```json
+[
+  {
+    "id": "C1",
+    "expression": "0 ≤ completion_rate ≤ 1",
+    "rationale": "概率有界"
+  }
+]
+```
+
+### 假设 (assumptions)
+```json
+[
+  {
+    "id": "A1",
+    "statement": "用户选择任务基于报酬与距离的权衡",
+    "justification": "众包平台通例"
+  },
+  {
+    "id": "A2",
+    "statement": "任务完成率与价格正相关",
+    "justification": "经济学常识"
+  }
+]
+```
+
+### 候选模型 (candidate_models)
+```json
+[
+  {
+    "model": "Logistic 回归",
+    "pros": "简单可解释",
+    "cons": "线性决策边界"
+  },
+  {
+    "model": "随机森林",
+    "pros": "非线性",
+    "cons": "黑箱"
+  }
+]
+```
+
+### 选定模型 (selected_model)
+Logistic 回归
+
+### 选择理由 (selection_reason)
+定价问题需要可解释模型
+
+### 灵敏度计划 (sensitivity_plan)
+```json
+[]
+```
+
+---
+
+请根据以上模型构件，撰写一篇完整的数学建模竞赛论文。论文必须包含上述所有元素，不要遗漏任何部分。

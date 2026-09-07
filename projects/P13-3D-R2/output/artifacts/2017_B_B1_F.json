@@ -1,0 +1,208 @@
+{
+  "problem_id": "2017_B",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "用户选择任务基于报酬-距离-难度的效用最大化",
+      "justification": "离散选择理论"
+    },
+    {
+      "id": "A2",
+      "statement": "任务完成率服从 logistic 函数（S 形曲线）",
+      "justification": "价格响应的饱和效应"
+    },
+    {
+      "id": "A3",
+      "statement": "区域固定效应可通过虚拟变量捕获",
+      "justification": "区域异质性"
+    },
+    {
+      "id": "A4",
+      "statement": "时段效应（工作日/周末、白天/晚间）影响用户可用性",
+      "justification": "时间经济学"
+    },
+    {
+      "id": "A5",
+      "statement": "任务难度与所需时间成正比",
+      "justification": "题面隐含"
+    }
+  ],
+  "variables": [
+    {
+      "id": "price",
+      "name": "任务价格",
+      "description": "单任务报酬",
+      "unit": "yuan",
+      "role": "decision",
+      "domain": "price > 0"
+    },
+    {
+      "id": "completion_rate",
+      "name": "任务完成率",
+      "description": "完成比例",
+      "unit": "1",
+      "role": "derived",
+      "domain": "[0,1]"
+    },
+    {
+      "id": "distance",
+      "name": "用户到任务距离",
+      "description": "地理距离",
+      "unit": "km",
+      "role": "input",
+      "domain": "distance ≥ 0"
+    },
+    {
+      "id": "difficulty",
+      "name": "任务难度",
+      "description": "所需时间/技能",
+      "unit": "1",
+      "role": "input",
+      "domain": "[0,1]"
+    },
+    {
+      "id": "region",
+      "name": "区域虚拟变量",
+      "description": "区域固定效应",
+      "unit": "1",
+      "role": "input",
+      "domain": "离散"
+    },
+    {
+      "id": "time_slot",
+      "name": "时段虚拟变量",
+      "description": "时段效应",
+      "unit": "1",
+      "role": "input",
+      "domain": "离散"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "p1",
+      "name": "价格敏感系数 β_price",
+      "value_or_source": "回归估计",
+      "unit": "1/yuan",
+      "source": "calibrated"
+    },
+    {
+      "id": "p2",
+      "name": "距离衰减系数 β_dist",
+      "value_or_source": "回归估计",
+      "unit": "1/km",
+      "source": "calibrated"
+    },
+    {
+      "id": "p3",
+      "name": "难度系数 β_diff",
+      "value_or_source": "回归估计",
+      "unit": "1",
+      "source": "calibrated"
+    },
+    {
+      "id": "p4",
+      "name": "截距 b",
+      "value_or_source": "回归估计",
+      "unit": "1",
+      "source": "calibrated"
+    },
+    {
+      "id": "p5",
+      "name": "区域效应 γ_r",
+      "value_or_source": "回归估计",
+      "unit": "1",
+      "source": "calibrated"
+    },
+    {
+      "id": "p6",
+      "name": "时段效应 δ_t",
+      "value_or_source": "回归估计",
+      "unit": "1",
+      "source": "calibrated"
+    }
+  ],
+  "constraints": [
+    {
+      "id": "C1",
+      "expression": "0 ≤ completion_rate ≤ 1",
+      "rationale": "概率有界"
+    },
+    {
+      "id": "C2",
+      "expression": "price ≥ 0",
+      "rationale": "价格非负"
+    },
+    {
+      "id": "C3",
+      "expression": "总预算约束：Σ price_i ≤ B",
+      "rationale": "平台预算"
+    }
+  ],
+  "objective": [
+    {
+      "id": "O1",
+      "expression": "max E[收益] = Σ price_i · completion_rate_i",
+      "kind": "maximize",
+      "rationale": "总期望收益最大"
+    },
+    {
+      "id": "O2",
+      "expression": "max 任务完成数 = Σ completion_rate_i",
+      "kind": "maximize",
+      "rationale": "平台任务完成量"
+    }
+  ],
+  "mechanism": [
+    {
+      "id": "M1",
+      "name": "完成率模型（多因素 logistic）",
+      "equation": "P(complete) = σ(β_p·price - β_d·distance - β_diff·difficulty + γ_r + δ_t + b)",
+      "derivation_notes": "σ 为 logistic 函数"
+    },
+    {
+      "id": "M2",
+      "name": "收益函数",
+      "equation": "Revenue = price · P(complete)",
+      "derivation_notes": "期望收益"
+    },
+    {
+      "id": "M3",
+      "name": "价格-完成率弹性",
+      "equation": "ε = β_p · price · (1 - P(complete))",
+      "derivation_notes": "弹性分析"
+    }
+  ],
+  "candidate_models": [
+    {
+      "model": "Logistic 回归",
+      "pros": "简单可解释",
+      "cons": "线性决策边界"
+    },
+    {
+      "model": "随机森林",
+      "pros": "非线性",
+      "cons": "黑箱"
+    }
+  ],
+  "selected_model": "Logistic 回归",
+  "selection_reason": "定价问题需要可解释模型",
+  "uncertainties": [],
+  "sensitivity_plan": [
+    {
+      "parameter": "价格 price",
+      "range": "5-50 yuan",
+      "metric": "完成率曲线、收益曲线"
+    },
+    {
+      "parameter": "距离 distance",
+      "range": "0.5-10 km",
+      "metric": "完成率衰减"
+    },
+    {
+      "parameter": "区域效应 γ_r",
+      "range": "±1",
+      "metric": "区域差异"
+    }
+  ],
+  "problem_interpretation": "众包任务定价的多因素优化问题。需要回答：(1)影响任务完成率的关键因素；(2)定价与完成率的定量关系；(3)最优定价策略；(4)区域和时段差异。成功标准：定价模型能解释现有数据并给出可执行的优化策略。"
+}

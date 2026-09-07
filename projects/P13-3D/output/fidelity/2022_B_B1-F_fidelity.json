@@ -1,0 +1,527 @@
+{
+  "fidelity_score": 0.672,
+  "total_elements": 47,
+  "found_elements": 13,
+  "element_coverage": {
+    "variables": {
+      "total": 7,
+      "found": 7,
+      "missing": []
+    },
+    "parameters": {
+      "total": 7,
+      "found": 1,
+      "missing": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6"
+      ]
+    },
+    "constraints": {
+      "total": 6,
+      "found": 0,
+      "missing": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ]
+    },
+    "objective": {
+      "total": 4,
+      "found": 0,
+      "missing": [
+        "O1",
+        "O2",
+        "O3",
+        "O4"
+      ]
+    },
+    "mechanism": {
+      "total": 5,
+      "found": 5,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 4,
+      "found": 0,
+      "missing": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ]
+    },
+    "candidate_models": {
+      "total": 3,
+      "found": 0,
+      "missing": [
+        "分层字典序 LP + 情景滚动（本框架）",
+        "加权和单层 LP",
+        "随机动态规划（来水不确定）"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "分层字典序 LP + 情景滚动（λ 加权对照）"
+      ]
+    },
+    "uncertainties": {
+      "total": 5,
+      "found": 0,
+      "missing": [
+        "蒸发 e_0",
+        "输水能力 Cap_pipe",
+        "需求增长 g / 节水 c",
+        "可再生占比 η_ren(t)",
+        "字典序 vs 加权和的准则选择"
+      ]
+    },
+    "sensitivity_plan": {
+      "total": 5,
+      "found": 0,
+      "missing": [
+        "需求增长率 g",
+        "节水率 c",
+        "可再生占比 η_ren",
+        "蒸发开关 e_0",
+        "输水能力 Cap_pipe"
+      ]
+    }
+  },
+  "mutations": [
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p1",
+      "artifact_ref": "parameters.p1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p2",
+      "artifact_ref": "parameters.p2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p3",
+      "artifact_ref": "parameters.p3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p4",
+      "artifact_ref": "parameters.p4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p5",
+      "artifact_ref": "parameters.p5",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p5' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "parameters",
+      "affected_object": "p6",
+      "artifact_ref": "parameters.p6",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'p6' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C1",
+      "artifact_ref": "constraints.C1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C2",
+      "artifact_ref": "constraints.C2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C3",
+      "artifact_ref": "constraints.C3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C4",
+      "artifact_ref": "constraints.C4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C5",
+      "artifact_ref": "constraints.C5",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C5' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "constraints",
+      "affected_object": "C6",
+      "artifact_ref": "constraints.C6",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'C6' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O1",
+      "artifact_ref": "objective.O1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O2",
+      "artifact_ref": "objective.O2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O3",
+      "artifact_ref": "objective.O3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "critical",
+      "category": "objective",
+      "affected_object": "O4",
+      "artifact_ref": "objective.O4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'O4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A1",
+      "artifact_ref": "assumptions.A1",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A1' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A2",
+      "artifact_ref": "assumptions.A2",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A2' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A3",
+      "artifact_ref": "assumptions.A3",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A3' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "assumptions",
+      "affected_object": "A4",
+      "artifact_ref": "assumptions.A4",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element 'A4' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "分层字典序 LP + 情景滚动（本框架）",
+      "artifact_ref": "candidate_models.分层字典序 LP + 情景滚动（本框架）",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '分层字典序 LP + 情景滚动（本框架）' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "加权和单层 LP",
+      "artifact_ref": "candidate_models.加权和单层 LP",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '加权和单层 LP' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "candidate_models",
+      "affected_object": "随机动态规划（来水不确定）",
+      "artifact_ref": "candidate_models.随机动态规划（来水不确定）",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '随机动态规划（来水不确定）' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "selected_model",
+      "affected_object": "分层字典序 LP + 情景滚动（λ 加权对照）",
+      "artifact_ref": "selected_model.分层字典序 LP + 情景滚动（λ 加权对照）",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '分层字典序 LP + 情景滚动（λ 加权对照）' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "蒸发 e_0",
+      "artifact_ref": "uncertainties.蒸发 e_0",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '蒸发 e_0' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "输水能力 Cap_pipe",
+      "artifact_ref": "uncertainties.输水能力 Cap_pipe",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '输水能力 Cap_pipe' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "需求增长 g / 节水 c",
+      "artifact_ref": "uncertainties.需求增长 g / 节水 c",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '需求增长 g / 节水 c' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "可再生占比 η_ren(t)",
+      "artifact_ref": "uncertainties.可再生占比 η_ren(t)",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '可再生占比 η_ren(t)' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "minor",
+      "category": "uncertainties",
+      "affected_object": "字典序 vs 加权和的准则选择",
+      "artifact_ref": "uncertainties.字典序 vs 加权和的准则选择",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '字典序 vs 加权和的准则选择' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "需求增长率 g",
+      "artifact_ref": "sensitivity_plan.需求增长率 g",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '需求增长率 g' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "节水率 c",
+      "artifact_ref": "sensitivity_plan.节水率 c",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '节水率 c' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "可再生占比 η_ren",
+      "artifact_ref": "sensitivity_plan.可再生占比 η_ren",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '可再生占比 η_ren' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "蒸发开关 e_0",
+      "artifact_ref": "sensitivity_plan.蒸发开关 e_0",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '蒸发开关 e_0' not found in paper"
+    },
+    {
+      "type": "deletion",
+      "severity": "major",
+      "category": "sensitivity_plan",
+      "affected_object": "输水能力 Cap_pipe",
+      "artifact_ref": "sensitivity_plan.输水能力 Cap_pipe",
+      "paper_ref": "NOT_FOUND",
+      "description": "Artifact element '输水能力 Cap_pipe' not found in paper"
+    }
+  ],
+  "additions": [
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "e_0",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'e_0' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "p_5",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'p_5' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "p_6",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'p_6' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "p_3",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'p_3' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "p_7",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'p_7' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "P_0",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'P_0' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "p_1",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'p_1' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "p_4",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'p_4' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "E_t",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'E_t' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "p_2",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'p_2' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "M_0",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'M_0' appears in paper but not in artifact"
+    },
+    {
+      "type": "addition",
+      "severity": "major",
+      "category": "variables",
+      "affected_object": "D_e",
+      "artifact_ref": "NOT_IN_ARTIFACT",
+      "paper_ref": "mentioned_in_paper",
+      "description": "Variable 'D_e' appears in paper but not in artifact"
+    }
+  ],
+  "addition_count": 12,
+  "mutation_count": {
+    "total": 34,
+    "critical": 4,
+    "major": 21,
+    "minor": 9
+  },
+  "summary": "Fidelity: LOW FIDELITY (67.2%). Mutations: 4 critical, 21 major, 9 minor, 12 additions. Missing categories: parameters, constraints, objective, assumptions, candidate_models, selected_model, uncertainties, sensitivity_plan.",
+  "problem_id": "2022_B",
+  "arm": "B1-F"
+}

@@ -108,16 +108,21 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
   （主张面）× Formal Consistency（支持面），缺一不可，先扩主张面后补
   支持面 = 中间态更差**。缺陷计数指标启用（rubric score ≠ absolute
   correctness）。
-- **P13-3C-R5 Expanded Benchmark（下一轮，已预注册）**：恢复三臂
-  （B0/MMA/B1-F）× 4×3+1 题型矩阵（Mechanism 3/Data 3/Optimization 3/
-  Hybrid 1）+ question_profile 难度控制（difficulty 先于结果锁定）+
-  Claim Coverage/Support Coverage/Claim-Support Gap 派生指标 +
-  H5/H6/H7 预注册。自评降级为 diagnostic only。详见
-  `P13_3C_REPORT.md` §5。
-- **P13-3D Model → Paper Conversion（待 P13-3C ≥3 题）**：三臂模型产物 →
-  同一 Writer/模板/检查器 → 论文，测 Paper Conversion Efficiency（模型分 →
-  论文分的转化率）；若外部系统模型弱但论文强，则识别并吸收其
-  Model→Paper compiler。
+- **P13-3C-R5 Expanded Benchmark（✅ 已完成）**：7 题三臂 21 artifact
+  全部盲评。**B1 mean 86.2 > MMA 69.5 > B0 37.1**；H5 ✅（7/7）、
+  H6 部分（6/7，2025_B MMA 反超）、**H7 ✅ 最强形式**（Mathematical
+  B1 71.4 < B0 73.6——B1 优势不是数学计算，而是 Structural 94.3 vs
+  28.4 + Alignment 92.9 vs 9.3）。Claim×Support：B1 Claim 92.9 /
+  Support 55.9——已解决"模型应该回答什么"，支持面尚未完全跟上。
+  详见 `P13_3C_REPORT.md` §8。
+- **P13-3C 收口（✅ 2026-09-07）**：H5/H7 成立、H6 6/7 成立且均值
+  差扩大。**Model Construction = 可独立测量、可干预、可迁移、且主要
+  区别于一般数学计算能力的能力。** 不再优化 checklist（收益递减；
+  2025_B 失利指向 Planner 层，非 Construction 层）。
+- **P13-3D Model → Paper Conversion（🟢 进行中）**：三臂产物冻结 →
+  同一 Writer → Paper Quality（四维）+ Model Fidelity Gate（五类
+  Mutation 双向检测）。首轮 3 题（2024_A/2021_C/2022_B），传导成立
+  后扩到 7-10 题。详见 `P13_3D_REPORT.md` v2。
 - **P13-4 Real Experiment（P14，定位修正）**：**Model → Evidence**——模型
   → 应该测什么 → 实验设计 → 模拟/优化/统计检验 → 证据 → 证据是否支持
   模型 → 模型修正。对比基线 = "模型 → 直接跑实验"。

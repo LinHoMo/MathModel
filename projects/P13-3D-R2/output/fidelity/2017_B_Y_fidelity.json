@@ -1,0 +1,155 @@
+{
+  "coverage_fidelity": 0.806,
+  "mutation_audit": {
+    "additions": [],
+    "deletions": [
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "Logistic 回归",
+        "artifact_ref": "candidate_models.Logistic 回归",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'Logistic 回归' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "candidate_models",
+        "affected_object": "随机森林",
+        "artifact_ref": "candidate_models.随机森林",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '随机森林' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "selected_model",
+        "affected_object": "Logistic 回归",
+        "artifact_ref": "selected_model.Logistic 回归",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element 'Logistic 回归' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "价格 price",
+        "artifact_ref": "sensitivity_plan.价格 price",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '价格 price' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "距离 distance",
+        "artifact_ref": "sensitivity_plan.距离 distance",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '距离 distance' not found in paper"
+      },
+      {
+        "type": "deletion",
+        "severity": "major",
+        "category": "sensitivity_plan",
+        "affected_object": "区域效应 γ_r",
+        "artifact_ref": "sensitivity_plan.区域效应 γ_r",
+        "paper_ref": "NOT_FOUND",
+        "description": "Artifact element '区域效应 γ_r' not found in paper"
+      }
+    ],
+    "modifications": [],
+    "renamings": [],
+    "total": 6
+  },
+  "semantic_fidelity": 0.903,
+  "element_coverage": {
+    "variables": {
+      "total": 6,
+      "found": 6,
+      "missing": []
+    },
+    "parameters": {
+      "total": 6,
+      "found": 6,
+      "missing": []
+    },
+    "constraints": {
+      "total": 3,
+      "found": 3,
+      "missing": []
+    },
+    "objective": {
+      "total": 2,
+      "found": 2,
+      "missing": []
+    },
+    "mechanism": {
+      "total": 3,
+      "found": 3,
+      "missing": []
+    },
+    "assumptions": {
+      "total": 5,
+      "found": 5,
+      "missing": []
+    },
+    "candidate_models": {
+      "total": 2,
+      "found": 0,
+      "missing": [
+        "Logistic 回归",
+        "随机森林"
+      ]
+    },
+    "selected_model": {
+      "total": 1,
+      "found": 0,
+      "missing": [
+        "Logistic 回归"
+      ]
+    },
+    "uncertainties": {
+      "total": 0,
+      "found": 0,
+      "missing": []
+    },
+    "sensitivity_plan": {
+      "total": 3,
+      "found": 0,
+      "missing": [
+        "价格 price",
+        "距离 distance",
+        "区域效应 γ_r"
+      ]
+    }
+  },
+  "total_elements": 31,
+  "found_elements": 25,
+  "writer_failures": [
+    {
+      "code": "P1",
+      "detail": "Artifact element 'Logistic 回归' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '随机森林' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '价格 price' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '距离 distance' not found in paper"
+    },
+    {
+      "code": "P1",
+      "detail": "Artifact element '区域效应 γ_r' not found in paper"
+    }
+  ],
+  "summary": "Coverage: 80.6% (25/31). Mutations: 6 deletions (0C/6M/0m), 0 additions. Writer failures: P1. Semantic: 90.3%.",
+  "problem_id": "2017_B",
+  "arm": "B1-F",
+  "letter": "Y"
+}

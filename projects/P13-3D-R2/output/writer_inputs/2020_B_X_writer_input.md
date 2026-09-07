@@ -1,0 +1,135 @@
+你是一位数学建模论文撰写专家。请根据以下信息撰写一篇完整的数学建模竞赛论文。
+
+**题目**：穿越沙漠
+
+**问题描述**：
+在天气不确定的沙漠穿越中，制定最优行进策略（出发时间、补给、路线）以最小化总时间或最大化安全概率。
+
+**模型产物（MODEL_ARTIFACT）**：
+以下是建模阶段产出的结构化模型信息。请严格基于此模型撰写论文，**不得修改、补充或删除模型中的任何元素**。
+
+```json
+{
+  "problem_id": "2020_B",
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "天气随机变化，影响行进速度和资源消耗",
+      "justification": "题面设定"
+    },
+    {
+      "id": "A2",
+      "statement": "队伍携带有限资源，可在绿洲补给",
+      "justification": "题面设定"
+    }
+  ],
+  "variables": [
+    {
+      "id": "s",
+      "name": "位置",
+      "description": "队伍当前坐标",
+      "unit": "km",
+      "role": "state",
+      "domain": "0 ≤ s ≤ L"
+    },
+    {
+      "id": "r",
+      "name": "剩余资源",
+      "description": "水/食物剩余",
+      "unit": "L",
+      "role": "state",
+      "domain": "r ≥ 0"
+    },
+    {
+      "id": "v",
+      "name": "行进速度",
+      "description": "当前速度决策",
+      "unit": "km/h",
+      "role": "decision",
+      "domain": "0 ≤ v ≤ v_max"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "p1",
+      "name": "总距离 L",
+      "value_or_source": "题目给定",
+      "unit": "km",
+      "source": "data"
+    },
+    {
+      "id": "p2",
+      "name": "天气状态转移概率",
+      "value_or_source": "题目给定",
+      "unit": "1",
+      "source": "data"
+    }
+  ],
+  "constraints": [
+    {
+      "id": "C1",
+      "expression": "r(t) ≥ 0 ∀t",
+      "rationale": "资源非负"
+    }
+  ],
+  "objective": [
+    {
+      "id": "O1",
+      "expression": "min E[总时间] 或 max P(安全到达)",
+      "kind": "minimize",
+      "rationale": "时间最优或安全最优"
+    }
+  ],
+  "mechanism": [
+    {
+      "id": "M1",
+      "name": "状态转移",
+      "equation": "s' = f(s, a, weather)",
+      "derivation_notes": "确定性转移+随机天气"
+    },
+    {
+      "id": "M2",
+      "name": "奖励函数",
+      "equation": "R(s,a) = -cost(s,a) + reward(到达绿洲)",
+      "derivation_notes": "代价+奖励"
+    },
+    {
+      "id": "M3",
+      "name": "Bellman 方程",
+      "equation": "V(s) = max_a [R(s,a) + γ·E[V(s')]",
+      "derivation_notes": "MDP 值迭代"
+    }
+  ],
+  "candidate_models": [
+    {
+      "model": "动态规划",
+      "pros": "全局最优",
+      "cons": "状态空间大"
+    },
+    {
+      "model": "MDP + 蒙特卡洛",
+      "pros": "可处理连续状态",
+      "cons": "近似解"
+    }
+  ],
+  "selected_model": "动态规划 / MDP",
+  "selection_reason": "随机环境下的序贯决策问题",
+  "uncertainties": [],
+  "sensitivity_plan": [],
+  "problem_interpretation": "沙漠穿越的序贯决策问题。建模思路：将沙漠离散化为阶段，天气为随机状态，队伍位置和资源为状态变量，用 MDP 框架求解最优策略。"
+}
+```
+
+**论文要求**：
+1. 按照标准数学建模论文格式撰写（摘要、问题重述、模型假设、符号说明、模型建立与求解、模型评价、参考文献）
+2. 所有数学公式使用 LaTeX 格式
+3. 论文中的所有变量、参数、约束、机制必须与 MODEL_ARTIFACT 完全一致
+4. 不得引入 MODEL_ARTIFACT 中未定义的新变量、新约束或新机制
+5. 不得修改 MODEL_ARTIFACT 中已有元素的含义或表达式
+6. 摘要需概括问题、模型、主要结论
+7. 模型假设需列出 MODEL_ARTIFACT 中的所有假设
+8. 符号说明需列出 MODEL_ARTIFACT 中的所有变量和参数
+9. 模型建立需详细展开 MODEL_ARTIFACT 中的所有机制方程
+10. 模型评价需讨论局限性和改进方向
+
+**输出格式**：LaTeX 格式的完整论文

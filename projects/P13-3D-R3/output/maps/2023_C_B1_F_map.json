@@ -1,0 +1,306 @@
+{
+  "problem_id": "2023_C",
+  "arm": "B1-F",
+  "claim_inventory": [
+    {
+      "id": "C1",
+      "claim_type": "model_selection",
+      "text": "选定模型：报童模型 + 价格优化",
+      "artifact_ref": "selected_model",
+      "paper_target": "Section 6"
+    },
+    {
+      "id": "C2",
+      "claim_type": "model_justification",
+      "text": "蔬菜单日决策适用报童框架",
+      "artifact_ref": "selection_reason",
+      "paper_target": "Section 6"
+    },
+    {
+      "id": "C3",
+      "claim_type": "assumption",
+      "text": "蔬菜保鲜期为 T_max 天，超过则完全损耗",
+      "artifact_ref": "assumptions.0",
+      "paper_target": "Section 3"
+    },
+    {
+      "id": "C4",
+      "claim_type": "assumption",
+      "text": "需求受价格影响，线性近似 D = a - b·p",
+      "artifact_ref": "assumptions.1",
+      "paper_target": "Section 3"
+    },
+    {
+      "id": "C5",
+      "claim_type": "assumption",
+      "text": "每日补货一次，日末处理剩余库存",
+      "artifact_ref": "assumptions.2",
+      "paper_target": "Section 3"
+    },
+    {
+      "id": "C6",
+      "claim_type": "assumption",
+      "text": "历史销售数据可用于需求分布估计",
+      "artifact_ref": "assumptions.3",
+      "paper_target": "Section 3"
+    },
+    {
+      "id": "C7",
+      "claim_type": "assumption",
+      "text": "缺货损失 = 毛利率 × 期望缺货量",
+      "artifact_ref": "assumptions.4",
+      "paper_target": "Section 3"
+    }
+  ],
+  "element_map": [
+    {
+      "id": "E1",
+      "artifact_type": "variables",
+      "artifact_id": "p_t",
+      "artifact_name": "第 t 日定价",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E2",
+      "artifact_type": "variables",
+      "artifact_id": "q_t",
+      "artifact_name": "第 t 日补货量",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E3",
+      "artifact_type": "variables",
+      "artifact_id": "D_t",
+      "artifact_name": "第 t 日需求",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E4",
+      "artifact_type": "variables",
+      "artifact_id": "w_t",
+      "artifact_name": "第 t 日末库存",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E5",
+      "artifact_type": "variables",
+      "artifact_id": "L_t",
+      "artifact_name": "第 t 日损耗",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E6",
+      "artifact_type": "parameters",
+      "artifact_id": "p1",
+      "artifact_name": "进货成本 c",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E7",
+      "artifact_type": "parameters",
+      "artifact_id": "p2",
+      "artifact_name": "需求分布参数",
+      "paper_section": "Section 4",
+      "paper_role": "definition"
+    },
+    {
+      "id": "E8",
+      "artifact_type": "constraints",
+      "artifact_id": "C1",
+      "artifact_name": "C1",
+      "artifact_expression": "w ≤ 保鲜期限制",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E9",
+      "artifact_type": "mechanism",
+      "artifact_id": "M1",
+      "artifact_name": "需求模型",
+      "artifact_expression": "D_t = max(0, a - b·p_t + ε_t), ε_t ~ N(0, σ²)",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E10",
+      "artifact_type": "mechanism",
+      "artifact_id": "M2",
+      "artifact_name": "库存动态",
+      "artifact_expression": "w_t = max(w_{t-1} + q_t - D_t, 0)",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E11",
+      "artifact_type": "mechanism",
+      "artifact_id": "M3",
+      "artifact_name": "损耗",
+      "artifact_expression": "L_t = max(w_{t-1} + q_t - D_t - W_max, 0)",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E12",
+      "artifact_type": "mechanism",
+      "artifact_id": "M4",
+      "artifact_name": "利润函数",
+      "artifact_expression": "π_t = p_t·min(q_t + w_{t-1}, D_t) - c·q_t - h·L_t",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    },
+    {
+      "id": "E13",
+      "artifact_type": "objective",
+      "artifact_id": "O1",
+      "artifact_name": "O1",
+      "artifact_expression": "max E[日利润] = p·min(q,D) - c·q - 损耗成本",
+      "paper_section": "Section 5",
+      "paper_role": "equation"
+    }
+  ],
+  "question_map": [
+    {
+      "question_id": "Q1",
+      "question_text": "蔬菜类商品的动态定价与补货联合优化问题",
+      "primary_elements": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "mechanism_elements": [
+        "E9"
+      ],
+      "paper_section": "Section 5.1"
+    },
+    {
+      "question_id": "Q2",
+      "question_text": "需要回答：(1)销售量预测模型；(2)损耗率、定价和需求的关系；(3)动态定价与补货的联合优化；(4",
+      "primary_elements": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "mechanism_elements": [
+        "E9"
+      ],
+      "paper_section": "Section 5.2"
+    },
+    {
+      "question_id": "Q3",
+      "question_text": "成功标准：优化策略相比固定定价显著降低损耗率并提高利润",
+      "primary_elements": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "mechanism_elements": [
+        "E9"
+      ],
+      "paper_section": "Section 5.3"
+    }
+  ],
+  "candidate_model_map": [
+    {
+      "model_id": "M1",
+      "model_name": "报童模型 + 价格优化",
+      "pros": "经典框架",
+      "cons": "单期",
+      "artifact_ref": "candidate_models.0",
+      "is_selected": true,
+      "selection_reason_ref": "selection_reason"
+    },
+    {
+      "model_id": "M2",
+      "model_name": "动态规划多期",
+      "pros": "考虑库存积累",
+      "cons": "计算复杂",
+      "artifact_ref": "candidate_models.1",
+      "is_selected": false,
+      "selection_reason_ref": null
+    }
+  ],
+  "sensitivity_map": [],
+  "section_map": [
+    {
+      "section_id": "S1",
+      "section_name": "摘要",
+      "required_elements": [],
+      "required_claims": []
+    },
+    {
+      "section_id": "S2",
+      "section_name": "问题重述",
+      "required_elements": [],
+      "required_claims": []
+    },
+    {
+      "section_id": "S3",
+      "section_name": "模型假设",
+      "required_elements": [],
+      "required_claims": [
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7"
+      ]
+    },
+    {
+      "section_id": "S4",
+      "section_name": "符号说明",
+      "required_elements": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E6",
+        "E7"
+      ],
+      "required_claims": []
+    },
+    {
+      "section_id": "S5",
+      "section_name": "模型建立",
+      "required_elements": [
+        "E8",
+        "E9",
+        "E10",
+        "E11",
+        "E12",
+        "E13"
+      ],
+      "required_claims": []
+    },
+    {
+      "section_id": "S6",
+      "section_name": "候选模型对比",
+      "required_elements": [],
+      "required_claims": [
+        "C1",
+        "C2"
+      ]
+    },
+    {
+      "section_id": "S7",
+      "section_name": "灵敏度分析",
+      "required_elements": [
+        "E6",
+        "E7"
+      ],
+      "required_claims": []
+    },
+    {
+      "section_id": "S8",
+      "section_name": "模型评价",
+      "required_elements": [],
+      "required_claims": []
+    }
+  ]
+}

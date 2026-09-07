@@ -1,0 +1,34 @@
+{
+  "manifest_version": "1.0",
+  "experiment_id": "P13-3D-R0",
+  "created_at": "2026-09-07T01:55:19.182059+00:00",
+  "frozen_at": "2026-09-07T01:55:19.182059+00:00",
+  "artifact": {
+    "path": "2022_B_MMA.json",
+    "hash": "802a3236a4f986525797aa067420cb117c51f616972af06f813c12b6d5118a76",
+    "schema_version": "model_artifact_v1"
+  },
+  "provenance": {
+    "arm": "MMA",
+    "question_id": "2022_B",
+    "reconstruction_set": "P13-3D-R0",
+    "is_reconstruction": false,
+    "original_experiment": "P13-3C",
+    "original_artifact_status": "recovered_from_core_knowledge",
+    "source_path": "core\\knowledge\\bench\\e2e\\artifacts\\2022_B\\ARM_MMA.json"
+  },
+  "generation_config": {
+    "source": "core/knowledge/bench/e2e/artifacts",
+    "note": "Recovered from P13-3C artifact archive"
+  },
+  "validation": {
+    "schema_valid": true,
+    "validated_at": "2026-09-07T01:55:19.182059+00:00",
+    "validator_version": "manual_schema_check"
+  },
+  "freezing": {
+    "status": "frozen",
+    "frozen_by": "artifact_persist.py",
+    "freeze_hash": "802a3236a4f986525797aa067420cb117c51f616972af06f813c12b6d5118a76"
+  }
+}
