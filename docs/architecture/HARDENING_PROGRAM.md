@@ -62,7 +62,7 @@
 - [x] P3 Deterministic Replay / Concurrency / Observability
 - [x] P4 Legacy Isolation
 - [x] P5 Regression Gate
-- [ ] P6 Release Candidate
+- [x] P6 Release Candidate（终检序列全绿 + RC tag v3.1.0-rc1）
 
 ## 5. RC 后方向备忘（不属本计划）
 
