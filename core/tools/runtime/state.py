@@ -743,12 +743,39 @@ def cmd_v3(project, args):
     return 0
 
 
+def cmd_reconcile(project, args):
+    """对账：status.json 投影 ↔ registry/graph 内容真源（System Hardening P2）。"""
+    pdir = project_dir(project)
+    sys.path.insert(0, str(ROOT / "core"))
+    from runtime.state.reconcile import reconcile
+    rep = reconcile(pdir)
+    print(f"[reconcile] 项目: {pdir}  模式: {rep.get('mode')}")
+    note = rep.get("note")
+    if note:
+        print(f"[reconcile] {note}")
+    problems = rep.get("problems", [])
+    if rep.get("ok"):
+        print("[reconcile] OK —— 投影与内容真源一致")
+        return 0
+    print(f"[reconcile] FAIL —— {len(problems)} 处不一致：")
+    for p_ in problems:
+        print(f"  - {p_}")
+    diff = rep.get("diff") or {}
+    if diff:
+        print("[reconcile] 字段级差异：")
+        for k, v in diff.items():
+            print(f"  {k}: 投影={v.get('disk')}  理想={v.get('ideal')}")
+    if rep.get("advice"):
+        print(f"[reconcile] {rep['advice']}")
+    return 1
+
+
 def main():
     ap = argparse.ArgumentParser(description="执行状态管理（跨 runtime 执行协议）")
     ap.add_argument("project", help="项目目录名或路径，如 cumcm2024a")
     ap.add_argument("command",
                     choices=["init", "status", "sync", "advance", "fail", "reset",
-                    "qfail", "qfix", "qstatus",
+                    "qfail", "qfix", "qstatus", "reconcile",
                     "decision-add", "decision-show", "v3"])
     # hand/agent 仅用于 advance/fail/qfail/qfix 命令
     # 手名从 PIPELINE 动态派生：此前硬编码「modeler/programmer/writer」漏了
@@ -784,6 +811,7 @@ def main():
         "qfail": cmd_qfail,
         "qfix": cmd_qfix,
         "qstatus": cmd_qstatus,
+        "reconcile": cmd_reconcile,
         "decision-add": cmd_decision_add,
         "decision-show": cmd_decision_show,
         "v3": cmd_v3,

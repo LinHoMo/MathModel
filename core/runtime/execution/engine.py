@@ -328,7 +328,18 @@ class WorkflowEngine:
         }
         p = _P(path)
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(_json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        # 原子写（Hardening P2 crash consistency）：先临时文件再 replace，
+        # 崩溃不会留下半截 progress 文件
+        import os as _os
+        import tempfile as _tempfile
+        _fd, _tmp = _tempfile.mkstemp(dir=str(p.parent), suffix=".tmp")
+        try:
+            with _os.fdopen(_fd, "w", encoding="utf-8") as _f:
+                _f.write(_json.dumps(data, ensure_ascii=False, indent=2))
+            _os.replace(_tmp, p)
+        finally:
+            if _os.path.exists(_tmp):
+                _os.unlink(_tmp)
 
     def restore(self, data: dict) -> None:
         """从 save_progress 的数据恢复进度（未知节点拒绝，fail-closed）。"""

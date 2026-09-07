@@ -37,7 +37,7 @@ Executor（GPT / Claude / DeepSeek / MathModelAgent / 人工均可插拔）。**
 | P11 | Scientific Writing（Expression Contract / ParagraphPlan / 红队） | ✅ | `bfd1e84`… |
 | P12 | Cross-Question：P12-0 审计 → P12-1 依赖 → P12-2 关系 → P12-3-lite 上下文 → 全阶段冻结 | ✅ 收口 | `856d369`/`92b9efa`/`0302228` |
 | P13-3 | Model Construction（3C）→ Model→Paper Transmission（3D/R2/R3） | ✅ | `82eb4fc`/`0036338`/`efc22df` |
-| **Hardening P0** | Architecture Freeze：基线固化 + 治理登记 + 定位文档收口 | ✅ 本提交 | `efc22df`+ |
+| **Hardening P0–P2** | Architecture Freeze + Contract Freeze（Canonical Domain）+ State Truth（reconcile 对账器 / crash 一致性） | ✅ | `9d98e86`/`efc8041` |
 
 ## 当前数字（机器实测，commit `efc22df`，Python 3.12.10）
 
