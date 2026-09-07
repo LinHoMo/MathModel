@@ -11,14 +11,14 @@ runtime: agent-native
 hands:
   - name: modeler
     description: 建模手：问题分析、模型选型、数学建模
-    path: core/Modeler
+    path: core/legacy/hands/Modeler
     stage_order: 1
     output_contract: MODEL_SPEC.md
     agents:
       - name: problem-parser
         gate: core/tools/gate.py
         artifact: work/question_spec.json
-        path: core/Modeler/agents/problem-parser
+        path: core/legacy/hands/Modeler/agents/problem-parser
         stage: 1
         utg_layer: L1
         description: 赛题结构化解析，消除歧义
@@ -28,21 +28,21 @@ hands:
       - name: type-classifier
         gate: core/tools/gate.py
         artifact: work/type_classification.json
-        path: core/Modeler/agents/type-classifier
+        path: core/legacy/hands/Modeler/agents/type-classifier
         stage: 2
         utg_layer: L1
         description: 题型识别 A/B/C/D/E + 推荐方法方向
         resources:
-          - core/Modeler/knowledge/problem-types/type-a-physical.md
-          - core/Modeler/knowledge/problem-types/type-b-experiment.md
-          - core/Modeler/knowledge/problem-types/type-c-data.md
-          - core/Modeler/knowledge/problem-types/type-d-operations.md
-          - core/Modeler/knowledge/problem-types/type-e-interdisciplinary.md
+          - core/legacy/hands/Modeler/knowledge/problem-types/type-a-physical.md
+          - core/legacy/hands/Modeler/knowledge/problem-types/type-b-experiment.md
+          - core/legacy/hands/Modeler/knowledge/problem-types/type-c-data.md
+          - core/legacy/hands/Modeler/knowledge/problem-types/type-d-operations.md
+          - core/legacy/hands/Modeler/knowledge/problem-types/type-e-interdisciplinary.md
           - core/knowledge/methodology/method-trends-2010-2025.md
       - name: literature-searcher
         gate: core/tools/gate.py
         artifact: work/literature_evidence.json
-        path: core/Modeler/agents/literature-searcher
+        path: core/legacy/hands/Modeler/agents/literature-searcher
         stage: 1.5
         utg_layer: L1.5
         description: 文献检索与证据提取，支撑模型选择
@@ -54,7 +54,7 @@ hands:
       - name: method-matcher
         gate: core/tools/gate.py
         artifact: work/method_candidates.json
-        path: core/Modeler/agents/method-matcher
+        path: core/legacy/hands/Modeler/agents/method-matcher
         stage: 3
         utg_layer: L2
         description: 方法匹配，从知识库选候选模型
@@ -69,7 +69,7 @@ hands:
       - name: model-builder
         gate: core/tools/gate.py
         artifact: work/model_draft.md
-        path: core/Modeler/agents/model-builder
+        path: core/legacy/hands/Modeler/agents/model-builder
         stage: 4
         utg_layer: L3
         description: 建立数学模型（公式/符号/边界条件）
@@ -81,7 +81,7 @@ hands:
       - name: dag-builder
         gate: core/tools/gate.py
         artifact: work/model_dag.json
-        path: core/Modeler/agents/dag-builder
+        path: core/legacy/hands/Modeler/agents/dag-builder
         stage: 4.5
         utg_layer: L3.5
         description: 构建子模型依赖 DAG，指导并行与级联
@@ -93,7 +93,7 @@ hands:
       - name: assumption-validator
         gate: core/tools/gate.py
         artifact: work/assumption_validation.json
-        path: core/Modeler/agents/assumption-validator
+        path: core/legacy/hands/Modeler/agents/assumption-validator
         stage: 5
         utg_layer: L4
         description: 假设四维评分验证
@@ -104,7 +104,7 @@ hands:
       - name: spec-auditor
         gate: core/tools/gate.py
         artifact: output/MODEL_SPEC.md
-        path: core/Modeler/agents/spec-auditor
+        path: core/legacy/hands/Modeler/agents/spec-auditor
         stage: 6
         utg_layer: L5+L6
         description: MODEL_SPEC 护栏检查 + 哈希审计
@@ -112,65 +112,65 @@ hands:
           - core/validators/modules/guardrails.py
           - core/validators/modules/hash_chain.py
           - core/schemas/model_spec.schema.json
-          - core/Modeler/templates/MODEL_SPEC_TEMPLATE.md
+          - core/legacy/hands/Modeler/templates/MODEL_SPEC_TEMPLATE.md
 
   - name: programmer
     description: 编程手：代码实现、测试验证、结果输出
-    path: core/Programmer
+    path: core/legacy/hands/Programmer
     stage_order: 2
     output_contract: CODE_DELIVERABLES.md
     agents:
       - name: template-selector
         gate: core/tools/gate.py
         artifact: work/template_plan.json
-        path: core/Programmer/agents/template-selector
+        path: core/legacy/hands/Programmer/agents/template-selector
         stage: 1
         utg_layer: L1
         description: 根据 MODEL_SPEC 选代码模板
         resources:
-          - core/Programmer/knowledge/code-templates/
+          - core/legacy/hands/Programmer/knowledge/code-templates/
           - core/knowledge/methodology/
           - core/schemas/code_deliverables.schema.json
           - core/env/loader.py
       - name: code-implementer
         gate: core/tools/gate.py
         artifact: code/main.py
-        path: core/Programmer/agents/code-implementer
+        path: core/legacy/hands/Programmer/agents/code-implementer
         stage: 2
         utg_layer: L2
         description: 实现代码，类型制导
         resources:
-          - core/Programmer/knowledge/code-templates/
+          - core/legacy/hands/Programmer/knowledge/code-templates/
           - core/validators/modules/type_system.py
           - core/schemas/code_deliverables.schema.json
           - core/env/loader.py
       - name: test-runner
         gate: core/tools/gate.py
         artifact: work/test_report.json
-        path: core/Programmer/agents/test-runner
+        path: core/legacy/hands/Programmer/agents/test-runner
         stage: 3
         utg_layer: L3
         description: 单元测试 + 集成测试
         resources:
-          - core/Programmer/knowledge/code-templates/utils/code_testing.py
+          - core/legacy/hands/Programmer/knowledge/code-templates/utils/code_testing.py
           - core/validators/modules/process_verifier.py
           - core/validators/modules/contract_checker.py
       - name: result-verifier
         gate: core/tools/gate.py
         artifact: work/result_validation.json
-        path: core/Programmer/agents/result-verifier
+        path: core/legacy/hands/Programmer/agents/result-verifier
         stage: 4
         utg_layer: L4
         description: 数值验证 + 灵敏度分析
         resources:
           - core/validators/modules/symbolic_verifier.py
           - core/validators/modules/cross_model_checker.py
-          - core/Programmer/knowledge/code-templates/utils/sensitivity_analysis.py
+          - core/legacy/hands/Programmer/knowledge/code-templates/utils/sensitivity_analysis.py
           - core/env/loader.py
       - name: guardrails-checker
         gate: core/tools/gate.py
         artifact: work/guardrails_report_programmer.json
-        path: core/Programmer/agents/guardrails-checker
+        path: core/legacy/hands/Programmer/agents/guardrails-checker
         stage: 5
         utg_layer: L5
         description: 运行时护栏（禁用词/占位符/AI痕迹/权限）
@@ -181,7 +181,7 @@ hands:
       - name: hash-auditor
         gate: core/tools/gate.py
         artifact: output/CODE_DELIVERABLES.md
-        path: core/Programmer/agents/hash-auditor
+        path: core/legacy/hands/Programmer/agents/hash-auditor
         stage: 6
         utg_layer: L6
         description: 哈希链 + 错误归因 + 规则迭代
@@ -193,66 +193,66 @@ hands:
 
   - name: writer
     description: 撰写手：论文撰写、图表生成、最终校验
-    path: core/Writer
+    path: core/legacy/hands/Writer
     stage_order: 3
     output_contract: PAPER_SPEC.md
     agents:
       - name: structure-planner
         gate: core/tools/gate.py
         artifact: work/paper_structure.json
-        path: core/Writer/agents/structure-planner
+        path: core/legacy/hands/Writer/agents/structure-planner
         stage: 1
         utg_layer: L1
         description: 论文结构规划 + 字数分配
         resources:
-          - core/Writer/knowledge/writing/paper-structure-guide.md
-          - core/Writer/knowledge/profiles/cumcm-rules.md
-          - core/Writer/knowledge/templates/mathmodel/
+          - core/legacy/hands/Writer/knowledge/writing/paper-structure-guide.md
+          - core/legacy/hands/Writer/knowledge/profiles/cumcm-rules.md
+          - core/legacy/hands/Writer/knowledge/templates/mathmodel/
           - core/env/loader.py
       - name: section-writer
         gate: core/tools/gate.py
         artifact: paper/main.tex
-        path: core/Writer/agents/section-writer
+        path: core/legacy/hands/Writer/agents/section-writer
         stage: 2
         utg_layer: L2
         description: 撰写各章节 LaTeX 内容
         resources:
-          - core/Writer/knowledge/writing/paper-structure-guide.md
-          - core/Writer/knowledge/writing/abstract-writing.md
-          - core/Writer/knowledge/writing/assumption-writing.md
-          - core/Writer/knowledge/writing/forbidden-words.md
-          - core/Writer/knowledge/writing/avoid-ai-writing-en.md
-          - core/Writer/knowledge/writing/latex-escape-cheatsheet.md
-          - core/Writer/knowledge/writing/transition-phrases.md
+          - core/legacy/hands/Writer/knowledge/writing/paper-structure-guide.md
+          - core/legacy/hands/Writer/knowledge/writing/abstract-writing.md
+          - core/legacy/hands/Writer/knowledge/writing/assumption-writing.md
+          - core/legacy/hands/Writer/knowledge/writing/forbidden-words.md
+          - core/legacy/hands/Writer/knowledge/writing/avoid-ai-writing-en.md
+          - core/legacy/hands/Writer/knowledge/writing/latex-escape-cheatsheet.md
+          - core/legacy/hands/Writer/knowledge/writing/transition-phrases.md
       - name: figure-generator
         gate: core/tools/gate.py
         artifact: paper/figures/
-        path: core/Writer/agents/figure-generator
+        path: core/legacy/hands/Writer/agents/figure-generator
         stage: 3
         utg_layer: L2
         description: 图表生成与规范命名
         resources:
-          - core/Writer/knowledge/reference/figure-rules-enhanced.md
-          - core/Writer/knowledge/reference/figure-rules.md
-          - core/Writer/knowledge/reference/figure-guide.md
-          - core/Writer/knowledge/reference/advanced-figures.md
+          - core/legacy/hands/Writer/knowledge/reference/figure-rules-enhanced.md
+          - core/legacy/hands/Writer/knowledge/reference/figure-rules.md
+          - core/legacy/hands/Writer/knowledge/reference/figure-guide.md
+          - core/legacy/hands/Writer/knowledge/reference/advanced-figures.md
           - figures/all_results.json
       - name: reference-curator
         gate: core/tools/gate.py
         artifact: paper/references.bib
-        path: core/Writer/agents/reference-curator
+        path: core/legacy/hands/Writer/agents/reference-curator
         stage: 4
         utg_layer: L3
         description: 参考文献整理 + 引用完整性
         resources:
-          - core/Writer/knowledge/templates/mathmodel/references.bib
-          - core/Writer/knowledge/writing/guidelines.md
+          - core/legacy/hands/Writer/knowledge/templates/mathmodel/references.bib
+          - core/legacy/hands/Writer/knowledge/writing/guidelines.md
           - core/schemas/paper_spec.schema.json
           - core/env/loader.py
       - name: consistency-checker
         gate: core/tools/gate.py
         artifact: work/consistency_report.json
-        path: core/Writer/agents/consistency-checker
+        path: core/legacy/hands/Writer/agents/consistency-checker
         stage: 5
         utg_layer: L4
         description: 论文 - 代码数值一致性
@@ -263,37 +263,37 @@ hands:
       - name: guardrails-checker
         gate: core/tools/gate.py
         artifact: work/guardrails_report_writer.json
-        path: core/Writer/agents/guardrails-checker
+        path: core/legacy/hands/Writer/agents/guardrails-checker
         stage: 6
         utg_layer: L5
         description: 运行时护栏（禁用词/占位符/AI 痕迹）
         resources:
           - core/validators/modules/guardrails.py
-          - core/Writer/knowledge/writing/forbidden-words.md
-          - core/Writer/knowledge/writing/avoid-ai-writing-en.md
+          - core/legacy/hands/Writer/knowledge/writing/forbidden-words.md
+          - core/legacy/hands/Writer/knowledge/writing/avoid-ai-writing-en.md
       - name: final-validator
         gate: core/tools/gate.py
         artifact: output/PAPER_SPEC.md
-        path: core/Writer/agents/final-validator
+        path: core/legacy/hands/Writer/agents/final-validator
         stage: 7
         utg_layer: L6
         description: 最终校验 + 哈希审计 + 渲染 PDF
         resources:
           - core/schemas/paper_spec.schema.json
-          - core/Writer/templates/PAPER_SPEC_TEMPLATE.md
+          - core/legacy/hands/Writer/templates/PAPER_SPEC_TEMPLATE.md
           - core/validators/modules/hash_chain.py
           - core/env/loader.py
 
   - name: reviewer
     description: 评审手：模拟评委审查、挑缺陷、出修改清单 (5 人评审团 + weakness-hunter + revision-planner + revision-executor)
-    path: core/Reviewer
+    path: core/legacy/hands/Reviewer
     stage_order: 4
     output_contract: work/revision_plan.json
     agents:
       - name: scorer-academic
         gate: core/tools/score_artifact.py
         artifact: work/score_card_academic.json
-        path: core/Reviewer/agents/scorer-academic
+        path: core/legacy/hands/Reviewer/agents/scorer-academic
         stage: 1
         utg_layer: L4
         description: 学术严谨性评分：推导完整性/假设合理性/验证充分性/数学正确性 (权重 25%)
@@ -304,7 +304,7 @@ hands:
       - name: scorer-engineering
         gate: core/tools/score_artifact.py
         artifact: work/score_card_engineering.json
-        path: core/Reviewer/agents/scorer-engineering
+        path: core/legacy/hands/Reviewer/agents/scorer-engineering
         stage: 1
         utg_layer: L4
         description: 工程落地评分：可复现性/计算性能/鲁棒性/工程规范 (权重 20%)
@@ -317,7 +317,7 @@ hands:
       - name: scorer-judge
         gate: core/tools/score_artifact.py
         artifact: work/score_card_judge.json
-        path: core/Reviewer/agents/scorer-judge
+        path: core/legacy/hands/Reviewer/agents/scorer-judge
         stage: 1
         utg_layer: L4
         description: 评委视角评分：创新性/完整性/规范性/亮点度 (权重 25%)
@@ -329,7 +329,7 @@ hands:
       - name: scorer-reader
         gate: core/tools/score_artifact.py
         artifact: work/score_card_reader.json
-        path: core/Reviewer/agents/scorer-reader
+        path: core/legacy/hands/Reviewer/agents/scorer-reader
         stage: 1
         utg_layer: L4
         description: 可读性评分：结构清晰度/语言质量/图表叙事/逻辑流畅度 (权重 15%)
@@ -340,7 +340,7 @@ hands:
       - name: scorer-adversarial
         gate: core/tools/score_artifact.py
         artifact: work/score_card_adversarial.json
-        path: core/Reviewer/agents/scorer-adversarial
+        path: core/legacy/hands/Reviewer/agents/scorer-adversarial
         stage: 1
         utg_layer: L4
         description: 对抗视角评分：漏洞/边界/造假风险/反模式 (权重 15%)
@@ -355,7 +355,7 @@ hands:
       - name: weakness-hunter
         gate: core/tools/score_artifact.py
         artifact: work/weakness_report.json
-        path: core/Reviewer/agents/weakness-hunter
+        path: core/legacy/hands/Reviewer/agents/weakness-hunter
         stage: 2
         utg_layer: L4
         description: 逐条扫描反模式库挑缺陷
@@ -365,7 +365,7 @@ hands:
       - name: revision-planner
         gate: core/tools/score_artifact.py
         artifact: work/revision_plan.json
-        path: core/Reviewer/agents/revision-planner
+        path: core/legacy/hands/Reviewer/agents/revision-planner
         stage: 3
         utg_layer: L5
         description: 把缺陷转成可执行的修改清单，支持按子问局部回修
@@ -375,7 +375,7 @@ hands:
       - name: revision-executor
         gate: core/tools/gate.py
         artifact: work/execution_report.json
-        path: core/Reviewer/agents/revision-executor
+        path: core/legacy/hands/Reviewer/agents/revision-executor
         stage: 4
         utg_layer: L6
         description: 按修改清单执行修改，验收通过后产出 execution_report.json
