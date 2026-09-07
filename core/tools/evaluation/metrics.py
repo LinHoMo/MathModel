@@ -30,7 +30,6 @@ ROOT = Path(__file__).resolve().parents[3]
 def _scan_catalog():
     """从 catalog.yaml / 文件系统扫描 agent 与 hand 数量。"""
     try:
-        sys.path.insert(0, str(ROOT / "core" / "tools" / _c))
         for _c in ("runtime", "validation", "evaluation", "knowledge", "devtools", "rendering"):
             sys.path.insert(0, str(ROOT / "core" / "tools" / _c))
         from gen_runtime_manifest import load_catalog
@@ -62,7 +61,6 @@ def _scan_tools():
 def _scan_known_competitions():
     """从 new_project.py 的 known_competitions() 扫描竞赛数。"""
     try:
-        sys.path.insert(0, str(ROOT / "core" / "tools" / _c))
         for _c in ("runtime", "validation", "evaluation", "knowledge", "devtools", "rendering"):
             sys.path.insert(0, str(ROOT / "core" / "tools" / _c))
         import new_project as np_mod
@@ -99,66 +97,62 @@ def _run(cmd, timeout=120):
 
 
 def _scan_tests():
-    """运行 pytest -q 并汇总。"""
+    """运行 pytest -q 并汇总（解析末行汇总行）。"""
     rc, out = _run([sys.executable, "-m", "pytest", "-q", "--tb=no"])
-    m = re.search(r"(\d+)(?: passed| failed| error| warning)", out)
-    passed = int(m.group(1)) if m else 0
-    return {"exit": rc, "passed": passed, "raw_tail": out.strip().splitlines()[-1] if out.strip() else ""}
+    lines = [l for l in out.strip().splitlines() if l.strip()]
+    tail = lines[-1] if lines else ""
+    p = re.search(r"(\d+) passed", tail)
+    s = re.search(r"(\d+) skipped", tail)
+    f = re.search(r"(\d+) failed", tail)
+    return {
+        "exit": rc,
+        "passed": int(p.group(1)) if p else 0,
+        "failed": int(f.group(1)) if f else 0,
+        "skipped": int(s.group(1)) if s else 0,
+        "raw_tail": tail,
+    }
 
 
 def _scan_gate():
-    """对归档样例 cumcm2024a 跑 gate.py all，返回 EXIT + 通过/失败计数。"""
-    rc, out = _run([sys.executable, "core/tools/gate.py", "archives/cumcm2024a", "all"], timeout=180)
-    pass_m = re.search(r"通过\s+(\d+)", out)
-    hard_m = re.search(r"硬失败\s+(\d+)", out)
-    soft_m = re.search(r"软失败\s+(\d+)", out)
+    """对归档样例 cumcm2024anew 跑 gate.py --level all，统计 [PASS]/[FAIL]/[SKIP] 与 EXIT。"""
+    rc, out = _run([sys.executable, "core/tools/gate.py", "archives/cumcm2024anew", "--level", "all"], timeout=180)
     return {
         "exit": rc,
-        "passed": int(pass_m.group(1)) if pass_m else 0,
-        "hard_fail": int(hard_m.group(1)) if hard_m else 0,
-        "soft_fail": int(soft_m.group(1)) if soft_m else 0,
+        "pass": out.count("[PASS]"),
+        "fail": out.count("[FAIL]"),
+        "skip": out.count("[SKIP]"),
     }
 
 
 def _scan_validate():
-    """对归档样例 cumcm2024a 跑 validate_project.py，返回 EXIT + 通过/警告/硬失败。"""
-    rc, out = _run([sys.executable, "core/tools/validate_project.py", "--project", "archives/cumcm2024a"], timeout=180)
-    # 汇总行: "汇总: 38 passed, 9 warnings, 8 hard errors"
-    m = re.search(r"汇总:\s*(\d+)\s*passed,\s*(\d+)\s*warnings?,\s*(\d+)\s*hard\s*errors?", out)
-    if m:
-        return {
-            "exit": rc,
-            "passed": int(m.group(1)),
-            "warn": int(m.group(2)),
-            "hard_fail": int(m.group(3)),
-        }
-    # fallback
-    pass_m = re.search(r"通过\s+(\d+)", out)
+    """对归档样例 cumcm2024anew 跑 validate_project.py，统计 HARD/WARN/PASS 标记与 EXIT。"""
+    rc, out = _run([sys.executable, "core/tools/validate_project.py", "--project", "archives/cumcm2024anew"], timeout=180)
     return {
         "exit": rc,
-        "passed": int(pass_m.group(1)) if pass_m else 0,
-        "warn": 0,
-        "hard_fail": 0,
+        "hard_fail": len(re.findall(r"^\s*HARD\s", out, re.MULTILINE)),
+        "warn": len(re.findall(r"^\s*WARN\s", out, re.MULTILINE)),
+        "passed": len(re.findall(r"^\s*(?:PASS|OK)\s", out, re.MULTILINE)),
     }
 
 
 def _scan_validate_lib():
-    """跑 validate.py（无参数，库级校验），手工统计分类数。"""
+    """跑 validate.py（无参数，库级校验），解析汇总行。"""
     rc, out = _run([sys.executable, "core/tools/validate.py"], timeout=120)
-    # validate.py 没有汇总行，手工数三类
-    passed = len(re.findall(r"\[PASS\]", out))
-    blocked = len(re.findall(r"失败项（阻塞交付）:", out))
-    warned = len(re.findall(r"警告项（不阻塞", out))
-    # 粗糙估计：按段计数
-    n_block = out.count("[L") - out.count("[L5]") - out.count("[L6]") - out.count("[L4]")
-    # 直接从 struct 判断: 数 "通过 X / 失败 Y / 警告 Z" —— validate.py 没这行
+    m = re.search(r"验证完成:\s*(\d+)\s*通过,\s*(\d+)\s*失败,\s*(\d+)\s*警告", out)
+    if not m:
+        return {"exit": rc, "passed": 0, "warn": 0, "fail": 0, "note": "无汇总行，需人工确认"}
     return {
         "exit": rc,
-        "passed": passed,
-        "warn": warned,
-        "fail": blocked,
-        "note": "validate.py 无汇总行，需人工确认数字",
+        "passed": int(m.group(1)),
+        "fail": int(m.group(2)),
+        "warn": int(m.group(3)),
     }
+
+
+def _scan_git():
+    """当前 HEAD 短 hash（数字与提交绑定）。"""
+    rc, out = _run(["git", "rev-parse", "HEAD"], timeout=15)
+    return {"exit": rc, "head": out.strip()[:9] if rc == 0 else "N/A"}
 
 
 def _scan_traceability():
@@ -168,13 +162,13 @@ def _scan_traceability():
     # 3. freeze_numbers.py 口径
     # 4. validate_project.py 口径
     # 简单实测部分
-    code_dir = ROOT / "archives" / "cumcm2024a" / "code"
-    figures_dir = ROOT / "archives" / "cumcm2024a" / "figures"
+    code_dir = ROOT / "archives" / "cumcm2024anew" / "code"
+    figures_dir = ROOT / "archives" / "cumcm2024anew" / "figures"
     return {
         "note": "追溯率四口径不在 P0 合并，需独立实测；仅公示以下脚本可计算",
         "scripts": [
-            "core/tools/freeze_numbers.py archives/cumcm2024a check (数字冻结口径)",
-            "core/tools/validate_project.py --project archives/cumcm2024a (综合校验口径)",
+            "core/tools/freeze_numbers.py archives/cumcm2024anew check (数字冻结口径)",
+            "core/tools/validate_project.py --project archives/cumcm2024anew (综合校验口径)",
         ]
     }
 
@@ -185,13 +179,14 @@ def scan_all():
     return {
         "generated_at": ts,
         "generated_by": "core/tools/metrics.py",
+        "commit": _scan_git(),
         "catalog": _scan_catalog(),
         "tools": _scan_tools(),
         "known_competitions": _scan_known_competitions(),
         "methodology_docs": _scan_methodology(),
         "tests": _scan_tests(),
-        "gate_cumcm2024a": _scan_gate(),
-        "validate_project_cumcm2024a": _scan_validate(),
+        "gate_cumcm2024anew": _scan_gate(),
+        "validate_project_cumcm2024anew": _scan_validate(),
         "validate_library": _scan_validate_lib(),
         "traceability": _scan_traceability(),
     }
@@ -209,6 +204,7 @@ def render_markdown(m):
         "> **本文件由 `core/tools/metrics.py --write` 自动生成，禁止手改。**",
         f"> 最近扫描时间: `{m['generated_at']}`",
         f"> 生成脚本: `{m['generated_by']}`",
+        f"> commit: `{m.get('commit', {}).get('head', 'N/A')}`",
         "",
         "---",
         "",
@@ -223,30 +219,34 @@ def render_markdown(m):
         f"| `known_competitions()` | {m['known_competitions'].get('count', 'N/A')} |",
         f"| methodology .md 数 | {m['methodology_docs']['count']} |",
         "",
-        "## 测试",
+        "## 测试（全量 pytest）",
         "",
         f"| 指标 | 值 |",
         f"|------|-----|",
         f"| pytest 通过 | {m['tests']['passed']} |",
+        f"| pytest 失败 | {m['tests']['failed']} |",
+        f"| pytest 跳过 | {m['tests']['skipped']} |",
         f"| pytest EXIT | {m['tests']['exit']} |",
         "",
-        "## 全链路门禁（cumcm2024a）",
+        "## 全链路门禁（归档样例 archives/cumcm2024anew）",
         "",
         f"| 指标 | 值 |",
         f"|------|-----|",
-        f"| gate.py 通过 | {m['gate_cumcm2024a']['passed']} |",
-        f"| gate.py 硬失败 | {m['gate_cumcm2024a']['hard_fail']} |",
-        f"| gate.py 软失败 | {m['gate_cumcm2024a']['soft_fail']} |",
-        f"| gate.py EXIT | {m['gate_cumcm2024a']['exit']} |",
+        f"| gate.py [PASS] | {m['gate_cumcm2024anew']['pass']} |",
+        f"| gate.py [FAIL] | {m['gate_cumcm2024anew']['fail']} |",
+        f"| gate.py [SKIP] | {m['gate_cumcm2024anew']['skip']} |",
+        f"| gate.py EXIT | {m['gate_cumcm2024anew']['exit']} |",
         "",
-        "## 项目校验（cumcm2024a）",
+        "## 项目校验（归档样例 archives/cumcm2024anew）",
         "",
         f"| 指标 | 值 |",
         f"|------|-----|",
-        f"| validate_project 通过 | {m['validate_project_cumcm2024a']['passed']} |",
-        f"| validate_project 警告 | {m['validate_project_cumcm2024a']['warn']} |",
-        f"| validate_project 硬失败 | {m['validate_project_cumcm2024a']['hard_fail']} |",
-        f"| validate_project EXIT | {m['validate_project_cumcm2024a']['exit']} |",
+        f"| validate_project HARD | {m['validate_project_cumcm2024anew']['hard_fail']} |",
+        f"| validate_project WARN | {m['validate_project_cumcm2024anew']['warn']} |",
+        f"| validate_project PASS | {m['validate_project_cumcm2024anew']['passed']} |",
+        f"| validate_project EXIT | {m['validate_project_cumcm2024anew']['exit']} |",
+        "",
+        "> 口径说明：归档样例是部分样例，不承诺全绿；以上数字是命令真实输出的计数。",
         "",
         "## 库级校验",
         "",

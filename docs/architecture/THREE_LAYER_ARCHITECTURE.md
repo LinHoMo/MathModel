@@ -60,6 +60,11 @@
   - 2026-09-06 `retriever.py` 类型命中权重 +3→+6（P13-2 Ranking 修正，
     Q1 门禁通过）：两题消融 + 评价类反向检查 + 零测试回归验证。见
     `P13_2_REPORT.md`。
+  - 2026-09-07 **HARDENING_PROGRAM（P0–P6，System Hardening 一次性授权）**：
+    对冻结层执行 Contract / State / Replay 三项硬化 + Legacy 物理隔离 +
+    Regression Gate 的工程收口（**不引入新语义层**；架构本身自今日起
+    宣布冻结，不再接受新的架构革命）。逐阶段范围与验收见
+    `HARDENING_PROGRAM.md`。
 
 ## 4. 三问门禁（每个新阶段 / 能力 PR 的准入检查）
 
