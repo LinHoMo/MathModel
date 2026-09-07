@@ -1,9 +1,9 @@
 # 项目度量（单一真源 · 脚本自动生成）
 
 > **本文件由 `core/tools/metrics.py --write` 自动生成，禁止手改。**
-> 最近扫描时间: `2026-09-07T08:45:18+00:00Z`
+> 最近扫描时间: `2026-09-07T10:31:14+00:00Z`
 > 生成脚本: `core/tools/metrics.py`
-> commit: `efc22dfb2`
+> commit: `5a6b051b9`
 
 ---
 
@@ -13,8 +13,8 @@
 |------|-----|
 | 手（hands）数 | 4 |
 | agent 数 | 29 |
-| tools 脚本数 | 36 |
-| tools 总行数 | 749 |
+| tools 脚本数 | 37 |
+| tools 总行数 | 772 |
 | `known_competitions()` | 9 |
 | methodology .md 数 | 53 |
 
@@ -22,7 +22,7 @@
 
 | 指标 | 值 |
 |------|-----|
-| pytest 通过 | 769 |
+| pytest 通过 | 781 |
 | pytest 失败 | 0 |
 | pytest 跳过 | 11 |
 | pytest EXIT | 0 |
@@ -51,10 +51,10 @@
 
 | 指标 | 值 |
 |------|-----|
-| validate.py 通过 | 55 |
+| validate.py 通过 | 57 |
 | validate.py 警告 | 0 |
-| validate.py 失败 | 2 |
-| validate.py EXIT | 1 |
+| validate.py 失败 | 0 |
+| validate.py EXIT | 0 |
 
 ## 追溯率（四口径，待实测对比）
 

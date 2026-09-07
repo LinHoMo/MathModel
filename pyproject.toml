@@ -15,6 +15,11 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+markers = [
+    "e2e: 端到端测试（依赖归档样例或完整交付产物，可条件跳过但必须分类）",
+    "integration: 集成测试（依赖交付实例/外部内容条件的测试，分类登记见 COMPATIBILITY_POLICY）",
+    "requires_runtime: 依赖外部运行时（MMBench 语料 / Syslab / LaTeX 工具链等）",
+]
 
 [tool.ruff]
 line-length = 100

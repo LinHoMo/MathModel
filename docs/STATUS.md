@@ -39,21 +39,23 @@ Executor（GPT / Claude / DeepSeek / MathModelAgent / 人工均可插拔）。**
 | P13-3 | Model Construction（3C）→ Model→Paper Transmission（3D/R2/R3） | ✅ | `82eb4fc`/`0036338`/`efc22df` |
 | **Hardening P0–P2** | Architecture Freeze + Contract Freeze（Canonical Domain）+ State Truth（reconcile 对账器 / crash 一致性） | ✅ | `9d98e86`/`efc8041` |
 | **Hardening P3** | Deterministic Replay / Run Provenance / 并发契约（RunRecord + replay verify/diff + 双问并行隔离） | ✅ | `55df19c` |
-| **Hardening P4** | Legacy Isolation：四手降级 `core/legacy/hands/` + 实验目录/脚本迁出 products（validate 57/57 达成） | ✅ | → |
+| **Hardening P4** | Legacy Isolation：四手降级 `core/legacy/hands/` + 实验目录/脚本迁出 products（validate 57/57 达成） | ✅ | `5a6b051` |
+| **Hardening P5** | Regression Gate：零失败基线（781/11，skip 全部分类）+ 五轴 Non-regression 契约 5/5（15 passed） | ✅ | → |
 
-## 当前数字（机器实测，commit `efc22df`，Python 3.12.10）
+## 当前数字（机器实测，Python 3.12.10）
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成测试 | **758 passed / 11 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
-| 项目级校验 | **55 通过 / 2 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
+| 单元/集成/端到端测试 | **781 passed / 11 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
+| 五轴 Non-regression | **5/5 全绿（15 passed）** | `py -3.12 -m pytest tests/regression -q` |
+| 项目级校验 | **57 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 
 说明：
 
-- validate 的 2 条失败均为**研究实验误报**（非引擎缺陷）：`projects/P13-3D-R3`
-  实验语料被当作交付论文扫出禁用词；库模式无用户 .tex。Hardening P4 把实验目录
-  移出 `projects/` 并修正扫描规则后，此二项转绿、validate 回到 57/57。
+- Hardening P4 已把研究实验移出 `projects/`（现居 `research/`），库级校验交付
+  子集回归 57/57；此前两条「研究实验误报」随迁移消除（记录见
+  HARDENING_PROGRAM §3.1 基线注释）。
 - **双真源问题档案**：历史文档出现过 228/16、574/11、751/11 三套测试数字与本表
   758/11 并存。自 Hardening P0 起，全部状态数字以本表口径为准；系统内状态真源
   收口（Event Log → Projection → status.json + `state.py reconcile`）在 Hardening

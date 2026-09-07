@@ -61,7 +61,7 @@
 - [x] P2 State Truth + Crash Consistency
 - [x] P3 Deterministic Replay / Concurrency / Observability
 - [x] P4 Legacy Isolation
-- [ ] P5 Regression Gate
+- [x] P5 Regression Gate
 - [ ] P6 Release Candidate
 
 ## 5. RC 后方向备忘（不属本计划）

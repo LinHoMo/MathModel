@@ -5,6 +5,7 @@
 import os
 import json
 import pytest
+pytestmark = pytest.mark.e2e
 
 
 class TestEndToEndPipeline:

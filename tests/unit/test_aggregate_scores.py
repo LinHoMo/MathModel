@@ -6,6 +6,9 @@
 import json
 import sys
 import unittest
+import pytest
+
+pytestmark = pytest.mark.integration
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
