@@ -2,9 +2,9 @@
 3 个 laws/rules.md 的反例与速查表测试
 
 测试对象：三手的 laws/rules.md：
-  - core/Modeler/laws/rules.md（铁律 M1-M7，每条含"典型反例"）
-  - core/Programmer/laws/rules.md（铁律 P1-P9，每条含"典型反例"）
-  - core/Writer/laws/rules.md（铁律 W1-W10，每条含"典型反例"）
+  - core/legacy/hands/Modeler/laws/rules.md（铁律 M1-M7，每条含"典型反例"）
+  - core/legacy/hands/Programmer/laws/rules.md（铁律 P1-P9，每条含"典型反例"）
+  - core/legacy/hands/Writer/laws/rules.md（铁律 W1-W10，每条含"典型反例"）
 
 本轮补门禁质量内容：
   - 每条铁律配 1 个"典型反例"（说明违反后的具体后果）
@@ -22,9 +22,9 @@ import pytest
 # 3 个 laws 文件相对路径
 # ---------------------------------------------------------------------------
 LAWS_FILES = {
-    "Modeler": os.path.join("core", "Modeler", "laws", "rules.md"),
-    "Programmer": os.path.join("core", "Programmer", "laws", "rules.md"),
-    "Writer": os.path.join("core", "Writer", "laws", "rules.md"),
+    "Modeler": os.path.join("core", "legacy", "hands", "Modeler", "laws", "rules.md"),
+    "Programmer": os.path.join("core", "legacy", "hands", "Programmer", "laws", "rules.md"),
+    "Writer": os.path.join("core", "legacy", "hands", "Writer", "laws", "rules.md"),
 }
 
 # 每条铁律数量（M1-M7 = 7，P1-P9 = 9，W1-W10 = 10）
@@ -50,21 +50,21 @@ class TestLawsAntiPatterns:
         assert missing == [], f"laws 文件缺失: {missing}"
 
     def test_modeler_has_at_least_7_antiexamples(self):
-        """core/Modeler/laws/rules.md 含 >=7 处'典型反例'（M1-M7 每条一个）"""
+        """core/legacy/hands/Modeler/laws/rules.md 含 >=7 处'典型反例'（M1-M7 每条一个）"""
         content = _read(LAWS_FILES["Modeler"])
         n = len(re.findall(r"典型反例", content))
         assert n >= EXPECTED_ANTIEXAMPLE_COUNT["Modeler"], \
             f"Modeler laws 典型反例数 {n} < {EXPECTED_ANTIEXAMPLE_COUNT['Modeler']}"
 
     def test_programmer_has_at_least_9_antiexamples(self):
-        """core/Programmer/laws/rules.md 含 >=9 处'典型反例'（P1-P9 每条一个）"""
+        """core/legacy/hands/Programmer/laws/rules.md 含 >=9 处'典型反例'（P1-P9 每条一个）"""
         content = _read(LAWS_FILES["Programmer"])
         n = len(re.findall(r"典型反例", content))
         assert n >= EXPECTED_ANTIEXAMPLE_COUNT["Programmer"], \
             f"Programmer laws 典型反例数 {n} < {EXPECTED_ANTIEXAMPLE_COUNT['Programmer']}"
 
     def test_writer_has_at_least_10_antiexamples(self):
-        """core/Writer/laws/rules.md 含 >=10 处'典型反例'（W1-W10 每条一个）"""
+        """core/legacy/hands/Writer/laws/rules.md 含 >=10 处'典型反例'（W1-W10 每条一个）"""
         content = _read(LAWS_FILES["Writer"])
         n = len(re.findall(r"典型反例", content))
         assert n >= EXPECTED_ANTIEXAMPLE_COUNT["Writer"], \
@@ -96,7 +96,7 @@ class TestLawsCheatSheet:
     """3 个 laws/rules.md 含'防错速查表'章节"""
 
     def test_modeler_has_cheat_sheet(self):
-        """core/Modeler/laws/rules.md 含'防错速查表'章节"""
+        """core/legacy/hands/Modeler/laws/rules.md 含'防错速查表'章节"""
         content = _read(LAWS_FILES["Modeler"])
         assert "防错速查表" in content, \
             "Modeler laws 缺'防错速查表'章节"
@@ -105,7 +105,7 @@ class TestLawsCheatSheet:
             "Modeler laws '防错速查表' 未作为标题"
 
     def test_programmer_has_cheat_sheet(self):
-        """core/Programmer/laws/rules.md 含'防错速查表'章节"""
+        """core/legacy/hands/Programmer/laws/rules.md 含'防错速查表'章节"""
         content = _read(LAWS_FILES["Programmer"])
         assert "防错速查表" in content, \
             "Programmer laws 缺'防错速查表'章节"
@@ -113,7 +113,7 @@ class TestLawsCheatSheet:
             "Programmer laws '防错速查表' 未作为标题"
 
     def test_writer_has_cheat_sheet(self):
-        """core/Writer/laws/rules.md 含'防错速查表'章节"""
+        """core/legacy/hands/Writer/laws/rules.md 含'防错速查表'章节"""
         content = _read(LAWS_FILES["Writer"])
         assert "防错速查表" in content, \
             "Writer laws 缺'防错速查表'章节"

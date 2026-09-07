@@ -105,7 +105,7 @@
 ## 9. 代码模板目录映射
 
 ```
-core/Programmer/knowledge/code-templates/clustering/
+core/legacy/hands/Programmer/knowledge/code-templates/clustering/
 ├── kmeans_template.py
 ├── kmedoids_template.py
 ├── kmodes_template.py

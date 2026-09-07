@@ -1,7 +1,7 @@
 """
 pytest 公共配置。
 
-背景：本项目的结构测试大量使用相对路径断言（如 os.path.isdir("core/Modeler/laws")），
+背景：本项目的结构测试大量使用相对路径断言（如 os.path.isdir("core/legacy/hands/Modeler/laws")），
 这些断言只有在 cwd 恰好是仓库根时才成立——换个目录跑就全挂。
 
 这里在收集阶段统一把 cwd 切到仓库根，使结构断言的语义明确为

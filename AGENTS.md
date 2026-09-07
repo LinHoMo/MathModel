@@ -84,8 +84,7 @@
 
 legacy 兼容层四手共 29 个 agent，**结构单一真源是 `catalog.yaml`**（hands 节路径 +
 UTG 层映射；`catalog_check.py --check` 强制三方一致），指令文件位于
-`core/legacy/hands/<Hand>/agents/<name>/SKILL.md`（P4 迁移完成后；迁移期间仍在
-`core/<Hand>/agents/`）。
+`core/legacy/hands/<Hand>/agents/<name>/SKILL.md`。
 
 | 手 | agents | 数量 |
 |---|---|---|

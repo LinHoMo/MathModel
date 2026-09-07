@@ -76,9 +76,9 @@ MathModelSkills 采用角色化架构，把「一道赛题 → 一篇论文」�
 - `templates/mathmodel/` - 论文模板
 
 私有层：
-- `core/Modeler/knowledge/` - domain（43 个领域知识）+ problem-types（5 个题型专项）+ paper-bridge.md
-- `core/Programmer/knowledge/` - code-templates（优化 / 时序 / 图 / 聚类 / 仿真等代码模板）+ platform-guide.md
-- `core/Writer/knowledge/` - writing（写作规范）+ profiles（竞赛与题型画像）+ reference（图表规范）+ templates
+- `core/legacy/hands/Modeler/knowledge/` - domain（43 个领域知识）+ problem-types（5 个题型专项）+ paper-bridge.md
+- `core/legacy/hands/Programmer/knowledge/` - code-templates（优化 / 时序 / 图 / 聚类 / 仿真等代码模板）+ platform-guide.md
+- `core/legacy/hands/Writer/knowledge/` - writing（写作规范）+ profiles（竞赛与题型画像）+ reference（图表规范）+ templates
 
 ### 4. 迭代优化
 

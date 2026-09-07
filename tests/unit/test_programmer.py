@@ -10,25 +10,25 @@ class TestProgrammerStructure:
     
     def test_skill_md_exists(self):
         """SKILL.md文件存在"""
-        assert os.path.exists("core/Programmer/SKILL.md")
+        assert os.path.exists("core/legacy/hands/Programmer/SKILL.md")
     
     def test_laws_directory_exists(self):
         """laws目录存在"""
-        assert os.path.isdir("core/Programmer/laws")
+        assert os.path.isdir("core/legacy/hands/Programmer/laws")
     
     def test_knowledge_directory_exists(self):
         """knowledge目录存在"""
-        assert os.path.isdir("core/Programmer/knowledge")
+        assert os.path.isdir("core/legacy/hands/Programmer/knowledge")
     
     def test_templates_directory_exists(self):
         """templates目录存在"""
-        assert os.path.isdir("core/Programmer/templates")
+        assert os.path.isdir("core/legacy/hands/Programmer/templates")
     
     def test_agents_directory_exists(self):
         """agents 目录存在且含 6 个 UTG agent"""
-        assert os.path.isdir("core/Programmer/agents")
-        agents = [d for d in os.listdir("core/Programmer/agents")
-                  if os.path.isdir(os.path.join("core/Programmer/agents", d))]
+        assert os.path.isdir("core/legacy/hands/Programmer/agents")
+        agents = [d for d in os.listdir("core/legacy/hands/Programmer/agents")
+                  if os.path.isdir(os.path.join("core/legacy/hands/Programmer/agents", d))]
         assert len(agents) == 6, f"Programmer agent 数应为 6，实际 {len(agents)}: {agents}"
 
 
@@ -37,11 +37,11 @@ class TestProgrammerLaws:
     
     def test_rules_md_exists(self):
         """rules.md存在"""
-        assert os.path.exists("core/Programmer/laws/rules.md")
+        assert os.path.exists("core/legacy/hands/Programmer/laws/rules.md")
     
     def test_rules_md_not_empty(self):
         """rules.md不为空"""
-        assert os.path.getsize("core/Programmer/laws/rules.md") > 0
+        assert os.path.getsize("core/legacy/hands/Programmer/laws/rules.md") > 0
 
 
 class TestProgrammerKnowledge:
@@ -53,11 +53,11 @@ class TestProgrammerKnowledge:
     
     def test_code_templates_directory_exists(self):
         """code-templates目录存在"""
-        assert os.path.isdir("core/Programmer/knowledge/code-templates")
+        assert os.path.isdir("core/legacy/hands/Programmer/knowledge/code-templates")
     
     def test_algorithms_directory_exists(self):
         """algorithms目录存在"""
-        assert os.path.isdir("core/Programmer/knowledge/code-templates")
+        assert os.path.isdir("core/legacy/hands/Programmer/knowledge/code-templates")
     
     def test_validation_directory_exists(self):
         """validation目录存在"""
@@ -70,7 +70,7 @@ class TestProgrammerKnowledge:
     
     def test_code_templates_files_count(self):
         """code-templates文件数量"""
-        count = sum([len(files) for r, d, files in os.walk("core/Programmer/knowledge/code-templates")])
+        count = sum([len(files) for r, d, files in os.walk("core/legacy/hands/Programmer/knowledge/code-templates")])
         assert count >= 30
 
 
@@ -79,4 +79,4 @@ class TestProgrammerTemplates:
     
     def test_code_deliverables_template_exists(self):
         """CODE_DELIVERABLES_TEMPLATE.md存在"""
-        assert os.path.exists("core/Programmer/templates/CODE_DELIVERABLES_TEMPLATE.md")
+        assert os.path.exists("core/legacy/hands/Programmer/templates/CODE_DELIVERABLES_TEMPLATE.md")

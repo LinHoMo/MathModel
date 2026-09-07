@@ -68,9 +68,9 @@ class TestEndToEndPipeline:
     def test_all_skill_files_complete(self):
         """所有 SKILL.md 文件完整"""
         skill_files = [
-            "core/Modeler/SKILL.md",
-            "core/Programmer/SKILL.md",
-            "core/Writer/SKILL.md",
+            "core/legacy/hands/Modeler/SKILL.md",
+            "core/legacy/hands/Programmer/SKILL.md",
+            "core/legacy/hands/Writer/SKILL.md",
         ]
         for f in skill_files:
             assert os.path.exists(f), f"SKILL.md 不存在: {f}"
@@ -79,9 +79,9 @@ class TestEndToEndPipeline:
     def test_all_laws_files_complete(self):
         """所有 laws/rules.md 文件完整"""
         law_files = [
-            "core/Modeler/laws/rules.md",
-            "core/Programmer/laws/rules.md",
-            "core/Writer/laws/rules.md",
+            "core/legacy/hands/Modeler/laws/rules.md",
+            "core/legacy/hands/Programmer/laws/rules.md",
+            "core/legacy/hands/Writer/laws/rules.md",
         ]
         for f in law_files:
             assert os.path.exists(f), f"laws/rules.md 不存在: {f}"
@@ -90,9 +90,9 @@ class TestEndToEndPipeline:
     def test_all_templates_complete(self):
         """所有模板文件完整"""
         template_files = [
-            "core/Modeler/templates/MODEL_SPEC_TEMPLATE.md",
-            "core/Programmer/templates/CODE_DELIVERABLES_TEMPLATE.md",
-            "core/Writer/templates/PAPER_SPEC_TEMPLATE.md",
+            "core/legacy/hands/Modeler/templates/MODEL_SPEC_TEMPLATE.md",
+            "core/legacy/hands/Programmer/templates/CODE_DELIVERABLES_TEMPLATE.md",
+            "core/legacy/hands/Writer/templates/PAPER_SPEC_TEMPLATE.md",
         ]
         for f in template_files:
             assert os.path.exists(f), f"模板不存在: {f}"
@@ -103,24 +103,24 @@ class TestEndToEndPipeline:
         # Modeler methodology
         meth_dir = "core/knowledge/methodology"
         meth_files = [f for f in os.listdir(meth_dir) if f.endswith('.md')]
-        assert len(meth_files) >= 30, f"core/Modeler/methodology 文件不足: {len(meth_files)}"
+        assert len(meth_files) >= 30, f"core/legacy/hands/Modeler/methodology 文件不足: {len(meth_files)}"
         
         # Modeler domain
-        domain_dir = "core/Modeler/knowledge/domain"
+        domain_dir = "core/legacy/hands/Modeler/knowledge/domain"
         domain_files = [f for f in os.listdir(domain_dir) if f.endswith('.md')]
-        assert len(domain_files) >= 40, f"core/Modeler/domain 文件不足: {len(domain_files)}"
+        assert len(domain_files) >= 40, f"core/legacy/hands/Modeler/domain 文件不足: {len(domain_files)}"
         
         # Programmer code-templates
-        templates_dir = "core/Programmer/knowledge/code-templates"
+        templates_dir = "core/legacy/hands/Programmer/knowledge/code-templates"
         py_files = []
         for r, d, files in os.walk(templates_dir):
             py_files.extend([f for f in files if f.endswith('.py')])
-        assert len(py_files) >= 40, f"core/Programmer/code-templates 文件不足: {len(py_files)}"
+        assert len(py_files) >= 40, f"core/legacy/hands/Programmer/code-templates 文件不足: {len(py_files)}"
         
         # Writer writing
-        writing_dir = "core/Writer/knowledge/writing"
+        writing_dir = "core/legacy/hands/Writer/knowledge/writing"
         writing_files = [f for f in os.listdir(writing_dir) if f.endswith('.md')]
-        assert len(writing_files) >= 8, f"core/Writer/writing 文件不足: {len(writing_files)}"
+        assert len(writing_files) >= 8, f"core/legacy/hands/Writer/writing 文件不足: {len(writing_files)}"
     
     def test_no_phantom_references(self):
         """无幻影引用（不存在的路径）"""

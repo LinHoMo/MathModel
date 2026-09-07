@@ -123,7 +123,7 @@
 ## 10. 代码模板目录映射
 
 ```
-core/Programmer/knowledge/code-templates/network/
+core/legacy/hands/Programmer/knowledge/code-templates/network/
 ├── graph_adjacency.py
 ├── graph_adjlist.py
 ├── graph_edgelist.py

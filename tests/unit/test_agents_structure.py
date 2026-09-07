@@ -73,48 +73,49 @@ def _iter_skill_paths():
     """yield (hand, agent_name, skill_path)，路径不保证存在。"""
     for hand, agents in EXPECTED_AGENTS.items():
         for agent_name in agents:
-            yield hand, agent_name, os.path.join("core", hand, "agents", agent_name, "SKILL.md")
+            yield hand, agent_name, os.path.join(
+            "core", "legacy", "hands", hand, "agents", agent_name, "SKILL.md")
 
 
 class TestAgentsDirectories:
     """四手 agents 目录存在"""
 
     def test_modeler_agents_dir(self):
-        assert os.path.isdir("core/Modeler/agents")
+        assert os.path.isdir("core/legacy/hands/Modeler/agents")
 
     def test_programmer_agents_dir(self):
-        assert os.path.isdir("core/Programmer/agents")
+        assert os.path.isdir("core/legacy/hands/Programmer/agents")
 
     def test_writer_agents_dir(self):
-        assert os.path.isdir("core/Writer/agents")
+        assert os.path.isdir("core/legacy/hands/Writer/agents")
 
     def test_reviewer_agents_dir(self):
-        assert os.path.isdir("core/Reviewer/agents")
+        assert os.path.isdir("core/legacy/hands/Reviewer/agents")
 
 
 class TestAgentsCount:
     """四手 agent 数量与名称正确（8/6/7/8 = 29）"""
 
     def test_modeler_agents_count(self):
-        names = _subdirs_with_skill("core/Modeler/agents")
+        names = _subdirs_with_skill("core/legacy/hands/Modeler/agents")
         assert len(names) == 8
         for n in EXPECTED_AGENTS["Modeler"]:
             assert n in names, f"Modeler 缺 agent: {n}"
 
     def test_programmer_agents_count(self):
-        names = _subdirs_with_skill("core/Programmer/agents")
+        names = _subdirs_with_skill("core/legacy/hands/Programmer/agents")
         assert len(names) == 6
         for n in EXPECTED_AGENTS["Programmer"]:
             assert n in names, f"Programmer 缺 agent: {n}"
 
     def test_writer_agents_count(self):
-        names = _subdirs_with_skill("core/Writer/agents")
+        names = _subdirs_with_skill("core/legacy/hands/Writer/agents")
         assert len(names) == 7
         for n in EXPECTED_AGENTS["Writer"]:
             assert n in names, f"Writer 缺 agent: {n}"
 
     def test_reviewer_agents_count(self):
-        names = _subdirs_with_skill("core/Reviewer/agents")
+        names = _subdirs_with_skill("core/legacy/hands/Reviewer/agents")
         assert len(names) == 8
         for n in EXPECTED_AGENTS["Reviewer"]:
             assert n in names, f"Reviewer 缺 agent: {n}"
@@ -182,7 +183,8 @@ class TestAgentsFrontmatter:
         mismatches = []
         for hand, agents in EXPECTED_AGENTS.items():
             for agent_name, expected_layer in agents.items():
-                skill_path = os.path.join("core", hand, "agents", agent_name, "SKILL.md")
+                skill_path = os.path.join(
+                    "core", "legacy", "hands", hand, "agents", agent_name, "SKILL.md")
                 content = _read(skill_path)
                 m = FRONTMATTER_PATTERN.match(content)
                 assert m is not None

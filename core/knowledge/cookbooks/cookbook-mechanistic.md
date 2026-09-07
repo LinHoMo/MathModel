@@ -35,7 +35,7 @@
 
 **代码模板目录**：
 ```
-core/Programmer/knowledge/code-templates/mechanistic/
+core/legacy/hands/Programmer/knowledge/code-templates/mechanistic/
 ├── ode_rk_template.py
 ├── ode_multistep.py
 ├── ode_spectral.py

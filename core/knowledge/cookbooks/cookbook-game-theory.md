@@ -110,7 +110,7 @@
 ## 9. 代码模板目录映射
 
 ```
-core/Programmer/knowledge/code-templates/game-theory/
+core/legacy/hands/Programmer/knowledge/code-templates/game-theory/
 ├── nash_pure.py
 ├── nash_mixed.py
 ├── dominance.py

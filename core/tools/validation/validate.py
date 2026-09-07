@@ -87,9 +87,8 @@ def _live_project_dirs(project_path):
     （all_results.json / 随机种子 / 论文 .tex）仅在存在活跃实例时才应报失败，
     否则库模式下的空 projects/ 会持续产生假失败。
 
-    bench e2e 基线项目（含 work/e2e_problem.json）不计入：它们由
-    `benchmark.py e2e` 的八项能力指标度量，不适用论文交付门禁
-    （误报修正，见 docs/architecture/BASELINE_REPORT.md）。
+    研究实验（P13-3D 系列 / bench 运行）自 Hardening P4 起迁至 research/，
+    不属于论文交付校验范围（research/ 不在本函数扫描内）。
     """
     pdir = project_path / "projects"
     if not pdir.is_dir():
@@ -317,12 +316,12 @@ def check_internal_paths(project_path):
 def check_required_artifacts(project_path):
     """L3.1: 检查必要产物"""
     required = {
-        "core/Modeler/SKILL.md": "Modeler SKILL.md",
-        "core/Programmer/SKILL.md": "Programmer SKILL.md",
-        "core/Writer/SKILL.md": "Writer SKILL.md",
-        "core/Modeler/laws/rules.md": "Modeler laws",
-        "core/Programmer/laws/rules.md": "Programmer laws",
-        "core/Writer/laws/rules.md": "Writer laws",
+        "core/legacy/hands/Modeler/SKILL.md": "Modeler SKILL.md",
+        "core/legacy/hands/Programmer/SKILL.md": "Programmer SKILL.md",
+        "core/legacy/hands/Writer/SKILL.md": "Writer SKILL.md",
+        "core/legacy/hands/Modeler/laws/rules.md": "Modeler laws",
+        "core/legacy/hands/Programmer/laws/rules.md": "Programmer laws",
+        "core/legacy/hands/Writer/laws/rules.md": "Writer laws",
     }
     
     missing = []
@@ -369,9 +368,9 @@ def check_knowledge_completeness(project_path):
 def check_laws_not_empty(project_path):
     """L3.3: 检查laws文件非空"""
     laws_files = [
-        "core/Modeler/laws/rules.md",
-        "core/Programmer/laws/rules.md",
-        "core/Writer/laws/rules.md",
+        "core/legacy/hands/Modeler/laws/rules.md",
+        "core/legacy/hands/Programmer/laws/rules.md",
+        "core/legacy/hands/Writer/laws/rules.md",
     ]
     
     empty = []
@@ -876,9 +875,9 @@ def check_documentation_completeness(project_path):
     required_docs = [
         "docs/ARCHITECTURE.md",
         "README.md",
-        "core/Modeler/SKILL.md",
-        "core/Programmer/SKILL.md",
-        "core/Writer/SKILL.md",
+        "core/legacy/hands/Modeler/SKILL.md",
+        "core/legacy/hands/Programmer/SKILL.md",
+        "core/legacy/hands/Writer/SKILL.md",
     ]
     missing = [d for d in required_docs if not (project_path / d).exists()]
     if missing:
@@ -944,12 +943,12 @@ def check_random_seed(project_path):
 def check_directory_structure(project_path):
     """目录结构检查"""
     required_dirs = [
-        "core/Modeler", "core/Modeler/laws", "core/Modeler/knowledge",
-        "core/Modeler/knowledge/domain",
-        "core/Programmer", "core/Programmer/laws", "core/Programmer/knowledge",
-        "core/Programmer/knowledge/code-templates",
-        "core/Writer", "core/Writer/laws", "core/Writer/knowledge",
-        "core/Writer/knowledge/writing", "core/Writer/knowledge/templates",
+        "core/legacy/hands/Modeler", "core/legacy/hands/Modeler/laws", "core/legacy/hands/Modeler/knowledge",
+        "core/legacy/hands/Modeler/knowledge/domain",
+        "core/legacy/hands/Programmer", "core/legacy/hands/Programmer/laws", "core/legacy/hands/Programmer/knowledge",
+        "core/legacy/hands/Programmer/knowledge/code-templates",
+        "core/legacy/hands/Writer", "core/legacy/hands/Writer/laws", "core/legacy/hands/Writer/knowledge",
+        "core/legacy/hands/Writer/knowledge/writing", "core/legacy/hands/Writer/knowledge/templates",
         "core/knowledge", "core/knowledge/methodology", "core/knowledge/paper-cases", "core/validators/modules",
         "core/schemas", "tests",
     ]
@@ -1094,7 +1093,7 @@ def _iter_agent_skill_files(project_path):
     yield (hand, agent_name, skill_path)，路径不保证存在（由调用方判断）。
     """
     for hand, names in _EXPECTED_AGENTS.items():
-        agents_dir = project_path / "core" / hand / "agents"
+        agents_dir = project_path / "core" / "legacy" / "hands" / hand / "agents"
         for agent_name in names:
             yield hand, agent_name, agents_dir / agent_name / "SKILL.md"
 
@@ -1103,7 +1102,7 @@ def check_agents_directories(project_path):
     """L1: 四手 agents 目录存在"""
     missing = []
     for hand in _EXPECTED_AGENTS:
-        d = project_path / "core" / hand / "agents"
+        d = project_path / "core" / "legacy" / "hands" / hand / "agents"
         if not d.exists():
             missing.append(f"{hand}/agents")
     if missing:
@@ -1115,7 +1114,7 @@ def check_agents_count(project_path):
     """L1: 四手 agent 数量与名称正确（8/6/7/8，每个子目录含 SKILL.md）"""
     issues = []
     for hand, expected_names in _EXPECTED_AGENTS.items():
-        agents_dir = project_path / "core" / hand / "agents"
+        agents_dir = project_path / "core" / "legacy" / "hands" / hand / "agents"
         if not agents_dir.exists():
             issues.append(f"{hand}/agents 目录不存在")
             continue

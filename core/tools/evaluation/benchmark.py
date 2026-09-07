@@ -428,7 +428,7 @@ def e2e_run(problem_id: str, project: str, questions: list[str],
         report["steps"]["prepare"] = f"FAIL: {exc}"
         return report
 
-    proj_dir = ROOT / "projects" / project
+    proj_dir = _find_project(project)
     if features:
         _save_json(proj_dir / "work" / "e2e_profile.json", features)
     try:

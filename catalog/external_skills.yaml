@@ -9,7 +9,7 @@ external_skills:
     install: "pip install pdfplumber"
     fallback: "使用 PyPDF2 内置解析"
     used_by:
-      - "core/Modeler/agents/problem-parser"
+      - "core/legacy/hands/Modeler/agents/problem-parser"
 
   # LaTeX 编译 skill
   - name: latex-compiler
@@ -18,7 +18,7 @@ external_skills:
     install: "安装 TeX Live 或 MiKTeX"
     fallback: "仅交付 .tex 源文件，不编译 PDF"
     used_by:
-      - "core/Writer/agents/final-validator"
+      - "core/legacy/hands/Writer/agents/final-validator"
 
   # 代码执行 skill
   - name: code-executor
@@ -27,8 +27,8 @@ external_skills:
     install: "无需额外安装（使用内置 subprocess）"
     fallback: "静态分析代码，不实际执行"
     used_by:
-      - "core/Programmer/agents/code-implementer"
-      - "core/Programmer/agents/test-runner"
+      - "core/legacy/hands/Programmer/agents/code-implementer"
+      - "core/legacy/hands/Programmer/agents/test-runner"
 
   # MWORKS Syslab（国产 MATLAB 兼容，M/Julia 双运行时）执行 skill
   - name: syslab
@@ -37,7 +37,7 @@ external_skills:
     install: "安装 MWORKS Syslab；skills 已拷贝到 .claude/skills/；SYSLAB_HOME 写入 ~/.syslab/syslab-env.ini"
     fallback: "仅产出 .m 文件不执行，标注'未实际执行'"
     used_by:
-      - "core/Programmer/agents/code-implementer"
-      - "core/Programmer/agents/test-runner"
+      - "core/legacy/hands/Programmer/agents/code-implementer"
+      - "core/legacy/hands/Programmer/agents/test-runner"
 
 

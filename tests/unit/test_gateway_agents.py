@@ -26,12 +26,12 @@ import pytest
 # 6 个门禁 agent 的 SKILL.md 相对路径
 # ---------------------------------------------------------------------------
 GATEWAY_AGENT_SKILLS = [
-    os.path.join("core", "Modeler", "agents", "spec-auditor", "SKILL.md"),
-    os.path.join("core", "Programmer", "agents", "guardrails-checker", "SKILL.md"),
-    os.path.join("core", "Programmer", "agents", "hash-auditor", "SKILL.md"),
-    os.path.join("core", "Writer", "agents", "consistency-checker", "SKILL.md"),
-    os.path.join("core", "Writer", "agents", "guardrails-checker", "SKILL.md"),
-    os.path.join("core", "Writer", "agents", "final-validator", "SKILL.md"),
+    os.path.join("core", "legacy", "hands", "Modeler", "agents", "spec-auditor", "SKILL.md"),
+    os.path.join("core", "legacy", "hands", "Programmer", "agents", "guardrails-checker", "SKILL.md"),
+    os.path.join("core", "legacy", "hands", "Programmer", "agents", "hash-auditor", "SKILL.md"),
+    os.path.join("core", "legacy", "hands", "Writer", "agents", "consistency-checker", "SKILL.md"),
+    os.path.join("core", "legacy", "hands", "Writer", "agents", "guardrails-checker", "SKILL.md"),
+    os.path.join("core", "legacy", "hands", "Writer", "agents", "final-validator", "SKILL.md"),
 ]
 
 

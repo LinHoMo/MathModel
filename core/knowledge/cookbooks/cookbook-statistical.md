@@ -21,7 +21,7 @@
 
 **代码模板目录**：
 ```
-core/Programmer/knowledge/code-templates/statistical/
+core/legacy/hands/Programmer/knowledge/code-templates/statistical/
 ├── ttest_template.py
 ├── ztest_template.py
 ├── chisq_template.py

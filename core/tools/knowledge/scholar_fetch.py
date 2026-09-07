@@ -673,7 +673,7 @@ def crossref_search(query: str, max_results: int = 5) -> list[dict]:
 
 # ============================================================
 # 引用真实性核验（verify 子命令）
-# 对应 core/Writer/knowledge/writing/citation-verification-rules.md §二「第一级：真实性深度检查」
+# 对应 core/legacy/hands/Writer/knowledge/writing/citation-verification-rules.md §二「第一级：真实性深度检查」
 # 把五类反捏造规则中"可脚本化"的部分落成可执行检查，供 reference-curator 直接调用。
 # ============================================================
 

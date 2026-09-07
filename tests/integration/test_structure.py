@@ -36,15 +36,15 @@ class TestContractFiles:
     
     def test_model_spec_template(self):
         """MODEL_SPEC_TEMPLATE.md存在"""
-        assert os.path.exists("core/Modeler/templates/MODEL_SPEC_TEMPLATE.md")
+        assert os.path.exists("core/legacy/hands/Modeler/templates/MODEL_SPEC_TEMPLATE.md")
     
     def test_code_deliverables_template(self):
         """CODE_DELIVERABLES_TEMPLATE.md存在"""
-        assert os.path.exists("core/Programmer/templates/CODE_DELIVERABLES_TEMPLATE.md")
+        assert os.path.exists("core/legacy/hands/Programmer/templates/CODE_DELIVERABLES_TEMPLATE.md")
     
     def test_paper_spec_template(self):
         """PAPER_SPEC_TEMPLATE.md存在"""
-        assert os.path.exists("core/Writer/templates/PAPER_SPEC_TEMPLATE.md")
+        assert os.path.exists("core/legacy/hands/Writer/templates/PAPER_SPEC_TEMPLATE.md")
 
 
 class TestProjectsDirectory:

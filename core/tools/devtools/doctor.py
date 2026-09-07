@@ -52,10 +52,10 @@ REQUIRED_TOOLS = [
 ]
 
 REQUIRED_DIRS = [
-    ("core/Modeler/agents", "建模手 8 个 agent"),
-    ("core/Programmer/agents", "编程手 6 个 agent"),
-    ("core/Writer/agents", "撰写手 7 个 agent"),
-    ("core/Reviewer/agents", "评审手 8 个 agent"),
+    ("core/legacy/hands/Modeler/agents", "建模手 8 个 agent"),
+    ("core/legacy/hands/Programmer/agents", "编程手 6 个 agent"),
+    ("core/legacy/hands/Writer/agents", "撰写手 7 个 agent"),
+    ("core/legacy/hands/Reviewer/agents", "评审手 8 个 agent"),
     ("core/knowledge/methodology", "方法论知识库"),
     ("core/validators/modules", "验证模块"),
     ("core/env", "配置层"),

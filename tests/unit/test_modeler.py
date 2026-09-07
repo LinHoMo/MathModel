@@ -10,25 +10,25 @@ class TestModelerStructure:
     
     def test_skill_md_exists(self):
         """SKILL.md文件存在"""
-        assert os.path.exists("core/Modeler/SKILL.md")
+        assert os.path.exists("core/legacy/hands/Modeler/SKILL.md")
     
     def test_laws_directory_exists(self):
         """laws目录存在"""
-        assert os.path.isdir("core/Modeler/laws")
+        assert os.path.isdir("core/legacy/hands/Modeler/laws")
     
     def test_knowledge_directory_exists(self):
         """knowledge目录存在"""
-        assert os.path.isdir("core/Modeler/knowledge")
+        assert os.path.isdir("core/legacy/hands/Modeler/knowledge")
     
     def test_templates_directory_exists(self):
         """templates目录存在"""
-        assert os.path.isdir("core/Modeler/templates")
+        assert os.path.isdir("core/legacy/hands/Modeler/templates")
     
     def test_agents_directory_exists(self):
         """agents 目录存在且含 8 个 UTG agent"""
-        assert os.path.isdir("core/Modeler/agents")
-        agents = [d for d in os.listdir("core/Modeler/agents")
-                  if os.path.isdir(os.path.join("core/Modeler/agents", d))]
+        assert os.path.isdir("core/legacy/hands/Modeler/agents")
+        agents = [d for d in os.listdir("core/legacy/hands/Modeler/agents")
+                  if os.path.isdir(os.path.join("core/legacy/hands/Modeler/agents", d))]
         assert len(agents) == 8, f"Modeler agent 数应为 8，实际 {len(agents)}: {agents}"
 
 
@@ -37,11 +37,11 @@ class TestModelerLaws:
     
     def test_rules_md_exists(self):
         """rules.md存在"""
-        assert os.path.exists("core/Modeler/laws/rules.md")
+        assert os.path.exists("core/legacy/hands/Modeler/laws/rules.md")
     
     def test_rules_md_not_empty(self):
         """rules.md不为空"""
-        assert os.path.getsize("core/Modeler/laws/rules.md") > 0
+        assert os.path.getsize("core/legacy/hands/Modeler/laws/rules.md") > 0
 
 
 class TestModelerKnowledge:
@@ -53,7 +53,7 @@ class TestModelerKnowledge:
     
     def test_domain_directory_exists(self):
         """domain目录存在"""
-        assert os.path.isdir("core/Modeler/knowledge/domain")
+        assert os.path.isdir("core/legacy/hands/Modeler/knowledge/domain")
     
     def test_paper_cases_directory_exists(self):
         """paper-cases目录存在"""
@@ -66,7 +66,7 @@ class TestModelerKnowledge:
     
     def test_domain_files_count(self):
         """domain文件数量"""
-        files = [f for f in os.listdir("core/Modeler/knowledge/domain") if f.endswith('.md')]
+        files = [f for f in os.listdir("core/legacy/hands/Modeler/knowledge/domain") if f.endswith('.md')]
         assert len(files) >= 20
 
 
@@ -75,4 +75,4 @@ class TestModelerTemplates:
     
     def test_model_spec_template_exists(self):
         """MODEL_SPEC_TEMPLATE.md存在"""
-        assert os.path.exists("core/Modeler/templates/MODEL_SPEC_TEMPLATE.md")
+        assert os.path.exists("core/legacy/hands/Modeler/templates/MODEL_SPEC_TEMPLATE.md")

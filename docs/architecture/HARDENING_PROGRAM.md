@@ -60,7 +60,7 @@
 - [x] P1 Contract Freeze
 - [x] P2 State Truth + Crash Consistency
 - [x] P3 Deterministic Replay / Concurrency / Observability
-- [ ] P4 Legacy Isolation
+- [x] P4 Legacy Isolation
 - [ ] P5 Regression Gate
 - [ ] P6 Release Candidate
 
@@ -68,4 +68,6 @@
 
 Provider 插拔工程化（Executor 可插拔：GPT/Claude/DeepSeek/MathModelAgent/MMA/Human）、
 Runtime / Provider / Regression / Failure-Injection / Recovery / Cross-domain 基准实验线。
-历史路径迁移映射：P4 完成前 `projects/bench-*|P13-3D* → research/<同名>`。
+历史路径迁移映射（P4 已完成）：`projects/bench-*|P13-3D* → research/<同名>`；
+实验专属脚本 → `research/P13-3D/scripts/`；四手 → `core/legacy/hands/`。
+恢复指令：`research/P13-3D/RESUME_R3G_PROMPT.md`（路径已同步更新）。

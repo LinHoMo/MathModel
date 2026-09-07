@@ -77,13 +77,15 @@ AGENTS = [
 
 
 def _evals_path(hand, agent_name):
-    """返回 agent 的 evals/evals.json 相对路径。"""
-    return os.path.join("core", hand, "agents", agent_name, "evals", "evals.json")
+    """返回 agent 的 evals.json 相对路径。"""
+    return os.path.join("core", "legacy", "hands", hand, "agents", agent_name,
+                        "evals", "evals.json")
 
 
 def _openai_yaml_path(hand, agent_name):
     """返回 agent 的 openai.yaml 相对路径。"""
-    return os.path.join("core", hand, "agents", agent_name, "openai.yaml")
+    return os.path.join("core", "legacy", "hands", hand, "agents", agent_name,
+                        "openai.yaml")
 
 
 def _read_text(path):
