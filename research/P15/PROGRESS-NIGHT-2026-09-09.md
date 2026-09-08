@@ -52,11 +52,21 @@
 - 2019_C 各臂产物哈希全不同（排除机械复制），但评分按 rep 完全同模式（92.3/92.3/76.9）→ 题目级区分度问题。
 - **对 K002**：子问题覆盖 gate 是核心机械强制（不是评分项）；知识效应的可测载体是覆盖指标。
 
-### 3.5.2 三仓库审计进度（Organizer o_0001iK1w1XA）
-- MathModelAgent dossier ✅（369 行）：Model 非一等语义对象、Model Selection = cookbook keyword routing、Code Interpreter 最强工程点、README 声称（RAG/HIL/Tavily/fallback）多为 DOC_CLAIM 死开关。
-- BZD：并发下载 164 文件 + 读 SKILL。
-- LinHoMo：读完 V3 runtime + K001 预注册/报告。
-- 剩 2 个 dossier 未完成。
+### 3.5.2 三仓库审计完成 ✅（Organizer o_0001iK1w1XA）
+- 三份证据级 dossier 落盘 `research/REPOSITORY_AUDIT/dossiers/`：MathModelAgent（369 行）/ BZD（298 行）/ LinHoMo（640 行，自审）。
+- **综合报告 `CROSS_REPO_AUDIT.md`**（17 节）已生成并 commit：
+  - BZD = 评委经验提示词工程（零测试；6.81% 等无出处常数被确定性脚本包装成 IMPLEMENTED——最需警惕的反模式）；吸收：atomic-deduction-scoring / 字典字段设计 / 诚实条款。
+  - MMA = LLM 文本接力流水线（Model 非一等对象、cookbook 路由、RAG/HIL 全 DOC_CLAIM）；吸收：Code Interpreter 抽象（execution adapter 参考）/ notebook 留痕 / 反射循环 / 模板。
+  - LHM = 研究基础设施优于数学建模系统；六风险全部确认（result 占位、features 硬编码 evaluation、ontology 分叉、execution weakness 最高）。
+- **P0 工程项确定**：①result 占位符治理（not_executed 状态）②`catalog/model_families.yaml` 单一词表 ③features 外部必传契约。
+
+### 3.5.3 K002 DRAFT v0.2（审计回填）
+- 1.4 审计启示节 + 6 章 P0 并行工程项 + S 臂受控词表 + n=63 修正 + RQ 编号修正 + 局限 5。
+
+### 3.5.4 全量自检 + 收口
+- pytest **774 passed / 11 skipped** ✅（50s）；catalog_check ✅；terminology 零残留 ✅；k001_freeze **44 文件无漂移 PASS** ✅。
+- K001 状态机 **ANALYSIS → CLOSED** ✅（negative result 按决策门记录，不进 P15.2）。
+- 2020_B 效应精确定位（coverage_corrected.py）：Δ_K 全部来自无知识臂 2 个 Q1-only FAIL（n=1 事件）；2018_A 噪声；2019_C 零区分度——K002 覆盖 gate + 区分度预检由此落地。
 
 ## 4. 待办（审计报告回来后）
 

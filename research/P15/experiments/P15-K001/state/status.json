@@ -1,7 +1,7 @@
 {
   "experiment_id": "P15-K001",
   "protocol_version": "1.0",
-  "phase": "ANALYSIS",
+  "phase": "CLOSED",
   "revisions": [],
   "history": [
     {
@@ -481,6 +481,13 @@
       "from": "VALIDATION",
       "to": "ANALYSIS",
       "note": "paired_analysis report generated; delta_K=+2.14 CI[0.00,6.41]"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-08T16:54:47Z",
+      "from": "ANALYSIS",
+      "to": "CLOSED",
+      "note": "full verification passed (pytest 774/11, catalog OK, terminology zero-residue, freeze PASS); three-repo audit complete (CROSS_REPO_AUDIT.md); K002 DRAFT v0.2 backfilled with audit insights; negative result recorded per decision gate - P15.2 not entered"
     }
   ],
   "gates": {
