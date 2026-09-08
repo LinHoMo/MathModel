@@ -12,6 +12,12 @@ good_for:
   - DAG 上的最短路径（Bellman-Ford / 拓扑序递推是 DP 特例）
   - 多周期生产-库存决策（Wagner-Whitin）
   - 随机环境下的序贯决策：MDP 值迭代/策略迭代（状态-动作-转移-奖励）
+structure_signals:
+  - 问题可按时间/顺序天然划分为多个阶段（阶段数有限）
+  - 每一阶段需要做一次决策，决策影响后续阶段状态
+  - 总目标跨阶段累积（总收益/总代价/最短路径），且存在子问题重叠
+  - 当前状态足以决定未来（历史信息可压缩进状态变量）
+  - 2020_B 型：每日一决策、资源跨期消耗、状态（位置/资源/天数）有限离散
 problem_structures: [scheduling, supply_chain/operations, competition/game]
 modeling_patterns: [decision_state_transition, resource_constraint]
 mathematical_forms: [optimization, probability_and_stochastic, graph]

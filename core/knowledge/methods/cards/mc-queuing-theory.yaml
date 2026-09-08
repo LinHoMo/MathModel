@@ -12,6 +12,12 @@ good_for:
   - 利用率与等待时间的权衡分析（ρ→1 时等待爆炸）
   - 简单排队网络（Jackson 网络，产品形式解）
   - 泊松到达 + 指数服务标准场景（M/M/c 闭式解）
+structure_signals:
+  - 存在随机到达事件流（顾客/出租车/请求按随机过程到达）
+  - 存在服务过程与服务能力限制（服务台数/服务时间）
+  - 出现等待现象或拥堵：队列长度、等待时间是关注指标
+  - 系统存在稳态性能问题（平均等待/利用率/拒绝率）
+  - 2019_C 型：机场出租车随机到达、蓄车池容量、决策与等待权衡
 problem_structures: [network/traffic, scheduling]
 modeling_patterns: [queue, flow_balance]
 mathematical_forms: [probability_and_stochastic, optimization]

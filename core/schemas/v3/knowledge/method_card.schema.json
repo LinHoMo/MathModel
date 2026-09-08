@@ -384,6 +384,13 @@
         "empirical",
         "generated"
       ]
+    },
+    "structure_signals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "结构识别信号（Applicability Precision 关键）——从题面/现实中可直接观察的信号，表明该建模结构成立。LLM 用它判断'这道题是否具有该结构'，防止乱用。可选。"
     }
   }
 }

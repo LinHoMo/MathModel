@@ -12,6 +12,12 @@ good_for:
   - 一维/二维规则网格上的抛物型/椭圆型 PDE（FDM 首选，实现可控）
   - 参数反演：由测量数据反推介质属性（PDE 约束优化，最小二乘/正则化）
   - 流体力学/波动/振动（守恒律+本构定律可导出）
+structure_signals:
+  - 题面出现连续时空演化：温度/浓度/场量随空间和时间变化
+  - 存在守恒量（热量/质量/能量）与通量（热流/扩散流）
+  - 需要给定初始条件 + 边界条件（定解问题）
+  - 介质属性（热导率/扩散系数）已知或可反演
+  - 2018_A 型：多层结构、界面条件、测量数据反演参数
 problem_structures: [diffusion/heat_transfer, continuous_mechanics, network/traffic]
 modeling_patterns: [conservation_law, spatial_temporal_field, inverse_problem]
 mathematical_forms: [PDE, optimization]
