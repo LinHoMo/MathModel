@@ -1,0 +1,512 @@
+{
+  "attributions": [
+    {
+      "problem_id": "2024_A",
+      "metric": "method_selection",
+      "b0_score": 0.0,
+      "observed_reason": "model artifact M001 的 data.card_id=mc-monte-carlo（family=uncertainty_propagation）与 benchmark core_methods [\"kinematics\",\"geometric_modeling\",\"numerical_solution\"] 无家族匹配；top3=[\"mc-monte-carlo\",\"mc-ga\",\"mc-pso\"] 亦无匹配。但 payload.model_family=multibody_dynamics（payload.model_family） 与 ref 高度相关，说明 agent 实际选择了正确方法家族，仅因方法卡库无对应卡片而 card_id 错配。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L286-354: method_selection 用 model artifact 的 data.card_id 查方法卡 family，与 benchmark core_methods 做家族匹配；t3_str 回退用 _method_hit() 对 card_id/name 与 gt_methods 做字符串包含匹配；方法卡库 core/knowledge/methods/cards/ 共 16 张，family 覆盖：decision_analysis, classical_timeseries, composite_evaluation, metaheuristics, uncertainty_propagation, multi_objective_optimization, statistical_modeling, dimensionality_reduction, unsupervised, supervised_learning, timeseries_learning。无 kinematics/geometric_modeling/dynamic_programming/MDP/game_theory/PDE/finite_difference/queueing_theory 家族卡片；p151-2024a-b0/state/registry.json M001.data.card_id=mc-monte-carlo, M001.payload.model_family=multibody_dynamics（payload.model_family）；p151-2024a-b0/state/registry.json D001: D001 decision 明确写道：'可用方法卡中无运动学/几何类，最接近的是mc-monte-carlo...这本身是方法卡覆盖度不足的观测'；实际核心方法为'多体刚体链运动学递推+阿基米德螺线参数化'；research/P15/benchmark/CUMCM-Bench-v2.json 2024_A.core_methods=[\"kinematics\",\"geometric_modeling\",\"numerical_solution\"]",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "decomposition_coverage",
+      "b0_score": 20.0,
+      "observed_reason": "evaluator 用 count_ratio 退化口径：produced_question_count=1 / gt_sub_questions=5 = 20.0%。但 Q001 artifact 的 payload.sub_questions 实际包含 5 个子问题，与 GT 完全对齐（逐条比对文本一致）。低分完全源于 artifact 粒度约定与 evaluator 假设不匹配：B0 将所有子问题打包进单个 Q001 artifact，而 evaluator 假设一个 question artifact = 一个子问题。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L270-284: 无 response.decomposition_aligned 时退化为 min(produced_question_count, gt_sub_question_count)/gt_count（count_ratio）；p151-2024a-b0/state/e2e_metrics_report.json decomposition_coverage.detail: gt_sub_questions=5, produced_questions=1, mode='count_ratio（无语义对齐评分，退化口径）'；p151-2024a-b0/state/registry.json Q001.payload.sub_questions 含 5 条，与 research/P15/benchmark/b0_manifests/2024_A/00_problem_understanding.json sub_questions 逐条对应",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "innovation",
+      "b0_score": 0.0,
+      "observed_reason": "decision_log.json 的 decisions 数组中无任何条目包含 knowledge_refs 字段，更无 pat- 前缀的 pattern 引用。innov_value=0.0 是因为 B0 artifact schema（model-ir-1.0 / b0-baseline-v1）不包含 knowledge_refs / pattern 引用机制，evaluator 无法检测到任何创新声明。这不是 agent 未产生创新思维，而是测量通道在 B0 阶段不存在。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L418-431: innovation 扫描 decision_log.decisions[].knowledge_refs 中 pat- 前缀条目；无 pat- 引用则 innov_value=0.0；p151-2024a-b0/state/decision_log.json 全部 3 条 decision（D001-D003）均无 knowledge_refs 字段；p151-2024a-b0/state/registry.json D001-D003 payload 含 decision/alternatives/reasoning/criteria 但无 pattern 引用结构；B0 prompt_or_skill_version='b0-baseline-v1' 未定义 pattern 引用输出 schema",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "model_correctness",
+      "b0_score": null,
+      "observed_reason": "response.model_correctness_pct 未提供（B0 阶段无外部语义评分输入），value=None。structural check 结果为 PASS：M001 的 data.objective（非空字符串）、data.constraints（非空列表）、data.variables（非空列表）均存在。模型 artifact 结构完整，但语义正确性无法在 B0 阶段评估。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L356-393: model_correctness 依赖外部 response.model_correctness_pct；缺失时 value=None，仅做 structural check（objective/constraints/variables 存在性）；p151-2024a-b0/state/e2e_metrics_report.json model_correctness.detail: model_correctness='UNAVAILABLE', source='外部评分缺失（null/n/a）', model_correctness_structural='PASS'；structural_check.per_model.M001: objective=True, constraints=True, variables=True；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "experiment_validity",
+      "b0_score": null,
+      "observed_reason": "registry 中无 result 类型 artifact（results=0），exp_components 为空列表 → value=None。B0 阶段仅完成问题理解、模型构建、方法选择、求解策略和验证计划，不执行代码运行和实验，因此不产生 result artifact。无 robustness tag、无 multi_run 数据可统计。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L395-405: experiment_validity 统计 result artifact 中 robustness tag 比例和 multi_run>=5；无 result artifact 时 exp_components 为空 → value=None；p151-2024a-b0/state/e2e_metrics_report.json experiment_validity.detail: results=0, with_robustness_tags=0, multi_run_ge5=0；p151-2024a-b0/state/registry.json artifact_ids 仅含 Q001/M001/D001-D003，无 result/experiment 类型；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "validation_reliability",
+      "b0_score": null,
+      "observed_reason": "claims_total=0（status.json evidence 字段无 claim 记录）且 paper/main.tex 不存在，val_components 为空 → value=None。B0 阶段不产生 claim artifact 和论文，验证计划（D003）仅为规划文档，未执行验证，因此无 claim 支撑率可计算。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L407-416: validation_reliability = claim 支撑率（status.json evidence 字段）+ paper 存在性；claims_total=0 且无 main.tex → val_components 为空 → value=None；p151-2024a-b0/state/e2e_metrics_report.json validation_reliability.detail: claims_supported=0, claims_total=0, paper_present=False；p151-2024a-b0/state/registry.json 无 claim 类型 artifact；p151-2024a-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "writing_completeness",
+      "b0_score": null,
+      "observed_reason": "paper/main.tex 不存在 → value=None。B0 阶段不执行论文写作节点，无 LaTeX 源文件、无 references.bib、无图表和公式计数。writing_completeness 指标的所有输入前提在 B0 均不满足。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L433-449: writing_completeness 检查 paper/main.tex 存在性并统计 figures/tables/equations/references；无 main.tex → value=None；p151-2024a-b0/state/e2e_metrics_report.json writing_completeness.detail: main_tex=False；p151-2024a-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "end_to_end",
+      "b0_score": null,
+      "observed_reason": "response.total 未提供（无 awarded/max_score）→ value=None。B0 阶段不执行端到端 rubric 评分，无总分输入。end_to_end 指标完全依赖外部评分响应，B0 不产生该数据。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L451-457: end_to_end 依赖 response.total.awarded/max_score；缺失 → value=None；p151-2024a-b0/state/e2e_metrics_report.json end_to_end.detail: rubric_total=null；B0 运行无 response JSON 传入 compute_e2e_metrics()；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "measurement_integrity",
+      "b0_score": 0.0,
+      "observed_reason": "overall_real_artifact=0/5：判据 created_by.startswith('agent') 下，5 个 artifact 无一命中。但所有 artifact 的 provenance 子文档均显示 executor_type='external_agent', agent_identity='doubao'，证明这些确实是 agent 创建的产物。created_by 字段填充的是 DAG 节点名（problem_understanding/model_construction/method_selection/solving_strategy/validation_plan），而非 'agent...' 前缀。判据 v1 与 B0 注册约定不匹配，导致测量完整性被严重低估。experiment/validation/writing realization 为 0/0（null），因 B0 无对应类型 artifact。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L484-510: measurement_integrity 判据 v1 = created_by.startswith('agent')；统计各类型 artifact 中 agent 创建的比例；p151-2024a-b0/state/e2e_metrics_report.json measurement_integrity: overall_real_artifact={numerator:0, denominator:5, value:0.0}, experiment/validation/writing_realization={numerator:0, denominator:0, value:null}；p151-2024a-b0/state/registry.json 各 artifact.created_by ∈ ['problem_understanding','model_construction','method_selection','solving_strategy','validation_plan']，provenance.executor_type='external_agent', provenance.agent_identity='doubao'",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2024_A",
+      "metric": "empty_artifact_filter",
+      "b0_score": 0,
+      "observed_reason": "total_excluded=0，registry_empty_total=0：所有 5 个 artifact（Q001/M001/D001-D003）均有非空 payload（含 sub_questions/model_spec/decision 等实质内容），无空壳 artifact。空壳过滤器正常工作，未误排除任何 artifact。此指标无失败。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L65-79, L249-261: empty_artifact_filter 用 _is_empty_artifact() 判定 payload=None/[] 且 data=None/{}/仅含空 payload 的空壳 artifact；p151-2024a-b0/state/e2e_metrics_report.json empty_artifact_filter: total_excluded=0, registry_empty_total=0, per_type={question:0, result:0, model:0, _all_types_total:0}；p151-2024a-b0/state/registry.json Q001.payload.sub_questions 非空，M001.payload.variables/constraints/equations 非空，D001-D003.payload.decision/reasoning 非空",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "method_selection",
+      "b0_score": 100.0,
+      "observed_reason": "method_value=100% 基于 top3_hit_rate，但 top1 chosen=mc-pca（family=dimensionality_reduction）的 top1_family_hit=False，top1_hit=True。分数来自字符串回退匹配（_method_hit）而非主路径家族检查。payload.model_family=statistical_classification（payload.model_family） 与 ref 相关，但 card_id 未反映主方法。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L286-354: method_selection 用 model artifact 的 data.card_id 查方法卡 family，与 benchmark core_methods 做家族匹配；t3_str 回退用 _method_hit() 对 card_id/name 与 gt_methods 做字符串包含匹配；p151-2022c-b0/state/e2e_metrics_report.json method_selection.detail.per_question.Q001: top1_chosen=mc-pca, top1_family_hit=False, top3_hit=True；p151-2022c-b0/state/registry.json D001: D001 decision：'PCA降维 + K-Means聚类 + XGBoost分类 + OLS回归 + 相关性分析'；top1_hit=True 来自 _method_hit 字符串回退（card name 含'PCA'匹配 gt_methods'pca'），但 top1_family_hit=False（dimensionality_reduction 不在 ref 家族中）；方法卡 family 命名（dimensionality_reduction/uncertainty_propagation）与 benchmark core_methods 命名（PCA/queuing_analysis）存在 taxonomy 映射断层",
+      "confidence": "medium",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "decomposition_coverage",
+      "b0_score": 25.0,
+      "observed_reason": "evaluator 用 count_ratio 退化口径：produced_question_count=1 / gt_sub_questions=4 = 25.0%。但 Q001 artifact 的 payload.sub_questions 实际包含 4 个子问题，与 GT 完全对齐（逐条比对文本一致）。低分完全源于 artifact 粒度约定与 evaluator 假设不匹配：B0 将所有子问题打包进单个 Q001 artifact，而 evaluator 假设一个 question artifact = 一个子问题。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L270-284: 无 response.decomposition_aligned 时退化为 min(produced_question_count, gt_sub_question_count)/gt_count（count_ratio）；p151-2022c-b0/state/e2e_metrics_report.json decomposition_coverage.detail: gt_sub_questions=4, produced_questions=1, mode='count_ratio（无语义对齐评分，退化口径）'；p151-2022c-b0/state/registry.json Q001.payload.sub_questions 含 4 条，与 research/P15/benchmark/b0_manifests/2022_C/00_problem_understanding.json sub_questions 逐条对应",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "innovation",
+      "b0_score": 0.0,
+      "observed_reason": "decision_log.json 的 decisions 数组中无任何条目包含 knowledge_refs 字段，更无 pat- 前缀的 pattern 引用。innov_value=0.0 是因为 B0 artifact schema（model-ir-1.0 / b0-baseline-v1）不包含 knowledge_refs / pattern 引用机制，evaluator 无法检测到任何创新声明。这不是 agent 未产生创新思维，而是测量通道在 B0 阶段不存在。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L418-431: innovation 扫描 decision_log.decisions[].knowledge_refs 中 pat- 前缀条目；无 pat- 引用则 innov_value=0.0；p151-2022c-b0/state/decision_log.json 全部 3 条 decision（D001-D003）均无 knowledge_refs 字段；p151-2022c-b0/state/registry.json D001-D003 payload 含 decision/alternatives/reasoning/criteria 但无 pattern 引用结构；B0 prompt_or_skill_version='b0-baseline-v1' 未定义 pattern 引用输出 schema",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "model_correctness",
+      "b0_score": null,
+      "observed_reason": "response.model_correctness_pct 未提供（B0 阶段无外部语义评分输入），value=None。structural check 结果为 PASS：M001 的 data.objective（非空字符串）、data.constraints（非空列表）、data.variables（非空列表）均存在。模型 artifact 结构完整，但语义正确性无法在 B0 阶段评估。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L356-393: model_correctness 依赖外部 response.model_correctness_pct；缺失时 value=None，仅做 structural check（objective/constraints/variables 存在性）；p151-2022c-b0/state/e2e_metrics_report.json model_correctness.detail: model_correctness='UNAVAILABLE', source='外部评分缺失（null/n/a）', model_correctness_structural='PASS'；structural_check.per_model.M001: objective=True, constraints=True, variables=True；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "experiment_validity",
+      "b0_score": null,
+      "observed_reason": "registry 中无 result 类型 artifact（results=0），exp_components 为空列表 → value=None。B0 阶段仅完成问题理解、模型构建、方法选择、求解策略和验证计划，不执行代码运行和实验，因此不产生 result artifact。无 robustness tag、无 multi_run 数据可统计。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L395-405: experiment_validity 统计 result artifact 中 robustness tag 比例和 multi_run>=5；无 result artifact 时 exp_components 为空 → value=None；p151-2022c-b0/state/e2e_metrics_report.json experiment_validity.detail: results=0, with_robustness_tags=0, multi_run_ge5=0；p151-2022c-b0/state/registry.json artifact_ids 仅含 Q001/M001/D001-D003，无 result/experiment 类型；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "validation_reliability",
+      "b0_score": null,
+      "observed_reason": "claims_total=0（status.json evidence 字段无 claim 记录）且 paper/main.tex 不存在，val_components 为空 → value=None。B0 阶段不产生 claim artifact 和论文，验证计划（D003）仅为规划文档，未执行验证，因此无 claim 支撑率可计算。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L407-416: validation_reliability = claim 支撑率（status.json evidence 字段）+ paper 存在性；claims_total=0 且无 main.tex → val_components 为空 → value=None；p151-2022c-b0/state/e2e_metrics_report.json validation_reliability.detail: claims_supported=0, claims_total=0, paper_present=False；p151-2022c-b0/state/registry.json 无 claim 类型 artifact；p151-2022c-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "writing_completeness",
+      "b0_score": null,
+      "observed_reason": "paper/main.tex 不存在 → value=None。B0 阶段不执行论文写作节点，无 LaTeX 源文件、无 references.bib、无图表和公式计数。writing_completeness 指标的所有输入前提在 B0 均不满足。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L433-449: writing_completeness 检查 paper/main.tex 存在性并统计 figures/tables/equations/references；无 main.tex → value=None；p151-2022c-b0/state/e2e_metrics_report.json writing_completeness.detail: main_tex=False；p151-2022c-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "end_to_end",
+      "b0_score": null,
+      "observed_reason": "response.total 未提供（无 awarded/max_score）→ value=None。B0 阶段不执行端到端 rubric 评分，无总分输入。end_to_end 指标完全依赖外部评分响应，B0 不产生该数据。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L451-457: end_to_end 依赖 response.total.awarded/max_score；缺失 → value=None；p151-2022c-b0/state/e2e_metrics_report.json end_to_end.detail: rubric_total=null；B0 运行无 response JSON 传入 compute_e2e_metrics()；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "measurement_integrity",
+      "b0_score": 0.0,
+      "observed_reason": "overall_real_artifact=0/5：判据 created_by.startswith('agent') 下，5 个 artifact 无一命中。但所有 artifact 的 provenance 子文档均显示 executor_type='external_agent', agent_identity='doubao'，证明这些确实是 agent 创建的产物。created_by 字段填充的是 DAG 节点名（problem_understanding/model_construction/method_selection/solving_strategy/validation_plan），而非 'agent...' 前缀。判据 v1 与 B0 注册约定不匹配，导致测量完整性被严重低估。experiment/validation/writing realization 为 0/0（null），因 B0 无对应类型 artifact。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L484-510: measurement_integrity 判据 v1 = created_by.startswith('agent')；统计各类型 artifact 中 agent 创建的比例；p151-2022c-b0/state/e2e_metrics_report.json measurement_integrity: overall_real_artifact={numerator:0, denominator:5, value:0.0}, experiment/validation/writing_realization={numerator:0, denominator:0, value:null}；p151-2022c-b0/state/registry.json 各 artifact.created_by ∈ ['problem_understanding','model_construction','method_selection','solving_strategy','validation_plan']，provenance.executor_type='external_agent', provenance.agent_identity='doubao'",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2022_C",
+      "metric": "empty_artifact_filter",
+      "b0_score": 0,
+      "observed_reason": "total_excluded=0，registry_empty_total=0：所有 5 个 artifact（Q001/M001/D001-D003）均有非空 payload（含 sub_questions/model_spec/decision 等实质内容），无空壳 artifact。空壳过滤器正常工作，未误排除任何 artifact。此指标无失败。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L65-79, L249-261: empty_artifact_filter 用 _is_empty_artifact() 判定 payload=None/[] 且 data=None/{}/仅含空 payload 的空壳 artifact；p151-2022c-b0/state/e2e_metrics_report.json empty_artifact_filter: total_excluded=0, registry_empty_total=0, per_type={question:0, result:0, model:0, _all_types_total:0}；p151-2022c-b0/state/registry.json Q001.payload.sub_questions 非空，M001.payload.variables/constraints/equations 非空，D001-D003.payload.decision/reasoning 非空",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "method_selection",
+      "b0_score": 0.0,
+      "observed_reason": "model artifact M001 的 data.card_id=mc-ga（family=metaheuristics）与 benchmark core_methods [\"dynamic_programming\",\"MDP\",\"game_theory\",\"Monte_Carlo\"] 无家族匹配；top3=[\"mc-ga\",\"mc-nsga2\",\"mc-monte-carlo\"] 亦无匹配。但 payload.model_family=['dynamic_programming','optimization','markov_decision_process','game_theory']（payload.model_family） 与 ref 高度相关，说明 agent 实际选择了正确方法家族，仅因方法卡库无对应卡片而 card_id 错配。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L286-354: method_selection 用 model artifact 的 data.card_id 查方法卡 family，与 benchmark core_methods 做家族匹配；t3_str 回退用 _method_hit() 对 card_id/name 与 gt_methods 做字符串包含匹配；方法卡库 core/knowledge/methods/cards/ 共 16 张，family 覆盖：decision_analysis, classical_timeseries, composite_evaluation, metaheuristics, uncertainty_propagation, multi_objective_optimization, statistical_modeling, dimensionality_reduction, unsupervised, supervised_learning, timeseries_learning。无 kinematics/geometric_modeling/dynamic_programming/MDP/game_theory/PDE/finite_difference/queueing_theory 家族卡片；p151-2020b-b0/state/registry.json M001.data.card_id=mc-ga, M001.payload.model_family=['dynamic_programming','optimization','markov_decision_process','game_theory']（payload.model_family）；p151-2020b-b0/state/registry.json D001: D001 decision：'选择遗传算法(mc-ga)作为Q1确定性优化的主求解方法'，并明确指出'本题无专用动态规划卡'；D002 solving_strategy 实际使用 MDP值迭代+纳什均衡，但 card_id 标记为 mc-ga（metaheuristics），与 ref 家族无匹配；research/P15/benchmark/CUMCM-Bench-v2.json 2020_B.core_methods=[\"dynamic_programming\",\"MDP\",\"game_theory\",\"Monte_Carlo\"]",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "decomposition_coverage",
+      "b0_score": 33.3,
+      "observed_reason": "evaluator 用 count_ratio 退化口径：produced_question_count=1 / gt_sub_questions=3 = 33.3%。但 Q001 artifact 的 payload.sub_questions 实际包含 3 个子问题，与 GT 完全对齐（逐条比对文本一致）。低分完全源于 artifact 粒度约定与 evaluator 假设不匹配：B0 将所有子问题打包进单个 Q001 artifact，而 evaluator 假设一个 question artifact = 一个子问题。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L270-284: 无 response.decomposition_aligned 时退化为 min(produced_question_count, gt_sub_question_count)/gt_count（count_ratio）；p151-2020b-b0/state/e2e_metrics_report.json decomposition_coverage.detail: gt_sub_questions=3, produced_questions=1, mode='count_ratio（无语义对齐评分，退化口径）'；p151-2020b-b0/state/registry.json Q001.payload.sub_questions 含 3 条，与 research/P15/benchmark/b0_manifests/2020_B/00_problem_understanding.json sub_questions 逐条对应",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "innovation",
+      "b0_score": 0.0,
+      "observed_reason": "decision_log.json 的 decisions 数组中无任何条目包含 knowledge_refs 字段，更无 pat- 前缀的 pattern 引用。innov_value=0.0 是因为 B0 artifact schema（model-ir-1.0 / b0-baseline-v1）不包含 knowledge_refs / pattern 引用机制，evaluator 无法检测到任何创新声明。这不是 agent 未产生创新思维，而是测量通道在 B0 阶段不存在。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L418-431: innovation 扫描 decision_log.decisions[].knowledge_refs 中 pat- 前缀条目；无 pat- 引用则 innov_value=0.0；p151-2020b-b0/state/decision_log.json 全部 3 条 decision（D001-D003）均无 knowledge_refs 字段；p151-2020b-b0/state/registry.json D001-D003 payload 含 decision/alternatives/reasoning/criteria 但无 pattern 引用结构；B0 prompt_or_skill_version='b0-baseline-v1' 未定义 pattern 引用输出 schema",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "model_correctness",
+      "b0_score": null,
+      "observed_reason": "response.model_correctness_pct 未提供（B0 阶段无外部语义评分输入），value=None。structural check 结果为 PASS：M001 的 data.objective（非空字符串）、data.constraints（非空列表）、data.variables（非空列表）均存在。模型 artifact 结构完整，但语义正确性无法在 B0 阶段评估。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L356-393: model_correctness 依赖外部 response.model_correctness_pct；缺失时 value=None，仅做 structural check（objective/constraints/variables 存在性）；p151-2020b-b0/state/e2e_metrics_report.json model_correctness.detail: model_correctness='UNAVAILABLE', source='外部评分缺失（null/n/a）', model_correctness_structural='PASS'；structural_check.per_model.M001: objective=True, constraints=True, variables=True；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "experiment_validity",
+      "b0_score": null,
+      "observed_reason": "registry 中无 result 类型 artifact（results=0），exp_components 为空列表 → value=None。B0 阶段仅完成问题理解、模型构建、方法选择、求解策略和验证计划，不执行代码运行和实验，因此不产生 result artifact。无 robustness tag、无 multi_run 数据可统计。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L395-405: experiment_validity 统计 result artifact 中 robustness tag 比例和 multi_run>=5；无 result artifact 时 exp_components 为空 → value=None；p151-2020b-b0/state/e2e_metrics_report.json experiment_validity.detail: results=0, with_robustness_tags=0, multi_run_ge5=0；p151-2020b-b0/state/registry.json artifact_ids 仅含 Q001/M001/D001-D003，无 result/experiment 类型；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "validation_reliability",
+      "b0_score": null,
+      "observed_reason": "claims_total=0（status.json evidence 字段无 claim 记录）且 paper/main.tex 不存在，val_components 为空 → value=None。B0 阶段不产生 claim artifact 和论文，验证计划（D003）仅为规划文档，未执行验证，因此无 claim 支撑率可计算。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L407-416: validation_reliability = claim 支撑率（status.json evidence 字段）+ paper 存在性；claims_total=0 且无 main.tex → val_components 为空 → value=None；p151-2020b-b0/state/e2e_metrics_report.json validation_reliability.detail: claims_supported=0, claims_total=0, paper_present=False；p151-2020b-b0/state/registry.json 无 claim 类型 artifact；p151-2020b-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "writing_completeness",
+      "b0_score": null,
+      "observed_reason": "paper/main.tex 不存在 → value=None。B0 阶段不执行论文写作节点，无 LaTeX 源文件、无 references.bib、无图表和公式计数。writing_completeness 指标的所有输入前提在 B0 均不满足。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L433-449: writing_completeness 检查 paper/main.tex 存在性并统计 figures/tables/equations/references；无 main.tex → value=None；p151-2020b-b0/state/e2e_metrics_report.json writing_completeness.detail: main_tex=False；p151-2020b-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "end_to_end",
+      "b0_score": null,
+      "observed_reason": "response.total 未提供（无 awarded/max_score）→ value=None。B0 阶段不执行端到端 rubric 评分，无总分输入。end_to_end 指标完全依赖外部评分响应，B0 不产生该数据。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L451-457: end_to_end 依赖 response.total.awarded/max_score；缺失 → value=None；p151-2020b-b0/state/e2e_metrics_report.json end_to_end.detail: rubric_total=null；B0 运行无 response JSON 传入 compute_e2e_metrics()；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "measurement_integrity",
+      "b0_score": 0.0,
+      "observed_reason": "overall_real_artifact=0/5：判据 created_by.startswith('agent') 下，5 个 artifact 无一命中。但所有 artifact 的 provenance 子文档均显示 executor_type='external_agent', agent_identity='doubao'，证明这些确实是 agent 创建的产物。created_by 字段填充的是 DAG 节点名（problem_understanding/model_construction/method_selection/solving_strategy/validation_plan），而非 'agent...' 前缀。判据 v1 与 B0 注册约定不匹配，导致测量完整性被严重低估。experiment/validation/writing realization 为 0/0（null），因 B0 无对应类型 artifact。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L484-510: measurement_integrity 判据 v1 = created_by.startswith('agent')；统计各类型 artifact 中 agent 创建的比例；p151-2020b-b0/state/e2e_metrics_report.json measurement_integrity: overall_real_artifact={numerator:0, denominator:5, value:0.0}, experiment/validation/writing_realization={numerator:0, denominator:0, value:null}；p151-2020b-b0/state/registry.json 各 artifact.created_by ∈ ['problem_understanding','model_construction','method_selection','solving_strategy','validation_plan']，provenance.executor_type='external_agent', provenance.agent_identity='doubao'",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2020_B",
+      "metric": "empty_artifact_filter",
+      "b0_score": 0,
+      "observed_reason": "total_excluded=0，registry_empty_total=0：所有 5 个 artifact（Q001/M001/D001-D003）均有非空 payload（含 sub_questions/model_spec/decision 等实质内容），无空壳 artifact。空壳过滤器正常工作，未误排除任何 artifact。此指标无失败。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L65-79, L249-261: empty_artifact_filter 用 _is_empty_artifact() 判定 payload=None/[] 且 data=None/{}/仅含空 payload 的空壳 artifact；p151-2020b-b0/state/e2e_metrics_report.json empty_artifact_filter: total_excluded=0, registry_empty_total=0, per_type={question:0, result:0, model:0, _all_types_total:0}；p151-2020b-b0/state/registry.json Q001.payload.sub_questions 非空，M001.payload.variables/constraints/equations 非空，D001-D003.payload.decision/reasoning 非空",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "method_selection",
+      "b0_score": 0.0,
+      "observed_reason": "model artifact M001 的 data.card_id=mc-ga（family=metaheuristics）与 benchmark core_methods [\"heat_equation_PDE\",\"parameter_inversion\",\"optimization\"] 无家族匹配；top3=[\"mc-ga\",\"mc-monte-carlo\",\"mc-pso\"] 亦无匹配。但 payload.model_family=pde（payload.model_family） 与 ref 高度相关，说明 agent 实际选择了正确方法家族，仅因方法卡库无对应卡片而 card_id 错配。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L286-354: method_selection 用 model artifact 的 data.card_id 查方法卡 family，与 benchmark core_methods 做家族匹配；t3_str 回退用 _method_hit() 对 card_id/name 与 gt_methods 做字符串包含匹配；方法卡库 core/knowledge/methods/cards/ 共 16 张，family 覆盖：decision_analysis, classical_timeseries, composite_evaluation, metaheuristics, uncertainty_propagation, multi_objective_optimization, statistical_modeling, dimensionality_reduction, unsupervised, supervised_learning, timeseries_learning。无 kinematics/geometric_modeling/dynamic_programming/MDP/game_theory/PDE/finite_difference/queueing_theory 家族卡片；p151-2018a-b0/state/registry.json M001.data.card_id=mc-ga, M001.payload.model_family=pde（payload.model_family）；p151-2018a-b0/state/registry.json D001: D001 decision：'采用隐式有限差分法（Crank-Nicolson格式）离散PDE，结合遗传算法/模式搜索进行层厚优化'；核心方法为 FDM/PDE，但方法卡库无 PDE/finite_difference 家族卡片，card_id 被迫标记为 mc-ga（仅用于优化子问题），与 ref 家族无匹配；research/P15/benchmark/CUMCM-Bench-v2.json 2018_A.core_methods=[\"heat_equation_PDE\",\"parameter_inversion\",\"optimization\"]",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "decomposition_coverage",
+      "b0_score": 33.3,
+      "observed_reason": "evaluator 用 count_ratio 退化口径：produced_question_count=1 / gt_sub_questions=3 = 33.3%。但 Q001 artifact 的 payload.sub_questions 实际包含 3 个子问题，与 GT 完全对齐（逐条比对文本一致）。低分完全源于 artifact 粒度约定与 evaluator 假设不匹配：B0 将所有子问题打包进单个 Q001 artifact，而 evaluator 假设一个 question artifact = 一个子问题。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L270-284: 无 response.decomposition_aligned 时退化为 min(produced_question_count, gt_sub_question_count)/gt_count（count_ratio）；p151-2018a-b0/state/e2e_metrics_report.json decomposition_coverage.detail: gt_sub_questions=3, produced_questions=1, mode='count_ratio（无语义对齐评分，退化口径）'；p151-2018a-b0/state/registry.json Q001.payload.sub_questions 含 3 条，与 research/P15/benchmark/b0_manifests/2018_A/00_problem_understanding.json sub_questions 逐条对应",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "innovation",
+      "b0_score": 0.0,
+      "observed_reason": "decision_log.json 的 decisions 数组中无任何条目包含 knowledge_refs 字段，更无 pat- 前缀的 pattern 引用。innov_value=0.0 是因为 B0 artifact schema（model-ir-1.0 / b0-baseline-v1）不包含 knowledge_refs / pattern 引用机制，evaluator 无法检测到任何创新声明。这不是 agent 未产生创新思维，而是测量通道在 B0 阶段不存在。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L418-431: innovation 扫描 decision_log.decisions[].knowledge_refs 中 pat- 前缀条目；无 pat- 引用则 innov_value=0.0；p151-2018a-b0/state/decision_log.json 全部 3 条 decision（D001-D003）均无 knowledge_refs 字段；p151-2018a-b0/state/registry.json D001-D003 payload 含 decision/alternatives/reasoning/criteria 但无 pattern 引用结构；B0 prompt_or_skill_version='b0-baseline-v1' 未定义 pattern 引用输出 schema",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "model_correctness",
+      "b0_score": null,
+      "observed_reason": "response.model_correctness_pct 未提供（B0 阶段无外部语义评分输入），value=None。structural check 结果为 PASS：M001 的 data.objective（非空字符串）、data.constraints（非空列表）、data.variables（非空列表）均存在。模型 artifact 结构完整，但语义正确性无法在 B0 阶段评估。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L356-393: model_correctness 依赖外部 response.model_correctness_pct；缺失时 value=None，仅做 structural check（objective/constraints/variables 存在性）；p151-2018a-b0/state/e2e_metrics_report.json model_correctness.detail: model_correctness='UNAVAILABLE', source='外部评分缺失（null/n/a）', model_correctness_structural='PASS'；structural_check.per_model.M001: objective=True, constraints=True, variables=True；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "experiment_validity",
+      "b0_score": null,
+      "observed_reason": "registry 中无 result 类型 artifact（results=0），exp_components 为空列表 → value=None。B0 阶段仅完成问题理解、模型构建、方法选择、求解策略和验证计划，不执行代码运行和实验，因此不产生 result artifact。无 robustness tag、无 multi_run 数据可统计。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L395-405: experiment_validity 统计 result artifact 中 robustness tag 比例和 multi_run>=5；无 result artifact 时 exp_components 为空 → value=None；p151-2018a-b0/state/e2e_metrics_report.json experiment_validity.detail: results=0, with_robustness_tags=0, multi_run_ge5=0；p151-2018a-b0/state/registry.json artifact_ids 仅含 Q001/M001/D001-D003，无 result/experiment 类型；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "validation_reliability",
+      "b0_score": null,
+      "observed_reason": "claims_total=0（status.json evidence 字段无 claim 记录）且 paper/main.tex 不存在，val_components 为空 → value=None。B0 阶段不产生 claim artifact 和论文，验证计划（D003）仅为规划文档，未执行验证，因此无 claim 支撑率可计算。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L407-416: validation_reliability = claim 支撑率（status.json evidence 字段）+ paper 存在性；claims_total=0 且无 main.tex → val_components 为空 → value=None；p151-2018a-b0/state/e2e_metrics_report.json validation_reliability.detail: claims_supported=0, claims_total=0, paper_present=False；p151-2018a-b0/state/registry.json 无 claim 类型 artifact；p151-2018a-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "writing_completeness",
+      "b0_score": null,
+      "observed_reason": "paper/main.tex 不存在 → value=None。B0 阶段不执行论文写作节点，无 LaTeX 源文件、无 references.bib、无图表和公式计数。writing_completeness 指标的所有输入前提在 B0 均不满足。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L433-449: writing_completeness 检查 paper/main.tex 存在性并统计 figures/tables/equations/references；无 main.tex → value=None；p151-2018a-b0/state/e2e_metrics_report.json writing_completeness.detail: main_tex=False；p151-2018a-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "end_to_end",
+      "b0_score": null,
+      "observed_reason": "response.total 未提供（无 awarded/max_score）→ value=None。B0 阶段不执行端到端 rubric 评分，无总分输入。end_to_end 指标完全依赖外部评分响应，B0 不产生该数据。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L451-457: end_to_end 依赖 response.total.awarded/max_score；缺失 → value=None；p151-2018a-b0/state/e2e_metrics_report.json end_to_end.detail: rubric_total=null；B0 运行无 response JSON 传入 compute_e2e_metrics()；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "measurement_integrity",
+      "b0_score": 0.0,
+      "observed_reason": "overall_real_artifact=0/5：判据 created_by.startswith('agent') 下，5 个 artifact 无一命中。但所有 artifact 的 provenance 子文档均显示 executor_type='external_agent', agent_identity='doubao'，证明这些确实是 agent 创建的产物。created_by 字段填充的是 DAG 节点名（problem_understanding/model_construction/method_selection/solving_strategy/validation_plan），而非 'agent...' 前缀。判据 v1 与 B0 注册约定不匹配，导致测量完整性被严重低估。experiment/validation/writing realization 为 0/0（null），因 B0 无对应类型 artifact。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L484-510: measurement_integrity 判据 v1 = created_by.startswith('agent')；统计各类型 artifact 中 agent 创建的比例；p151-2018a-b0/state/e2e_metrics_report.json measurement_integrity: overall_real_artifact={numerator:0, denominator:5, value:0.0}, experiment/validation/writing_realization={numerator:0, denominator:0, value:null}；p151-2018a-b0/state/registry.json 各 artifact.created_by ∈ ['problem_understanding','model_construction','method_selection','solving_strategy','validation_plan']，provenance.executor_type='external_agent', provenance.agent_identity='doubao'",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2018_A",
+      "metric": "empty_artifact_filter",
+      "b0_score": 0,
+      "observed_reason": "total_excluded=0，registry_empty_total=0：所有 5 个 artifact（Q001/M001/D001-D003）均有非空 payload（含 sub_questions/model_spec/decision 等实质内容），无空壳 artifact。空壳过滤器正常工作，未误排除任何 artifact。此指标无失败。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L65-79, L249-261: empty_artifact_filter 用 _is_empty_artifact() 判定 payload=None/[] 且 data=None/{}/仅含空 payload 的空壳 artifact；p151-2018a-b0/state/e2e_metrics_report.json empty_artifact_filter: total_excluded=0, registry_empty_total=0, per_type={question:0, result:0, model:0, _all_types_total:0}；p151-2018a-b0/state/registry.json Q001.payload.sub_questions 非空，M001.payload.variables/constraints/equations 非空，D001-D003.payload.decision/reasoning 非空",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "method_selection",
+      "b0_score": 100.0,
+      "observed_reason": "method_value=100% 基于 top3_hit_rate，但 top1 chosen=mc-monte-carlo（family=uncertainty_propagation）的 top1_family_hit=False，top1_hit=False。分数来自字符串回退匹配（_method_hit）而非主路径家族检查。payload.model_family=['queueing_theory','decision_analysis','optimization','simulation']（payload.model_family） 与 ref 相关，但 card_id 未反映主方法。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L286-354: method_selection 用 model artifact 的 data.card_id 查方法卡 family，与 benchmark core_methods 做家族匹配；t3_str 回退用 _method_hit() 对 card_id/name 与 gt_methods 做字符串包含匹配；p151-2019c-b0/state/e2e_metrics_report.json method_selection.detail.per_question.Q001: top1_chosen=mc-monte-carlo, top1_family_hit=False, top3_hit=True；p151-2019c-b0/state/registry.json D001: D001 decision：'排队论解析模型为骨架、蒙特卡洛仿真为验证、遗传算法处理Q3布局优化'；top1 chosen=mc-monte-carlo（family=uncertainty_propagation）与 ref 无匹配，top1_hit=False；top3_hit=True 来自 mc-ahp（card name 含'decision_analysis'）与 gt_methods'decision_analysis' 的字符串回退匹配；方法卡库无 queueing_theory 家族卡片；方法卡 family 命名（dimensionality_reduction/uncertainty_propagation）与 benchmark core_methods 命名（PCA/queuing_analysis）存在 taxonomy 映射断层",
+      "confidence": "medium",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "decomposition_coverage",
+      "b0_score": 25.0,
+      "observed_reason": "evaluator 用 count_ratio 退化口径：produced_question_count=1 / gt_sub_questions=4 = 25.0%。但 Q001 artifact 的 payload.sub_questions 实际包含 4 个子问题，与 GT 完全对齐（逐条比对文本一致）。低分完全源于 artifact 粒度约定与 evaluator 假设不匹配：B0 将所有子问题打包进单个 Q001 artifact，而 evaluator 假设一个 question artifact = 一个子问题。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L270-284: 无 response.decomposition_aligned 时退化为 min(produced_question_count, gt_sub_question_count)/gt_count（count_ratio）；p151-2019c-b0/state/e2e_metrics_report.json decomposition_coverage.detail: gt_sub_questions=4, produced_questions=1, mode='count_ratio（无语义对齐评分，退化口径）'；p151-2019c-b0/state/registry.json Q001.payload.sub_questions 含 4 条，与 research/P15/benchmark/b0_manifests/2019_C/00_problem_understanding.json sub_questions 逐条对应",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "innovation",
+      "b0_score": 0.0,
+      "observed_reason": "decision_log.json 的 decisions 数组中无任何条目包含 knowledge_refs 字段，更无 pat- 前缀的 pattern 引用。innov_value=0.0 是因为 B0 artifact schema（model-ir-1.0 / b0-baseline-v1）不包含 knowledge_refs / pattern 引用机制，evaluator 无法检测到任何创新声明。这不是 agent 未产生创新思维，而是测量通道在 B0 阶段不存在。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L418-431: innovation 扫描 decision_log.decisions[].knowledge_refs 中 pat- 前缀条目；无 pat- 引用则 innov_value=0.0；p151-2019c-b0/state/decision_log.json 全部 3 条 decision（D001-D003）均无 knowledge_refs 字段；p151-2019c-b0/state/registry.json D001-D003 payload 含 decision/alternatives/reasoning/criteria 但无 pattern 引用结构；B0 prompt_or_skill_version='b0-baseline-v1' 未定义 pattern 引用输出 schema",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "model_correctness",
+      "b0_score": null,
+      "observed_reason": "response.model_correctness_pct 未提供（B0 阶段无外部语义评分输入），value=None。structural check 结果为 PASS：M001 的 data.objective（非空字符串）、data.constraints（非空列表）、data.variables（非空列表）均存在。模型 artifact 结构完整，但语义正确性无法在 B0 阶段评估。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L356-393: model_correctness 依赖外部 response.model_correctness_pct；缺失时 value=None，仅做 structural check（objective/constraints/variables 存在性）；p151-2019c-b0/state/e2e_metrics_report.json model_correctness.detail: model_correctness='UNAVAILABLE', source='外部评分缺失（null/n/a）', model_correctness_structural='PASS'；structural_check.per_model.M001: objective=True, constraints=True, variables=True；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "experiment_validity",
+      "b0_score": null,
+      "observed_reason": "registry 中无 result 类型 artifact（results=0），exp_components 为空列表 → value=None。B0 阶段仅完成问题理解、模型构建、方法选择、求解策略和验证计划，不执行代码运行和实验，因此不产生 result artifact。无 robustness tag、无 multi_run 数据可统计。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L395-405: experiment_validity 统计 result artifact 中 robustness tag 比例和 multi_run>=5；无 result artifact 时 exp_components 为空 → value=None；p151-2019c-b0/state/e2e_metrics_report.json experiment_validity.detail: results=0, with_robustness_tags=0, multi_run_ge5=0；p151-2019c-b0/state/registry.json artifact_ids 仅含 Q001/M001/D001-D003，无 result/experiment 类型；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "validation_reliability",
+      "b0_score": null,
+      "observed_reason": "claims_total=0（status.json evidence 字段无 claim 记录）且 paper/main.tex 不存在，val_components 为空 → value=None。B0 阶段不产生 claim artifact 和论文，验证计划（D003）仅为规划文档，未执行验证，因此无 claim 支撑率可计算。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L407-416: validation_reliability = claim 支撑率（status.json evidence 字段）+ paper 存在性；claims_total=0 且无 main.tex → val_components 为空 → value=None；p151-2019c-b0/state/e2e_metrics_report.json validation_reliability.detail: claims_supported=0, claims_total=0, paper_present=False；p151-2019c-b0/state/registry.json 无 claim 类型 artifact；p151-2019c-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "writing_completeness",
+      "b0_score": null,
+      "observed_reason": "paper/main.tex 不存在 → value=None。B0 阶段不执行论文写作节点，无 LaTeX 源文件、无 references.bib、无图表和公式计数。writing_completeness 指标的所有输入前提在 B0 均不满足。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L433-449: writing_completeness 检查 paper/main.tex 存在性并统计 figures/tables/equations/references；无 main.tex → value=None；p151-2019c-b0/state/e2e_metrics_report.json writing_completeness.detail: main_tex=False；p151-2019c-b0/paper/ 目录不存在；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "end_to_end",
+      "b0_score": null,
+      "observed_reason": "response.total 未提供（无 awarded/max_score）→ value=None。B0 阶段不执行端到端 rubric 评分，无总分输入。end_to_end 指标完全依赖外部评分响应，B0 不产生该数据。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L451-457: end_to_end 依赖 response.total.awarded/max_score；缺失 → value=None；p151-2019c-b0/state/e2e_metrics_report.json end_to_end.detail: rubric_total=null；B0 运行无 response JSON 传入 compute_e2e_metrics()；B0 baseline 仅执行 DAG 前 5 节点（problem_understanding→model_construction→method_selection→solving_strategy→validation_plan），不执行代码运行、实验、论文写作和端到端评分",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "measurement_integrity",
+      "b0_score": 0.0,
+      "observed_reason": "overall_real_artifact=0/5：判据 created_by.startswith('agent') 下，5 个 artifact 无一命中。但所有 artifact 的 provenance 子文档均显示 executor_type='external_agent', agent_identity='doubao'，证明这些确实是 agent 创建的产物。created_by 字段填充的是 DAG 节点名（problem_understanding/model_construction/method_selection/solving_strategy/validation_plan），而非 'agent...' 前缀。判据 v1 与 B0 注册约定不匹配，导致测量完整性被严重低估。experiment/validation/writing realization 为 0/0（null），因 B0 无对应类型 artifact。",
+      "failure_attribution": "measurement_failure",
+      "evidence": "e2e_metrics.py L484-510: measurement_integrity 判据 v1 = created_by.startswith('agent')；统计各类型 artifact 中 agent 创建的比例；p151-2019c-b0/state/e2e_metrics_report.json measurement_integrity: overall_real_artifact={numerator:0, denominator:5, value:0.0}, experiment/validation/writing_realization={numerator:0, denominator:0, value:null}；p151-2019c-b0/state/registry.json 各 artifact.created_by ∈ ['problem_understanding','model_construction','method_selection','solving_strategy','validation_plan']，provenance.executor_type='external_agent', provenance.agent_identity='doubao'",
+      "confidence": "high",
+      "recommended_action": "calibrate_instrument"
+    },
+    {
+      "problem_id": "2019_C",
+      "metric": "empty_artifact_filter",
+      "b0_score": 0,
+      "observed_reason": "total_excluded=0，registry_empty_total=0：所有 5 个 artifact（Q001/M001/D001-D003）均有非空 payload（含 sub_questions/model_spec/decision 等实质内容），无空壳 artifact。空壳过滤器正常工作，未误排除任何 artifact。此指标无失败。",
+      "failure_attribution": "not_applicable",
+      "evidence": "e2e_metrics.py L65-79, L249-261: empty_artifact_filter 用 _is_empty_artifact() 判定 payload=None/[] 且 data=None/{}/仅含空 payload 的空壳 artifact；p151-2019c-b0/state/e2e_metrics_report.json empty_artifact_filter: total_excluded=0, registry_empty_total=0, per_type={question:0, result:0, model:0, _all_types_total:0}；p151-2019c-b0/state/registry.json Q001.payload.sub_questions 非空，M001.payload.variables/constraints/equations 非空，D001-D003.payload.decision/reasoning 非空",
+      "confidence": "high",
+      "recommended_action": "no_action"
+    }
+  ],
+  "summary": {
+    "total_records": 50,
+    "measurement_failure": 20,
+    "capability_failure": 0,
+    "mixed": 0,
+    "unresolved": 0,
+    "not_applicable": 30
+  }
+}
