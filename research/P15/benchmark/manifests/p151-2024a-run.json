@@ -1,0 +1,46 @@
+{
+  "run_id": "P15.1-2024A-B0",
+  "problem_id": "2024_A",
+  "project": "p151-2024a",
+  "condition": "B0",
+  "seed": 42,
+  "timestamp": "2026-09-08T00:35:58+00:00",
+  "frozen_input": {
+    "text_file": "examples/problems/cumcm2024A.txt",
+    "text_sha256": "90a3026e5c58d87dc84ba60f0a72c4ec7617aac11645bc05b804b88841791713",
+    "data_files": [],
+    "status": "complete"
+  },
+  "pipeline": {
+    "mode": "V3",
+    "dag": "mathmodel-base:expanded",
+    "nodes_total": 16,
+    "nodes_completed": 16,
+    "nodes_blocked": 0,
+    "nodes_failed": 0
+  },
+  "registry_snapshot": {
+    "total_artifacts": 16,
+    "question_artifacts": 1,
+    "question_ids": ["Q001"],
+    "model_artifacts": 1,
+    "model_summary": "M001: TOPSIS 平行对比模型 (mc-topsis)",
+    "claim_artifacts": 1,
+    "claim_summary": "C001: Q001 结论 (comparative)"
+  },
+  "evidence_graph": {
+    "relations": 12,
+    "chain": "P001→Q001→M001→E001→R001→C001"
+  },
+  "gold_standard": {
+    "source": "research/P15/benchmark/CUMCM-Bench-v2.json",
+    "sub_questions": [
+      "Q1: 300s时龙头把手位置坐标",
+      "Q2: 碰撞检测（螺线进出碰撞时间）",
+      "Q3: 最小螺距设计",
+      "Q4: 进入与盘出的螺距变化方案",
+      "Q5: 速度控制（龙头匀速条件下各把手最大速度）"
+    ],
+    "sub_question_count": 5
+  }
+}
