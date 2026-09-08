@@ -2,6 +2,35 @@
 
 本文件记录 MathModel Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
+## v3.1.1（2026-09-08，仓库清理 + P15 研究基础设施）
+
+### 仓库清理（3 commits，`691bdd0`…`b6540e3`，non-regression 781/11 不变）
+
+- **技能迁移**：10 个 syslab 技能包从 `.claude/skills/` → `core/skills/syslab/`（101 files，git mv 历史保留）。
+- **归档清理**：`archives/cumcm2024anew/` → `tests/fixtures/sample_incomplete_project/`（7 files，git mv）；删除 `archives/README.md`。
+- **V2 残余移除**：`package.json` + `package-lock.json`（node 依赖，V2 遗留）。
+- **架构文档迁移**：`.opencode/plans/V3_ARCHITECTURE_PLAN.md` → `docs/architecture/`。
+- **P0 测量修复**：`e2e_metrics.py` 空壳过滤 + 方法族匹配 + 结构性检查；`validate.py` 路径引用更新；`cumcm2024A.txt` 输入污染修复。
+- **工具清理**：删除 `fidelity_gate.py`、`run_p13_3d.py`、12 个 `_tmp_*.txt`、`mc_scorecard_v2.json`。
+- **文档更新**：`STATUS.md`、`METRICS.md`、3 个架构审计文档、5 个测试文件路径修正。
+
+### P15.0 CUMCM Benchmark Freeze（`8751c45`，tag `p15.0-benchmark-freeze`）
+
+- 36 题 × 7 gold fields（problem_source/problem_type/capability_dimensions/model_methods/assumptions/code_language/result_fields）。
+- Schemas：`competition_problem.schema.json`（30B schema，含 problem_type=5 enum + 16 capability_dimensions）。
+- Catalog：`by_family.json`（8 families）、`by_capability.json`（16 dims）、`by_failure_mode.json`（12 patterns）。
+- Validation scripts：`validate_schema.py`（PASS）、`benchmark_completeness.py`（36/36）、`coverage_report.py`、`duplicate_gate.py`。
+- Baseline snapshot：5 问题卡（2024_A / 2022_C / 2020_B / 2018_A / 2019_C）+ `content_hashes.json`。
+- Pre-registration：`PRE_REGISTRATION.md`（v1 freeze）。
+
+### P15.1 B0 Alignment Baseline（`af1bbd5`，tag `p15.1-b0-baseline`）
+
+- **2024_A B0 首轮**：V3 pipeline 16/16 节点完成；decomposition_coverage = UNRESOLVED（Q001 payload 为空）；method_selection = 0%（TOPSIS chosen for kinematics）；methodology_completeness = 0%；structural_compliance = 15.6%。
+- **2024_A B0-R2 改进轮**：Mock execution with real problem text（`p151-2024a-r2/`）。
+- **P15 研究基础设施**：measurement_recovery（execution_gate + register_external_artifact + schemas）、Model IR spec（MODEL_IR_SPEC.md + schema + example）、capability ontology（CAPABILITY_MAP + FAILURE_TAXONOMY + MODEL_CONSTRUCTION_RUBRIC）。
+- **仓库审计**：10 份审计报告（`research/REPOSITORY_AUDIT/`）。
+- **会话交接**：`HANDOFF.md`。
+
 ## v3.1.0-rc2（2026-09-07，Release Candidate 收尾）
 
 ### RC Smoke（真实负载验证，全部收口）

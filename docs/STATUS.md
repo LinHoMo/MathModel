@@ -1,6 +1,6 @@
 # 项目状态
 
-> 更新：2026-09-07（RC 收口：P13-3D 关闭 · P14 pilot PASS · RC smoke S1/S3 PASS · Release v3.1.0）。治理见
+> 更新：2026-09-08（仓库清理 + P15 研究基础设施）。治理见
 > `docs/architecture/THREE_LAYER_ARCHITECTURE.md`，硬化总纲见
 > `docs/architecture/HARDENING_PROGRAM.md`。
 > **本文件是状态数字的唯一出处：所有数字来自机器命令实测并绑定 commit hash，
@@ -42,6 +42,9 @@ Executor（GPT / Claude / DeepSeek / MathModelAgent / 人工均可插拔）。**
 | **Hardening P4** | Legacy Isolation：四手降级 `core/legacy/hands/` + 实验目录/脚本迁出 products（validate 57/57 达成） | ✅ | `5a6b051` |
 | **Hardening P5** | Regression Gate：零失败基线（781/11，skip 全部分类）+ 五轴 Non-regression 契约 5/5（15 passed） | ✅ | `2ea318c` |
 | **Hardening P6** | Release Candidate：九条终验收全部有证据（终检序列全绿） | ✅ | `v3.1.0（RC 收口：P13-3D 关闭 · P14 pilot PASS · RC smoke S1/S3 PASS）` |
+| **P15.0** | CUMCM Benchmark Freeze（36 题 × 7 gold fields，5 脚本，4 基线问题卡，schema + 3 catalog 索引） | ✅ | `8751c45`（tag `p15.0-benchmark-freeze`） |
+| **P15.1** | B0 Alignment Baseline（2024_A B0 首轮 + B0-R2 改进轮，decomposition_coverage = UNRESOLVED） | ✅ | `af1bbd5`（tag `p15.1-b0-baseline`） |
+| **仓库清理** | `.claude/` → `core/skills/syslab/`（101 files）+ `archives/` → `tests/fixtures/` + `package.json` 移除 + `.opencode/` → `docs/architecture/` + P0 测量修复 + P15 研究基础设施 + 仓库审计 | ✅ | `691bdd0`…`b6540e3`（3 commits，non-regression 781/11 不变） |
 
 ## 当前数字（机器实测，Python 3.12.10）
 
