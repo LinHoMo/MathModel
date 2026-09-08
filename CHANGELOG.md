@@ -2,7 +2,18 @@
 
 本文件记录 MathModel Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
-## v3.1.1（2026-09-08，仓库清理 + P15 研究基础设施）
+## v3.1.1（2026-09-08，仓库清理 + P15 研究基础设施 + core/tools 统一）
+
+### core/tools 统一（4 commits，`7f29443`…`9199f03`，non-regression 774/11）
+
+- **core/tools/ 子目录内联**：7 个子目录（runtime/validation/knowledge/devtools/rendering/evaluation/friendly）的 37 个实现文件内联到 `core/tools/*.py`，删除全部子目录。loose 文件从 shim 变为自包含实现。
+- **core/evaluation/ 空壳删除**：3 个 `__init__.py`（零导入，功能由 `core/tools/evaluation/` 承担）。
+- **adapters 迁移**：`adapters/openai.yaml` → `core/runtime/adapters/openai.yaml`；修复 `gen_runtime_manifest.py` 输出路径 + `instructions_file` 路径（`core/AGENTS.md` → `AGENTS.md`）。
+- **AI 工具配置 V2→V3**：`.clinerules` / `.cursorrules` / `.windsurfrules` 更新为 V3 表述；`GEMINI.md` 合并为 `@CLAUDE.md` 指针。
+- **文档更新**：`TEAM_GUIDE.md`（V2 四手→V3 五角色）、`harness-compat.md`（V2 契约→V3 Artifact Registry）。
+- **测试修正**：`test_validate_project.py` 路径更新；`test_tex_to_docx_quick.py` 转为 pytest 格式并迁入 `tests/unit/`；删除 `test_evaluation_bridge.py`（core/evaluation/ 已删）。
+- **空目录清理**：`tests/tests/`、`research/P13-3D/inputs/`、`research/P13-3D-R3/.workbuddy/`、`adapters/`。
+- **research/README.md**：新增目录指南。
 
 ### 仓库清理（3 commits，`691bdd0`…`b6540e3`，non-regression 781/11 不变）
 

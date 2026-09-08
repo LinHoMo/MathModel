@@ -45,14 +45,14 @@ Executor（GPT / Claude / DeepSeek / MathModelAgent / 人工均可插拔）。**
 | **P15.0** | CUMCM Benchmark Freeze（36 题 × 7 gold fields，5 脚本，4 基线问题卡，schema + 3 catalog 索引） | ✅ | `8751c45`（tag `p15.0-benchmark-freeze`） |
 | **P15.1** | B0 Alignment Baseline（2024_A B0 首轮 + B0-R2 改进轮，decomposition_coverage = UNRESOLVED） | ✅ | `af1bbd5`（tag `p15.1-b0-baseline`） |
 | **仓库清理** | `.claude/` → `core/skills/syslab/`（101 files）+ `archives/` → `tests/fixtures/` + `package.json` 移除 + `.opencode/` → `docs/architecture/` + P0 测量修复 + P15 研究基础设施 + 仓库审计 | ✅ | `691bdd0`…`b6540e3`（3 commits，non-regression 781/11 不变） |
+| **core/tools 统一** | 7 个子目录内联为独立文件 + 删除子目录（37 files）+ core/evaluation/ 空壳删除 + adapters 迁移 + AI 配置 V2→V3 + 测试修正 | ✅ | `7f29443`…`9199f03`（4 commits，non-regression 774/11） |
 
 ## 当前数字（机器实测，Python 3.12.10）
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **781 passed / 11 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
-| 五轴 Non-regression | **5/5 全绿（15 passed）** | `py -3.12 -m pytest tests/regression -q` |
-| 项目级校验 | **57 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
+| 单元/集成/端到端测试 | **774 passed / 11 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
+| 项目级校验 | **53 通过 / 4 失败 / 0 警告**（4 失败为项目产物问题） | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 
 说明：
@@ -68,26 +68,18 @@ Executor（GPT / Claude / DeepSeek / MathModelAgent / 人工均可插拔）。**
   样例 `tests/fixtures/sample_incomplete_project` 为部分样例，不保证全绿。
 - Windows 本机 `py` 默认解释器（3.14/3.13）安装损坏，统一用 `py -3.12`。
 
-## 下一步（System Hardening P0–P6，见 `HARDENING_PROGRAM.md`）
+## 下一步
 
 ```text
-Architecture Freeze（P0 ✅）→ Contract Freeze（P1 Canonical Schema + 兼容政策）
-→ State Truth + Crash Consistency（P2）→ Deterministic Replay / Concurrency /
-Observability（P3）→ Legacy Isolation（P4）→ Regression Gate（P5 零失败基线 +
-五轴 Non-regression）→ Release Candidate（P6 九条终验收）
+P15.2 Model Construction（真实 B0 执行，需 4 道题原始题面）→
+P15.3 Formal Consistency → P15.4 Computational Solving →
+P15.5 Validation → P15.6 Model→Paper Transmission →
+P15.7 Competition Model Construction Benchmark
 ```
-
-终验收九条：旧能力全部保留 ＋ 新能力全部可用 ＋ 新旧边界明确 ＋ 不存在双真源 ＋
-可以恢复 ＋ 可以重放 ＋ 可以审计 ＋ 可以验证 ＋ 可以长期扩展。
 
 ## 风险与待办
 
-- CUMCM 22 份 rubric 中 13 份 `reference_results` 为空——不凭记忆伪造 GT；每实际
-  解出一题回填一份（见 BASELINE_REPORT §6）。
+- **P15.2 阻塞**：2022_C / 2020_B / 2018_A / 2019_C 四道题缺原始题面+数据附件，需用户提供。
+- CUMCM 22 份 rubric 中 13 份 `reference_results` 为空——不凭记忆伪造 GT。
 - 完整 CUMCM 题面语料未导入（现有仅题名索引 + 1 份合成示例）。
-- 基线暴露的三个 backlog：问题语义未接入选型、方法卡缺种群动力学家族、创新模式卡
-  未被管线消费（BASELINE_REPORT §4/§5）——属能力路线图 P13–P17，不在硬化计划内。
-- `docs/IMPROVEMENT_PLAN.md` 为 V2 时代文档，仅存档不再维护；`docs/METRICS.md`
-  由 `core/tools/metrics.py --write` 机器生成，禁止手改。
-- RC 后方向（不属 Hardening 计划）：Provider 插拔工程化、Runtime/Regression/
-  Provider/Failure-Injection/Recovery/Cross-domain 基准实验线。
+- `core/tools/` 松散文件现在是唯一实现（子目录已删除），AGENTS.md 命令路径无需变更。
