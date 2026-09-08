@@ -1,0 +1,795 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2024A-Q1-rigid-chain",
+  "model_family": {
+    "primary": "multibody_dynamics",
+    "secondary": ["differential_geometry", "kinematic"],
+    "description": "多体刚体链递推 + 阿基米德螺线参数化"
+  },
+  "problem_binding": {
+    "problem_id": "2024_A",
+    "sub_question_id": "Q1",
+    "problem_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+    "problem_card_ref": "research/P15/benchmark/problem_cards/2024_A/card.yaml",
+    "competition_format": "cumcm"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A001",
+      "text": "每节板凳视为刚体，不发生弯曲变形",
+      "source": "reasonable_simplification",
+      "confidence": 0.95,
+      "anchors_to_problem": [],
+      "sub_question_binding": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+      "type": "mechanism_assumption"
+    },
+    {
+      "assumption_id": "A002",
+      "text": "把手与板固连，把手中心位于孔中心，相邻板凳通过把手铰接",
+      "source": "problem_explicit",
+      "confidence": 0.99,
+      "anchors_to_problem": [
+        {"line": 8, "quote": "每节板凳上均有两个孔...相邻两条板凳通过把手连接"}
+      ],
+      "sub_question_binding": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+      "type": "projection"
+    },
+    {
+      "assumption_id": "A003",
+      "text": "忽略空气阻力和板凳质量，仅考虑运动学（不涉及动力学受力分析）",
+      "source": "reasonable_simplification",
+      "confidence": 0.9,
+      "anchors_to_problem": [],
+      "sub_question_binding": ["Q1", "Q2"],
+      "type": "simplification"
+    },
+    {
+      "assumption_id": "A004",
+      "text": "各把手中心均位于等距螺线上（题面明确要求）",
+      "source": "problem_explicit",
+      "confidence": 0.99,
+      "anchors_to_problem": [
+        {"line": 16, "quote": "各把手中心均位于螺线上"}
+      ],
+      "sub_question_binding": ["Q1", "Q2"],
+      "type": "projection"
+    },
+    {
+      "assumption_id": "A005",
+      "text": "龙头前把手沿螺线匀速运动，速度大小恒为1m/s",
+      "source": "problem_explicit",
+      "confidence": 0.99,
+      "anchors_to_problem": [
+        {"line": 16, "quote": "龙头前把手的行进速度始终保持1 m/s"}
+      ],
+      "sub_question_binding": ["Q1", "Q2", "Q4"],
+      "type": "projection"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V001",
+      "name": "x_i",
+      "symbol": "x_i(t)",
+      "definition": "第i个把手中心的x坐标（i=1..224，1为龙头前把手，224为龙尾后把手）",
+      "unit": "m",
+      "dimension": "L",
+      "type": "state",
+      "value_range": {"min": -15.0, "max": 15.0},
+      "sub_question_binding": ["Q1", "Q2", "Q4"],
+      "index_domain": {"i": "1..224", "t": "0..300s"}
+    },
+    {
+      "variable_id": "V002",
+      "name": "y_i",
+      "symbol": "y_i(t)",
+      "definition": "第i个把手中心的y坐标",
+      "unit": "m",
+      "dimension": "L",
+      "type": "state",
+      "value_range": {"min": -15.0, "max": 15.0},
+      "sub_question_binding": ["Q1", "Q2", "Q4"],
+      "index_domain": {"i": "1..224", "t": "0..300s"}
+    },
+    {
+      "variable_id": "V003",
+      "name": "v_i",
+      "symbol": "v_i(t)",
+      "definition": "第i个把手的速率",
+      "unit": "m/s",
+      "dimension": "L/T",
+      "type": "derived",
+      "value_range": {"min": 0.0, "max": 5.0},
+      "sub_question_binding": ["Q1", "Q2", "Q4", "Q5"],
+      "index_domain": {"i": "1..224", "t": "0..300s"}
+    },
+    {
+      "variable_id": "V004",
+      "name": "theta",
+      "symbol": "\\theta(t)",
+      "definition": "龙头前把手在螺线上的极角（从初始位置A点起算，顺时针为正）",
+      "unit": "rad",
+      "dimension": "1",
+      "type": "state",
+      "value_range": {"min": 0.0, "max": 200.0},
+      "sub_question_binding": ["Q1", "Q2"]
+    },
+    {
+      "variable_id": "V005",
+      "name": "R_spiral",
+      "symbol": "R(\\theta)",
+      "definition": "螺线半径作为极角的函数",
+      "unit": "m",
+      "dimension": "L",
+      "type": "derived",
+      "value_range": {"min": 0.0, "max": 15.0},
+      "sub_question_binding": ["Q1", "Q2", "Q3"]
+    },
+    {
+      "variable_id": "V006",
+      "name": "phi_i",
+      "symbol": "\\phi_i(t)",
+      "definition": "第i节板凳的方位角（板的方向角）",
+      "unit": "rad",
+      "dimension": "1",
+      "type": "derived",
+      "value_range": {"min": -3.14159, "max": 3.14159},
+      "sub_question_binding": ["Q1", "Q2"],
+      "index_domain": {"i": "1..223"}
+    },
+    {
+      "variable_id": "V007",
+      "name": "s_i",
+      "symbol": "s_i(t)",
+      "definition": "第i个把手沿螺线的弧长坐标（从龙头前把手起算）",
+      "unit": "m",
+      "dimension": "L",
+      "type": "derived",
+      "value_range": {"min": 0.0, "max": 400.0},
+      "sub_question_binding": ["Q1", "Q2"],
+      "index_domain": {"i": "1..224"}
+    },
+    {
+      "variable_id": "V008",
+      "name": "d_ij",
+      "symbol": "d_{ij}(t)",
+      "definition": "第i个与第j个把手之间的距离（用于碰撞检测）",
+      "unit": "m",
+      "dimension": "L",
+      "type": "derived",
+      "value_range": {"min": 0.0, "max": 30.0},
+      "sub_question_binding": ["Q2"],
+      "index_domain": {"i": "1..224", "j": "1..224", "|i-j|>1": ""}
+    },
+    {
+      "variable_id": "V009",
+      "name": "p_opt",
+      "symbol": "p_{opt}",
+      "definition": "Q3优化的最小螺距",
+      "unit": "m",
+      "dimension": "L",
+      "type": "decision",
+      "value_range": {"min": 0.1, "max": 2.0},
+      "sub_question_binding": ["Q3"]
+    },
+    {
+      "variable_id": "V010",
+      "name": "v_head_max",
+      "symbol": "v_{head,max}",
+      "definition": "Q5优化的龙头最大行进速度",
+      "unit": "m/s",
+      "dimension": "L/T",
+      "type": "decision",
+      "value_range": {"min": 0.5, "max": 3.0},
+      "sub_question_binding": ["Q5"]
+    },
+    {
+      "variable_id": "V011",
+      "name": "omega",
+      "symbol": "\\omega(t)",
+      "definition": "龙头前把手的角速度",
+      "unit": "rad/s",
+      "dimension": "1/T",
+      "type": "derived",
+      "value_range": {"min": 0.0, "max": 2.0},
+      "sub_question_binding": ["Q1", "Q2"]
+    },
+    {
+      "variable_id": "V012",
+      "name": "t_collision",
+      "symbol": "t_{collision}",
+      "definition": "Q2首次碰撞时刻",
+      "unit": "s",
+      "dimension": "T",
+      "type": "derived",
+      "value_range": {"min": 0.0, "max": 600.0},
+      "sub_question_binding": ["Q2"]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "PARM001",
+      "name": "N",
+      "symbol": "N",
+      "definition": "板凳龙总节数",
+      "unit": "节",
+      "value": 223,
+      "source": "problem_given",
+      "sub_question_binding": ["Q1", "Q2", "Q3", "Q4", "Q5"]
+    },
+    {
+      "parameter_id": "PARM002",
+      "name": "L_head",
+      "symbol": "L_{head}",
+      "definition": "龙头板长",
+      "unit": "m",
+      "value": 3.41,
+      "source": "problem_given",
+      "sub_question_binding": ["Q1", "Q2", "Q4"]
+    },
+    {
+      "parameter_id": "PARM003",
+      "name": "L_body",
+      "symbol": "L_{body}",
+      "definition": "龙身和龙尾板长",
+      "unit": "m",
+      "value": 2.20,
+      "source": "problem_given",
+      "sub_question_binding": ["Q1", "Q2", "Q4"]
+    },
+    {
+      "parameter_id": "PARM004",
+      "name": "d_offset",
+      "symbol": "d_{offset}",
+      "definition": "孔中心距最近板头的距离",
+      "unit": "m",
+      "value": 0.275,
+      "source": "problem_given",
+      "sub_question_binding": ["Q1", "Q2", "Q4"]
+    },
+    {
+      "parameter_id": "PARM005",
+      "name": "W",
+      "symbol": "W",
+      "definition": "板凳板宽",
+      "unit": "m",
+      "value": 0.30,
+      "source": "problem_given",
+      "sub_question_binding": ["Q2"]
+    },
+    {
+      "parameter_id": "PARM006",
+      "name": "p_in",
+      "symbol": "p_{in}",
+      "definition": "盘入螺距（Q1/Q2）",
+      "unit": "m",
+      "value": 0.55,
+      "source": "problem_given",
+      "sub_question_binding": ["Q1", "Q2"]
+    },
+    {
+      "parameter_id": "PARM007",
+      "name": "v0",
+      "symbol": "v_0",
+      "definition": "龙头前把手行进速度",
+      "unit": "m/s",
+      "value": 1.0,
+      "source": "problem_given",
+      "sub_question_binding": ["Q1", "Q2", "Q4"]
+    },
+    {
+      "parameter_id": "PARM008",
+      "name": "R_A",
+      "symbol": "R_A",
+      "definition": "初始时刻龙头前把手（第16圈A点）的螺线半径",
+      "unit": "m",
+      "value": 8.8,
+      "source": "derived",
+      "sub_question_binding": ["Q1", "Q2"]
+    },
+    {
+      "parameter_id": "PARM009",
+      "name": "b_spiral",
+      "symbol": "b",
+      "definition": "阿基米德螺线参数（b = p/(2π)）",
+      "unit": "m/rad",
+      "value": 0.08754,
+      "source": "derived",
+      "sub_question_binding": ["Q1", "Q2", "Q3"]
+    },
+    {
+      "parameter_id": "PARM010",
+      "name": "R_turn",
+      "symbol": "R_{turn}",
+      "definition": "调头空间半径（直径9m）",
+      "unit": "m",
+      "value": 4.5,
+      "source": "problem_given",
+      "sub_question_binding": ["Q3", "Q4"]
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O001",
+      "type": "simulate",
+      "expression": "\\text{求解 } \\{x_i(t), y_i(t), v_i(t)\\}_{i=1}^{224}, t \\in [0, 300]\\text{s}",
+      "variables_refs": ["V001", "V002", "V003"],
+      "sub_question_binding": ["Q1"],
+      "clarity_score": {
+        "direction_explicit": true,
+        "expression_explicit": true,
+        "score": 2
+      },
+      "description": "Q1: 正向仿真223节板凳龙0-300s每秒各把手位置和速度"
+    },
+    {
+      "objective_id": "O002",
+      "type": "find",
+      "expression": "t_{collision} = \\min\\{t : \\exists_{i<j, |i-j|>1} d_{ij}(t) < W\\}",
+      "variables_refs": ["V008", "V012"],
+      "sub_question_binding": ["Q2"],
+      "clarity_score": {
+        "direction_explicit": true,
+        "expression_explicit": true,
+        "score": 2
+      },
+      "description": "Q2: 确定首次碰撞时刻"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C001",
+      "type": "equality",
+      "expression": "R(\\theta) = R_A - b\\cdot\\theta \\quad (\\text{顺时针盘入，半径递减})",
+      "variables_refs": ["V004", "V005"],
+      "parameters_refs": ["PARM008", "PARM009"],
+      "source": "geometric",
+      "sub_question_binding": ["Q1", "Q2"],
+      "description": "阿基米德等距螺线方程（龙头轨迹约束）"
+    },
+    {
+      "constraint_id": "C002",
+      "type": "equality",
+      "expression": "\\sqrt{(x_i - x_{i-1})^2 + (y_i - y_{i-1})^2} = \\ell_i, \\quad \\ell_1 = L_{head} - 2d_{offset}, \\ell_{i>1} = L_{body} - 2d_{offset}",
+      "variables_refs": ["V001", "V002"],
+      "parameters_refs": ["PARM002", "PARM003", "PARM004"],
+      "source": "physical_law",
+      "sub_question_binding": ["Q1", "Q2", "Q4"],
+      "description": "相邻把手间距守恒（刚体约束，板内孔间距）"
+    },
+    {
+      "constraint_id": "C003",
+      "type": "equality",
+      "expression": "\\|\\dot{\\mathbf{r}}_1(t)\\| = v_0 = 1.0 \\text{ m/s}",
+      "variables_refs": ["V003"],
+      "parameters_refs": ["PARM007"],
+      "source": "problem",
+      "sub_question_binding": ["Q1", "Q2", "Q4"],
+      "description": "龙头前把手匀速约束"
+    },
+    {
+      "constraint_id": "C004",
+      "type": "inequality",
+      "expression": "d_{ij}(t) \\geq W, \\quad \\forall_{i<j, |i-j|>1}",
+      "variables_refs": ["V008"],
+      "parameters_refs": ["PARM005"],
+      "source": "physical_law",
+      "sub_question_binding": ["Q2"],
+      "description": "非相邻节不碰撞约束（板宽为安全距离下界）"
+    },
+    {
+      "constraint_id": "C005",
+      "type": "initial",
+      "expression": "\\theta(0) = 0, \\quad R(0) = R_A = 8.8 \\text{ m}",
+      "variables_refs": ["V004", "V005"],
+      "parameters_refs": ["PARM008"],
+      "source": "problem",
+      "sub_question_binding": ["Q1"],
+      "description": "初始条件：龙头位于第16圈A点"
+    },
+    {
+      "constraint_id": "C006",
+      "type": "boundary",
+      "expression": "R(\\theta_{final}) \\geq R_{turn} = 4.5 \\text{ m} \\quad (Q3)",
+      "variables_refs": ["V005"],
+      "parameters_refs": ["PARM010"],
+      "source": "problem",
+      "sub_question_binding": ["Q3"],
+      "description": "调头空间边界约束"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "MECH001",
+      "name": "阿基米德螺线参数化",
+      "description": "龙头前把手沿等距螺线运动，螺线半径随极角线性变化",
+      "type": "geometric",
+      "governing_principle": "等距螺线（阿基米德螺线）：R(θ) = R0 + b·θ，相邻圈径向距离=p",
+      "variables_refs": ["V004", "V005", "V011"],
+      "assumptions_refs": ["A004"],
+      "sub_question_binding": ["Q1", "Q2", "Q3"]
+    },
+    {
+      "mechanism_id": "MECH002",
+      "name": "刚体链运动学递推",
+      "description": "板凳龙视为多节刚体铰接链，后节位置由前节约束递推；各把手均在螺线上",
+      "type": "physical",
+      "governing_principle": "刚体运动学：板的长度不变，相邻把手间距守恒；速度由位置对时间求导得到",
+      "variables_refs": ["V001", "V002", "V003", "V006", "V007"],
+      "assumptions_refs": ["A001", "A002", "A003"],
+      "sub_question_binding": ["Q1", "Q2", "Q4"]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E001",
+      "latex": "R(\\theta) = R_A - b\\theta, \\quad b = \\frac{p_{in}}{2\\pi}",
+      "type": "constitutive",
+      "variables_refs": ["V004", "V005"],
+      "parameters_refs": ["PARM006", "PARM008", "PARM009"],
+      "mechanism_ref": "MECH001",
+      "derivation_trace": {
+        "from_assumptions": ["A004"],
+        "from_mechanisms": ["MECH001"],
+        "from_equations": [],
+        "steps": [
+          "等距螺线定义：相邻圈径向距离=螺距p",
+          "阿基米德螺线标准形式 R(θ)=R0+bθ，其中 b=p/(2π)",
+          "顺时针盘入时半径递减，故取负号"
+        ]
+      },
+      "sub_question_binding": ["Q1", "Q2"],
+      "description": "阿基米德等距螺线参数方程"
+    },
+    {
+      "equation_id": "E002",
+      "latex": "\\mathbf{r}_i(t) = \\mathbf{r}_{i-1}(t) + \\ell_i \\cdot \\hat{\\mathbf{u}}_i(t), \\quad \\hat{\\mathbf{u}}_i = \\frac{\\mathbf{r}_{i-1} - \\mathbf{r}_{i-2}}{\\|\\mathbf{r}_{i-1} - \\mathbf{r}_{i-2}\\|}",
+      "type": "balance",
+      "variables_refs": ["V001", "V002", "V006"],
+      "parameters_refs": ["PARM002", "PARM003", "PARM004"],
+      "mechanism_ref": "MECH002",
+      "derivation_trace": {
+        "from_assumptions": ["A001", "A002"],
+        "from_mechanisms": ["MECH002"],
+        "from_equations": [],
+        "steps": [
+          "刚体假设→板长不变→相邻把手间距=ℓ_i",
+          "铰接假设→后节方向沿前两节连线方向",
+          "递推：已知龙头位置，逐节计算后续把手位置"
+        ]
+      },
+      "sub_question_binding": ["Q1", "Q2"],
+      "description": "刚体链递推方程（后节位置=前节位置+板长×方向单位向量）"
+    },
+    {
+      "equation_id": "E003",
+      "latex": "\\mathbf{v}_i(t) = \\frac{d\\mathbf{r}_i}{dt}, \\quad v_i = \\|\\mathbf{v}_i\\|",
+      "type": "definition",
+      "variables_refs": ["V001", "V002", "V003"],
+      "parameters_refs": [],
+      "mechanism_ref": "MECH002",
+      "derivation_trace": {
+        "from_assumptions": [],
+        "from_mechanisms": ["MECH002"],
+        "from_equations": ["E002"],
+        "steps": [
+          "速度定义为位置对时间的导数",
+          "由E002递推得到位置后，数值微分得到速度"
+        ]
+      },
+      "sub_question_binding": ["Q1", "Q2", "Q4"],
+      "description": "速度定义方程"
+    },
+    {
+      "equation_id": "E004",
+      "latex": "\\frac{d\\theta}{dt} = \\frac{v_0}{\\sqrt{R(\\theta)^2 + b^2}}, \\quad \\omega = \\frac{d\\theta}{dt}",
+      "type": "derived",
+      "variables_refs": ["V004", "V011"],
+      "parameters_refs": ["PARM007", "PARM009"],
+      "mechanism_ref": "MECH001",
+      "derivation_trace": {
+        "from_assumptions": ["A005"],
+        "from_mechanisms": ["MECH001"],
+        "from_equations": ["E001"],
+        "steps": [
+          "螺线弧长元 ds = √(R² + (dR/dθ)²) dθ = √(R² + b²) dθ",
+          "龙头速度 v0 = ds/dt = √(R² + b²) · dθ/dt",
+          "解得角速度 dθ/dt = v0 / √(R² + b²)"
+        ]
+      },
+      "sub_question_binding": ["Q1", "Q2"],
+      "description": "龙头角速度方程（由匀速约束和螺线几何推导）"
+    },
+    {
+      "equation_id": "E005",
+      "latex": "d_{ij}(t) = \\sqrt{(x_i - x_j)^2 + (y_i - y_j)^2}",
+      "type": "definition",
+      "variables_refs": ["V001", "V002", "V008"],
+      "parameters_refs": [],
+      "mechanism_ref": "MECH002",
+      "derivation_trace": {
+        "from_assumptions": [],
+        "from_mechanisms": ["MECH002"],
+        "from_equations": [],
+        "steps": [
+          "欧几里得距离定义：二维平面中两点间距离",
+          "在刚体链运动学框架下，用于碰撞检测的把手间距计算"
+        ]
+      },
+      "sub_question_binding": ["Q2"],
+      "description": "把手间距离定义（碰撞检测用）"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_id": "DEP001",
+      "from_type": "variable",
+      "from_id": "V004",
+      "to_type": "equation",
+      "to_id": "E001",
+      "relation": "feeds",
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "dependency_id": "DEP002",
+      "from_type": "assumption",
+      "from_id": "A001",
+      "to_type": "constraint",
+      "to_id": "C002",
+      "relation": "derives",
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "dependency_id": "DEP003",
+      "from_type": "mechanism",
+      "from_id": "MECH001",
+      "to_type": "equation",
+      "to_id": "E001",
+      "relation": "governs",
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "dependency_id": "DEP004",
+      "from_type": "mechanism",
+      "from_id": "MECH002",
+      "to_type": "equation",
+      "to_id": "E002",
+      "relation": "governs",
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "dependency_id": "DEP005",
+      "from_type": "equation",
+      "from_id": "E002",
+      "to_type": "equation",
+      "to_id": "E003",
+      "relation": "feeds",
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "dependency_id": "DEP006",
+      "from_type": "variable",
+      "from_id": "V001",
+      "to_type": "constraint",
+      "to_id": "C002",
+      "relation": "constrains",
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "dependency_id": "DEP007",
+      "from_type": "parameter",
+      "from_id": "PARM006",
+      "to_type": "equation",
+      "to_id": "E001",
+      "relation": "uses",
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "dependency_id": "DEP008",
+      "from_type": "equation",
+      "from_id": "E001",
+      "to_type": "equation",
+      "to_id": "E004",
+      "relation": "feeds",
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "dependency_id": "DEP009",
+      "from_type": "variable",
+      "from_id": "V008",
+      "to_type": "objective",
+      "to_id": "O002",
+      "relation": "feeds",
+      "sub_question_binding": ["Q2"]
+    },
+    {
+      "dependency_id": "DEP010",
+      "from_type": "constraint",
+      "from_id": "C004",
+      "to_type": "variable",
+      "to_id": "V008",
+      "relation": "constrains",
+      "sub_question_binding": ["Q2"]
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S001",
+      "name": "刚体链递推数值仿真器",
+      "type": "simulation",
+      "method": "时间步进 + 刚体链几何递推 + 数值微分（中心差分）",
+      "parameters": {
+        "dt": 0.01,
+        "output_interval": 1.0,
+        "integration": "analytical_theta + geometric_recursion"
+      },
+      "convergence_criteria": {
+        "rigid_body_constraint_tolerance": 1e-6,
+        "time_step_halving_change_threshold": 0.001
+      },
+      "implementation_ref": "CODE001",
+      "equations_refs": ["E001", "E002", "E003", "E004"],
+      "sub_question_binding": ["Q1", "Q2"]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "EXP001",
+      "method": "Q1正向运动学仿真：0-300s每秒输出224个把手的位置和速度",
+      "parameters": {
+        "time_range": [0, 300],
+        "output_interval": 1.0,
+        "sections_to_report": [1, 2, 52, 102, 152, 202, 224]
+      },
+      "inputs_refs": ["V001", "V002", "V003", "V004"],
+      "outputs": [
+        "result1.xlsx: 224把手×301时刻的位置速度",
+        "论文表1: 6个时刻7个特定节的位置",
+        "论文表2: 6个时刻7个特定节的速度"
+      ],
+      "results": {
+        "status": "computed",
+        "note": "数值结果由代码执行产生，此处为结构实例不填充具体数值"
+      },
+      "run_metadata": {
+        "seed": 42,
+        "repetitions": 5,
+        "latency_seconds": 120.0,
+        "exit_code": 0
+      },
+      "solver_ref": "S001",
+      "sub_question_binding": ["Q1"]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "VAL001",
+      "type": "convergence",
+      "method": "刚体约束守恒验证：逐帧检查相邻把手间距与ℓ_i的相对误差",
+      "results": {
+        "max_relative_error": 1e-7,
+        "threshold": 1e-6
+      },
+      "pass_fail": "pass",
+      "evidence_refs": ["EXP001"],
+      "targets_refs": ["E002", "C002"],
+      "sub_question_binding": ["Q1"]
+    },
+    {
+      "validation_id": "VAL002",
+      "type": "sensitivity",
+      "method": "敏感性分析：板长L_body ±10%对碰撞时刻t_collision的影响",
+      "results": {
+        "L_body_plus_10pct_collision_time": "t+Δt1",
+        "L_body_minus_10pct_collision_time": "t-Δt2",
+        "elasticity_coefficient": 0.15
+      },
+      "pass_fail": "pass",
+      "evidence_refs": ["EXP001"],
+      "targets_refs": ["O002", "V012"],
+      "sub_question_binding": ["Q2"]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL001",
+      "text": "板凳龙各把手的位置由龙头前把手的螺线位置和各节板长通过刚体链递推唯一确定",
+      "type": "interpretation",
+      "evidence_refs": ["EXP001", "VAL001"],
+      "model_refs": ["E002", "MECH002"],
+      "experiment_refs": ["EXP001"],
+      "validation_refs": ["VAL001"],
+      "sub_question_binding": ["Q1"],
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL002",
+      "text": "在螺距55cm、龙头速度1m/s条件下，舞龙队盘入过程中非相邻节会发生碰撞，碰撞时刻由最小把手间距首次小于板宽确定",
+      "type": "result",
+      "evidence_refs": ["EXP001", "VAL002"],
+      "model_refs": ["E005", "C004"],
+      "experiment_refs": ["EXP001"],
+      "validation_refs": ["VAL002"],
+      "sub_question_binding": ["Q2"],
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL003",
+      "text": "增大螺距可增加相邻圈径向距离，从而降低非相邻节碰撞风险并延后碰撞时刻",
+      "type": "recommendation",
+      "evidence_refs": ["VAL002"],
+      "model_refs": ["E001", "C004"],
+      "experiment_refs": [],
+      "validation_refs": ["VAL002"],
+      "sub_question_binding": ["Q2", "Q3"],
+      "status": "supported"
+    }
+  ],
+  "model_graph": {
+    "graph_version": "1.0",
+    "nodes": [
+      {"node_id": "P001", "node_type": "problem", "label": "2024_A 板凳龙闹元宵"},
+      {"node_id": "Q1", "node_type": "subquestion", "label": "Q1 正向运动学仿真"},
+      {"node_id": "A001", "node_type": "assumption", "label": "板为刚体"},
+      {"node_id": "A004", "node_type": "assumption", "label": "把手在螺线上"},
+      {"node_id": "V001", "node_type": "variable", "label": "x_i(t) 把手x坐标"},
+      {"node_id": "V004", "node_type": "variable", "label": "θ(t) 极角"},
+      {"node_id": "MECH001", "node_type": "mechanism", "label": "阿基米德螺线参数化"},
+      {"node_id": "MECH002", "node_type": "mechanism", "label": "刚体链运动学递推"},
+      {"node_id": "E001", "node_type": "equation", "label": "螺线参数方程"},
+      {"node_id": "E002", "node_type": "equation", "label": "刚体链递推方程"},
+      {"node_id": "C002", "node_type": "constraint", "label": "间距守恒约束"},
+      {"node_id": "O001", "node_type": "objective", "label": "Q1仿真目标"},
+      {"node_id": "S001", "node_type": "solver", "label": "递推数值仿真器"},
+      {"node_id": "EXP001", "node_type": "experiment", "label": "Q1正向仿真"},
+      {"node_id": "VAL001", "node_type": "validation", "label": "刚体约束守恒验证"},
+      {"node_id": "CL001", "node_type": "claim", "label": "位置由递推唯一确定"}
+    ],
+    "edges": [
+      {"source_node": "P001", "target_node": "Q1", "edge_type": "binds_to", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "A004", "target_node": "P001", "edge_type": "cites_problem", "evidence_ref": null, "confidence": 0.99},
+      {"source_node": "A001", "target_node": "C002", "edge_type": "derives", "evidence_ref": null, "confidence": 0.95},
+      {"source_node": "V004", "target_node": "E001", "edge_type": "references_variable", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "E001", "target_node": "MECH001", "edge_type": "governed_by", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "E002", "target_node": "MECH002", "edge_type": "governed_by", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "C002", "target_node": "V001", "edge_type": "constrains", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "E002", "target_node": "O001", "edge_type": "defines", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "O001", "target_node": "S001", "edge_type": "solved_by", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "S001", "target_node": "EXP001", "edge_type": "produces", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "VAL001", "target_node": "E002", "edge_type": "validates", "evidence_ref": null, "confidence": 1.0},
+      {"source_node": "CL001", "target_node": "EXP001", "edge_type": "evidenced_by", "evidence_ref": null, "confidence": 0.9},
+      {"source_node": "CL001", "target_node": "VAL001", "edge_type": "evidenced_by", "evidence_ref": null, "confidence": 0.9}
+    ]
+  },
+  "modeling_trace": {
+    "trace_version": "1.0",
+    "generated_at": "2026-09-08T10:00:00Z",
+    "agent_identity": "reference_exemplar",
+    "model_version": "N/A",
+    "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+    "prompt_version": "model_ir_spec-v1.0",
+    "skill_version": "N/A",
+    "commit_hash": "reference",
+    "generation_order": [
+      {"node_id": "A001", "order_index": 1, "timestamp": "2026-09-08T10:00:01Z"},
+      {"node_id": "A004", "order_index": 2, "timestamp": "2026-09-08T10:00:02Z"},
+      {"node_id": "V004", "order_index": 3, "timestamp": "2026-09-08T10:00:03Z"},
+      {"node_id": "MECH001", "order_index": 4, "timestamp": "2026-09-08T10:00:04Z"},
+      {"node_id": "E001", "order_index": 5, "timestamp": "2026-09-08T10:00:05Z"},
+      {"node_id": "V001", "order_index": 6, "timestamp": "2026-09-08T10:00:06Z"},
+      {"node_id": "MECH002", "order_index": 7, "timestamp": "2026-09-08T10:00:07Z"},
+      {"node_id": "E002", "order_index": 8, "timestamp": "2026-09-08T10:00:08Z"},
+      {"node_id": "C002", "order_index": 9, "timestamp": "2026-09-08T10:00:09Z"},
+      {"node_id": "O001", "order_index": 10, "timestamp": "2026-09-08T10:00:10Z"}
+    ],
+    "version_history": [
+      {
+        "version_number": 1,
+        "commit_hash": "reference",
+        "changed_nodes": ["ALL"],
+        "change_summary": "初始版本：Q1运动学建模完整实例",
+        "timestamp": "2026-09-08T10:00:00Z"
+      }
+    ]
+  }
+}

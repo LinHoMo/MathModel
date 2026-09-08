@@ -1,0 +1,96 @@
+{
+  "schema_version": 3,
+  "project": "p151-2024a-r2",
+  "state": {
+    "problem": {
+      "status": "validated"
+    },
+    "questions": {
+      "Q001": {
+        "status": "validated",
+        "models": [
+          "M001"
+        ],
+        "experiments": [
+          "E001"
+        ],
+        "claims": [
+          "C001"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-08T02:01:06+00:00"
+      }
+    },
+    "models": {
+      "status": "validated",
+      "candidates": [
+        "M001"
+      ],
+      "selected": [
+        "M001"
+      ]
+    },
+    "experiments": {
+      "status": "completed",
+      "by_question": {
+        "Q001": [
+          "E001"
+        ]
+      }
+    },
+    "evidence": {
+      "status": "validated",
+      "graph_version": 1,
+      "claims_supported": 1,
+      "claims_total": 1,
+      "coverage_ratio": 1.0
+    },
+    "narrative": {
+      "status": "completed"
+    },
+    "paper": {
+      "status": "draft",
+      "sections_written": 5,
+      "sections_total": 5
+    },
+    "review": {
+      "status": "pending",
+      "rounds_completed": 0,
+      "verdict": null
+    }
+  },
+  "workflow": {
+    "current_nodes": [],
+    "completed_nodes": [
+      "problem_analysis",
+      "literature_search",
+      "model_selection",
+      "model_construction",
+      "model_critique",
+      "assumption_check",
+      "experiment_design",
+      "experiment@Q001",
+      "experiment_critique@Q001",
+      "evidence_build",
+      "evidence_gate",
+      "quality_evaluation",
+      "research_direction",
+      "paper_projection",
+      "paper_sections@Q001",
+      "paper_review"
+    ],
+    "blocked_nodes": [],
+    "waiting_approval": [],
+    "retries": {},
+    "notes": [
+      "mock_execution: 所有节点由 mock_llm_executor_v1 完成"
+    ]
+  },
+  "run": {
+    "phase": "completed",
+    "started_at": "2026-09-08T02:01:06+00:00",
+    "updated_at": "2026-09-08T02:01:06+00:00"
+  }
+}

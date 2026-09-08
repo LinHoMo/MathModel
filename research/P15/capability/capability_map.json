@@ -1,0 +1,233 @@
+{
+  "version": "1.0",
+  "date": "2026-09-08",
+  "source": "research/P15/capability/CAPABILITY_MAP.md",
+  "principles": [
+    "Method correctness != Model correctness",
+    "Capability != Observable behavior != Failure mode != Measurement instrument != Evidence"
+  ],
+  "status_enum": ["MEASURED", "PARTIALLY_MEASURED", "UNMEASURED", "MEASUREMENT_INVALID"],
+  "confidence_enum": ["HIGH", "MEDIUM", "LOW"],
+  "generalization_enum": ["CROSS_PROBLEM_VALIDATED", "SINGLE_PROBLEM", "UNTESTED"],
+  "research_transfer_enum": ["DIRECTLY_TRANSFERABLE", "NEEDS_ADAPTATION", "COMPETITION_SPECIFIC"],
+  "capabilities": [
+    {
+      "id": "CAP-01",
+      "name": "Problem Understanding",
+      "definition": "正确解析题目文本、数据附件、隐含约束与交付要求",
+      "observable_behaviors": [
+        "产出结构化 problem_analysis artifact",
+        "能指认题面中每个数字/参数的来源和物理意义",
+        "能识别题面中的歧义点并显式标注",
+        "交付物格式要求被正确提取"
+      ],
+      "failure_modes": ["FM-PA-003", "FM-ME-003"],
+      "measurement_instrument": "problem-parser (legacy, qualitative); planned: required_deliverables extraction hit rate",
+      "evidence_type": ["artifact", "human_judgment"],
+      "current_status": "UNMEASURED",
+      "confidence": "LOW",
+      "generalization_status": "UNTESTED",
+      "research_transfer_status": "NEEDS_ADAPTATION"
+    },
+    {
+      "id": "CAP-02",
+      "name": "Problem Alignment",
+      "definition": "子问题分解覆盖率 + 题目要求到模型元素的强制映射",
+      "observable_behaviors": [
+        "产出的子问题列表覆盖题目全部子问",
+        "每个子问题能指认模型中承载它的变量/方程/约束",
+        "无虚对齐点",
+        "优化目标与题目要求一致"
+      ],
+      "failure_modes": ["FM-PA-001", "FM-PA-002", "FM-PA-003"],
+      "measurement_instrument": "e2e_metrics.py: decomposition_coverage; model_construction.py: alignment dimension",
+      "evidence_type": ["artifact", "run_manifest", "replay"],
+      "current_status": "MEASURED",
+      "confidence": "HIGH",
+      "generalization_status": "CROSS_PROBLEM_VALIDATED",
+      "research_transfer_status": "NEEDS_ADAPTATION"
+    },
+    {
+      "id": "CAP-03",
+      "name": "Model Construction",
+      "definition": "从问题到数学模型的完整构造：变量到参数到假设到目标到约束到机理到方程",
+      "observable_behaviors": [
+        "所有关键变量已声明并区分类型",
+        "所有参数已声明来源与取值",
+        "假设集显式合理可检验",
+        "目标函数明确且与题目一致",
+        "约束集完备",
+        "机理选择与问题物理一致",
+        "方程结构完整"
+      ],
+      "failure_modes": ["FM-MC-001", "FM-MC-002", "FM-MC-003", "FM-MC-004"],
+      "measurement_instrument": "model_construction.py (structural + mathematical + alignment); model_construction_checklist.md",
+      "evidence_type": ["artifact", "run_manifest", "human_judgment", "replay"],
+      "current_status": "MEASURED",
+      "confidence": "HIGH",
+      "generalization_status": "CROSS_PROBLEM_VALIDATED",
+      "research_transfer_status": "DIRECTLY_TRANSFERABLE"
+    },
+    {
+      "id": "CAP-04",
+      "name": "Formal Consistency",
+      "definition": "方程推导正确性、量纲一致、符号/索引/边界正确",
+      "observable_behaviors": [
+        "所有方程引用的参数已声明",
+        "方程两边量纲一致",
+        "符号使用一致",
+        "索引范围正确",
+        "边界条件正确声明",
+        "约束方向正确"
+      ],
+      "failure_modes": ["FM-FC-001", "FM-FC-002", "FM-FC-003", "FM-FC-004"],
+      "measurement_instrument": "model_construction.py: mathematical dimension (error taxonomy); no automated checker yet",
+      "evidence_type": ["artifact", "human_judgment", "run_manifest"],
+      "current_status": "PARTIALLY_MEASURED",
+      "confidence": "MEDIUM",
+      "generalization_status": "SINGLE_PROBLEM",
+      "research_transfer_status": "DIRECTLY_TRANSFERABLE"
+    },
+    {
+      "id": "CAP-05",
+      "name": "Method Selection",
+      "definition": "选择正确的模型家族和具体方法，独立于Problem Alignment",
+      "observable_behaviors": [
+        "选择的模型家族与题目gold family有交集",
+        "方法选择有明确依据",
+        "能区分方法名正确和方法适合问题",
+        "备选方法有对比分析"
+      ],
+      "failure_modes": ["FM-MS-001", "FM-MS-002"],
+      "measurement_instrument": "e2e_metrics.py: method_selection (top-3 GT hit); FAMILY_MISMATCH binary check",
+      "evidence_type": ["artifact", "run_manifest", "replay"],
+      "current_status": "MEASURED",
+      "confidence": "HIGH",
+      "generalization_status": "CROSS_PROBLEM_VALIDATED",
+      "research_transfer_status": "DIRECTLY_TRANSFERABLE"
+    },
+    {
+      "id": "CAP-06",
+      "name": "Solving",
+      "definition": "选择合适的求解算法，处理可解性，代码执行确定性",
+      "observable_behaviors": [
+        "求解算法与模型类型匹配",
+        "求解步长与参数口径一致",
+        "代码可执行无崩溃",
+        "多seed结果可复现",
+        "数值结果收敛",
+        "结果在物理合理范围内"
+      ],
+      "failure_modes": ["FM-SV-001", "FM-SV-002", "FM-SV-003"],
+      "measurement_instrument": "e2e_metrics.py: experiment_validity; P14 replay match; solving strategy has no independent evaluator",
+      "evidence_type": ["artifact", "run_manifest", "replay"],
+      "current_status": "PARTIALLY_MEASURED",
+      "confidence": "MEDIUM",
+      "generalization_status": "CROSS_PROBLEM_VALIDATED",
+      "research_transfer_status": "DIRECTLY_TRANSFERABLE"
+    },
+    {
+      "id": "CAP-07",
+      "name": "Validation",
+      "definition": "模型验证充分性：对照基线、灵敏度分析、残差分析、交叉验证、极限检验",
+      "observable_behaviors": [
+        "至少1个对照基线",
+        "至少1个灵敏度分析",
+        "至少1个极限检验",
+        "验证目标与模型主张对应",
+        "残差分析/交叉验证"
+      ],
+      "failure_modes": ["FM-VA-001", "FM-VA-002", "FM-VA-003"],
+      "measurement_instrument": "e2e_metrics.py: experiment_validity + validation_reliability; P14 Evidence-to-Claim chain",
+      "evidence_type": ["artifact", "run_manifest", "human_judgment", "replay"],
+      "current_status": "MEASURED",
+      "confidence": "HIGH",
+      "generalization_status": "CROSS_PROBLEM_VALIDATED",
+      "research_transfer_status": "DIRECTLY_TRANSFERABLE"
+    },
+    {
+      "id": "CAP-08",
+      "name": "Sensitivity-Robustness",
+      "definition": "参数扰动下的结论稳定性、鲁棒性边界、不确定性传播",
+      "observable_behaviors": [
+        "有明确的灵敏度分析计划",
+        "扰动了敏感参数",
+        "不确定性从上游传播到下游",
+        "报告了鲁棒性边界",
+        "多seed下结论稳定"
+      ],
+      "failure_modes": ["FM-VA-002", "FM-MC-003"],
+      "measurement_instrument": "e2e_metrics.py robustness tags (presence only); no independent quality score",
+      "evidence_type": ["artifact", "run_manifest", "human_judgment"],
+      "current_status": "PARTIALLY_MEASURED",
+      "confidence": "LOW",
+      "generalization_status": "SINGLE_PROBLEM",
+      "research_transfer_status": "DIRECTLY_TRANSFERABLE"
+    },
+    {
+      "id": "CAP-09",
+      "name": "Evidence",
+      "definition": "结果可追溯到已验证的实验，每个数值有明确来源",
+      "observable_behaviors": [
+        "每个数值可追溯到具体Execution artifact",
+        "Evidence到Result到Execution到Spec哈希链完整",
+        "证据类型明确",
+        "无合成证据",
+        "随机种子固定，多seed有均值与标准差"
+      ],
+      "failure_modes": ["FM-EV-002", "FM-EV-003"],
+      "measurement_instrument": "P14 p14_integrity_gate.py (G0-G7); hash_chain.verify_chain(); Artifact Registry",
+      "evidence_type": ["artifact", "run_manifest", "replay"],
+      "current_status": "PARTIALLY_MEASURED",
+      "confidence": "MEDIUM",
+      "generalization_status": "SINGLE_PROBLEM",
+      "research_transfer_status": "DIRECTLY_TRANSFERABLE"
+    },
+    {
+      "id": "CAP-10",
+      "name": "Claim Support",
+      "definition": "每个结论/主张有可追溯的Evidence支持，区分supported/refuted/unresolved",
+      "observable_behaviors": [
+        "每个Claim绑定至少1条Evidence",
+        "Claim判定为supported或refuted",
+        "无unsupported claim",
+        "Claim类型与模型结构相容",
+        "Claim-Support Gap可量化"
+      ],
+      "failure_modes": ["FM-EV-001"],
+      "measurement_instrument": "P14 p14_integrity_gate.py (Claim判定); e2e_metrics.py: validation_reliability; P15 FM-CS all empty (invalid)",
+      "evidence_type": ["artifact", "human_judgment", "run_manifest"],
+      "current_status": "MEASUREMENT_INVALID",
+      "confidence": "LOW",
+      "generalization_status": "UNTESTED",
+      "research_transfer_status": "DIRECTLY_TRANSFERABLE"
+    },
+    {
+      "id": "CAP-11",
+      "name": "Communication",
+      "definition": "模型构件到论文的结构传输、内容忠实度、无未授权变异",
+      "observable_behaviors": [
+        "模型构件在论文中有对应章节",
+        "论文数值与Result Artifact一致",
+        "结构传输完整",
+        "无critical mutation",
+        "论文格式符合规范"
+      ],
+      "failure_modes": ["FM-EV-001"],
+      "measurement_instrument": "P13-3D STC v2 + Fidelity v2; r32_eval.py; Blind PQ",
+      "evidence_type": ["artifact", "human_judgment", "run_manifest"],
+      "current_status": "MEASURED",
+      "confidence": "MEDIUM",
+      "generalization_status": "CROSS_PROBLEM_VALIDATED",
+      "research_transfer_status": "NEEDS_ADAPTATION"
+    }
+  ],
+  "summary": {
+    "total_capabilities": 11,
+    "measured": 5,
+    "partially_measured": 3,
+    "unmeasured": 1,
+    "measurement_invalid": 1,
+    "measurement_coverage_pct": 45
+  }
+}

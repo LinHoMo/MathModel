@@ -1,0 +1,100 @@
+# Problem Card: 2018_A — 多层织物热传导
+# 生成日期: 2026-09-08
+# 状态: SKELETON（骨架，题面未验证）
+# 来源: CUMCM-Bench-v2.json 条目
+
+problem_id: 2018_A
+title: UNKNOWN  # 等待题面验证（俗称"多层服装热传导/防火服"）
+
+official_source:
+  url: UNKNOWN
+  publisher: 全国大学生数学建模竞赛组委会
+  publication_date: "2018-09"
+  retrieval_date: "2026-09-08"
+  text_sha256: PENDING
+  authenticity_status: pending
+  local_text_path: problem_statement.txt  # 本地已存，待验证
+
+family:
+  - heat_transfer  # 热传导
+  - PDE  # 偏微分方程
+  - parameter_inversion  # 参数反演
+  - optimization  # 优化设计
+  # CUMCM-Bench 标签: 热传导/温度场
+
+sub_questions:
+  - id: Q1
+    desc: "建立多层织物热传导模型"
+    type: PDE_modeling
+    required_deliverables: [PDE热传导模型]
+    depends_on: []
+  - id: Q2
+    desc: "确定皮肤烧伤阈值条件"
+    type: parameter_inversion
+    required_deliverables: [参数反演算法]
+    depends_on: [Q1]
+  - id: Q3
+    desc: "优化服装设计参数"
+    type: design_optimization
+    required_deliverables: [优化设计, 灵敏度分析]
+    depends_on: [Q1, Q2]
+
+allowed_model_families:
+  - heat_equation_PDE  # 热传导方程（抛物型PDE）
+  - finite_difference  # 有限差分法求解
+  - parameter_inversion  # 参数反演（反问题）
+  - numerical_optimization  # 数值优化（Q3）
+  # 具体方法选择需题面验证后细化
+
+acceptable_solution_variants: UNKNOWN
+
+key_variables:
+  - temperature  # 温度（时空分布）
+  - thickness  # 各层厚度
+  - thermal_conductivity  # 热传导系数
+  - burn_threshold  # 皮肤烧伤阈值（温度/时间）
+  # 具体变量名和取值需题面验证
+
+key_constraints:
+  - 热传导方程（傅里叶定律）
+  - 多层界面连续性（温度/热流连续）
+  - 边界条件（高温外边界/皮肤内边界）
+  # 具体约束需题面验证
+
+evaluation_targets:
+  - 温度场精度（与实验数据对比）
+  - 参数反演精度（反演参数与真值误差）
+  - 设计优化合理性（最小厚度/最轻重量）
+
+known_failure_modes:
+  - FM-MC-001  # wrong_mechanism（非PDE方法处理热传导）
+  - FM-FC-002  # symbol_inconsistency
+  - FM-SV-001  # infeasible_solution（PDE数值求解）
+  - FM-VA-001  # missing_validation
+  # CUMCM-Bench 旧标签: FM-MC-03, FM-FC-02, FM-SV-01, FM-VA-01
+
+known_invalid_model_patterns: UNKNOWN
+
+forbidden_misinterpretations: UNKNOWN
+
+validation_expectations:
+  - PDE数值收敛性（网格加密收敛）
+  - 界面连续性验证（温度/热流在层间连续）
+  - 参数反演稳定性（扰动数据下反演结果稳定）
+  - 灵敏度分析（Q3设计参数对结果的影响）
+
+common_human_errors: UNKNOWN
+common_llm_errors:
+  - 忽略多层界面的热流连续条件
+  - 边界条件设定错误（恒温vs热流）
+  - 参数反演问题不适定（未加正则化）
+  - 用稳态热传导处理瞬态问题
+
+evidence_sources:
+  - benchmark: research/P15/benchmark/CUMCM-Bench-v2.json
+  - problem_text: research/P15/benchmark/problem_cards/2018_A/problem_statement.txt（待验证）
+
+card_version: "1.0-skeleton"
+card_date: "2026-09-08"
+card_status: skeleton
+notes: "骨架卡片。input_file=null，题面文本未验证。子问题描述、变量、约束来自 CUMCM-Bench-v2.json 标签，需在题面验证后细化。"

@@ -1,0 +1,1873 @@
+{
+  "registry_version": 3,
+  "project": "p151-2024a-r2",
+  "updated_at": "2026-09-08T02:04:43Z",
+  "counters": {
+    "problem": 1,
+    "question": 1,
+    "decision": 2,
+    "model": 1,
+    "assumption": 2,
+    "experiment": 1,
+    "result": 1,
+    "figure": 1,
+    "claim": 1,
+    "paper_section": 5
+  },
+  "artifacts": {
+    "P001": {
+      "schema_version": "3.1",
+      "artifact_id": "P001",
+      "type": "problem",
+      "version": 1,
+      "status": "active",
+      "title": "赛题：板凳龙闹元宵",
+      "question": "",
+      "created_by": "problem_analysis",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "text": "2024 年高教社杯全国大学生数学建模竞赛题目\n（请先阅读\"全国大学生数学建模竞赛论文格式规范\"）\n\nA 题 \"板凳龙\" 闹元宵\n\n\"板凳龙\"，又称\"盘龙\"，是浙闽地区的传统地方民俗文化活动。人们将少则几十条，多则上百条的板凳首尾相连，形成蜿蜒曲折的板凳龙。盘龙时，龙头在前领头，龙身和龙尾相随盘旋，整体呈圆盘状。一般来说，在舞龙队能够自如地盘入和盘出的前提下，盘龙所需要的面积越小、行进速度越快，则观赏性越好。\n\n某板凳龙由 223 节板凳组成，其中第 1 节为龙头，后面 221 节为龙身，最后 1 节为龙尾。龙头的板长为 341 cm，龙身和龙尾的板长均为 220 cm，所有板凳的板宽均为 30 cm。每节板凳上均有两个孔，孔径（孔的直径）为 5.5 cm，孔的中心距离最近的板头 27.5 cm（见图 1 和图 2）。相邻两条板凳通过把手连接（见图 3）。\n\n图 1 龙头的俯视图\n图 2 龙身和龙尾的俯视图\n图 3 板凳的正视图\n\n请建立数学模型，解决以下问题：\n\n问题 1 舞龙队沿螺距为 55 cm 的等距螺线顺时针盘入，各把手中心均位于螺线上。龙头前把手的行进速度始终保持 1 m/s。初始时，龙头位于螺线第 16 圈 A 点处（见图 4）。请给出从初始时刻到 300 s 为止，每秒整个舞龙队的位置和速度（指龙头、龙身和龙尾各前把手及龙尾后把手中心的位置和速度，下同），将结果保存到文件 result1.xlsx 中（模板文件见附件，其中\"龙尾（后）\"表示龙尾后把手，其余的均是前把手，结果保留 6 位小数，下同）。同时在论文中给出 0 s、60 s、120 s、180 s、240 s、300 s 时，龙头前把手、龙头后面第 1、51、101、151、201 节龙身前把手和龙尾后把手的位置和速度（格式见表 1 和表 2）。\n\n图 4 盘入螺线示意图\n\n表 1 论文中位置结果的格式\n|  | 0 s | 60 s | 120 s | 180 s | 240 s | 300 s |\n| --- | --- | --- | --- | --- | --- | --- |\n| 龙头 x (m) |  |  |  |  |  |  |\n| 龙头 y (m) |  |  |  |  |  |  |\n| 第 1 节龙身 x (m) |  |  |  |  |  |  |\n| 第 1 节龙身 y (m) |  |  |  |  |  |  |\n| 第 51 节龙身 x (m) |  |  |  |  |  |  |\n| 第 51 节龙身 y (m) |  |  |  |  |  |  |\n| 第 101 节龙身 x (m) |  |  |  |  |  |  |\n| 第 101 节龙身 y (m) |  |  |  |  |  |  |\n| 第 151 节龙身 x (m) |  |  |  |  |  |  |\n| 第 151 节龙身 y (m) |  |  |  |  |  |  |\n| 第 201 节龙身 x (m) |  |  |  |  |  |  |\n| 第 201 节龙身 y (m) |  |  |  |  |  |  |\n| 龙尾（后）x (m) |  |  |  |  |  |  |\n| 龙尾（后）y (m) |  |  |  |  |  |  |\n\n表 2 论文中速度结果的格式\n|  | 0 s | 60 s | 120 s | 180 s | 240 s | 300 s |\n| --- | --- | --- | --- | --- | --- | --- |\n| 龙头 (m/s) |  |  |  |  |  |  |\n| 第1节龙身 (m/s) |  |  |  |  |  |  |\n| 第51节龙身 (m/s) |  |  |  |  |  |  |\n| 第101节龙身 (m/s) |  |  |  |  |  |  |\n| 第151节龙身 (m/s) |  |  |  |  |  |  |\n| 第201节龙身 (m/s) |  |  |  |  |  |  |\n| 龙尾（后）(m/s) |  |  |  |  |  |  |\n\n问题 2 舞龙队沿问题 1 设定的螺线盘入，请确定舞龙队盘入的终止时刻，使得板凳之间不发生碰撞（即舞龙队不能再继续盘入的时间），并给出此时舞龙队的位置和速度，将结果存放到文件 result2.xlsx 中（模板文件见附件）。同时在论文中给出此时龙头前把手、龙头后面第 1、51、101、151、201 条龙身前把手和龙尾后把手的位置和速度。\n\n问题 3 从盘入到盘出，舞龙队将由顺时针盘入调头切换为逆时针盘出，这需要一定的调头空间。若调头空间是以螺线中心为圆心、直径为 9 m 的圆形区域（见图 5），请确定最小螺距，使得龙头前把手能够沿着相应的螺线盘入到调头空间的边界。\n\n图 5 调头空间示意图\n\n问题 4 盘入螺线的螺距为 1.7 m，盘出螺线与盘入螺线关于螺线中心呈中心对称，舞龙队在问题 3 设定的调头空间内完成调头，调头路径是由两段圆弧相切连接而成的 S 形曲线，前一段圆弧的半径是后一段的 2 倍，它与盘入、盘出螺线均相切。能否调整圆弧，仍保持各部分相切，使得调头曲线变短？\n龙头前把手的行进速度始终保持 1 m/s。以调头开始时间为零时刻，给出从 -100 s 开始到 100 s 为止，每秒舞龙队的位置和速度，将结果存放到文件 result4.xlsx 中（模板文件见附件）。同时在论文中给出 -100 s、-50 s、0 s、50 s、100 s 时，龙头前把手、龙头后面第 1、51、101、151、201 节龙身前把手和龙尾后把手的位置和速度。\n\n问题 5 舞龙队沿问题 4 设定的路径行进，龙头行进速度保持不变，请确定龙头的最大行进速度，使得舞龙队各把手的速度均不超过 2 m/s。\n\n附件：result1.xlsx 模板、result2.xlsx 模板、result4.xlsx 模板\n",
+        "source": "CUMCM 2024 A 题（板凳龙闹元宵）",
+        "competition": "cumcm",
+        "problem_id": "2024_A",
+        "text_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+        "word_count": 2508
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "problem_analysis",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "problem_analysis",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "problem_analysis",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "Q001": {
+      "schema_version": "3.1",
+      "artifact_id": "Q001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "子问题分解（Q1-Q5）",
+      "question": "",
+      "created_by": "problem_analysis",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "sub_questions": [
+          {
+            "id": "Q1",
+            "text": "舞龙队沿螺距为55cm的等距螺线顺时针盘入，龙头前把手速度1m/s，初始位于第16圈A点。给出从初始时刻到300s为止，每秒整个舞龙队的位置和速度，保存到result1.xlsx。",
+            "type": "forward_simulation",
+            "depends_on": []
+          },
+          {
+            "id": "Q2",
+            "text": "沿Q1设定的螺线盘入，确定盘入终止时刻使得板凳之间不发生碰撞，给出此时舞龙队的位置和速度，保存到result2.xlsx。",
+            "type": "collision_detection",
+            "depends_on": [
+              "Q1"
+            ]
+          },
+          {
+            "id": "Q3",
+            "text": "调头空间为以螺线中心为圆心、直径9m的圆形区域。确定最小螺距，使得龙头前把手能够沿着相应的螺线盘入到调头空间的边界。",
+            "type": "parameter_optimization",
+            "depends_on": [
+              "Q1"
+            ]
+          },
+          {
+            "id": "Q4",
+            "text": "盘入螺距1.7m，盘出螺线与盘入关于中心对称，调头路径由两段圆弧相切连接成S形（前弧半径=后弧2倍），与盘入盘出均相切。能否调整圆弧使调头曲线变短？给出从-100s到100s每秒的位置和速度。",
+            "type": "trajectory_optimization",
+            "depends_on": [
+              "Q2",
+              "Q3"
+            ]
+          },
+          {
+            "id": "Q5",
+            "text": "沿Q4设定的路径行进，龙头速度保持不变，确定龙头的最大行进速度，使得舞龙队各把手的速度均不超过2m/s。",
+            "type": "velocity_optimization",
+            "depends_on": [
+              "Q4"
+            ]
+          }
+        ],
+        "original_text": "2024年高教社杯全国大学生数学建模竞赛A题：板凳龙闹元宵。某板凳龙由223节板凳组成，建立数学模型解决5个子问题。",
+        "count": 5
+      },
+      "parent": [],
+      "depends_on": [
+        "P001"
+      ],
+      "relations": [
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "problem_analysis",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "problem_analysis",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "problem_analysis",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "D001": {
+      "schema_version": "3.1",
+      "artifact_id": "D001",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "文献检索与方法选型决策",
+      "question": "",
+      "created_by": "literature_search",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "decision": "针对板凳龙运动学问题，文献检索确认该问题属于多体动力学+几何建模+数值优化交叉领域。核心方法家族为多体刚体链递推、阿基米德螺线参数化、碰撞检测和约束优化。",
+        "alternatives": [
+          {
+            "id": "mc-monte-carlo",
+            "score": 82,
+            "reason": "蒙特卡洛模拟适用于多体系统的不确定性传播和碰撞概率估计"
+          },
+          {
+            "id": "mc-ga",
+            "score": 75,
+            "reason": "遗传算法适用于Q3最小螺距和Q4轨迹优化的非线性搜索"
+          },
+          {
+            "id": "mc-pso",
+            "score": 70,
+            "reason": "粒子群优化可作为Q3/Q4的替代优化器，收敛较快"
+          },
+          {
+            "id": "mc-ols",
+            "score": 55,
+            "reason": "最小二乘可用于螺线参数拟合，但不直接解决运动学递推"
+          }
+        ],
+        "criteria": [
+          "问题类型匹配（运动学/几何）",
+          "方法适用性（时空坐标输出）",
+          "验证可行性（刚体约束可检验）",
+          "竞赛历史表现"
+        ],
+        "evidence_ids": [
+          "P001"
+        ],
+        "reasoning": "题面核心是223节板凳龙沿螺线的运动学仿真（Q1）、碰撞检测（Q2）、参数优化（Q3）、轨迹优化（Q4）和速度约束优化（Q5）。这是典型的多体刚体链运动学问题，需要螺线几何参数化+刚体约束递推+数值优化。评价类方法（TOPSIS/AHP）无法产生时空坐标，不适用。"
+      },
+      "parent": [],
+      "depends_on": [
+        "P001"
+      ],
+      "relations": [
+        {
+          "from": "D001",
+          "relation": "based_on",
+          "to": "P001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "literature_search",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "literature_search",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "literature_search",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "recommendations": [
+          {
+            "card_id": "mc-monte-carlo",
+            "score": 82,
+            "matched": [
+              "问题类型命中: simulation",
+              "多体系统不确定性传播"
+            ]
+          },
+          {
+            "card_id": "mc-ga",
+            "score": 75,
+            "matched": [
+              "问题类型命中: optimization"
+            ]
+          },
+          {
+            "card_id": "mc-pso",
+            "score": 70,
+            "matched": [
+              "问题类型命中: optimization"
+            ]
+          }
+        ]
+      }
+    },
+    "M001": {
+      "schema_version": "3.1",
+      "artifact_id": "M001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "多体刚体链递推+螺线参数化模型",
+      "question": "Q001",
+      "created_by": "model_construction",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "objective": "最小化舞龙队盘入运动学仿真的位置预测误差；Q1: 仿真223节板凳龙0-300s每秒位置速度；Q2: 最小化首次碰撞时间的预测误差；Q3: 最小化盘入螺距p使得龙头到达半径4.5m边界；Q4: 最小化S形调头曲线长度；Q5: 最大化龙头速度v0使得各把手速度≤2m/s",
+        "constraints": [
+          {
+            "expression": "R(theta) = R0 + p_in * theta / (2*pi)",
+            "description": "等距阿基米德螺线方程（龙头轨迹约束）"
+          },
+          {
+            "expression": "sqrt((x_i - x_{i-1})^2 + (y_i - y_{i-1})^2) = L_i",
+            "description": "相邻节把手间距守恒（刚体约束，L_i为第i节板长）"
+          },
+          {
+            "expression": "v_head = 1.0 m/s (constant)",
+            "description": "龙头前把手匀速约束"
+          },
+          {
+            "expression": "min_{i<j, |i-j|>1} distance(section_i, section_j) >= W",
+            "description": "非相邻节不碰撞约束（板宽W=0.30m为安全距离下界）"
+          },
+          {
+            "expression": "R_final >= R_turn = 4.5 m (Q3)",
+            "description": "调头空间边界约束（Q3最小螺距优化）"
+          },
+          {
+            "expression": "v_i <= v_max = 2.0 m/s for all i (Q5)",
+            "description": "各把手速度上限约束（Q5）"
+          }
+        ],
+        "variables": [
+          {
+            "name": "N",
+            "domain": "integer",
+            "description": "板凳龙总节数",
+            "unit": "节",
+            "value": 223
+          },
+          {
+            "name": "L_head",
+            "domain": "real",
+            "description": "龙头板长",
+            "unit": "m",
+            "value": 3.41
+          },
+          {
+            "name": "L_body",
+            "domain": "real",
+            "description": "龙身和龙尾板长",
+            "unit": "m",
+            "value": 2.2
+          },
+          {
+            "name": "W",
+            "domain": "real",
+            "description": "板凳板宽",
+            "unit": "m",
+            "value": 0.3
+          },
+          {
+            "name": "p_in",
+            "domain": "real",
+            "description": "盘入螺距（Q1/Q2）",
+            "unit": "m",
+            "value": 0.55
+          },
+          {
+            "name": "v0",
+            "domain": "real",
+            "description": "龙头前把手行进速度",
+            "unit": "m/s",
+            "value": 1.0
+          },
+          {
+            "name": "R_turn",
+            "domain": "real",
+            "description": "调头空间半径",
+            "unit": "m",
+            "value": 4.5
+          },
+          {
+            "name": "v_max",
+            "domain": "real",
+            "description": "各把手速度上限（Q5）",
+            "unit": "m/s",
+            "value": 2.0
+          },
+          {
+            "name": "x_i, y_i",
+            "domain": "real",
+            "description": "第i节把手坐标",
+            "unit": "m"
+          },
+          {
+            "name": "theta_i",
+            "domain": "real",
+            "description": "第i节方位角",
+            "unit": "rad"
+          },
+          {
+            "name": "R(theta)",
+            "domain": "real",
+            "description": "螺旋半径（角度函数）",
+            "unit": "m"
+          }
+        ],
+        "equations": [
+          {
+            "latex": "R(\\theta) = R_0 + \\frac{p_{in}}{2\\pi}\\theta",
+            "description": "阿基米德等距螺线参数方程（龙头轨迹）"
+          },
+          {
+            "latex": "\\mathbf{r}_i(t) = \\mathbf{r}_{i-1}(t) + L_i \\cdot \\hat{\\mathbf{u}}_i(t)",
+            "description": "刚体链递推方程（后节位置=前节位置+板长×方向单位向量）"
+          },
+          {
+            "latex": "\\|\\mathbf{v}_i(t)\\| = \\left\\|\\frac{d\\mathbf{r}_i}{dt}\\right\\| \\leq v_{max}",
+            "description": "各节速度约束（Q5优化目标约束）"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "N",
+            "value": 223,
+            "unit": "节"
+          },
+          {
+            "name": "L_head",
+            "value": 3.41,
+            "unit": "m"
+          },
+          {
+            "name": "L_body",
+            "value": 2.2,
+            "unit": "m"
+          },
+          {
+            "name": "W",
+            "value": 0.3,
+            "unit": "m"
+          },
+          {
+            "name": "p_in",
+            "value": 0.55,
+            "unit": "m"
+          },
+          {
+            "name": "v0",
+            "value": 1.0,
+            "unit": "m/s"
+          },
+          {
+            "name": "R_turn",
+            "value": 4.5,
+            "unit": "m"
+          },
+          {
+            "name": "v_max",
+            "value": 2.0,
+            "unit": "m/s"
+          },
+          {
+            "name": "dt",
+            "value": 1.0,
+            "unit": "s"
+          },
+          {
+            "name": "t_end",
+            "value": 300.0,
+            "unit": "s"
+          }
+        ],
+        "mechanism": "多体刚体链递推 + 阿基米德螺线几何参数化。龙头沿螺线运动给定，后节位置由前节约束递推（间距守恒），速度由位置对时间求导得到。Q3/Q4/Q5转化为带约束的数值优化问题。",
+        "assumptions": [
+          "每节板凳视为刚体，相邻节通过把手铰接，板长和间距守恒",
+          "龙头前把手沿等距阿基米德螺线运动，速度恒定1m/s",
+          "忽略板凳的弯曲变形和空气阻力，运动为平面运动",
+          "碰撞检测中安全距离取板宽W=0.30m（保守估计）",
+          "所有长度单位统一为米(m)，时间单位为秒(s)"
+        ],
+        "model_family": "multibody_dynamics + numerical_optimization"
+      },
+      "parent": [],
+      "depends_on": [
+        "Q001",
+        "D001"
+      ],
+      "relations": [
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A002",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "validated_by",
+          "to": "E001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "D002",
+          "relation": "based_on",
+          "to": "M001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "E001",
+          "relation": "tests",
+          "to": "M001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "model_construction",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "model_construction",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-monte-carlo",
+        "family": "uncertainty_propagation",
+        "shortlist": [
+          "mc-monte-carlo",
+          "mc-ga",
+          "mc-pso"
+        ],
+        "objective": "最小化舞龙队盘入运动学仿真的位置预测误差；Q1: 仿真223节板凳龙0-300s每秒位置速度；Q2: 最小化首次碰撞时间的预测误差；Q3: 最小化盘入螺距p使得龙头到达半径4.5m边界；Q4: 最小化S形调头曲线长度；Q5: 最大化龙头速度v0使得各把手速度≤2m/s",
+        "constraints": [
+          {
+            "expression": "R(theta) = R0 + p_in * theta / (2*pi)",
+            "description": "等距阿基米德螺线方程（龙头轨迹约束）"
+          },
+          {
+            "expression": "sqrt((x_i - x_{i-1})^2 + (y_i - y_{i-1})^2) = L_i",
+            "description": "相邻节把手间距守恒（刚体约束，L_i为第i节板长）"
+          },
+          {
+            "expression": "v_head = 1.0 m/s (constant)",
+            "description": "龙头前把手匀速约束"
+          },
+          {
+            "expression": "min_{i<j, |i-j|>1} distance(section_i, section_j) >= W",
+            "description": "非相邻节不碰撞约束（板宽W=0.30m为安全距离下界）"
+          },
+          {
+            "expression": "R_final >= R_turn = 4.5 m (Q3)",
+            "description": "调头空间边界约束（Q3最小螺距优化）"
+          },
+          {
+            "expression": "v_i <= v_max = 2.0 m/s for all i (Q5)",
+            "description": "各把手速度上限约束（Q5）"
+          }
+        ],
+        "variables": [
+          {
+            "name": "N",
+            "domain": "integer",
+            "description": "板凳龙总节数",
+            "unit": "节",
+            "value": 223
+          },
+          {
+            "name": "L_head",
+            "domain": "real",
+            "description": "龙头板长",
+            "unit": "m",
+            "value": 3.41
+          },
+          {
+            "name": "L_body",
+            "domain": "real",
+            "description": "龙身和龙尾板长",
+            "unit": "m",
+            "value": 2.2
+          },
+          {
+            "name": "W",
+            "domain": "real",
+            "description": "板凳板宽",
+            "unit": "m",
+            "value": 0.3
+          },
+          {
+            "name": "p_in",
+            "domain": "real",
+            "description": "盘入螺距（Q1/Q2）",
+            "unit": "m",
+            "value": 0.55
+          },
+          {
+            "name": "v0",
+            "domain": "real",
+            "description": "龙头前把手行进速度",
+            "unit": "m/s",
+            "value": 1.0
+          },
+          {
+            "name": "R_turn",
+            "domain": "real",
+            "description": "调头空间半径",
+            "unit": "m",
+            "value": 4.5
+          },
+          {
+            "name": "v_max",
+            "domain": "real",
+            "description": "各把手速度上限（Q5）",
+            "unit": "m/s",
+            "value": 2.0
+          },
+          {
+            "name": "x_i, y_i",
+            "domain": "real",
+            "description": "第i节把手坐标",
+            "unit": "m"
+          },
+          {
+            "name": "theta_i",
+            "domain": "real",
+            "description": "第i节方位角",
+            "unit": "rad"
+          },
+          {
+            "name": "R(theta)",
+            "domain": "real",
+            "description": "螺旋半径（角度函数）",
+            "unit": "m"
+          }
+        ],
+        "model_family": "multibody_dynamics + numerical_optimization"
+      }
+    },
+    "A001": {
+      "schema_version": "3.1",
+      "artifact_id": "A001",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "假设1：刚体链约束",
+      "question": "Q001",
+      "created_by": "assumption_check",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "statement": "每节板凳视为刚体，相邻节通过把手铰接，间距守恒（龙头3.41m，龙身/龙尾2.20m）",
+        "justification": "题面描述板凳通过把手连接，木板弯曲变形在民俗运动速度下可忽略，刚体近似合理",
+        "relaxation_impact": "若考虑柔性变形，需引入有限元模型，计算量从O(N)增至O(N²)以上，且需材料参数",
+        "testable": true
+      },
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "assumption_check",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "assumption_check",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "assumption_check",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A002": {
+      "schema_version": "3.1",
+      "artifact_id": "A002",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "假设2：龙头螺线匀速运动",
+      "question": "Q001",
+      "created_by": "assumption_check",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "statement": "龙头前把手沿等距阿基米德螺线运动，速度恒定1m/s，顺时针盘入",
+        "justification": "题面明确指定螺距55cm等距螺线和龙头速度1m/s，初始位置第16圈A点",
+        "relaxation_impact": "若速度变化，需引入速度控制律，轨迹时间参数化改变，碰撞时间预测需重新校准",
+        "testable": true
+      },
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "assumes",
+          "to": "A002",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "assumption_check",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "assumption_check",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "assumption_check",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "D002": {
+      "schema_version": "3.1",
+      "artifact_id": "D002",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 实验计划决策",
+      "question": "Q001",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "decision": "Q001实验设计：采用多体刚体链递推仿真，龙头沿阿基米德螺线运动，后节位置由前节约束递推。包含基线对比、灵敏度分析和多次运行验证。",
+        "alternatives": [
+          {
+            "id": "E-Q001-01",
+            "score": 90,
+            "reason": "主实验：多体递推仿真+刚体约束验证"
+          },
+          {
+            "id": "E-Q001-02",
+            "score": 80,
+            "reason": "基线对比：纯几何螺旋拟合（忽略刚体约束）"
+          },
+          {
+            "id": "E-Q001-03",
+            "score": 75,
+            "reason": "灵敏度分析：螺距±10%扰动对碰撞时间的影响"
+          }
+        ],
+        "criteria": [
+          "方法可复现性",
+          "刚体约束可验证性",
+          "计算效率（O(N)递推）",
+          "结果可解释性"
+        ],
+        "evidence_ids": [
+          "M001"
+        ],
+        "reasoning": "实验必须验证刚体约束守恒（相邻节间距相对误差<1e-6）、碰撞检测覆盖所有非相邻节对、时间步长收敛性。主方法为多体递推，基线为纯几何拟合，灵敏度分析扰动螺距参数。"
+      },
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [
+        {
+          "from": "D002",
+          "relation": "based_on",
+          "to": "M001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "experiment_design",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "experiment_design",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "experiment_design",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "question": "Q001",
+        "methods": [
+          "mc-monte-carlo",
+          "mc-ga"
+        ],
+        "entries": [
+          {
+            "experiment_id": "E-Q001-01",
+            "purpose": "多体递推仿真主实验",
+            "method": "multibody_recursive_simulation",
+            "priority": 1
+          },
+          {
+            "experiment_id": "E-Q001-02",
+            "purpose": "纯几何拟合基线对比",
+            "method": "pure_geometric_spiral",
+            "priority": 1
+          },
+          {
+            "experiment_id": "E-Q001-03",
+            "purpose": "螺距灵敏度分析",
+            "method": "sensitivity_analysis",
+            "priority": 2
+          }
+        ]
+      }
+    },
+    "E001": {
+      "schema_version": "3.1",
+      "artifact_id": "E001",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 多体递推仿真实验",
+      "question": "Q001",
+      "created_by": "experiment@Q001",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "method": "多体刚体链递推仿真：龙头前把手沿阿基米德螺线以1m/s匀速运动，后节位置由前节约束递推（相邻节间距守恒），速度由位置差分得到。碰撞检测遍历所有|i-j|>1的节对，间距<板宽0.30m判定为碰撞。",
+        "parameters": {
+          "N": 223,
+          "L_head_m": 3.41,
+          "L_body_m": 2.2,
+          "W_m": 0.3,
+          "p_in_m": 0.55,
+          "v0_mps": 1.0,
+          "dt_s": 1.0,
+          "t_end_s": 300.0,
+          "initial_turn": 16,
+          "collision_safety_m": 0.3,
+          "random_seed": 42,
+          "multi_run_count": 5
+        },
+        "results": {
+          "collision_time_s": 187.5,
+          "collision_radius_m": 2.34,
+          "max_velocity_mps": 1.85,
+          "max_velocity_section": 198,
+          "min_clearance_m": 0.02,
+          "min_clearance_time_s": 187.5,
+          "total_distance_head_m": 300.0,
+          "final_radius_m": 1.82,
+          "rigid_constraint_max_error": 1.2e-07,
+          "convergence_ratio_pct": 0.03
+        },
+        "baseline": "纯几何螺旋拟合（忽略刚体约束，所有节直接投影到螺线上）",
+        "repetitions": 5,
+        "sensitivity": {
+          "p_in_plus10pct_collision_time_s": 172.3,
+          "p_in_minus10pct_collision_time_s": 204.1,
+          "v0_plus20pct_collision_time_s": 156.2
+        }
+      },
+      "parent": [],
+      "depends_on": [
+        "M001",
+        "D002"
+      ],
+      "relations": [
+        {
+          "from": "E001",
+          "relation": "tests",
+          "to": "M001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "E001",
+          "relation": "produces",
+          "to": "R001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "M001",
+          "relation": "validated_by",
+          "to": "E001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "experiment@Q001",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "experiment@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "experiment@Q001",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "mc-monte-carlo",
+        "plan_ref": "D002",
+        "plan_entry": "E-Q001-01",
+        "hypothesis_ref": "多体递推仿真刚体约束误差<1e-6"
+      }
+    },
+    "R001": {
+      "schema_version": "3.1",
+      "artifact_id": "R001",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 仿真结果",
+      "question": "Q001",
+      "created_by": "quality_evaluation",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "values": {
+          "collision_time_s": 187.5,
+          "collision_radius_m": 2.34,
+          "max_velocity_mps": 1.85,
+          "min_clearance_m": 0.02,
+          "total_distance_head_m": 300.0,
+          "final_radius_m": 1.82,
+          "rigid_constraint_max_error": 1.2e-07,
+          "q3_min_pitch_m": 0.42,
+          "q4_curve_length_m": 12.8,
+          "q5_max_head_velocity_mps": 1.35
+        },
+        "uncertainty": {
+          "collision_time_s": 0.8,
+          "collision_radius_m": 0.05,
+          "max_velocity_mps": 0.03,
+          "q3_min_pitch_m": 0.01,
+          "q5_max_head_velocity_mps": 0.04
+        },
+        "raw_data_path": "output/q001_simulation_results.json",
+        "multi_run_stats": {
+          "runs": 5,
+          "collision_time_mean_s": 187.5,
+          "collision_time_std_s": 0.8,
+          "max_velocity_mean_mps": 1.85,
+          "max_velocity_std_mps": 0.03
+        }
+      },
+      "parent": [],
+      "depends_on": [
+        "E001"
+      ],
+      "relations": [
+        {
+          "from": "E001",
+          "relation": "produces",
+          "to": "R001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "R001",
+          "relation": "visualized_by",
+          "to": "F001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "R001",
+          "relation": "supports",
+          "to": "C001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "quality_evaluation",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "quality_evaluation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "quality_evaluation",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "sensitivity",
+        "baseline",
+        "multi_run"
+      ],
+      "data": {
+        "card_id": "mc-monte-carlo",
+        "runs": 5
+      }
+    },
+    "F001": {
+      "schema_version": "3.1",
+      "artifact_id": "F001",
+      "type": "figure",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 盘入轨迹图",
+      "question": "Q001",
+      "created_by": "experiment@Q001",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "data": {
+          "x": [
+            10.2006,
+            -9.5599,
+            -9.863,
+            6.236,
+            4.836,
+            -9.555,
+            10.5044,
+            -9.0554,
+            4.6721,
+            2.9051,
+            -11.2245,
+            14.4602,
+            -7.4161,
+            -6.8872,
+            15.1508,
+            -6.2876,
+            -11.1023,
+            13.6721,
+            4.2617,
+            -15.9085,
+            0.8779,
+            16.0738,
+            -3.4573,
+            -16.0916,
+            3.694,
+            16.5462,
+            -1.7829,
+            -17.0757,
+            -2.1738,
+            16.6427,
+            7.7615
+          ],
+          "y": [
+            0.0,
+            6.4346,
+            6.9605,
+            10.8245,
+            -11.9019,
+            9.048,
+            -8.3866,
+            10.2822,
+            -13.1369,
+            13.869,
+            -8.9961,
+            -1.9334,
+            12.7895,
+            -13.293,
+            0.1287,
+            13.9759,
+            -10.8063,
+            -7.6278,
+            15.2291,
+            1.3771,
+            -16.0939,
+            2.4796,
+            16.0382,
+            -3.8517,
+            -16.2685,
+            3.0017,
+            16.8532,
+            -0.0481,
+            -17.0641,
+            -4.8172,
+            15.6263
+          ],
+          "time_s": [
+            0,
+            10,
+            20,
+            30,
+            40,
+            50,
+            60,
+            70,
+            80,
+            90,
+            100,
+            110,
+            120,
+            130,
+            140,
+            150,
+            160,
+            170,
+            180,
+            190,
+            200,
+            210,
+            220,
+            230,
+            240,
+            250,
+            260,
+            270,
+            280,
+            290,
+            300
+          ],
+          "labels": [
+            "龙头前把手轨迹"
+          ]
+        },
+        "file_path": "figures/q001_trajectory.png",
+        "caption": "图1 板凳龙盘入螺线轨迹（0-300s，龙头前把手，螺距55cm，初始第16圈，速度1m/s）",
+        "figure_type": "line",
+        "x_label": "x (m)",
+        "y_label": "y (m)"
+      },
+      "parent": [],
+      "depends_on": [
+        "R001"
+      ],
+      "relations": [
+        {
+          "from": "R001",
+          "relation": "visualized_by",
+          "to": "F001",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "experiment@Q001",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "experiment@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "experiment@Q001",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "C001": {
+      "schema_version": "3.1",
+      "artifact_id": "C001",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 研究结论",
+      "question": "Q001",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "claim": "在螺距55cm、龙头速度1m/s、初始第16圈条件下，板凳龙于187.5s发生首次非相邻节碰撞，此时龙头位于半径2.34m处，最大把手速度1.85m/s（出现在第198节），刚体约束最大误差1.2e-7m。",
+        "claim_type": "quantitative",
+        "evidence_ref": [
+          "R001",
+          "E001"
+        ],
+        "confidence": 0.85,
+        "limitations": "mock仿真结果，由确定性规则生成，未与金标准对比。碰撞时间和速度数值为模拟值，不代表真实求解结果。",
+        "supporting_values": {
+          "collision_time_s": 187.5,
+          "collision_radius_m": 2.34,
+          "max_velocity_mps": 1.85
+        }
+      },
+      "parent": [],
+      "depends_on": [
+        "R001"
+      ],
+      "relations": [
+        {
+          "from": "R001",
+          "relation": "supports",
+          "to": "C001",
+          "at": "2026-09-08T02:01:06+00:00"
+        },
+        {
+          "from": "C001",
+          "relation": "appears_in",
+          "to": "S003",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "evidence_build",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "evidence_build",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "evidence_build",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "statement": "在螺距55cm、龙头速度1m/s、初始第16圈条件下，板凳龙于187.5s发生首次非相邻节碰撞，此时龙头位于半径2.34m处，最大把手速度1.85m/s（出现在...",
+        "claim_type": "quantitative",
+        "experiment_refs": [
+          "R001",
+          "E001"
+        ],
+        "literature_refs": []
+      }
+    },
+    "S001": {
+      "schema_version": "3.1",
+      "artifact_id": "S001",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 问题重述与分析",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "section_name": "问题重述与分析",
+        "content": "板凳龙闹元宵是2024年全国大学生数学建模竞赛A题。某板凳龙由223节板凳组成，其中第1节为龙头（板长341cm），第2至222节为龙身（板长220cm），第223节为龙尾（板长220cm），所有板凳板宽30cm。相邻板凳通过把手连接，孔径5.5cm，孔中心距最近板头27.5cm。本题包含五个子问题：Q1要求舞龙队沿螺距55cm的等距螺线顺时针盘入，龙头速度1m/s，初始位于第16圈，给出0到300s每秒全节位置速度；Q2要求确定盘入终止时刻使得板凳不发生碰撞；Q3要求在直径9m调头空间约束下确定最小螺距；Q4要求在螺距1.7m条件下优化S形调头曲线；Q5要求确定龙头最大速度使得各把手速度不超过2m/s。本题核心是多体刚体链运动学仿真与约束优化问题。",
+        "word_count": 329,
+        "citations": [
+          "[1] 多体系统动力学",
+          "[2] 阿基米德螺线几何"
+        ]
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "paper_sections@Q001",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S002": {
+      "schema_version": "3.1",
+      "artifact_id": "S002",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 模型建立",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "section_name": "模型建立",
+        "content": "本文建立多体刚体链递推模型求解板凳龙运动学问题。龙头前把手沿阿基米德等距螺线运动，螺线方程为R(θ)=R0+p·θ/(2π)，其中p为螺距。后节位置由刚体约束递推得到：r_i(t)=r_{i-1}(t)+L_i·û_i(t)，其中L_i为第i节板长（龙头3.41m，龙身/龙尾2.20m），û_i为第i节方向单位向量。速度由位置对时间求导得到。模型假设：(1)每节板凳为刚体，相邻节间距守恒；(2)龙头沿螺线匀速运动，速度1m/s；(3)忽略弯曲变形和空气阻力，平面运动；(4)碰撞安全距离取板宽0.30m。Q3最小螺距转化为约束优化：min p subject to R_final≥4.5m。Q4 S形曲线优化：min curve_length subject to 相切约束。Q5速度优化：max v0 subject to v_i≤2.0m/s for all i。模型变量包括N=223、L_head=3.41m、L_body=2.20m、W=0.30m、p_in=0.55m、v0=1.0m/s、R_turn=4.5m等。",
+        "word_count": 467,
+        "citations": [
+          "[1] 多体系统动力学",
+          "[2] 阿基米德螺线几何"
+        ]
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "paper_sections@Q001",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S003": {
+      "schema_version": "3.1",
+      "artifact_id": "S003",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 结果与分析",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "section_name": "结果与分析",
+        "content": "基于多体刚体链递推模型，对Q1进行0-300s仿真（时间步长1s，223节）。仿真结果表明：龙头前把手在300s内行进300m，最终半径降至1.82m。首次非相邻节碰撞发生在187.5s，此时龙头位于半径2.34m处，碰撞涉及第45节与第120节（间距0.02m，小于安全距离0.30m）。最大把手速度出现在第198节，为1.85m/s（小于龙头速度1m/s的2倍，物理合理）。刚体约束验证：相邻节间距最大误差1.2e-7m，远小于阈值1e-6m，约束守恒良好。时间步长收敛性：dt=1s与dt=0.5s结果差异0.03%，满足收敛要求。Q3最小螺距优化结果为0.42m（小于题面给定的0.55m，说明在4.5m调头空间约束下可以使用更小螺距）。Q4优化后S形曲线长度12.8m。Q5龙头最大速度1.35m/s（受龙尾节速度约束限制）。",
+        "word_count": 368,
+        "citations": [
+          "[1] 多体系统动力学",
+          "[2] 阿基米德螺线几何"
+        ]
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "C001",
+          "relation": "appears_in",
+          "to": "S003",
+          "at": "2026-09-08T02:01:06+00:00"
+        }
+      ],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "paper_sections@Q001",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S004": {
+      "schema_version": "3.1",
+      "artifact_id": "S004",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 灵敏度与稳健性",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "section_name": "灵敏度与稳健性",
+        "content": "本文对关键参数进行灵敏度分析。螺距灵敏度：p_in增加10%（0.55→0.605m）时，首次碰撞时间从187.5s提前至172.3s（-8.1%）；p_in减少10%（0.55→0.495m）时，碰撞时间推迟至204.1s（+8.9%）。螺距对碰撞时间呈近似线性负相关，灵敏度约-1.6s/mm。龙头速度灵敏度：v0增加20%（1.0→1.2m/s）时，碰撞时间从187.5s提前至156.2s（-16.7%），速度与碰撞时间呈反比关系。多次运行验证（5次，随机种子42）：碰撞时间均值187.5s，标准差0.8s（变异系数0.43%）；最大速度均值1.85m/s，标准差0.03m/s（变异系数1.62%）。结果稳健性良好。基线对比：纯几何螺旋拟合（忽略刚体约束）在150s即出现间距违反，说明刚体约束递推对结果精度至关重要。模型局限性：mock仿真未考虑板凳柔性变形和三维运动，实际碰撞可能涉及板宽方向的接触而非仅中心点间距。",
+        "word_count": 416,
+        "citations": [
+          "[1] 多体系统动力学",
+          "[2] 阿基米德螺线几何"
+        ]
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "paper_sections@Q001",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "S005": {
+      "schema_version": "3.1",
+      "artifact_id": "S005",
+      "type": "paper_section",
+      "version": 1,
+      "status": "active",
+      "title": "Q001 · 结论",
+      "question": "Q001",
+      "created_by": "paper_sections@Q001",
+      "created_at": "2026-09-08T02:01:06+00:00",
+      "updated_at": "2026-09-08T02:01:06+00:00",
+      "payload": {
+        "section_name": "结论",
+        "content": "本文建立了多体刚体链递推模型求解2024年A题板凳龙闹元宵问题。主要结论如下：(1) Q1：在螺距55cm、龙头速度1m/s、初始第16圈条件下，完成0-300s全节位置速度仿真，刚体约束最大误差1.2e-7m，收敛性良好。(2) Q2：首次非相邻节碰撞发生在187.5s，龙头半径2.34m，盘入应在此之前终止。(3) Q3：在直径9m调头空间约束下，最小螺距为0.42m。(4) Q4：优化后S形调头曲线长度12.8m，前弧半径为后弧2倍的约束下可进一步缩短。(5) Q5：龙头最大行进速度为1.35m/s，受龙尾节速度不超过2m/s约束限制。模型创新点：将多体刚体链递推与阿基米德螺线参数化结合，O(N)时间复杂度完成223节仿真；碰撞检测覆盖所有非相邻节对，避免了仅检查相邻节的常见错误。未来工作：引入有限元柔性体模型考虑板凳弯曲变形；扩展三维运动模型；用真实金标准数据验证仿真精度。注意：本报告数值为mock_executor生成的模拟结果，用于验证测量管线，不代表真实求解结果。",
+        "word_count": 445,
+        "citations": [
+          "[1] 多体系统动力学",
+          "[2] 阿基米德螺线几何"
+        ]
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "mock_execution": true,
+        "generator": "mock_llm_executor_v1",
+        "node": "paper_sections@Q001",
+        "model_provider": "mock",
+        "model_version": "mock-v1.0",
+        "execution_mode": "mock",
+        "generated_at": "2026-09-08T02:01:06+00:00",
+        "deterministic": true,
+        "note": "此 artifact 由 mock_llm_executor 用确定性规则生成，不是真实 LLM 输出",
+        "executor_type": "synthetic",
+        "marked_at": "2026-09-08T02:04:43Z",
+        "marked_by": "mark_executor_type.py"
+      },
+      "validation": {
+        "status": "mock_validated",
+        "validated_by": "mock_llm_executor_v1",
+        "validated_at": "2026-09-08T02:01:06+00:00",
+        "checks": [
+          "layer1_non_empty",
+          "layer2_structural"
+        ],
+        "note": "mock 验证：仅确认结构非空，不验证语义正确性"
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "draft",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T02:01:06+00:00",
+          "by": "paper_sections@Q001",
+          "reason": "registered with mock payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    }
+  },
+  "history": {},
+  "mock_metadata": {
+    "generator": "mock_llm_executor_v1",
+    "executed_at": "2026-09-08T02:01:06+00:00",
+    "nodes_executed": [
+      "problem_analysis",
+      "literature_search",
+      "model_selection",
+      "model_construction",
+      "model_critique",
+      "assumption_check",
+      "experiment_design",
+      "experiment@Q001",
+      "experiment_critique@Q001",
+      "evidence_build",
+      "evidence_gate",
+      "quality_evaluation",
+      "research_direction",
+      "paper_projection",
+      "paper_sections@Q001",
+      "paper_review"
+    ],
+    "artifact_count": 16,
+    "mock_execution": true
+  }
+}

@@ -1,0 +1,246 @@
+# Problem Card: 2024_A — 板凳龙闹元宵
+# 生成日期: 2026-09-08
+# 来源: CUMCM-Bench-v2 + playbook-2024A-bench-dragon.md + problem_statement.txt
+# 注意: 题面文本标记为 pending，等待 Input Authenticity Recovery 子代理验证
+
+problem_id: 2024_A
+title: '板凳龙闹元宵'
+
+official_source:
+  url: UNKNOWN  # 等待 Input Authenticity Recovery 验证官方发布链接
+  publisher: 全国大学生数学建模竞赛组委会
+  publication_date: "2024-09"
+  retrieval_date: "2026-09-08"
+  text_sha256: PENDING  # 等待计算 problem_statement.txt 的 SHA-256
+  authenticity_status: pending  # pending | verified | blocked
+  local_text_path: problem_statement.txt  # 本地已存题面文本，待验证
+
+family:
+  - kinematics  # 运动学
+  - geometric_modeling  # 几何建模
+  - optimization  # 优化（Q3/Q4）
+  # CUMCM-Bench 标签: 几何运动 / 综合
+
+sub_questions:
+  - id: Q1
+    desc: "舞龙队沿螺距为55cm的等距螺线顺时针盘入，龙头前把手速度1m/s，初始位于第16圈A点。给出从初始时刻到300s为止，每秒整个舞龙队的位置和速度，保存到result1.xlsx。论文中给出0/60/120/180/240/300s时特定节的位置和速度。"
+    type: forward_simulation  # 正向运动学仿真
+    required_deliverables:
+      - result1.xlsx（每秒全节位置速度，6位小数）
+      - 论文表1（6个时刻7个特定节的位置）
+      - 论文表2（6个时刻7个特定节的速度）
+    depends_on: []
+
+  - id: Q2
+    desc: "沿Q1设定的螺线盘入，确定盘入终止时刻使得板凳之间不发生碰撞，给出此时舞龙队的位置和速度，保存到result2.xlsx。"
+    type: collision_detection  # 碰撞检测
+    required_deliverables:
+      - result2.xlsx（终止时刻全节位置速度）
+      - 论文中特定节的位置和速度
+    depends_on: [Q1]
+
+  - id: Q3
+    desc: "调头空间为以螺线中心为圆心、直径9m的圆形区域。确定最小螺距，使得龙头前把手能够沿着相应的螺线盘入到调头空间的边界。"
+    type: parameter_optimization  # 参数优化（最小螺距）
+    required_deliverables:
+      - 最小螺距数值
+      - 推导过程
+    depends_on: [Q1]
+
+  - id: Q4
+    desc: "盘入螺距1.7m，盘出螺线与盘入关于中心对称，调头路径由两段圆弧相切连接成S形（前弧半径=后弧2倍），与盘入盘出均相切。能否调整圆弧使调头曲线变短？给出从-100s到100s每秒的位置和速度，保存到result4.xlsx。"
+    type: trajectory_optimization  # 轨迹优化
+    required_deliverables:
+      - 优化后的调头曲线参数
+      - result4.xlsx（-100s到100s每秒位置速度）
+      - 论文中-100/-50/0/50/100s特定节的位置和速度
+    depends_on: [Q2, Q3]
+
+  - id: Q5
+    desc: "沿Q4设定的路径行进，龙头速度保持不变，确定龙头的最大行进速度，使得舞龙队各把手的速度均不超过2m/s。"
+    type: velocity_optimization  # 速度约束优化
+    required_deliverables:
+      - 龙头最大速度数值
+      - 各把手速度分析
+    depends_on: [Q4]
+
+allowed_model_families:
+  - multibody_dynamics  # 多体动力学/刚体链递推
+  - catenary_approximation  # 悬链线近似（Q2初估）
+  - differential_geometry  # 微分几何（螺旋线参数化）
+  - numerical_optimization  # 数值优化（Q3/Q4/Q5）
+  - pure_geometric_spiral  # 纯几何螺旋拟合（Q2/Q4辅助）
+
+acceptable_solution_variants:
+  - desc: "多体递推（刚体链）+ 螺旋几何解析"
+    conditions:
+      - 每节板凳视为刚体，相邻间距守恒
+      - 龙头沿阿基米德螺线运动
+      - 后节位置由前节约束递推
+      - 适用 Q1/Q2/Q3
+    playbook_reference: playbook-2024A-bench-dragon.md §4.3
+  - desc: "有限元柔性体"
+    conditions:
+      - 考虑板凳弯曲变形
+      - 精度最高但计算量大
+      - 竞赛不推荐
+    playbook_reference: playbook-2024A-bench-dragon.md §3（推荐度 ★☆☆☆☆）
+
+key_variables:
+  - name: N
+    desc: 板凳龙总节数
+    value: 223
+    unit: 节
+    source: 题面
+  - name: L_head
+    desc: 龙头板长
+    value: 341
+    unit: cm
+    source: 题面
+  - name: L_body
+    desc: 龙身和龙尾板长
+    value: 220
+    unit: cm
+    source: 题面
+  - name: W
+    desc: 板凳板宽
+    value: 30
+    unit: cm
+    source: 题面
+  - name: d_hole
+    desc: 孔径
+    value: 5.5
+    unit: cm
+    source: 题面
+  - name: d_offset
+    desc: 孔中心距最近板头
+    value: 27.5
+    unit: cm
+    source: 题面
+  - name: p_in
+    desc: 盘入螺距（Q1/Q2）
+    value: 55
+    unit: cm
+    source: 题面
+  - name: p_q4
+    desc: 盘入螺距（Q4）
+    value: 1.7
+    unit: m
+    source: 题面
+  - name: v0
+    desc: 龙头前把手行进速度
+    value: 1.0
+    unit: m/s
+    source: 题面
+  - name: R_turn
+    desc: 调头空间半径
+    value: 4.5
+    unit: m
+    source: 题面（直径9m）
+  - name: v_max
+    desc: 各把手速度上限（Q5）
+    value: 2.0
+    unit: m/s
+    source: 题面
+  - name: theta_i
+    desc: 第i节方位角
+    unit: rad
+    source: 模型
+  - name: x_i, y_i
+    desc: 第i节把手坐标
+    unit: m
+    source: 模型
+  - name: R
+    desc: 螺旋半径
+    unit: m
+    source: 模型
+  - name: p
+    desc: 螺距（变量，Q3优化目标）
+    unit: m/rad
+    source: 模型
+
+key_constraints:
+  - 螺线方程约束（龙头沿等距螺线运动）
+  - 把手间距约束（相邻节间距守恒 = 板长相关）
+  - 龙头匀速约束（v0 = 1 m/s）
+  - 不碰撞约束（任意两节间距 ≥ 板宽/安全距离）
+  - 调头空间约束（Q3: 盘入到半径4.5m边界）
+  - 相切约束（Q4: S形曲线与盘入盘出螺线均相切）
+  - 速度上限约束（Q5: 各把手速度 ≤ 2 m/s）
+  - 单位一致性约束（题面cm与m/s需换算）
+
+evaluation_targets:
+  - 坐标精度（Q1/Q2/Q4 位置结果与金标准的误差）
+  - 碰撞时间精度（Q2 终止时刻）
+  - 螺距最小化（Q3 最小螺距的正确性）
+  - 速度合理性（Q5 最大速度的推导与数值）
+  - 刚体约束守恒（相邻节间距误差 < 1e-6）
+  - 数值收敛性（时间步长减半后结果变化 < 0.1%）
+
+known_failure_modes:
+  - FM-PA-001  # wrong_abstraction（运动学误判为评价类，P15.1 B0 实锤）
+  - FM-MC-001  # wrong_mechanism（用TOPSIS等评价方法解运动学）
+  - FM-MS-001  # wrong_model_family（评价族 vs 几何运动族）
+  - FM-MS-002  # method_name_trap（TOPSIS数学正确但问题错配）
+  - FM-FC-003  # unit_inconsistency（cm与m混用）
+  - FM-FC-004  # index_inconsistency（节索引/时间步长口径）
+  - FM-VA-001  # missing_validation
+  - FM-ME-003  # empty_artifact_passing（P15.1 Q001空壳）
+  # CUMCM-Bench 旧标签: FM-PA-02, FM-MC-03, FM-FC-03, FM-VA-01
+
+known_invalid_model_patterns:
+  - pattern: "使用TOPSIS/AHP/PCA等评价方法处理运动学问题"
+    why_invalid: "评价方法输出排名/权重，无法产生时空坐标和速度；方法假设（独立指标）与运动学的时空耦合矛盾。P15.1 B0 实锤：method_selection=0%。"
+  - pattern: "忽略板凳长度差异（龙头341cm vs 龙身220cm）"
+    why_invalid: "龙头比龙身长121cm，忽略此差异导致把手间距计算错误，影响碰撞检测精度。"
+  - pattern: "将螺距55cm直接当作半径或直径"
+    why_invalid: "螺距是相邻圈的径向距离，不是半径；混淆导致螺旋线参数化完全错误。"
+  - pattern: "碰撞检测只检查相邻节"
+    why_invalid: "螺旋盘入时非相邻节（如第1节与第50节）可能碰撞，必须检查所有 |i-j|>1 的节对。"
+  - pattern: "Q5 直接假设所有把手速度=龙头速度"
+    why_invalid: "龙尾在螺旋内侧/外侧时速度可能远超龙头速度（角速度相同但半径不同），必须逐节计算。"
+
+forbidden_misinterpretations:
+  - "将'顺时针盘入'理解为'逆时针'（方向错误导致坐标符号全反）"
+  - "将'螺距55cm'理解为'螺旋半径55cm'或'直径55cm'"
+  - "将'第16圈A点'理解为'半径16m处'"
+  - "忽略'龙头前把手'与'龙尾后把手'的区别（结果模板中有特定列）"
+  - "将Q3的'最小螺距'理解为'最大螺距'（优化方向错误）"
+  - "将Q5的'各把手速度不超过2m/s'理解为'龙头速度不超过2m/s'"
+
+validation_expectations:
+  - 刚体约束验证：逐帧检查相邻节间距守恒，相对误差 < 1e-6
+  - 网格收敛验证：时间步长减半（dt=0.01→0.005）后关键节点位置变化 < 0.1%
+  - 对称性验证：盘入/盘出对称参数下轨迹对称，误差 < 1%
+  - 速度有界验证：龙头匀速条件下各节速率不超过 2*v0（物理合理性）
+  - 碰撞检测验证：已知碰撞时刻的人工抽检
+  - 单位一致性验证：所有输入参数统一为 m 和 s
+
+common_human_errors:
+  - 混淆螺距与半径
+  - 忽略龙头与龙身的长度差异
+  - 碰撞检测遗漏非相邻节
+  - Q4 S形曲线的相切条件计算错误
+  - 单位换算遗漏（cm→m）
+  - 时间步长选择不当导致数值耗散
+
+common_llm_errors:
+  - 被'评价''优化'等关键词误导，选择TOPSIS/AHP等评价方法（P15.1实锤）
+  - 子问题分解失败（5问压成1个空壳，P15.1 Q001）
+  - 生成的代码中N=223但循环范围错误（off-by-one）
+  - 螺旋线方程参数化错误（角度与半径的关系搞反）
+  - 碰撞检测复杂度O(N²)但未优化导致超时
+  - 论文中数值与代码结果不一致（missing provenance）
+
+evidence_sources:
+  - playbook: core/knowledge/playbooks/playbook-2024A-bench-dragon.md（方法论参考）
+  - benchmark: research/P15/benchmark/CUMCM-Bench-v2.json（标签金标准）
+  - problem_text: research/P15/benchmark/problem_cards/2024_A/problem_statement.txt（题面，待验证）
+  - audit: research/REPOSITORY_AUDIT/04_MODELING_CAPABILITY_AUDIT.md（P15.1 B0 失败分析）
+  - methodology_cards: core/knowledge/methodology/numerical-methods.md, ode-pde.md, optimization.md
+
+# 元数据
+card_version: "1.0"
+card_date: "2026-09-08"
+card_status: partial  # partial（题面pending） | complete | verified
+notes: "题面文本已从本地 problem_statement.txt 读取，但 authenticity_status=pending，等待 Input Authenticity Recovery 子代理验证官方来源和SHA-256。所有基于题面的字段（参数值、子问题描述）来自本地文本，需在验证后确认。"

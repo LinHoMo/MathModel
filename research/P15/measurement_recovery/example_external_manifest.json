@@ -1,0 +1,67 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-1.5-pro",
+  "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "node_id": "model_construction",
+  "dag_position": 4,
+  "prompt_or_skill_version": "v3.1.0",
+  "artifact_schema_version": "1.0",
+  "started_at": "2026-09-08T10:00:00Z",
+  "finished_at": "2026-09-08T10:05:00Z",
+  "latency_seconds": 300.0,
+  "submitted_at": "2026-09-08T10:05:01Z",
+  "payload": {
+    "model_id": "M001",
+    "model_type": "TOPSIS",
+    "family": "composite_evaluation",
+    "objective": "对教材订购方案进行多属性综合评价与排序，选出最优订购方案",
+    "constraints": [
+      "评价指标需覆盖需求量预测准确性、库存成本、缺货风险、供应商交付可靠性",
+      "权重分配需有客观依据（熵权法或AHP一致性检验），禁止拍脑袋",
+      "所有指标需同向化（成本类取倒数或负向化）后再归一化"
+    ],
+    "variables": [
+      {"name": "C_i", "description": "方案i与理想解的相对贴近度", "type": "continuous", "range": "[0,1]"},
+      {"name": "w_j", "description": "第j个评价指标的权重", "type": "continuous", "range": "[0,1], sum=1"},
+      {"name": "d_i^+", "description": "方案i到正理想解的欧氏距离", "type": "continuous"},
+      {"name": "d_i^-", "description": "方案i到负理想解的欧氏距离", "type": "continuous"}
+    ],
+    "method_flow": [
+      "step1: 构建评价矩阵 X (m方案 x n指标)",
+      "step2: 同向化处理（成本类指标取倒数）",
+      "step3: 向量归一化得到 R",
+      "step4: 熵权法计算客观权重 w_j（零方差列检测）",
+      "step5: 构建加权归一化矩阵 V = R * diag(w)",
+      "step6: 确定正理想解 V+ 和负理想解 V-",
+      "step7: 计算各方案到理想解的距离 d_i^+, d_i^-",
+      "step8: 计算相对贴近度 C_i = d_i^- / (d_i^+ + d_i^-)",
+      "step9: 按 C_i 降序排序，C_i 最大者为最优方案"
+    ],
+    "assumptions": [
+      "评价指标之间相互独立，无强共线性",
+      "各方案在所有指标上的取值可量化且数据完整",
+      "归一化采用向量归一化（非min-max），保持量纲无关性",
+      "权重由熵权法客观确定，不引入主观偏好"
+    ],
+    "sensitivity_analysis": [
+      "双赋权对比：熵权 vs AHP，报告排序Spearman相关系数",
+      "指标增删敏感性（leave-one-out）验证排序稳定性",
+      "权重扰动 ±10% 观察排序变化"
+    ],
+    "expected_output": {
+      "ranking": "list of (方案名, C_i) sorted descending",
+      "best_scheme": "方案名 with max C_i",
+      "weights": "dict of {指标名: w_j}",
+      "spearman_vs_ahp": "float, correlation coefficient"
+    }
+  },
+  "reproducibility": {
+    "seed": 42,
+    "temperature": 0.7,
+    "parameters": {
+      "max_tokens": 4096,
+      "top_p": 0.9
+    }
+  }
+}

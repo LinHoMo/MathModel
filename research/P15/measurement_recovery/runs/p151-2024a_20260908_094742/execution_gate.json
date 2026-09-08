@@ -1,0 +1,1031 @@
+{
+  "execution_authenticity": {
+    "gate": "execution_authenticity",
+    "version": "1.0",
+    "project": "p151-2024a",
+    "run_id": "5c98cd9911bc",
+    "overall": "INVALID",
+    "summary": {
+      "pass": 4,
+      "fail": 1,
+      "invalid": 8,
+      "total": 13
+    },
+    "checks": [
+      {
+        "id": "EAG-01",
+        "name": "model_provider non-empty",
+        "pass": false,
+        "expected": "non-empty string (e.g. 'openai')",
+        "actual": null,
+        "message": "null indicates zero-LLM deterministic execution"
+      },
+      {
+        "id": "EAG-02",
+        "name": "model_version non-empty",
+        "pass": false,
+        "expected": "non-empty string (e.g. 'gpt-4o-2024-05-13')",
+        "actual": null,
+        "message": ""
+      },
+      {
+        "id": "EAG-03",
+        "name": "skill_version is non-empty hash",
+        "pass": false,
+        "expected": "64-char hex, not empty-string SHA256",
+        "actual": "e3b0c44298fc1c14...",
+        "message": "empty hash = no .yaml files in core/skills/"
+      },
+      {
+        "id": "EAG-04",
+        "name": "execution timestamps reasonable",
+        "pass": true,
+        "expected": "parseable, not in future",
+        "actual": "started=2026-09-08T00:35:58Z",
+        "message": ""
+      },
+      {
+        "id": "EAG-05",
+        "name": "latency >= 1.0s (real execution)",
+        "pass": false,
+        "expected": ">= 1.0s",
+        "actual": "0.06s",
+        "message": "below threshold = template initialization speed"
+      },
+      {
+        "id": "EAG-06",
+        "name": "input_hash matches recomputed inputs hash",
+        "pass": false,
+        "expected": "c955469f3b2478ec...",
+        "actual": "a2ca89ecca7623d8...",
+        "message": ""
+      },
+      {
+        "id": "EAG-07",
+        "name": "workflow_version is valid non-empty hash",
+        "pass": true,
+        "expected": "64-char non-empty hex",
+        "actual": "5e65f282f5599fc7...",
+        "message": ""
+      },
+      {
+        "id": "EAG-08",
+        "name": "real execution artifacts exist (code/output/artifacts with files)",
+        "pass": false,
+        "expected": "at least one of code/, output/, artifacts/ containing actual files",
+        "actual": "code(has_files)=False, output(has_files)=False, artifacts(has_files)=False",
+        "message": ""
+      },
+      {
+        "id": "EAG-09",
+        "name": "registry has artifacts",
+        "pass": true,
+        "expected": ">= 1 artifact",
+        "actual": 16,
+        "message": ""
+      },
+      {
+        "id": "EAG-10",
+        "name": "artifact payloads non-empty (>=80% pass Layer 1)",
+        "pass": false,
+        "expected": "pass_rate >= 0.8, no INVALID",
+        "actual": "pass_rate=0.0, INVALID=16",
+        "message": ""
+      },
+      {
+        "id": "EAG-11",
+        "name": "decision_log has decisions with evidence",
+        "pass": true,
+        "expected": "all decisions have evidence_ids or substantive reasoning",
+        "actual": "1/1 decisions have evidence",
+        "message": ""
+      },
+      {
+        "id": "EAG-12",
+        "name": "artifacts have execution provenance (>=90%)",
+        "pass": false,
+        "expected": ">= 90% artifacts with non-empty provenance",
+        "actual": "0/16 have provenance",
+        "message": ""
+      },
+      {
+        "id": "EAG-13",
+        "name": "execution_mode is llm or hybrid",
+        "pass": false,
+        "expected": "'llm' or 'hybrid'",
+        "actual": "(field missing — core schema gap)",
+        "message": "'deterministic' or missing = template initialization, not real execution"
+      }
+    ],
+    "root_causes": [
+      "model_provider/model_version is null — DefaultNodeExecutor is zero-LLM deterministic pipeline",
+      "latency below threshold — execution completed in template-initialization time, no real LLM/code execution",
+      "artifact payloads are empty — handlers create registry entries with payload=[] and only metadata in data field",
+      "no code/output/artifacts directories — no real execution artifacts on disk",
+      "skill_version is empty-string SHA256 — core/skills/ has no .yaml files",
+      "artifact provenance is empty — no execution traceability (run_id/node_id/executor)",
+      "execution_mode missing or 'deterministic' — orchestrator --execute triggers template init, not LLM execution"
+    ]
+  },
+  "artifact_integrity": {
+    "gate": "artifact_integrity",
+    "registry_path": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\projects\\p151-2024a\\state\\registry.json",
+    "total_artifacts": 16,
+    "summary": {
+      "INVALID": 16
+    },
+    "pass_rate": 0.0,
+    "overall": "INVALID",
+    "artifacts": [
+      {
+        "artifact_id": "A001",
+        "type": "assumption",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-A-01",
+              "name": "assumption has statement",
+              "pass": false,
+              "expected": "statement length >= 10",
+              "actual": 0,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "A002",
+        "type": "assumption",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-A-01",
+              "name": "assumption has statement",
+              "pass": false,
+              "expected": "statement length >= 10",
+              "actual": 0,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "C001",
+        "type": "claim",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-C-01",
+              "name": "claim has statement",
+              "pass": false,
+              "expected": "claim length >= 10",
+              "actual": 7,
+              "message": ""
+            },
+            {
+              "id": "L1-C-02",
+              "name": "claim has evidence_ref",
+              "pass": false,
+              "expected": "non-empty evidence_ref list",
+              "actual": 0,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "D001",
+        "type": "decision",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "['mc-topsis', 'mc-ahp', 'mc-pca']",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-D-01",
+              "name": "decision payload is structured (not ID list)",
+              "pass": false,
+              "expected": "dict with decision/alternatives",
+              "actual": "list of 3 items (likely method card IDs)",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "D002",
+        "type": "decision",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "['mc-topsis', 'mc-ahp']",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-D-01",
+              "name": "decision payload is structured (not ID list)",
+              "pass": false,
+              "expected": "dict with decision/alternatives",
+              "actual": "list of 2 items (likely method card IDs)",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "E001",
+        "type": "experiment",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-E-00",
+              "name": "experiment payload is dict",
+              "pass": false,
+              "expected": "dict",
+              "actual": "list",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "F001",
+        "type": "figure",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-F-01",
+              "name": "figure has data or valid file_path",
+              "pass": false,
+              "expected": "non-empty data OR existing file_path",
+              "actual": "data=False, file=False",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "M001",
+        "type": "model",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-M-00",
+              "name": "model payload is dict",
+              "pass": false,
+              "expected": "dict",
+              "actual": "list",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "P001",
+        "type": "problem",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-P-01",
+              "name": "problem payload has text field",
+              "pass": false,
+              "expected": "dict with 'text' field",
+              "actual": "list",
+              "message": ""
+            },
+            {
+              "id": "L1-P-02",
+              "name": "problem text non-trivial",
+              "pass": false,
+              "expected": "length >= 50",
+              "actual": 0,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "Q001",
+        "type": "question",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-Q-01",
+              "name": "question payload has sub_questions",
+              "pass": false,
+              "expected": "non-empty sub_questions list",
+              "actual": 0,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "R001",
+        "type": "result",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": false,
+              "expected": "non-None, non-empty",
+              "actual": "[]",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-R-01",
+              "name": "result payload has values dict",
+              "pass": false,
+              "expected": "non-empty values dict",
+              "actual": 0,
+              "message": ""
+            },
+            {
+              "id": "L1-R-02",
+              "name": "result values contain numeric data",
+              "pass": false,
+              "expected": "at least one numeric value",
+              "actual": "no numeric values",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "S001",
+        "type": "paper_section",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "['问题重述与分析']",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-S-01",
+              "name": "paper_section has actual content (not just title)",
+              "pass": false,
+              "expected": "content length >= 200",
+              "actual": 7,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "S002",
+        "type": "paper_section",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "['模型建立']",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-S-01",
+              "name": "paper_section has actual content (not just title)",
+              "pass": false,
+              "expected": "content length >= 200",
+              "actual": 4,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "S003",
+        "type": "paper_section",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "['结果与分析']",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-S-01",
+              "name": "paper_section has actual content (not just title)",
+              "pass": false,
+              "expected": "content length >= 200",
+              "actual": 5,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "S004",
+        "type": "paper_section",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "['灵敏度与稳健性']",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-S-01",
+              "name": "paper_section has actual content (not just title)",
+              "pass": false,
+              "expected": "content length >= 200",
+              "actual": 7,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "S005",
+        "type": "paper_section",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "['结论']",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": false,
+              "expected": "not placeholder",
+              "actual": "placeholder detected",
+              "message": ""
+            },
+            {
+              "id": "L1-S-01",
+              "name": "paper_section has actual content (not just title)",
+              "pass": false,
+              "expected": "content length >= 200",
+              "actual": 2,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      }
+    ]
+  },
+  "overall": "INVALID"
+}

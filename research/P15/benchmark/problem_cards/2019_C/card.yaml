@@ -1,0 +1,100 @@
+# Problem Card: 2019_C — 机场出租车排队
+# 生成日期: 2026-09-08
+# 状态: SKELETON（骨架，题面未验证）
+# 来源: CUMCM-Bench-v2.json 条目
+
+problem_id: 2019_C
+title: UNKNOWN  # 等待题面验证（俗称"机场出租车调度"）
+
+official_source:
+  url: UNKNOWN
+  publisher: 全国大学生数学建模竞赛组委会
+  publication_date: "2019-09"
+  retrieval_date: "2026-09-08"
+  text_sha256: PENDING
+  authenticity_status: pending
+  local_text_path: problem_statement.txt  # 本地已存，待验证
+
+family:
+  - queuing_theory  # 排队论
+  - optimization  # 优化
+  - decision_modeling  # 决策建模
+  - simulation  # 仿真
+  # CUMCM-Bench 标签: 交通/网络
+
+sub_questions:
+  - id: Q1
+    desc: "建立机场出租车排队模型"
+    type: queuing_model
+    required_deliverables: [排队论模型]
+    depends_on: []
+  - id: Q2
+    desc: "分析司机决策行为"
+    type: decision_modeling
+    required_deliverables: [决策模型]
+    depends_on: [Q1]
+  - id: Q3
+    desc: "优化调度策略"
+    type: scheduling_optimization
+    required_deliverables: [优化策略, 仿真验证]
+    depends_on: [Q1, Q2]
+
+allowed_model_families:
+  - queuing_analysis  # M/M/c 等排队模型
+  - decision_theory  # 决策论（司机选择）
+  - optimization  # 调度优化
+  - agent_based_simulation  # 多智能体仿真
+  # 具体方法选择需题面验证后细化
+
+acceptable_solution_variants: UNKNOWN
+
+key_variables:
+  - arrival_rate  # 乘客到达率
+  - service_rate  # 出租车服务率
+  - queue_length  # 排队长度
+  - driver_utility  # 司机效用（收益-成本）
+  # 具体变量名和取值需题面验证
+
+key_constraints:
+  - 排队平衡约束（流量守恒）
+  - 司机理性约束（效用最大化）
+  - 乘客等待时间约束
+  # 具体约束需题面验证
+
+evaluation_targets:
+  - 排队模型精度（平均等待时间/队列长度）
+  - 决策合理性（司机选择逻辑）
+  - 调度效率（优化后等待时间/吞吐量）
+
+known_failure_modes:
+  - FM-PA-002  # wrong_objective
+  - FM-MC-002  # wrong_causal_structure
+  - FM-VA-001  # missing_validation
+  - FM-VA-002  # wrong_validation_target
+  # CUMCM-Bench 旧标签: FM-PA-02, FM-MC-02, FM-VA-01, FM-VA-02
+
+known_invalid_model_patterns: UNKNOWN
+
+forbidden_misinterpretations: UNKNOWN
+
+validation_expectations:
+  - 排队模型验证（与仿真数据对比）
+  - 决策模型验证（司机策略与实际行为对比）
+  - 仿真验证（优化策略的仿真效果）
+  - 灵敏度分析（到达率/服务率扰动）
+
+common_human_errors: UNKNOWN
+common_llm_errors:
+  - 忽略司机与乘客的双边匹配（只建模一方）
+  - 排队模型假设不满足（泊松到达/指数服务未检验）
+  - 优化目标与实际运营目标不一致
+  - 仿真未做多次运行取平均
+
+evidence_sources:
+  - benchmark: research/P15/benchmark/CUMCM-Bench-v2.json
+  - problem_text: research/P15/benchmark/problem_cards/2019_C/problem_statement.txt（待验证）
+
+card_version: "1.0-skeleton"
+card_date: "2026-09-08"
+card_status: skeleton
+notes: "骨架卡片。input_file=null，题面文本未验证。子问题描述、变量、约束来自 CUMCM-Bench-v2.json 标签，需在题面验证后细化。"

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodel.local/schemas/external_artifact_manifest.schema.json",
+  "title": "ExternalArtifactManifest",
+  "description": "Contract for artifacts submitted by external agents (Doubao/GPT/Claude/human) to the MathModel harness. The harness validates schema + non-empty + hash binding + provenance before registry admission. LLM-free by design.",
+  "type": "object",
+  "required": [
+    "executor_type",
+    "agent_identity",
+    "model_version",
+    "input_sha256",
+    "node_id",
+    "dag_position",
+    "prompt_or_skill_version",
+    "artifact_schema_version",
+    "started_at",
+    "finished_at",
+    "latency_seconds",
+    "submitted_at",
+    "payload"
+  ],
+  "properties": {
+    "executor_type": {
+      "type": "string",
+      "enum": ["external_agent", "dry_run", "synthetic"],
+      "description": "Execution type. Must be 'external_agent' for real agent submissions. 'dry_run' = DefaultNodeExecutor deterministic stub, 'synthetic' = mock executor. Only external_agent may enter capability scoring."
+    },
+    "agent_identity": {
+      "type": "string",
+      "enum": ["doubao", "gpt", "claude", "human", "other"],
+      "description": "Identity of the external agent that produced this artifact."
+    },
+    "model_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Model version string. Use 'N/A' when agent_identity is 'human'."
+    },
+    "input_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of the frozen problem input. Must match the project's frozen input hash; mismatch causes immediate rejection (exit code 2)."
+    },
+    "node_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "DAG node ID that produced this artifact, e.g. 'model_construction', 'experiment_design'."
+    },
+    "dag_position": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "DAG position (0-indexed) of the producing node."
+    },
+    "prompt_or_skill_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version of the prompt or SKILL used by the external agent."
+    },
+    "artifact_schema_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version of the artifact schema used for the payload."
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the external agent started working on this node."
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the external agent finished this node."
+    },
+    "latency_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Real wall-clock latency in seconds. Must be > 0; below 1s triggers a warning (likely template initialisation)."
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this manifest was submitted to the harness."
+    },
+    "payload": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "The actual artifact payload. Must be non-empty and pass the artifact-type-specific schema. Content varies by node_id (model spec, experiment plan, result values, etc.)."
+    },
+    "reproducibility": {
+      "type": "object",
+      "description": "Optional reproducibility metadata.",
+      "properties": {
+        "seed": {
+          "type": ["integer", "null"],
+          "description": "Random seed used (if applicable)."
+        },
+        "temperature": {
+          "type": ["number", "null"],
+          "description": "Sampling temperature (if applicable)."
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Additional generation parameters."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

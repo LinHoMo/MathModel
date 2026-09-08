@@ -1,0 +1,96 @@
+# Problem Card: 2022_C — 古代玻璃制品的成分分析与鉴别
+# 生成日期: 2026-09-08
+# 状态: SKELETON（骨架，题面未验证）
+# 来源: CUMCM-Bench-v2.json 条目
+
+problem_id: 2022_C
+title: UNKNOWN  # 等待题面验证
+
+official_source:
+  url: UNKNOWN
+  publisher: 全国大学生数学建模竞赛组委会
+  publication_date: "2022-09"
+  retrieval_date: "2026-09-08"
+  text_sha256: PENDING
+  authenticity_status: pending
+  local_text_path: problem_statement.txt  # 本地已存，待验证
+
+family:
+  - data_analysis  # 数据分析
+  - clustering  # 聚类
+  - discriminant_analysis  # 判别分析
+  - statistical_modeling  # 统计建模
+  # CUMCM-Bench 标签: 数据+评价+决策
+
+sub_questions:
+  - id: Q1
+    desc: "对古代玻璃制品进行聚类分析"
+    type: clustering
+    required_deliverables: [PCA降维, 聚类模型]
+    depends_on: []
+  - id: Q2
+    desc: "建立分类判别模型"
+    type: discriminant_analysis
+    required_deliverables: [判别分析]
+    depends_on: [Q1]
+  - id: Q3
+    desc: "分析风化因素的影响"
+    type: statistical_analysis
+    required_deliverables: [统计检验]
+    depends_on: [Q1, Q2]
+
+allowed_model_families:
+  - clustering  # K-means / 层次聚类
+  - discriminant_analysis  # LDA / 随机森林判别
+  - PCA  # 主成分分析（降维）
+  - statistical_testing  # 假设检验
+  # 具体方法选择需题面验证后细化
+
+acceptable_solution_variants: UNKNOWN  # 等待题面验证
+
+key_variables:
+  - chemical_composition  # 化学成分（各元素含量）
+  - weathering_level  # 风化程度
+  - period  # 年代
+  - origin  # 产地
+  # 具体变量名和取值需题面验证
+
+key_constraints:
+  - 高维小样本约束（化学成分维度高但样本量有限）
+  - 统计前提约束（正态性、方差齐性等）
+  # 具体约束需题面验证
+
+evaluation_targets:
+  - 聚类效果（轮廓系数/CH指数等）
+  - 判别精度（交叉验证准确率）
+  - 统计显著性（p值）
+
+known_failure_modes:
+  - FM-MC-004  # missing_variables（关键化学变量遗漏）
+  - FM-VA-001  # missing_validation
+  - FM-VA-003  # overfitting（高维小样本易过拟合）
+  # CUMCM-Bench 旧标签: FM-MC-04, FM-VA-01, FM-VA-04
+
+known_invalid_model_patterns: UNKNOWN  # 等待题面验证
+
+forbidden_misinterpretations: UNKNOWN  # 等待题面验证
+
+validation_expectations:
+  - 交叉验证（判别模型的k-fold CV）
+  - 聚类稳定性（多初始化一致性）
+  - 统计前提检验（正态性/方差齐性）
+
+common_human_errors: UNKNOWN
+common_llm_errors:
+  - 高维小样本下不做降维直接建模（过拟合）
+  - 忽略数据预处理（缺失值/异常值）
+  - 聚类结果不做稳定性验证
+
+evidence_sources:
+  - benchmark: research/P15/benchmark/CUMCM-Bench-v2.json
+  - problem_text: research/P15/benchmark/problem_cards/2022_C/problem_statement.txt（待验证）
+
+card_version: "1.0-skeleton"
+card_date: "2026-09-08"
+card_status: skeleton
+notes: "骨架卡片。input_file=null，题面文本未验证。子问题描述、变量、约束来自 CUMCM-Bench-v2.json 标签，需在题面验证后细化。所有 UNKNOWN 字段待填充。"

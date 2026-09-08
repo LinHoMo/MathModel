@@ -1,0 +1,100 @@
+# Problem Card: 2020_B — 穿越沙漠
+# 生成日期: 2026-09-08
+# 状态: SKELETON（骨架，题面未验证）
+# 来源: CUMCM-Bench-v2.json 条目
+
+problem_id: 2020_B
+title: UNKNOWN  # 等待题面验证（俗称"穿越沙漠"）
+
+official_source:
+  url: UNKNOWN
+  publisher: 全国大学生数学建模竞赛组委会
+  publication_date: "2020-09"
+  retrieval_date: "2026-09-08"
+  text_sha256: PENDING
+  authenticity_status: pending
+  local_text_path: problem_statement.txt  # 本地已存，待验证
+
+family:
+  - dynamic_programming  # 动态规划
+  - MDP  # 马尔可夫决策过程
+  - game_theory  # 博弈论
+  - monte_carlo  # 蒙特卡洛模拟
+  # CUMCM-Bench 标签: 离散调度/博弈
+
+sub_questions:
+  - id: Q1
+    desc: "建立穿越沙漠的决策模型"
+    type: dynamic_programming
+    required_deliverables: [DP/MDP模型]
+    depends_on: []
+  - id: Q2
+    desc: "分析天气随机性的影响"
+    type: stochastic_optimization
+    required_deliverables: [蒙特卡洛模拟]
+    depends_on: [Q1]
+  - id: Q3
+    desc: "比较多策略的收益"
+    type: game_theory
+    required_deliverables: [博弈分析, 策略对比]
+    depends_on: [Q1, Q2]
+
+allowed_model_families:
+  - dynamic_programming  # 确定性DP
+  - MDP  # 随机动态规划（天气随机）
+  - game_theory  # 多玩家博弈（Q3）
+  - monte_carlo  # 随机模拟（Q2）
+  # 具体方法选择需题面验证后细化
+
+acceptable_solution_variants: UNKNOWN
+
+key_variables:
+  - resource_level  # 资源水平（水/食物/资金）
+  - weather_state  # 天气状态（晴朗/高温/沙暴）
+  - position  # 位置（地图节点）
+  - speed  # 行进速度
+  - fatigue  # 疲劳度
+  # 具体变量名和取值需题面验证
+
+key_constraints:
+  - 资源消耗约束（每日水/食物消耗）
+  - 天气随机性（行走/停留/挖矿的天气依赖）
+  - 博弈均衡（Q3多玩家策略）
+  # 具体约束需题面验证
+
+evaluation_targets:
+  - 决策最优性（最大收益/最短时间）
+  - 随机性处理合理性（天气随机建模）
+  - 策略对比公平性（Q3）
+
+known_failure_modes:
+  - FM-MC-004  # missing_variables
+  - FM-FC-003  # unit_inconsistency
+  - FM-SV-002  # non_convergence（DP状态空间过大）
+  - FM-VA-001  # missing_validation
+  - FM-VA-002  # wrong_validation_target
+  # CUMCM-Bench 旧标签: FM-MC-04, FM-FC-03, FM-SV-02, FM-VA-01, FM-VA-02
+
+known_invalid_model_patterns: UNKNOWN
+
+forbidden_misinterpretations: UNKNOWN
+
+validation_expectations:
+  - DP收敛性验证（值迭代/策略迭代收敛）
+  - 蒙特卡洛方差分析（多模拟方差）
+  - 博弈均衡验证（纳什均衡检验）
+
+common_human_errors: UNKNOWN
+common_llm_errors:
+  - 状态空间爆炸导致DP不可行
+  - 天气转移概率矩阵设定无依据
+  - 忽略资源约束的耦合（水和食物非独立）
+
+evidence_sources:
+  - benchmark: research/P15/benchmark/CUMCM-Bench-v2.json
+  - problem_text: research/P15/benchmark/problem_cards/2020_B/problem_statement.txt（待验证）
+
+card_version: "1.0-skeleton"
+card_date: "2026-09-08"
+card_status: skeleton
+notes: "骨架卡片。input_file=null，题面文本未验证。子问题描述、变量、约束来自 CUMCM-Bench-v2.json 标签，需在题面验证后细化。"

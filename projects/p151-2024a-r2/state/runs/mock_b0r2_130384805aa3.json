@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "run_id": "mock_b0r2_130384805aa3",
+  "parent_run_id": null,
+  "project": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\projects\\p151-2024a-r2",
+  "questions": [
+    "Q001"
+  ],
+  "status": "completed",
+  "workflow_version": "ca2de0f9eef627847525b7230bc055f0887207e27830a769dfe64767a2409737",
+  "skill_version": "6fa8103a0fe2eabe3d7fbf4bc65bf82be079c8401c43fda1d4fefb0bf2db0294",
+  "tool_version": "mock-executor-v1",
+  "model_provider": "mock",
+  "model_version": "mock-v1.0",
+  "prompt_hash": "f35aa44dabc1aa534c71e01a91f5bb3df6753678ab7f33c4ed773adea62750cc",
+  "input_hash": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "artifact_hash": "e066497a1096619e2493b7577f920ec50d4e5922cd8205fba242e17834ab9a29",
+  "evidence_hash": "c2a086c35b14a0aee4ac738aa038be0af5c470551844095984b6a89c070f9c03",
+  "decision_log_hash": "e36caaf05c2ec667e500c0ecab62440c6ab2ea5d093124b0cb4249e2fb168b56",
+  "latency": {
+    "started_at": "2026-09-08T01:59:38+00:00",
+    "finished_at": "2026-09-08T01:59:38+00:00",
+    "seconds": 0.01
+  },
+  "started_at": "2026-09-08T01:59:38+00:00",
+  "token_cost": null,
+  "execution_mode": "mock",
+  "engine": {
+    "completed_nodes": 16,
+    "retries": 0,
+    "failures": []
+  },
+  "decision": null,
+  "mock_execution": true,
+  "generator": "mock_llm_executor_v1",
+  "executor_type": "synthetic",
+  "provenance": {
+    "executor_type": "synthetic",
+    "marked_at": "2026-09-08T02:04:43Z",
+    "marked_by": "mark_executor_type.py"
+  }
+}
