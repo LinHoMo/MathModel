@@ -39,54 +39,65 @@
 | # | 问题 | 统计量 |
 |---|---|---|
 | **RQ1（主）** | 强制结构化 MODEL_IR 是否提升 MCQ（L2 composite）？ | `mean(S) − mean(F)` |
-| **RQ2** | 结构化是否提升**子问题覆盖度**（K001 最强区分维度）？ | 每 run sub-question coverage（Q1–Qn） |
-| **RQ3** | 结构化是否改变 failure mode 分布？ | FM 命中对比（重点 FM-MC-003 等） |
-| **RQ4** | 效应是否跨题型泛化？ | 主检验 3 题 + 泛化 2 题分层报告 |
-| **RQ5** | 结构化是否改变 token 成本/产物信息密度？ | tokens、产物长度、信息密度（结构字段 vs 字数） |
+| **RQ2** | 强制 Validation Plan 字段是否提升 VAL（L4 composite）？ | `mean(S+V) − mean(S)` |
+| **RQ3** | 结构化是否提升**子问题覆盖度**（K001 最强区分维度）？ | 每 run sub-question coverage（Q1–Qn） |
+| **RQ4** | 结构化/验证强制是否改变 failure mode 分布？ | FM 命中对比（重点 FM-MC-003、FM-VA-001/002） |
+| **RQ5** | 效应是否跨题型泛化？ | 主检验 3 题 + 泛化 2 题分层报告 |
+| **RQ6** | 结构化是否改变 token 成本/产物信息密度？ | tokens、产物长度、信息密度 |
 
-### 预注册假设（双侧，不做方向性承诺；点估计方向 S−F 报告）
-- **H1（主）**：Representation 主效应 ≠ 0。
-- **H2**：子问题覆盖度差异 ≠ 0。
-- **H3**：FM 分布差异 ≠ 0。
+### 预注册假设（双侧，不做方向性承诺；点估计方向报告）
+- **H1（主）**：Representation 主效应 ≠ 0（S−F）。
+- **H2**：Validation 强制效应 ≠ 0（S+V − S）。
+- **H3**：子问题覆盖度差异 ≠ 0。
+- **H4**：FM 分布差异 ≠ 0。
 
 ### 预先声明的结论形态
 | 结果形态 | 解释 | 后续动作 |
 |---|---|---|
-| `S > F`，CI 下界 > 0 | 结构化提升建模质量 | 确立 Model IR 强制为 Harness 核心；下一轮测 Critic/Evidence 叠加 |
-| `S ≈ F`，CI 跨 0 | 无 Representation 效应（与 K001 一致） | 强化"纯契约无增益"风险；转向 Critic/Evidence 或接受 Harness=纯测量 |
-| `S < F`，CI 上界 < 0 | 结构化有害 | 重审 MODEL_IR 强制策略（改引导式/半结构化） |
+| `S > F` 且 CI 下界 > 0 | 纯结构化提升 L2（低概率，L2 已饱和） | 确立 Model IR 强制价值 |
+| `S+V > S` 且 CI 下界 > 0 | **验证行为字段化提升 L4**（主预期） | Validation Plan 纳入 MODEL_IR 契约；下一轮测 Critic 叠加 |
+| `S ≈ F` 且 `S+V ≈ S` | Representation 与验证强制均无效应 | 强化"纯契约无增益"风险；转向 Critic/Evidence 或接受 Harness=纯测量 |
+| `S+V ≈ S ≈ F` 但 L4 全体低分 | 字段化不改变行为（Agent 仍不执行验证） | 需更强执行机制（L4 结果 gate：无极限检验即 FAIL） |
+| `S+V < S` | 强制字段有害（负担 > 收益） | 改引导式验证要求 |
 
 ---
 
 ## 3. 实验设计
 
-### 3.1 条件（2 臂）
+### 3.0 子维度分布证据（决定三臂结构）
+P15-K001 盲评 55 份的 22 维分布（`research/P15/analysis/dimension_distribution.json`）：
+- **L2 结构维度已饱和**：L2.1（变量）/L2.2（参数）/L2.3（假设）≈ 满分（avg 1.98–2.00/2），L2.7 1.96/2——K001 的 18 字段 MODEL_IR 强制下 Agent 结构产物已接近天花板。
+- **弱环全部在"非强制字段"**：L4.3 极限/边界检验 avg 0.84（**唯一有 0 分**，9/55）、L3.4 可复现性 avg 1.04（**无一 2 分**）、L1.4 歧义标注 avg 1.00（全 1 分）、L3.5 结果合理性 1.00。
+- **结论**：结构化契约的效应局限在被结构化的字段；**验证行为（极限检验/多 seed/歧义处理）未被强制，所以 Agent 普遍不做**。K002 因此增加第三臂：把验证行为也字段化。
 
-| 臂 | Representation | 输出要求 | 角色 |
-|---|---|---|---|
-| **F** | free-form | prompt：要求完整描述模型的假设/变量/参数/目标/约束/方程/求解/验证，**自由格式文本**（无 schema 字段名、无 JSON/YAML 强制） | 基线 |
-| **S** | structured | prompt：要求按 MODEL_IR 18 字段 schema 输出结构化 JSON；`k002_register.py` 机械校验字段（REQUIRED_TOP） | 处理 |
+### 3.1 条件（3 臂）
 
-**指令长度对齐**：F 臂在"请完整描述…"后追加与 S 臂 schema 说明等长的引导句（"请使用清晰的小节与编号，确保每个组成部分都可独立核验"），使两臂 prompt 长度差 <10%，排除"更多上下文"替代解释（K001 的 Sham 教训）。
+| 臂 | Representation | 强制字段 | 输出要求 | 角色 |
+|---|---|---|---|---|
+| **F** | free-form | 无 | prompt 要求完整描述假设/变量/参数/目标/约束/方程/求解/验证，自由格式文本 | 基线 |
+| **S** | structured | MODEL_IR 18 字段（K001 同款） | 按 MODEL_IR schema 输出 JSON；`k002_register.py` 机械校验 | 纯 Representation |
+| **S+V** | structured + validation fields | MODEL_IR 18 字段 + **Validation Plan 字段**（极限/边界检验、多 seed 可复现、敏感性扰动、歧义处理方案、主张-证据对应） | 同上 + Validation Plan 强制字段校验 | Representation + Validation 强制 |
 
-**对照组说明**：K002 无 Sham 臂——无知识注入，Representation 无"错位对照"自然形态；"更多上下文/更多处理资源"替代解释由指令长度对齐 + 产物信息密度统计（RQ5）控制。
+**指令长度对齐**：F 臂追加与 S 臂 schema 说明等长的引导句；S 与 S+V 的差异仅在 Validation Plan 字段说明——三臂 prompt 长度差 <10%，排除"更多上下文"替代解释（K001 Sham 教训）。
+
+**对照组说明**：K002 无 Sham 臂——无知识注入；"更多上下文/处理资源"由指令长度对齐 + 信息密度统计控制。
 
 ### 3.2 实验单位与区组
 ```
 Problem    = block（区组）
-Arm        = treatment（F/S）
-Replication = stochastic repeat（seed 42/43/44/44/45，5 rep）
+Arm        = treatment（F/S/S+V）
+Replication = stochastic repeat（seed 42/43/44/45/46，5 rep）
 ```
-统计比较同题配对差（F/S 各 5 rep 内的均值差 + 配对 CI），block 吸收题目难度。
+统计比较同题配对差（臂内 5 rep 均值差 + 配对 CI），block 吸收题目难度。
 
 ### 3.3 规模
 | 用途 | 题 | 臂 | 重复 | runs |
 |---|---|---|---|---|
-| 主检验 | 2020_B、2018_A、2019_C | 2 | 5 | 30 |
-| 泛化观察 | 2022_C、2024_A | 2 | 3 | 12 |
-| **合计** | | | | **42** |
+| 主检验 | 2020_B、2018_A、2019_C | 3 | 5 | 45 |
+| 泛化观察 | 2022_C、2024_A | 3 | 3 | 18 |
+| **合计** | | | | **63** |
 
-（与 K001 同题集同构，保持跨实验可比；功效：F/S 各 15 run 主检验配对 → 比 K001 每臂 11 略高。）
+（与 K001 同题集同构；F/S 臂可与 K001 的 A/B 臂交叉参照。）
 
 ### 3.4 强制子问题覆盖 gate（K001 教训落点）
 - 每 run 的 `problem_binding.sub_question_id` 必须覆盖该题全部子问题（2020_B→Q1-Q3 等），缺任一子问题 → 该 run 标记 `COVERAGE_FAIL`，**不进入主终点**（单独报告，与 K001 的 2 个 FAIL 同口径）。
@@ -104,7 +115,9 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 ## 4. 测量
 
 ### 4.1 主终点
-`MCQ_primary` = L2 composite（MODEL_CONSTRUCTION_RUBRIC v1.0 不变：L2.1/2.2/2.4/2.5/2.6(权重3)/2.7，/13×100）。**rubric 与 K001 完全一致**，保证跨实验可比。
+- **MCQ_primary** = L2 composite（MODEL_CONSTRUCTION_RUBRIC v1.0：L2.1/2.2/2.4/2.5/2.6(权重3)/2.7，/13×100）——与 K001 **完全一致**，跨实验可比（注意 L2 已饱和，预期区分力有限，如实报告）。
+- **VAL_primary** = L4 composite（L4.1–L4.5，/10×100）——**本实验新增关键终点**，针对 L4.3 0 分率 16.4%、L3.4 无一 2 分的已知弱环，检验"验证行为字段化"是否提升。
+- 次要：L1（歧义处理 L1.4）、L3（求解层 L3.4 可复现性）分层报告。
 
 ### 4.2 盲评与盲法（Generator ≠ Evaluator 保持）
 - 盲评包：仅含 submission_id + 题面 + 产物 + 评分表，无臂标识。
