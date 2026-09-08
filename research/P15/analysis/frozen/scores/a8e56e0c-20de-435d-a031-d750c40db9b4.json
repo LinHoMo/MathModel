@@ -1,0 +1,120 @@
+{
+  "submission_id": "a8e56e0c-20de-435d-a031-d750c40db9b4",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "a5 提取调头空间半径 4.5m 圆盘与两段相切圆弧（前弧=2 倍后弧）；a2 提取孔距恒定；con_ratio_given 提取题面 q=2 与'优化时可放宽'，显式条件覆盖 Q1-Q5"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "a3 碰撞时刻为决策变量的不连续函数（隐式非光滑性）、a4 目标非凸不可导需全局搜索、a7 可行域由物理量界定，隐式条件被显式识别"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "exp_q12→Q1/Q2 位置速度与碰撞、exp_q3→Q3 最小螺距、exp_q4→Q4 调头曲线、exp_q5→Q5 最大速度，五个子问题交付物均有对应"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 标注；调头空间形状等歧义经 a5 假设处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=constrained_optimization_kinematics（运动学映射+约束优化），与板凳龙运动学+优化问题的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V27 全部声明且区分类型；deterministic undeclared_symbol_ratio=0.0，符号声明完整"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P20 全部声明，含 source 与取值/待标定；未声明符号比例 0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "a1-a7 显式且可检验，a1（运动学映射黑箱）与 a6（速率比例关系）为合理机理假设，无与题面矛盾项"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "obj_min_pitch（Q3）与 obj_max_speed（Q5）形式化正确；但 Q4'最短调头曲线'未列入 objectives，仅由 eq_turn/eq_tangent 与 exp_q4 承载"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "con_chord/con_spiral/con_collision/con_boundary/con_speed/con_ratio_given/con_tangent/con_feasible 八条约束形式化完整，含相切/碰撞/边界/速度上限/界约束，方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "mech_kinematic_map 运动学映射 + mech_penalty 约束惩罚嵌入 + mech_ga 群体搜索 + mech_collision 碰撞事件 + mech_scale 速度线性比例，机理与运动学物理一致；sol_ga vs sol_scan 属求解对照而非候选模型对比，故不给 3"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E9 完整：螺线/弧长/弦长/速度比例/适应度/调头长度/相切/最大速度/碰撞时刻，可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "sol_kin 内层运动学递推（exact）、sol_ga 遗传算法式群体搜索（heuristic）、sol_scan 网格扫描对照，求解器与运动学/非凸优化模型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "exp_q12/exp_q3/exp_q4/exp_q5 实验含 outputs 与 solver 绑定，设计完整（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "val_stepconv 做 dt 三档收敛对比、val_tangent_res 相切残差机器精度检查、sol_ga 12 次运行统计，收敛判据明确"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "sol_ga 12 次独立运行报告均值/标准差（多运行设计），但 seed=42 与 replay 设计未显式声明"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出（位置速度序列、t_col、p_min、L_turn、v_hmax）量级物理合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "val_ga_vs_grid 对照基线：GA 最小螺距与均匀网格扫描结果相对偏差"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "val_penalty 灵敏度：惩罚系数 mu 变化一个数量级时最优解漂移幅度"
+    },
+    "L4.3": {
+      "score": 0,
+      "evidence": "无极端参数/边界条件极限检验（val_stepconv/val_tangent_res 为收敛与几何检查）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "val_ga_vs_grid/val_multi_run→cl2 全局搜索、val_tangent_res→cl3 调头构型、val_stepconv/val_spacing→cl1 递推正确性，验证覆盖核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "cl1-cl4 每条均有 evidence_refs 与 model_refs；deterministic supported_claims=4/4"
+    }
+  },
+  "vector": {
+    "L1": 9,
+    "L2": 13,
+    "L3": 8,
+    "L4": 8,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 47,
+    "used_symbols": 37,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 4,
+    "supported_claims": 4,
+    "sub_question_binding_count": 5,
+    "method_family_identified": "constrained_optimization_kinematics"
+  },
+  "failure_modes": [],
+  "notes": "运动学映射+惩罚嵌入+群体搜索的两级结构覆盖全部五个子问题，GA 与网格对照保障非凸优化可信；仅 Q4 目标未列入 objectives 且无极限检验。"
+}

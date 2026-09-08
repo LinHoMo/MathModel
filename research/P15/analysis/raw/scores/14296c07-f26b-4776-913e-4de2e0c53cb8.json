@@ -1,0 +1,120 @@
+{
+  "submission_id": "14296c07-f26b-4776-913e-4de2e0c53cb8",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "a1 提取等距螺线+两段相切圆弧路径；a2 提取刚性杆、孔距恒定、链条不可伸长；a6 提取调头空间半径 4.5m 圆盘与中心对称盘出；a3 提取龙头前把手驱动，显式条件覆盖 Q1-Q5"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "a4 碰撞判定须覆盖全部非相邻节对（隐含几何要求）、a5 目标函数非凸不可导（结构性质）、a7 可行域由物理边界界定，隐式条件被显式识别"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "exp_q12→Q1/Q2 每秒位置速度与碰撞时刻、obj_min_pitch→Q3 最小螺距、obj_min_turn→Q4 调头曲线、exp_q5→Q5 最大速度，五个子问题交付物均有对应"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 标注；调头空间形状等歧义经 a6 假设处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=hybrid_geometry_optimization（几何运动学管线+全局搜索），与板凳龙运动学+优化问题的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V25 全部声明且区分类型；deterministic undeclared_symbol_ratio=0.0，符号声明完整"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P19 全部声明，含 source 与取值/待标定；未声明符号比例 0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "a1-a7 显式且可检验，a4（全对碰撞）与 a6（调头空间几何）为合理机理假设，无与题面矛盾项"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "obj_min_pitch（Q3）与 obj_min_turn（Q4）形式化正确；但 Q5'最大行进速度'未列入 objectives，仅由 eq_vmax 解析式与 exp_q5 承载"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "con_chord/con_oncurve/con_drive/con_collision/con_boundary/con_speedlim/con_tangent/con_bounds 八条约束形式化完整，含相切/碰撞/边界/速度上限/界约束，方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "mech_pipeline 几何-运动学管线 + mech_recursion 链式递推 + mech_vel 速度传播 + mech_collide 全对碰撞 + mech_search 全局搜索，机理与板凳龙运动学物理一致；sol_ga vs sol_grid 属求解对照而非候选模型对比，故不给 3"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E10 完整：螺线/弧长/驱动 ODE/弦长约束/速度比/适应度/调头长度/相切/碰撞时刻/最大速度，含初始与边界条件，可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "sol_pipe 固定步长积分+牛顿迭代（exact）、sol_ga 群体随机搜索（heuristic）、sol_grid 网格扫描对照，求解器与几何运动学/非凸优化模型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "exp_q12/exp_q3/exp_q4/exp_q5 实验含 outputs 与 solver 绑定，设计完整（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "val_step 做 dt=0.05/0.025/0.0125 收敛对比、val_tangent 相切残差检查、sol_ga 12 次运行统计，收敛判据明确"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "sol_ga 12 次独立运行报告均值/标准差（多运行设计），但 seed=42 与 replay 设计未显式声明"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出（位置速度序列、t_col、p_min、L_turn、v_hmax）量级物理合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "val_grid 对照基线：GA 最优解与均匀网格扫描结果的相对偏差"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "val_penalty 灵敏度：惩罚系数数量级变化对最优解的影响，扰动对象为关键松弛参数"
+    },
+    "L4.3": {
+      "score": 0,
+      "evidence": "无极端参数/边界条件极限检验（val_step/val_tangent 为收敛与几何检查）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "val_grid/val_multi→cl2 全局搜索、val_tangent→cl3 调头构型、val_step/val_spacing→cl1 管线正确性，验证覆盖核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "cl1-cl4 每条均有 evidence_refs 与 model_refs；deterministic supported_claims=4/4"
+    }
+  },
+  "vector": {
+    "L1": 9,
+    "L2": 13,
+    "L3": 8,
+    "L4": 8,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 44,
+    "used_symbols": 37,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 4,
+    "supported_claims": 4,
+    "sub_question_binding_count": 5,
+    "method_family_identified": "hybrid_geometry_optimization"
+  },
+  "failure_modes": [],
+  "notes": "几何-运动学管线+全局搜索的混合建模覆盖全部五个子问题，约束/方程/验证设计完整，多运行统计与网格对照保障优化可信；仅 Q5 目标未列入 objectives 且无极限检验。"
+}

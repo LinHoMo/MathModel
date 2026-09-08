@@ -1,0 +1,123 @@
+{
+  "submission_id": "37f8a88b-17fc-495a-87a0-ca6e0822e8f3",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T00:00:00+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P11（T/L/b_w/b_f/c_w/c_f/R/m_0/lambda/kappa/rho）与 A1-A5 完整覆盖规则(1)-(8) 数字参数，均带 source"
+    },
+    "L1.2": {
+      "score": 1,
+      "evidence": "识别 C2 生存非负、C4 沙暴停留、C5 邻接，但未识别『到达终点必须入终端/约束』（E5 无 p=p_end 检查）与矿山到达当日不可挖矿等隐式/规则条件"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "X1 仅覆盖第一关/第二关的逐日状态表与终局资金；Q2/Q3 的第三至六关交付要求完全未涉及（binding_count=1）"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A3 标注 Q2 天气随机（confidence 0.7）但未给出随机建模处理方案，模型只覆盖 Q1"
+    },
+    "L1.5": {
+      "score": 1,
+      "evidence": "primary=discrete_recurrence/secondary=[dynamic_programming] 对 Q1 正确，但未判定 Q2 随机决策与 Q3 博弈类型（综合题只识别了一个类型）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 全声明含 type，覆盖 Q1 关键变量 t/p/w/f/m/omega/a/s/V/r/g_w/g_f；undeclared=0"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P11 每参数有 source/value；E1-E6 引用符号全部映射到 parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 显式带 source/confidence/type，合理可检验"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "O1 对 Q1 正确（终局资金最大化），但 Q2/Q3 目标未建模——仅部分子问题有目标"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1-C5 方向正确但缺失关键约束：起点单次购买（规则6）、矿山到达当日不可挖矿（规则7）未形式化；E5 终端亦缺到达终点判定"
+    },
+    "L2.6": {
+      "score": 1,
+      "evidence": "M1/M2/M3 家族正确（DP 递推），但终端条件 E5 未含 p=p_end 检查（未到达也按半价退回结算，机理形式有缺陷）；无候选模型对比，Q2/Q3 机理缺失"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E6 有递推/终端/初始结构，但 E5 终端条件不完整（缺到达终点的硬判定），结构可解但语义有误"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 反向精确递推匹配确定性 DP"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码与执行日志，X1 results='待求解'/pending"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 有限阶段精确终止，收敛性平凡"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X1 设 seed=42 但无多 seed 运行数据"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "计划输出逐日状态表与终局资金，量级合理；结果待产出"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 贪心基线对照"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA2 改变消耗参数（敏感参数）检验策略稳定性"
+    },
+    "L4.3": {
+      "score": 0,
+      "evidence": "无极限/边界检验"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1/VA2 分别对应 CL1（递推优于贪心）与 CL2（约束齐备性）两个核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "2 条 claim 均有 evidence_refs（supported_claims=2），无空证据引用"
+    }
+  },
+  "vector": {
+    "L1": 6,
+    "L2": 10,
+    "L3": 7,
+    "L4": 8,
+    "overall": 31
+  },
+  "deterministic": {
+    "declared_symbols": 23,
+    "used_symbols": 26,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 2,
+    "supported_claims": 2,
+    "sub_question_binding_count": 1,
+    "method_family_identified": "discrete_recurrence"
+  },
+  "failure_modes": [
+    "FM-PA-002",
+    "FM-MC-003"
+  ],
+  "notes": "仅覆盖 Q1 的确定性递推模型：Q1 部分机理与方程基本正确，但终端条件缺少到达终点判定、起点单次购买与矿山当日不可挖矿约束未形式化，Q2/Q3 未建模，交付覆盖不全。L1/L2 未达阈值。"
+}

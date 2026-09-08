@@ -1,0 +1,120 @@
+{
+  "submission_id": "5cec4eb5-edd9-4831-9ca3-5cfb04fc6d82",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1/C2 提取题面'累加和 100%、85%~105% 有效'；A2 提取风化点/未风化点；A5 提取类型标签与表单 3 无标签样本，显式条件覆盖 Q1-Q3"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A3 凸簇结构假设、A4 聚类前标准化+k 双证据、A6 先划分检验集防泄漏，隐式统计/方法学条件被显式识别"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1→Q2 判别准确率、O2→Q3 亚类（silhouette）、X1→Q1 风化差异、X3→Q3 亚类划分，Q1-Q3 交付物均有对应"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 标注；风化分级与簇数等歧义经 A2/A4 假设处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=clustering（K 均值+层次+LDA），与'分类规律+亚类划分'的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V26 全部声明且区分类型；deterministic undeclared_symbol_ratio=0.0，符号声明完整"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P17 全部声明，含 source 与取值/待标定；未声明符号比例 0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式且可检验，A4（标准化+k 双证据+多起点）与 A6（先划分防泄漏）合理，无与题面矛盾项"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 maximize accuracy 对齐 Q2 判别、O2 maximize silhouette 对齐 Q3 亚类，目标与题目一致；Q1 统计规律经 X1 实验承载"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 闭合、C2 有效性、C3 非负、C4 先划分防泄漏、C5 k 双证据、C6 标准化前置，方向正确且完整"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "M1 闭合效应→标准化/变换、M2 风化离子交换、M3 簇内紧致聚类→K 均值、M4 最近中心判别，机理与化学数据一致；无显式候选模型对比，故不给 3"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E8 完整：闭合/有效性/标准化/距离/K 均值/轮廓系数/最近中心规则/LDA 判别，结构闭合可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 K 均值（多起点）、S2 层次聚类（Ward）、S3 LDA，求解器与聚类/判别模型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "X1 统计检验、X2 留出+5 折 CV（中心最近邻+LDA）、X3 双证据定 k+子采样 50 次+层次对照，实验设计完整（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "聚类/拟合未显式声明收敛判据，以 VA3 交叉验证稳定性与 VA4 子采样簇一致性作为稳定代理"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X2 固定划分+5 折 CV、X3 子采样 50 次具备可复现设计，但未显式 seed=42/多 seed 方差与 replay 设计"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出（混淆矩阵、轮廓系数、簇稳定性指数）量级合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 对照基线：与多数类朴素基线比较留出集准确率"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA2 对 PbO/BaO/K2O/CaO 施加 ±5%~±20% 扰动，均为判别/聚类主导敏感成分"
+    },
+    "L4.3": {
+      "score": 0,
+      "evidence": "无极端参数/边界条件检验；VA4 聚类合理性、VA5 泄漏检查均非极限检验"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1→CL4 判别有效性、VA4→CL3 亚类结构、VA2→CL3/CL4 灵敏度、VA5→CL1/CL5 防泄漏，验证覆盖核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "CL1-CL5 每条均有 evidence_refs 与 model_refs；deterministic supported_claims=5/5"
+    }
+  },
+  "vector": {
+    "L1": 9,
+    "L2": 14,
+    "L3": 7,
+    "L4": 8,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 43,
+    "used_symbols": 16,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 5,
+    "supported_claims": 5,
+    "sub_question_binding_count": 3,
+    "method_family_identified": "clustering"
+  },
+  "failure_modes": [],
+  "notes": "聚类+判别混合建模完整覆盖 Q1-Q3，符号声明干净、k 值双证据与防泄漏约束到位、子采样稳定性验证充分；仅缺显式收敛判据与极限检验。"
+}

@@ -1,0 +1,67 @@
+{
+  "experiment_id": "P15-K001",
+  "protocol_version": "1.0",
+  "submission_id": "436d76e2-b83c-4e0b-a037-e5edb8db0672",
+  "problem_id": "2019_C",
+  "block_role": "main",
+  "condition": {
+    "arm": "E",
+    "knowledge": "sham",
+    "case": "none"
+  },
+  "knowledge": {
+    "card_ids": [
+      "mc-numerical-pde"
+    ],
+    "role": "sham",
+    "card_sha256": {}
+  },
+  "case": {
+    "path": null,
+    "case_type": "none",
+    "sha256": null
+  },
+  "rep": 3,
+  "seed": 44,
+  "generator": {
+    "agent_identity": "doubao",
+    "model_version": "doubao-pro",
+    "provider": "console"
+  },
+  "hashes": {
+    "problem_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+    "prompt_sha256": "1b3e6cd058452db4551f8a42e26500b6ffedb592bd2aca217ca69f1020800aea",
+    "bundle_sha256": "dc80d98d29ce7acefb426da3d1bac8aa6db40dba953958d3c0335b215f95c979",
+    "run_order_sha256": "d7bad29015c5748f5c240a33631434ced69d3455b389104f6d231547f0127d37"
+  },
+  "artifact_schema_version": "model-ir-1.0",
+  "knowledge_trace": {
+    "retrieved": [
+      "mc-numerical-pde"
+    ],
+    "considered": [
+      "mc-numerical-pde"
+    ],
+    "used": [],
+    "adapted": [],
+    "rejected": [
+      {
+        "card_id": "mc-numerical-pde",
+        "reason": "该参考条目面向数值求解偏微分方程的通用方法，与本问题的机场出租车蓄车排队与司机决策对象和机理不匹配，故未采用"
+      }
+    ]
+  },
+  "cost": {
+    "prompt_tokens": 6610,
+    "completion_tokens": 8870,
+    "latency_seconds": 232.0
+  },
+  "reference_chars": 2778,
+  "bundle_chars": 6187,
+  "batch": "batch3",
+  "sequence_in_block": 1,
+  "created_at": "2026-09-08T13:20:23Z",
+  "status": "REGISTERED",
+  "schema_validated": true,
+  "updated_at": "2026-09-08T13:20:23Z"
+}

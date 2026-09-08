@@ -1,0 +1,66 @@
+{
+  "experiment_id": "P15-K001",
+  "protocol_version": "1.0",
+  "submission_id": "444ea7c8-c039-4710-8976-e334e2817efd",
+  "problem_id": "2019_C",
+  "block_role": "main",
+  "condition": {
+    "arm": "B",
+    "knowledge": "relevant",
+    "case": "none"
+  },
+  "knowledge": {
+    "card_ids": [
+      "mc-queuing-theory"
+    ],
+    "role": "relevant",
+    "card_sha256": {}
+  },
+  "case": {
+    "path": null,
+    "case_type": "none",
+    "sha256": null
+  },
+  "rep": 2,
+  "seed": 43,
+  "generator": {
+    "agent_identity": "doubao",
+    "model_version": "doubao-pro",
+    "provider": "console"
+  },
+  "hashes": {
+    "problem_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+    "prompt_sha256": "1b3e6cd058452db4551f8a42e26500b6ffedb592bd2aca217ca69f1020800aea",
+    "bundle_sha256": "f67962b39c45ccc37640c34fd664d59222aeb83e6870c2b1854ab21e9518a8bd",
+    "run_order_sha256": "d7bad29015c5748f5c240a33631434ced69d3455b389104f6d231547f0127d37"
+  },
+  "artifact_schema_version": "model-ir-1.0",
+  "knowledge_trace": {
+    "retrieved": [
+      "mc-queuing-theory"
+    ],
+    "considered": [
+      "mc-queuing-theory"
+    ],
+    "used": [
+      "mc-queuing-theory"
+    ],
+    "adapted": [
+      "mc-queuing-theory"
+    ],
+    "rejected": []
+  },
+  "cost": {
+    "prompt_tokens": 6500,
+    "completion_tokens": 8700,
+    "latency_seconds": 208.0
+  },
+  "reference_chars": 2596,
+  "bundle_chars": 6005,
+  "batch": "batch2",
+  "sequence_in_block": 4,
+  "created_at": "2026-09-08T13:20:11Z",
+  "status": "REGISTERED",
+  "schema_validated": true,
+  "updated_at": "2026-09-08T13:20:11Z"
+}

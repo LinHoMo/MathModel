@@ -1,0 +1,1408 @@
+{
+  "ir_version": "1.0",
+  "model_id": "m-2018a-6f1a6d57",
+  "model_family": {
+    "primary": "parabolic_heat_conduction_pde",
+    "secondary": [
+      "crank_nicolson",
+      "least_squares_inversion"
+    ],
+    "description": "高温作业服装四层一维瞬态热传导正反问题耦合模型：守恒律导出抛物型方程，CN 格式二阶精度离散，正则化最小二乘反演等效参数并支撑厚度设计优化。"
+  },
+  "problem_binding": {
+    "problem_id": "2018_A",
+    "sub_question_id": "Q1",
+    "problem_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+    "problem_card_ref": "research/P15/benchmark/problem_cards/2018_A/card.yaml",
+    "competition_format": "CUMCM"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "服装沿厚度方向的几何尺度远小于面内尺寸，温度梯度以厚度方向为主，边缘散热与侧向传导可忽略，问题可简化为一维瞬态热传导。",
+      "source": "题面结构+几何量级分析",
+      "confidence": 0.92,
+      "sub_question_binding": "Q1",
+      "type": "简化假设"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "各层织物与空气隙材料均匀、各向同性，导热系数、密度、比热容在 37–75°C 温度区间内近似为常数，忽略温度依赖。",
+      "source": "附件1 参数表+材料物性常识",
+      "confidence": 0.85,
+      "sub_question_binding": "Q1",
+      "type": "简化假设"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "层间接触热阻并入邻近层的等效导热系数中，不单独建立接触热阻模型。",
+      "source": "等效参数思想",
+      "confidence": 0.82,
+      "sub_question_binding": "Q1",
+      "type": "机制假设"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "服装内部无内热源；高温侧辐射换热的影响并入等效对流换热系数，以牛顿冷却定律形式处理。",
+      "source": "题面无热源表述+辐射简化",
+      "confidence": 0.8,
+      "sub_question_binding": "Q1",
+      "type": "机制假设"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "初始时刻全场温度均匀，等于假人置于高温环境前达到的热平衡温度。",
+      "source": "实验流程设定",
+      "confidence": 0.88,
+      "sub_question_binding": "Q1",
+      "type": "简化假设"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "皮肤内表面温度恒定保持 37°C，不随实验过程变化。",
+      "source": "题面设定（体内温度控制在 37°C）",
+      "confidence": 0.95,
+      "sub_question_binding": "Q1",
+      "type": "机制假设"
+    },
+    {
+      "assumption_id": "A7",
+      "text": "附件2 的测量数据包含仪器噪声，参数反演时引入 Tikhonov 正则化以抑制过拟合。",
+      "source": "反问题不适定性分析",
+      "confidence": 0.86,
+      "sub_question_binding": "Q1",
+      "type": "反演假设"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "空间坐标",
+      "symbol": "x",
+      "definition": "沿服装厚度方向的坐标，原点取 I 层外表面",
+      "unit": "m",
+      "type": "independent",
+      "value_range": "[0, L]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V2",
+      "name": "时间",
+      "symbol": "t",
+      "definition": "自进入高温环境起算的计时",
+      "unit": "s",
+      "type": "independent",
+      "value_range": "[0, 5400]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V3",
+      "name": "温度场",
+      "symbol": "T",
+      "definition": "服装/空气隙/皮肤交界处温度分布",
+      "unit": "°C",
+      "type": "field",
+      "value_range": "[37, 75]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V4",
+      "name": "第i层温度场",
+      "symbol": "T_i",
+      "definition": "第 i 层（i=1..4）内部的温度分布",
+      "unit": "°C",
+      "type": "field",
+      "value_range": "[37, 75]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V5",
+      "name": "热流密度",
+      "symbol": "q",
+      "definition": "沿厚度方向的热流密度",
+      "unit": "W/m^2",
+      "type": "field",
+      "value_range": "实数",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V6",
+      "name": "皮肤外侧温度（预测）",
+      "symbol": "T_s",
+      "definition": "模型输出的皮肤外侧温度序列",
+      "unit": "°C",
+      "type": "output",
+      "value_range": "[37, 75]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V7",
+      "name": "皮肤外侧温度（实测）",
+      "symbol": "T_m",
+      "definition": "附件2 给出的假人皮肤外侧测量温度序列",
+      "unit": "°C",
+      "type": "data",
+      "value_range": "由附件2 给定",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V8",
+      "name": "空间网格节点索引",
+      "symbol": "j",
+      "definition": "有限差分空间网格节点编号",
+      "unit": "-",
+      "type": "index",
+      "value_range": "[0, 400]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V9",
+      "name": "时间层索引",
+      "symbol": "n",
+      "definition": "有限差分时间层编号",
+      "unit": "-",
+      "type": "index",
+      "value_range": "[0, 21600]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V10",
+      "name": "层索引",
+      "symbol": "i",
+      "definition": "层编号 i=1..4（I/II/III 织物层与 IV 空气隙）",
+      "unit": "-",
+      "type": "index",
+      "value_range": "[1, 4]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V11",
+      "name": "观测点索引",
+      "symbol": "m",
+      "definition": "附件2 测量时刻编号",
+      "unit": "-",
+      "type": "index",
+      "value_range": "[1, M]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V12",
+      "name": "残差平方和",
+      "symbol": "J",
+      "definition": "预测与实测皮肤温度之差的平方和",
+      "unit": "°C^2",
+      "type": "derived",
+      "value_range": ">= 0",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V13",
+      "name": "总厚度",
+      "symbol": "L",
+      "definition": "四层总厚度 L = d_1+d_2+d_3+d_4",
+      "unit": "m",
+      "type": "derived",
+      "value_range": "0.0152",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V14",
+      "name": "第II层设计厚度",
+      "symbol": "L_2",
+      "definition": "Q2/Q3 中待优化的 II 层厚度",
+      "unit": "mm",
+      "type": "decision",
+      "value_range": "[0.6, 25]",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V15",
+      "name": "第IV层设计厚度",
+      "symbol": "L_4",
+      "definition": "Q3 中待优化的 IV 层厚度",
+      "unit": "mm",
+      "type": "decision",
+      "value_range": "[0.6, 25]",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V16",
+      "name": "超温累计时长",
+      "symbol": "tau_44",
+      "definition": "皮肤外侧温度超过 44°C 的累计时长",
+      "unit": "min",
+      "type": "derived",
+      "value_range": "[0, 60]",
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "第I层厚度",
+      "symbol": "d_1",
+      "definition": "织物 I 层厚度",
+      "unit": "m",
+      "value": "6.0e-4",
+      "source": "附件1",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "第II层厚度",
+      "symbol": "d_2",
+      "definition": "织物 II 层厚度（Q1 取 6mm）",
+      "unit": "m",
+      "value": "6.0e-3",
+      "source": "附件1/题面Q1",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "第III层厚度",
+      "symbol": "d_3",
+      "definition": "织物 III 层厚度",
+      "unit": "m",
+      "value": "3.6e-3",
+      "source": "附件1",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "第IV层厚度",
+      "symbol": "d_4",
+      "definition": "空气隙层厚度（Q1 取 5mm）",
+      "unit": "m",
+      "value": "5.0e-3",
+      "source": "附件1/题面Q1",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "第i层导热系数",
+      "symbol": "k",
+      "definition": "各层导热系数（第 i 层记作 k_i；I/II/III 由附件1 给定，IV 空气隙为待反演等效值）",
+      "unit": "W/(m K)",
+      "value": "I:0.082 / II:0.37 / III:0.045 / IV:待反演（参考 0.024–0.06）",
+      "source": "附件1+反演",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "第i层密度",
+      "symbol": "rho_i",
+      "definition": "各层密度（IV 空气隙按等效密度处理）",
+      "unit": "kg/m^3",
+      "value": "I:300 / II:862 / III:74.2 / IV:空气等效",
+      "source": "附件1",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "第i层比热容",
+      "symbol": "c_i",
+      "definition": "各层比热容（IV 空气隙按等效比热容处理）",
+      "unit": "J/(kg K)",
+      "value": "I:1377 / II:2100 / III:1726 / IV:空气等效",
+      "source": "附件1",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "环境侧对流换热系数",
+      "symbol": "h",
+      "definition": "I 层外表面与高温环境间的等效对流换热系数（含辐射贡献）",
+      "unit": "W/(m^2 K)",
+      "value": "待反演（参考 9–25）",
+      "source": "反演参数",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "环境温度",
+      "symbol": "T_a",
+      "definition": "高温环境温度（Q1 取 75°C）",
+      "unit": "°C",
+      "value": "75（Q1）/ 65（Q2）/ 80（Q3）",
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P10",
+      "name": "皮肤/体内温度",
+      "symbol": "T_b",
+      "definition": "假人体内恒定温度，作为内边界取值",
+      "unit": "°C",
+      "value": "37",
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P11",
+      "name": "观测点数",
+      "symbol": "M",
+      "definition": "附件2 皮肤温度测量时刻数量",
+      "unit": "-",
+      "value": "待求解（依附件2 数据）",
+      "source": "附件2",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P12",
+      "name": "空间网格步长",
+      "symbol": "dx",
+      "definition": "有限差分空间步长 dx = L/N",
+      "unit": "m",
+      "value": "L/400（本 run 取 N=400）",
+      "source": "数值离散设定",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "minimize",
+      "expression": "J = sum_m (T_s(t_m) - T_m(t_m))^2",
+      "variables_refs": [
+        "V6",
+        "V7",
+        "V12"
+      ],
+      "description": "在反演参数空间上极小化皮肤外侧温度预测与附件2 实测的残差平方和，确定等效参数 h、k_4（并校核 k_2）。",
+      "sub_question_binding": "Q1",
+      "clarity_score": 3
+    },
+    {
+      "objective_id": "O2",
+      "type": "minimize",
+      "expression": "min L_2 subject to T_s(60) <= 47 and tau_44 <= 5",
+      "variables_refs": [
+        "V14",
+        "V6",
+        "V16"
+      ],
+      "description": "在保证 60 分钟时皮肤外侧温度不超过 47°C 且超过 44°C 累计不超过 5 分钟的前提下，最小化 II 层厚度。",
+      "sub_question_binding": "Q2",
+      "clarity_score": 3
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "equality",
+      "expression": "T_i(x_i,t) = T_{i+1}(x_i,t)",
+      "variables_refs": [
+        "V4",
+        "V3"
+      ],
+      "source": "界面温度连续",
+      "description": "层间界面两侧温度连续",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "equality",
+      "expression": "k_i dT_i/dx = k_{i+1} dT_{i+1}/dx at x_i",
+      "variables_refs": [
+        "V4",
+        "V5"
+      ],
+      "source": "界面热流连续",
+      "description": "层间界面热流密度连续",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "inequality",
+      "expression": "T_b <= T(x,t) <= T_a",
+      "variables_refs": [
+        "V3"
+      ],
+      "source": "物理合理性",
+      "description": "温度场有界且不低于体温",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "inequality",
+      "expression": "k_i > 0, h > 0, rho_i > 0",
+      "variables_refs": [],
+      "source": "物性正定性",
+      "description": "反演参数与物性参数保持正定",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "inequality",
+      "expression": "T_s(60) <= 47",
+      "variables_refs": [
+        "V6"
+      ],
+      "source": "题面Q2",
+      "description": "工作 60 分钟时皮肤外侧温度不超过 47°C",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C6",
+      "type": "inequality",
+      "expression": "tau_44 <= 5",
+      "variables_refs": [
+        "V16"
+      ],
+      "source": "题面Q2",
+      "description": "皮肤外侧温度超过 44°C 的累计时间不超过 5 分钟",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C7",
+      "type": "inequality",
+      "expression": "L_2 >= 0.6, L_4 >= 0.6",
+      "variables_refs": [
+        "V14",
+        "V15"
+      ],
+      "source": "工艺可行域",
+      "description": "II/IV 层设计厚度存在工艺下限（厚度非负）",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "傅里叶热传导定律",
+      "description": "导热由温度梯度驱动，热流密度与负温度梯度成正比，是各层内部热输运的本构关系。",
+      "type": "constitutive",
+      "governing_principle": "q = -k grad(T)",
+      "variables_refs": [
+        "V3",
+        "V5"
+      ],
+      "assumptions_refs": [
+        "A2",
+        "A4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "name": "能量守恒（热力学第一定律）",
+      "description": "每一层微元体内能变化率等于净流入热流，由守恒律积分形式导出层内抛物型控制方程。",
+      "type": "conservation",
+      "governing_principle": "dU/dt = -div(q)（无内热源）",
+      "variables_refs": [
+        "V3",
+        "V5"
+      ],
+      "assumptions_refs": [
+        "A1",
+        "A4",
+        "A5"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M3",
+      "name": "层间界面耦合",
+      "description": "四层介质在界面处温度连续且热流连续，保证能量在层间无缝传递；漏写会导致方程组欠定。",
+      "type": "interface",
+      "governing_principle": "T_i = T_{i+1}, k_i dT_i/dn = k_{i+1} dT_{i+1}/dn",
+      "variables_refs": [
+        "V4",
+        "V3",
+        "V5"
+      ],
+      "assumptions_refs": [
+        "A3"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M4",
+      "name": "外边界对流换热",
+      "description": "I 层外表面与高温环境通过对流换热交换热量，辐射贡献并入等效换热系数。",
+      "type": "boundary",
+      "governing_principle": "牛顿冷却定律 q = h(T_a - T_surface)",
+      "variables_refs": [
+        "V3"
+      ],
+      "assumptions_refs": [
+        "A4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M5",
+      "name": "瞬态扩散演化",
+      "description": "温度场随时间向稳态扩散演化，热扩散率 alpha_i = k_i/(rho_i c_i) 决定演化时间尺度；不同层热惰性差异导致界面温度延迟。",
+      "type": "evolution",
+      "governing_principle": "抛物型方程 dT/dt = alpha d^2T/dx^2",
+      "variables_refs": [
+        "V3",
+        "V4"
+      ],
+      "assumptions_refs": [
+        "A1",
+        "A2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M6",
+      "name": "反问题参数辨识",
+      "description": "部分物性（空气隙导热、对流系数）未知，由附件2 皮肤温度序列反求；反问题不适定，需正则化并区分等效参数与真实物性。",
+      "type": "inverse",
+      "governing_principle": "最小二乘拟合 + 正则化（Tikhonov）",
+      "variables_refs": [
+        "V6",
+        "V7",
+        "V12"
+      ],
+      "assumptions_refs": [
+        "A7"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\rho_i c_i \\frac{\\partial T_i}{\\partial t} = \\frac{\\partial}{\\partial x}\\left(k_i \\frac{\\partial T_i}{\\partial x}\\right)",
+      "type": "pde",
+      "variables_refs": [
+        "V4",
+        "V3",
+        "V2",
+        "V1"
+      ],
+      "parameters_refs": [
+        "P5",
+        "P6",
+        "P7"
+      ],
+      "mechanism_ref": "M2",
+      "derivation_trace": "由能量守恒积分形式经散度定理导出，i=1..4",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "q_i = -k_i \\frac{\\partial T_i}{\\partial x}",
+      "type": "constitutive",
+      "variables_refs": [
+        "V5",
+        "V4",
+        "V1"
+      ],
+      "parameters_refs": [
+        "P5"
+      ],
+      "mechanism_ref": "M1",
+      "derivation_trace": "傅里叶定律一维形式",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "-k_i \\frac{\\partial T_i}{\\partial x}\\Big|_{x=0} = h\\,(T_a-T_i(0,t)),\\quad i=1",
+      "type": "boundary",
+      "variables_refs": [
+        "V4",
+        "V1",
+        "V2"
+      ],
+      "parameters_refs": [
+        "P5",
+        "P8",
+        "P9"
+      ],
+      "mechanism_ref": "M4",
+      "derivation_trace": "外表面热流平衡：导热热流=对流换热热流，i=1 指 I 层外表面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "T_i(x_i,t)=T_{i+1}(x_i,t),\\quad k_i\\frac{\\partial T_i}{\\partial x}=k_{i+1}\\frac{\\partial T_{i+1}}{\\partial x}",
+      "type": "interface",
+      "variables_refs": [
+        "V4",
+        "V1",
+        "V2"
+      ],
+      "parameters_refs": [
+        "P5"
+      ],
+      "mechanism_ref": "M3",
+      "derivation_trace": "界面温度连续+热流连续",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E6",
+      "latex": "T_i(L,t)=T_b,\\quad i=4",
+      "type": "boundary",
+      "variables_refs": [
+        "V4",
+        "V13",
+        "V2"
+      ],
+      "parameters_refs": [
+        "P10"
+      ],
+      "mechanism_ref": "M2",
+      "derivation_trace": "皮肤内表面 Dirichlet 定温边界，i=4 指空气隙与皮肤交界面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E7",
+      "latex": "T_i(x,0)=T_b",
+      "type": "initial",
+      "variables_refs": [
+        "V4",
+        "V1"
+      ],
+      "parameters_refs": [
+        "P10"
+      ],
+      "mechanism_ref": "M2",
+      "derivation_trace": "初始全场均匀定温（与体温一致）",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E8",
+      "latex": "\\frac{T_j^{n+1}-T_j^n}{\\Delta t}=\\frac{\\alpha_i}{2}\\left(\\frac{T_{j-1}^{n+1}-2T_j^{n+1}+T_{j+1}^{n+1}}{\\Delta x^2}+\\frac{T_{j-1}^{n}-2T_j^{n}+T_{j+1}^{n}}{\\Delta x^2}\\right)",
+      "type": "discretization",
+      "variables_refs": [
+        "V3",
+        "V8",
+        "V9",
+        "V1",
+        "V2"
+      ],
+      "parameters_refs": [
+        "P12"
+      ],
+      "mechanism_ref": "M5",
+      "derivation_trace": "Crank-Nicolson：空间二阶中心差，时间取 n 与 n+1 层平均，无条件稳定且二阶精度",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E9",
+      "latex": "J=\\sum_{m=1}^{M}\\left(T_s(t_m)-T_m(t_m)\\right)^2",
+      "type": "objective",
+      "variables_refs": [
+        "V6",
+        "V7",
+        "V12",
+        "V2"
+      ],
+      "parameters_refs": [
+        "P11"
+      ],
+      "mechanism_ref": "M6",
+      "derivation_trace": "最小二乘残差定义，M 为附件2 观测点数",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E10",
+      "latex": "\\sum_i \\int_{x_{i-1}}^{x_i} \\rho_i c_i \\frac{\\partial T_i}{\\partial t}\\,dx = q(0,t)-q(L,t)",
+      "type": "conservation_check",
+      "variables_refs": [
+        "V3",
+        "V5",
+        "V13",
+        "V1",
+        "V2"
+      ],
+      "parameters_refs": [
+        "P6",
+        "P7"
+      ],
+      "mechanism_ref": "M2",
+      "derivation_trace": "整体能量平衡（逐层积分求和），用于守恒性验证",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_id": "D1",
+      "from_type": "mechanism",
+      "from_id": "M1",
+      "to_type": "equation",
+      "to_id": "E3",
+      "relation": "derives",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D2",
+      "from_type": "mechanism",
+      "from_id": "M2",
+      "to_type": "equation",
+      "to_id": "E1",
+      "relation": "derives",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D3",
+      "from_type": "mechanism",
+      "from_id": "M5",
+      "to_type": "equation",
+      "to_id": "E8",
+      "relation": "discretizes",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D4",
+      "from_type": "equation",
+      "from_id": "E9",
+      "to_type": "objective",
+      "to_id": "O1",
+      "relation": "supports",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D5",
+      "from_type": "solver",
+      "from_id": "S2",
+      "to_type": "solver",
+      "to_id": "S1",
+      "relation": "calls",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D6",
+      "from_type": "experiment",
+      "from_id": "X2",
+      "to_type": "solver",
+      "to_id": "S2",
+      "relation": "drives",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "name": "Crank-Nicolson 有限差分正问题求解器",
+      "type": "exact",
+      "method": "逐层建立 CN 隐式差分方程组（含界面与边界离散），三对角追赶法（Thomas）求解每个时间层",
+      "parameters": {
+        "N": 400,
+        "dt": 0.25,
+        "scheme": "CN",
+        "boundary": "Robin(left)+Dirichlet(right)"
+      },
+      "convergence_criteria": "能量残差相对变化 < 1e-3 且皮肤温度步间变化 < 0.01°C",
+      "equations_refs": [
+        "E1",
+        "E4",
+        "E5",
+        "E6",
+        "E7",
+        "E8"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "name": "参数反演求解器（最小二乘+Levenberg-Marquardt）",
+      "type": "heuristic",
+      "method": "外层优化驱动内层正问题黑箱：迭代更新反演参数 theta=(h,k_4,k_2) 使 J 下降",
+      "parameters": {
+        "init": "[h0=15, k4_0=0.03, k2_0=0.37]",
+        "lambda_reg": 0.0001,
+        "max_iter": 120
+      },
+      "convergence_criteria": "J 相对下降 < 1e-4 或参数更新 < 1e-3",
+      "equations_refs": [
+        "E9"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S3",
+      "name": "厚度设计优化器",
+      "type": "heuristic",
+      "method": "对 II/IV 层厚度在可行域做枚举/区间搜索，评估约束 C5-C7 下最小化目标",
+      "parameters": {
+        "bounds_d2_mm": "[0.6, 25]",
+        "bounds_d4_mm": "[0.6, 25]",
+        "grid": "0.1mm"
+      },
+      "convergence_criteria": "可行域内目标函数最小且约束全部满足",
+      "equations_refs": [
+        "E9"
+      ],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "method": "在 T_a=75°C、d_2=6mm、d_4=5mm、90 分钟工况下用 S1 求解正问题，输出皮肤外侧温度时间序列并与附件2 对照",
+      "parameters": {
+        "T_a": 75,
+        "d_2_mm": 6,
+        "d_4_mm": 5,
+        "t_end_min": 90,
+        "N": 400,
+        "dt": 0.25,
+        "seed": 42
+      },
+      "inputs_refs": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "P9",
+        "P10",
+        "P12"
+      ],
+      "outputs": [
+        "T_s(t) 序列",
+        "各层温度场快照"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "status": "pending",
+        "rep": "r3"
+      },
+      "solver_ref": "S1",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "method": "以附件2 皮肤温度序列为观测，用 S2 反演 h、k_4（并校核 k_2），检查残差与参数可辨识性",
+      "parameters": {
+        "observations": "附件2",
+        "objective": "J",
+        "seed": 42
+      },
+      "inputs_refs": [
+        "P5",
+        "P8",
+        "V7"
+      ],
+      "outputs": [
+        "theta* = (h*, k_4*, k_2*)",
+        "J*",
+        "残差曲线"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "status": "pending",
+        "rep": "r3"
+      },
+      "solver_ref": "S2",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X3",
+      "method": "对 d_2（Q2）与 (d_2, d_4)（Q3）做厚度设计扫描，评估 T_s 峰值与 tau_44 约束裕度",
+      "parameters": {
+        "T_a": 65,
+        "d_4_mm": 5.5,
+        "t_end_min": 60,
+        "seed": 42
+      },
+      "inputs_refs": [
+        "P8",
+        "V14",
+        "V15"
+      ],
+      "outputs": [
+        "最优厚度",
+        "约束裕度"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "status": "pending",
+        "rep": "r3"
+      },
+      "solver_ref": "S3",
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "VA1",
+      "type": "convergence",
+      "method": "空间步长与时间步长同时减半（N:200->400, dt:1.0->0.5 等），比较皮肤温度曲线最大偏差",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X1"
+      ],
+      "targets_refs": [
+        "V6"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA2",
+      "type": "baseline",
+      "method": "令 t->inf 求稳态极限，与各层线性温度分布解析解对比",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X1"
+      ],
+      "targets_refs": [
+        "V3"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA3",
+      "type": "consistency",
+      "method": "检查整体能量平衡（E10）：进入热量=内能增量+流出热量，相对误差",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X1"
+      ],
+      "targets_refs": [
+        "V3",
+        "V5"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA4",
+      "type": "predictive",
+      "method": "把附件2 数据按时间分割：前 60% 反演、后 40% 检验预测能力",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X2"
+      ],
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA5",
+      "type": "sensitivity",
+      "method": "对反演参数 h、k_4、k_2 施加 ±10% 扰动，观察 T_s 输出变化是否平滑",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X2"
+      ],
+      "targets_refs": [
+        "V6"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA6",
+      "type": "cross_validation",
+      "method": "用显式 FTCS 格式（稳定域内）与 CN 求解同一工况，交叉对比结果",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X1"
+      ],
+      "targets_refs": [
+        "V3"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "text": "在厚度远小于面内尺度且环境场近似均匀的条件下，一维降维成立；稳态极限下各层温度呈线性分布，可作解析对照基线。",
+      "type": "methodological",
+      "evidence_refs": [
+        "VA2",
+        "VA6"
+      ],
+      "model_refs": [
+        "M1",
+        "M2"
+      ],
+      "experiment_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL2",
+      "text": "Crank-Nicolson 格式无条件稳定且时间二阶精度，配合 Thomas 算法可在不满足 CFL 限制下采用较大时间步，是抛物型问题首选格式。",
+      "type": "numerical",
+      "evidence_refs": [
+        "VA1",
+        "VA6"
+      ],
+      "model_refs": [
+        "M5"
+      ],
+      "experiment_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL3",
+      "text": "反演所得导热系数与对流换热系数为模型等效参数，受一维化、理想接触与辐射并入假设影响，不能直接视为材料真实物性。",
+      "type": "interpretive",
+      "evidence_refs": [
+        "VA5"
+      ],
+      "model_refs": [
+        "M6"
+      ],
+      "experiment_refs": [
+        "X2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL4",
+      "text": "在 75°C、II 层 6mm、IV 层 5mm、90 分钟工况下，模型可复现附件2 的皮肤外侧温度序列。",
+      "type": "predictive",
+      "evidence_refs": [
+        "X1",
+        "VA4"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "experiment_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "unresolved"
+    },
+    {
+      "claim_id": "CL5",
+      "text": "界面温度连续与热流连续条件是四层耦合方程组适定的必要组成，缺失其一将导致欠定或非物理解。",
+      "type": "structural",
+      "evidence_refs": [
+        "VA3",
+        "VA6"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "experiment_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL6",
+      "text": "增厚 II/IV 层可推迟皮肤升温并降低峰值温度，但受 44°C 以上时长与厚度下限约束，存在最优厚度组合。",
+      "type": "predictive",
+      "evidence_refs": [
+        "X3"
+      ],
+      "model_refs": [
+        "M5"
+      ],
+      "experiment_refs": [
+        "X3"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "unresolved"
+    }
+  ],
+  "model_graph": {
+    "graph_version": "1.0",
+    "nodes": [
+      {
+        "id": "problem",
+        "type": "problem",
+        "label": "2018_A"
+      },
+      {
+        "id": "M1",
+        "type": "mechanism",
+        "label": "傅里叶热传导"
+      },
+      {
+        "id": "M2",
+        "type": "mechanism",
+        "label": "能量守恒"
+      },
+      {
+        "id": "M4",
+        "type": "mechanism",
+        "label": "对流换热边界"
+      },
+      {
+        "id": "M5",
+        "type": "mechanism",
+        "label": "瞬态扩散演化"
+      },
+      {
+        "id": "M6",
+        "type": "mechanism",
+        "label": "反问题参数辨识"
+      },
+      {
+        "id": "E1",
+        "type": "equation",
+        "label": "层内控制方程"
+      },
+      {
+        "id": "E3",
+        "type": "equation",
+        "label": "傅里叶本构"
+      },
+      {
+        "id": "E4",
+        "type": "equation",
+        "label": "外边界对流"
+      },
+      {
+        "id": "E5",
+        "type": "equation",
+        "label": "界面连续条件"
+      },
+      {
+        "id": "E6",
+        "type": "equation",
+        "label": "内边界定温"
+      },
+      {
+        "id": "E8",
+        "type": "equation",
+        "label": "CN 离散格式"
+      },
+      {
+        "id": "E9",
+        "type": "equation",
+        "label": "反演目标"
+      },
+      {
+        "id": "C1",
+        "type": "constraint",
+        "label": "温度连续"
+      },
+      {
+        "id": "C2",
+        "type": "constraint",
+        "label": "热流连续"
+      },
+      {
+        "id": "C5",
+        "type": "constraint",
+        "label": "47°C 上限"
+      },
+      {
+        "id": "C6",
+        "type": "constraint",
+        "label": "44°C 时长上限"
+      },
+      {
+        "id": "O1",
+        "type": "objective",
+        "label": "残差平方和最小"
+      },
+      {
+        "id": "O2",
+        "type": "objective",
+        "label": "II 层厚度最小"
+      },
+      {
+        "id": "S1",
+        "type": "solver",
+        "label": "CN+Thomas 正问题"
+      },
+      {
+        "id": "S2",
+        "type": "solver",
+        "label": "参数反演"
+      },
+      {
+        "id": "S3",
+        "type": "solver",
+        "label": "厚度优化"
+      },
+      {
+        "id": "X1",
+        "type": "experiment",
+        "label": "正问题复现实验"
+      },
+      {
+        "id": "VA1",
+        "type": "validation",
+        "label": "网格收敛性"
+      },
+      {
+        "id": "VA2",
+        "type": "validation",
+        "label": "稳态解析对照"
+      },
+      {
+        "id": "VA5",
+        "type": "validation",
+        "label": "参数灵敏度"
+      }
+    ],
+    "edges": [
+      {
+        "from": "problem",
+        "to": "M1",
+        "relation": "yields"
+      },
+      {
+        "from": "problem",
+        "to": "M2",
+        "relation": "yields"
+      },
+      {
+        "from": "M1",
+        "to": "E3",
+        "relation": "derives"
+      },
+      {
+        "from": "M2",
+        "to": "E1",
+        "relation": "derives"
+      },
+      {
+        "from": "M4",
+        "to": "E4",
+        "relation": "derives"
+      },
+      {
+        "from": "M5",
+        "to": "E8",
+        "relation": "derives"
+      },
+      {
+        "from": "M6",
+        "to": "E9",
+        "relation": "derives"
+      },
+      {
+        "from": "E1",
+        "to": "E8",
+        "relation": "discretizes"
+      },
+      {
+        "from": "E5",
+        "to": "E8",
+        "relation": "discretizes"
+      },
+      {
+        "from": "C1",
+        "to": "E1",
+        "relation": "restricts"
+      },
+      {
+        "from": "C2",
+        "to": "E1",
+        "relation": "restricts"
+      },
+      {
+        "from": "E8",
+        "to": "S1",
+        "relation": "solved_by"
+      },
+      {
+        "from": "S1",
+        "to": "X1",
+        "relation": "used_in"
+      },
+      {
+        "from": "E9",
+        "to": "O1",
+        "relation": "supports"
+      },
+      {
+        "from": "O1",
+        "to": "S2",
+        "relation": "solved_by"
+      },
+      {
+        "from": "S2",
+        "to": "S1",
+        "relation": "calls"
+      },
+      {
+        "from": "M6",
+        "to": "S2",
+        "relation": "drives"
+      },
+      {
+        "from": "C5",
+        "to": "O2",
+        "relation": "restricts"
+      },
+      {
+        "from": "C6",
+        "to": "O2",
+        "relation": "restricts"
+      },
+      {
+        "from": "O2",
+        "to": "S3",
+        "relation": "solved_by"
+      },
+      {
+        "from": "S3",
+        "to": "X1",
+        "relation": "uses"
+      },
+      {
+        "from": "S1",
+        "to": "VA1",
+        "relation": "validated_by"
+      },
+      {
+        "from": "E1",
+        "to": "VA2",
+        "relation": "validated_by"
+      },
+      {
+        "from": "O1",
+        "to": "VA5",
+        "relation": "assessed_by"
+      }
+    ]
+  },
+  "modeling_trace": {
+    "trace_version": "1.0",
+    "generated_at": "2026-09-08T13:25:04Z",
+    "agent_identity": "doubao",
+    "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+    "node_events": [
+      {
+        "order": 1,
+        "node": "problem_structuring",
+        "action": "识别抛物型初边值问题与反演耦合，评估稳态/集总/高维候选机理的适用性并选定一维瞬态模型"
+      },
+      {
+        "order": 2,
+        "node": "model_construction",
+        "action": "写出四层控制方程、界面与边界条件，按 CN 格式离散为三对角系统"
+      },
+      {
+        "order": 3,
+        "node": "inverse_setup",
+        "action": "引入正则化最小二乘目标并规划验证实验（收敛性/稳态/守恒/留一/灵敏度）"
+      }
+    ],
+    "generation_order": [
+      "assumptions",
+      "parameters",
+      "variables",
+      "mechanisms",
+      "equations",
+      "constraints",
+      "objectives",
+      "solvers",
+      "experiments",
+      "validations",
+      "claims"
+    ]
+  }
+}

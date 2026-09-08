@@ -1,0 +1,1242 @@
+{
+  "ir_version": "1.0",
+  "model_id": "m-2022c-8d4e6f10",
+  "model_family": {
+    "primary": "hybrid_cluster_discriminant",
+    "secondary": [
+      "compositional_data_analysis",
+      "unsupervised_clustering",
+      "regression_correction"
+    ],
+    "description": "无监督聚类与有监督判别结合的混合建模：按固定预处理顺序（先划分检验集、再闭合处理与尺度化）保证无泄漏，用 K 均值对每一类型内部做亚类划分（肘部+轮廓双证据定 k、多起点初始化），用线性判别给出类型鉴别函数，并以风化点数据构造风化前成分的回归校正。聚类结果仅作结构与亚类探索，类型判定由判别模型负责。"
+  },
+  "problem_binding": {
+    "problem_id": "2022_C",
+    "sub_question_id": "Q1",
+    "problem_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+    "problem_card_ref": "research/P15/benchmark/problem_cards/2022_C/card.yaml",
+    "competition_format": "CUMCM"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "各化学成分比例为重量百分比，理想累加和为 100%，仅累加和介于 85%~105% 的数据有效。",
+      "source": "题面附件说明",
+      "confidence": 0.98,
+      "sub_question_binding": "Q1",
+      "type": "数据约束假设"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "风化通过表面离子交换改变表层成分读数，未风化点与严重风化点分别近似对应风化前与风化后状态。",
+      "source": "题面背景 + 附件采样说明",
+      "confidence": 0.9,
+      "sub_question_binding": "Q1",
+      "type": "机理假设"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "同一玻璃类型内部的亚类在成分空间呈现簇状结构，可用距离度量的聚类刻画；聚类前须对特征做标准化以消除量纲差异。",
+      "source": "建模选择",
+      "confidence": 0.8,
+      "sub_question_binding": "Q2",
+      "type": "结构假设"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "聚类数 k 不能拍脑袋确定，需以肘部法与轮廓系数双证据选择，并用子采样重复聚类检验稳定性。",
+      "source": "建模规范",
+      "confidence": 0.92,
+      "sub_question_binding": "Q2",
+      "type": "流程假设"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "类型标签由考古工作者依据化学检测给定，视为可靠真值，用于有监督判别；无标签样本（表单 3）仅用成分特征推断。",
+      "source": "题面说明",
+      "confidence": 0.97,
+      "sub_question_binding": "Q3",
+      "type": "标注可靠性假设"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "留出检验集须在标准化与任何变换前划分，检验信息不进入训练过程。",
+      "source": "建模规范",
+      "confidence": 0.99,
+      "sub_question_binding": "Q2",
+      "type": "流程假设"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "样本序号",
+      "symbol": "i",
+      "definition": "文物采样点编号，观测单位索引",
+      "unit": "件",
+      "type": "index",
+      "value_range": "[1, N]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V2",
+      "name": "成分下标",
+      "symbol": "j",
+      "definition": "氧化物成分序号，j=1..12 对应 SiO2..SrO",
+      "unit": "维",
+      "type": "index",
+      "value_range": "[1, J]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V3",
+      "name": "表面风化状态",
+      "symbol": "W",
+      "definition": "W_i=1 表示采样点标记为风化，W_i=0 表示未风化",
+      "unit": "二值",
+      "type": "label",
+      "value_range": "{0,1}",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V4",
+      "name": "玻璃类型",
+      "symbol": "T",
+      "definition": "T_i=1 表示铅钡玻璃，T_i=0 表示高钾玻璃",
+      "unit": "二值",
+      "type": "label",
+      "value_range": "{0,1}",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V5",
+      "name": "纹饰",
+      "symbol": "D",
+      "definition": "文物表面纹饰类别（风化与外观关联分析用）",
+      "unit": "类别",
+      "type": "categorical",
+      "value_range": "纹饰类别集合",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V6",
+      "name": "颜色",
+      "symbol": "C",
+      "definition": "文物颜色类别（风化与外观关联分析用）",
+      "unit": "类别",
+      "type": "categorical",
+      "value_range": "颜色类别集合",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V7",
+      "name": "成分向量",
+      "symbol": "x",
+      "definition": "全部 12 种主要氧化物的含量比例向量，x_j 为第 j 种成分占比",
+      "unit": "比例",
+      "type": "vector",
+      "value_range": "[0,1]^J",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V8",
+      "name": "二氧化硅含量",
+      "symbol": "x_1",
+      "definition": "SiO2 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V9",
+      "name": "氧化钠含量",
+      "symbol": "x_2",
+      "definition": "Na2O 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V10",
+      "name": "氧化钾含量",
+      "symbol": "x_3",
+      "definition": "K2O 所占比例，高钾玻璃的特征成分",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V11",
+      "name": "氧化钙含量",
+      "symbol": "x_4",
+      "definition": "CaO 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V12",
+      "name": "氧化镁含量",
+      "symbol": "x_5",
+      "definition": "MgO 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V13",
+      "name": "氧化铝含量",
+      "symbol": "x_6",
+      "definition": "Al2O3 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V14",
+      "name": "氧化铁含量",
+      "symbol": "x_7",
+      "definition": "Fe2O3 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V15",
+      "name": "氧化铜含量",
+      "symbol": "x_8",
+      "definition": "CuO 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V16",
+      "name": "氧化铅含量",
+      "symbol": "x_9",
+      "definition": "PbO 所占比例，铅钡玻璃的助熔剂特征成分，亚类划分主选成分",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V17",
+      "name": "氧化钡含量",
+      "symbol": "x_10",
+      "definition": "BaO 所占比例，铅钡玻璃的助熔剂特征成分，亚类划分主选成分",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V18",
+      "name": "五氧化二磷含量",
+      "symbol": "x_11",
+      "definition": "P2O5 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V19",
+      "name": "氧化锶含量",
+      "symbol": "x_12",
+      "definition": "SrO 所占比例",
+      "unit": "比例",
+      "type": "composition",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V20",
+      "name": "标准化成分",
+      "symbol": "z",
+      "definition": "z_{i,j} 为第 i 个样本第 j 种成分标准化后的值",
+      "unit": "无量纲",
+      "type": "derived",
+      "value_range": "实数",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V21",
+      "name": "轮廓系数",
+      "symbol": "s",
+      "definition": "单个样本的聚类轮廓系数，衡量簇内紧致与簇间分离",
+      "unit": "无量纲",
+      "type": "derived",
+      "value_range": "[-1,1]",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V22",
+      "name": "簇内平均距离",
+      "symbol": "a",
+      "definition": "样本到同簇其他样本的平均距离",
+      "unit": "无量纲",
+      "type": "derived",
+      "value_range": ">=0",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V23",
+      "name": "最近簇平均距离",
+      "symbol": "c",
+      "definition": "样本到最近邻簇样本的平均距离",
+      "unit": "无量纲",
+      "type": "derived",
+      "value_range": ">=0",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V24",
+      "name": "预测类型概率",
+      "symbol": "p",
+      "definition": "p_i = P(T_i=1|x_i)，判别模型输出的铅钡玻璃后验概率",
+      "unit": "概率",
+      "type": "derived",
+      "value_range": "[0,1]",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "显著性水平",
+      "symbol": "alpha",
+      "definition": "假设检验的显著性水平",
+      "unit": "无量纲",
+      "value": "0.05",
+      "source": "统计学惯例",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "有效数据下界",
+      "symbol": "Lb",
+      "definition": "成分比例累加和视为有效的最小值",
+      "unit": "比例",
+      "value": "0.85",
+      "source": "题面规定",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "有效数据上界",
+      "symbol": "Ub",
+      "definition": "成分比例累加和视为有效的最大值",
+      "unit": "比例",
+      "value": "1.05",
+      "source": "题面规定",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "零值替代常数",
+      "symbol": "delta",
+      "definition": "对数比变换前对零值成分的乘法替代常数",
+      "unit": "比例",
+      "value": "1e-3",
+      "source": "成分数据方法惯例",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "成分维数",
+      "symbol": "J",
+      "definition": "纳入建模的主要氧化物成分个数",
+      "unit": "维",
+      "value": "12",
+      "source": "附件表单 2 结构",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "样本量",
+      "symbol": "n",
+      "definition": "有效样本总数",
+      "unit": "件",
+      "value": "待求解",
+      "source": "附件表单 2",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "聚类数",
+      "symbol": "k",
+      "definition": "K 均值聚类簇数，由肘部法与轮廓系数双证据在 2..6 中选定",
+      "unit": "簇",
+      "value": "待定（双证据选择）",
+      "source": "建模规范",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "交叉验证折数",
+      "symbol": "K",
+      "definition": "K 折交叉验证的折数",
+      "unit": "折",
+      "value": "5",
+      "source": "建模选择",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "训练集比例",
+      "symbol": "r",
+      "definition": "有标签样本中用于训练判别模型的比例",
+      "unit": "比例",
+      "value": "0.8",
+      "source": "建模选择",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P10",
+      "name": "距离度量",
+      "symbol": "d",
+      "definition": "样本间距离函数，取欧氏距离",
+      "unit": "无量纲",
+      "value": "欧氏距离",
+      "source": "建模选择",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P11",
+      "name": "链接法",
+      "symbol": "g",
+      "definition": "层次聚类链接策略（备选，用于与 K 均值结果交叉印证）",
+      "unit": "无量纲",
+      "value": "Ward",
+      "source": "建模选择",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P12",
+      "name": "K 均值初始化次数",
+      "symbol": "n_init",
+      "definition": "K 均值多起点初始化次数，避免局部最优",
+      "unit": "次",
+      "value": "10",
+      "source": "建模规范",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P13",
+      "name": "随机种子",
+      "symbol": "seed",
+      "definition": "划分与建模的随机种子",
+      "unit": "无量纲",
+      "value": "42",
+      "source": "实验设置",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P14",
+      "name": "类别先验概率",
+      "symbol": "pi",
+      "definition": "判别模型类别先验，取训练集类别频率",
+      "unit": "概率",
+      "value": "训练集频率",
+      "source": "建模选择",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P15",
+      "name": "判别系数向量",
+      "symbol": "beta",
+      "definition": "线性判别/逻辑回归中的系数向量（待估计）",
+      "unit": "无量纲",
+      "value": "待估计",
+      "source": "数据估计",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P16",
+      "name": "检验统计量阈值",
+      "symbol": "t",
+      "definition": "两样本检验统计量的临界判定值",
+      "unit": "无量纲",
+      "value": "待求解",
+      "source": "数据计算",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P17",
+      "name": "分组均值",
+      "symbol": "m",
+      "definition": "风化/未风化两组某成分的样本均值（下标区分组别）",
+      "unit": "比例",
+      "value": "待估计",
+      "source": "数据估计",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P18",
+      "name": "风化校正截距",
+      "symbol": "q",
+      "definition": "风化前成分预测回归第 j 成分的截距（待估计）",
+      "unit": "比例",
+      "value": "待估计",
+      "source": "数据估计",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P19",
+      "name": "风化校正斜率",
+      "symbol": "u",
+      "definition": "风化前成分预测回归第 j 成分的斜率（待估计）",
+      "unit": "无量纲",
+      "value": "待估计",
+      "source": "数据估计",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "maximize",
+      "expression": "accuracy(T, T_hat)",
+      "variables_refs": ["V4", "V24"],
+      "description": "在留出检验集与交叉验证上最大化玻璃类型判别准确率，并兼顾各类别查全率与查准率",
+      "sub_question_binding": "Q2",
+      "clarity_score": 0.9
+    },
+    {
+      "objective_id": "O2",
+      "type": "maximize",
+      "expression": "mean_silhouette(k)",
+      "variables_refs": ["V21"],
+      "description": "对每一类型内部选择使平均轮廓系数最大且肘部稳定的 k，得到合理亚类划分",
+      "sub_question_binding": "Q2",
+      "clarity_score": 0.85
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "equality",
+      "expression": "sum_{j=1}^{J} x_{i,j} = 1",
+      "variables_refs": ["V7"],
+      "source": "题面成分性定义",
+      "description": "同一文物各成分比例累加和为 100%（理想情形）",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "inequality",
+      "expression": "0.85 <= sum_{j=1}^{J} x_{i,j} <= 1.05",
+      "variables_refs": ["V7"],
+      "source": "题面有效性规定",
+      "description": "仅累加和介于 85%~105% 的记录有效",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "inequality",
+      "expression": "x_{i,j} >= 0",
+      "variables_refs": ["V7"],
+      "source": "成分物理含义",
+      "description": "各成分比例非负",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "inequality",
+      "expression": "split_before_transform",
+      "variables_refs": ["V20"],
+      "source": "建模规范（防泄漏）",
+      "description": "检验集须在标准化与变换前划分，不参与任何参数估计",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "inequality",
+      "expression": "k_dual_evidence",
+      "variables_refs": ["V21"],
+      "source": "建模规范",
+      "description": "聚类数 k 必须同时有肘部法与轮廓系数依据，禁止无依据取 k",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C6",
+      "type": "inequality",
+      "expression": "report_per_class_metrics",
+      "variables_refs": ["V4"],
+      "source": "建模规范",
+      "description": "类型判别评价须同时报告各类别查全率与查准率",
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "成分闭合效应机理",
+      "description": "占比数据满足总和为一约束，各维度不独立；常规距离与统计量会被闭合效应扭曲，故先做对数比变换再进入聚类与判别。",
+      "type": "数据机理",
+      "governing_principle": "成分数据位于单纯形上，闭合约束使协方差退化，需映射到无约束空间",
+      "variables_refs": ["V7", "V20"],
+      "assumptions_refs": ["A1"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M2",
+      "name": "风化离子交换机理",
+      "description": "风化使碱金属与碱土金属氧化物淋失、SiO2 相对富集，风化点读数相对风化前系统性偏移；需分类型比较或校正，不能混作同分布。",
+      "type": "地球化学机理",
+      "governing_principle": "埋藏环境中玻璃网络修饰体阳离子与水溶液发生离子交换与淋滤",
+      "variables_refs": ["V3", "V8", "V9", "V10", "V11"],
+      "assumptions_refs": ["A2"],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M3",
+      "name": "簇内紧致聚类机理",
+      "description": "同一类型的亚类在成分空间呈簇状；K 均值通过最小化簇内平方距离和寻找紧致分组，适合欧氏空间中凸簇结构；对初始中心敏感，故多起点初始化并配合层次聚类交叉印证。",
+      "type": "无监督学习机理",
+      "governing_principle": "以簇内离差平方和最小为目标的最优划分",
+      "variables_refs": ["V7", "V20", "V21", "V22", "V23"],
+      "assumptions_refs": ["A3", "A4"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M4",
+      "name": "贝叶斯判别机理",
+      "description": "有标签样本上按贝叶斯最优决策构造线性判别边界；铅钡与高钾的助熔剂特征成分（PbO、BaO 对 K2O）差异显著，线性边界兼具准确与可解释。",
+      "type": "统计分类机理",
+      "governing_principle": "最小化期望错分代价的后验概率最大规则",
+      "variables_refs": ["V4", "V7", "V16", "V17", "V10"],
+      "assumptions_refs": ["A5"],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\sum_{j=1}^{J} x_{i,j} = 1, \\; \\forall i",
+      "type": "控制方程",
+      "variables_refs": ["V7"],
+      "parameters_refs": ["P5"],
+      "mechanism_ref": "M1",
+      "derivation_trace": "题面成分性定义直接给出",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "0.85 \\le \\sum_{j=1}^{J} x_{i,j} \\le 1.05",
+      "type": "约束条件",
+      "variables_refs": ["V7"],
+      "parameters_refs": ["P2", "P3", "P5"],
+      "mechanism_ref": "M1",
+      "derivation_trace": "题面有效性判定规则",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\mathrm{clr}_j(x) = \\ln x_j - \\frac{1}{J} \\sum_{k=1}^{J} \\ln x_k",
+      "type": "数据变换",
+      "variables_refs": ["V7"],
+      "parameters_refs": ["P5"],
+      "mechanism_ref": "M1",
+      "derivation_trace": "Aitchison 中心对数比变换，消除闭合约束对协方差结构的扭曲",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "z_{i,j} = (x_{i,j} - \\mu_j) / \\sigma_j",
+      "type": "数据变换",
+      "variables_refs": ["V7", "V20"],
+      "parameters_refs": ["P5"],
+      "mechanism_ref": "M1",
+      "derivation_trace": "z-score 标准化，使不同量纲成分可比；均值与标准差仅在训练集上估计",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "d(x_i, x_l) = \\sqrt{\\sum_{j=1}^{J} (x_{i,j} - x_{l,j})^2}",
+      "type": "距离度量",
+      "variables_refs": ["V7"],
+      "parameters_refs": ["P5", "P10"],
+      "mechanism_ref": "M3",
+      "derivation_trace": "欧氏距离，作为聚类与最近邻判别的样本间相似性度量",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E6",
+      "latex": "\\min \\sum_{k=1}^{K} \\sum_{i \\in C_k} \\|x_i - \\mu_k\\|^2",
+      "type": "优化目标",
+      "variables_refs": ["V7", "V22"],
+      "parameters_refs": ["P7", "P12"],
+      "mechanism_ref": "M3",
+      "derivation_trace": "K 均值聚类目标：最小化各簇内样本到簇中心的平方距离和",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E7",
+      "latex": "s(i) = (c(i) - a(i)) / \\max\\{a(i), c(i)\\}",
+      "type": "评价指标",
+      "variables_refs": ["V21", "V22", "V23"],
+      "parameters_refs": [],
+      "mechanism_ref": "M3",
+      "derivation_trace": "轮廓系数定义，衡量簇内紧致与簇间分离；与肘部法共同确定 k",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E8",
+      "latex": "\\delta_k(x) = x^\\top \\Sigma^{-1} \\mu_k - \\frac{1}{2} \\mu_k^\\top \\Sigma^{-1} \\mu_k + \\ln \\pi_k",
+      "type": "判别函数",
+      "variables_refs": ["V7", "V4"],
+      "parameters_refs": ["P14", "P15"],
+      "mechanism_ref": "M4",
+      "derivation_trace": "类内协方差相同的多元高斯假设下贝叶斯判别的线性形式",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E9",
+      "latex": "\\hat{x}_j = q_j + u_j z_{i,j}",
+      "type": "校正方程",
+      "variables_refs": ["V7", "V20"],
+      "parameters_refs": ["P18", "P19"],
+      "mechanism_ref": "M2",
+      "derivation_trace": "分类型以未风化点为参照，用风化点读数线性回归估计风化前成分",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_id": "DEP1",
+      "type": "data",
+      "description": "有效样本筛选依赖成分累加和判定，先按 C2 过滤再进入变换",
+      "source_refs": ["C2"],
+      "target_refs": ["E2"],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "DEP2",
+      "type": "data",
+      "description": "标准化与对数比变换依赖先划分检验集，防止统计量泄漏",
+      "source_refs": ["C4"],
+      "target_refs": ["E3", "E4"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "dependency_id": "DEP3",
+      "type": "model",
+      "description": "亚类聚类依赖标准化成分与 k 选择；类型判别依赖标签与校正后成分",
+      "source_refs": ["V4", "V7", "V20"],
+      "target_refs": ["E6", "E7", "E8"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "dependency_id": "DEP4",
+      "type": "model",
+      "description": "风化前成分预测依赖风化标记与类型标签，分类型分成分估计",
+      "source_refs": ["V3", "V4", "V7"],
+      "target_refs": ["E9"],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "DEP5",
+      "type": "software",
+      "description": "数值实现依赖 numpy/scipy/sklearn 标准科学计算栈，随机种子固定 42",
+      "source_refs": ["P13"],
+      "target_refs": ["S1", "S2", "S3"],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "type": "heuristic",
+      "name": "K 均值聚类",
+      "method": "Lloyd 迭代：分配样本到最近中心后更新中心，多起点初始化取最优",
+      "parameters": "n_init=10；tol=1e-4；k 由肘部+轮廓双证据在 2..6 选择",
+      "convergence_criteria": "中心位移小于 1e-4 或达到最大迭代",
+      "equations_refs": ["E6", "E7"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S2",
+      "type": "exact",
+      "name": "层次聚类",
+      "method": "凝聚式层次聚类，Ward 链接最小化合并后类内方差增量",
+      "parameters": "链接法=Ward；距离=欧氏",
+      "convergence_criteria": "合并至指定簇数或单一簇",
+      "equations_refs": ["E5"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S3",
+      "type": "exact",
+      "name": "线性判别分析求解",
+      "method": "类内散度矩阵广义特征分解，得到判别方向与阈值",
+      "parameters": "先验=训练集频率；类内协方差=合并估计",
+      "convergence_criteria": "闭式解，无迭代",
+      "equations_refs": ["E8"],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "method": "按类型分层做风化/未风化两样本检验与描述统计，并做风化状态与类型、纹饰、颜色的交叉表卡方检验",
+      "parameters": "显著性水平 0.05；按类型分层",
+      "inputs_refs": ["V3", "V4", "V5", "V6", "V7"],
+      "outputs": "各成分风化差异显著性清单、风化与外观属性关联表",
+      "results": "待求解",
+      "run_metadata": "seed=42",
+      "solver_ref": "S3",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "method": "先划分训练/检验集，再在训练集上拟合并做 5 折交叉验证，最后在留出检验集上报告混淆矩阵与逐类查全/查准",
+      "parameters": "r=0.8；K=5",
+      "inputs_refs": ["V4", "V7", "V20"],
+      "outputs": "交叉验证准确率均值与标准差、留出集混淆矩阵",
+      "results": "待求解",
+      "run_metadata": "seed=42",
+      "solver_ref": "S3",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "method": "对每一类型在选定特征（铅钡类取 PbO、BaO；高钾类取 K2O、CaO、MgO）上做标准化后 K 均值聚类，用肘部+轮廓双证据定 k，并用子采样重复聚类检验簇稳定性",
+      "parameters": "k=2..6；n_init=10；子采样 50 次",
+      "inputs_refs": ["V7", "V20", "V16", "V17", "V10", "V11", "V12"],
+      "outputs": "各类型亚类划分结果、平均轮廓系数、簇稳定性指数",
+      "results": "待求解",
+      "run_metadata": "seed=42",
+      "solver_ref": "S1",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X4",
+      "method": "对风化点样本按类型拟合风化前成分校正回归，用同类型未风化点读数做留出评估",
+      "parameters": "分类型、分成分估计",
+      "inputs_refs": ["V3", "V7"],
+      "outputs": "各成分校正回归系数与预测误差",
+      "results": "待求解",
+      "run_metadata": "seed=42",
+      "solver_ref": "S3",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "VA1",
+      "type": "对照基线",
+      "method": "与总是判为多数类的朴素基线比较留出集准确率",
+      "results": "待求解",
+      "pass_fail": "待求解",
+      "evidence_refs": ["X2"],
+      "targets_refs": ["O1"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "VA2",
+      "type": "灵敏度分析",
+      "method": "对关键成分（PbO、BaO、K2O、CaO）读数施加 ±5%~±20% 扰动，观察判别翻转比例与亚类归属变化",
+      "results": "待求解",
+      "pass_fail": "待求解",
+      "evidence_refs": ["E8", "X2", "X3"],
+      "targets_refs": ["O1", "O2"],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "VA3",
+      "type": "交叉验证稳定性",
+      "method": "多次 5 折交叉验证报告准确率均值与标准差",
+      "results": "待求解",
+      "pass_fail": "待求解",
+      "evidence_refs": ["X2"],
+      "targets_refs": ["O1"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "VA4",
+      "type": "聚类合理性检验",
+      "method": "肘部法与轮廓系数双证据定 k；子采样重复聚类计算簇一致性；与层次聚类（Ward）结果对照",
+      "results": "待求解",
+      "pass_fail": "待求解",
+      "evidence_refs": ["X3"],
+      "targets_refs": ["O2"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "VA5",
+      "type": "泄漏检查",
+      "method": "核对检验集是否参与标准化与变换参数估计，对比先划分与先变换两种流程的检验集准确率差异",
+      "results": "待求解",
+      "pass_fail": "待求解",
+      "evidence_refs": ["C4", "E4"],
+      "targets_refs": ["O1"],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "VA6",
+      "type": "化学一致性对照",
+      "method": "判别与聚类依据与化学常识对照：铅钡类 PbO、BaO 高，高钾类 K2O 高",
+      "results": "待求解",
+      "pass_fail": "待求解",
+      "evidence_refs": ["M4", "X2"],
+      "targets_refs": ["O1", "O2"],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "text": "成分占比数据受闭合约束，各维度不独立，须经对数比变换与标准化后再聚类或判别。",
+      "type": "方法主张",
+      "evidence_refs": ["M1", "E3", "E4"],
+      "model_refs": ["M1"],
+      "experiment_refs": [],
+      "validation_refs": ["VA5"],
+      "sub_question_binding": "Q2",
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL2",
+      "text": "风化使碱金属与碱土金属氧化物含量系统性改变，风化与未风化样本不能视为同分布。",
+      "type": "机理主张",
+      "evidence_refs": ["M2", "E9"],
+      "model_refs": ["M2"],
+      "experiment_refs": ["X1", "X4"],
+      "validation_refs": [],
+      "sub_question_binding": "Q1",
+      "status": "unresolved"
+    },
+    {
+      "claim_id": "CL3",
+      "text": "同一玻璃类型内部存在可被 K 均值与层次聚类共同确认的亚类结构，且 k 由双证据确定而非主观给定。",
+      "type": "经验主张",
+      "evidence_refs": ["M3", "E6", "E7"],
+      "model_refs": ["M3"],
+      "experiment_refs": ["X3"],
+      "validation_refs": ["VA4"],
+      "sub_question_binding": "Q2",
+      "status": "unresolved"
+    },
+    {
+      "claim_id": "CL4",
+      "text": "高钾与铅钡玻璃可由助熔剂特征成分经线性判别有效区分，判别边界可解释且优于多数类基线。",
+      "type": "经验主张",
+      "evidence_refs": ["M4", "E8", "VA1", "VA6"],
+      "model_refs": ["M4"],
+      "experiment_refs": ["X2"],
+      "validation_refs": ["VA1", "VA3", "VA6"],
+      "sub_question_binding": "Q2",
+      "status": "unresolved"
+    },
+    {
+      "claim_id": "CL5",
+      "text": "未知类别样本鉴别应使用风化校正或分风化状态建模，并同时报告整体准确率与逐类查全/查准。",
+      "type": "流程主张",
+      "evidence_refs": ["C4", "C6", "E9"],
+      "model_refs": ["M2", "M4"],
+      "experiment_refs": ["X2", "X4"],
+      "validation_refs": ["VA2"],
+      "sub_question_binding": "Q3",
+      "status": "supported"
+    }
+  ],
+  "model_graph": {
+    "graph_version": "1.0",
+    "nodes": [
+      {
+        "id": "problem",
+        "type": "problem",
+        "label": "2022_C"
+      },
+      {
+        "id": "M1",
+        "type": "mechanism",
+        "label": "成分闭合效应"
+      },
+      {
+        "id": "M2",
+        "type": "mechanism",
+        "label": "风化离子交换"
+      },
+      {
+        "id": "M3",
+        "type": "mechanism",
+        "label": "簇内紧致聚类"
+      },
+      {
+        "id": "M4",
+        "type": "mechanism",
+        "label": "贝叶斯判别"
+      },
+      {
+        "id": "E1",
+        "type": "equation",
+        "label": "闭合约束"
+      },
+      {
+        "id": "E2",
+        "type": "equation",
+        "label": "有效性判定"
+      },
+      {
+        "id": "E3",
+        "type": "equation",
+        "label": "对数比变换"
+      },
+      {
+        "id": "E4",
+        "type": "equation",
+        "label": "标准化"
+      },
+      {
+        "id": "E5",
+        "type": "equation",
+        "label": "欧氏距离"
+      },
+      {
+        "id": "E6",
+        "type": "equation",
+        "label": "K 均值目标"
+      },
+      {
+        "id": "E7",
+        "type": "equation",
+        "label": "轮廓系数"
+      },
+      {
+        "id": "E8",
+        "type": "equation",
+        "label": "线性判别函数"
+      },
+      {
+        "id": "E9",
+        "type": "equation",
+        "label": "风化前成分校正"
+      },
+      {
+        "id": "C1",
+        "type": "constraint",
+        "label": "成分闭合"
+      },
+      {
+        "id": "C2",
+        "type": "constraint",
+        "label": "有效区间"
+      },
+      {
+        "id": "C4",
+        "type": "constraint",
+        "label": "防泄漏划分"
+      },
+      {
+        "id": "C5",
+        "type": "constraint",
+        "label": "k 双证据"
+      },
+      {
+        "id": "O1",
+        "type": "objective",
+        "label": "分类准确率"
+      },
+      {
+        "id": "O2",
+        "type": "objective",
+        "label": "聚类合理性"
+      },
+      {
+        "id": "S1",
+        "type": "solver",
+        "label": "K 均值聚类"
+      },
+      {
+        "id": "S2",
+        "type": "solver",
+        "label": "层次聚类"
+      },
+      {
+        "id": "S3",
+        "type": "solver",
+        "label": "线性判别求解"
+      },
+      {
+        "id": "VA1",
+        "type": "validation",
+        "label": "对照基线"
+      },
+      {
+        "id": "VA4",
+        "type": "validation",
+        "label": "聚类合理性"
+      }
+    ],
+    "edges": [
+      {
+        "from": "problem",
+        "to": "M2",
+        "relation": "yields"
+      },
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "derives"
+      },
+      {
+        "from": "M1",
+        "to": "E2",
+        "relation": "derives"
+      },
+      {
+        "from": "M1",
+        "to": "E3",
+        "relation": "derives"
+      },
+      {
+        "from": "M1",
+        "to": "E4",
+        "relation": "derives"
+      },
+      {
+        "from": "M3",
+        "to": "E5",
+        "relation": "derives"
+      },
+      {
+        "from": "M3",
+        "to": "E6",
+        "relation": "derives"
+      },
+      {
+        "from": "M3",
+        "to": "E7",
+        "relation": "derives"
+      },
+      {
+        "from": "M2",
+        "to": "E9",
+        "relation": "derives"
+      },
+      {
+        "from": "M4",
+        "to": "E8",
+        "relation": "derives"
+      },
+      {
+        "from": "C1",
+        "to": "E1",
+        "relation": "restricts"
+      },
+      {
+        "from": "C2",
+        "to": "E2",
+        "relation": "restricts"
+      },
+      {
+        "from": "C4",
+        "to": "E4",
+        "relation": "restricts"
+      },
+      {
+        "from": "C5",
+        "to": "E6",
+        "relation": "restricts"
+      },
+      {
+        "from": "E6",
+        "to": "O2",
+        "relation": "supports"
+      },
+      {
+        "from": "E7",
+        "to": "O2",
+        "relation": "supports"
+      },
+      {
+        "from": "E8",
+        "to": "O1",
+        "relation": "supports"
+      },
+      {
+        "from": "E6",
+        "to": "S1",
+        "relation": "solved_by"
+      },
+      {
+        "from": "E5",
+        "to": "S2",
+        "relation": "solved_by"
+      },
+      {
+        "from": "E8",
+        "to": "S3",
+        "relation": "solved_by"
+      },
+      {
+        "from": "E7",
+        "to": "VA4",
+        "relation": "checked_by"
+      },
+      {
+        "from": "E8",
+        "to": "VA1",
+        "relation": "checked_by"
+      }
+    ]
+  },
+  "modeling_trace": {
+    "trace_version": "1.0",
+    "generated_at": "2026-09-08T09:24:00Z",
+    "agent_identity": "doubao",
+    "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+    "node_events": [
+      {
+        "order": 1,
+        "node": "structure_identification",
+        "action": "识别样本/特征/标签/干扰变量：部分标签已知、部分未知，判定为聚类探索+有监督判别双线建模"
+      },
+      {
+        "order": 2,
+        "node": "preprocessing_order",
+        "action": "先划分检验集再闭合处理与标准化，防止统计量泄漏；占比数据标注闭合属性"
+      },
+      {
+        "order": 3,
+        "node": "cluster_k_selection",
+        "action": "规定 k 由肘部法与轮廓系数双证据选择，多起点初始化避免局部最优"
+      },
+      {
+        "order": 4,
+        "node": "mechanism_selection",
+        "action": "无标签部分用 K 均值+层次聚类探索亚类结构，有标签部分用线性判别分类，归因（风化校正）独立建模"
+      },
+      {
+        "order": 5,
+        "node": "validation_skeleton",
+        "action": "设计对照基线、灵敏度、交叉验证稳定性、聚类合理性、泄漏检查、化学一致性六项验证"
+      }
+    ],
+    "generation_order": [
+      "assumptions",
+      "variables",
+      "parameters",
+      "constraints",
+      "mechanisms",
+      "equations",
+      "objectives",
+      "solvers",
+      "experiments",
+      "validations",
+      "claims",
+      "model_graph"
+    ]
+  }
+}

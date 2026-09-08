@@ -1,0 +1,122 @@
+{
+  "submission_id": "deda4e16-1b3d-4d5c-a9a1-fa6f81f76d1c",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A2/A7 提取题面(3)两条并行车道与'如何设置上车点'；A3 提取选项(A)(B)；A4/A5 提取题面(4)里程相关收益与优先权；A1 提取乘客数量变化规律，跨 Q1/Q3/Q4 的显式条件均被覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1/A6 分段平稳与稳态假设显式声明；C2 lambda_t < s*mu（排队稳定性条件）为隐式约束；E2 生灭过程归一化、E4 剩余服务能力比值为隐式物理关系"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1/O2 对应 Q1 司机收益与等待；O3 max B 对应 Q3'总乘车效率最高'；E10 theta 与 X3 outputs（收益均衡指标）对应 Q4'优先安排方案'；VA7 对应 Q2 数据标定"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 标注；到达过程与稳态性等不确定性通过 A1/A2/A6 假设处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=multi_objective_queueing（M/M/s + 权衡前沿 + 优先权），与问题排队+多目标（收益/效率/公平）的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V15 全部声明且区分 input/state/derived/decision/index 类型，含 lambda_t(V2)、n(V3)、W(V4)、U(V5)、B(V6)、s(V7)、d(V12)、theta(V13)、rho(V14)"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 全部声明，每项含 source（题目/运营成本/机场设施/管理参数等）与取值或'待标定'；deterministic undeclared_symbol_ratio=0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A7 显式列出且按 Q1/Q3/Q4 绑定，区分简化/机理假设，标注 source 与 confidence(0.65-0.9)，A5'优先权不改变乘客上车顺序'为合理界定"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "O1 maximize U（Q1 收益）、O3 maximize B（Q3 乘车效率）形式化正确；但 Q4'收益尽量均衡'未在 objectives 中形式化为目标（仅由 M5 机理+VA5 变异系数间接承担）"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1-C6 含队长非负/稳定性/二值性/容量等关键约束且方向正确；但 Q3 题面显式要求'保证车辆和乘客安全'未形式化为约束，C6 表达式仅 s>=1 未含 s<=车道容量上界"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "M1 M/M/s 生灭过程 + M2 期望收益阈值决策 + M3 收益核算 + M4 服务容量吞吐 + M5 收益均衡补偿，机理与各问物理一致；无显式候选模型对比，故不给 3"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E10 完整：rho/P0/Pw/W 稳态链、E5/E6 收益、E7 决策收益、E8 吞吐、E9 决策规则、E10 优先权规则，结构闭合可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 Erlang-C 解析配 M/M/s 稳态、S2 网格扫描配多目标权衡前沿、S3 带优先权离散事件仿真配 Q4 规则，求解器与模型类型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "S1/S2/S3 含 method、parameters、convergence_criteria；X1/X2/X3 含 grid（s x alpha）、inputs_refs、outputs、solver_ref，设计完整（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 服务强度小于1；S2 权衡前沿随网格加密稳定；S3 均值标准误低于阈值，收敛判据明确"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "seed=42（P12/X1/X2/X3），S3 replications>=1000，但无显式多 seed 扫描/方差设计"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出 rho∈[0,1)（V14）、P0/Pw∈[0,1]、B=s*mu*(1-P0)（E8）非负有界、W>=0（C4），量级物理合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 baseline：对比阈值策略与'总是蓄车''总是放空'基线期望收益"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA2 sensitivity：扫描空驶成本、等待成本率与车费差，均为收益/等待权衡的主导参数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA4 校验服务强度<1（边界条件检验），但无极端参数极限检验"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1→O1、VA5→O2（公平性 CV，Q4）、VA6→O3（Q3 效率）、VA7→Q2，验证目标覆盖 CL1-CL6 核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "CL1-CL6 每条均有 evidence_refs（VA1/VA2/VA5/VA6/VA3/VA7）与 model_refs；deterministic supported_claims=6/6"
+    }
+  },
+  "vector": {
+    "L1": 9,
+    "L2": 12,
+    "L3": 8,
+    "L4": 9,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 27,
+    "used_symbols": 21,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 6,
+    "supported_claims": 6,
+    "sub_question_binding_count": 4,
+    "method_family_identified": "multi_objective_queueing"
+  },
+  "failure_modes": [
+    "FM-MC-003"
+  ],
+  "notes": "以 M/M/s 多服务台排队统一刻画司机决策、乘车区效率与短途优先权，覆盖 Q1/Q3/Q4，机理正确、验证设计完整；主要缺陷是 Q3 安全约束与 s 上界未形式化，Q4 公平目标未显式列入 objectives。"
+}

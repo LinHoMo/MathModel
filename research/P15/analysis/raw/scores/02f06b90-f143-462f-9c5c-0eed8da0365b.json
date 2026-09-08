@@ -1,0 +1,120 @@
+{
+  "submission_id": "02f06b90-f143-462f-9c5c-0eed8da0365b",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A4（选项A/B 放空成本与时间机会成本）、A3（可观测航班与队长）、A7（先来后到）、A1（乘客数量变化规律）均提取题面显式条件；P1 c=2 取自题面(3)两条并行车道"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1 分段平稳假设显式说明推导依据；C2 lambda_t < c*mu（排队稳定性条件）为隐式约束；M4 Little 定律（流量守恒）为隐式物理关系"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1 最大化班次期望总收益 J 对应 Q1'司机收益'；E10 阈值决策规则 nstar 与 X1 outputs（各时段 nstar、总收益 J）对应'给出司机选择策略'的交付物"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "题面到达率时变/司机经验判断存在歧义，无显式 ambiguities 标注，但通过 A1（分段平稳）、A2（泊松/指数）以假设形式给出处理方案"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=time_varying_queueing_dp（分段平稳 M/M/c 排队 + 动态规划），与 Q1 随机序贯决策+排队等待的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V15 全部声明且区分 index/input/state/derived/decision 类型，含 n(W4)、lambda_p/lambda_t(V2/V3)、Wq(V5)、d/nstar(V14/V8)、J(V7)，带 unit 与 value_range"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 全部声明，每项含 source（题目/运营成本/机场设施等）与取值或'待标定'；deterministic undeclared_symbol_ratio=0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A7 显式列出，区分简化假设/机理假设，均标注 source 与 confidence(0.7-0.95)，无与题面矛盾项"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 maximize J（V7 班次总净收益）与 Q1 综合乘客数量变化规律与司机收益的要求一致；O2 minimize Wq 为辅助目标"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 n>=0、C2 稳定性、C3 d∈{0,1}、C4 Wq>=0、C5 n<=N_max、C6 H>=1，方向正确，含容量与稳定性关键约束"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "M1 分段平稳 M/M/c 排队 + M2 Bellman 动态规划 + M3 收益核算 + M4 Little 定律，机理与出租车排队决策物理一致；M5 仿真作对照基准，但无显式候选模型对比与选择依据，故不给 3"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1/E2/E3 稳态与 Erlang-C、E4 Little、E5/E6 收益、E7 总收益求和、E8 Bellman 递推、E9 终端条件、E10 阈值决策规则，结构完整可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 exact 闭式 Erlang-C 配分段稳态模型、S2 后向 DP 配 Bellman 递推、S3 离散事件仿真配随机系统，求解器与模型类型完全匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "S1/S2/S3 均含 method、parameters、equations_refs；X1/X2 实验含 inputs_refs、outputs、solver_ref，设计完整内部一致（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 convergence_criteria=各时段服务强度小于1；S3=均值标准误低于阈值；S2=有限时段终止，收敛判据明确且适配"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "seed 固定 42（P12/X1/X2），S3 replications>=1000，但未设计显式多 seed 扫描/方差报告，仅设计层面可复现"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出 Wq>=0（C4）、P0/Pw∈[0,1]（V9/V10 range）、收益 J 由 E5-E7 有界核算，量级物理合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 baseline：对比 DP 阈值策略与'固定蓄车''固定放空'策略的期望收益，基线选择恰当"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA2 sensitivity：扫描等待成本率 cw 与空驶成本 ce，二者为 CL3 声称的主导敏感参数，扰动对象正确"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA4 stability 校验所有时段服务强度<1（边界条件检验）+ VA5 时段粒度 H 稳健性，但无极端参数极限检验"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1→O1（策略收益主张）、VA2→CL2/CL3（等待时间与收益敏感性）、VA4→C2、VA6→Q2 数据依赖性，验证覆盖核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "CL1-CL5 每条 claim 均绑定 evidence_refs（VA1/VA2/VA5/VA6）与 model_refs，无 unsupported claim；deterministic supported_claims=5/5"
+    }
+  },
+  "vector": {
+    "L1": 9,
+    "L2": 14,
+    "L3": 8,
+    "L4": 9,
+    "overall": 40
+  },
+  "deterministic": {
+    "declared_symbols": 27,
+    "used_symbols": 24,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 5,
+    "supported_claims": 5,
+    "sub_question_binding_count": 2,
+    "method_family_identified": "time_varying_queueing_dp"
+  },
+  "failure_modes": [],
+  "notes": "对 Q1 构建了分段平稳 M/M/c 排队+动态规划决策模型，变量/参数/假设/方程/验证设计完整自洽，机理与问题物理一致，阈值策略可直接落地；唯一小缺憾是无显式歧义标注与候选模型对比。"
+}

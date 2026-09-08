@@ -1,0 +1,69 @@
+{
+  "experiment_id": "P15-K001",
+  "protocol_version": "1.0",
+  "submission_id": "c5e7ce8a-3a57-4a8e-a948-8d990bbb2599",
+  "problem_id": "2018_A",
+  "block_role": "main",
+  "condition": {
+    "arm": "D",
+    "knowledge": "relevant",
+    "case": "structural"
+  },
+  "knowledge": {
+    "card_ids": [
+      "mc-numerical-pde"
+    ],
+    "role": "relevant",
+    "card_sha256": {}
+  },
+  "case": {
+    "path": "research/P15/cases/structural/2018_A.md",
+    "case_type": "structural",
+    "sha256": "2a4633fa63d32bbfc546f3b01750d78d0c65bc4053d959a7e5dd30e086065990"
+  },
+  "rep": 1,
+  "seed": 42,
+  "generator": {
+    "agent_identity": "doubao",
+    "model_version": "doubao-pro",
+    "provider": "console"
+  },
+  "hashes": {
+    "problem_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+    "prompt_sha256": "33cc3964eed541ee0dce140b97261078fb5e629d877e8dbc15c20a7ae0059da0",
+    "bundle_sha256": "6f8baf70c2e390592c9409454a829301ee88d41e3dfa10bfc5c6685dbe61dd00",
+    "run_order_sha256": "d7bad29015c5748f5c240a33631434ced69d3455b389104f6d231547f0127d37"
+  },
+  "artifact_schema_version": "model-ir-1.0",
+  "knowledge_trace": {
+    "retrieved": [
+      "mc-numerical-pde",
+      "case-structural-2018_A"
+    ],
+    "considered": [
+      "mc-numerical-pde",
+      "case-structural-2018_A"
+    ],
+    "used": [
+      "mc-numerical-pde",
+      "case-structural-2018_A"
+    ],
+    "adapted": [
+      "case-structural-2018_A"
+    ],
+    "rejected": []
+  },
+  "cost": {
+    "prompt_tokens": 6352,
+    "completion_tokens": 8296,
+    "latency_seconds": 172.0
+  },
+  "reference_chars": 4673,
+  "bundle_chars": 7778,
+  "batch": "batch1",
+  "sequence_in_block": 0,
+  "created_at": "2026-09-08T13:24:13Z",
+  "status": "REGISTERED",
+  "schema_validated": true,
+  "updated_at": "2026-09-08T13:24:13Z"
+}

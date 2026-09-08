@@ -1,0 +1,120 @@
+{
+  "submission_id": "d0e6e660-7c69-4ee1-bb5e-4bcf15ed6269",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "a1 提取把手位于螺线、刚性杆、孔距恒定；a6 提取调头空间半径 4.5m 圆盘与中心对称盘出；a2 提取龙头前把手给定速度驱动，显式条件覆盖 Q1-Q5"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "a4 代数约束可解析求导、系统指标为 1（隐式可解性条件）、a5 碰撞为代数约束之外的事件、a7 速率约束后验检查，隐式动力学条件被显式识别"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "exp_q1→Q1 位置速度、exp_q2→Q2 碰撞时刻、exp_q34→Q3/Q4/Q5 参数求解，五个子问题交付物均有对应"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 标注；调头空间形状等歧义经 a6 假设处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=differential_algebraic_kinematics（DAE 运动学），与板凳龙链式约束运动学问题的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V21 全部声明且区分类型；deterministic undeclared_symbol_ratio=0.0，符号声明完整"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P16 全部声明，含 source 与取值/待标定；未声明符号比例 0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "a1-a7 显式且可检验，a3（广义坐标选取）与 a4（指标 1 可降阶）为严谨的机理假设，无与题面矛盾项"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "obj_min_pitch（Q3）与 obj_min_turn（Q4）形式化正确；但 Q5'最大行进速度'未列入 objectives，仅由 eq_vmax 解析式与 exp_q34 承载"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "con_g 孔距代数约束、con_oncurve、con_head、con_col、con_boundary、con_speed、con_turn、con_init 初始构型在约束流形上，八条约束形式化完整且方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "mech_dae 微分代数方程组 + 降指标 + mech_event 事件检测 + mech_check 后验速率检查，机理与链式约束运动学物理一致；val_indep 独立重算属验证对照而非候选模型对比，故不给 3"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E11 完整：螺线/弧长/DAE 约束/降指标 ODE/位置/速率/约束漂移/碰撞事件/边界匹配/调头长度/最大速度，含初始条件，可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "sol_dae 自适应 RK45+事件定位（exact）、sol_proj 约束投影校正（heuristic）、sol_opt 参数扫描，求解器与 DAE 运动学模型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "exp_q1/exp_q2/exp_q34 实验含 outputs 与 solver 绑定，设计完整（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "val_drift 约束漂移 1e-7m 阈值、val_tol 容差 1e-8~1e-10 对比、val_event 事件精度对照，收敛判据明确"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "求解确定性可复现，但 seed=42/多 seed 方差与 replay 设计未显式声明"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出（位置速度序列、约束漂移、t_col、p_min、L_turn、v_hmax）量级物理合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "val_indep 对照基线：用弦长递推（非 DAE）独立重算同一时刻位置与 DAE 结果对比"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "val_tol 灵敏度：积分容差 1e-8~1e-10 变化时位置结果差异"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "val_limit 极限检验：螺距取很大时 DAE 退化为近似直线运动，检查数值稳定性"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "val_drift/val_indep→cl1 约束保持、val_event→cl2 碰撞定位、val_tangent→cl3 调头、val_limit→cl1 数值稳定性，验证覆盖核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "cl1-cl4 每条均有 evidence_refs 与 model_refs；deterministic supported_claims=4/4"
+    }
+  },
+  "vector": {
+    "L1": 9,
+    "L2": 13,
+    "L3": 8,
+    "L4": 9,
+    "overall": 39
+  },
+  "deterministic": {
+    "declared_symbols": 37,
+    "used_symbols": 31,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 4,
+    "supported_claims": 4,
+    "sub_question_binding_count": 5,
+    "method_family_identified": "differential_algebraic_kinematics"
+  },
+  "failure_modes": [],
+  "notes": "DAE 运动学表述严谨（降指标+约束漂移控制+事件定位+独立重算对照），覆盖全部五个子问题；仅 Q5 目标未列入 objectives，整体设计质量高。"
+}

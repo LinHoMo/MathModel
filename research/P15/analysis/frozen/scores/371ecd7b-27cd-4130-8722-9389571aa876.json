@@ -1,0 +1,122 @@
+{
+  "submission_id": "371ecd7b-27cd-4130-8722-9389571aa876",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T00:00:00+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1-A6 与 P1-P12 完整覆盖规则(1)-(8)，参数带 source/value（T/H/bx/by/cx/cy/R/z0/lambda/Pi/kappa/rho）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A3 马尔可夫性（历史可丢弃）、A5 资源耗尽按 -∞/0 处理、C6 起点单次购买、C7 矿山次日可挖、E5 终端 -∞ 强制到达终点——隐式条件识别充分"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "X1-X3 outputs 覆盖六关（最优策略表/终局资金/期望资金+收益分布/纳什均衡），但未显式提及 Result.xlsx 交付文件与注2 口径"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A4 对 Q2 天气转移概率给置信度 0.7 的估计假设并注明『无法估计时均匀先验+报告灵敏度』（歧义处理方案）"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=dynamic_programming, secondary=[markov_decision_process, graph_shortest_path, game_theory]，逐问绑定 Q1/Q2/Q3，类型判定完整"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 全声明含 type/value_range（t/i/x/y/z/e/a/k/V/gx/gy/r）；deterministic undeclared=0"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source/value；E1-E8 引用符号全部映射到 parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式带 source/confidence/type；A2 给出 cut-and-paste 论证依据、A4 含先验回退，合理可检验"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1/O2 表达式正确（含停时 tau 期望），clarity_score 均 3"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C7 完整含方向标注（上界负重/下界生存/期限/沙暴/邻接/起点购买/矿山规则）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1 消耗倍率正确；M2 显式对比 Dijkstra 最短路视角（无挖矿时退化为资源约束最短路，是 DP 特例）——候选对比分析；M4 有限 MDP 值迭代；M5 区分同时承诺/逐日反馈均衡"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E3 转移+E4 递推+E5 终端（-∞）+E6 初始+E7 随机递推+E8 耦合，结构完整可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 表格化自底向上递推（精确）/S2 值迭代（MDP）/S3 策略迭代/最优反应匹配三类模型"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "solver 配置齐全（epsilon/max_iter/state_space）但无代码与执行日志，X1-X3 results='待求解'/pending"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 填表至 t=0 精确终止；S2 ||V_k+1-V_k||inf<1e-6；S3 策略不再变化"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X2 设 n_mc=2000、seed=43、VA7 计划 ≥5 种子相对标准差<10%，无实际数据"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "计划输出策略表/期望资金/收益分布，量级合理；结果待产出"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 贪心下界基线 + VA2 小规模暴力枚举对照最优子结构"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA3 扰动天气转移矩阵与消耗参数 ±20%（敏感参数）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA4 松弛上界 + VA6 极限检验（无挖矿→最短路、无限负重→尽量挖矿）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1/VA2→CL1 全局最优主张、VA5→CL2 状态完整性、VA3/VA7→CL3 状态依赖策略主张，验证目标对齐"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "5 claims 中 CL1/CL2/CL3 有 evidence_refs（3 supported），CL4/CL5 evidence_refs 为空且全部 unresolved"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 15,
+    "L3": 7,
+    "L4": 8,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 24,
+    "used_symbols": 27,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 5,
+    "supported_claims": 3,
+    "sub_question_binding_count": 3,
+    "method_family_identified": "dynamic_programming"
+  },
+  "failure_modes": [
+    "FM-EV-001"
+  ],
+  "notes": "2020_B Q1-Q3 高质量动态规划模型：机理含 Dijkstra 特例对比（候选分析）、约束完整含方向、MDP/博弈求解器匹配、七项验证覆盖基线/枚举/灵敏度/松弛/极限/稳定性。L3 因结果为设计期『待求解』部分给分；CL4/CL5 无证据引用。"
+}

@@ -1,0 +1,69 @@
+{
+  "experiment_id": "P15-K001",
+  "protocol_version": "1.0",
+  "submission_id": "eb2263dd-87c5-421e-ac24-a3c5c754108f",
+  "problem_id": "2022_C",
+  "block_role": "generalization",
+  "condition": {
+    "arm": "D",
+    "knowledge": "relevant",
+    "case": "structural"
+  },
+  "knowledge": {
+    "card_ids": [
+      "mc-kmeans"
+    ],
+    "role": "relevant",
+    "card_sha256": {}
+  },
+  "case": {
+    "path": "research/P15/cases/structural/2022_C.md",
+    "case_type": "structural",
+    "sha256": "22cf78f6704071fd469f9666e2cbebf624c8664a936c4544364645fd52f3dda7"
+  },
+  "rep": 1,
+  "seed": 42,
+  "generator": {
+    "agent_identity": "doubao",
+    "model_version": "doubao-pro",
+    "provider": "console"
+  },
+  "hashes": {
+    "problem_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+    "prompt_sha256": "33cc3964eed541ee0dce140b97261078fb5e629d877e8dbc15c20a7ae0059da0",
+    "bundle_sha256": "16110c70e0a54da8aecfb22927e1687e25d6a824f0e1840c5ebc247ed06467df",
+    "run_order_sha256": "d7bad29015c5748f5c240a33631434ced69d3455b389104f6d231547f0127d37"
+  },
+  "artifact_schema_version": "model-ir-1.0",
+  "knowledge_trace": {
+    "retrieved": [
+      "mc-kmeans",
+      "case-structural-2022_C"
+    ],
+    "considered": [
+      "mc-kmeans",
+      "case-structural-2022_C"
+    ],
+    "used": [
+      "mc-kmeans",
+      "case-structural-2022_C"
+    ],
+    "adapted": [
+      "case-structural-2022_C"
+    ],
+    "rejected": []
+  },
+  "cost": {
+    "prompt_tokens": 7320,
+    "completion_tokens": 10240,
+    "latency_seconds": 356.0
+  },
+  "reference_chars": 2675,
+  "bundle_chars": 6563,
+  "batch": "batch4",
+  "sequence_in_block": 1,
+  "created_at": "2026-09-08T13:17:18Z",
+  "status": "REGISTERED",
+  "schema_validated": true,
+  "updated_at": "2026-09-08T13:17:19Z"
+}

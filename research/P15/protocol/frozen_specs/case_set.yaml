@@ -1,0 +1,48 @@
+# P15-K001 Frozen Case Set
+# 分层：structural（本轮注入） / solution（本轮建库不注入，留作后续 K+C+S 臂）
+# 硬约束：structural case 不得包含数值解、完整公式推导、gt.json 中的答案常量。
+# 门禁：scripts/k001_leak_scan.py —— 未通过者不得进入 bundle。
+
+experiment_id: P15-K001
+protocol_version: "1.0"
+frozen_at: "2026-09-08"
+
+case_layers:
+  structural:
+    description: >-
+      题面 → 建模思路、变量/约束/目标骨架、机理选择理由与候选对比、常见坑。
+      不含数值解、不含完整公式推导、不含 gt 答案常量。测的是「从案例中学结构」。
+    injected_in_round_1: true
+    arms: [C, D]
+    assets:
+      - { problem_id: "2018_A", path: research/P15/cases/structural/2018_A.md }
+      - { problem_id: "2019_C", path: research/P15/cases/structural/2019_C.md }
+      - { problem_id: "2020_B", path: research/P15/cases/structural/2020_B.md }
+      - { problem_id: "2022_C", path: research/P15/cases/structural/2022_C.md }
+      - { problem_id: "2024_A", path: research/P15/cases/structural/2024_A.md }
+
+  solution:
+    description: >-
+      完整建模与求解（含数值结果路径与关键公式）。本轮不注入，
+      仅建库，供后续 S 臂（A / B / C / D / E=S / F=K+C+S）扩展。
+    injected_in_round_1: false
+    arms: []
+    assets:
+      - { problem_id: "2018_A", path: research/P15/cases/solution/2018_A.md }
+      - { problem_id: "2019_C", path: research/P15/cases/solution/2019_C.md }
+      - { problem_id: "2020_B", path: research/P15/cases/solution/2020_B.md }
+      - { problem_id: "2022_C", path: research/P15/cases/solution/2022_C.md }
+      - { problem_id: "2024_A", path: research/P15/cases/solution/2024_A.md }
+
+leak_gate:
+  scanner: research/P15/scripts/k001_leak_scan.py
+  applies_to: [structural]        # solution 层允许含数值（本轮不注入）
+  rules:
+    - "R1 答案标记词：出现「答案为/最优解为/最终结果为/计算得/求得/数值结果/最优值/答案」等 → FAIL"
+    - "R2 结果赋值：形如「结果|答案|最优… = <数字>」→ FAIL"
+    - "R3 数值密度：不同数值字面量个数 > 10 → FAIL（结构案例应保持符号化）"
+    - "R4 结果型图表：出现「表 1/图 1」类结果表引用 → WARN"
+  on_fail: block_from_bundle
+  note: >-
+    gt.json 仅含方法族/变量/约束等方法学字段，无数值答案，
+    因此泄漏判定以「是否承载结论性数值」为主，而非逐值比对。

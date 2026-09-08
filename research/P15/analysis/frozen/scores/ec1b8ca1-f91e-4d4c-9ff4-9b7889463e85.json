@@ -1,0 +1,122 @@
+{
+  "submission_id": "ec1b8ca1-f91e-4d4c-9ff4-9b7889463e85",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T00:00:00+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1-A6 与 P1-P12 完整覆盖规则(1)-(8)，参数带 source/value（N/Lh/bw/bf/cw/cf/Rv/m0/lambda/Pi/kappa/rho）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A3 状态完整性保证无后效性、A5 失败判定、C6 起点单次购买、C7 矿山次日可挖、E5 终端 -∞——隐式条件识别充分"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "X1-X3 outputs 覆盖六关（计划/资金/期望资金+失败率/均衡策略），但未显式提及 Result.xlsx 交付文件与注2 口径"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A2 对 Q2 天气随机给置信度 0.8 的转移概率假设；M4 注明概率无法标定时报告稳健准则对照（歧义处理方案）"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=multi_stage_decision, secondary=[dynamic_programming, stochastic_control, game_theory]，逐问绑定 Q1/Q2/Q3"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 全声明含 type/value_range（n/h/wn/fn/mn/qt/cn/k/J/pw/pf/r）；deterministic undeclared=0"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source/value；E1-E8 引用符号全部映射到 parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式带 source/confidence/type；A4 合并沙暴/矿山/起点/村庄规则、A6 对称优先，合理可检验"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1/O2 表达式正确（含停时 tau 期望），clarity_score 均 3"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C7 完整含方向标注（上界负重/下界生存/期限/沙暴/邻接/起点购买/矿山规则）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1 行动与消耗倍率正确（沙暴日可挖矿使倍率与行动解耦）；M2 显式对比静态优化与仿真论证序贯形式；M4 期望准则+稳健准则对照——含候选对比分析"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E3 转移+E4 递推+E5 终端（-∞）+E6 初始+E7 随机递推+E8 耦合，结构完整可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 倒推求解（精确）/S2 期望值迭代/S3 均衡循环匹配三类模型"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "solver 配置齐全但无代码与执行日志，X1-X3 results='待求解'/pending"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 倒推完成精确终止；S2 价值差<1e-6；S3 策略稳定"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X2 设 n_sim=1500、seed=44、VA7 多种子设计，无实际数据"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "计划输出含失败率指标，量级合理；结果待产出"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 参照策略基线（直行/挖矿）+ VA2 小规模枚举精确对照"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA3 概率/参数扰动（敏感参数）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA6 极限检验；无松弛上界检验"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA2/VA5→CL1 精确最优主张、VA5→CL2 状态必要性主张、VA4→CL3 准则选择主张，验证目标对齐"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "5 claims 中 CL1/CL2/CL3 有 evidence_refs（3 supported），CL4/CL5 evidence_refs 为空且全部 unresolved"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 15,
+    "L3": 7,
+    "L4": 8,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 24,
+    "used_symbols": 28,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 5,
+    "supported_claims": 3,
+    "sub_question_binding_count": 3,
+    "method_family_identified": "multi_stage_decision"
+  },
+  "failure_modes": [
+    "FM-EV-001"
+  ],
+  "notes": "2020_B Q1-Q3 高质量有限期决策模型：机理含静态优化/仿真候选对比与稳健准则对照、约束完整含方向、验证覆盖基线/枚举/灵敏度/准则/一致性/极限/稳定性。L3 因结果为设计期『待求解』部分给分；CL4/CL5 无证据引用。"
+}

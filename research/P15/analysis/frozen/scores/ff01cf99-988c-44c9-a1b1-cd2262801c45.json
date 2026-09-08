@@ -1,0 +1,120 @@
+{
+  "submission_id": "ff01cf99-988c-44c9-a1b1-cd2262801c45",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:55:40+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件提取：P1 c=2（两条并行车道）、A3 可观测排队长度与航班信息、A7 FCFS 放行、P11 N_max 蓄车池容量、P8 T 班次时长、P9 H 时段数"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别：A1 分段平稳到达、A2 泊松+指数服务（M/M/c）、C2 各时段 lambda_t < c*mu 稳定性条件"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "识别了 Q1 输出（各时段阈值策略与总收益，X1/X2），但未显式记录论文交付/格式要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "时变到达、稳态近似、时段划分粒度等歧义通过 A1/A6 假设处理，但无显式 ambiguities 清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=time_varying_queueing_dp 与 2019_C 时变排队决策问题匹配（secondary 含 piecewise_stationary/dynamic_programming/discrete_event_simulation）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V15 全声明并区分类型：V2 lambda_p/V3 lambda_t（input）、V4 n（state）、V8 nstar/V14 d（decision）、V7 J/V13 V（derived）、V9/V10 P0/Pw（derived）；含单位与 value_range"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 全声明：P1 c=2、P2 mu 待标定、P3 ce、P4 cw、P5 Rc、P6 Rf、P7 p_c、P9 H、P11 N_max、P12 seed=42；E1-E9 符号均被覆盖"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A7 显式假设（分段平稳、泊松到达、指数服务、可观测性、风险中性、时段内决策固定、FCFS），带类型与 confidence"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 maximize J（班次期望总净收益）与决策问题目标一致；O2 minimize Wq 为辅助目标，不与题目冲突"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 n>=0、C2 各时段 lambda_t<c*mu、C3 d in {0,1}、C4 Wq>=0、C5 n<=N_max、C6 H>=1 方向正确无符号错误"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "M1 分段平稳生灭过程 + M2 Bellman 最优性（E8 递推）+ M5 离散事件仿真对照机理正确；未提供候选模型对比分析"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1 P0 闭式 + E2 Pw + E3 Wq + E4 Little + E5/E6 收益 + E7 目标 + E8 Bellman 递推 + E9 终端条件，闭环可解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 分段稳态闭式、S2 后向动态规划（有限时段终止）、S3 离散事件仿真（replications>=1000），与模型完全匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "S1-S3 规格完整可执行（closed_form 顺序 + backward 递推 + DES 复现数/种子），结果'待求解'属预注册正常状态"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "闭式解析 + 有限时段 DP 终止条件（E9 V_next=0）+ DES 均值标准误阈值，收敛设计完整"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "S3 规划 replications>=1000 且 seed 固定 42（X2），具备多复现性设计"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出界物理合理：Wq>=0、P0/Pw in [0,1]、收益为有限值；实际结果待求解未验证"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 动态规划阈值策略 vs '固定蓄车/固定放空' 基线，基线合理"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA2 扫描等待成本率 cw 与空驶成本 ce（CL3 主张的主导因素），扰动对象为敏感参数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA4 各时段服务强度 <1 稳定性边界检验，覆盖部分边界情形"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1→O1/CL1（DP 策略优于固定策略，核心主张）、VA2→CL2/CL3、VA5→CL4、VA6→CL5，核心主张均有对应验证"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "CL1-CL5 均绑定 evidence_refs，unresolved 标注诚实（结果待求解）"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 14,
+    "L3": 9,
+    "L4": 9,
+    "overall": 40
+  },
+  "deterministic": {
+    "declared_symbols": 27,
+    "used_symbols": 23,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 5,
+    "supported_claims": 5,
+    "sub_question_binding_count": 2,
+    "method_family_identified": "time_varying_queueing_dp"
+  },
+  "failure_modes": [],
+  "notes": "分段平稳 M/M/c + 后向动态规划 + 离散事件仿真三重设计，机理正确、验证覆盖核心主张、含多复现规划；结果'待求解'标注诚实。"
+}

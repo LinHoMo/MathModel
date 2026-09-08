@@ -1,0 +1,69 @@
+{
+  "experiment_id": "P15-K001",
+  "protocol_version": "1.0",
+  "submission_id": "f42d47cc-00d4-4f59-b427-3ca3287d06ca",
+  "problem_id": "2019_C",
+  "block_role": "main",
+  "condition": {
+    "arm": "D",
+    "knowledge": "relevant",
+    "case": "structural"
+  },
+  "knowledge": {
+    "card_ids": [
+      "mc-queuing-theory"
+    ],
+    "role": "relevant",
+    "card_sha256": {}
+  },
+  "case": {
+    "path": "research/P15/cases/structural/2019_C.md",
+    "case_type": "structural",
+    "sha256": "b2830d00e45d0a44fb8eb2a24825eac323bcff896952dc06371284c78f58a627"
+  },
+  "rep": 3,
+  "seed": 44,
+  "generator": {
+    "agent_identity": "doubao",
+    "model_version": "doubao-pro",
+    "provider": "console"
+  },
+  "hashes": {
+    "problem_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+    "prompt_sha256": "33cc3964eed541ee0dce140b97261078fb5e629d877e8dbc15c20a7ae0059da0",
+    "bundle_sha256": "263131316e9f21951ef7f5e4cc7a1fe120167a1188ac0f527eff4a2cee138a2d",
+    "run_order_sha256": "d7bad29015c5748f5c240a33631434ced69d3455b389104f6d231547f0127d37"
+  },
+  "artifact_schema_version": "model-ir-1.0",
+  "knowledge_trace": {
+    "retrieved": [
+      "mc-queuing-theory",
+      "case-structural-2019_C"
+    ],
+    "considered": [
+      "mc-queuing-theory",
+      "case-structural-2019_C"
+    ],
+    "used": [
+      "mc-queuing-theory",
+      "case-structural-2019_C"
+    ],
+    "adapted": [
+      "case-structural-2019_C"
+    ],
+    "rejected": []
+  },
+  "cost": {
+    "prompt_tokens": 6555,
+    "completion_tokens": 8785,
+    "latency_seconds": 220.0
+  },
+  "reference_chars": 4484,
+  "bundle_chars": 7893,
+  "batch": "batch3",
+  "sequence_in_block": 0,
+  "created_at": "2026-09-08T13:20:23Z",
+  "status": "REGISTERED",
+  "schema_validated": true,
+  "updated_at": "2026-09-08T13:20:23Z"
+}

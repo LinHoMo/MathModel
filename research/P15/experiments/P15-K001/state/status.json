@@ -1,0 +1,502 @@
+{
+  "experiment_id": "P15-K001",
+  "protocol_version": "1.0",
+  "phase": "ANALYSIS",
+  "revisions": [],
+  "history": [
+    {
+      "event": "advance",
+      "at": "2026-09-08T12:22:33Z",
+      "from": "DESIGN",
+      "to": "REVIEW",
+      "note": "P15-K001 v1.0 preregistered + frozen + preflight green"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-08T12:22:34Z",
+      "from": "REVIEW",
+      "to": "PREREGISTERED",
+      "note": "P15-K001 v1.0 preregistered + frozen + preflight green"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-08T12:22:34Z",
+      "from": "PREREGISTERED",
+      "to": "FROZEN",
+      "note": "P15-K001 v1.0 preregistered + frozen + preflight green"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-08T12:22:34Z",
+      "from": "FROZEN",
+      "to": "PREFLIGHT",
+      "note": "P15-K001 v1.0 preregistered + frozen + preflight green"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-08T12:22:35Z",
+      "from": "PREFLIGHT",
+      "to": "RUNNING",
+      "note": "P15-K001 v1.0 preregistered + frozen + preflight green"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T12:31:08Z",
+      "submission_id": "bc8960a9-23b8-41e9-b924-56de3eb13b90",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T12:32:32Z",
+      "submission_id": "bc8960a9-23b8-41e9-b924-56de3eb13b90",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T12:33:49Z",
+      "submission_id": "bc8960a9-23b8-41e9-b924-56de3eb13b90",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T12:41:54Z",
+      "submission_id": "e465e150-bd9c-46b3-ad3c-2d6d1a3d1fa7",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T12:41:54Z",
+      "submission_id": "6c031199-972a-4469-9641-9f828b9d2434",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T12:41:55Z",
+      "submission_id": "37f8a88b-17fc-495a-87a0-ca6e0822e8f3",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T12:41:56Z",
+      "submission_id": "06cb0fb3-9a1d-4644-815e-f6d13b8faa18",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "batch",
+      "at": "2026-09-08T12:44:47Z",
+      "batch": "batch0",
+      "status": "done"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-08T12:44:47Z",
+      "name": "PREFLIGHT",
+      "result": "PASS"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:13:16Z",
+      "submission_id": "f4188f3f-8a14-4e62-a95b-4715c333e861",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:17:19Z",
+      "submission_id": "eb2263dd-87c5-421e-ac24-a3c5c754108f",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:07Z",
+      "submission_id": "e5d7b875-6dad-46c7-95a7-6d79bf3c4c06",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:08Z",
+      "submission_id": "382567b8-5cab-4c97-a63f-1c97956269f0",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:08Z",
+      "submission_id": "827050a8-2369-4584-bf5e-9ff0ff50bde4",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:08Z",
+      "submission_id": "0c0fd195-c17a-408a-9745-d6d87e570ddf",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:08Z",
+      "submission_id": "a0a04dc4-2720-4bdf-9c11-f735dc713d96",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:09Z",
+      "submission_id": "ff01cf99-988c-44c9-a1b1-cd2262801c45",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:09Z",
+      "submission_id": "f89897b9-405c-4cec-8774-09a977d21e02",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:10Z",
+      "submission_id": "02f06b90-f143-462f-9c5c-0eed8da0365b",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:10Z",
+      "submission_id": "ae849217-1d53-434b-b881-39b9ae270da7",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:11Z",
+      "submission_id": "444ea7c8-c039-4710-8976-e334e2817efd",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:20Z",
+      "submission_id": "7d154385-52fb-443b-9954-6eb400257ad1",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:23Z",
+      "submission_id": "f42d47cc-00d4-4f59-b427-3ca3287d06ca",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:23Z",
+      "submission_id": "436d76e2-b83c-4e0b-a037-e5edb8db0672",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:24Z",
+      "submission_id": "2dbc2134-c30f-446e-8026-695ff8cda88b",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:24Z",
+      "submission_id": "deda4e16-1b3d-4d5c-a9a1-fa6f81f76d1c",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:20:24Z",
+      "submission_id": "a39231a7-d777-4477-8c66-e0a8a013ac6e",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:23:42Z",
+      "submission_id": "5cec4eb5-edd9-4831-9ca3-5cfb04fc6d82",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:13Z",
+      "submission_id": "c5e7ce8a-3a57-4a8e-a948-8d990bbb2599",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:13Z",
+      "submission_id": "daf61a26-146d-4f31-bc37-7a4c4a15544d",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:14Z",
+      "submission_id": "614ff3d7-19db-4ad0-9dd1-dfb23b982ef8",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:14Z",
+      "submission_id": "d58842de-a2bc-472f-b412-b29347294739",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:14Z",
+      "submission_id": "5af30553-5ec4-4e08-a9a3-b2e95d65a441",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:14Z",
+      "submission_id": "88bd6407-2bcf-4e01-a28d-efe39bf00273",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:15Z",
+      "submission_id": "7656af72-29d4-4eef-beab-edcbbaa80dd4",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:15Z",
+      "submission_id": "ece66fa2-fd51-46e6-851b-4cf36123fdf7",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:15Z",
+      "submission_id": "3838b326-8e94-4239-b02b-61c4a3d70628",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:15Z",
+      "submission_id": "c4b032cc-d7c5-44a5-9304-317faf42e12f",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:16Z",
+      "submission_id": "3602f8ac-10f1-4c81-848a-aa9e66b2bc5b",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:16Z",
+      "submission_id": "e059a0ee-9132-463e-b162-87e4e9c349e0",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:16Z",
+      "submission_id": "a7cad415-366e-416f-908e-bad7b7c93acf",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:16Z",
+      "submission_id": "ea1fca65-e27a-484d-a548-21d07fcd9eb1",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:17Z",
+      "submission_id": "43cf2fde-2493-4b83-b577-50a9a491f0b2",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:24:59Z",
+      "submission_id": "47378190-96da-4dac-b2ff-5d2a386ecbe0",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:06Z",
+      "submission_id": "c241330b-01a9-471f-9e8a-774bcf36d58b",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:15Z",
+      "submission_id": "6c307511-b2b9-437a-a8df-6ec4ce4a2bbd",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:24Z",
+      "submission_id": "371ecd7b-27cd-4130-8722-9389571aa876",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:30Z",
+      "submission_id": "1a2a73ed-562b-4f79-8374-59eef50bea63",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:37Z",
+      "submission_id": "43b7a3a6-9a8d-4a03-980d-7b71d8f56413",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:41Z",
+      "submission_id": "ce88cb2d-d4e8-4839-bc3e-058be0f3eab0",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:43Z",
+      "submission_id": "759cde66-bacf-43d0-8b1f-9163ce9ff57f",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:51Z",
+      "submission_id": "ec1b8ca1-f91e-4d4c-9ff4-9b7889463e85",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:25:58Z",
+      "submission_id": "4b0dbb41-8d52-48f1-942c-3fe860e7a113",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:26:06Z",
+      "submission_id": "e2acf72f-9e57-4f7a-a0ee-89aed453dd32",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:41:16Z",
+      "submission_id": "14296c07-f26b-4776-913e-4de2e0c53cb8",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:41:21Z",
+      "submission_id": "d0e6e660-7c69-4ee1-bb5e-4bcf15ed6269",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:41:27Z",
+      "submission_id": "885f6e66-c2b6-42c5-ba5d-310011b7e948",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:41:32Z",
+      "submission_id": "a8e56e0c-20de-435d-a031-d750c40db9b4",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "set-run",
+      "at": "2026-09-08T13:41:39Z",
+      "submission_id": "2a45c2ab-8cbf-4db0-b264-accc79ac1b1e",
+      "from": "REGISTERED",
+      "to": "REGISTERED"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-08T14:05:07Z",
+      "name": "data_freeze",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-08T14:05:07Z",
+      "name": "blind_eval",
+      "result": "PASS"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-08T14:05:07Z",
+      "from": "RUNNING",
+      "to": "VALIDATION",
+      "note": "DATA FREEZE 165 files + 55/55 scores + blind_eval PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-08T14:05:07Z",
+      "name": "analysis_freeze",
+      "result": "PASS"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-08T14:05:08Z",
+      "from": "VALIDATION",
+      "to": "ANALYSIS",
+      "note": "paired_analysis report generated; delta_K=+2.14 CI[0.00,6.41]"
+    }
+  ],
+  "gates": {
+    "PREFLIGHT": "PASS",
+    "data_freeze": "PASS",
+    "blind_eval": "PASS",
+    "analysis_freeze": "PASS"
+  },
+  "batches": {
+    "batch0": "done"
+  },
+  "runs": {
+    "total": 55,
+    "by_status": {
+      "REGISTERED": 55
+    }
+  },
+  "notes": []
+}

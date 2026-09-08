@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodel.local/schemas/p15-k001-score-vector-v1.0.json",
+  "title": "P15-K001 Score Vector",
+  "description": "Blind evaluation output for one submission. Contains rubric dimension scores (L1-L4), the derived 6-vector M, deterministic machine checks, and failure-mode hits. The evaluator must NOT see `condition`; this schema therefore has no condition field.",
+  "type": "object",
+  "required": [
+    "submission_id",
+    "evaluator",
+    "rubric_version",
+    "dimensions",
+    "vector",
+    "deterministic",
+    "failure_modes"
+  ],
+  "properties": {
+    "submission_id": { "type": "string", "minLength": 1 },
+    "evaluator": {
+      "type": "object",
+      "required": ["model", "type"],
+      "properties": {
+        "model": { "type": "string", "minLength": 1, "description": "Must differ from the generator model." },
+        "type": { "type": "string", "enum": ["independent_llm", "human", "human_sampled_review"] },
+        "version": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "rubric_version": { "type": "string", "const": "MODEL_CONSTRUCTION_RUBRIC-v1.0" },
+    "dimensions": {
+      "type": "object",
+      "description": "Raw rubric scores. Keys are rubric dimension ids; values are {score, evidence}. Every scored dimension MUST carry an evidence pointer.",
+      "required": ["L1.1", "L1.2", "L1.3", "L1.4", "L1.5",
+                   "L2.1", "L2.2", "L2.3", "L2.4", "L2.5", "L2.6", "L2.7",
+                   "L3.1", "L3.2", "L3.3", "L3.4", "L3.5",
+                   "L4.1", "L4.2", "L4.3", "L4.4", "L4.5"],
+      "additionalProperties": {
+        "type": "object",
+        "required": ["score"],
+        "properties": {
+          "score": { "type": "integer", "minimum": 0 },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "vector": {
+      "type": "object",
+      "description": "M = [alignment, structure, mathematics, consistency, validation, support], all normalized to 0-100.",
+      "required": ["alignment", "structure", "mathematics", "consistency", "validation", "support", "mcq_primary"],
+      "properties": {
+        "alignment": { "type": "number", "minimum": 0, "maximum": 100 },
+        "structure": { "type": "number", "minimum": 0, "maximum": 100 },
+        "mathematics": { "type": "number", "minimum": 0, "maximum": 100 },
+        "consistency": { "type": "number", "minimum": 0, "maximum": 100 },
+        "validation": { "type": "number", "minimum": 0, "maximum": 100 },
+        "support": { "type": "number", "minimum": 0, "maximum": 100 },
+        "mcq_primary": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "PRIMARY ENDPOINT = (L2.1+L2.2+L2.4+L2.5+L2.6+L2.7)/13*100."
+        }
+      },
+      "additionalProperties": false
+    },
+    "deterministic": {
+      "type": "object",
+      "description": "Machine-computed, zero-LLM. Used for consistency/support and for the RQ5 method-vs-construction contrast.",
+      "properties": {
+        "method_family_identified": { "type": ["string", "null"] },
+        "method_family_in_allowed_set": { "type": "boolean" },
+        "undeclared_symbol_ratio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "index_inconsistency": { "type": "boolean" },
+        "sub_question_coverage": { "type": "number", "minimum": 0, "maximum": 1 },
+        "total_claims": { "type": "integer", "minimum": 0 },
+        "supported_claims": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "failure_modes": {
+      "type": "array",
+      "description": "FM-XX-NNN codes from FAILURE_TAXONOMY.md.",
+      "items": { "type": "string", "pattern": "^FM-[A-Z]{2}-\\d{3}$" }
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

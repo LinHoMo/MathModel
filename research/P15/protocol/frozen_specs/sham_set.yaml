@@ -1,0 +1,46 @@
+# P15-K001 Frozen Sham Set（负控制）
+# 目的：分离「正确知识」与「更多上下文」两种解释。
+# 构造原则：与目标卡同格式、同字段结构、量级相近；但机理与本题无关（循环错位）。
+# E 臂不入主假设检验（不参与 2×2 主效应/交互），仅作 robustness contrast：Δ_Sham = B − E。
+
+experiment_id: P15-K001
+protocol_version: "1.0"
+frozen_at: "2026-09-08"
+sham_strategy: cyclic_mismatch     # 循环错位：用另一题的目标卡作为本题的 sham
+
+sham:
+  - problem_id: "2020_B"
+    sham_card: mc-queuing-theory
+    target_card: mc-dp
+    path: core/knowledge/methods/cards/mc-queuing-theory.yaml
+    mismatch_reason: "随机服务系统 vs 离散序贯决策；无最优子结构诉求"
+
+  - problem_id: "2018_A"
+    sham_card: mc-dp
+    target_card: mc-numerical-pde
+    path: core/knowledge/methods/cards/mc-dp.yaml
+    mismatch_reason: "离散序贯决策 vs 连续时空场 PDE"
+
+  - problem_id: "2019_C"
+    sham_card: mc-numerical-pde
+    target_card: mc-queuing-theory
+    path: core/knowledge/methods/cards/mc-numerical-pde.yaml
+    mismatch_reason: "热传导 PDE vs 排队服务系统"
+
+  - problem_id: "2022_C"
+    sham_card: mc-fuzzy-evaluation
+    target_card: mc-kmeans
+    path: core/knowledge/methods/cards/mc-fuzzy-evaluation.yaml
+    mismatch_reason: "综合评价/决策 vs 横截面成分分类（机理无关）；长度与目标卡接近"
+
+  - problem_id: "2024_A"
+    sham_card: mc-ols
+    target_card: mc-ga
+    path: core/knowledge/methods/cards/mc-ols.yaml
+    mismatch_reason: "线性回归 vs 多体几何运动学（机理无关）；长度与目标卡接近"
+
+# 协变量检查：记录各臂 prompt token 数。若 E 臂 token 显著低于 B 臂，
+# 则 Δ_Sham 的解释力下降，需在报告中声明（长度不匹配 = sham 控制不充分）。
+covariate_check:
+  record_prompt_tokens: true
+  tolerance_ratio: 0.15            # |tok(B) - tok(E)| / tok(B) 超过 15% 需在报告声明

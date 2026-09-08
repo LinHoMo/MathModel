@@ -1,0 +1,120 @@
+{
+  "submission_id": "2a45c2ab-8cbf-4db0-b264-accc79ac1b1e",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "a1 提取等距螺线+两段相切圆弧路径；a2 提取 223 节板凳首尾把手连接、孔距固定；a7 提取调头段前弧=2 倍后弧与 4.5m 边界圆盘，显式条件覆盖 Q1-Q5"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "a4 内侧把手转弯速率可超龙头（隐式运动学放大）、a5 碰撞须检查全部非相邻节对、a6 步长需同时满足采样与碰撞精度，隐式条件被显式识别"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "exp_q1→Q1 每秒 224 把手位置速度与抽样表、exp_q2→Q2 碰撞时刻、exp_q34→Q3/Q4/Q5 参数求解，五个子问题交付物均有对应"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 标注；调头空间形状等歧义经 a7 假设处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=time_stepping_multibody_simulation（RK4 时间步进+链式递推+碰撞扫描），与板凳龙多体运动学问题的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V23 全部声明且区分类型；deterministic undeclared_symbol_ratio=0.0，符号声明完整"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P16 全部声明，含 source 与取值/待标定；未声明符号比例 0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "a1-a7 显式且可检验，a4（速度传播必要性）与 a5（全对碰撞）为合理机理假设，无与题面矛盾项"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "obj_min_pitch（Q3）与 obj_min_turn（Q4）形式化正确；但 Q5'最大行进速度'未列入 objectives，仅由 eq_vmax 解析式与 exp_q34 承载"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "con_chord/con_oncurve/con_drive/con_nointer/con_turncircle/con_ratio/con_tangent2/con_vlim 八条约束形式化完整，含相切（外切圆心距=半径和）/碰撞/边界/速度上限，方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "mech_curve 曲线参数化 + mech_recursion 链式递推 + mech_prop 速度传播（切向量乘弧长速率）+ mech_collision 线段最近距离 + mech_step 时间步进，机理与运动学物理一致；cl2 对'直接令各把手速度等于龙头速度'的反例论证属机理辩护而非完整候选对比，故不给 3"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E11 完整：螺线/弧长/驱动 ODE/切向量/位置速率/弦长/速率/间隙/边界匹配/调头长度/最大速度，可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "sol_rk4 固定步长四阶龙格-库塔+弦长牛顿、sol_sweep 线段最近距离扫描（scipy）、sol_opt 约束优化，求解器与时间步进运动学模型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "exp_q1/exp_q2/exp_q34 实验含 outputs 与 solver 绑定，设计完整（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "val_stepconv 做 dt=0.02/0.01/0.005 三档收敛对比、val_spacing 间距守恒检查、val_tangent 切线连续性检查，收敛判据明确"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "时间步进确定性可复现，但 seed=42/多 seed 方差与 replay 设计未显式声明"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出（位置速度序列、t_col、p_min、L_turn、v_hmax）量级物理合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "val_recompute 对照基线：用弧长参数化独立重算位置与链式递推结果对比"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "val_sens_dt 灵敏度：碰撞间隙阈值与 dt 变化 ±50% 时 t_col 的波动"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "val_limit 极限检验：螺距取 50m 时盘入近似直线，检查递推与速度传播不发散"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "val_stepconv/val_spacing/val_recompute→cl1 分步正确性、val_tangent→cl3 调头、val_sens_dt→cl3 碰撞、val_limit→cl2 速度传播，验证覆盖核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "cl1-cl4 每条均有 evidence_refs 与 model_refs；deterministic supported_claims=4/4"
+    }
+  },
+  "vector": {
+    "L1": 9,
+    "L2": 13,
+    "L3": 8,
+    "L4": 9,
+    "overall": 39
+  },
+  "deterministic": {
+    "declared_symbols": 39,
+    "used_symbols": 32,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 4,
+    "supported_claims": 4,
+    "sub_question_binding_count": 5,
+    "method_family_identified": "time_stepping_multibody_simulation"
+  },
+  "failure_modes": [],
+  "notes": "时间步进多体运动学建模完整覆盖五个子问题，速度传播机理有反例论证、步长收敛与独立重算验证扎实；仅 Q5 目标未列入 objectives。"
+}

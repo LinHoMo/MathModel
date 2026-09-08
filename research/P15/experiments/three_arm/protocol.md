@@ -1,6 +1,13 @@
 # Three-Arm Experiment Protocol — 方法卡有效性实验（P15.2 前置）
 
-> 状态：DRAFT v0.1（待 B0-R2 完成后定稿） ｜ 定位：验证 Model Construction Knowledge 是否真正改善模型构造
+> [!WARNING]
+> **SUPERSEDED — 本协议已被 `research/P15/protocol/preregistration/P15-K001-v1.0.md` 取代。**
+> 取代日期：2026-09-08。取代理由：三臂（A / B / C）无法分离 Knowledge 主效应、Case 主效应与
+> 二者交互；缺 Sham 负控制（无法排除「更长 prompt」解释）；primary endpoint 为 method
+> selection 类指标而非 Model Construction Quality。
+> **正文保留仅供历史追溯，不得作为执行依据。新实验一律以 P15-K001 v1.0 为准。**
+
+> 状态：DRAFT v0.1（SUPERSEDED，历史存档） ｜ 定位：验证 Model Construction Knowledge 是否真正改善模型构造
 > 前置：B0-R2（校准后基线）必须已完成，测量仪器有效（execution/artifact/evaluator 三真）
 > 对应治理条款：Research-layer calibration ≠ Agent capability intervention；三臂实验只回答 instrument 效度问题
 

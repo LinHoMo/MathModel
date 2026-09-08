@@ -1,0 +1,122 @@
+{
+  "submission_id": "47378190-96da-4dac-b2ff-5d2a386ecbe0",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T00:00:00+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1-A6 与 P1-P12 完整覆盖规则(1)-(8) 及附件参数，每参数带 source/value（含 Pi=转移矩阵、kappa=2、rho=0.5、lambda={1,2,3}）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "C6 起点单次购买、C7 矿山次日可挖、E5 终端将『到达终点』作为硬约束（未到达记 -∞）、M2 状态完整性论证（含天气与两类资源否则无后效性不成立）——隐式条件识别充分"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "X1-X3 outputs 覆盖六关（逐日位置/水量/食物量/资金表、期望终局资金、均衡策略组合），但未显式提及 Result.xlsx 交付文件与注2 口径"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A3 对 Q2 天气转移概率未知给出置信度 0.75 的马尔可夫假设+附件历史频率标定方案（建模选择显式标注）"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=discrete_recurrence, secondary=[dynamic_programming, markov_decision_process, game_theory]，逐问绑定 Q1 确定性/Q2 随机/Q3 博弈，类型判定完整"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 全声明含 type 与 value_range（含 k 同行人数 V8、r 即时收益 V12、g_w/g_f 购买决策）；deterministic undeclared=0"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source/value；E1-E8 引用符号全部映射到 parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式带 source/confidence/type；A3 置信度 0.75 标注建模选择、A5 显式含『退回计入到达当日』口径，全部合理可检验"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1/O2 表达式正确（含停时 tau 的期望形式），clarity_score 均 3，与 Q1/Q2 目标一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C7 完整且方向标注（C1 上界 ≤、C2 生存下界 ≥、C3 期限、C4 沙暴、C5 邻接、C6 起点购买、C7 矿山规则），含 C4 补充『沙暴日挖矿仍可进行』"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1 消耗倍率/M3 资金收支/M4 马尔可夫/M5 博弈耦合（同行消耗 2k 倍、收益 1/k、价格 4 倍）均正确；M2 显式对比贪心与全枚举论证 DP 精确性（候选对比分析）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E3 转移+E4 Bellman 递推（全状态）+E5 终端（含 p=p_end 判定与 -∞ 惩罚）+E6 初始+E7 随机递推+E8 耦合规则，结构完整可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 自底向上表格递推（精确）匹配确定性 DP、S2 值迭代匹配 MDP、S3 最优反应迭代匹配博弈"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "solvers 给出 state_space/epsilon/max_iter 配置但无代码与执行日志，X1-X3 results='待求解'/pending"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 有限阶段精确终止；S2 epsilon=1e-6、S3 收益差<1e-6 收敛判据明确"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X1/X2 设 seed=43、n_monte_carlo=1000、VA7 多 seed 相对标准差<10% 目标，但无实际多 seed 数据"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "计划输出逐日状态表/期望资金/均衡策略，量级合理；结果待产出"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 贪心下界基线 + VA2 小规模暴力枚举精确对照"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA3 扰动 b_w/b_f/R/L ±20%（敏感参数）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA4 松弛下界 + VA6 极限检验（L→∞ 挖矿、R=0 最短路）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1/VA2/VA5 对应最优性主张（CL1/CL2）、VA7 对应 Q2 期望主张（CL4），验证目标对齐核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "5 claims 中 CL1/CL2/CL4 有 evidence_refs（3 supported），CL3/CL5 evidence_refs 为空且全部 unresolved"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 15,
+    "L3": 7,
+    "L4": 8,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 24,
+    "used_symbols": 28,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 5,
+    "supported_claims": 3,
+    "sub_question_binding_count": 3,
+    "method_family_identified": "discrete_recurrence"
+  },
+  "failure_modes": [
+    "FM-EV-001"
+  ],
+  "notes": "2020_B Q1-Q3 全覆盖高完成度模型：约束完整含方向标注、终端条件正确实施到达硬约束、机理含候选对比（贪心/枚举/DP）、七项验证设计完整。L3 因结果为设计期『待求解』部分给分；CL3/CL5 缺证据引用。"
+}

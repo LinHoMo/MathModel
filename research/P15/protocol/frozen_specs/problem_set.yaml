@@ -1,0 +1,79 @@
+# P15-K001 Frozen Problem Set
+# 冻结对象：题面 / 金标准 / 题目卡。FROZEN 后不得原地修改；改动 = new revision (v1.1)。
+# 哈希由 scripts/k001_freeze.py 计算并写入 frozen_specs/hashes.json，本文件不写哈希（避免自指漂移）。
+
+experiment_id: P15-K001
+protocol_version: "1.0"
+frozen_at: "2026-09-08"
+statement_encoding: utf-8
+
+problems:
+  - problem_id: "2020_B"
+    title: "穿越沙漠"
+    block_role: main              # 进入主检验（blocked / paired）
+    out_of_catalog: false
+    knowledge_source: manual      # 人工指定目标卡
+    statement_path: research/P15/benchmark/problem_cards/2020_B/problem_statement.txt
+    gt_path: research/P15/benchmark/problem_cards/2020_B/gt.json
+    card_path: research/P15/benchmark/problem_cards/2020_B/card.yaml
+    sub_questions: [Q1, Q2, Q3]
+    allowed_model_families: [dynamic_programming, optimization, game_theory, graph_algorithm, markov_decision_process]
+    note: "离散序贯决策；专属卡 mc-dp，卡内 structure_signals 直接指向 2020_B"
+
+  - problem_id: "2018_A"
+    title: "高温作业专用服装设计"
+    block_role: main
+    out_of_catalog: false
+    knowledge_source: manual
+    statement_path: research/P15/benchmark/problem_cards/2018_A/problem_statement.txt
+    gt_path: research/P15/benchmark/problem_cards/2018_A/gt.json
+    card_path: research/P15/benchmark/problem_cards/2018_A/card.yaml
+    sub_questions: [Q1, Q2, Q3]
+    allowed_model_families: [pde, finite_difference, numerical_optimization, inverse_problem, heat_transfer]
+    note: "连续时空场 / 热传导反问题；专属卡 mc-numerical-pde"
+
+  - problem_id: "2019_C"
+    title: "机场的出租车问题"
+    block_role: main
+    out_of_catalog: false
+    knowledge_source: manual
+    statement_path: research/P15/benchmark/problem_cards/2019_C/problem_statement.txt
+    gt_path: research/P15/benchmark/problem_cards/2019_C/gt.json
+    card_path: research/P15/benchmark/problem_cards/2019_C/card.yaml
+    sub_questions: [Q1, Q2, Q3, Q4]
+    allowed_model_families: [queueing_theory, decision_analysis, optimization, simulation, game_theory]
+    note: "随机服务系统 / 决策分析；专属卡 mc-queuing-theory"
+
+  - problem_id: "2022_C"
+    title: "古代玻璃制品的成分分析与鉴别"
+    block_role: generalization   # 单独报告，不并入主检验 p 值
+    out_of_catalog: false
+    knowledge_source: retriever   # knowledge.py recommend --types classification → top-1
+    statement_path: research/P15/benchmark/problem_cards/2022_C/problem_statement.txt
+    gt_path: research/P15/benchmark/problem_cards/2022_C/gt.json
+    card_path: research/P15/benchmark/problem_cards/2022_C/card.yaml
+    sub_questions: [Q1, Q2, Q3, Q4]
+    allowed_model_families: [statistical_classification, regression_analysis, clustering, pca, decision_tree, supervised_learning]
+    note: "统计分类 / 成分鉴别；gt acceptable_solution_variants 含 kmeans，retriever top-1 = mc-kmeans"
+
+  - problem_id: "2024_A"
+    title: "板凳龙闹元宵"
+    block_role: generalization
+    out_of_catalog: true          # 无专属卡，retriever top-1 仅弱匹配
+    knowledge_source: retriever   # knowledge.py recommend --types optimization → top-1
+    statement_path: research/P15/benchmark/problem_cards/2024_A/problem_statement.txt
+    gt_path: research/P15/benchmark/problem_cards/2024_A/gt.json
+    card_path: research/P15/benchmark/problem_cards/2024_A/card.yaml
+    sub_questions: [Q1, Q2, Q3, Q4, Q5]
+    allowed_model_families: [multibody_dynamics, catenary_approximation, differential_geometry, numerical_optimization, pure_geometric_spiral, kinematics]
+    note: >-
+      多体动力学 / 微分几何。retriever 无 kinematics 类型，--types optimization 返回 mc-ga，
+      与真实机理弱匹配，因此标记 out_of_catalog。B0 测量历史污染题，本轮仅作泛化观察。
+
+# 主检验区组（block）= 3 题；泛化观察 = 2 题。
+# 分析单位：problem(block) × condition(treatment) × rep(42/43/44)
+primary_blocks: ["2020_B", "2018_A", "2019_C"]
+generalization_blocks: ["2022_C", "2024_A"]
+replicates_primary: 3
+replicates_generalization: 1
+seeds: [42, 43, 44]

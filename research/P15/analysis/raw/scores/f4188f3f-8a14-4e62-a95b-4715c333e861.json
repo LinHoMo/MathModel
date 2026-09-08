@@ -1,0 +1,122 @@
+{
+  "submission_id": "f4188f3f-8a14-4e62-a95b-4715c333e861",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1/C2 提取题面'累加和 100%、仅 85%~105% 有效'的显式条件；A2 提取风化点/未风化点；A4 提取类型标签真值，Q1/Q2 显式条件覆盖完整"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A3 同类型同风化状态同分布族（隐式统计假设）、A5 先划分检验集防泄漏（隐式方法学约束）、M1 成分闭合效应（隐式物理约束）被显式识别"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "O1 accuracy 对应 Q2 分类交付、O2 校正 MSE 与 X1/X3 对应 Q1 风化影响分析；但 Q3 亚类划分未建模，CL4 将'未知样本鉴别'（实为 Q2 任务）绑定到 Q3，交付识别不完整"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 标注；风化程度分级等歧义经 A2/A6 假设形式处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=supervised_classification（统计检验+判别+校正回归），与玻璃成分分类规律分析的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 1,
+      "evidence": "V1-V20 大体声明完备，但 E5（t 检验）中 m_1/m_2/t 与 E3 中索引 j/k 未声明，deterministic undeclared_symbol_ratio=0.375，变量声明不完整"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P14 均含 source 与取值/待标定，但方程符号闭合性不足：未声明符号比例 37.5%（m_1/m_2/t 等），破坏'方程符号⊆声明集'要求"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式列出且可检验，A5（检验集先划分）与 A2（风化离子交换）为合理机理假设，无与题面矛盾项"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "O1 maximize accuracy 对齐 Q2 判别；O2 minimize 校正 MSE 只覆盖 Q1 的风化校正子任务，Q1 统计规律分析与 Q3 亚类目标未进入 objectives"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 闭合和、C2 85-105% 有效性、C3 非负、C4 先划分防泄漏、C5 逐类指标报告，方向正确且适配数据问题"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "M1 成分闭合效应→E3 CLR 对数比变换、M2 风化离子交换→E8 校正回归、M3 贝叶斯判别→E6、M4 规则归纳，机理与化学数据特性一致；无显式候选模型对比，故不给 3"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E8 完整：闭合/有效性/CLR/标准化/Welch t/LDA 判别/逻辑回归/风化校正，统计管线闭合可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 LDA 广义特征分解、S2 逻辑回归 IRLS、S3 CART 基尼二分，均与判别/分类模型类型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "X1 分层两样本检验+卡方、X2 0.8/0.2 留出+5 折 CV、X3 校正回归留出评估，实验设计完整（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "统计拟合未显式声明收敛判据，以 VA3 多次 5 折 CV 稳定性作为收敛/稳定代理"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X2 固定 0.8/0.2 划分+5 折 CV 具备可复现设计，但未显式 seed=42/多 seed 方差与 replay 设计"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出（混淆矩阵、逐类查全/查准、校正回归误差）量级合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 对照基线：与总是判为多数类的朴素基线比较留出集准确率，基线选择恰当"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA2 对 PbO/BaO/K2O/CaO 施加 ±5%~±20% 扰动，均为玻璃判别的主导敏感成分"
+    },
+    "L4.3": {
+      "score": 0,
+      "evidence": "无极端参数/边界条件检验；VA4 泄漏检查属流程校验而非极限检验"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1/VA5→CL3 判别有效性、VA2→CL3 灵敏度、VA4→CL1/CL4 防泄漏，验证覆盖核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "CL1-CL4 每条均有 evidence_refs（M/E/VA 混合）与 model_refs；deterministic supported_claims=4/4"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 11,
+    "L3": 7,
+    "L4": 8,
+    "overall": 34
+  },
+  "deterministic": {
+    "declared_symbols": 34,
+    "used_symbols": 16,
+    "undeclared_symbols": ["ij", "j", "k", "m_1", "m_2", "t"],
+    "undeclared_symbol_ratio": 0.375,
+    "index_inconsistency": null,
+    "total_claims": 4,
+    "supported_claims": 4,
+    "sub_question_binding_count": 3,
+    "method_family_identified": "supervised_classification"
+  },
+  "failure_modes": [
+    "FM-MC-004"
+  ],
+  "notes": "成分闭合效应、风化校正与判别建模的统计管线设计扎实，验证含基线/灵敏度/防泄漏检查；主要缺口是方程符号声明不完整（未声明符号比 37.5%）且 Q3 亚类划分未建模、交付绑定有偏差。"
+}

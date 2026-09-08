@@ -1,0 +1,1642 @@
+{
+  "ir_version": "1.0",
+  "model_id": "m-2024a-7b4d08aa",
+  "model_family": {
+    "primary": "differential_algebraic_kinematics",
+    "secondary": [
+      "index1_dae",
+      "ode45_integration"
+    ],
+    "description": "把板凳龙整体写成带代数约束的微分代数方程组（DAE）：以各把手极角为状态，刚性链孔距为代数约束，对约束求导降指标得到显式常微分方程组后用自适应步长龙格-库塔积分；速度由约束微分方程在约束流形上的解直接给出。模型是确定性的运动学系统，不需要任何统计辨识环节。"
+  },
+  "problem_binding": {
+    "problem_id": "2024_A",
+    "sub_question_id": "Q1",
+    "problem_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+    "problem_card_ref": "research/P15/benchmark/problem_cards/2024_A/card.yaml",
+    "competition_format": "CUMCM"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "a1",
+      "text": "把手中心位于螺线上，板凳为刚性杆，孔距恒定，链条不可伸长。",
+      "source": "题面给定",
+      "confidence": 0.95,
+      "sub_question_binding": "Q1",
+      "type": "mechanics"
+    },
+    {
+      "assumption_id": "a2",
+      "text": "运动完全由龙头前把手沿螺线的给定速度驱动，系统为确定性运动学系统，无随机输入。",
+      "source": "题面给定",
+      "confidence": 0.95,
+      "sub_question_binding": "Q1",
+      "type": "kinematics"
+    },
+    {
+      "assumption_id": "a3",
+      "text": "链条构型可用 224 个把手极角作为广义坐标描述，其余量（位置、速度）均为其导出量。",
+      "source": "坐标选取",
+      "confidence": 0.85,
+      "sub_question_binding": "Q1",
+      "type": "structure"
+    },
+    {
+      "assumption_id": "a4",
+      "text": "代数约束（孔距）对时间求导可解析进行，系统指标为 1，可降为常微分方程组。",
+      "source": "数值分析",
+      "confidence": 0.8,
+      "sub_question_binding": "Q1",
+      "type": "numerical"
+    },
+    {
+      "assumption_id": "a5",
+      "text": "碰撞以非相邻板凳线段最近距离为零判定，碰撞时刻为代数约束之外的事件。",
+      "source": "建模约定",
+      "confidence": 0.8,
+      "sub_question_binding": "Q2",
+      "type": "geometry"
+    },
+    {
+      "assumption_id": "a6",
+      "text": "调头空间为半径 4.5 m 圆盘，盘出螺线为盘入螺线的中心对称像。",
+      "source": "题面给定",
+      "confidence": 0.9,
+      "sub_question_binding": "Q3",
+      "type": "geometry"
+    },
+    {
+      "assumption_id": "a7",
+      "text": "速率限值约束只在每个积分步后检查，不进入微分方程本身（后验约束）。",
+      "source": "建模约定",
+      "confidence": 0.75,
+      "sub_question_binding": "Q5",
+      "type": "kinematics"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "var_t",
+      "name": "时间",
+      "symbol": "t",
+      "definition": "仿真时间",
+      "unit": "s",
+      "type": "continuous",
+      "sub_question_binding": "Q1",
+      "value_range": "[-100,300]"
+    },
+    {
+      "variable_id": "var_phi_i",
+      "name": "第 i 个把手极角",
+      "symbol": "phi",
+      "definition": "第 i 个把手在螺线上的极角（DAE 状态）",
+      "unit": "rad",
+      "type": "continuous",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "var_rho_i",
+      "name": "第 i 个把手极径",
+      "symbol": "rho",
+      "definition": "第 i 个把手到螺线中心距离",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "var_sigma_i",
+      "name": "弧长坐标",
+      "symbol": "sigma",
+      "definition": "沿螺线从初始点量到第 i 个把手的弧长",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "var_x_i",
+      "name": "第 i 个把手横坐标",
+      "symbol": "x",
+      "definition": "第 i 个把手横坐标",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "var_y_i",
+      "name": "第 i 个把手纵坐标",
+      "symbol": "y",
+      "definition": "第 i 个把手纵坐标",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "var_u_i",
+      "name": "第 i 个把手速率",
+      "symbol": "u",
+      "definition": "第 i 个把手速度大小",
+      "unit": "m/s",
+      "type": "continuous",
+      "sub_question_binding": "Q1",
+      "value_range": ">=0"
+    },
+    {
+      "variable_id": "var_res",
+      "name": "约束残差",
+      "symbol": "res",
+      "definition": "代数约束 g(phi)=0 在积分过程中的最大残差",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "var_gap",
+      "name": "最小间距",
+      "symbol": "gap",
+      "definition": "全部非相邻板凳对的最小间距",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q2",
+      "value_range": ">=0"
+    },
+    {
+      "variable_id": "var_t_col",
+      "name": "碰撞时刻",
+      "symbol": "t_col",
+      "definition": "最小间距首次为零的时刻",
+      "unit": "s",
+      "type": "continuous",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "var_p_min",
+      "name": "最小螺距",
+      "symbol": "p_min",
+      "definition": "满足边界可达的最小螺距",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q3",
+      "value_range": ">0"
+    },
+    {
+      "variable_id": "var_L_turn",
+      "name": "调头曲线长度",
+      "symbol": "L_turn",
+      "definition": "两段圆弧长度之和",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q4",
+      "value_range": ">0"
+    },
+    {
+      "variable_id": "var_R1",
+      "name": "前弧半径",
+      "symbol": "R_1",
+      "definition": "调头前段圆弧半径",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q4",
+      "value_range": ">0"
+    },
+    {
+      "variable_id": "var_R2",
+      "name": "后弧半径",
+      "symbol": "R_2",
+      "definition": "调头后段圆弧半径",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q4",
+      "value_range": ">0"
+    },
+    {
+      "variable_id": "var_alpha1",
+      "name": "前弧圆心角",
+      "symbol": "alpha_1",
+      "definition": "前段圆弧圆心角",
+      "unit": "rad",
+      "type": "continuous",
+      "sub_question_binding": "Q4",
+      "value_range": "(0,pi)"
+    },
+    {
+      "variable_id": "var_alpha2",
+      "name": "后弧圆心角",
+      "symbol": "alpha_2",
+      "definition": "后段圆弧圆心角",
+      "unit": "rad",
+      "type": "continuous",
+      "sub_question_binding": "Q4",
+      "value_range": "(0,pi)"
+    },
+    {
+      "variable_id": "var_g_i",
+      "name": "约束函数值",
+      "symbol": "g",
+      "definition": "代数约束函数 g(phi) 在把手 i 处的值",
+      "unit": "m",
+      "type": "continuous",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "var_v_hmax",
+      "name": "龙头最大速度",
+      "symbol": "v_hmax",
+      "definition": "使全部把手速率不超过限值的头速上界",
+      "unit": "m/s",
+      "type": "continuous",
+      "sub_question_binding": "Q5",
+      "value_range": ">0"
+    },
+    {
+      "variable_id": "var_i",
+      "name": "把手下标",
+      "symbol": "i",
+      "definition": "把手编号下标",
+      "unit": "1",
+      "type": "integer",
+      "sub_question_binding": "Q1",
+      "value_range": "[1,224]"
+    },
+    {
+      "variable_id": "var_j",
+      "name": "把手下标",
+      "symbol": "j",
+      "definition": "第二把手编号下标",
+      "unit": "1",
+      "type": "integer",
+      "sub_question_binding": "Q2",
+      "value_range": "[1,224]"
+    },
+    {
+      "variable_id": "var_eta_i",
+      "name": "约束流形传播系数",
+      "symbol": "eta",
+      "definition": "DAE 降指标后约束流形上的速度传播系数",
+      "unit": "1",
+      "type": "continuous",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "par_N",
+      "name": "板凳总数",
+      "symbol": "N",
+      "definition": "板凳节数",
+      "unit": "1",
+      "value": 223,
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_L1",
+      "name": "龙头板长",
+      "symbol": "L1",
+      "definition": "龙头板长",
+      "unit": "m",
+      "value": 3.41,
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_L",
+      "name": "龙身/龙尾板长",
+      "symbol": "L",
+      "definition": "龙身与龙尾板长",
+      "unit": "m",
+      "value": 2.2,
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_w",
+      "name": "板凳宽度",
+      "symbol": "w",
+      "definition": "板凳板宽",
+      "unit": "m",
+      "value": 0.3,
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_h",
+      "name": "孔心距板头",
+      "symbol": "h",
+      "definition": "孔中心到最近板头距离",
+      "unit": "m",
+      "value": 0.275,
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_d1",
+      "name": "龙头节链长",
+      "symbol": "d1",
+      "definition": "龙头孔距",
+      "unit": "m",
+      "value": 2.86,
+      "source": "L1-2h",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_d",
+      "name": "龙身节链长",
+      "symbol": "d",
+      "definition": "龙身/龙尾孔距",
+      "unit": "m",
+      "value": 1.65,
+      "source": "L-2h",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_p",
+      "name": "螺距",
+      "symbol": "p",
+      "definition": "等距螺线螺距",
+      "unit": "m",
+      "value": 0.55,
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_k",
+      "name": "增长系数",
+      "symbol": "k",
+      "definition": "半径对极角导数 p/(2pi)",
+      "unit": "m/rad",
+      "value": 0.08753521870054244,
+      "source": "由 p 导出",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_v_h",
+      "name": "龙头速度",
+      "symbol": "v_h",
+      "definition": "龙头前把手速率",
+      "unit": "m/s",
+      "value": 1.0,
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_R_turn",
+      "name": "调头空间半径",
+      "symbol": "R_turn",
+      "definition": "直径 9 m 圆盘半径",
+      "unit": "m",
+      "value": 4.5,
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "parameter_id": "par_v_lim",
+      "name": "速率上限",
+      "symbol": "v_lim",
+      "definition": "问题 5 速率限值",
+      "unit": "m/s",
+      "value": 2.0,
+      "source": "题面",
+      "sub_question_binding": "Q5"
+    },
+    {
+      "parameter_id": "par_tol",
+      "name": "积分容差",
+      "symbol": "tol",
+      "definition": "自适应步长 ODE 求解器的相对/绝对容差",
+      "unit": "1",
+      "value": 1e-08,
+      "source": "建模选择",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_T1",
+      "name": "问题 1 时间范围",
+      "symbol": "T1",
+      "definition": "输出到 300 s",
+      "unit": "s",
+      "value": 300,
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_phi_A",
+      "name": "A 点极角",
+      "symbol": "phi_0",
+      "definition": "初始龙头所在第 16 圈 A 点极角",
+      "unit": "rad",
+      "value": "由图 4 确定",
+      "source": "题面图 4",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "par_L_c",
+      "name": "链条总长",
+      "symbol": "L_c",
+      "definition": "全部相邻把手间距之和",
+      "unit": "m",
+      "value": 369.15999999999997,
+      "source": "链长公式",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "obj_min_pitch",
+      "type": "minimize",
+      "expression": "p 最小化，使龙头前把手可到达 r = R_turn 边界且 DAE 解存在到该时刻",
+      "variables_refs": [
+        "var_p_min",
+        "var_rho_i",
+        "var_t_col"
+      ],
+      "description": "问题 3 最小螺距",
+      "sub_question_binding": "Q3",
+      "clarity_score": 0.9
+    },
+    {
+      "objective_id": "obj_min_turn",
+      "type": "minimize",
+      "expression": "L_turn 最小化（两段相切圆弧），保持相切约束",
+      "variables_refs": [
+        "var_L_turn",
+        "var_R1",
+        "var_R2"
+      ],
+      "description": "问题 4 最短调头曲线",
+      "sub_question_binding": "Q4",
+      "clarity_score": 0.85
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "con_g",
+      "type": "equality",
+      "expression": "g_i(phi) = |P_{i+1} - P_i| - d_i = 0 对所有 i",
+      "variables_refs": [
+        "var_phi_i",
+        "var_x_i",
+        "var_y_i",
+        "par_d1",
+        "par_d"
+      ],
+      "source": "刚性链代数约束",
+      "description": "相邻把手间距恒等于孔距（DAE 代数约束）",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "con_oncurve",
+      "type": "equality",
+      "expression": "rho_i = k*phi_i",
+      "variables_refs": [
+        "var_rho_i",
+        "var_phi_i",
+        "par_k"
+      ],
+      "source": "曲线约束",
+      "description": "把手位于螺线上",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "con_head",
+      "type": "equality",
+      "expression": "u_1 = v_h（沿螺线弧长方向）",
+      "variables_refs": [
+        "var_u_i",
+        "par_v_h"
+      ],
+      "source": "驱动条件",
+      "description": "龙头前把手速率恒定",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "con_col",
+      "type": "inequality",
+      "expression": "gap >= 0（全部非相邻对）",
+      "variables_refs": [
+        "var_gap",
+        "var_x_i",
+        "var_y_i"
+      ],
+      "source": "干涉约束",
+      "description": "任意时刻无碰撞",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "con_boundary",
+      "type": "equality",
+      "expression": "rho_1(t_end) = R_turn",
+      "variables_refs": [
+        "var_rho_i",
+        "par_R_turn",
+        "var_t_col"
+      ],
+      "source": "边界条件",
+      "description": "龙头可达调头边界",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "con_speed",
+      "type": "inequality",
+      "expression": "u_i <= v_lim（积分步后验检查）",
+      "variables_refs": [
+        "var_u_i",
+        "par_v_lim"
+      ],
+      "source": "题面（问题 5）",
+      "description": "把手速率上限",
+      "sub_question_binding": "Q5"
+    },
+    {
+      "constraint_id": "con_turn",
+      "type": "equality",
+      "expression": "R_1 = 2*R_2，两圆弧相切并与两侧螺线相切",
+      "variables_refs": [
+        "var_R1",
+        "var_R2",
+        "var_L_turn"
+      ],
+      "source": "题面（问题 4）",
+      "description": "调头 S 形曲线相切约束",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "constraint_id": "con_init",
+      "type": "equality",
+      "expression": "phi_1(0) = phi_A，且 g(phi(0)) = 0（初始构型满足约束）",
+      "variables_refs": [
+        "var_phi_i",
+        "par_phi_A"
+      ],
+      "source": "初始条件",
+      "description": "初始构型在约束流形上",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "mech_dae",
+      "name": "微分代数方程组表述",
+      "description": "把全部把手极角 phi_i 作为状态，孔距等式为代数约束，构成指标 1 的 DAE；对代数约束求导降为 ODE。为何采用：把“链条不可伸长”作为硬约束而不是罚项，避免数值漂移导致相邻把手间距在长时间积分后偏离孔距。",
+      "type": "numerical",
+      "governing_principle": "index-1 differential-algebraic system",
+      "variables_refs": [
+        "var_phi_i",
+        "var_res",
+        "var_x_i",
+        "var_y_i"
+      ],
+      "assumptions_refs": [
+        "a3",
+        "a4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "mech_curve",
+      "name": "螺线几何",
+      "description": "极坐标 rho = k*phi 与弧长微分给出位置与切向；盘出螺线为中心对称像。",
+      "type": "geometry",
+      "governing_principle": "Archimedean spiral geometry",
+      "variables_refs": [
+        "var_rho_i",
+        "var_sigma_i",
+        "var_phi_i"
+      ],
+      "assumptions_refs": [
+        "a1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "mech_vel",
+      "name": "约束流形上的速度",
+      "description": "速度由位置沿约束流形的导数给出，链式约束使内侧把手速率可超过龙头；速度不是独立变量，而是 DAE 解在流形切空间上的投影。",
+      "type": "kinematics",
+      "governing_principle": "velocity as projection on constraint manifold",
+      "variables_refs": [
+        "var_u_i",
+        "var_phi_i",
+        "var_rho_i"
+      ],
+      "assumptions_refs": [
+        "a1",
+        "a2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "mech_event",
+      "name": "事件检测",
+      "description": "碰撞时刻作为 DAE 积分中的事件（gap 过零）处理，用事件定位算法精确定位 t_col；避免固定步长漏检。",
+      "type": "geometry",
+      "governing_principle": "event location of gap zero-crossing",
+      "variables_refs": [
+        "var_gap",
+        "var_t_col",
+        "var_x_i",
+        "var_y_i"
+      ],
+      "assumptions_refs": [
+        "a5"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "mech_check",
+      "name": "后验速率检查",
+      "description": "问题 5 的速率限值在积分步后检查，并利用速率与头速的线性齐次性确定最大可行头速。",
+      "type": "kinematics",
+      "governing_principle": "a-posteriori constraint check with linear scaling",
+      "variables_refs": [
+        "var_u_i",
+        "var_v_hmax"
+      ],
+      "assumptions_refs": [
+        "a7"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "eq_spiral",
+      "latex": "rho_i = k\\,phi_i",
+      "type": "geometry",
+      "variables_refs": [
+        "var_rho_i",
+        "var_phi_i"
+      ],
+      "parameters_refs": [
+        "par_k"
+      ],
+      "mechanism_ref": "mech_curve",
+      "derivation_trace": "螺线极坐标方程",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "eq_arclen",
+      "latex": "\\mathrm{d}sigma = \\sqrt{rho^2 + k^2}\\,\\mathrm{d}phi",
+      "type": "geometry",
+      "variables_refs": [
+        "var_sigma_i",
+        "var_rho_i",
+        "var_phi_i"
+      ],
+      "parameters_refs": [
+        "par_k"
+      ],
+      "mechanism_ref": "mech_curve",
+      "derivation_trace": "螺线弧长微分",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "eq_dae_g",
+      "latex": "g_i = \\sqrt{(x_{i+1}-x_i)^2 + (y_{i+1}-y_i)^2} - d_i = 0",
+      "type": "algebraic_constraint",
+      "variables_refs": [
+        "var_x_i",
+        "var_y_i",
+        "var_res"
+      ],
+      "parameters_refs": [
+        "par_d1",
+        "par_d"
+      ],
+      "mechanism_ref": "mech_dae",
+      "derivation_trace": "DAE 代数约束：孔距恒定",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "eq_dae_ode",
+      "latex": "\\dot{phi}_i = \\frac{v_h}{\\sqrt{rho_i^2 + k^2}}\\,eta_i(phi),\\quad eta_1 = 1",
+      "type": "differential",
+      "variables_refs": [
+        "var_phi_i",
+        "var_rho_i",
+        "var_u_i"
+      ],
+      "parameters_refs": [
+        "par_v_h",
+        "par_k"
+      ],
+      "mechanism_ref": "mech_dae",
+      "derivation_trace": "对 g 求导降指标后的 ODE（eta_i 为约束流形上的传播系数）",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "eq_pos",
+      "latex": "x_i = rho_i\\cosphi_i,\\quad y_i = rho_i\\sinphi_i",
+      "type": "geometry",
+      "variables_refs": [
+        "var_x_i",
+        "var_y_i",
+        "var_rho_i",
+        "var_phi_i"
+      ],
+      "parameters_refs": [],
+      "mechanism_ref": "mech_curve",
+      "derivation_trace": "极坐标到直角坐标",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "eq_u",
+      "latex": "u_i = \\sqrt{rho_i^2 + k^2}\\,\\dot{phi}_i",
+      "type": "kinematics",
+      "variables_refs": [
+        "var_u_i",
+        "var_rho_i",
+        "var_phi_i"
+      ],
+      "parameters_refs": [
+        "par_k"
+      ],
+      "mechanism_ref": "mech_vel",
+      "derivation_trace": "把手速率 = 弧长因子乘极角速率",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "eq_res",
+      "latex": "res = \\max_i |g_i(t)|",
+      "type": "numerical",
+      "variables_refs": [
+        "var_res",
+        "var_i"
+      ],
+      "parameters_refs": [],
+      "mechanism_ref": "mech_dae",
+      "derivation_trace": "约束漂移监测量",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "eq_col",
+      "latex": "t_col = \\min\\{ t : \\exists\\, |i-j| \\ge 2,\\ \\mathrm{gap}_{i,j}(t) = 0 \\}",
+      "type": "event",
+      "variables_refs": [
+        "var_t_col",
+        "var_gap",
+        "var_i",
+        "var_j"
+      ],
+      "parameters_refs": [],
+      "mechanism_ref": "mech_event",
+      "derivation_trace": "碰撞事件定位",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "eq_boundary",
+      "latex": "sigma(phi_0) - sigma(phi_2) = L_c,\\quad rho(phi_2) = R_turn",
+      "type": "constraint",
+      "variables_refs": [
+        "var_sigma_i",
+        "var_rho_i",
+        "var_phi_i",
+        "var_p_min"
+      ],
+      "parameters_refs": [
+        "par_L_c",
+        "par_R_turn"
+      ],
+      "mechanism_ref": "mech_curve",
+      "derivation_trace": "问题 3 边界可达条件",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "eq_turn",
+      "latex": "L_turn = R_1\\,alpha_1 + R_2\\,alpha_2,\\quad R_1 = 2\\,R_2",
+      "type": "geometry",
+      "variables_refs": [
+        "var_L_turn",
+        "var_R1",
+        "var_R2",
+        "var_alpha1",
+        "var_alpha2"
+      ],
+      "parameters_refs": [],
+      "mechanism_ref": "mech_curve",
+      "derivation_trace": "问题 4 调头曲线长度与半径比",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "equation_id": "eq_vmax",
+      "latex": "v_hmax = \\frac{v_lim}{\\max_i (u_i / v_h)}",
+      "type": "optimization",
+      "variables_refs": [
+        "var_v_hmax",
+        "var_u_i",
+        "var_i"
+      ],
+      "parameters_refs": [
+        "par_v_lim",
+        "par_v_h"
+      ],
+      "mechanism_ref": "mech_check",
+      "derivation_trace": "问题 5：按基准运行的速率比放大头速",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_id": "dep_numpy",
+      "name": "numpy",
+      "version": "1.26",
+      "purpose": "向量化几何与约束计算"
+    },
+    {
+      "dependency_id": "dep_scipy",
+      "name": "scipy",
+      "version": "1.11",
+      "purpose": "solve_ivp 自适应步长积分与事件定位"
+    },
+    {
+      "dependency_id": "dep_sympy",
+      "name": "sympy",
+      "version": "1.12",
+      "purpose": "代数约束符号求导，降指标推导"
+    },
+    {
+      "dependency_id": "dep_openpyxl",
+      "name": "openpyxl",
+      "version": "3.1",
+      "purpose": "result xlsx 输出"
+    },
+    {
+      "dependency_id": "dep_matplotlib",
+      "name": "matplotlib",
+      "version": "3.8",
+      "purpose": "轨迹与约束漂移曲线图"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "sol_dae",
+      "name": "降指标 ODE + 自适应 RK45",
+      "type": "exact",
+      "method": "对 eq_dae_ode 用 scipy.solve_ivp 自适应步长积分，事件函数定位 eq_col 过零；每步后监测 eq_res 约束漂移",
+      "parameters": {
+        "rtol": 1e-08,
+        "atol": 1e-10,
+        "max_step": 1.0
+      },
+      "convergence_criteria": "约束漂移 res < 1e-7 m，事件定位精度 < 1e-6 s",
+      "equations_refs": [
+        "eq_dae_ode",
+        "eq_dae_g",
+        "eq_col"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "sol_proj",
+      "name": "约束投影校正",
+      "type": "heuristic",
+      "method": "当 res 超过阈值时对构型做最近点投影回约束流形（高斯-牛顿），恢复 g=0",
+      "parameters": {
+        "proj_tol": 1e-10,
+        "max_iter": 10
+      },
+      "convergence_criteria": "投影后 res < 1e-10",
+      "equations_refs": [
+        "eq_dae_g"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "sol_opt",
+      "name": "参数扫描（Q3/Q4/Q5）",
+      "type": "heuristic",
+      "method": "外循环扫描螺距 p 与半径比，内层 DAE 求解边界可达与速率比",
+      "parameters": {
+        "grid": 300,
+        "tol": 1e-09
+      },
+      "convergence_criteria": "相邻格点目标差异 < 1e-3",
+      "equations_refs": [
+        "eq_boundary",
+        "eq_turn",
+        "eq_vmax"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "exp_q1",
+      "method": "DAE 积分 0-300 s",
+      "parameters": {
+        "rtol": 1e-08,
+        "t_end": 300
+      },
+      "inputs_refs": [
+        "eq_dae_ode",
+        "eq_dae_g",
+        "eq_res"
+      ],
+      "outputs": [
+        "每秒全部把手位置速度",
+        "约束漂移序列"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "runs": 1,
+        "seed": 42
+      },
+      "solver_ref": "sol_dae",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "exp_q2",
+      "method": "碰撞事件定位",
+      "parameters": {
+        "event_tol": 1e-06
+      },
+      "inputs_refs": [
+        "eq_col"
+      ],
+      "outputs": [
+        "t_col 与碰撞时刻全部把手状态"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "runs": 1,
+        "seed": 42
+      },
+      "solver_ref": "sol_dae",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "exp_q34",
+      "method": "参数扫描实验",
+      "parameters": {
+        "p_grid": [
+          0.2,
+          0.8
+        ],
+        "ratio_grid": [
+          1,
+          4
+        ]
+      },
+      "inputs_refs": [
+        "eq_boundary",
+        "eq_turn",
+        "eq_vmax"
+      ],
+      "outputs": [
+        "p_min",
+        "L_turn 最优值",
+        "v_hmax"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "runs": 1,
+        "seed": 42
+      },
+      "solver_ref": "sol_opt",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "val_drift",
+      "type": "constraint_drift",
+      "method": "长时间积分后约束漂移 res 是否保持在 1e-7 m 以内",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "exp_q1"
+      ],
+      "targets_refs": [
+        "eq_res",
+        "eq_dae_g"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "val_tol",
+      "type": "sensitivity",
+      "method": "积分容差从 1e-8 到 1e-10 变化时位置结果差异",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "exp_q1"
+      ],
+      "targets_refs": [
+        "eq_dae_ode"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "val_limit",
+      "type": "limit_test",
+      "method": "螺距取很大时 DAE 退化为近似直线运动，检查数值稳定性",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "exp_q1"
+      ],
+      "targets_refs": [
+        "eq_spiral"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "val_event",
+      "type": "event_accuracy",
+      "method": "事件定位结果与极小步长固定步长扫描对照",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "exp_q2"
+      ],
+      "targets_refs": [
+        "eq_col"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "val_tangent",
+      "type": "geometry_check",
+      "method": "调头圆弧与螺线连接处切线连续检查",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "exp_q34"
+      ],
+      "targets_refs": [
+        "eq_turn"
+      ],
+      "sub_question_binding": "Q4"
+    },
+    {
+      "validation_id": "val_indep",
+      "type": "independent_recompute",
+      "method": "用弦长递推（非 DAE）独立重算同一时刻位置，与 DAE 结果对比",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "exp_q1"
+      ],
+      "targets_refs": [
+        "eq_dae_g"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "cl1",
+      "text": "DAE 表述以硬约束保持链长，长时间积分的约束漂移可控制在容差内",
+      "type": "model_claim",
+      "evidence_refs": [
+        "eq_dae_g",
+        "eq_res"
+      ],
+      "model_refs": [
+        "mech_dae"
+      ],
+      "experiment_refs": [
+        "exp_q1"
+      ],
+      "validation_refs": [
+        "val_drift"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "cl2",
+      "text": "碰撞时刻由事件定位精确给出，避免固定步长漏检",
+      "type": "model_claim",
+      "evidence_refs": [
+        "eq_col"
+      ],
+      "model_refs": [
+        "mech_event"
+      ],
+      "experiment_refs": [
+        "exp_q2"
+      ],
+      "validation_refs": [
+        "val_event"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "supported"
+    },
+    {
+      "claim_id": "cl3",
+      "text": "最小螺距由链条总长与边界弧长匹配决定，与积分器选择无关",
+      "type": "model_claim",
+      "evidence_refs": [
+        "eq_boundary"
+      ],
+      "model_refs": [
+        "mech_curve"
+      ],
+      "experiment_refs": [
+        "exp_q34"
+      ],
+      "validation_refs": [
+        "val_indep"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "supported"
+    },
+    {
+      "claim_id": "cl4",
+      "text": "最大头速由速率比最大处决定，v_hmax = v_lim / max(u_i/v_h)",
+      "type": "model_claim",
+      "evidence_refs": [
+        "eq_vmax"
+      ],
+      "model_refs": [
+        "mech_check"
+      ],
+      "experiment_refs": [
+        "exp_q34"
+      ],
+      "validation_refs": [
+        "val_tol"
+      ],
+      "sub_question_binding": "Q5",
+      "status": "supported"
+    }
+  ],
+  "model_graph": {
+    "graph_version": "1.0",
+    "nodes": [
+      {
+        "id": "n_root",
+        "type": "problem",
+        "label": "2024_A 板凳龙（多节刚性链运动学）",
+        "refs": [
+          "problem_binding"
+        ]
+      },
+      {
+        "id": "n_sub",
+        "type": "subproblems",
+        "label": "子问题 Q1-Q5（时序输出/碰撞/螺距/调头/速度）",
+        "refs": [
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5"
+        ]
+      },
+      {
+        "id": "n_ent_spiral",
+        "type": "entity",
+        "label": "等距螺线路径",
+        "refs": [
+          "mech_curve"
+        ]
+      },
+      {
+        "id": "n_ent_chain",
+        "type": "entity",
+        "label": "223 节刚性链",
+        "refs": [
+          "mech_dae"
+        ]
+      },
+      {
+        "id": "n_ent_turn",
+        "type": "entity",
+        "label": "调头 S 形圆弧",
+        "refs": [
+          "mech_curve"
+        ]
+      },
+      {
+        "id": "n_ent_state",
+        "type": "entity",
+        "label": "把手状态（位置/速度）",
+        "refs": [
+          "mech_vel"
+        ]
+      },
+      {
+        "id": "n_mech_dae",
+        "type": "mechanism",
+        "label": "微分代数方程组表述",
+        "refs": [
+          "mech_dae"
+        ]
+      },
+      {
+        "id": "n_mech_curve",
+        "type": "mechanism",
+        "label": "螺线几何",
+        "refs": [
+          "mech_curve"
+        ]
+      },
+      {
+        "id": "n_mech_vel",
+        "type": "mechanism",
+        "label": "约束流形上的速度",
+        "refs": [
+          "mech_vel"
+        ]
+      },
+      {
+        "id": "n_mech_event",
+        "type": "mechanism",
+        "label": "事件检测",
+        "refs": [
+          "mech_event"
+        ]
+      },
+      {
+        "id": "n_mech_check",
+        "type": "mechanism",
+        "label": "后验速率检查",
+        "refs": [
+          "mech_check"
+        ]
+      },
+      {
+        "id": "n_eq_spiral",
+        "type": "equation",
+        "label": "mech_curve / eq_spiral",
+        "refs": [
+          "eq_spiral"
+        ]
+      },
+      {
+        "id": "n_eq_arclen",
+        "type": "equation",
+        "label": "mech_curve / eq_arclen",
+        "refs": [
+          "eq_arclen"
+        ]
+      },
+      {
+        "id": "n_eq_dae_g",
+        "type": "equation",
+        "label": "mech_dae / eq_dae_g",
+        "refs": [
+          "eq_dae_g"
+        ]
+      },
+      {
+        "id": "n_eq_dae_ode",
+        "type": "equation",
+        "label": "mech_dae / eq_dae_ode",
+        "refs": [
+          "eq_dae_ode"
+        ]
+      },
+      {
+        "id": "n_eq_pos",
+        "type": "equation",
+        "label": "mech_curve / eq_pos",
+        "refs": [
+          "eq_pos"
+        ]
+      },
+      {
+        "id": "n_eq_u",
+        "type": "equation",
+        "label": "mech_vel / eq_u",
+        "refs": [
+          "eq_u"
+        ]
+      },
+      {
+        "id": "n_sol_dae",
+        "type": "solver",
+        "label": "降指标 ODE + 自适应 RK45",
+        "refs": [
+          "sol_dae"
+        ]
+      },
+      {
+        "id": "n_sol_proj",
+        "type": "solver",
+        "label": "约束投影校正",
+        "refs": [
+          "sol_proj"
+        ]
+      },
+      {
+        "id": "n_sol_opt",
+        "type": "solver",
+        "label": "参数扫描（Q3/Q4/Q5）",
+        "refs": [
+          "sol_opt"
+        ]
+      },
+      {
+        "id": "n_exp_q1",
+        "type": "experiment",
+        "label": "DAE 积分 0-300 s",
+        "refs": [
+          "exp_q1"
+        ]
+      },
+      {
+        "id": "n_exp_q2",
+        "type": "experiment",
+        "label": "碰撞事件定位",
+        "refs": [
+          "exp_q2"
+        ]
+      },
+      {
+        "id": "n_val_drift",
+        "type": "validation",
+        "label": "长时间积分后约束漂移 res 是否保持在 1e-7 m 以内",
+        "refs": [
+          "val_drift"
+        ]
+      },
+      {
+        "id": "n_val_tol",
+        "type": "validation",
+        "label": "积分容差从 1e-8 到 1e-10 变化时位置结果差异",
+        "refs": [
+          "val_tol"
+        ]
+      },
+      {
+        "id": "n_val_limit",
+        "type": "validation",
+        "label": "螺距取很大时 DAE 退化为近似直线运动，检查数值稳定性",
+        "refs": [
+          "val_limit"
+        ]
+      },
+      {
+        "id": "n_cl1",
+        "type": "claim",
+        "label": "DAE 表述以硬约束保持链长，长时间积分的约束漂移可控制在容差内…",
+        "refs": [
+          "cl1"
+        ]
+      },
+      {
+        "id": "n_cl2",
+        "type": "claim",
+        "label": "碰撞时刻由事件定位精确给出，避免固定步长漏检…",
+        "refs": [
+          "cl2"
+        ]
+      },
+      {
+        "id": "n_cl3",
+        "type": "claim",
+        "label": "最小螺距由链条总长与边界弧长匹配决定，与积分器选择无关…",
+        "refs": [
+          "cl3"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "source": "n_root",
+        "target": "n_sub",
+        "relation": "decomposes_to"
+      },
+      {
+        "source": "n_sub",
+        "target": "n_ent_spiral",
+        "relation": "instantiates"
+      },
+      {
+        "source": "n_sub",
+        "target": "n_ent_chain",
+        "relation": "instantiates"
+      },
+      {
+        "source": "n_sub",
+        "target": "n_ent_turn",
+        "relation": "instantiates"
+      },
+      {
+        "source": "n_sub",
+        "target": "n_ent_state",
+        "relation": "instantiates"
+      },
+      {
+        "source": "n_ent_chain",
+        "target": "n_mech_dae",
+        "relation": "embodies"
+      },
+      {
+        "source": "n_ent_spiral",
+        "target": "n_mech_curve",
+        "relation": "embodies"
+      },
+      {
+        "source": "n_ent_state",
+        "target": "n_mech_vel",
+        "relation": "embodies"
+      },
+      {
+        "source": "n_ent_state",
+        "target": "n_mech_event",
+        "relation": "embodies"
+      },
+      {
+        "source": "n_ent_state",
+        "target": "n_mech_check",
+        "relation": "embodies"
+      },
+      {
+        "source": "n_mech_curve",
+        "target": "n_eq_spiral",
+        "relation": "formulates"
+      },
+      {
+        "source": "n_mech_curve",
+        "target": "n_eq_arclen",
+        "relation": "formulates"
+      },
+      {
+        "source": "n_mech_dae",
+        "target": "n_eq_dae_g",
+        "relation": "formulates"
+      },
+      {
+        "source": "n_mech_dae",
+        "target": "n_eq_dae_ode",
+        "relation": "formulates"
+      },
+      {
+        "source": "n_mech_curve",
+        "target": "n_eq_pos",
+        "relation": "formulates"
+      },
+      {
+        "source": "n_mech_vel",
+        "target": "n_eq_u",
+        "relation": "formulates"
+      },
+      {
+        "source": "n_eq_dae_ode",
+        "target": "n_sol_dae",
+        "relation": "solved_by"
+      },
+      {
+        "source": "n_eq_dae_g",
+        "target": "n_sol_dae",
+        "relation": "solved_by"
+      },
+      {
+        "source": "n_eq_dae_g",
+        "target": "n_sol_proj",
+        "relation": "solved_by"
+      },
+      {
+        "source": "n_sol_dae",
+        "target": "n_exp_q1",
+        "relation": "executes"
+      },
+      {
+        "source": "n_sol_dae",
+        "target": "n_exp_q2",
+        "relation": "executes"
+      },
+      {
+        "source": "n_exp_q1",
+        "target": "n_val_drift",
+        "relation": "validates"
+      },
+      {
+        "source": "n_exp_q1",
+        "target": "n_val_tol",
+        "relation": "validates"
+      },
+      {
+        "source": "n_exp_q1",
+        "target": "n_val_limit",
+        "relation": "validates"
+      },
+      {
+        "source": "n_val_drift",
+        "target": "n_cl1",
+        "relation": "supports"
+      }
+    ]
+  },
+  "modeling_trace": {
+    "trace_version": "1.0",
+    "generated_at": "2026-09-08T13:40:46Z",
+    "agent_identity": "doubao",
+    "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+    "node_events": [
+      {
+        "node": "n_root",
+        "event": "instantiated",
+        "detail": "解析题面为多体刚性链运动学问题"
+      },
+      {
+        "node": "n_sub",
+        "event": "decomposed",
+        "detail": "拆分为 Q1-Q5 五个子问题"
+      },
+      {
+        "node": "n_ent_spiral",
+        "event": "instantiated",
+        "detail": "建立路径/链条/状态实体"
+      },
+      {
+        "node": "n_mech_dae",
+        "event": "selected",
+        "detail": "选定机理并说明选择依据"
+      },
+      {
+        "node": "n_mech_curve",
+        "event": "selected",
+        "detail": "选定机理并说明选择依据"
+      },
+      {
+        "node": "n_eq_spiral",
+        "event": "derived",
+        "detail": "写出控制/约束/边界方程"
+      },
+      {
+        "node": "n_eq_arclen",
+        "event": "derived",
+        "detail": "写出控制/约束/边界方程"
+      },
+      {
+        "node": "n_eq_dae_g",
+        "event": "derived",
+        "detail": "写出控制/约束/边界方程"
+      },
+      {
+        "node": "n_sol_dae",
+        "event": "configured",
+        "detail": "配置求解器与收敛判据"
+      },
+      {
+        "node": "n_sol_proj",
+        "event": "configured",
+        "detail": "配置求解器与收敛判据"
+      },
+      {
+        "node": "n_exp_q1",
+        "event": "scheduled",
+        "detail": "安排数值实验"
+      },
+      {
+        "node": "n_exp_q2",
+        "event": "scheduled",
+        "detail": "安排数值实验"
+      },
+      {
+        "node": "n_val_drift",
+        "event": "planned",
+        "detail": "计划验证方法"
+      },
+      {
+        "node": "n_val_tol",
+        "event": "planned",
+        "detail": "计划验证方法"
+      },
+      {
+        "node": "n_cl1",
+        "event": "stated",
+        "detail": "形成主张并绑定证据"
+      },
+      {
+        "node": "n_cl2",
+        "event": "stated",
+        "detail": "形成主张并绑定证据"
+      }
+    ],
+    "generation_order": [
+      "n_root",
+      "n_sub",
+      "n_ent_spiral",
+      "n_ent_chain",
+      "n_ent_turn",
+      "n_ent_state",
+      "n_mech_dae",
+      "n_mech_curve",
+      "n_mech_vel",
+      "n_mech_event",
+      "n_mech_check",
+      "n_eq_spiral",
+      "n_eq_arclen",
+      "n_eq_dae_g",
+      "n_eq_dae_ode",
+      "n_eq_pos",
+      "n_eq_u",
+      "n_sol_dae",
+      "n_sol_proj",
+      "n_sol_opt",
+      "n_exp_q1",
+      "n_exp_q2",
+      "n_val_drift",
+      "n_val_tol",
+      "n_val_limit",
+      "n_cl1",
+      "n_cl2",
+      "n_cl3"
+    ]
+  }
+}

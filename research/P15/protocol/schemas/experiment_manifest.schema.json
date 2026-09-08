@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodel.local/schemas/p15-k001-experiment-manifest-v1.0.json",
+  "title": "P15-K001 Experiment Manifest",
+  "description": "Per-run manifest for P15-K001 (2x2 Knowledge x Case + Sham). Extends the ExternalArtifactManifest contract with experiment-level fields required for blocked/paired analysis. LLM-free by design. NOTE: this file is NOT part of the blind evaluation pack; the `condition` field must never reach the evaluator.",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "protocol_version",
+    "submission_id",
+    "problem_id",
+    "block_role",
+    "condition",
+    "knowledge",
+    "case",
+    "rep",
+    "seed",
+    "generator",
+    "hashes",
+    "artifact_schema_version",
+    "knowledge_trace",
+    "created_at"
+  ],
+  "properties": {
+    "experiment_id": { "type": "string", "const": "P15-K001" },
+    "protocol_version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+    "submission_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "description": "UUID4. The ONLY identifier exposed to the blind evaluator."
+    },
+    "problem_id": { "type": "string", "enum": ["2018_A", "2019_C", "2020_B", "2022_C", "2024_A"] },
+    "block_role": {
+      "type": "string",
+      "enum": ["main", "generalization"],
+      "description": "main = enters the primary blocked analysis; generalization = reported separately, never pooled into the primary p-value."
+    },
+    "condition": {
+      "type": "object",
+      "required": ["arm", "knowledge", "case"],
+      "properties": {
+        "arm": { "type": "string", "enum": ["A", "B", "C", "D", "E"] },
+        "knowledge": { "type": "string", "enum": ["none", "relevant", "sham"] },
+        "case": { "type": "string", "enum": ["none", "structural", "solution"] }
+      },
+      "additionalProperties": false
+    },
+    "knowledge": {
+      "type": "object",
+      "required": ["card_ids"],
+      "properties": {
+        "card_ids": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "role": { "type": "string", "enum": ["none", "relevant", "sham"] },
+        "card_sha256": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "case": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": { "type": ["string", "null"] },
+        "case_type": { "type": "string", "enum": ["none", "structural", "solution"] },
+        "sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+      },
+      "additionalProperties": true
+    },
+    "rep": { "type": "integer", "minimum": 1 },
+    "seed": { "type": "integer", "enum": [42, 43, 44] },
+    "generator": {
+      "type": "object",
+      "required": ["agent_identity"],
+      "properties": {
+        "agent_identity": { "type": "string", "enum": ["doubao", "gpt", "claude", "human", "other"] },
+        "model_version": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string" },
+        "temperature": { "type": ["number", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "hashes": {
+      "type": "object",
+      "required": ["problem_sha256", "prompt_sha256", "bundle_sha256"],
+      "properties": {
+        "problem_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "prompt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "bundle_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "run_order_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "additionalProperties": true
+    },
+    "artifact_schema_version": { "type": "string", "const": "model-ir-1.0" },
+    "knowledge_trace": {
+      "type": "object",
+      "description": "Mechanism chain: availability -> uptake -> correct application -> model construction.",
+      "properties": {
+        "retrieved": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "considered": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "used": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "adapted": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "rejected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["card_id", "reason"],
+            "properties": {
+              "card_id": { "type": "string" },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "prompt_tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "completion_tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "latency_seconds": { "type": ["number", "null"], "exclusiveMinimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "batch": { "type": "string" },
+    "sequence_in_block": { "type": "integer", "minimum": 0 }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodel.local/schemas/p15-k001-case-asset-v1.0.json",
+  "title": "P15-K001 Case Asset",
+  "description": "Metadata for a case asset injected into the C/D arms. Two layers: structural (problem-to-model construction rationale, NO answers) and solution (full model + solving, NOT injected in round 1). The structural layer must pass k001_leak_scan.py before it may enter a bundle.",
+  "type": "object",
+  "required": ["case_id", "problem_id", "case_type", "version", "sections"],
+  "properties": {
+    "case_id": { "type": "string", "pattern": "^case-(structural|solution)-[0-9]{4}_[A-E]$" },
+    "problem_id": { "type": "string", "enum": ["2018_A", "2019_C", "2020_B", "2022_C", "2024_A"] },
+    "case_type": {
+      "type": "string",
+      "enum": ["structural", "solution"],
+      "description": "structural = problem -> modeling rationale / variable-constraint-objective skeleton, no numeric answers. solution = full model and solving, reserved for a later K+C+S arm."
+    },
+    "version": { "type": "integer", "minimum": 1 },
+    "title": { "type": "string" },
+    "path": { "type": "string" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "approx_tokens": { "type": "integer", "minimum": 0 },
+    "injected_in_round_1": { "type": "boolean" },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["heading"],
+        "properties": {
+          "heading": { "type": "string", "minLength": 1 },
+          "required": { "type": "boolean", "default": true }
+        },
+        "additionalProperties": false
+      }
+    },
+    "leak_scan": {
+      "type": "object",
+      "required": ["passed", "scanned_at"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "scanned_at": { "type": "string" },
+        "hits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": { "type": "string", "enum": ["gt_constant", "solution_variant", "final_answer"] },
+              "value": { "type": "string" },
+              "context": { "type": "string" }
+            }
+          }
+        },
+        "scanner_version": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": true
+}

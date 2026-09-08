@@ -1,0 +1,120 @@
+{
+  "submission_id": "6c031199-972a-4469-9641-9f828b9d2434",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T00:00:00+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1/A2/A4-A6 与 P1-P12 完整提取规则(1)-(8)，每参数带 source 与 value（T/L/b_w/b_f/c_w/c_f/R/m_0/lambda/kappa/rho/Pi）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "C2 生存下界硬约束、C5 邻接（注1 公共边界）、C6 起点单次购买、C7 矿山次日可挖、CL1 状态分量剔除测试——隐式条件识别充分"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "X1-X3 outputs 识别逐日状态表与终局资金，但未显式提及 Result.xlsx 交付文件与注2 口径"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A3 对 Q2 天气转移概率以 0.75 置信度标注马尔可夫建模选择；CL5 标注连续资源离散化问题"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=discrete_recurrence, secondary=[dynamic_programming, markov_decision_process, game_theory] 匹配序贯决策/随机/博弈三问"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V13 全声明含 type 区分；V3/V4/V6 注明入状态必要性（剔除测试依据）；deterministic undeclared=0"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source/value；E1-E8 引用符号全部映射到 parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式带 source/confidence/type，A6 将矿山次日可挖规则显式化为假设，全部合理可检验"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1/O2 与 Q1/Q2 目标一致；O1 描述强调『到达终点是约束不是目标』，建模决策正确"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C7 完整且方向标注（C1 上界、C2 下界、C3 期限上界），modeling_trace node2 逐条核对方向"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M5 机理正确；model_family 描述逐问绑定机理（Q1 确定性/Q2 随机/Q3 博弈），modeling_trace 含约束方向核对与目标-约束分离"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E8 含转移/递推/终端/初始/随机递推/耦合，结构完整可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 精确表格递推/S2 值迭代/S3 最优反应迭代分别匹配模型类型"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码与执行日志，X1-X3 results='待求解'/pending（设计期产物）"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 有限阶段精确终止；S2 epsilon=1e-6、S3 max_iter=200"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "seed=42、n_mc=1000、VA7 多种子设计，无实际运行数据"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "输出为逐日状态表与终局资金，量级合理；结果待产出"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 贪心下界基线 + VA2 小规模枚举对照"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA4 扰动天气分布与消耗参数——均为影响最优策略的敏感参数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA5 松弛下界 + VA6 极限检验（L→∞ 挖矿、R=0 最短路）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1/VA2/VA3 对应最优性主张（CL1-CL4），VA7 对应 Q2 稳定性（CL6），验证目标对齐核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "6 条 claim 全部有 evidence_refs（deterministic supported_claims=6），无空证据引用；status=unresolved 属结果待产出所致"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 15,
+    "L3": 7,
+    "L4": 9,
+    "overall": 39
+  },
+  "deterministic": {
+    "declared_symbols": 25,
+    "used_symbols": 27,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 6,
+    "supported_claims": 6,
+    "sub_question_binding_count": 3,
+    "method_family_identified": "discrete_recurrence"
+  },
+  "failure_modes": [],
+  "notes": "2020_B 高质量序贯决策模型：变量参数零遗漏、约束方向显式核对、机理逐问绑定、全部主张均有证据引用。验证设计覆盖基线/枚举/灵敏度/松弛/极限/稳定性。L3 因结果为设计期『待求解』部分给分。"
+}

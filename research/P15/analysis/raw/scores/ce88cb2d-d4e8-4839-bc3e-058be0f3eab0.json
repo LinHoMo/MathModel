@@ -1,0 +1,120 @@
+{
+  "submission_id": "ce88cb2d-d4e8-4839-bc3e-058be0f3eab0",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:47:21+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1/C2 提取题面'累加和 100%、85%~105% 有效'；A2 提取风化点/未风化点；A3 提取实测化学检测确定类型边界，显式条件覆盖 Q1-Q3"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A4 多重比较校正（隐式统计风险）、A5 先划分检验集防泄漏、A6 亚类轮廓系数选择，隐式条件被显式识别并说明依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1→Q2 判别准确率、O2→Q3 亚类（silhouette）、X1→Q1 风化差异（含 Bonferroni 校正）、X3→Q3 亚类划分，Q1-Q3 交付物均有对应"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 标注；风化分级等歧义经 A2 假设处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=empirical_statistics_classification（硬边界贝叶斯判别+层次聚类），与玻璃分类规律与亚类划分的建模范式匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V25 全部声明且区分类型；deterministic undeclared_symbol_ratio=0.0，符号声明完整"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P17 全部声明，含 source 与取值/待标定；未声明符号比例 0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式且可检验，A4（Bonferroni 校正）与 A5（先划分防泄漏）为合理方法学假设，无与题面矛盾项"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 maximize accuracy 对齐 Q2 判别、O2 maximize silhouette 对齐 Q3 亚类，目标与题目一致；Q1 统计规律经 X1 实验承载"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 闭合、C2 有效性、C3 非负、C4 先划分防泄漏、C5 Bonferroni 校正、C6 逐类指标，方向正确且完整"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1 闭合效应、M2 风化离子交换、M3 硬边界贝叶斯判别、M4 凝聚聚类机理均正确；CL3 显式对比候选模型：'硬边界判别优于以隶属度刻画模糊边界的评价类方法'，并以'本题类型边界由实测化学检测确定、清晰可判'作为选择依据，满足候选模型对比要求"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E8 完整：闭合/有效性/标准化/Welch t/距离/轮廓系数/LDA 判别/逻辑回归，结构闭合可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 LDA、S2 逻辑回归 IRLS、S3 凝聚层次聚类（Ward），求解器与统计模型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "X1 统计检验（Bonferroni）、X2 0.7/0.3 留出+5 折 CV、X3 层次聚类选簇，实验设计完整（results 待求解为本实验常态）"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "统计拟合未显式声明收敛判据，以 VA3 交叉验证稳定性作为稳定代理"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X2 固定划分+5 折 CV 具备可复现设计，但未显式 seed=42/多 seed 方差与 replay 设计"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出（混淆矩阵、逐类查全/查准、轮廓系数）量级合理（该维度权重上限为 1）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 对照基线：与多数类朴素基线比较留出集准确率"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA2 对 PbO/BaO/K2O/CaO 施加 ±5%~±20% 扰动并扰动校正阈值 alpha_adj ±50%，扰动对象均为敏感参数"
+    },
+    "L4.3": {
+      "score": 0,
+      "evidence": "无极端参数/边界条件检验；VA4 聚类合理性、VA5 泄漏检查均非极限检验"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1→CL3 判别有效性、VA4→CL4 亚类结构、VA2→CL3 灵敏度、VA5→CL1/CL3 防泄漏，验证覆盖核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "CL1-CL4 每条均有 evidence_refs 与 model_refs；deterministic supported_claims=4/4"
+    }
+  },
+  "vector": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 7,
+    "L4": 8,
+    "overall": 39
+  },
+  "deterministic": {
+    "declared_symbols": 42,
+    "used_symbols": 17,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 4,
+    "supported_claims": 4,
+    "sub_question_binding_count": 2,
+    "method_family_identified": "empirical_statistics_classification"
+  },
+  "failure_modes": [],
+  "notes": "统计判别建模完整覆盖 Q1-Q3，符号声明干净、多重比较校正约束到位；亮点是 CL3 对硬边界判别与模糊评价类方法做了候选对比并给出选择依据（L2.6 满分）；仅缺显式收敛判据与极限检验。"
+}

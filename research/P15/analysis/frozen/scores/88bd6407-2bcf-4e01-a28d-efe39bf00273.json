@@ -1,0 +1,122 @@
+{
+  "submission_id": "88bd6407-2bcf-4e01-a28d-efe39bf00273",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:55:40+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面显式条件完整提取：P1-P4 四层厚度（d1=0.6mm、d2=6mm、d3=3.6mm、d4=5mm）；P9 环境温度 75/65/80°C；P10 皮肤温度 37°C；X1 t_end=90min；C5 T_s(60)<=47°C；C6 tau_44<=5min；附件1 物性参数进入 P1-P7"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别完整：A1 一维化（厚度远小于面内尺度）；A2 各向同性常数物性；A3 理想热接触；A4 无内热源+辐射并入等效对流 h；A5 初始热平衡；A6 皮肤恒温 37°C"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "识别了各问时间范围与输出类型（X1 输出 T_s(t) 序列与各层温度场、X3 输出最优厚度），但未显式记录 Q1 的 Excel 交付文件（problem1.xlsx）与精度要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "无显式 ambiguities 清单；辐射处理（A4 并入 h）、温度依赖（A2 常数物性）、测量点位置等歧义通过假设+confidence 处理，未以歧义清单形式显式标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary 与一维瞬态热传导问题匹配（secondary 含 finite_difference/crank_nicolson/parameter_inversion）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V16 全声明并区分类型：V1 x/V2 t（independent）、V3 T（field）、V4-V9 各层温度（field）、V10 q（derived）、V11 T_s（output）、V14 L_2/V15 L_4（decision）、V16 T_m（data）；含 value_range 与单位"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 全声明：P5-P7 附件1 物性（k/rho/c）、P8 h 待反演（参考 9-25）、P9 T_a、P10 T_b=37、P11/P12 反演初值；equation 符号均被覆盖，undeclared_symbol_ratio=0.0"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式假设并区分简化/机理类型、带 confidence（A1 一维化、A3 理想热接触、A4 辐射并入 h、A6 恒温皮肤），可检验"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "O1（Q1 反演残差最小化）与 O2（Q2 最小化 II 层厚度）与题面一致；但 Q3（80°C 下最小化 II/IV 层厚度）未形式化为 objectives 条目，仅由 S3 枚举 + C7 间接覆盖"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1/C2 界面温度热流连续、C3 T 域 [37,75]、C4 物性正定、C5 47°C、C6 44°C/5min、C7 厚度下界方向均正确；但 IV 层设计上界（题面 6.5mm）未形式化，S3 bounds_d4_mm 误用 [0.6, 25]"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1 傅里叶导热+能量守恒（E1 rho*c*dT/dt=d(k*dT/dx)/dx）、M3 牛顿冷却边界（E4）、M4 界面耦合（E5）、M5 CN 离散（E8）机理正确；并给出对比与选择依据：VA2 稳态解析对照、VA6 FTCS 交叉验证、CL2 CN 无条件稳定+时间二阶精度优于显式格式"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1 控制方程 + E4 Robin 左边界 + E6 Dirichlet 右边界 + E5 界面连续 + E7 初始条件 + E8 CN 离散，结构完整可解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 CN+Thomas 三对角求解与抛物型 PDE 匹配（N=300, dt=0.5）；S2 LM 反演与参数估计匹配；S3 0.1mm 网格枚举与厚度设计匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "S1-S3 求解规格完整可执行：scheme=CN、boundary=Robin(left)+Dirichlet(right)、S2 init=[h0=15,k4_0=0.03,k2_0=0.37]（lambda_reg=0.0005, max_iter=80）、S3 bounds/grid 明确；结果'待求解'属预注册正常状态"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "CN 无条件稳定（CL2），VA1 网格收敛（N/dt 同时减半）与 VA3 能量平衡（E10）给出收敛判定设计，无发散风险"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "seed 固定 42（X1-X3），但仅规划单次运行（rep r2），未规划多 seed（>=5）或多复现"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出界物理合理：T value_range=[37,75]°C、T_s 目标值约 48°C；实际结果待求解未验证"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA2 稳态极限解析基线（t→∞ 各层线性温度分布）+ VA6 FTCS 交叉验证，双对照基线"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA5 对反演敏感参数 h、k_4、k_2 施加 ±10% 扰动，扰动对象为敏感参数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA2 稳态极限（t→∞）与 VA1 网格收敛属极限/边界检验，覆盖部分边界情形"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA4 预测性验证（附件2 前 60% 反演/后 40% 检验）直指核心主张 CL4；VA1/VA5 指向 V6（T_s）核心输出"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "CL1-CL6 均绑定 evidence_refs；机理类 CL1/CL2/CL3/CL5 标 supported（有 VA 依据），数值类 CL4/CL6 诚实标 unresolved（待执行）"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 13,
+    "L3": 8,
+    "L4": 9,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 28,
+    "used_symbols": 25,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 6,
+    "supported_claims": 6,
+    "sub_question_binding_count": 2,
+    "method_family_identified": "transient_heat_conduction_pde"
+  },
+  "failure_modes": [
+    "FM-MC-003"
+  ],
+  "notes": "一维瞬态热传导 PDE 模型（CN 离散 + LM 反演 + 厚度枚举）机理正确、方程闭环、验证设计充分；轻度缺陷：Q3 目标未在 objectives 中显式形式化，IV 层设计上界误用 25mm（题面为 6.5mm）；结果均为'待求解'预注册状态，标注诚实。"
+}

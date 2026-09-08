@@ -1,0 +1,122 @@
+{
+  "submission_id": "614ff3d7-19db-4ad0-9dd1-dfb23b982ef8",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T00:00:00+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1-A6 与 P1-P12 完整覆盖题面条件：T_a=75/65/80°C（P9）、d_1-d_4（P1-P4）、k/rho/c（P5-P7）、T_b=37°C（P10）、附件1/2 引用"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1 一维降维（几何量级分析）、A3 理想热接触、A4 辐射并入等效对流、A5 初始热平衡、A6 皮肤恒温——隐式物理条件识别充分；M6 反问题不适定性识别"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "X1 outputs 含 T_s(t) 序列与各层温度场快照，但未显式提及题面要求的 problem1.xlsx 交付文件"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A2/A4 标注温度依赖与辐射简化（confidence 0.85/0.8）；M6 明确反问题不适定需 Tikhonov 正则化并区分等效参数"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=pde_transient_heat_conduction, secondary=[finite_difference, crank_nicolson, parameter_inversion]（deterministic method_family_identified 一致），与 2018_A 传热+反演匹配"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V16 全声明含 type（independent/field/output/data/index/decision/derived），含 T_s/T_m/J/L/L_2/L_4/tau_44；deterministic undeclared_symbol_ratio=0.0"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source（附件1/题面/反演）；k_4/h 标为待反演等效参数，值域合理"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式带 source/confidence/type，一维化/理想接触/无内热源/辐射并入/初始平衡/皮肤恒温均合理可检验"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "O1 残差平方和反演目标、O2 最小化 L_2 含 C5/C6 约束均与题面一致；Q3（80°C 下 (L_2,L_4) 联合最优）未声明独立目标（deterministic binding_count=2，仅 X3/C7/V15 覆盖 Q3）"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C2 界面温度/热流连续、C3 物理有界、C4 正定性、C5 T_s(60)≤47、C6 tau_44≤5、C7 厚度下限，方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1 傅里叶定律/M2 能量守恒/M3 界面耦合/M4 对流边界/M5 瞬态扩散/M6 反问题辨识全部物理正确；CL2 显式对比 CN 与 FTCS（无条件稳定+二阶精度），VA6 FTCS 交叉验证——含候选对比分析"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1 层内 PDE+E3 本构+E4 Robin 外边界+E5 界面连续+E6 Dirichlet 内边界+E7 初始+E8 CN 离散+E9 目标+E10 守恒检验，定解条件完整可解；仅 E2 编号缺省（引用无错乱，deterministic index_inconsistency=null）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 CN+Thomas 正问题（exact，匹配抛物型 PDE）、S2 LM 最小二乘反演（匹配反问题）、S3 厚度枚举/区间搜索（匹配设计优化）"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "solver 给出 N/dt/scheme/init/lambda_reg 配置但无代码与执行日志，X1-X3 results='待求解'/pending"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 能量残差<1e-3 且步间温度变化<0.01°C；S2 J 相对下降<1e-4；S3 可行域内约束全部满足"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X1-X3 均设 seed=42、rep=r1，但无多 seed 实际运行数据"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "计划输出 T_s 序列/温度场快照/反演参数，量级合理；结果待产出"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA2 稳态极限与各层线性温度分布解析解对照（优秀基线）；VA6 显式 FTCS 交叉验证"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA5 对反演参数 h/k_4/k_2 ±10% 扰动（敏感参数）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA2 t→∞ 稳态极限检验；VA1 网格收敛性（步长减半）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1/VA6→CL2、VA2/VA6→CL1、VA5→CL3、VA3→CL5、VA4→CL4、X3→CL6，验证目标对齐全部核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "6 条 claim 全部有 evidence_refs（deterministic supported_claims=6），CL1/CL2/CL3/CL5 已判 supported，无空证据引用"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 14,
+    "L3": 7,
+    "L4": 9,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 28,
+    "used_symbols": 25,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 6,
+    "supported_claims": 6,
+    "sub_question_binding_count": 2,
+    "method_family_identified": "pde_transient_heat_conduction"
+  },
+  "failure_modes": [
+    "FM-PA-002"
+  ],
+  "notes": "2018_A 高完成度传热正/反问题模型：PDE+定解条件+CN 离散完整、机理含 CN/FTCS 候选对比与稳态解析基线、验证覆盖网格收敛/能量守恒/留出法预测/灵敏度/交叉验证、全部主张有证据。Q3 厚度联合优化未单独声明目标（L2.4 扣 1）；L3 结果为设计期『待求解』。"
+}

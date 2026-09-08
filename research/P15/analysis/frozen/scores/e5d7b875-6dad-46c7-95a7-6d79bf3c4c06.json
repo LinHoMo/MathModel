@@ -1,0 +1,120 @@
+{
+  "submission_id": "e5d7b875-6dad-46c7-95a7-6d79bf3c4c06",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T21:55:40+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件提取：P1 c=2（乘车区两条并行车道）、A3 可观测航班数量与蓄车池已有车辆数、A7 FCFS 先来后到放行、P11 N_max 蓄车池容量、P8 T 班次时长"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别：A1 乘客到达近似泊松、A2 出租车到达泊松+指数服务（M/M/c）、A6 稳态近似、C2 服务强度 lambda_t < c*mu 稳定性条件"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "识别了 Q1 输出（阈值策略与期望收益，X1）与时间范围，但未显式记录论文交付/格式要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "时变到达、稳态适用性等歧义通过 A6（conf=0.65）等假设处理，但无显式 ambiguities 清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=queueing_threshold_decision 与 2019_C 出租车排队决策问题匹配（secondary 含 birth_death_process/expected_utility）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V14 全声明并区分类型：V2 lambda_p/V3 lambda_t（input）、V4 n（state）、V5 nstar/V10 d（decision）、V6 Wq/V7 Lq（derived）、V11 P0/V12 Pw（derived）；含单位与 value_range"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 全声明：P1 c=2、P2 mu 待标定（机场运行数据）、P3 ce、P4 cw、P5 Rc、P6 Rf、P7 p_c、P11 N_max、P12 seed=42；E1-E9 符号均被覆盖"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A7 显式假设（泊松到达、指数服务、可观测性、风险中性、稳态、FCFS），带类型与 confidence，可检验"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 maximize d*Rq+(1-d)*Rl 与司机决策问题目标一致；O2 minimize Wq 为辅助目标，不与题目冲突"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 n>=0、C2 lambda_t<c*mu、C3 Wq>=0、C4 d in {0,1}、C5 n<=N_max、C6 t in [0,T] 方向正确无符号错误"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "M1 M/M/c 生灭过程+Erlang-C（E1-E3）、M2 阈值决策机理、M4 Little 定律机理正确；未提供候选模型对比分析"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1 P0 闭式 + E2 Pw + E3 Wq + E4/E5 收益核算 + E6/E7 决策规则 + E8 目标，闭环可解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 Erlang-C 闭式求解稳态排队指标（closed_form 顺序）、S2 阈值枚举（nstar in [0,N_max]），与排队模型完全匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "S1/S2 规格完整可执行（closed_form + 枚举网格 + 收敛准则），结果'待求解'属预注册正常状态"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "闭式解析公式天然收敛，C2 稳定性条件（lambda_t < c*mu）与概率归一化给出收敛准则"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "seed 固定 42（X1/X2），但未规划多 seed（>=5）或多复现运行"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "设计输出界物理合理：Wq>=0、P0/Pw in [0,1]、Lq>=0；实际结果待求解未验证"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 阈值策略 vs '总是蓄车/总是放空' 基线策略，基线合理"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA2 单因素扫描 ce、Rf、lambda_p——均为决策敏感参数（CL3 主张的主导因素）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA4 服务强度 <1 稳定性边界检验，覆盖部分边界情形"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1→O1/CL1（阈值策略最优性，核心主张）、VA2→CL2/CL3、VA3→CL4、VA5→CL5，核心主张均有对应验证"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "CL1-CL5 均绑定 evidence_refs，unresolved 标注诚实（结果待求解）"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 14,
+    "L3": 8,
+    "L4": 9,
+    "overall": 39
+  },
+  "deterministic": {
+    "declared_symbols": 26,
+    "used_symbols": 17,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 5,
+    "supported_claims": 5,
+    "sub_question_binding_count": 2,
+    "method_family_identified": "queueing_threshold_decision"
+  },
+  "failure_modes": [],
+  "notes": "M/M/c 排队 + Erlang-C + 司机阈值决策模型，变量/参数/约束/方程闭环可解，机理与问题匹配；对照基线与灵敏度分析覆盖核心主张；结果'待求解'标注诚实。"
+}

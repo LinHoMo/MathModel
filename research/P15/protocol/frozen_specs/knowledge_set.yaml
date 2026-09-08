@@ -1,0 +1,51 @@
+# P15-K001 Frozen Knowledge Set
+# 注入 = 卡片 YAML 全文（不裁剪、不摘要），保证跨题「知识剂量」口径一致。
+# 每题 1 张目标卡；B 臂（knowledge only）与 D 臂（knowledge + case）注入同一张。
+
+experiment_id: P15-K001
+protocol_version: "1.0"
+frozen_at: "2026-09-08"
+card_root: core/knowledge/methods/cards
+injection_mode: full_card_text      # 全文注入，禁止摘要/裁剪
+
+knowledge:
+  - problem_id: "2020_B"
+    card_ids: [mc-dp]
+    role: relevant
+    path: core/knowledge/methods/cards/mc-dp.yaml
+    family: dynamic_programming
+    rationale: "人工指定。卡内 structure_signals 明确列出 2020_B 型特征。"
+
+  - problem_id: "2018_A"
+    card_ids: [mc-numerical-pde]
+    role: relevant
+    path: core/knowledge/methods/cards/mc-numerical-pde.yaml
+    family: numerical_pde
+    rationale: "人工指定。热传导 PDE + 有限差分 + 参数反演。"
+
+  - problem_id: "2019_C"
+    card_ids: [mc-queuing-theory]
+    role: relevant
+    path: core/knowledge/methods/cards/mc-queuing-theory.yaml
+    family: queuing_theory
+    rationale: "人工指定。蓄车池排队 + 司机决策。"
+
+  - problem_id: "2022_C"
+    card_ids: [mc-kmeans]
+    role: relevant
+    path: core/knowledge/methods/cards/mc-kmeans.yaml
+    family: unsupervised
+    rationale: "retriever top-1（--types classification），非人工指定。"
+
+  - problem_id: "2024_A"
+    card_ids: [mc-ga]
+    role: weak_match                # out_of_catalog，弱匹配
+    path: core/knowledge/methods/cards/mc-ga.yaml
+    family: metaheuristics
+    rationale: "retriever top-1（--types optimization），与真实机理弱匹配；仅泛化观察。"
+
+# 冻结要求：实验期间 card 文件内容不得变更；k001_freeze.py --check 会比对 card_sha256。
+# 若确需变更知识卡内容 → new revision (v1.1)，v1.0 数据作废或单独归档。
+freeze_policy:
+  allow_card_edit_after_freeze: false
+  on_drift: invalidate_and_rerun

@@ -1,0 +1,122 @@
+{
+  "submission_id": "6c307511-b2b9-437a-a8df-6ec4ce4a2bbd",
+  "evaluator": {
+    "model": "doubao-pro",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-08T00:00:00+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "A1-A6 与 P1-P12 完整覆盖规则(1)-(8)，参数带 source/value（Dmax/Cap/bx/by/px/py/Rev/z0/lambda/Pi/kappa/rho）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A2 历史可压缩（路径不影响未来）、C6 起点单次购买、C7 矿山次日可挖、E5 终端 -∞ 强制到达终点、M4 期望目标须与生存约束并存——隐式条件识别充分"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "X1-X3 outputs 覆盖六关（最优逐日计划/终局资金/期望资金+失败率/均衡策略），但未显式提及 Result.xlsx 交付文件与注2 口径"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A4 对 Q2 天气随机给置信度 0.75 的转移概率假设并注明『必要时按无信息先验』（歧义处理方案）"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=sequential_decision, secondary=[dynamic_programming, stochastic_control, game_theory]，五问结构判据驱动识别，类型判定完整"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 全声明含 type/value_range（d/r/x/y/z/q/c/k/G/h_x/h_y/r）；deterministic undeclared=0"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source/value；E1-E8 引用符号全部映射到 parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 显式带 source/confidence/type；A3 明确离散粒度由附件箱单位天然给定、A4 含先验回退，合理可检验"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1/O2 表达式正确（含停时 tau 期望），clarity_score 均 3"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C7 完整含方向标注（上界负重/下界生存），D5 显式绑定 C2 限制 O2——约束方向显式核对"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1 倍率作用域正确；M2 显式排除蒙特卡洛仿真（只给统计近似）与贪心（无视明日状态）论证递推选择；M4 期望目标+生存约束并存防极端天气耗竭；M5 区分同时承诺/逐日反馈博弈——含候选对比分析"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E3 转移+E4 递推+E5 终端（-∞）+E6 初始+E7 随机递推+E8 耦合，结构完整可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 状态表格递推（精确，箱单位离散化）/S2 期望递推（值迭代）/S3 最优反应循环匹配 DP/MDP/博弈"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "solver 配置齐全但无代码与执行日志，X1-X3 results='待求解'/pending"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 倒推至 d=0 精确终止；S2 相邻价值差<1e-6；S3 收益差<1e-6"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X2 设 n_sim=1000、seed=43、VA7 计划 5 种子相对标准差<10%，无实际数据"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "计划输出含失败率（资源耗尽）指标，量级合理；结果待产出"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "VA1 贪心下界基线 + VA2 小规模枚举精确对照"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "VA3 扰动天气分布与消耗参数 ±20%（敏感参数）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "VA4 松弛下界 + VA6 离散化粒度边界检验（半箱 vs 整数箱）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "VA1/VA2→CL1 结构判定、VA5→CL2 状态完整性、VA4→CL3 约束方向、VA3/VA7→CL4 期望+生存主张，验证目标对齐"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "5 claims 中 CL1-CL4 有 evidence_refs（4 supported），CL5 evidence_refs 为空且全部 unresolved"
+    }
+  },
+  "vector": {
+    "L1": 8,
+    "L2": 15,
+    "L3": 7,
+    "L4": 8,
+    "overall": 38
+  },
+  "deterministic": {
+    "declared_symbols": 23,
+    "used_symbols": 26,
+    "undeclared_symbols": [],
+    "undeclared_symbol_ratio": 0.0,
+    "index_inconsistency": null,
+    "total_claims": 5,
+    "supported_claims": 4,
+    "sub_question_binding_count": 3,
+    "method_family_identified": "sequential_decision"
+  },
+  "failure_modes": [
+    "FM-EV-001"
+  ],
+  "notes": "2020_B Q1-Q3 高质量序贯决策模型：结构识别驱动（五问判据）、机理含候选排除论证（蒙特卡洛/贪心）、约束方向显式核对、验证含粒度检验。L3 因结果为设计期『待求解』部分给分；CL5 无证据引用。"
+}

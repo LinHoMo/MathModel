@@ -1,0 +1,56 @@
+{
+  "experiment_id": "P15-K001",
+  "protocol_version": "1.0",
+  "submission_id": "daf61a26-146d-4f31-bc37-7a4c4a15544d",
+  "problem_id": "2018_A",
+  "block_role": "main",
+  "condition": {
+    "arm": "A",
+    "knowledge": "none",
+    "case": "none"
+  },
+  "knowledge": {
+    "card_ids": [],
+    "role": "none",
+    "card_sha256": {}
+  },
+  "case": {
+    "path": null,
+    "case_type": "none",
+    "sha256": null
+  },
+  "rep": 1,
+  "seed": 42,
+  "generator": {
+    "agent_identity": "doubao",
+    "model_version": "doubao-pro",
+    "provider": "console"
+  },
+  "hashes": {
+    "problem_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+    "prompt_sha256": "44e12ee0655afd194196650c671526d3f8e77bb8237cdcfe0334ad4108ee3e39",
+    "bundle_sha256": "0ab0c20e2bdd5ca3f2670e2df6fb6eb29ebc0fbee768219034bc7fa022c00e41",
+    "run_order_sha256": "d7bad29015c5748f5c240a33631434ced69d3455b389104f6d231547f0127d37"
+  },
+  "artifact_schema_version": "model-ir-1.0",
+  "knowledge_trace": {
+    "retrieved": [],
+    "considered": [],
+    "used": [],
+    "adapted": [],
+    "rejected": []
+  },
+  "cost": {
+    "prompt_tokens": 6449,
+    "completion_tokens": 8427,
+    "latency_seconds": 189.0
+  },
+  "reference_chars": 56,
+  "bundle_chars": 3161,
+  "batch": "batch1",
+  "sequence_in_block": 1,
+  "created_at": "2026-09-08T13:24:13Z",
+  "status": "REGISTERED",
+  "schema_validated": true,
+  "updated_at": "2026-09-08T13:24:13Z"
+}

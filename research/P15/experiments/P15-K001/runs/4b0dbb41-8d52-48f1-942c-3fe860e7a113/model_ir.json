@@ -1,0 +1,1276 @@
+{
+  "ir_version": "1.0",
+  "model_id": "m-2020b-7919b0d3",
+  "model_family": {
+    "primary": "dynamic_programming",
+    "secondary": [
+      "markov_decision_process",
+      "game_theory",
+      "resource_allocation"
+    ],
+    "description": "有限阶段动态规划：状态（位置/水/食物/资金/天数/天气）完备时逐日递推精确可解；Q2 用天气转移核做期望递推；Q3 多人耦合写成策略博弈，完全信息子问题用均衡、逐日反馈子问题用闭环策略均衡。"
+  },
+  "problem_binding": {
+    "problem_id": "2020_B",
+    "sub_question_id": "Q1",
+    "problem_sha256": "a2d0867169b94c592caafb438f608dfa12fc91c7e5df0aab5acaa5a9408ed4f2",
+    "problem_card_ref": "research/P15/benchmark/problem_cards/2020_B/card.yaml",
+    "competition_format": "CUMCM"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "资源以箱为单位取整数，阶段以天划分，期限与负重由附件给定。",
+      "source": "题面规则(1)(2)",
+      "confidence": 0.98,
+      "sub_question_binding": "Q1",
+      "type": "简化假设"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "Q1 天气已知；Q2 天气一阶马尔可夫，转移矩阵需从附件标定。",
+      "source": "题面问题1/2",
+      "confidence": 0.8,
+      "sub_question_binding": "Q2",
+      "type": "机制假设"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "状态充分性：当前状态含全部影响未来的信息；若出现状态相关的联动（如 Q3 同行），则扩展状态。",
+      "source": "建模原理",
+      "confidence": 0.9,
+      "sub_question_binding": "Q1",
+      "type": "机制假设"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "动作可行性：相邻移动、沙暴停留、矿山次日可挖、起点一次购买。",
+      "source": "题面规则(4)(6)(7)",
+      "confidence": 0.99,
+      "sub_question_binding": "Q1",
+      "type": "机制假设"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "终点半价退回计入资金；资源耗尽或超期为失败。",
+      "source": "题面规则(2)(6)",
+      "confidence": 0.95,
+      "sub_question_binding": "Q1",
+      "type": "机制假设"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "Q3 玩家同质，均衡优先对称；偏离检验保留。",
+      "source": "题面问题3",
+      "confidence": 0.85,
+      "sub_question_binding": "Q3",
+      "type": "机制假设"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "天数",
+      "symbol": "t",
+      "definition": "阶段计数，第 0 天位于起点",
+      "unit": "天",
+      "type": "index",
+      "value_range": "[0, T]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V2",
+      "name": "所在区域",
+      "symbol": "p",
+      "definition": "玩家当日所处地图区域编号",
+      "unit": "区域编号",
+      "type": "state",
+      "value_range": "地图节点集 p",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V3",
+      "name": "剩余水量",
+      "symbol": "wt",
+      "definition": "当日全部消耗与购买完成后的剩余水",
+      "unit": "箱",
+      "type": "state",
+      "value_range": "[0, L]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V4",
+      "name": "剩余食物量",
+      "symbol": "ft",
+      "definition": "当日全部消耗与购买完成后的剩余食物",
+      "unit": "箱",
+      "type": "state",
+      "value_range": "[0, L]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V5",
+      "name": "剩余资金",
+      "symbol": "mt",
+      "definition": "当日全部收支完成后的剩余资金",
+      "unit": "元",
+      "type": "state",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V6",
+      "name": "天气状态",
+      "symbol": "ot",
+      "definition": "当日天气，取晴朗/高温/沙暴",
+      "unit": "枚举",
+      "type": "state",
+      "value_range": "{clear, hot, sandstorm}",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V7",
+      "name": "当日行动",
+      "symbol": "at",
+      "definition": "决策变量：停留/移动至某相邻区域/挖矿/购买",
+      "unit": "枚举",
+      "type": "decision",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V8",
+      "name": "当日同行人数",
+      "symbol": "k",
+      "definition": "Q3 中执行同一行动的玩家数",
+      "unit": "人",
+      "type": "state",
+      "value_range": "[1, n]",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V9",
+      "name": "价值函数",
+      "symbol": "Vt",
+      "definition": "从第 t 天状态 s 出发到终点可获得的资金上界",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V10",
+      "name": "当日购水量",
+      "symbol": "gw",
+      "definition": "当日购买并计入存量的水量，起点/村庄按不同价格",
+      "unit": "箱",
+      "type": "decision",
+      "value_range": "[0, L - wt_t - ft_t]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V11",
+      "name": "当日购食物量",
+      "symbol": "gf",
+      "definition": "当日购买并计入存量的食物量，起点/村庄按不同价格",
+      "unit": "箱",
+      "type": "decision",
+      "value_range": "[0, L - wt_t - ft_t]",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V12",
+      "name": "当日即时收益",
+      "symbol": "r",
+      "definition": "第 D 天采取行动 a 后当期的净资金变化（含购买支出与挖矿收益）",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "截止天数",
+      "symbol": "T",
+      "definition": "必须到达终点的最后期限",
+      "unit": "天",
+      "value": "关卡附件给定",
+      "source": "题面附件",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "负重上限",
+      "symbol": "L",
+      "definition": "水与食物箱数之和的上限",
+      "unit": "箱",
+      "value": "关卡附件给定",
+      "source": "题面规则(2)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "水的基础消耗量",
+      "symbol": "bw",
+      "definition": "原地停留一天消耗的水",
+      "unit": "箱/天",
+      "value": "关卡附件给定",
+      "source": "题面规则(5)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "食物的基础消耗量",
+      "symbol": "bf",
+      "definition": "原地停留一天消耗的食物",
+      "unit": "箱/天",
+      "value": "关卡附件给定",
+      "source": "题面规则(5)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "水的基准价格",
+      "symbol": "cw",
+      "definition": "起点购买水的单价",
+      "unit": "元/箱",
+      "value": "关卡附件给定",
+      "source": "题面规则(6)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "食物的基准价格",
+      "symbol": "cf",
+      "definition": "起点购买食物的单价",
+      "unit": "元/箱",
+      "value": "关卡附件给定",
+      "source": "题面规则(6)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "基础收益",
+      "symbol": "R",
+      "definition": "单人挖矿一天获得的资金",
+      "unit": "元/天",
+      "value": "关卡附件给定",
+      "source": "题面规则(7)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "初始资金",
+      "symbol": "m0",
+      "definition": "第 0 天可用资金",
+      "unit": "元",
+      "value": "关卡附件给定",
+      "source": "题面规则(6)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "消耗倍率",
+      "symbol": "\\lambda",
+      "definition": "停留=1，行走=2，挖矿=3",
+      "unit": "无量纲",
+      "value": "{1,2,3}",
+      "source": "题面规则(5)(7)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P10",
+      "name": "天气转移概率",
+      "symbol": "\\Pi",
+      "definition": "Q2 中天气的一阶转移矩阵",
+      "unit": "概率",
+      "value": "待由附件/假设标定",
+      "source": "假设 A3",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "parameter_id": "P11",
+      "name": "村庄加价系数",
+      "symbol": "\\kappa",
+      "definition": "村庄购买价格相对基准价格的倍数",
+      "unit": "无量纲",
+      "value": "2",
+      "source": "题面规则(8)",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "parameter_id": "P12",
+      "name": "终点退回系数",
+      "symbol": "\\rho",
+      "definition": "终点退回价格相对基准价格的比例",
+      "unit": "无量纲",
+      "value": "0.5",
+      "source": "题面规则(6)",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "maximize",
+      "expression": "J = mt_T + \\rho * (cw * wt_T + cf * ft_T)",
+      "variables_refs": [
+        "V3",
+        "V4",
+        "V5"
+      ],
+      "description": "最大化到达终点时的剩余资金（含按半价退回的剩余资源折算）",
+      "sub_question_binding": "Q1",
+      "clarity_score": 3
+    },
+    {
+      "objective_id": "O2",
+      "type": "maximize",
+      "expression": "J = E[ mt_tau + \\rho * (cw * wt_tau + cf * ft_tau) ]",
+      "variables_refs": [
+        "V3",
+        "V4",
+        "V5",
+        "V6"
+      ],
+      "description": "Q2 天气随机时最大化期望终局资金；tau 为到达终点的停时",
+      "sub_question_binding": "Q2",
+      "clarity_score": 3
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "inequality",
+      "expression": "wt_t + ft_t <= L",
+      "variables_refs": [
+        "V3",
+        "V4"
+      ],
+      "source": "题面规则(2) 负重上限",
+      "description": "每日水与食物箱数之和不超过负重上限（上界约束，方向为 ≤）",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "inequality",
+      "expression": "wt_t >= 0,  ft_t >= 0",
+      "variables_refs": [
+        "V3",
+        "V4"
+      ],
+      "source": "题面规则(2) 资源耗尽即失败",
+      "description": "生存约束：资源非负是硬约束，不进入目标函数做权衡（下界约束，方向为 ≥）",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "inequality",
+      "expression": "tau <= T",
+      "variables_refs": [
+        "V1"
+      ],
+      "source": "题面规则(1) 截止日期",
+      "description": "到达终点的时刻不超过截止天数",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "equality",
+      "expression": "at_t = stay  if ot_t = sandstorm",
+      "variables_refs": [
+        "V6",
+        "V7"
+      ],
+      "source": "题面规则(4) 沙暴日必须停留",
+      "description": "沙暴日行动被强制为原地停留（挖矿仍可进行，见规则(7)）",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "inequality",
+      "expression": "p_{t+1} in Adj(p_t) union { p_t }",
+      "variables_refs": [
+        "V2"
+      ],
+      "source": "题面规则(4) 与注1（公共边界才算相邻）",
+      "description": "每日仅可移动到有公共边界的相邻区域或原地停留",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C6",
+      "type": "inequality",
+      "expression": "purchase_at_start_allowed only when D = 0",
+      "variables_refs": [
+        "V1",
+        "V2"
+      ],
+      "source": "题面规则(6) 起点不可重复购买",
+      "description": "基准价格购买仅限第 0 天在起点；村庄价格购买不受此限",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C7",
+      "type": "inequality",
+      "expression": "mine_allowed on day t only if p_{t-1} = mine and p_t = mine",
+      "variables_refs": [
+        "V2",
+        "V7"
+      ],
+      "source": "题面规则(7) 到达矿山当天不能挖矿",
+      "description": "到达矿山当日不可挖矿，须在矿山停留满一天后才可挖矿",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "消耗倍率",
+      "description": "停留/行走/挖矿 1/2/3 倍基础消耗；沙暴日强制停留但挖矿不受阻。",
+      "type": "empirical_rule",
+      "governing_principle": "行动-消耗映射",
+      "variables_refs": [
+        "V3",
+        "V4",
+        "V7"
+      ],
+      "assumptions_refs": [
+        "A4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "name": "Bellman 递推",
+      "description": "价值函数满足最优子结构；状态完备性是无后效性的前提。曾对比仿真与贪心，均无法保证全局最优，故以递推为主。",
+      "type": "first_principle",
+      "governing_principle": "Bellman 最优性",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V3",
+        "V4",
+        "V5",
+        "V6",
+        "V9",
+        "V12"
+      ],
+      "assumptions_refs": [
+        "A1",
+        "A3"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M3",
+      "name": "资金流",
+      "description": "资金 = 初始 − 支出 + 收益 + 退回；价格按补给点（起点 1 倍/村庄 2 倍）。",
+      "type": "empirical_rule",
+      "governing_principle": "资金守恒",
+      "variables_refs": [
+        "V5",
+        "V12"
+      ],
+      "assumptions_refs": [
+        "A5"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M4",
+      "name": "天气转移",
+      "description": "Q2 以转移矩阵做期望递推；矩阵标定不确定时做灵敏度。",
+      "type": "stochastic_process",
+      "governing_principle": "马尔可夫转移 + 期望准则",
+      "variables_refs": [
+        "V6"
+      ],
+      "assumptions_refs": [
+        "A2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M5",
+      "name": "多玩家均衡",
+      "description": "Q3 耦合规则改写参数为 k 的函数；个体支付依赖他人，用均衡概念；逐日反馈场景策略依赖公开历史。",
+      "type": "game_theoretic",
+      "governing_principle": "均衡（策略不动点）",
+      "variables_refs": [
+        "V8"
+      ],
+      "assumptions_refs": [
+        "A6"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "wt_{t+1} = wt_t - \\lambda(at_t) bw + gw",
+      "type": "state_transition",
+      "variables_refs": [
+        "V3",
+        "V7"
+      ],
+      "parameters_refs": [
+        "P3",
+        "P9"
+      ],
+      "mechanism_ref": "M1",
+      "derivation_trace": "由资源消耗倍率机理直接写出；gw 为当日购买并入存量的水量，非补给点当日为 0。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "ft_{t+1} = ft_t - \\lambda(at_t) bf + gf",
+      "type": "state_transition",
+      "variables_refs": [
+        "V4",
+        "V7"
+      ],
+      "parameters_refs": [
+        "P4",
+        "P9"
+      ],
+      "mechanism_ref": "M1",
+      "derivation_trace": "同 E1，对食物分量写出；消耗倍率与购买项均与水量平行。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "mt_{t+1} = mt_t - \\kappa(cw gw + cf gf) + R \\cdot \\mathbf{1}[at_t = \\mathrm{mine}]",
+      "type": "state_transition",
+      "variables_refs": [
+        "V5",
+        "V7"
+      ],
+      "parameters_refs": [
+        "P5",
+        "P6",
+        "P7",
+        "P11"
+      ],
+      "mechanism_ref": "M3",
+      "derivation_trace": "支出按村庄加价系数 kap（起点购买时视为 1），挖矿当日按基础收益入账；资金为累积型状态量。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "Vt_t(p_t, wt_t, ft_t, mt_t, t, ot_t) = \\max_{at} \\left\\{ r((p_t, wt_t, ft_t, mt_t, t, ot_t), at) + Vt_{t+1}(p_{t+1}, wt_{t+1}, ft_{t+1}, mt_{t+1}, t+1, ot_{t+1}) \\right\\}",
+      "type": "recurrence",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V3",
+        "V4",
+        "V5",
+        "V6",
+        "V9",
+        "V12"
+      ],
+      "mechanism_ref": "M2",
+      "derivation_trace": "Bellman 方程：由最优子结构与无后效性导出；状态必须完整包含位置/两类资源/资金/天数/天气，否则无后效性不成立；r 为当日即时收益。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "Vt_t(p_t, wt_t, ft_t, mt_t, t, ot_t) = mt_t + \\rho(cw wt_t + cf ft_t) \\; \\mathrm{if}\\; p_t = p_{end}; \\quad Vt_t(p_t, wt_t, ft_t, mt_t, t, ot_t) = -\\infty \\; \\mathrm{otherwise}",
+      "type": "terminal_condition",
+      "variables_refs": [
+        "V2",
+        "V3",
+        "V4",
+        "V5"
+      ],
+      "parameters_refs": [
+        "P12"
+      ],
+      "mechanism_ref": "M2",
+      "derivation_trace": "终端条件：到达终点按半价退回剩余资源；未到达记为不可行（-∞），把『到达终点』作为硬约束放在终端而非目标中。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E6",
+      "latex": "Vt_t(p_{start}, wt_0, ft_0, m0 - cw wt_0 - cf ft_0, 0, ot_0) = \\mathrm{opt}",
+      "type": "initial_condition",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V3",
+        "V4",
+        "V5"
+      ],
+      "parameters_refs": [
+        "P5",
+        "P6",
+        "P8"
+      ],
+      "mechanism_ref": "M2",
+      "derivation_trace": "初始条件：第 0 天在起点以基准价格完成首次采购，采购量 (W_0, F_0) 本身也是决策变量，在最外层枚举。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E7",
+      "latex": "Vt_t(p_t, wt_t, ft_t, mt_t, t, ot_t) = \\max_{at} \\sum_{\\omega'} \\Pi(\\omega'|ot_t) \\left\\{ r((p_t, wt_t, ft_t, mt_t, t, ot_t), at) + Vt_{t+1}(p_{t+1}, wt_{t+1}, ft_{t+1}, mt_{t+1}, t+1, ot_{t+1}) \\right\\}",
+      "type": "recurrence",
+      "variables_refs": [
+        "V6",
+        "V9",
+        "V12"
+      ],
+      "parameters_refs": [
+        "P10"
+      ],
+      "mechanism_ref": "M4",
+      "derivation_trace": "Q2 的随机动态规划形式：对明日天气取期望；天气取晴朗/高温/沙暴三种取值，转移由一阶马尔可夫链给出。",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E8",
+      "latex": "\\lambda_{\\mathrm{multi}}(k) = 2k, \\quad R_{\\mathrm{multi}}(k) = R/k, \\quad \\kappa_{\\mathrm{multi}}(k) = 4",
+      "type": "coupling",
+      "variables_refs": [
+        "V8"
+      ],
+      "parameters_refs": [
+        "P7",
+        "P11"
+      ],
+      "mechanism_ref": "M5",
+      "derivation_trace": "Q3 的同行耦合规则：把单人参数替换为同行人数 k 的函数，再对每个玩家求最优反应并迭代至不动点。",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_id": "D1",
+      "from_type": "mechanism",
+      "from_id": "M2",
+      "to_type": "equation",
+      "to_id": "E4",
+      "relation": "derives",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D2",
+      "from_type": "mechanism",
+      "from_id": "M1",
+      "to_type": "equation",
+      "to_id": "E1",
+      "relation": "derives",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D3",
+      "from_type": "mechanism",
+      "from_id": "M1",
+      "to_type": "equation",
+      "to_id": "E2",
+      "relation": "derives",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D4",
+      "from_type": "mechanism",
+      "from_id": "M3",
+      "to_type": "equation",
+      "to_id": "E3",
+      "relation": "derives",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "dependency_id": "D5",
+      "from_type": "mechanism",
+      "from_id": "M4",
+      "to_type": "equation",
+      "to_id": "E7",
+      "relation": "derives",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "dependency_id": "D6",
+      "from_type": "mechanism",
+      "from_id": "M5",
+      "to_type": "equation",
+      "to_id": "E8",
+      "relation": "derives",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "name": "反向递推表",
+      "type": "exact",
+      "method": "从 T 反向填表；实现时按守恒律压缩资金维度",
+      "parameters": {
+        "order": "backward",
+        "compress": "money"
+      },
+      "convergence_criteria": "填至 t=0",
+      "equations_refs": [
+        "E4",
+        "E5",
+        "E6"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "name": "值迭代",
+      "type": "iterative",
+      "method": "Q2 期望递推/值迭代",
+      "parameters": {
+        "epsilon": 1e-06,
+        "max_iter": 3000
+      },
+      "convergence_criteria": "价值差 < 1e-6",
+      "equations_refs": [
+        "E7"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S3",
+      "name": "最优反应循环",
+      "type": "iterative",
+      "method": "Q3 最优反应至不动点；逐日反馈场景对历史扩展状态重算",
+      "parameters": {
+        "max_iter": 200
+      },
+      "convergence_criteria": "策略稳定",
+      "equations_refs": [
+        "E8"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "method": "DP 求解第一关与第二关",
+      "parameters": {
+        "levels": [
+          "第一关",
+          "第二关"
+        ],
+        "seed": 44
+      },
+      "inputs_refs": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "outputs": [
+        "策略",
+        "资金"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "status": "pending"
+      },
+      "solver_ref": "S1",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "method": "随机 DP + 回测第三关与第四关",
+      "parameters": {
+        "levels": [
+          "第三关",
+          "第四关"
+        ],
+        "n_mc": 2000,
+        "seed": 44
+      },
+      "inputs_refs": [
+        "P10"
+      ],
+      "outputs": [
+        "期望资金",
+        "分布"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "status": "pending"
+      },
+      "solver_ref": "S2",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "method": "均衡求解第五关与第六关",
+      "parameters": {
+        "levels": [
+          "第五关",
+          "第六关"
+        ],
+        "n": "关卡给定"
+      },
+      "inputs_refs": [
+        "P7",
+        "P11"
+      ],
+      "outputs": [
+        "均衡策略",
+        "资金"
+      ],
+      "results": "待求解",
+      "run_metadata": {
+        "status": "pending"
+      },
+      "solver_ref": "S3",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "VA1",
+      "type": "baseline",
+      "method": "贪心/极端策略基线",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA2",
+      "type": "exactness",
+      "method": "小规模枚举对照",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA3",
+      "type": "sensitivity",
+      "method": "转移矩阵/消耗 ±20% 扰动",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "VA4",
+      "type": "bound",
+      "method": "松弛上界",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA5",
+      "type": "consistency",
+      "method": "回溯一致性",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA6",
+      "type": "feasibility",
+      "method": "策略可行性检查",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "VA7",
+      "type": "stability",
+      "method": "多种子稳定性",
+      "results": "待求解",
+      "pass_fail": "pending",
+      "evidence_refs": [
+        "X2"
+      ],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "text": "状态完备时 DP 递推精确，且资金压缩不损失最优性。",
+      "type": "structural",
+      "evidence_refs": [
+        "VA2",
+        "VA5"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "experiment_refs": [
+        "X1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "unresolved"
+    },
+    {
+      "claim_id": "CL2",
+      "text": "Q3 同行联动使玩家状态互相依赖，单主体递推需扩展为联合状态上的博弈。",
+      "type": "structural",
+      "evidence_refs": [],
+      "model_refs": [
+        "M5"
+      ],
+      "experiment_refs": [
+        "X3"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "unresolved"
+    },
+    {
+      "claim_id": "CL3",
+      "text": "Q2 期望最优策略是状态依赖的，信息越少期望资金越低。",
+      "type": "comparative",
+      "evidence_refs": [
+        "VA3",
+        "VA7"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "experiment_refs": [
+        "X2"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "unresolved"
+    },
+    {
+      "claim_id": "CL4",
+      "text": "把到达终点与存活写成约束（而非目标项）是保证模型物理意义的前提。",
+      "type": "methodological",
+      "evidence_refs": [
+        "VA4"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "unresolved"
+    },
+    {
+      "claim_id": "CL5",
+      "text": "同行规模对人均资金非单调，存在最优 k。",
+      "type": "comparative",
+      "evidence_refs": [],
+      "model_refs": [
+        "M5"
+      ],
+      "experiment_refs": [
+        "X3"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "unresolved"
+    }
+  ],
+  "model_graph": {
+    "graph_version": "1.0",
+    "nodes": [
+      {
+        "id": "problem",
+        "type": "problem",
+        "label": "2020_B Q1-Q3"
+      },
+      {
+        "id": "assumptions",
+        "type": "group",
+        "label": "A1,A2,A3,A4,A5,A6"
+      },
+      {
+        "id": "variables",
+        "type": "group",
+        "label": "V1,V2,V3,V4,V5,V6,V7,V8,V9,V10,V11,V12"
+      },
+      {
+        "id": "parameters",
+        "type": "group",
+        "label": "P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12"
+      },
+      {
+        "id": "M1",
+        "type": "mechanism",
+        "label": "消耗倍率"
+      },
+      {
+        "id": "M2",
+        "type": "mechanism",
+        "label": "Bellman 递推"
+      },
+      {
+        "id": "M3",
+        "type": "mechanism",
+        "label": "资金流"
+      },
+      {
+        "id": "M4",
+        "type": "mechanism",
+        "label": "天气转移"
+      },
+      {
+        "id": "M5",
+        "type": "mechanism",
+        "label": "多玩家均衡"
+      },
+      {
+        "id": "E1",
+        "type": "equation",
+        "label": "state_transition"
+      },
+      {
+        "id": "E2",
+        "type": "equation",
+        "label": "state_transition"
+      },
+      {
+        "id": "E3",
+        "type": "equation",
+        "label": "state_transition"
+      },
+      {
+        "id": "E4",
+        "type": "equation",
+        "label": "recurrence"
+      },
+      {
+        "id": "E5",
+        "type": "equation",
+        "label": "terminal_condition"
+      },
+      {
+        "id": "E6",
+        "type": "equation",
+        "label": "initial_condition"
+      },
+      {
+        "id": "E7",
+        "type": "equation",
+        "label": "recurrence"
+      },
+      {
+        "id": "E8",
+        "type": "equation",
+        "label": "coupling"
+      },
+      {
+        "id": "C1",
+        "type": "constraint",
+        "label": "每日水与食物"
+      },
+      {
+        "id": "C2",
+        "type": "constraint",
+        "label": "生存约束：资"
+      },
+      {
+        "id": "C3",
+        "type": "constraint",
+        "label": "到达终点的时"
+      },
+      {
+        "id": "C4",
+        "type": "constraint",
+        "label": "沙暴日行动被"
+      },
+      {
+        "id": "C5",
+        "type": "constraint",
+        "label": "每日仅可移动"
+      },
+      {
+        "id": "C6",
+        "type": "constraint",
+        "label": "基准价格购买"
+      },
+      {
+        "id": "C7",
+        "type": "constraint",
+        "label": "到达矿山当日"
+      },
+      {
+        "id": "O1",
+        "type": "objective",
+        "label": "最大化终局资金"
+      },
+      {
+        "id": "O2",
+        "type": "objective",
+        "label": "最大化期望终局资金"
+      },
+      {
+        "id": "S1",
+        "type": "solver",
+        "label": "反向递推表"
+      },
+      {
+        "id": "S2",
+        "type": "solver",
+        "label": "值迭代"
+      },
+      {
+        "id": "S3",
+        "type": "solver",
+        "label": "最优反应循环"
+      }
+    ],
+    "edges": [
+      {
+        "from": "problem",
+        "to": "assumptions",
+        "relation": "yields"
+      },
+      {
+        "from": "assumptions",
+        "to": "variables",
+        "relation": "defines"
+      },
+      {
+        "from": "assumptions",
+        "to": "parameters",
+        "relation": "defines"
+      },
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "derives"
+      },
+      {
+        "from": "M1",
+        "to": "E2",
+        "relation": "derives"
+      },
+      {
+        "from": "M3",
+        "to": "E3",
+        "relation": "derives"
+      },
+      {
+        "from": "M2",
+        "to": "E4",
+        "relation": "derives"
+      },
+      {
+        "from": "M2",
+        "to": "E5",
+        "relation": "derives"
+      },
+      {
+        "from": "M2",
+        "to": "E6",
+        "relation": "derives"
+      },
+      {
+        "from": "M4",
+        "to": "E7",
+        "relation": "derives"
+      },
+      {
+        "from": "M5",
+        "to": "E8",
+        "relation": "derives"
+      },
+      {
+        "from": "C1",
+        "to": "E1",
+        "relation": "restricts"
+      },
+      {
+        "from": "C2",
+        "to": "E1",
+        "relation": "restricts"
+      },
+      {
+        "from": "C4",
+        "to": "E4",
+        "relation": "restricts"
+      },
+      {
+        "from": "E4",
+        "to": "O1",
+        "relation": "supports"
+      },
+      {
+        "from": "E7",
+        "to": "O2",
+        "relation": "supports"
+      },
+      {
+        "from": "E4",
+        "to": "S1",
+        "relation": "solved_by"
+      },
+      {
+        "from": "E7",
+        "to": "S2",
+        "relation": "solved_by"
+      },
+      {
+        "from": "E8",
+        "to": "S3",
+        "relation": "solved_by"
+      }
+    ]
+  },
+  "modeling_trace": {
+    "trace_version": "1.0",
+    "generated_at": "2026-09-08T14:14:00Z",
+    "agent_identity": "doubao",
+    "input_sha256": "a2d0867169b94c592caafb438f608dfa12fc91c7e5df0aab5acaa5a9408ed4f2",
+    "node_events": [
+      {
+        "order": 1,
+        "node": "problem_understanding",
+        "action": "把六关统一到有限阶段 DP 框架，信息结构决定递推形式"
+      },
+      {
+        "order": 2,
+        "node": "state_construction",
+        "action": "构造完备状态并验证，识别资金守恒压缩"
+      },
+      {
+        "order": 3,
+        "node": "mechanism_selection",
+        "action": "DP 主路径；Q2 转移核；Q3 均衡扩展"
+      },
+      {
+        "order": 4,
+        "node": "constraint_audit",
+        "action": "全部硬约束审计，失败结局归入约束"
+      },
+      {
+        "order": 5,
+        "node": "validation_design",
+        "action": "七项验证设计"
+      }
+    ],
+    "generation_order": [
+      "assumptions",
+      "variables",
+      "parameters",
+      "constraints",
+      "mechanisms",
+      "equations",
+      "objectives",
+      "solvers",
+      "validations",
+      "claims"
+    ]
+  }
+}
