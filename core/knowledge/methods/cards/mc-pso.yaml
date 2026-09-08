@@ -12,6 +12,9 @@ match:
 good_for:
   - 连续变量非凸优化，实现与调参比 GA 简单，收敛快
   - 函数优化/神经网络超参搜索/参数标定
+problem_structures: [scheduling, allocation]
+modeling_patterns: [optimization_objective, state_transition]
+mathematical_forms: [optimization, probability]
 requires:
   - 惯性权重与学习因子设置；速度边界约束
   - 多种子运行统计

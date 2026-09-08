@@ -7,6 +7,18 @@
 
 ---
 
+## ⚠️ 更正说明（2026-09-08 方向纠偏）
+
+本文档记录的是审计时点（2026-09-08）的旧方向状态。方向纠偏后，以下术语与定位已更正：
+
+- **`core_methods` → `allowed_model_families`**：benchmark 不再定义"核心方法"作为唯一答案，而是定义兼容的模型族（允许的模型族）。
+- **方法卡定位**：从"答案库"改为"约束/先验/验证"（constraint/prior/validation）。方法卡不告诉 LLM "必须用 X"，而是"如果你考虑 X，需要满足这些条件"。
+- **`method_selection` 指标**：从"方法选择/参考方法匹配"重定义为"方法兼容性评估"（method compatibility assessment），测量的是测量工具效度而非 Agent 能力。
+- **知识库目标**：从"全方法覆盖"改为"核心建模知识覆盖（Tier 0-3 策略）"，不追求穷尽所有方法。
+
+> 本文档的审计发现与结论为历史记录，不做重写；上述更正适用于方向纠偏后的系统定位。详见 `docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md`。
+
+
 ## 一句话结论
 
 **仓库内核健康，但测量仪器严重失真——2024_A B0 的三个"失败"观测值全部无效（输入错误 + 未真实执行 + 评估器放过空壳），当前最紧迫的不是加能力，而是修尺子。**
@@ -209,7 +221,7 @@ Problem → Mathematical abstraction → Variables → Parameters → Assumption
 | 评估器无法测量内容 | 🟠 P1 | method_selection 是字符串匹配，无 deterministic checks，无 non-emptiness gate，对空壳 artifact 全 PASS |
 | 4/5 题目 BLOCKED | 🟠 P1 | input_file=null，实际只有 1 题可执行 |
 | 无分层设计 | 🟡 P2 | 直接 L3（题目→论文），无法定位失败在 L1（理解）还是 L2（构建） |
-| solution-method leakage | 🟡 P2 | `core_methods` 字段可能变成"唯一正确答案"，违反多解模型原则 |
+| solution-method leakage | 🟡 P2 | `allowed_model_families` 字段可能变成"唯一正确答案"，违反多解模型原则 |
 | 无 Model Card | 🟡 P2 | 每个 problem 缺少 allowed_model_families / known_invalid_patterns 等结构化描述 |
 | 无 human baseline | 🟡 P2 | 缺少人类解决方案作为参照，无法区分"Agent 不行"和"题目本身难" |
 
@@ -224,7 +236,7 @@ Problem → Mathematical abstraction → Variables → Parameters → Assumption
 | 输入校验 | 无 | 新增 input-label consistency check（题面内容 hash 与 problem_id 绑定） | P0 |
 | artifact non-emptiness | 无 | 新增 gate：空 payload 必须 FAIL | P0 |
 | orchestrator 真实执行 | 模板初始化 | 确保 model_provider ≠ null、latency > 0、artifact payload 非空 | P0 |
-| `core_methods` 字段 | 可能唯一答案 | 改为 `allowed_model_families`（列表）+ `acceptable_alternative` | P1 |
+| `allowed_model_families` 字段 | 可能唯一答案 | 改为 `allowed_model_families`（列表）+ `acceptable_alternative` | P1 |
 | evaluator | string matching | 重设计：8 deterministic checks（dimension/symbol/constraint/variable/equation/unit consistency + hash/provenance + non-emptiness）+ 5 semantic judgment（alignment/assumption plausibility/mechanism validity/model sufficiency/solvability） | P1 |
 | Benchmark 分层 | 无（直接 L3） | 新增 L1（Problem Understanding）+ L2（Model Construction），L3 在 L1+L2 通过后执行 | P2 |
 | Model Card | 无 | 每个 problem 新增 17 字段 Model Card（见 05 审计 §5） | P2 |
@@ -254,7 +266,7 @@ Problem → Mathematical abstraction → Variables → Parameters → Assumption
 6. 实现 L1 Problem Understanding evaluator（sub_question decomposition 可测量）
 7. 实现 L2 Model Construction evaluator（8 deterministic + 5 semantic）
 8. 为 2024_A 写完整 Model Card
-9. CUMCM-Bench-v2 schema 升级（core_methods→allowed_model_families）
+9. CUMCM-Bench-v2 schema 升级（allowed_model_families→allowed_model_families）
 ```
 
 **第三优先级（两周后）：能力训练（在尺子可靠之后）。**

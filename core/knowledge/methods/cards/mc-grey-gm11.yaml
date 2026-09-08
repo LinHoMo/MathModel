@@ -13,6 +13,9 @@ match:
 good_for:
   - 数据点少（4-10 个）且近似单调/指数规律的增长量预测
   - 无需分布假设的贫信息建模，CUMCM 高频（如产量/人口/污染预测）
+problem_structures: [prediction]
+modeling_patterns: [state_transition]
+mathematical_forms: [differential_equation, statistics, recurrence]
 requires:
   - 序列准指数性检验（级比检验落界）
   - 数据非负（或平移非负）

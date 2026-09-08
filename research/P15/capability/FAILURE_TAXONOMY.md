@@ -35,8 +35,8 @@
 | FM-FC-002 | symbol_inconsistency | Formal Consistency | A | Formal Consistency | Yes (deterministic) |
 | FM-FC-003 | unit_inconsistency | Formal Consistency | A | Formal Consistency | Yes (deterministic + semantic) |
 | FM-FC-004 | index_inconsistency | Formal Consistency | A | Formal Consistency | Yes (deterministic) |
-| FM-MS-001 | wrong_model_family | Method Selection | A | Method Selection | Yes (deterministic) |
-| FM-MS-002 | method_name_trap | Method Selection | A | Method Selection | Yes (deterministic + semantic) |
+| FM-MS-001 | wrong_model_family | Method Compatibility Assessment | A | Method Compatibility Assessment | Yes (deterministic) |
+| FM-MS-002 | method_name_trap | Method Compatibility Assessment | A | Method Compatibility Assessment | Yes (deterministic + semantic) |
 | FM-SV-001 | infeasible_solution | Solving | A+B | Solving | Yes (deterministic) |
 | FM-SV-002 | non_convergence | Solving | A+B | Solving | Yes (deterministic) |
 | FM-SV-003 | numerical_instability | Solving | A+B | Solving | Yes (deterministic) |
@@ -61,7 +61,7 @@
 - **Name**: Wrong Abstraction（抽象错误/问题类型误判）
 - **Definition**: 将问题的数学类型/建模范式误判。例如将运动学/几何问题误分类为评价类问题，将机理问题误分类为数据驱动问题。抽象错误会导致整个 pipeline 方向错误，下游所有努力都建立在错误的范式上。
 - **Observable evidence**:
-  - type-classifier 输出的 problem_type 与题目 gold family 无交集
+  - type-classifier 输出的 problem_type 与题目 allowed_model_families 无交集
   - 选择的方法族（如 TOPSIS/AHP/PCA）与问题物理本质（如运动学方程）不匹配
   - 模型中没有与问题物理机制对应的方程结构
 - **Counterexample**: 一个综合题同时包含评价和机理两个子问题，Agent 选择了评价方法处理评价子问题——这不是 wrong_abstraction，而是正确的分而治之。只有当整体范式误判时才是 FM-PA-001。
@@ -232,21 +232,21 @@
 
 ---
 
-## 5. Method Selection Failures
+## 5. Method Compatibility Assessment Failures
 
 ### FM-MS-001 wrong_model_family
 
 - **Name**: Wrong Model Family（模型家族错误）
-- **Definition**: 选择的模型家族与题目 gold family 无交集。这是 family 标签级的确定性错误，不涉及家族内具体方法的正确性。**与 FM-MC-001 wrong_mechanism 的区别**：wrong_model_family 是标签级（detectable by string matching），wrong_mechanism 是机理级（需语义判断）。一个模型可能 family 标签正确但机理仍然错误（如在 ODE 家族中选了错误的方程形式）。
+- **Definition**: 选择的模型家族与题目 allowed_model_families 无交集。这是 family 标签级的确定性错误，不涉及家族内具体方法的正确性。**与 FM-MC-001 wrong_mechanism 的区别**：wrong_model_family 是标签级（detectable by string matching），wrong_mechanism 是机理级（需语义判断）。一个模型可能 family 标签正确但机理仍然错误（如在 ODE 家族中选了错误的方程形式）。
 - **Observable evidence**:
-  - selected_model.family ∩ CUMCM-Bench gold_family = ∅
+  - selected_model.family ∩ CUMCM-Bench allowed_model_families = ∅
   - 方法卡 retriever 返回的 top-k 方法全部属于错误家族
-- **Counterexample**: 综合题选择了多个家族中的一个（如综合题有机理和评价两个家族，选了评价家族处理评价子问题）——这不是 wrong_model_family，只要与 gold family 有交集即可。
-- **Measurement rule**: deterministic。selected_model.family 与 gold_family 的集合交集检查。FAMILY_MISMATCH = (intersection == ∅)。
-- **Related capability**: Method Selection（CAP-05）
+- **Counterexample**: 综合题选择了多个家族中的一个（如综合题有机理和评价两个家族，选了评价家族处理评价子问题）——这不是 wrong_model_family，只要与 allowed_model_families 有交集即可。
+- **Measurement rule**: deterministic。selected_model.family 与 allowed_model_families 的集合交集检查。FAMILY_MISMATCH = (intersection == ∅)。
+- **Related capability**: Method Compatibility Assessment（CAP-05）
 - **Research transferability**: DIRECTLY_TRANSFERABLE。模型家族选择是通用建模决策。
 - **Class**: A（Agent 选择了错误的家族）。若 method-matcher skill 的检索逻辑有缺陷则为 B。
-- **Real example**: P15.1 2024_A：选择评价族（TOPSIS/AHP/PCA），gold family = 几何运动/综合，无交集。
+- **Real example**: P15.1 2024_A：选择评价族（TOPSIS/AHP/PCA），allowed_model_families = 几何运动/综合，无交集。
 
 ### FM-MS-002 method_name_trap
 
@@ -259,7 +259,7 @@
   - method_selection 分数可能为 0%，但 mathematical correctness 分数可能很高
 - **Counterexample**: 方法不适合但 Agent 显式说明了局限性并作为辅助方法使用（如用 TOPSIS 做方案初筛，再用机理模型精算）——这不是 method_name_trap，而是方法组合。只有当 Agent 将不适合的方法作为主方法且未意识到错配时才是 FM-MS-002。
 - **Measurement rule**: deterministic + semantic。第一步：检查方法数学正确性（deterministic：公式可复现、代码可运行）。第二步：检查方法假设前提与问题条件的一致性（semantic）。关键判定：mathematically_valid = true AND problem_alignment = fail → method_name_trap = true。
-- **Related capability**: Method Selection（CAP-05）
+- **Related capability**: Method Compatibility Assessment（CAP-05）
 - **Research transferability**: DIRECTLY_TRANSFERABLE。"方法正确但不适合问题"是科研中最常见的方法论错误之一。
 - **Class**: A（Agent 未能识别方法与问题的错配）
 - **Real example**: P15.1 2024_A B0：TOPSIS 数学完全正确，但用于运动学问题 = 完全错配。method_selection=0%，但如果只看 mathematical correctness 可以得高分。
@@ -495,7 +495,7 @@
 | FM-CS-01/02/03 | （全空） | FM-EV-001 | 重新定义为 unsupported_claim，接入 P14 Claim 判定 |
 
 **关键变化**：
-1. 新增 Method Selection 独立类别（FM-MS-001/002），体现 Method correctness ≠ Model correctness
+1. 新增 Method Compatibility Assessment 独立类别（FM-MS-001/002），体现 Method correctness ≠ Model correctness
 2. 新增 Measurement-Evaluator 类别（FM-ME-001/002/003），严格区分 C 类失败
 3. 旧 7 个空 FM（PA-03, MC-05, FC-04, SV-03, VA-03, CS-01/02/03）全部移除或重新定义
 4. 所有 FM 均有明确的 measurement rule（deterministic 或 semantic），无不可测量的 FM

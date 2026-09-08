@@ -16,7 +16,7 @@
 |---|------|--------|-----------|
 | EVAL-BUG-001 | 空壳 artifact 判全 PASS（无 non-emptiness check） | **P0** | 全部 8 项能力 |
 | EVAL-BUG-002 | model_correctness 完全依赖外部输入（n/a） | **P0** | Model Construction |
-| EVAL-BUG-003 | method_selection 仅方法卡 ID 字符串匹配 | **P0/P1** | Method Selection |
+| EVAL-BUG-003 | method_selection 仅方法卡 ID 字符串匹配 | **P0/P1** | Method Compatibility Assessment |
 | EVAL-BUG-004 | decomposition_coverage 退化口径 count-ratio 无语义 | P1 | Problem Understanding |
 | EVAL-BUG-005 | experiment_validity 仅查 tags，不查结果内容 | P1 | Experiment Validity |
 | EVAL-BUG-006 | validation_reliability 中 paper.exists() 直接给 1.0 | P1 | Validation Reliability |
@@ -201,8 +201,8 @@
   - B0 实测：agent 选了 TOPSIS（评价类方法），2024_A 是运动学问题，method_selection=0%
   - 代码第 78 行 `gt in hay or hay in gt` — 纯字符串包含
   - `_load_card_names()` 第 85-99 行仅提取 card_id + name + family，不提取 applicability 条件
-- **影响**: Method Selection 能力。合理的替代方法被判 0 分；错误的方法族只要 ID 字符串碰巧匹配就得分。
-- **修复建议**: 按本协议 §5 设计独立的 Method Selection Quality 维度，评估方法适用性而非 ID 匹配。
+- **影响**: Method Compatibility Assessment 能力。合理的替代方法被判 0 分；错误的方法族只要 ID 字符串碰巧匹配就得分。
+- **修复建议**: 按本协议 §5 设计独立的 Method Compatibility Assessment Quality 维度，评估方法适用性而非 ID 匹配。
 
 ### EVAL-BUG-004 — decomposition_coverage 退化口径 count-ratio [P1: 测量不可靠]
 
@@ -713,7 +713,7 @@ model_construction_score =
 
 ---
 
-## 5. Method Selection Quality 独立维度设计
+## 5. Method Compatibility Assessment Quality 独立维度设计
 
 ### 5.1 设计原则
 
@@ -764,10 +764,10 @@ model_construction_score =
 
 ### 5.3 与旧 method_selection 的区别
 
-| 维度 | 旧 method_selection | 新 Method Selection Quality |
+| 维度 | 旧 method_selection | 新 Method Compatibility Assessment Quality |
 |------|-------------------|---------------------------|
 | 匹配方式 | 方法卡 ID 字符串包含 | 方法适用性 + 目标回答性 + 数学合理性 |
-| GT 作用 | GT 方法 = 唯一正确答案 | GT 方法 = 参考方法族，非唯一 |
+| GT 作用 | GT 方法 = 唯一正确答案 | GT 方法 = 允许的模型族（allowed_model_families，benchmark 定义的兼容模型族）族，非唯一 |
 | 替代方法 | 不评估 | MSQ-4 独立评估 |
 | 空壳处理 | 空 card_id → 不命中 → 0% | 空 card_id → FAIL（前置条件） |
 | 置信度 | Low（字符串匹配） | Medium（D+S 组合） |
@@ -845,7 +845,7 @@ model_construction_score =
 3. 定义 semantic judge 的 prompt template + 输出 schema
 4. 用 B0 空壳 + adversarial test cases 验证
 
-### Phase 3b.3 — Method Selection Quality 实现（P1，1 周）
+### Phase 3b.3 — Method Compatibility Assessment Quality 实现（P1，1 周）
 1. 实现 MSQ-1 至 MSQ-4
 2. 方法卡增加 `applicability.problem_types` 字段
 3. 验证 gold=TOPSIS, agent=AHP 不自动判 wrong

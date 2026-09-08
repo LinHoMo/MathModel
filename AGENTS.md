@@ -131,6 +131,21 @@ threshold = get("modeling.assumption_score_threshold", default=6.0)
 - **状态单一真源**：status.json 是流程状态投影（由事件重建），禁止多份状态文件并存；
   改动后必须 `state.py reconcile` 通过。
 
+### 方向锁定：Modeling Knowledge 定位（2026-09-08 冻结）
+
+方法卡 = Constraint / Prior / Validation（约束/先验/验证），不是答案库。
+- LLM = Model Generator（自由建模，不是方法卡执行器）
+- Modeling Knowledge = Constraint / Prior（提供 requirements/risks/validation，不指定"必须用 X"）
+- Evidence = Adjudication（实验证据决定模型是否成立）
+
+治理原则：
+- Knowledge coverage must constrain evaluation, not constrain creativity
+- Research-layer calibration ≠ Agent capability intervention
+- 多解模型原则：benchmark 用 allowed_model_families，不用 core_methods/gold method
+- Tier 0-3 核心覆盖：不追求全方法覆盖
+
+详见：docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md
+
 ## 修改后必做
 
 ```powershell

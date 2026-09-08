@@ -1,11 +1,23 @@
 {
   "schema_version": "2.0",
   "name": "CUMCM-Bench",
-  "description": "国赛真题标准化索引（借鉴 LLM-MM-Agent 的 MM-Bench 结构），提供机器可读的赛题检索与题型-方法映射，供 type-classifier / method-matcher / model-builder 调用。",
+  "description": "国赛真题标准化索引（借鉴 LLM-MM-Agent 的 MM-Bench 结构），提供机器可读的赛题检索与题型-方法映射，供 type-classifier / method-matcher / model-builder 调用。方法字段采用多解模型原则（multiple acceptable solution families）：allowed_model_families 指定允许的高层建模方法族，acceptable_solution_variants 列出可接受的具体算法；historical_core_methods 仅用于追溯，不参与评估。Benchmark 不指定 gold method。",
   "metadata": {
     "competition": "CUMCM",
     "competition_fullname": "高教社杯全国大学生数学建模竞赛",
-    "years_covered": [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+    "years_covered": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
     "topics_per_year": 3,
     "total_problems": 32,
     "source": "core/knowledge/problems/INDEX.md + CUMCM-EXAMINER-TRACKER.md",
@@ -21,11 +33,36 @@
       "topic_type": "A-physical",
       "topic_type_detail": "几何·连续",
       "difficulty": "medium",
-      "keywords": ["太阳高度角", "影子轨迹", "球面三角", "时空反演"],
-      "core_methods": ["astronomical_geometry", "nonlinear_least_squares"],
-      "bonus_methods": ["multi-model_validation"],
+      "keywords": [
+        "太阳高度角",
+        "影子轨迹",
+        "球面三角",
+        "时空反演"
+      ],
+      "bonus_methods": [
+        "multi-model_validation"
+      ],
       "family": "空间几何-定位",
-      "examiner_hint": "几何建模 + 非线性最小二乘反演，注意地理坐标系的统一"
+      "examiner_hint": "几何建模 + 非线性最小二乘反演，注意地理坐标系的统一",
+      "historical_core_methods": [
+        "astronomical_geometry",
+        "nonlinear_least_squares"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "inverse_problem",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "nonlinear_least_squares",
+        "spherical_trigonometry",
+        "grid_search",
+        "genetic_algorithm"
+      ],
+      "forbidden_misinterpretations": [
+        "multi_criteria_decision",
+        "clustering"
+      ]
     },
     {
       "id": "2015_B",
@@ -35,11 +72,36 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·运筹",
       "difficulty": "medium",
-      "keywords": ["出租车", "供需匹配", "资源配置", "调度半径"],
-      "core_methods": ["supply_demand_analysis", "optimization_allocation"],
-      "bonus_methods": ["sensitivity_analysis", "multi-scenario"],
+      "keywords": [
+        "出租车",
+        "供需匹配",
+        "资源配置",
+        "调度半径"
+      ],
+      "bonus_methods": [
+        "sensitivity_analysis",
+        "multi-scenario"
+      ],
       "family": "数据+评价+决策",
-      "examiner_hint": "指标体系建立是核心，避免纯描述统计"
+      "examiner_hint": "指标体系建立是核心，避免纯描述统计",
+      "historical_core_methods": [
+        "supply_demand_analysis",
+        "optimization_allocation"
+      ],
+      "allowed_model_families": [
+        "multi_criteria_decision",
+        "optimization",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "TOPSIS",
+        "AHP",
+        "entropy_weight",
+        "linear_programming"
+      ],
+      "forbidden_misinterpretations": [
+        "differential_equations_as_primary"
+      ]
     },
     {
       "id": "2015_C",
@@ -49,11 +111,30 @@
       "topic_type": "E-interdisciplinary",
       "topic_type_detail": "交叉·开放",
       "difficulty": "easy",
-      "keywords": ["农历历法", "月出月落", "天文计算", "日期推算"],
-      "core_methods": ["calendar_algorithm", "rule_modeling"],
-      "bonus_methods": ["historical_validation"],
+      "keywords": [
+        "农历历法",
+        "月出月落",
+        "天文计算",
+        "日期推算"
+      ],
+      "bonus_methods": [
+        "historical_validation"
+      ],
       "family": "天文历法",
-      "examiner_hint": "历法算法 + 规则建模，注意天文参数的准确性"
+      "examiner_hint": "历法算法 + 规则建模，注意天文参数的准确性",
+      "historical_core_methods": [
+        "calendar_algorithm",
+        "rule_modeling"
+      ],
+      "allowed_model_families": [
+        "rule_based_modeling",
+        "astronomical_calculation"
+      ],
+      "acceptable_solution_variants": [
+        "lunar_calendar_algorithm",
+        "astronomical_ephemeris",
+        "historical_data_validation"
+      ]
     },
     {
       "id": "2016_A",
@@ -63,11 +144,38 @@
       "topic_type": "A-physical",
       "topic_type_detail": "物理·连续",
       "difficulty": "hard",
-      "keywords": ["浮体静力学", "锚链形态", "受力平衡", "风-流载荷"],
-      "core_methods": ["force_equilibrium", "nonlinear_equations", "parameter_optimization"],
-      "bonus_methods": ["multi-load-case", "sensitivity_analysis"],
+      "keywords": [
+        "浮体静力学",
+        "锚链形态",
+        "受力平衡",
+        "风-流载荷"
+      ],
+      "bonus_methods": [
+        "multi-load-case",
+        "sensitivity_analysis"
+      ],
       "family": "连续力学/振动",
-      "examiner_hint": "力学平衡建模 + 非线性方程组 + 环境载荷，静力学为主"
+      "examiner_hint": "力学平衡建模 + 非线性方程组 + 环境载荷，静力学为主",
+      "historical_core_methods": [
+        "force_equilibrium",
+        "nonlinear_equations",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "optimization",
+        "mechanical_modeling"
+      ],
+      "acceptable_solution_variants": [
+        "static_equilibrium",
+        "nonlinear_solver",
+        "genetic_algorithm",
+        "finite_element_method"
+      ],
+      "forbidden_misinterpretations": [
+        "time_series_forecasting",
+        "clustering"
+      ]
     },
     {
       "id": "2016_B",
@@ -77,11 +185,32 @@
       "topic_type": "E-interdisciplinary",
       "topic_type_detail": "交叉·开放",
       "difficulty": "medium",
-      "keywords": ["路网结构", "交通流", "通行能力", "开放街区"],
-      "core_methods": ["traffic_flow_modeling", "simulation_evaluation"],
-      "bonus_methods": ["multi-scenario_comparison"],
+      "keywords": [
+        "路网结构",
+        "交通流",
+        "通行能力",
+        "开放街区"
+      ],
+      "bonus_methods": [
+        "multi-scenario_comparison"
+      ],
       "family": "交通/网络",
-      "examiner_hint": "交通流建模 + 仿真评价，注意开放前后的对照"
+      "examiner_hint": "交通流建模 + 仿真评价，注意开放前后的对照",
+      "historical_core_methods": [
+        "traffic_flow_modeling",
+        "simulation_evaluation"
+      ],
+      "allowed_model_families": [
+        "network_analysis",
+        "simulation",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "traffic_flow_model",
+        "cellular_automata",
+        "agent_based_simulation",
+        "macroscopic_fundamental_diagram"
+      ]
     },
     {
       "id": "2016_C",
@@ -91,11 +220,33 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计",
       "difficulty": "medium",
-      "keywords": ["放电曲线", "剩余寿命预测", "回归", "时序"],
-      "core_methods": ["regression", "time_series"],
-      "bonus_methods": ["error_analysis", "confidence_interval"],
+      "keywords": [
+        "放电曲线",
+        "剩余寿命预测",
+        "回归",
+        "时序"
+      ],
+      "bonus_methods": [
+        "error_analysis",
+        "confidence_interval"
+      ],
       "family": "预测方法论",
-      "examiner_hint": "回归/时序预测 + 误差分析，注意电池老化非线性"
+      "examiner_hint": "回归/时序预测 + 误差分析，注意电池老化非线性",
+      "historical_core_methods": [
+        "regression",
+        "time_series"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "time_series_forecasting",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "nonlinear_regression",
+        "ARIMA",
+        "exponential_smoothing",
+        "LSTM"
+      ]
     },
     {
       "id": "2017_A",
@@ -105,11 +256,34 @@
       "topic_type": "A-physical",
       "topic_type_detail": "几何·连续",
       "difficulty": "hard",
-      "keywords": ["断层扫描", "Radon变换", "几何标定", "反投影重建"],
-      "core_methods": ["Radon_transform", "geometric_calibration", "image_reconstruction"],
-      "bonus_methods": ["noise_robustness", "resolution_analysis"],
+      "keywords": [
+        "断层扫描",
+        "Radon变换",
+        "几何标定",
+        "反投影重建"
+      ],
+      "bonus_methods": [
+        "noise_robustness",
+        "resolution_analysis"
+      ],
       "family": "空间几何-定位",
-      "examiner_hint": "几何标定 + 图像重建算法，Radon变换是核心"
+      "examiner_hint": "几何标定 + 图像重建算法，Radon变换是核心",
+      "historical_core_methods": [
+        "Radon_transform",
+        "geometric_calibration",
+        "image_reconstruction"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "inverse_problem",
+        "signal_processing"
+      ],
+      "acceptable_solution_variants": [
+        "Radon_transform",
+        "filtered_back_projection",
+        "iterative_reconstruction",
+        "geometric_calibration"
+      ]
     },
     {
       "id": "2017_B",
@@ -119,11 +293,34 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计",
       "difficulty": "medium",
-      "keywords": ["众包任务", "定价", "影响因素", "分类优化"],
-      "core_methods": ["regression", "classification", "pricing_optimization"],
-      "bonus_methods": ["feature_importance", "spatial_analysis"],
+      "keywords": [
+        "众包任务",
+        "定价",
+        "影响因素",
+        "分类优化"
+      ],
+      "bonus_methods": [
+        "feature_importance",
+        "spatial_analysis"
+      ],
       "family": "数据+评价+决策",
-      "examiner_hint": "回归 + 分类 + 定价优化，注意空间分布特征"
+      "examiner_hint": "回归 + 分类 + 定价优化，注意空间分布特征",
+      "historical_core_methods": [
+        "regression",
+        "classification",
+        "pricing_optimization"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "classification",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "logistic_regression",
+        "random_forest",
+        "XGBoost",
+        "pricing_optimization"
+      ]
     },
     {
       "id": "2017_C",
@@ -133,11 +330,33 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计",
       "difficulty": "medium",
-      "keywords": ["比色分析", "色度空间", "浓度反演", "回归标定"],
-      "core_methods": ["colorimetric_modeling", "regression_calibration"],
-      "bonus_methods": ["cross_validation", "uncertainty_quantification"],
+      "keywords": [
+        "比色分析",
+        "色度空间",
+        "浓度反演",
+        "回归标定"
+      ],
+      "bonus_methods": [
+        "cross_validation",
+        "uncertainty_quantification"
+      ],
       "family": "统计建模",
-      "examiner_hint": "色度建模 + 回归反演，注意色彩空间的线性化转换"
+      "examiner_hint": "色度建模 + 回归反演，注意色彩空间的线性化转换",
+      "historical_core_methods": [
+        "colorimetric_modeling",
+        "regression_calibration"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "statistical_analysis",
+        "inverse_problem"
+      ],
+      "acceptable_solution_variants": [
+        "linear_regression",
+        "partial_least_squares",
+        "principal_component_regression",
+        "support_vector_regression"
+      ]
     },
     {
       "id": "2018_A",
@@ -147,12 +366,41 @@
       "topic_type": "A-physical",
       "topic_type_detail": "物理·连续",
       "difficulty": "hard",
-      "keywords": ["热传导", "多层织物", "皮肤烧伤阈值", "反问题"],
-      "core_methods": ["heat_equation_PDE", "parameter_inversion", "optimization"],
-      "bonus_methods": ["multi-layer_validation", "sensitivity_analysis", "cost_constraint"],
+      "keywords": [
+        "热传导",
+        "多层织物",
+        "皮肤烧伤阈值",
+        "反问题"
+      ],
+      "bonus_methods": [
+        "multi-layer_validation",
+        "sensitivity_analysis",
+        "cost_constraint"
+      ],
       "family": "热传导/温度场",
-      "paper_case_ref": ["A229"],
-      "examiner_hint": "传热 PDE + 参数反演 + 优化，边界条件不可缺失"
+      "paper_case_ref": [
+        "A229"
+      ],
+      "examiner_hint": "传热 PDE + 参数反演 + 优化，边界条件不可缺失",
+      "historical_core_methods": [
+        "heat_equation_PDE",
+        "parameter_inversion",
+        "optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "inverse_problem",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "finite_difference_method",
+        "finite_element_method",
+        "Levenberg_Marquardt",
+        "genetic_algorithm"
+      ],
+      "forbidden_misinterpretations": [
+        "multi_criteria_decision"
+      ]
     },
     {
       "id": "2018_B",
@@ -162,12 +410,38 @@
       "topic_type": "B-experiment",
       "topic_type_detail": "离散·调度",
       "difficulty": "medium",
-      "keywords": ["RGV", "CNC上下料", "两道工序", "调度", "0-1规划"],
-      "core_methods": ["integer_programming", "event-driven_simulation", "rolling_rescheduling"],
-      "bonus_methods": ["fault_tolerance", "multi-objective"],
+      "keywords": [
+        "RGV",
+        "CNC上下料",
+        "两道工序",
+        "调度",
+        "0-1规划"
+      ],
+      "bonus_methods": [
+        "fault_tolerance",
+        "multi-objective"
+      ],
       "family": "离散调度/博弈",
-      "paper_case_ref": ["B203"],
-      "examiner_hint": "0-1规划 + 事件驱动仿真 + 滚动重调度"
+      "paper_case_ref": [
+        "B203"
+      ],
+      "examiner_hint": "0-1规划 + 事件驱动仿真 + 滚动重调度",
+      "historical_core_methods": [
+        "integer_programming",
+        "event-driven_simulation",
+        "rolling_rescheduling"
+      ],
+      "allowed_model_families": [
+        "combinatorial_optimization",
+        "simulation",
+        "scheduling"
+      ],
+      "acceptable_solution_variants": [
+        "integer_programming",
+        "genetic_algorithm",
+        "discrete_event_simulation",
+        "tabu_search"
+      ]
     },
     {
       "id": "2018_C",
@@ -177,12 +451,37 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计",
       "difficulty": "medium",
-      "keywords": ["会员数据", "RFM/RFMT", "聚类", "精准营销"],
-      "core_methods": ["index_system", "ensemble_weighting", "clustering"],
-      "bonus_methods": ["rfm_enhancement", "segment_interpretation"],
+      "keywords": [
+        "会员数据",
+        "RFM/RFMT",
+        "聚类",
+        "精准营销"
+      ],
+      "bonus_methods": [
+        "rfm_enhancement",
+        "segment_interpretation"
+      ],
       "family": "数据+评价+决策",
-      "paper_case_ref": ["C008"],
-      "examiner_hint": "指标体系 + 组合赋权 + 聚类细分，避免仅做描述统计"
+      "paper_case_ref": [
+        "C008"
+      ],
+      "examiner_hint": "指标体系 + 组合赋权 + 聚类细分，避免仅做描述统计",
+      "historical_core_methods": [
+        "index_system",
+        "ensemble_weighting",
+        "clustering"
+      ],
+      "allowed_model_families": [
+        "clustering",
+        "multi_criteria_decision",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "kmeans",
+        "RFM_analysis",
+        "entropy_weight",
+        "hierarchical_clustering"
+      ]
     },
     {
       "id": "2019_A",
@@ -192,12 +491,38 @@
       "topic_type": "A-physical",
       "topic_type_detail": "物理·连续",
       "difficulty": "hard",
-      "keywords": ["燃油喷射", "凸轮驱动", "进油阀", "压力稳定", "微分方程"],
-      "core_methods": ["ODE_modeling", "numerical_solution", "parameter_optimization"],
-      "bonus_methods": ["multi-cycle_stability", "robustness_analysis"],
+      "keywords": [
+        "燃油喷射",
+        "凸轮驱动",
+        "进油阀",
+        "压力稳定",
+        "微分方程"
+      ],
+      "bonus_methods": [
+        "multi-cycle_stability",
+        "robustness_analysis"
+      ],
       "family": "连续力学/振动",
-      "paper_case_ref": ["A023"],
-      "examiner_hint": "ODE建模 + 数值求解 + 参数寻优，连续性方程是基础"
+      "paper_case_ref": [
+        "A023"
+      ],
+      "examiner_hint": "ODE建模 + 数值求解 + 参数寻优，连续性方程是基础",
+      "historical_core_methods": [
+        "ODE_modeling",
+        "numerical_solution",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "optimization",
+        "numerical_methods"
+      ],
+      "acceptable_solution_variants": [
+        "Runge_Kutta",
+        "finite_difference",
+        "genetic_algorithm",
+        "particle_swarm_optimization"
+      ]
     },
     {
       "id": "2019_B",
@@ -207,12 +532,38 @@
       "topic_type": "B-experiment",
       "topic_type_detail": "离散·动力学",
       "difficulty": "hard",
-      "keywords": ["同心鼓", "多体动力学", "鼓-球碰撞", "站位与节奏", "周期稳定性"],
-      "core_methods": ["event-driven_simulation", "periodic_mapping_stability", "parameter_optimization"],
-      "bonus_methods": ["multi-player_coordination", "rhythm_optimization"],
+      "keywords": [
+        "同心鼓",
+        "多体动力学",
+        "鼓-球碰撞",
+        "站位与节奏",
+        "周期稳定性"
+      ],
+      "bonus_methods": [
+        "multi-player_coordination",
+        "rhythm_optimization"
+      ],
       "family": "离散调度/博弈",
-      "paper_case_ref": ["B479"],
-      "examiner_hint": "事件驱动仿真 + 周期映射稳定性 + 参数寻优"
+      "paper_case_ref": [
+        "B479"
+      ],
+      "examiner_hint": "事件驱动仿真 + 周期映射稳定性 + 参数寻优",
+      "historical_core_methods": [
+        "event-driven_simulation",
+        "periodic_mapping_stability",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "simulation",
+        "differential_equations",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "discrete_event_simulation",
+        "multi_body_dynamics",
+        "Poincare_map",
+        "genetic_algorithm"
+      ]
     },
     {
       "id": "2019_C",
@@ -222,12 +573,37 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计+运筹",
       "difficulty": "medium",
-      "keywords": ["排队论", "供需匹配", "司机决策", "调度策略"],
-      "core_methods": ["queuing_analysis", "optimization", "decision_modeling"],
-      "bonus_methods": ["simulation_validation", "multi-objective"],
+      "keywords": [
+        "排队论",
+        "供需匹配",
+        "司机决策",
+        "调度策略"
+      ],
+      "bonus_methods": [
+        "simulation_validation",
+        "multi-objective"
+      ],
       "family": "交通/网络",
-      "paper_case_ref": ["C044"],
-      "examiner_hint": "排队分析 + 优化 + 决策，注意司机与乘客的双边匹配"
+      "paper_case_ref": [
+        "C044"
+      ],
+      "examiner_hint": "排队分析 + 优化 + 决策，注意司机与乘客的双边匹配",
+      "historical_core_methods": [
+        "queuing_analysis",
+        "optimization",
+        "decision_modeling"
+      ],
+      "allowed_model_families": [
+        "probability_modeling",
+        "optimization",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "queuing_theory",
+        "monte_carlo",
+        "game_theory",
+        "markov_decision_process"
+      ]
     },
     {
       "id": "2020_A",
@@ -237,11 +613,34 @@
       "topic_type": "A-physical",
       "topic_type_detail": "物理·连续",
       "difficulty": "medium",
-      "keywords": ["热传导", "回流焊", "温度场", "边界条件"],
-      "core_methods": ["heat_equation_PDE", "numerical_solution", "parameter_optimization"],
-      "bonus_methods": ["multi-zone_control", "sensitivity_analysis"],
+      "keywords": [
+        "热传导",
+        "回流焊",
+        "温度场",
+        "边界条件"
+      ],
+      "bonus_methods": [
+        "multi-zone_control",
+        "sensitivity_analysis"
+      ],
       "family": "热传导/温度场",
-      "examiner_hint": "PDE + 数值求解 + 参数寻优，注意回流焊各区温度设定"
+      "examiner_hint": "PDE + 数值求解 + 参数寻优，注意回流焊各区温度设定",
+      "historical_core_methods": [
+        "heat_equation_PDE",
+        "numerical_solution",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "optimization",
+        "numerical_methods"
+      ],
+      "acceptable_solution_variants": [
+        "finite_difference_method",
+        "finite_element_method",
+        "genetic_algorithm",
+        "response_surface_method"
+      ]
     },
     {
       "id": "2020_B",
@@ -251,11 +650,36 @@
       "topic_type": "B-experiment",
       "topic_type_detail": "离散·决策",
       "difficulty": "hard",
-      "keywords": ["不确定性决策", "博弈", "资源调度", "随机天气"],
-      "core_methods": ["dynamic_programming", "MDP", "game_theory", "Monte_Carlo"],
-      "bonus_methods": ["multi-strategy_comparison", "risk_analysis"],
+      "keywords": [
+        "不确定性决策",
+        "博弈",
+        "资源调度",
+        "随机天气"
+      ],
+      "bonus_methods": [
+        "multi-strategy_comparison",
+        "risk_analysis"
+      ],
       "family": "离散调度/博弈",
-      "examiner_hint": "动态规划 / MDP + 博弈 + 蒙特卡洛，注意天气随机性建模"
+      "examiner_hint": "动态规划 / MDP + 博弈 + 蒙特卡洛，注意天气随机性建模",
+      "historical_core_methods": [
+        "dynamic_programming",
+        "MDP",
+        "game_theory",
+        "Monte_Carlo"
+      ],
+      "allowed_model_families": [
+        "combinatorial_optimization",
+        "probability_modeling",
+        "simulation",
+        "game_theory"
+      ],
+      "acceptable_solution_variants": [
+        "dynamic_programming",
+        "markov_decision_process",
+        "monte_carlo",
+        "nash_equilibrium"
+      ]
     },
     {
       "id": "2020_C",
@@ -265,11 +689,36 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计",
       "difficulty": "medium",
-      "keywords": ["信贷风险", "信用评分", "违约概率", "客户分层"],
-      "core_methods": ["evaluation_index", "regression", "clustering", "sensitivity"],
-      "bonus_methods": ["risk_quantification", "scenario_analysis"],
+      "keywords": [
+        "信贷风险",
+        "信用评分",
+        "违约概率",
+        "客户分层"
+      ],
+      "bonus_methods": [
+        "risk_quantification",
+        "scenario_analysis"
+      ],
       "family": "数据+评价+决策",
-      "examiner_hint": "综合评价 + 回归 + 聚类 + 灵敏度，注意违约概率的 Logit 变换"
+      "examiner_hint": "综合评价 + 回归 + 聚类 + 灵敏度，注意违约概率的 Logit 变换",
+      "historical_core_methods": [
+        "evaluation_index",
+        "regression",
+        "clustering",
+        "sensitivity"
+      ],
+      "allowed_model_families": [
+        "classification",
+        "regression",
+        "multi_criteria_decision",
+        "clustering"
+      ],
+      "acceptable_solution_variants": [
+        "logistic_regression",
+        "random_forest",
+        "TOPSIS",
+        "kmeans"
+      ]
     },
     {
       "id": "2021_A",
@@ -279,11 +728,34 @@
       "topic_type": "A-physical",
       "topic_type_detail": "物理·几何连续",
       "difficulty": "hard",
-      "keywords": ["射电望远镜", "抛物面拟合", "空间解析几何", "反射面调节"],
-      "core_methods": ["spatial_geometry", "least_squares_fitting", "numerical_optimization"],
-      "bonus_methods": ["cable-net_kinematics", "multi-point_coordination"],
+      "keywords": [
+        "射电望远镜",
+        "抛物面拟合",
+        "空间解析几何",
+        "反射面调节"
+      ],
+      "bonus_methods": [
+        "cable-net_kinematics",
+        "multi-point_coordination"
+      ],
       "family": "定日镜/聚光",
-      "examiner_hint": "几何建模 + 最小二乘拟合 + 数值优化，空间坐标系建立是基础"
+      "examiner_hint": "几何建模 + 最小二乘拟合 + 数值优化，空间坐标系建立是基础",
+      "historical_core_methods": [
+        "spatial_geometry",
+        "least_squares_fitting",
+        "numerical_optimization"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "optimization",
+        "regression"
+      ],
+      "acceptable_solution_variants": [
+        "least_squares",
+        "paraboloid_fitting",
+        "genetic_algorithm",
+        "gradient_descent"
+      ]
     },
     {
       "id": "2021_B",
@@ -293,11 +765,34 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计",
       "difficulty": "medium",
-      "keywords": ["化学反应", "催化剂组合", "转化率与选择性", "实验数据"],
-      "core_methods": ["regression", "factor_analysis", "experiment_optimization"],
-      "bonus_methods": ["mechanism_interpretation", "catalyst_selection"],
+      "keywords": [
+        "化学反应",
+        "催化剂组合",
+        "转化率与选择性",
+        "实验数据"
+      ],
+      "bonus_methods": [
+        "mechanism_interpretation",
+        "catalyst_selection"
+      ],
       "family": "实验设计",
-      "examiner_hint": "回归 + 因子分析 + 实验优化，注意催化剂组合的交互效应"
+      "examiner_hint": "回归 + 因子分析 + 实验优化，注意催化剂组合的交互效应",
+      "historical_core_methods": [
+        "regression",
+        "factor_analysis",
+        "experiment_optimization"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "statistical_analysis",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "multiple_linear_regression",
+        "response_surface_method",
+        "ANOVA",
+        "genetic_algorithm"
+      ]
     },
     {
       "id": "2021_C",
@@ -307,11 +802,35 @@
       "topic_type": "B-experiment",
       "topic_type_detail": "离散·规划",
       "difficulty": "medium",
-      "keywords": ["订购策略", "运输调度", "供需平衡", "成本控制"],
-      "core_methods": ["integer_programming", "linear_programming", "forecasting", "scheduling"],
-      "bonus_methods": ["multi-objective", "uncertainty_modeling"],
+      "keywords": [
+        "订购策略",
+        "运输调度",
+        "供需平衡",
+        "成本控制"
+      ],
+      "bonus_methods": [
+        "multi-objective",
+        "uncertainty_modeling"
+      ],
       "family": "供应链/运营",
-      "examiner_hint": "整数/线性规划 + 预测 + 调度，注意订购与运输的联合优化"
+      "examiner_hint": "整数/线性规划 + 预测 + 调度，注意订购与运输的联合优化",
+      "historical_core_methods": [
+        "integer_programming",
+        "linear_programming",
+        "forecasting",
+        "scheduling"
+      ],
+      "allowed_model_families": [
+        "combinatorial_optimization",
+        "time_series_forecasting",
+        "scheduling"
+      ],
+      "acceptable_solution_variants": [
+        "integer_programming",
+        "linear_programming",
+        "ARIMA",
+        "genetic_algorithm"
+      ]
     },
     {
       "id": "2022_A",
@@ -321,11 +840,34 @@
       "topic_type": "A-physical",
       "topic_type_detail": "物理·连续",
       "difficulty": "hard",
-      "keywords": ["波浪能装置", "机械振动", "能量转化", "结构参数"],
-      "core_methods": ["vibration_dynamics", "numerical_solution", "parameter_optimization"],
-      "bonus_methods": ["multi-DOF_modeling", "power_curve_analysis"],
+      "keywords": [
+        "波浪能装置",
+        "机械振动",
+        "能量转化",
+        "结构参数"
+      ],
+      "bonus_methods": [
+        "multi-DOF_modeling",
+        "power_curve_analysis"
+      ],
       "family": "连续力学/振动",
-      "examiner_hint": "振动力学建模 + 数值求解 + 参数优化，注意流体-结构耦合"
+      "examiner_hint": "振动力学建模 + 数值求解 + 参数优化，注意流体-结构耦合",
+      "historical_core_methods": [
+        "vibration_dynamics",
+        "numerical_solution",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "optimization",
+        "mechanical_modeling"
+      ],
+      "acceptable_solution_variants": [
+        "Runge_Kutta",
+        "finite_element_method",
+        "genetic_algorithm",
+        "harmonic_balance"
+      ]
     },
     {
       "id": "2022_B",
@@ -335,11 +877,33 @@
       "topic_type": "A-physical",
       "topic_type_detail": "几何·连续优化",
       "difficulty": "medium",
-      "keywords": ["无人机编队", "纯方位", "无源定位", "几何定位"],
-      "core_methods": ["geometric_positioning", "numerical_optimization"],
-      "bonus_methods": ["formation_geometry", "multi-UAV_coordination"],
+      "keywords": [
+        "无人机编队",
+        "纯方位",
+        "无源定位",
+        "几何定位"
+      ],
+      "bonus_methods": [
+        "formation_geometry",
+        "multi-UAV_coordination"
+      ],
       "family": "定日镜/聚光",
-      "examiner_hint": "几何建模 + 数值优化，注意多无人机协同定位的约束条件"
+      "examiner_hint": "几何建模 + 数值优化，注意多无人机协同定位的约束条件",
+      "historical_core_methods": [
+        "geometric_positioning",
+        "numerical_optimization"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "optimization",
+        "inverse_problem"
+      ],
+      "acceptable_solution_variants": [
+        "triangulation",
+        "least_squares",
+        "genetic_algorithm",
+        "particle_filter"
+      ]
     },
     {
       "id": "2022_C",
@@ -349,11 +913,37 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计",
       "difficulty": "medium",
-      "keywords": ["玻璃成分", "聚类", "分类", "风化", "高维小样本"],
-      "core_methods": ["clustering", "discriminant_analysis", "PCA", "statistical_analysis"],
-      "bonus_methods": ["chemical_mechanism_interpretation", "weathering_model"],
+      "keywords": [
+        "玻璃成分",
+        "聚类",
+        "分类",
+        "风化",
+        "高维小样本"
+      ],
+      "bonus_methods": [
+        "chemical_mechanism_interpretation",
+        "weathering_model"
+      ],
       "family": "数据+评价+决策",
-      "examiner_hint": "聚类 + 判别 + 主成分 + 统计分析，注意高维小样本特征"
+      "examiner_hint": "聚类 + 判别 + 主成分 + 统计分析，注意高维小样本特征",
+      "historical_core_methods": [
+        "clustering",
+        "discriminant_analysis",
+        "PCA",
+        "statistical_analysis"
+      ],
+      "allowed_model_families": [
+        "clustering",
+        "classification",
+        "statistical_analysis",
+        "dimensionality_reduction"
+      ],
+      "acceptable_solution_variants": [
+        "kmeans",
+        "LDA",
+        "PCA",
+        "random_forest"
+      ]
     },
     {
       "id": "2023_A",
@@ -363,13 +953,40 @@
       "topic_type": "A-physical",
       "topic_type_detail": "几何·连续优化",
       "difficulty": "hard",
-      "keywords": ["定日镜", "聚光", "镜场布局", "光能效率", "几何"],
-      "core_methods": ["geometric_modeling", "numerical_optimization", "simulation"],
-      "bonus_methods": ["multi-model_comparison", "shadow_analysis", "efficiency_validation"],
+      "keywords": [
+        "定日镜",
+        "聚光",
+        "镜场布局",
+        "光能效率",
+        "几何"
+      ],
+      "bonus_methods": [
+        "multi-model_comparison",
+        "shadow_analysis",
+        "efficiency_validation"
+      ],
       "family": "定日镜/聚光",
-      "paper_case_ref": ["A-topic 多篇"],
+      "paper_case_ref": [
+        "A-topic 多篇"
+      ],
       "scoring_criteria_ref": "core/knowledge/review/scoring-criteria.md 第三章",
-      "examiner_hint": "几何建模 + 数值优化 + 仿真，注意遮挡与阴影分析"
+      "examiner_hint": "几何建模 + 数值优化 + 仿真，注意遮挡与阴影分析",
+      "historical_core_methods": [
+        "geometric_modeling",
+        "numerical_optimization",
+        "simulation"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "optimization",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "ray_tracing",
+        "genetic_algorithm",
+        "monte_carlo",
+        "gradient_based_optimization"
+      ]
     },
     {
       "id": "2023_B",
@@ -379,11 +996,33 @@
       "topic_type": "A-physical",
       "topic_type_detail": "几何·连续",
       "difficulty": "medium",
-      "keywords": ["多波束测深", "覆盖宽度", "测线布设", "海底地形"],
-      "core_methods": ["geometric_calculation", "numerical_solution"],
-      "bonus_methods": ["terrain_adaptation", "multi-objective"],
+      "keywords": [
+        "多波束测深",
+        "覆盖宽度",
+        "测线布设",
+        "海底地形"
+      ],
+      "bonus_methods": [
+        "terrain_adaptation",
+        "multi-objective"
+      ],
       "family": "空间几何-定位",
-      "examiner_hint": "几何计算 + 数值求解，注意海底地形对覆盖宽度的影响"
+      "examiner_hint": "几何计算 + 数值求解，注意海底地形对覆盖宽度的影响",
+      "historical_core_methods": [
+        "geometric_calculation",
+        "numerical_solution"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "optimization",
+        "numerical_methods"
+      ],
+      "acceptable_solution_variants": [
+        "coverage_optimization",
+        "genetic_algorithm",
+        "terrain_modeling",
+        "spiral_survey_pattern"
+      ]
     },
     {
       "id": "2023_C",
@@ -393,8 +1032,13 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计+决策",
       "difficulty": "medium",
-      "keywords": ["生鲜损耗", "定价", "补货", "销售预测", "成本收益"],
-      "core_methods": ["data_cleaning", "distribution_fitting", "time_series", "optimization"],
+      "keywords": [
+        "生鲜损耗",
+        "定价",
+        "补货",
+        "销售预测",
+        "成本收益"
+      ],
       "bonus_methods": [
         "ventors_model(报童思想)",
         "multi_plan_comparison",
@@ -414,6 +1058,23 @@
         "问一并考虑时间效应和分布类型",
         "问二用报童思想建随机优化模型",
         "问三有不同模型或方案的结果对比"
+      ],
+      "historical_core_methods": [
+        "data_cleaning",
+        "distribution_fitting",
+        "time_series",
+        "optimization"
+      ],
+      "allowed_model_families": [
+        "time_series_forecasting",
+        "optimization",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "ARIMA",
+        "newsboy_model",
+        "stochastic_optimization",
+        "LSTM"
       ]
     },
     {
@@ -424,9 +1085,16 @@
       "topic_type": "A-physical",
       "topic_type_detail": "几何·连续",
       "difficulty": "medium",
-      "keywords": ["舞龙", "螺线盘入盘旋出", "运动模型", "路径与速度"],
-      "core_methods": ["kinematics", "geometric_modeling", "numerical_solution"],
-      "bonus_methods": ["collision_detection", "path_planning"],
+      "keywords": [
+        "舞龙",
+        "螺线盘入盘旋出",
+        "运动模型",
+        "路径与速度"
+      ],
+      "bonus_methods": [
+        "collision_detection",
+        "path_planning"
+      ],
       "pitfalls_2024": [
         "缺少第n个到第n+1个把手的计算公式（扣 5-10 分）",
         "摘要未独立成页（扣分项）"
@@ -438,7 +1106,28 @@
         "q2_collision_time": "412.4738s",
         "q3_min_pitch": "0.450337m",
         "q5_max_speed": "1.2465 m/s"
-      }
+      },
+      "historical_core_methods": [
+        "kinematics",
+        "geometric_modeling",
+        "numerical_solution"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "differential_equations",
+        "optimization",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "multi_body_dynamics",
+        "spiral_geometry",
+        "collision_detection",
+        "constrained_optimization"
+      ],
+      "forbidden_misinterpretations": [
+        "multi_criteria_decision",
+        "clustering"
+      ]
     },
     {
       "id": "2024_B",
@@ -448,10 +1137,33 @@
       "topic_type": "B-experiment",
       "topic_type_detail": "离散·决策",
       "difficulty": "medium",
-      "keywords": ["生产决策", "抽样检验", "成本权衡", "概率"],
-      "core_methods": ["probabilistic_decision", "optimization", "sensitivity"],
-      "bonus_methods": ["Bayesian_update", "multi-stage_decision"],
-      "family": "离散调度/博弈"
+      "keywords": [
+        "生产决策",
+        "抽样检验",
+        "成本权衡",
+        "概率"
+      ],
+      "bonus_methods": [
+        "Bayesian_update",
+        "multi-stage_decision"
+      ],
+      "family": "离散调度/博弈",
+      "historical_core_methods": [
+        "probabilistic_decision",
+        "optimization",
+        "sensitivity"
+      ],
+      "allowed_model_families": [
+        "probability_modeling",
+        "optimization",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "bayesian_decision",
+        "expected_value_optimization",
+        "monte_carlo",
+        "sensitivity_analysis"
+      ]
     },
     {
       "id": "2024_C",
@@ -461,10 +1173,33 @@
       "topic_type": "D-operations",
       "topic_type_detail": "规划·多目标",
       "difficulty": "medium",
-      "keywords": ["耕地资源", "轮作", "农产品销售", "利润优化"],
-      "core_methods": ["linear_programming", "integer_programming", "multi-objective"],
-      "bonus_methods": ["uncertainty_analysis", "rolling_optimization"],
-      "family": "供应链/运营"
+      "keywords": [
+        "耕地资源",
+        "轮作",
+        "农产品销售",
+        "利润优化"
+      ],
+      "bonus_methods": [
+        "uncertainty_analysis",
+        "rolling_optimization"
+      ],
+      "family": "供应链/运营",
+      "historical_core_methods": [
+        "linear_programming",
+        "integer_programming",
+        "multi-objective"
+      ],
+      "allowed_model_families": [
+        "combinatorial_optimization",
+        "multi_criteria_decision",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "linear_programming",
+        "integer_programming",
+        "NSGA_II",
+        "genetic_algorithm"
+      ]
     },
     {
       "id": "2024_E",
@@ -474,10 +1209,32 @@
       "topic_type": "E-interdisciplinary",
       "topic_type_detail": "交叉·开放",
       "difficulty": "medium",
-      "keywords": ["交通流", "信号管控", "通行效率"],
-      "core_methods": ["traffic_flow_modeling", "optimization", "simulation"],
-      "bonus_methods": ["multi-objective", "real-time_control"],
-      "family": "交通/网络"
+      "keywords": [
+        "交通流",
+        "信号管控",
+        "通行效率"
+      ],
+      "bonus_methods": [
+        "multi-objective",
+        "real-time_control"
+      ],
+      "family": "交通/网络",
+      "historical_core_methods": [
+        "traffic_flow_modeling",
+        "optimization",
+        "simulation"
+      ],
+      "allowed_model_families": [
+        "network_analysis",
+        "simulation",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "traffic_flow_model",
+        "cellular_automata",
+        "signal_timing_optimization",
+        "agent_based_simulation"
+      ]
     },
     {
       "id": "2025_A",
@@ -487,9 +1244,17 @@
       "topic_type": "A-physical",
       "topic_type_detail": "物理·连续",
       "difficulty": "hard",
-      "keywords": ["无人机", "导弹拦截", "烟幕遮蔽", "运动学/几何"],
-      "core_methods": ["kinematics", "geometric_shielding", "optimization", "simulation"],
-      "bonus_methods": ["multi-UAV_coordination", "complexity_analysis", "cooperative_shielding"],
+      "keywords": [
+        "无人机",
+        "导弹拦截",
+        "烟幕遮蔽",
+        "运动学/几何"
+      ],
+      "bonus_methods": [
+        "multi-UAV_coordination",
+        "complexity_analysis",
+        "cooperative_shielding"
+      ],
       "pitfalls_2025": [
         "目标只考虑一个点扣 2-3 分（应为圆柱体）",
         "启发式算法未说明理由扣 2-3 分"
@@ -511,7 +1276,25 @@
         "q3": "1机3弹协同策略；协同共同遮蔽目标的思路应予鼓励",
         "q4": "3机运动模型及结果+协同施放策略",
         "q5": "模型及策略+求解分析；算法复杂性低；启发式须说明理由"
-      }
+      },
+      "historical_core_methods": [
+        "kinematics",
+        "geometric_shielding",
+        "optimization",
+        "simulation"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "differential_equations",
+        "optimization",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "projectile_motion",
+        "collision_avoidance",
+        "genetic_algorithm",
+        "monte_carlo"
+      ]
     },
     {
       "id": "2025_B",
@@ -521,9 +1304,17 @@
       "topic_type": "A-physical",
       "topic_type_detail": "物理·连续",
       "difficulty": "medium",
-      "keywords": ["碳化硅外延层", "红外干涉", "光学测厚", "多光束干涉"],
-      "core_methods": ["optical_interference_modeling", "fitting_inversion", "numerical_solution"],
-      "bonus_methods": ["multi-beam_justification", "reliability_validation", "robustness_analysis"],
+      "keywords": [
+        "碳化硅外延层",
+        "红外干涉",
+        "光学测厚",
+        "多光束干涉"
+      ],
+      "bonus_methods": [
+        "multi-beam_justification",
+        "reliability_validation",
+        "robustness_analysis"
+      ],
       "pitfalls_2025": [
         "折射率简化为常数扣分（须与波长相关）",
         "未做可靠性分析（用估计值反算对比原始数据）扣 10 分"
@@ -541,7 +1332,23 @@
         "q1": "折射率估计模型至少与波长有关；厚度模型与入射角/折射率有关",
         "q2": "算法实用性/鲁棒性/一致性；可靠性分析十分必要（用估计值反算对比原始数据）",
         "q3": "多光束干涉必要条件；折射率估计只能用附件数据；厚度模型"
-      }
+      },
+      "historical_core_methods": [
+        "optical_interference_modeling",
+        "fitting_inversion",
+        "numerical_solution"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "inverse_problem",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "multi_beam_interference",
+        "Levenberg_Marquardt",
+        "nonlinear_fitting",
+        "spectral_analysis"
+      ]
     },
     {
       "id": "2025_C",
@@ -551,8 +1358,12 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计+决策",
       "difficulty": "medium",
-      "keywords": ["无创产前检测", "Y染色体浓度", "重复测量数据", "BMI分组"],
-      "core_methods": ["mixed_effects_model", "logit_regression", "optimization_grouping", "classification"],
+      "keywords": [
+        "无创产前检测",
+        "Y染色体浓度",
+        "重复测量数据",
+        "BMI分组"
+      ],
       "bonus_methods": [
         "multi-factor_interaction",
         "cross-question_comparison",
@@ -578,7 +1389,25 @@
         "q2": "不宜直接聚类；宜建优化/决策模型；3-6组灵敏度分析",
         "q3": "纳入年龄/身高/体重的合理性；与q2分组结果对比分析值得奖励",
         "q4": "异常与正常的差异分析；明确判定阈值与优良性分析"
-      }
+      },
+      "historical_core_methods": [
+        "mixed_effects_model",
+        "logit_regression",
+        "optimization_grouping",
+        "classification"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "classification",
+        "statistical_analysis",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "mixed_effects_model",
+        "logistic_regression",
+        "optimization_based_grouping",
+        "random_forest"
+      ]
     },
     {
       "id": "2025_D",
@@ -588,11 +1417,35 @@
       "topic_type": "B-experiment",
       "topic_type_detail": "离散·网络",
       "difficulty": "medium",
-      "keywords": ["巷道水流漫延", "BFS", "动态Dijkstra", "圣维南方程组"],
-      "core_methods": ["graph_search", "dynamic_shortest_path", "hydraulic_modeling"],
-      "bonus_methods": ["multi-scenario_routing", "risk_zoning"],
+      "keywords": [
+        "巷道水流漫延",
+        "BFS",
+        "动态Dijkstra",
+        "圣维南方程组"
+      ],
+      "bonus_methods": [
+        "multi-scenario_routing",
+        "risk_zoning"
+      ],
       "family": "离散调度/博弈",
-      "examiner_hint": "图搜索 + 动态最短路 + 水动力建模，注意水流时间动态性"
+      "examiner_hint": "图搜索 + 动态最短路 + 水动力建模，注意水流时间动态性",
+      "historical_core_methods": [
+        "graph_search",
+        "dynamic_shortest_path",
+        "hydraulic_modeling"
+      ],
+      "allowed_model_families": [
+        "network_analysis",
+        "graph_theory",
+        "differential_equations",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "BFS",
+        "Dijkstra",
+        "Saint_Venant_equations",
+        "A_star"
+      ]
     },
     {
       "id": "2025_E",
@@ -602,32 +1455,96 @@
       "topic_type": "C-data",
       "topic_type_detail": "数据·统计",
       "difficulty": "easy",
-      "keywords": ["人体姿态估计", "质心轨迹", "相关性分析", "回归预测"],
-      "core_methods": ["signal_smoothing", "correlation_analysis", "regression", "dimensionality_reduction"],
-      "bonus_methods": ["biomechanical_interpretation", "video_analysis"],
+      "keywords": [
+        "人体姿态估计",
+        "质心轨迹",
+        "相关性分析",
+        "回归预测"
+      ],
+      "bonus_methods": [
+        "biomechanical_interpretation",
+        "video_analysis"
+      ],
       "family": "数据分析-人体运动",
-      "examiner_hint": "信号平滑 + 相关分析 + 回归/降维，注意生物力学合理性"
+      "examiner_hint": "信号平滑 + 相关分析 + 回归/降维，注意生物力学合理性",
+      "historical_core_methods": [
+        "signal_smoothing",
+        "correlation_analysis",
+        "regression",
+        "dimensionality_reduction"
+      ],
+      "allowed_model_families": [
+        "statistical_analysis",
+        "regression",
+        "time_series_forecasting"
+      ],
+      "acceptable_solution_variants": [
+        "moving_average",
+        "Pearson_correlation",
+        "linear_regression",
+        "PCA"
+      ]
     }
   ],
   "families": {
     "定日镜/聚光": {
-      "members": ["2021_A", "2023_A", "2025_A"],
-      "core_methods": ["spatial_geometry", "reflection_law", "numerical_optimization"],
-      "bonus_methods_2023_2025": ["multi-model_comparison", "shadow_analysis", "sensitivity"]
+      "members": [
+        "2021_A",
+        "2023_A",
+        "2025_A"
+      ],
+      "bonus_methods_2023_2025": [
+        "multi-model_comparison",
+        "shadow_analysis",
+        "sensitivity"
+      ],
+      "historical_core_methods": [
+        "spatial_geometry",
+        "reflection_law",
+        "numerical_optimization"
+      ]
     },
     "连续力学/振动": {
-      "members": ["2016_A", "2019_A", "2022_A"],
-      "core_methods": ["force_equilibrium", "ODE_PDE", "numerical_solution"],
-      "bonus_methods_2023_2025": ["parameter_inversion_validation", "multi-simulation"]
+      "members": [
+        "2016_A",
+        "2019_A",
+        "2022_A"
+      ],
+      "bonus_methods_2023_2025": [
+        "parameter_inversion_validation",
+        "multi-simulation"
+      ],
+      "historical_core_methods": [
+        "force_equilibrium",
+        "ODE_PDE",
+        "numerical_solution"
+      ]
     },
     "热传导/温度场": {
-      "members": ["2018_A", "2020_A"],
-      "core_methods": ["heat_equation", "boundary_conditions", "numerical_solution"],
-      "bonus_methods_2023_2025": ["inverse_problem", "sensitivity_analysis"]
+      "members": [
+        "2018_A",
+        "2020_A"
+      ],
+      "bonus_methods_2023_2025": [
+        "inverse_problem",
+        "sensitivity_analysis"
+      ],
+      "historical_core_methods": [
+        "heat_equation",
+        "boundary_conditions",
+        "numerical_solution"
+      ]
     },
     "数据+评价+决策": {
-      "members": ["2015_B", "2017_B", "2018_C", "2020_C", "2023_C", "2022_C", "2025_C"],
-      "core_methods": ["data_cleaning", "regression_classification", "clustering", "optimization"],
+      "members": [
+        "2015_B",
+        "2017_B",
+        "2018_C",
+        "2020_C",
+        "2023_C",
+        "2022_C",
+        "2025_C"
+      ],
       "bonus_methods_2023_2025": [
         "mixed_effects_model",
         "logit_for_proportional_data",
@@ -639,22 +1556,63 @@
         "未验证统计方法前提",
         "重复测量数据视为独立样本",
         "[0,1]数据直接线性回归"
+      ],
+      "historical_core_methods": [
+        "data_cleaning",
+        "regression_classification",
+        "clustering",
+        "optimization"
       ]
     },
     "离散调度/博弈": {
-      "members": ["2018_B", "2020_B", "2022_B", "2024_B"],
-      "core_methods": ["integer_programming", "dynamic_programming", "probabilistic_decision", "simulation"],
-      "bonus_methods_2023_2025": ["multi-strategy_comparison", "sensitivity"]
+      "members": [
+        "2018_B",
+        "2020_B",
+        "2022_B",
+        "2024_B"
+      ],
+      "bonus_methods_2023_2025": [
+        "multi-strategy_comparison",
+        "sensitivity"
+      ],
+      "historical_core_methods": [
+        "integer_programming",
+        "dynamic_programming",
+        "probabilistic_decision",
+        "simulation"
+      ]
     },
     "交通/网络": {
-      "members": ["2016_B", "2019_C", "2024_E"],
-      "core_methods": ["traffic_flow", "network_flow", "queuing_theory", "optimization"],
-      "bonus_methods_2023_2025": ["multi-objective", "simulation_validation"]
+      "members": [
+        "2016_B",
+        "2019_C",
+        "2024_E"
+      ],
+      "bonus_methods_2023_2025": [
+        "multi-objective",
+        "simulation_validation"
+      ],
+      "historical_core_methods": [
+        "traffic_flow",
+        "network_flow",
+        "queuing_theory",
+        "optimization"
+      ]
     },
     "空间几何-定位": {
-      "members": ["2015_A", "2017_A", "2023_B"],
-      "core_methods": ["Radon_transform_or_geometric_calibration", "numerical_solution"],
-      "bonus_methods_2023_2025": ["noise_robustness", "multi-modal_validation"]
+      "members": [
+        "2015_A",
+        "2017_A",
+        "2023_B"
+      ],
+      "bonus_methods_2023_2025": [
+        "noise_robustness",
+        "multi-modal_validation"
+      ],
+      "historical_core_methods": [
+        "Radon_transform_or_geometric_calibration",
+        "numerical_solution"
+      ]
     }
   },
   "scoring_weights_2025": {

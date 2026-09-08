@@ -8,6 +8,18 @@
 
 ---
 
+## ⚠️ 更正说明（2026-09-08 方向纠偏）
+
+本文档记录的是审计时点（2026-09-08）的旧方向状态。方向纠偏后，以下术语与定位已更正：
+
+- **`core_methods` → `allowed_model_families`**：benchmark 不再定义"核心方法"作为唯一答案，而是定义兼容的模型族（允许的模型族）。
+- **方法卡定位**：从"答案库"改为"约束/先验/验证"（constraint/prior/validation）。方法卡不告诉 LLM "必须用 X"，而是"如果你考虑 X，需要满足这些条件"。
+- **`method_selection` 指标**：从"方法选择/参考方法匹配"重定义为"方法兼容性评估"（method compatibility assessment），测量的是测量工具效度而非 Agent 能力。
+- **知识库目标**：从"全方法覆盖"改为"核心建模知识覆盖（Tier 0-3 策略）"，不追求穷尽所有方法。
+
+> 本文档的审计发现与结论为历史记录，不做重写；上述更正适用于方向纠偏后的系统定位。详见 `docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md`。
+
+
 ## 1. 审计执行摘要
 
 ### 1.1 过程
@@ -128,7 +140,7 @@
 6. 实现 L1 Problem Understanding evaluator（sub_question decomposition 可测量）
 7. 实现 L2 Model Construction evaluator（8 deterministic + 5 semantic checks）
 8. 为 2024_A 写完整 Model Card（17 字段）
-9. CUMCM-Bench-v2 schema 升级：core_methods → allowed_model_families
+9. CUMCM-Bench-v2 schema 升级：allowed_model_families → allowed_model_families
 10. 扩充 Failure Taxonomy（+11 种关键失败模式）
 ```
 

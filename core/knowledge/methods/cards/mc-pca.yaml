@@ -13,6 +13,9 @@ match:
 good_for:
   - 强相关指标体系的降维压缩（评价前置步骤）
   - 高维数据可视化与去共线性（回归前处理）
+problem_structures: [classification, prediction]
+modeling_patterns: [optimization_objective, distance]
+mathematical_forms: [linear_algebra, statistics, optimization]
 requires:
   - 数据标准化（z-score）后再做 PCA
   - 主成分个数依据（累计方差贡献率 ≥80% 或碎石图）

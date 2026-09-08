@@ -46,7 +46,11 @@ allowed_model_families:
   - statistical_testing  # 假设检验
   # 具体方法选择需题面验证后细化
 
-acceptable_solution_variants: UNKNOWN  # 等待题面验证
+acceptable_solution_variants:
+  - kmeans  # K-means 聚类
+  - LDA  # 线性判别分析
+  - PCA  # 主成分分析降维
+  - random_forest  # 随机森林分类
 
 key_variables:
   - chemical_composition  # 化学成分（各元素含量）

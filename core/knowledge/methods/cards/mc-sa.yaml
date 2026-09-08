@@ -12,6 +12,9 @@ match:
 good_for:
   - 邻域结构清晰的组合优化（TSP/调度/选址），实现简单
   - 与 GA/PSO 互为对照的多算法验证（算法独立性证据）
+problem_structures: [scheduling, allocation, network]
+modeling_patterns: [optimization_objective, state_transition]
+mathematical_forms: [optimization, probability]
 requires:
   - 降温计划（初温/终温/速率）设计与邻域算子定义
   - 多起点/多种子运行

@@ -146,6 +146,11 @@ NODE_TO_ARTIFACT_TYPE = {
     "evidence_build": "claim",
     "paper_sections": "paper_section",
     "figure_generation": "figure",
+    # B0 baseline node IDs
+    "problem_understanding": "question",
+    "method_selection": "decision",
+    "solving_strategy": "decision",
+    "validation_plan": "decision",
 }
 
 
@@ -181,6 +186,9 @@ def _build_registry_artifact(
     # Extract title from payload if available
     title = payload.get("title", f"{manifest.node_id} output")
     question = payload.get("question", "Q001")
+    # Question-type artifacts cannot reference themselves (artifact_id == Q001...)
+    if artifact_type == "question" and question == artifact_id:
+        question = ""
 
     return {
         "schema_version": "3.1",
@@ -361,6 +369,7 @@ def _update_decision_log(
     project_dir: Path,
     artifact_id: str,
     manifest: ExternalArtifactManifest,
+    artifact_type: str = "",
 ) -> None:
     """Add a decision log entry for model/decision-type artifacts."""
     dlog_path = project_dir / "state" / "decision_log.json"
@@ -375,18 +384,35 @@ def _update_decision_log(
             "decisions": [],
         }
 
-    # Only add decision entries for decision/model type artifacts
-    artifact_type = NODE_TO_ARTIFACT_TYPE.get(manifest.node_id, "")
-    if artifact_type not in ("decision", "model"):
+    # Only add decision entries for decision-type artifacts
+    # (model artifacts get M-prefixed IDs which violate ^D\d+$ schema)
+    if artifact_type != "decision":
+        _save_json(dlog_path, dlog)
         return
 
     decisions = dlog.setdefault("decisions", [])
+
+    # Normalize alternatives to list[str] (DecisionLog schema requires strings)
+    raw_alts = manifest.payload.get("alternatives", [])
+    alternatives = []
+    for a in raw_alts:
+        if isinstance(a, str):
+            alternatives.append(a)
+        elif isinstance(a, dict):
+            alternatives.append(str(a.get("method", a.get("name", a.get("strategy", json.dumps(a, ensure_ascii=False))))))
+        else:
+            alternatives.append(str(a))
+
+    # Ensure criteria is non-empty list[str]
+    raw_criteria = manifest.payload.get("criteria", [])
+    criteria = [str(c) for c in raw_criteria] if raw_criteria else ["problem_fit", "feasibility", "data_availability"]
+
     decision_entry = {
         "decision_id": artifact_id,
         "question": f"{manifest.node_id} output",
-        "chosen": manifest.payload.get("model_type", manifest.payload.get("decision", artifact_id)),
-        "alternatives": manifest.payload.get("alternatives", []),
-        "criteria": manifest.payload.get("criteria", []),
+        "chosen": str(manifest.payload.get("decision", manifest.payload.get("model_type", artifact_id))),
+        "alternatives": alternatives,
+        "criteria": criteria,
         "evidence_ids": manifest.payload.get("depends_on", []),
         "reasoning": manifest.payload.get("reasoning", f"External agent {manifest.agent_identity} produced via {manifest.node_id}"),
         "confidence": manifest.payload.get("confidence", 0.8),
@@ -505,7 +531,7 @@ def register_artifact(
     _update_evidence_graph(project_dir, artifact_id, manifest)
 
     # Step 9: Update decision log
-    _update_decision_log(project_dir, artifact_id, manifest)
+    _update_decision_log(project_dir, artifact_id, manifest, artifact_type=artifact_type)
 
     result["status"] = "success"
     result["artifact_id"] = artifact_id

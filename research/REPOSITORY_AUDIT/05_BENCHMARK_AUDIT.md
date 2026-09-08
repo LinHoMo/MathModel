@@ -8,6 +8,18 @@
 
 ---
 
+## ⚠️ 更正说明（2026-09-08 方向纠偏）
+
+本文档记录的是审计时点（2026-09-08）的旧方向状态。方向纠偏后，以下术语与定位已更正：
+
+- **`core_methods` → `allowed_model_families`**：benchmark 不再定义"核心方法"作为唯一答案，而是定义兼容的模型族（允许的模型族）。
+- **方法卡定位**：从"答案库"改为"约束/先验/验证"（constraint/prior/validation）。方法卡不告诉 LLM "必须用 X"，而是"如果你考虑 X，需要满足这些条件"。
+- **`method_selection` 指标**：从"方法选择/参考方法匹配"重定义为"方法兼容性评估"（method compatibility assessment），测量的是测量工具效度而非 Agent 能力。
+- **知识库目标**：从"全方法覆盖"改为"核心建模知识覆盖（Tier 0-3 策略）"，不追求穷尽所有方法。
+
+> 本文档的审计发现与结论为历史记录，不做重写；上述更正适用于方向纠偏后的系统定位。详见 `docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md`。
+
+
 ## 1. 2024_A B0 深度复盘（Root-Cause Decomposition）
 
 ### 1.1 观测事实
@@ -35,7 +47,7 @@
 
 `work/STATE.md` 显示 V2 进度为 **0/29（0%）**，"已完成：（无）"，当前 agent 停留在 `problem-parser`。`work/handoff.md` 同样显示"已完成步骤：（无）"。
 
-**结论**：B0 是一次模板初始化 / dry-run，注册了 16 个空壳 artifact（payload=[]，data={}），但没有任何真实的 agent 推理、方法选型或建模执行。所谓"TOPSIS 方法选择"和"evaluation 分类"是模板默认值或方法卡推荐系统的确定性输出，**不是 agent 的真实决策**。
+**结论**：B0 是一次模板初始化 / dry-run，注册了 16 个空壳 artifact（payload=[]，data={}），但没有任何真实的 agent 推理、方法选型或建模执行。所谓"TOPSIS 方法兼容性评估"和"evaluation 分类"是模板默认值或方法卡推荐系统的确定性输出，**不是 agent 的真实决策**。
 
 #### 证据 B：输入题面与 Gold Standard 不匹配
 
@@ -43,7 +55,7 @@ Gold standard（`CUMCM-Bench-v2.json` 2024_A 条目）描述：
 - 标题："板凳龙"闹元宵
 - family：几何运动 / 综合
 - 5 个子问题：300s 坐标、碰撞检测、最小螺距、螺距变化方案、速度控制
-- core_methods：kinematics, geometric_modeling, numerical_solution
+- allowed_model_families：kinematics, geometric_modeling, numerical_solution
 
 但实际输入文件 `examples/problems/cumcm2024A.txt`（以及 `projects/p151-2024a/inputs/cumcm2024A.txt`）的内容是：
 - 标题：某防空导弹拦截弹道目标的最优制导律设计
@@ -103,7 +115,7 @@ quality gate 只能检测结构化元数据的缺失（如 claim 的 compared_ag
 | **Evaluator limitation** | **成立（关键根因）** | e2e_metrics.py 的 decomposition_coverage 在无语义评分时退化为 count-ratio（20%），无法区分"未分解"和"分解错误"。method_selection 仅做 top-3 方法卡 ID 字符串匹配，不评估方法是否适用于题目。model_correctness 完全依赖外部 rubric 输入（本次为 n/a）。没有任何 evaluator 检测 artifact 内容是否为空。 |
 | **Problem classifier failure** | **不成立（未被调用 / 输入错误）** | decision_log 显示 question_type="evaluation"，但这是方法卡推荐系统基于空输入的默认分类，不是真实 classifier 的输出。且输入本身是导弹题（即使 classifier 正常工作，也应该分类为 A-physical/ODE，而非 evaluation）。 |
 | **Input representation failure** | **成立（严重根因）** | `examples/problems/cumcm2024A.txt` 包含导弹制导题而非板凳龙题。benchmark 体系缺乏输入文本 hash 与题目标签的一致性校验。content_hashes.json 记录的是 benchmark JSON 条目 hash，不是输入文本 hash，两者无关联校验。 |
-| **Benchmark annotation failure** | **部分成立** | Gold standard 本身（板凳龙的 5 个子问题、kinematics 方法族）与 `CUMCM-Bench.json` 和 playbook 一致，标注质量可接受。但 gold standard 与实际输入不匹配这一事实未被任何 gate 检测到。此外，core_methods 字段的表述方式（"kinematics, geometric_modeling, numerical_solution"）容易被 evaluator 当作"唯一正确方法"而非"参考方法族"。 |
+| **Benchmark annotation failure** | **部分成立** | Gold standard 本身（板凳龙的 5 个子问题、kinematics 方法族）与 `CUMCM-Bench.json` 和 playbook 一致，标注质量可接受。但 gold standard 与实际输入不匹配这一事实未被任何 gate 检测到。此外，allowed_model_families 字段的表述方式（"kinematics, geometric_modeling, numerical_solution"）容易被 evaluator 当作"唯一正确方法"而非"允许的模型族（allowed_model_families，benchmark 定义的兼容模型族）族"。 |
 
 ### 1.4 Root-Cause 结论
 
@@ -123,7 +135,7 @@ quality gate 只能检测结构化元数据的缺失（如 claim 的 compared_ag
 ### 2.1 Schema 结构
 
 `CUMCM-Bench-v2.json` 包含 36 个 problem（2015-2025），每题 9 个字段：
-`question_id, year, family, sub_questions, required_deliverables, core_methods, key_variables, key_constraints, evaluation_targets` + `capability_dimensions` + `failure_modes` + `rationale`。
+`question_id, year, family, sub_questions, required_deliverables, allowed_model_families, key_variables, key_constraints, evaluation_targets` + `capability_dimensions` + `failure_modes` + `rationale`。
 
 P15.0 有 4 个 gate 脚本（`research/P15/scripts/`）：
 - `validate_schema.py`：检查必填字段存在性 + capability_dimensions 枚举值 + failure_modes 格式
@@ -135,14 +147,14 @@ P15.0 有 4 个 gate 脚本（`research/P15/scripts/`）：
 
 #### 2.2.1 Gold Leakage / Solution-Method Leakage
 
-**core_methods 字段存在方法泄露风险。** 例如：
+**allowed_model_families 字段存在方法泄露风险。** 例如：
 - 2018_A：`["heat_equation_PDE", "parameter_inversion", "optimization"]`——直接指定了 PDE + 反演 + 优化，这几乎是完整的解法路线
 - 2020_B：`["dynamic_programming", "MDP", "game_theory", "Monte_Carlo"]`——四种方法全部列出
 - 2024_A：`["kinematics", "geometric_modeling", "numerical_solution"]`——相对抽象，泄露较轻
 
-PRE_REGISTRATION.md §5 声称 `core_methods` 是"方法参考（非唯一答案）"，但：
-- 字段名 `core_methods`（核心方法）而非 `reference_methods`（参考方法）或 `acceptable_method_families`（可接受方法族），语义上倾向于"正确答案"
-- evaluator（e2e_metrics.py `_method_hit`）将 core_methods 作为 GT 进行 top-3 命中率计算，实际上把它当作了"正确答案"来匹配
+PRE_REGISTRATION.md §5 声称 `allowed_model_families` 是"方法参考（非唯一答案）"，但：
+- 字段名 `allowed_model_families`（允许的模型族（allowed_model_families））而非 `reference_methods`（允许的模型族（allowed_model_families，benchmark 定义的兼容模型族））或 `acceptable_method_families`（可接受方法族），语义上倾向于"正确答案"
+- evaluator（e2e_metrics.py `_method_hit`）将 allowed_model_families 作为 GT 进行 top-3 命中率计算，实际上把它当作了"正确答案"来匹配
 - 没有 `acceptable_alternative_methods` 或 `invalid_method_families` 字段来表达多解性
 
 **判定**：存在 solution-method leakage，且 evaluator 的使用方式加剧了这一问题。
@@ -160,7 +172,7 @@ PRE_REGISTRATION.md §5 声称 `core_methods` 是"方法参考（非唯一答案
 无法直接验证 gold standard 是否基于获奖论文反推，但有以下线索：
 - `CUMCM-Bench.json` 中 2024_A 包含 `reference_results`（q1_300s_head_pos="(4.4203, 2.3204)" 等精确数值），这些数值可能来自参考解法
 - `core/knowledge/playbooks/playbook-2024A-bench-dragon.md` 提供了详细的建模路线（多体递推 + 悬链线 + 微分几何），这是典型的"已知解法后写 playbook"模式
-- 但 CUMCM-Bench-v2.json 本身不包含 reference_results，只包含 sub_questions / core_methods 等结构化字段，hindsight bias 的直接证据较弱
+- 但 CUMCM-Bench-v2.json 本身不包含 reference_results，只包含 sub_questions / allowed_model_families 等结构化字段，hindsight bias 的直接证据较弱
 
 **判定**：CUMCM-Bench-v2.json 本身的 hindsight bias 风险中等。playbook 体系存在明显的 hindsight bias，但 playbook 不在 benchmark schema 内。
 
@@ -205,25 +217,25 @@ PRE_REGISTRATION.md §5 声称 `core_methods` 是"方法参考（非唯一答案
 
 ### 3.1 原则陈述
 
-数学建模题不存在唯一正确模型。Benchmark 不应该是 `expected_method = TOPSIS` 或 `expected_method = kinematics` 的猜谜游戏。最终 evaluator 应该测量：**does the model answer the problem?** 而不是 **did the agent guess the reference solution?**
+数学建模题不存在唯一正确模型。Benchmark 不应该是 `acceptable_solution_variants = TOPSIS` 或 `acceptable_solution_variants = kinematics` 的猜谜游戏。最终 evaluator 应该测量：**does the model answer the problem?** 而不是 **did the agent guess the reference solution?**
 
 ### 3.2 当前 Schema 是否违反该原则
 
 **是，存在三处违反：**
 
-#### 违反 1：core_methods 被当作"唯一正确答案"
+#### 违反 1：allowed_model_families 被当作"唯一正确答案"
 
-如 §2.2.1 所述，`core_methods` 字段名和 evaluator 的使用方式（top-3 GT hit rate）都将其视为"正确方法"。e2e_metrics.py 第 138-170 行：
+如 §2.2.1 所述，`allowed_model_families` 字段名和 evaluator 的使用方式（top-3 GT hit rate）都将其视为"正确方法"。e2e_metrics.py 第 138-170 行：
 
 ```python
-# method selection: top-3 GT hit
-methods_gt = gt.get("methods") or []  # 来自 core_methods
+# method compatibility assessment: top-3 GT hit
+methods_gt = gt.get("methods") or []  # 来自 allowed_model_families
 t1 = _method_hit([chosen], card_names, methods_gt)
 t3 = _method_hit(top3, card_names, methods_gt)
 method_value = round(100.0 * sum(t3_hits) / len(t3_hits), 1)
 ```
 
-如果 agent 选择了一个完全合理但不在 core_methods 中的替代方法（例如用变分法求解板凳龙，而非运动学），method_selection 得分为 0，即使模型正确回答了问题。
+如果 agent 选择了一个完全合理但不在 allowed_model_families 中的替代方法（例如用变分法求解板凳龙，而非运动学），method_selection 得分为 0，即使模型正确回答了问题。
 
 #### 违反 2：evaluation_targets 不允许 alternative model families
 
@@ -231,11 +243,11 @@ method_value = round(100.0 * sum(t3_hits) / len(t3_hits), 1)
 
 #### 违反 3：缺少 known_invalid_model_patterns
 
-当前 schema 只有 `failure_modes`（通用失败模式代码，如 FM-MC-03），但没有题目级别的 `known_invalid_model_patterns`（如"2024_A 中使用 TOPSIS/AHP 等评价类方法 = invalid"）。这导致 evaluator 无法主动检测方法族不匹配，只能被动匹配 core_methods。
+当前 schema 只有 `failure_modes`（通用失败模式代码，如 FM-MC-03），但没有题目级别的 `known_invalid_model_patterns`（如"2024_A 中使用 TOPSIS/AHP 等评价类方法 = invalid"）。这导致 evaluator 无法主动检测方法族不匹配，只能被动匹配 allowed_model_families。
 
 ### 3.3 设计建议
 
-将 `core_methods` 重构为以下字段组：
+将 `allowed_model_families` 重构为以下字段组：
 
 ```json
 {
@@ -250,7 +262,7 @@ method_value = round(100.0 * sum(t3_hits) / len(t3_hits), 1)
     {"pattern": "TOPSIS/AHP/PCA 等评价类方法", "reason": "题目要求正向运动学计算，非多方案评价"},
     {"pattern": "纯回归拟合无物理模型", "reason": "缺乏螺线几何约束，外推不可靠"}
   ],
-  "evaluation_target": "模型是否正确回答了 5 个子问题（坐标/碰撞/螺距/方案/速度），而非是否使用了参考方法"
+  "evaluation_target": "模型是否正确回答了 5 个子问题（坐标/碰撞/螺距/方案/速度），而非是否使用了允许的模型族（allowed_model_families，benchmark 定义的兼容模型族）"
 }
 ```
 
@@ -458,7 +470,7 @@ evidence_sources:
 
 当前 benchmark 的隐含比较是 **Agent vs Answer Key**（agent 输出 vs gold standard）。这有两个根本问题：
 
-1. **Answer Key 不是能力标尺**：gold standard 是结构化标注（sub_questions、core_methods），不是实际解法。Agent 与 answer key 的匹配度不能直接翻译为"建模能力"。
+1. **Answer Key 不是能力标尺**：gold standard 是结构化标注（sub_questions、allowed_model_families），不是实际解法。Agent 与 answer key 的匹配度不能直接翻译为"建模能力"。
 2. **缺乏能力上界**：没有 human baseline，就不知道"好的建模"长什么样，也无法判断 agent 的差距是"能力不足"还是"benchmark 设计不合理"。
 
 合理的比较框架应该是：

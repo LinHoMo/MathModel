@@ -46,7 +46,11 @@ allowed_model_families:
   - numerical_optimization  # 数值优化（Q3）
   # 具体方法选择需题面验证后细化
 
-acceptable_solution_variants: UNKNOWN
+acceptable_solution_variants:
+  - finite_difference_method  # 有限差分法求解PDE
+  - finite_element_method  # 有限元法
+  - Levenberg_Marquardt  # 参数反演
+  - genetic_algorithm  # 设计优化（Q3）
 
 key_variables:
   - temperature  # 温度（时空分布）

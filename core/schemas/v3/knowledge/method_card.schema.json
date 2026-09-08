@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "v3/knowledge/method_card.schema.json",
   "title": "Method Card（方法卡）",
-  "description": "机器可读方法卡片：good_for / requires / risks / validation / often_combined_with / anti_patterns。检索输出候选方法 + 适用条件 + 风险 + 验证方式 + 历史失败案例。",
+  "description": "方法卡 = 建模知识约束/先验/验证（Constraint / Prior / Validation），不是答案库。提供使用前提、风险、验证方式和反模式，不指定“必须使用”。检索输出候选方法 + 适用条件 + 风险 + 验证方式 + 历史失败案例。LLM 可自由提出 catalog 外的新方法；Evidence = Adjudication，实验和证据才决定模型是否成立。",
   "type": "object",
   "required": [
     "card_id",
@@ -44,11 +44,11 @@
       "items": {
         "type": "string"
       },
-      "description": "适配的问题类型标签：evaluation / ranking / prediction / classification / optimization / uncertainty / simulation / fitting ..."
+      "description": "适配的问题类型标签（兼容性提示），不是硬限制。LLM 可将方法用于其他问题类型，但需自行验证适用性。"
     },
     "match": {
       "type": "object",
-      "description": "检索打分特征（可选，缺省时不参与硬过滤）",
+      "description": "仅用于检索排序的软特征，不参与硬过滤或自动选方法。Knowledge coverage constrains evaluation, not constrain creativity.",
       "additionalProperties": false,
       "properties": {
         "requires_data": {
@@ -85,7 +85,29 @@
       "minItems": 1,
       "items": {
         "type": "string"
-      }
+      },
+      "description": "适用场景描述（兼容性提示），不是排他性推荐。不意味着其他方法不可用。"
+    },
+    "problem_structures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "该方法适配的问题结构（如 motion, network, scheduling, diffusion, allocation, ranking, prediction, classification, inverse_problem, equilibrium, transport 等）。兼容性提示，可选。"
+    },
+    "modeling_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "该方法体现的建模模式（如 state_transition, conservation, flow, distance, optimization_objective, probability_distribution, graph_traversal, feedback_loop 等）。兼容性提示，可选。"
+    },
+    "mathematical_forms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "该方法的数学形式（如 optimization, differential_equation, graph, probability, linear_algebra, statistics, recurrence, integral 等）。兼容性提示，可选。"
     },
     "requires": {
       "type": "array",
@@ -105,7 +127,7 @@
       "items": {
         "type": "string"
       },
-      "description": "必做验证（灵敏度/交叉检验/多起点）"
+      "description": "必做验证清单——使用该方法时必须执行的验证步骤（灵敏度/交叉检验/多起点/残差分析等）。Evidence = Adjudication：这些验证产生成立证据。"
     },
     "often_combined_with": {
       "type": "array",
@@ -119,7 +141,7 @@
       "items": {
         "type": "string"
       },
-      "description": "误用形态（对应 Failure Memory）"
+      "description": "误用形态——使用该方法时常见的错误模式。对应 Failure Memory。出现这些模式时模型可信度存疑。"
     },
     "known_failures": {
       "type": "array",

@@ -13,6 +13,9 @@ match:
 good_for:
   - 无标签样本分组（用户分群/区域分区/状态识别）
   - 分层建模前的基础分组（先聚类后分组各自建模）
+problem_structures: [classification]
+modeling_patterns: [distance, optimization_objective]
+mathematical_forms: [optimization, linear_algebra, statistics]
 requires:
   - 特征标准化；k 值选择依据（肘部/轮廓系数）
   - KMeans 需多起点避免局部最优（n_init）

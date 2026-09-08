@@ -13,6 +13,9 @@ match:
 good_for:
   - 中大样本表格数据分类/回归，精度-可解释性平衡好
   - 特征重要性可输出，比深度网络更好向评委交代
+problem_structures: [prediction, classification]
+modeling_patterns: [optimization_objective, probability_distribution]
+mathematical_forms: [optimization, statistics, probability]
 requires:
   - 交叉验证调参（深度/学习率/正则）；类别不平衡处理
   - 特征工程与数据泄漏检查

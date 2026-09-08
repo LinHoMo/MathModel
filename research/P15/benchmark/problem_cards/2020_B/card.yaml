@@ -46,7 +46,11 @@ allowed_model_families:
   - monte_carlo  # 随机模拟（Q2）
   # 具体方法选择需题面验证后细化
 
-acceptable_solution_variants: UNKNOWN
+acceptable_solution_variants:
+  - dynamic_programming  # 确定性DP
+  - markov_decision_process  # 随机动态规划（天气随机）
+  - monte_carlo  # 随机模拟（Q2）
+  - nash_equilibrium  # 多玩家博弈均衡（Q3）
 
 key_variables:
   - resource_level  # 资源水平（水/食物/资金）

@@ -1,11 +1,23 @@
 {
   "schema_version": "2.0",
   "name": "CUMCM-Bench-v2",
-  "description": "国赛真题增强版索引：每题含 7 字段金标准（sub_questions / required_deliverables / core_methods / key_variables / key_constraints / evaluation_targets / capability_dimensions / failure_modes）。P15.0 freeze。",
+  "description": "国赛真题增强版索引：每题含金标准字段（sub_questions / required_deliverables / allowed_model_families / acceptable_solution_variants / key_variables / key_constraints / evaluation_targets / capability_dimensions / failure_modes）。采用多解模型原则（multiple acceptable solution families）：allowed_model_families 是唯一评分依据，acceptable_solution_variants 列出可接受的具体算法；historical_core_methods 仅用于追溯，不参与评估。P15.0 freeze。",
   "metadata": {
     "competition": "CUMCM",
     "competition_fullname": "高教社杯全国大学生数学建模竞赛",
-    "years_covered": [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+    "years_covered": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
     "topics_per_year": "3-5",
     "total_problems": 36,
     "source": "core/knowledge/problems/CUMCM-Bench.json + CUMCM-EXAMINER-TRACKER.md",
@@ -16,16 +28,35 @@
     {
       "question_id": "2015_A",
       "year": 2015,
-      "family": ["空间几何-定位"],
+      "family": [
+        "空间几何-定位"
+      ],
       "sub_questions": [
         "Q1: 建立太阳影子长度与时间的关系模型",
         "Q2: 根据影子长度确定地理位置（经度、纬度）"
       ],
-      "required_deliverables": ["太阳高度角模型", "影子长度公式", "经纬度反演算法", "数值结果"],
-      "core_methods": ["astronomical_geometry", "nonlinear_least_squares"],
-      "key_variables": ["solar_altitude", "shadow_length", "latitude", "longitude", "time"],
-      "key_constraints": ["球面三角约束", "日期-时间约束", "地理坐标系统一"],
-      "evaluation_targets": ["影子长度精度", "定位精度"],
+      "required_deliverables": [
+        "太阳高度角模型",
+        "影子长度公式",
+        "经纬度反演算法",
+        "数值结果"
+      ],
+      "key_variables": [
+        "solar_altitude",
+        "shadow_length",
+        "latitude",
+        "longitude",
+        "time"
+      ],
+      "key_constraints": [
+        "球面三角约束",
+        "日期-时间约束",
+        "地理坐标系统一"
+      ],
+      "evaluation_targets": [
+        "影子长度精度",
+        "定位精度"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "medium",
@@ -33,22 +64,63 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-PA-01", "FM-MC-01", "FM-FC-01"],
-      "rationale": "几何建模 + 非线性最小二乘反演，坐标系统一是关键"
+      "failure_modes": [
+        "FM-PA-01",
+        "FM-MC-01",
+        "FM-FC-01"
+      ],
+      "rationale": "几何建模 + 非线性最小二乘反演，坐标系统一是关键",
+      "historical_core_methods": [
+        "astronomical_geometry",
+        "nonlinear_least_squares"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "inverse_problem",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "nonlinear_least_squares",
+        "spherical_trigonometry",
+        "grid_search",
+        "genetic_algorithm"
+      ],
+      "forbidden_misinterpretations": [
+        "multi_criteria_decision",
+        "clustering"
+      ]
     },
     {
       "question_id": "2015_B",
       "year": 2015,
-      "family": ["数据+评价+决策"],
+      "family": [
+        "数据+评价+决策"
+      ],
       "sub_questions": [
         "Q1: 建立出租车供需匹配评价指标体系",
         "Q2: 评价不同城市的出租车资源配置合理性"
       ],
-      "required_deliverables": ["指标体系", "赋权方法", "评价模型", "城市对比结果"],
-      "core_methods": ["supply_demand_analysis", "optimization_allocation"],
-      "key_variables": ["supply_rate", "demand_rate", "dispatch_radius", "matching_efficiency"],
-      "key_constraints": ["城市规模约束", "时间约束", "数据可获取性"],
-      "evaluation_targets": ["指标体系完整性", "评价结果合理性"],
+      "required_deliverables": [
+        "指标体系",
+        "赋权方法",
+        "评价模型",
+        "城市对比结果"
+      ],
+      "key_variables": [
+        "supply_rate",
+        "demand_rate",
+        "dispatch_radius",
+        "matching_efficiency"
+      ],
+      "key_constraints": [
+        "城市规模约束",
+        "时间约束",
+        "数据可获取性"
+      ],
+      "evaluation_targets": [
+        "指标体系完整性",
+        "评价结果合理性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "medium",
@@ -56,22 +128,60 @@
         "solving": "low",
         "validation": "medium"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-02", "FM-VA-01"],
-      "rationale": "指标体系建立是核心，避免纯描述统计"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-02",
+        "FM-VA-01"
+      ],
+      "rationale": "指标体系建立是核心，避免纯描述统计",
+      "historical_core_methods": [
+        "supply_demand_analysis",
+        "optimization_allocation"
+      ],
+      "allowed_model_families": [
+        "multi_criteria_decision",
+        "optimization",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "TOPSIS",
+        "AHP",
+        "entropy_weight",
+        "linear_programming"
+      ],
+      "forbidden_misinterpretations": [
+        "differential_equations_as_primary"
+      ]
     },
     {
       "question_id": "2015_C",
       "year": 2015,
-      "family": ["天文历法"],
+      "family": [
+        "天文历法"
+      ],
       "sub_questions": [
         "Q1: 建立农历日期与月出月落时间的关系模型",
         "Q2: 确定特定诗句描述的日期"
       ],
-      "required_deliverables": ["历法算法模型", "月出月落计算", "日期推算结果"],
-      "core_methods": ["calendar_algorithm", "rule_modeling"],
-      "key_variables": ["lunar_date", "moonrise_time", "moonset_time", "solar_date"],
-      "key_constraints": ["天文参数精度", "历法规则约束"],
-      "evaluation_targets": ["历法计算精度", "日期推算正确性"],
+      "required_deliverables": [
+        "历法算法模型",
+        "月出月落计算",
+        "日期推算结果"
+      ],
+      "key_variables": [
+        "lunar_date",
+        "moonrise_time",
+        "moonset_time",
+        "solar_date"
+      ],
+      "key_constraints": [
+        "天文参数精度",
+        "历法规则约束"
+      ],
+      "evaluation_targets": [
+        "历法计算精度",
+        "日期推算正确性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "low",
@@ -79,23 +189,58 @@
         "solving": "low",
         "validation": "medium"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-01"],
-      "rationale": "历法算法 + 规则建模，天文参数准确性是关键"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-01"
+      ],
+      "rationale": "历法算法 + 规则建模，天文参数准确性是关键",
+      "historical_core_methods": [
+        "calendar_algorithm",
+        "rule_modeling"
+      ],
+      "allowed_model_families": [
+        "rule_based_modeling",
+        "astronomical_calculation"
+      ],
+      "acceptable_solution_variants": [
+        "lunar_calendar_algorithm",
+        "astronomical_ephemeris",
+        "historical_data_validation"
+      ]
     },
     {
       "question_id": "2016_A",
       "year": 2016,
-      "family": ["连续力学/振动"],
+      "family": [
+        "连续力学/振动"
+      ],
       "sub_questions": [
         "Q1: 建立锚链形态的静力学模型",
         "Q2: 确定系泊系统的设计参数",
         "Q3: 分析不同载荷条件下的系统响应"
       ],
-      "required_deliverables": ["力学平衡方程", "锚链形态模型", "参数优化结果", "多工况分析"],
-      "core_methods": ["force_equilibrium", "nonlinear_equations", "parameter_optimization"],
-      "key_variables": ["chain_shape", "tension", "anchor_force", "wind_load", "current_load"],
-      "key_constraints": ["力学平衡约束", "锚链几何约束", "环境载荷约束"],
-      "evaluation_targets": ["力学平衡精度", "参数优化合理性"],
+      "required_deliverables": [
+        "力学平衡方程",
+        "锚链形态模型",
+        "参数优化结果",
+        "多工况分析"
+      ],
+      "key_variables": [
+        "chain_shape",
+        "tension",
+        "anchor_force",
+        "wind_load",
+        "current_load"
+      ],
+      "key_constraints": [
+        "力学平衡约束",
+        "锚链几何约束",
+        "环境载荷约束"
+      ],
+      "evaluation_targets": [
+        "力学平衡精度",
+        "参数优化合理性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -103,22 +248,63 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-03", "FM-FC-02", "FM-SV-01", "FM-VA-02"],
-      "rationale": "力学平衡建模 + 非线性方程组 + 环境载荷，静力学为主"
+      "failure_modes": [
+        "FM-MC-03",
+        "FM-FC-02",
+        "FM-SV-01",
+        "FM-VA-02"
+      ],
+      "rationale": "力学平衡建模 + 非线性方程组 + 环境载荷，静力学为主",
+      "historical_core_methods": [
+        "force_equilibrium",
+        "nonlinear_equations",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "optimization",
+        "mechanical_modeling"
+      ],
+      "acceptable_solution_variants": [
+        "static_equilibrium",
+        "nonlinear_solver",
+        "genetic_algorithm",
+        "finite_element_method"
+      ],
+      "forbidden_misinterpretations": [
+        "time_series_forecasting",
+        "clustering"
+      ]
     },
     {
       "question_id": "2016_B",
       "year": 2016,
-      "family": ["交通/网络"],
+      "family": [
+        "交通/网络"
+      ],
       "sub_questions": [
         "Q1: 建路网通行能力评价模型",
         "Q2: 评估小区开放对道路通行的影响"
       ],
-      "required_deliverables": ["路网模型", "通行能力指标", "开放前后对比分析"],
-      "core_methods": ["traffic_flow_modeling", "simulation_evaluation"],
-      "key_variables": ["road_capacity", "traffic_flow", "intersection_delay", "open_ratio"],
-      "key_constraints": ["路网拓扑约束", "交通流守恒"],
-      "evaluation_targets": ["通行能力计算精度", "对比分析合理性"],
+      "required_deliverables": [
+        "路网模型",
+        "通行能力指标",
+        "开放前后对比分析"
+      ],
+      "key_variables": [
+        "road_capacity",
+        "traffic_flow",
+        "intersection_delay",
+        "open_ratio"
+      ],
+      "key_constraints": [
+        "路网拓扑约束",
+        "交通流守恒"
+      ],
+      "evaluation_targets": [
+        "通行能力计算精度",
+        "对比分析合理性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "medium",
@@ -126,22 +312,58 @@
         "solving": "medium",
         "validation": "medium"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-02", "FM-VA-01"],
-      "rationale": "交通流建模 + 仿真评价，注意开放前后的对照"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-02",
+        "FM-VA-01"
+      ],
+      "rationale": "交通流建模 + 仿真评价，注意开放前后的对照",
+      "historical_core_methods": [
+        "traffic_flow_modeling",
+        "simulation_evaluation"
+      ],
+      "allowed_model_families": [
+        "network_analysis",
+        "simulation",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "traffic_flow_model",
+        "cellular_automata",
+        "agent_based_simulation",
+        "macroscopic_fundamental_diagram"
+      ]
     },
     {
       "question_id": "2016_C",
       "year": 2016,
-      "family": ["预测方法论"],
+      "family": [
+        "预测方法论"
+      ],
       "sub_questions": [
         "Q1: 建立电池放电曲线模型",
         "Q2: 预测电池剩余放电时间"
       ],
-      "required_deliverables": ["回归/时序模型", "误差分析", "预测结果", "置信区间"],
-      "core_methods": ["regression", "time_series"],
-      "key_variables": ["discharge_voltage", "remaining_time", "temperature", "cycle_count"],
-      "key_constraints": ["电池老化非线性", "数据噪声"],
-      "evaluation_targets": ["预测精度", "误差范围合理性"],
+      "required_deliverables": [
+        "回归/时序模型",
+        "误差分析",
+        "预测结果",
+        "置信区间"
+      ],
+      "key_variables": [
+        "discharge_voltage",
+        "remaining_time",
+        "temperature",
+        "cycle_count"
+      ],
+      "key_constraints": [
+        "电池老化非线性",
+        "数据噪声"
+      ],
+      "evaluation_targets": [
+        "预测精度",
+        "误差范围合理性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -149,23 +371,59 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-VA-01", "FM-VA-04"],
-      "rationale": "回归/时序预测 + 误差分析，注意电池老化非线性"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-VA-01",
+        "FM-VA-04"
+      ],
+      "rationale": "回归/时序预测 + 误差分析，注意电池老化非线性",
+      "historical_core_methods": [
+        "regression",
+        "time_series"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "time_series_forecasting",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "nonlinear_regression",
+        "ARIMA",
+        "exponential_smoothing",
+        "LSTM"
+      ]
     },
     {
       "question_id": "2017_A",
       "year": 2017,
-      "family": ["空间几何-定位"],
+      "family": [
+        "空间几何-定位"
+      ],
       "sub_questions": [
         "Q1: 建立CT系统几何标定模型",
         "Q2: 实现Radon变换图像重建",
         "Q3: 分析重建质量与参数的关系"
       ],
-      "required_deliverables": ["几何标定算法", "Radon变换实现", "反投影重建", "质量分析"],
-      "core_methods": ["Radon_transform", "geometric_calibration", "image_reconstruction"],
-      "key_variables": ["projection_angle", "detector_position", "reconstructed_pixel", "sinogram"],
-      "key_constraints": ["投影几何约束", "采样定理约束"],
-      "evaluation_targets": ["标定精度", "重建图像质量"],
+      "required_deliverables": [
+        "几何标定算法",
+        "Radon变换实现",
+        "反投影重建",
+        "质量分析"
+      ],
+      "key_variables": [
+        "projection_angle",
+        "detector_position",
+        "reconstructed_pixel",
+        "sinogram"
+      ],
+      "key_constraints": [
+        "投影几何约束",
+        "采样定理约束"
+      ],
+      "evaluation_targets": [
+        "标定精度",
+        "重建图像质量"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -173,22 +431,59 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-01", "FM-FC-01", "FM-SV-01", "FM-VA-01"],
-      "rationale": "几何标定 + 图像重建算法，Radon变换是核心"
+      "failure_modes": [
+        "FM-MC-01",
+        "FM-FC-01",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "几何标定 + 图像重建算法，Radon变换是核心",
+      "historical_core_methods": [
+        "Radon_transform",
+        "geometric_calibration",
+        "image_reconstruction"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "inverse_problem",
+        "signal_processing"
+      ],
+      "acceptable_solution_variants": [
+        "Radon_transform",
+        "filtered_back_projection",
+        "iterative_reconstruction",
+        "geometric_calibration"
+      ]
     },
     {
       "question_id": "2017_B",
       "year": 2017,
-      "family": ["数据+评价+决策"],
+      "family": [
+        "数据+评价+决策"
+      ],
       "sub_questions": [
         "Q1: 分析众包任务定价的影响因素",
         "Q2: 建立定价优化模型"
       ],
-      "required_deliverables": ["影响因素分析", "回归/分类模型", "定价优化结果"],
-      "core_methods": ["regression", "classification", "pricing_optimization"],
-      "key_variables": ["task_price", "completion_rate", "location", "task_difficulty"],
-      "key_constraints": ["预算约束", "市场均衡约束"],
-      "evaluation_targets": ["定价模型精度", "优化结果合理性"],
+      "required_deliverables": [
+        "影响因素分析",
+        "回归/分类模型",
+        "定价优化结果"
+      ],
+      "key_variables": [
+        "task_price",
+        "completion_rate",
+        "location",
+        "task_difficulty"
+      ],
+      "key_constraints": [
+        "预算约束",
+        "市场均衡约束"
+      ],
+      "evaluation_targets": [
+        "定价模型精度",
+        "优化结果合理性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -196,22 +491,59 @@
         "solving": "medium",
         "validation": "medium"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-02", "FM-VA-01"],
-      "rationale": "回归 + 分类 + 定价优化，注意空间分布特征"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-02",
+        "FM-VA-01"
+      ],
+      "rationale": "回归 + 分类 + 定价优化，注意空间分布特征",
+      "historical_core_methods": [
+        "regression",
+        "classification",
+        "pricing_optimization"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "classification",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "logistic_regression",
+        "random_forest",
+        "XGBoost",
+        "pricing_optimization"
+      ]
     },
     {
       "question_id": "2017_C",
       "year": 2017,
-      "family": ["统计建模"],
+      "family": [
+        "统计建模"
+      ],
       "sub_questions": [
         "Q1: 建立颜色-浓度标定模型",
         "Q2: 根据颜色反演物质浓度"
       ],
-      "required_deliverables": ["色度空间模型", "回归标定", "浓度反演算法", "误差分析"],
-      "core_methods": ["colorimetric_modeling", "regression_calibration"],
-      "key_variables": ["color_value", "concentration", "wavelength", "absorbance"],
-      "key_constraints": ["Beer-Lambert定律", "色彩空间线性化"],
-      "evaluation_targets": ["标定精度", "反演精度"],
+      "required_deliverables": [
+        "色度空间模型",
+        "回归标定",
+        "浓度反演算法",
+        "误差分析"
+      ],
+      "key_variables": [
+        "color_value",
+        "concentration",
+        "wavelength",
+        "absorbance"
+      ],
+      "key_constraints": [
+        "Beer-Lambert定律",
+        "色彩空间线性化"
+      ],
+      "evaluation_targets": [
+        "标定精度",
+        "反演精度"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -219,23 +551,61 @@
         "solving": "low",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-01", "FM-VA-04"],
-      "rationale": "色度建模 + 回归反演，注意色彩空间的线性化转换"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-01",
+        "FM-VA-04"
+      ],
+      "rationale": "色度建模 + 回归反演，注意色彩空间的线性化转换",
+      "historical_core_methods": [
+        "colorimetric_modeling",
+        "regression_calibration"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "statistical_analysis",
+        "inverse_problem"
+      ],
+      "acceptable_solution_variants": [
+        "linear_regression",
+        "partial_least_squares",
+        "principal_component_regression",
+        "support_vector_regression"
+      ]
     },
     {
       "question_id": "2018_A",
       "year": 2018,
-      "family": ["热传导/温度场"],
+      "family": [
+        "热传导/温度场"
+      ],
       "sub_questions": [
         "Q1: 建立多层织物热传导模型",
         "Q2: 确定皮肤烧伤阈值条件",
         "Q3: 优化服装设计参数"
       ],
-      "required_deliverables": ["PDE热传导模型", "参数反演算法", "优化设计", "灵敏度分析"],
-      "core_methods": ["heat_equation_PDE", "parameter_inversion", "optimization"],
-      "key_variables": ["temperature", "thickness", "thermal_conductivity", "burn_threshold"],
-      "key_constraints": ["热传导方程", "多层界面连续性", "边界条件"],
-      "evaluation_targets": ["温度场精度", "参数反演精度", "设计优化合理性"],
+      "required_deliverables": [
+        "PDE热传导模型",
+        "参数反演算法",
+        "优化设计",
+        "灵敏度分析"
+      ],
+      "key_variables": [
+        "temperature",
+        "thickness",
+        "thermal_conductivity",
+        "burn_threshold"
+      ],
+      "key_constraints": [
+        "热传导方程",
+        "多层界面连续性",
+        "边界条件"
+      ],
+      "evaluation_targets": [
+        "温度场精度",
+        "参数反演精度",
+        "设计优化合理性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -243,23 +613,65 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-03", "FM-FC-02", "FM-SV-01", "FM-VA-01"],
-      "rationale": "传热PDE + 参数反演 + 优化，边界条件不可缺失"
+      "failure_modes": [
+        "FM-MC-03",
+        "FM-FC-02",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "传热PDE + 参数反演 + 优化，边界条件不可缺失",
+      "historical_core_methods": [
+        "heat_equation_PDE",
+        "parameter_inversion",
+        "optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "inverse_problem",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "finite_difference_method",
+        "finite_element_method",
+        "Levenberg_Marquardt",
+        "genetic_algorithm"
+      ],
+      "forbidden_misinterpretations": [
+        "multi_criteria_decision"
+      ]
     },
     {
       "question_id": "2018_B",
       "year": 2018,
-      "family": ["离散调度/博弈"],
+      "family": [
+        "离散调度/博弈"
+      ],
       "sub_questions": [
         "Q1: 建立RGV调度优化模型",
         "Q2: 设计动态调度策略",
         "Q3: 分析调度效率与鲁棒性"
       ],
-      "required_deliverables": ["0-1规划模型", "事件驱动仿真", "调度策略", "效率分析"],
-      "core_methods": ["integer_programming", "event-driven_simulation", "rolling_rescheduling"],
-      "key_variables": ["RGV_position", "CNC_status", "processing_time", "waiting_time"],
-      "key_constraints": ["工序约束", "时间窗口约束", "故障容错"],
-      "evaluation_targets": ["调度效率", "鲁棒性"],
+      "required_deliverables": [
+        "0-1规划模型",
+        "事件驱动仿真",
+        "调度策略",
+        "效率分析"
+      ],
+      "key_variables": [
+        "RGV_position",
+        "CNC_status",
+        "processing_time",
+        "waiting_time"
+      ],
+      "key_constraints": [
+        "工序约束",
+        "时间窗口约束",
+        "故障容错"
+      ],
+      "evaluation_targets": [
+        "调度效率",
+        "鲁棒性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "medium",
@@ -267,23 +679,62 @@
         "solving": "high",
         "validation": "medium"
       },
-      "failure_modes": ["FM-MC-03", "FM-SV-01", "FM-SV-02", "FM-VA-01"],
-      "rationale": "0-1规划 + 事件驱动仿真 + 滚动重调度"
+      "failure_modes": [
+        "FM-MC-03",
+        "FM-SV-01",
+        "FM-SV-02",
+        "FM-VA-01"
+      ],
+      "rationale": "0-1规划 + 事件驱动仿真 + 滚动重调度",
+      "historical_core_methods": [
+        "integer_programming",
+        "event-driven_simulation",
+        "rolling_rescheduling"
+      ],
+      "allowed_model_families": [
+        "combinatorial_optimization",
+        "simulation",
+        "scheduling"
+      ],
+      "acceptable_solution_variants": [
+        "integer_programming",
+        "genetic_algorithm",
+        "discrete_event_simulation",
+        "tabu_search"
+      ]
     },
     {
       "question_id": "2018_C",
       "year": 2018,
-      "family": ["数据+评价+决策"],
+      "family": [
+        "数据+评价+决策"
+      ],
       "sub_questions": [
         "Q1: 建立会员画像指标体系",
         "Q2: 聚类细分会员群体",
         "Q3: 制定精准营销策略"
       ],
-      "required_deliverables": ["RFM/RFMT指标体系", "组合赋权", "聚类模型", "营销策略"],
-      "core_methods": ["index_system", "ensemble_weighting", "clustering"],
-      "key_variables": ["recency", "frequency", "monetary", "membership_type"],
-      "key_constraints": ["数据完整性约束", "聚类数选择"],
-      "evaluation_targets": ["指标体系合理性", "聚类效果", "策略针对性"],
+      "required_deliverables": [
+        "RFM/RFMT指标体系",
+        "组合赋权",
+        "聚类模型",
+        "营销策略"
+      ],
+      "key_variables": [
+        "recency",
+        "frequency",
+        "monetary",
+        "membership_type"
+      ],
+      "key_constraints": [
+        "数据完整性约束",
+        "聚类数选择"
+      ],
+      "evaluation_targets": [
+        "指标体系合理性",
+        "聚类效果",
+        "策略针对性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -291,23 +742,62 @@
         "solving": "low",
         "validation": "medium"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-02", "FM-VA-01"],
-      "rationale": "指标体系 + 组合赋权 + 聚类细分，避免仅做描述统计"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-02",
+        "FM-VA-01"
+      ],
+      "rationale": "指标体系 + 组合赋权 + 聚类细分，避免仅做描述统计",
+      "historical_core_methods": [
+        "index_system",
+        "ensemble_weighting",
+        "clustering"
+      ],
+      "allowed_model_families": [
+        "clustering",
+        "multi_criteria_decision",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "kmeans",
+        "RFM_analysis",
+        "entropy_weight",
+        "hierarchical_clustering"
+      ]
     },
     {
       "question_id": "2019_A",
       "year": 2019,
-      "family": ["连续力学/振动"],
+      "family": [
+        "连续力学/振动"
+      ],
       "sub_questions": [
         "Q1: 建立高压油管压力控制的ODE模型",
         "Q2: 确定凸轮驱动参数使压力稳定",
         "Q3: 分析多周期稳定性"
       ],
-      "required_deliverables": ["ODE模型", "数值求解", "参数优化", "稳定性分析"],
-      "core_methods": ["ODE_modeling", "numerical_solution", "parameter_optimization"],
-      "key_variables": ["pressure", "cam_speed", "valve_opening", "fuel_flow"],
-      "key_constraints": ["连续性方程", "压力平衡", "阀门开闭时序"],
-      "evaluation_targets": ["压力稳定精度", "参数优化合理性", "稳定性证明"],
+      "required_deliverables": [
+        "ODE模型",
+        "数值求解",
+        "参数优化",
+        "稳定性分析"
+      ],
+      "key_variables": [
+        "pressure",
+        "cam_speed",
+        "valve_opening",
+        "fuel_flow"
+      ],
+      "key_constraints": [
+        "连续性方程",
+        "压力平衡",
+        "阀门开闭时序"
+      ],
+      "evaluation_targets": [
+        "压力稳定精度",
+        "参数优化合理性",
+        "稳定性证明"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -315,23 +805,63 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-03", "FM-FC-02", "FM-SV-01", "FM-VA-02"],
-      "rationale": "ODE建模 + 数值求解 + 参数寻优，连续性方程是基础"
+      "failure_modes": [
+        "FM-MC-03",
+        "FM-FC-02",
+        "FM-SV-01",
+        "FM-VA-02"
+      ],
+      "rationale": "ODE建模 + 数值求解 + 参数寻优，连续性方程是基础",
+      "historical_core_methods": [
+        "ODE_modeling",
+        "numerical_solution",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "optimization",
+        "numerical_methods"
+      ],
+      "acceptable_solution_variants": [
+        "Runge_Kutta",
+        "finite_difference",
+        "genetic_algorithm",
+        "particle_swarm_optimization"
+      ]
     },
     {
       "question_id": "2019_B",
       "year": 2019,
-      "family": ["离散调度/博弈"],
+      "family": [
+        "离散调度/博弈"
+      ],
       "sub_questions": [
         "Q1: 建立鼓-球碰撞动力学模型",
         "Q2: 研究站位与节奏策略",
         "Q3: 分析周期稳定性"
       ],
-      "required_deliverables": ["多体动力学模型", "事件驱动仿真", "策略优化", "稳定性分析"],
-      "core_methods": ["event-driven_simulation", "periodic_mapping_stability", "parameter_optimization"],
-      "key_variables": ["drum_rotation", "ball_position", "player_stance", "rhythm"],
-      "key_constraints": ["碰撞物理约束", "多体协调约束", "周期边界条件"],
-      "evaluation_targets": ["碰撞精度", "策略有效性", "稳定性"],
+      "required_deliverables": [
+        "多体动力学模型",
+        "事件驱动仿真",
+        "策略优化",
+        "稳定性分析"
+      ],
+      "key_variables": [
+        "drum_rotation",
+        "ball_position",
+        "player_stance",
+        "rhythm"
+      ],
+      "key_constraints": [
+        "碰撞物理约束",
+        "多体协调约束",
+        "周期边界条件"
+      ],
+      "evaluation_targets": [
+        "碰撞精度",
+        "策略有效性",
+        "稳定性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -339,23 +869,63 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-03", "FM-SV-01", "FM-VA-02"],
-      "rationale": "事件驱动仿真 + 周期映射稳定性 + 参数寻优"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-03",
+        "FM-SV-01",
+        "FM-VA-02"
+      ],
+      "rationale": "事件驱动仿真 + 周期映射稳定性 + 参数寻优",
+      "historical_core_methods": [
+        "event-driven_simulation",
+        "periodic_mapping_stability",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "simulation",
+        "differential_equations",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "discrete_event_simulation",
+        "multi_body_dynamics",
+        "Poincare_map",
+        "genetic_algorithm"
+      ]
     },
     {
       "question_id": "2019_C",
       "year": 2019,
-      "family": ["交通/网络"],
+      "family": [
+        "交通/网络"
+      ],
       "sub_questions": [
         "Q1: 建立机场出租车排队模型",
         "Q2: 分析司机决策行为",
         "Q3: 优化调度策略"
       ],
-      "required_deliverables": ["排队论模型", "决策模型", "优化策略", "仿真验证"],
-      "core_methods": ["queuing_analysis", "optimization", "decision_modeling"],
-      "key_variables": ["arrival_rate", "service_rate", "queue_length", "driver_utility"],
-      "key_constraints": ["排队平衡约束", "司机理性约束", "乘客等待时间约束"],
-      "evaluation_targets": ["排队模型精度", "决策合理性", "调度效率"],
+      "required_deliverables": [
+        "排队论模型",
+        "决策模型",
+        "优化策略",
+        "仿真验证"
+      ],
+      "key_variables": [
+        "arrival_rate",
+        "service_rate",
+        "queue_length",
+        "driver_utility"
+      ],
+      "key_constraints": [
+        "排队平衡约束",
+        "司机理性约束",
+        "乘客等待时间约束"
+      ],
+      "evaluation_targets": [
+        "排队模型精度",
+        "决策合理性",
+        "调度效率"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -363,23 +933,63 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-02", "FM-VA-01", "FM-VA-02"],
-      "rationale": "排队分析 + 优化 + 决策，注意司机与乘客的双边匹配"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-02",
+        "FM-VA-01",
+        "FM-VA-02"
+      ],
+      "rationale": "排队分析 + 优化 + 决策，注意司机与乘客的双边匹配",
+      "historical_core_methods": [
+        "queuing_analysis",
+        "optimization",
+        "decision_modeling"
+      ],
+      "allowed_model_families": [
+        "probability_modeling",
+        "optimization",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "queuing_theory",
+        "monte_carlo",
+        "game_theory",
+        "markov_decision_process"
+      ]
     },
     {
       "question_id": "2020_A",
       "year": 2020,
-      "family": ["热传导/温度场"],
+      "family": [
+        "热传导/温度场"
+      ],
       "sub_questions": [
         "Q1: 建立回流焊温度场PDE模型",
         "Q2: 确定各区温度设定参数",
         "Q3: 分析参数灵敏度"
       ],
-      "required_deliverables": ["PDE模型", "数值求解", "参数优化", "灵敏度分析"],
-      "core_methods": ["heat_equation_PDE", "numerical_solution", "parameter_optimization"],
-      "key_variables": ["temperature", "zone_setting", "solder_paste_properties", "conveyor_speed"],
-      "key_constraints": ["热传导方程", "多区温度边界", "工艺约束"],
-      "evaluation_targets": ["温度场精度", "参数优化合理性", "灵敏度完整性"],
+      "required_deliverables": [
+        "PDE模型",
+        "数值求解",
+        "参数优化",
+        "灵敏度分析"
+      ],
+      "key_variables": [
+        "temperature",
+        "zone_setting",
+        "solder_paste_properties",
+        "conveyor_speed"
+      ],
+      "key_constraints": [
+        "热传导方程",
+        "多区温度边界",
+        "工艺约束"
+      ],
+      "evaluation_targets": [
+        "温度场精度",
+        "参数优化合理性",
+        "灵敏度完整性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -387,23 +997,64 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-03", "FM-FC-02", "FM-SV-01", "FM-VA-01"],
-      "rationale": "PDE + 数值求解 + 参数寻优，注意回流焊各区温度设定"
+      "failure_modes": [
+        "FM-MC-03",
+        "FM-FC-02",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "PDE + 数值求解 + 参数寻优，注意回流焊各区温度设定",
+      "historical_core_methods": [
+        "heat_equation_PDE",
+        "numerical_solution",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "optimization",
+        "numerical_methods"
+      ],
+      "acceptable_solution_variants": [
+        "finite_difference_method",
+        "finite_element_method",
+        "genetic_algorithm",
+        "response_surface_method"
+      ]
     },
     {
       "question_id": "2020_B",
       "year": 2020,
-      "family": ["离散调度/博弈"],
+      "family": [
+        "离散调度/博弈"
+      ],
       "sub_questions": [
         "Q1: 建立穿越沙漠的决策模型",
         "Q2: 分析天气随机性的影响",
         "Q3: 比较多策略的收益"
       ],
-      "required_deliverables": ["DP/MDP模型", "博弈分析", "蒙特卡洛模拟", "策略对比"],
-      "core_methods": ["dynamic_programming", "MDP", "game_theory", "Monte_Carlo"],
-      "key_variables": ["resource_level", "weather_state", "position", "speed", "fatigue"],
-      "key_constraints": ["资源消耗约束", "天气随机性", "博弈均衡"],
-      "evaluation_targets": ["决策最优性", "随机性处理合理性", "策略对比公平性"],
+      "required_deliverables": [
+        "DP/MDP模型",
+        "博弈分析",
+        "蒙特卡洛模拟",
+        "策略对比"
+      ],
+      "key_variables": [
+        "resource_level",
+        "weather_state",
+        "position",
+        "speed",
+        "fatigue"
+      ],
+      "key_constraints": [
+        "资源消耗约束",
+        "天气随机性",
+        "博弈均衡"
+      ],
+      "evaluation_targets": [
+        "决策最优性",
+        "随机性处理合理性",
+        "策略对比公平性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -411,23 +1062,66 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-03", "FM-SV-02", "FM-VA-01", "FM-VA-02"],
-      "rationale": "动态规划/MDP + 博弈 + 蒙特卡洛，注意天气随机性建模"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-03",
+        "FM-SV-02",
+        "FM-VA-01",
+        "FM-VA-02"
+      ],
+      "rationale": "动态规划/MDP + 博弈 + 蒙特卡洛，注意天气随机性建模",
+      "historical_core_methods": [
+        "dynamic_programming",
+        "MDP",
+        "game_theory",
+        "Monte_Carlo"
+      ],
+      "allowed_model_families": [
+        "combinatorial_optimization",
+        "probability_modeling",
+        "simulation",
+        "game_theory"
+      ],
+      "acceptable_solution_variants": [
+        "dynamic_programming",
+        "markov_decision_process",
+        "monte_carlo",
+        "nash_equilibrium"
+      ]
     },
     {
       "question_id": "2020_C",
       "year": 2020,
-      "family": ["数据+评价+决策"],
+      "family": [
+        "数据+评价+决策"
+      ],
       "sub_questions": [
         "Q1: 建立信贷风险评价指标体系",
         "Q2: 建立违约概率预测模型",
         "Q3: 制定客户分层与信贷策略"
       ],
-      "required_deliverables": ["评价指标体系", "Logit/回归模型", "聚类分层", "策略建议"],
-      "core_methods": ["evaluation_index", "regression", "clustering", "sensitivity"],
-      "key_variables": ["default_probability", "credit_score", "customer_segment", "loan_amount"],
-      "key_constraints": ["违约概率[0,1]约束", "风险容忍约束", "监管约束"],
-      "evaluation_targets": ["预测精度", "分层合理性", "策略可行性"],
+      "required_deliverables": [
+        "评价指标体系",
+        "Logit/回归模型",
+        "聚类分层",
+        "策略建议"
+      ],
+      "key_variables": [
+        "default_probability",
+        "credit_score",
+        "customer_segment",
+        "loan_amount"
+      ],
+      "key_constraints": [
+        "违约概率[0,1]约束",
+        "风险容忍约束",
+        "监管约束"
+      ],
+      "evaluation_targets": [
+        "预测精度",
+        "分层合理性",
+        "策略可行性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -435,23 +1129,64 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-02", "FM-VA-01", "FM-VA-04"],
-      "rationale": "综合评价 + 回归 + 聚类 + 灵敏度，注意违约概率的Logit变换"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-02",
+        "FM-VA-01",
+        "FM-VA-04"
+      ],
+      "rationale": "综合评价 + 回归 + 聚类 + 灵敏度，注意违约概率的Logit变换",
+      "historical_core_methods": [
+        "evaluation_index",
+        "regression",
+        "clustering",
+        "sensitivity"
+      ],
+      "allowed_model_families": [
+        "classification",
+        "regression",
+        "multi_criteria_decision",
+        "clustering"
+      ],
+      "acceptable_solution_variants": [
+        "logistic_regression",
+        "random_forest",
+        "TOPSIS",
+        "kmeans"
+      ]
     },
     {
       "question_id": "2021_A",
       "year": 2021,
-      "family": ["定日镜/聚光"],
+      "family": [
+        "定日镜/聚光"
+      ],
       "sub_questions": [
         "Q1: 建立FAST反射面调节的几何模型",
         "Q2: 确定促动器行程与反射面形状的关系",
         "Q3: 优化反射面调节方案"
       ],
-      "required_deliverables": ["空间几何模型", "最小二乘拟合", "优化算法", "精度分析"],
-      "core_methods": ["spatial_geometry", "least_squares_fitting", "numerical_optimization"],
-      "key_variables": ["actuator_length", "surface_shape", "focus_point", "illumination_efficiency"],
-      "key_constraints": ["抛物面几何约束", "促动器行程约束", "精度要求"],
-      "evaluation_targets": ["拟合精度", "调节方案可行性"],
+      "required_deliverables": [
+        "空间几何模型",
+        "最小二乘拟合",
+        "优化算法",
+        "精度分析"
+      ],
+      "key_variables": [
+        "actuator_length",
+        "surface_shape",
+        "focus_point",
+        "illumination_efficiency"
+      ],
+      "key_constraints": [
+        "抛物面几何约束",
+        "促动器行程约束",
+        "精度要求"
+      ],
+      "evaluation_targets": [
+        "拟合精度",
+        "调节方案可行性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -459,23 +1194,62 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-01", "FM-FC-01", "FM-SV-01", "FM-VA-01"],
-      "rationale": "几何建模 + 最小二乘拟合 + 数值优化，空间坐标系建立是基础"
+      "failure_modes": [
+        "FM-MC-01",
+        "FM-FC-01",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "几何建模 + 最小二乘拟合 + 数值优化，空间坐标系建立是基础",
+      "historical_core_methods": [
+        "spatial_geometry",
+        "least_squares_fitting",
+        "numerical_optimization"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "optimization",
+        "regression"
+      ],
+      "acceptable_solution_variants": [
+        "least_squares",
+        "paraboloid_fitting",
+        "genetic_algorithm",
+        "gradient_descent"
+      ]
     },
     {
       "question_id": "2021_B",
       "year": 2021,
-      "family": ["实验设计"],
+      "family": [
+        "实验设计"
+      ],
       "sub_questions": [
         "Q1: 分析催化剂组合对转化率与选择性的影响",
         "Q2: 建立回归模型",
         "Q3: 优化催化剂配比"
       ],
-      "required_deliverables": ["因子分析", "回归模型", "优化结果", "实验验证"],
-      "core_methods": ["regression", "factor_analysis", "experiment_optimization"],
-      "key_variables": ["conversion_rate", "selectivity", "catalyst_ratio", "temperature"],
-      "key_constraints": ["实验条件约束", "催化剂交互效应", "成本约束"],
-      "evaluation_targets": ["模型拟合度", "优化结果可验证性"],
+      "required_deliverables": [
+        "因子分析",
+        "回归模型",
+        "优化结果",
+        "实验验证"
+      ],
+      "key_variables": [
+        "conversion_rate",
+        "selectivity",
+        "catalyst_ratio",
+        "temperature"
+      ],
+      "key_constraints": [
+        "实验条件约束",
+        "催化剂交互效应",
+        "成本约束"
+      ],
+      "evaluation_targets": [
+        "模型拟合度",
+        "优化结果可验证性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -483,23 +1257,62 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-VA-01", "FM-VA-04"],
-      "rationale": "回归 + 因子分析 + 实验优化，注意催化剂组合的交互效应"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-VA-01",
+        "FM-VA-04"
+      ],
+      "rationale": "回归 + 因子分析 + 实验优化，注意催化剂组合的交互效应",
+      "historical_core_methods": [
+        "regression",
+        "factor_analysis",
+        "experiment_optimization"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "statistical_analysis",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "multiple_linear_regression",
+        "response_surface_method",
+        "ANOVA",
+        "genetic_algorithm"
+      ]
     },
     {
       "question_id": "2021_C",
       "year": 2021,
-      "family": ["供应链/运营"],
+      "family": [
+        "供应链/运营"
+      ],
       "sub_questions": [
         "Q1: 建立原材料订购优化模型",
         "Q2: 设计运输调度方案",
         "Q3: 联合优化订购与运输"
       ],
-      "required_deliverables": ["整数/线性规划", "预测模型", "调度方案", "联合优化"],
-      "core_methods": ["integer_programming", "linear_programming", "forecasting", "scheduling"],
-      "key_variables": ["order_quantity", "transport_cost", "demand_forecast", "inventory_level"],
-      "key_constraints": ["供需平衡约束", "运输能力约束", "库存容量约束"],
-      "evaluation_targets": ["成本最优性", "供需匹配度", "调度可行性"],
+      "required_deliverables": [
+        "整数/线性规划",
+        "预测模型",
+        "调度方案",
+        "联合优化"
+      ],
+      "key_variables": [
+        "order_quantity",
+        "transport_cost",
+        "demand_forecast",
+        "inventory_level"
+      ],
+      "key_constraints": [
+        "供需平衡约束",
+        "运输能力约束",
+        "库存容量约束"
+      ],
+      "evaluation_targets": [
+        "成本最优性",
+        "供需匹配度",
+        "调度可行性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -507,23 +1320,63 @@
         "solving": "high",
         "validation": "medium"
       },
-      "failure_modes": ["FM-MC-03", "FM-SV-01", "FM-VA-01"],
-      "rationale": "整数/线性规划 + 预测 + 调度，注意订购与运输的联合优化"
+      "failure_modes": [
+        "FM-MC-03",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "整数/线性规划 + 预测 + 调度，注意订购与运输的联合优化",
+      "historical_core_methods": [
+        "integer_programming",
+        "linear_programming",
+        "forecasting",
+        "scheduling"
+      ],
+      "allowed_model_families": [
+        "combinatorial_optimization",
+        "time_series_forecasting",
+        "scheduling"
+      ],
+      "acceptable_solution_variants": [
+        "integer_programming",
+        "linear_programming",
+        "ARIMA",
+        "genetic_algorithm"
+      ]
     },
     {
       "question_id": "2022_A",
       "year": 2022,
-      "family": ["连续力学/振动"],
+      "family": [
+        "连续力学/振动"
+      ],
       "sub_questions": [
         "Q1: 建立波浪能装置的振动力学模型",
         "Q2: 优化结构参数使输出功率最大",
         "Q3: 分析能量转化效率"
       ],
-      "required_deliverables": ["振动动力学模型", "数值求解", "参数优化", "效率分析"],
-      "core_methods": ["vibration_dynamics", "numerical_solution", "parameter_optimization"],
-      "key_variables": ["wave_height", "device_displacement", "power_output", "damping_coefficient"],
-      "key_constraints": ["振动力学方程", "流体-结构耦合", "能量守恒"],
-      "evaluation_targets": ["动力学精度", "功率最大化", "效率合理性"],
+      "required_deliverables": [
+        "振动动力学模型",
+        "数值求解",
+        "参数优化",
+        "效率分析"
+      ],
+      "key_variables": [
+        "wave_height",
+        "device_displacement",
+        "power_output",
+        "damping_coefficient"
+      ],
+      "key_constraints": [
+        "振动力学方程",
+        "流体-结构耦合",
+        "能量守恒"
+      ],
+      "evaluation_targets": [
+        "动力学精度",
+        "功率最大化",
+        "效率合理性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -531,23 +1384,61 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-02", "FM-SV-01", "FM-VA-01"],
-      "rationale": "振动力学建模 + 数值求解 + 参数优化，注意流体-结构耦合"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-02",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "振动力学建模 + 数值求解 + 参数优化，注意流体-结构耦合",
+      "historical_core_methods": [
+        "vibration_dynamics",
+        "numerical_solution",
+        "parameter_optimization"
+      ],
+      "allowed_model_families": [
+        "differential_equations",
+        "optimization",
+        "mechanical_modeling"
+      ],
+      "acceptable_solution_variants": [
+        "Runge_Kutta",
+        "finite_element_method",
+        "genetic_algorithm",
+        "harmonic_balance"
+      ]
     },
     {
       "question_id": "2022_B",
       "year": 2022,
-      "family": ["定日镜/聚光"],
+      "family": [
+        "定日镜/聚光"
+      ],
       "sub_questions": [
         "Q1: 建立纯方位无源定位的几何模型",
         "Q2: 设计无人机编队定位策略",
         "Q3: 分析定位精度与编队构型的关系"
       ],
-      "required_deliverables": ["几何定位模型", "编队构型优化", "精度分析"],
-      "core_methods": ["geometric_positioning", "numerical_optimization"],
-      "key_variables": ["bearing_angle", "uav_position", "formation_geometry", "positioning_error"],
-      "key_constraints": ["纯方位约束", "编队协同约束", "通信约束"],
-      "evaluation_targets": ["定位精度", "编队效率"],
+      "required_deliverables": [
+        "几何定位模型",
+        "编队构型优化",
+        "精度分析"
+      ],
+      "key_variables": [
+        "bearing_angle",
+        "uav_position",
+        "formation_geometry",
+        "positioning_error"
+      ],
+      "key_constraints": [
+        "纯方位约束",
+        "编队协同约束",
+        "通信约束"
+      ],
+      "evaluation_targets": [
+        "定位精度",
+        "编队效率"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "medium",
@@ -555,23 +1446,60 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-03", "FM-VA-01"],
-      "rationale": "几何建模 + 数值优化，注意多无人机协同定位的约束条件"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-03",
+        "FM-VA-01"
+      ],
+      "rationale": "几何建模 + 数值优化，注意多无人机协同定位的约束条件",
+      "historical_core_methods": [
+        "geometric_positioning",
+        "numerical_optimization"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "optimization",
+        "inverse_problem"
+      ],
+      "acceptable_solution_variants": [
+        "triangulation",
+        "least_squares",
+        "genetic_algorithm",
+        "particle_filter"
+      ]
     },
     {
       "question_id": "2022_C",
       "year": 2022,
-      "family": ["数据+评价+决策"],
+      "family": [
+        "数据+评价+决策"
+      ],
       "sub_questions": [
         "Q1: 对古代玻璃制品进行聚类分析",
         "Q2: 建立分类判别模型",
         "Q3: 分析风化因素的影响"
       ],
-      "required_deliverables": ["PCA降维", "聚类模型", "判别分析", "统计检验"],
-      "core_methods": ["clustering", "discriminant_analysis", "PCA", "statistical_analysis"],
-      "key_variables": ["chemical_composition", "weathering_level", "period", "origin"],
-      "key_constraints": ["高维小样本约束", "统计前提约束"],
-      "evaluation_targets": ["聚类效果", "判别精度", "统计显著性"],
+      "required_deliverables": [
+        "PCA降维",
+        "聚类模型",
+        "判别分析",
+        "统计检验"
+      ],
+      "key_variables": [
+        "chemical_composition",
+        "weathering_level",
+        "period",
+        "origin"
+      ],
+      "key_constraints": [
+        "高维小样本约束",
+        "统计前提约束"
+      ],
+      "evaluation_targets": [
+        "聚类效果",
+        "判别精度",
+        "统计显著性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -579,23 +1507,63 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-VA-01", "FM-VA-04"],
-      "rationale": "聚类 + 判别 + 主成分 + 统计分析，注意高维小样本特征"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-VA-01",
+        "FM-VA-04"
+      ],
+      "rationale": "聚类 + 判别 + 主成分 + 统计分析，注意高维小样本特征",
+      "historical_core_methods": [
+        "clustering",
+        "discriminant_analysis",
+        "PCA",
+        "statistical_analysis"
+      ],
+      "allowed_model_families": [
+        "clustering",
+        "classification",
+        "statistical_analysis",
+        "dimensionality_reduction"
+      ],
+      "acceptable_solution_variants": [
+        "kmeans",
+        "LDA",
+        "PCA",
+        "random_forest"
+      ]
     },
     {
       "question_id": "2023_A",
       "year": 2023,
-      "family": ["定日镜/聚光"],
+      "family": [
+        "定日镜/聚光"
+      ],
       "sub_questions": [
         "Q1: 建定定日镜聚光效率模型",
         "Q2: 优化镜场布局",
         "Q3: 分析遮挡与阴影影响"
       ],
-      "required_deliverables": ["几何建模", "数值优化", "仿真", "阴影分析"],
-      "core_methods": ["geometric_modeling", "numerical_optimization", "simulation"],
-      "key_variables": ["mirror_position", "sun_angle", "efficiency", "shadow_ratio"],
-      "key_constraints": ["几何光学约束", "镜场边界约束", "效率目标"],
-      "evaluation_targets": ["效率优化结果", "阴影分析精度"],
+      "required_deliverables": [
+        "几何建模",
+        "数值优化",
+        "仿真",
+        "阴影分析"
+      ],
+      "key_variables": [
+        "mirror_position",
+        "sun_angle",
+        "efficiency",
+        "shadow_ratio"
+      ],
+      "key_constraints": [
+        "几何光学约束",
+        "镜场边界约束",
+        "效率目标"
+      ],
+      "evaluation_targets": [
+        "效率优化结果",
+        "阴影分析精度"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -603,23 +1571,61 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-03", "FM-FC-01", "FM-SV-02", "FM-VA-01"],
-      "rationale": "几何建模 + 数值优化 + 仿真，注意遮挡与阴影分析"
+      "failure_modes": [
+        "FM-MC-03",
+        "FM-FC-01",
+        "FM-SV-02",
+        "FM-VA-01"
+      ],
+      "rationale": "几何建模 + 数值优化 + 仿真，注意遮挡与阴影分析",
+      "historical_core_methods": [
+        "geometric_modeling",
+        "numerical_optimization",
+        "simulation"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "optimization",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "ray_tracing",
+        "genetic_algorithm",
+        "monte_carlo",
+        "gradient_based_optimization"
+      ]
     },
     {
       "question_id": "2023_B",
       "year": 2023,
-      "family": ["空间几何-定位"],
+      "family": [
+        "空间几何-定位"
+      ],
       "sub_questions": [
         "Q1: 建立多波束测深覆盖宽度模型",
         "Q2: 设计测线布设方案",
         "Q3: 分析海底地形对覆盖的影响"
       ],
-      "required_deliverables": ["几何计算模型", "测线优化", "地形适应分析"],
-      "core_methods": ["geometric_calculation", "numerical_solution"],
-      "key_variables": ["beam_width", "sea_depth", "coverage_width", "line_spacing"],
-      "key_constraints": ["水深约束", "覆盖连续性约束", "测线不交叉"],
-      "evaluation_targets": ["覆盖精度", "测线效率"],
+      "required_deliverables": [
+        "几何计算模型",
+        "测线优化",
+        "地形适应分析"
+      ],
+      "key_variables": [
+        "beam_width",
+        "sea_depth",
+        "coverage_width",
+        "line_spacing"
+      ],
+      "key_constraints": [
+        "水深约束",
+        "覆盖连续性约束",
+        "测线不交叉"
+      ],
+      "evaluation_targets": [
+        "覆盖精度",
+        "测线效率"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -627,23 +1633,61 @@
         "solving": "medium",
         "validation": "medium"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-01", "FM-VA-01"],
-      "rationale": "几何计算 + 数值求解，注意海底地形对覆盖宽度的影响"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-01",
+        "FM-VA-01"
+      ],
+      "rationale": "几何计算 + 数值求解，注意海底地形对覆盖宽度的影响",
+      "historical_core_methods": [
+        "geometric_calculation",
+        "numerical_solution"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "optimization",
+        "numerical_methods"
+      ],
+      "acceptable_solution_variants": [
+        "coverage_optimization",
+        "genetic_algorithm",
+        "terrain_modeling",
+        "spiral_survey_pattern"
+      ]
     },
     {
       "question_id": "2023_C",
       "year": 2023,
-      "family": ["数据+评价+决策"],
+      "family": [
+        "数据+评价+决策"
+      ],
       "sub_questions": [
         "Q1: 分析蔬菜销售数据的时间效应与分布类型",
         "Q2: 建立自动定价模型",
         "Q3: 建立补货决策模型"
       ],
-      "required_deliverables": ["数据清洗", "分布拟合", "时间序列", "定价+补货联合优化"],
-      "core_methods": ["data_cleaning", "distribution_fitting", "time_series", "optimization"],
-      "key_variables": ["sales_volume", "price", "spoilage_rate", "reorder_point"],
-      "key_constraints": ["生鲜损耗约束", "需求不确定性", "成本收益约束"],
-      "evaluation_targets": ["分布拟合精度", "定价合理性", "补货策略可行性"],
+      "required_deliverables": [
+        "数据清洗",
+        "分布拟合",
+        "时间序列",
+        "定价+补货联合优化"
+      ],
+      "key_variables": [
+        "sales_volume",
+        "price",
+        "spoilage_rate",
+        "reorder_point"
+      ],
+      "key_constraints": [
+        "生鲜损耗约束",
+        "需求不确定性",
+        "成本收益约束"
+      ],
+      "evaluation_targets": [
+        "分布拟合精度",
+        "定价合理性",
+        "补货策略可行性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -651,13 +1695,38 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-01", "FM-VA-01", "FM-VA-04"],
-      "rationale": "数据清洗 + 分布拟合 + 时间序列 + 联合优化，注意机理分析融合"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-01",
+        "FM-VA-01",
+        "FM-VA-04"
+      ],
+      "rationale": "数据清洗 + 分布拟合 + 时间序列 + 联合优化，注意机理分析融合",
+      "historical_core_methods": [
+        "data_cleaning",
+        "distribution_fitting",
+        "time_series",
+        "optimization"
+      ],
+      "allowed_model_families": [
+        "time_series_forecasting",
+        "optimization",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "ARIMA",
+        "newsboy_model",
+        "stochastic_optimization",
+        "LSTM"
+      ]
     },
     {
       "question_id": "2024_A",
       "year": 2024,
-      "family": ["几何运动", "综合"],
+      "family": [
+        "几何运动",
+        "综合"
+      ],
       "sub_questions": [
         "Q1: 300s时龙头把手位置坐标",
         "Q2: 碰撞检测（螺线进出碰撞时间）",
@@ -665,11 +1734,29 @@
         "Q4: 进入与盘出的螺距变化方案",
         "Q5: 速度控制（龙头匀速条件下各把手最大速度）"
       ],
-      "required_deliverables": ["运动学模型", "碰撞检测算法", "螺距优化", "数值结果"],
-      "core_methods": ["kinematics", "geometric_modeling", "numerical_solution"],
-      "key_variables": ["head_position", "collision_time", "pitch", "speed"],
-      "key_constraints": ["螺线方程约束", "把手间距约束", "龙头匀速约束"],
-      "evaluation_targets": ["坐标精度", "碰撞时间精度", "螺距最小化", "速度合理性"],
+      "required_deliverables": [
+        "运动学模型",
+        "碰撞检测算法",
+        "螺距优化",
+        "数值结果"
+      ],
+      "key_variables": [
+        "head_position",
+        "collision_time",
+        "pitch",
+        "speed"
+      ],
+      "key_constraints": [
+        "螺线方程约束",
+        "把手间距约束",
+        "龙头匀速约束"
+      ],
+      "evaluation_targets": [
+        "坐标精度",
+        "碰撞时间精度",
+        "螺距最小化",
+        "速度合理性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "medium",
@@ -677,23 +1764,67 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-03", "FM-FC-03", "FM-VA-01"],
-      "rationale": "五问递进，几何运动建模需要精确螺线参数化"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-03",
+        "FM-FC-03",
+        "FM-VA-01"
+      ],
+      "rationale": "五问递进，几何运动建模需要精确螺线参数化",
+      "historical_core_methods": [
+        "kinematics",
+        "geometric_modeling",
+        "numerical_solution"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "differential_equations",
+        "optimization",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "multi_body_dynamics",
+        "spiral_geometry",
+        "collision_detection",
+        "constrained_optimization"
+      ],
+      "forbidden_misinterpretations": [
+        "multi_criteria_decision",
+        "clustering"
+      ]
     },
     {
       "question_id": "2024_B",
       "year": 2024,
-      "family": ["离散调度/博弈"],
+      "family": [
+        "离散调度/博弈"
+      ],
       "sub_questions": [
         "Q1: 建立生产决策的概率模型",
         "Q2: 确定最优抽样检验策略",
         "Q3: 分析成本权衡"
       ],
-      "required_deliverables": ["概率决策模型", "优化算法", "灵敏度分析", "成本分析"],
-      "core_methods": ["probabilistic_decision", "optimization", "sensitivity"],
-      "key_variables": ["defect_rate", "inspection_cost", "rework_cost", "sample_size"],
-      "key_constraints": ["质量约束", "成本预算约束", "概率约束"],
-      "evaluation_targets": ["决策最优性", "成本合理性"],
+      "required_deliverables": [
+        "概率决策模型",
+        "优化算法",
+        "灵敏度分析",
+        "成本分析"
+      ],
+      "key_variables": [
+        "defect_rate",
+        "inspection_cost",
+        "rework_cost",
+        "sample_size"
+      ],
+      "key_constraints": [
+        "质量约束",
+        "成本预算约束",
+        "概率约束"
+      ],
+      "evaluation_targets": [
+        "决策最优性",
+        "成本合理性"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -701,23 +1832,60 @@
         "solving": "medium",
         "validation": "medium"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-02", "FM-VA-01"],
-      "rationale": "概率决策 + 优化 + 灵敏度，注意抽样检验的统计基础"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-02",
+        "FM-VA-01"
+      ],
+      "rationale": "概率决策 + 优化 + 灵敏度，注意抽样检验的统计基础",
+      "historical_core_methods": [
+        "probabilistic_decision",
+        "optimization",
+        "sensitivity"
+      ],
+      "allowed_model_families": [
+        "probability_modeling",
+        "optimization",
+        "statistical_analysis"
+      ],
+      "acceptable_solution_variants": [
+        "bayesian_decision",
+        "expected_value_optimization",
+        "monte_carlo",
+        "sensitivity_analysis"
+      ]
     },
     {
       "question_id": "2024_C",
       "year": 2024,
-      "family": ["供应链/运营"],
+      "family": [
+        "供应链/运营"
+      ],
       "sub_questions": [
         "Q1: 建立耕地轮作优化模型",
         "Q2: 制定农产品销售策略",
         "Q3: 多目标利润优化"
       ],
-      "required_deliverables": ["线性/整数规划", "多目标优化", "不确定性分析"],
-      "core_methods": ["linear_programming", "integer_programming", "multi-objective"],
-      "key_variables": ["crop_type", "land_area", "profit", "market_price"],
-      "key_constraints": ["耕地面积约束", "轮作周期约束", "市场供需约束"],
-      "evaluation_targets": ["利润最优性", "约束满足度"],
+      "required_deliverables": [
+        "线性/整数规划",
+        "多目标优化",
+        "不确定性分析"
+      ],
+      "key_variables": [
+        "crop_type",
+        "land_area",
+        "profit",
+        "market_price"
+      ],
+      "key_constraints": [
+        "耕地面积约束",
+        "轮作周期约束",
+        "市场供需约束"
+      ],
+      "evaluation_targets": [
+        "利润最优性",
+        "约束满足度"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -725,23 +1893,61 @@
         "solving": "high",
         "validation": "medium"
       },
-      "failure_modes": ["FM-MC-03", "FM-SV-01", "FM-VA-01"],
-      "rationale": "线性/整数规划 + 多目标优化，注意轮作周期约束"
+      "failure_modes": [
+        "FM-MC-03",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "线性/整数规划 + 多目标优化，注意轮作周期约束",
+      "historical_core_methods": [
+        "linear_programming",
+        "integer_programming",
+        "multi-objective"
+      ],
+      "allowed_model_families": [
+        "combinatorial_optimization",
+        "multi_criteria_decision",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "linear_programming",
+        "integer_programming",
+        "NSGA_II",
+        "genetic_algorithm"
+      ]
     },
     {
       "question_id": "2024_E",
       "year": 2024,
-      "family": ["交通/网络"],
+      "family": [
+        "交通/网络"
+      ],
       "sub_questions": [
         "Q1: 建立交通流模型",
         "Q2: 设计信号管控方案",
         "Q3: 评估通行效率"
       ],
-      "required_deliverables": ["交通流模型", "信号优化", "仿真评估", "效率分析"],
-      "core_methods": ["traffic_flow_modeling", "optimization", "simulation"],
-      "key_variables": ["traffic_density", "signal_timing", "throughput", "delay"],
-      "key_constraints": ["交通流守恒", "信号周期约束", "容量约束"],
-      "evaluation_targets": ["通行效率提升", "延误减少"],
+      "required_deliverables": [
+        "交通流模型",
+        "信号优化",
+        "仿真评估",
+        "效率分析"
+      ],
+      "key_variables": [
+        "traffic_density",
+        "signal_timing",
+        "throughput",
+        "delay"
+      ],
+      "key_constraints": [
+        "交通流守恒",
+        "信号周期约束",
+        "容量约束"
+      ],
+      "evaluation_targets": [
+        "通行效率提升",
+        "延误减少"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "medium",
@@ -749,13 +1955,36 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-PA-02", "FM-MC-02", "FM-VA-01", "FM-VA-02"],
-      "rationale": "交通流建模 + 优化 + 仿真，注意多目标权衡"
+      "failure_modes": [
+        "FM-PA-02",
+        "FM-MC-02",
+        "FM-VA-01",
+        "FM-VA-02"
+      ],
+      "rationale": "交通流建模 + 优化 + 仿真，注意多目标权衡",
+      "historical_core_methods": [
+        "traffic_flow_modeling",
+        "optimization",
+        "simulation"
+      ],
+      "allowed_model_families": [
+        "network_analysis",
+        "simulation",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "traffic_flow_model",
+        "cellular_automata",
+        "signal_timing_optimization",
+        "agent_based_simulation"
+      ]
     },
     {
       "question_id": "2025_A",
       "year": 2025,
-      "family": ["定日镜/聚光"],
+      "family": [
+        "定日镜/聚光"
+      ],
       "sub_questions": [
         "Q1: 建导弹/无人机/烟幕弹运动模型",
         "Q2: 确定最佳飞行方向/速度/投放与起爆时间",
@@ -763,11 +1992,28 @@
         "Q4: 3机运动模型及协同施放策略",
         "Q5: 模型及策略求解分析"
       ],
-      "required_deliverables": ["运动学模型", "烟幕遮蔽判别", "协同策略", "算法复杂性分析"],
-      "core_methods": ["kinematics", "geometric_shielding", "optimization", "simulation"],
-      "key_variables": ["missile_position", "uav_position", "smoke_position", "shielding_duration"],
-      "key_constraints": ["运动学约束", "烟幕扩散约束", "协同时间约束"],
-      "evaluation_targets": ["遮蔽时长", "协同效果", "算法效率"],
+      "required_deliverables": [
+        "运动学模型",
+        "烟幕遮蔽判别",
+        "协同策略",
+        "算法复杂性分析"
+      ],
+      "key_variables": [
+        "missile_position",
+        "uav_position",
+        "smoke_position",
+        "shielding_duration"
+      ],
+      "key_constraints": [
+        "运动学约束",
+        "烟幕扩散约束",
+        "协同时间约束"
+      ],
+      "evaluation_targets": [
+        "遮蔽时长",
+        "协同效果",
+        "算法效率"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -775,23 +2021,65 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-PA-01", "FM-MC-03", "FM-FC-03", "FM-SV-01", "FM-VA-01"],
-      "rationale": "运动学 + 几何遮蔽 + 协同优化，目标需考虑圆柱体而非点"
+      "failure_modes": [
+        "FM-PA-01",
+        "FM-MC-03",
+        "FM-FC-03",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "运动学 + 几何遮蔽 + 协同优化，目标需考虑圆柱体而非点",
+      "historical_core_methods": [
+        "kinematics",
+        "geometric_shielding",
+        "optimization",
+        "simulation"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "differential_equations",
+        "optimization",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "projectile_motion",
+        "collision_avoidance",
+        "genetic_algorithm",
+        "monte_carlo"
+      ]
     },
     {
       "question_id": "2025_B",
       "year": 2025,
-      "family": ["光学-反演"],
+      "family": [
+        "光学-反演"
+      ],
       "sub_questions": [
         "Q1: 建立红外干涉测厚模型",
         "Q2: 设计算法确定外延层厚度",
         "Q3: 分析多光束干涉条件"
       ],
-      "required_deliverables": ["光学干涉模型", "拟合反演算法", "可靠性分析"],
-      "core_methods": ["optical_interference_modeling", "fitting_inversion", "numerical_solution"],
-      "key_variables": ["thickness", "refractive_index", "wavelength", "interference_pattern"],
-      "key_constraints": ["光学路径约束", "折射率与波长相关", "多光束干涉条件"],
-      "evaluation_targets": ["厚度精度", "算法鲁棒性", "可靠性"],
+      "required_deliverables": [
+        "光学干涉模型",
+        "拟合反演算法",
+        "可靠性分析"
+      ],
+      "key_variables": [
+        "thickness",
+        "refractive_index",
+        "wavelength",
+        "interference_pattern"
+      ],
+      "key_constraints": [
+        "光学路径约束",
+        "折射率与波长相关",
+        "多光束干涉条件"
+      ],
+      "evaluation_targets": [
+        "厚度精度",
+        "算法鲁棒性",
+        "可靠性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -799,24 +2087,64 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-01", "FM-VA-01", "FM-VA-04"],
-      "rationale": "光学干涉建模 + 拟合反演，折射率须与波长相关"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-01",
+        "FM-VA-01",
+        "FM-VA-04"
+      ],
+      "rationale": "光学干涉建模 + 拟合反演，折射率须与波长相关",
+      "historical_core_methods": [
+        "optical_interference_modeling",
+        "fitting_inversion",
+        "numerical_solution"
+      ],
+      "allowed_model_families": [
+        "geometric_modeling",
+        "inverse_problem",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "multi_beam_interference",
+        "Levenberg_Marquardt",
+        "nonlinear_fitting",
+        "spectral_analysis"
+      ]
     },
     {
       "question_id": "2025_C",
       "year": 2025,
-      "family": ["数据+评价+决策"],
+      "family": [
+        "数据+评价+决策"
+      ],
       "sub_questions": [
         "Q1: 建立Y染色体浓度与孕周的关系模型",
         "Q2: 确定NIPT最佳检测时点",
         "Q3: 建立胎儿异常判定模型",
         "Q4: BMI分组与多因素分析"
       ],
-      "required_deliverables": ["混合效应模型", "Logit回归", "优化分组", "分类模型"],
-      "core_methods": ["mixed_effects_model", "logit_regression", "optimization_grouping", "classification"],
-      "key_variables": ["y_chromosome_concentration", "gestational_age", "bmi", "fetal_status"],
-      "key_constraints": ["重复测量数据约束", "[0,1]比例数据约束", "临床合理性约束"],
-      "evaluation_targets": ["模型拟合度", "分组合理性", "判定精度"],
+      "required_deliverables": [
+        "混合效应模型",
+        "Logit回归",
+        "优化分组",
+        "分类模型"
+      ],
+      "key_variables": [
+        "y_chromosome_concentration",
+        "gestational_age",
+        "bmi",
+        "fetal_status"
+      ],
+      "key_constraints": [
+        "重复测量数据约束",
+        "[0,1]比例数据约束",
+        "临床合理性约束"
+      ],
+      "evaluation_targets": [
+        "模型拟合度",
+        "分组合理性",
+        "判定精度"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "high",
@@ -824,23 +2152,64 @@
         "solving": "medium",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-01", "FM-VA-01", "FM-VA-04"],
-      "rationale": "混合效应 + Logit + 优化分组，重复测量数据不可视为独立样本"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-01",
+        "FM-VA-01",
+        "FM-VA-04"
+      ],
+      "rationale": "混合效应 + Logit + 优化分组，重复测量数据不可视为独立样本",
+      "historical_core_methods": [
+        "mixed_effects_model",
+        "logit_regression",
+        "optimization_grouping",
+        "classification"
+      ],
+      "allowed_model_families": [
+        "regression",
+        "classification",
+        "statistical_analysis",
+        "optimization"
+      ],
+      "acceptable_solution_variants": [
+        "mixed_effects_model",
+        "logistic_regression",
+        "optimization_based_grouping",
+        "random_forest"
+      ]
     },
     {
       "question_id": "2025_D",
       "year": 2025,
-      "family": ["离散调度/博弈"],
+      "family": [
+        "离散调度/博弈"
+      ],
       "sub_questions": [
         "Q1: 建立矿井突水水流漫延模型",
         "Q2: 设计动态逃生路径规划",
         "Q3: 制定多场景逃生方案"
       ],
-      "required_deliverables": ["水动力建模", "图搜索算法", "动态最短路", "多场景分析"],
-      "core_methods": ["graph_search", "dynamic_shortest_path", "hydraulic_modeling"],
-      "key_variables": ["water_level", "tunnel_topology", "escape_time", "risk_zone"],
-      "key_constraints": ["水流动力学约束", "巷道拓扑约束", "时间动态约束"],
-      "evaluation_targets": ["水流预测精度", "逃生方案可行性"],
+      "required_deliverables": [
+        "水动力建模",
+        "图搜索算法",
+        "动态最短路",
+        "多场景分析"
+      ],
+      "key_variables": [
+        "water_level",
+        "tunnel_topology",
+        "escape_time",
+        "risk_zone"
+      ],
+      "key_constraints": [
+        "水流动力学约束",
+        "巷道拓扑约束",
+        "时间动态约束"
+      ],
+      "evaluation_targets": [
+        "水流预测精度",
+        "逃生方案可行性"
+      ],
       "capability_dimensions": {
         "alignment": "medium",
         "construction": "high",
@@ -848,23 +2217,63 @@
         "solving": "high",
         "validation": "high"
       },
-      "failure_modes": ["FM-MC-04", "FM-FC-03", "FM-SV-01", "FM-VA-01"],
-      "rationale": "图搜索 + 动态最短路 + 水动力建模，注意水流时间动态性"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-FC-03",
+        "FM-SV-01",
+        "FM-VA-01"
+      ],
+      "rationale": "图搜索 + 动态最短路 + 水动力建模，注意水流时间动态性",
+      "historical_core_methods": [
+        "graph_search",
+        "dynamic_shortest_path",
+        "hydraulic_modeling"
+      ],
+      "allowed_model_families": [
+        "network_analysis",
+        "graph_theory",
+        "differential_equations",
+        "simulation"
+      ],
+      "acceptable_solution_variants": [
+        "BFS",
+        "Dijkstra",
+        "Saint_Venant_equations",
+        "A_star"
+      ]
     },
     {
       "question_id": "2025_E",
       "year": 2025,
-      "family": ["数据分析-人体运动"],
+      "family": [
+        "数据分析-人体运动"
+      ],
       "sub_questions": [
         "Q1: 建立人体质心轨迹分析模型",
         "Q2: 分析技术动作与成绩的相关性",
         "Q3: 建立成绩预测模型"
       ],
-      "required_deliverables": ["信号平滑", "相关分析", "回归/降维", "预测模型"],
-      "core_methods": ["signal_smoothing", "correlation_analysis", "regression", "dimensionality_reduction"],
-      "key_variables": ["center_of_mass", "jump_distance", "joint_angle", "velocity"],
-      "key_constraints": ["生物力学约束", "数据噪声约束"],
-      "evaluation_targets": ["信号质量", "相关性显著性", "预测精度"],
+      "required_deliverables": [
+        "信号平滑",
+        "相关分析",
+        "回归/降维",
+        "预测模型"
+      ],
+      "key_variables": [
+        "center_of_mass",
+        "jump_distance",
+        "joint_angle",
+        "velocity"
+      ],
+      "key_constraints": [
+        "生物力学约束",
+        "数据噪声约束"
+      ],
+      "evaluation_targets": [
+        "信号质量",
+        "相关性显著性",
+        "预测精度"
+      ],
       "capability_dimensions": {
         "alignment": "high",
         "construction": "medium",
@@ -872,8 +2281,29 @@
         "solving": "low",
         "validation": "medium"
       },
-      "failure_modes": ["FM-MC-04", "FM-VA-01", "FM-VA-04"],
-      "rationale": "信号平滑 + 相关分析 + 回归/降维，注意生物力学合理性"
+      "failure_modes": [
+        "FM-MC-04",
+        "FM-VA-01",
+        "FM-VA-04"
+      ],
+      "rationale": "信号平滑 + 相关分析 + 回归/降维，注意生物力学合理性",
+      "historical_core_methods": [
+        "signal_smoothing",
+        "correlation_analysis",
+        "regression",
+        "dimensionality_reduction"
+      ],
+      "allowed_model_families": [
+        "statistical_analysis",
+        "regression",
+        "time_series_forecasting"
+      ],
+      "acceptable_solution_variants": [
+        "moving_average",
+        "Pearson_correlation",
+        "linear_regression",
+        "PCA"
+      ]
     }
   ]
 }

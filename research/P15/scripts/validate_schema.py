@@ -20,7 +20,7 @@ def _validate_entry(entry: dict, idx: int) -> list[str]:
 
     required = [
         "question_id", "year", "family", "sub_questions",
-        "required_deliverables", "core_methods", "key_variables",
+        "required_deliverables", "allowed_model_families", "key_variables",
         "key_constraints", "evaluation_targets",
         "capability_dimensions", "failure_modes",
     ]

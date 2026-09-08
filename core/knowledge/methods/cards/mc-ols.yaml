@@ -13,6 +13,9 @@ match:
 good_for:
   - 机理已知形式的参数辨识（SIR 系数、增长指数、多项式拟合）
   - 变量关系探索与显著性检验的统计基线
+problem_structures: [prediction, inverse_problem]
+modeling_patterns: [optimization_objective]
+mathematical_forms: [optimization, linear_algebra, statistics]
 requires:
   - 残差独立同分布近似成立；异方差需加权或稳健修正
   - 形式选择（线性/指数/幂律）应有机理或数据依据

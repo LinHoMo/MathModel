@@ -8,6 +8,18 @@
 
 ---
 
+## ⚠️ 更正说明（2026-09-08 方向纠偏）
+
+本文档记录的是审计时点（2026-09-08）的旧方向状态。方向纠偏后，以下术语与定位已更正：
+
+- **`core_methods` → `allowed_model_families`**：benchmark 不再定义"核心方法"作为唯一答案，而是定义兼容的模型族（允许的模型族）。
+- **方法卡定位**：从"答案库"改为"约束/先验/验证"（constraint/prior/validation）。方法卡不告诉 LLM "必须用 X"，而是"如果你考虑 X，需要满足这些条件"。
+- **`method_selection` 指标**：从"方法选择/参考方法匹配"重定义为"方法兼容性评估"（method compatibility assessment），测量的是测量工具效度而非 Agent 能力。
+- **知识库目标**：从"全方法覆盖"改为"核心建模知识覆盖（Tier 0-3 策略）"，不追求穷尽所有方法。
+
+> 本文档的审计发现与结论为历史记录，不做重写；上述更正适用于方向纠偏后的系统定位。详见 `docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md`。
+
+
 ## 0. 审计摘要
 
 本审计的核心结论可以用三句话概括：
@@ -39,7 +51,7 @@
 | **C4** | Assumption Construction | 构建合理、显式、可检验的假设集，区分投影假设/校准锚/机制假设 | `assumption-validator` agent（legacy）；无量化 evaluator | 无独立 benchmark 字段 | P13-3B 2000C：A4 校准锚（λ=1.0636）被判定生物不合理→双分支括弧干预 | **只有 qualitative judgment** |
 | **C5** | Model Construction | 从问题到数学模型的完整构造：变量→参数→假设→目标→约束→机制→方程 | `model_construction.py`（structural + mathematical + alignment 三维）；`model_construction_checklist.md`（7 类干预清单） | P13-3C rubric（mc_2024A.json 等）；CUMCM-Bench `key_constraints[]` | P13-3B：math 55→95（干预）；P13-3C：B1 93.9 > MMA 83.9 > B0 50.0；R5：B1 86.2 > MMA 69.5 > B0 37.1 | **有 evaluator + benchmark + 强 evidence**（核心能力） |
 | **C6** | Mathematical Formalization | 方程推导正确性、量纲一致、符号/索引/边界正确 | `model_construction.py: mathematical` 维度（错误分类学扣分制） | rubric `math_error_taxonomy`（量纲/索引/符号/边界/校准/缺失约束/未陈述假设） | P13-3C-R4：B1-A 对齐干预导致 math 暴跌 65→45、85→20；P13-3B：math 55→95 | **有 evaluator + evidence** |
-| **C7** | Model-family Selection | 选择正确的模型家族（运动学/优化/统计/评价/机理…） | `e2e_metrics.py: method_selection`（top-3 GT hit）；`method-matcher` agent | CUMCM-Bench-v2 `core_methods[]` + `family[]`（19 个家族） | P15.1 2024_A：选 TOPSIS（评价族）而非运动学/几何族，method_selection=0%；P13-1/P13-2 retriever 消融 | **有 evaluator + benchmark + evidence** |
+| **C7** | Model-family Selection | 选择正确的模型家族（运动学/优化/统计/评价/机理…） | `e2e_metrics.py: method_selection`（top-3 GT hit）；`method-matcher` agent | CUMCM-Bench-v2 `allowed_model_families[]` + `family[]`（19 个家族） | P15.1 2024_A：选 TOPSIS（评价族）而非运动学/几何族，method_selection=0%；P13-1/P13-2 retriever 消融 | **有 evaluator + benchmark + evidence** |
 | **C8** | Cross-question Model Interface | 多子问题间模型接口、变量复用、参数传递、结果级联 | 无独立 evaluator | 无 | P13-3C 2022_B：月期量与年率需求无折算（跨子问题口径不一致）；MMA 臂 constraints 空置 | **完全没有 measurement** |
 | **C9** | Solving Strategy | 选择合适的求解算法（解析/数值/优化/模拟），处理可解性 | `template-selector` + `code-implementer`（legacy）；无独立策略 evaluator | 无独立 benchmark | P13-3C 2022_B B1：年率 g 按月复利（index_error）——求解策略与模型口径不匹配 | **只有 qualitative judgment** |
 | **C10** | Computational Reliability | 代码执行确定性、多 seed 稳定性、数值收敛、无崩溃 | `e2e_metrics.py: experiment_validity`（multi_run≥5 + robustness tags）；P14 21/21 replay match | env `code.random_seed=42`, `multi_run_count=5` | P14：21/21 Execution replay match；P15 PRE_REG：seeds [42,43,44,45,46] | **有 evaluator + evidence** |
@@ -410,8 +422,8 @@ P15 PRE_REGISTRATION §4 定义了 6 类 22 种 failure mode：
 
 B0 pipeline 的产出：
 - 子问题分解：**UNRESOLVED**（1 个空壳 Q001，无 payload）
-- 方法选择：**mc-topsis (TOPSIS)**，备选 AHP(73) / PCA(63)，全部属于评价类方法族
-- 期望方法族：**运动学/几何建模 (kinematics/geometric)**
+- 方法兼容性评估：**mc-topsis (TOPSIS)**，备选 AHP(73) / PCA(63)，全部属于评价类方法族
+- 可接受的解变体（acceptable_solution_variants）族：**运动学/几何建模 (kinematics/geometric)**
 - method_selection = **0%**
 
 TOPSIS 本身是一个数学上完全正确的多属性决策方法。它的公式、计算、排序逻辑都没有问题。但用 TOPSIS 来解"螺旋运动的碰撞检测"——这就像用尺子量温度——工具本身没错，但用错了地方。
@@ -439,7 +451,7 @@ TOPSIS 本身是一个数学上完全正确的多属性决策方法。它的公�
 ### 4.4 实现建议
 
 1. **`model_construction.py` 已具备三维拆分**（structural / mathematical / alignment），应将其升级为六维，并将 `method_selection` 从 `e2e_metrics.py` 迁入。
-2. **新增 `model_family_mismatch` 二元判定**：如果 selected_model 的 family 与题目 gold family 无交集，直接标记 FAMILY_MISMATCH，此时 mathematical correctness 仅作参考，不作为质量指标。
+2. **新增 `model_family_mismatch` 二元判定**：如果 selected_model 的 family 与题目 allowed_model_families 无交集，直接标记 FAMILY_MISMATCH，此时 mathematical correctness 仅作参考，不作为质量指标。
 3. **composite 分数改为条件聚合**：
    - 如果 Problem Alignment < 阈值或 Model-family Selection = FAIL → composite = FAIL，不计算加权平均。
    - 否则 composite = 加权平均，但六维分数必须同时展示。
@@ -525,7 +537,7 @@ TOPSIS 本身是一个数学上完全正确的多属性决策方法。它的公�
 Problem Alignment
     ↓ （输入：正确理解的问题）
 Model Construction
-    ↓ （输入：对齐的子问题 + 选对的模型家族）
+    ↓ （输入：对齐的子问题 + 选择与问题兼容的模型家族）
 Formal Consistency
     ↓ （输入：构造好的模型结构）
 Solving
@@ -583,9 +595,9 @@ Communication
 | **C2 Subproblem Decomposition** | 高 | 科研中子问题分解是研究者的核心创造力，不是题目给定的 | 题目通常已隐含子问题结构 | 将复杂研究问题分解为可解子问题 |
 | **C3 Variable/Parameter ID** | 高 | 科研中参数来源更多元（文献/实验/校准/先验），可观测性判断更重要 | 比赛参数通常在题面中给出 | 识别内生/外生变量、区分可观测/不可观测参数 |
 | **C4 Assumption Construction** | 高 | 科研假设需要与文献对话、需要可证伪性、需要显式标注假设对结论的影响 | 比赛假设通常是"合理简化" | 构建显式、可检验、可证伪的假设集 |
-| **C5 Model Construction** | **最高** | 科研建模更强调机理的创新性和与已有模型的对话；比赛更强调"覆盖题目" | 比赛有"标准答案"方向（core_methods 参考） | 从问题到数学模型的完整构造能力——完全通用 |
+| **C5 Model Construction** | **最高** | 科研建模更强调机理的创新性和与已有模型的对话；比赛更强调"覆盖题目" | 比赛有"标准答案"方向（allowed_model_families 参考） | 从问题到数学模型的完整构造能力——完全通用 |
 | **C6 Mathematical Formalization** | **最高** | 无变化——数学是通用语言 | 无 | 方程推导、量纲一致、符号正确——完全通用 |
-| **C7 Model-family Selection** | 高 | 科研中模型家族选择需要文献依据，不是"选对方法"而是"选择最适合研究问题的范式" | 比赛有 core_methods 参考标签 | 根据问题类型选择合适的建模范式 |
+| **C7 Model-family Selection** | 高 | 科研中模型家族选择需要文献依据，不是"选对方法"而是"选择最适合研究问题的范式" | 比赛有 allowed_model_families 参考标签 | 根据问题类型选择合适的建模范式 |
 | **C8 Cross-question Interface** | 中 | 科研中子模型间的依赖关系更复杂（反馈循环、多尺度耦合） | 比赛子问题通常是串行的 | 子模型间接口设计、变量复用、参数传递 |
 | **C9 Solving Strategy** | 高 | 科研求解更强调可复现性和计算效率，可能需要 HPC | 比赛时间受限，求解策略偏实用 | 选择合适的求解算法、处理可解性 |
 | **C10 Computational Reliability** | **最高** | 科研更严格——需要完整的环境锁定、版本控制、数据管理 | 比赛 seed 固定即可 | 确定性、可复现、数值稳定——完全通用 |
@@ -610,7 +622,7 @@ Communication
 | 比赛特有 | 解耦方案 |
 |---|---|
 | 题目有明确子问题编号和金标准 | 科研模式下子问题由研究者生成，alignment 测量改为"研究目标覆盖率" |
-| core_methods 参考标签（非唯一答案） | 科研模式下方法选择需要文献依据，改为"方法选择的文献支持率" |
+| allowed_model_families 参考标签（非唯一答案） | 科研模式下方法兼容性评估需要文献依据，改为"方法兼容性评估的文献支持率" |
 | CUMCM rubric 评分细则 | 科研模式下使用通用审稿标准（novelty/correctness/significance/clarity） |
 | 20 页篇幅限制 | 科研无篇幅限制，但 Communication 能力仍需测量 |
 | 3 天时间限制 | 科研无时间限制，但 Solving 效率仍需测量 |

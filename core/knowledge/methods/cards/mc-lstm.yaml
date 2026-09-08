@@ -13,6 +13,9 @@ match:
 good_for:
   - 大样本（≥1000）非线性复杂时序模式（多变量耦合、长程依赖）
   - 需要滚动多步预测且经典方法残差仍有结构时
+problem_structures: [prediction, classification]
+modeling_patterns: [state_transition, recurrence, feedback_loop]
+mathematical_forms: [optimization, probability]
 requires:
   - 大样本量与合理特征工程；序列滑窗构造
   - 训练/验证/测试时间切分（不可随机打乱）；固定随机种子

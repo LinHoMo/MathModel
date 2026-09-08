@@ -256,7 +256,7 @@ RC-S1 的"16 波真实认知执行"是指 **RuntimeSession 的 16 个 DAG 节点
 | 节点 | LLM 任务 | 输入 | 输出 |
 |------|---------|------|------|
 | `problem_analysis` | 题面解析 + 问题分解 | 题面文本 | problem artifact payload（结构化问题描述）+ sub_questions |
-| `literature_search` | 文献检索策略生成 | 问题描述 | 检索关键词 + 方法卡选择理由 |
+| `literature_search` | 文献检索策略生成 | 问题描述 | 检索关键词 + 方法兼容性评估理由 |
 | `model_selection` | 模型选型推理 | 问题描述 + 候选方法卡 | 选型决策 + reasoning + evidence_ids |
 | `model_construction` | 数学模型构建 | 问题描述 + 选型结果 | model payload（objective/constraints/variables/equations） |
 | `experiment` | 实验代码生成 + 执行 | 模型 + 实验计划 | 实际代码执行结果（数值） |

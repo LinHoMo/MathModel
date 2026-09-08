@@ -12,6 +12,9 @@ match:
 good_for:
   - 大规模/非凸/混合整数问题，精确求解器超时或不可用时
   - 解空间结构复杂、梯度不可得的黑箱优化
+problem_structures: [scheduling, allocation, network]
+modeling_patterns: [optimization_objective, state_transition]
+mathematical_forms: [optimization, probability]
 requires:
   - 合理的编码（二进制/实数/排列）与适应度函数
   - 多次独立运行（不同随机种子）取最优/统计

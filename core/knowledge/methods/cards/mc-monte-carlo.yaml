@@ -12,6 +12,9 @@ match:
 good_for:
   - 参数/输入带分布不确定性的结果分布估计（代替点估计）
   - 复杂系统无解析解时的仿真评估（排队/库存/风险）
+problem_structures: [prediction, equilibrium, transport]
+modeling_patterns: [probability_distribution, flow]
+mathematical_forms: [probability, statistics, integral]
 requires:
   - 不确定性来源识别与分布假设（须给出依据）
   - 收敛性检查（样本量 vs 结果稳定性）；固定随机种子可复现

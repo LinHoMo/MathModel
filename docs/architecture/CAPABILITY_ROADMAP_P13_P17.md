@@ -45,7 +45,7 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
 | # | 指标 | 可计算定义 | 金标准来源 |
 |---|---|---|---|
 | 1 | decomposition 子问题覆盖率 | 产出的问题分解（DAG questions）命中金标准子问题集的比例；命中 = 子问题语义对齐（题目要求项逐条对照） | CUMCM rubric dimensions（q1..qn）；MMBench `problem_requirement` 分解项 |
-| 2 | method selection 方法正确率 | 选出的方法候选（top-3）命中金标准方法集的比例；方法名按方法卡家族归一 | CUMCM-Bench.json `core_methods`（32 题现成）；rubric 评审要点中的方法方向 |
+| 2 | method compatibility assessment 方法正确率 | 选出的方法候选（top-3）命中金标准方法集的比例；方法名按方法卡家族归一 | CUMCM-Bench.json `allowed_model_families`（32 题现成）；rubric 评审要点中的方法方向 |
 | 3 | model correctness 数学正确性 | 评委 rubric 中"模型/公式/推导"维度按扣分制折算的得分率；有数值 GT 时叠加关键结果数值命中率 | rubric assessment_points + reference_results |
 | 4 | experiment validity 实验有效性 | 确定性复合：对照基线存在 + 灵敏度分析存在（result tags）+ 多次运行（seed 42, ≥5 次均值±std）+ 实验确有检验对应 claim（Evidence Gate 通过率） | Registry/Graph 产物（tags、runs、coverage） |
 | 5 | validation reliability 结论可靠性 | 确定性复合：fact_check 通过率 + 论文↔代码数值一致（consistency_checker）+ 引用零捏造（citation_check）+ 护栏全绿 | 校验工具输出 |
@@ -130,7 +130,7 @@ MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
   （跨 ≥2 年）可复现基线且至少一项指标 +10 个百分点。
 
 **纪律（P13-1 确立）**：实验结果为 0 时本轮就地停止，不为让 Δ 变正继续
-修改；只允许增加"题目语义 → 已有方法选择器"的信息流，不允许增加新的
+修改；只允许增加"题目语义 → 已有方法兼容性评估器"的信息流，不允许增加新的
 认知层。若出现"架构缺口"，先过三问门禁——通常答案是改 Brain 指令/知识
 或修真实 bug，**绝不为此开新 P 阶段**。
 

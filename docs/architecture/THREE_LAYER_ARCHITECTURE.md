@@ -69,7 +69,7 @@
 ## 4. 三问门禁（每个新阶段 / 能力 PR 的准入检查）
 
 > **Q1** 它是否提升 Agent 的科研解题能力？
-> （更好的问题分解 / 方法选择 / 建模 / 实验设计 / 结果解释 / 论文表达）
+> （更好的问题分解 / 方法兼容性评估 / 建模 / 实验设计 / 结果解释 / 论文表达）
 >
 > **Q2** 它是否让 Agent 更可靠？
 > （crash 后可恢复、结果可追溯、错误可归因）
@@ -87,11 +87,11 @@
 `CAPABILITY_ROADMAP_P13_P17.md` / `bench e2e`：
 
 ```text
-decomposition / method selection / model correctness / experiment validity
+decomposition / method compatibility assessment / model correctness / experiment validity
 / validation reliability / innovation / writing completeness / end-to-end
 ```
 
-- `method selection 42% → 57%（+15）` = 实打实的进步；
+- `method compatibility assessment 42% → 57%（+15）` = 实打实的进步；
 - `新增 800 行 / 新增 37 tests / 新增 5 contracts` 但
   `end-to-end 31% → 31%` = **判定为没有能力进步**。
 - 测试数量的意义是守住下层冻结的两层不回归，不再作为进度度量。

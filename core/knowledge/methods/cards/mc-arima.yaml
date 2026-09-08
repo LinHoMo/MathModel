@@ -13,6 +13,9 @@ match:
 good_for:
   - 中等长度（≥50 期）单变量时间序列的短期预测
   - 有明确趋势/季节性的统计建模，模型可解释（AIC 定阶可交代）
+problem_structures: [prediction]
+modeling_patterns: [state_transition, recurrence]
+mathematical_forms: [statistics, recurrence, probability]
 requires:
   - 序列平稳化检验（ADF 检验）与必要差分
   - 残差白噪声检验（Ljung-Box）

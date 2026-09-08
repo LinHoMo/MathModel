@@ -46,7 +46,11 @@ allowed_model_families:
   - agent_based_simulation  # 多智能体仿真
   # 具体方法选择需题面验证后细化
 
-acceptable_solution_variants: UNKNOWN
+acceptable_solution_variants:
+  - queuing_theory  # M/M/c 排队模型
+  - monte_carlo  # 随机仿真验证
+  - game_theory  # 司机-乘客博弈
+  - markov_decision_process  # 司机决策MDP
 
 key_variables:
   - arrival_rate  # 乘客到达率

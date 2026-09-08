@@ -51,7 +51,7 @@
 | 2 | Problem Alignment | MEASURED | HIGH | CROSS_PROBLEM_VALIDATED | NEEDS_ADAPTATION |
 | 3 | Model Construction | MEASURED | HIGH | CROSS_PROBLEM_VALIDATED | DIRECTLY_TRANSFERABLE |
 | 4 | Formal Consistency | PARTIALLY_MEASURED | MEDIUM | SINGLE_PROBLEM | DIRECTLY_TRANSFERABLE |
-| 5 | Method Selection | MEASURED | HIGH | CROSS_PROBLEM_VALIDATED | DIRECTLY_TRANSFERABLE |
+| 5 | Method Compatibility Assessment | MEASURED | HIGH | CROSS_PROBLEM_VALIDATED | DIRECTLY_TRANSFERABLE |
 | 6 | Solving | PARTIALLY_MEASURED | MEDIUM | CROSS_PROBLEM_VALIDATED | DIRECTLY_TRANSFERABLE |
 | 7 | Validation | MEASURED | HIGH | CROSS_PROBLEM_VALIDATED | DIRECTLY_TRANSFERABLE |
 | 8 | Sensitivity-Robustness | PARTIALLY_MEASURED | LOW | SINGLE_PROBLEM | DIRECTLY_TRANSFERABLE |
@@ -233,14 +233,14 @@
 
 ---
 
-## 5. Method Selection（方法选择）
+## 5. Method Compatibility Assessment（方法兼容性评估）
 
 ### Capability
-选择正确的模型家族（运动学/优化/统计/评价/机理…）和具体方法。**独立维度，不是 Problem Alignment 的代理**：Alignment 测"是否回答了题目"，Method Selection 测"选的工具是否适合问题类型"。一个模型可以 Alignment 很好（覆盖了所有子问）但 Method Selection 错误（用 TOPSIS 解运动学）。
+选择正确的模型家族（运动学/优化/统计/评价/机理…）和具体方法。**独立维度，不是 Problem Alignment 的代理**：Alignment 测"是否回答了题目"，Method Compatibility Assessment 测"选的工具是否适合问题类型"。一个模型可以 Alignment 很好（覆盖了所有子问）但 Method Compatibility Assessment 错误（用 TOPSIS 解运动学）。
 
 ### Observable behavior
-- 选择的模型家族与题目 gold family 有交集
-- 方法选择有明确依据（不是关键词匹配）
+- 选择的模型家族与题目 allowed_model_families 有交集
+- 方法兼容性评估有明确依据（不是关键词匹配）
 - 能区分"方法名正确"和"方法适合问题"
 - 备选方法有对比分析
 
@@ -249,18 +249,18 @@
 - FM-MS-002 method_name_trap（方法名正确但不适合问题，如 TOPSIS 数学正确但用于运动学）
 
 ### Measurement instrument
-- `e2e_metrics.py: method_selection`（top-3 GT hit，基于 CUMCM-Bench `core_methods[]` + `family[]`）
+- `e2e_metrics.py: method_selection`（top-3 GT hit，基于 CUMCM-Bench `allowed_model_families[]` + `family[]`）
 - `method-matcher` agent（legacy）+ 方法卡 retriever（53 个 methodology .md）
-- **FAMILY_MISMATCH 二元判定**（计划）：selected_model.family ∩ gold_family = ∅ → 直接标记，此时 mathematical correctness 仅作参考
-- 引用：EVALUATOR_VALIDITY_PROTOCOL §Method Selection
+- **FAMILY_MISMATCH 二元判定**（计划）：selected_model.family ∩ allowed_model_families = ∅ → 直接标记，此时 mathematical correctness 仅作参考
+- 引用：EVALUATOR_VALIDITY_PROTOCOL §Method Compatibility Assessment
 
 ### Evidence type
 - artifact（selected_method 标签 + confidence score）
 - run manifest（method_selection 百分比 + family mismatch flag）
-- replay（方法选择可重放）
+- replay（方法兼容性评估可重放）
 
 ### Current status
-**MEASURED**。有 evaluator（method_selection top-3 hit）+ benchmark（19 个家族标签 + core_methods）+ evidence（P15.1 2024_A：TOPSIS for kinematics，method_selection=0%；P13-1/P13-2 retriever 消融）。
+**MEASURED**。有 evaluator（method_selection top-3 hit）+ benchmark（19 个家族标签 + allowed_model_families）+ evidence（P15.1 2024_A：TOPSIS for kinematics，method_selection=0%；P13-1/P13-2 retriever 消融）。
 
 ### Confidence
 **HIGH**。method_selection 是 deterministic 的标签匹配；family 标签有 36 题基准；P15.1 提供了教科书级的错配案例。
@@ -534,8 +534,8 @@
 ```
 Problem Understanding (1)
   ↓ 输入：正确理解的问题
-Problem Alignment (2) ─── Method Selection (5)  [并行：对齐方向 + 方法选择]
-  ↓ 输入：对齐的子问题 + 选对的模型家族
+Problem Alignment (2) ─── method compatibility assessment (5)  [并行：对齐方向 + 方法兼容性评估]
+  ↓ 输入：对齐的子问题 + 选择与问题兼容的模型家族
 Model Construction (3)
   ↓ 输入：构造好的模型结构
 Formal Consistency (4)
@@ -554,7 +554,7 @@ Communication (11)
 
 **关键依赖规则**：
 - 前级失败会污染后级测量（如 Problem Alignment 失败时，Model Construction 的高分无意义）
-- Method Selection 与 Problem Alignment 并行但独立：Alignment 失败时 Method Selection 可能正确（如正确识别了运动学但未分解子问题），反之亦然
+- Method Compatibility Assessment 与 Problem Alignment 并行但独立：Alignment 失败时 Method Compatibility Assessment 可能正确（如正确识别了运动学但未分解子问题），反之亦然
 - Claim Support 依赖 Evidence，Evidence 依赖 Validation，Validation 依赖 Solving——链式依赖
 
 ## 附录 B：与 legacy C0–C15 的映射
@@ -565,7 +565,7 @@ Communication (11)
 | Problem Alignment | C1 + C2 | C1 对齐 + C2 子问题分解合并 |
 | Model Construction | C3 + C4 + C5 | 变量/参数/假设 + 模型构造合并 |
 | Formal Consistency | C6 | 直接对应 |
-| Method Selection | C7 | 直接对应，提升为独立维度 |
+| Method Compatibility Assessment | C7 | 直接对应，提升为独立维度 |
 | Solving | C9 + C10 | 求解策略 + 计算可靠性合并 |
 | Validation | C11 | 直接对应 |
 | Sensitivity-Robustness | C12 | 直接对应 |
@@ -582,7 +582,7 @@ Communication (11)
 | Problem Alignment | decomposition_coverage + alignment 维度 | deterministic + semantic | 空壳 artifact 导致 UNRESOLVED |
 | Model Construction | model_construction.py 三维 | semantic + rubric | 对齐干预可污染 mathematical 维度 |
 | Formal Consistency | mathematical 维度 | semantic | 无自动化检查器，量纲未独立量化 |
-| Method Selection | method_selection top-3 hit | deterministic | 标签匹配不等于方法适合 |
+| Method Compatibility Assessment | method_selection top-3 hit | deterministic | 标签匹配不等于方法适合 |
 | Solving | experiment_validity + replay | deterministic | Solving Strategy 无独立测量 |
 | Validation | experiment_validity + validation_reliability | deterministic + semantic | FM-VA-01 定义过宽（81% 题标注） |
 | Sensitivity-Robustness | robustness tags | deterministic（存在性） | 无质量评分，不检查参数敏感性 |

@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BENCH = ROOT / "benchmark" / "CUMCM-Bench-v2.json"
 
 GOLD_FIELDS = [
-    "sub_questions", "required_deliverables", "core_methods",
+    "sub_questions", "required_deliverables", "allowed_model_families",
     "key_variables", "key_constraints", "evaluation_targets",
     "capability_dimensions", "failure_modes",
 ]

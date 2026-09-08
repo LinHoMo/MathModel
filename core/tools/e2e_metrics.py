@@ -15,6 +15,12 @@
 规则: 输入缺失的指标如实记 null（不臆造分数）；能从产物确定性计算的
 尽量计算。所有指标值域 0-100。
 
+method_selection（方法兼容性评估）:
+    检查 agent 选择的方法族是否在 benchmark allowed_model_families 中。
+    采用多解模型原则：allowed_model_families 是唯一评分依据，
+    catalog 外方法标记 out_of_catalog 不自动判错，需人工审查数学合理性。
+    historical_core_methods 仅用于 detail 展示，不参与评分。
+
 Measurement Integrity（measurement metadata，不是第 9 项能力指标）:
     provenance-based realization（v1）——回答"这个分数有多少是 agent
     真实产物支撑的"。判据 v1 = created_by.startswith("agent")（本仓库
@@ -52,7 +58,8 @@ def _load_project(project_dir: Path) -> dict:
     graph = EvidenceGraph(registry, sdir / "evidence_graph.json")
     state = ProjectState(sdir / "status.json")
     decisions = DecisionLog(sdir / "decision_log.json")
-    decisions.load()
+    if decisions.path.exists():
+        decisions.load()
     return {"registry": registry, "graph": graph, "state": state,
             "decisions": decisions}
 
@@ -132,10 +139,12 @@ def _load_card_families() -> dict[str, str]:
 
 
 def _load_benchmark_reference(problem_id: str) -> dict:
-    """P0-3: 从 CUMCM-Bench-v2.json 加载某题的参考方法家族。
+    """从 CUMCM-Bench-v2.json 加载某题的参考方法家族。
 
-    返回 {"core_methods": [...], "allowed_model_families": [...]}，
-    字段缺失时对应值为 None。
+    返回 {"historical_core_methods": [...], "allowed_model_families": [...],
+           "acceptable_solution_variants": [...], "family": [...]}。
+    allowed_model_families 是唯一评分依据；historical_core_methods 仅用于
+    detail 展示，不参与评分；字段缺失时对应值为 None。
     """
     bench_path = ROOT / "research" / "P15" / "benchmark" / "CUMCM-Bench-v2.json"
     if not bench_path.exists() or not problem_id:
@@ -145,8 +154,9 @@ def _load_benchmark_reference(problem_id: str) -> dict:
         for p in bench.get("problems", []):
             if p.get("question_id") == problem_id:
                 return {
-                    "core_methods": p.get("core_methods"),
+                    "historical_core_methods": p.get("historical_core_methods"),
                     "allowed_model_families": p.get("allowed_model_families"),
+                    "acceptable_solution_variants": p.get("acceptable_solution_variants"),
                     "family": p.get("family"),
                 }
     except (json.JSONDecodeError, OSError):
@@ -166,20 +176,20 @@ def _infer_problem_id(project_dir: Path, gt: dict) -> str | None:
 
 
 def _method_family_hit(card_id: str, card_families: dict[str, str],
-                       reference_methods: list[str]) -> tuple[bool, bool]:
-    """P0-3: 方法家族适用性检查。
+                       allowed_families: list[str]) -> tuple[bool, bool]:
+    """方法族兼容性检查：检查 card 的 family 是否在 allowed_model_families 中。
 
     Returns (hit, is_alternative):
-      hit=True            → 家族在参考方法中
+      hit=True            → 家族在 allowed_model_families 中
       hit=False, alt=True → 方法卡存在但家族不匹配（合理替代方法）
       hit=False, alt=False → 方法卡不存在或无家族信息
     """
-    if not card_id or not reference_methods:
+    if not card_id or not allowed_families:
         return False, False
     family = card_families.get(card_id, "")
     if not family:
         return False, False
-    ref_norm = {_norm(r) for r in reference_methods if _norm(r)}
+    ref_norm = {_norm(r) for r in allowed_families if _norm(r)}
     fam_norm = _norm(family)
     # 家族名直接匹配，或紧凑匹配（去空格后包含）
     fam_compact = fam_norm.replace(" ", "")
@@ -282,33 +292,39 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
         decomp_value = round(100.0 * min(int(aligned), len(sub_qs))
                              / len(sub_qs), 1)
 
-    # 2 method selection。P0-3 修复：从"方法卡 ID 字符串命中"改为
-    #   "方法家族适用性检查"。优先用 allowed_model_families（如存在），
-    #   否则用 benchmark core_methods 作为参考家族（非唯一答案）。
-    #   选择了不同但合理的方法家族 → alternative_method（不自动判 wrong）。
+    # 2 method selection（方法兼容性评估）。
+    #   allowed_model_families 是唯一评分依据；historical_core_methods 仅用于
+    #   detail 展示，不参与评分，不做回退。catalog 外方法标记 out_of_catalog，
+    #   不自动判 0，需人工审查数学合理性。
     methods_gt = gt.get("methods") or []
     card_families = _load_card_families()
     problem_id = _infer_problem_id(project_dir, gt)
     bench_ref = _load_benchmark_reference(problem_id) if problem_id else {}
     allowed_families = bench_ref.get("allowed_model_families")
-    ref_methods = allowed_families if allowed_families else (
-        bench_ref.get("core_methods") or methods_gt)
-    method_basis = ("allowed_model_families" if allowed_families
-                    else "core_methods_reference" if bench_ref.get("core_methods")
-                    else "gt_methods_fallback")
+    historical_core_methods = bench_ref.get("historical_core_methods")
+    acceptable_variants = bench_ref.get("acceptable_solution_variants")
 
     method_value = None
     method_detail: dict = {
         "gt_methods": methods_gt,
-        "reference_methods": ref_methods,
-        "method_selection_basis": method_basis,
+        "allowed_model_families": allowed_families,
+        "historical_core_methods": historical_core_methods,
+        "acceptable_solution_variants": acceptable_variants,
         "problem_id": problem_id,
-        "definition": "方法家族适用性检查（family hit + alternative标记）",
+        "definition": (
+            "方法兼容性评估：检查 agent 选择的方法族是否在 benchmark "
+            "allowed_model_families 中；catalog 外方法标记 out_of_catalog 不自动判错"
+        ),
         "per_question": {},
     }
-    if ref_methods and models:
+    if not allowed_families:
+        method_detail["method_selection_basis"] = "unavailable"
+        method_detail["note"] = "allowed_model_families unavailable in benchmark"
+    elif models:
+        method_detail["method_selection_basis"] = "allowed_model_families"
         t1_hits, t3_hits = [], []
         alt_count = 0
+        out_of_catalog_count = 0
         for q in questions:
             qm = [m for m in models if m.question == q.artifact_id]
             if not qm:
@@ -320,17 +336,21 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
                          for c in (data.get("shortlist") or [])]
             cands = [chosen] + [c for c in shortlist if c != chosen]
             top3 = [c for c in cands if c][:3]
-            # P0-3: 家族检查为主，字符串匹配为向后兼容回退
-            t1_fam, t1_alt = _method_family_hit(chosen, card_families, ref_methods)
+            # 家族检查为主，字符串匹配为向后兼容回退
+            t1_fam, t1_alt = _method_family_hit(chosen, card_families, allowed_families)
             t1_str = _method_hit([chosen], card_names, methods_gt) if methods_gt else False
             t1 = t1_fam or t1_str
-            t3_fam = any(_method_family_hit(c, card_families, ref_methods)[0]
+            t3_fam = any(_method_family_hit(c, card_families, allowed_families)[0]
                          for c in top3)
             t3_str = _method_hit(top3, card_names, methods_gt) if methods_gt else False
             t3 = t3_fam or t3_str
             is_alt = (not t1_fam) and t1_alt and chosen
+            # out_of_catalog 检测：card_id 不在方法卡目录中
+            is_out_of_catalog = bool(chosen) and chosen not in card_families
             if is_alt:
                 alt_count += 1
+            if is_out_of_catalog:
+                out_of_catalog_count += 1
             t1_hits.append(t1)
             t3_hits.append(t3)
             method_detail["per_question"][q.artifact_id] = {
@@ -338,6 +358,7 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
                 "top1_family": card_families.get(chosen, ""),
                 "top1_hit": t1, "top1_family_hit": t1_fam,
                 "top1_alternative": is_alt,
+                "out_of_catalog": is_out_of_catalog,
                 "top3": top3, "top3_hit": t3,
                 "shortlist": shortlist}
         if t3_hits:
@@ -347,10 +368,15 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
             method_detail["distinct_chosen"] = len(
                 {(m.data or {}).get("card_id", "") for m in models})
             method_detail["alternative_method_count"] = alt_count
+            method_detail["out_of_catalog_count"] = out_of_catalog_count
             if alt_count > 0:
                 method_detail["alternative_method_note"] = (
                     f"{alt_count} 题选择了参考家族外的方法卡（alternative_method），"
                     "不自动判 wrong，需人工审查合理性")
+            if out_of_catalog_count > 0:
+                method_detail["out_of_catalog_note"] = (
+                    f"{out_of_catalog_count} 题选择的方法不在 catalog 中"
+                    "（out_of_catalog），需人工审查数学合理性，不自动判 0")
 
     # 3 model correctness。P0-4 修复：
     #   - 外部输入 model_correctness_pct 为 null/n/a/缺失 → UNAVAILABLE（不静默跳过）

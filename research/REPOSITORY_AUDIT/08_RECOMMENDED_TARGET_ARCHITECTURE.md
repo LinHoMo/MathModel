@@ -6,6 +6,18 @@
 
 ---
 
+## ⚠️ 更正说明（2026-09-08 方向纠偏）
+
+本文档记录的是审计时点（2026-09-08）的旧方向状态。方向纠偏后，以下术语与定位已更正：
+
+- **`core_methods` → `allowed_model_families`**：benchmark 不再定义"核心方法"作为唯一答案，而是定义兼容的模型族（允许的模型族）。
+- **方法卡定位**：从"答案库"改为"约束/先验/验证"（constraint/prior/validation）。方法卡不告诉 LLM "必须用 X"，而是"如果你考虑 X，需要满足这些条件"。
+- **`method_selection` 指标**：从"方法选择/参考方法匹配"重定义为"方法兼容性评估"（method compatibility assessment），测量的是测量工具效度而非 Agent 能力。
+- **知识库目标**：从"全方法覆盖"改为"核心建模知识覆盖（Tier 0-3 策略）"，不追求穷尽所有方法。
+
+> 本文档的审计发现与结论为历史记录，不做重写；上述更正适用于方向纠偏后的系统定位。详见 `docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md`。
+
+
 ## ⚠️ 战略定位更新（2026-09-08，优先级高于本文档其余内容）
 
 ### 核心对象收束：Model Construction + Model Representation
@@ -209,7 +221,7 @@ research/
 
 ### 4.3 多解模型原则
 
-- `core_methods` 字段改为 `allowed_model_families`（列表，非唯一答案）
+- `allowed_model_families` 字段改为 `allowed_model_families`（列表，非唯一答案）
 - 增加 `acceptable_alternative` 字段
 - evaluator 测 `does the model answer the problem?` 而非 `did the agent guess the reference solution?`
 
@@ -250,7 +262,7 @@ research/
 |---|---|---|
 | F2-1 | 重设计 Model Construction evaluator（8 deterministic + 5 semantic） | 05 审计 §7 的 spec |
 | F2-2 | 为 2024_A 写完整 Model Card | 05 审计 §5 的示例 |
-| F2-3 | CUMCM-Bench-v2 schema 升级：core_methods→allowed_model_families | schema validate 通过 |
+| F2-3 | CUMCM-Bench-v2 schema 升级：allowed_model_families→allowed_model_families | schema validate 通过 |
 | F2-4 | 实现 L1 Problem Understanding evaluator | sub_question decomposition 可测量 |
 | F2-5 | 3 个 adversarial test case（05 审计 §8） | evaluator 能正确判 FAIL |
 

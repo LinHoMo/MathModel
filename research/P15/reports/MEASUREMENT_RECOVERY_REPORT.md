@@ -6,6 +6,17 @@
 
 ---
 
+## ⚠️ 指标定义更正说明（2026-09-08 方向纠偏）
+
+本报告记录测量仪器恢复过程中的观测与修复。方向纠偏后，相关指标定义更正如下：
+
+- **`method_selection` 指标**：原定义为"参考方法匹配（top-3 GT hit / 字符串匹配）"，现重定义为**方法兼容性评估**（method compatibility assessment）——测量所选模型家族与 `allowed_model_families` 的兼容度。
+- **测量对象澄清**：`method_selection` 分数变化反映的是**测量工具效度**（measurement instrument validity）的改善（如 evaluator bug 修复、方法卡库覆盖扩充），**不等于 Agent 能力提升**。Research-layer calibration ≠ Agent capability intervention。
+- **术语变更**：`core_methods` → `allowed_model_families`；`expected_method` → `acceptable_solution_variants`；`reference_method` / `gold_method` → `allowed_model_families`。
+- **方法卡定位**：方法卡 = 约束/先验/验证（constraint/prior/validation），不是答案库。Knowledge coverage constrains evaluation, not creativity.
+
+> 本报告所有数值数据与修复记录保留原始观测结果不变。
+
 ## 1. 执行摘要
 
 上一轮审计发现 2024_A B0 measurement = INVALID（输入污染 + 未真实执行 + evaluator 放过空壳）。本轮测量恢复工作完成了以下关键修复：
@@ -17,7 +28,7 @@
 | **Artifact 完整性** | 16/16 空壳 artifact（payload=[]）全 PASS | 三层 gate 设计（non-empty/structural/semantic），execution_gate.py 实现 L1+L2，旧 B0 正确判定 INVALID | ✅ GATED |
 | **评估器有效性** | 3 P0 bug（空壳 PASS / method_selection 字符串匹配 / model_correctness 依赖外部输入） | e2e_metrics.py minimal patch 修复全部 3 P0，pytest 781/11 零回归 | ✅ FIXED |
 | **能力本体** | C0–C15 仅 5/16 有闭环，Failure Taxonomy 7/22 空 | 11 项能力地图，25 个可测量 FM（A/B/C 分类），L1-L4 评分细则，5 个 Problem Card | ✅ REBUILT |
-| **Benchmark Schema** | core_methods 可能唯一答案，无 allowed_model_families | Problem Card 含 allowed_model_families + acceptable_solution_variants + known_invalid_model_patterns | ✅ UPGRADED |
+| **Benchmark Schema** | allowed_model_families 可能唯一答案，无 allowed_model_families | Problem Card 含 allowed_model_families + acceptable_solution_variants + known_invalid_model_patterns | ✅ UPGRADED |
 
 **核心结论**：测量仪器已恢复可信状态。输入真实、gate 有效、evaluator 修复、能力本体重建。剩余瓶颈是执行管线不产生真实 LLM 输出（零 LLM 设计），需通过方案 A（core minimal patch 接入 LLM）或方案 D（mock executor 验证链路）解决。
 
@@ -124,7 +135,7 @@
 | Bug | 修复 |
 |---|---|
 | EVAL-BUG-001 空壳 PASS | 新增 `_is_empty_artifact()`，评分前过滤 payload=[] 且 data={} 的空壳，报告标记排除数量 |
-| EVAL-BUG-003 method_selection 字符串匹配 | 改为方法家族适用性检查，从 CUMCM-Bench-v2.json 加载 core_methods，标记 alternative_method，保留向后兼容 |
+| EVAL-BUG-003 method_selection 字符串匹配 | 改为方法家族适用性检查，从 CUMCM-Bench-v2.json 加载 allowed_model_families，标记 alternative_method，保留向后兼容 |
 | EVAL-BUG-002 model_correctness 依赖外部输入 | 缺失时标记 UNAVAILABLE 不参与均分；新增 objective/constraints/variables 结构检查（structural PASS/FAIL，非语义正确性） |
 
 **验证**：pytest 781 passed / 11 skipped（零回归），catalog_check PASS，validate.py 56/57（预期失败），import OK，sha256 双文件校验一致。
@@ -140,7 +151,7 @@
 
 **3 个熔断 check**：objective_clarity / constraint_validity / equation_structure 任一 FAIL → 总分上限 40。
 
-**Method Selection Quality 独立四维**：方法适用性、目标回答性、数学合理性、替代方法可行性——gold=TOPSIS, agent=AHP 不自动判 wrong。
+**Method Compatibility Assessment Quality 独立四维**：方法适用性、目标回答性、数学合理性、替代方法可行性——gold=TOPSIS, agent=AHP 不自动判 wrong。
 
 ---
 
@@ -154,7 +165,7 @@
 | Problem Alignment | PARTIALLY_MEASURED | MEDIUM | NEEDS_ADAPTATION |
 | Model Construction | PARTIALLY_MEASURED | MEDIUM | DIRECTLY_TRANSFERABLE |
 | Formal Consistency | MEASURED | HIGH | DIRECTLY_TRANSFERABLE |
-| Method Selection | MEASURED（修复后） | MEDIUM | NEEDS_ADAPTATION |
+| Method Compatibility Assessment | MEASURED（修复后） | MEDIUM | NEEDS_ADAPTATION |
 | Solving | PARTIALLY_MEASURED | MEDIUM | DIRECTLY_TRANSFERABLE |
 | Validation | PARTIALLY_MEASURED | MEDIUM | DIRECTLY_TRANSFERABLE |
 | Sensitivity-Robustness | UNMEASURED | LOW | DIRECTLY_TRANSFERABLE |
@@ -162,7 +173,7 @@
 | Claim Support | MEASUREMENT_INVALID | LOW | DIRECTLY_TRANSFERABLE |
 | Communication | MEASURED | MEDIUM | COMPETITION_SPECIFIC |
 
-Method Selection 提升为独立维度，不再作为 Alignment 的代理。
+Method Compatibility Assessment 提升为独立维度，不再作为 Alignment 的代理。
 
 ### 5.2 Failure Taxonomy（25 个可测量 FM）
 
@@ -171,7 +182,7 @@ Method Selection 提升为独立维度，不再作为 Alignment 的代理。
 - **B. Workflow-Skill Failure**（2 个 + 5 个 A+B 混合）：workflow skip, skill missing
 - **C. Measurement-Evaluator Failure**（3 个）：evaluator bug, threshold manipulation, empty artifact passing
 
-每个 FM 均有 definition / observable evidence / counterexample / measurement rule。旧 taxonomy 中 7 个空 FM 全部移除或重新定义。新增 Method Selection 类别（含 method_name_trap——TOPSIS 数学正确但问题错配的教科书级案例）。
+每个 FM 均有 definition / observable evidence / counterexample / measurement rule。旧 taxonomy 中 7 个空 FM 全部移除或重新定义。新增 Method Compatibility Assessment 类别（含 method_name_trap——TOPSIS 数学正确但问题错配的教科书级案例）。
 
 ### 5.3 Problem Cards（5 个）
 

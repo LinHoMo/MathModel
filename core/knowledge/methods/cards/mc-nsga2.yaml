@@ -12,6 +12,9 @@ match:
 good_for:
   - 多个冲突目标的优化，需要给出帕累托前沿而非单点解
   - 决策者需要在"成本-效益"等权衡曲线上选点的工程问题
+problem_structures: [scheduling, allocation]
+modeling_patterns: [optimization_objective, state_transition]
+mathematical_forms: [optimization, probability]
 requires:
   - 目标可量化且相互冲突；种群规模与代数设置
   - 前沿上选解的决策规则（理想点/TOPSIS/偏好权重）

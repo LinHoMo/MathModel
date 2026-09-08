@@ -46,7 +46,7 @@
 ```text
 sub_questions[]              Alignment 金标准
 required_deliverables[]      交付物完整性
-core_methods[]               方法参考（非唯一答案）
+allowed_model_families[]               方法参考（非唯一答案）
 key_variables[]              变量识别
 key_constraints[]            约束建模
 evaluation_targets[]         验证目标

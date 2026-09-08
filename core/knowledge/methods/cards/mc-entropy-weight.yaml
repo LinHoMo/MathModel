@@ -13,6 +13,9 @@ match:
 good_for:
   - 完全由数据离散度决定权重的客观赋权，避免主观拍权
   - 与 TOPSIS/灰色关联/理想点法组合成完整评价管线
+problem_structures: [ranking, allocation]
+modeling_patterns: [probability_distribution, conservation]
+mathematical_forms: [probability, statistics, integral]
 requires:
   - 方案×指标矩阵；指标先同向化与标准化
   - 指标存在信息量差异（全同列无意义）
