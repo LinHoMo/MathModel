@@ -1,10 +1,9 @@
 """runtime.adapters — 跨运行时适配工具稳定 import 面（P5 桥接层）。
 
-三个模块的迁移映射（P5 原位桥接，实现暂留 core/tools/）:
+两个模块的迁移映射（P5 原位桥接，实现暂留 core/tools/）:
 
     core/tools/gen_runtime_manifest.py  → runtime.adapters.manifest
     core/tools/cloud_sandbox.py         → runtime.adapters.cloud_sandbox
-    core/tools/test_runtime_compat.py   → runtime.adapters.runtime_compat
 
 P5 阶段为桥接（动态加载 + 单实例复用）；后续实现迁入本包时
 core/tools/ 侧退化为 CLI 薄转发，import 面不变。
@@ -26,7 +25,7 @@ _TOOLS = _REPO / "core" / "tools"
 if str(_TOOLS) not in sys.path:
     sys.path.insert(0, str(_TOOLS))
 
-_MODULE_FILES = ("gen_runtime_manifest", "cloud_sandbox", "test_runtime_compat")
+_MODULE_FILES = ("gen_runtime_manifest", "cloud_sandbox")
 
 
 def _load(name: str):
@@ -45,6 +44,5 @@ def _load(name: str):
 
 manifest = _load("gen_runtime_manifest")
 cloud_sandbox = _load("cloud_sandbox")
-runtime_compat = _load("test_runtime_compat")
 
-__all__ = ["manifest", "cloud_sandbox", "runtime_compat"]
+__all__ = ["manifest", "cloud_sandbox"]
