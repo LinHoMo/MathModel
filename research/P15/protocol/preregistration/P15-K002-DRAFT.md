@@ -149,6 +149,42 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 
 ---
 
+## 8. Validation Plan 字段规格（S+V 臂强制字段，草案）
+
+S+V 臂在 MODEL_IR 之外强制输出 `validation_plan`，直接锚定 L4.3/L3.4/L1.4 三个已知弱维：
+
+```jsonc
+{
+  "validation_plan": {
+    "limit_tests": [                       // 锚 L4.3（K001 唯一有 0 分维度）
+      {"condition": "c→0 时排队系统退化为无等待", "expected": "J→仅收益项", "result": "…"}
+    ],
+    "multi_seed": {                        // 锚 L3.4（K001 无一 2 分维度）
+      "seeds": [42, 43, 44, 45, 46],
+      "n_runs": 5,
+      "metric": "目标函数值",
+      "tolerance": "cv<10%",
+      "result": "cv=…"
+    },
+    "sensitivity": [                       // 锚 L4.2
+      {"parameter": "λ（到达率）", "range": "±20%", "metric": "J", "result": "…"}
+    ],
+    "ambiguity_handling": [                // 锚 L1.4（K001 全 1 分维度）
+      {"source": "题面歧义点", "interpretations": ["…", "…"], "adopted": "…", "justification": "…"}
+    ],
+    "claim_evidence_map": [                // 锚 L4.5
+      {"claim": "…", "evidence_ref": "experiment/…", "status": "supported|refuted|unresolved"}
+    ]
+  }
+}
+```
+
+- **登记校验**（k002_register.py）：`limit_tests` 非空、`multi_seed.n_runs≥3`、`sensitivity` 非空、`ambiguity_handling` 非空、`claim_evidence_map` 每 claim 有 evidence_ref——机械 gate，非自报。
+- 注意：**字段非空 ≠ 内容正确**（L4.3 要 2 分需检验结果合理）。本设计测的是"字段化是否驱动 Agent 执行验证行为"（1 分门槛：做了）；内容质量（2 分）由盲评判断——两者分开报告，避免"非空即正确"的 Formalized nonsense 风险。
+- 设计约束：Validation Plan 字段只在 S+V 臂出现；S 臂维持 K001 同款 18 字段——保证 S 臂与 K001 B/D 臂可交叉参照（跨实验一致性）。
+
+---
+
 ## 7. 已知局限（预先声明）
 1. F 臂"自由格式"是相对概念：prompt 仍要求覆盖主要建模成分，测的是 **schema 强制 vs 文本要求**，不是"无结构 vs 有结构"的极端对比。
 2. 盲评形式对齐不完美（JSON vs 文本呈现差异）——已设计敏感性分析。
