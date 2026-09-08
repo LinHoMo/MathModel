@@ -4,10 +4,10 @@
 
 ## 核心原则
 
-1. **状态外置**：所有执行进度、决策历史、中间产物路径写入文件系统（`work/state.json`、`work/decision_log.json`），不依赖模型上下文记忆。
-2. **契约优先**：四手之间仅通过契约文件（`MODEL_SPEC.md`、`CODE_DELIVERABLES.md`、`PAPER_SPEC.md`）交互，不共享内部状态。
+1. **状态外置**：所有执行进度、决策历史、中间产物路径写入文件系统（`state/status.json`、`state/decision_log.json`），不依赖模型上下文记忆。
+2. **契约优先**：DAG 节点之间仅通过 Artifact Registry + Evidence Graph 交互，不共享内部状态。
 3. **门禁脚本化**：Self-Check 由 Python 脚本（`gate.py`、`score_artifact.py`、`validate.py`）判定，不依赖模型自评。
-4. **入口统一**：任何运行时进入项目根目录，读取 `AGENTS.md` 或 `.codex-plugin/plugin.json` 即可开始执行。
+4. **入口统一**：任何运行时进入项目根目录，读取 `AGENTS.md` 即可开始执行。
 
 ## 状态文件规范
 

@@ -1,8 +1,5 @@
 # MathModel Harness
 
-> 本项目的权威说明与执行协议位于仓库根的 **`AGENTS.md`**。
-> 使用本仓库前请先完整读取 `AGENTS.md`——定位（Scientific/Mathematical Modeling
-> Harness）、五层目录、V3 执行协议与 V2 兼容模式均在其中；任何状态数字以
-> `docs/STATUS.md` 的机器实测口径为准（commit hash 绑定）。
+> Gemini 请读取 `CLAUDE.md` 获取项目指引。
 
-@AGENTS.md
+@CLAUDE.md
