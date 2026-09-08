@@ -45,6 +45,7 @@ RELATION_TYPES: dict[str, tuple] = {
     "selects":        ({"decision"}, {"model"}),
     "based_on":       ({"decision"}, None),
     "derived_from":   (None, None),
+    "executed_by":    ({"result"}, {"execution_result"}),
 }
 
 STRONG_RELATIONS = frozenset({

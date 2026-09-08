@@ -90,11 +90,13 @@
 | 审计行动整合（AUDIT_ACTION_PLAN） | ✅ 完成 |
 | 战略固化（THREE_LAYER_ARCHITECTURE.md v2 重写） | ✅ 完成 |
 | 全量自检（pytest 774/11、catalog_check OK、terminology OK、freeze PASS） | ✅ 完成 |
-| **P0 工程项① result 占位符治理**（result data 标 not_executed + claim placeholder provenance） | ✅ 完成（774/11 零回归，FIX_LOG P0-2） |
+| **P0 工程项① result 占位符治理**（result data 标 not_executed + claim placeholder provenance） | ✅ 完成（FIX_LOG P0-2） |
 | **P0 工程项② catalog/model_families.yaml 单一词表**（18 family，三源+ K001 实际命名词全解析；`frozen: false` 待 K002 FROZEN） | ✅ 数据层完成（catalog_check 扩展校验=下一步） |
-| **P0 工程项③ features 外部必传契约**（handler 可观测标记 + orchestrator 显式加载 + 缺省 WARNING） | ✅ 完成（774/11 零回归，FIX_LOG P0-2） |
-| K002 定稿（DRAFT→v1.0 FROZEN） | ⏸ DRAFT v0.3 已按战略裁决更新（3 臂 + block≥6 + L3/L4 终点 + 题目多样性）；**待用户确认新增题与定稿节奏** |
-| Code Interpreter adapter（R5 修复主体） | ⏸ P1 工程，待排期（本轮完成占位符治理与词表，执行闭环是下一大步） |
+| **P0 工程项③ features 外部必传契约**（handler 可观测标记 + orchestrator 显式加载 + 缺省 WARNING） | ✅ 完成（FIX_LOG P0-2） |
+| **P0-E Executable Model Runtime**（用户裁决 2026-09-09，最高优先） | ✅ **闭环已打通**：ExecutionAdapter(local_python 四态) + execution_result 一等 artifact(EXEC) + do_experiment 集成(真实状态翻写) + executed_by 证据绑定 + session 透传；测试 774→789 全绿。详见 `research/P15/measurement_recovery/P0E_EXECUTABLE_RUNTIME.md` |
+| K002 定稿 | ⏸ DRAFT v0.4：+Measurement Gate 五 Gate 前置 + 冻结顺序写死（P0-E→dry-run→区分度→五 Gate→PREREGISTERED→FROZEN）；**待 P0-E4/E5 + 新增题 Authenticity** |
+| P0-E4 Replay/provenance 工具扩展 | ⏸ 数据字段已就绪（code_hash/environment_hash），replay.py 扩展待排期 |
+| P0-E5 K002 dry-run + Code Generation（MODEL_IR→code） | ⏸ 下一大步 |
 | P15-K001 状态机推 CLOSED | ✅ 已 CLOSED（negative result 按决策门记录） |
 
 **下一轮建议**：K002 新增题 Authenticity（≥3 道，block≥6 前置）→ K002 PREREGISTERED+FROZEN → Code Interpreter adapter 设计+实现（R5 核心）。

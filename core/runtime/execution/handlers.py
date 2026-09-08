@@ -67,7 +67,8 @@ class DefaultNodeExecutor:
 
     def __init__(self, registry, graph, state=None, decisions=None,
                  knowledge_root: str | Path | None = None,
-                 features: dict | None = None, min_coverage: float = 0.6):
+                 features: dict | None = None, min_coverage: float = 0.6,
+                 execution_adapter=None):
         self.registry = registry
         self.graph = graph
         self.state = state
@@ -80,6 +81,8 @@ class DefaultNodeExecutor:
                    "sample_size": "medium", "_features_source": "legacy_default"}
         self.features = dict(features or _LEGACY)
         self.min_coverage = min_coverage
+        # P0-E：真实执行后端（None = 不执行；result 保持 not_executed）
+        self.execution_adapter = execution_adapter
         self.retriever = KnowledgeRetriever(knowledge_root or REPO / "core" / "knowledge")
         self.arena = MethodArena(self.retriever, decisions)
         self.planner = ExperimentPlanner(self.retriever)
@@ -441,10 +444,64 @@ class DefaultNodeExecutor:
         info.setdefault("results", []).append(r.artifact_id)
         info["results"] = self._results_of(qid)   # 以 Registry 为准
         self._clear_revalidation_marks(qid, node_id)   # 重建即复验通过
+        # P0-E：真实执行集成——adapter 可用且可执行代码可得时，
+        # 执行并登记 execution_result（EXEC 一等 artifact），result.status
+        # 只来自真实执行状态；否则保持 not_executed（外部 executor 回填）。
+        self._maybe_execute_experiment(qid, mid, r.artifact_id, plan, node_id)
         if self.state:
             self._advance_question(qid, "experimenting")
         return NodeResult(PASS, f"{qid}: 实验/结果/图已登记",
                           outputs={"artifacts": [], "evidence": ev})
+
+    def _maybe_execute_experiment(self, qid: str, mid: str,
+                                 result_id: str, plan: dict,
+                                 by_node: str) -> None:
+        """P0-E：真实执行集成。
+
+        条件（全部满足才执行）：
+          1. execution_adapter 可用；
+          2. 计划/外部提供可执行 code（plan.data.code 或 info.plan.code）。
+        执行后：
+          - 创建 execution_result artifact（EXEC，一等）；
+          - result.data.status 翻为真实执行状态（success/failed/timeout/invalid）；
+          - result.data.execution_ref 指向 EXEC artifact。
+        不满足条件时静默返回（result 保持 not_executed，外部 executor 回填路径不变）。
+        """
+        if self.execution_adapter is None:
+            return
+        code = None
+        for cand in (plan or {}):
+            if cand == "code":
+                code = plan["code"]
+        if not code:
+            return
+        from runtime.execution.adapters import ExecutionPlan
+        try:
+            xplan = ExecutionPlan(model_id=mid, code=code,
+                                  inputs={"question": qid})
+            xr = self.execution_adapter.execute(xplan)
+        except Exception as exc:
+            # adapter 异常不应中断 V3 管线：登记 invalid 并继续
+            from runtime.execution.adapters import ExecutionResultData
+            xr = ExecutionResultData(
+                execution_id="", model_id=mid, status="invalid",
+                stderr=f"adapter error: {exc}",
+                provenance={"reason": "adapter_exception"})
+        xart = self.registry.create(
+            "execution_result",
+            title=f"{qid} 执行结果",
+            question=qid, depends_on=[result_id],
+            data=xr.to_dict(),
+            activate=True, created_by=by_node)
+        r_art = self.registry.get(result_id)
+        r_art.data = dict(r_art.data or {})
+        r_art.data["status"] = xr.status
+        r_art.data["execution_ref"] = xart.artifact_id
+        if xr.status == "success":
+            r_art.data["value"] = xr.outputs
+        # 证据图：execution_result 产自 experiment 链上的 result
+        self.graph.add_relation(
+            result_id, "executed_by", xart.artifact_id)
 
     def _clear_revalidation_marks(self, qid: str, by_node: str) -> None:
         """P9.5 红队修复（E6 死循环）：链重建/复验即复验通过——

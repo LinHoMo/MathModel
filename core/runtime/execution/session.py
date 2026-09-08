@@ -47,7 +47,8 @@ class RuntimeSession:
     def __init__(self, project_dir: str | Path, questions: list[str],
                  features: dict | None = None, knowledge_root=None,
                  max_workers: int = 1, min_coverage: float = 0.6,
-                 run_meta: dict | None = None):
+                 run_meta: dict | None = None,
+                 execution_adapter=None):
         self.project_dir = Path(project_dir)
         self.project_dir.mkdir(parents=True, exist_ok=True)
         if not questions:
@@ -56,6 +57,9 @@ class RuntimeSession:
         # Hardening P3：外部 executor 溯源（model_provider/model_version/
         # token_cost/decision）；additive，None 时记录为 null
         self.run_meta = run_meta or {}
+        # P0-E：真实执行后端（ExecutionAdapter；None = 不执行，result 保持
+        # not_executed，由外部 executor 回填）
+        self.execution_adapter = execution_adapter
 
         sdir = self.project_dir / "state"
         self.state = ProjectState(sdir / "status.json")
@@ -68,7 +72,8 @@ class RuntimeSession:
         self.executor_impl = DefaultNodeExecutor(
             self.registry, self.graph, state=self.state,
             decisions=self.decisions, knowledge_root=knowledge_root,
-            features=features, min_coverage=min_coverage)
+            features=features, min_coverage=min_coverage,
+            execution_adapter=execution_adapter)
         # 预登记 Question Artifact（分配的 ID Q001… 依序即 questions 标签）
         existing = [a.artifact_id for a in self.registry.list_by_type("question")]
         for q in self.questions:

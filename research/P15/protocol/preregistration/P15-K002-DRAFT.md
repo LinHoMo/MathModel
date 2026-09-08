@@ -1,9 +1,13 @@
 # P15-K002 — Model Representation Efficacy
-## 预注册（Preregistration）DRAFT v0.3（三仓库审计 + 战略裁决已回填）
+## 预注册（Preregistration）DRAFT v0.4（P0-E 先行 + Measurement Gate）
 
-> **状态：`DRAFT`（审计启示 v0.2 已回填；v0.3 落实战略裁决：3 臂确认 + block≥6 + L3/L4 主终点；待 6 题题集 Authenticity 就绪 + 预注册签署 → PREREGISTERED → FROZEN）**
+> **状态：`DRAFT`（v0.3 已落实战略裁决；v0.4 增加 Measurement Gate 五 Gate 前置，并明确 K002 冻结排在 P0-E 之后）**
 > **科学定位**：K001（Knowledge 文本注入）已得 negative result；本实验检验**下一个杠杆：强制的结构化 Model Representation（输出契约）本身是否提升外部 Agent 的 Model Construction Quality**。
-> **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认——result 占位、features 硬编码、ontology 分叉）｜ **战略裁决**（docs/architecture/THREE_LAYER_ARCHITECTURE.md v2：Epistemic/Execution/Evaluation 三层；infra 不冒充 capability；ontology 与词汇表分离）
+> **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认——result 占位、features 硬编码、ontology 分叉）｜ **战略裁决**（docs/architecture/THREE_LAYER_ARCHITECTURE.md v2：Epistemic/Execution/Evaluation 三层；infra 不冒充 capability；ontology 与词汇表分离）｜ **P0-E 裁决**（2026-09-09：Execution Runtime 优先，K002 冻结暂缓）
+
+> **冻结顺序（用户裁决，写死）**：
+> `P0-E → runtime validation → K002 dry-run → 题目区分度检查 → measurement check（五 Gate）→ PREREGISTERED → FROZEN`
+> 否则 K002 测出来的可能不是 MODEL_IR 的效果，而是 runtime 的缺陷。
 
 ---
 
@@ -184,9 +188,9 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 
 - 全程 `research/P15/`，不进 `core/`；不修改任何冻结规格（K001 frozen specs 原样保留）。
 - 工具链：复用 k001_common/freeze/state 模式，新增 `k002_*`（register 增加 coverage gate + validation_plan gate；gen_bundles 生成 F/S/S+V 三种 prompt 模板）。
-- **P0 工程项（审计回填，独立于实验执行）**：①experiment 节点 result 占位符治理（`not_executed` 状态替代假占位 claim）；②`catalog/model_families.yaml` 单一词表（合并 model_ir.schema 枚举 + allowed_model_families + 方法卡 family）；③features 外部必传契约（缺失即 BLOCKED，替代硬编码 evaluation）。这三项不阻塞 K002 生成（K002 在 research/ 层用预注册词表），但必须与 K002 并行推进并在 CLOSED 前完成。
+- **P0-E 前置（用户裁决 2026-09-09，优先级最高）**：K002 冻结排在 `P0-E Executable Model Runtime` 之后——ExecutionAdapter（真实执行）、execution_result 一等 artifact、Evidence←Execution 绑定、runtime validation 完成，再走 K002 dry-run → 五 Gate → PREREGISTERED → FROZEN。P0 工程项（①result 占位符治理 ✅ ②词表收敛 ✅ ③features 契约 ✅）已完成。
 - 外部生成/盲评由独立 Agent 完成（与 K001 同模式：生成侧 1 个 Organizer + 分片子代理；盲评 3 个独立 evaluator）。
-- 预注册签署 → FROZEN（哈希锁定 44+ 规格文件）→ PREFLIGHT → RUNNING → VALIDATION → ANALYSIS → CLOSED。
+- 预注册签署 → **五 Gate 全 PASS（§7.5）** → FROZEN（哈希锁定 44+ 规格文件）→ PREFLIGHT → RUNNING → VALIDATION → ANALYSIS → CLOSED。
 
 ---
 
@@ -223,6 +227,25 @@ S+V 臂在 MODEL_IR 之外强制输出 `validation_plan`，直接锚定 L4.3/L3.
 - **登记校验**（k002_register.py）：`limit_tests` 非空、`multi_seed.n_runs≥3`、`sensitivity` 非空、`ambiguity_handling` 非空、`claim_evidence_map` 每 claim 有 evidence_ref——机械 gate，非自报。
 - 注意：**字段非空 ≠ 内容正确**（L4.3 要 2 分需检验结果合理）。本设计测的是"字段化是否驱动 Agent 执行验证行为"（1 分门槛：做了）；内容质量（2 分）由盲评判断——两者分开报告，避免"非空即正确"的 Formalized nonsense 风险。
 - 设计约束：Validation Plan 字段只在 S+V 臂出现；S 臂维持 K001 同款 18 字段——保证 S 臂与 K001 B/D 臂可交叉参照（跨实验一致性）。
+
+---
+
+## 7.5 Measurement Gate（五 Gate 前置，全部 PASS 才允许 FROZEN）
+
+> 背景：RQ5 词表错位（`dynamic_programming` vs `discrete_recurrence`）是一次真实的
+> measurement failure——"我们测的东西"不是"我们声称测的东西"。K002 预注册此 Gate，
+> 在 PREREGISTERED 之前逐项验证（每项附证据，不是口头声明）：
+
+| # | Gate | 问题 | 验证方式 | 通过标准 |
+|---|---|---|---|---|
+| G1 | **Construct validity** | L3/L4 终点是否真的测 Model Construction？ | 逐维度对照 rubric 定义与 MODEL_IR 18 字段 + validation_plan 字段，确认评分项可被产物字段触发 | 每个评分维度至少 1 个产物字段可支撑（映射表冻结） |
+| G2 | **Instrument validity** | evaluator 是否真的按 rubric 测？ | 3 个独立 evaluator 在 5 份盲评样例上的评分一致性（K001 已有 55 份基线可复用） | 维度级 Cohen's κ ≥ 0.6 或分歧可归因于模糊声明（报告） |
+| G3 | **Vocabulary validity** | ontology 是否统一？ | `catalog/model_families.yaml` 单一词表 + 生成侧/评分侧解析测试（K001 词表错位回归用例） | 三源全部解析到 canonical，无 OUT_OF_CATALOG 意外 |
+| G4 | **Execution validity** | 需要 execution 的终点（L3.4/L4）是否真的由真实执行支撑？ | 若某维度依赖数值结果，产物必须含 execution_result 或等价真实数值 provenance | 预检 run 的 L3/L4 评分项全部绑定真实数值（无占位） |
+| G5 | **Statistical validity** | block 数是否足够？ | 预检 6 题区分度（§3.5）；block=6 排列功效预计算 | ≥4/6 题有区分度且功效 ≥0.8（效应量按 K001 Δ=+2.14 估计） |
+
+- 任一 Gate FAIL → 回到对应修复（词表/工具/rubric/题集），修复后重跑该 Gate，全部 PASS 才 PREREGISTERED。
+- Gate 证据归档到 `research/P15/protocol/preregistration/P15-K002-GATES.md`（冻结时一并 hash）。
 
 ---
 
