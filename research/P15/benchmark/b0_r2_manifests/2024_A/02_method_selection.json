@@ -1,0 +1,143 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T08:09:30Z",
+  "finished_at": "2026-09-08T08:13:00Z",
+  "latency_seconds": 210,
+  "submitted_at": "2026-09-08T08:13:05Z",
+  "node_id": "method_selection",
+  "dag_position": 2,
+  "payload": {
+    "title": "方法卡选择 — 结构信号匹配决策",
+    "decision": "选择 mc-nsga2（NSGA-II 多目标进化优化）作为主方法卡。建模策略为：以阿基米德螺线几何参数化+多体刚体链运动学递推为核心机理，Q3/Q4/Q5的约束优化子问题采用NSGA-II求解帕累托前沿后决策选点。catalog中无geometric_modeling卡，mc-nsga2的family=multi_objective_optimization可匹配benchmark allowed_modeling_structures中的optimization。",
+    "alternatives": [
+      {
+        "method": "mc-ga (遗传算法)",
+        "family": "metaheuristics",
+        "assessment": "可用于单目标优化子问题，但family=metaheuristics不在allowed_modeling_structures中；且GA更适合组合优化，本题优化变量为连续型（螺距/速度/半径），NSGA-II的多目标能力更贴合Q3-Q5的多约束权衡"
+      },
+      {
+        "method": "mc-pso (粒子群优化)",
+        "family": "metaheuristics",
+        "assessment": "连续变量优化收敛快，但family=metaheuristics不匹配allowed列表；单目标优化能力，缺乏多目标帕累托前沿输出；早熟收敛风险"
+      },
+      {
+        "method": "mc-topsis (逼近理想解排序)",
+        "family": "composite_evaluation",
+        "assessment": "REJECT — 评价排序类方法，benchmark明确禁止multi_criteria_decision。本题是几何运动学+约束优化，不存在方案×指标矩阵需要排序"
+      },
+      {
+        "method": "mc-ahp (层次分析法)",
+        "family": "decision_analysis",
+        "assessment": "REJECT — 主观赋权类方法，与几何运动问题完全无关。benchmark禁止multi_criteria_decision"
+      },
+      {
+        "method": "mc-monte-carlo (蒙特卡洛模拟)",
+        "family": "uncertainty_propagation",
+        "assessment": "REJECT — 问题无随机性/不确定性输入，所有参数确定。family=uncertainty_propagation不匹配simulation（simulation指确定性数值仿真，非不确定性传播）"
+      },
+      {
+        "method": "mc-numerical-pde (偏微分方程数值求解)",
+        "family": "numerical_pde",
+        "assessment": "REJECT — 问题无连续时空场/守恒律/热传导。运动学求导不是PDE求解。family=numerical_pde不匹配differential_equations"
+      },
+      {
+        "method": "mc-dp (动态规划)",
+        "family": "dynamic_programming",
+        "assessment": "REJECT — 问题无多阶段序贯决策结构。各节板凳位置由几何约束递推确定，不是每阶段做决策的MDP。无最优子结构+无后效性的DP前提不成立"
+      },
+      {
+        "method": "mc-queuing-theory (排队论)",
+        "family": "queuing_theory",
+        "assessment": "REJECT — 无随机到达/服务/等待的服务系统结构。完全不适用"
+      }
+    ],
+    "reasoning": "结构识别→卡片匹配推理链：(1) 题面分析：223节板凳铰接成开环刚体链，沿阿基米德螺线运动，龙头匀速→核心结构是multi_body_rigid_chain_kinematics + archimedean_spiral_geometry。(2) 子问题分解：Q1/Q2纯运动学+碰撞检测（几何），Q3最小螺距（约束优化），Q4最短调头曲线（几何优化），Q5最大速度（约束优化）→3/5子问题含optimization结构。(3) benchmark allowed_modeling_structures = [geometric_modeling, differential_equations, optimization, simulation]。(4) catalog 19张卡逐张检查family：mc-nsga2(family=multi_objective_optimization)紧凑匹配optimization→HIT；其余卡family均不在allowed列表中或被benchmark禁止。(5) 结论：mc-nsga2是唯一能匹配allowed_modeling_structures的卡，且其多目标优化能力确实适用于Q3-Q5的约束优化子问题。选择mc-nsga2，shortlist包含mc-ga和mc-pso作为替代优化方法参考（但它们的family不匹配allowed列表，仅作算法对比）。",
+    "criteria": [
+      "structure_signal_match: 卡片structure_signals是否与问题结构匹配",
+      "family_in_allowed: 卡片family是否在benchmark allowed_modeling_structures中",
+      "not_forbidden: 不在benchmark forbidden_misinterpretations中",
+      "mathematical_applicability: 方法数学机理是否适用于子问题",
+      "multi_objective_capability: 是否能处理Q3-Q5的多约束权衡"
+    ],
+    "confidence": 0.82,
+    "structure_signals_matched": {
+      "mc-nsga2": {
+        "family": "multi_objective_optimization",
+        "structure_signals": "多个冲突目标的优化，需要帕累托前沿；决策者需要在成本-效益权衡曲线上选点",
+        "match_assessment": "PARTIAL_MATCH — Q3最小螺距（螺距vs可达性）、Q4最短曲线（弧长vs相切约束）、Q5最大速度（速度vs约束）均为约束优化。NSGA-II的多目标能力可用于探索约束边界上的帕累托前沿。但Q1/Q2纯运动学不需要优化。",
+        "family_hit": true,
+        "family_hit_detail": "multi_objective_optimization 紧凑匹配 allowed_modeling_structures 中的 optimization",
+        "decision": "USE_AS_PRIMARY"
+      },
+      "mc-ga": {
+        "family": "metaheuristics",
+        "structure_signals": "大规模/非凸/混合整数问题，精确求解器超时；解空间结构复杂、梯度不可得的黑箱优化",
+        "match_assessment": "WEAK_MATCH — 可用于Q3/Q5的单目标优化，但本题优化维度低（1-2个连续变量），梯度信息可通过运动学模型获得，GA的大规模非凸优势不明显。",
+        "family_hit": false,
+        "family_hit_detail": "metaheuristics 不在 allowed_modeling_structures 中",
+        "decision": "SHORTLIST_ALTERNATIVE"
+      },
+      "mc-pso": {
+        "family": "metaheuristics",
+        "structure_signals": "连续变量非凸优化，实现与调参比GA简单，收敛快",
+        "match_assessment": "WEAK_MATCH — 连续变量优化确实适合PSO，但同GA，family不匹配。且单目标优化，缺乏多目标能力。",
+        "family_hit": false,
+        "family_hit_detail": "metaheuristics 不在 allowed_modeling_structures 中",
+        "decision": "SHORTLIST_ALTERNATIVE"
+      },
+      "mc-topsis": {
+        "family": "composite_evaluation",
+        "structure_signals": "多方案综合排序，已知方案×指标矩阵",
+        "match_assessment": "NO_MATCH — 本题无方案×指标矩阵，不需要排序。benchmark明确禁止multi_criteria_decision。",
+        "family_hit": false,
+        "family_hit_detail": "composite_evaluation 不在 allowed_modeling_structures 中，且被forbidden_misinterpretations禁止",
+        "decision": "REJECT"
+      },
+      "mc-ahp": {
+        "family": "decision_analysis",
+        "structure_signals": "无客观数据时的结构化主观赋权，指标层次结构清晰",
+        "match_assessment": "NO_MATCH — 与几何运动学完全无关。被benchmark禁止。",
+        "family_hit": false,
+        "family_hit_detail": "decision_analysis 不在 allowed_modeling_structures 中",
+        "decision": "REJECT"
+      },
+      "mc-monte-carlo": {
+        "family": "uncertainty_propagation",
+        "structure_signals": "参数/输入带分布不确定性的结果分布估计；复杂系统无解析解时的仿真评估",
+        "match_assessment": "NO_MATCH — 所有参数确定，无不确定性。虽然可以用蒙特卡洛做碰撞检测的采样验证，但这不是问题的核心建模结构。",
+        "family_hit": false,
+        "family_hit_detail": "uncertainty_propagation 不匹配 simulation（simulation指确定性数值仿真）",
+        "decision": "REJECT"
+      },
+      "mc-numerical-pde": {
+        "family": "numerical_pde",
+        "structure_signals": "连续时空演化，守恒量与通量，初始条件+边界条件",
+        "match_assessment": "NO_MATCH — 运动学求导不是PDE。无守恒律/时空场。",
+        "family_hit": false,
+        "family_hit_detail": "numerical_pde 不匹配 differential_equations",
+        "decision": "REJECT"
+      },
+      "mc-dp": {
+        "family": "dynamic_programming",
+        "structure_signals": "多阶段序贯决策，每阶段做一次选择，总目标跨阶段累积，最优子结构+无后效性",
+        "match_assessment": "NO_MATCH — 板凳位置由几何约束递推确定，不是每阶段做决策。无最优子结构证明。",
+        "family_hit": false,
+        "family_hit_detail": "dynamic_programming 不在 allowed_modeling_structures 中",
+        "decision": "REJECT"
+      },
+      "mc-queuing-theory": {
+        "family": "queuing_theory",
+        "structure_signals": "随机到达事件流，服务过程与能力限制，等待现象/拥堵",
+        "match_assessment": "NO_MATCH — 完全不适用。",
+        "family_hit": false,
+        "family_hit_detail": "queuing_theory 不在 allowed_modeling_structures 中",
+        "decision": "REJECT"
+      }
+    }
+  }
+}

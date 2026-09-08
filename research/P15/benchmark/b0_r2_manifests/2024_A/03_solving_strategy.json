@@ -1,0 +1,90 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T08:13:30Z",
+  "finished_at": "2026-09-08T08:17:00Z",
+  "latency_seconds": 210,
+  "submitted_at": "2026-09-08T08:17:05Z",
+  "node_id": "solving_strategy",
+  "dag_position": 3,
+  "payload": {
+    "title": "求解策略 — 运动学递推+约束优化数值求解",
+    "decision": "采用分层求解策略：(1) 运动学层：阿基米德螺线弧长参数化+前向链递推，由龙头位置和速度递推所有节的位置和速度；(2) 碰撞检测层：矩形SAT分离轴定理逐对检测；(3) 优化层：Q3/Q4/Q5转化为带约束优化问题，用NSGA-II求帕累托前沿后基于理想点法选解。整体为确定性数值仿真，固定随机种子42。",
+    "alternatives": [
+      {
+        "method": "纯解析求解",
+        "assessment": "阿基米德螺线弧长积分无初等闭式解（涉及椭圆积分），无法纯解析。只能数值积分。"
+      },
+      {
+        "method": "有限元多体动力学仿真",
+        "assessment": "过度建模。问题是纯运动学（给定速度求位置），不需要动力学（力/质量/加速度）。引入动力学增加不必要的复杂度和误差。"
+      },
+      {
+        "method": "梯度-based优化（SQP/IPOPT）",
+        "assessment": "Q3/Q5目标函数可通过运动学模型获得梯度，SQP可能更高效。但Q4的相切约束导致可行域非凸，且NSGA-II的帕累托前沿能提供更多决策信息。选择NSGA-II为主，SQP作为对比验证。"
+      }
+    ],
+    "reasoning": "Q1/Q2的核心是螺线弧长参数化：龙头速度恒定→弧长s(t)=v*t是已知的→需要由s反解极角theta(s)，这需要数值积分螺线弧长元素。一旦龙头位置确定，后续各节由刚性杆长约束和铰接角度递推。递推关系是确定性的，不需要迭代。Q2碰撞检测在每个时间步对所有板凳矩形对做SAT检测，首次检测到碰撞的时间即为终止时刻。Q3/Q4/Q5是优化问题：Q3是单变量约束优化（最小螺距），可用二分法或NSGA-II；Q4是两变量约束优化（R1,R2满足R1=2R2和相切约束），目标是最小化弧长；Q5是单变量约束优化（最大龙头速度），约束是所有把手速度<=2m/s。NSGA-II能统一处理这三个优化问题，且帕累托前沿有助于理解约束边界的权衡。",
+    "algorithm": {
+      "step1_spiral_parametrization": {
+        "description": "阿基米德螺线弧长参数化",
+        "details": [
+          "螺线方程: r(theta) = r0 + b*theta/(2*pi)",
+          "弧长元素: ds = sqrt(r^2 + (b/(2*pi))^2) dtheta",
+          "数值积分: 使用Simpson法或自适应求积计算s(theta) = integral_0^theta ds",
+          "反解: 由s(t)=v_head*t，通过二分法或Newton法反解theta(t)",
+          "初始条件: theta(0)对应第16圈A点位置"
+        ]
+      },
+      "step2_forward_chain_propagation": {
+        "description": "前向链递推各节位置",
+        "details": [
+          "已知第i节前把手位置P_i和方位角phi_i",
+          "第i节后把手位置: P_i,back = P_i + L_eff_i * (cos(phi_i), sin(phi_i))",
+          "第i+1节前把手 = 第i节后把手（铰接点重合）",
+          "方位角phi_i由螺线切线方向或优化变量确定",
+          "递推从龙头(i=1)到龙尾(i=223)"
+        ]
+      },
+      "step3_velocity_propagation": {
+        "description": "速度递推",
+        "details": [
+          "对位置方程关于t求导",
+          "龙头速度: v_1 = v_head (已知)",
+          "后续各节速度由链式法则和铰接约束递推",
+          "速度大小: v_i = sqrt((dx_i/dt)^2 + (dy_i/dt)^2)"
+        ]
+      },
+      "step4_collision_detection": {
+        "description": "矩形碰撞检测（SAT分离轴定理）",
+        "details": [
+          "每节板凳视为矩形: 长=L_i, 宽=0.30m, 中心=前后把手中点, 方向=phi_i",
+          "对每对非相邻板凳(i,j)，检查4个潜在分离轴（2个矩形各2个边方向）",
+          "若所有轴上投影均重叠→碰撞",
+          "时间步长1s，从t=0递增，首次碰撞时刻为t_collision"
+        ]
+      },
+      "step5_optimization_nsga2": {
+        "description": "NSGA-II多目标优化求解Q3/Q4/Q5",
+        "details": [
+          "编码: 实数编码（螺距/速度/半径为连续变量）",
+          "种群规模: 100, 进化代数: 200",
+          "交叉: SBX模拟二进制交叉, eta_c=20",
+          "变异: 多项式变异, eta_m=20, 概率=1/n_var",
+          "选择: 二元锦标赛选择（基于非支配排序+拥挤度）",
+          "选解: 帕累托前沿上用理想点法（最小化到理想点距离）选最终解",
+          "随机种子: 42, 独立运行5次报告均值±标准差"
+        ]
+      }
+    },
+    "feasibility": {
+      "computational_complexity": "Q1/Q2: O(T * N^2) where T=300时间步, N=223节 → 约1500万次矩形对检测，可接受。Q3/Q4/Q5: NSGA-II每次评估需一次完整运动学仿真O(N)，100*200=20000次评估 → 约450万次递推，可接受。",
+      "numerical_stability": "螺线弧长积分为光滑函数，数值积分稳定。递推过程为线性运算，无累积发散风险。NSGA-II实数编码稳定。",
+      "implementation_notes": "使用numpy向量化运算加速递推。碰撞检测可提前剪枝（距离>对角线的矩形对跳过）。优化目标函数缓存避免重复计算。"
+    }
+  }
+}

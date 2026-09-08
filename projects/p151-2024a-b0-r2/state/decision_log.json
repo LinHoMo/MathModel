@@ -1,0 +1,84 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-08T09:11:02Z",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "method_selection output",
+      "chosen": "选择 mc-nsga2（NSGA-II 多目标进化优化）作为主方法卡。建模策略为：以阿基米德螺线几何参数化+多体刚体链运动学递推为核心机理，Q3/Q4/Q5的约束优化子问题采用NSGA-II求解帕累托前沿后决策选点。catalog中无geometric_modeling卡，mc-nsga2的family=multi_objective_optimization可匹配benchmark allowed_modeling_structures中的optimization。",
+      "alternatives": [
+        "mc-ga (遗传算法)",
+        "mc-pso (粒子群优化)",
+        "mc-topsis (逼近理想解排序)",
+        "mc-ahp (层次分析法)",
+        "mc-monte-carlo (蒙特卡洛模拟)",
+        "mc-numerical-pde (偏微分方程数值求解)",
+        "mc-dp (动态规划)",
+        "mc-queuing-theory (排队论)"
+      ],
+      "criteria": [
+        "structure_signal_match: 卡片structure_signals是否与问题结构匹配",
+        "family_in_allowed: 卡片family是否在benchmark allowed_modeling_structures中",
+        "not_forbidden: 不在benchmark forbidden_misinterpretations中",
+        "mathematical_applicability: 方法数学机理是否适用于子问题",
+        "multi_objective_capability: 是否能处理Q3-Q5的多约束权衡"
+      ],
+      "evidence_ids": [],
+      "reasoning": "结构识别→卡片匹配推理链：(1) 题面分析：223节板凳铰接成开环刚体链，沿阿基米德螺线运动，龙头匀速→核心结构是multi_body_rigid_chain_kinematics + archimedean_spiral_geometry。(2) 子问题分解：Q1/Q2纯运动学+碰撞检测（几何），Q3最小螺距（约束优化），Q4最短调头曲线（几何优化），Q5最大速度（约束优化）→3/5子问题含optimization结构。(3) benchmark allowed_modeling_structures = [geometric_modeling, differential_equations, optimization, simulation]。(4) catalog 19张卡逐张检查family：mc-nsga2(family=multi_objective_optimization)紧凑匹配optimization→HIT；其余卡family均不在allowed列表中或被benchmark禁止。(5) 结论：mc-nsga2是唯一能匹配allowed_modeling_structures的卡，且其多目标优化能力确实适用于Q3-Q5的约束优化子问题。选择mc-nsga2，shortlist包含mc-ga和mc-pso作为替代优化方法参考（但它们的family不匹配allowed列表，仅作算法对比）。",
+      "confidence": 0.82,
+      "reversible": true,
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T09:10:48Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D002",
+      "question": "solving_strategy output",
+      "chosen": "采用分层求解策略：(1) 运动学层：阿基米德螺线弧长参数化+前向链递推，由龙头位置和速度递推所有节的位置和速度；(2) 碰撞检测层：矩形SAT分离轴定理逐对检测；(3) 优化层：Q3/Q4/Q5转化为带约束优化问题，用NSGA-II求帕累托前沿后基于理想点法选解。整体为确定性数值仿真，固定随机种子42。",
+      "alternatives": [
+        "纯解析求解",
+        "有限元多体动力学仿真",
+        "梯度-based优化（SQP/IPOPT）"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [],
+      "reasoning": "Q1/Q2的核心是螺线弧长参数化：龙头速度恒定→弧长s(t)=v*t是已知的→需要由s反解极角theta(s)，这需要数值积分螺线弧长元素。一旦龙头位置确定，后续各节由刚性杆长约束和铰接角度递推。递推关系是确定性的，不需要迭代。Q2碰撞检测在每个时间步对所有板凳矩形对做SAT检测，首次检测到碰撞的时间即为终止时刻。Q3/Q4/Q5是优化问题：Q3是单变量约束优化（最小螺距），可用二分法或NSGA-II；Q4是两变量约束优化（R1,R2满足R1=2R2和相切约束），目标是最小化弧长；Q5是单变量约束优化（最大龙头速度），约束是所有把手速度<=2m/s。NSGA-II能统一处理这三个优化问题，且帕累托前沿有助于理解约束边界的权衡。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T09:10:54Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D003",
+      "question": "validation_plan output",
+      "chosen": "采用四层验证体系：(1) 几何一致性验证（杆长约束/曲线约束残差）；(2) 物理合理性验证（速度连续性/能量守恒代理）；(3) 优化收敛性验证（NSGA-II前沿稳定性/HV指标）；(4) 敏感性分析（关键参数扰动±10%/±20%）。固定随机种子42，独立运行5次报告均值±标准差。",
+      "alternatives": [
+        "仅数值结果对比",
+        "蒙特卡洛不确定性传播"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [],
+      "reasoning": "板凳龙问题的核心风险在于：(1) 螺线弧长参数化的数值精度直接影响所有位置坐标；(2) 223节递推可能累积误差；(3) 碰撞检测的时间分辨率（1s步长）可能错过精确碰撞时刻；(4) NSGA-II优化结果可能受参数影响。因此验证必须覆盖几何精度、递推稳定性、碰撞时间精度和优化收敛性四个维度。敏感性分析聚焦于对结果影响最大的参数：螺距、龙头速度、板凳长度。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T09:11:02Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    }
+  ]
+}

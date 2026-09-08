@@ -1,0 +1,112 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T08:05:00Z",
+  "finished_at": "2026-09-08T08:09:00Z",
+  "latency_seconds": 240,
+  "submitted_at": "2026-09-08T08:09:05Z",
+  "node_id": "model_construction",
+  "dag_position": 1,
+  "payload": {
+    "title": "多体刚体链运动学与约束优化模型",
+    "model_type": "kinematic_chain_constrained_optimization",
+    "model_family": "geometric_modeling + optimization",
+    "question": "Q001",
+    "assumptions": [
+      "板凳为刚性体，不发生弯曲或形变",
+      "把手连接为理想铰接，可自由旋转且无摩擦",
+      "各把手中心严格位于指定曲线上（螺线或调头曲线）",
+      "龙头前把手速度严格恒定为设定值（Q1-Q4为1m/s，Q5为变量）",
+      "板凳宽度30cm在碰撞检测中视为矩形障碍物",
+      "忽略把手孔径5.5cm的间隙影响（把手中心视为精确铰接点）",
+      "螺线参数化采用阿基米德螺线标准形式r=r0+b*theta/(2*pi)",
+      "盘入方向为顺时针（极角theta随时间减小）"
+    ],
+    "variables": [
+      {"name": "theta_i(t)", "meaning": "第i节前把手在螺线上的极角", "type": "continuous_time_dependent"},
+      {"name": "phi_i(t)", "meaning": "第i节板凳相对于极轴的方位角", "type": "continuous_time_dependent"},
+      {"name": "x_i(t), y_i(t)", "meaning": "第i节前把手的笛卡尔坐标", "type": "continuous_time_dependent"},
+      {"name": "v_i(t)", "meaning": "第i节前把手的速度大小", "type": "continuous_time_dependent"},
+      {"name": "pitch_b", "meaning": "螺距（Q3决策变量）", "type": "continuous_optimization"},
+      {"name": "v_head_max", "meaning": "龙头最大速度（Q5决策变量）", "type": "continuous_optimization"},
+      {"name": "R1, R2", "meaning": "调头曲线两段圆弧半径（Q4决策变量，R1=2*R2）", "type": "continuous_optimization"}
+    ],
+    "parameters": [
+      {"name": "N", "value": 223, "unit": "节", "meaning": "板凳总数"},
+      {"name": "L_head", "value": 3.41, "unit": "m", "meaning": "龙头板长"},
+      {"name": "L_body", "value": 2.20, "unit": "m", "meaning": "龙身/龙尾板长"},
+      {"name": "W", "value": 0.30, "unit": "m", "meaning": "板凳宽度"},
+      {"name": "d_hole", "value": 0.275, "unit": "m", "meaning": "孔中心到最近板头距离"},
+      {"name": "L_eff_head", "value": 2.86, "unit": "m", "meaning": "龙头有效杆长 = 3.41 - 2*0.275"},
+      {"name": "L_eff_body", "value": 1.65, "unit": "m", "meaning": "龙身有效杆长 = 2.20 - 2*0.275"},
+      {"name": "pitch_Q1", "value": 0.55, "unit": "m", "meaning": "Q1/Q2螺距"},
+      {"name": "pitch_Q4", "value": 1.7, "unit": "m", "meaning": "Q4/Q5螺距"},
+      {"name": "v_head_Q1", "value": 1.0, "unit": "m/s", "meaning": "Q1-Q4龙头速度"},
+      {"name": "v_limit", "value": 2.0, "unit": "m/s", "meaning": "Q5各把手速度上限"},
+      {"name": "turning_diameter", "value": 9.0, "unit": "m", "meaning": "调头空间直径"},
+      {"name": "initial_turn", "value": 16, "unit": "圈", "meaning": "初始位置圈数"}
+    ],
+    "objectives": [
+      "Q1: 精确计算0-300s每秒各把手位置和速度",
+      "Q2: 确定碰撞终止时刻t_collision",
+      "Q3: 最小化螺距b: min b subject to 龙头可达调头空间边界",
+      "Q4: 最小化调头曲线弧长: min L_curve subject to 相切约束",
+      "Q5: 最大化龙头速度: max v_head subject to 所有把手速度<=2m/s"
+    ],
+    "constraints": [
+      "刚性杆长约束: ||P_{i+1,front} - P_{i,back}|| = L_eff_i (相邻把手间距等于有效杆长)",
+      "曲线约束: 各前把手中心位于指定曲线（螺线或调头S曲线）上",
+      "速度约束(Q5): v_i(t) <= 2.0 m/s 对所有i和t",
+      "调头空间约束(Q3): 龙头前把手到达r=4.5m圆边界",
+      "相切约束(Q4): 调头曲线与盘入螺线、盘出螺线均相切；两段圆弧之间相切",
+      "半径关系(Q4): R1 = 2*R2",
+      "碰撞约束(Q2): 任意两节板凳矩形不相交（除相邻铰接处）",
+      "非负约束: pitch_b > 0, v_head > 0, R1 > 0, R2 > 0"
+    ],
+    "mechanisms": [
+      "archimedean_spiral_kinematics: 龙头沿螺线运动，弧长参数s(t)由速度积分得到s(t)=v_head*t，反解theta(s)确定位置",
+      "forward_chain_propagation: 已知第i节前把手位置和方位角，由杆长约束递推第i+1节前把手位置",
+      "velocity_propagation: 对位置方程求导，由龙头速度和铰接角度关系递推各节速度",
+      "rectangle_collision_detection: 将每节板凳视为矩形，用SAT（分离轴定理）检测任意两节矩形是否相交",
+      "constrained_optimization_solve: Q3/Q4/Q5转化为带约束的单目标/多目标优化问题求解"
+    ],
+    "equations": [
+      "螺线方程: r(theta) = r0 + b * theta / (2*pi)",
+      "螺线弧长元素: ds = sqrt(r^2 + (dr/dtheta)^2) dtheta = sqrt(r^2 + (b/(2*pi))^2) dtheta",
+      "龙头运动: s(t) = v_head * t, 由s(theta) = integral_0^theta sqrt(r(u)^2 + (b/(2*pi))^2) du 反解theta(t)",
+      "位置: x(t) = r(theta(t)) * cos(theta(t)), y(t) = r(theta(t)) * sin(theta(t))",
+      "速度: v(t) = sqrt((dx/dt)^2 + (dy/dt)^2) = ds/dt = v_head (龙头)",
+      "杆长约束: (x_{i+1} - x_i)^2 + (y_{i+1} - y_i)^2 = L_eff_i^2",
+      "方位角: phi_i = atan2(y_{i,back} - y_{i,front}, x_{i,back} - x_{i,front})",
+      "Q3优化: min_{b} b  s.t. exists theta: r(theta)=4.5 AND 螺线从初始位置连续可达",
+      "Q5优化: max_{v_head} v_head  s.t. forall i,t: v_i(t;v_head) <= 2.0"
+    ],
+    "objective": "建立多体刚体链运动学模型，通过阿基米德螺线参数化和刚性杆长约束递推各把手位置与速度，并对Q3最小螺距、Q4最短调头曲线、Q5最大龙头速度三个子问题建立约束优化模型求解",
+    "data": {
+      "objective": "建立多体刚体链运动学模型，通过阿基米德螺线参数化和刚性杆长约束递推各把手位置与速度，并对Q3最小螺距、Q4最短调头曲线、Q5最大龙头速度建立约束优化模型求解",
+      "constraints": [
+        "刚性杆长约束: 相邻把手间距等于有效杆长",
+        "曲线约束: 各前把手中心位于指定曲线上",
+        "速度约束(Q5): 所有把手速度<=2.0m/s",
+        "调头空间约束(Q3): 龙头到达r=4.5m边界",
+        "相切约束(Q4): 调头曲线与螺线及两段圆弧间均相切",
+        "碰撞约束(Q2): 任意两节板凳矩形不相交"
+      ],
+      "variables": [
+        "theta_i(t): 第i节前把手极角",
+        "phi_i(t): 第i节板凳方位角",
+        "x_i(t), y_i(t): 第i节前把手笛卡尔坐标",
+        "v_i(t): 第i节前把手速度",
+        "pitch_b: 螺距(Q3决策变量)",
+        "v_head_max: 龙头最大速度(Q5决策变量)",
+        "R1, R2: 调头圆弧半径(Q4决策变量)"
+      ],
+      "card_id": "mc-nsga2",
+      "shortlist": ["mc-nsga2", "mc-ga", "mc-pso"]
+    }
+  }
+}

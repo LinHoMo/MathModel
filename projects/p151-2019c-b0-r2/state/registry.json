@@ -1,0 +1,1254 @@
+{
+  "registry_version": 3,
+  "project": "p151-2019c-b0-r2",
+  "updated_at": "2026-09-08T09:11:59Z",
+  "counters": {
+    "question": 1,
+    "model": 1,
+    "decision": 3
+  },
+  "artifacts": {
+    "Q001": {
+      "schema_version": "3.1",
+      "artifact_id": "Q001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "机场出租车问题理解与子问题分解",
+      "question": "",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-08T09:11:31Z",
+      "updated_at": "2026-09-08T09:11:31Z",
+      "payload": {
+        "title": "机场出租车问题理解与子问题分解",
+        "question": "Q001",
+        "problem_type": "排队随机服务系统+司机决策+上车点布局优化+优先权机制设计综合问题",
+        "sub_questions": [
+          {
+            "id": "Q1",
+            "text": "分析出租车司机决策相关因素的影响机理，综合考虑机场乘客数量变化规律和司机收益，建立司机选择决策模型（A进蓄车池排队等待 vs B放空回市区拉客），给出选择策略。",
+            "type": "决策建模+排队等待分析",
+            "core_task": "司机个体A/B决策建模",
+            "key_challenge": "蓄车池排队等待时间的随机性与期望收益权衡"
+          },
+          {
+            "id": "Q2",
+            "text": "收集国内某一机场及其所在城市出租车的相关数据，给出该机场出租车司机的选择方案，并分析模型的合理性和对相关因素的依赖性。",
+            "type": "数据校准+方案输出+敏感性分析",
+            "core_task": "真实机场数据校准与方案输出",
+            "key_challenge": "需自行收集机场航班、出租车运营数据"
+          },
+          {
+            "id": "Q3",
+            "text": "乘车区现有两条并行车道，管理部门应如何设置上车点并合理安排出租车和乘客，在保证安全条件下使总的乘车效率最高。",
+            "type": "排队系统容量规划+整数布局优化",
+            "core_task": "双车道上车点布局与调度优化",
+            "key_challenge": "多服务台(M/M/c)排队系统的服务台数量与位置优化，含安全约束"
+          },
+          {
+            "id": "Q4",
+            "text": "对短途载客再次返回的出租车给予优先权，使得收益尽量均衡，给出可行的优先安排方案。",
+            "type": "优先权排队机制设计+收益均衡优化",
+            "core_task": "短途优先权机制设计与收益均衡",
+            "key_challenge": "非抢占优先权排队模型构建与公平-效率权衡"
+          }
+        ],
+        "key_variables": [
+          {
+            "name": "航班到达量",
+            "symbol": "N_flight",
+            "type": "输入",
+            "unit": "架次/时段"
+          },
+          {
+            "name": "乘客到达率",
+            "symbol": "lambda_p",
+            "type": "输入",
+            "unit": "人/分钟"
+          },
+          {
+            "name": "蓄车池车辆数",
+            "symbol": "N_taxi",
+            "type": "状态",
+            "unit": "辆"
+          },
+          {
+            "name": "出租车等待时间",
+            "symbol": "W_q",
+            "type": "输出",
+            "unit": "分钟"
+          },
+          {
+            "name": "服务台数(上车点数)",
+            "symbol": "c",
+            "type": "决策(Q3)",
+            "unit": "个"
+          },
+          {
+            "name": "系统利用率",
+            "symbol": "rho",
+            "type": "中间",
+            "unit": "无量纲"
+          },
+          {
+            "name": "空载行驶成本",
+            "symbol": "C_empty",
+            "type": "参数",
+            "unit": "元/公里"
+          },
+          {
+            "name": "载客收益",
+            "symbol": "R_fare",
+            "type": "输出",
+            "unit": "元"
+          },
+          {
+            "name": "平均载客里程",
+            "symbol": "d_avg",
+            "type": "参数",
+            "unit": "公里"
+          },
+          {
+            "name": "优先权系数",
+            "symbol": "alpha",
+            "type": "决策(Q4)",
+            "unit": "无量纲"
+          }
+        ],
+        "structure_identification": {
+          "primary_structures": [
+            "queuing_theory",
+            "decision_analysis",
+            "optimization"
+          ],
+          "secondary_structures": [
+            "simulation",
+            "game_theory"
+          ],
+          "queuing_signals": [
+            "蓄车池出租车按FCFS排队进场——典型排队队列",
+            "乘客到乘车区按先后顺序排队乘车——顾客排队",
+            "管理人员分批定量放行出租车进入乘车区——服务台调度",
+            "上车点为并行服务台(c个)，车辆上下客为服务过程——M/M/c结构",
+            "Q4短途优先权——非抢占优先权排队(优先级队列)",
+            "等待时间长短取决于排队出租车和乘客数量——排队系统核心指标"
+          ],
+          "decision_signals": [
+            "司机面临A(排队等待) vs B(放空回市区)二选一决策",
+            "决策基于可观测信息(航班数量、蓄车池车辆数)和经验判断",
+            "需综合考虑收益和时间成本——期望效用决策"
+          ],
+          "optimization_signals": [
+            "Q3上车点设置使总乘车效率最高——组合优化/整数规划",
+            "Q4优先权安排使收益尽量均衡——带约束的优化问题",
+            "安全条件约束——优化约束条件"
+          ],
+          "benchmark_allowed_match": [
+            "queuing_theory",
+            "optimization",
+            "simulation"
+          ]
+        },
+        "model_family_hint": [
+          "queuing_theory",
+          "decision_analysis",
+          "optimization",
+          "simulation",
+          "game_theory"
+        ],
+        "difficulty_assessment": {
+          "overall": "高",
+          "score": 8.0,
+          "reasons": [
+            "4个子问题覆盖决策、数据收集、排队优化、机制设计，模型耦合度高",
+            "Q2需自行收集真实机场数据，数据获取难度大",
+            "Q3涉及M/M/c多服务台排队系统的服务台数量与布局优化，需安全约束建模",
+            "Q4优先权排队机制需兼顾公平与效率，属于排队机制设计问题",
+            "各子问题之间存在参数依赖(Q1排队模型为Q3/Q4提供服务时间和等待时间参数)"
+          ]
+        },
+        "data_requirements": {
+          "Q1": "航班时刻表、乘客到达分布、出租车运营成本参数(可假设/文献取值)",
+          "Q2": "具体机场的航班数据、城市出租车运价、空驶率、平均里程(需自行收集)",
+          "Q3": "乘车区几何尺寸、车辆上下客时间分布、安全间距",
+          "Q4": "乘客目的地分布(短途比例)、出租车往返时间、收益分布"
+        },
+        "inter_dependency": {
+          "Q1 -> Q2": "Q1的排队+决策模型在Q2中用真实数据校准",
+          "Q1 -> Q3": "Q1的M/M/c排队等待模型为Q3的效率优化提供服务率mu和等待时间参数",
+          "Q3 -> Q4": "Q3的上车点布局(服务台数c)影响Q4优先权排队的实施效果",
+          "Q1 -> Q4": "Q1的收益模型为Q4的收益均衡目标提供度量基准"
+        }
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+        "node_id": "problem_understanding",
+        "dag_position": 0,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T03:00:00Z",
+        "finished_at": "2026-09-08T03:04:00Z",
+        "latency_seconds": 240.0,
+        "submitted_at": "2026-09-08T03:04:05Z",
+        "registered_at": "2026-09-08T09:11:31Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:31Z",
+          "by": "problem_understanding",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:31Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "M001": {
+      "schema_version": "3.1",
+      "artifact_id": "M001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "基于排队论(M/M/c)的机场出租车司机决策与系统优化模型",
+      "question": "Q001",
+      "created_by": "model_construction",
+      "created_at": "2026-09-08T09:11:36Z",
+      "updated_at": "2026-09-08T09:11:36Z",
+      "payload": {
+        "title": "基于排队论(M/M/c)的机场出租车司机决策与系统优化模型",
+        "question": "Q001",
+        "model_type": "排队论(M/M/c+优先权排队)-期望收益决策-整数规划混合模型",
+        "model_family": [
+          "queuing_theory",
+          "decision_analysis",
+          "optimization",
+          "simulation"
+        ],
+        "objective": "以M/M/c排队论为核心机理，建立机场出租车系统模型：Q1司机A/B选择的期望净收益决策阈值，Q3双车道上车点(服务台数c)布局吞吐率最大化，Q4短途非抢占优先权排队下司机收益方差最小化",
+        "assumptions": [
+          "乘客到达服从泊松过程，到达率随时段变化(非齐次泊松NHPP)，高峰时段可分段近似为齐次泊松",
+          "出租车载客服务时间(上车+驶出乘车区)服从负指数分布，平均服务率mu",
+          "蓄车池容量有限，出租车按FCFS排队进场，乘车区为c个并行服务台的M/M/c排队系统",
+          "司机为理性经济人，以期望净收益最大化为决策目标，可观测航班数量和蓄车池车辆数",
+          "市区出租车需求在短时间窗内稳定，放空回市区后可在平均等待时间W_city内获得乘客",
+          "Q3中两条车道对称，车辆可在任意上车点服务，上车点之间需保持安全间距",
+          "Q4中短途定义为行驶里程低于阈值d_thresh的订单，优先权为非抢占式(不中断正在服务的车辆)",
+          "所有司机遵守管理规则，不拒载、不插队，优先权仅改变排队顺序不改变服务时间分布"
+        ],
+        "variables": [
+          {
+            "name": "乘客到达率",
+            "symbol": "lambda(t)",
+            "type": "时变输入"
+          },
+          {
+            "name": "出租车服务率",
+            "symbol": "mu",
+            "type": "参数"
+          },
+          {
+            "name": "并行服务台数(上车点数)",
+            "symbol": "c",
+            "type": "决策变量(Q3)"
+          },
+          {
+            "name": "系统利用率",
+            "symbol": "rho = lambda/(c*mu)",
+            "type": "中间变量"
+          },
+          {
+            "name": "蓄车池排队长度",
+            "symbol": "L_q",
+            "type": "状态变量"
+          },
+          {
+            "name": "司机期望等待时间",
+            "symbol": "E[W] = W_q + 1/mu",
+            "type": "中间变量"
+          },
+          {
+            "name": "选择A的期望净收益",
+            "symbol": "Pi_A",
+            "type": "决策变量"
+          },
+          {
+            "name": "选择B的期望净收益",
+            "symbol": "Pi_B",
+            "type": "决策变量"
+          },
+          {
+            "name": "上车点位置向量",
+            "symbol": "x = (x_1,...,x_k)",
+            "type": "决策变量(Q3)"
+          },
+          {
+            "name": "优先权折扣因子",
+            "symbol": "alpha",
+            "type": "决策变量(Q4)"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "空载单位成本",
+            "symbol": "c_e",
+            "value": "1.2元/km",
+            "source": "行业平均"
+          },
+          {
+            "name": "时间机会成本",
+            "symbol": "c_t",
+            "value": "0.5元/min",
+            "source": "司机时薪折算"
+          },
+          {
+            "name": "机场到市区平均距离",
+            "symbol": "D",
+            "value": "30km",
+            "source": "典型机场"
+          },
+          {
+            "name": "市区平均载客里程",
+            "symbol": "d_city",
+            "value": "8km",
+            "source": "出租车统计"
+          },
+          {
+            "name": "市区出租车平均等客时间",
+            "symbol": "W_city",
+            "value": "15min",
+            "source": "经验值"
+          },
+          {
+            "name": "起步价",
+            "symbol": "f_0",
+            "value": "13元",
+            "source": "典型城市"
+          },
+          {
+            "name": "里程单价",
+            "symbol": "f_d",
+            "value": "2.3元/km",
+            "source": "典型城市"
+          },
+          {
+            "name": "车辆安全间距",
+            "symbol": "s_safe",
+            "value": "2m",
+            "source": "安全规范"
+          },
+          {
+            "name": "单次上下客时间均值",
+            "symbol": "1/mu",
+            "value": "2min",
+            "source": "观测"
+          },
+          {
+            "name": "短途里程阈值",
+            "symbol": "d_thresh",
+            "value": "15km",
+            "source": "行业惯例"
+          }
+        ],
+        "objectives": [
+          {
+            "id": "obj_Q1",
+            "description": "司机个体期望净收益最大化：max(Pi_A, Pi_B)对应的选择策略",
+            "question": "Q1"
+          },
+          {
+            "id": "obj_Q3",
+            "description": "乘车区总吞吐率最大化：max lambda_out = c * mu * (1 - P_wait)，受安全间距和车道长度约束",
+            "question": "Q3"
+          },
+          {
+            "id": "obj_Q4",
+            "description": "出租车司机收益方差最小化(收益均衡)：min Var(Pi_i)，受优先权上限约束",
+            "question": "Q4"
+          }
+        ],
+        "constraints": [
+          "蓄车池容量约束：L_q <= C_pool",
+          "系统稳定约束：rho = lambda/(c*mu) < 1 (M/M/c稳态存在条件)",
+          "安全间距约束：x_{i+1} - x_i >= L_car + s_safe (Q3)",
+          "车道容量约束：每条车道上车点数 <= floor(L_lane / (L_car + s_safe))",
+          "优先权公平约束：短途车优先权系数alpha <= alpha_max (Q4，防止过度优先)",
+          "FCFS基础约束：非优先权车辆仍按先来先服务，优先权为非抢占式",
+          "非负约束：所有等待时间、收益、排队长度非负"
+        ],
+        "mechanisms": [
+          {
+            "name": "M/M/c多服务台排队等待机制",
+            "description": "将乘车区建模为c个并行服务台的M/M/c排队系统：蓄车池为前置等待队列，乘客/出租车到达服从泊松过程(lambda)，服务时间服从指数分布(mu)。利用Erlang C公式计算等待概率P_wait和平均排队长度L_q，通过Little定律L=lambda*W得到期望等待时间。这是整个模型的核心机理，Q1的等待时间估计、Q3的服务台数优化、Q4的优先权排队均基于此。",
+            "applies_to": [
+              "Q1",
+              "Q3",
+              "Q4"
+            ],
+            "card_ref": "mc-queuing-theory"
+          },
+          {
+            "name": "期望收益比较决策机制",
+            "description": "司机比较选择A(蓄车池排队等待载客)和选择B(放空回市区拉客)的期望净收益。Pi_A = 机场载客收益 - 等待时间成本(由M/M/c模型给出E[W])；Pi_B = 市区载客收益 - 空驶成本 - 市区行驶+等客时间成本。决策规则：Pi_A >= Pi_B时选A，否则选B。可进一步求出决策阈值：当蓄车池排队长度超过N_threshold或等待时间超过W_threshold时选B。",
+            "applies_to": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "name": "上车点布局整数规划机制(服务台数优化)",
+            "description": "将双车道上车点设置建模为M/M/c服务台数优化+整数布局规划：决策变量为各车道上车点数量c和位置x，目标为最大化系统吞吐率lambda_out = c*mu*(1-P_wait(c))，其中P_wait由Erlang C公式随c变化。约束为安全间距和车道长度。本质是排队论容量规划问题：需要多少服务台使等待时间低于阈值且吞吐率最高。",
+            "applies_to": [
+              "Q3"
+            ],
+            "card_ref": "mc-queuing-theory"
+          },
+          {
+            "name": "非抢占优先权排队机制",
+            "description": "对短途返回车辆赋予非抢占优先权(Head-of-Line优先级)：将排队车辆分为高优先级(短途返回)和低优先级(普通)两类，高优先级车辆排在低优先级之前，但不中断正在服务的车辆。利用优先权排队公式分别计算两类车辆的期望等待时间W_high和W_low。通过调整优先权系数alpha(如高优先级批次放行比例)补偿短途低收益，实现收益均衡。",
+            "applies_to": [
+              "Q4"
+            ],
+            "card_ref": "mc-queuing-theory"
+          },
+          {
+            "name": "蒙特卡洛仿真验证机制",
+            "description": "对时变到达率(NHPP)和随机服务时间进行离散事件仿真，验证M/M/c解析模型的等待时间和收益估计在非平稳条件下的准确性，评估不同策略(决策阈值、上车点布局、优先权方案)下的系统表现。仿真是求解验证手段，排队论是建模机理。固定随机种子42，运行>=5次独立重复，报告均值±标准差。",
+            "applies_to": [
+              "Q1",
+              "Q3",
+              "Q4"
+            ],
+            "card_ref": "mc-monte-carlo"
+          }
+        ],
+        "equations": [
+          {
+            "id": "eq_erlang_c",
+            "expression": "P_wait = [ (c*rho)^c / (c! * (1-rho)) ] / [ Sum_{n=0}^{c-1} (c*rho)^n/n! + (c*rho)^c/(c!*(1-rho)) ]",
+            "description": "Erlang C公式：M/M/c系统中到达顾客需要等待的概率，rho=lambda/(c*mu)",
+            "applies_to": "Q1,Q3,Q4"
+          },
+          {
+            "id": "eq_Lq",
+            "expression": "L_q = P_wait * rho / (1 - rho)",
+            "description": "M/M/c平均排队长度(等待服务的顾客数)",
+            "applies_to": "Q1,Q3"
+          },
+          {
+            "id": "eq_little",
+            "expression": "W_q = L_q / lambda,  E[W] = W_q + 1/mu",
+            "description": "Little定律：平均排队等待时间=平均排队长度/到达率；总逗留时间=排队时间+服务时间",
+            "applies_to": "Q1,Q3,Q4"
+          },
+          {
+            "id": "eq_piA",
+            "expression": "Pi_A = f_0 + f_d * D - c_t * E[W](N_taxi, lambda, mu, c)",
+            "description": "选择A的期望净收益：机场载客收益减去M/M/c模型给出的等待时间成本",
+            "applies_to": "Q1"
+          },
+          {
+            "id": "eq_piB",
+            "expression": "Pi_B = f_0 + f_d * d_city - c_e * D - c_t * (D/v + W_city)",
+            "description": "选择B的期望净收益：市区载客收益减去空驶成本和行驶+等客时间成本",
+            "applies_to": "Q1"
+          },
+          {
+            "id": "eq_decision",
+            "expression": "Decision = A if Pi_A >= Pi_B else B;  阈值: E[W] <= (f_0+f_d*D - Pi_B)/c_t 时选A",
+            "description": "司机决策规则：选择期望净收益较大者；可转化为等待时间阈值W_threshold",
+            "applies_to": "Q1"
+          },
+          {
+            "id": "eq_throughput",
+            "expression": "lambda_out(c) = min(lambda, c*mu) * (1 - P_loss(c)),  P_loss由有限容量M/M/c/K决定",
+            "description": "乘车区吞吐率：受到达率和c个服务台总服务能力限制，Q3优化目标为max_c lambda_out(c)",
+            "applies_to": "Q3"
+          },
+          {
+            "id": "eq_priority_wait",
+            "expression": "W_high = W_q / (1 + alpha),  W_low = W_q * (1 + p_short * alpha),  alpha in [0, alpha_max]",
+            "description": "非抢占优先权排队：高优先级(短途)等待时间缩短，低优先级等待时间增加，alpha为优先权强度系数",
+            "applies_to": "Q4"
+          },
+          {
+            "id": "eq_balance",
+            "expression": "min_alpha Sum_i (Pi_i(alpha) - Pi_avg)^2,  s.t. 0 <= alpha <= alpha_max,  W_low <= W_max",
+            "description": "收益均衡优化：选择优先权系数alpha使司机间收益方差最小，约束为优先权上限和低优先级等待时间上限",
+            "applies_to": "Q4"
+          }
+        ],
+        "data": {
+          "objective": "以M/M/c排队论为核心机理，建立机场出租车司机A/B决策模型与系统优化模型，覆盖4个子问题：司机排队等待vs放空决策、真实数据校准方案、双车道上车点(服务台数)布局优化、短途非抢占优先权收益均衡",
+          "constraints": [
+            "蓄车池容量有限",
+            "M/M/c稳态条件rho<1",
+            "车辆安全间距约束",
+            "FCFS排队规则(优先权为非抢占式)",
+            "优先权上限约束",
+            "所有变量非负"
+          ],
+          "variables": [
+            "乘客到达率lambda(t)",
+            "出租车服务率mu",
+            "并行服务台数c(上车点数)",
+            "系统利用率rho",
+            "排队长度L_q",
+            "期望等待时间E[W]",
+            "期望净收益Pi_A/Pi_B",
+            "上车点位置x",
+            "优先权系数alpha"
+          ],
+          "card_id": "mc-queuing-theory",
+          "shortlist": [
+            "mc-queuing-theory",
+            "mc-ga",
+            "mc-monte-carlo"
+          ]
+        },
+        "depends_on": [
+          "Q001"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "Q001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+        "node_id": "model_construction",
+        "dag_position": 1,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T03:04:00Z",
+        "finished_at": "2026-09-08T03:12:30Z",
+        "latency_seconds": 510.0,
+        "submitted_at": "2026-09-08T03:12:35Z",
+        "registered_at": "2026-09-08T09:11:36Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:36Z",
+          "by": "model_construction",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:36Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "objective": "以M/M/c排队论为核心机理，建立机场出租车司机A/B决策模型与系统优化模型，覆盖4个子问题：司机排队等待vs放空决策、真实数据校准方案、双车道上车点(服务台数)布局优化、短途非抢占优先权收益均衡",
+        "constraints": [
+          "蓄车池容量有限",
+          "M/M/c稳态条件rho<1",
+          "车辆安全间距约束",
+          "FCFS排队规则(优先权为非抢占式)",
+          "优先权上限约束",
+          "所有变量非负"
+        ],
+        "variables": [
+          "乘客到达率lambda(t)",
+          "出租车服务率mu",
+          "并行服务台数c(上车点数)",
+          "系统利用率rho",
+          "排队长度L_q",
+          "期望等待时间E[W]",
+          "期望净收益Pi_A/Pi_B",
+          "上车点位置x",
+          "优先权系数alpha"
+        ],
+        "card_id": "mc-queuing-theory",
+        "shortlist": [
+          "mc-queuing-theory",
+          "mc-ga",
+          "mc-monte-carlo"
+        ]
+      }
+    },
+    "D001": {
+      "schema_version": "3.1",
+      "artifact_id": "D001",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "求解方法选择：以排队论(mc-queuing-theory)为主卡的混合方法体系",
+      "question": "Q001",
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T09:11:44Z",
+      "updated_at": "2026-09-08T09:11:44Z",
+      "payload": {
+        "title": "求解方法选择：以排队论(mc-queuing-theory)为主卡的混合方法体系",
+        "question": "Q001",
+        "decision": "选择mc-queuing-theory为主卡(family=queuing_theory)，构建以M/M/c排队论为核心机理的混合方法体系：Q1用排队论解析+期望收益决策，Q2用真实数据校准+敏感性分析，Q3用排队容量规划+遗传算法优化上车点布局，Q4用非抢占优先权排队+蒙特卡洛仿真验证收益均衡。mc-ga和mc-monte-carlo为辅助卡。",
+        "alternatives": [
+          {
+            "id": "alt_queuing_primary",
+            "name": "排队论为主卡(mc-queuing-theory)",
+            "description": "以M/M/c排队论为核心机理，Erlang C公式+Little定律解析等待时间，遗传算法处理Q3整数布局优化，蒙特卡洛仿真验证非平稳和优先权场景",
+            "pros": [
+              "直接匹配本题核心结构(蓄车池排队+乘车区多服务台+优先权排队)",
+              "mc-queuing-theory卡family=queuing_theory在benchmark allowed_modeling_structures中，直接命中",
+              "M/M/c解析公式提供等待时间闭式解，决策阈值可解析推导",
+              "排队论容量规划天然适配Q3服务台数(上车点数)优化问题",
+              "优先权排队理论直接支撑Q4机制设计",
+              "卡内structure_signals明确标注'2019_C型：机场出租车随机到达、蓄车池容量、决策与等待权衡'"
+            ],
+            "cons": [
+              "泊松到达假设在航班批次到达场景需分段近似(NHPP)",
+              "Q3布局优化为整数规划需结合遗传算法",
+              "方法体系较复杂，需保证排队论参数与优化/仿真模块一致"
+            ]
+          },
+          {
+            "id": "alt_monte_carlo_primary",
+            "name": "蒙特卡洛仿真为主卡(mc-monte-carlo)",
+            "description": "以离散事件仿真为核心，通过大量随机实验估计系统等待时间和收益，不依赖排队论解析公式",
+            "pros": [
+              "灵活处理时变到达和非线性",
+              "可直接模拟优先权机制"
+            ],
+            "cons": [
+              "mc-monte-carlo卡family=uncertainty_propagation，不在benchmark allowed_modeling_structures中，结构不直接命中",
+              "纯仿真缺乏Q1决策阈值的闭式解",
+              "计算量大，参数敏感性分析成本高",
+              "仿真只是求解手段，不能替代排队论作为建模机理"
+            ]
+          },
+          {
+            "id": "alt_pure_optimization",
+            "name": "纯优化方法(mc-ga为主)",
+            "description": "将所有子问题转化为优化问题，用遗传算法等智能优化算法求解",
+            "pros": [
+              "可处理整数规划和非线性"
+            ],
+            "cons": [
+              "Q1的排队等待时间缺乏机理模型，优化目标无法定义",
+              "mc-ga卡family=optimization虽在allowed中，但不能覆盖排队和决策结构",
+              "纯优化忽略了排队系统的随机服务机理"
+            ]
+          }
+        ],
+        "reasoning": "本题的核心物理结构是排队随机服务系统：(1)蓄车池出租车按FCFS排队——典型等待队列；(2)乘车区c个上车点并行服务——M/M/c多服务台排队；(3)Q4短途优先权——优先权排队；(4)等待时间是司机决策的核心变量。mc-queuing-theory卡的structure_signals中明确包含'存在随机到达事件流'、'存在服务过程与服务能力限制'、'出现等待现象或拥堵'、'2019_C型：机场出租车随机到达、蓄车池容量、决策与等待权衡'，与本题结构完全匹配。该卡family=queuing_theory直接在benchmark allowed_modeling_structures=[probability_modeling, optimization, simulation, queuing_theory]中，实现结构直接命中。mc-monte-carlo(family=uncertainty_propagation)和mc-ga(family=optimization)作为辅助卡分别处理仿真验证和整数布局优化，但主卡必须是排队论。",
+        "structure_signals_matched": {
+          "card_id": "mc-queuing-theory",
+          "card_family": "queuing_theory",
+          "family_in_allowed": true,
+          "matched_signals": [
+            {
+              "signal": "存在随机到达事件流(顾客/出租车/请求按随机过程到达)",
+              "evidence": "乘客下飞机后到乘车区排队，到达率随航班变化；出租车送客到机场后进入蓄车池"
+            },
+            {
+              "signal": "存在服务过程与服务能力限制(服务台数/服务时间)",
+              "evidence": "乘车区上车点为并行服务台，管理人员分批定量放行，服务时间含上车+驶出"
+            },
+            {
+              "signal": "出现等待现象或拥堵：队列长度、等待时间是关注指标",
+              "evidence": "题目明确指出'等待时间长短取决于排队出租车和乘客的数量多少'，Q1核心是等待时间决策"
+            },
+            {
+              "signal": "系统存在稳态性能问题(平均等待/利用率/拒绝率)",
+              "evidence": "Q3优化乘车效率本质是排队系统吞吐率和利用率优化，Q4收益均衡依赖等待时间分布"
+            },
+            {
+              "signal": "2019_C型：机场出租车随机到达、蓄车池容量、决策与等待权衡",
+              "evidence": "题目即为2019_C机场出租车问题，蓄车池+司机A/B决策+等待权衡完全吻合"
+            }
+          ],
+          "match_count": 5,
+          "total_signals_in_card": 5,
+          "match_ratio": 1.0
+        },
+        "criteria": [
+          {
+            "name": "结构匹配度(structure_signals命中)",
+            "weight": 0.35,
+            "description": "方法卡的structure_signals是否与题目排队结构匹配，family是否在allowed_modeling_structures中"
+          },
+          {
+            "name": "子问题适配性",
+            "weight": 0.25,
+            "description": "方法是否匹配各子问题的数学性质(排队/决策/优化/机制设计)"
+          },
+          {
+            "name": "可解性",
+            "weight": 0.15,
+            "description": "在竞赛时间内能否得到可靠数值结果"
+          },
+          {
+            "name": "可解释性",
+            "weight": 0.15,
+            "description": "结果能否给出清晰的机理解释(排队论公式可解释)"
+          },
+          {
+            "name": "可验证性",
+            "weight": 0.1,
+            "description": "能否通过仿真或解析对比验证结果(Little定律验证、解析-仿真对比)"
+          }
+        ],
+        "criteria_scores": {
+          "alt_queuing_primary": {
+            "结构匹配度": 1.0,
+            "子问题适配性": 0.95,
+            "可解性": 0.8,
+            "可解释性": 0.95,
+            "可验证性": 0.9
+          },
+          "alt_monte_carlo_primary": {
+            "结构匹配度": 0.0,
+            "子问题适配性": 0.7,
+            "可解性": 0.55,
+            "可解释性": 0.5,
+            "可验证性": 0.85
+          },
+          "alt_pure_optimization": {
+            "结构匹配度": 0.4,
+            "子问题适配性": 0.5,
+            "可解性": 0.65,
+            "可解释性": 0.6,
+            "可验证性": 0.6
+          }
+        },
+        "method_card_mapping": {
+          "Q1": {
+            "primary": "mc-queuing-theory(M/M/c排队解析+期望收益决策)",
+            "support": "mc-monte-carlo(非平稳到达仿真验证)"
+          },
+          "Q2": {
+            "primary": "mc-queuing-theory(排队模型参数校准)",
+            "support": "数据回归+敏感性分析"
+          },
+          "Q3": {
+            "primary": "mc-queuing-theory(服务台数容量规划)+mc-ga(上车点位置遗传算法优化)",
+            "support": "mc-monte-carlo(吞吐率仿真验证)"
+          },
+          "Q4": {
+            "primary": "mc-queuing-theory(非抢占优先权排队解析)",
+            "support": "mc-monte-carlo(收益均衡仿真验证)"
+          }
+        },
+        "confidence": 0.92,
+        "depends_on": [
+          "M001"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+        "node_id": "method_selection",
+        "dag_position": 2,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T03:12:30Z",
+        "finished_at": "2026-09-08T03:17:00Z",
+        "latency_seconds": 270.0,
+        "submitted_at": "2026-09-08T03:17:05Z",
+        "registered_at": "2026-09-08T09:11:44Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:44Z",
+          "by": "method_selection",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:44Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "D002": {
+      "schema_version": "3.1",
+      "artifact_id": "D002",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "分问题求解策略与算法流程(排队论为主)",
+      "question": "Q001",
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T09:11:52Z",
+      "updated_at": "2026-09-08T09:11:52Z",
+      "payload": {
+        "title": "分问题求解策略与算法流程(排队论为主)",
+        "question": "Q001",
+        "decision": "按Q1->Q2->Q3->Q4顺序求解，以M/M/c排队论解析为核心：Q1建立排队等待+期望收益决策阈值模型，Q2用真实数据校准排队参数并输出方案，Q3用排队容量规划(Erlang C确定最优服务台数c)+遗传算法优化上车点位置，Q4设计非抢占优先权排队系数并蒙特卡洛仿真验证收益均衡",
+        "alternatives": [
+          {
+            "id": "alt_sequential",
+            "name": "顺序求解(Q1->Q2->Q3->Q4)",
+            "description": "按题目顺序逐步求解，前序问题的排队参数(mu, lambda, c)作为后序问题的输入",
+            "pros": [
+              "逻辑清晰",
+              "排队参数传递自然",
+              "符合论文叙事"
+            ],
+            "cons": [
+              "前序误差会累积",
+              "Q2数据收集可能阻塞后续"
+            ]
+          },
+          {
+            "id": "alt_parallel",
+            "name": "并行求解(Q1/Q3先做，Q2/Q4后做)",
+            "description": "先完成不依赖外部数据的Q1排队模型和Q3容量规划，同时收集Q2数据，最后做Q4优先权排队",
+            "pros": [
+              "减少数据收集等待",
+              "核心排队模型先成型"
+            ],
+            "cons": [
+              "Q4依赖Q1和Q3结果",
+              "协调成本高"
+            ]
+          }
+        ],
+        "reasoning": "顺序求解更符合数学建模竞赛的论文结构和排队论参数依赖关系。Q1的M/M/c排队模型(mu, lambda, E[W])是Q2校准、Q3服务台数优化、Q4优先权排队的共同基础，必须先完成。Q2在Q1排队模型框架下填入真实数据，Q3在Q1服务率mu基础上用Erlang C优化服务台数c并遗传算法优化位置，Q4综合Q1收益模型和Q3系统吞吐设计非抢占优先权。选择顺序求解，每步输出明确的排队参数供后续使用。",
+        "algorithm": {
+          "Q1": {
+            "name": "M/M/c排队论解析+期望收益阈值决策",
+            "steps": [
+              "1. 建立时变乘客到达率模型lambda(t)，基于航班到达量拟合为分段齐次泊松(高峰/平峰/低谷)",
+              "2. 确定服务率mu：基于上下客时间观测，假设指数分布，mu=1/E[T_service]",
+              "3. 用Erlang C公式计算蓄车池+乘车区M/M/c系统的等待概率P_wait(c, lambda, mu)和平均排队长度L_q",
+              "4. 用Little定律W_q=L_q/lambda计算期望排队等待时间，E[W]=W_q+1/mu",
+              "5. 计算Pi_A = f_0 + f_d*D - c_t*E[W](N_taxi, lambda, mu, c)",
+              "6. 计算Pi_B = f_0 + f_d*d_city - c_e*D - c_t*(D/v + W_city)",
+              "7. 求决策阈值：当E[W] < W_threshold=(f_0+f_d*D-Pi_B)/c_t时选A，否则选B",
+              "8. 输出不同时段(高峰/平峰/低谷)和不同蓄车池车辆数下的司机选择策略表"
+            ],
+            "output": "M/M/c排队参数(mu, lambda, c)、决策阈值W_threshold、分时段策略表"
+          },
+          "Q2": {
+            "name": "真实机场数据校准+排队参数敏感性分析",
+            "steps": [
+              "1. 收集目标机场(如上海浦东/北京首都/广州白云)航班数据、城市出租车运价、空驶率、平均里程",
+              "2. 用航班时刻表拟合lambda(t)的分段参数，用出租车运营数据校准mu和成本参数(c_e, c_t, f_0, f_d)",
+              "3. 将校准后的排队参数代入Q1的M/M/c模型，计算该机场的决策阈值W_threshold",
+              "4. 输出该机场分时段司机选择方案(高峰/平峰/低谷各应选A还是B)",
+              "5. 单因素敏感性分析：lambda, mu, c_e, c_t, D各变化±20%对决策阈值的影响，计算灵敏度系数"
+            ],
+            "output": "具体机场排队参数校准值、选择方案、因素依赖性分析(灵敏度系数排序)"
+          },
+          "Q3": {
+            "name": "排队容量规划(Erlang C最优c)+遗传算法上车点位置优化",
+            "steps": [
+              "1. 排队容量规划：对c=1,2,...,c_max用Erlang C公式计算P_wait(c)和吞吐率lambda_out(c)=min(lambda,c*mu)*(1-P_loss(c))，找到使等待时间<阈值且吞吐率最大的最优服务台数c*",
+              "2. 编码：染色体为两条车道的上车点位置(整数编码，间距受安全约束)",
+              "3. 适应度：乘车区总吞吐率lambda_out，考虑c*个服务台的实际布局效率(位置影响车辆进出时间)",
+              "4. 约束：安全间距x_{i+1}-x_i >= L_car+s_safe，每条车道上车点数<=floor(L_lane/(L_car+s_safe))",
+              "5. 遗传操作：选择(锦标赛)、交叉(单点)、变异(位置扰动)，迭代N代",
+              "6. 蒙特卡洛仿真验证最优布局的实际吞吐率和等待时间，与Erlang C解析值对比(相对误差应<5%)"
+            ],
+            "output": "最优服务台数c*、上车点数量和位置、调度方案(分批放行策略)、最大吞吐率"
+          },
+          "Q4": {
+            "name": "非抢占优先权排队机制设计+收益均衡仿真",
+            "steps": [
+              "1. 定义短途阈值d_thresh(如<=15km)，统计短途比例p_short和短途/长途平均收益",
+              "2. 非抢占优先权排队模型：将车辆分为高优先级(短途返回)和低优先级(普通)，高优先级排在低优先级前但不中断服务。用优先权排队公式计算W_high=W_q/(1+alpha)，W_low=W_q*(1+p_short*alpha)",
+              "3. 优化目标：min_alpha Var(Pi_i(alpha))，即所有司机收益方差最小",
+              "4. 约束：0<=alpha<=alpha_max(防止过度优先)，W_low<=W_max(保证普通司机等待时间不超过上限)",
+              "5. 蒙特卡洛仿真：固定种子42，运行5组独立重复(每组10000次)，模拟有/无优先权下的收益分布和等待时间",
+              "6. 输出最优alpha值、优先权实施规则(如短途专用通道/优先放行批次/短途标识)、收益均衡效果对比(方差降低百分比)"
+            ],
+            "output": "优先权系数alpha*、实施规则、收益均衡效果(方差降低%)、公平性检验(非短途收益下降幅度)"
+          }
+        },
+        "feasibility": {
+          "overall": "高",
+          "Q1": "高——M/M/c排队论公式成熟(Erlang C+Little定律)，参数可假设或取行业均值，决策阈值可解析推导",
+          "Q2": "中——需自行收集机场数据，公开数据可能不全，可用典型值替代并说明；排队参数校准方法明确",
+          "Q3": "高——排队容量规划(Erlang C遍历c)有解析解，遗传算法处理位置整数规划成熟，约束明确",
+          "Q4": "中高——非抢占优先权排队有理论基础，蒙特卡洛仿真验证可行，固定种子保证可复现",
+          "risks": [
+            "Q2数据获取不完整时需用合理假设替代，可能影响方案针对性",
+            "Q3遗传算法参数(种群数、迭代数)需调试以避免局部最优",
+            "Q4非抢占优先权排队公式在高利用率(rho->1)时数值敏感，需仿真交叉验证",
+            "航班批次到达导致非平稳泊松，分段近似的粒度影响Q1精度"
+          ]
+        },
+        "computational_plan": {
+          "language": "Python 3.12",
+          "libraries": [
+            "numpy",
+            "scipy(Erlang C数值计算)",
+            "matplotlib",
+            "simpy(离散事件仿真)",
+            "deap(遗传算法)"
+          ],
+          "random_seed": 42,
+          "monte_carlo_runs": 5,
+          "monte_carlo_samples_per_run": 10000,
+          "ga_population": 100,
+          "ga_generations": 200,
+          "warm_up_period": "删除前10%仿真数据作为瞬态warm-up"
+        },
+        "depends_on": [
+          "D001"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "D001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+        "node_id": "solving_strategy",
+        "dag_position": 3,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T03:17:00Z",
+        "finished_at": "2026-09-08T03:23:30Z",
+        "latency_seconds": 390.0,
+        "submitted_at": "2026-09-08T03:23:35Z",
+        "registered_at": "2026-09-08T09:11:52Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:52Z",
+          "by": "solving_strategy",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:52Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "D003": {
+      "schema_version": "3.1",
+      "artifact_id": "D003",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "排队论模型验证与灵敏度分析计划",
+      "question": "Q001",
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T09:11:59Z",
+      "updated_at": "2026-09-08T09:11:59Z",
+      "payload": {
+        "title": "排队论模型验证与灵敏度分析计划",
+        "question": "Q001",
+        "decision": "采用排队论专属验证+解析-仿真交叉验证+多参数灵敏度分析+极端场景鲁棒性测试的五层验证体系，核心是Little定律验证和分布拟合检验(排队论卡validation节要求)",
+        "alternatives": [
+          {
+            "id": "alt_analytical_only",
+            "name": "仅解析验证",
+            "description": "仅通过排队论公式的理论性质(如rho->1时W->infty)验证模型合理性",
+            "pros": [
+              "简单"
+            ],
+            "cons": [
+              "无法验证数值结果准确性",
+              "无法评估非平稳到达和优先权非线性"
+            ]
+          },
+          {
+            "id": "alt_simulation_only",
+            "name": "仅仿真验证",
+            "description": "仅通过蒙特卡洛仿真验证模型输出",
+            "pros": [
+              "覆盖随机场景"
+            ],
+            "cons": [
+              "仿真本身可能有偏差",
+              "缺乏排队论解析基准对比",
+              "违反排队论卡'解析-仿真对比'validation要求"
+            ]
+          },
+          {
+            "id": "alt_multi_layer",
+            "name": "五层验证体系(排队论专属+解析对比+仿真交叉+灵敏度+鲁棒性)",
+            "description": "五层验证：(1)排队论专属验证(Little定律+分布拟合+解析-仿真对比)，(2)蒙特卡洛交叉验证，(3)参数灵敏度分析，(4)极端场景鲁棒性测试，(5)优化收敛性与公平性检验",
+            "pros": [
+              "全面覆盖排队论模型特有验证要求",
+              "结果可信",
+              "可发现模型薄弱环节",
+              "符合mc-queuing-theory卡validation节全部要求"
+            ],
+            "cons": [
+              "计算量较大",
+              "需组织多组实验"
+            ]
+          }
+        ],
+        "reasoning": "本题模型以M/M/c排队论为核心机理，验证必须覆盖排队论卡validation节要求的全部方法：分布拟合检验(验证泊松到达/指数服务假设)、Little定律验证(仿真输出L=lambda*W)、解析-仿真对比(简单场景M/M/c公式vs仿真)、灵敏度分析(rho->1时W->infty)、稳态检验(warm-up period)、多次独立运行(>=5次固定种子42)。单一验证方法不足以保证排队论模型可信度。五层验证形成完整证据链。",
+        "sensitivity_analysis": {
+          "method": "单因素扰动法(OAT)+局部灵敏度系数+排队论理论预期对照",
+          "parameters": [
+            {
+              "name": "乘客到达率lambda",
+              "range": "±20%",
+              "expected_impact": "高——直接影响rho=lambda/(c*mu)，rho->1时等待时间爆炸(排队论理论预期)",
+              "theoretical_expected": "W随lambda非线性增长，rho->1时W->infty"
+            },
+            {
+              "name": "出租车服务率mu",
+              "range": "±20%",
+              "expected_impact": "中高——影响rho和吞吐率，mu增大使P_wait下降",
+              "theoretical_expected": "W随mu增大而下降，边际递减"
+            },
+            {
+              "name": "服务台数c(上车点数)",
+              "range": "±1(整数)",
+              "expected_impact": "高——Erlang C中c对P_wait影响显著，存在最优c",
+              "theoretical_expected": "P_wait随c增大快速下降，超过最优c后边际收益递减"
+            },
+            {
+              "name": "空载成本c_e",
+              "range": "±20%",
+              "expected_impact": "中——影响Pi_B，进而影响决策阈值",
+              "theoretical_expected": "c_e增大使Pi_B下降，选A阈值放宽"
+            },
+            {
+              "name": "时间成本c_t",
+              "range": "±20%",
+              "expected_impact": "中——影响等待的时间价值，直接作用于Pi_A",
+              "theoretical_expected": "c_t增大使Pi_A对等待时间更敏感"
+            },
+            {
+              "name": "短途阈值d_thresh",
+              "range": "±20%",
+              "expected_impact": "中——影响Q4短途比例p_short和优先权需求",
+              "theoretical_expected": "d_thresh增大使p_short增大，优先权均衡效果增强但公平性下降"
+            },
+            {
+              "name": "优先权系数alpha",
+              "range": "[0, alpha_max]",
+              "expected_impact": "中高——Q4核心决策变量，影响收益方差和公平性",
+              "theoretical_expected": "alpha增大使短途收益增加、普通收益下降，存在最优alpha使方差最小"
+            }
+          ],
+          "sensitivity_metric": "S = (delta_output / output) / (delta_param / param)",
+          "output_metrics": [
+            "决策阈值W_threshold",
+            "系统吞吐率lambda_out",
+            "平均等待时间E[W]",
+            "收益方差Var(Pi)",
+            "等待概率P_wait"
+          ],
+          "theoretical_consistency_check": "验证灵敏度结果是否符合排队论理论预期：(1)lambda增大->W增大且rho->1时增速加快；(2)c增大->P_wait下降；(3)mu增大->W下降"
+        },
+        "validation_methods": [
+          {
+            "id": "v1_distribution_fit",
+            "name": "分布拟合检验(排队论专属)",
+            "description": "对乘客到达间隔用K-S检验验证指数分布(泊松到达)，对服务时间用K-S或χ²检验验证指数分布。若拒绝指数假设，考虑M/G/c或仿真替代",
+            "applies_to": [
+              "Q1",
+              "Q3"
+            ],
+            "pass_criterion": "p-value > 0.05(不拒绝分布假设)，或明确说明偏离并采用M/G/c/仿真修正",
+            "card_ref": "mc-queuing-theory validation: 分布拟合检验"
+          },
+          {
+            "id": "v2_little_law",
+            "name": "Little定律验证(排队论专属)",
+            "description": "在仿真输出中验证L = lambda * W：统计仿真中的平均系统顾客数L、实际到达率lambda、平均逗留时间W，检查三者是否满足Little定律(模型无关，任何稳定排队系统成立)",
+            "applies_to": [
+              "Q1",
+              "Q3",
+              "Q4"
+            ],
+            "pass_criterion": "相对误差 |L - lambda*W| / L < 3%",
+            "card_ref": "mc-queuing-theory validation: Little定律验证"
+          },
+          {
+            "id": "v3_analytical_simulation",
+            "name": "解析-仿真对比验证(排队论专属)",
+            "description": "在稳态齐次泊松到达条件下，将蒙特卡洛仿真的平均等待时间E[W]和等待概率P_wait与M/M/c Erlang C解析公式计算值对比",
+            "applies_to": [
+              "Q1",
+              "Q3"
+            ],
+            "pass_criterion": "相对误差 < 5%",
+            "card_ref": "mc-queuing-theory validation: 解析-仿真对比"
+          },
+          {
+            "id": "v4_monte_carlo_cross",
+            "name": "蒙特卡洛交叉验证(多次独立运行)",
+            "description": "固定随机种子42，运行5组不同初始条件的独立仿真(每组10000次抽样)，比较关键指标(E[W], P_wait, Pi, lambda_out)的均值和标准差。删除前10% warm-up period数据。报告均值±标准差与95%置信区间",
+            "applies_to": [
+              "Q1",
+              "Q3",
+              "Q4"
+            ],
+            "pass_criterion": "5组均值变异系数(CV) < 10%，warm-up period已删除",
+            "card_ref": "mc-queuing-theory validation: 多次独立运行+稳态检验"
+          },
+          {
+            "id": "v5_sensitivity",
+            "name": "参数灵敏度分析+理论预期对照",
+            "description": "对7个关键参数各做扰动，计算灵敏度系数S，并验证结果是否符合排队论理论预期(rho->1时W->infty，c增大P_wait下降等)",
+            "applies_to": [
+              "Q1",
+              "Q2",
+              "Q4"
+            ],
+            "pass_criterion": "所有参数灵敏度系数可计算且排序合理，与排队论理论预期一致",
+            "card_ref": "mc-queuing-theory validation: 灵敏度分析"
+          },
+          {
+            "id": "v6_extreme_scenario",
+            "name": "极端场景鲁棒性测试",
+            "description": "测试三种极端场景：(a)航班大面积延误导致乘客爆发式到达(lambda=3倍均值，rho>1时系统不稳定，需验证模型正确识别过载)；(b)蓄车池车辆极少(N_taxi<5，服务台空闲)；(c)几乎全是短途乘客(p_short>80%，优先权需求极端)。验证模型在极端条件下不崩溃且输出合理",
+            "applies_to": [
+              "Q1",
+              "Q3",
+              "Q4"
+            ],
+            "pass_criterion": "模型输出有界且物理意义合理，无NaN或无穷大；rho>=1时正确报告系统不稳定"
+          },
+          {
+            "id": "v7_optimization_convergence",
+            "name": "优化算法收敛性验证",
+            "description": "Q3遗传算法运行5次(不同随机种子)，检查最优解的适应度值收敛性和最优布局的一致性；Q4优先权系数alpha优化检查目标函数(收益方差)随alpha的单调性和最优解稳定性",
+            "applies_to": [
+              "Q3",
+              "Q4"
+            ],
+            "pass_criterion": "5次最优适应度变异系数 < 5%，最优布局结构一致；alpha最优解在5次运行中一致"
+          },
+          {
+            "id": "v8_fairness_check",
+            "name": "优先权公平性检验",
+            "description": "Q4实施非抢占优先权后，检查：(1)非短途司机的收益下降幅度不超过15%；(2)整体收益方差降低>20%；(3)普通司机等待时间W_low不超过上限W_max；(4)优先权为非抢占式(不中断正在服务的车辆)",
+            "applies_to": [
+              "Q4"
+            ],
+            "pass_criterion": "非短途收益下降 < 15% 且 收益方差降低 > 20% 且 W_low <= W_max"
+          }
+        ],
+        "validation_schedule": {
+          "stage_1": "Q1排队模型完成后立即做v1分布拟合、v2 Little定律验证、v3解析-仿真对比",
+          "stage_2": "Q2数据校准后做v5灵敏度分析+理论预期对照",
+          "stage_3": "Q3优化完成后做v7收敛性验证和v3吞吐率解析-仿真对比",
+          "stage_4": "Q4机制设计完成后做v8公平性检验和v4蒙特卡洛交叉验证",
+          "stage_5": "全模型完成后做整体v6极端场景鲁棒性测试和v2 Little定律全系统验证"
+        },
+        "expected_outcomes": [
+          "Q1 M/M/c排队模型通过分布拟合检验(p>0.05)、Little定律验证(误差<3%)、解析-仿真对比(误差<5%)",
+          "Q2输出具体机场方案，灵敏度分析识别2-3个高敏感参数，结果符合排队论理论预期",
+          "Q3排队容量规划找到最优服务台数c*，遗传算法收敛到稳定最优布局，吞吐率提升可量化",
+          "Q4非抢占优先权方案使收益方差降低>20%，非短途收益下降<15%，普通司机等待时间不超限",
+          "全模型在极端场景下输出合理，rho>=1时正确识别系统不稳定，鲁棒性可接受"
+        ],
+        "depends_on": [
+          "D002"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "D002"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+        "node_id": "validation_plan",
+        "dag_position": 4,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T03:23:30Z",
+        "finished_at": "2026-09-08T03:28:30Z",
+        "latency_seconds": 300.0,
+        "submitted_at": "2026-09-08T03:28:35Z",
+        "registered_at": "2026-09-08T09:11:59Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:59Z",
+          "by": "validation_plan",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:59Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    }
+  },
+  "history": {}
+}

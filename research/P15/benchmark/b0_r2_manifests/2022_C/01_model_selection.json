@@ -1,0 +1,90 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "model_selection",
+  "dag_position": 1,
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "1.0",
+  "started_at": "2026-09-08T09:02:35Z",
+  "finished_at": "2026-09-08T09:06:00Z",
+  "latency_seconds": 205.0,
+  "submitted_at": "2026-09-08T09:06:01Z",
+  "payload": {
+    "title": "基于PCA降维的古代玻璃成分统计分类模型",
+    "model_type": "pca_dimensionality_reduction_with_classification",
+    "question": "Q001",
+    "assumptions": [
+      "成分比例累加和在85%-105%之间的数据视为有效，超出范围予以剔除",
+      "未检测到的成分（空白）按0处理，代表该成分含量低于检测限",
+      "风化过程中元素交换服从线性混合模型，风化前后成分差异可通过统计回归建模",
+      "高钾玻璃与铅钡玻璃在化学成分空间中存在可分的聚类结构",
+      "主成分分析前对数据进行z-score标准化，消除不同氧化物量纲差异",
+      "累计方差贡献率≥80%的前k个主成分足以保留原始数据主要信息"
+    ],
+    "variables": [
+      {"name": "X", "type": "matrix", "dimension": "n×14", "description": "标准化后的氧化物成分矩阵，n为有效采样点数"},
+      {"name": "PC_k", "type": "vector", "dimension": "n×k", "description": "前k个主成分得分，k由累计方差贡献率≥80%确定"},
+      {"name": "y_type", "type": "categorical", "values": ["高钾", "铅钡"], "description": "玻璃类型标签"},
+      {"name": "y_weather", "type": "binary", "values": [0, 1], "description": "风化状态（0=无风化，1=风化）"},
+      {"name": "loadings", "type": "matrix", "dimension": "14×k", "description": "主成分载荷矩阵，反映各氧化物对主成分的贡献"}
+    ],
+    "parameters": [
+      {"name": "n_components", "value": "k (累计方差≥80%)", "description": "PCA保留主成分个数"},
+      {"name": "random_state", "value": 42, "description": "随机种子，保证可复现"},
+      {"name": "n_clusters", "value": "肘部法/轮廓系数确定", "description": "KMeans亚类聚类簇数"},
+      {"name": "cv_folds", "value": 5, "description": "交叉验证折数"}
+    ],
+    "objectives": [
+      "通过PCA将14维氧化物成分降维至k维，保留≥80%方差信息",
+      "在降维空间中实现高钾/铅钡玻璃的可分性可视化与分类",
+      "对每个玻璃类别进行无监督亚类聚类划分",
+      "建立风化前后成分含量的统计预测模型",
+      "分析不同类别玻璃化学成分间的关联关系差异"
+    ],
+    "constraints": [
+      "成分比例累加和须在85%-105%有效范围内",
+      "PCA前必须进行z-score标准化",
+      "主成分个数k须有累计方差贡献率或碎石图依据",
+      "随机种子固定为42，多种子运行≥5次报告均值与标准差",
+      "分类结果须进行交叉验证与敏感性分析"
+    ],
+    "mechanisms": [
+      "PCA通过协方差矩阵特征值分解，将14维相关氧化物投影到正交主成分空间，消除多重共线性",
+      "主成分载荷揭示哪些氧化物（如PbO、BaO、K2O）主导类间差异",
+      "降维后特征输入KMeans进行亚类聚类，避免高维距离集中问题",
+      "降维后特征输入分类器（LDA/随机森林）鉴别未知样本类型",
+      "风化前后成分差异通过OLS回归建模，预测风化前含量"
+    ],
+    "equations": [
+      "X_std = (X - μ) / σ  (z-score标准化)",
+      "C = (1/(n-1)) X_std^T X_std  (协方差矩阵)",
+      "C v_i = λ_i v_i  (特征值分解，λ_1≥λ_2≥...≥λ_14)",
+      "PC_i = X_std · v_i  (第i主成分得分)",
+      "累计方差贡献率 = Σ_{i=1}^{k} λ_i / Σ_{i=1}^{14} λ_i ≥ 0.80",
+      "KMeans: min Σ_{j=1}^{K} Σ_{x∈C_j} ||x - μ_j||²"
+    ],
+    "objective": "基于PCA降维的古代玻璃成分统计分类：将14维氧化物成分投影到低维正交空间，在保留≥80%方差的前提下实现高钾/铅钡玻璃的可分性分析、亚类聚类、未知样本分类与风化预测",
+    "data": {
+      "objective": "基于PCA降维的古代玻璃成分统计分类：将14维氧化物成分投影到低维正交空间，在保留≥80%方差的前提下实现高钾/铅钡玻璃的可分性分析、亚类聚类、未知样本分类与风化预测",
+      "constraints": [
+        "成分比例累加和须在85%-105%有效范围内",
+        "PCA前必须进行z-score标准化",
+        "主成分个数k须有累计方差贡献率或碎石图依据",
+        "随机种子固定为42，多种子运行≥5次报告均值与标准差",
+        "分类结果须进行交叉验证与敏感性分析"
+      ],
+      "variables": [
+        "X: n×14标准化氧化物成分矩阵",
+        "PC_k: n×k主成分得分矩阵",
+        "y_type: 玻璃类型标签(高钾/铅钡)",
+        "y_weather: 风化状态(0/1)",
+        "loadings: 14×k主成分载荷矩阵"
+      ],
+      "card_id": "mc-pca",
+      "shortlist": ["mc-pca", "mc-kmeans", "mc-xgboost"]
+    },
+    "depends_on": []
+  }
+}

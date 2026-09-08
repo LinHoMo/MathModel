@@ -1,0 +1,121 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T04:16:30Z",
+  "finished_at": "2026-09-08T04:20:00Z",
+  "latency_seconds": 210.0,
+  "submitted_at": "2026-09-08T04:20:05Z",
+  "node_id": "validation_plan",
+  "dag_position": 4,
+  "payload": {
+    "title": "验证计划：网格收敛性 + 守恒量检查 + 反演残差 + 灵敏度分析",
+    "question": "Q001",
+    "decision": "采用多层次验证策略：(1) 数值验证——网格收敛性测试（Δx/Δt减半，关键输出变化<1%）、守恒量检查（无源时总能量变化<2%）、解析解对比（稳态线性分布/半无限大物体，相对误差<1%）、多格式交叉验证（CN vs 隐式Euler结果一致）；(2) 反演验证——拟合残差分析（R²>0.95）、参数不确定性（协方差矩阵估计h的置信区间）、留一交叉验证；(3) 优化验证——约束满足性检查、最优解局部稳定性（邻域扰动后仍满足约束）、Pareto前沿分析（Q3）；(4) 灵敏度分析——热导率k、对流系数h、层厚d对皮肤温度峰值和超温时间的局部灵敏度（OAT）和全局灵敏度（Sobol/LHS）。",
+    "alternatives": [
+      {
+        "method": "仅靠最终结果与附件2对比",
+        "pros": ["最简单"],
+        "cons": ["无法区分模型误差和数值误差", "无法验证优化解的最优性", "不符合mc-numerical-pde卡的validation要求"],
+        "feasibility": "low — 验证不充分"
+      },
+      {
+        "method": "网格收敛性 + 守恒量检查 + 灵敏度分析（选定）",
+        "pros": ["覆盖数值精度、物理合理性、参数鲁棒性三个维度", "符合mc-numerical-pde卡validation节的全部建议", "可操作且计算量可控"],
+        "cons": ["需要多次正问题求解（网格收敛性需3-4组网格）"],
+        "feasibility": "high — 全面且可操作"
+      }
+    ],
+    "reasoning": "## 验证计划推理\n\n### 数值验证（PDE求解器正确性）\n1. **网格收敛性测试**：取Δx=[0.5, 0.25, 0.125]mm，Δt=[5, 2.5, 1.25]s，计算Q1情形下皮肤外侧温度峰值和90min末温度。CN格式理论收敛阶为O(Δt²+Δx²)，相邻网格间关键输出变化应<1%。若变化>5%需进一步加密。\n2. **守恒量检查**：在无源项情形下（关闭对流边界，改为绝热），系统总内能应守恒。计算Q=Σρ_i c_i ∫T_i dx随时间变化，相对变化应<2%。\n3. **解析解对比**：(a) 稳态情形——关闭时间导数，四层稳态热传导解析解为分段线性分布，数值解应与解析解完全一致（机器精度）；(b) 半无限大物体——单层半无限大物体受恒定表面温度，解析解为erfc函数，数值解在早期应匹配。\n4. **多格式交叉验证**：用隐式Euler（BTCS）在相同网格下求解，与CN结果对比，两者差异应<1%（BTCS一阶精度在细网格下趋近CN）。\n\n### 反演验证（参数估计可靠性）\n1. **拟合优度**：反演h后，计算模拟皮肤温度与附件2实测值的R²，要求R²>0.95；RMSE应<1°C。\n2. **参数不确定性**：基于LM算法的协方差矩阵估计h的标准偏差σ_h，报告95%置信区间[h-2σ_h, h+2σ_h]。\n3. **留一交叉验证**：将附件2数据分为训练集（80%）和验证集（20%），用训练集反演h，在验证集上预测，验证集RMSE应与训练集接近（无过拟合）。\n4. **正则化参数选择**：用L-curve法确定λ，在拟合残差和正则化项间取平衡点。\n\n### 优化验证（最优解合理性）\n1. **约束满足性**：验证最优解处T_skin(t_end)≤47°C且超44°C时间≤5min，允许数值容差0.1°C/0.1min。\n2. **局部稳定性**：在最优解邻域（±5%厚度）扰动，检查约束是否仍满足；若微小扰动即违反约束，说明解处于约束边界，需报告active constraint。\n3. **Pareto前沿（Q3）**：若用NSGA-II，绘制d_II vs d_IV的Pareto前沿，验证前沿的凸性和分布均匀性。\n4. **最优性条件**：对于Q2单变量问题，验证目标函数在最优解处的导数（有限差分近似）接近0（无约束侧）或约束active（约束侧）。\n\n### 物理合理性检查\n1. 温度分布应在环境温度和体内温度之间（37°C ≤ T ≤ T_env）\n2. 皮肤温度应单调上升并趋近稳态（无过冲）\n3. 增加层厚应降低皮肤温度（单调性）\n4. 提高环境温度应升高皮肤温度（单调性）",
+    "sensitivity_analysis": {
+      "method": "OAT (One-At-a-Time) local sensitivity + LHS global sensitivity",
+      "local_sensitivity": {
+        "parameters": ["k_I", "k_II", "k_III", "k_IV", "h", "d_II", "d_IV", "T_env"],
+        "perturbation": "±10% around baseline",
+        "outputs": ["T_skin_peak", "time_above_44C", "T_skin_at_t_end"],
+        "metric": "S_i = (ΔOutput/Output_baseline) / (ΔInput/Input_baseline) (normalized sensitivity coefficient)",
+        "expected": "d_II and d_IV have highest negative sensitivity (thicker → lower skin temp); h and T_env have highest positive sensitivity"
+      },
+      "global_sensitivity": {
+        "method": "Latin Hypercube Sampling (LHS) + Sobol indices",
+        "sample_size": 200,
+        "parameters": ["k_II", "k_IV", "h", "d_II", "d_IV"],
+        "ranges": "±20% around baseline",
+        "outputs": ["T_skin_peak", "time_above_44C"],
+        "first_order_indices": "S_i = V(E[Y|X_i]) / V(Y)",
+        "total_indices": "S_Ti = E[V(Y|X_~i)] / V(Y)"
+      },
+      "robustness_check": "Monte Carlo simulation (N=500) with parameter uncertainty propagation to estimate probability of constraint violation at optimal design point"
+    },
+    "validation_methods": [
+      {
+        "name": "网格收敛性测试",
+        "type": "numerical_verification",
+        "criteria": "Δx/Δt减半，关键输出变化 < 1%",
+        "mc_numerical_pde_ref": "validation: 网格收敛性测试"
+      },
+      {
+        "name": "守恒量检查",
+        "type": "physical_verification",
+        "criteria": "无源时总能量相对变化 < 2%",
+        "mc_numerical_pde_ref": "validation: 守恒量检查"
+      },
+      {
+        "name": "解析解对比",
+        "type": "numerical_verification",
+        "criteria": "稳态线性分布/半无限大物体相对误差 < 1%",
+        "mc_numerical_pde_ref": "validation: 解析解对比"
+      },
+      {
+        "name": "多格式交叉验证",
+        "type": "numerical_verification",
+        "criteria": "CN vs BTCS结果差异 < 1%",
+        "mc_numerical_pde_ref": "validation: 多格式交叉验证"
+      },
+      {
+        "name": "反演拟合优度",
+        "type": "inverse_validation",
+        "criteria": "R² > 0.95, RMSE < 1°C"
+      },
+      {
+        "name": "参数不确定性分析",
+        "type": "inverse_validation",
+        "criteria": "报告h的95%置信区间"
+      },
+      {
+        "name": "留一交叉验证",
+        "type": "inverse_validation",
+        "criteria": "验证集RMSE ≈ 训练集RMSE（无过拟合）"
+      },
+      {
+        "name": "约束满足性检查",
+        "type": "optimization_validation",
+        "criteria": "最优解处T_skin≤47°C且超44°C时间≤5min（容差0.1°C/0.1min）"
+      },
+      {
+        "name": "最优解局部稳定性",
+        "type": "optimization_validation",
+        "criteria": "±5%扰动后约束仍满足（或识别active constraint）"
+      },
+      {
+        "name": "物理合理性检查",
+        "type": "physical_validation",
+        "criteria": "温度在37~T_env之间，单调上升，层厚/环境温度单调性正确",
+        "mc_numerical_pde_ref": "validation: 物理合理性"
+      },
+      {
+        "name": "参数敏感性分析",
+        "type": "sensitivity",
+        "criteria": "±10%扰动输出变化平滑无突变",
+        "mc_numerical_pde_ref": "validation: 参数敏感性"
+      }
+    ],
+    "random_seed": 42,
+    "multi_run_count": 5,
+    "depends_on": ["M001", "D001", "D002"],
+    "tags": ["validation", "grid_convergence", "conservation_check", "sensitivity_analysis", "inverse_validation", "optimization_validation", "mc-numerical-pde"]
+  }
+}

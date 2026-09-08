@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-08T09:10:59Z",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "method_selection output",
+      "chosen": "{'card_id': 'mc-pca', 'method_name': '主成分分析（PCA）', 'family': 'dimensionality_reduction', 'decision': 'USE mc-pca as primary modeling card; ADAPT mc-kmeans and mc-xgboost as complementary downstream methods'}",
+      "alternatives": [
+        "{\"card_id\": \"mc-kmeans\", \"method_name\": \"KMeans与层次聚类\", \"family\": \"unsupervised\", \"verdict\": \"ADAPT — 用于Q2亚类划分，但family=unsupervised不直接匹配allowed中的clustering，作为PCA降维后的下游聚类步骤\", \"use_case\": \"在PCA降维空间中对高钾/铅钡玻璃分别进行无监督亚类聚类\"}",
+        "{\"card_id\": \"mc-xgboost\", \"method_name\": \"XGBoost梯度提升树\", \"family\": \"supervised_learning\", \"verdict\": \"ADAPT — 用于Q3未知样本分类，但family=supervised_learning不直接匹配allowed中的classification，作为PCA特征提取后的分类器\", \"use_case\": \"基于PCA降维特征训练分类器，对表单3未知玻璃进行类型鉴别\"}",
+        "{\"card_id\": \"mc-ols\", \"method_name\": \"最小二乘回归\", \"family\": \"statistical_modeling\", \"verdict\": \"REJECT as primary — family=statistical_modeling不直接匹配allowed中的statistical_analysis；仅用于Q1风化前含量预测的辅助回归，不进入shortlist top3\", \"use_case\": \"Q1中风化前后成分含量的线性回归预测\"}"
+      ],
+      "criteria": [
+        "family是否在allowed_modeling_structures中（硬约束）",
+        "problem_structures是否覆盖classification/clustering",
+        "good_for是否匹配高维成分数据降维需求",
+        "often_combined_with是否支持下游聚类/分类方法",
+        "requires/risks是否可通过标准化和方差阈值管控"
+      ],
+      "evidence_ids": [
+        "Q001",
+        "M001"
+      ],
+      "reasoning": "结构→卡片推理链：(1) 问题结构识别为成分数据统计分类——14维氧化物成分、维度接近样本量、存在多重共线性、含已标注二分类与无监督亚类需求。(2) 结构信号匹配：高维小样本→降维预处理是必要前置步骤；成分数据强相关→PCA正交化消除共线性；分类/聚类均受益于低维特征空间。(3) 卡片评估：mc-pca的family=dimensionality_reduction直接命中allowed_modeling_structures；其problem_structures包含classification，good_for明确列出'高维数据可视化与去共线性'，often_combined_with包含mc-kmeans和mc-xgboost，与本题多方法流水线完全契合。(4) mc-kmeans(family=unsupervised)和mc-xgboost(family=supervised_learning)虽不直接命中allowed中的clustering/classification字符串，但作为PCA降维后的下游方法被ADAPT保留在shortlist中。(5) mc-ols(family=statistical_modeling)不直接匹配statistical_analysis，且仅用于Q1辅助回归，REJECT为primary。结论：mc-pca是唯一同时满足结构需求、family直接命中allowed、且与下游方法兼容的主卡。",
+      "confidence": 0.88,
+      "reversible": true,
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T09:10:58Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D002",
+      "question": "solving_strategy output",
+      "chosen": "采用PCA为核心的分阶段求解策略：数据清洗与标准化→PCA降维与载荷分析→按问题分支执行（Q1统计回归/Q2降维空间KMeans亚类聚类/Q3降维特征分类器鉴别/Q4类别内相关网络对比）",
+      "alternatives": [
+        "直接在原始14维空间执行分类/聚类，不降维",
+        "仅用t-SNE/UMAP做可视化，不做线性降维",
+        "先做特征选择（如ANOVA F值筛选top-k氧化物），再分类"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "Q001",
+        "M001",
+        "D001"
+      ],
+      "reasoning": "本题四问共享同一成分数据集，统一在PCA降维空间求解可保证方法一致性与结果可比性。PCA的线性性质使载荷矩阵可解释——直接回答Q2'哪些化学成分主导分类'。降维后KMeans避免高维距离集中，分类器减少过拟合风险。Q1的风化预测和Q4的相关分析虽不严格需要降维，但在PCA空间中分析主成分间相关性可提供更简洁的关联结构视图。分阶段策略确保每一步有明确的输入输出和验证门禁。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T09:10:58Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D003",
+      "question": "validation_plan output",
+      "chosen": "采用多层验证策略：结构验证（PCA方差贡献率+载荷可解释性）→ 统计验证（假设检验+交叉验证）→ 稳定性验证（多种子重复+子采样一致性）→ 敏感性验证（特征剔除+参数扰动），四层全绿方可宣告模型成立",
+      "alternatives": [
+        "仅用准确率单一指标验证分类结果",
+        "不做敏感性分析，仅报告单次运行结果",
+        "用训练集准确率代替交叉验证"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "Q001",
+        "M001",
+        "D001",
+        "D002"
+      ],
+      "reasoning": "本题为小样本高维成分数据，模型结论的可信度高度依赖验证的严密性。PCA的验证核心是方差贡献率与载荷可解释性——如果PC1不能由PbO/BaO/K2O等化学可解释特征主导，则降维结果缺乏物理意义。分类与聚类的验证必须包含交叉验证和多种子稳定性，因为~70样本的数据集随机划分波动大。敏感性分析直接回应题目Q2/Q3要求，通过特征剔除和参数扰动量化结论的鲁棒性。四层验证策略确保从结构到统计到稳定性到敏感性的全链路覆盖。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T09:10:59Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    }
+  ]
+}

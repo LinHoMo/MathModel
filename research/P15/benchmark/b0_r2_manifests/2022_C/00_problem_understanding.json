@@ -1,0 +1,77 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "problem_understanding",
+  "dag_position": 0,
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "1.0",
+  "started_at": "2026-09-08T09:00:00Z",
+  "finished_at": "2026-09-08T09:02:30Z",
+  "latency_seconds": 150.0,
+  "submitted_at": "2026-09-08T09:02:31Z",
+  "payload": {
+    "title": "古代玻璃制品成分分析与鉴别 — 问题理解与结构识别",
+    "problem_type": "compositional_data_statistical_classification",
+    "sub_questions": [
+      {
+        "id": "Q1",
+        "text": "分析表面风化与玻璃类型、纹饰、颜色的关系；结合玻璃类型分析风化前后化学成分含量的统计规律，并预测风化前化学成分含量",
+        "type": "statistical_analysis"
+      },
+      {
+        "id": "Q2",
+        "text": "分析高钾玻璃与铅钡玻璃的分类规律；对每个类别选择合适化学成分进行亚类划分，给出划分方法与结果，并分析合理性和敏感性",
+        "type": "clustering"
+      },
+      {
+        "id": "Q3",
+        "text": "对未知类别玻璃文物的化学成分进行分析，鉴别其所属类型，并对分类结果进行敏感性分析",
+        "type": "classification"
+      },
+      {
+        "id": "Q4",
+        "text": "针对不同类别玻璃文物样品，分析化学成分之间的关联关系，并比较不同类别之间化学成分关联关系的差异性",
+        "type": "statistical_analysis"
+      }
+    ],
+    "key_variables": [
+      "SiO2 (二氧化硅含量)",
+      "Na2O, K2O, CaO, MgO (碱金属/碱土金属氧化物)",
+      "Al2O3, Fe2O3 (金属氧化物)",
+      "PbO, BaO (铅钡特征氧化物)",
+      "P2O5, SO2, SrO, SnO2 (微量元素氧化物)",
+      "CuO (铜氧化物着色剂)",
+      "weathering (表面风化状态: 风化/无风化)",
+      "glass_type (玻璃类型: 高钾/铅钡)",
+      "ornament (纹饰: A/B/C)",
+      "color (颜色)"
+    ],
+    "structure_identification": {
+      "primary_structure": "compositional_data_statistical_classification",
+      "description": "14维氧化物成分比例数据（成分性约束：累加和85%-105%），含已标注二分类（高钾/铅钡），需完成统计描述、无监督亚类聚类、有监督分类预测与相关性分析。数据维度(14)接近样本量(~70采样点)，存在高维小样本与多重共线性特征。",
+      "detected_structures": [
+        "statistical_analysis",
+        "clustering",
+        "classification",
+        "dimensionality_reduction"
+      ],
+      "data_characteristics": {
+        "sample_size": "medium (约70个采样点)",
+        "dimensionality": "high (14种氧化物)",
+        "labeled": true,
+        "compositional": true,
+        "missing_values": "存在（未检测到的成分空白）",
+        "class_imbalance": "轻度（铅钡略多于高钾）"
+      },
+      "structure_signals": [
+        "多变量连续型成分数据 → 降维预处理需求",
+        "已知类别标签 + 未知样本预测 → 分类任务",
+        "亚类划分无预定义标签 → 聚类任务",
+        "风化前后含量关系 + 成分关联 → 统计分析/回归",
+        "维度接近样本量 → PCA降维缓解过拟合"
+      ]
+    }
+  }
+}

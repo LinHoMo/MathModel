@@ -1,0 +1,85 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-08T09:11:59Z",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "method_selection output",
+      "chosen": "选择mc-queuing-theory为主卡(family=queuing_theory)，构建以M/M/c排队论为核心机理的混合方法体系：Q1用排队论解析+期望收益决策，Q2用真实数据校准+敏感性分析，Q3用排队容量规划+遗传算法优化上车点布局，Q4用非抢占优先权排队+蒙特卡洛仿真验证收益均衡。mc-ga和mc-monte-carlo为辅助卡。",
+      "alternatives": [
+        "排队论为主卡(mc-queuing-theory)",
+        "蒙特卡洛仿真为主卡(mc-monte-carlo)",
+        "纯优化方法(mc-ga为主)"
+      ],
+      "criteria": [
+        "{'name': '结构匹配度(structure_signals命中)', 'weight': 0.35, 'description': '方法卡的structure_signals是否与题目排队结构匹配，family是否在allowed_modeling_structures中'}",
+        "{'name': '子问题适配性', 'weight': 0.25, 'description': '方法是否匹配各子问题的数学性质(排队/决策/优化/机制设计)'}",
+        "{'name': '可解性', 'weight': 0.15, 'description': '在竞赛时间内能否得到可靠数值结果'}",
+        "{'name': '可解释性', 'weight': 0.15, 'description': '结果能否给出清晰的机理解释(排队论公式可解释)'}",
+        "{'name': '可验证性', 'weight': 0.1, 'description': '能否通过仿真或解析对比验证结果(Little定律验证、解析-仿真对比)'}"
+      ],
+      "evidence_ids": [
+        "M001"
+      ],
+      "reasoning": "本题的核心物理结构是排队随机服务系统：(1)蓄车池出租车按FCFS排队——典型等待队列；(2)乘车区c个上车点并行服务——M/M/c多服务台排队；(3)Q4短途优先权——优先权排队；(4)等待时间是司机决策的核心变量。mc-queuing-theory卡的structure_signals中明确包含'存在随机到达事件流'、'存在服务过程与服务能力限制'、'出现等待现象或拥堵'、'2019_C型：机场出租车随机到达、蓄车池容量、决策与等待权衡'，与本题结构完全匹配。该卡family=queuing_theory直接在benchmark allowed_modeling_structures=[probability_modeling, optimization, simulation, queuing_theory]中，实现结构直接命中。mc-monte-carlo(family=uncertainty_propagation)和mc-ga(family=optimization)作为辅助卡分别处理仿真验证和整数布局优化，但主卡必须是排队论。",
+      "confidence": 0.92,
+      "reversible": true,
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T09:11:44Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D002",
+      "question": "solving_strategy output",
+      "chosen": "按Q1->Q2->Q3->Q4顺序求解，以M/M/c排队论解析为核心：Q1建立排队等待+期望收益决策阈值模型，Q2用真实数据校准排队参数并输出方案，Q3用排队容量规划(Erlang C确定最优服务台数c)+遗传算法优化上车点位置，Q4设计非抢占优先权排队系数并蒙特卡洛仿真验证收益均衡",
+      "alternatives": [
+        "顺序求解(Q1->Q2->Q3->Q4)",
+        "并行求解(Q1/Q3先做，Q2/Q4后做)"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "D001"
+      ],
+      "reasoning": "顺序求解更符合数学建模竞赛的论文结构和排队论参数依赖关系。Q1的M/M/c排队模型(mu, lambda, E[W])是Q2校准、Q3服务台数优化、Q4优先权排队的共同基础，必须先完成。Q2在Q1排队模型框架下填入真实数据，Q3在Q1服务率mu基础上用Erlang C优化服务台数c并遗传算法优化位置，Q4综合Q1收益模型和Q3系统吞吐设计非抢占优先权。选择顺序求解，每步输出明确的排队参数供后续使用。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T09:11:52Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D003",
+      "question": "validation_plan output",
+      "chosen": "采用排队论专属验证+解析-仿真交叉验证+多参数灵敏度分析+极端场景鲁棒性测试的五层验证体系，核心是Little定律验证和分布拟合检验(排队论卡validation节要求)",
+      "alternatives": [
+        "仅解析验证",
+        "仅仿真验证",
+        "五层验证体系(排队论专属+解析对比+仿真交叉+灵敏度+鲁棒性)"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "D002"
+      ],
+      "reasoning": "本题模型以M/M/c排队论为核心机理，验证必须覆盖排队论卡validation节要求的全部方法：分布拟合检验(验证泊松到达/指数服务假设)、Little定律验证(仿真输出L=lambda*W)、解析-仿真对比(简单场景M/M/c公式vs仿真)、灵敏度分析(rho->1时W->infty)、稳态检验(warm-up period)、多次独立运行(>=5次固定种子42)。单一验证方法不足以保证排队论模型可信度。五层验证形成完整证据链。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T09:11:59Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    }
+  ]
+}

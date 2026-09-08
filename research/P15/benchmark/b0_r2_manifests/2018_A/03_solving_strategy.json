@@ -1,0 +1,87 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T04:12:00Z",
+  "finished_at": "2026-09-08T04:16:30Z",
+  "latency_seconds": 270.0,
+  "submitted_at": "2026-09-08T04:16:35Z",
+  "node_id": "solving_strategy",
+  "dag_position": 3,
+  "payload": {
+    "title": "求解策略：Crank-Nicolson FDM + Levenberg-Marquardt反演 + 约束优化",
+    "question": "Q001",
+    "decision": "采用三阶段求解策略：(1) 正问题——Crank-Nicolson有限差分法（CN-FDM）离散四层非稳态热传导PDE，联合求解各层三对角方程组；(2) 反问题——基于附件2实测皮肤温度，用Levenberg-Marquardt（LM）算法最小二乘反演对流换热系数h，含Tikhonov正则化；(3) 优化问题——以CN-FDM正解为黑箱目标函数，Q2用黄金分割/模式搜索单变量约束优化，Q3用NSGA-II多目标优化或序列二次规划（SQP）。",
+    "alternatives": [
+      {
+        "algorithm": "显式Euler (FTCS) + GA优化",
+        "pros": ["实现最简单", "每步无需求解方程组"],
+        "cons": ["CFL稳定性条件 r=αΔt/Δx²≤0.5，空气层α极小导致Δt极小（<0.01s），90分钟仿真需54000+步", "一阶时间精度", "GA优化效率低（每次评估需完整PDE仿真）"],
+        "feasibility": "low — 计算量过大，不适合优化迭代"
+      },
+      {
+        "algorithm": "隐式Euler (BTCS) + 模式搜索",
+        "pros": ["无条件稳定", "实现比CN略简单"],
+        "cons": ["仅一阶时间精度，长时间仿真累积误差大", "需要更小时间步补偿精度损失"],
+        "feasibility": "medium — 可行但精度不足"
+      },
+      {
+        "algorithm": "有限元法 (FEM) + SQP",
+        "pros": ["处理复杂几何灵活", "商业软件成熟"],
+        "cons": ["一维规则几何下FEM是过度设计", "装配刚度矩阵开销大", "实现复杂度高，竞赛时间内不经济"],
+        "feasibility": "low — 一维问题FDM更高效"
+      },
+      {
+        "algorithm": "Crank-Nicolson FDM + LM反演 + 约束优化（选定）",
+        "pros": ["无条件稳定 + 二阶时间精度", "可使用较大Δt（如1-5s），效率高", "三对角方程组Thomas算法O(N)求解", "LM算法结合Gauss-Newton和梯度下降，反演收敛快", "适合多层介质联合求解"],
+        "cons": ["实现比显式复杂（需处理界面条件）", "每步需组装并求解块三对角方程组"],
+        "feasibility": "high — 平衡精度、效率与实现复杂度"
+      }
+    ],
+    "reasoning": "## 求解策略推理\n\n### 正问题求解器选择\n本题为一维四层规则几何的抛物型PDE，FDM是自然选择。关键约束是空气层（IV层）热扩散率 α_air ≈ 2.2e-5 m²/s 远小于织物层，若用显式格式，CFL条件由最小α决定全局Δt，导致时间步极小（Δt≤Δx²/(2α_min)，若Δx=0.1mm则Δt≤0.23s，90分钟需23000+步）。Crank-Nicolson隐式格式无条件稳定，可使用Δt=1-5s，且二阶时间精度，是长时间仿真的最优选择。\n\n### 离散方案\n- 空间：各层均匀网格，界面处共用节点，Δx=0.1-0.5mm（界面加密）\n- 时间：Δt=1-5s，CN格式（时间二阶，空间二阶）\n- 界面处理：温度连续直接共用节点值；热流连续通过界面节点的能量守恒离散（调和平均热导率）\n- 边界：Robin外边界用ghost node法或直接离散；Dirichlet内边界直接赋值\n- 求解：块三对角方程组（各层内部三对角 + 界面耦合），块Thomas算法\n\n### 反问题求解\n对流换热系数h为唯一未知参数（其余k/rho/c由附件1给出）。目标函数 J(h)=Σ[T_sim(t_i;h)-T_meas(t_i)]² + λ(h-h₀)²。LM算法在h附近二次收敛，正则化参数λ通过L-curve或交叉验证选取。\n\n### 优化求解\n- Q2（单变量d_II）：目标函数为PDE仿真的黑箱函数，约束为T_skin(60min)≤47°C和超44°C时间≤5min。可用黄金分割法结合约束边界搜索，或模式搜索（Hooke-Jeeves）。\n- Q3（双变量d_II,d_IV）：可用NSGA-II多目标优化（最小化总厚度 + 满足约束），或SQP（将约束转化为罚函数）。由于每次评估需跑PDE仿真，评估次数受限（建议≤500次），NSGA-II种群规模不宜过大。",
+    "algorithm": {
+      "name": "CN-FDM + LM反演 + 约束优化三阶段算法",
+      "stage_1_forward": {
+        "method": "Crank-Nicolson Finite Difference Method",
+        "spatial_discretization": "uniform grid per layer, Δx=0.1-0.5mm, shared nodes at interfaces",
+        "time_step": "Δt=1-5s (unconditionally stable)",
+        "interface_handling": "temperature continuity (shared node) + heat flux continuity (harmonic mean k at interface node)",
+        "boundary_handling": "Robin (ghost node) at x=0, Dirichlet at x=d_total",
+        "solver": "block tridiagonal (Thomas algorithm), O(N) per time step",
+        "stability": "unconditionally stable (CN implicit)",
+        "accuracy": "2nd order in time, 2nd order in space"
+      },
+      "stage_2_inverse": {
+        "method": "Levenberg-Marquardt with Tikhonov regularization",
+        "objective": "min_h J(h) = Σ[T_sim(t_i;h) - T_meas(t_i)]² + λ(h-h₀)²",
+        "unknown": "convection coefficient h",
+        "forward_solver": "CN-FDM from stage 1 (each LM iteration requires forward solve)",
+        "regularization": "Tikhonov λ, selected via L-curve",
+        "convergence": "quadratic near optimum (Gauss-Newton region), gradient descent far from optimum"
+      },
+      "stage_3_optimization": {
+        "q2_method": "golden-section search / Hooke-Jeeves pattern search with constraint boundary",
+        "q2_variable": "d_II (single variable)",
+        "q3_method": "NSGA-II multi-objective or SQP with penalty function",
+        "q3_variables": "[d_II, d_IV] (two variables)",
+        "objective": "minimize total thickness (or weighted sum)",
+        "constraints": "T_skin(t_end) ≤ 47°C, time above 44°C ≤ 5min",
+        "forward_calls": "each evaluation = one CN-FDM forward solve; budget ≤ 500 calls",
+        "seed": 42
+      }
+    },
+    "feasibility": {
+      "overall": "high",
+      "forward_solver": "high — CN-FDM for 1D multilayer PDE is standard and robust",
+      "inverse_problem": "medium-high — single parameter (h) inversion is well-posed with regularization; LM converges reliably",
+      "optimization": "medium — black-box PDE-constrained optimization; limited forward call budget but low dimensionality (1-2 variables) makes it feasible",
+      "implementation_effort": "medium — block tridiagonal solver + interface handling requires care but manageable",
+      "computational_cost": "low-medium — single forward solve < 1s (90min, Δt=2s, ~2700 steps, N~100 nodes); 500 optimization evaluations < 10min"
+    },
+    "depends_on": ["M001", "D001"],
+    "tags": ["crank_nicolson", "finite_difference", "levenberg_marquardt", "inverse_problem", "nsga2", "constrained_optimization", "pde_constrained"]
+  }
+}

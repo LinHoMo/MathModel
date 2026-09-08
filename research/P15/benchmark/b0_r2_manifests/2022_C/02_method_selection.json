@@ -1,0 +1,64 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "method_selection",
+  "dag_position": 2,
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "1.0",
+  "started_at": "2026-09-08T09:06:05Z",
+  "finished_at": "2026-09-08T09:08:00Z",
+  "latency_seconds": 115.0,
+  "submitted_at": "2026-09-08T09:08:01Z",
+  "payload": {
+    "title": "方法卡选择决策 — 选定mc-pca为主方法卡",
+    "decision": {
+      "card_id": "mc-pca",
+      "method_name": "主成分分析（PCA）",
+      "family": "dimensionality_reduction",
+      "decision": "USE mc-pca as primary modeling card; ADAPT mc-kmeans and mc-xgboost as complementary downstream methods"
+    },
+    "alternatives": [
+      {
+        "card_id": "mc-kmeans",
+        "method_name": "KMeans与层次聚类",
+        "family": "unsupervised",
+        "verdict": "ADAPT — 用于Q2亚类划分，但family=unsupervised不直接匹配allowed中的clustering，作为PCA降维后的下游聚类步骤",
+        "use_case": "在PCA降维空间中对高钾/铅钡玻璃分别进行无监督亚类聚类"
+      },
+      {
+        "card_id": "mc-xgboost",
+        "method_name": "XGBoost梯度提升树",
+        "family": "supervised_learning",
+        "verdict": "ADAPT — 用于Q3未知样本分类，但family=supervised_learning不直接匹配allowed中的classification，作为PCA特征提取后的分类器",
+        "use_case": "基于PCA降维特征训练分类器，对表单3未知玻璃进行类型鉴别"
+      },
+      {
+        "card_id": "mc-ols",
+        "method_name": "最小二乘回归",
+        "family": "statistical_modeling",
+        "verdict": "REJECT as primary — family=statistical_modeling不直接匹配allowed中的statistical_analysis；仅用于Q1风化前含量预测的辅助回归，不进入shortlist top3",
+        "use_case": "Q1中风化前后成分含量的线性回归预测"
+      }
+    ],
+    "reasoning": "结构→卡片推理链：(1) 问题结构识别为成分数据统计分类——14维氧化物成分、维度接近样本量、存在多重共线性、含已标注二分类与无监督亚类需求。(2) 结构信号匹配：高维小样本→降维预处理是必要前置步骤；成分数据强相关→PCA正交化消除共线性；分类/聚类均受益于低维特征空间。(3) 卡片评估：mc-pca的family=dimensionality_reduction直接命中allowed_modeling_structures；其problem_structures包含classification，good_for明确列出'高维数据可视化与去共线性'，often_combined_with包含mc-kmeans和mc-xgboost，与本题多方法流水线完全契合。(4) mc-kmeans(family=unsupervised)和mc-xgboost(family=supervised_learning)虽不直接命中allowed中的clustering/classification字符串，但作为PCA降维后的下游方法被ADAPT保留在shortlist中。(5) mc-ols(family=statistical_modeling)不直接匹配statistical_analysis，且仅用于Q1辅助回归，REJECT为primary。结论：mc-pca是唯一同时满足结构需求、family直接命中allowed、且与下游方法兼容的主卡。",
+    "criteria": [
+      "family是否在allowed_modeling_structures中（硬约束）",
+      "problem_structures是否覆盖classification/clustering",
+      "good_for是否匹配高维成分数据降维需求",
+      "often_combined_with是否支持下游聚类/分类方法",
+      "requires/risks是否可通过标准化和方差阈值管控"
+    ],
+    "confidence": 0.88,
+    "structure_signals_matched": [
+      "high_dimensional_data → PCA降维",
+      "multicollinearity → PCA正交化",
+      "classification_task → PCA problem_structures包含classification",
+      "clustering_downstream → often_combined_with包含mc-kmeans",
+      "visualization_need → PCA 2D/3D可视化",
+      "small_sample_medium → PCA缓解维度灾难"
+    ],
+    "depends_on": ["Q001", "M001"]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-08T09:11:00Z",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "method_selection output",
+      "chosen": "选择动态规划与马尔可夫决策过程方法卡(mc-dp, family=dynamic_programming)作为本题主建模方法。Q1用确定性DP自底向上递推，Q2用MDP值迭代/策略迭代，Q3在DP框架上扩展多玩家博弈均衡分析。mc-monte-carlo用于Q2/Q3随机场景的策略评估与期望收益估计，mc-nsga2作为多目标（资金最大化vs资源效率/时间）备选。",
+      "alternatives": [
+        "mc-dp",
+        "mc-monte-carlo",
+        "mc-nsga2",
+        "mc-ga"
+      ],
+      "criteria": [
+        "方法与问题结构匹配度（多阶段序贯决策/资源约束/随机性/多玩家）",
+        "方法family是否在benchmark allowed_modeling_structures中",
+        "最优性保证（精确解vs近似解）",
+        "约束处理能力（负重/资源/天气/外部性）",
+        "计算可行性（状态空间规模、收敛速度）",
+        "可解释性与结果可验证性"
+      ],
+      "evidence_ids": [
+        "Q001",
+        "M001"
+      ],
+      "reasoning": "本题核心结构是多阶段序贯决策：以天为阶段，每阶段做一次行动决策，决策影响后续状态（位置/资源/资金），总目标跨阶段累积，且满足马尔可夫性和最优子结构。这与mc-dp卡的structure_signals完全匹配：(1)问题可按时间天然划分为多个阶段——天数t=0..T_max；(2)每一阶段需要做一次决策，决策影响后续阶段状态——每日行动改变资源和位置；(3)总目标跨阶段累积——最大化终点资金；(4)当前状态足以决定未来——(x,w,f,m,weather)包含全部相关信息；(5)mc-dp卡good_for明确列出'2020_B穿越沙漠的每日决策'。mc-dp的family=dynamic_programming直接在benchmark allowed_modeling_structures列表中。mc-monte-carlo(family=simulation，也在allowed中)用于Q2/Q3随机场景评估，mc-nsga2作为多目标备选。旧B0选mc-ga(family=metaheuristics，不在allowed中)导致method_selection=0，校准后选mc-dp可命中。",
+      "confidence": 0.9,
+      "reversible": true,
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T09:11:00Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D002",
+      "question": "solving_strategy output",
+      "chosen": "采用分阶段DP/MDP求解策略：Q1用确定性DP自底向上表格递推（反向归纳），从终点向起点计算V_t(s)并回溯最优行动序列；Q2用MDP值迭代（Bellman备份含天气期望），收敛后导出在线策略；Q3.1用开环优化+纳什均衡检验（枚举或GA搜索各玩家预定义策略组合，检验无单方面偏离获益）；Q3.2用在线策略迭代+多智能体模拟（每玩家根据当日天气和他人昨日行动更新策略，模拟至收敛）。各阶段共享地图解析和资源消耗引擎。",
+      "alternatives": [
+        "统一MDP框架",
+        "纯元启发式（GA/PSO）搜索",
+        "分阶段DP/MDP（推荐）"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "Q001",
+        "M001",
+        "D001"
+      ],
+      "reasoning": "三问的信息结构和决策时序本质不同：Q1是完全信息离线优化（天气已知→确定性DP，状态转移确定，可反向归纳求精确最优解）；Q2是部分可观测在线决策（仅知当日天气→随机MDP，Bellman方程含期望算子，值迭代/策略迭代求解）；Q3是多玩家博弈（玩家间外部性→需均衡概念，开环/闭环分别处理）。强行统一框架会导致Q3联合状态空间不可计算。分阶段策略每问用最适配的DP/MDP变体，共享底层地图/资源/天气引擎，兼顾理论最优性和工程可行性。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T09:11:00Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D003",
+      "question": "validation_plan output",
+      "chosen": "采用五维验证体系：(1)最优子结构证明（cut-and-paste论证）；(2)小规模枚举对比（n≤10时暴力枚举全部策略，DP结果必须等于枚举最优值）；(3)收敛性验证（MDP值迭代||V_{k+1}-V_k||_∞<1e-6，DP回溯一致性检验）；(4)灵敏度分析（基础消耗/价格/负重上限/矿山收益±20%扰动）；(5)鲁棒性验证（多种子≥5次运行报告均值标准差，seed=42固定）。",
+      "alternatives": [
+        "仅收敛性验证",
+        "完整五维验证（推荐）",
+        "交叉验证（多算法对比）"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "Q001",
+        "M001",
+        "D001",
+        "D002"
+      ],
+      "reasoning": "B0-R2校准观测需要可复现、可审计的验证证据，且mc-dp卡的validation节明确要求最优子结构证明、小规模枚举对比、收敛性检验、策略可行性检验和回溯一致性。五维验证覆盖：(1)理论层——最优子结构cut-and-paste证明确保DP适用前提成立；(2)数值层——小规模枚举对比验证DP递推的正确性（这是最硬的检验）；(3)算法层——收敛性和回溯一致性确保实现无误；(4)稳健性层——灵敏度分析检验模型对关键参数的稳定性；(5)可复现层——多种子运行符合env配置random_seed=42和multi_run_count=5。",
+      "confidence": 0.85,
+      "reversible": true,
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T09:11:00Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    }
+  ]
+}

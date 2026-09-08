@@ -1,0 +1,938 @@
+{
+  "execution_authenticity": {
+    "gate": "execution_authenticity",
+    "version": "2.0",
+    "project": "p151-2020b-b0-r2",
+    "run_id": "ext_validation_plan_b54ef32ba8cf",
+    "executor_type": "external_agent",
+    "synthetic": false,
+    "capability_result": true,
+    "overall": "INVALID",
+    "summary": {
+      "pass": 12,
+      "fail": 3,
+      "invalid": 2,
+      "skipped": 0,
+      "total": 17
+    },
+    "checks": [
+      {
+        "id": "EAG-EX",
+        "name": "executor_type annotated",
+        "pass": true,
+        "expected": "external_agent",
+        "actual": "external_agent",
+        "message": ""
+      },
+      {
+        "id": "EAG-01",
+        "name": "model_provider non-empty",
+        "pass": true,
+        "expected": "non-empty string (e.g. 'openai')",
+        "actual": "doubao",
+        "message": ""
+      },
+      {
+        "id": "EAG-02",
+        "name": "model_version non-empty",
+        "pass": true,
+        "expected": "non-empty string (e.g. 'gpt-4o-2024-05-13')",
+        "actual": "doubao-pro-32k",
+        "message": ""
+      },
+      {
+        "id": "EAG-03",
+        "name": "skill_version is non-empty hash",
+        "pass": false,
+        "expected": "64-char hex, not empty-string SHA256",
+        "actual": "b0-r2-calibrated...",
+        "message": ""
+      },
+      {
+        "id": "EAG-04",
+        "name": "execution timestamps reasonable",
+        "pass": false,
+        "expected": "parseable, not in future",
+        "actual": "started=2026-09-08T14:36:35Z",
+        "message": ""
+      },
+      {
+        "id": "EAG-05",
+        "name": "latency >= 1.0s (real execution)",
+        "pass": true,
+        "expected": ">= 1.0s",
+        "actual": "80.0s",
+        "message": ""
+      },
+      {
+        "id": "EAG-06",
+        "name": "input_hash matches recomputed inputs hash",
+        "pass": false,
+        "expected": "b7db4cc3644a40f3...",
+        "actual": "a2d0867169b94c59...",
+        "message": ""
+      },
+      {
+        "id": "EAG-07",
+        "name": "workflow_version is valid non-empty hash",
+        "pass": false,
+        "expected": "64-char non-empty hex",
+        "actual": "b0-r2-calibrated...",
+        "message": ""
+      },
+      {
+        "id": "EAG-08",
+        "name": "real execution artifacts exist (code/output/artifacts with files)",
+        "pass": false,
+        "expected": "at least one of code/, output/, artifacts/ containing actual files",
+        "actual": "code(has_files)=False, output(has_files)=False, artifacts(has_files)=False",
+        "message": ""
+      },
+      {
+        "id": "EAG-09",
+        "name": "registry has artifacts",
+        "pass": true,
+        "expected": ">= 1 artifact",
+        "actual": 5,
+        "message": ""
+      },
+      {
+        "id": "EAG-10",
+        "name": "artifact payloads non-empty (>=80% pass Layer 1)",
+        "pass": true,
+        "expected": "pass_rate >= 0.8, no INVALID",
+        "actual": "pass_rate=1.0, INVALID=0",
+        "message": ""
+      },
+      {
+        "id": "EAG-11",
+        "name": "decision_log has decisions with evidence",
+        "pass": true,
+        "expected": "all decisions have evidence_ids or substantive reasoning",
+        "actual": "3/3 decisions have evidence",
+        "message": ""
+      },
+      {
+        "id": "EAG-12",
+        "name": "artifacts have execution provenance (>=90%)",
+        "pass": true,
+        "expected": ">= 90% artifacts with non-empty provenance",
+        "actual": "5/5 have provenance",
+        "message": ""
+      },
+      {
+        "id": "EAG-13",
+        "name": "execution_mode is llm or hybrid",
+        "pass": true,
+        "expected": "'llm', 'hybrid', or 'external_agent'",
+        "actual": "external_agent",
+        "message": ""
+      },
+      {
+        "id": "EAG-14",
+        "name": "external agent_identity non-empty",
+        "pass": true,
+        "expected": "non-empty (doubao/gpt/claude/human)",
+        "actual": "doubao",
+        "message": ""
+      },
+      {
+        "id": "EAG-15",
+        "name": "external model_version non-empty (N/A for human)",
+        "pass": true,
+        "expected": "non-empty or 'N/A'",
+        "actual": "doubao-pro-32k",
+        "message": ""
+      },
+      {
+        "id": "EAG-16",
+        "name": "artifact input_sha256 bound to run input_hash",
+        "pass": true,
+        "expected": "at least one artifact provenance.input_sha256 == run input_hash",
+        "actual": "bound",
+        "message": ""
+      }
+    ],
+    "root_causes": [
+      "no code/output/artifacts directories — no real execution artifacts on disk",
+      "skill_version is empty-string SHA256 — core/skills/ has no .yaml files"
+    ]
+  },
+  "artifact_integrity": {
+    "gate": "artifact_integrity",
+    "registry_path": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\projects\\p151-2020b-b0-r2\\state\\registry.json",
+    "total_artifacts": 5,
+    "summary": {
+      "PASS": 5
+    },
+    "pass_rate": 1.0,
+    "overall": "PASS",
+    "artifacts": [
+      {
+        "artifact_id": "D001",
+        "type": "decision",
+        "overall": "PASS",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '求解方法选择 — 动态规划(mc-dp)为主卡，蒙特卡洛与NSGA-II为shortlist', 'decision': '选择动态规划与",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-D-02",
+              "name": "decision has decision content",
+              "pass": true,
+              "expected": "non-empty decision string",
+              "actual": "选择动态规划与马尔可夫决策过程方法卡(mc-dp, family=dynamic_programming)作为本题主建模方法。Q1用确定性DP自底向上递推，Q2用MDP值迭代/策略迭代，Q3在DP框架上扩展多玩家博弈均衡分析。mc-monte-carlo用于Q2/Q3随机场景的策略评估与期望收益估计，mc-nsga2作为多目标（资金最大化vs资源效率/时间）备选。",
+              "message": ""
+            },
+            {
+              "id": "L1-D-03",
+              "name": "decision has alternatives",
+              "pass": true,
+              "expected": "non-empty alternatives list",
+              "actual": 4,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": {
+          "layer": 2,
+          "name": "structurally_valid",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L2-00",
+              "name": "artifact is valid dict",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L2-01",
+              "name": "schema_version is 3.1",
+              "pass": true,
+              "expected": "3.1",
+              "actual": "3.1",
+              "message": ""
+            },
+            {
+              "id": "L2-02",
+              "name": "artifact_id format (A+3 digits)",
+              "pass": true,
+              "expected": "e.g. P001, M001",
+              "actual": "D001",
+              "message": ""
+            },
+            {
+              "id": "L2-03",
+              "name": "type is valid",
+              "pass": true,
+              "expected": "one of ['assumption', 'claim', 'decision', 'experiment', 'figure', 'model', 'paper_section', 'problem', 'question', 'result']",
+              "actual": "decision",
+              "message": ""
+            },
+            {
+              "id": "L2-04",
+              "name": "status is valid",
+              "pass": true,
+              "expected": "one of ['active', 'deprecated', 'draft', 'invalidated', 'superseded']",
+              "actual": "active",
+              "message": ""
+            },
+            {
+              "id": "L2-05",
+              "name": "created_at is parseable ISO8601",
+              "pass": true,
+              "expected": "ISO8601",
+              "actual": "2026-09-08T09:11:00Z",
+              "message": ""
+            },
+            {
+              "id": "L2-06",
+              "name": "lifecycle_history non-empty",
+              "pass": true,
+              "expected": ">= 1 event",
+              "actual": 2,
+              "message": ""
+            },
+            {
+              "id": "L2-07",
+              "name": "payload type correct for decision",
+              "pass": true,
+              "expected": "dict",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L2-08",
+              "name": "depends_on references exist in registry",
+              "pass": true,
+              "expected": "all referenced IDs exist",
+              "actual": "all exist",
+              "message": ""
+            },
+            {
+              "id": "L2-09",
+              "name": "relations references exist in registry",
+              "pass": true,
+              "expected": "all from/to IDs exist",
+              "actual": "all exist",
+              "message": ""
+            }
+          ]
+        },
+        "layer3": null
+      },
+      {
+        "artifact_id": "D002",
+        "type": "decision",
+        "overall": "PASS",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '求解策略 — 基于DP/MDP的分阶段求解框架', 'decision': '采用分阶段DP/MDP求解策略：Q1用确定性DP自底向上表格",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-D-02",
+              "name": "decision has decision content",
+              "pass": true,
+              "expected": "non-empty decision string",
+              "actual": "采用分阶段DP/MDP求解策略：Q1用确定性DP自底向上表格递推（反向归纳），从终点向起点计算V_t(s)并回溯最优行动序列；Q2用MDP值迭代（Bellman备份含天气期望），收敛后导出在线策略；Q3.1用开环优化+纳什均衡检验（枚举或GA搜索各玩家预定义策略组合，检验无单方面偏离获益）；Q3.2用在线策略迭代+多智能体模拟（每玩家根据当日天气和他人昨日行动更新策略，模拟至收敛）。各阶段共享地图解析和资源消耗引擎。",
+              "message": ""
+            },
+            {
+              "id": "L1-D-03",
+              "name": "decision has alternatives",
+              "pass": true,
+              "expected": "non-empty alternatives list",
+              "actual": 3,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": {
+          "layer": 2,
+          "name": "structurally_valid",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L2-00",
+              "name": "artifact is valid dict",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L2-01",
+              "name": "schema_version is 3.1",
+              "pass": true,
+              "expected": "3.1",
+              "actual": "3.1",
+              "message": ""
+            },
+            {
+              "id": "L2-02",
+              "name": "artifact_id format (A+3 digits)",
+              "pass": true,
+              "expected": "e.g. P001, M001",
+              "actual": "D002",
+              "message": ""
+            },
+            {
+              "id": "L2-03",
+              "name": "type is valid",
+              "pass": true,
+              "expected": "one of ['assumption', 'claim', 'decision', 'experiment', 'figure', 'model', 'paper_section', 'problem', 'question', 'result']",
+              "actual": "decision",
+              "message": ""
+            },
+            {
+              "id": "L2-04",
+              "name": "status is valid",
+              "pass": true,
+              "expected": "one of ['active', 'deprecated', 'draft', 'invalidated', 'superseded']",
+              "actual": "active",
+              "message": ""
+            },
+            {
+              "id": "L2-05",
+              "name": "created_at is parseable ISO8601",
+              "pass": true,
+              "expected": "ISO8601",
+              "actual": "2026-09-08T09:11:00Z",
+              "message": ""
+            },
+            {
+              "id": "L2-06",
+              "name": "lifecycle_history non-empty",
+              "pass": true,
+              "expected": ">= 1 event",
+              "actual": 2,
+              "message": ""
+            },
+            {
+              "id": "L2-07",
+              "name": "payload type correct for decision",
+              "pass": true,
+              "expected": "dict",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L2-08",
+              "name": "depends_on references exist in registry",
+              "pass": true,
+              "expected": "all referenced IDs exist",
+              "actual": "all exist",
+              "message": ""
+            },
+            {
+              "id": "L2-09",
+              "name": "relations references exist in registry",
+              "pass": true,
+              "expected": "all from/to IDs exist",
+              "actual": "all exist",
+              "message": ""
+            }
+          ]
+        },
+        "layer3": null
+      },
+      {
+        "artifact_id": "D003",
+        "type": "decision",
+        "overall": "PASS",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '验证计划 — DP/MDP模型多维验证与灵敏度分析', 'decision': '采用五维验证体系：(1)最优子结构证明（cut-and-",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-D-02",
+              "name": "decision has decision content",
+              "pass": true,
+              "expected": "non-empty decision string",
+              "actual": "采用五维验证体系：(1)最优子结构证明（cut-and-paste论证）；(2)小规模枚举对比（n≤10时暴力枚举全部策略，DP结果必须等于枚举最优值）；(3)收敛性验证（MDP值迭代||V_{k+1}-V_k||_∞<1e-6，DP回溯一致性检验）；(4)灵敏度分析（基础消耗/价格/负重上限/矿山收益±20%扰动）；(5)鲁棒性验证（多种子≥5次运行报告均值标准差，seed=42固定）。",
+              "message": ""
+            },
+            {
+              "id": "L1-D-03",
+              "name": "decision has alternatives",
+              "pass": true,
+              "expected": "non-empty alternatives list",
+              "actual": 3,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": {
+          "layer": 2,
+          "name": "structurally_valid",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L2-00",
+              "name": "artifact is valid dict",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L2-01",
+              "name": "schema_version is 3.1",
+              "pass": true,
+              "expected": "3.1",
+              "actual": "3.1",
+              "message": ""
+            },
+            {
+              "id": "L2-02",
+              "name": "artifact_id format (A+3 digits)",
+              "pass": true,
+              "expected": "e.g. P001, M001",
+              "actual": "D003",
+              "message": ""
+            },
+            {
+              "id": "L2-03",
+              "name": "type is valid",
+              "pass": true,
+              "expected": "one of ['assumption', 'claim', 'decision', 'experiment', 'figure', 'model', 'paper_section', 'problem', 'question', 'result']",
+              "actual": "decision",
+              "message": ""
+            },
+            {
+              "id": "L2-04",
+              "name": "status is valid",
+              "pass": true,
+              "expected": "one of ['active', 'deprecated', 'draft', 'invalidated', 'superseded']",
+              "actual": "active",
+              "message": ""
+            },
+            {
+              "id": "L2-05",
+              "name": "created_at is parseable ISO8601",
+              "pass": true,
+              "expected": "ISO8601",
+              "actual": "2026-09-08T09:11:00Z",
+              "message": ""
+            },
+            {
+              "id": "L2-06",
+              "name": "lifecycle_history non-empty",
+              "pass": true,
+              "expected": ">= 1 event",
+              "actual": 2,
+              "message": ""
+            },
+            {
+              "id": "L2-07",
+              "name": "payload type correct for decision",
+              "pass": true,
+              "expected": "dict",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L2-08",
+              "name": "depends_on references exist in registry",
+              "pass": true,
+              "expected": "all referenced IDs exist",
+              "actual": "all exist",
+              "message": ""
+            },
+            {
+              "id": "L2-09",
+              "name": "relations references exist in registry",
+              "pass": true,
+              "expected": "all from/to IDs exist",
+              "actual": "all exist",
+              "message": ""
+            }
+          ]
+        },
+        "layer3": null
+      },
+      {
+        "artifact_id": "M001",
+        "type": "model",
+        "overall": "PASS",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '穿越沙漠 — 多阶段动态规划与马尔可夫决策过程模型', 'model_type': '动态规划(DP)/马尔可夫决策过程(MDP)统一模型",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-M-objective",
+              "name": "model payload has objective (目标)",
+              "pass": true,
+              "expected": "non-empty objective",
+              "actual": "str",
+              "message": ""
+            },
+            {
+              "id": "L1-M-constraints",
+              "name": "model payload has constraints (约束)",
+              "pass": true,
+              "expected": "non-empty constraints",
+              "actual": "list",
+              "message": ""
+            },
+            {
+              "id": "L1-M-variables",
+              "name": "model payload has variables (变量)",
+              "pass": true,
+              "expected": "non-empty variables",
+              "actual": "list",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": {
+          "layer": 2,
+          "name": "structurally_valid",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L2-00",
+              "name": "artifact is valid dict",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L2-01",
+              "name": "schema_version is 3.1",
+              "pass": true,
+              "expected": "3.1",
+              "actual": "3.1",
+              "message": ""
+            },
+            {
+              "id": "L2-02",
+              "name": "artifact_id format (A+3 digits)",
+              "pass": true,
+              "expected": "e.g. P001, M001",
+              "actual": "M001",
+              "message": ""
+            },
+            {
+              "id": "L2-03",
+              "name": "type is valid",
+              "pass": true,
+              "expected": "one of ['assumption', 'claim', 'decision', 'experiment', 'figure', 'model', 'paper_section', 'problem', 'question', 'result']",
+              "actual": "model",
+              "message": ""
+            },
+            {
+              "id": "L2-04",
+              "name": "status is valid",
+              "pass": true,
+              "expected": "one of ['active', 'deprecated', 'draft', 'invalidated', 'superseded']",
+              "actual": "active",
+              "message": ""
+            },
+            {
+              "id": "L2-05",
+              "name": "created_at is parseable ISO8601",
+              "pass": true,
+              "expected": "ISO8601",
+              "actual": "2026-09-08T09:11:00Z",
+              "message": ""
+            },
+            {
+              "id": "L2-06",
+              "name": "lifecycle_history non-empty",
+              "pass": true,
+              "expected": ">= 1 event",
+              "actual": 2,
+              "message": ""
+            },
+            {
+              "id": "L2-07",
+              "name": "payload type correct for model",
+              "pass": true,
+              "expected": "dict",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L2-08",
+              "name": "depends_on references exist in registry",
+              "pass": true,
+              "expected": "all referenced IDs exist",
+              "actual": "all exist",
+              "message": ""
+            },
+            {
+              "id": "L2-09",
+              "name": "relations references exist in registry",
+              "pass": true,
+              "expected": "all from/to IDs exist",
+              "actual": "all exist",
+              "message": ""
+            }
+          ]
+        },
+        "layer3": null
+      },
+      {
+        "artifact_id": "Q001",
+        "type": "question",
+        "overall": "PASS",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '穿越沙漠 — 问题理解与多阶段序贯决策结构识别', 'problem_type': '多阶段序贯决策 / 资源约束优化 / 随机动态规划 ",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-Q-01",
+              "name": "question payload has sub_questions",
+              "pass": true,
+              "expected": "non-empty sub_questions list",
+              "actual": 3,
+              "message": ""
+            },
+            {
+              "id": "L1-Q-02-0",
+              "name": "sub_question[0] has id+text",
+              "pass": true,
+              "expected": "dict with id and text",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L1-Q-02-1",
+              "name": "sub_question[1] has id+text",
+              "pass": true,
+              "expected": "dict with id and text",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L1-Q-02-2",
+              "name": "sub_question[2] has id+text",
+              "pass": true,
+              "expected": "dict with id and text",
+              "actual": "dict",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": {
+          "layer": 2,
+          "name": "structurally_valid",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L2-00",
+              "name": "artifact is valid dict",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L2-01",
+              "name": "schema_version is 3.1",
+              "pass": true,
+              "expected": "3.1",
+              "actual": "3.1",
+              "message": ""
+            },
+            {
+              "id": "L2-02",
+              "name": "artifact_id format (A+3 digits)",
+              "pass": true,
+              "expected": "e.g. P001, M001",
+              "actual": "Q001",
+              "message": ""
+            },
+            {
+              "id": "L2-03",
+              "name": "type is valid",
+              "pass": true,
+              "expected": "one of ['assumption', 'claim', 'decision', 'experiment', 'figure', 'model', 'paper_section', 'problem', 'question', 'result']",
+              "actual": "question",
+              "message": ""
+            },
+            {
+              "id": "L2-04",
+              "name": "status is valid",
+              "pass": true,
+              "expected": "one of ['active', 'deprecated', 'draft', 'invalidated', 'superseded']",
+              "actual": "active",
+              "message": ""
+            },
+            {
+              "id": "L2-05",
+              "name": "created_at is parseable ISO8601",
+              "pass": true,
+              "expected": "ISO8601",
+              "actual": "2026-09-08T09:11:00Z",
+              "message": ""
+            },
+            {
+              "id": "L2-06",
+              "name": "lifecycle_history non-empty",
+              "pass": true,
+              "expected": ">= 1 event",
+              "actual": 2,
+              "message": ""
+            },
+            {
+              "id": "L2-07",
+              "name": "payload type correct for question",
+              "pass": true,
+              "expected": "dict",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L2-08",
+              "name": "depends_on references exist in registry",
+              "pass": true,
+              "expected": "all referenced IDs exist",
+              "actual": "all exist",
+              "message": ""
+            },
+            {
+              "id": "L2-09",
+              "name": "relations references exist in registry",
+              "pass": true,
+              "expected": "all from/to IDs exist",
+              "actual": "all exist",
+              "message": ""
+            }
+          ]
+        },
+        "layer3": null
+      }
+    ]
+  },
+  "overall": "INVALID"
+}

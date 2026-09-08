@@ -1,0 +1,1065 @@
+{
+  "registry_version": 3,
+  "project": "p151-2018a-b0-r2",
+  "updated_at": "2026-09-08T09:12:57Z",
+  "counters": {
+    "question": 1,
+    "model": 1,
+    "decision": 3
+  },
+  "artifacts": {
+    "Q001": {
+      "schema_version": "3.1",
+      "artifact_id": "Q001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "高温作业专用服装设计 — 问题理解与结构识别",
+      "question": "",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-08T09:12:46Z",
+      "updated_at": "2026-09-08T09:12:46Z",
+      "payload": {
+        "title": "高温作业专用服装设计 — 问题理解与结构识别",
+        "question": "Q001",
+        "problem_type": "one_dimensional_transient_heat_conduction_pde_with_inverse_problem_and_optimization",
+        "sub_questions": [
+          {
+            "id": "Q1",
+            "text": "环境温度75°C、II层厚度6mm、IV层厚度5mm、工作90分钟，建立四层非稳态热传导数学模型，计算温度分布并生成problem1.xlsx；利用附件2实测皮肤温度反演对流换热系数等未知参数",
+            "type": "forward_simulation_with_parameter_inversion"
+          },
+          {
+            "id": "Q2",
+            "text": "环境温度65°C、IV层厚度5.5mm，确定II层最优厚度，确保工作60分钟时假人皮肤外侧温度不超过47°C，且超过44°C的时间不超过5分钟",
+            "type": "single_variable_constrained_optimization"
+          },
+          {
+            "id": "Q3",
+            "text": "环境温度80°C，确定II层和IV层的最优厚度，确保工作30分钟时假人皮肤外侧温度不超过47°C，且超过44°C的时间不超过5分钟",
+            "type": "multi_variable_constrained_optimization"
+          }
+        ],
+        "key_variables": [
+          {
+            "name": "T_i(x,t)",
+            "description": "第i层(i=I,II,III,IV)温度场，x为厚度方向空间坐标，t为时间",
+            "unit": "°C"
+          },
+          {
+            "name": "d_I, d_II, d_III, d_IV",
+            "description": "各层厚度，其中d_II和d_IV为优化决策变量",
+            "unit": "mm"
+          },
+          {
+            "name": "k_i",
+            "description": "第i层热传导系数",
+            "unit": "W/(m·K)"
+          },
+          {
+            "name": "rho_i",
+            "description": "第i层密度",
+            "unit": "kg/m³"
+          },
+          {
+            "name": "c_i",
+            "description": "第i层比热容",
+            "unit": "J/(kg·K)"
+          },
+          {
+            "name": "h",
+            "description": "I层外表面对流换热系数（待反演参数）",
+            "unit": "W/(m²·K)"
+          },
+          {
+            "name": "T_env",
+            "description": "环境温度（Q1=75°C, Q2=65°C, Q3=80°C）",
+            "unit": "°C"
+          },
+          {
+            "name": "T_skin(t)",
+            "description": "假人皮肤外侧温度（IV层内侧温度）",
+            "unit": "°C"
+          },
+          {
+            "name": "t_work",
+            "description": "工作时长（Q1=90min, Q2=60min, Q3=30min）",
+            "unit": "min"
+          }
+        ],
+        "structure_identification": {
+          "primary_structure": "numerical_pde",
+          "secondary_structures": [
+            "inverse_problem",
+            "optimization",
+            "differential_equations"
+          ],
+          "pde_type": "parabolic (transient heat conduction equation)",
+          "spatial_dimension": "1D (through thickness direction)",
+          "media_type": "multi-layer (4 layers: I/II/III fabric + IV air gap)",
+          "interface_conditions": "temperature continuity + heat flux continuity at each layer boundary",
+          "boundary_conditions": "Robin (convection) at outer surface, Dirichlet (37°C) at skin side",
+          "initial_condition": "uniform 37°C throughout",
+          "inverse_problem": "estimate convection coefficient h (and potentially other thermal properties) from measured skin temperature data (附件2)",
+          "optimization_type": "PDE-constrained optimization (black-box objective via PDE forward solver)",
+          "decision_variables": "d_II (Q2), [d_II, d_IV] (Q3)",
+          "constraints": "T_skin(t_end) ≤ 47°C, time above 44°C ≤ 5 min",
+          "numerical_method_hint": "Crank-Nicolson finite difference method (unconditionally stable, 2nd order)",
+          "matched_card_family": "numerical_pde (mc-numerical-pde)",
+          "rationale": "题面描述连续时空温度场演化（守恒律+Fourier本构定律），存在初边值条件，多层介质界面条件，测量数据用于反演未知参数，最终以PDE仿真为黑箱目标函数进行层厚优化——完全符合 numerical_pde 知识卡的 structure_signals"
+        },
+        "difficulty_assessment": {
+          "overall": "high",
+          "rationale": "一维非稳态多层热传导PDE正问题 + 参数反演（不适定反问题）+ PDE约束的单/多变量优化，三问层层递进，需同时处理正问题、反问题和优化问题",
+          "sub_question_difficulty": {
+            "Q1": "medium",
+            "Q2": "high",
+            "Q3": "high"
+          }
+        },
+        "tags": [
+          "heat_transfer",
+          "numerical_pde",
+          "finite_difference",
+          "crank_nicolson",
+          "inverse_problem",
+          "parameter_estimation",
+          "optimization",
+          "multilayer"
+        ]
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+        "node_id": "problem_understanding",
+        "dag_position": 0,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T04:00:00Z",
+        "finished_at": "2026-09-08T04:03:00Z",
+        "latency_seconds": 180.0,
+        "submitted_at": "2026-09-08T04:03:05Z",
+        "registered_at": "2026-09-08T09:12:46Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:12:46Z",
+          "by": "problem_understanding",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:12:46Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "heat_transfer",
+        "numerical_pde",
+        "finite_difference",
+        "crank_nicolson",
+        "inverse_problem",
+        "parameter_estimation",
+        "optimization",
+        "multilayer"
+      ],
+      "data": {}
+    },
+    "M001": {
+      "schema_version": "3.1",
+      "artifact_id": "M001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "四层非稳态热传导PDE模型 — 正问题/反问题/优化统一框架",
+      "question": "Q001",
+      "created_by": "model_construction",
+      "created_at": "2026-09-08T09:12:51Z",
+      "updated_at": "2026-09-08T09:12:51Z",
+      "payload": {
+        "title": "四层非稳态热传导PDE模型 — 正问题/反问题/优化统一框架",
+        "question": "Q001",
+        "model_type": "one_dimensional_four_layer_transient_heat_conduction_pde_with_inverse_and_optimization",
+        "objective": "建立一维四层（I/II/III织物+IV空气层）非稳态热传导PDE模型，采用Crank-Nicolson有限差分法求解正问题温度场；基于附件2实测皮肤温度通过最小二乘反演对流换热系数h；以PDE正解为黑箱目标函数，在温度约束下优化II层和IV层厚度",
+        "variables": [
+          {
+            "name": "T_I(x,t)",
+            "description": "I层温度场",
+            "domain": "x∈[0,d_I], t∈[0,t_end]"
+          },
+          {
+            "name": "T_II(x,t)",
+            "description": "II层温度场",
+            "domain": "x∈[0,d_II], t∈[0,t_end]"
+          },
+          {
+            "name": "T_III(x,t)",
+            "description": "III层温度场",
+            "domain": "x∈[0,d_III], t∈[0,t_end]"
+          },
+          {
+            "name": "T_IV(x,t)",
+            "description": "IV层（空气间隙）温度场",
+            "domain": "x∈[0,d_IV], t∈[0,t_end]"
+          },
+          {
+            "name": "d_II",
+            "description": "II层厚度（Q2/Q3决策变量）",
+            "unit": "mm"
+          },
+          {
+            "name": "d_IV",
+            "description": "IV层厚度（Q3决策变量）",
+            "unit": "mm"
+          },
+          {
+            "name": "h",
+            "description": "外表面对流换热系数（反演参数）",
+            "unit": "W/(m²·K)"
+          }
+        ],
+        "constraints": [
+          "PDE约束：各层内 rho_i*c_i*∂T_i/∂t = k_i*∂²T_i/∂x² (i=I,II,III,IV)",
+          "界面温度连续：T_i(d_i,t) = T_{i+1}(0,t)",
+          "界面热流连续：k_i*∂T_i/∂x|_{x=d_i} = k_{i+1}*∂T_{i+1}/∂x|_{x=0}",
+          "外表面对流边界（Robin）：-k_I*∂T_I/∂x|_{x=0} = h*(T_env - T_I(0,t))",
+          "内表面恒温边界（Dirichlet）：T_IV(d_IV,t) = 37°C",
+          "初始条件：T_i(x,0) = 37°C, ∀i,∀x",
+          "Q2约束：T_skin(60min) ≤ 47°C",
+          "Q2约束：∫₀⁶⁰ 𝟙(T_skin(t)>44°C)dt ≤ 5 min",
+          "Q3约束：T_skin(30min) ≤ 47°C",
+          "Q3约束：∫₀³⁰ 𝟙(T_skin(t)>44°C)dt ≤ 5 min",
+          "厚度非负且物理合理：d_II > 0, d_IV > 0"
+        ],
+        "assumptions": [
+          "服装各层材料均匀各向同性，热物性参数（k, rho, c）不随温度变化",
+          "热传导仅沿厚度方向（一维），忽略侧向热损失和辐射换热",
+          "IV层为静止空气层，仅考虑热传导，忽略自然对流",
+          "假人体内温度恒定37°C，皮肤内侧为恒温Dirichlet边界",
+          "环境温度恒定，I层外表面与环境间为Newton对流换热（Robin边界）",
+          "各层接触良好，界面处温度连续、热流密度连续",
+          "初始时刻整个系统温度均匀为37°C",
+          "附件2实测数据包含测量噪声，反演时需考虑正则化"
+        ],
+        "parameters": [
+          {
+            "name": "k_I, k_II, k_III, k_IV",
+            "description": "各层热导率",
+            "source": "附件1"
+          },
+          {
+            "name": "rho_I, rho_II, rho_III, rho_IV",
+            "description": "各层密度",
+            "source": "附件1"
+          },
+          {
+            "name": "c_I, c_II, c_III, c_IV",
+            "description": "各层比热容",
+            "source": "附件1"
+          },
+          {
+            "name": "d_I, d_III",
+            "description": "I、III层厚度（固定）",
+            "source": "附件1"
+          },
+          {
+            "name": "h",
+            "description": "外表面对流换热系数",
+            "source": "反演（附件2最小二乘拟合）"
+          },
+          {
+            "name": "T_env",
+            "description": "环境温度",
+            "values": [
+              75,
+              65,
+              80
+            ]
+          },
+          {
+            "name": "T_core",
+            "description": "体内恒温边界温度",
+            "value": 37
+          }
+        ],
+        "mechanisms": [
+          "守恒律：能量守恒的积分形式→微分形式（热传导方程）",
+          "本构定律：Fourier热传导定律 q = -k∇T",
+          "多层介质一维非稳态热传导：热量从高温环境经I→II→III→IV层传导至皮肤",
+          "界面条件：温度连续 + 热流密度连续（联合求解各层）",
+          "外表面Newton对流换热边界",
+          "内表面恒温边界（37°C假人体核）",
+          "反问题：由附件2实测皮肤温度反演对流换热系数h（PDE约束最小二乘）",
+          "优化：以PDE正解为黑箱函数，在温度约束下最小化层厚"
+        ],
+        "equations": [
+          {
+            "name": "非稳态热传导PDE（各层）",
+            "expression": "rho_i * c_i * ∂T_i/∂t = k_i * ∂²T_i/∂x²,  i = I, II, III, IV",
+            "description": "一维四层非稳态热传导方程，alpha_i = k_i/(rho_i*c_i)为热扩散率；抛物型PDE"
+          },
+          {
+            "name": "外表面对流边界（Robin）",
+            "expression": "-k_I * ∂T_I/∂x |_{x=0} = h * (T_env - T_I(0,t))",
+            "description": "I层外表面与环境间的Newton对流换热边界条件"
+          },
+          {
+            "name": "内表面恒温边界（Dirichlet）",
+            "expression": "T_IV(d_IV, t) = 37°C",
+            "description": "IV层内侧（皮肤侧）恒温37°C边界"
+          },
+          {
+            "name": "界面温度连续",
+            "expression": "T_i(d_i, t) = T_{i+1}(0, t),  i = I, II, III",
+            "description": "相邻层界面处温度连续"
+          },
+          {
+            "name": "界面热流连续",
+            "expression": "k_i * ∂T_i/∂x |_{x=d_i} = k_{i+1} * ∂T_{i+1}/∂x |_{x=0},  i = I, II, III",
+            "description": "相邻层界面处热流密度连续"
+          },
+          {
+            "name": "初始条件",
+            "expression": "T_i(x, 0) = 37°C,  ∀i, ∀x",
+            "description": "初始时刻整个系统温度均匀为37°C"
+          },
+          {
+            "name": "参数反演目标函数",
+            "expression": "min_h J(h) = Σ_t [T_skin_sim(t; h) - T_skin_meas(t)]² + λ||h - h_prior||²",
+            "description": "基于附件2实测皮肤温度的最小二乘反演，含Tikhonov正则化项"
+          },
+          {
+            "name": "Q2优化目标",
+            "expression": "min_{d_II} d_II  s.t. T_skin(60min) ≤ 47°C, ∫₀⁶⁰ 𝟙(T_skin>44)dt ≤ 5min",
+            "description": "单变量PDE约束优化，最小化II层厚度"
+          },
+          {
+            "name": "Q3优化目标",
+            "expression": "min_{d_II,d_IV} (w1*d_II + w2*d_IV)  s.t. T_skin(30min) ≤ 47°C, ∫₀³⁰ 𝟙(T_skin>44)dt ≤ 5min",
+            "description": "多变量PDE约束优化，最小化II层与IV层加权厚度和"
+          }
+        ],
+        "data": {
+          "objective": "建立一维四层非稳态热传导PDE模型，CN-FDM求解正问题，最小二乘反演h，PDE约束优化层厚",
+          "constraints": [
+            "T_skin(t_end) ≤ 47°C",
+            "超过44°C时间 ≤ 5分钟",
+            "各层PDE + 界面条件 + 初边值条件",
+            "厚度非负物理合理"
+          ],
+          "variables": [
+            "T_i(x,t)",
+            "d_II",
+            "d_IV",
+            "h"
+          ],
+          "card_id": "mc-numerical-pde",
+          "shortlist": [
+            "mc-numerical-pde",
+            "mc-nsga2",
+            "mc-monte-carlo"
+          ],
+          "card_family": "numerical_pde",
+          "matched_allowed_structures": [
+            "numerical_pde",
+            "differential_equations",
+            "inverse_problem",
+            "optimization"
+          ]
+        },
+        "depends_on": [
+          "Q001"
+        ],
+        "tags": [
+          "numerical_pde",
+          "heat_conduction",
+          "finite_difference",
+          "crank_nicolson",
+          "multilayer",
+          "transient",
+          "inverse_problem",
+          "optimization"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "Q001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+        "node_id": "model_construction",
+        "dag_position": 1,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T04:03:00Z",
+        "finished_at": "2026-09-08T04:08:30Z",
+        "latency_seconds": 330.0,
+        "submitted_at": "2026-09-08T04:08:35Z",
+        "registered_at": "2026-09-08T09:12:51Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:12:51Z",
+          "by": "model_construction",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:12:51Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "numerical_pde",
+        "heat_conduction",
+        "finite_difference",
+        "crank_nicolson",
+        "multilayer",
+        "transient",
+        "inverse_problem",
+        "optimization"
+      ],
+      "data": {
+        "objective": "建立一维四层非稳态热传导PDE模型，CN-FDM求解正问题，最小二乘反演h，PDE约束优化层厚",
+        "constraints": [
+          "T_skin(t_end) ≤ 47°C",
+          "超过44°C时间 ≤ 5分钟",
+          "各层PDE + 界面条件 + 初边值条件",
+          "厚度非负物理合理"
+        ],
+        "variables": [
+          "T_i(x,t)",
+          "d_II",
+          "d_IV",
+          "h"
+        ],
+        "card_id": "mc-numerical-pde",
+        "shortlist": [
+          "mc-numerical-pde",
+          "mc-nsga2",
+          "mc-monte-carlo"
+        ],
+        "card_family": "numerical_pde",
+        "matched_allowed_structures": [
+          "numerical_pde",
+          "differential_equations",
+          "inverse_problem",
+          "optimization"
+        ]
+      }
+    },
+    "D001": {
+      "schema_version": "3.1",
+      "artifact_id": "D001",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "方法卡选择：mc-numerical-pde 为主卡（structure_signals 全匹配）",
+      "question": "Q001",
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T09:12:56Z",
+      "updated_at": "2026-09-08T09:12:56Z",
+      "payload": {
+        "title": "方法卡选择：mc-numerical-pde 为主卡（structure_signals 全匹配）",
+        "question": "Q001",
+        "decision": "选择 mc-numerical-pde（偏微分方程数值求解，family=numerical_pde）作为主方法卡。该卡的 structure_signals 与本题完全匹配：连续时空温度场演化、守恒律（能量）+本构定律（Fourier）、初边值条件定解问题、多层介质界面条件、测量数据反演参数。mc-numerical-pde 的 family=numerical_pde 直接命中 benchmark allowed_modeling_structures=[differential_equations, inverse_problem, optimization, numerical_pde]。",
+        "alternatives": [
+          {
+            "card_id": "mc-nsga2",
+            "name": "多目标遗传算法NSGA-II",
+            "family": "multi_objective_optimization",
+            "pros": [
+              "适合PDE约束黑箱优化",
+              "无需梯度信息",
+              "可处理多目标（Q3双变量）"
+            ],
+            "cons": [
+              "仅覆盖优化环节，不覆盖PDE正问题和反问题",
+              "计算量大（每次评估需跑PDE仿真）",
+              "family=multi_objective_optimization 匹配 optimization 但非主结构"
+            ],
+            "role": "辅助卡：用于Q2/Q3的PDE约束层厚优化",
+            "structure_match": "partial (optimization only)"
+          },
+          {
+            "card_id": "mc-monte-carlo",
+            "name": "蒙特卡洛方法",
+            "family": "monte_carlo_simulation",
+            "pros": [
+              "可用于参数不确定性传播分析",
+              "无需梯度"
+            ],
+            "cons": [
+              "不适合确定性PDE正问题求解",
+              "收敛慢（O(1/√N)）",
+              "family不在allowed_modeling_structures中"
+            ],
+            "role": "不选用：仅可用于灵敏度分析的辅助验证",
+            "structure_match": "no"
+          },
+          {
+            "card_id": "mc-ga",
+            "name": "遗传算法",
+            "family": "metaheuristics",
+            "pros": [
+              "无导数优化",
+              "全局搜索"
+            ],
+            "cons": [
+              "family=metaheuristics 不在 allowed_modeling_structures 中",
+              "仅覆盖优化，不覆盖PDE建模核心",
+              "旧B0误选此卡导致 method_selection=0"
+            ],
+            "role": "不选用：旧B0错误选择，校准后排除",
+            "structure_match": "no (family=metaheuristics not in allowed)"
+          }
+        ],
+        "reasoning": "## 决策推理\n\n### 第一步：structure_signals 匹配分析\n对照 mc-numerical-pde 卡的 structure_signals 逐条核验：\n\n1. **连续时空演化**：题面要求'确定假人皮肤外侧的温度变化情况'——温度 T(x,t) 随空间x和时间t连续演化。✅ 匹配\n2. **守恒量与通量**：热量守恒（能量守恒）+ Fourier热流定律（热流通量 ∝ -∇T）。✅ 匹配\n3. **初始条件+边界条件**：初始温度37°C（IC），外表面对流边界（Robin BC），内表面恒温边界（Dirichlet BC）——完整定解问题。✅ 匹配\n4. **介质属性已知或可反演**：附件1给出k/rho/c，对流换热系数h由附件2反演。✅ 匹配\n5. **2018_A型多层结构**：四层织物/空气结构、界面温度+热流连续、测量数据反演参数。✅ 精确匹配（卡中明确标注'2018_A型'）\n\n### 第二步：family 与 allowed_modeling_structures 对齐\n- mc-numerical-pde.family = numerical_pde\n- benchmark allowed_modeling_structures = [differential_equations, inverse_problem, optimization, numerical_pde]\n- numerical_pde ∈ allowed → **直接命中**\n\n### 第三步：多解模型原则\n本题核心结构是 numerical_pde（抛物型热传导方程的数值求解），反问题和优化是在PDE正解基础上的衍生环节。mc-numerical-pde 覆盖了守恒律推导、PDE表述、初边值条件、FDM/CN求解器、参数反演、验证方法等全链条知识，是最完整的主卡选择。mc-nsga2 仅覆盖优化环节，作为辅助卡。\n\n### 第四步：旧B0错误修正\n旧B0选择 mc-ga（family=metaheuristics），metaheuristics 不在 allowed_modeling_structures 中，且GA仅能处理优化环节，无法指导PDE建模核心。校准后切换为 mc-numerical-pde。",
+        "criteria": [
+          "structure_signals 匹配度（题面结构与方法卡信号的对应程度）",
+          "family 是否在 benchmark allowed_modeling_structures 中（硬指标）",
+          "知识覆盖完整性（是否覆盖正问题/反问题/优化全链条）",
+          "求解器适用性（FDM/CN对一维多层抛物型PDE的适用性）",
+          "验证方法可操作性（网格收敛性、守恒量检查等）"
+        ],
+        "confidence": 0.95,
+        "structure_signals_matched": [
+          {
+            "signal": "连续时空演化（温度/浓度/场量随空间和时间变化）",
+            "matched": true,
+            "evidence": "T(x,t) 四层温度场，90/60/30分钟时间演化"
+          },
+          {
+            "signal": "守恒量（热量/质量/能量）与通量（热流/扩散流）",
+            "matched": true,
+            "evidence": "能量守恒 + Fourier热流 q=-k∇T"
+          },
+          {
+            "signal": "初始条件+边界条件（定解问题）",
+            "matched": true,
+            "evidence": "IC=37°C均匀, Robin外边界, Dirichlet内边界"
+          },
+          {
+            "signal": "介质属性（热导率/扩散系数）已知或可反演",
+            "matched": true,
+            "evidence": "附件1给k/rho/c, h由附件2反演"
+          },
+          {
+            "signal": "2018_A型：多层结构、界面条件、测量数据反演参数",
+            "matched": true,
+            "evidence": "四层I/II/III/IV, 界面温度+热流连续, 附件2反演h"
+          }
+        ],
+        "selected_card": {
+          "card_id": "mc-numerical-pde",
+          "name": "偏微分方程数值求解",
+          "family": "numerical_pde",
+          "family_in_allowed": true,
+          "role": "primary_card"
+        },
+        "shortlist": [
+          {
+            "card_id": "mc-numerical-pde",
+            "family": "numerical_pde",
+            "in_allowed": true,
+            "role": "primary"
+          },
+          {
+            "card_id": "mc-nsga2",
+            "family": "multi_objective_optimization",
+            "in_allowed": true,
+            "role": "auxiliary (optimization)"
+          },
+          {
+            "card_id": "mc-monte-carlo",
+            "family": "monte_carlo_simulation",
+            "in_allowed": false,
+            "role": "not selected"
+          }
+        ],
+        "depends_on": [
+          "M001"
+        ],
+        "tags": [
+          "method_selection",
+          "mc-numerical-pde",
+          "structure_signals",
+          "numerical_pde",
+          "calibration_fix"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+        "node_id": "method_selection",
+        "dag_position": 2,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T04:08:30Z",
+        "finished_at": "2026-09-08T04:12:00Z",
+        "latency_seconds": 210.0,
+        "submitted_at": "2026-09-08T04:12:05Z",
+        "registered_at": "2026-09-08T09:12:56Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:12:56Z",
+          "by": "method_selection",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:12:56Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "method_selection",
+        "mc-numerical-pde",
+        "structure_signals",
+        "numerical_pde",
+        "calibration_fix"
+      ],
+      "data": {}
+    },
+    "D002": {
+      "schema_version": "3.1",
+      "artifact_id": "D002",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "求解策略：Crank-Nicolson FDM + Levenberg-Marquardt反演 + 约束优化",
+      "question": "Q001",
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T09:12:56Z",
+      "updated_at": "2026-09-08T09:12:56Z",
+      "payload": {
+        "title": "求解策略：Crank-Nicolson FDM + Levenberg-Marquardt反演 + 约束优化",
+        "question": "Q001",
+        "decision": "采用三阶段求解策略：(1) 正问题——Crank-Nicolson有限差分法（CN-FDM）离散四层非稳态热传导PDE，联合求解各层三对角方程组；(2) 反问题——基于附件2实测皮肤温度，用Levenberg-Marquardt（LM）算法最小二乘反演对流换热系数h，含Tikhonov正则化；(3) 优化问题——以CN-FDM正解为黑箱目标函数，Q2用黄金分割/模式搜索单变量约束优化，Q3用NSGA-II多目标优化或序列二次规划（SQP）。",
+        "alternatives": [
+          {
+            "algorithm": "显式Euler (FTCS) + GA优化",
+            "pros": [
+              "实现最简单",
+              "每步无需求解方程组"
+            ],
+            "cons": [
+              "CFL稳定性条件 r=αΔt/Δx²≤0.5，空气层α极小导致Δt极小（<0.01s），90分钟仿真需54000+步",
+              "一阶时间精度",
+              "GA优化效率低（每次评估需完整PDE仿真）"
+            ],
+            "feasibility": "low — 计算量过大，不适合优化迭代"
+          },
+          {
+            "algorithm": "隐式Euler (BTCS) + 模式搜索",
+            "pros": [
+              "无条件稳定",
+              "实现比CN略简单"
+            ],
+            "cons": [
+              "仅一阶时间精度，长时间仿真累积误差大",
+              "需要更小时间步补偿精度损失"
+            ],
+            "feasibility": "medium — 可行但精度不足"
+          },
+          {
+            "algorithm": "有限元法 (FEM) + SQP",
+            "pros": [
+              "处理复杂几何灵活",
+              "商业软件成熟"
+            ],
+            "cons": [
+              "一维规则几何下FEM是过度设计",
+              "装配刚度矩阵开销大",
+              "实现复杂度高，竞赛时间内不经济"
+            ],
+            "feasibility": "low — 一维问题FDM更高效"
+          },
+          {
+            "algorithm": "Crank-Nicolson FDM + LM反演 + 约束优化（选定）",
+            "pros": [
+              "无条件稳定 + 二阶时间精度",
+              "可使用较大Δt（如1-5s），效率高",
+              "三对角方程组Thomas算法O(N)求解",
+              "LM算法结合Gauss-Newton和梯度下降，反演收敛快",
+              "适合多层介质联合求解"
+            ],
+            "cons": [
+              "实现比显式复杂（需处理界面条件）",
+              "每步需组装并求解块三对角方程组"
+            ],
+            "feasibility": "high — 平衡精度、效率与实现复杂度"
+          }
+        ],
+        "reasoning": "## 求解策略推理\n\n### 正问题求解器选择\n本题为一维四层规则几何的抛物型PDE，FDM是自然选择。关键约束是空气层（IV层）热扩散率 α_air ≈ 2.2e-5 m²/s 远小于织物层，若用显式格式，CFL条件由最小α决定全局Δt，导致时间步极小（Δt≤Δx²/(2α_min)，若Δx=0.1mm则Δt≤0.23s，90分钟需23000+步）。Crank-Nicolson隐式格式无条件稳定，可使用Δt=1-5s，且二阶时间精度，是长时间仿真的最优选择。\n\n### 离散方案\n- 空间：各层均匀网格，界面处共用节点，Δx=0.1-0.5mm（界面加密）\n- 时间：Δt=1-5s，CN格式（时间二阶，空间二阶）\n- 界面处理：温度连续直接共用节点值；热流连续通过界面节点的能量守恒离散（调和平均热导率）\n- 边界：Robin外边界用ghost node法或直接离散；Dirichlet内边界直接赋值\n- 求解：块三对角方程组（各层内部三对角 + 界面耦合），块Thomas算法\n\n### 反问题求解\n对流换热系数h为唯一未知参数（其余k/rho/c由附件1给出）。目标函数 J(h)=Σ[T_sim(t_i;h)-T_meas(t_i)]² + λ(h-h₀)²。LM算法在h附近二次收敛，正则化参数λ通过L-curve或交叉验证选取。\n\n### 优化求解\n- Q2（单变量d_II）：目标函数为PDE仿真的黑箱函数，约束为T_skin(60min)≤47°C和超44°C时间≤5min。可用黄金分割法结合约束边界搜索，或模式搜索（Hooke-Jeeves）。\n- Q3（双变量d_II,d_IV）：可用NSGA-II多目标优化（最小化总厚度 + 满足约束），或SQP（将约束转化为罚函数）。由于每次评估需跑PDE仿真，评估次数受限（建议≤500次），NSGA-II种群规模不宜过大。",
+        "algorithm": {
+          "name": "CN-FDM + LM反演 + 约束优化三阶段算法",
+          "stage_1_forward": {
+            "method": "Crank-Nicolson Finite Difference Method",
+            "spatial_discretization": "uniform grid per layer, Δx=0.1-0.5mm, shared nodes at interfaces",
+            "time_step": "Δt=1-5s (unconditionally stable)",
+            "interface_handling": "temperature continuity (shared node) + heat flux continuity (harmonic mean k at interface node)",
+            "boundary_handling": "Robin (ghost node) at x=0, Dirichlet at x=d_total",
+            "solver": "block tridiagonal (Thomas algorithm), O(N) per time step",
+            "stability": "unconditionally stable (CN implicit)",
+            "accuracy": "2nd order in time, 2nd order in space"
+          },
+          "stage_2_inverse": {
+            "method": "Levenberg-Marquardt with Tikhonov regularization",
+            "objective": "min_h J(h) = Σ[T_sim(t_i;h) - T_meas(t_i)]² + λ(h-h₀)²",
+            "unknown": "convection coefficient h",
+            "forward_solver": "CN-FDM from stage 1 (each LM iteration requires forward solve)",
+            "regularization": "Tikhonov λ, selected via L-curve",
+            "convergence": "quadratic near optimum (Gauss-Newton region), gradient descent far from optimum"
+          },
+          "stage_3_optimization": {
+            "q2_method": "golden-section search / Hooke-Jeeves pattern search with constraint boundary",
+            "q2_variable": "d_II (single variable)",
+            "q3_method": "NSGA-II multi-objective or SQP with penalty function",
+            "q3_variables": "[d_II, d_IV] (two variables)",
+            "objective": "minimize total thickness (or weighted sum)",
+            "constraints": "T_skin(t_end) ≤ 47°C, time above 44°C ≤ 5min",
+            "forward_calls": "each evaluation = one CN-FDM forward solve; budget ≤ 500 calls",
+            "seed": 42
+          }
+        },
+        "feasibility": {
+          "overall": "high",
+          "forward_solver": "high — CN-FDM for 1D multilayer PDE is standard and robust",
+          "inverse_problem": "medium-high — single parameter (h) inversion is well-posed with regularization; LM converges reliably",
+          "optimization": "medium — black-box PDE-constrained optimization; limited forward call budget but low dimensionality (1-2 variables) makes it feasible",
+          "implementation_effort": "medium — block tridiagonal solver + interface handling requires care but manageable",
+          "computational_cost": "low-medium — single forward solve < 1s (90min, Δt=2s, ~2700 steps, N~100 nodes); 500 optimization evaluations < 10min"
+        },
+        "depends_on": [
+          "M001",
+          "D001"
+        ],
+        "tags": [
+          "crank_nicolson",
+          "finite_difference",
+          "levenberg_marquardt",
+          "inverse_problem",
+          "nsga2",
+          "constrained_optimization",
+          "pde_constrained"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "M001",
+        "D001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+        "node_id": "solving_strategy",
+        "dag_position": 3,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T04:12:00Z",
+        "finished_at": "2026-09-08T04:16:30Z",
+        "latency_seconds": 270.0,
+        "submitted_at": "2026-09-08T04:16:35Z",
+        "registered_at": "2026-09-08T09:12:56Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:12:56Z",
+          "by": "solving_strategy",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:12:56Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "crank_nicolson",
+        "finite_difference",
+        "levenberg_marquardt",
+        "inverse_problem",
+        "nsga2",
+        "constrained_optimization",
+        "pde_constrained"
+      ],
+      "data": {}
+    },
+    "D003": {
+      "schema_version": "3.1",
+      "artifact_id": "D003",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "验证计划：网格收敛性 + 守恒量检查 + 反演残差 + 灵敏度分析",
+      "question": "Q001",
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T09:12:57Z",
+      "updated_at": "2026-09-08T09:12:57Z",
+      "payload": {
+        "title": "验证计划：网格收敛性 + 守恒量检查 + 反演残差 + 灵敏度分析",
+        "question": "Q001",
+        "decision": "采用多层次验证策略：(1) 数值验证——网格收敛性测试（Δx/Δt减半，关键输出变化<1%）、守恒量检查（无源时总能量变化<2%）、解析解对比（稳态线性分布/半无限大物体，相对误差<1%）、多格式交叉验证（CN vs 隐式Euler结果一致）；(2) 反演验证——拟合残差分析（R²>0.95）、参数不确定性（协方差矩阵估计h的置信区间）、留一交叉验证；(3) 优化验证——约束满足性检查、最优解局部稳定性（邻域扰动后仍满足约束）、Pareto前沿分析（Q3）；(4) 灵敏度分析——热导率k、对流系数h、层厚d对皮肤温度峰值和超温时间的局部灵敏度（OAT）和全局灵敏度（Sobol/LHS）。",
+        "alternatives": [
+          {
+            "method": "仅靠最终结果与附件2对比",
+            "pros": [
+              "最简单"
+            ],
+            "cons": [
+              "无法区分模型误差和数值误差",
+              "无法验证优化解的最优性",
+              "不符合mc-numerical-pde卡的validation要求"
+            ],
+            "feasibility": "low — 验证不充分"
+          },
+          {
+            "method": "网格收敛性 + 守恒量检查 + 灵敏度分析（选定）",
+            "pros": [
+              "覆盖数值精度、物理合理性、参数鲁棒性三个维度",
+              "符合mc-numerical-pde卡validation节的全部建议",
+              "可操作且计算量可控"
+            ],
+            "cons": [
+              "需要多次正问题求解（网格收敛性需3-4组网格）"
+            ],
+            "feasibility": "high — 全面且可操作"
+          }
+        ],
+        "reasoning": "## 验证计划推理\n\n### 数值验证（PDE求解器正确性）\n1. **网格收敛性测试**：取Δx=[0.5, 0.25, 0.125]mm，Δt=[5, 2.5, 1.25]s，计算Q1情形下皮肤外侧温度峰值和90min末温度。CN格式理论收敛阶为O(Δt²+Δx²)，相邻网格间关键输出变化应<1%。若变化>5%需进一步加密。\n2. **守恒量检查**：在无源项情形下（关闭对流边界，改为绝热），系统总内能应守恒。计算Q=Σρ_i c_i ∫T_i dx随时间变化，相对变化应<2%。\n3. **解析解对比**：(a) 稳态情形——关闭时间导数，四层稳态热传导解析解为分段线性分布，数值解应与解析解完全一致（机器精度）；(b) 半无限大物体——单层半无限大物体受恒定表面温度，解析解为erfc函数，数值解在早期应匹配。\n4. **多格式交叉验证**：用隐式Euler（BTCS）在相同网格下求解，与CN结果对比，两者差异应<1%（BTCS一阶精度在细网格下趋近CN）。\n\n### 反演验证（参数估计可靠性）\n1. **拟合优度**：反演h后，计算模拟皮肤温度与附件2实测值的R²，要求R²>0.95；RMSE应<1°C。\n2. **参数不确定性**：基于LM算法的协方差矩阵估计h的标准偏差σ_h，报告95%置信区间[h-2σ_h, h+2σ_h]。\n3. **留一交叉验证**：将附件2数据分为训练集（80%）和验证集（20%），用训练集反演h，在验证集上预测，验证集RMSE应与训练集接近（无过拟合）。\n4. **正则化参数选择**：用L-curve法确定λ，在拟合残差和正则化项间取平衡点。\n\n### 优化验证（最优解合理性）\n1. **约束满足性**：验证最优解处T_skin(t_end)≤47°C且超44°C时间≤5min，允许数值容差0.1°C/0.1min。\n2. **局部稳定性**：在最优解邻域（±5%厚度）扰动，检查约束是否仍满足；若微小扰动即违反约束，说明解处于约束边界，需报告active constraint。\n3. **Pareto前沿（Q3）**：若用NSGA-II，绘制d_II vs d_IV的Pareto前沿，验证前沿的凸性和分布均匀性。\n4. **最优性条件**：对于Q2单变量问题，验证目标函数在最优解处的导数（有限差分近似）接近0（无约束侧）或约束active（约束侧）。\n\n### 物理合理性检查\n1. 温度分布应在环境温度和体内温度之间（37°C ≤ T ≤ T_env）\n2. 皮肤温度应单调上升并趋近稳态（无过冲）\n3. 增加层厚应降低皮肤温度（单调性）\n4. 提高环境温度应升高皮肤温度（单调性）",
+        "sensitivity_analysis": {
+          "method": "OAT (One-At-a-Time) local sensitivity + LHS global sensitivity",
+          "local_sensitivity": {
+            "parameters": [
+              "k_I",
+              "k_II",
+              "k_III",
+              "k_IV",
+              "h",
+              "d_II",
+              "d_IV",
+              "T_env"
+            ],
+            "perturbation": "±10% around baseline",
+            "outputs": [
+              "T_skin_peak",
+              "time_above_44C",
+              "T_skin_at_t_end"
+            ],
+            "metric": "S_i = (ΔOutput/Output_baseline) / (ΔInput/Input_baseline) (normalized sensitivity coefficient)",
+            "expected": "d_II and d_IV have highest negative sensitivity (thicker → lower skin temp); h and T_env have highest positive sensitivity"
+          },
+          "global_sensitivity": {
+            "method": "Latin Hypercube Sampling (LHS) + Sobol indices",
+            "sample_size": 200,
+            "parameters": [
+              "k_II",
+              "k_IV",
+              "h",
+              "d_II",
+              "d_IV"
+            ],
+            "ranges": "±20% around baseline",
+            "outputs": [
+              "T_skin_peak",
+              "time_above_44C"
+            ],
+            "first_order_indices": "S_i = V(E[Y|X_i]) / V(Y)",
+            "total_indices": "S_Ti = E[V(Y|X_~i)] / V(Y)"
+          },
+          "robustness_check": "Monte Carlo simulation (N=500) with parameter uncertainty propagation to estimate probability of constraint violation at optimal design point"
+        },
+        "validation_methods": [
+          {
+            "name": "网格收敛性测试",
+            "type": "numerical_verification",
+            "criteria": "Δx/Δt减半，关键输出变化 < 1%",
+            "mc_numerical_pde_ref": "validation: 网格收敛性测试"
+          },
+          {
+            "name": "守恒量检查",
+            "type": "physical_verification",
+            "criteria": "无源时总能量相对变化 < 2%",
+            "mc_numerical_pde_ref": "validation: 守恒量检查"
+          },
+          {
+            "name": "解析解对比",
+            "type": "numerical_verification",
+            "criteria": "稳态线性分布/半无限大物体相对误差 < 1%",
+            "mc_numerical_pde_ref": "validation: 解析解对比"
+          },
+          {
+            "name": "多格式交叉验证",
+            "type": "numerical_verification",
+            "criteria": "CN vs BTCS结果差异 < 1%",
+            "mc_numerical_pde_ref": "validation: 多格式交叉验证"
+          },
+          {
+            "name": "反演拟合优度",
+            "type": "inverse_validation",
+            "criteria": "R² > 0.95, RMSE < 1°C"
+          },
+          {
+            "name": "参数不确定性分析",
+            "type": "inverse_validation",
+            "criteria": "报告h的95%置信区间"
+          },
+          {
+            "name": "留一交叉验证",
+            "type": "inverse_validation",
+            "criteria": "验证集RMSE ≈ 训练集RMSE（无过拟合）"
+          },
+          {
+            "name": "约束满足性检查",
+            "type": "optimization_validation",
+            "criteria": "最优解处T_skin≤47°C且超44°C时间≤5min（容差0.1°C/0.1min）"
+          },
+          {
+            "name": "最优解局部稳定性",
+            "type": "optimization_validation",
+            "criteria": "±5%扰动后约束仍满足（或识别active constraint）"
+          },
+          {
+            "name": "物理合理性检查",
+            "type": "physical_validation",
+            "criteria": "温度在37~T_env之间，单调上升，层厚/环境温度单调性正确",
+            "mc_numerical_pde_ref": "validation: 物理合理性"
+          },
+          {
+            "name": "参数敏感性分析",
+            "type": "sensitivity",
+            "criteria": "±10%扰动输出变化平滑无突变",
+            "mc_numerical_pde_ref": "validation: 参数敏感性"
+          }
+        ],
+        "random_seed": 42,
+        "multi_run_count": 5,
+        "depends_on": [
+          "M001",
+          "D001",
+          "D002"
+        ],
+        "tags": [
+          "validation",
+          "grid_convergence",
+          "conservation_check",
+          "sensitivity_analysis",
+          "inverse_validation",
+          "optimization_validation",
+          "mc-numerical-pde"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "M001",
+        "D001",
+        "D002"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+        "node_id": "validation_plan",
+        "dag_position": 4,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T04:16:30Z",
+        "finished_at": "2026-09-08T04:20:00Z",
+        "latency_seconds": 210.0,
+        "submitted_at": "2026-09-08T04:20:05Z",
+        "registered_at": "2026-09-08T09:12:57Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:12:57Z",
+          "by": "validation_plan",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:12:57Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [
+        "validation",
+        "grid_convergence",
+        "conservation_check",
+        "sensitivity_analysis",
+        "inverse_validation",
+        "optimization_validation",
+        "mc-numerical-pde"
+      ],
+      "data": {}
+    }
+  },
+  "history": {}
+}

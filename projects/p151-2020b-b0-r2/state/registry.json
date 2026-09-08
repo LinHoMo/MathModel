@@ -1,0 +1,794 @@
+{
+  "registry_version": 3,
+  "project": "p151-2020b-b0-r2",
+  "updated_at": "2026-09-08T09:11:00Z",
+  "counters": {
+    "question": 1,
+    "model": 1,
+    "decision": 3
+  },
+  "artifacts": {
+    "Q001": {
+      "schema_version": "3.1",
+      "artifact_id": "Q001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "穿越沙漠 — 问题理解与多阶段序贯决策结构识别",
+      "question": "",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-08T09:11:00Z",
+      "updated_at": "2026-09-08T09:11:00Z",
+      "payload": {
+        "title": "穿越沙漠 — 问题理解与多阶段序贯决策结构识别",
+        "problem_type": "多阶段序贯决策 / 资源约束优化 / 随机动态规划 / 多玩家博弈",
+        "sub_questions": [
+          {
+            "id": "Q1",
+            "text": "单玩家、天气全已知：建立确定性动态规划模型，以天为阶段向后递推，求解第一关和第二关的最优每日行动序列（行走/停留/挖矿/购买），最大化到达终点时剩余资金（含终点资源退回价值）。",
+            "type": "deterministic_dynamic_programming"
+          },
+          {
+            "id": "Q2",
+            "text": "单玩家、仅知当日天气：建立马尔可夫决策过程(MDP)模型，状态含位置/水/食物/资金/当日天气，通过值迭代或在线策略迭代求解第三关和第四关的最佳自适应策略，对未来天气取期望。",
+            "type": "stochastic_markov_decision_process"
+          },
+          {
+            "id": "Q3",
+            "text": "n名玩家竞争/协作：(1)天气全已知+策略预先确定→开环纳什均衡，枚举或搜索各玩家策略组合检验无单方面偏离获益；(2)仅知当日天气+可观察他人行动→闭环马尔可夫完美均衡，在线策略迭代+多智能体模拟。求解第五关和第六关。",
+            "type": "game_theory_multi_agent"
+          }
+        ],
+        "key_variables": [
+          {
+            "name": "x_t",
+            "desc": "第t天所在地图区域（起点/村庄/矿山/沙漠/终点）"
+          },
+          {
+            "name": "a_t",
+            "desc": "第t天行动（move到相邻区域/stay原地/mine挖矿），购买可与行动同日"
+          },
+          {
+            "name": "w_t",
+            "desc": "第t天开始时水量（箱），每日消耗，可在起点/村庄购买"
+          },
+          {
+            "name": "f_t",
+            "desc": "第t天开始时食物量（箱），每日消耗，可在起点/村庄购买"
+          },
+          {
+            "name": "m_t",
+            "desc": "第t天开始时资金（元），初始资金+挖矿收益-购买支出"
+          },
+          {
+            "name": "weather_t",
+            "desc": "第t天天气（晴朗/高温/沙暴），沙暴日强制停留"
+          },
+          {
+            "name": "b_w_t, b_f_t",
+            "desc": "第t天购买水/食物量（箱），起点基准价/村庄2倍价"
+          },
+          {
+            "name": "t",
+            "desc": "天数（第0天起，截止日期T_max前到达终点）"
+          }
+        ],
+        "structure_identification": {
+          "primary_structure": "multi_stage_sequential_decision_with_resource_constraints",
+          "description": "本题天然以天为阶段划分（第0天到截止日），每一阶段玩家需做一次行动决策（行走/停留/挖矿/购买），决策直接改变下一阶段的状态（位置、水、食物、资金）。总目标（终点剩余资金）跨阶段累积，且当前状态（位置+资源+资金+天数+天气）足以决定未来最优策略，满足马尔可夫性。状态空间有限离散（地图节点数×资源箱数×资金数×天数），具有最优子结构和重叠子问题，是动态规划/马尔可夫决策过程的标准适用结构。",
+          "stage_definition": "以天为阶段 t=0,1,...,T_max，每阶段对应一次行动决策",
+          "state_vector": "(x_t, w_t, f_t, m_t, weather_t) — 位置、水量、食物量、资金、当日天气",
+          "action_space": "{move到相邻区域, stay, mine(仅矿山), buy水/食物(起点或村庄)}",
+          "transition": "资源消耗(行动×天气系数) + 位置转移 + 资金流转(购买/挖矿/退回)",
+          "objective_accumulation": "最大化终点资金 m_T + 0.5×(C_w×w_T + C_f×f_T)",
+          "optimal_substructure": "从第t天状态s出发的最优策略，其从第t+1天起的子策略必为子问题最优（cut-and-paste可证）",
+          "markov_property": "当前状态(x,w,f,m,weather)包含影响未来决策的全部相关信息，历史路径可丢弃",
+          "q1_structure": "确定性DP：天气序列已知，状态转移确定，自底向上表格递推或自顶向下记忆化",
+          "q2_structure": "随机MDP：天气为随机过程，Bellman方程含期望算子，值迭代/策略迭代求解",
+          "q3_structure": "多玩家博弈：玩家间行动产生外部性（同行/同矿/同村的k人聚合效应），需均衡分析"
+        },
+        "model_family_hint": [
+          "dynamic_programming",
+          "markov_decision_process",
+          "resource_allocation_optimization",
+          "game_theory",
+          "integer_programming"
+        ],
+        "difficulty_assessment": "高 — 三问递进，Q1确定性DP状态空间大但可精确求解，Q2随机MDP需处理天气不确定性，Q3多玩家博弈需均衡概念，资源约束与外部性耦合紧密",
+        "core_challenge": "在负重上限、资源消耗、天气随机性和多玩家外部性约束下，通过多阶段序贯决策最大化到达终点时的剩余资金"
+      },
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "a2d0867169b94c592caafb438f608dfa12fc91c7e5df0aab5acaa5a9408ed4f2",
+        "node_id": "problem_understanding",
+        "dag_position": 0,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T14:30:00Z",
+        "finished_at": "2026-09-08T14:31:30Z",
+        "latency_seconds": 90.0,
+        "submitted_at": "2026-09-08T14:31:33Z",
+        "registered_at": "2026-09-08T09:11:00Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "problem_understanding",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "M001": {
+      "schema_version": "3.1",
+      "artifact_id": "M001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "穿越沙漠 — 多阶段动态规划与马尔可夫决策过程模型",
+      "question": "Q001",
+      "created_by": "model_construction",
+      "created_at": "2026-09-08T09:11:00Z",
+      "updated_at": "2026-09-08T09:11:00Z",
+      "payload": {
+        "title": "穿越沙漠 — 多阶段动态规划与马尔可夫决策过程模型",
+        "model_type": "动态规划(DP)/马尔可夫决策过程(MDP)统一模型，含多玩家博弈扩展",
+        "model_family": [
+          "dynamic_programming",
+          "markov_decision_process",
+          "optimization",
+          "game_theory"
+        ],
+        "assumptions": [
+          "玩家每天执行一种主要行动（行走/停留/挖矿），购买资源可与行动同日进行",
+          "水和食物的消耗系数由行动类型决定：停留=1x基础，行走=2x基础，挖矿=3x基础；沙暴日强制停留",
+          "地图区域相邻关系固定（有公共边界为相邻），沙暴日不可行走",
+          "起点购买仅第0天一次（基准价），村庄购买价格=2x基准，终点退回价格=0.5x基准",
+          "Q1中天气序列完全已知（确定性环境），可离线全局优化",
+          "Q2中天气为随机过程，仅当日可观测，需对未来天气取期望",
+          "Q3中n名玩家同时行动，k人同行/同矿/同村时产生资源消耗和价格的外部性",
+          "所有资源和资金均为整数（以箱/元为单位），状态空间有限离散"
+        ],
+        "variables": [
+          {
+            "name": "x_t",
+            "desc": "第t天位置（地图节点索引）",
+            "domain": "地图节点集合V"
+          },
+          {
+            "name": "a_t",
+            "desc": "第t天行动",
+            "domain": "{move(v'), stay, mine}，move目标v'∈N(x_t)∪{x_t}"
+          },
+          {
+            "name": "w_t",
+            "desc": "第t天开始时水量（箱）",
+            "domain": "非负整数，0≤w_t≤W_max"
+          },
+          {
+            "name": "f_t",
+            "desc": "第t天开始时食物量（箱）",
+            "domain": "非负整数，0≤f_t≤W_max"
+          },
+          {
+            "name": "m_t",
+            "desc": "第t天开始时资金（元）",
+            "domain": "非负整数"
+          },
+          {
+            "name": "b_w_t",
+            "desc": "第t天购买水量（箱）",
+            "domain": "非负整数"
+          },
+          {
+            "name": "b_f_t",
+            "desc": "第t天购买食物量（箱）",
+            "domain": "非负整数"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "C_w",
+            "desc": "水的基准价格（元/箱）"
+          },
+          {
+            "name": "C_f",
+            "desc": "食物的基准价格（元/箱）"
+          },
+          {
+            "name": "W_max",
+            "desc": "负重上限（水+食物总箱数）"
+          },
+          {
+            "name": "d_w(sun/hot)",
+            "desc": "晴朗/高温日基础消耗水量（箱/天）"
+          },
+          {
+            "name": "d_f(sun/hot)",
+            "desc": "晴朗/高温日基础消耗食物量（箱/天）"
+          },
+          {
+            "name": "R",
+            "desc": "矿山基础收益（元/天）"
+          },
+          {
+            "name": "T_max",
+            "desc": "截止天数"
+          },
+          {
+            "name": "P(weather_{t+1}|weather_t)",
+            "desc": "天气转移概率矩阵（Q2/Q3.2用）"
+          },
+          {
+            "name": "n",
+            "desc": "玩家数量（Q3用）"
+          }
+        ],
+        "objectives": [
+          "Q1: 最大化到达终点时资金 m_T + 0.5×(C_w×w_T + C_f×f_T)（终点退回剩余资源）",
+          "Q2: 最大化期望终点资金 E[m_T + 0.5×(C_w×w_T + C_f×f_T)]（对随机天气取期望）",
+          "Q3.1: 预定义策略下最大化各玩家期望剩余资金（开环纳什均衡：无玩家可单方面偏离获益）",
+          "Q3.2: 在线策略下最大化各玩家期望剩余资金（闭环马尔可夫完美均衡）"
+        ],
+        "constraints": [
+          "负重约束：w_t + f_t ≤ W_max（每日开始时）",
+          "资源非负：w_t ≥ 0, f_t ≥ 0（未到达终点前耗尽则游戏失败）",
+          "资金非负：m_t ≥ 0",
+          "行动约束：沙暴日 a_t = stay；到达矿山当天不可挖矿；仅在矿山可挖矿",
+          "购买约束：起点仅第0天可购买（基准价）；村庄购买价格=2×基准；购买后资金减少、资源增加",
+          "状态转移：x_{t+1} ∈ N(x_t) ∪ {x_t}（相邻区域或原地停留）",
+          "终止约束：存在 t ≤ T_max 使 x_t = 终点",
+          "Q3外部性：k人同行消耗=2k×基础；k人同矿每人收益=R/k且消耗=3×基础；k人同村价格=4×基准"
+        ],
+        "mechanisms": [
+          "资源消耗机制：消耗系数=行动类型系数(停留1/行走2/挖矿3)×天气基础消耗量；沙暴日强制停留",
+          "资金流转机制：起点购买(基准价)→村庄购买(2x价)→挖矿收益(R/天)→终点退回(0.5x价)",
+          "天气机制：晴朗/高温正常消耗，沙暴强制停留；Q2中天气为马尔可夫随机过程",
+          "多玩家外部性机制：同行/同矿/同村的k人聚合效应，改变消耗系数、挖矿收益和购买价格",
+          "Bellman最优性原理：最优策略的子策略必为对应子问题的最优策略（cut-and-paste可证）"
+        ],
+        "equations": [
+          "资源状态转移: w_{t+1} = w_t + b_w_t - c_w(a_t, weather_t),  f_{t+1} = f_t + b_f_t - c_f(a_t, weather_t)",
+          "资金状态转移: m_{t+1} = m_t - price_w(x_t)×b_w_t - price_f(x_t)×b_f_t + R×I(a_t=mine)",
+          "Q1确定性DP递推: V_t(x,w,f,m) = max_{a,b} { V_{t+1}(x',w',f',m') }, 终端V_T(x,w,f,m) = m + 0.5(C_w w + C_f f)×I(x=终点)",
+          "Q2随机MDP Bellman方程: V_t(s) = max_a { R(s,a) + Σ_{s'} P(s'|s,a)·V_{t+1}(s') }, s=(x,w,f,m,weather_t)",
+          "Q3均衡条件: 每个玩家策略σ_i满足 σ_i ∈ argmax_{σ_i'} E[payoff_i(σ_i', σ_{-i})], ∀i=1,...,n"
+        ],
+        "objective": "最大化到达终点时的剩余资金（含终点剩余水和食物按基准价一半退回的价值）",
+        "data": {
+          "objective": "最大化到达终点时的剩余资金（含终点剩余水和食物按基准价一半退回的价值）",
+          "constraints": [
+            "负重上限约束 w_t + f_t ≤ W_max",
+            "资源非负约束（未到终点前耗尽则失败）",
+            "沙暴日强制停留，到达矿山当天不可挖矿",
+            "起点仅第0天一次购买（基准价），村庄2倍价购买",
+            "截止日期T_max前到达终点",
+            "Q3多玩家外部性约束（k人同行/同矿/同村的聚合效应）"
+          ],
+          "variables": [
+            "位置 x_t（地图节点）",
+            "行动 a_t（move/stay/mine）",
+            "水量 w_t（箱）",
+            "食物量 f_t（箱）",
+            "资金 m_t（元）",
+            "购买量 b_w_t, b_f_t（箱）"
+          ],
+          "card_id": "mc-dp",
+          "shortlist": [
+            "mc-monte-carlo",
+            "mc-nsga2"
+          ]
+        },
+        "depends_on": [
+          "Q001"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "Q001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "a2d0867169b94c592caafb438f608dfa12fc91c7e5df0aab5acaa5a9408ed4f2",
+        "node_id": "model_construction",
+        "dag_position": 1,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T14:31:35Z",
+        "finished_at": "2026-09-08T14:33:40Z",
+        "latency_seconds": 125.0,
+        "submitted_at": "2026-09-08T14:33:43Z",
+        "registered_at": "2026-09-08T09:11:00Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "model_construction",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "objective": "最大化到达终点时的剩余资金（含终点剩余水和食物按基准价一半退回的价值）",
+        "constraints": [
+          "负重上限约束 w_t + f_t ≤ W_max",
+          "资源非负约束（未到终点前耗尽则失败）",
+          "沙暴日强制停留，到达矿山当天不可挖矿",
+          "起点仅第0天一次购买（基准价），村庄2倍价购买",
+          "截止日期T_max前到达终点",
+          "Q3多玩家外部性约束（k人同行/同矿/同村的聚合效应）"
+        ],
+        "variables": [
+          "位置 x_t（地图节点）",
+          "行动 a_t（move/stay/mine）",
+          "水量 w_t（箱）",
+          "食物量 f_t（箱）",
+          "资金 m_t（元）",
+          "购买量 b_w_t, b_f_t（箱）"
+        ],
+        "card_id": "mc-dp",
+        "shortlist": [
+          "mc-monte-carlo",
+          "mc-nsga2"
+        ]
+      }
+    },
+    "D001": {
+      "schema_version": "3.1",
+      "artifact_id": "D001",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "求解方法选择 — 动态规划(mc-dp)为主卡，蒙特卡洛与NSGA-II为shortlist",
+      "question": "Q001",
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T09:11:00Z",
+      "updated_at": "2026-09-08T09:11:00Z",
+      "payload": {
+        "title": "求解方法选择 — 动态规划(mc-dp)为主卡，蒙特卡洛与NSGA-II为shortlist",
+        "decision": "选择动态规划与马尔可夫决策过程方法卡(mc-dp, family=dynamic_programming)作为本题主建模方法。Q1用确定性DP自底向上递推，Q2用MDP值迭代/策略迭代，Q3在DP框架上扩展多玩家博弈均衡分析。mc-monte-carlo用于Q2/Q3随机场景的策略评估与期望收益估计，mc-nsga2作为多目标（资金最大化vs资源效率/时间）备选。",
+        "alternatives": [
+          {
+            "method": "mc-dp",
+            "family": "dynamic_programming",
+            "pros": "与本题多阶段序贯决策结构天然匹配；Bellman最优性原理可严格证明最优子结构；Q1确定性DP可求精确最优解；Q2 MDP值迭代有收敛保证；状态有限离散可表格化",
+            "cons": "状态空间可能较大（地图×资源×资金×天数），需注意维数灾难和状态裁剪；Q3多玩家扩展需结合博弈论",
+            "score": 0.92
+          },
+          {
+            "method": "mc-monte-carlo",
+            "family": "simulation",
+            "pros": "天然适合Q2随机天气和Q3博弈的策略模拟评估；可估计期望收益和方差；实现灵活",
+            "cons": "计算量大，方差收敛慢；不直接给出最优策略，需与优化方法结合；仅作为评估工具而非主求解器",
+            "score": 0.75
+          },
+          {
+            "method": "mc-nsga2",
+            "family": "multi_objective_optimization",
+            "pros": "可处理资金最大化与资源效率/时间的多目标权衡；Pareto前沿提供决策灵活性",
+            "cons": "Pareto前沿选择需额外决策；元启发式不保证全局最优；本题核心是单目标（资金最大化），多目标非必需",
+            "score": 0.6
+          },
+          {
+            "method": "mc-ga",
+            "family": "metaheuristics",
+            "pros": "全局搜索能力强，可编码行动序列搜索；处理复杂约束",
+            "cons": "family=metaheuristics不在本题allowed_modeling_structures中；收敛速度慢，参数调优敏感；不保证最优解；本题有精确DP解法，GA是次优替代",
+            "score": 0.45
+          }
+        ],
+        "reasoning": "本题核心结构是多阶段序贯决策：以天为阶段，每阶段做一次行动决策，决策影响后续状态（位置/资源/资金），总目标跨阶段累积，且满足马尔可夫性和最优子结构。这与mc-dp卡的structure_signals完全匹配：(1)问题可按时间天然划分为多个阶段——天数t=0..T_max；(2)每一阶段需要做一次决策，决策影响后续阶段状态——每日行动改变资源和位置；(3)总目标跨阶段累积——最大化终点资金；(4)当前状态足以决定未来——(x,w,f,m,weather)包含全部相关信息；(5)mc-dp卡good_for明确列出'2020_B穿越沙漠的每日决策'。mc-dp的family=dynamic_programming直接在benchmark allowed_modeling_structures列表中。mc-monte-carlo(family=simulation，也在allowed中)用于Q2/Q3随机场景评估，mc-nsga2作为多目标备选。旧B0选mc-ga(family=metaheuristics，不在allowed中)导致method_selection=0，校准后选mc-dp可命中。",
+        "structure_signals_matched": [
+          {
+            "signal": "问题可按时间/顺序天然划分为多个阶段（阶段数有限）",
+            "matched": true,
+            "evidence": "游戏以天为基本时间单位，第0天到截止日T_max，每阶段对应一天，阶段数有限且明确"
+          },
+          {
+            "signal": "每一阶段需要做一次决策，决策影响后续阶段状态",
+            "matched": true,
+            "evidence": "每天玩家选择行动（行走/停留/挖矿/购买），行动直接改变次日的位置、水量、食物量和资金"
+          },
+          {
+            "signal": "总目标跨阶段累积（总收益/总代价/最短路径），且存在子问题重叠",
+            "matched": true,
+            "evidence": "目标是最大化终点剩余资金，资金随每日购买/挖矿逐天变化；从不同日期但相同状态出发的子问题反复出现（重叠子问题）"
+          },
+          {
+            "signal": "当前状态足以决定未来（历史信息可压缩进状态变量）",
+            "matched": true,
+            "evidence": "状态向量(x_t, w_t, f_t, m_t, weather_t)包含位置、资源、资金和当日天气，历史路径不影响未来最优决策，满足马尔可夫性"
+          },
+          {
+            "signal": "2020_B型：每日一决策、资源跨期消耗、状态（位置/资源/天数）有限离散",
+            "matched": true,
+            "evidence": "完全匹配：每日一次行动决策，水/食物逐日消耗，地图节点数有限、资源以箱计为整数、天数有上限，状态空间有限离散"
+          }
+        ],
+        "criteria": [
+          "方法与问题结构匹配度（多阶段序贯决策/资源约束/随机性/多玩家）",
+          "方法family是否在benchmark allowed_modeling_structures中",
+          "最优性保证（精确解vs近似解）",
+          "约束处理能力（负重/资源/天气/外部性）",
+          "计算可行性（状态空间规模、收敛速度）",
+          "可解释性与结果可验证性"
+        ],
+        "confidence": 0.9,
+        "depends_on": [
+          "Q001",
+          "M001"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "Q001",
+        "M001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "a2d0867169b94c592caafb438f608dfa12fc91c7e5df0aab5acaa5a9408ed4f2",
+        "node_id": "method_selection",
+        "dag_position": 2,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T14:33:45Z",
+        "finished_at": "2026-09-08T14:34:50Z",
+        "latency_seconds": 65.0,
+        "submitted_at": "2026-09-08T14:34:53Z",
+        "registered_at": "2026-09-08T09:11:00Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "method_selection",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "D002": {
+      "schema_version": "3.1",
+      "artifact_id": "D002",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "求解策略 — 基于DP/MDP的分阶段求解框架",
+      "question": "Q001",
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T09:11:00Z",
+      "updated_at": "2026-09-08T09:11:00Z",
+      "payload": {
+        "title": "求解策略 — 基于DP/MDP的分阶段求解框架",
+        "decision": "采用分阶段DP/MDP求解策略：Q1用确定性DP自底向上表格递推（反向归纳），从终点向起点计算V_t(s)并回溯最优行动序列；Q2用MDP值迭代（Bellman备份含天气期望），收敛后导出在线策略；Q3.1用开环优化+纳什均衡检验（枚举或GA搜索各玩家预定义策略组合，检验无单方面偏离获益）；Q3.2用在线策略迭代+多智能体模拟（每玩家根据当日天气和他人昨日行动更新策略，模拟至收敛）。各阶段共享地图解析和资源消耗引擎。",
+        "alternatives": [
+          {
+            "strategy": "统一MDP框架",
+            "desc": "将三问统一为MDP，Q1为确定性MDP（转移概率退化），Q2为随机MDP，Q3为多智能体MDP",
+            "feasibility": "理论优雅但Q3多玩家联合状态空间爆炸（n个玩家状态的笛卡尔积），实际不可行；Q1用确定性DP比MDP更高效"
+          },
+          {
+            "strategy": "纯元启发式（GA/PSO）搜索",
+            "desc": "编码每日行动序列为染色体，用遗传算法/粒子群搜索最优策略",
+            "feasibility": "实现简单但不保证最优解，收敛慢，参数敏感；本题有精确DP解法，元启发式是次优替代；且family=metaheuristics不在allowed_modeling_structures中"
+          },
+          {
+            "strategy": "分阶段DP/MDP（推荐）",
+            "desc": "Q1确定性DP反向递推，Q2 MDP值迭代，Q3博弈均衡分析",
+            "feasibility": "各问用最适配方法，Q1/Q2有精确解或收敛保证，Q3结合博弈论，工程可行性最高；family=dynamic_programming在allowed列表中"
+          }
+        ],
+        "reasoning": "三问的信息结构和决策时序本质不同：Q1是完全信息离线优化（天气已知→确定性DP，状态转移确定，可反向归纳求精确最优解）；Q2是部分可观测在线决策（仅知当日天气→随机MDP，Bellman方程含期望算子，值迭代/策略迭代求解）；Q3是多玩家博弈（玩家间外部性→需均衡概念，开环/闭环分别处理）。强行统一框架会导致Q3联合状态空间不可计算。分阶段策略每问用最适配的DP/MDP变体，共享底层地图/资源/天气引擎，兼顾理论最优性和工程可行性。",
+        "algorithm": {
+          "Q1_deterministic_DP": {
+            "method": "自底向上反向归纳（Backward Induction）",
+            "state": "s=(x, w, f, m, t) — 位置、水量、食物量、资金、天数",
+            "recurrence": "V_t(x,w,f,m) = max_{a∈A(x,t), b_w,b_f} { V_{t+1}(x',w',f',m') }",
+            "terminal": "V_T(x,w,f,m) = m + 0.5×(C_w×w + C_f×f) if x=终点 else -∞",
+            "backtracking": "从t=0状态出发，按V表选择每阶段argmax行动，输出完整策略序列",
+            "complexity": "O(T_max × |V| × W_max² × M_max × |A|)，状态裁剪后可管理"
+          },
+          "Q2_stochastic_MDP": {
+            "method": "值迭代（Value Iteration）",
+            "state": "s=(x, w, f, m, weather_t)",
+            "bellman": "V_k(s) = max_a { R(s,a) + Σ_{weather'} P(weather'|weather_t) × V_{k-1}(s') }",
+            "convergence": "||V_{k+1} - V_k||_∞ < ε=1e-6",
+            "policy_extraction": "π*(s) = argmax_a { Q*(s,a) }",
+            "monte_carlo_evaluation": "对导出策略执行1000次随机天气模拟，报告期望收益±标准差"
+          },
+          "Q3_1_open_loop_nash": {
+            "method": "策略空间搜索+纳什均衡检验",
+            "search": "枚举或GA搜索各玩家预定义策略组合（行动序列）",
+            "equilibrium_check": "对每个玩家i，固定其他玩家策略σ_{-i}，检验σ_i是否为最优反应（无单方面偏离获益）",
+            "externalities": "k人同行消耗=2k×基础；k人同矿收益=R/k；k人同村价格=4×基准"
+          },
+          "Q3_2_closed_loop_MPE": {
+            "method": "在线策略迭代+多智能体模拟",
+            "observation": "第1天起，每玩家行动结束后知道其余玩家当日行动和剩余资源",
+            "update": "每玩家根据当日天气+他人昨日行动+自身状态更新次日策略",
+            "simulation": "多智能体模拟至策略收敛（连续多轮无显著变化）",
+            "equilibrium": "收敛策略构成马尔可夫完美均衡（MPE）"
+          }
+        },
+        "feasibility": {
+          "Q1": "可行 — 确定性DP状态空间经裁剪（资源上限由负重和价格约束）后可管理，反向归纳求精确最优解；第一关/第二关地图规模小，计算时间在分钟级",
+          "Q2": "可行 — MDP状态空间约10^6量级（地图节点×资源箱数×资金×天气），值迭代可收敛；蒙特卡洛评估1000次模拟可接受",
+          "Q3_1": "可行 — n较小（通常2-4人），策略空间可枚举或GA搜索；纳什均衡检验为多项式时间",
+          "Q3_2": "可行 — 在线模拟无需全状态空间，每轮模拟为O(n×T_max)，收敛轮数有限",
+          "main_risks": "Q2/Q3状态空间裁剪需谨慎（避免遗漏关键状态）；天气转移概率需从附件数据估计；Q3多玩家外部性使策略空间增大"
+        },
+        "depends_on": [
+          "Q001",
+          "M001",
+          "D001"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "Q001",
+        "M001",
+        "D001"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "a2d0867169b94c592caafb438f608dfa12fc91c7e5df0aab5acaa5a9408ed4f2",
+        "node_id": "solving_strategy",
+        "dag_position": 3,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T14:34:55Z",
+        "finished_at": "2026-09-08T14:36:30Z",
+        "latency_seconds": 95.0,
+        "submitted_at": "2026-09-08T14:36:33Z",
+        "registered_at": "2026-09-08T09:11:00Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "solving_strategy",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "D003": {
+      "schema_version": "3.1",
+      "artifact_id": "D003",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "验证计划 — DP/MDP模型多维验证与灵敏度分析",
+      "question": "Q001",
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T09:11:00Z",
+      "updated_at": "2026-09-08T09:11:00Z",
+      "payload": {
+        "title": "验证计划 — DP/MDP模型多维验证与灵敏度分析",
+        "decision": "采用五维验证体系：(1)最优子结构证明（cut-and-paste论证）；(2)小规模枚举对比（n≤10时暴力枚举全部策略，DP结果必须等于枚举最优值）；(3)收敛性验证（MDP值迭代||V_{k+1}-V_k||_∞<1e-6，DP回溯一致性检验）；(4)灵敏度分析（基础消耗/价格/负重上限/矿山收益±20%扰动）；(5)鲁棒性验证（多种子≥5次运行报告均值标准差，seed=42固定）。",
+        "alternatives": [
+          {
+            "method": "仅收敛性验证",
+            "desc": "只检查DP/MDP算法是否收敛",
+            "risk": "无法评估解的最优性和参数敏感性；收敛不代表正确（转移方程错误也可能收敛）"
+          },
+          {
+            "method": "完整五维验证（推荐）",
+            "desc": "最优子结构证明+小规模枚举+收敛性+灵敏度+鲁棒性",
+            "risk": "计算量较大，但B0基线可接受；确保模型从理论到数值的完整可信"
+          },
+          {
+            "method": "交叉验证（多算法对比）",
+            "desc": "用GA/贪心等不同算法求解同一关卡对比结果",
+            "risk": "实现成本高，且GA不保证最优解，对比意义有限；B0阶段不优先"
+          }
+        ],
+        "reasoning": "B0-R2校准观测需要可复现、可审计的验证证据，且mc-dp卡的validation节明确要求最优子结构证明、小规模枚举对比、收敛性检验、策略可行性检验和回溯一致性。五维验证覆盖：(1)理论层——最优子结构cut-and-paste证明确保DP适用前提成立；(2)数值层——小规模枚举对比验证DP递推的正确性（这是最硬的检验）；(3)算法层——收敛性和回溯一致性确保实现无误；(4)稳健性层——灵敏度分析检验模型对关键参数的稳定性；(5)可复现层——多种子运行符合env配置random_seed=42和multi_run_count=5。",
+        "sensitivity_analysis": {
+          "parameters": [
+            {
+              "name": "基础消耗量 d_w/d_f",
+              "desc": "晴朗/高温日水和食物的基础消耗量（箱/天）",
+              "perturbation": "±20%",
+              "impact": "影响资源需求总量和负重分配，可能改变路径选择（是否绕路去村庄/矿山）和挖矿天数"
+            },
+            {
+              "name": "基准价格 C_w/C_f",
+              "desc": "水和食物的基准价格（元/箱）",
+              "perturbation": "±20%",
+              "impact": "影响起点购买量、村庄购买决策和终点退回价值；价格比变化可能改变水/食物购买比例"
+            },
+            {
+              "name": "负重上限 W_max",
+              "desc": "水+食物总箱数上限",
+              "perturbation": "±20%",
+              "impact": "影响可携带资源量，进而影响最长可行步行距离和是否需要中途村庄补给"
+            },
+            {
+              "name": "矿山基础收益 R",
+              "desc": "挖矿一天获得的资金（元/天）",
+              "perturbation": "±20%",
+              "impact": "影响挖矿停留天数的决策；R增大可能增加挖矿时间，R减小可能直接赶路"
+            }
+          ],
+          "method": "单因素扰动法（One-at-a-time）：每次仅扰动一个参数，其余保持基准值，重新运行DP求解，记录最优资金变化率和策略结构变化（行动序列切换点）",
+          "output_metrics": [
+            "最优资金变化率(%)",
+            "策略结构变化（行动序列差异天数）",
+            "挖矿天数变化",
+            "村庄购买次数变化"
+          ]
+        },
+        "validation_methods": [
+          {
+            "name": "最优子结构证明",
+            "target": "证明从任意状态s出发的最优策略，其子策略为子问题最优",
+            "method": "cut-and-paste论证：假设子问题非最优，替换为更优子策略后构造更优全局解，导出矛盾",
+            "criterion": "证明逻辑严密，无循环论证"
+          },
+          {
+            "name": "小规模枚举对比",
+            "target": "T_max≤10、地图≤5节点的简化实例",
+            "method": "暴力枚举全部可能行动序列（|A|^T），计算每序列的终点资金，与DP结果对比",
+            "criterion": "DP最优值 == 枚举最优值（精确相等，整数运算无浮点误差）"
+          },
+          {
+            "name": "收敛性验证",
+            "target": "Q2 MDP值迭代收敛",
+            "method": "绘制||V_{k+1}-V_k||_∞随迭代次数变化曲线，检查连续迭代满足<1e-6",
+            "criterion": "收敛判据满足，且收敛后策略稳定（连续2轮策略无变化）"
+          },
+          {
+            "name": "回溯一致性检验",
+            "target": "DP表回溯最优策略的累积奖励",
+            "method": "从V表回溯出完整行动序列，手动模拟逐日资源消耗和资金流转，计算终点资金",
+            "criterion": "回溯模拟终点资金 == V_0(初始状态)（误差<1e-6）"
+          },
+          {
+            "name": "约束满足检验",
+            "target": "最优策略满足全部游戏规则约束",
+            "method": "逐天检查：负重约束(w+f≤W_max)、资源非负、沙暴日停留、矿山到达当天不挖矿、起点仅一次购买、截止日前到达终点",
+            "criterion": "所有约束违反数=0"
+          },
+          {
+            "name": "基准对比（下界验证）",
+            "target": "DP策略 vs 贪心策略 vs 随机策略",
+            "method": "实现贪心基线（每步选即时收益最高行动）和随机策略，计算终点资金，DP策略应显著优于两者",
+            "criterion": "DP最优资金 ≥ 贪心资金 ≥ 随机资金（松弛问题最优值≤DP最优值）"
+          },
+          {
+            "name": "鲁棒性验证（多种子）",
+            "target": "Q2/Q3随机场景的5次独立运行",
+            "method": "seed=42,43,44,45,46，每次重新生成天气序列并求解，报告期望收益均值±标准差",
+            "criterion": "变异系数(CV=标准差/均值)<5%为稳定"
+          }
+        ],
+        "confidence": 0.85,
+        "depends_on": [
+          "Q001",
+          "M001",
+          "D001",
+          "D002"
+        ]
+      },
+      "parent": [],
+      "depends_on": [
+        "Q001",
+        "M001",
+        "D001",
+        "D002"
+      ],
+      "relations": [],
+      "provenance": {
+        "executor_type": "external_agent",
+        "agent_identity": "doubao",
+        "model_version": "doubao-pro-32k",
+        "input_sha256": "a2d0867169b94c592caafb438f608dfa12fc91c7e5df0aab5acaa5a9408ed4f2",
+        "node_id": "validation_plan",
+        "dag_position": 4,
+        "prompt_or_skill_version": "b0-r2-calibrated-v1",
+        "started_at": "2026-09-08T14:36:35Z",
+        "finished_at": "2026-09-08T14:37:55Z",
+        "latency_seconds": 80.0,
+        "submitted_at": "2026-09-08T14:37:58Z",
+        "registered_at": "2026-09-08T09:11:00Z",
+        "registered_by": "register_external_artifact.py"
+      },
+      "validation": {
+        "manifest_validated": true,
+        "input_hash_verified": true
+      },
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "validation_plan",
+          "reason": "created by external agent"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-08T09:11:00Z",
+          "by": "register_external_artifact.py",
+          "reason": "registered with payload via external artifact manifest"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    }
+  },
+  "history": {}
+}

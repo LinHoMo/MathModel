@@ -1,0 +1,83 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T08:00:00Z",
+  "finished_at": "2026-09-08T08:04:30Z",
+  "latency_seconds": 270,
+  "submitted_at": "2026-09-08T08:04:35Z",
+  "node_id": "problem_understanding",
+  "dag_position": 0,
+  "payload": {
+    "title": "板凳龙闹元宵 — 问题理解与结构识别",
+    "problem_type": "geometric_kinematics_constrained_optimization",
+    "sub_questions": [
+      {
+        "id": "Q1",
+        "text": "舞龙队沿螺距55cm等距螺线顺时针盘入，龙头前把手速度1m/s，初始位于第16圈A点。给出0-300s每秒整个舞龙队各把手的位置和速度，保存到result1.xlsx。",
+        "type": "kinematics_tracking"
+      },
+      {
+        "id": "Q2",
+        "text": "沿Q1螺线盘入，确定盘入终止时刻使得板凳之间不发生碰撞，给出此时位置和速度，保存到result2.xlsx。",
+        "type": "collision_detection"
+      },
+      {
+        "id": "Q3",
+        "text": "调头空间为以螺线中心为圆心、直径9m的圆形区域，确定最小螺距使得龙头前把手能沿螺线盘入到调头空间边界。",
+        "type": "constrained_optimization"
+      },
+      {
+        "id": "Q4",
+        "text": "盘入螺距1.7m，盘出螺线与盘入螺线中心对称，调头路径为两段圆弧相切连接的S形曲线（前弧半径是后弧2倍），与盘入盘出螺线均相切。能否调整圆弧使调头曲线变短？给出-100s到100s每秒位置和速度，保存到result4.xlsx。",
+        "type": "geometric_curve_design"
+      },
+      {
+        "id": "Q5",
+        "text": "沿Q4路径行进，龙头速度不变，确定龙头最大行进速度使得各把手速度均不超过2m/s。",
+        "type": "velocity_constrained_optimization"
+      }
+    ],
+    "key_variables": [
+      {"name": "theta(t)", "meaning": "龙头前把手在阿基米德螺线上的极角", "value": "time-dependent", "unit": "rad"},
+      {"name": "r(theta)", "meaning": "螺线极径，r = r0 + b*theta/(2*pi)", "value": "function", "unit": "m"},
+      {"name": "pitch_b", "meaning": "螺距（相邻圈径向间距）", "value": "0.55 (Q1/Q2), variable (Q3), 1.7 (Q4/Q5)", "unit": "m"},
+      {"name": "v_head", "meaning": "龙头前把手行进速度", "value": "1.0 (Q1-Q4), variable (Q5)", "unit": "m/s"},
+      {"name": "L_i", "meaning": "第i节板凳长度", "value": "3.41 (龙头), 2.20 (龙身/龙尾)", "unit": "m"},
+      {"name": "d_hole", "meaning": "孔中心到最近板头距离", "value": "0.275", "unit": "m"},
+      {"name": "N", "meaning": "板凳节数", "value": "223", "unit": "节"},
+      {"name": "t_collision", "meaning": "碰撞发生时刻（Q2）", "value": "to_be_determined", "unit": "s"},
+      {"name": "pitch_min", "meaning": "最小螺距（Q3）", "value": "to_be_determined", "unit": "m"},
+      {"name": "v_max", "meaning": "龙头最大允许速度（Q5）", "value": "to_be_determined", "unit": "m/s"}
+    ],
+    "model_family_hint": "geometric_modeling + constrained_optimization",
+    "difficulty_assessment": "high",
+    "structure_identification": {
+      "primary_structure": "multi_body_rigid_chain_kinematics",
+      "description": "223节板凳通过把手铰接形成开环多体刚体链。各把手中心被约束在阿基米德螺线上（Q1/Q2）或自定义曲线上（Q4）。龙头前把手以恒定速度沿曲线运动，后续各节通过固定杆长约束和铰接角度关系递推确定位置和速度。这是一个纯运动学（kinematics）问题，不涉及动力学/力/质量。",
+      "geometric_components": [
+        "archimedean_spiral_parametrization: r(theta) = r0 + b*theta/(2*pi), 螺距b决定圈间径向间距",
+        "rigid_link_constraint: 相邻把手中心距离等于板凳有效长度（板长 - 2*d_hole）",
+        "hinge_kinematics: 每节板凳绕前把手铰接，后把手位置由杆长和角度确定",
+        "collision_geometry: 板凳为矩形刚体（长x宽），碰撞检测需判断相邻/非相邻板凳矩形是否相交"
+      ],
+      "optimization_components": [
+        "Q3_min_pitch: 在调头空间直径9m约束下，最小化螺距b使得龙头能到达调头空间边界",
+        "Q5_max_velocity: 在各把手速度<=2m/s约束下，最大化龙头速度v_head",
+        "Q4_curve_shortening: 在两段圆弧相切+与螺线相切约束下，优化圆弧半径使调头曲线弧长最短"
+      ],
+      "differential_aspects": "速度由位置对时间求导得到：v = ds/dt，其中s为曲线弧长参数。螺线弧长元素ds = sqrt(r^2 + (dr/dtheta)^2) dtheta。这是运动学求导，不是微分方程求解。",
+      "excluded_structures": [
+        "no_multi_criteria_evaluation: 问题不涉及方案排序/综合评价，TOPSIS/AHP/熵权等评价类方法不适用",
+        "no_clustering: 无数据分组需求",
+        "no_time_series_prediction: 无历史数据预测需求",
+        "no_pde: 无连续时空场/守恒律",
+        "no_queue: 无随机服务系统",
+        "no_dp: 无多阶段序贯决策结构"
+      ]
+    }
+  }
+}

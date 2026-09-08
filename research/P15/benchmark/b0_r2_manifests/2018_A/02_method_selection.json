@@ -1,0 +1,78 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T04:08:30Z",
+  "finished_at": "2026-09-08T04:12:00Z",
+  "latency_seconds": 210.0,
+  "submitted_at": "2026-09-08T04:12:05Z",
+  "node_id": "method_selection",
+  "dag_position": 2,
+  "payload": {
+    "title": "方法卡选择：mc-numerical-pde 为主卡（structure_signals 全匹配）",
+    "question": "Q001",
+    "decision": "选择 mc-numerical-pde（偏微分方程数值求解，family=numerical_pde）作为主方法卡。该卡的 structure_signals 与本题完全匹配：连续时空温度场演化、守恒律（能量）+本构定律（Fourier）、初边值条件定解问题、多层介质界面条件、测量数据反演参数。mc-numerical-pde 的 family=numerical_pde 直接命中 benchmark allowed_modeling_structures=[differential_equations, inverse_problem, optimization, numerical_pde]。",
+    "alternatives": [
+      {
+        "card_id": "mc-nsga2",
+        "name": "多目标遗传算法NSGA-II",
+        "family": "multi_objective_optimization",
+        "pros": ["适合PDE约束黑箱优化", "无需梯度信息", "可处理多目标（Q3双变量）"],
+        "cons": ["仅覆盖优化环节，不覆盖PDE正问题和反问题", "计算量大（每次评估需跑PDE仿真）", "family=multi_objective_optimization 匹配 optimization 但非主结构"],
+        "role": "辅助卡：用于Q2/Q3的PDE约束层厚优化",
+        "structure_match": "partial (optimization only)"
+      },
+      {
+        "card_id": "mc-monte-carlo",
+        "name": "蒙特卡洛方法",
+        "family": "monte_carlo_simulation",
+        "pros": ["可用于参数不确定性传播分析", "无需梯度"],
+        "cons": ["不适合确定性PDE正问题求解", "收敛慢（O(1/√N)）", "family不在allowed_modeling_structures中"],
+        "role": "不选用：仅可用于灵敏度分析的辅助验证",
+        "structure_match": "no"
+      },
+      {
+        "card_id": "mc-ga",
+        "name": "遗传算法",
+        "family": "metaheuristics",
+        "pros": ["无导数优化", "全局搜索"],
+        "cons": ["family=metaheuristics 不在 allowed_modeling_structures 中", "仅覆盖优化，不覆盖PDE建模核心", "旧B0误选此卡导致 method_selection=0"],
+        "role": "不选用：旧B0错误选择，校准后排除",
+        "structure_match": "no (family=metaheuristics not in allowed)"
+      }
+    ],
+    "reasoning": "## 决策推理\n\n### 第一步：structure_signals 匹配分析\n对照 mc-numerical-pde 卡的 structure_signals 逐条核验：\n\n1. **连续时空演化**：题面要求'确定假人皮肤外侧的温度变化情况'——温度 T(x,t) 随空间x和时间t连续演化。✅ 匹配\n2. **守恒量与通量**：热量守恒（能量守恒）+ Fourier热流定律（热流通量 ∝ -∇T）。✅ 匹配\n3. **初始条件+边界条件**：初始温度37°C（IC），外表面对流边界（Robin BC），内表面恒温边界（Dirichlet BC）——完整定解问题。✅ 匹配\n4. **介质属性已知或可反演**：附件1给出k/rho/c，对流换热系数h由附件2反演。✅ 匹配\n5. **2018_A型多层结构**：四层织物/空气结构、界面温度+热流连续、测量数据反演参数。✅ 精确匹配（卡中明确标注'2018_A型'）\n\n### 第二步：family 与 allowed_modeling_structures 对齐\n- mc-numerical-pde.family = numerical_pde\n- benchmark allowed_modeling_structures = [differential_equations, inverse_problem, optimization, numerical_pde]\n- numerical_pde ∈ allowed → **直接命中**\n\n### 第三步：多解模型原则\n本题核心结构是 numerical_pde（抛物型热传导方程的数值求解），反问题和优化是在PDE正解基础上的衍生环节。mc-numerical-pde 覆盖了守恒律推导、PDE表述、初边值条件、FDM/CN求解器、参数反演、验证方法等全链条知识，是最完整的主卡选择。mc-nsga2 仅覆盖优化环节，作为辅助卡。\n\n### 第四步：旧B0错误修正\n旧B0选择 mc-ga（family=metaheuristics），metaheuristics 不在 allowed_modeling_structures 中，且GA仅能处理优化环节，无法指导PDE建模核心。校准后切换为 mc-numerical-pde。",
+    "criteria": [
+      "structure_signals 匹配度（题面结构与方法卡信号的对应程度）",
+      "family 是否在 benchmark allowed_modeling_structures 中（硬指标）",
+      "知识覆盖完整性（是否覆盖正问题/反问题/优化全链条）",
+      "求解器适用性（FDM/CN对一维多层抛物型PDE的适用性）",
+      "验证方法可操作性（网格收敛性、守恒量检查等）"
+    ],
+    "confidence": 0.95,
+    "structure_signals_matched": [
+      {"signal": "连续时空演化（温度/浓度/场量随空间和时间变化）", "matched": true, "evidence": "T(x,t) 四层温度场，90/60/30分钟时间演化"},
+      {"signal": "守恒量（热量/质量/能量）与通量（热流/扩散流）", "matched": true, "evidence": "能量守恒 + Fourier热流 q=-k∇T"},
+      {"signal": "初始条件+边界条件（定解问题）", "matched": true, "evidence": "IC=37°C均匀, Robin外边界, Dirichlet内边界"},
+      {"signal": "介质属性（热导率/扩散系数）已知或可反演", "matched": true, "evidence": "附件1给k/rho/c, h由附件2反演"},
+      {"signal": "2018_A型：多层结构、界面条件、测量数据反演参数", "matched": true, "evidence": "四层I/II/III/IV, 界面温度+热流连续, 附件2反演h"}
+    ],
+    "selected_card": {
+      "card_id": "mc-numerical-pde",
+      "name": "偏微分方程数值求解",
+      "family": "numerical_pde",
+      "family_in_allowed": true,
+      "role": "primary_card"
+    },
+    "shortlist": [
+      {"card_id": "mc-numerical-pde", "family": "numerical_pde", "in_allowed": true, "role": "primary"},
+      {"card_id": "mc-nsga2", "family": "multi_objective_optimization", "in_allowed": true, "role": "auxiliary (optimization)"},
+      {"card_id": "mc-monte-carlo", "family": "monte_carlo_simulation", "in_allowed": false, "role": "not selected"}
+    ],
+    "depends_on": ["M001"],
+    "tags": ["method_selection", "mc-numerical-pde", "structure_signals", "numerical_pde", "calibration_fix"]
+  }
+}

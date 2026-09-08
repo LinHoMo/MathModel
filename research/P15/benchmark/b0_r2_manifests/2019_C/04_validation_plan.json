@@ -1,0 +1,136 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T03:23:30Z",
+  "finished_at": "2026-09-08T03:28:30Z",
+  "latency_seconds": 300.0,
+  "submitted_at": "2026-09-08T03:28:35Z",
+  "node_id": "validation_plan",
+  "dag_position": 4,
+  "payload": {
+    "title": "排队论模型验证与灵敏度分析计划",
+    "question": "Q001",
+    "decision": "采用排队论专属验证+解析-仿真交叉验证+多参数灵敏度分析+极端场景鲁棒性测试的五层验证体系，核心是Little定律验证和分布拟合检验(排队论卡validation节要求)",
+    "alternatives": [
+      {
+        "id": "alt_analytical_only",
+        "name": "仅解析验证",
+        "description": "仅通过排队论公式的理论性质(如rho->1时W->infty)验证模型合理性",
+        "pros": ["简单"],
+        "cons": ["无法验证数值结果准确性", "无法评估非平稳到达和优先权非线性"]
+      },
+      {
+        "id": "alt_simulation_only",
+        "name": "仅仿真验证",
+        "description": "仅通过蒙特卡洛仿真验证模型输出",
+        "pros": ["覆盖随机场景"],
+        "cons": ["仿真本身可能有偏差", "缺乏排队论解析基准对比", "违反排队论卡'解析-仿真对比'validation要求"]
+      },
+      {
+        "id": "alt_multi_layer",
+        "name": "五层验证体系(排队论专属+解析对比+仿真交叉+灵敏度+鲁棒性)",
+        "description": "五层验证：(1)排队论专属验证(Little定律+分布拟合+解析-仿真对比)，(2)蒙特卡洛交叉验证，(3)参数灵敏度分析，(4)极端场景鲁棒性测试，(5)优化收敛性与公平性检验",
+        "pros": ["全面覆盖排队论模型特有验证要求", "结果可信", "可发现模型薄弱环节", "符合mc-queuing-theory卡validation节全部要求"],
+        "cons": ["计算量较大", "需组织多组实验"]
+      }
+    ],
+    "reasoning": "本题模型以M/M/c排队论为核心机理，验证必须覆盖排队论卡validation节要求的全部方法：分布拟合检验(验证泊松到达/指数服务假设)、Little定律验证(仿真输出L=lambda*W)、解析-仿真对比(简单场景M/M/c公式vs仿真)、灵敏度分析(rho->1时W->infty)、稳态检验(warm-up period)、多次独立运行(>=5次固定种子42)。单一验证方法不足以保证排队论模型可信度。五层验证形成完整证据链。",
+    "sensitivity_analysis": {
+      "method": "单因素扰动法(OAT)+局部灵敏度系数+排队论理论预期对照",
+      "parameters": [
+        {"name": "乘客到达率lambda", "range": "±20%", "expected_impact": "高——直接影响rho=lambda/(c*mu)，rho->1时等待时间爆炸(排队论理论预期)", "theoretical_expected": "W随lambda非线性增长，rho->1时W->infty"},
+        {"name": "出租车服务率mu", "range": "±20%", "expected_impact": "中高——影响rho和吞吐率，mu增大使P_wait下降", "theoretical_expected": "W随mu增大而下降，边际递减"},
+        {"name": "服务台数c(上车点数)", "range": "±1(整数)", "expected_impact": "高——Erlang C中c对P_wait影响显著，存在最优c", "theoretical_expected": "P_wait随c增大快速下降，超过最优c后边际收益递减"},
+        {"name": "空载成本c_e", "range": "±20%", "expected_impact": "中——影响Pi_B，进而影响决策阈值", "theoretical_expected": "c_e增大使Pi_B下降，选A阈值放宽"},
+        {"name": "时间成本c_t", "range": "±20%", "expected_impact": "中——影响等待的时间价值，直接作用于Pi_A", "theoretical_expected": "c_t增大使Pi_A对等待时间更敏感"},
+        {"name": "短途阈值d_thresh", "range": "±20%", "expected_impact": "中——影响Q4短途比例p_short和优先权需求", "theoretical_expected": "d_thresh增大使p_short增大，优先权均衡效果增强但公平性下降"},
+        {"name": "优先权系数alpha", "range": "[0, alpha_max]", "expected_impact": "中高——Q4核心决策变量，影响收益方差和公平性", "theoretical_expected": "alpha增大使短途收益增加、普通收益下降，存在最优alpha使方差最小"}
+      ],
+      "sensitivity_metric": "S = (delta_output / output) / (delta_param / param)",
+      "output_metrics": ["决策阈值W_threshold", "系统吞吐率lambda_out", "平均等待时间E[W]", "收益方差Var(Pi)", "等待概率P_wait"],
+      "theoretical_consistency_check": "验证灵敏度结果是否符合排队论理论预期：(1)lambda增大->W增大且rho->1时增速加快；(2)c增大->P_wait下降；(3)mu增大->W下降"
+    },
+    "validation_methods": [
+      {
+        "id": "v1_distribution_fit",
+        "name": "分布拟合检验(排队论专属)",
+        "description": "对乘客到达间隔用K-S检验验证指数分布(泊松到达)，对服务时间用K-S或χ²检验验证指数分布。若拒绝指数假设，考虑M/G/c或仿真替代",
+        "applies_to": ["Q1", "Q3"],
+        "pass_criterion": "p-value > 0.05(不拒绝分布假设)，或明确说明偏离并采用M/G/c/仿真修正",
+        "card_ref": "mc-queuing-theory validation: 分布拟合检验"
+      },
+      {
+        "id": "v2_little_law",
+        "name": "Little定律验证(排队论专属)",
+        "description": "在仿真输出中验证L = lambda * W：统计仿真中的平均系统顾客数L、实际到达率lambda、平均逗留时间W，检查三者是否满足Little定律(模型无关，任何稳定排队系统成立)",
+        "applies_to": ["Q1", "Q3", "Q4"],
+        "pass_criterion": "相对误差 |L - lambda*W| / L < 3%",
+        "card_ref": "mc-queuing-theory validation: Little定律验证"
+      },
+      {
+        "id": "v3_analytical_simulation",
+        "name": "解析-仿真对比验证(排队论专属)",
+        "description": "在稳态齐次泊松到达条件下，将蒙特卡洛仿真的平均等待时间E[W]和等待概率P_wait与M/M/c Erlang C解析公式计算值对比",
+        "applies_to": ["Q1", "Q3"],
+        "pass_criterion": "相对误差 < 5%",
+        "card_ref": "mc-queuing-theory validation: 解析-仿真对比"
+      },
+      {
+        "id": "v4_monte_carlo_cross",
+        "name": "蒙特卡洛交叉验证(多次独立运行)",
+        "description": "固定随机种子42，运行5组不同初始条件的独立仿真(每组10000次抽样)，比较关键指标(E[W], P_wait, Pi, lambda_out)的均值和标准差。删除前10% warm-up period数据。报告均值±标准差与95%置信区间",
+        "applies_to": ["Q1", "Q3", "Q4"],
+        "pass_criterion": "5组均值变异系数(CV) < 10%，warm-up period已删除",
+        "card_ref": "mc-queuing-theory validation: 多次独立运行+稳态检验"
+      },
+      {
+        "id": "v5_sensitivity",
+        "name": "参数灵敏度分析+理论预期对照",
+        "description": "对7个关键参数各做扰动，计算灵敏度系数S，并验证结果是否符合排队论理论预期(rho->1时W->infty，c增大P_wait下降等)",
+        "applies_to": ["Q1", "Q2", "Q4"],
+        "pass_criterion": "所有参数灵敏度系数可计算且排序合理，与排队论理论预期一致",
+        "card_ref": "mc-queuing-theory validation: 灵敏度分析"
+      },
+      {
+        "id": "v6_extreme_scenario",
+        "name": "极端场景鲁棒性测试",
+        "description": "测试三种极端场景：(a)航班大面积延误导致乘客爆发式到达(lambda=3倍均值，rho>1时系统不稳定，需验证模型正确识别过载)；(b)蓄车池车辆极少(N_taxi<5，服务台空闲)；(c)几乎全是短途乘客(p_short>80%，优先权需求极端)。验证模型在极端条件下不崩溃且输出合理",
+        "applies_to": ["Q1", "Q3", "Q4"],
+        "pass_criterion": "模型输出有界且物理意义合理，无NaN或无穷大；rho>=1时正确报告系统不稳定"
+      },
+      {
+        "id": "v7_optimization_convergence",
+        "name": "优化算法收敛性验证",
+        "description": "Q3遗传算法运行5次(不同随机种子)，检查最优解的适应度值收敛性和最优布局的一致性；Q4优先权系数alpha优化检查目标函数(收益方差)随alpha的单调性和最优解稳定性",
+        "applies_to": ["Q3", "Q4"],
+        "pass_criterion": "5次最优适应度变异系数 < 5%，最优布局结构一致；alpha最优解在5次运行中一致"
+      },
+      {
+        "id": "v8_fairness_check",
+        "name": "优先权公平性检验",
+        "description": "Q4实施非抢占优先权后，检查：(1)非短途司机的收益下降幅度不超过15%；(2)整体收益方差降低>20%；(3)普通司机等待时间W_low不超过上限W_max；(4)优先权为非抢占式(不中断正在服务的车辆)",
+        "applies_to": ["Q4"],
+        "pass_criterion": "非短途收益下降 < 15% 且 收益方差降低 > 20% 且 W_low <= W_max"
+      }
+    ],
+    "validation_schedule": {
+      "stage_1": "Q1排队模型完成后立即做v1分布拟合、v2 Little定律验证、v3解析-仿真对比",
+      "stage_2": "Q2数据校准后做v5灵敏度分析+理论预期对照",
+      "stage_3": "Q3优化完成后做v7收敛性验证和v3吞吐率解析-仿真对比",
+      "stage_4": "Q4机制设计完成后做v8公平性检验和v4蒙特卡洛交叉验证",
+      "stage_5": "全模型完成后做整体v6极端场景鲁棒性测试和v2 Little定律全系统验证"
+    },
+    "expected_outcomes": [
+      "Q1 M/M/c排队模型通过分布拟合检验(p>0.05)、Little定律验证(误差<3%)、解析-仿真对比(误差<5%)",
+      "Q2输出具体机场方案，灵敏度分析识别2-3个高敏感参数，结果符合排队论理论预期",
+      "Q3排队容量规划找到最优服务台数c*，遗传算法收敛到稳定最优布局，吞吐率提升可量化",
+      "Q4非抢占优先权方案使收益方差降低>20%，非短途收益下降<15%，普通司机等待时间不超限",
+      "全模型在极端场景下输出合理，rho>=1时正确识别系统不稳定，鲁棒性可接受"
+    ],
+    "depends_on": ["D002"]
+  }
+}

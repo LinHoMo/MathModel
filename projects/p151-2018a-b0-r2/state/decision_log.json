@@ -1,0 +1,89 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-08T09:12:57Z",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "method_selection output",
+      "chosen": "选择 mc-numerical-pde（偏微分方程数值求解，family=numerical_pde）作为主方法卡。该卡的 structure_signals 与本题完全匹配：连续时空温度场演化、守恒律（能量）+本构定律（Fourier）、初边值条件定解问题、多层介质界面条件、测量数据反演参数。mc-numerical-pde 的 family=numerical_pde 直接命中 benchmark allowed_modeling_structures=[differential_equations, inverse_problem, optimization, numerical_pde]。",
+      "alternatives": [
+        "多目标遗传算法NSGA-II",
+        "蒙特卡洛方法",
+        "遗传算法"
+      ],
+      "criteria": [
+        "structure_signals 匹配度（题面结构与方法卡信号的对应程度）",
+        "family 是否在 benchmark allowed_modeling_structures 中（硬指标）",
+        "知识覆盖完整性（是否覆盖正问题/反问题/优化全链条）",
+        "求解器适用性（FDM/CN对一维多层抛物型PDE的适用性）",
+        "验证方法可操作性（网格收敛性、守恒量检查等）"
+      ],
+      "evidence_ids": [
+        "M001"
+      ],
+      "reasoning": "## 决策推理\n\n### 第一步：structure_signals 匹配分析\n对照 mc-numerical-pde 卡的 structure_signals 逐条核验：\n\n1. **连续时空演化**：题面要求'确定假人皮肤外侧的温度变化情况'——温度 T(x,t) 随空间x和时间t连续演化。✅ 匹配\n2. **守恒量与通量**：热量守恒（能量守恒）+ Fourier热流定律（热流通量 ∝ -∇T）。✅ 匹配\n3. **初始条件+边界条件**：初始温度37°C（IC），外表面对流边界（Robin BC），内表面恒温边界（Dirichlet BC）——完整定解问题。✅ 匹配\n4. **介质属性已知或可反演**：附件1给出k/rho/c，对流换热系数h由附件2反演。✅ 匹配\n5. **2018_A型多层结构**：四层织物/空气结构、界面温度+热流连续、测量数据反演参数。✅ 精确匹配（卡中明确标注'2018_A型'）\n\n### 第二步：family 与 allowed_modeling_structures 对齐\n- mc-numerical-pde.family = numerical_pde\n- benchmark allowed_modeling_structures = [differential_equations, inverse_problem, optimization, numerical_pde]\n- numerical_pde ∈ allowed → **直接命中**\n\n### 第三步：多解模型原则\n本题核心结构是 numerical_pde（抛物型热传导方程的数值求解），反问题和优化是在PDE正解基础上的衍生环节。mc-numerical-pde 覆盖了守恒律推导、PDE表述、初边值条件、FDM/CN求解器、参数反演、验证方法等全链条知识，是最完整的主卡选择。mc-nsga2 仅覆盖优化环节，作为辅助卡。\n\n### 第四步：旧B0错误修正\n旧B0选择 mc-ga（family=metaheuristics），metaheuristics 不在 allowed_modeling_structures 中，且GA仅能处理优化环节，无法指导PDE建模核心。校准后切换为 mc-numerical-pde。",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T09:12:56Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D002",
+      "question": "solving_strategy output",
+      "chosen": "采用三阶段求解策略：(1) 正问题——Crank-Nicolson有限差分法（CN-FDM）离散四层非稳态热传导PDE，联合求解各层三对角方程组；(2) 反问题——基于附件2实测皮肤温度，用Levenberg-Marquardt（LM）算法最小二乘反演对流换热系数h，含Tikhonov正则化；(3) 优化问题——以CN-FDM正解为黑箱目标函数，Q2用黄金分割/模式搜索单变量约束优化，Q3用NSGA-II多目标优化或序列二次规划（SQP）。",
+      "alternatives": [
+        "{\"algorithm\": \"显式Euler (FTCS) + GA优化\", \"pros\": [\"实现最简单\", \"每步无需求解方程组\"], \"cons\": [\"CFL稳定性条件 r=αΔt/Δx²≤0.5，空气层α极小导致Δt极小（<0.01s），90分钟仿真需54000+步\", \"一阶时间精度\", \"GA优化效率低（每次评估需完整PDE仿真）\"], \"feasibility\": \"low — 计算量过大，不适合优化迭代\"}",
+        "{\"algorithm\": \"隐式Euler (BTCS) + 模式搜索\", \"pros\": [\"无条件稳定\", \"实现比CN略简单\"], \"cons\": [\"仅一阶时间精度，长时间仿真累积误差大\", \"需要更小时间步补偿精度损失\"], \"feasibility\": \"medium — 可行但精度不足\"}",
+        "{\"algorithm\": \"有限元法 (FEM) + SQP\", \"pros\": [\"处理复杂几何灵活\", \"商业软件成熟\"], \"cons\": [\"一维规则几何下FEM是过度设计\", \"装配刚度矩阵开销大\", \"实现复杂度高，竞赛时间内不经济\"], \"feasibility\": \"low — 一维问题FDM更高效\"}",
+        "{\"algorithm\": \"Crank-Nicolson FDM + LM反演 + 约束优化（选定）\", \"pros\": [\"无条件稳定 + 二阶时间精度\", \"可使用较大Δt（如1-5s），效率高\", \"三对角方程组Thomas算法O(N)求解\", \"LM算法结合Gauss-Newton和梯度下降，反演收敛快\", \"适合多层介质联合求解\"], \"cons\": [\"实现比显式复杂（需处理界面条件）\", \"每步需组装并求解块三对角方程组\"], \"feasibility\": \"high — 平衡精度、效率与实现复杂度\"}"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "M001",
+        "D001"
+      ],
+      "reasoning": "## 求解策略推理\n\n### 正问题求解器选择\n本题为一维四层规则几何的抛物型PDE，FDM是自然选择。关键约束是空气层（IV层）热扩散率 α_air ≈ 2.2e-5 m²/s 远小于织物层，若用显式格式，CFL条件由最小α决定全局Δt，导致时间步极小（Δt≤Δx²/(2α_min)，若Δx=0.1mm则Δt≤0.23s，90分钟需23000+步）。Crank-Nicolson隐式格式无条件稳定，可使用Δt=1-5s，且二阶时间精度，是长时间仿真的最优选择。\n\n### 离散方案\n- 空间：各层均匀网格，界面处共用节点，Δx=0.1-0.5mm（界面加密）\n- 时间：Δt=1-5s，CN格式（时间二阶，空间二阶）\n- 界面处理：温度连续直接共用节点值；热流连续通过界面节点的能量守恒离散（调和平均热导率）\n- 边界：Robin外边界用ghost node法或直接离散；Dirichlet内边界直接赋值\n- 求解：块三对角方程组（各层内部三对角 + 界面耦合），块Thomas算法\n\n### 反问题求解\n对流换热系数h为唯一未知参数（其余k/rho/c由附件1给出）。目标函数 J(h)=Σ[T_sim(t_i;h)-T_meas(t_i)]² + λ(h-h₀)²。LM算法在h附近二次收敛，正则化参数λ通过L-curve或交叉验证选取。\n\n### 优化求解\n- Q2（单变量d_II）：目标函数为PDE仿真的黑箱函数，约束为T_skin(60min)≤47°C和超44°C时间≤5min。可用黄金分割法结合约束边界搜索，或模式搜索（Hooke-Jeeves）。\n- Q3（双变量d_II,d_IV）：可用NSGA-II多目标优化（最小化总厚度 + 满足约束），或SQP（将约束转化为罚函数）。由于每次评估需跑PDE仿真，评估次数受限（建议≤500次），NSGA-II种群规模不宜过大。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T09:12:56Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D003",
+      "question": "validation_plan output",
+      "chosen": "采用多层次验证策略：(1) 数值验证——网格收敛性测试（Δx/Δt减半，关键输出变化<1%）、守恒量检查（无源时总能量变化<2%）、解析解对比（稳态线性分布/半无限大物体，相对误差<1%）、多格式交叉验证（CN vs 隐式Euler结果一致）；(2) 反演验证——拟合残差分析（R²>0.95）、参数不确定性（协方差矩阵估计h的置信区间）、留一交叉验证；(3) 优化验证——约束满足性检查、最优解局部稳定性（邻域扰动后仍满足约束）、Pareto前沿分析（Q3）；(4) 灵敏度分析——热导率k、对流系数h、层厚d对皮肤温度峰值和超温时间的局部灵敏度（OAT）和全局灵敏度（Sobol/LHS）。",
+      "alternatives": [
+        "仅靠最终结果与附件2对比",
+        "网格收敛性 + 守恒量检查 + 灵敏度分析（选定）"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "M001",
+        "D001",
+        "D002"
+      ],
+      "reasoning": "## 验证计划推理\n\n### 数值验证（PDE求解器正确性）\n1. **网格收敛性测试**：取Δx=[0.5, 0.25, 0.125]mm，Δt=[5, 2.5, 1.25]s，计算Q1情形下皮肤外侧温度峰值和90min末温度。CN格式理论收敛阶为O(Δt²+Δx²)，相邻网格间关键输出变化应<1%。若变化>5%需进一步加密。\n2. **守恒量检查**：在无源项情形下（关闭对流边界，改为绝热），系统总内能应守恒。计算Q=Σρ_i c_i ∫T_i dx随时间变化，相对变化应<2%。\n3. **解析解对比**：(a) 稳态情形——关闭时间导数，四层稳态热传导解析解为分段线性分布，数值解应与解析解完全一致（机器精度）；(b) 半无限大物体——单层半无限大物体受恒定表面温度，解析解为erfc函数，数值解在早期应匹配。\n4. **多格式交叉验证**：用隐式Euler（BTCS）在相同网格下求解，与CN结果对比，两者差异应<1%（BTCS一阶精度在细网格下趋近CN）。\n\n### 反演验证（参数估计可靠性）\n1. **拟合优度**：反演h后，计算模拟皮肤温度与附件2实测值的R²，要求R²>0.95；RMSE应<1°C。\n2. **参数不确定性**：基于LM算法的协方差矩阵估计h的标准偏差σ_h，报告95%置信区间[h-2σ_h, h+2σ_h]。\n3. **留一交叉验证**：将附件2数据分为训练集（80%）和验证集（20%），用训练集反演h，在验证集上预测，验证集RMSE应与训练集接近（无过拟合）。\n4. **正则化参数选择**：用L-curve法确定λ，在拟合残差和正则化项间取平衡点。\n\n### 优化验证（最优解合理性）\n1. **约束满足性**：验证最优解处T_skin(t_end)≤47°C且超44°C时间≤5min，允许数值容差0.1°C/0.1min。\n2. **局部稳定性**：在最优解邻域（±5%厚度）扰动，检查约束是否仍满足；若微小扰动即违反约束，说明解处于约束边界，需报告active constraint。\n3. **Pareto前沿（Q3）**：若用NSGA-II，绘制d_II vs d_IV的Pareto前沿，验证前沿的凸性和分布均匀性。\n4. **最优性条件**：对于Q2单变量问题，验证目标函数在最优解处的导数（有限差分近似）接近0（无约束侧）或约束active（约束侧）。\n\n### 物理合理性检查\n1. 温度分布应在环境温度和体内温度之间（37°C ≤ T ≤ T_env）\n2. 皮肤温度应单调上升并趋近稳态（无过冲）\n3. 增加层厚应降低皮肤温度（单调性）\n4. 提高环境温度应升高皮肤温度（单调性）",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T09:12:57Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    }
+  ]
+}

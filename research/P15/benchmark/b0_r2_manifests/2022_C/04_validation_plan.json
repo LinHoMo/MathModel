@@ -1,0 +1,113 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "validation_plan",
+  "dag_position": 4,
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "1.0",
+  "started_at": "2026-09-08T09:11:35Z",
+  "finished_at": "2026-09-08T09:14:00Z",
+  "latency_seconds": 145.0,
+  "submitted_at": "2026-09-08T09:14:01Z",
+  "payload": {
+    "title": "验证计划与敏感性分析方案 — PCA建模全链路验证",
+    "decision": "采用多层验证策略：结构验证（PCA方差贡献率+载荷可解释性）→ 统计验证（假设检验+交叉验证）→ 稳定性验证（多种子重复+子采样一致性）→ 敏感性验证（特征剔除+参数扰动），四层全绿方可宣告模型成立",
+    "alternatives": [
+      {
+        "strategy": "仅用准确率单一指标验证分类结果",
+        "verdict": "REJECT — 单指标无法反映类别不平衡、混淆矩阵细节和过拟合程度，违反mc-xgboost卡的validation要求（交叉验证多指标）"
+      },
+      {
+        "strategy": "不做敏感性分析，仅报告单次运行结果",
+        "verdict": "REJECT — 题目Q2/Q3明确要求敏感性分析，且小样本数据集对随机种子和特征选择敏感，必须量化稳定性"
+      },
+      {
+        "strategy": "用训练集准确率代替交叉验证",
+        "verdict": "REJECT — 训练集准确率必然虚高，无法评估泛化能力；必须5折交叉验证，且检查数据泄漏"
+      }
+    ],
+    "reasoning": "本题为小样本高维成分数据，模型结论的可信度高度依赖验证的严密性。PCA的验证核心是方差贡献率与载荷可解释性——如果PC1不能由PbO/BaO/K2O等化学可解释特征主导，则降维结果缺乏物理意义。分类与聚类的验证必须包含交叉验证和多种子稳定性，因为~70样本的数据集随机划分波动大。敏感性分析直接回应题目Q2/Q3要求，通过特征剔除和参数扰动量化结论的鲁棒性。四层验证策略确保从结构到统计到稳定性到敏感性的全链路覆盖。",
+    "sensitivity_analysis": {
+      "pca_parameter_sensitivity": {
+        "description": "PCA主成分个数k的敏感性分析",
+        "method": "分别取累计方差贡献率阈值70%/80%/90%对应的k值，观察下游分类准确率和聚类轮廓系数的变化",
+        "expected_result": "k在合理范围内波动时，分类准确率变化<5%，聚类亚类分配一致性ARI>0.8"
+      },
+      "feature_ablation": {
+        "description": "特征剔除敏感性（逐一剔除每种氧化物后重新建模）",
+        "method": "对14种氧化物逐一设为0后重新执行标准化→PCA→分类，记录未知样本预测类别是否翻转",
+        "expected_result": "剔除PbO/BaO/K2O等主导特征可能导致分类翻转（预期内），剔除微量元素不应翻转；翻转比例<30%为可接受"
+      },
+      "clustering_stability": {
+        "description": "KMeans聚类稳定性（多种子+子采样）",
+        "method": "5种不同random_state重复KMeans，计算亚类分配的调整兰德指数(ARI)；80%子采样重复10次，报告一致性",
+        "expected_result": "多种子ARI>0.85，子采样一致性>80%"
+      },
+      "classification_robustness": {
+        "description": "分类器对训练集划分的鲁棒性",
+        "method": "5折交叉验证重复5次（不同划分种子），报告准确率均值±标准差；与LDA/随机森林/SVM三种分类器对比",
+        "expected_result": "准确率均值>85%，标准差<5%，三种分类器一致率>90%"
+      },
+      "weathering_prediction_sensitivity": {
+        "description": "Q1风化前含量预测对回归方法的敏感性",
+        "method": "对比OLS、稳健回归(RANSAC)、LOOCV三种方式的预测值差异",
+        "expected_result": "三种方法预测值相对偏差<10%"
+      }
+    },
+    "validation_methods": [
+      {
+        "name": "PCA结构验证",
+        "checks": [
+          "累计方差贡献率≥80%（硬性门槛）",
+          "碎石图肘部明确，k值有客观依据",
+          "PC1/PC2载荷可由化学背景解释（PbO/BaO vs K2O）",
+          "标准化执行确认（z-score，非raw data）"
+        ],
+        "pass_criteria": "全部4项通过"
+      },
+      {
+        "name": "统计验证",
+        "checks": [
+          "Q1风化关联检验p值<0.05",
+          "风化前后成分差异t检验显著（至少3种氧化物p<0.05）",
+          "Q3分类5折CV准确率>80%，F1>0.75",
+          "Q4相关网络差异有Fisher z检验p<0.05支撑"
+        ],
+        "pass_criteria": "至少3/4项通过"
+      },
+      {
+        "name": "稳定性验证",
+        "checks": [
+          "KMeans多种子ARI>0.8",
+          "分类器5次重复CV标准差<5%",
+          "PCA载荷符号在5次bootstrap中一致率>90%",
+          "随机种子42固定，所有结果可复现"
+        ],
+        "pass_criteria": "全部4项通过"
+      },
+      {
+        "name": "敏感性验证",
+        "checks": [
+          "PCA k值扰动下分类准确率变化<5%",
+          "特征剔除翻转比例<30%（主导特征除外需说明）",
+          "聚类子采样一致性>80%",
+          "风化预测方法间相对偏差<10%"
+        ],
+        "pass_criteria": "至少3/4项通过"
+      },
+      {
+        "name": "数据完整性验证",
+        "checks": [
+          "有效数据过滤后样本量n≥30",
+          "成分累加和分布在85%-105%内",
+          "无缺失标签（高钾/铅钡标注完整）",
+          "表单3未知样本数与题目一致（8个）"
+        ],
+        "pass_criteria": "全部4项通过"
+      }
+    ],
+    "depends_on": ["Q001", "M001", "D001", "D002"]
+  }
+}

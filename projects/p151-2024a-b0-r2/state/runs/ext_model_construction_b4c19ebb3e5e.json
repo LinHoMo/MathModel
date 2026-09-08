@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "run_id": "ext_model_construction_b4c19ebb3e5e",
+  "parent_run_id": null,
+  "project": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\projects\\p151-2024a-b0-r2",
+  "questions": [
+    "Q001"
+  ],
+  "status": "completed",
+  "workflow_version": "b0-r2-calibrated-v1",
+  "skill_version": "b0-r2-calibrated-v1",
+  "tool_version": "external-artifact-registry-v1",
+  "model_provider": "doubao",
+  "model_version": "doubao-pro-32k",
+  "prompt_hash": "d55dd6b8221604b8757b651f98e06b81c93b458834e5f47c66c0f9f747c5d259",
+  "input_hash": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "artifact_hash": "67fe0ba5600082a8d348a860ca8ff4f52751958eec559e0c6f065815d45001af",
+  "evidence_hash": "2bc095bbc4c16c2b52243e6cc76fd69b65dbf3a7d9952b9cfdf36d0160a01ae1",
+  "decision_log_hash": "06309013f69fe5c20005c5c6f0cdb3d8be820e97d414639e71405c2ee10062e9",
+  "latency": {
+    "started_at": "2026-09-08T08:05:00Z",
+    "finished_at": "2026-09-08T08:09:00Z",
+    "seconds": 240
+  },
+  "started_at": "2026-09-08T08:05:00Z",
+  "token_cost": null,
+  "execution_mode": "external_agent",
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "node_id": "model_construction",
+  "dag_position": 1,
+  "registered_artifact": "M001",
+  "engine": {
+    "completed_nodes": 1,
+    "retries": 0,
+    "failures": []
+  },
+  "decision": null,
+  "provenance": {
+    "executor_type": "external_agent",
+    "agent_identity": "doubao",
+    "model_version": "doubao-pro-32k",
+    "submitted_at": "2026-09-08T08:09:05Z",
+    "registered_at": "2026-09-08T09:10:43Z"
+  }
+}

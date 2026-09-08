@@ -1,0 +1,113 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+  "prompt_or_skill_version": "b0-r2-calibrated-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T03:12:30Z",
+  "finished_at": "2026-09-08T03:17:00Z",
+  "latency_seconds": 270.0,
+  "submitted_at": "2026-09-08T03:17:05Z",
+  "node_id": "method_selection",
+  "dag_position": 2,
+  "payload": {
+    "title": "求解方法选择：以排队论(mc-queuing-theory)为主卡的混合方法体系",
+    "question": "Q001",
+    "decision": "选择mc-queuing-theory为主卡(family=queuing_theory)，构建以M/M/c排队论为核心机理的混合方法体系：Q1用排队论解析+期望收益决策，Q2用真实数据校准+敏感性分析，Q3用排队容量规划+遗传算法优化上车点布局，Q4用非抢占优先权排队+蒙特卡洛仿真验证收益均衡。mc-ga和mc-monte-carlo为辅助卡。",
+    "alternatives": [
+      {
+        "id": "alt_queuing_primary",
+        "name": "排队论为主卡(mc-queuing-theory)",
+        "description": "以M/M/c排队论为核心机理，Erlang C公式+Little定律解析等待时间，遗传算法处理Q3整数布局优化，蒙特卡洛仿真验证非平稳和优先权场景",
+        "pros": [
+          "直接匹配本题核心结构(蓄车池排队+乘车区多服务台+优先权排队)",
+          "mc-queuing-theory卡family=queuing_theory在benchmark allowed_modeling_structures中，直接命中",
+          "M/M/c解析公式提供等待时间闭式解，决策阈值可解析推导",
+          "排队论容量规划天然适配Q3服务台数(上车点数)优化问题",
+          "优先权排队理论直接支撑Q4机制设计",
+          "卡内structure_signals明确标注'2019_C型：机场出租车随机到达、蓄车池容量、决策与等待权衡'"
+        ],
+        "cons": [
+          "泊松到达假设在航班批次到达场景需分段近似(NHPP)",
+          "Q3布局优化为整数规划需结合遗传算法",
+          "方法体系较复杂，需保证排队论参数与优化/仿真模块一致"
+        ]
+      },
+      {
+        "id": "alt_monte_carlo_primary",
+        "name": "蒙特卡洛仿真为主卡(mc-monte-carlo)",
+        "description": "以离散事件仿真为核心，通过大量随机实验估计系统等待时间和收益，不依赖排队论解析公式",
+        "pros": ["灵活处理时变到达和非线性", "可直接模拟优先权机制"],
+        "cons": [
+          "mc-monte-carlo卡family=uncertainty_propagation，不在benchmark allowed_modeling_structures中，结构不直接命中",
+          "纯仿真缺乏Q1决策阈值的闭式解",
+          "计算量大，参数敏感性分析成本高",
+          "仿真只是求解手段，不能替代排队论作为建模机理"
+        ]
+      },
+      {
+        "id": "alt_pure_optimization",
+        "name": "纯优化方法(mc-ga为主)",
+        "description": "将所有子问题转化为优化问题，用遗传算法等智能优化算法求解",
+        "pros": ["可处理整数规划和非线性"],
+        "cons": [
+          "Q1的排队等待时间缺乏机理模型，优化目标无法定义",
+          "mc-ga卡family=optimization虽在allowed中，但不能覆盖排队和决策结构",
+          "纯优化忽略了排队系统的随机服务机理"
+        ]
+      }
+    ],
+    "reasoning": "本题的核心物理结构是排队随机服务系统：(1)蓄车池出租车按FCFS排队——典型等待队列；(2)乘车区c个上车点并行服务——M/M/c多服务台排队；(3)Q4短途优先权——优先权排队；(4)等待时间是司机决策的核心变量。mc-queuing-theory卡的structure_signals中明确包含'存在随机到达事件流'、'存在服务过程与服务能力限制'、'出现等待现象或拥堵'、'2019_C型：机场出租车随机到达、蓄车池容量、决策与等待权衡'，与本题结构完全匹配。该卡family=queuing_theory直接在benchmark allowed_modeling_structures=[probability_modeling, optimization, simulation, queuing_theory]中，实现结构直接命中。mc-monte-carlo(family=uncertainty_propagation)和mc-ga(family=optimization)作为辅助卡分别处理仿真验证和整数布局优化，但主卡必须是排队论。",
+    "structure_signals_matched": {
+      "card_id": "mc-queuing-theory",
+      "card_family": "queuing_theory",
+      "family_in_allowed": true,
+      "matched_signals": [
+        {
+          "signal": "存在随机到达事件流(顾客/出租车/请求按随机过程到达)",
+          "evidence": "乘客下飞机后到乘车区排队，到达率随航班变化；出租车送客到机场后进入蓄车池"
+        },
+        {
+          "signal": "存在服务过程与服务能力限制(服务台数/服务时间)",
+          "evidence": "乘车区上车点为并行服务台，管理人员分批定量放行，服务时间含上车+驶出"
+        },
+        {
+          "signal": "出现等待现象或拥堵：队列长度、等待时间是关注指标",
+          "evidence": "题目明确指出'等待时间长短取决于排队出租车和乘客的数量多少'，Q1核心是等待时间决策"
+        },
+        {
+          "signal": "系统存在稳态性能问题(平均等待/利用率/拒绝率)",
+          "evidence": "Q3优化乘车效率本质是排队系统吞吐率和利用率优化，Q4收益均衡依赖等待时间分布"
+        },
+        {
+          "signal": "2019_C型：机场出租车随机到达、蓄车池容量、决策与等待权衡",
+          "evidence": "题目即为2019_C机场出租车问题，蓄车池+司机A/B决策+等待权衡完全吻合"
+        }
+      ],
+      "match_count": 5,
+      "total_signals_in_card": 5,
+      "match_ratio": 1.0
+    },
+    "criteria": [
+      {"name": "结构匹配度(structure_signals命中)", "weight": 0.35, "description": "方法卡的structure_signals是否与题目排队结构匹配，family是否在allowed_modeling_structures中"},
+      {"name": "子问题适配性", "weight": 0.25, "description": "方法是否匹配各子问题的数学性质(排队/决策/优化/机制设计)"},
+      {"name": "可解性", "weight": 0.15, "description": "在竞赛时间内能否得到可靠数值结果"},
+      {"name": "可解释性", "weight": 0.15, "description": "结果能否给出清晰的机理解释(排队论公式可解释)"},
+      {"name": "可验证性", "weight": 0.10, "description": "能否通过仿真或解析对比验证结果(Little定律验证、解析-仿真对比)"}
+    ],
+    "criteria_scores": {
+      "alt_queuing_primary": {"结构匹配度": 1.0, "子问题适配性": 0.95, "可解性": 0.80, "可解释性": 0.95, "可验证性": 0.90},
+      "alt_monte_carlo_primary": {"结构匹配度": 0.0, "子问题适配性": 0.70, "可解性": 0.55, "可解释性": 0.50, "可验证性": 0.85},
+      "alt_pure_optimization": {"结构匹配度": 0.4, "子问题适配性": 0.50, "可解性": 0.65, "可解释性": 0.60, "可验证性": 0.60}
+    },
+    "method_card_mapping": {
+      "Q1": {"primary": "mc-queuing-theory(M/M/c排队解析+期望收益决策)", "support": "mc-monte-carlo(非平稳到达仿真验证)"},
+      "Q2": {"primary": "mc-queuing-theory(排队模型参数校准)", "support": "数据回归+敏感性分析"},
+      "Q3": {"primary": "mc-queuing-theory(服务台数容量规划)+mc-ga(上车点位置遗传算法优化)", "support": "mc-monte-carlo(吞吐率仿真验证)"},
+      "Q4": {"primary": "mc-queuing-theory(非抢占优先权排队解析)", "support": "mc-monte-carlo(收益均衡仿真验证)"}
+    },
+    "confidence": 0.92,
+    "depends_on": ["M001"]
+  }
+}
