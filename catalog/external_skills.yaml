@@ -34,7 +34,7 @@ external_skills:
   - name: syslab
     type: system
     description: "MWORKS Syslab 环境（M 命令行 mlang + Julia julia-ty），用于 MATLAB/北太天元交付分支的真实执行"
-    install: "安装 MWORKS Syslab；skills 已拷贝到 .claude/skills/；SYSLAB_HOME 写入 ~/.syslab/syslab-env.ini"
+    install: "安装 MWORKS Syslab；skills 位于 core/skills/syslab/；SYSLAB_HOME 写入 ~/.syslab/syslab-env.ini"
     fallback: "仅产出 .m 文件不执行，标注'未实际执行'"
     used_by:
       - "core/legacy/hands/Programmer/agents/code-implementer"

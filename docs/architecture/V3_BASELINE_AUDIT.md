@@ -141,7 +141,7 @@ latex 下 9 个竞赛包（cumcm/mcm/diangong/huashu/huawei/apmcm/mathorcup/renz
 
 ### 3.8 外部技能与生成物
 
-- `.claude/skills/`：10 个 syslab 系列 skill（MWORKS Syslab 外部能力包），与 core/ 无复制关系，由 catalog external_skills 声明 → 语义上是 host adapter 下的外部技能，V3 应明确其位置
+- `core/skills/syslab/`：10 个 syslab 系列 skill（MWORKS Syslab 外部能力包），原位于 `.claude/skills/`，2026-09-08 迁移至厂商中立位置 `core/skills/syslab/`，由 catalog external_skills 声明
 - `adapters/openai.yaml`：catalog 的自动派生物（263 行）→ V3 的 agent manifest 雏形
 - `archify-skill/`：**空目录**，无任何内容 → 删除或补充说明
 
