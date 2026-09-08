@@ -1,0 +1,2467 @@
+[
+  {
+    "sha": "332d55c2f3244c9e193e90749f42bcc0d534ce53",
+    "node_id": "C_kwDOT3bKSNoAKDMzMmQ1NWMyZjMyNDRjOWUxOTNlOTA3NDlmNDJiY2MwZDUzNGNlNTM",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-07T07:06:08Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-07T07:06:08Z"
+      },
+      "message": "feat: 新增全流程总控skill，各skill补充CUMCM题型专用参考\n\n【新增：总控类】\nskills/总控类/bzd-modeling-workflow/\n统一入口skill，编排从读题、思路生成、模型选择、论文撰写、\n分章节自查到格式/AIGC审计与评委式打分的完整赛程链路。\n用户可只记一个入口，由它调度后续各专用skill。\n\n【新增：CUMCM ABCDE 题型专用参考】\n5个skill各补一份题型化参考文档：\n- bzd-problem-translator  → cumcm-abcde-translation-signals.md\n- bzd-modeling-ideas      → cumcm-abcde-modeling-patterns.md\n- bzd-problem-analysis-checker → cumcm-abcde-analysis-checks.md\n- bzd-model-solution-checker   → cumcm-abcde-solution-redflags.md\n- bzd-review-paper        → cumcm-problem-type-review.md\n\n【bzd-review-paper 评分体系更新】\n- 新增 low-score-safeguard.md：低分保护机制\n- 原子扣分、赛制情境调整、评分表构建规则同步修订\n- competition_context.py 逻辑更新\n\n【README】全面重写，同步当前skill目录结构\n\n【仓库卫生】\n- 新增 .gitignore（__pycache__、*.pyc、编辑器与OS临时文件）\n- 移除误提交的 competition_context.cpython-313.pyc\n  编译缓存随Python版本变化，不应进版本库",
+      "tree": {
+        "sha": "1e80a22cac56d66af07c59e37086cb9fa93be538",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/1e80a22cac56d66af07c59e37086cb9fa93be538"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/332d55c2f3244c9e193e90749f42bcc0d534ce53",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/332d55c2f3244c9e193e90749f42bcc0d534ce53",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/332d55c2f3244c9e193e90749f42bcc0d534ce53",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/332d55c2f3244c9e193e90749f42bcc0d534ce53/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "57356e969ec9043acd1609093afba329a4e2d7cb",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/57356e969ec9043acd1609093afba329a4e2d7cb",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/57356e969ec9043acd1609093afba329a4e2d7cb"
+      }
+    ]
+  },
+  {
+    "sha": "57356e969ec9043acd1609093afba329a4e2d7cb",
+    "node_id": "C_kwDOT3bKSNoAKDU3MzU2ZTk2OWVjOTA0M2FjZDE2MDkwOTNhZmJhMzI5YTRlMmQ3Y2I",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T17:00:43Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T17:00:43Z"
+      },
+      "message": "docs: 离线Prompt升级至v2.2，与skill判分标准对齐\n\n原离线版停留在v2.0的五维框架(语言模板化60%+其他四维40%)，\n与skill的九维框架已严重脱节。本次整体重写，577行->777行。\n\n【核心更新】\n- 五维框架 -> 九维框架(语言6维60% + 事实3维40%)\n- 补齐v2.1新增的事实层：引文L1-L3验证、数值一致性追踪、术语一致性\n- 同步v2.2的两处bug修复：权重不再二次相乘、明确风险分=100-质量分\n- 同步v2.2收严后的全部阈值表\n- 新增一票否决清单(5类造假情形直接定级)\n- 新增组织词跨章复用扣分规则\n- 新增主动披露豁免与加分机制\n- 新增报告标红规范(四级色彩+五条硬性要求)\n\n【离线可用性强化】\n- 三步使用说明，明确到\"另存为.html、编码选UTF-8\"\n- HTML模板补齐红色警示区、标红行样式、三档结论卡\n- 新增交付前自检清单(计算正确性/证据完整性/呈现规范 三类)\n- 常见问题扩充至6条，含长论文分两次发送的处理方式\n- 明确列出适配平台：Claude/ChatGPT/Gemini/Kimi/DeepSeek/豆包\n\n【关键边界澄清】\n开篇即用对照表说明：判\"AI拼装痕迹\"而非\"是否用过AI\"。\n声明用了AI但建模主线由人主导、参数可溯源的论文可判低风险；\n没用AI但引文造假的论文直接触发否决。",
+      "tree": {
+        "sha": "406dcf8d863768218dffdb8b43abc4d9669c5eb7",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/406dcf8d863768218dffdb8b43abc4d9669c5eb7"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/57356e969ec9043acd1609093afba329a4e2d7cb",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/57356e969ec9043acd1609093afba329a4e2d7cb",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/57356e969ec9043acd1609093afba329a4e2d7cb",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/57356e969ec9043acd1609093afba329a4e2d7cb/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f0245b2d60c10045d970045835a594602f47aa53",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/f0245b2d60c10045d970045835a594602f47aa53",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/f0245b2d60c10045d970045835a594602f47aa53"
+      }
+    ]
+  },
+  {
+    "sha": "f0245b2d60c10045d970045835a594602f47aa53",
+    "node_id": "C_kwDOT3bKSNoAKGYwMjQ1YjJkNjBjMTAwNDVkOTcwMDQ1ODM1YTU5NDYwMmY0N2FhNTM",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T16:43:22Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T16:43:22Z"
+      },
+      "message": "fix+feat: v2.2 修复两处评分bug并全面收严判分标准\n\n【Bug修复】\n1. 权重二次相乘错误：语言层面维度1-6的百分数(20/12/12/9/6/1)本已是\n   占总分100%的最终权重，文档却又乘0.60，导致语言层塌缩到36%、\n   事实层被隐性放大到53%。现移除二次相乘并加注警示。\n\n2. 质量分与风险分方向矛盾：各维度打的是质量分(越高越好)，风险等级表\n   用的是风险分(越高越危险)，文档示例自身即撞车(引文100+数值100\n   加总67.8却标中风险)。现明确 风险分 = 100 - 质量分，\n   给出三步计算流程与方向自洽的校验示例。\n\n【判分收严】各维度阈值下移5-10个百分点：\n- 维1 连接词：警戒线 15% -> 12%\n- 维3 拔高词：1个L1即标红(原需>3个)\n- 维4 被动句：27%即标红(原30%)\n- 维6 复杂度：TTR<0.45即扣分(原0.4)\n- 维7 引文：作者/年份不符即触发否决(原仅扣至20分)\n- 风险等级：低风险区间 0-20 -> 0-15\n\n【新增机制】\n- 一票否决项(§4.3)：虚构文献/引文信息不符/参数矛盾>5%无解释等\n  5类情形直接定级，不被其他维度高分稀释\n- 组织词跨章复用扣分：同一组织词(如其一/其二/其三)在>=4章节\n  机械复用额外-20，>=6章节-30。补上v2.1只看L1/L2/L3分级的盲区\n- 主动披露豁免+加分：论文自曝数值差异并解释来源(求解器容差等)\n  不触发否决，反在维度8加分——这是人工复算的正面证据\n- 段落规律性豁免：数模章节级五段式属文体常规，只统计段落级重复\n\n【报告标红规范】强制要求\n- 四级色彩语义(严重<30/警示30-54/注意55-79/通过>=80)\n- 任一维度<55时报告顶部必须有红色警示区\n- 每个标红项必须含 问题+证据位置+具体改法 三要素\n- 标红行须用红色背景，不能只靠图标区分",
+      "tree": {
+        "sha": "8b7a8553324aa6c0c6ef999fd16c3605a1ec22ea",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/8b7a8553324aa6c0c6ef999fd16c3605a1ec22ea"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/f0245b2d60c10045d970045835a594602f47aa53",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/f0245b2d60c10045d970045835a594602f47aa53",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/f0245b2d60c10045d970045835a594602f47aa53",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/f0245b2d60c10045d970045835a594602f47aa53/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "79fdda3d8d128ce2ddd851d6e0c98f0e0c797bc4",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/79fdda3d8d128ce2ddd851d6e0c98f0e0c797bc4",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/79fdda3d8d128ce2ddd851d6e0c98f0e0c797bc4"
+      }
+    ]
+  },
+  {
+    "sha": "79fdda3d8d128ce2ddd851d6e0c98f0e0c797bc4",
+    "node_id": "C_kwDOT3bKSNoAKDc5ZmRkYTNkOGQxMjhjZTJkZGQ4NTFkNmUwYzk4ZjBlMGM3OTdiYzQ",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T16:14:36Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T16:14:36Z"
+      },
+      "message": "merge: 合并远程变更，恢复并升级SKILL.md至v2.1\n\n冲突处理：\n- 远程e03ca46删除了SKILL.md，本地保留并升级至v2.1（9维融合框架）\n- frontmatter的description同步更新为9维框架描述\n\n清理：\n- 删除误提交的并列目录 skills/bzd-paper-aigc-auditor/\n  该skill只应位于 skills/论文自查类/ 下",
+      "tree": {
+        "sha": "396891d542fff6b26b564c6366d4a7ef16516e0a",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/396891d542fff6b26b564c6366d4a7ef16516e0a"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/79fdda3d8d128ce2ddd851d6e0c98f0e0c797bc4",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/79fdda3d8d128ce2ddd851d6e0c98f0e0c797bc4",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/79fdda3d8d128ce2ddd851d6e0c98f0e0c797bc4",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/79fdda3d8d128ce2ddd851d6e0c98f0e0c797bc4/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "760cdd473924615de4f79070c26261ee6da147f7",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/760cdd473924615de4f79070c26261ee6da147f7",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/760cdd473924615de4f79070c26261ee6da147f7"
+      },
+      {
+        "sha": "e03ca46efda6fe24d4eb5960c516e515ecc5ddfa",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/e03ca46efda6fe24d4eb5960c516e515ecc5ddfa",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/e03ca46efda6fe24d4eb5960c516e515ecc5ddfa"
+      }
+    ]
+  },
+  {
+    "sha": "760cdd473924615de4f79070c26261ee6da147f7",
+    "node_id": "C_kwDOT3bKSNoAKDc2MGNkZDQ3MzkyNDYxNWRlNGY3OTA3MGMyNjI2MWVlNmRhMTQ3Zjc",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T16:05:17Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T16:05:17Z"
+      },
+      "message": "更新其他文档（自动合并）",
+      "tree": {
+        "sha": "3571fbd3c61ed8cd167481cd5cc1f604ed334a6d",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/3571fbd3c61ed8cd167481cd5cc1f604ed334a6d"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/760cdd473924615de4f79070c26261ee6da147f7",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/760cdd473924615de4f79070c26261ee6da147f7",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/760cdd473924615de4f79070c26261ee6da147f7",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/760cdd473924615de4f79070c26261ee6da147f7/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "890bd637c5d8c693fc9d696dee83f1a54ab36904",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/890bd637c5d8c693fc9d696dee83f1a54ab36904",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/890bd637c5d8c693fc9d696dee83f1a54ab36904"
+      }
+    ]
+  },
+  {
+    "sha": "e03ca46efda6fe24d4eb5960c516e515ecc5ddfa",
+    "node_id": "C_kwDOT3bKSNoAKGUwM2NhNDZlZmRhNmZlMjRkNGViNTk2MGM1MTZlNTE1ZWNjNWRkZmE",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T15:58:59Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-03T15:58:59Z"
+      },
+      "message": "Delete skills/论文自查类/bzd-paper-aigc-auditor/SKILL.md",
+      "tree": {
+        "sha": "cdccb02ae440b59233a002a2fdfbd8857fd33289",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/cdccb02ae440b59233a002a2fdfbd8857fd33289"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/e03ca46efda6fe24d4eb5960c516e515ecc5ddfa",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqmZlDCRC1aQ7uu5UhlAAA1CoQAAVOxC6kz8Cj6g924bxx6iFt\nUkeQosPUewypbmzqEYgRS377GK3nY9umIqUSTnZqJ95gZFcBObidDIwUEfwc+SiH\nF+hYpaLZLA1C5jdGbo4EdtVZqQYOCoKPGdXkUJEN6wQc2zTsj/Toh4Yf6d8aDmBn\nUKflThR+IyufPmWz07jdKynO3qx6YqfgV7ds/D9j6kdmqBR1h0RnHP0cA1Y7gEAm\niVr8uKE6EnB2D2snnUkRu3S/RB/YEnMVkTUyF77WQeZchrcbq+rxujECCCsFohs3\nrUO0n2dPvl9H+XcBphYKVt6NOiPTwMJctUne7EdKNoVKa1d6siRb6dU6tj7l2XB2\nfiEWMnqhONX5ulPn0T1YMaPn64OVQJyR6kHzR11zt/2Ai9hjtSwJdhd/gNOMZN5+\nNx0DqAjztwgMaN71/Dtx3rVMMd4Ev5MIOwymCS/TigIPxwz/uGWTDxr9Dg+0tI4+\nLA35JR7GzbYt3i6M7ftURp5Vf48F6nvxNurUdMyy1OGaptjVVJOrS5gGtRCSiwNv\nn0W109Yck8HaRpR+d6pn8MnrGLKqjJ76ff3qFmpP42w0oX8uTAX53ag3yaiTmr7E\n6VsBQTXELzJ9VBqKhbq35NiJJguo6jrB8imqKD0d5N8bUhOt/sdwcnqJ5sKMhw5r\nntVHjI9W5kQI30mloY0t\n=j+59\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree cdccb02ae440b59233a002a2fdfbd8857fd33289\nparent d5cf2d90368df79aed7891c9c7097273791d55e2\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788451139 +0800\ncommitter GitHub <noreply@github.com> 1788451139 +0800\n\nDelete skills/论文自查类/bzd-paper-aigc-auditor/SKILL.md",
+        "verified_at": "2026-09-03T15:59:00Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/e03ca46efda6fe24d4eb5960c516e515ecc5ddfa",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/e03ca46efda6fe24d4eb5960c516e515ecc5ddfa",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/e03ca46efda6fe24d4eb5960c516e515ecc5ddfa/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "d5cf2d90368df79aed7891c9c7097273791d55e2",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/d5cf2d90368df79aed7891c9c7097273791d55e2",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/d5cf2d90368df79aed7891c9c7097273791d55e2"
+      }
+    ]
+  },
+  {
+    "sha": "890bd637c5d8c693fc9d696dee83f1a54ab36904",
+    "node_id": "C_kwDOT3bKSNoAKDg5MGJkNjM3YzVkOGM2OTNmYzlkNjk2ZGVlODNmMWE1NGFiMzY5MDQ",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T15:35:07Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T15:35:07Z"
+      },
+      "message": "新增：5分钟快速检查卡 - 现场应用指南\n\nQUICK_CHECK_CARD.md提供了实用的现场快速检查流程：\n\n【核心特性】：\n✅ 5分钟快速判定（2分钟语言+2分钟事实+1分钟评分）\n✅ 单行操作命令（Ctrl+F搜索、统计基础）\n✅ 快速风险颜色判定（绿/黄/橙/红/黑）\n✅ 问题定位和快速修改指南\n✅ 三种使用场景（队员/老师/评委）\n✅ 清单式检查点\n\n【检查项覆盖】：\n• 高频连接词密度（目标<15%）\n• 被动句占比（目标15-20%）\n• 拔高词数量（目标L1-L2<3个）\n• 引文可验证性（3篇spot check）\n• 参数一致性（关键参数追踪）\n• 术语统一性（算法名称等）\n\n【快速修改指南】：\n针对每类问题给出\"快速修改\"步骤\n• 高频词 → 删除重复\n• 被动句 → 改为主动\n• 拔高词 → 补充具体数字\n• 引文 → 核实或删除\n• 参数 → 统一数值\n• 术语 → 使用替换功能\n\n可直接打印或在线使用",
+      "tree": {
+        "sha": "cfdd3845811e2442493e4e669e54c32cccf9f70c",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/cfdd3845811e2442493e4e669e54c32cccf9f70c"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/890bd637c5d8c693fc9d696dee83f1a54ab36904",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/890bd637c5d8c693fc9d696dee83f1a54ab36904",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/890bd637c5d8c693fc9d696dee83f1a54ab36904",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/890bd637c5d8c693fc9d696dee83f1a54ab36904/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "bc7ed0165f0529882b6c630abdee992518993995",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/bc7ed0165f0529882b6c630abdee992518993995",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/bc7ed0165f0529882b6c630abdee992518993995"
+      }
+    ]
+  },
+  {
+    "sha": "bc7ed0165f0529882b6c630abdee992518993995",
+    "node_id": "C_kwDOT3bKSNoAKGJjN2VkMDE2NWYwNTI5ODgyYjZjNjMwYWJkZWU5OTI1MTg5OTM5OTU",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T15:34:34Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T15:34:34Z"
+      },
+      "message": "新增：第一层增强整合完整总结文档\n\nINTEGRATION_SUMMARY.md记录了bzd-paper-aigc-auditor从v2.0到v2.1的完整整合过程：\n\n【文档内容结构】：\n1. 项目背景与目标（v2.0→v2.1的演进）\n2. 整合流程与新增参考文档说明\n3. 权重重新分配详解（60%语言+40%事实）\n4. 关键检测能力对比表\n5. 改进示例（拔高词5级、术语追踪、引文验证）\n6. 实施流程升级（单一→两阶段检查）\n7. 参考资源完整性清单\n8. 核心增强点总结（4大类）\n9. 用户应用指南（参赛队/老师/评委）\n10. 后续优化方向\n\n【快速导航】：\n用户可通过文档末尾的\"关键文件速查\"表快速定位需要的参考资源",
+      "tree": {
+        "sha": "e19c1693048d50f2c44b49ce1df3528febb126ae",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/e19c1693048d50f2c44b49ce1df3528febb126ae"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/bc7ed0165f0529882b6c630abdee992518993995",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/bc7ed0165f0529882b6c630abdee992518993995",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/bc7ed0165f0529882b6c630abdee992518993995",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/bc7ed0165f0529882b6c630abdee992518993995/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "709e9bae320ed4fe5c6d4f36c27e2a514ad1830e",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/709e9bae320ed4fe5c6d4f36c27e2a514ad1830e",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/709e9bae320ed4fe5c6d4f36c27e2a514ad1830e"
+      }
+    ]
+  },
+  {
+    "sha": "709e9bae320ed4fe5c6d4f36c27e2a514ad1830e",
+    "node_id": "C_kwDOT3bKSNoAKDcwOWU5YmFlMzIwZWQ0ZmU1YzZkNGYzNmMyN2UyYTUxNGFkMTgzMGU",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T15:33:41Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-03T15:33:41Z"
+      },
+      "message": "增强第一层检测框架 - 融合nature-AIGC-detector的9维检测模型\n\n第一层检测框架升级至v2.1，融合nature-AIGC检测器的5大维度：\n\n【语言层面】(权重60%)：\n- 维度1: 高频连接词(Humanizer-zh) - 20% → 12%\n- 维度2: 排比/同构句式识别 - 20% → 7.2%\n- 维度3: 拔高词5级分类 - 20% → 7.2%\n- 维度4: 被动句占比+语态分析 - 15% → 5.4%\n- 维度5: 段落结构规律性 - 10% → 3.6%\n- 维度6: 文本复杂度(TTR/熵值/n-gram) - 新增 0.6%\n\n【事实层面】(权重40%) - 新增：\n- 维度7: 引文验证(L1-L3三层) - 15%\n- 维度8: 数值一致性追踪 - 15%\n- 维度9: 术语一致性检测 - 10%\n\n【关键增强】：\n✨ 引文不仅检查格式，而是验证真实性和主张匹配度\n✨ 引入数值参数追踪表，发现虚构或计算错误\n✨ 加入词汇多样性(TTR)等科学复杂度度量\n✨ 术语追踪表检测概念混乱\n✨ 两个新参考文档助力理解和实施\n\n新增参考文档：\n- layer1-enhanced-detection.md: 完整的9维检测框架细节\n- nature-detector-integration.md: nature-detector方法论完整指南",
+      "tree": {
+        "sha": "b4309b9636a2aa11a542c624f4c139b1eda57b35",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/b4309b9636a2aa11a542c624f4c139b1eda57b35"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/709e9bae320ed4fe5c6d4f36c27e2a514ad1830e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/709e9bae320ed4fe5c6d4f36c27e2a514ad1830e",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/709e9bae320ed4fe5c6d4f36c27e2a514ad1830e",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/709e9bae320ed4fe5c6d4f36c27e2a514ad1830e/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "d5cf2d90368df79aed7891c9c7097273791d55e2",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/d5cf2d90368df79aed7891c9c7097273791d55e2",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/d5cf2d90368df79aed7891c9c7097273791d55e2"
+      }
+    ]
+  },
+  {
+    "sha": "d5cf2d90368df79aed7891c9c7097273791d55e2",
+    "node_id": "C_kwDOT3bKSNoAKGQ1Y2YyZDkwMzY4ZGY3OWFlZDc4OTFjOWM3MDk3MjczNzkxZDU1ZTI",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:35:15Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:35:15Z"
+      },
+      "message": "refactor: move bzd-paper-aigc-auditor under 论文自查类 folder\n\nReorganize folder structure:\n- Before: skills/bzd-paper-aigc-auditor\n- After:  skills/论文自查类/bzd-paper-aigc-auditor\n\nThis groups the audit skill with other paper self-checking tools.\n\nAll files preserved:\n- SKILL.md\n- README.md\n- Complete Prompt guide\n- References (4 files: framework, keywords, models, patterns)\n- Templates (2 HTML files: audit report, self-check guide)",
+      "tree": {
+        "sha": "1bd9aef7a5f61ca709579d99ab1ef56b542758a4",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/1bd9aef7a5f61ca709579d99ab1ef56b542758a4"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/d5cf2d90368df79aed7891c9c7097273791d55e2",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/d5cf2d90368df79aed7891c9c7097273791d55e2",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/d5cf2d90368df79aed7891c9c7097273791d55e2",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/d5cf2d90368df79aed7891c9c7097273791d55e2/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "249a0269a342a8a9eb6479dc5e6c86b03ebe1d7f",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/249a0269a342a8a9eb6479dc5e6c86b03ebe1d7f",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/249a0269a342a8a9eb6479dc5e6c86b03ebe1d7f"
+      }
+    ]
+  },
+  {
+    "sha": "249a0269a342a8a9eb6479dc5e6c86b03ebe1d7f",
+    "node_id": "C_kwDOT3bKSNoAKDI0OWEwMjY5YTM0MmE4YTllYjY0NzlkYzVlNmM4NmIwM2ViZTFkN2Y",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:32:12Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:32:12Z"
+      },
+      "message": "docs: add complete offline prompt guide for AIGC paper audit\n\n- Full audit procedure and evaluation standards (two-layer framework)\n- Language template detection (Humanizer-zh patterns)\n- Model rationality assessment (common vs AI-prone models)\n- HTML output template with complete styling\n- Step-by-step guide for users without skill access\n- Quality assurance checklist\n- FAQ section\n\nUsers can now use this document with any AI (ChatGPT, Claude Web, Gemini) to audit papers when skill is unavailable.\n\nFile: BZD数模论文AI痕迹审计完整Prompt.md\nVersion: v2.0",
+      "tree": {
+        "sha": "7b40b6799bb76881405fd4330b85a8a67c152af4",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/7b40b6799bb76881405fd4330b85a8a67c152af4"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/249a0269a342a8a9eb6479dc5e6c86b03ebe1d7f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/249a0269a342a8a9eb6479dc5e6c86b03ebe1d7f",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/249a0269a342a8a9eb6479dc5e6c86b03ebe1d7f",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/249a0269a342a8a9eb6479dc5e6c86b03ebe1d7f/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "c87758e2d56d932f04544ef6a4c1199512fed68f",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/c87758e2d56d932f04544ef6a4c1199512fed68f",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/c87758e2d56d932f04544ef6a4c1199512fed68f"
+      }
+    ]
+  },
+  {
+    "sha": "c87758e2d56d932f04544ef6a4c1199512fed68f",
+    "node_id": "C_kwDOT3bKSNoAKGM4Nzc1OGUyZDU2ZDkzMmYwNDU0NGVmNmE0YzExOTk1MTJmZWQ2OGY",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:30:37Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:30:37Z"
+      },
+      "message": "refactor: optimize audit report template - simplify to brief and complete versions\n\n- Remove student/teacher/reviewer version distinction\n- Keep only 'Brief Diagnostic Version' and 'Complete Review Version'\n- Maintain all content and functionality\n- Academic style UI design preserved\n- Both versions support print/PDF export\n\nVersion: v2.0",
+      "tree": {
+        "sha": "1b5fd88a79030517fb72f47b8892747caa574888",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/1b5fd88a79030517fb72f47b8892747caa574888"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/c87758e2d56d932f04544ef6a4c1199512fed68f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/c87758e2d56d932f04544ef6a4c1199512fed68f",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/c87758e2d56d932f04544ef6a4c1199512fed68f",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/c87758e2d56d932f04544ef6a4c1199512fed68f/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "69f5c71427f00854a727e4e59eadbe528d441361",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/69f5c71427f00854a727e4e59eadbe528d441361",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/69f5c71427f00854a727e4e59eadbe528d441361"
+      }
+    ]
+  },
+  {
+    "sha": "69f5c71427f00854a727e4e59eadbe528d441361",
+    "node_id": "C_kwDOT3bKSNoAKDY5ZjVjNzE0MjdmMDA4NTRhNzI3ZTRlNTllYWRiZTUyOGQ0NDEzNjE",
+    "commit": {
+      "author": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:15:45Z"
+      },
+      "committer": {
+        "name": "BZDmathclub",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:15:45Z"
+      },
+      "message": "feat: add bzd-paper-aigc-auditor v2.0 - two-layer AIGC detection skill\n\nFeatures:\n- Two-layer detection framework: language patterns (60%) + modeling logic (40%)\n- Integrate Humanizer-zh for Chinese AI text pattern detection\n- Academic-style UI design with professional data visualization\n- Comprehensive mathematical modeling model library (common vs AI-prone models)\n- Two-tier audit reports: brief diagnostic version + detailed analysis version\n- Complete parameter traceability table and inter-question data flow mapping\n- Student self-check guide and audit report templates\n\nFiles included (8 files):\n- SKILL.md: Complete skill definition and usage guide\n- README.md: Project overview, user guides, and methodology explanation\n- references/audit-framework.md: Five-dimensional evaluation standards\n- references/humanizer-keywords.txt: Humanizer-zh high-frequency keyword library\n- references/models-zh.md: Mathematical modeling model library comparison\n- references/patterns-zh.md: AI reasoning pattern library and self-justification patterns\n- templates/BZD数模论文AI痕迹审计报告模板.html: Audit report (academic style)\n- templates/BZD数模论文AI痕迹自查指南.html: Student self-check guide\n\nDesign:\n- Academic scientific research style UI with high contrast\n- Serif font (STIX Two Text) for professional appearance\n- Clear visual hierarchy with color-coded risk levels\n- Responsive design supporting print/PDF export\n- Smooth animations and interactive elements\n\nCompatibility:\n- Claude Code\n- Codex\n- Version: v2.0 (2024)\n\nThis skill helps identify AI-generated content in mathematical modeling competition papers through language analysis and modeling logic review.",
+      "tree": {
+        "sha": "15303d8b6bfe1594b1e4c2ba8fda3cb10c0bea0b",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/15303d8b6bfe1594b1e4c2ba8fda3cb10c0bea0b"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/69f5c71427f00854a727e4e59eadbe528d441361",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/69f5c71427f00854a727e4e59eadbe528d441361",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/69f5c71427f00854a727e4e59eadbe528d441361",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/69f5c71427f00854a727e4e59eadbe528d441361/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "0faf0e1bf0f25c2d0b6f33bd757740cb7920ec16",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/0faf0e1bf0f25c2d0b6f33bd757740cb7920ec16",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/0faf0e1bf0f25c2d0b6f33bd757740cb7920ec16"
+      }
+    ]
+  },
+  {
+    "sha": "0faf0e1bf0f25c2d0b6f33bd757740cb7920ec16",
+    "node_id": "C_kwDOT3bKSNoAKDBmYWYwZTFiZjBmMjVjMmQwYjZmMzNiZDc1Nzc0MGNiNzkyMGVjMTY",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T17:08:24Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-02T17:08:24Z"
+      },
+      "message": "Delete skills/论文自查类/bzd-paper-aigc-auditor directory",
+      "tree": {
+        "sha": "1a60cf00aa26f5095691ae4edc0afa1c59984287",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/1a60cf00aa26f5095691ae4edc0afa1c59984287"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/0faf0e1bf0f25c2d0b6f33bd757740cb7920ec16",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqmFgICRC1aQ7uu5UhlAAAq9MQADWS4uB7cT1KC1ZB9yNH/Fy8\ndc6YWP9p9JnPtocFL8Aqw1wGfSr/4Togjkl8ZvGry1BagvlB1DA7iUyVUGqDCsOk\nCwnv3XQZhRzfOWCIkZB3BHZEtvRbunVvfl1/5T2rycVwpzurfDxKcN4kPW70WgU6\n3ywYOmxjPUkpubvHQARzkIL4brWe4DZBfR/EuCz9WoAEhXSoxCpiR/TWkAjR2wj9\n3n0O2C7qPYyGdzjelnlweTLWtJxeMTFa2aPIHIYX1NCyaysuCd3/u75beQ+miw2d\np1U07Gnn1GfEpKzXNpAjYhy/LPWCOYtTMer0RQxF68/37GzZOD1Y2KCG+lzQERuN\n70jLcB3DuynUsT0e/3GZB3GU3CE4ijPbd6ieVS6x3cnNknueZrLxoY8BWDM1/H9m\n3kW3+ioGY7MnakjpPSM1Sr9ppMLciJAvKMfX+Oax3/652IDUri58pL/t+pB5zvYN\nojaZBuVKFU6MPnOKmLvEHVCsKHMZqESVzmkUBBwuuD4Id/4I9HVgElpijsSKPq1J\nnAtRS6iAJbSI9ptk/eGURcMqQliirrijunrXVDvF5aLb8T6YbymdvLnUw0AOAxP/\nimchh4I2UwsYLCtcZFjdzdlwcz7Nc8/s28GCLFIcKJVLezTefzUJWVWxUJ5DobAW\ncKx8CtrK29ji8qnQr1V8\n=x7fS\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 1a60cf00aa26f5095691ae4edc0afa1c59984287\nparent 34a76cfa1f720277c6349150b2615aac0de7a71f\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788368904 +0800\ncommitter GitHub <noreply@github.com> 1788368904 +0800\n\nDelete skills/论文自查类/bzd-paper-aigc-auditor directory",
+        "verified_at": "2026-09-02T17:08:25Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/0faf0e1bf0f25c2d0b6f33bd757740cb7920ec16",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/0faf0e1bf0f25c2d0b6f33bd757740cb7920ec16",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/0faf0e1bf0f25c2d0b6f33bd757740cb7920ec16/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "34a76cfa1f720277c6349150b2615aac0de7a71f",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/34a76cfa1f720277c6349150b2615aac0de7a71f",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/34a76cfa1f720277c6349150b2615aac0de7a71f"
+      }
+    ]
+  },
+  {
+    "sha": "34a76cfa1f720277c6349150b2615aac0de7a71f",
+    "node_id": "C_kwDOT3bKSNoAKDM0YTc2Y2ZhMWY3MjAyNzdjNjM0OTE1MGIyNjE1YWFjMGRlN2E3MWY",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T15:56:30Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-02T15:56:30Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "8fc3f91db82c19abf0218d21dff3abd8c5f6e0be",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/8fc3f91db82c19abf0218d21dff3abd8c5f6e0be"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/34a76cfa1f720277c6349150b2615aac0de7a71f",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqmEcuCRC1aQ7uu5UhlAAAjv0QAHe5wlcT2D4BGQqBEpoJnUi7\npyaXWZjfqtws/AOyiKPaJlKxSBgq5FBsQHT8vQlamtkf/DUvYB1vaMEvgnv1pxak\nCx8yw31nHfWhXZkhSL4jg9qGrJIcd1WReLtQwWNEmzQa47e7MNO4t7kmTIizxXfR\nf05Kzb8ZIj7FP4HMGt0H5UxHX7ZqlEL+WIghN+7HcgjO9vNDRDGWVe+HamY50oP/\n+l3ADx/Lzefa8WM2zhYuf10Fph3VAcF0rBzqEelhaS77ZUwtFOsIIzwcW+yGkev0\n7y65XlsLBBAGVpFnU3mGTgfqwPPAp55tATw59++chved5ySjV9Oi/COvLpZWdqAt\nfha03ZidZ9QO2zX7YPAxb0Ads5UMcQ9+eD9Qhwb9z+lmFWvRrL9g3x7NhLROQRl7\nCviMOMrjhI5NCZqiV+d2UTM/NqH91ptHDYbLoDgt6b4Tpa/I4LR3cN12SSm/YK8H\nFAulDWaSgWWXqqpUG616fXZ6nSm5zUu+bwQ71P0uzb8YnLiG6COkrgLEwK1YkdVs\nJlOjbS4hMLLYn3tz1FyK5iT2pwHSdFC1il86GCSI7XMVxgtxyLyH4CVgpT8syerp\nBFFc09Xjbf9N3GPbGFqG6f4mseOVwuQq44orHqmqu6VHL/Y7S8LhVC81SvCJKLw6\nwQ+WkwBUKKIaQi1xoUi9\n=X9KG\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 8fc3f91db82c19abf0218d21dff3abd8c5f6e0be\nparent 2ff527dcfd868e48d5a5901675a2ffc8872d88c3\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788364590 +0800\ncommitter GitHub <noreply@github.com> 1788364590 +0800\n\nUpdate README.md",
+        "verified_at": "2026-09-02T15:56:31Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/34a76cfa1f720277c6349150b2615aac0de7a71f",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/34a76cfa1f720277c6349150b2615aac0de7a71f",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/34a76cfa1f720277c6349150b2615aac0de7a71f/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "2ff527dcfd868e48d5a5901675a2ffc8872d88c3",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2ff527dcfd868e48d5a5901675a2ffc8872d88c3",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/2ff527dcfd868e48d5a5901675a2ffc8872d88c3"
+      }
+    ]
+  },
+  {
+    "sha": "2ff527dcfd868e48d5a5901675a2ffc8872d88c3",
+    "node_id": "C_kwDOT3bKSNoAKDJmZjUyN2RjZmQ4NjhlNDhkNWE1OTAxNjc1YTJmZmM4ODcyZDg4YzM",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T15:54:56Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-02T15:54:56Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "eae5a20be967a23605a92a3fb592de495a3621e9",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/eae5a20be967a23605a92a3fb592de495a3621e9"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/2ff527dcfd868e48d5a5901675a2ffc8872d88c3",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqmEbQCRC1aQ7uu5UhlAAAhasQAFOiWLaj2TyC0D5foeiRLEwG\n68ij1JNlitMfGMgj05isbXuegDEgs/2yy/Zw2iXwYwWENtXEcYAQ4ivksDfAVSNw\nWA8BPm9yN/l++bKv41rUDqZAsGTJFtnISPTedI52CDjx/c2xIElPQbqshMBeHlzv\nJskr70d3upa7JBiR9o+vW4M7kQXe/+RuWJirP5dYVRx7FhksfzN7F7r930SgCX+O\n8t0bHikKDCnAdbZ2NPabOX3Bhpu3jykGlRxA+6T/5k32M/QuPrIz7zeqoUhobbhh\ny5Hgpc47vF9jQ81u9lj6jM+XTaek7qk0E4szTuboOqqP38kQUVboq62sLXpf12ep\nYqIZ0AUevfsSHmGmXhaA5EfM+sDxevyRE2/svUcF6RtoFKZF2P7PIopm875wY/fY\nGIXYazcB6hTMQPydiqmy3sYoqbda84pJO4wicuwkdEgPRB96XWh7WPAyozdKhTbz\nU56NRemyTAf/m4iQMqBlYrLi3D6EhQLUhRIGYLkGMQTkFQZcSDdUfhY3bLHSLVCH\n+vmLyBpFhM+POiy0JTJjuPRGpqDW1Wp4/2STCglNlOLhRi9ROYaPE/nk3O2kDj0z\nGzdi7PHBV+zAIZlctDKyhDANOYPA0eIcARPYTF+5EfFaZZqK2Iy2Ku2KoBI85S1f\nylzeSFAOzT4Na7k5oKmP\n=rDie\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree eae5a20be967a23605a92a3fb592de495a3621e9\nparent a99bb079c63fa0588911dc8db0bcd9211cb79677\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788364496 +0800\ncommitter GitHub <noreply@github.com> 1788364496 +0800\n\nAdd files via upload",
+        "verified_at": "2026-09-02T15:55:03Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2ff527dcfd868e48d5a5901675a2ffc8872d88c3",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/2ff527dcfd868e48d5a5901675a2ffc8872d88c3",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2ff527dcfd868e48d5a5901675a2ffc8872d88c3/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "a99bb079c63fa0588911dc8db0bcd9211cb79677",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/a99bb079c63fa0588911dc8db0bcd9211cb79677",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/a99bb079c63fa0588911dc8db0bcd9211cb79677"
+      }
+    ]
+  },
+  {
+    "sha": "a99bb079c63fa0588911dc8db0bcd9211cb79677",
+    "node_id": "C_kwDOT3bKSNoAKGE5OWJiMDc5YzYzZmEwNTg4OTExZGM4ZGIwYmNkOTIxMWNiNzk2Nzc",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-02T15:54:29Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-02T15:54:29Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "d856d1dd2fe9e7922c70315d4792fac7c59ea1a2",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/d856d1dd2fe9e7922c70315d4792fac7c59ea1a2"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/a99bb079c63fa0588911dc8db0bcd9211cb79677",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqmEa1CRC1aQ7uu5UhlAAAAs8QAHTTq7ENw166YWsxsW2STYGY\ngXm05KA67yMuFmmfLITW3dEZ1S19FJ8A0j0txP5cDSJ7MAg2RXag/w5WV6MCuk1+\n9ihyQcwOlNL17Wr9KEE7Tgbe9+8FCEe2SevwdR5HuEQasE6sVSRteST8BbgDkRhy\n+J8zcV43mgQL1J5GxGSu7bdwb30STBfhMPFYPXoLvpuXg+yNaQ9Aq64THvolk1hL\njepdJnueEv9X40wncFibvSipF/WTtIswEuwpeyM2mzrxn716oih++2MCxrX9DlBD\nImsmVrYKVCJ6rSetQo4b6uoF6YxWO94oFb7FXnJuCPKtjjJKYasQ1FpaJJlGeyxo\nzcQnFaCw5RcvWsRg6H7uw90F92/sFpjmVHzzLnkyDC+GFmwEY6sl0E1oxmbuHd5q\nZl5SNHSg+dl0zSrQrdzOqivs1ZH6QckylZlR25gECdOt8fcsSXX40sUyJgJckoaV\ngs/enkQ+InLHt5/qVprQBptqylrAmN+vG+dA5hoMZ8KSIGedBVzVPotG1KoKcxmY\nLERFv9PqS3b1hcEJb+ezBY5/s8XIGlA4ki5/uhSVaYqxDMt1wjuMcbhhyj70wZuU\nd1/JUbT13RFQzYA/QahT27NYsiNTMTMGwsTH/xV6jRCAQYjoWHX4aaMQTNkagWuX\nHGTUOYmRcnOJRC6dSEc6\n=r7l8\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree d856d1dd2fe9e7922c70315d4792fac7c59ea1a2\nparent 8b825cfebc71d8d12525bfcd67562afcf19f7315\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788364469 +0800\ncommitter GitHub <noreply@github.com> 1788364469 +0800\n\nAdd files via upload",
+        "verified_at": "2026-09-02T15:54:32Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/a99bb079c63fa0588911dc8db0bcd9211cb79677",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/a99bb079c63fa0588911dc8db0bcd9211cb79677",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/a99bb079c63fa0588911dc8db0bcd9211cb79677/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "8b825cfebc71d8d12525bfcd67562afcf19f7315",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/8b825cfebc71d8d12525bfcd67562afcf19f7315",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/8b825cfebc71d8d12525bfcd67562afcf19f7315"
+      }
+    ]
+  },
+  {
+    "sha": "8b825cfebc71d8d12525bfcd67562afcf19f7315",
+    "node_id": "C_kwDOT3bKSNoAKDhiODI1Y2ZlYmM3MWQ4ZDEyNTI1YmZjZDY3NTYyYWZjZjE5ZjczMTU",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-01T19:50:06Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-01T19:50:06Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "27f5fabacb54c49107b9a48774bc143d06ea53d6",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/27f5fabacb54c49107b9a48774bc143d06ea53d6"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/8b825cfebc71d8d12525bfcd67562afcf19f7315",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqlyxuCRC1aQ7uu5UhlAAAMi8QAHVjaQkVjymymNVEwaZjvGnD\nYIitA38GG8ZXrAkz8g94PtqXS2/Gfn8Btl8xnZERLFYQedQUrPrk+qLfbPjBFW1b\njYFPO5NRDcKaeSu5G26KCFokSVI0isCht+7SHa+P7d4M+q1pn1IAjA8C+MauiTxJ\nIZqtaJ2VG0Pq3Dbv0a8lcetg6d7aW06/h4frlyNQe8CDnFEV+YZdIa4JdR6yyemS\nX8mjhA16wWzCwP+OCVmFHcKbLWEQtHwRjR40e4aBdBdSZ74gE89VUVVwURM0AQQU\n6u2U5kMJXDhtkJLZGo0rDQhjb+13TS9nk/o8Q+H2g6r/c1xjiiqvL3uur4iX/Ypt\nAQ6HiR4/vz7EdIJlB71/fdkZfezH8MpULBsyomFRAEQAgY1whz/0dpB+moxwNa5z\nHbJ/EwZMQNEh37A3aZaltSf+hVjpa5tR3rHl+4bc7FALUqXbRx67VmQdqFRYika7\nNkijx2AuhrTeFLArlKnbErjfLNmY4p5ji0O+h2K4VAext8WSsPx6iN/PXDVFcp8/\nMWgVclsVpF7FKGs8nGDefjxvc199HgwMLAsYoxVpFjfwKbuq+bhml2flsLijfcUi\nil1DPRF9do7hxXrs7S9RbytgaRDWUDdwTkAdqkTsg5wfitGck1ZyL8KBoPb0nDcO\nuyMQD8jezB41w7x+sjus\n=Emcp\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 27f5fabacb54c49107b9a48774bc143d06ea53d6\nparent 54aae4c1fa9f06c6053524a5d5136b0ef18f23e5\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788292206 +0800\ncommitter GitHub <noreply@github.com> 1788292206 +0800\n\nUpdate README.md",
+        "verified_at": "2026-09-01T19:50:06Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/8b825cfebc71d8d12525bfcd67562afcf19f7315",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/8b825cfebc71d8d12525bfcd67562afcf19f7315",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/8b825cfebc71d8d12525bfcd67562afcf19f7315/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "54aae4c1fa9f06c6053524a5d5136b0ef18f23e5",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/54aae4c1fa9f06c6053524a5d5136b0ef18f23e5",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/54aae4c1fa9f06c6053524a5d5136b0ef18f23e5"
+      }
+    ]
+  },
+  {
+    "sha": "54aae4c1fa9f06c6053524a5d5136b0ef18f23e5",
+    "node_id": "C_kwDOT3bKSNoAKDU0YWFlNGMxZmE5ZjA2YzYwNTM1MjRhNWQ1MTM2YjBlZjE4ZjIzZTU",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-01T19:41:12Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-01T19:41:12Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "9470c04d8817da195fd9107944b3ac01262eebe8",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/9470c04d8817da195fd9107944b3ac01262eebe8"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/54aae4c1fa9f06c6053524a5d5136b0ef18f23e5",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqlypZCRC1aQ7uu5UhlAAAKq0QAJ6obGaQh99j5tEp+5gSNabj\nJNdaXMEXVIivLJA29d6z9UwEsMiH38p7JfO5/2iHk9Nf3hqIIO8EQszGnAdURCSM\nqsP2fralspqW5bayCsaikfDu0nksVyyurROHxZqK5l9AjJiREktfvvm0miCRA6qb\nKzreNtBDsgFSkpAmDn8XdqUJz31ddveBvHdYMOzG6LNCCRKak1k87YrRTJ4Umu7j\nfpSfXrXlrbO4rfUKOjkpHeN/A5OYAYWibQByEead6p7qGeA1tRKVl9TRFBdZ+fOJ\n7oS7mF4j1xWQwRYB3vk/JYxiNKkOFshm+T9BOsNWfNTHd2j1yAFH9abg9AkrU77s\nS3XzUuH4VX9cqlEeB3mKjJR0/42XR/Fsa2K7W173exT7Ya8sPDbkeddSo9JociG9\nT/vuroQMVDXRYKFzjUKERmcQEd0Fo2ovT0WcWgN0HNrQtzfl/wpfuous4Gl8pXMY\nbs0uJ/uYjcEqq+jS/+nOkzemcHudCoqnFPCUkD88iFOxfaYIpAG6RGwya8q1ORls\nethl4G4ojVW0KptuNJidx2SHKRiSbaPUcpk1i0Mz3vdaCEvTtS/SUQA62rLeGeM1\nyRGD8FqNzpnJWHtpdWe0EVp2hNTo/Kqz3aIHOBpUDBM/CFqoucMfqbOWn7zbnYCG\nLxkQfeCvng5FHUiEJR7u\n=4RWx\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 9470c04d8817da195fd9107944b3ac01262eebe8\nparent fc49d26c3dcd3787c455d3efe4fe2251435497fe\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788291672 +0800\ncommitter GitHub <noreply@github.com> 1788291672 +0800\n\nAdd files via upload",
+        "verified_at": "2026-09-01T19:41:13Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/54aae4c1fa9f06c6053524a5d5136b0ef18f23e5",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/54aae4c1fa9f06c6053524a5d5136b0ef18f23e5",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/54aae4c1fa9f06c6053524a5d5136b0ef18f23e5/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "fc49d26c3dcd3787c455d3efe4fe2251435497fe",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/fc49d26c3dcd3787c455d3efe4fe2251435497fe",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/fc49d26c3dcd3787c455d3efe4fe2251435497fe"
+      }
+    ]
+  },
+  {
+    "sha": "fc49d26c3dcd3787c455d3efe4fe2251435497fe",
+    "node_id": "C_kwDOT3bKSNoAKGZjNDlkMjZjM2RjZDM3ODdjNDU1ZDNlZmU0ZmUyMjUxNDM1NDk3ZmU",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-01T19:39:54Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-01T19:39:54Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "922ddbb2de401a682318a3e3ca9528303974900f",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/922ddbb2de401a682318a3e3ca9528303974900f"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/fc49d26c3dcd3787c455d3efe4fe2251435497fe",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqlyoMCRC1aQ7uu5UhlAAAqUYQAI7jg5VUSoNocL6oYyZmIfES\n3UUetQbfdzj2C/QR+HCdpw2PQIKNyKTqKILBzBUMRZcLkpgeABMapQa/ohhhvPHa\n4vaQc2WavfE6SZFdSxfiR1QQCYTmx7GNj3aqCbhGhuFzczBYfhZdgbLbJXD/OJh4\nUelRB8nV0b7Hoje8KIfKBriEiPiEUd1IyGIyyodvMicGB3PvfbmS0TojTDTebKfP\n4l5QFnKsUeO4RC9Haa3pveY80l5w1951FDx4YFhWNahJBMt3MhDMS39eUTnwR8lp\nckU1I5Cc+MixOffpQpLnwIp4ukIIfPCfR8uexF5Uy0MqaCyR9UlZ1rHCG+0jzwwV\nOhPhR4srskpyaOGx1qsB+sjugSaiO49hkynEAAl+/+lMs9XcrzTK+PaqZ5xeqR90\nmbu6zOLXGOnjwdQIWsqXv5S+vR8y39FjVUv7MDecnQKwwU+KfPcNiJCaKhxTQT9m\nQSVQ7i33ujWDJOeK81adjlqi00WoBtc5G0+yEQlW9MzBR4l/GG4+PFazDsVGBt4K\nugG7mkZZ7btmLIQjUQlEPk7juJb4+v+XU2IX1LdKYDfdhJOIjx8KyUHC8RVEOQNn\ngXQx8LVZoOFEuSp0il8Tg+yVpUgGegw/tNcMpFV4U6uBHObD95BTBpvFIrq7qCv3\nDN4pjucmdE/uD0L1pJsM\n=rmC5\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 922ddbb2de401a682318a3e3ca9528303974900f\nparent 0d1ece98593d4310925fbd5a563b6d082fe8cda0\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788291594 +0800\ncommitter GitHub <noreply@github.com> 1788291594 +0800\n\nAdd files via upload",
+        "verified_at": "2026-09-01T19:39:57Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/fc49d26c3dcd3787c455d3efe4fe2251435497fe",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/fc49d26c3dcd3787c455d3efe4fe2251435497fe",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/fc49d26c3dcd3787c455d3efe4fe2251435497fe/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "0d1ece98593d4310925fbd5a563b6d082fe8cda0",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/0d1ece98593d4310925fbd5a563b6d082fe8cda0",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/0d1ece98593d4310925fbd5a563b6d082fe8cda0"
+      }
+    ]
+  },
+  {
+    "sha": "0d1ece98593d4310925fbd5a563b6d082fe8cda0",
+    "node_id": "C_kwDOT3bKSNoAKDBkMWVjZTk4NTkzZDQzMTA5MjVmYmQ1YTU2M2I2ZDA4MmZlOGNkYTA",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-01T19:36:35Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-01T19:36:35Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "a6ba11ff934313bd8ceb6ce3b8b865e9b8d51de2",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/a6ba11ff934313bd8ceb6ce3b8b865e9b8d51de2"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/0d1ece98593d4310925fbd5a563b6d082fe8cda0",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqlylDCRC1aQ7uu5UhlAAAI/YQAGJaSwTQvigWu9PRxg6CAkgz\ncvZSALJk5ble9a7eqapJwtja5FHL+k2RxFRANDhi7P++SaU9HymeU4zVoxv4qBM6\nbaslymhDBKl+clTKsB2D9NBwLNJzV1gHNHD0wxA6tK3c6Vjuuh7YRhqM21n8DMlN\nuoGP0A7DD3YamwVcbEHtGpF48GEmQ/+3gg1k457Scm6Sm0z4TIVuKk2uMMvbI8JT\nSfkGEFDxXk6h2HHfmWcgnwEUZOSo95iMwq6oixwpYmIReBLvEp3T7ddKXLoShF31\nZg5j84No0DdbSYKlaeIKQQNXOiXs7aSQAiA6oKd57keSBfFqNBddSpKPVyG6wYxW\n+oCkpJAhQpOAIU4tknCtLmaJKKQeaZp5+ePrbPGHUvjKe0jQG6aLZT7IVg0EpxJb\nGYjDzS5Yva9ILtH/IvihzZkijGTphlhQc6jdUpUy4Ifulp0OvHbte1Fe52cGWq45\no4G2yh5iBqtkVDilYD+95MPa2l2FYC1ggpKYyxobDYvlR8Php6GoEX4AaJLgZsIK\nW9No1cE2dIHLuHM+//e69Zn4q84vbPS90OhismlcqJK2GIMQc46LB09FnoiB73Rk\nXkHL5JS/kNP96blKPT4LmUCOwt6QLOQrbuPtlzReCnBSLH9o62RMKYfOKc8uq4i8\nNtGLeaEYnDG3w7oB/p+S\n=n+HC\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree a6ba11ff934313bd8ceb6ce3b8b865e9b8d51de2\nparent 2649abbdbec13a89f28af5b782dd606333c51b59\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788291395 +0800\ncommitter GitHub <noreply@github.com> 1788291395 +0800\n\nAdd files via upload",
+        "verified_at": "2026-09-01T19:36:36Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/0d1ece98593d4310925fbd5a563b6d082fe8cda0",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/0d1ece98593d4310925fbd5a563b6d082fe8cda0",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/0d1ece98593d4310925fbd5a563b6d082fe8cda0/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "2649abbdbec13a89f28af5b782dd606333c51b59",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2649abbdbec13a89f28af5b782dd606333c51b59",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/2649abbdbec13a89f28af5b782dd606333c51b59"
+      }
+    ]
+  },
+  {
+    "sha": "2649abbdbec13a89f28af5b782dd606333c51b59",
+    "node_id": "C_kwDOT3bKSNoAKDI2NDlhYmJkYmVjMTNhODlmMjhhZjViNzgyZGQ2MDYzMzNjNTFiNTk",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-09-01T19:35:32Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-09-01T19:35:32Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "f4495b76f399fa9672fcba01c133f74ddf0ea5d8",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/f4495b76f399fa9672fcba01c133f74ddf0ea5d8"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/2649abbdbec13a89f28af5b782dd606333c51b59",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqlykICRC1aQ7uu5UhlAAANEsQADtxEpDjcYMFdCayqabfacCI\nliGyxMf89a2NNSvun+mYyG5GRE9jQRN5m0EbSWmeJ1NyoZPjMrMvLVumgfsrfSuC\nEiPR7nW3iPgCqj04926Pe9QKmmk0srUJEJfX/lXJ7ZJEQYwetYue+BFwVFVNaUca\nF4nHNod7wNWFox+5n7T0cIedzThPGuhJSJjazIMiijQvAmqa2tUTtbmgVqrXIIJA\ndiP57hhm90k3Ow+F6H2e9+RU5RiuUJz6I1UbEn9Cj6Huc5MwBidJHb6Toieoj/IH\nJ2PZAyf5fkASVRLrvydviU8sD+dqDH6lLStPTLJngOWOIJtd9z/leUZnP31taSvT\nrTTdGhNPNF0TYZOUJC+ZCoIZRnBzQdXfiCcW7/dGHdXoUCKBgWjNncOrKZgJvT/7\nCtxlGAboV2w158/nF2g8M/gripvyfQMSnBRo2BZFpzZNh+zfeDVro5LygAlI6N0G\ngAht5RSilHrH0nHhRt0IhNEsfv+cEZgJ4ZuUXxUZ+B6tjzeqmmxC3ia+Zwziolrx\nOKnhg20lyuKFucSwr8UA5h/rUgy0IGh1YVnT9frl7tIq+Rb6LS2OSAVzQqtessHG\nVvZgWLz2ibFENZ9HM9YmhXWSCg2Gx4JNKgDjG6K5R0dvqT7yUAuFyRTBK/tyFjyJ\ndUVIa0D95PwXLn7jzMzX\n=Ah9+\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree f4495b76f399fa9672fcba01c133f74ddf0ea5d8\nparent 113017f6f14a40914efdcfd998149a22a4acecef\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788291332 +0800\ncommitter GitHub <noreply@github.com> 1788291332 +0800\n\nAdd files via upload",
+        "verified_at": "2026-09-01T19:35:37Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2649abbdbec13a89f28af5b782dd606333c51b59",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/2649abbdbec13a89f28af5b782dd606333c51b59",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2649abbdbec13a89f28af5b782dd606333c51b59/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "113017f6f14a40914efdcfd998149a22a4acecef",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/113017f6f14a40914efdcfd998149a22a4acecef",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/113017f6f14a40914efdcfd998149a22a4acecef"
+      }
+    ]
+  },
+  {
+    "sha": "113017f6f14a40914efdcfd998149a22a4acecef",
+    "node_id": "C_kwDOT3bKSNoAKDExMzAxN2Y2ZjE0YTQwOTE0ZWZkY2ZkOTk4MTQ5YTIyYTRhY2VjZWY",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-08-29T21:59:23Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-08-29T21:59:23Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "85d247302450c4cf5c5b7c07af0051784e78aa2d",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/85d247302450c4cf5c5b7c07af0051784e78aa2d"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/113017f6f14a40914efdcfd998149a22a4acecef",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqk1Y7CRC1aQ7uu5UhlAAA0OsQAKNq/2inVScjW55UpwqtopWi\nhFvEVtx+xbfpr0HP/cm2KWLPzFhbCtDWFfLGDU5qeMGjYgeUGD2boXj9nuAm9i+O\nxl1xdOoLjcQv3C2TVktt2bY+HzyXmleWR2YWERDSzS9GvJxSZGtcknyW7x3dEGDX\n28MTnV5GzIXBfxkxFoHW1VbxtaMipB3Ju4HRl4OkBTwEDvPV9CmZe2QvsM/9chZT\n9wM/0zDrwPcpTgyuyUrtX5aJ3/tPSMflcomSDNrq2+jS2apM/O2IP6J3zvLukasz\ngDUp7d+lzo30ZtkX3Vbsremn5+Nm+/AueR4lsV5V3qoqSmC5ZrpH+UYLmcKqJJFi\nEReEzBCIKrUpXuGksX1lPYI2sPPg25gLwC+FysjdQVvnkXHKMLPaTVpVROdvZr8a\nyk4aLhsYEpZXzSmkh//DB+IF7ufKEaBF1UuvAL3WfWe2AapFvQTGyQP8O17CKGcS\nZmUPTlwxzl4JtOuCRzJd+gX2ZM/5I/MG9l/ksPwUnmS6cgb7HZQjFit1/sM3VByu\n5Zz1as4N2FNAFvYlpnZcds4s1XIWnAzhGBiwna5rB8EdjpHZhdURPjQjEEKhQz84\nxmFR9I2IlZzhie6dHXl3Oo+xylX870J7KrozHLK/kdiUXNFNqt0BVRSt+iXOwpqu\nCZjmK0+KkVWKK2V2iewJ\n=pFCE\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 85d247302450c4cf5c5b7c07af0051784e78aa2d\nparent 5197550dccafd90b50f2dec6b70491f67712b994\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788040763 +0800\ncommitter GitHub <noreply@github.com> 1788040763 +0800\n\nUpdate README.md",
+        "verified_at": "2026-08-29T21:59:24Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/113017f6f14a40914efdcfd998149a22a4acecef",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/113017f6f14a40914efdcfd998149a22a4acecef",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/113017f6f14a40914efdcfd998149a22a4acecef/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "5197550dccafd90b50f2dec6b70491f67712b994",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/5197550dccafd90b50f2dec6b70491f67712b994",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/5197550dccafd90b50f2dec6b70491f67712b994"
+      }
+    ]
+  },
+  {
+    "sha": "5197550dccafd90b50f2dec6b70491f67712b994",
+    "node_id": "C_kwDOT3bKSNoAKDUxOTc1NTBkY2NhZmQ5MGI1MGYyZGVjNmI3MDQ5MWY2NzcxMmI5OTQ",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-08-29T21:56:17Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-08-29T21:56:17Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "f54477e522c9c03d15ddd83fc36623a9a093961d",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/f54477e522c9c03d15ddd83fc36623a9a093961d"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/5197550dccafd90b50f2dec6b70491f67712b994",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqk1WCCRC1aQ7uu5UhlAAAnncQACPAxbfJIAVVfvg7OaIGRlxc\n8wvbRy/PCJfTf7O7GkefBb/SH3K5kfqoJe2khRERUr03qiTxPg2pVmBMQCFZFiiA\ndEznWlIOKDfC/FPDUdGNfotnjjX3na01JzzhG2DZzm1CPvBh9Y3tj+tg1Zp81soN\nWPCQ408EJWGPQ+jsktAEleQsgP1pSZxdsgeD78nkWydsPGkYozuRCgvtPTKtIOfF\nwXiNWnQ51lUWkDDJJoPhGKBURRo6RiDJ/SF1rLS8VwjtG4Njqy8rcWPgjHuZ1YRH\njWg5KRyWmKSwWMTnrxpnnlN1PSOnfZhwiYfGEIPum+Ympi2zutTYW4YUbA8d8hHg\ng1ukUOjr3NoHAlIAHg4RVMM213SIo36MrkG7hXGFZAde3Upy+B33D7eo3eqhUf0j\njXdtOPD83tM6+0PCBOgagbqLMpkncjYMP42uLQmWVTpOjpYzaehnW7ea5XpphVYL\nYCnEmoP299ZuJ8NgnifEHoLadcdsP2/Hsq8MJzabIptH0gwgt4vzNmSawC+yKuow\nRtWlri/9tJ76jVP1LrHio7ed7gq1q1R8bpfV/ZLlqZsz8M424h0ny9GqguFExj6x\nKElqfjLaxpAhmEWgPa/TnSmTm8QAMZDGC6Q7A1wmA2KDq7kqsP80HS7hT2Lf3Ml7\nHnn1PKZZurSSp+L6Nzz/\n=Wdnh\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree f54477e522c9c03d15ddd83fc36623a9a093961d\nparent 89ed1ddbf80ff2a90a2c55977220b75466589981\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1788040577 +0800\ncommitter GitHub <noreply@github.com> 1788040577 +0800\n\nAdd files via upload",
+        "verified_at": "2026-08-29T21:56:20Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/5197550dccafd90b50f2dec6b70491f67712b994",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/5197550dccafd90b50f2dec6b70491f67712b994",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/5197550dccafd90b50f2dec6b70491f67712b994/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "89ed1ddbf80ff2a90a2c55977220b75466589981",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/89ed1ddbf80ff2a90a2c55977220b75466589981",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/89ed1ddbf80ff2a90a2c55977220b75466589981"
+      }
+    ]
+  },
+  {
+    "sha": "89ed1ddbf80ff2a90a2c55977220b75466589981",
+    "node_id": "C_kwDOT3bKSNoAKDg5ZWQxZGRiZjgwZmYyYTkwYTJjNTU5NzcyMjBiNzU0NjY1ODk5ODE",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-08-28T17:20:20Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-08-28T17:20:20Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "9dabf43e6a1a7183072d56812519afa257028ef6",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/9dabf43e6a1a7183072d56812519afa257028ef6"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/89ed1ddbf80ff2a90a2c55977220b75466589981",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqkcNUCRC1aQ7uu5UhlAAA8aEQABuu+AbdgzfV5JC04DCajg3d\nAfaxodA343JRsgTsvkxIf+CsICjGxGKK5QLbBP3yc9mw7292HfVK4UhlURBJZxzh\n32EdqgrcA4+0VeyrAzjA9vtv494c8vN9XI+6OrC6l9e7zCUOsS8ySdpj1Ikahnd9\nI3+ASbZxQZxZNKa1nEa9f+JRQgMtUhODCvU3ySQw/J1H77dmaMbveNAyplpwqAbs\nElJL81eqdZ7cvIsPCMXQ77Y1QcE6aUjpjcr/FgCdpV3NYqPQcV4prJHCheNjq5+J\nXWSivcMmDPB4gK7on3VGnGPVmiq/+LQLueaXvNPTumx++MB7pWEZmoOnZAwHK7VF\nnlk/1gTK2wevttqkzWOBdGYJlmwjyznt07YY3Am3Ie2Km5o7Xgn+4GPhGJmdaeOe\ngBlH2ExceA26oXKKUEXYOiorrRlL68mGT5gJ3sM0fP8rzac3JPCoOW4oPD+6Khr6\nFbmzEPL3hIhMqjbWf23H4yLi/c10goZzi6DM02Y7pBBijIbZv+KNsDbuBje3iPJg\nj95m605ty0MSlNMI7WEXNm9VIG3iZ7Tt8Pw8COit46ueX3dpxrzp/KKQ24sBBop0\nsnKhndbtfT4+uIWQcckxWUnNVLvInMlUU64imOqpaaEneENyUkbtrf5r74eiNMK2\na+EsfF1hFljJ7tYmcyZD\n=wMST\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 9dabf43e6a1a7183072d56812519afa257028ef6\nparent c5a7e78bd4ec467fc88c7c986881eb689088e614\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1787937620 +0800\ncommitter GitHub <noreply@github.com> 1787937620 +0800\n\nUpdate README.md",
+        "verified_at": "2026-08-28T17:20:20Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/89ed1ddbf80ff2a90a2c55977220b75466589981",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/89ed1ddbf80ff2a90a2c55977220b75466589981",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/89ed1ddbf80ff2a90a2c55977220b75466589981/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "c5a7e78bd4ec467fc88c7c986881eb689088e614",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/c5a7e78bd4ec467fc88c7c986881eb689088e614",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/c5a7e78bd4ec467fc88c7c986881eb689088e614"
+      }
+    ]
+  },
+  {
+    "sha": "c5a7e78bd4ec467fc88c7c986881eb689088e614",
+    "node_id": "C_kwDOT3bKSNoAKGM1YTdlNzhiZDRlYzQ2N2ZjODhjN2M5ODY4ODFlYjY4OTA4OGU2MTQ",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-08-28T16:49:24Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-08-28T16:49:24Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "0e960f7d980ba0d2674f3bdba4fb86c907e849ef",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/0e960f7d980ba0d2674f3bdba4fb86c907e849ef"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/c5a7e78bd4ec467fc88c7c986881eb689088e614",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqkbwXCRC1aQ7uu5UhlAAAO28QADTioejptRkI60ecY1F8OxUW\nC4rqbUp6UQMGiPHdM5zB/9nvdJIWsEr5vIGWxEoUMN2elC+k/cHUSWoHIvW3ONKU\nWcvJf/3swcwPU8I2awBuLgiantCzwxTKFgAaHk6gu3rGgT5oEdIczFvS8UrkvQXJ\nHGLGq1//Vk/I3BeoSF1FFxTGlDn45KHxFT60AdISlsabU/YE/nX3cEQstrlrwBji\nh1AES82Bqy8PBriXFuBAFS6A4uzhZ0CT+NTz7oNmQL2bqppvaI+p5lwozppP3y8U\nW4Ty2t+zzS07M0sCvvFhrqHLgjh6g+mYq3qXT00lNygPIBBoBDxeG+9u1Z7Lm+xU\nx6xZ2OkkKA1IAADk/20VPfcjW6d9/dzUOwQoOqIVU1ibAHhH3NU3EZOXoparCP/A\nNfq/UeDQtsRo3ZH1VTH4S5AjPFNakgjKxAxwn65a7aF0BkrR/lAfE63fpDcuHQ2i\nIGQCap9AKI72xuVYmHhjLSTzreMjIA/ly8dOoxMwKpew2eTUepNJnMCeOx5zlt24\nN5l4DMC2kBRe/fYT7ourZSiRaW63d/NNRyRVd2Oo7dOsoI3QeXbuZ2eghfnzKoEp\nZ4g0rWqvk1oM7OJnn3yDWMNJK10m+r+VE3kj0Ay20LAW7v2t7+uJevtdqPVJKiBi\nSDes+Z6NUNmFVmB972RI\n=fBbS\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 0e960f7d980ba0d2674f3bdba4fb86c907e849ef\nparent ce578ac11379ae51c54783c9cda7ed4fab7ee33a\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1787935764 +0800\ncommitter GitHub <noreply@github.com> 1787935764 +0800\n\nAdd files via upload",
+        "verified_at": "2026-08-28T16:49:28Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/c5a7e78bd4ec467fc88c7c986881eb689088e614",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/c5a7e78bd4ec467fc88c7c986881eb689088e614",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/c5a7e78bd4ec467fc88c7c986881eb689088e614/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "ce578ac11379ae51c54783c9cda7ed4fab7ee33a",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/ce578ac11379ae51c54783c9cda7ed4fab7ee33a",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/ce578ac11379ae51c54783c9cda7ed4fab7ee33a"
+      }
+    ]
+  },
+  {
+    "sha": "ce578ac11379ae51c54783c9cda7ed4fab7ee33a",
+    "node_id": "C_kwDOT3bKSNoAKGNlNTc4YWMxMTM3OWFlNTFjNTQ3ODNjOWNkYTdlZDRmYWI3ZWUzM2E",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-08-28T16:46:00Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-08-28T16:46:00Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "998d5d41eca5011a0df09f0b0442c60abb0e5780",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/998d5d41eca5011a0df09f0b0442c60abb0e5780"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/ce578ac11379ae51c54783c9cda7ed4fab7ee33a",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqkbtLCRC1aQ7uu5UhlAAA+fsQAJfxiIubj0ukGLwNjRMhOO16\nt0iNPJd5MHvFqFjuiT2sYbVYZ39akBs8GhMKcK0RJvxBZMoN84WAw8BYHIKzDdQ7\nE2I3uBYYZUlwGYkkGDDqDcdl76vxrC+xsqoz/4958WjNkI63v8PJrP9cd30rfEPr\n9fRcb9OcBlhWxEFCdVMi5xxvUL0QXywxrga981ZGODOl/lGHP9Ew9lDp1cZM1Y3e\nt3z3SFKH5DMf5sKHXA3rYR4ampnvlmyLiN4lk/FNzfaaG5GfCIdSu9xONdmLu3E+\nsTqPaKgQn5kiJ/UKdpNCGFRM5/RVQ8I1ia2SZsjvWkn38v1NdvKUg13c9cC73pDZ\nuPzLbjnuWS7lkNISvg/PVr30NX+Cx+3YIcIEqRdBWok74AYLBcZ1URzXwV2f29t/\n5chg7+B1vNWSr0qbtEC5yDRLcFQdZT+LrtTXEQIQN4ZdvmVZZbU8jaXYjGmTe+Bd\nyJ/jtvgmywSKP/qE2v2lg2bGgdCZxtt2zS0Lw4lQV0fvWHI2Nh9Zj1UfxUrQdw35\ngP6Mr7YlFyHf28RLXS0K1OTNpb0S5WANEBdOCSl+EU0/qixGNVLQWyacHtDzqE9d\nw5MbaafaRdEhLM3aZtp/D1CgjgTEcH2BM+oGvBW+zasemD3l121uMLpkL8dB/IOB\nnGgmPmuxHALv9afhSKOA\n=RQsR\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 998d5d41eca5011a0df09f0b0442c60abb0e5780\nparent 2585364eb422812f13bff000229b9af788aa03ce\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1787935560 +0800\ncommitter GitHub <noreply@github.com> 1787935560 +0800\n\nAdd files via upload",
+        "verified_at": "2026-08-28T16:46:06Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/ce578ac11379ae51c54783c9cda7ed4fab7ee33a",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/ce578ac11379ae51c54783c9cda7ed4fab7ee33a",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/ce578ac11379ae51c54783c9cda7ed4fab7ee33a/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "2585364eb422812f13bff000229b9af788aa03ce",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2585364eb422812f13bff000229b9af788aa03ce",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/2585364eb422812f13bff000229b9af788aa03ce"
+      }
+    ]
+  },
+  {
+    "sha": "2585364eb422812f13bff000229b9af788aa03ce",
+    "node_id": "C_kwDOT3bKSNoAKDI1ODUzNjRlYjQyMjgxMmYxM2JmZjAwMDIyOWI5YWY3ODhhYTAzY2U",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-08-27T23:31:12Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-08-27T23:31:12Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "83ab902ed88b95484394728844fb90dfa0f7754b",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/83ab902ed88b95484394728844fb90dfa0f7754b"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/2585364eb422812f13bff000229b9af788aa03ce",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqkMjACRC1aQ7uu5UhlAAAjA8QADMlAH5+bjPRS7dqRZZSMli3\nhK+4regM1FjTAfKKVZFKSjqmVnY1VJO5x2NOwU77pYZfFIbV28XaL0sSEaVT1EJt\nG9GW/2QooYkTRsHIOMoohGmZMZ+3WczWdV6BT8sYCUe+c+sBM+Yej9rCil2Aojoq\n6AYQGT4TaPjwC5Opeskuqjh9nbLMGJb1pe9OejlcmOzRfE00BRsKtXzbs6ytrctw\nf/pInzZ91uOM1fz9qd0hH/QagXueTyKFC65a2JplJsaisLJwuFmuPQplq61rqzPv\nYKvvD/6ZXAJUI4w7BdYnhYBO54OK0SS4fRqa80NSrBrueU/uObZd/FJje8q8gPop\nhGBLnPjKdp4ewTFgsxKDKSnvu8kM5vYVxvXYhqdRI0gmpXXinN50fZn5dBrxXuiK\nisBeQS5S0jStei7SvOkKu3JZ+XesYEpRYGzRsDCtX23UNMOEBWEZDfS+kAxzpenx\nDa1OoXjxOAeeHLa1PcOxvgX/yosViLaGUxJO8FaFXQ2wG7SJCJ8R/w0BcA7KOtp7\ndqUpm7x0g9n7xzpsLdVsndmOiVRNdr8a3P5xNlU8cX/w0hkWuTIEmxM46qcpwEQR\nqoIz9uWlUwuyQdN2ajS2FC69MBaA0bxAL4n7nUoLCaf8CqVWY2fBP5XJXbFoy7qM\nJ+bNf+CYH+8t8/ns/YWl\n=Tych\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 83ab902ed88b95484394728844fb90dfa0f7754b\nparent de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1787873472 +0800\ncommitter GitHub <noreply@github.com> 1787873472 +0800\n\nUpdate README.md",
+        "verified_at": "2026-08-27T23:31:12Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2585364eb422812f13bff000229b9af788aa03ce",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/2585364eb422812f13bff000229b9af788aa03ce",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/2585364eb422812f13bff000229b9af788aa03ce/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0"
+      }
+    ]
+  },
+  {
+    "sha": "de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0",
+    "node_id": "C_kwDOT3bKSNoAKGRlOGY5MTYzZjVlOGEyZjcxMTE2MWNmNzBmOGZjY2JkMmM0YTJkYjA",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-08-27T22:59:15Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-08-27T22:59:15Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "c4db5168853cd2827468ba7226f552f85da5d087",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/c4db5168853cd2827468ba7226f552f85da5d087"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqkMFDCRC1aQ7uu5UhlAAAvAUQAIqr07/djy6NzUO7ZtIuJdVq\nsUwvGXjudQh85Rxvrg3v2Oo2ZiA/e0V2pt3DJJJ2goHt857rpPQ1cFRG8tRmx4D/\nNQV+uxwc8uiGCrombIvLOuYebkPC/Pxlu+I126+KkHGgOuURefxdHX4Fg157RiLZ\n6MuAMncI31algwmvvqohmvjInbRa1fwCqiq+ulZ/SLuneq4o6QKQlkv/ilODV9bv\nwtdbfFDiwOIxjOQUiKr9UgyHxBgeVo+FxIbTUz0ZRXHQmibSOK9hbuuwg92mLGSl\nZWaCT01YeE8l1hf2Dsi9GHVSoP9tjdgaz51LMuSH7ICa43y9QBcGieHcMq/wzC7f\njxxFePZIHXcyjuYmdcSBg8WIQLrCLcGnoyfzi3KK8HqvwdWjJ9TRU0czKmBiwgZB\nIlda/L8S4UQIQL9K1yzmXYgX7/nVbJFHjX2QjMP1KPGz8S3VWH1Nk74JYGxn1wby\nwS3SkaQoQm6RKTe6NzJ5ACbdwNRHfr92rId+0YDeiSRchsT7SxXENaRLVmcTR2hl\nGJ07ZE2wJhz/eASSXuA4njhKXKr2YSkVRuuRH0g0hJX9AgoD2YHBi+kShUKVPkxX\n6bZ+/3PsD/T47Zrp2cHBoKL+9qd8gyxjgXT8dXQR9DxFj43UROgqIrV+ZTbuKXia\nHu2xCeEqXvH6komrA+Xr\n=V/uB\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree c4db5168853cd2827468ba7226f552f85da5d087\nparent f777bbcda8c230fb12c092a3b36fecf1a0c1216c\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1787871555 +0800\ncommitter GitHub <noreply@github.com> 1787871555 +0800\n\nUpdate README.md",
+        "verified_at": "2026-08-27T22:59:16Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/de8f9163f5e8a2f711161cf70f8fccbd2c4a2db0/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f777bbcda8c230fb12c092a3b36fecf1a0c1216c",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/f777bbcda8c230fb12c092a3b36fecf1a0c1216c",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/f777bbcda8c230fb12c092a3b36fecf1a0c1216c"
+      }
+    ]
+  },
+  {
+    "sha": "f777bbcda8c230fb12c092a3b36fecf1a0c1216c",
+    "node_id": "C_kwDOT3bKSNoAKGY3NzdiYmNkYThjMjMwZmIxMmMwOTJhM2IzNmZlY2YxYTBjMTIxNmM",
+    "commit": {
+      "author": {
+        "name": "BZD数模社",
+        "email": "156565824+BZDmathclub@users.noreply.github.com",
+        "date": "2026-08-27T22:57:17Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2026-08-27T22:57:17Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "8df0ac5cdfea77c28904764dc12930e5446a7953",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/trees/8df0ac5cdfea77c28904764dc12930e5446a7953"
+      },
+      "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/git/commits/f777bbcda8c230fb12c092a3b36fecf1a0c1216c",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqkMDNCRC1aQ7uu5UhlAAAF3EQAHezZ24TxRFtp1+KqZuurbe+\nsIhgtRkvLjj5TwzjA7sJ/YgqxaMEf98CIzGLg3n0LXUC4aJKyXIyKRd4YvsPrhQg\noEB8qak7PmlnXpLdXVARok8HaQ6sQl99cVbr4UVst+vdbh5yYauZW8G5YzGge/ZI\nR7HLK6y0VAs2VFrbbZNPxEUVldoNYYUR3hbF+zeaO1sL/pGO9Mcc8KSVZ5LrUoD2\nQ1Me+3VXBEwqTfy9NNKNIW9LNWeXJUmnx7ktOgf8ijOn27s+ydQHEU+b4PfkBLnb\noFBJ+J+ISgHfpAREuyaAIFG4gYZk84gN8kUsUkKfke2vM59wxbkhj2ddT7JtghuS\nFsriBgiWOROobJNBwJr61JUJ8OCKMq1/zG7ULmHrxX9JxCmL+E3veNLNBRnUwVfR\nMZw/hM3zo4iTB74idUCGRaz1jAopUkjDdcg3fGTHSaAVcDrS3sPHRbx0ffOKpMYA\nKt9YWuArrxH/CFJhbnK/67vTfGqSpl5anaQ2gSf6JQsLY+SGiF/wfSsNK+/End1K\npAW4L1p21U1rSlpNVwkWwgPX6A3MruMRQqziZbU+kvuaTfDdW0tCsZILLmWc0fB7\n5vcSMOcyY8FG4onVJpjSxurqmCSgW4pyFsfXDYh7jh5GaMoVdTATBYhOpPjH2bsv\nJGpiXGlW9X5PaLAeCCb9\n=A4dM\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 8df0ac5cdfea77c28904764dc12930e5446a7953\nparent de459568c93173ac74addf8ed332adc70d15f8fc\nauthor BZD数模社 <156565824+BZDmathclub@users.noreply.github.com> 1787871437 +0800\ncommitter GitHub <noreply@github.com> 1787871437 +0800\n\nUpdate README.md",
+        "verified_at": "2026-08-27T22:57:18Z"
+      }
+    },
+    "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/f777bbcda8c230fb12c092a3b36fecf1a0c1216c",
+    "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/f777bbcda8c230fb12c092a3b36fecf1a0c1216c",
+    "comments_url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/f777bbcda8c230fb12c092a3b36fecf1a0c1216c/comments",
+    "author": {
+      "login": "BZDmathclub",
+      "id": 156565824,
+      "node_id": "U_kgDOCVUBQA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/156565824?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BZDmathclub",
+      "html_url": "https://github.com/BZDmathclub",
+      "followers_url": "https://api.github.com/users/BZDmathclub/followers",
+      "following_url": "https://api.github.com/users/BZDmathclub/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BZDmathclub/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BZDmathclub/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BZDmathclub/subscriptions",
+      "organizations_url": "https://api.github.com/users/BZDmathclub/orgs",
+      "repos_url": "https://api.github.com/users/BZDmathclub/repos",
+      "events_url": "https://api.github.com/users/BZDmathclub/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BZDmathclub/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "de459568c93173ac74addf8ed332adc70d15f8fc",
+        "url": "https://api.github.com/repos/BZDmathclub/bzd-math-modeling-skills/commits/de459568c93173ac74addf8ed332adc70d15f8fc",
+        "html_url": "https://github.com/BZDmathclub/bzd-math-modeling-skills/commit/de459568c93173ac74addf8ed332adc70d15f8fc"
+      }
+    ]
+  }
+]
