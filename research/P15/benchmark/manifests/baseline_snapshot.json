@@ -1,0 +1,47 @@
+{
+  "snapshot_id": "p15-baseline-v1",
+  "description": "P15.1 首批 5 题冻结输入快照（frozen inputs + sha256）",
+  "created_at": "2026-09-08",
+  "problems": [
+    {
+      "question_id": "2024_A",
+      "title": ""板凳龙"闹元宵",
+      "family": ["几何运动", "综合"],
+      "source": "core/knowledge/problems/CUMCM-Bench.json",
+      "input_file": "examples/problems/cumcm2024A.txt",
+      "selection_rationale": "多模型串联，P13-3D 已有 artifact，五问递进"
+    },
+    {
+      "question_id": "2022_C",
+      "title": "古代玻璃制品的成分分析与鉴别",
+      "family": ["数据+评价+决策"],
+      "source": "core/knowledge/problems/CUMCM-Bench.json",
+      "input_file": null,
+      "selection_rationale": "高维小样本统计判别，P13-3C 已用，C-data 典型"
+    },
+    {
+      "question_id": "2020_B",
+      "title": "穿越沙漠",
+      "family": ["离散调度/博弈"],
+      "source": "core/knowledge/problems/CUMCM-Bench.json",
+      "input_file": null,
+      "selection_rationale": "DP/MDP/博弈，P14 已有 artifact，B-experiment 典型"
+    },
+    {
+      "question_id": "2018_A",
+      "title": "高温作业专用服装设计",
+      "family": ["热传导/温度场"],
+      "source": "core/knowledge/problems/CUMCM-Bench.json",
+      "input_file": null,
+      "selection_rationale": "PDE 反问题，A-physical 典型，边界条件是关键"
+    },
+    {
+      "question_id": "2019_C",
+      "title": "机场的出租车问题",
+      "family": ["交通/网络"],
+      "source": "core/knowledge/problems/CUMCM-Bench.json",
+      "input_file": null,
+      "selection_rationale": "排队+优化+决策，C-data 典型，双边匹配"
+    }
+  ]
+}

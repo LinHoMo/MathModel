@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "P15 Benchmark Problem Tags",
+  "description": "CUMCM-Bench-v2 每题的能力维度标签 + 失败模式标签（两个独立 taxonomy）。P15.0 freeze。",
+  "type": "object",
+  "required": [
+    "question_id", "year", "family", "sub_questions",
+    "required_deliverables", "core_methods", "key_variables",
+    "key_constraints", "evaluation_targets",
+    "capability_dimensions", "failure_modes"
+  ],
+  "properties": {
+    "question_id": {
+      "type": "string",
+      "pattern": "^\\d{4}_[A-E]$",
+      "description": "题目唯一标识，格式: YYYY_X"
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 2015,
+      "maximum": 2025
+    },
+    "family": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "模型家族标签（可多值，如综合题）"
+    },
+    "sub_questions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "题目子问题列表（Alignment 金标准）"
+    },
+    "required_deliverables": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "题目要求的交付物（模型/算法/结果/分析等）"
+    },
+    "core_methods": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "核心方法参考（Method Selection 维度的参考标签，非唯一答案）"
+    },
+    "key_variables": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "关键变量（Model Construction 维度参考）"
+    },
+    "key_constraints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "关键约束（Formal Consistency 维度参考）"
+    },
+    "evaluation_targets": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "评价目标（Validation 维度参考）"
+    },
+    "capability_dimensions": {
+      "type": "object",
+      "required": ["alignment", "construction", "consistency", "solving", "validation"],
+      "properties": {
+        "alignment": {
+          "enum": ["low", "medium", "high"],
+          "description": "Problem Alignment 难度：子问题是否独立明确"
+        },
+        "construction": {
+          "enum": ["low", "medium", "high"],
+          "description": "Model Construction 难度：模型构造复杂度"
+        },
+        "consistency": {
+          "enum": ["low", "medium", "high"],
+          "description": "Formal Consistency 难度：变量-约束-目标自洽复杂度"
+        },
+        "solving": {
+          "enum": ["low", "medium", "high"],
+          "description": "Solving 难度：求解计算复杂度"
+        },
+        "validation": {
+          "enum": ["low", "medium", "high"],
+          "description": "Validation 难度：验证充分性要求"
+        }
+      },
+      "additionalProperties": false
+    },
+    "failure_modes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^FM-(PA|MC|FC|SV|VA|CS)-\\d{2}$"
+      },
+      "minItems": 1,
+      "description": "该题已知的典型失败模式（taxonomy 独立于 capability_dimensions）"
+    },
+    "rationale": {
+      "type": "string",
+      "description": "能力维度评定理由（自然语言，不参与机器评测）"
+    }
+  },
+  "additionalProperties": false
+}
