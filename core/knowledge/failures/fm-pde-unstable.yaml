@@ -1,0 +1,13 @@
+# 显式差分格式违反稳定性条件导致发散
+failure_id: fm-pde-unstable
+title: 显式差分格式违反稳定性条件导致发散
+problem_context: 显式 Euler(FTCS) 未检查 r=αΔt/Δx²≤0.5（CFL 条件）
+method: 数值 PDE
+method_family: numerical_pde
+failure_mode: numerical
+symptom: 数值振荡/发散，随网格加密反而更差
+root_cause: 显式时间推进有条件稳定，Δt 过大违反稳定性判据
+detection: 检查 r 值；Δt 减半后结果是否突变
+fix: 改用隐式格式（BTCS/Crank-Nicolson）或满足 CFL 条件
+avoidance: 显式格式先算稳定性判据；抛物型首选 Crank-Nicolson
+applies_to: [mc-numerical-pde]

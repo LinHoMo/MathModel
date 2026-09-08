@@ -1,8 +1,10 @@
-# MODELING_KNOWLEDGE_GOVERNANCE — Modeling Knowledge 治理规范（方向锁定 v1.0）
+# MODELING_KNOWLEDGE_GOVERNANCE — Modeling Knowledge 治理规范（方向锁定 v1.1）
 
 > 生效日期：2026-09-08 ｜ 状态：**ARCHITECTURE FROZEN**（架构已冻结，变更需走 RFC）
 > 适用范围：MathModel Harness 全系统（V3 runtime + V2 legacy 兼容层 + benchmark + evaluation）
 > 核心命题：方法卡 = Constraint / Prior / Validation，**不是答案库**。
+> 核心哲学（v1.1 增补）：
+> **The LLM constructs models. Knowledge constrains and informs construction. Evidence decides whether the construction survives.**
 
 ## 1. 文档定位
 
@@ -35,6 +37,24 @@ Layer 3: Evidence = Adjudication
 三层之间的关系：**Layer 1 产出候选 → Layer 2 提供约束与先验 → Layer 3 裁决成立与否**。
 Knowledge 永远不替代 Evidence 做最终裁决。
 
+## 2.1 方法卡 = 可调用的建模知识单元（v1.1 锁定）
+
+方法卡不是"算法说明书"（步骤/公式罗列），而是 **Model Construction Knowledge
+（建模决策基础设施）**——一组可调用的建模知识单元，回答"这个问题怎么从现实结构走到
+数学模型"：
+
+| 知识维度 | 对应字段 | 作用 |
+|---|---|---|
+| 适用问题结构 | `problem_structures` + `problem_types` | 判断问题是否属于该建模结构族 |
+| 建模机理 | `mechanism` | 该方法成立所依赖的问题内在结构/因果机制（Bellman 原理 / 守恒律 / 到达-服务过程）——供 LLM 判断"这个问题是否具有该结构" |
+| 数学结构 | `formulations` + `mathematical_forms` | 典型数学表述，帮助评估结构匹配，不是强制实现清单 |
+| 求解策略 | `solvers` | 常用求解器（与数学形式严格区分：PDE ≠ numerical_PDE） |
+| 适用/不适用 | `good_for` + `anti_patterns` | 什么时候该用、什么时候不该用 |
+| 可验证证据 | `validation` | 必做验证步骤——产生成立证据 |
+
+方法卡允许 LLM **不使用它**：LLM 可自由提出 catalog 外的新模型（`out_of_catalog`），
+只要给出数学合理性与结构证据。方法卡是"约束/启发/可验证知识"，不是"菜单"。
+
 ## 3. 关键治理原则
 
 ### 原则 1：Knowledge coverage must constrain evaluation, not constrain creativity.
@@ -57,7 +77,40 @@ Knowledge 永远不替代 Evidence 做最终裁决。
 - 不指定"核心方法"（core_methods 仅保留为 historical_core_methods 用于追溯）
 - Agent 选择任何 allowed family 中的方法都算兼容
 
-### 原则 4：Tier 0-3 核心覆盖策略（不追求全方法覆盖）
+### 原则 4：结构覆盖优先于算法覆盖（v1.1 修正）
+
+- **覆盖单位是"建模结构"，不是"算法数量"**。问"覆盖了多少种典型建模结构（dynamic
+  systems / optimization / field / network / queue / game...）"，不问"有多少张卡"。
+- 方法卡数量**不是核心 KPI**；追求结构覆盖的正确性、适用性精度与验证有用性。
+- 知识覆盖评价指标：
+
+| 指标 | 含义 |
+|---|---|
+| family coverage | 覆盖多少建模结构族 |
+| applicability precision | 方法被正确使用的比例 |
+| applicability recall | 应该想到的方法是否被想到 |
+| construction usefulness | 是否帮助构造模型（而非只命中名字） |
+| misuse detection | 是否能阻止错误套用 |
+| validation usefulness | 是否提供可验证结构 |
+| downstream success | 是否真正改善下游实验/论文 |
+
+- P0 三张卡（mc-dp / mc-numerical-pde / mc-queuing-theory）定位为**知识架构校准样本**，
+  分别覆盖离散序贯决策 / 连续时空场 / 随机服务系统三个不同的 model construction regime，
+  用于验证 Method Card Schema 是否真正表达"建模知识"，而非"又加了三张算法卡"。
+
+### 原则 5：三层知识体系（v1.1 新增）
+
+```
+Model Construction Knowledge
+  ├── Ontology      — 问题是什么结构（L1 Problem Structure → L2 Modeling Pattern）
+  ├── Method Cards  — 怎么建模型（建模机理/结构/验证知识）
+  └── Cases         — 别人怎么做过（真实题面→建模路线的实例化）
+```
+
+三者不混：paper-case ≠ problem statement，paper-case ≠ method card。Case 是 Method Card
+在真实问题中的实例化证据，不能反向变成唯一 gold。
+
+### 原则 6：Tier 0-3 核心覆盖策略（不追求全方法覆盖）
 
 - 不追求穷尽所有数学建模方法（那是不可能的，也限制创造力）
 - 采用 Tier 分级覆盖：
@@ -70,6 +123,8 @@ Knowledge 永远不替代 Evidence 做最终裁决。
 | Tier 3 | 低频/前沿方法 | 可选，不强制 | — |
 
 - 覆盖目标：Tier 0-1 100%，Tier 2 ≥80%，Tier 3 按需
+- **先做校准样本证明知识架构有效 → Fresh B0 看真实 failure → 再决定下一批知识覆盖**；
+  不预先堆 100 张卡。
 
 ## 4. 方法卡定位规范
 
@@ -89,6 +144,9 @@ Knowledge 永远不替代 Evidence 做最终裁决。
 - `problem_structures`: 适配的问题结构
 - `modeling_patterns`: 建模模式
 - `mathematical_forms`: 数学形式
+- `mechanism`: 建模机理（该方法成立所依赖的问题内在结构/因果机制）
+- `formulations`: 典型数学表述/核心公式
+- `solvers`: 常用求解器/求解策略
 
 ### 禁止事项
 
@@ -97,6 +155,7 @@ Knowledge 永远不替代 Evidence 做最终裁决。
 - 使用"推荐使用"、"最佳选择"等排他性表述
 - 指定某道题"必须使用"某方法
 - 作为自动选方法的硬过滤依据（match 字段仅用于检索排序）
+- 把算法步骤当卡主体（方法卡是建模知识单元，不是算法说明书）
 
 ## 5. Benchmark 规范
 
@@ -142,3 +201,14 @@ Benchmark **禁止**：
   - `core_methods` → `allowed_model_families`
   - `reference_method` → 方法兼容性检查
   - 方法卡定位从"推荐/答案"改为"约束/先验/验证"
+- **2026-09-08**: 方向锁定 v1.1（本轮）。核心哲学明确为
+  "The LLM constructs models. Knowledge constrains and informs construction.
+  Evidence decides whether the construction survives."。
+  - 方法卡升级为"可调用的建模知识单元（Model Construction Knowledge）"：新增
+    `mechanism` / `formulations` / `solvers` 三个建模知识字段（schema 同步扩展）
+  - 结构覆盖优先于算法覆盖；方法卡数量不再作为核心 KPI
+  - 允许 LLM 不用方法卡（out_of_catalog 合法通道，需结构证据）
+  - 新增三层知识体系 Ontology / Method Cards / Cases
+  - P0 三张卡（mc-dp / mc-numerical-pde / mc-queuing-theory）落地为知识架构校准样本，
+    对应题 allowed_model_families 同步补齐（2020_B +dynamic_programming /
+    2018_A +numerical_pde / 2019_C +queuing_theory）

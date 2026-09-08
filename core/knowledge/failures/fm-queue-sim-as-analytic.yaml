@@ -1,0 +1,13 @@
+# 把仿真结果当解析模型（或反之）
+failure_id: fm-queue-sim-as-analytic
+title: 把仿真结果当解析模型（或反之）
+problem_context: M/M/c 公式当仿真结论，或仿真输出不带稳态/warm-up 处理直接报告
+method: 排队论
+method_family: queuing_theory
+failure_mode: wrong-usage
+symptom: 报告值无法复现；稳态指标被初始瞬态污染
+root_cause: 解析公式是稳态期望，仿真是样本估计，二者口径不同
+detection: 检查是否删除 warm-up period；是否报置信区间/多次运行
+fix: 仿真需 warm-up 删除+多次运行+置信区间；解析需说明稳态假设
+avoidance: 区分两种求解口径并在报告中显式声明
+applies_to: [mc-queuing-theory]

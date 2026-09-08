@@ -1,0 +1,70 @@
+# 排队论与随机服务系统 — 随机服务过程建模知识卡
+# 定位：Model Construction Knowledge（约束/先验/验证），不是算法说明书。
+# 核心机理：到达-等待-服务-离开的随机服务过程 + Little 定律 + 生灭过程稳态方程。
+card_id: mc-queuing-theory
+name: 排队论与随机服务系统分析
+family: queuing_theory
+version: 1
+problem_types: [random_service_system, taxi_dispatch, network_congestion, capacity_planning]
+good_for:
+  - 随机服务系统：到达-等待-服务-离开的稳态性能分析（2019_C 机场出租车）
+  - 服务台容量规划：需要多少服务台使等待时间 < 阈值
+  - 利用率与等待时间的权衡分析（ρ→1 时等待爆炸）
+  - 简单排队网络（Jackson 网络，产品形式解）
+  - 泊松到达 + 指数服务标准场景（M/M/c 闭式解）
+problem_structures: [network/traffic, scheduling]
+modeling_patterns: [queue, flow_balance]
+mathematical_forms: [probability_and_stochastic, optimization]
+mechanism:
+  - 到达过程：泊松到达（指数间隔）或一般分布（G）
+  - 服务过程：指数服务（M）或一般分布（G）
+  - 排队规则：FIFO / 优先级 / LIFO（影响等待时间分布）
+  - 服务台与容量：c 个服务台、K 容量（有限/无限）
+  - 稳态分析：生灭过程平衡方程 λ_n P_n = μ_{n+1} P_{n+1}
+  - Little 定律：L = λW（模型无关，任何稳定排队系统成立）
+formulations:
+  - Kendall 记号：A/B/c/K/m/Z
+  - M/M/1：ρ=λ/μ, P₀=1-ρ, L=ρ/(1-ρ), W=1/(μ-λ)
+  - M/M/c：Erlang C 公式（P_wait、L_q 闭式）
+  - M/G/1 Pollaczek-Khinchine：L_q = [λ²Var(S)+(λE[S])²]/[2(1-λE[S])]
+  - Little 定律：L = λW
+  - 生灭过程稳态方程：λ_n P_n = μ_{n+1} P_{n+1}
+solvers:
+  - 解析求解：M/M/1, M/M/c, M/G/1, M/M/1/K 闭式公式
+  - 近似公式：G/G/1 的 Kingman 界
+  - 排队网络：Jackson 定理（产品形式解）
+  - 离散事件仿真（DES）：SimPy 或自定义，复杂/非平稳系统
+  - 蒙特卡洛仿真：随机抽样到达和服务时间（注意：仿真是求解手段，排队论是建模机理）
+requires:
+  - 到达和服务具有随机性（确定性系统无排队建模必要）
+  - 存在"等待"现象（服务能力不足时顾客排队）
+  - 关注稳态性能指标（平均等待/队列长度/利用率）
+  - 系统可近似 Markov 过程（指数分布假设合理），或可用仿真处理一般分布
+risks:
+  - 泊松到达假设不满足（机场出租车有航班批次性，非平稳到达）
+  - 忽略顾客放弃/重试行为（等待过久离开会改变稳态）
+  - ρ→1 时解析解不稳定（等待时间趋于无穷，数值敏感）
+  - 有限容量系统拒绝概率未建模（M/M/1/K vs M/M/1）
+  - 把排队论当仿真：M/M/c 公式是稳态解析，不是仿真结果
+  - 忽略排队规则影响（优先级队列与 FIFO 等待分布不同）
+  - 仿真未删除 warm-up period（初始瞬态污染稳态统计）
+validation:
+  - 分布拟合检验：χ² 或 K-S 检验验证到达间隔/服务时间分布假设
+  - Little 定律验证：仿真输出的 L、λ、W 满足 L=λW
+  - 解析-仿真对比：简单场景解析公式 vs 仿真结果一致
+  - 灵敏度分析：扰动 λ 和 μ，观察指标变化符合理论预期（ρ→1 时 W→∞）
+  - 稳态检验：仿真运行足够长达到稳态，warm-up period 分析
+  - 多次独立运行（≥5 次，固定种子 42 及变体），报告均值±标准差与置信区间
+often_combined_with: [mc-monte-carlo, mc-ga]
+anti_patterns:
+  - 无分布拟合验证直接套 M/M/c 公式
+  - 把仿真当解析模型（或把解析公式当仿真结果）
+  - 忽略顾客放弃/批次到达等现实行为却宣称"排队论适用"
+  - 有限容量系统用无限容量公式
+  - 仿真不删 warm-up period、不报置信区间
+  - 纯确定性调度问题硬套排队论（应归 scheduling/MILP）
+known_failures: [fm-queue-poisson-misassumed, fm-queue-sim-as-analytic]
+status: active
+source_refs: [knowledge_calibration/evidence/domain_network_game.md]
+confidence: 0.9
+source_type: expert_knowledge

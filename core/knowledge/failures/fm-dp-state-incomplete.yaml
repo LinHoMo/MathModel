@@ -1,0 +1,13 @@
+# DP 状态定义不完整导致马尔可夫性不成立
+failure_id: fm-dp-state-incomplete
+title: DP 状态定义不完整导致马尔可夫性不成立
+problem_context: 状态遗漏关键变量（如剩余资源/位置/天气），历史影响无法压缩
+method: DP/MDP
+method_family: dynamic_programming
+failure_mode: wrong-usage
+symptom: 策略依赖被丢弃的历史信息；DP 表回溯结果不可复现
+root_cause: 状态必须包含影响未来决策的全部相关信息（无后效性）
+detection: 状态转移是否只依赖当前状态；补状态变量后结果是否改变
+fix: 补全状态变量，或改用带记忆的建模（MDP 状态扩展/近似）
+avoidance: 状态定义先做无后效性检验：任一被丢弃的历史信息是否影响未来
+applies_to: [mc-dp]

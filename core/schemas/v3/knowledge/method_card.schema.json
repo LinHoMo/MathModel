@@ -109,6 +109,27 @@
       },
       "description": "该方法的数学形式（如 optimization, differential_equation, graph, probability, linear_algebra, statistics, recurrence, integral 等）。兼容性提示，可选。"
     },
+    "mechanism": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "建模机理（Model Construction Knowledge 核心）——该方法成立所依赖的问题内在结构/因果机制，如 Bellman 最优性原理、守恒律（积分形式→微分形式）、状态-动作-转移-奖励五元组。区别于标签：这是可供 LLM 判断“这个问题是否具有该结构”的机理描述。可选。"
+    },
+    "formulations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "典型数学表述/核心公式（如 Bellman 方程、热方程 ∂u/∂t=α∇²u+S、M/M/1 的 L=ρ/(1-ρ)）。帮助 LLM 评估数学结构是否匹配；不是强制实现清单。可选。"
+    },
+    "solvers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "常用求解器/求解策略（如值迭代、Crank-Nicolson、离散事件仿真）。与 Mathematical Formulation 严格区分：PDE ≠ numerical_PDE，optimization ≠ GA。可选。"
+    },
     "requires": {
       "type": "array",
       "items": {

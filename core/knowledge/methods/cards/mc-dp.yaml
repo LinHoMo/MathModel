@@ -1,0 +1,68 @@
+# 动态规划与马尔可夫决策过程（DP/MDP）— 多阶段序贯决策建模知识卡
+# 定位：Model Construction Knowledge（约束/先验/验证），不是算法说明书。
+# 核心机理：Bellman 最优性原理 —— 问题必须具有最优子结构 + 重叠子问题 + 无后效性。
+card_id: mc-dp
+name: 动态规划与马尔可夫决策过程
+family: dynamic_programming
+version: 1
+problem_types: [sequential_decision, resource_allocation, shortest_path, inventory_control]
+good_for:
+  - 多阶段序贯决策：每一阶段做一次选择，总收益/总代价跨阶段累积（如 2020_B 穿越沙漠的每日决策）
+  - 资源约束下的序列优化：有限资源跨期分配、背包类问题（0-1/多维）
+  - DAG 上的最短路径（Bellman-Ford / 拓扑序递推是 DP 特例）
+  - 多周期生产-库存决策（Wagner-Whitin）
+  - 随机环境下的序贯决策：MDP 值迭代/策略迭代（状态-动作-转移-奖励）
+problem_structures: [scheduling, supply_chain/operations, competition/game]
+modeling_patterns: [decision_state_transition, resource_constraint]
+mathematical_forms: [optimization, probability_and_stochastic, graph]
+mechanism:
+  - Bellman 最优性原理：最优策略的子策略必为对应子问题的最优策略（cut-and-paste 可证）
+  - 最优子结构：全局最优可由子问题最优组合而成
+  - 重叠子问题：递归中反复访问相同子问题，表格化/记忆化消除重复
+  - 无后效性（马尔可夫性）：当前状态已包含影响未来决策的全部相关信息，历史可丢弃
+  - 状态-动作-转移-奖励：随机 MDP 中 V*(s)=max_a{R(s,a)+γ·Σ_{s'}P(s'|s,a)·V*(s')}
+formulations:
+  - 确定性 DP 递推：V_t(s) = max_a { r_t(s,a) + V_{t+1}(s') }
+  - 随机 MDP 贝尔曼方程：V*(s) = max_a { R(s,a) + γ·Σ_{s'} P(s'|s,a)·V*(s') }
+  - 动作价值：Q*(s,a) = R(s,a) + γ·Σ_{s'} P(s'|s,a)·V*(s')
+  - 2020_B 型问题：F_t(s,w) = max/min over 动作 { 当期收益 + F_{t+1}(s',w') }，状态含剩余资源与位置
+solvers:
+  - 自底向上表格递推（Tabulation）
+  - 自顶向下记忆化递归（Memoization）
+  - 值迭代（Value Iteration）：V 收敛判据 ||V_{k+1}-V_k||_∞ < ε
+  - 策略迭代（Policy Iteration）：策略评估+策略改进交替
+  - Dijkstra（非负权图最短路径 = DP 特例）
+requires:
+  - 问题可划分为多阶段序贯决策（时间/顺序天然分阶段，或可人为切分）
+  - 状态空间有限或可离散化且规模多项式可管理（避免维数灾难）
+  - 最优子结构可证明（不能靠直觉断言）
+  - 无后效性成立（若历史影响无法压缩进状态，DP 失效）
+  - 重叠子问题存在（否则退化为分治/枚举，DP 无收益）
+risks:
+  - 状态定义不完整：遗漏关键状态变量导致马尔可夫性不成立（最常见的建模错误）
+  - 维数灾难：多维资源状态使状态空间爆炸（需降维/近似/换方法）
+  - 转移方程错误：动作对状态的影响未正确建模
+  - 边界条件错误：初始/终端状态或奖励设定错误
+  - 连续状态直接离散化粒度不当（网格过粗丢精度，过细状态爆炸）
+  - 把 DP formulation（L3 Bellman 方程）与 DP algorithm（L4 值迭代/表格）混为一谈
+  - 无最优子结构的均衡问题硬套 DP（博弈均衡不由子博弈最优简单构成）
+validation:
+  - 最优子结构证明：cut-and-paste 论证（假设子问题非最优，替换后构造更优解导出矛盾）
+  - 小规模枚举对比：n≤10 时暴力枚举全部策略，DP 结果必须等于枚举最优值
+  - 收敛性检验：值/策略迭代 ||V_{k+1}-V_k||_∞ < 1e-6
+  - 策略可行性检验：DP 输出策略满足全部约束（资源不耗尽、规则遵守、到达终点）
+  - 回溯一致性：从 DP 表回溯最优策略，手动模拟累积奖励 == DP 表最优值
+  - 下界验证：松弛问题最优值 ≤ DP 最优值
+  - 多种子/多参数实例稳定性
+often_combined_with: [mc-monte-carlo, mc-ga]
+anti_patterns:
+  - 未验证最优子结构就写递推（把 DP 当黑盒模板）
+  - 状态空间含后效性仍强行 DP（历史影响无法压缩）
+  - 连续资源量不做离散化直接对连续量做 DP（状态空间不可数）
+  - 单阶段静态优化硬拆成"多阶段"用 DP（应直接用 optimization/MILP）
+  - 状态维度过高不处理，直接宣称"DP 不可行"而非评估替代
+known_failures: [fm-dp-no-optimal-substructure, fm-dp-state-incomplete]
+status: active
+source_refs: [knowledge_calibration/evidence/domain_discrete_optimization.md]
+confidence: 0.9
+source_type: expert_knowledge

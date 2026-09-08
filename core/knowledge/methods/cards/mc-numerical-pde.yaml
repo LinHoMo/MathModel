@@ -1,0 +1,73 @@
+# PDE 数值求解 — 连续时空场/守恒律建模知识卡
+# 定位：Model Construction Knowledge（约束/先验/验证），不是算法说明书。
+# 核心机理：守恒律（积分→微分形式）+ 本构定律 + 时空场（u(x,t)）+ 初边值条件。
+card_id: mc-numerical-pde
+name: 偏微分方程数值求解
+family: numerical_pde
+version: 1
+problem_types: [heat_transfer, diffusion, wave, fluid_flow, pollution_spread]
+good_for:
+  - 热传导/扩散类问题：温度/浓度随空间和时间连续演化（2018_A 高温服装、2020_A 回流焊）
+  - 多层介质的热传导：界面温度连续 + 热流连续（复合服装四层结构）
+  - 一维/二维规则网格上的抛物型/椭圆型 PDE（FDM 首选，实现可控）
+  - 参数反演：由测量数据反推介质属性（PDE 约束优化，最小二乘/正则化）
+  - 流体力学/波动/振动（守恒律+本构定律可导出）
+problem_structures: [diffusion/heat_transfer, continuous_mechanics, network/traffic]
+modeling_patterns: [conservation_law, spatial_temporal_field, inverse_problem]
+mathematical_forms: [PDE, optimization]
+mechanism:
+  - 守恒律：质量/能量/动量守恒的积分形式 → 微分形式 ∂u/∂t + ∇·F(u) = S(u)
+  - 本构定律：Fourier（热流 ∝ -∇T）/ Fick（扩散流 ∝ -∇C）/ 牛顿粘性定律
+  - 时空场：未知量 u(x,t) 需同时给定初始条件（t=0）与边界条件（空间域边缘）
+  - 界面条件：多层介质界面温度连续 + 热流连续（联合求解）
+  - 反问题不适定性：参数反演需正则化（Tikhonov）或约束最小二乘
+formulations:
+  - 通用守恒形式：∂u/∂t + ∇·F(u) = S(u)
+  - 热方程：∂u/∂t = α∇²u + S
+  - 波动方程：∂²u/∂t² = c²∇²u
+  - Laplace/Poisson：∇²u = 0 / ∇²u = f
+  - 边界条件：Dirichlet (u=g) / Neumann (∂u/∂n=g) / Robin (αu+β∂u/∂n=g)
+  - 一维三层传热示例（2018_A 型）：ρ_i c_i ∂T_i/∂t = k_i ∂²T_i/∂x², 界面 k ∂T/∂x 连续
+solvers:
+  - 有限差分法（FDM）：竞赛首选，实现简单；显式 Euler (FTCS) 条件稳定 r=αΔt/Δx² ≤ 0.5（CFL 条件）
+  - 隐式 Euler (BTCS)：无条件稳定，一阶精度
+  - Crank-Nicolson：无条件稳定 + 二阶精度，抛物型首选
+  - ADI：二维/三维抛物型问题（交替方向隐式）
+  - 有限元法（FEM）：复杂几何，竞赛极少用
+  - 有限体积法（FVM）：守恒性好，流体/多物理场
+  - 参数反演：最小二乘 + Levenberg-Marquardt / 正则化
+requires:
+  - 问题可表述为 PDE：守恒律 + 本构定律 + 时空场（不能凭空假设 PDE 形式）
+  - 边界条件和初始条件可定义（缺少任何一类则定解问题不完整）
+  - 计算域可离散化（结构化网格 FDM 或非结构化 FEM/FVM）
+  - 介质属性（热导率/扩散系数）已知或可反演
+risks:
+  - 边界条件类型错误（把对流边界当 Dirichlet）
+  - 多层介质界面条件缺失（温度连续+热流连续漏掉）
+  - 显式格式违反 CFL 稳定性条件（r>0.5 数值振荡发散）
+  - 网格/时间步分辨率不足（边界层/界面处需加密）
+  - 源/汇项遗漏（内热源、化学反应）
+  - 把守恒律（L2 机理）直接当 PDE（L3 表述）——层间混淆
+  - 复杂三维几何用 FDM 硬做（应评估 FEM 或简化）
+  - 忽略反问题不适定性：无正则化直接反演会放大噪声
+validation:
+  - 网格收敛性测试：Δx、Δt 减半，关键输出变化 <1% 或符合理论收敛阶
+  - 守恒量检查：无源时总能量/总质量守恒（相对变化 <2%）
+  - 解析解对比：简单情形（稳态线性分布/半无限大物体）相对误差 <1%
+  - 物理合理性：温度在边界值之间、单调趋近稳态
+  - 参数敏感性：输入扰动 ±10%，输出变化平滑无突变
+  - 多格式交叉验证：两种不同差分格式求解同一问题结果一致
+  - Lax 等价定理（线性问题）：一致性 + 稳定性 ⟺ 收敛性
+often_combined_with: [mc-ols, mc-ga]
+anti_patterns:
+  - 未由守恒律+本构定律推导 PDE，直接套热方程模板
+  - 漏边界条件或初值（定解问题不完整仍求解）
+  - 显式格式不检查稳定性条件
+  - 界面条件只给温度连续、漏热流连续
+  - 反演问题不加正则化
+  - 集中参数问题误用 PDE（应归 ODE 建模）
+known_failures: [fm-pde-boundary-wrong, fm-pde-unstable, fm-pde-interface-missing]
+status: active
+source_refs: [knowledge_calibration/evidence/domain_continuous_physics.md]
+confidence: 0.9
+source_type: expert_knowledge

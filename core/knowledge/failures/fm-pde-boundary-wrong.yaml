@@ -1,0 +1,13 @@
+# PDE 边界条件类型错误
+failure_id: fm-pde-boundary-wrong
+title: PDE 边界条件类型错误
+problem_context: 把对流/辐射边界当 Dirichlet，或边界条件缺失
+method: 数值 PDE
+method_family: numerical_pde
+failure_mode: wrong-usage
+symptom: 数值解偏离物理（温度越过边界值）或定解问题不完整
+root_cause: 边界条件类型（Dirichlet/Neumann/Robin）决定解的物理行为
+detection: 检查三类边界条件是否齐全且类型正确；稳态解是否满足边界
+fix: 按物理机制重定边界（对流/辐射用 Robin，隔热用 Neumann）
+avoidance: PDE 建模固定检查：初值+边界（类型/位置/数值）完整性
+applies_to: [mc-numerical-pde]

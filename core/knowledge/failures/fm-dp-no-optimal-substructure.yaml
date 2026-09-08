@@ -1,0 +1,13 @@
+# DP 未验证最优子结构即写递推
+failure_id: fm-dp-no-optimal-substructure
+title: DP 未验证最优子结构即写递推
+problem_context: 多阶段问题直接套 DP 模板，未做 cut-and-paste 论证
+method: DP/MDP
+method_family: dynamic_programming
+failure_mode: wrong-usage
+symptom: 递推结果与暴力枚举不一致；或局部最优组合非全局最优
+root_cause: 最优子结构是 DP 成立前提，缺此结构则贪心/搜索/枚举更合适
+detection: 小规模(n≤10)暴力枚举对比 DP 结果；检查子问题最优性证明
+fix: 证明最优子结构；不成立则改用 MILP/搜索/贪心
+avoidance: DP 建模三步必检：最优子结构、重叠子问题、无后效性
+applies_to: [mc-dp]
