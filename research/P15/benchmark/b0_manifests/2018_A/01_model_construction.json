@@ -1,0 +1,106 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:03:00Z",
+  "finished_at": "2026-09-08T02:08:00Z",
+  "latency_seconds": 300.0,
+  "submitted_at": "2026-09-08T02:08:05Z",
+  "node_id": "model_construction",
+  "dag_position": 1,
+  "payload": {
+    "title": "四层非稳态热传导PDE模型构建",
+    "question": "Q001",
+    "model_type": "one_dimensional_transient_heat_conduction_pde",
+    "model_family": "pde",
+    "assumptions": [
+      "服装各层材料均匀各向同性，热物性参数（k, rho, c）不随温度变化",
+      "热传导仅沿厚度方向（一维），忽略侧向热损失",
+      "IV层为静止空气层，仅考虑热传导，忽略自然对流",
+      "假人体内温度恒定37°C，皮肤内侧为恒温边界",
+      "环境温度恒定，I层外表面与环境间为对流换热边界",
+      "各层接触良好，界面处温度连续、热流密度连续",
+      "初始时刻整个系统温度均匀为37°C"
+    ],
+    "variables": [
+      {"name": "T_i(x,t)", "description": "第i层(i=I,II,III,IV)温度场", "domain": "x∈[0,d_i], t∈[0,t_end]"},
+      {"name": "d_II", "description": "II层厚度（Q2/Q3决策变量）", "unit": "mm"},
+      {"name": "d_IV", "description": "IV层厚度（Q3决策变量）", "unit": "mm"}
+    ],
+    "parameters": [
+      {"name": "k_I, k_II, k_III, k_IV", "description": "各层热导率", "source": "附件1"},
+      {"name": "rho_I, rho_II, rho_III, rho_IV", "description": "各层密度", "source": "附件1"},
+      {"name": "c_I, c_II, c_III, c_IV", "description": "各层比热容", "source": "附件1"},
+      {"name": "d_I, d_III", "description": "I、III层厚度（固定）", "source": "附件1"},
+      {"name": "h", "description": "外表面对流换热系数", "source": "待反演/经验值"},
+      {"name": "T_env", "description": "环境温度", "values": [75, 65, 80]},
+      {"name": "T_core", "description": "体内温度", "value": 37}
+    ],
+    "objectives": [
+      "Q1: 计算90分钟内四层温度分布及皮肤外侧温度随时间变化",
+      "Q2: 最小化II层厚度，满足皮肤温度约束",
+      "Q3: 最小化II层与IV层总厚度（或加权和），满足皮肤温度约束"
+    ],
+    "constraints": [
+      "Q2: T_skin(60min) ≤ 47°C",
+      "Q2: ∫₀⁶⁰ 𝟙(T_skin(t)>44°C) dt ≤ 5 min",
+      "Q3: T_skin(30min) ≤ 47°C",
+      "Q3: ∫₀³⁰ 𝟙(T_skin(t)>44°C) dt ≤ 5 min",
+      "厚度非负且在物理合理范围内"
+    ],
+    "mechanisms": [
+      "多层介质一维非稳态热传导：热量从高温环境经I→II→III→IV层传导至皮肤",
+      "界面热流连续与温度连续条件",
+      "外表面对流换热边界（Newton冷却定律）",
+      "内表面恒温边界（37°C假人体核）"
+    ],
+    "equations": [
+      {
+        "name": "非稳态热传导PDE",
+        "expression": "rho_i * c_i * ∂T_i/∂t = k_i * ∂²T_i/∂x²,  i=I,II,III,IV",
+        "description": "各层内的一维非稳态热传导方程，其中alpha_i = k_i/(rho_i*c_i)为热扩散率"
+      },
+      {
+        "name": "外表面对流边界",
+        "expression": "-k_I * ∂T_I/∂x |_{x=0} = h * (T_env - T_I(0,t))",
+        "description": "I层外表面与环境间的对流换热边界条件"
+      },
+      {
+        "name": "内表面恒温边界",
+        "expression": "T_IV(d_IV, t) = 37°C",
+        "description": "IV层内侧（皮肤侧）恒温37°C边界"
+      },
+      {
+        "name": "界面温度连续",
+        "expression": "T_i(d_i, t) = T_{i+1}(0, t)",
+        "description": "相邻层界面处温度连续"
+      },
+      {
+        "name": "界面热流连续",
+        "expression": "k_i * ∂T_i/∂x |_{x=d_i} = k_{i+1} * ∂T_{i+1}/∂x |_{x=0}",
+        "description": "相邻层界面处热流密度连续"
+      },
+      {
+        "name": "初始条件",
+        "expression": "T_i(x, 0) = 37°C,  ∀i, ∀x",
+        "description": "初始时刻整个系统温度均匀为37°C"
+      }
+    ],
+    "data": {
+      "objective": "建立四层非稳态热传导PDE模型，求解温度分布并优化层厚",
+      "constraints": [
+        "T_skin(t_end) ≤ 47°C",
+        "超过44°C时间 ≤ 5分钟",
+        "各层厚度物理合理"
+      ],
+      "variables": ["T(x,t)", "d_II", "d_IV"],
+      "card_id": "mc-ga",
+      "shortlist": ["mc-ga", "mc-monte-carlo", "mc-pso"]
+    },
+    "depends_on": ["Q001"],
+    "tags": ["pde", "heat_conduction", "finite_difference", "multilayer", "transient"]
+  }
+}

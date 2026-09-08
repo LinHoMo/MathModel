@@ -1,0 +1,63 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:14:00Z",
+  "finished_at": "2026-09-08T02:18:30Z",
+  "latency_seconds": 270.0,
+  "submitted_at": "2026-09-08T02:18:35Z",
+  "node_id": "method_selection",
+  "dag_position": 2,
+  "payload": {
+    "title": "求解方法选择：蒙特卡洛仿真+解析排队+遗传算法优化混合方案",
+    "question": "Q001",
+    "decision": "采用排队论解析模型为骨架、蒙特卡洛仿真为验证、遗传算法处理Q3布局优化、AHP辅助Q2因素权重分析的混合方法体系",
+    "alternatives": [
+      {
+        "id": "alt_pure_queueing",
+        "name": "纯排队论解析方法",
+        "description": "全程使用M/M/c和M/G/c排队模型解析求解，不使用仿真和智能优化",
+        "pros": ["理论严谨", "计算快", "可解释性强"],
+        "cons": ["时变到达率难以解析处理", "Q3布局优化为整数规划需额外方法", "Q4优先权排队解析复杂", "无法捕捉非线性交互"]
+      },
+      {
+        "id": "alt_pure_simulation",
+        "name": "纯蒙特卡洛仿真方法",
+        "description": "全程离散事件仿真，通过大量随机实验估计系统指标",
+        "pros": ["灵活处理时变和非线性", "可直接模拟优先权机制", "结果直观"],
+        "cons": ["计算量大", "Q1决策阈值需大量仿真", "缺乏理论闭式解", "参数敏感性分析成本高"]
+      },
+      {
+        "id": "alt_hybrid",
+        "name": "混合方法（解析+仿真+智能优化）",
+        "description": "Q1用排队论解析+期望收益比较；Q2用AHP分析因素权重+真实数据校准；Q3用遗传算法优化上车点布局；Q4用优先权排队模型+蒙特卡洛验证",
+        "pros": ["各子问题用最适配方法", "解析与仿真互补", "可处理整数规划和机制设计", "结果可验证"],
+        "cons": ["方法体系较复杂", "需保证模型间参数一致", "实现工作量较大"]
+      }
+    ],
+    "reasoning": "本题4个子问题性质差异大：Q1是个体决策（适合解析期望收益模型），Q2是数据驱动方案（适合AHP权重分析+校准），Q3是组合优化（适合遗传算法），Q4是机制设计（适合优先权排队+仿真验证）。纯解析无法处理Q3的整数布局优化和Q4的优先权非线性；纯仿真缺乏Q1的决策闭式阈值且计算成本过高。混合方法在每个子问题上选择最适配的工具，同时通过统一参数集保证模型一致性。方法卡中无排队论专用卡，mc-monte-carlo最接近仿真验证需求，mc-ga处理优化，mc-ahp处理决策权重。",
+    "criteria": [
+      {"name": "子问题适配性", "weight": 0.35, "description": "方法是否匹配各子问题的数学性质"},
+      {"name": "可解性", "weight": 0.25, "description": "在竞赛时间内能否得到可靠数值结果"},
+      {"name": "数据需求", "weight": 0.15, "description": "是否需要难以获取的数据"},
+      {"name": "可解释性", "weight": 0.15, "description": "结果能否给出清晰的机理解释"},
+      {"name": "可验证性", "weight": 0.10, "description": "能否通过仿真或对比验证结果"}
+    ],
+    "criteria_scores": {
+      "alt_pure_queueing": {"适配性": 0.5, "可解性": 0.9, "数据需求": 0.8, "可解释性": 0.95, "可验证性": 0.6},
+      "alt_pure_simulation": {"适配性": 0.7, "可解性": 0.5, "数据需求": 0.6, "可解释性": 0.5, "可验证性": 0.9},
+      "alt_hybrid": {"适配性": 0.95, "可解性": 0.75, "数据需求": 0.7, "可解释性": 0.85, "可验证性": 0.9}
+    },
+    "method_card_mapping": {
+      "Q1": {"primary": "排队论解析（无对应方法卡）", "support": "mc-monte-carlo（仿真验证）"},
+      "Q2": {"primary": "mc-ahp（因素权重分析）", "support": "mc-ols（数据回归校准）"},
+      "Q3": {"primary": "mc-ga（遗传算法布局优化）", "support": "mc-monte-carlo（吞吐率仿真）"},
+      "Q4": {"primary": "优先权排队解析（无对应方法卡）", "support": "mc-monte-carlo（收益均衡仿真）"}
+    },
+    "confidence": 0.82,
+    "depends_on": ["M001"]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-08T06:37:39Z",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "method_selection output",
+      "chosen": "采用排队论解析模型为骨架、蒙特卡洛仿真为验证、遗传算法处理Q3布局优化、AHP辅助Q2因素权重分析的混合方法体系",
+      "alternatives": [
+        "纯排队论解析方法",
+        "纯蒙特卡洛仿真方法",
+        "混合方法（解析+仿真+智能优化）"
+      ],
+      "criteria": [
+        "{'name': '子问题适配性', 'weight': 0.35, 'description': '方法是否匹配各子问题的数学性质'}",
+        "{'name': '可解性', 'weight': 0.25, 'description': '在竞赛时间内能否得到可靠数值结果'}",
+        "{'name': '数据需求', 'weight': 0.15, 'description': '是否需要难以获取的数据'}",
+        "{'name': '可解释性', 'weight': 0.15, 'description': '结果能否给出清晰的机理解释'}",
+        "{'name': '可验证性', 'weight': 0.1, 'description': '能否通过仿真或对比验证结果'}"
+      ],
+      "evidence_ids": [
+        "M001"
+      ],
+      "reasoning": "本题4个子问题性质差异大：Q1是个体决策（适合解析期望收益模型），Q2是数据驱动方案（适合AHP权重分析+校准），Q3是组合优化（适合遗传算法），Q4是机制设计（适合优先权排队+仿真验证）。纯解析无法处理Q3的整数布局优化和Q4的优先权非线性；纯仿真缺乏Q1的决策闭式阈值且计算成本过高。混合方法在每个子问题上选择最适配的工具，同时通过统一参数集保证模型一致性。方法卡中无排队论专用卡，mc-monte-carlo最接近仿真验证需求，mc-ga处理优化，mc-ahp处理决策权重。",
+      "confidence": 0.82,
+      "reversible": true,
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T06:37:17Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D002",
+      "question": "solving_strategy output",
+      "chosen": "按Q1->Q2->Q3->Q4顺序求解，Q1建立决策阈值模型，Q2用真实数据校准并输出方案，Q3用遗传算法优化上车点，Q4设计优先权系数并仿真验证收益均衡",
+      "alternatives": [
+        "顺序求解（Q1->Q2->Q3->Q4）",
+        "并行求解（Q1/Q3先做，Q2/Q4后做）"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "D001"
+      ],
+      "reasoning": "顺序求解更符合数学建模竞赛的论文结构和参数依赖关系。Q1的排队和收益模型是Q2校准、Q3效率优化、Q4收益均衡的共同基础，必须先完成。Q2在Q1模型框架下填入真实数据，Q3在Q1服务时间参数基础上优化布局，Q4综合Q1收益模型和Q3系统吞吐设计优先权。选择顺序求解，每步输出明确的中间结果供后续使用。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T06:37:34Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D003",
+      "question": "validation_plan output",
+      "chosen": "采用解析解对比+蒙特卡洛交叉验证+多参数灵敏度分析+极端场景鲁棒性测试的四层验证体系",
+      "alternatives": [
+        "仅解析验证",
+        "仅仿真验证",
+        "多层验证体系（解析+仿真+灵敏度+鲁棒性）"
+      ],
+      "criteria": [
+        "problem_fit",
+        "feasibility",
+        "data_availability"
+      ],
+      "evidence_ids": [
+        "D002"
+      ],
+      "reasoning": "本题模型涉及排队随机性、优化搜索和机制设计，单一验证方法不足以保证可信度。解析对比确保理论基础正确，蒙特卡洛交叉验证确保数值结果可靠，灵敏度分析回答Q2的因素依赖性问题，极端场景测试确保方案在高峰/低谷等边界条件下仍有效。四层验证形成完整的证据链。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T06:37:39Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    }
+  ]
+}

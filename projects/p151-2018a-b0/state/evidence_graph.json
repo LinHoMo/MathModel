@@ -1,0 +1,32 @@
+{
+  "graph_schema_version": 3,
+  "graph_version": 1,
+  "project": "p151-2018a-b0",
+  "updated_at": "2026-09-08T06:33:14Z",
+  "relations": [
+    {
+      "from": "M001",
+      "relation": "based_on",
+      "to": "Q001",
+      "at": "2026-09-08T06:33:14Z"
+    },
+    {
+      "from": "D001",
+      "relation": "based_on",
+      "to": "M001",
+      "at": "2026-09-08T06:33:14Z"
+    },
+    {
+      "from": "D002",
+      "relation": "based_on",
+      "to": "D001",
+      "at": "2026-09-08T06:33:14Z"
+    },
+    {
+      "from": "D003",
+      "relation": "based_on",
+      "to": "D002",
+      "at": "2026-09-08T06:33:14Z"
+    }
+  ]
+}

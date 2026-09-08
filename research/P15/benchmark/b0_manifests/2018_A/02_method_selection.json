@@ -1,0 +1,56 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:08:00Z",
+  "finished_at": "2026-09-08T02:11:00Z",
+  "latency_seconds": 180.0,
+  "submitted_at": "2026-09-08T02:11:05Z",
+  "node_id": "method_selection",
+  "dag_position": 2,
+  "payload": {
+    "title": "求解方法选择：有限差分法 + 数值优化",
+    "question": "Q001",
+    "decision": "采用隐式有限差分法（Crank-Nicolson格式）离散PDE，结合遗传算法/模式搜索进行层厚优化，并用最小二乘法反演对流换热系数",
+    "alternatives": [
+      {
+        "method": "显式有限差分法（FTCS）",
+        "pros": ["实现简单", "计算量小"],
+        "cons": ["稳定性受CFL条件限制（dt ≤ dx²/(2α)）", "多层介质中最小α决定全局时间步长，效率低"],
+        "applicability": "不推荐，四层中空气层热扩散率小导致时间步长极小"
+      },
+      {
+        "method": "隐式有限差分法（Crank-Nicolson）",
+        "pros": ["无条件稳定", "时间精度二阶", "可使用较大时间步长", "适合多层非均匀介质"],
+        "cons": ["每步需解三对角方程组", "实现略复杂"],
+        "applicability": "推荐，平衡精度与效率"
+      },
+      {
+        "method": "有限元法（FEM）",
+        "pros": ["处理复杂几何灵活", "商业软件成熟"],
+        "cons": ["一维问题杀鸡用牛刀", "实现复杂度高", "计算开销大"],
+        "applicability": "不推荐，一维规则几何下FDM更高效"
+      },
+      {
+        "method": "解析法（分离变量法）",
+        "pros": ["精确解", "无离散误差"],
+        "cons": ["多层非均匀介质解析解极复杂", "含对流边界时难以求解", "不适合后续优化迭代"],
+        "applicability": "不推荐，仅可用于验证特殊情形"
+      }
+    ],
+    "reasoning": "本题为一维四层规则几何的非稳态热传导问题，有限差分法是最自然的选择。显式格式受稳定性限制，在空气层（热扩散率极小）下时间步长过小；Crank-Nicolson隐式格式无条件稳定且二阶精度，适合长时间仿真。优化问题中目标函数为PDE仿真的黑箱函数，无梯度信息，遗传算法（GA）或模式搜索等无导数优化方法适用。对流换热系数h需通过附件2实测数据反演，采用最小二乘拟合。",
+    "criteria": [
+      "数值稳定性（长时间仿真不发散）",
+      "计算效率（优化需反复调用正问题求解器）",
+      "精度（满足工程温度预测要求）",
+      "实现复杂度（可在竞赛时间内完成）",
+      "可扩展性（支持参数反演与优化迭代）"
+    ],
+    "confidence": 0.85,
+    "depends_on": ["M001"],
+    "tags": ["finite_difference", "crank_nicolson", "genetic_algorithm", "least_squares", "inverse_problem"]
+  }
+}

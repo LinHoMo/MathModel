@@ -1,0 +1,102 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "validation_plan",
+  "dag_position": 4,
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T01:15:40Z",
+  "finished_at": "2026-09-08T01:19:00Z",
+  "latency_seconds": 200.0,
+  "submitted_at": "2026-09-08T01:19:05Z",
+  "payload": {
+    "title": "2022_C 古代玻璃制品 — 验证计划",
+    "question": "Q001",
+    "decision": "采用交叉验证 + 敏感性分析 + 统计显著性检验的三重验证策略",
+    "alternatives": [
+      "仅用训练集准确率验证：无法评估泛化能力，小样本下容易过拟合",
+      "仅用敏感性分析：缺乏对模型预测准确性的直接验证",
+      "人工专家验证：客观但成本高，不适合baseline自动化观测"
+    ],
+    "reasoning": "本题为小样本高维统计建模，单一验证方法不足以保证结论可靠性。交叉验证评估分类模型的泛化能力；敏感性分析验证结论对输入扰动的鲁棒性（题目Q2、Q3明确要求）；统计显著性检验确保风化关联和相关差异不是随机波动。三重验证互补，覆盖模型准确性、鲁棒性和统计显著性三个维度。",
+    "sensitivity_analysis": {
+      "Q1": {
+        "method": "对风化点成分数据施加±5%/±10%随机扰动，观察风化前预测值的变化幅度",
+        "metric": "预测值相对变化率的均值和标准差"
+      },
+      "Q2": {
+        "method": "K-Means多次随机初始化（n_init=50），统计聚类标签稳定性；改变PCA方差阈值（80%/85%/90%）观察亚类划分变化",
+        "metric": "调整兰德指数(ARI) + 亚类标签一致率"
+      },
+      "Q3": {
+        "method": "对未知样本成分特征施加±10%扰动，观察分类标签是否翻转；留一法交叉验证(LOOCV)评估训练集准确率",
+        "metric": "标签翻转率 + LOOCV准确率"
+      },
+      "Q4": {
+        "method": "Bootstrap重采样（1000次）估计相关系数置信区间；剔除异常值后重新计算相关矩阵",
+        "metric": "相关系数95%置信区间宽度 + 异常值剔除前后相关系数变化"
+      }
+    },
+    "validation_methods": [
+      {
+        "name": "5折交叉验证",
+        "applies_to": [
+          "Q2分类模型",
+          "Q3未知鉴别"
+        ],
+        "metric": "准确率、精确率、召回率、F1分数"
+      },
+      {
+        "name": "留一法交叉验证(LOOCV)",
+        "applies_to": [
+          "Q3未知鉴别"
+        ],
+        "metric": "分类准确率",
+        "rationale": "小样本下LOOCV比k折更充分利用数据"
+      },
+      {
+        "name": "轮廓系数",
+        "applies_to": [
+          "Q2亚类聚类"
+        ],
+        "metric": "silhouette_score，确定最优簇数"
+      },
+      {
+        "name": "卡方检验",
+        "applies_to": [
+          "Q1风化关联分析"
+        ],
+        "metric": "p值 < 0.05 为显著相关"
+      },
+      {
+        "name": "t检验/Mann-Whitney U检验",
+        "applies_to": [
+          "Q1风化前后成分差异"
+        ],
+        "metric": "p值 < 0.05 为显著差异"
+      },
+      {
+        "name": "Fisher z变换",
+        "applies_to": [
+          "Q4类别间相关差异"
+        ],
+        "metric": "z统计量p值 < 0.05 为显著差异"
+      },
+      {
+        "name": "Bootstrap置信区间",
+        "applies_to": [
+          "Q4相关系数"
+        ],
+        "metric": "95%置信区间不包含0为显著相关"
+      }
+    ],
+    "acceptance_criteria": {
+      "classification_accuracy": "≥ 80%（5折CV均值）",
+      "clustering_stability": "ARI ≥ 0.6（多次初始化）",
+      "sensitivity_robustness": "Q3标签翻转率 ≤ 20%（±10%扰动）",
+      "statistical_significance": "关键关联检验p值 < 0.05"
+    }
+  }
+}

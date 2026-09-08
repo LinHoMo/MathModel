@@ -1,0 +1,33 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T14:03:01Z",
+  "finished_at": "2026-09-08T14:04:00Z",
+  "latency_seconds": 59.0,
+  "submitted_at": "2026-09-08T14:04:01Z",
+  "node_id": "method_selection",
+  "dag_position": 2,
+  "payload": {
+    "decision": "采用多体刚体链运动学递推 + 阿基米德螺线参数化作为核心方法；Q3/Q4/Q5的优化子问题使用数值优化（黄金分割/网格搜索）；碰撞检测使用逐帧欧氏距离扫描。可用方法卡中无运动学/几何类，最接近的是mc-monte-carlo（用于碰撞时刻的随机采样验证）和mc-ga（用于Q3/Q4/Q5优化），这本身是方法卡覆盖度不足的观测。",
+    "alternatives": [
+      "纯几何螺线法(pure_geometric_spiral): 直接假设所有把手在同一螺线上，忽略板长约束，计算简单但精度不足",
+      "悬链线近似(catenary_approximation): 将板凳龙视为柔性链，不适用于刚体板凳铰接结构",
+      "微分几何法(differential_geometry): 用Frenet标架描述曲线运动，数学优美但实现复杂",
+      "蒙特卡洛采样(mc-monte-carlo): 随机采样初始条件和参数估计碰撞概率，可作为验证手段但不适合确定性仿真",
+      "遗传算法(mc-ga): 用于Q3/Q4/Q5的优化问题，可作为全局优化备选"
+    ],
+    "reasoning": "1) 题面明确要求各把手中心位于螺线上，且板凳为刚体铰接，刚体链运动学递推是最直接的物理建模方式；2) 阿基米德螺线有解析参数方程，可精确计算龙头位置和角速度；3) Q1/Q2为确定性正向仿真，无需随机方法；4) Q3/Q4/Q5为单变量或低维优化，数值方法足够，mc-ga可作为全局优化验证；5) 现有方法卡库缺乏运动学/几何类卡片，mc-monte-carlo仅能用于碰撞检测的鲁棒性验证，不能替代核心运动学模型。",
+    "criteria": [
+      "物理一致性: 模型必须反映刚体铰接和板长约束",
+      "可解性: 必须能在合理时间内完成300s×224把手的数值仿真",
+      "精度: 位置速度需保留6位小数，碰撞时刻需精确到秒级",
+      "可扩展性: 模型需能覆盖Q1-Q5全部子问题",
+      "方法卡匹配度: 尽量从可用方法卡中选择最接近的"
+    ],
+    "confidence": 0.82
+  }
+}

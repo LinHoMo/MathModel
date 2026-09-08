@@ -1,0 +1,56 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "solving_strategy",
+  "dag_position": 3,
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T01:11:10Z",
+  "finished_at": "2026-09-08T01:15:30Z",
+  "latency_seconds": 260.0,
+  "submitted_at": "2026-09-08T01:15:35Z",
+  "payload": {
+    "title": "2022_C 古代玻璃制品 — 求解策略",
+    "question": "Q001",
+    "decision": "按数据预处理→Q1风化分析→Q2分类聚类→Q3未知鉴别→Q4关联分析的顺序逐步求解，每步输出中间结果供下游使用",
+    "alternatives": [
+      "并行求解四个子问题：各问题独立建模，但共享预处理结果，减少重复计算",
+      "端到端单一模型：用一个统一框架同时处理所有问题，但难以兼顾各问题的不同方法需求"
+    ],
+    "reasoning": "四个子问题存在数据依赖：Q1的风化分析结果为Q2提供数据清洗依据；Q2的分类模型直接用于Q3的未知鉴别；Q4的关联分析依赖Q2确定的类别标签。因此采用串行求解策略，每步的输出作为下一步的输入，确保逻辑一致性。预处理阶段统一处理有效数据筛选和缺失值，避免重复劳动。",
+    "algorithm": {
+      "step_0_preprocessing": {
+        "action": "合并表单1和表单2，按文物编号关联；计算各采样点成分累加和，筛选85%-105%有效数据；空白值填0；按类型和风化状态分组",
+        "output": "清洗后的分析数据集"
+      },
+      "step_1_Q1": {
+        "action": "卡方检验风化与类型/纹饰/颜色的关联性；按类型分组做风化/未风化成分均值差异检验；以未风化点为基准建立风化前后成分差异回归模型，预测风化点风化前含量",
+        "output": "风化关联检验结果 + 风化前成分预测值"
+      },
+      "step_2_Q2": {
+        "action": "用PCA对成分数据降维（保留≥85%方差）；用XGBoost/决策树提取高钾vs铅钡分类规则；在每类内部用K-Means聚类，轮廓系数选最优k；输出亚类划分结果",
+        "output": "分类规则 + 亚类标签 + 合理性/敏感性分析"
+      },
+      "step_3_Q3": {
+        "action": "以表单2有效数据为训练集训练XGBoost分类器；对表单3未知样本预测类型；通过特征扰动（±10%）和留一法交叉验证进行敏感性分析",
+        "output": "未知样本类型预测 + 敏感性分析报告"
+      },
+      "step_4_Q4": {
+        "action": "分别计算高钾和铅钡类内成分间Pearson/Spearman相关矩阵；用Fisher z变换检验类别间相关系数差异；绘制相关热力图对比",
+        "output": "类别内相关矩阵 + 类别间差异显著性检验"
+      }
+    },
+    "feasibility": {
+      "data_sufficiency": "约70个已分类采样点 + 8个未知样本，满足小样本统计分析要求",
+      "computational_complexity": "所有方法均为经典统计/机器学习方法，可在普通PC上秒级完成",
+      "tool_availability": "Python (pandas, scikit-learn, scipy, xgboost, matplotlib) 均可实现",
+      "risk_points": [
+        "部分成分在某些样本中全为0，可能导致相关系数计算不稳定",
+        "K-Means对初始质心敏感，需多次运行取稳定结果",
+        "小样本下XGBoost可能过拟合，需正则化和交叉验证"
+      ]
+    }
+  }
+}

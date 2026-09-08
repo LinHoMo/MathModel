@@ -1,0 +1,166 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "problem_understanding",
+  "dag_position": 0,
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T01:00:00Z",
+  "finished_at": "2026-09-08T01:03:00Z",
+  "latency_seconds": 180.0,
+  "submitted_at": "2026-09-08T01:03:05Z",
+  "payload": {
+    "title": "2022_C 古代玻璃制品的成分分析与鉴别 — 问题理解",
+    "question": "Q001",
+    "problem_type": "statistical_classification_and_compositional_analysis",
+    "sub_questions": [
+      {
+        "id": "Q1",
+        "text": "分析玻璃文物表面风化与其玻璃类型、纹饰和颜色的关系；结合玻璃类型，分析文物样品表面有无风化化学成分含量的统计规律，并根据风化点检测数据预测其风化前的化学成分含量",
+        "type": "statistical_analysis_and_regression_prediction"
+      },
+      {
+        "id": "Q2",
+        "text": "依据附件数据分析高钾玻璃、铅钡玻璃的分类规律；对每个类别选择合适的化学成分进行亚类划分，给出划分方法及结果，并对分类结果的合理性和敏感性进行分析",
+        "type": "classification_and_clustering"
+      },
+      {
+        "id": "Q3",
+        "text": "对附件表单3中未知类别玻璃文物的化学成分进行分析，鉴别其所属类型，并对分类结果的敏感性进行分析",
+        "type": "supervised_classification"
+      },
+      {
+        "id": "Q4",
+        "text": "针对不同类别的玻璃文物样品，分析其化学成分之间的关联关系，并比较不同类别之间的化学成分关联关系的差异性",
+        "type": "correlation_analysis"
+      }
+    ],
+    "key_variables": [
+      {
+        "name": "glass_type",
+        "meaning": "玻璃类型（高钾/铅钡）",
+        "value": "categorical",
+        "unit": "类别"
+      },
+      {
+        "name": "weathering",
+        "meaning": "表面风化状态（风化/无风化）",
+        "value": "categorical",
+        "unit": "类别"
+      },
+      {
+        "name": "decoration",
+        "meaning": "纹饰类型",
+        "value": "categorical",
+        "unit": "类别"
+      },
+      {
+        "name": "color",
+        "meaning": "颜色",
+        "value": "categorical",
+        "unit": "类别"
+      },
+      {
+        "name": "SiO2",
+        "meaning": "二氧化硅含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "Na2O",
+        "meaning": "氧化钠含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "K2O",
+        "meaning": "氧化钾含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "CaO",
+        "meaning": "氧化钙含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "MgO",
+        "meaning": "氧化镁含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "Al2O3",
+        "meaning": "氧化铝含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "Fe2O3",
+        "meaning": "氧化铁含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "CuO",
+        "meaning": "氧化铜含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "PbO",
+        "meaning": "氧化铅含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "BaO",
+        "meaning": "氧化钡含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "P2O5",
+        "meaning": "五氧化二磷含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "SrO",
+        "meaning": "氧化锶含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "SnO2",
+        "meaning": "二氧化锡含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "SO2",
+        "meaning": "二氧化硫含量比例",
+        "value": "continuous",
+        "unit": "%"
+      },
+      {
+        "name": "valid_range",
+        "meaning": "成分比例累加和有效范围",
+        "value": "[85, 105]",
+        "unit": "%"
+      }
+    ],
+    "model_family_hint": "statistical_classification / regression_analysis / clustering / pca / decision_tree / correlation_analysis",
+    "difficulty_assessment": "medium",
+    "data_availability": "attachments_provided",
+    "data_characteristics": {
+      "compositional_data": true,
+      "sum_constraint": "各成分比例累加和应接近100%，有效范围85%-105%",
+      "missing_values": "空白处表示未检测到该成分",
+      "sampling_note": "文物采样点为表面随机采样，风化属性与表单1一致；部位1和部位2成分可能不同；未风化点取自风化文物表面未风化区域；严重风化点取自风化层"
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:00:00Z",
+  "finished_at": "2026-09-08T02:04:30Z",
+  "latency_seconds": 270.0,
+  "submitted_at": "2026-09-08T02:04:35Z",
+  "node_id": "problem_understanding",
+  "dag_position": 0,
+  "payload": {
+    "title": "机场出租车问题理解与子问题分解",
+    "question": "Q001",
+    "problem_type": "排队决策与系统优化综合问题",
+    "sub_questions": [
+      {
+        "id": "Q1",
+        "text": "分析出租车司机决策相关因素的影响机理，综合考虑机场乘客数量变化规律和司机收益，建立司机选择决策模型（A进蓄车池等待 vs B放空回市区拉客），给出选择策略。",
+        "core_task": "司机个体决策建模",
+        "key_challenge": "等待时间的随机性与收益期望的权衡"
+      },
+      {
+        "id": "Q2",
+        "text": "收集国内某一机场及其所在城市出租车的相关数据，给出该机场出租车司机的选择方案，并分析模型的合理性和对相关因素的依赖性。",
+        "core_task": "真实数据校准与方案输出",
+        "key_challenge": "需自行收集机场航班、出租车运营数据"
+      },
+      {
+        "id": "Q3",
+        "text": "乘车区现有两条并行车道，管理部门应如何设置上车点并合理安排出租车和乘客，在保证安全条件下使总的乘车效率最高。",
+        "core_task": "上车点布局与调度优化",
+        "key_challenge": "双车道并行服务的排队与安全约束"
+      },
+      {
+        "id": "Q4",
+        "text": "对短途载客再次返回的出租车给予优先权，使得收益尽量均衡，给出可行的优先安排方案。",
+        "core_task": "优先权机制设计与收益均衡",
+        "key_challenge": "短途识别与优先权量化"
+      }
+    ],
+    "key_variables": [
+      {"name": "航班到达量", "symbol": "N_flight", "type": "输入", "unit": "架次/时段"},
+      {"name": "乘客到达率", "symbol": "lambda_p", "type": "输入", "unit": "人/分钟"},
+      {"name": "蓄车池车辆数", "symbol": "N_taxi", "type": "状态", "unit": "辆"},
+      {"name": "出租车等待时间", "symbol": "W_q", "type": "输出", "unit": "分钟"},
+      {"name": "空载行驶成本", "symbol": "C_empty", "type": "参数", "unit": "元/公里"},
+      {"name": "载客收益", "symbol": "R_fare", "type": "输出", "unit": "元"},
+      {"name": "平均载客里程", "symbol": "d_avg", "type": "参数", "unit": "公里"},
+      {"name": "上车点数量", "symbol": "k", "type": "决策", "unit": "个"},
+      {"name": "优先权系数", "symbol": "alpha", "type": "决策", "unit": "无量纲"}
+    ],
+    "model_family_hint": [
+      "queueing_theory",
+      "decision_analysis",
+      "optimization_model",
+      "monte_carlo_simulation",
+      "game_theory",
+      "cost_benefit_analysis"
+    ],
+    "difficulty_assessment": {
+      "overall": "高",
+      "score": 8.0,
+      "reasons": [
+        "4个子问题覆盖决策、数据收集、优化、机制设计，模型耦合度高",
+        "Q2需自行收集真实机场数据，数据获取难度大",
+        "Q3涉及双车道排队系统的布局优化，需安全约束建模",
+        "Q4优先权机制需兼顾公平与效率，属于机制设计问题",
+        "各子问题之间存在参数依赖（如Q1的等待时间模型为Q3/Q4提供基础）"
+      ]
+    },
+    "data_requirements": {
+      "Q1": "航班时刻表、乘客到达分布、出租车运营成本参数（可假设/文献取值）",
+      "Q2": "具体机场的航班数据、城市出租车运价、空驶率、平均里程（需自行收集）",
+      "Q3": "乘车区几何尺寸、车辆上下客时间、安全间距",
+      "Q4": "乘客目的地分布（短途比例）、出租车往返时间"
+    },
+    "inter_dependency": {
+      "Q1 -> Q2": "Q1的决策模型在Q2中用真实数据校准",
+      "Q1 -> Q3": "Q1的排队等待模型为Q3的效率优化提供服务时间参数",
+      "Q3 -> Q4": "Q3的上车点布局影响Q4优先权的实施效果",
+      "Q1 -> Q4": "Q1的收益模型为Q4的收益均衡目标提供度量"
+    }
+  }
+}

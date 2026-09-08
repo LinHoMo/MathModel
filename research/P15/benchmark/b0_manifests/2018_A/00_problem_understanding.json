@@ -1,0 +1,75 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:00:00Z",
+  "finished_at": "2026-09-08T02:03:00Z",
+  "latency_seconds": 180.0,
+  "submitted_at": "2026-09-08T02:03:05Z",
+  "node_id": "problem_understanding",
+  "dag_position": 0,
+  "payload": {
+    "title": "高温作业专用服装设计 — 问题理解与分解",
+    "question": "Q001",
+    "problem_type": "transient_heat_conduction_pde_with_optimization",
+    "sub_questions": [
+      {
+        "id": "Q1",
+        "description": "环境温度75°C、II层厚度6mm、IV层厚度5mm、工作90分钟，建立数学模型计算温度分布并生成problem1.xlsx",
+        "type": "forward_simulation",
+        "boundary_conditions": {
+          "environment_temp": 75,
+          "layer_II_thickness_mm": 6,
+          "layer_IV_thickness_mm": 5,
+          "duration_min": 90,
+          "core_temp": 37
+        }
+      },
+      {
+        "id": "Q2",
+        "description": "环境温度65°C、IV层厚度5.5mm，确定II层最优厚度，确保60分钟时皮肤外侧温度≤47°C且超过44°C的时间≤5分钟",
+        "type": "single_variable_optimization",
+        "boundary_conditions": {
+          "environment_temp": 65,
+          "layer_IV_thickness_mm": 5.5,
+          "duration_min": 60,
+          "max_skin_temp": 47,
+          "max_time_above_44C_min": 5
+        },
+        "decision_variable": "layer_II_thickness_mm"
+      },
+      {
+        "id": "Q3",
+        "description": "环境温度80°C，确定II层和IV层最优厚度，确保30分钟时皮肤外侧温度≤47°C且超过44°C的时间≤5分钟",
+        "type": "multi_variable_optimization",
+        "boundary_conditions": {
+          "environment_temp": 80,
+          "duration_min": 30,
+          "max_skin_temp": 47,
+          "max_time_above_44C_min": 5
+        },
+        "decision_variables": ["layer_II_thickness_mm", "layer_IV_thickness_mm"]
+      }
+    ],
+    "key_variables": [
+      {"name": "T(x,t)", "description": "四层介质内温度分布，x为空间坐标，t为时间", "unit": "°C"},
+      {"name": "d_I, d_II, d_III, d_IV", "description": "各层厚度", "unit": "mm"},
+      {"name": "k_i", "description": "第i层热传导系数", "unit": "W/(m·K)"},
+      {"name": "rho_i", "description": "第i层密度", "unit": "kg/m³"},
+      {"name": "c_i", "description": "第i层比热容", "unit": "J/(kg·K)"},
+      {"name": "T_env", "description": "环境温度", "unit": "°C"},
+      {"name": "T_skin", "description": "假人皮肤外侧温度", "unit": "°C"},
+      {"name": "t_work", "description": "工作时长", "unit": "min"}
+    ],
+    "model_family_hint": "heat_conduction_pde / finite_difference_method / numerical_optimization / inverse_problem / parameter_estimation / transient_heat_transfer",
+    "difficulty_assessment": {
+      "overall": "high",
+      "rationale": "涉及一维非稳态多层热传导PDE求解、参数反演校准、带约束的单/多变量优化，三个子问题层层递进，需同时处理正问题与反问题",
+      "sub_question_difficulty": {"Q1": "medium", "Q2": "high", "Q3": "high"}
+    },
+    "tags": ["heat_transfer", "pde", "finite_difference", "optimization", "inverse_problem"]
+  }
+}

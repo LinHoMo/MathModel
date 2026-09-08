@@ -1,0 +1,41 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "method_selection",
+  "dag_position": 2,
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T01:08:10Z",
+  "finished_at": "2026-09-08T01:11:00Z",
+  "latency_seconds": 170.0,
+  "submitted_at": "2026-09-08T01:11:05Z",
+  "payload": {
+    "title": "2022_C 古代玻璃制品 — 方法选择",
+    "question": "Q001",
+    "decision": "采用多方法组合框架：PCA降维 + K-Means聚类 + XGBoost分类 + OLS回归 + 相关性分析",
+    "alternatives": [
+      "纯决策树/随机森林：可解释性强但对高维成分数据的特征交互捕捉不足",
+      "层次聚类：亚类划分结果稳定但计算复杂度高，对噪声敏感",
+      "SVM分类：小样本下泛化能力好但可解释性差，不便于提取分类规则",
+      "神经网络：表达能力强但样本量不足（约70个采样点），易过拟合"
+    ],
+    "reasoning": "本题数据具有成分性（compositional）、高维（14种化学成分）、小样本（约70个已分类采样点）和多子问题的特点。PCA用于降维去除成分间多重共线性并保留85%以上方差；K-Means用于无监督亚类划分，配合轮廓系数确定簇数；XGBoost用于监督分类（Q2分类规律、Q3未知鉴别），能处理非线性关系并输出特征重要性；OLS回归用于Q1风化前后成分映射；Pearson/Spearman相关分析用于Q4成分关联。各方法互补，覆盖全部四个子问题。",
+    "criteria": [
+      "适配小样本高维成分数据",
+      "可解释性（需给出分类规律和划分方法）",
+      "覆盖全部四个子问题",
+      "支持敏感性分析",
+      "计算可行性（无需大规模算力）"
+    ],
+    "confidence": 0.82,
+    "method_card_mapping": {
+      "Q1_weathering_prediction": "mc-ols",
+      "Q2_subclass_clustering": "mc-kmeans",
+      "Q2_dimension_reduction": "mc-pca",
+      "Q3_unknown_classification": "mc-xgboost",
+      "Q4_correlation": "correlation_analysis（基础统计方法）"
+    }
+  }
+}

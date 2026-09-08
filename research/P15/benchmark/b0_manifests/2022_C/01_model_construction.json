@@ -1,0 +1,146 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709",
+  "node_id": "model_construction",
+  "dag_position": 1,
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T01:03:10Z",
+  "finished_at": "2026-09-08T01:08:00Z",
+  "latency_seconds": 290.0,
+  "submitted_at": "2026-09-08T01:08:05Z",
+  "payload": {
+    "title": "2022_C 古代玻璃制品 — 模型构建",
+    "question": "Q001",
+    "model_type": "multi_method_statistical_framework",
+    "model_family": "statistical_classification",
+    "objective": "构建统计分类与成分分析框架，覆盖风化预测、分类聚类、未知鉴别和关联分析四个子问题",
+    "assumptions": [
+      "成分比例累加和在85%-105%之间的数据视为有效，超出范围的采样点予以剔除",
+      "空白成分值视为未检测到，按0处理或在分析时排除该变量",
+      "同一文物不同采样点的风化属性与表单1中该文物的风化标记一致",
+      "高钾玻璃和铅钡玻璃的化学成分差异主要由助熔剂类型决定（K2O vs PbO/BaO）",
+      "风化过程导致元素交换，使成分比例发生系统性偏移",
+      "未风化点的成分可近似代表风化前的化学成分"
+    ],
+    "variables": [
+      "glass_type",
+      "weathering",
+      "decoration",
+      "color",
+      "SiO2",
+      "Na2O",
+      "K2O",
+      "CaO",
+      "MgO",
+      "Al2O3",
+      "Fe2O3",
+      "CuO",
+      "PbO",
+      "BaO",
+      "P2O5",
+      "SrO",
+      "SnO2",
+      "SO2",
+      "weathering_prediction",
+      "glass_type_prediction",
+      "subclass_label",
+      "correlation_matrix"
+    ],
+    "variables_detail": {
+      "independent": [
+        "glass_type",
+        "weathering",
+        "decoration",
+        "color",
+        "SiO2",
+        "Na2O",
+        "K2O",
+        "CaO",
+        "MgO",
+        "Al2O3",
+        "Fe2O3",
+        "CuO",
+        "PbO",
+        "BaO",
+        "P2O5",
+        "SrO",
+        "SnO2",
+        "SO2"
+      ],
+      "dependent": [
+        "weathering_prediction",
+        "glass_type_prediction",
+        "subclass_label",
+        "correlation_matrix"
+      ],
+      "control": [
+        "sampling_point",
+        "artifact_id"
+      ]
+    },
+    "parameters": {
+      "valid_sum_min": 85.0,
+      "valid_sum_max": 105.0,
+      "pca_variance_threshold": 0.85,
+      "kmeans_max_clusters": 5,
+      "classification_cv_folds": 5,
+      "correlation_significance": 0.05
+    },
+    "objectives": [
+      "Q1: 建立风化状态与类型/纹饰/颜色的关联模型，预测风化前化学成分",
+      "Q2: 提取高钾/铅钡分类规律，完成亚类聚类划分",
+      "Q3: 对未知类别样本进行类型鉴别",
+      "Q4: 构建类别内成分关联网络并比较类别间差异"
+    ],
+    "constraints": [
+      "成分比例累加和 ∈ [85%, 105%]",
+      "各成分比例 ≥ 0",
+      "分类结果需通过敏感性分析验证"
+    ],
+    "mechanisms": {
+      "Q1_weathering_analysis": "卡方检验分析风化与类型/纹饰/颜色的关联性；按玻璃类型分组，对风化/未风化样本做成分均值差异检验（t检验/Mann-Whitney U）；以未风化点为基准建立风化前后成分比例映射回归模型",
+      "Q2_classification_subclass": "基于化学成分特征，使用决策树/随机森林提取高钾vs铅钡的分类规则；在每类内部使用K-Means聚类进行亚类划分，通过轮廓系数确定最优簇数",
+      "Q3_unknown_classification": "以表单2已分类数据为训练集，构建监督分类模型（XGBoost/逻辑回归），对表单3未知样本预测类型；通过扰动输入特征进行敏感性分析",
+      "Q4_correlation_analysis": "分别在高钾和铅钡样本内计算成分间Pearson/Spearman相关系数，构建相关矩阵；通过Fisher z变换比较两类间相关系数的显著性差异"
+    },
+    "equations": [
+      "成分有效性: 85 ≤ Σ(x_i) ≤ 105, x_i ≥ 0",
+      "风化预测: x_pre = x_weathered + Δ(glass_type), Δ由未风化-风化配对回归估计",
+      "PCA降维: z = W·x, 保留方差≥85%的主成分",
+      "K-Means: min Σ||x_i - μ_k||², k由轮廓系数确定",
+      "相关系数: r_ij = cov(x_i,x_j)/(σ_i·σ_j)",
+      "类别间相关差异: z = (z_r1 - z_r2)/sqrt(1/(n1-3)+1/(n2-3))"
+    ],
+    "data": {
+      "objective": "构建统计分类与成分分析框架，覆盖风化预测、分类聚类、未知鉴别和关联分析四个子问题",
+      "constraints": [
+        "成分累加和∈[85%,105%]",
+        "成分比例非负",
+        "分类需敏感性验证"
+      ],
+      "variables": [
+        "glass_type",
+        "weathering",
+        "SiO2",
+        "K2O",
+        "PbO",
+        "BaO",
+        "CaO",
+        "Al2O3",
+        "Fe2O3",
+        "CuO",
+        "P2O5"
+      ],
+      "card_id": "mc-pca",
+      "shortlist": [
+        "mc-pca",
+        "mc-kmeans",
+        "mc-xgboost",
+        "mc-ols"
+      ]
+    }
+  }
+}

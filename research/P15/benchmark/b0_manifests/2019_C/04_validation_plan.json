@@ -1,0 +1,115 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:25:00Z",
+  "finished_at": "2026-09-08T02:30:00Z",
+  "latency_seconds": 300.0,
+  "submitted_at": "2026-09-08T02:30:05Z",
+  "node_id": "validation_plan",
+  "dag_position": 4,
+  "payload": {
+    "title": "模型验证与灵敏度分析计划",
+    "question": "Q001",
+    "decision": "采用解析解对比+蒙特卡洛交叉验证+多参数灵敏度分析+极端场景鲁棒性测试的四层验证体系",
+    "alternatives": [
+      {
+        "id": "alt_analytical_only",
+        "name": "仅解析验证",
+        "description": "仅通过排队论公式的理论性质验证模型合理性",
+        "pros": ["简单"],
+        "cons": ["无法验证数值结果准确性", "无法评估非线性交互"]
+      },
+      {
+        "id": "alt_simulation_only",
+        "name": "仅仿真验证",
+        "description": "仅通过蒙特卡洛仿真验证模型输出",
+        "pros": ["覆盖随机场景"],
+        "cons": ["仿真本身可能有偏差", "缺乏理论基准对比"]
+      },
+      {
+        "id": "alt_multi_layer",
+        "name": "多层验证体系（解析+仿真+灵敏度+鲁棒性）",
+        "description": "四层验证：解析解对比验证理论正确性，蒙特卡洛交叉验证验证数值准确性，灵敏度分析验证参数依赖性，极端场景测试验证鲁棒性",
+        "pros": ["全面覆盖", "结果可信", "可发现模型薄弱环节"],
+        "cons": ["计算量较大", "需组织多组实验"]
+      }
+    ],
+    "reasoning": "本题模型涉及排队随机性、优化搜索和机制设计，单一验证方法不足以保证可信度。解析对比确保理论基础正确，蒙特卡洛交叉验证确保数值结果可靠，灵敏度分析回答Q2的因素依赖性问题，极端场景测试确保方案在高峰/低谷等边界条件下仍有效。四层验证形成完整的证据链。",
+    "sensitivity_analysis": {
+      "method": "单因素扰动法（OAT）+ 局部灵敏度系数",
+      "parameters": [
+        {"name": "乘客到达率lambda", "range": "±20%", "expected_impact": "高——直接影响等待时间和决策阈值"},
+        {"name": "出租车服务率mu", "range": "±20%", "expected_impact": "中高——影响吞吐率和排队长度"},
+        {"name": "空载成本c_e", "range": "±20%", "expected_impact": "中——影响Pi_B，进而影响决策"},
+        {"name": "时间成本c_t", "range": "±20%", "expected_impact": "中——影响等待的时间价值"},
+        {"name": "机场到市区距离D", "range": "±20%", "expected_impact": "中高——同时影响Pi_A收益和Pi_B空驶成本"},
+        {"name": "短途阈值d_thresh", "range": "±20%", "expected_impact": "中——影响Q4短途比例和优先权需求"}
+      ],
+      "sensitivity_metric": "S = (delta_output / output) / (delta_param / param)",
+      "output_metrics": ["决策阈值W_threshold", "系统吞吐率lambda_out", "收益方差Var(Pi)"]
+    },
+    "validation_methods": [
+      {
+        "id": "v1_analytical",
+        "name": "解析解对比验证",
+        "description": "在稳态条件下（到达率恒定），将蒙特卡洛仿真的平均等待时间与M/M/c解析公式计算值对比，相对误差应<5%",
+        "applies_to": ["Q1", "Q3"],
+        "pass_criterion": "相对误差 < 5%"
+      },
+      {
+        "id": "v2_monte_carlo_cross",
+        "name": "蒙特卡洛交叉验证",
+        "description": "固定随机种子42，运行5组不同初始条件的仿真（每组10000次），比较关键指标（等待时间、收益、吞吐率）的均值和标准差，验证结果稳定性",
+        "applies_to": ["Q1", "Q3", "Q4"],
+        "pass_criterion": "5组均值变异系数 < 10%"
+      },
+      {
+        "id": "v3_sensitivity",
+        "name": "参数灵敏度分析",
+        "description": "对6个关键参数各做±20%扰动，计算灵敏度系数S，识别高敏感参数并在论文中重点讨论",
+        "applies_to": ["Q1", "Q2", "Q4"],
+        "pass_criterion": "所有参数灵敏度系数可计算且排序合理"
+      },
+      {
+        "id": "v4_extreme_scenario",
+        "name": "极端场景鲁棒性测试",
+        "description": "测试三种极端场景：(a)航班大面积延误导致乘客爆发式到达（lambda=3倍均值）；(b)蓄车池车辆极少（N_taxi<5）；(c)几乎全是短途乘客（p_short>80%）。验证模型在极端条件下不崩溃且输出合理",
+        "applies_to": ["Q1", "Q3", "Q4"],
+        "pass_criterion": "模型输出有界且物理意义合理，无NaN或无穷大"
+      },
+      {
+        "id": "v5_optimization_convergence",
+        "name": "优化算法收敛性验证",
+        "description": "Q3遗传算法运行5次（不同随机种子），检查最优解的适应度值收敛性和最优布局的一致性",
+        "applies_to": ["Q3"],
+        "pass_criterion": "5次最优适应度变异系数 < 5%，最优布局结构一致"
+      },
+      {
+        "id": "v6_fairness_check",
+        "name": "优先权公平性检验",
+        "description": "Q4实施优先权后，检查非短途司机的收益下降幅度不超过15%，且整体收益方差降低>20%",
+        "applies_to": ["Q4"],
+        "pass_criterion": "非短途收益下降 < 15% 且 收益方差降低 > 20%"
+      }
+    ],
+    "validation_schedule": {
+      "stage_1": "Q1模型完成后立即做v1解析对比和v2仿真交叉验证",
+      "stage_2": "Q2数据校准后做v3灵敏度分析",
+      "stage_3": "Q3优化完成后做v5收敛性验证和v1吞吐率对比",
+      "stage_4": "Q4机制设计完成后做v6公平性检验和v4极端场景测试",
+      "stage_5": "全模型完成后做整体v4极端场景鲁棒性测试"
+    },
+    "expected_outcomes": [
+      "Q1决策阈值模型通过解析对比验证，误差<5%",
+      "Q2输出具体机场方案，灵敏度分析识别2-3个高敏感参数",
+      "Q3遗传算法收敛到稳定最优布局，吞吐率提升可量化",
+      "Q4优先权方案使收益方差降低>20%，且不严重损害非短途司机",
+      "全模型在极端场景下输出合理，鲁棒性可接受"
+    ],
+    "depends_on": ["D002"]
+  }
+}

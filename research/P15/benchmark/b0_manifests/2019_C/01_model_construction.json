@@ -1,0 +1,158 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:04:30Z",
+  "finished_at": "2026-09-08T02:14:00Z",
+  "latency_seconds": 570.0,
+  "submitted_at": "2026-09-08T02:14:05Z",
+  "node_id": "model_construction",
+  "dag_position": 1,
+  "payload": {
+    "title": "机场出租车司机决策与系统优化混合模型",
+    "question": "Q001",
+    "model_type": "排队论-决策分析-整数规划混合模型",
+    "model_family": ["queueing_theory", "decision_analysis", "optimization", "simulation"],
+    "objective": "建立机场出租车司机A/B选择决策模型与系统优化模型：Q1司机期望净收益最大化决策阈值，Q3双车道上车点布局吞吐率最大化，Q4短途优先权下司机收益方差最小化",
+    "assumptions": [
+      "乘客到达服从泊松过程，到达率随时段变化（非齐次泊松）",
+      "出租车载客服务时间服从负指数分布，平均服务时间含上车+驶出",
+      "蓄车池容量有限，出租车按FCFS排队进场",
+      "司机为理性经济人，以期望净收益最大化为决策目标",
+      "市区出租车需求在短时间窗内稳定，放空回市区后可在平均等待时间内获得乘客",
+      "Q3中两条车道对称，车辆可在任意上车点服务",
+      "Q4中短途定义为行驶里程低于阈值d_thresh的订单",
+      "所有司机遵守管理规则，不拒载、不插队"
+    ],
+    "variables": [
+      {"name": "乘客到达率", "symbol": "lambda(t)", "type": "时变输入"},
+      {"name": "出租车服务率", "symbol": "mu", "type": "参数"},
+      {"name": "蓄车池排队长度", "symbol": "L_q", "type": "状态变量"},
+      {"name": "司机期望等待时间", "symbol": "E[W]", "type": "中间变量"},
+      {"name": "选择A的期望净收益", "symbol": "Pi_A", "type": "决策变量"},
+      {"name": "选择B的期望净收益", "symbol": "Pi_B", "type": "决策变量"},
+      {"name": "上车点位置向量", "symbol": "x = (x_1,...,x_k)", "type": "决策变量(Q3)"},
+      {"name": "优先权折扣因子", "symbol": "alpha", "type": "决策变量(Q4)"}
+    ],
+    "parameters": [
+      {"name": "空载单位成本", "symbol": "c_e", "value": "1.2元/km", "source": "行业平均"},
+      {"name": "时间机会成本", "symbol": "c_t", "value": "0.5元/min", "source": "司机时薪折算"},
+      {"name": "机场到市区平均距离", "symbol": "D", "value": "30km", "source": "典型机场"},
+      {"name": "市区平均载客里程", "symbol": "d_city", "value": "8km", "source": "出租车统计"},
+      {"name": "市区出租车平均等客时间", "symbol": "W_city", "value": "15min", "source": "经验值"},
+      {"name": "起步价", "symbol": "f_0", "value": "13元", "source": "典型城市"},
+      {"name": "里程单价", "symbol": "f_d", "value": "2.3元/km", "source": "典型城市"},
+      {"name": "车辆安全间距", "symbol": "s_safe", "value": "2m", "source": "安全规范"},
+      {"name": "单次上下客时间", "symbol": "t_board", "value": "2min", "source": "观测"}
+    ],
+    "objectives": [
+      {"id": "obj_Q1", "description": "司机个体期望净收益最大化：max(Pi_A, Pi_B)对应的选择", "question": "Q1"},
+      {"id": "obj_Q3", "description": "乘车区总吞吐率最大化：max lambda_out = k * mu_eff，受安全约束", "question": "Q3"},
+      {"id": "obj_Q4", "description": "出租车司机收益方差最小化（收益均衡）：min Var(Pi_i)", "question": "Q4"}
+    ],
+    "constraints": [
+      "蓄车池容量约束：L_q <= C_pool",
+      "安全间距约束：x_{i+1} - x_i >= L_car + s_safe（Q3）",
+      "车道容量约束：每条车道上车点数 <= floor(L_lane / (L_car + s_safe))",
+      "优先权公平约束：短途车优先权不超过alpha_max（Q4）",
+      "FCFS基础约束：非优先权车辆仍按先来先服务",
+      "非负约束：所有等待时间、收益、排队长度非负"
+    ],
+    "mechanisms": [
+      {
+        "name": "M/M/c排队等待机制",
+        "description": "将乘车区建模为多服务台排队系统，蓄车池为前置队列，c为同时服务的上车点数。利用Little公式和M/M/c稳态公式计算期望等待时间。",
+        "applies_to": ["Q1", "Q3"]
+      },
+      {
+        "name": "期望收益比较决策机制",
+        "description": "司机比较选择A（等待载客）和选择B（放空回市区）的期望净收益，选择较大者。Pi_A = 期望载客收益 - 等待时间成本；Pi_B = 市区期望载客收益 - 空驶成本 - 市区等客时间成本。",
+        "applies_to": ["Q1", "Q2"]
+      },
+      {
+        "name": "上车点布局整数规划机制",
+        "description": "将双车道上车点设置建模为整数规划：决策变量为各车道上车点数量和位置，目标为最大化吞吐率，约束为安全间距和车道长度。",
+        "applies_to": ["Q3"]
+      },
+      {
+        "name": "优先权排队机制",
+        "description": "对短途返回车辆赋予优先权（如插队系数或专用通道），通过调整其排队优先级缩短等待时间，补偿短途低收益，实现收益均衡。",
+        "applies_to": ["Q4"]
+      },
+      {
+        "name": "蒙特卡洛仿真机制",
+        "description": "对时变到达率和随机服务时间进行离散事件仿真，验证解析模型的等待时间和收益估计，评估不同策略下的系统表现。",
+        "applies_to": ["Q1", "Q3", "Q4"]
+      }
+    ],
+    "equations": [
+      {
+        "id": "eq_wait",
+        "expression": "E[W] = (L_q / lambda) + 1/mu",
+        "description": "Little公式：期望等待时间 = 平均排队长度/到达率 + 平均服务时间",
+        "applies_to": "Q1"
+      },
+      {
+        "id": "eq_piA",
+        "expression": "Pi_A = f_0 + f_d * D - c_t * E[W] - c_e * 0",
+        "description": "选择A的期望净收益：机场载客收益减去等待时间成本（无空驶）",
+        "applies_to": "Q1"
+      },
+      {
+        "id": "eq_piB",
+        "expression": "Pi_B = f_0 + f_d * d_city - c_e * D - c_t * (D/v + W_city)",
+        "description": "选择B的期望净收益：市区载客收益减去空驶成本和行驶+等客时间成本",
+        "applies_to": "Q1"
+      },
+      {
+        "id": "eq_decision",
+        "expression": "Decision = A if Pi_A >= Pi_B else B",
+        "description": "司机决策规则：选择期望净收益较大的策略",
+        "applies_to": "Q1"
+      },
+      {
+        "id": "eq_throughput",
+        "expression": "lambda_out = min(lambda, c * mu) * (1 - P_loss)",
+        "description": "乘车区吞吐率：受到达率和服务能力限制，P_loss为乘客流失概率",
+        "applies_to": "Q3"
+      },
+      {
+        "id": "eq_priority",
+        "expression": "W_short = W_normal / (1 + alpha), alpha in [0, alpha_max]",
+        "description": "优先权模型：短途车等待时间按优先权系数alpha缩短",
+        "applies_to": "Q4"
+      },
+      {
+        "id": "eq_balance",
+        "expression": "min_alpha Sum_i (Pi_i - Pi_avg)^2, s.t. alpha <= alpha_max",
+        "description": "收益均衡优化：选择优先权系数使司机间收益方差最小",
+        "applies_to": "Q4"
+      }
+    ],
+    "data": {
+      "objective": "建立机场出租车司机决策模型与系统优化模型，覆盖4个子问题：司机A/B选择决策、真实数据方案、双车道上车点优化、短途优先权收益均衡",
+      "constraints": [
+        "蓄车池容量有限",
+        "车辆安全间距约束",
+        "FCFS排队规则",
+        "优先权上限约束",
+        "所有变量非负"
+      ],
+      "variables": [
+        "乘客到达率lambda(t)",
+        "出租车服务率mu",
+        "排队长度L_q",
+        "期望等待时间E[W]",
+        "期望净收益Pi_A/Pi_B",
+        "上车点位置x",
+        "优先权系数alpha"
+      ],
+      "card_id": "mc-monte-carlo",
+      "shortlist": ["mc-monte-carlo", "mc-ahp", "mc-ga", "mc-topsis"]
+    },
+    "depends_on": ["Q001"]
+  }
+}

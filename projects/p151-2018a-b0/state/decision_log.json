@@ -1,0 +1,85 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-08T06:33:14Z",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "method_selection output",
+      "chosen": "采用隐式有限差分法（Crank-Nicolson格式）离散PDE，结合遗传算法/模式搜索进行层厚优化，并用最小二乘法反演对流换热系数",
+      "alternatives": [
+        "显式有限差分法（FTCS）",
+        "隐式有限差分法（Crank-Nicolson）",
+        "有限元法（FEM）",
+        "解析法（分离变量法）"
+      ],
+      "criteria": [
+        "数值稳定性（长时间仿真不发散）",
+        "计算效率（优化需反复调用正问题求解器）",
+        "精度（满足工程温度预测要求）",
+        "实现复杂度（可在竞赛时间内完成）",
+        "可扩展性（支持参数反演与优化迭代）"
+      ],
+      "evidence_ids": [
+        "M001"
+      ],
+      "reasoning": "本题为一维四层规则几何的非稳态热传导问题，有限差分法是最自然的选择。显式格式受稳定性限制，在空气层（热扩散率极小）下时间步长过小；Crank-Nicolson隐式格式无条件稳定且二阶精度，适合长时间仿真。优化问题中目标函数为PDE仿真的黑箱函数，无梯度信息，遗传算法（GA）或模式搜索等无导数优化方法适用。对流换热系数h需通过附件2实测数据反演，采用最小二乘拟合。",
+      "confidence": 0.85,
+      "reversible": true,
+      "created_by": "method_selection",
+      "created_at": "2026-09-08T06:33:14Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D002",
+      "question": "solving_strategy output",
+      "chosen": "分三阶段求解：(1)参数反演——用附件2实测数据最小二乘拟合对流换热系数h；(2)正问题求解——Crank-Nicolson有限差分计算温度场；(3)约束优化——GA/模式搜索搜索最优层厚",
+      "alternatives": [
+        "联立求解（全参数一起优化）",
+        "三阶段分解（反演→正解→优化）"
+      ],
+      "criteria": [
+        "model_fidelity",
+        "computational_efficiency",
+        "implementation_feasibility"
+      ],
+      "evidence_ids": [
+        "D001"
+      ],
+      "reasoning": "将问题分解为参数反演、正问题求解、约束优化三个独立阶段。先用Q1的实测数据反演对流换热系数h（这是连接模型与真实物理的关键参数），再用校准后的模型求解Q1温度分布，最后以正问题求解器为目标函数，通过无导数优化方法搜索Q2/Q3的最优层厚。分解策略大幅降低了问题维度，且每阶段可独立验证。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "solving_strategy",
+      "created_at": "2026-09-08T06:33:14Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    },
+    {
+      "decision_id": "D003",
+      "question": "validation_plan output",
+      "chosen": "采用三级验证体系：(1)数值验证——网格/时间步收敛性检验与守恒律检查；(2)数据验证——Q1仿真结果与附件2实测数据对比；(3)优化验证——最优解附近约束敏感性分析与鲁棒性检验",
+      "alternatives": [
+        "仅与实测数据对比",
+        "三级验证体系（数值+数据+优化）"
+      ],
+      "criteria": [
+        "model_fidelity",
+        "computational_efficiency",
+        "implementation_feasibility"
+      ],
+      "evidence_ids": [
+        "D002"
+      ],
+      "reasoning": "本题的最终输出是优化后的层厚设计，仅验证正问题精度不足以保证优化结果可靠。需要从数值离散收敛性（确保PDE求解无系统偏差）、实测数据拟合（确保模型物理正确）、优化解的约束敏感性（确保最优解不是数值伪影）三个层面系统验证，才能给出可信的设计建议。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "validation_plan",
+      "created_at": "2026-09-08T06:33:14Z",
+      "status": "active",
+      "executor_type": "external_agent",
+      "agent_identity": "doubao"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:11:00Z",
+  "finished_at": "2026-09-08T02:15:00Z",
+  "latency_seconds": 240.0,
+  "submitted_at": "2026-09-08T02:15:05Z",
+  "node_id": "solving_strategy",
+  "dag_position": 3,
+  "payload": {
+    "title": "求解策略：三阶段流水线（反演→正问题→优化）",
+    "question": "Q001",
+    "decision": "分三阶段求解：(1)参数反演——用附件2实测数据最小二乘拟合对流换热系数h；(2)正问题求解——Crank-Nicolson有限差分计算温度场；(3)约束优化——GA/模式搜索搜索最优层厚",
+    "alternatives": [
+      {
+        "strategy": "联立求解（全参数一起优化）",
+        "pros": ["理论上全局最优"],
+        "cons": ["维度灾难", "h与层厚耦合导致目标函数非凸", "计算量极大"],
+        "applicability": "不推荐"
+      },
+      {
+        "strategy": "三阶段分解（反演→正解→优化）",
+        "pros": ["解耦降低维度", "每阶段可独立验证", "计算效率高", "符合物理直觉"],
+        "cons": ["误差可能逐级传递", "需保证反演精度"],
+        "applicability": "推荐"
+      }
+    ],
+    "reasoning": "将问题分解为参数反演、正问题求解、约束优化三个独立阶段。先用Q1的实测数据反演对流换热系数h（这是连接模型与真实物理的关键参数），再用校准后的模型求解Q1温度分布，最后以正问题求解器为目标函数，通过无导数优化方法搜索Q2/Q3的最优层厚。分解策略大幅降低了问题维度，且每阶段可独立验证。",
+    "algorithm": {
+      "stage_1_parameter_inversion": {
+        "name": "最小二乘参数反演",
+        "description": "以对流换热系数h为待估参数，以Q1条件下仿真皮肤温度与附件2实测温度的残差平方和为目标函数，用Levenberg-Marquardt或模式搜索求解",
+        "objective": "min_h Σ_j [T_sim(t_j; h) - T_meas(t_j)]²",
+        "output": "最优h值"
+      },
+      "stage_2_forward_solver": {
+        "name": "Crank-Nicolson有限差分法",
+        "description": "将四层介质沿厚度方向离散为均匀网格，界面处用调和平均处理热导率跳跃；时间方向用Crank-Nicolson格式，每步解三对角方程组（Thomas算法）",
+        "spatial_discretization": "每层均匀网格，界面节点共享",
+        "temporal_discretization": "Crank-Nicolson, dt可自适应",
+        "interface_handling": "热导率调和平均保证热流连续",
+        "boundary_implementation": "外表面对流边界用虚拟节点法离散，内表面Dirichlet边界",
+        "output": "T(x,t)全场温度分布及皮肤外侧温度时序"
+      },
+      "stage_3_optimization": {
+        "name": "约束优化（GA或模式搜索）",
+        "description": "Q2为单变量约束优化，可用黄金分割+可行性检验；Q3为双变量约束优化，用遗传算法或模式搜索",
+        "Q2_algorithm": "黄金分割搜索 / 模式搜索，目标为最小化d_II，约束为温度阈值",
+        "Q3_algorithm": "遗传算法（NSGA-II或带约束的GA），目标为最小化d_II+d_IV或加权和",
+        "constraint_handling": "罚函数法或可行性优先法",
+        "output": "最优层厚组合"
+      }
+    },
+    "feasibility": {
+      "computational_complexity": "正问题O(Nx·Nt)，优化需调用数百至数千次正问题，总体可接受",
+      "implementation_effort": "中等，有限差分核心约200行Python，优化调用scipy.optimize",
+      "risk_points": [
+        "对流换热系数反演可能存在多解或不收敛",
+        "空气层热导率极小导致网格界面处理需谨慎",
+        "优化中约束边界附近目标函数可能不光滑"
+      ],
+      "mitigation": [
+        "反演时给h合理初值和 bounds",
+        "界面用调和平均热导率，网格加密验证",
+        "优化后做局部细化搜索"
+      ]
+    },
+    "depends_on": ["D001"],
+    "tags": ["crank_nicolson", "parameter_inversion", "constrained_optimization", "genetic_algorithm", "three_stage"]
+  }
+}

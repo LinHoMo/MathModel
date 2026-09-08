@@ -1,0 +1,252 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T14:00:46Z",
+  "finished_at": "2026-09-08T14:03:00Z",
+  "latency_seconds": 134.0,
+  "submitted_at": "2026-09-08T14:03:01Z",
+  "node_id": "model_construction",
+  "dag_position": 1,
+  "payload": {
+    "title": "板凳龙多体刚体链运动学模型",
+    "model_type": "rigid_body_chain_kinematics",
+    "model_family": "multibody_dynamics",
+    "assumptions": [
+      "每节板凳视为刚体，不发生弯曲变形",
+      "把手与板固连，把手中心位于孔中心，相邻板凳通过把手铰接",
+      "忽略空气阻力和板凳质量，仅考虑运动学不涉及动力学受力分析",
+      "各把手中心均位于等距螺线上（题面明确要求）",
+      "龙头前把手沿螺线匀速运动，速度大小恒为1m/s",
+      "板凳宽度方向不发生重叠时视为不碰撞（碰撞判据为非相邻把手间距小于板宽）"
+    ],
+    "variables": [
+      {
+        "name": "x_i",
+        "symbol": "x_i(t)",
+        "definition": "第i个把手中心的x坐标(i=1..224)",
+        "unit": "m"
+      },
+      {
+        "name": "y_i",
+        "symbol": "y_i(t)",
+        "definition": "第i个把手中心的y坐标",
+        "unit": "m"
+      },
+      {
+        "name": "v_i",
+        "symbol": "v_i(t)",
+        "definition": "第i个把手的速率",
+        "unit": "m/s"
+      },
+      {
+        "name": "theta",
+        "symbol": "\\theta(t)",
+        "definition": "龙头前把手在螺线上的极角（顺时针为正）",
+        "unit": "rad"
+      },
+      {
+        "name": "R_spiral",
+        "symbol": "R(\\theta)",
+        "definition": "螺线半径作为极角的函数",
+        "unit": "m"
+      },
+      {
+        "name": "phi_i",
+        "symbol": "\\phi_i(t)",
+        "definition": "第i节板凳的方位角",
+        "unit": "rad"
+      },
+      {
+        "name": "s_i",
+        "symbol": "s_i(t)",
+        "definition": "第i个把手沿螺线的弧长坐标",
+        "unit": "m"
+      },
+      {
+        "name": "d_ij",
+        "symbol": "d_{ij}(t)",
+        "definition": "第i与第j个把手间距离（碰撞检测用）",
+        "unit": "m"
+      },
+      {
+        "name": "p_opt",
+        "symbol": "p_{opt}",
+        "definition": "Q3优化的最小螺距",
+        "unit": "m"
+      },
+      {
+        "name": "v_head_max",
+        "symbol": "v_{head,max}",
+        "definition": "Q5优化的龙头最大行进速度",
+        "unit": "m/s"
+      },
+      {
+        "name": "omega",
+        "symbol": "\\omega(t)",
+        "definition": "龙头前把手的角速度",
+        "unit": "rad/s"
+      },
+      {
+        "name": "t_collision",
+        "symbol": "t_{collision}",
+        "definition": "Q2首次碰撞时刻",
+        "unit": "s"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "N",
+        "symbol": "N",
+        "definition": "板凳龙总节数",
+        "unit": "节",
+        "value": 223
+      },
+      {
+        "name": "L_head",
+        "symbol": "L_{head}",
+        "definition": "龙头板长",
+        "unit": "m",
+        "value": 3.41
+      },
+      {
+        "name": "L_body",
+        "symbol": "L_{body}",
+        "definition": "龙身和龙尾板长",
+        "unit": "m",
+        "value": 2.2
+      },
+      {
+        "name": "d_offset",
+        "symbol": "d_{offset}",
+        "definition": "孔中心距最近板头距离",
+        "unit": "m",
+        "value": 0.275
+      },
+      {
+        "name": "W",
+        "symbol": "W",
+        "definition": "板凳板宽",
+        "unit": "m",
+        "value": 0.3
+      },
+      {
+        "name": "p_in",
+        "symbol": "p_{in}",
+        "definition": "盘入螺距(Q1/Q2)",
+        "unit": "m",
+        "value": 0.55
+      },
+      {
+        "name": "v0",
+        "symbol": "v_0",
+        "definition": "龙头前把手行进速度",
+        "unit": "m/s",
+        "value": 1.0
+      },
+      {
+        "name": "R_A",
+        "symbol": "R_A",
+        "definition": "初始时刻龙头(第16圈A点)螺线半径",
+        "unit": "m",
+        "value": 8.8
+      },
+      {
+        "name": "b_spiral",
+        "symbol": "b",
+        "definition": "阿基米德螺线参数 b=p/(2π)",
+        "unit": "m/rad",
+        "value": 0.08754
+      },
+      {
+        "name": "R_turn",
+        "symbol": "R_{turn}",
+        "definition": "调头空间半径",
+        "unit": "m",
+        "value": 4.5
+      }
+    ],
+    "objectives": [
+      "Q1: 正向仿真223节板凳龙0-300s每秒224个把手的位置和速度",
+      "Q2: 确定首次碰撞时刻 t_collision = min{t: ∃_{i<j,|i-j|>1} d_ij(t) < W}",
+      "Q3: 最小化螺距 p 使龙头能盘入到半径4.5m的调头空间边界",
+      "Q4: 优化S形调头曲线使总弧长最短，同时保持与盘入/盘出螺线相切",
+      "Q5: 最大化龙头速度 v_head 使所有把手速度 v_i ≤ 2 m/s"
+    ],
+    "constraints": [
+      "阿基米德等距螺线: R(θ) = R_A - b·θ (顺时针盘入半径递减)",
+      "相邻把手间距守恒: sqrt((x_i-x_{i-1})²+(y_i-y_{i-1})²) = ℓ_i, ℓ_1=L_head-2d_offset, ℓ_{i>1}=L_body-2d_offset",
+      "龙头前把手匀速: ||ṙ_1(t)|| = v_0 = 1.0 m/s",
+      "非相邻节不碰撞: d_ij(t) ≥ W, ∀_{i<j,|i-j|>1}",
+      "初始条件: θ(0)=0, R(0)=R_A=8.8m",
+      "Q3调头空间边界: R(θ_final) ≥ R_turn = 4.5m",
+      "Q5速度约束: v_i(t) ≤ 2.0 m/s, ∀i,t"
+    ],
+    "mechanisms": [
+      "阿基米德螺线参数化: 龙头前把手沿等距螺线运动，半径随极角线性变化 R(θ)=R0+bθ",
+      "刚体链运动学递推: 板凳龙视为多节刚体铰接链，后节位置由前节约束递推；各把手均在螺线上",
+      "碰撞检测机制: 非相邻把手间欧氏距离小于板宽时判定为碰撞",
+      "S形曲线几何: 两段相切圆弧连接盘入与盘出螺线，半径比2:1，切点处曲率连续"
+    ],
+    "equations": [
+      {
+        "latex": "R(\\theta) = R_A - b\\theta, \\quad b = \\frac{p_{in}}{2\\pi}",
+        "description": "阿基米德等距螺线参数方程"
+      },
+      {
+        "latex": "\\mathbf{r}_i(t) = \\mathbf{r}_{i-1}(t) + \\ell_i \\cdot \\hat{\\mathbf{u}}_i(t), \\quad \\hat{\\mathbf{u}}_i = \\frac{\\mathbf{r}_{i-1} - \\mathbf{r}_{i-2}}{\\|\\mathbf{r}_{i-1} - \\mathbf{r}_{i-2}\\|}",
+        "description": "刚体链递推方程"
+      },
+      {
+        "latex": "\\mathbf{v}_i(t) = \\frac{d\\mathbf{r}_i}{dt}, \\quad v_i = \\|\\mathbf{v}_i\\|",
+        "description": "速度定义方程"
+      },
+      {
+        "latex": "\\frac{d\\theta}{dt} = \\frac{v_0}{\\sqrt{R(\\theta)^2 + b^2}}, \\quad \\omega = \\frac{d\\theta}{dt}",
+        "description": "龙头角速度方程（由匀速约束和螺线几何推导）"
+      },
+      {
+        "latex": "d_{ij}(t) = \\sqrt{(x_i - x_j)^2 + (y_i - y_j)^2}",
+        "description": "把手间距离定义（碰撞检测用）"
+      },
+      {
+        "latex": "\\min_{p} \\; p \\quad \\text{s.t.} \\quad R_A - \\frac{p}{2\\pi}\\theta_{final} \\geq R_{turn}",
+        "description": "Q3最小螺距优化问题"
+      },
+      {
+        "latex": "\\max_{v_{head}} \\; v_{head} \\quad \\text{s.t.} \\quad v_i(t) \\leq 2.0, \\; \\forall i,t",
+        "description": "Q5最大龙头速度优化问题"
+      }
+    ],
+    "data": {
+      "objective": "建立多体刚体链运动学模型，仿真板凳龙沿阿基米德螺线盘入/盘出的位置速度，检测碰撞，优化螺距与调头曲线，求解速度约束下的最大龙头速度",
+      "constraints": [
+        "相邻把手间距守恒(刚体约束)",
+        "龙头前把手匀速1m/s",
+        "非相邻节不碰撞(间距≥板宽0.3m)",
+        "各把手中心位于螺线上",
+        "Q3调头空间半径4.5m边界约束",
+        "Q5所有把手速度≤2m/s"
+      ],
+      "variables": [
+        "x_i(t), y_i(t): 224个把手中心坐标",
+        "v_i(t): 各把手速率",
+        "θ(t): 龙头极角",
+        "R(θ): 螺线半径",
+        "d_ij(t): 把手间距(碰撞检测)",
+        "p_opt: 最小螺距(Q3)",
+        "v_head_max: 最大龙头速度(Q5)"
+      ],
+      "card_id": "mc-monte-carlo",
+      "shortlist": [
+        "mc-monte-carlo",
+        "mc-ga",
+        "mc-pso"
+      ]
+    },
+    "objective": "建立多体刚体链运动学模型，仿真板凳龙沿阿基米德螺线盘入/盘出的位置速度，检测碰撞，优化螺距与调头曲线，求解速度约束下的最大龙头速度"
+  }
+}

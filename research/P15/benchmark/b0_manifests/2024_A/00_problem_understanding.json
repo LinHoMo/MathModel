@@ -1,0 +1,113 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T14:00:00Z",
+  "finished_at": "2026-09-08T14:00:45Z",
+  "latency_seconds": 45.0,
+  "submitted_at": "2026-09-08T14:00:46Z",
+  "node_id": "problem_understanding",
+  "dag_position": 0,
+  "payload": {
+    "title": "2024_A 板凳龙闹元宵 — 问题理解与分解",
+    "problem_type": "运动学仿真与几何优化",
+    "sub_questions": [
+      {
+        "id": "Q1",
+        "text": "沿螺距55cm等距螺线顺时针盘入，龙头前把手速度1m/s，初始在第16圈A点，求0-300s每秒各把手位置和速度",
+        "type": "forward_simulation"
+      },
+      {
+        "id": "Q2",
+        "text": "确定盘入终止时刻使得板凳间不发生碰撞，给出此时位置和速度",
+        "type": "collision_detection"
+      },
+      {
+        "id": "Q3",
+        "text": "调头空间为直径9m圆形区域，确定最小螺距使龙头能盘入到调头空间边界",
+        "type": "geometric_optimization"
+      },
+      {
+        "id": "Q4",
+        "text": "盘入螺距1.7m，盘出螺线中心对称，S形调头曲线由两段相切圆弧组成（前半径=后半径2倍），能否调整圆弧使调头曲线变短；给出-100s到100s每秒位置速度",
+        "type": "curve_optimization_and_simulation"
+      },
+      {
+        "id": "Q5",
+        "text": "沿Q4路径行进，确定龙头最大行进速度使各把手速度均不超过2m/s",
+        "type": "velocity_constrained_optimization"
+      }
+    ],
+    "key_variables": [
+      {
+        "name": "N",
+        "meaning": "板凳总节数",
+        "value": 223,
+        "unit": "节"
+      },
+      {
+        "name": "L_head",
+        "meaning": "龙头板长",
+        "value": 3.41,
+        "unit": "m"
+      },
+      {
+        "name": "L_body",
+        "meaning": "龙身/龙尾板长",
+        "value": 2.2,
+        "unit": "m"
+      },
+      {
+        "name": "W",
+        "meaning": "板宽",
+        "value": 0.3,
+        "unit": "m"
+      },
+      {
+        "name": "d_offset",
+        "meaning": "孔中心距最近板头距离",
+        "value": 0.275,
+        "unit": "m"
+      },
+      {
+        "name": "p_in",
+        "meaning": "盘入螺距(Q1/Q2)",
+        "value": 0.55,
+        "unit": "m"
+      },
+      {
+        "name": "v0",
+        "meaning": "龙头前把手行进速度",
+        "value": 1.0,
+        "unit": "m/s"
+      },
+      {
+        "name": "R_turn",
+        "meaning": "调头空间半径(直径9m)",
+        "value": 4.5,
+        "unit": "m"
+      },
+      {
+        "name": "n_handles",
+        "meaning": "把手中心总数(223前把手+1龙尾后把手)",
+        "value": 224,
+        "unit": "个"
+      }
+    ],
+    "model_family_hint": "multibody_dynamics + differential_geometry + numerical_optimization",
+    "difficulty_assessment": {
+      "overall": "high",
+      "reason": "多体刚体链运动学+阿基米德螺线参数化+碰撞检测+几何优化，5个子问题耦合度高，需要精确数值仿真",
+      "sub_question_difficulty": {
+        "Q1": "medium",
+        "Q2": "high",
+        "Q3": "medium",
+        "Q4": "high",
+        "Q5": "medium"
+      }
+    }
+  }
+}

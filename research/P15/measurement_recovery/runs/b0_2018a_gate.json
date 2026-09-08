@@ -1,0 +1,768 @@
+{
+  "execution_authenticity": {
+    "gate": "execution_authenticity",
+    "version": "2.0",
+    "project": "p151-2018a-b0",
+    "run_id": "ext_validation_plan_6a88266251bf",
+    "executor_type": "external_agent",
+    "synthetic": false,
+    "capability_result": true,
+    "overall": "INVALID",
+    "summary": {
+      "pass": 12,
+      "fail": 2,
+      "invalid": 3,
+      "skipped": 0,
+      "total": 17
+    },
+    "checks": [
+      {
+        "id": "EAG-EX",
+        "name": "executor_type annotated",
+        "pass": true,
+        "expected": "external_agent",
+        "actual": "external_agent",
+        "message": ""
+      },
+      {
+        "id": "EAG-01",
+        "name": "model_provider non-empty",
+        "pass": true,
+        "expected": "non-empty string (e.g. 'openai')",
+        "actual": "doubao",
+        "message": ""
+      },
+      {
+        "id": "EAG-02",
+        "name": "model_version non-empty",
+        "pass": true,
+        "expected": "non-empty string (e.g. 'gpt-4o-2024-05-13')",
+        "actual": "doubao-pro-32k",
+        "message": ""
+      },
+      {
+        "id": "EAG-03",
+        "name": "skill_version is non-empty hash",
+        "pass": false,
+        "expected": "64-char hex, not empty-string SHA256",
+        "actual": "b0-baseline-v1",
+        "message": ""
+      },
+      {
+        "id": "EAG-04",
+        "name": "execution timestamps reasonable",
+        "pass": true,
+        "expected": "parseable, not in future",
+        "actual": "started=2026-09-08T02:15:00Z",
+        "message": ""
+      },
+      {
+        "id": "EAG-05",
+        "name": "latency >= 1.0s (real execution)",
+        "pass": true,
+        "expected": ">= 1.0s",
+        "actual": "180.0s",
+        "message": ""
+      },
+      {
+        "id": "EAG-06",
+        "name": "input_hash matches recomputed inputs hash",
+        "pass": false,
+        "expected": "e10a50b7ab6ae4d1...",
+        "actual": "6b4062dcd020bd6b...",
+        "message": ""
+      },
+      {
+        "id": "EAG-07",
+        "name": "workflow_version is valid non-empty hash",
+        "pass": false,
+        "expected": "64-char non-empty hex",
+        "actual": "b0-baseline-v1",
+        "message": ""
+      },
+      {
+        "id": "EAG-08",
+        "name": "real execution artifacts exist (code/output/artifacts with files)",
+        "pass": false,
+        "expected": "at least one of code/, output/, artifacts/ containing actual files",
+        "actual": "code(has_files)=False, output(has_files)=False, artifacts(has_files)=False",
+        "message": ""
+      },
+      {
+        "id": "EAG-09",
+        "name": "registry has artifacts",
+        "pass": true,
+        "expected": ">= 1 artifact",
+        "actual": 5,
+        "message": ""
+      },
+      {
+        "id": "EAG-10",
+        "name": "artifact payloads non-empty (>=80% pass Layer 1)",
+        "pass": false,
+        "expected": "pass_rate >= 0.8, no INVALID",
+        "actual": "pass_rate=0.6, INVALID=2",
+        "message": ""
+      },
+      {
+        "id": "EAG-11",
+        "name": "decision_log has decisions with evidence",
+        "pass": true,
+        "expected": "all decisions have evidence_ids or substantive reasoning",
+        "actual": "4/4 decisions have evidence",
+        "message": ""
+      },
+      {
+        "id": "EAG-12",
+        "name": "artifacts have execution provenance (>=90%)",
+        "pass": true,
+        "expected": ">= 90% artifacts with non-empty provenance",
+        "actual": "5/5 have provenance",
+        "message": ""
+      },
+      {
+        "id": "EAG-13",
+        "name": "execution_mode is llm or hybrid",
+        "pass": true,
+        "expected": "'llm', 'hybrid', or 'external_agent'",
+        "actual": "external_agent",
+        "message": ""
+      },
+      {
+        "id": "EAG-14",
+        "name": "external agent_identity non-empty",
+        "pass": true,
+        "expected": "non-empty (doubao/gpt/claude/human)",
+        "actual": "doubao",
+        "message": ""
+      },
+      {
+        "id": "EAG-15",
+        "name": "external model_version non-empty (N/A for human)",
+        "pass": true,
+        "expected": "non-empty or 'N/A'",
+        "actual": "doubao-pro-32k",
+        "message": ""
+      },
+      {
+        "id": "EAG-16",
+        "name": "artifact input_sha256 bound to run input_hash",
+        "pass": true,
+        "expected": "at least one artifact provenance.input_sha256 == run input_hash",
+        "actual": "bound",
+        "message": ""
+      }
+    ],
+    "root_causes": [
+      "artifact payloads are empty — handlers create registry entries with payload=[] and only metadata in data field",
+      "no code/output/artifacts directories — no real execution artifacts on disk",
+      "skill_version is empty-string SHA256 — core/skills/ has no .yaml files"
+    ]
+  },
+  "artifact_integrity": {
+    "gate": "artifact_integrity",
+    "registry_path": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\projects\\p151-2018a-b0\\state\\registry.json",
+    "total_artifacts": 5,
+    "summary": {
+      "PASS": 3,
+      "INVALID": 2
+    },
+    "pass_rate": 0.6,
+    "overall": "INVALID",
+    "artifacts": [
+      {
+        "artifact_id": "D001",
+        "type": "decision",
+        "overall": "PASS",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '求解方法选择：有限差分法 + 数值优化', 'question': 'Q001', 'decision': '采用隐式有限差分法（Cran",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-D-02",
+              "name": "decision has decision content",
+              "pass": true,
+              "expected": "non-empty decision string",
+              "actual": "采用隐式有限差分法（Crank-Nicolson格式）离散PDE，结合遗传算法/模式搜索进行层厚优化，并用最小二乘法反演对流换热系数",
+              "message": ""
+            },
+            {
+              "id": "L1-D-03",
+              "name": "decision has alternatives",
+              "pass": true,
+              "expected": "non-empty alternatives list",
+              "actual": 4,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": {
+          "layer": 2,
+          "name": "structurally_valid",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L2-00",
+              "name": "artifact is valid dict",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L2-01",
+              "name": "schema_version is 3.1",
+              "pass": true,
+              "expected": "3.1",
+              "actual": "3.1",
+              "message": ""
+            },
+            {
+              "id": "L2-02",
+              "name": "artifact_id format (A+3 digits)",
+              "pass": true,
+              "expected": "e.g. P001, M001",
+              "actual": "D001",
+              "message": ""
+            },
+            {
+              "id": "L2-03",
+              "name": "type is valid",
+              "pass": true,
+              "expected": "one of ['assumption', 'claim', 'decision', 'experiment', 'figure', 'model', 'paper_section', 'problem', 'question', 'result']",
+              "actual": "decision",
+              "message": ""
+            },
+            {
+              "id": "L2-04",
+              "name": "status is valid",
+              "pass": true,
+              "expected": "one of ['active', 'deprecated', 'draft', 'invalidated', 'superseded']",
+              "actual": "active",
+              "message": ""
+            },
+            {
+              "id": "L2-05",
+              "name": "created_at is parseable ISO8601",
+              "pass": true,
+              "expected": "ISO8601",
+              "actual": "2026-09-08T06:33:14Z",
+              "message": ""
+            },
+            {
+              "id": "L2-06",
+              "name": "lifecycle_history non-empty",
+              "pass": true,
+              "expected": ">= 1 event",
+              "actual": 2,
+              "message": ""
+            },
+            {
+              "id": "L2-07",
+              "name": "payload type correct for decision",
+              "pass": true,
+              "expected": "dict",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L2-08",
+              "name": "depends_on references exist in registry",
+              "pass": true,
+              "expected": "all referenced IDs exist",
+              "actual": "all exist",
+              "message": ""
+            },
+            {
+              "id": "L2-09",
+              "name": "relations references exist in registry",
+              "pass": true,
+              "expected": "all from/to IDs exist",
+              "actual": "all exist",
+              "message": ""
+            }
+          ]
+        },
+        "layer3": null
+      },
+      {
+        "artifact_id": "D002",
+        "type": "decision",
+        "overall": "PASS",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '求解策略：三阶段流水线（反演→正问题→优化）', 'question': 'Q001', 'decision': '分三阶段求解：(1)参",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-D-02",
+              "name": "decision has decision content",
+              "pass": true,
+              "expected": "non-empty decision string",
+              "actual": "分三阶段求解：(1)参数反演——用附件2实测数据最小二乘拟合对流换热系数h；(2)正问题求解——Crank-Nicolson有限差分计算温度场；(3)约束优化——GA/模式搜索搜索最优层厚",
+              "message": ""
+            },
+            {
+              "id": "L1-D-03",
+              "name": "decision has alternatives",
+              "pass": true,
+              "expected": "non-empty alternatives list",
+              "actual": 2,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": {
+          "layer": 2,
+          "name": "structurally_valid",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L2-00",
+              "name": "artifact is valid dict",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L2-01",
+              "name": "schema_version is 3.1",
+              "pass": true,
+              "expected": "3.1",
+              "actual": "3.1",
+              "message": ""
+            },
+            {
+              "id": "L2-02",
+              "name": "artifact_id format (A+3 digits)",
+              "pass": true,
+              "expected": "e.g. P001, M001",
+              "actual": "D002",
+              "message": ""
+            },
+            {
+              "id": "L2-03",
+              "name": "type is valid",
+              "pass": true,
+              "expected": "one of ['assumption', 'claim', 'decision', 'experiment', 'figure', 'model', 'paper_section', 'problem', 'question', 'result']",
+              "actual": "decision",
+              "message": ""
+            },
+            {
+              "id": "L2-04",
+              "name": "status is valid",
+              "pass": true,
+              "expected": "one of ['active', 'deprecated', 'draft', 'invalidated', 'superseded']",
+              "actual": "active",
+              "message": ""
+            },
+            {
+              "id": "L2-05",
+              "name": "created_at is parseable ISO8601",
+              "pass": true,
+              "expected": "ISO8601",
+              "actual": "2026-09-08T06:33:14Z",
+              "message": ""
+            },
+            {
+              "id": "L2-06",
+              "name": "lifecycle_history non-empty",
+              "pass": true,
+              "expected": ">= 1 event",
+              "actual": 2,
+              "message": ""
+            },
+            {
+              "id": "L2-07",
+              "name": "payload type correct for decision",
+              "pass": true,
+              "expected": "dict",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L2-08",
+              "name": "depends_on references exist in registry",
+              "pass": true,
+              "expected": "all referenced IDs exist",
+              "actual": "all exist",
+              "message": ""
+            },
+            {
+              "id": "L2-09",
+              "name": "relations references exist in registry",
+              "pass": true,
+              "expected": "all from/to IDs exist",
+              "actual": "all exist",
+              "message": ""
+            }
+          ]
+        },
+        "layer3": null
+      },
+      {
+        "artifact_id": "D003",
+        "type": "decision",
+        "overall": "PASS",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '验证计划：数值收敛性 + 参数敏感性 + 约束鲁棒性', 'question': 'Q001', 'decision': '采用三级验证体",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-D-02",
+              "name": "decision has decision content",
+              "pass": true,
+              "expected": "non-empty decision string",
+              "actual": "采用三级验证体系：(1)数值验证——网格/时间步收敛性检验与守恒律检查；(2)数据验证——Q1仿真结果与附件2实测数据对比；(3)优化验证——最优解附近约束敏感性分析与鲁棒性检验",
+              "message": ""
+            },
+            {
+              "id": "L1-D-03",
+              "name": "decision has alternatives",
+              "pass": true,
+              "expected": "non-empty alternatives list",
+              "actual": 2,
+              "message": ""
+            }
+          ]
+        },
+        "layer2": {
+          "layer": 2,
+          "name": "structurally_valid",
+          "verdict": "PASS",
+          "checks": [
+            {
+              "id": "L2-00",
+              "name": "artifact is valid dict",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L2-01",
+              "name": "schema_version is 3.1",
+              "pass": true,
+              "expected": "3.1",
+              "actual": "3.1",
+              "message": ""
+            },
+            {
+              "id": "L2-02",
+              "name": "artifact_id format (A+3 digits)",
+              "pass": true,
+              "expected": "e.g. P001, M001",
+              "actual": "D003",
+              "message": ""
+            },
+            {
+              "id": "L2-03",
+              "name": "type is valid",
+              "pass": true,
+              "expected": "one of ['assumption', 'claim', 'decision', 'experiment', 'figure', 'model', 'paper_section', 'problem', 'question', 'result']",
+              "actual": "decision",
+              "message": ""
+            },
+            {
+              "id": "L2-04",
+              "name": "status is valid",
+              "pass": true,
+              "expected": "one of ['active', 'deprecated', 'draft', 'invalidated', 'superseded']",
+              "actual": "active",
+              "message": ""
+            },
+            {
+              "id": "L2-05",
+              "name": "created_at is parseable ISO8601",
+              "pass": true,
+              "expected": "ISO8601",
+              "actual": "2026-09-08T06:33:14Z",
+              "message": ""
+            },
+            {
+              "id": "L2-06",
+              "name": "lifecycle_history non-empty",
+              "pass": true,
+              "expected": ">= 1 event",
+              "actual": 2,
+              "message": ""
+            },
+            {
+              "id": "L2-07",
+              "name": "payload type correct for decision",
+              "pass": true,
+              "expected": "dict",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L2-08",
+              "name": "depends_on references exist in registry",
+              "pass": true,
+              "expected": "all referenced IDs exist",
+              "actual": "all exist",
+              "message": ""
+            },
+            {
+              "id": "L2-09",
+              "name": "relations references exist in registry",
+              "pass": true,
+              "expected": "all from/to IDs exist",
+              "actual": "all exist",
+              "message": ""
+            }
+          ]
+        },
+        "layer3": null
+      },
+      {
+        "artifact_id": "M001",
+        "type": "model",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '四层非稳态热传导PDE模型构建', 'question': 'Q001', 'model_type': 'one_dimensional_",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-M-objective",
+              "name": "model payload has objective (目标)",
+              "pass": false,
+              "expected": "non-empty objective",
+              "actual": "NoneType",
+              "message": ""
+            },
+            {
+              "id": "L1-M-constraints",
+              "name": "model payload has constraints (约束)",
+              "pass": true,
+              "expected": "non-empty constraints",
+              "actual": "list",
+              "message": ""
+            },
+            {
+              "id": "L1-M-variables",
+              "name": "model payload has variables (变量)",
+              "pass": true,
+              "expected": "non-empty variables",
+              "actual": "list",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      },
+      {
+        "artifact_id": "Q001",
+        "type": "question",
+        "overall": "INVALID",
+        "layer1": {
+          "layer": 1,
+          "name": "non_empty",
+          "verdict": "FAIL",
+          "checks": [
+            {
+              "id": "L1-00",
+              "name": "artifact exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-01",
+              "name": "payload field exists",
+              "pass": true,
+              "expected": null,
+              "actual": null,
+              "message": ""
+            },
+            {
+              "id": "L1-02",
+              "name": "payload non-empty (not []/{}/None/empty str)",
+              "pass": true,
+              "expected": "non-None, non-empty",
+              "actual": "{'title': '高温作业专用服装设计 — 问题理解与分解', 'question': 'Q001', 'problem_type': 'transient",
+              "message": ""
+            },
+            {
+              "id": "L1-03",
+              "name": "payload is not pure placeholder",
+              "pass": true,
+              "expected": "not placeholder",
+              "actual": "ok",
+              "message": ""
+            },
+            {
+              "id": "L1-Q-01",
+              "name": "question payload has sub_questions",
+              "pass": true,
+              "expected": "non-empty sub_questions list",
+              "actual": 3,
+              "message": ""
+            },
+            {
+              "id": "L1-Q-02-0",
+              "name": "sub_question[0] has id+text",
+              "pass": false,
+              "expected": "dict with id and text",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L1-Q-02-1",
+              "name": "sub_question[1] has id+text",
+              "pass": false,
+              "expected": "dict with id and text",
+              "actual": "dict",
+              "message": ""
+            },
+            {
+              "id": "L1-Q-02-2",
+              "name": "sub_question[2] has id+text",
+              "pass": false,
+              "expected": "dict with id and text",
+              "actual": "dict",
+              "message": ""
+            }
+          ]
+        },
+        "layer2": null,
+        "layer3": null
+      }
+    ]
+  },
+  "overall": "INVALID"
+}

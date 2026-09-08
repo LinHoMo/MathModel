@@ -1,0 +1,83 @@
+{
+  "executor_type": "external_agent",
+  "agent_identity": "doubao",
+  "model_version": "doubao-pro-32k",
+  "input_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569",
+  "prompt_or_skill_version": "b0-baseline-v1",
+  "artifact_schema_version": "model-ir-1.0",
+  "started_at": "2026-09-08T02:15:00Z",
+  "finished_at": "2026-09-08T02:18:00Z",
+  "latency_seconds": 180.0,
+  "submitted_at": "2026-09-08T02:18:05Z",
+  "node_id": "validation_plan",
+  "dag_position": 4,
+  "payload": {
+    "title": "验证计划：数值收敛性 + 参数敏感性 + 约束鲁棒性",
+    "question": "Q001",
+    "decision": "采用三级验证体系：(1)数值验证——网格/时间步收敛性检验与守恒律检查；(2)数据验证——Q1仿真结果与附件2实测数据对比；(3)优化验证——最优解附近约束敏感性分析与鲁棒性检验",
+    "alternatives": [
+      {
+        "method": "仅与实测数据对比",
+        "pros": ["直接验证预测能力"],
+        "cons": ["无法区分模型误差与数值误差", "不能保证优化结果可靠"],
+        "applicability": "不充分"
+      },
+      {
+        "method": "三级验证体系（数值+数据+优化）",
+        "pros": ["全面覆盖模型、数值、优化三个层面", "可定位误差来源", "保证最终设计可靠"],
+        "cons": ["工作量较大"],
+        "applicability": "推荐"
+      }
+    ],
+    "reasoning": "本题的最终输出是优化后的层厚设计，仅验证正问题精度不足以保证优化结果可靠。需要从数值离散收敛性（确保PDE求解无系统偏差）、实测数据拟合（确保模型物理正确）、优化解的约束敏感性（确保最优解不是数值伪影）三个层面系统验证，才能给出可信的设计建议。",
+    "sensitivity_analysis": {
+      "parameters_to_test": [
+        {"name": "对流换热系数h", "range": "±20%", "impact": "直接影响外表面热流，是最敏感参数"},
+        {"name": "II层热导率k_II", "range": "±10%", "impact": "影响隔热性能，Q2/Q3优化关键"},
+        {"name": "IV层热导率k_IV", "range": "±10%", "impact": "空气层热导率小但厚度大，影响显著"},
+        {"name": "环境温度T_env", "range": "±2°C", "impact": "边界条件扰动，检验设计裕度"}
+      ],
+      "method": "单因素扰动法（OAT），固定其他参数，逐一扰动并观察皮肤温度峰值与超温时间变化",
+      "output": "各参数敏感度排序与最优解的可行域边界"
+    },
+    "validation_methods": [
+      {
+        "name": "网格收敛性检验",
+        "description": "分别用Nx=50,100,200,400空间网格计算Q1皮肤温度，观察收敛趋势；要求相邻网格间最大温差<0.1°C",
+        "criterion": "Richardson外推或网格收敛指数(GCI)<5%"
+      },
+      {
+        "name": "时间步收敛性检验",
+        "description": "分别用dt=1s,5s,10s,30s计算，观察皮肤温度时序收敛性",
+        "criterion": "dt减半后温度变化<0.05°C"
+      },
+      {
+        "name": "能量守恒检验",
+        "description": "检验系统总内能变化率与外表面对流热流是否平衡",
+        "criterion": "相对误差<1%"
+      },
+      {
+        "name": "实测数据对比验证",
+        "description": "将Q1仿真皮肤温度与附件2实测数据逐时刻对比，计算RMSE和R²",
+        "criterion": "RMSE<1°C, R²>0.95"
+      },
+      {
+        "name": "优化解约束验证",
+        "description": "对Q2/Q3最优层厚，重新独立仿真验证温度约束是否严格满足，并计算约束裕度",
+        "criterion": "T_skin_max ≤ 47°C且超44°C时间≤5min，裕度>0"
+      },
+      {
+        "name": "优化解稳定性检验",
+        "description": "在最优解附近±5%扰动层厚，观察约束违反情况，确保最优解位于可行域内部而非数值伪影",
+        "criterion": "小扰动下约束仍满足或违反量可解释"
+      },
+      {
+        "name": "多随机种子优化验证",
+        "description": "GA优化使用5个不同随机种子（42, 123, 456, 789, 1024），检验最优解一致性",
+        "criterion": "最优层厚标准差<0.5mm"
+      }
+    ],
+    "depends_on": ["D002"],
+    "tags": ["validation", "sensitivity_analysis", "grid_convergence", "robustness", "monte_carlo"]
+  }
+}
