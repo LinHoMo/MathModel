@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-ABOUTME: 从 catalog.yaml 单一真源生成 adapters/openai.yaml（Codex 运行时入口）
+ABOUTME: 从 catalog.yaml 单一真源生成 core/runtime/adapters/openai.yaml（Codex 运行时入口）
 ABOUTME: --check 模式检测漂移，供 doctor.py 调用
 
 用法：
-    python core/tools/gen_runtime_manifest.py            # 生成/覆盖 adapters/openai.yaml
+    python core/tools/gen_runtime_manifest.py            # 生成/覆盖 core/runtime/adapters/openai.yaml
     python core/tools/gen_runtime_manifest.py --check    # 漂移检测，drift 即 EXIT 1
     python core/tools/gen_runtime_manifest.py --verify   # 校验 29 agent/8 reviewer 等
 """
@@ -17,7 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 CATALOG_PATH = ROOT / "catalog.yaml"
-OPENAI_PATH = ROOT / "adapters" / "openai.yaml"
+OPENAI_PATH = ROOT / "core" / "runtime" / "adapters" / "openai.yaml"
 
 
 # ---------------------------------------------------------------------------
@@ -328,7 +328,7 @@ def generate_openai_yaml(catalog):
 
 def check_drift(generated_text):
     if not OPENAI_PATH.exists():
-        return False, ["adapters/openai.yaml 不存在，无法比对漂移"]
+        return False, ["core/runtime/adapters/openai.yaml 不存在，无法比对漂移"]
     current = OPENAI_PATH.read_text(encoding="utf-8")
     # 去掉自动生成头部时间戳行再比
     import re
@@ -391,7 +391,7 @@ def verify(catalog):
 # ---------------------------------------------------------------------------
 
 def main():
-    ap = argparse.ArgumentParser(description="从 catalog.yaml 生成 adapters/openai.yaml（Codex 运行时入口）")
+    ap = argparse.ArgumentParser(description="从 catalog.yaml 生成 core/runtime/adapters/openai.yaml（Codex 运行时入口）")
     ap.add_argument("--check", action="store_true", help="漂移检测，drift 即 EXIT 1")
     ap.add_argument("--verify", action="store_true", help="验证 catalog 内在一致性")
     args = ap.parse_args()
@@ -409,7 +409,7 @@ def main():
     if args.check:
         ok, diffs = check_drift(generated)
         if ok:
-            print("[check] adapters/openai.yaml 与 catalog.yaml 一致，无漂移")
+            print("[check] core/runtime/adapters/openai.yaml 与 catalog.yaml 一致，无漂移")
             return 0
         print(f"[check] 检测到 {len(diffs)} 处漂移（应重新生成）:")
         for d in diffs:
@@ -422,7 +422,7 @@ def main():
     hands = catalog.get("hands", [])
     total = sum(len(h.get("agents", [])) for h in hands)
     total_hands = len(hands)
-    print(f"[gen] adapters/openai.yaml 已生成：{total_hands} 手 {total} agent")
+    print(f"[gen] core/runtime/adapters/openai.yaml 已生成：{total_hands} 手 {total} agent")
     return 0
 
 
