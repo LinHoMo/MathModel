@@ -41,6 +41,22 @@
 1. P15-K001 的知识注入机制本身健康（Sham 100% 正确拒绝），negative result 源于信息 ceiling + 测量粒度 + 功效，**不是"知识卡无效"**。
 2. 知识库 84% 的卡缺建模机理段——但这不是实验瓶颈（注入的是最优卡），是**长期完善项**。
 3. 下一杠杆明确：**Representation（结构化输出契约）**——它强制而非建议，是最可能产生真效应的 Harness 维度，也是验证项目定位的关键实验。
+4. **2020_B 效应 = 知识卡防止子问题漏覆盖**（无知识臂 2 个 Q1-only FAIL，知识臂 0）——知识效应真实但极弱（n=1 事件）。
+
+## 3.5 补充进展（继续深挖）
+
+### 3.5.1 2020_B 效应精确定位 — `coverage_corrected.py` 实证
+修正 L2.6 计分（满分即 3，不乘权重）后逐 run 重算：
+- **Δ_K=+6.41 的全部来源 = 无知识臂（A/E）各 1 个 Q1-only FAIL run（61.5 分），知识/案例臂（B/C/D）0 个 FAIL（全 100）**——1 个稀有事件的臂间 0/1 差异（CI 触 0 的本质）。
+- 机制：mc-dp 卡 structure_signals 明确列出 2020_B Q1–Q3 结构 → 真卡臂 Agent 被引导覆盖全部子问题。
+- 2019_C 各臂产物哈希全不同（排除机械复制），但评分按 rep 完全同模式（92.3/92.3/76.9）→ 题目级区分度问题。
+- **对 K002**：子问题覆盖 gate 是核心机械强制（不是评分项）；知识效应的可测载体是覆盖指标。
+
+### 3.5.2 三仓库审计进度（Organizer o_0001iK1w1XA）
+- MathModelAgent dossier ✅（369 行）：Model 非一等语义对象、Model Selection = cookbook keyword routing、Code Interpreter 最强工程点、README 声称（RAG/HIL/Tavily/fallback）多为 DOC_CLAIM 死开关。
+- BZD：并发下载 164 文件 + 读 SKILL。
+- LinHoMo：读完 V3 runtime + K001 预注册/报告。
+- 剩 2 个 dossier 未完成。
 
 ## 4. 待办（审计报告回来后）
 
