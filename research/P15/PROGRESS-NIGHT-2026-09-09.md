@@ -68,10 +68,16 @@
 - K001 状态机 **ANALYSIS → CLOSED** ✅（negative result 按决策门记录，不进 P15.2）。
 - 2020_B 效应精确定位（coverage_corrected.py）：Δ_K 全部来自无知识臂 2 个 Q1-only FAIL（n=1 事件）；2018_A 噪声；2019_C 零区分度——K002 覆盖 gate + 区分度预检由此落地。
 
+## 3.5.5 审计行动整合（AUDIT_ACTION_PLAN.md，已 commit）
+- 六风险 → 行动项映射落盘：R5（execution weakness）→ P0 工程（experiment 节点真执行 + EvidenceGate 数值对账）；R6（ontology）→ K002 前置词表收敛；R1/R2/R4/R3 → 报告口径纪律 + K001 negative 作能力宣称基准。
+- 可吸收清单（不污染 core）：BZD → 原子扣分公式/rubric 构造（reviewer 层）；MMA → Code Interpreter 抽象 + notebook 留痕（execution adapter，P1 工程）。明确拒绝：硬编码经验值（6.81%）、cookbook 路由、死配置。
+- **K002 定稿裁决**：以三臂（F/S/S+V）为主，不扩 6 臂（K001 已测知识/Sham 臂，边际信息低；3 臂功效更高）；吸收审计 4 强制修正——block≥6（题目数 3→6，待定稿确认）、L3/L4 终点、族命中 primary OR secondary OR mechanism OR solver、词表先收敛。
+- 四条红线写入：不变成 process management / schema 不冒充正确性 / infra 不冒充 capability / 不丢 LLM-free 定位。
+
 ## 4. 待办（审计报告回来后）
 
-1. 三仓库审计报告回填：提炼 BZD/MathModelAgent 可吸收点（不污染 core 语义）+ 对 LinHoMo 六风险逐条回应。
-2. P15-K002 定稿：融入审计启示 → PREREGISTERED → FROZEN（哈希锁定）。
+1. ~~三仓库审计报告回填~~ → ✅ AUDIT_ACTION_PLAN.md（六风险回应 + 吸收清单 + K002 裁决 + 红线）。
+2. P15-K002 定稿：按行动计划 §3 的 4 强制修正 → PREREGISTERED → FROZEN（哈希锁定）。**待用户确认：题目数扩到 6+（block≥6）与 3 臂 vs 6 臂裁决**。
 3. 知识卡升级（P1 工程项）：16 张 Tier3 卡补 mechanism/formulations/solvers，与实验分离。
 4. L1 结构覆盖扩展（game/network/scheduling）过 Architecture Gate。
-5. 全量自检 + commit + push（按既定流程）。
+5. ~~全量自检 + commit + push~~ → ✅ 自检全绿（pytest 774/11、catalog OK、terminology 零残留、freeze PASS），10 个 commit 待 push。
