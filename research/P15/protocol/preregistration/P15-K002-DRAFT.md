@@ -1,9 +1,9 @@
 # P15-K002 — Model Representation Efficacy
-## 预注册（Preregistration）DRAFT v0.1
+## 预注册（Preregistration）DRAFT v0.2（三仓库审计已回填）
 
-> **状态：`DRAFT`（待三仓库审计报告回填"吸收优点"后定稿 → PREREGISTERED → FROZEN）**
+> **状态：`DRAFT`（审计启示已回填 v0.2；待 K001 CLOSED + 预注册签署 → PREREGISTERED → FROZEN）**
 > **科学定位**：K001（Knowledge 文本注入）已得 negative result；本实验检验**下一个杠杆：强制的结构化 Model Representation（输出契约）本身是否提升外部 Agent 的 Model Construction Quality**。
-> **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）
+> **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认——result 占位、features 硬编码、ontology 分叉）
 
 ---
 
@@ -31,6 +31,12 @@
 - 若 S > F：证明"标准化表达本身提升质量"——Harness 不仅是测量底座，还通过结构化状态约束提升外部 Agent 能力；直接回应审计风险 "Infrastructure without capability gain"。
 - 若 S ≈ F：与 K001 一致，指向"纯基础设施/契约无能力增益"——需要 Critic/Evidence 等更强杠杆，或承认 Harness 是纯测量层。
 - 若 S < F：结构化约束**有害**（框架化抑制自由建模）→ 重新评估 Model IR 强制方向。
+
+### 1.4 三仓库审计启示（CROSS_REPO_AUDIT.md，已回填）
+- **BZD/MMA 无任何因果证据**：BZD 全仓零测试零 benchmark（"基于 16 道题蒸馏"是 DOC_CLAIM）；MMA 无 benchmark/ablation（README 后期计划才有）。→ **LHM 的预注册实验是唯一能给出"知识/表示因果效应"数据的系统**——K002 延续这一稀缺性。
+- **execution weakness 是公共缺口**：MMA 有 Code Interpreter（最强执行参考）、BZD 显式外包、LHM experiment 节点产占位 result。→ K002 的 S/V 臂产物必须含**真实数值**（validation_plan 强制字段已有此设计）；result 占位符修复列为 P0 工程项（experiment 节点未执行应标 `not_executed`，不得用假占位 claim）。
+- **ontology 分叉直接污染测量**（RQ5 教训：`discrete_recurrence` vs `dynamic_programming`）。→ K002 的 S 臂 `model_family` 字段使用**单一受控词表**（若 `catalog/model_families.yaml` 已建则引用之；未建则用预注册固定枚举并声明为 K002 的受控词表，同时把"词表收敛"列为 P0 工程项）。
+- **"更多上下文"必须对齐**：K001 Sham>K 教训 → K002 指令长度对齐 <10%（§3.1 已设计）+ 信息密度统计（RQ6）。
 
 ---
 
@@ -126,7 +132,7 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 
 ### 4.3 过程与协变量
 - knowledge_trace：K002 无知识注入，trace 记录**结构遍历**（字段级完成度：18 字段是否全部实质性填充，非空字符串）。
-- tokens / 产物长度 / 信息密度（RQ5）。
+- tokens / 产物长度 / 信息密度（RQ6）。
 - failure mode 标注（与 K001 FM 分类一致）。
 
 ---
@@ -143,7 +149,8 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 ## 6. 执行与治理
 
 - 全程 `research/P15/`，不进 `core/`；不修改任何冻结规格（K001 frozen specs 原样保留）。
-- 工具链：复用 k001_common/freeze/state 模式，新增 `k002_*`（register 增加 coverage gate；gen_bundles 生成 F/S 两种 prompt 模板）。
+- 工具链：复用 k001_common/freeze/state 模式，新增 `k002_*`（register 增加 coverage gate + validation_plan gate；gen_bundles 生成 F/S/S+V 三种 prompt 模板）。
+- **P0 工程项（审计回填，独立于实验执行）**：①experiment 节点 result 占位符治理（`not_executed` 状态替代假占位 claim）；②`catalog/model_families.yaml` 单一词表（合并 model_ir.schema 枚举 + allowed_model_families + 方法卡 family）；③features 外部必传契约（缺失即 BLOCKED，替代硬编码 evaluation）。这三项不阻塞 K002 生成（K002 在 research/ 层用预注册词表），但必须与 K002 并行推进并在 CLOSED 前完成。
 - 外部生成/盲评由独立 Agent 完成（与 K001 同模式：生成侧 1 个 Organizer + 分片子代理；盲评 3 个独立 evaluator）。
 - 预注册签署 → FROZEN（哈希锁定 44+ 规格文件）→ PREFLIGHT → RUNNING → VALIDATION → ANALYSIS → CLOSED。
 
@@ -188,5 +195,6 @@ S+V 臂在 MODEL_IR 之外强制输出 `validation_plan`，直接锚定 L4.3/L3.
 ## 7. 已知局限（预先声明）
 1. F 臂"自由格式"是相对概念：prompt 仍要求覆盖主要建模成分，测的是 **schema 强制 vs 文本要求**，不是"无结构 vs 有结构"的极端对比。
 2. 盲评形式对齐不完美（JSON vs 文本呈现差异）——已设计敏感性分析。
-3. n=42，功效有限（与 K001 同级）——以效应量+CI 为主，不宣称"无效应"为"无差异"。
+3. n=63（主检验 45 + 泛化 18），功效中等（与 K001 同级）——以效应量+CI 为主，不宣称"无效应"为"无差异"。
 4. Representation 与 Knowledge 的交互不在本实验范围（K001 已单独测 Knowledge）。
+5. 审计启示的 P0 工程项（result 占位/词表收敛/features 契约）与实验并行推进；若工程项未完成，K002 的 F/S 对照仍有效（research 层独立），但"生产层一致性"结论需以工程项完成后的复检为准。
