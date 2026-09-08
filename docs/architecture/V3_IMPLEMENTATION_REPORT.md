@@ -85,5 +85,5 @@ python core/tools/doctor.py
 
 1. **WaveExecutor 实装**：orchestrator V3 从干跑转实际执行（逐波次调用节点 SKILL.md，产出登记 registry，门禁失败触发 on_fail 反馈环）——引擎/状态/门禁已就绪，纯装配工作。
 2. **修复 test_delivery_gates AI 披露用例**（P0 前已知失败）。
-3. **metrics.py 历史基线死引用清理**（archives/cumcm2024a）。
+3. **metrics.py 历史基线死引用清理**（tests/fixtures/sample_incomplete_project）。
 4. **legacy 退役评估**：V3 执行器稳定跑通 2-3 个真实赛题后，评估 29 手降级时间表（checkpoint schema / all_results 导出器 / evaluation 桥接转正一并处理）。

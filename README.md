@@ -125,7 +125,7 @@ MathModel/
 │   └── adapters/                    # 运行时适配 manifest
 ├── research/                        # 研究实验（P13-3D 系列 / bench 运行）——带实验专属脚本
 ├── projects/                        # 用户运行实例（仅 new_project.py 创建）
-├── archives/                        # 历史样例归档（只读，不计入实时校验）
+├── tests/fixtures/                  # 测试 fixture（不完整项目样例）
 ├── examples/                        # 少量可运行示例（problems/cumcm2024A.txt）
 ├── docs/                            # 架构与状态文档（architecture/ 为真源）
 ├── tests/                           # unit / integration / e2e / regression / compat

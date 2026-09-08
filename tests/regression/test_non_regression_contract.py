@@ -39,7 +39,7 @@ class TestNonRegressionContract:
         from runtime.state.model import ProjectState
         from runtime.state.reconcile import reconcile
 
-        base = REPO / "archives" / "cumcm2024anew"
+        base = REPO / "tests" / "fixtures" / "sample_incomplete_project"
         state = ProjectState(base / "state" / "status.json")
         assert state.data["schema_version"] == 3
         reg = ArtifactRegistry(base / "state" / "registry.json")

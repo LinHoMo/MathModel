@@ -61,6 +61,23 @@ def _norm(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", str(text).lower()).strip()
 
 
+def _is_empty_artifact(a) -> bool:
+    """P0-2: 判断 artifact 是否为空壳（无 payload 文件且无内联数据）。
+
+    空壳判据：payload 为 None/[]，且 data 为 None/{}/或 data 内嵌 payload=[]。
+    有意义的内联数据（如 model 的 card_id/objective）不算空。
+    """
+    payload = getattr(a, "payload", None)
+    data = getattr(a, "data", None)
+    payload_empty = payload is None or payload == []
+    data_empty = data is None or data == {}
+    if not data_empty and isinstance(data, dict):
+        # data 中只有空 payload 也视为空
+        if set(data.keys()) <= {"payload"} and data.get("payload") in (None, []):
+            data_empty = True
+    return payload_empty and data_empty
+
+
 def _method_hit(candidate_ids: list[str], card_names: dict[str, str],
                 gt_methods: list[str]) -> bool:
     """top-k 候选与金标准方法做归一化包含匹配（双向）。
@@ -89,7 +106,7 @@ def _load_card_names() -> dict[str, str]:
     if not cards_dir.exists():
         return out
     for f in sorted(cards_dir.glob("*.yaml")):
-        text = f.read_text(encoding="utf-8")
+        text = f.read_text(encoding="utf-8", errors="ignore")
         cid_m = re.search(r"^card_id:\s*(\S+)", text, flags=re.M)
         name_m = re.search(r'^name:\s*(.+)$', text, flags=re.M)
         fam_m = re.search(r"^family:\s*(\S+)", text, flags=re.M)
@@ -99,6 +116,122 @@ def _load_card_names() -> dict[str, str]:
     return out
 
 
+def _load_card_families() -> dict[str, str]:
+    """P0-3: 从方法卡 YAML 提取 {card_id: family}（零依赖正则解析）。"""
+    cards_dir = ROOT / "core" / "knowledge" / "methods" / "cards"
+    out: dict[str, str] = {}
+    if not cards_dir.exists():
+        return out
+    for f in sorted(cards_dir.glob("*.yaml")):
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        cid_m = re.search(r"^card_id:\s*(\S+)", text, flags=re.M)
+        fam_m = re.search(r"^family:\s*(\S+)", text, flags=re.M)
+        if cid_m and fam_m:
+            out[cid_m.group(1)] = fam_m.group(1)
+    return out
+
+
+def _load_benchmark_reference(problem_id: str) -> dict:
+    """P0-3: 从 CUMCM-Bench-v2.json 加载某题的参考方法家族。
+
+    返回 {"core_methods": [...], "allowed_model_families": [...]}，
+    字段缺失时对应值为 None。
+    """
+    bench_path = ROOT / "research" / "P15" / "benchmark" / "CUMCM-Bench-v2.json"
+    if not bench_path.exists() or not problem_id:
+        return {}
+    try:
+        bench = json.loads(bench_path.read_text(encoding="utf-8"))
+        for p in bench.get("problems", []):
+            if p.get("question_id") == problem_id:
+                return {
+                    "core_methods": p.get("core_methods"),
+                    "allowed_model_families": p.get("allowed_model_families"),
+                    "family": p.get("family"),
+                }
+    except (json.JSONDecodeError, OSError):
+        pass
+    return {}
+
+
+def _infer_problem_id(project_dir: Path, gt: dict) -> str | None:
+    """P0-3: 从 gt 或项目目录名推断 problem_id（如 2024_A）。"""
+    if gt and gt.get("problem_id"):
+        return gt["problem_id"]
+    # 项目名形如 p151-2024a → 2024_A
+    m = re.search(r"(\d{4})[_\-]?([a-e])", project_dir.name, re.I)
+    if m:
+        return f"{m.group(1)}_{m.group(2).upper()}"
+    return None
+
+
+def _method_family_hit(card_id: str, card_families: dict[str, str],
+                       reference_methods: list[str]) -> tuple[bool, bool]:
+    """P0-3: 方法家族适用性检查。
+
+    Returns (hit, is_alternative):
+      hit=True            → 家族在参考方法中
+      hit=False, alt=True → 方法卡存在但家族不匹配（合理替代方法）
+      hit=False, alt=False → 方法卡不存在或无家族信息
+    """
+    if not card_id or not reference_methods:
+        return False, False
+    family = card_families.get(card_id, "")
+    if not family:
+        return False, False
+    ref_norm = {_norm(r) for r in reference_methods if _norm(r)}
+    fam_norm = _norm(family)
+    # 家族名直接匹配，或紧凑匹配（去空格后包含）
+    fam_compact = fam_norm.replace(" ", "")
+    for r in ref_norm:
+        r_compact = r.replace(" ", "")
+        if fam_norm == r or fam_norm in r or r in fam_norm:
+            return True, False
+        if fam_compact and (fam_compact in r_compact or r_compact in fam_compact):
+            return True, False
+    return False, True
+
+
+def _model_structural_check(models: list) -> dict:
+    """P0-4: 基于 artifact 内容的 minimal model_correctness 结构检查。
+
+    检查每个 model artifact 是否包含 objective（优化目标）、constraints（约束）、
+    variables（变量定义）。这只是 structural check，不是 semantic correctness。
+
+    返回 {"structural_pass": bool, "per_model": {artifact_id: {field: bool}},
+           "models_checked": int}
+    """
+    per_model: dict[str, dict] = {}
+    all_pass = True
+    checked = 0
+    for m in models:
+        data = getattr(m, "data", None) or {}
+        payload = getattr(m, "payload", None) or []
+        # 优先从 data 检查，也检查 payload 引用的文件（仅检查存在性）
+        fields = {}
+        for field in ("objective", "constraints", "variables"):
+            val = data.get(field)
+            if field == "objective":
+                ok = isinstance(val, str) and len(val.strip()) > 0
+            else:
+                ok = isinstance(val, list) and len(val) > 0
+            # 如果 data 中没有但 payload 有文件，视为可能有内容（不判 FAIL）
+            if not ok and payload:
+                ok = None  # 无法从内联数据判定
+            fields[field] = ok
+        per_model[m.artifact_id] = fields
+        checked += 1
+        # 只要有一个字段明确 FAIL 就整体 FAIL；None（payload有文件但无内联）不判 FAIL
+        if any(v is False for v in fields.values()):
+            all_pass = False
+    return {
+        "structural_pass": all_pass if checked > 0 else False,
+        "per_model": per_model,
+        "models_checked": checked,
+        "note": "structural check only (objective/constraints/variables), not semantic correctness",
+    }
+
+
 def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
              loaded: dict) -> dict:
     reg = loaded["registry"]
@@ -106,11 +239,25 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
     st = loaded["state"].data["state"]
     decisions = loaded["decisions"]
 
-    questions = [a for a in reg.list_by_type("question")]
-    results = [a for a in reg.list_by_type("result")
-               if a.status not in ("invalidated", "superseded", "deprecated")]
-    models = [a for a in reg.list_by_type("model")]
+    questions_raw = [a for a in reg.list_by_type("question")]
+    results_raw = [a for a in reg.list_by_type("result")
+                   if a.status not in ("invalidated", "superseded", "deprecated")]
+    models_raw = [a for a in reg.list_by_type("model")]
     card_names = _load_card_names()
+
+    # P0-2: 空壳 artifact 过滤（payload=[] 且 data={} 的不计入评分）
+    questions = [a for a in questions_raw if not _is_empty_artifact(a)]
+    results = [a for a in results_raw if not _is_empty_artifact(a)]
+    models = [a for a in models_raw if not _is_empty_artifact(a)]
+    empty_artifact_count = {
+        "question": len(questions_raw) - len(questions),
+        "result": len(results_raw) - len(results),
+        "model": len(models_raw) - len(models),
+    }
+    # 统计全 registry 空壳（含 assumption/figure/problem 等不直接参与评分的类型）
+    all_empty = sum(1 for a in reg.all() if _is_empty_artifact(a))
+    empty_total = sum(empty_artifact_count.values())
+    empty_artifact_count["_all_types_total"] = all_empty
 
     claims_total = int(st.get("evidence", {}).get("claims_total", 0) or 0)
     claims_supported = int(st.get("evidence", {}).get("claims_supported", 0) or 0)
@@ -135,18 +282,33 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
         decomp_value = round(100.0 * min(int(aligned), len(sub_qs))
                              / len(sub_qs), 1)
 
-    # 2 method selection。口径（P13-1 v2 最终版）：
-    #   top-3 GT hit = GT 方法至少有一个 canonical method 与该 question 的
-    #   top-3 candidate/shortlist 方法匹配（候选去重保序：chosen + shortlist）。
-    #   value = top-3 命中率；top-1 / top-3 / diversity / shortlist 全进 detail，
-    #   使失败可定位：画像未传入 → matcher 未召回 → 有候选但排序错 → GT 归一不匹配。
+    # 2 method selection。P0-3 修复：从"方法卡 ID 字符串命中"改为
+    #   "方法家族适用性检查"。优先用 allowed_model_families（如存在），
+    #   否则用 benchmark core_methods 作为参考家族（非唯一答案）。
+    #   选择了不同但合理的方法家族 → alternative_method（不自动判 wrong）。
     methods_gt = gt.get("methods") or []
+    card_families = _load_card_families()
+    problem_id = _infer_problem_id(project_dir, gt)
+    bench_ref = _load_benchmark_reference(problem_id) if problem_id else {}
+    allowed_families = bench_ref.get("allowed_model_families")
+    ref_methods = allowed_families if allowed_families else (
+        bench_ref.get("core_methods") or methods_gt)
+    method_basis = ("allowed_model_families" if allowed_families
+                    else "core_methods_reference" if bench_ref.get("core_methods")
+                    else "gt_methods_fallback")
+
     method_value = None
-    method_detail: dict = {"gt_methods": methods_gt,
-                           "definition": "top-3 GT hit（chosen+shortlist 去重前3）",
-                           "per_question": {}}
-    if methods_gt and models:
+    method_detail: dict = {
+        "gt_methods": methods_gt,
+        "reference_methods": ref_methods,
+        "method_selection_basis": method_basis,
+        "problem_id": problem_id,
+        "definition": "方法家族适用性检查（family hit + alternative标记）",
+        "per_question": {},
+    }
+    if ref_methods and models:
         t1_hits, t3_hits = [], []
+        alt_count = 0
         for q in questions:
             qm = [m for m in models if m.question == q.artifact_id]
             if not qm:
@@ -158,12 +320,24 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
                          for c in (data.get("shortlist") or [])]
             cands = [chosen] + [c for c in shortlist if c != chosen]
             top3 = [c for c in cands if c][:3]
-            t1 = _method_hit([chosen], card_names, methods_gt)
-            t3 = _method_hit(top3, card_names, methods_gt)
+            # P0-3: 家族检查为主，字符串匹配为向后兼容回退
+            t1_fam, t1_alt = _method_family_hit(chosen, card_families, ref_methods)
+            t1_str = _method_hit([chosen], card_names, methods_gt) if methods_gt else False
+            t1 = t1_fam or t1_str
+            t3_fam = any(_method_family_hit(c, card_families, ref_methods)[0]
+                         for c in top3)
+            t3_str = _method_hit(top3, card_names, methods_gt) if methods_gt else False
+            t3 = t3_fam or t3_str
+            is_alt = (not t1_fam) and t1_alt and chosen
+            if is_alt:
+                alt_count += 1
             t1_hits.append(t1)
             t3_hits.append(t3)
             method_detail["per_question"][q.artifact_id] = {
-                "top1_chosen": chosen, "top1_hit": t1,
+                "top1_chosen": chosen,
+                "top1_family": card_families.get(chosen, ""),
+                "top1_hit": t1, "top1_family_hit": t1_fam,
+                "top1_alternative": is_alt,
                 "top3": top3, "top3_hit": t3,
                 "shortlist": shortlist}
         if t3_hits:
@@ -172,12 +346,50 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
                 100.0 * sum(t1_hits) / len(t1_hits), 1)
             method_detail["distinct_chosen"] = len(
                 {(m.data or {}).get("card_id", "") for m in models})
+            method_detail["alternative_method_count"] = alt_count
+            if alt_count > 0:
+                method_detail["alternative_method_note"] = (
+                    f"{alt_count} 题选择了参考家族外的方法卡（alternative_method），"
+                    "不自动判 wrong，需人工审查合理性")
 
-    # 3 model correctness：来自 agent 对照 rubric 的评分（缺评分 → n/a）
-    mc = response.get("model_correctness_pct")
-    model_value = round(float(mc), 1) if mc is not None else None
-    model_detail = {"source": "response.rubric" if mc is not None
-                    else "缺评分响应（n/a）"}
+    # 3 model correctness。P0-4 修复：
+    #   - 外部输入 model_correctness_pct 为 null/n/a/缺失 → UNAVAILABLE（不静默跳过）
+    #   - 增加基于 artifact 内容的 structural check（objective/constraints/variables）
+    #   - 缺失的题目不参与总分平均（value=None 已被 summary 过滤）
+    mc_raw = response.get("model_correctness_pct")
+    mc_unavailable = mc_raw is None or (isinstance(mc_raw, str)
+                                        and mc_raw.strip().lower() in ("n/a", "na", "null", ""))
+    structural = _model_structural_check(models) if models else {
+        "structural_pass": False, "per_model": {}, "models_checked": 0,
+        "note": "no non-empty model artifacts"}
+
+    if mc_unavailable:
+        model_value = None
+        model_detail = {
+            "model_correctness": "UNAVAILABLE",
+            "source": "外部评分缺失（null/n/a），不参与总分计算",
+            "model_correctness_structural": "PASS" if structural["structural_pass"] else "FAIL",
+            "structural_check": structural,
+            "note": "structural check only, not semantic correctness",
+        }
+    else:
+        try:
+            model_value = round(float(mc_raw), 1)
+            model_detail = {
+                "model_correctness": model_value,
+                "source": "response.rubric",
+                "model_correctness_structural": "PASS" if structural["structural_pass"] else "FAIL",
+                "structural_check": structural,
+                "note": "structural check only, not semantic correctness",
+            }
+        except (TypeError, ValueError):
+            model_value = None
+            model_detail = {
+                "model_correctness": "UNAVAILABLE",
+                "source": f"外部评分格式错误: {repr(mc_raw)}",
+                "model_correctness_structural": "PASS" if structural["structural_pass"] else "FAIL",
+                "structural_check": structural,
+            }
 
     # 4 experiment validity：实验设计质量（稳健性证据覆盖 + 多次运行）
     robust = [r for r in results
@@ -230,7 +442,7 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
             "references": len(re.findall(r"^@\w+", bib.read_text(encoding="utf-8"),
                                          flags=re.M)) if bib.exists() else 0,
         }
-        ratios = [min(1.0, counts[k] / _PAPER_DEFAULTS[k])
+        ratios = [min(1.0, counts[k] / _PAPER_DEFAULTS["min_" + k])
                   for k in counts]
         wc_value = round(100.0 * sum(ratios) / len(ratios), 1)
         wc_detail.update(counts)
@@ -246,7 +458,7 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
     def pack(value, detail):
         return {"value": value, "detail": detail}
 
-    return {
+    metrics = {
         "decomposition_coverage": pack(decomp_value, decomp_detail),
         "method_selection": pack(method_value, method_detail),
         "model_correctness": pack(model_value, model_detail),
@@ -255,6 +467,16 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
         "innovation": pack(innov_value, innov_detail),
         "writing_completeness": pack(wc_value, wc_detail),
         "end_to_end": pack(e2e_value, e2e_detail),
+    }
+    return {
+        "metrics": metrics,
+        "empty_artifact_filter": {
+            "total_excluded": empty_total,
+            "registry_empty_total": all_empty,
+            "per_type": empty_artifact_count,
+            "note": f"评分相关 {empty_total} 个空壳 artifact 已排除（全 registry 共 {all_empty} 个空壳），不参与评分" if empty_total > 0
+            else f"无评分相关空壳 artifact（全 registry 共 {all_empty} 个空壳）",
+        },
     }
 
 
@@ -292,14 +514,17 @@ def compute_e2e_metrics(project_dir: str | Path, gt: dict | None = None,
     """计算八项能力指标 + Measurement Integrity 仪表盘。"""
     pdir = Path(project_dir)
     loaded = _load_project(pdir)
+    metrics_result = _metrics(pdir, gt, response, loaded)
+    metrics = metrics_result["metrics"]
     report = {
         "mode": "e2e_metrics",
         "project": pdir.name,
         "computed_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
-        "metrics": _metrics(pdir, gt, response, loaded),
+        "metrics": metrics,
+        "empty_artifact_filter": metrics_result["empty_artifact_filter"],
         "measurement_integrity": _measurement_integrity(loaded["registry"]),
     }
-    values = [m["value"] for m in report["metrics"].values()
+    values = [m["value"] for m in metrics.values()
               if m["value"] is not None]
     report["summary"] = {
         "computed": len(values), "absent": 8 - len(values),
@@ -329,6 +554,16 @@ def render_report(metrics_report: dict, problem_meta: dict | None = None) -> str
     lines.append(f"可计算指标 {s['computed']}/8，缺失 {s['absent']}（n/a 不计分），"
                  f"可得均值 **{s['mean_of_available']}**。")
     lines.append("")
+    # P0-2: 空壳 artifact 过滤报告
+    eaf = metrics_report.get("empty_artifact_filter")
+    if eaf and eaf.get("total_excluded", 0) > 0:
+        lines.append("### Artifact Non-Emptiness Filter")
+        lines.append("")
+        lines.append(f"**{eaf['total_excluded']} 个空壳 artifact 已排除**（不参与评分）：")
+        for atype, cnt in eaf.get("per_type", {}).items():
+            if cnt > 0:
+                lines.append(f"- {atype}: {cnt} 个")
+        lines.append("")
     mi = metrics_report.get("measurement_integrity")
     if mi:
         lines.append("### Measurement Integrity"

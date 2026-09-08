@@ -65,10 +65,9 @@ USER_CONTENT_EXCLUDE_DIRS = {
     "inputs", "_scratch", "_debug", "support_materials",
 }
 
-# === 仓库级扫描：跳过归档与临时目录 ===
-# archives/ 为「已知不达标」的历史样例（见 archives/README.md），不计入实时校验，
-# 否则会持续污染 validate.py 的出口信号；_scratch/_debug 为临时区，同理排除。
-REPO_SCAN_EXCLUDE_DIRS = {"archives", "_scratch", "_debug", "node_modules", "__pycache__"}
+# === 仓库级扫描：跳过临时与缓存目录 ===
+# _scratch/_debug 为临时区，node_modules/__pycache__ 为构建缓存，均排除在实时校验外。
+REPO_SCAN_EXCLUDE_DIRS = {"_scratch", "_debug", "node_modules", "__pycache__"}
 
 
 def iter_repo(root, pattern):
@@ -81,7 +80,7 @@ def iter_repo(root, pattern):
 
 
 def _live_project_dirs(project_path):
-    """返回 projects/ 下的活跃项目实例目录（样例已归档至 archives/，不计入）。
+    """返回 projects/ 下的活跃项目实例目录（样例已迁移至 tests/fixtures/）。
 
     本仓库是技能库，projects/ 可能为空（无活跃实例）。项目级存在性检查
     （all_results.json / 随机种子 / 论文 .tex）仅在存在活跃实例时才应报失败，
@@ -424,7 +423,7 @@ def _count_paper_words(content):
 def check_paper_structure(project_path):
     """L6.1: 检查论文结构（深度检查：字数/页数/图表/公式/引用）"""
     if not _live_project_dirs(project_path):
-        return True, "跳过：无活跃项目实例（样例已归档至 archives/）"
+        return True, "跳过：无活跃项目实例"
     template_dirs = {"templates", "template"}
     
     tex_files = []
@@ -901,7 +900,7 @@ def check_test_coverage(project_path):
 def check_results_ledger(project_path):
     """L6.7: 检查结果文件"""
     if not _live_project_dirs(project_path):
-        return True, "跳过：无活跃项目实例（样例已归档至 archives/）"
+        return True, "跳过：无活跃项目实例"
     results_files = list(iter_repo(project_path, "all_results.json"))
     if not results_files:
         return False, "未找到all_results.json"
@@ -922,7 +921,7 @@ def check_results_ledger(project_path):
 def check_random_seed(project_path):
     """L6.8: 检查随机种子"""
     if not _live_project_dirs(project_path):
-        return True, "跳过：无活跃项目实例（样例已归档至 archives/）"
+        return True, "跳过：无活跃项目实例"
     code_files = list(iter_repo(project_path, "*.py"))
     found_seed = False
     

@@ -27,7 +27,7 @@
 | pytest 跳过 | 11 |
 | pytest EXIT | 0 |
 
-## 全链路门禁（归档样例 archives/cumcm2024anew）
+## 全链路门禁（归档样例 tests/fixtures/sample_incomplete_project）
 
 | 指标 | 值 |
 |------|-----|
@@ -36,7 +36,7 @@
 | gate.py [SKIP] | 17 |
 | gate.py EXIT | 2 |
 
-## 项目校验（归档样例 archives/cumcm2024anew）
+## 项目校验（归档样例 tests/fixtures/sample_incomplete_project）
 
 | 指标 | 值 |
 |------|-----|

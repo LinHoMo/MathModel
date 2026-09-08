@@ -12,7 +12,7 @@ class TestEndToEndPipeline:
     """端到端管道测试"""
 
     # 使用新建的测试项目（若存在）
-    PROJECT = "archives/cumcm2024anew"
+    PROJECT = "tests/fixtures/sample_incomplete_project"
 
     @classmethod
     def setup_class(cls):

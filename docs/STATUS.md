@@ -62,7 +62,7 @@ Executor（GPT / Claude / DeepSeek / MathModelAgent / 人工均可插拔）。**
   收口（Event Log → Projection → status.json + `state.py reconcile`）在 Hardening
   P2 完成。
 - 单项目门禁/校验（`gate.py` / `validate_project.py`）按活跃实例判定；归档参考
-  样例 `archives/cumcm2024anew` 为部分样例，不保证全绿。
+  样例 `tests/fixtures/sample_incomplete_project` 为部分样例，不保证全绿。
 - Windows 本机 `py` 默认解释器（3.14/3.13）安装损坏，统一用 `py -3.12`。
 
 ## 下一步（System Hardening P0–P6，见 `HARDENING_PROGRAM.md`）

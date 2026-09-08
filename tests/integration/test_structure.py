@@ -95,8 +95,8 @@ class TestProjectsDirectory:
             if proj_dir and os.path.exists(proj_dir):
                 shutil.rmtree(proj_dir, ignore_errors=True)
     
-    def test_archived_project_marked(self):
-        """归档目录存在但不要求完整结构（历史项目）"""
-        # archives/ 目录存在即可，不验证内部具体项目
-        assert os.path.isdir("archives")
-        # 仅验证归档目录存在，不验证内部完整结构
+    def test_fixture_project_exists(self):
+        """测试 fixture 项目存在（不完整样例，用于 gate/validate 行为测试）"""
+        # fixture 目录存在即可，不验证内部具体项目
+        assert os.path.isdir("tests/fixtures/sample_incomplete_project")
+        # 仅验证 fixture 目录存在

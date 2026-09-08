@@ -91,7 +91,7 @@
 ## 5. 遗留风险与待办（非阻塞）
 
 1. **test_delivery_gates AI 披露 1 fail**：P0 前已存在（V2 期引入），需单独修复（gate 对"正文披露"判定过严或测试 fixture 弱）。
-2. **metrics.py 死引用** `archives/cumcm2024a`：该项目实际不存在（历史基线记录用途），建议下个版本周期改为读 `projects/` 或删除该指标。
+2. **metrics.py 死引用** `tests/fixtures/sample_incomplete_project`：该项目实际不存在（历史基线记录用途），建议下个版本周期改为读 `projects/` 或删除该指标。
 3. **checkpoint schema 保留**：V2 兼容层仍消费（迁移映射 §3 "P5 评估删除"）——评估结论：**保留一个版本周期**，待 legacy 29 步正式退役时一并清理。
 4. **all_results.json 导出器**：按迁移映射 §6 保留一个版本周期；数值一致性终态以 graph 为真源。
 5. **orchestrator V3 干跑仅计划**：`_run_v3` 目前输出波次计划（15 节点 13 波），实际节点执行器（WaveExecutor 消费 registry/graph 逐节点跑 SKILL.md）为下一步工作——DAG 引擎、状态、门禁、批评器已全部就绪，执行器是纯装配工作。

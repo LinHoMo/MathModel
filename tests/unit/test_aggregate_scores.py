@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 # 测试项目（如果存在）
-PROJ = ROOT / "archives" / "cumcm2024anew"
+PROJ = ROOT / "tests" / "fixtures" / "sample_incomplete_project"
 SCORE = PROJ / "work" / "score_card.json"
 
 sys.path.insert(0, str(ROOT / "core" / "tools"))

@@ -114,8 +114,8 @@ def _scan_tests():
 
 
 def _scan_gate():
-    """对归档样例 cumcm2024anew 跑 gate.py --level all，统计 [PASS]/[FAIL]/[SKIP] 与 EXIT。"""
-    rc, out = _run([sys.executable, "core/tools/gate.py", "archives/cumcm2024anew", "--level", "all"], timeout=180)
+    """对测试 fixture 跑 gate.py --level all，统计 [PASS]/[FAIL]/[SKIP] 与 EXIT。"""
+    rc, out = _run([sys.executable, "core/tools/gate.py", "tests/fixtures/sample_incomplete_project", "--level", "all"], timeout=180)
     return {
         "exit": rc,
         "pass": out.count("[PASS]"),
@@ -125,8 +125,8 @@ def _scan_gate():
 
 
 def _scan_validate():
-    """对归档样例 cumcm2024anew 跑 validate_project.py，统计 HARD/WARN/PASS 标记与 EXIT。"""
-    rc, out = _run([sys.executable, "core/tools/validate_project.py", "--project", "archives/cumcm2024anew"], timeout=180)
+    """对测试 fixture 跑 validate_project.py，统计 HARD/WARN/PASS 标记与 EXIT。"""
+    rc, out = _run([sys.executable, "core/tools/validate_project.py", "--project", "tests/fixtures/sample_incomplete_project"], timeout=180)
     return {
         "exit": rc,
         "hard_fail": len(re.findall(r"^\s*HARD\s", out, re.MULTILINE)),
@@ -162,13 +162,13 @@ def _scan_traceability():
     # 3. freeze_numbers.py 口径
     # 4. validate_project.py 口径
     # 简单实测部分
-    code_dir = ROOT / "archives" / "cumcm2024anew" / "code"
-    figures_dir = ROOT / "archives" / "cumcm2024anew" / "figures"
+    code_dir = ROOT / "tests" / "fixtures" / "sample_incomplete_project" / "code"
+    figures_dir = ROOT / "tests" / "fixtures" / "sample_incomplete_project" / "figures"
     return {
         "note": "追溯率四口径不在 P0 合并，需独立实测；仅公示以下脚本可计算",
         "scripts": [
-            "core/tools/freeze_numbers.py archives/cumcm2024anew check (数字冻结口径)",
-            "core/tools/validate_project.py --project archives/cumcm2024anew (综合校验口径)",
+            "core/tools/freeze_numbers.py tests/fixtures/sample_incomplete_project check (数字冻结口径)",
+            "core/tools/validate_project.py --project tests/fixtures/sample_incomplete_project (综合校验口径)",
         ]
     }
 
@@ -228,7 +228,7 @@ def render_markdown(m):
         f"| pytest 跳过 | {m['tests']['skipped']} |",
         f"| pytest EXIT | {m['tests']['exit']} |",
         "",
-        "## 全链路门禁（归档样例 archives/cumcm2024anew）",
+        "## 全链路门禁（测试 fixture sample_incomplete_project）",
         "",
         f"| 指标 | 值 |",
         f"|------|-----|",
@@ -237,7 +237,7 @@ def render_markdown(m):
         f"| gate.py [SKIP] | {m['gate_cumcm2024anew']['skip']} |",
         f"| gate.py EXIT | {m['gate_cumcm2024anew']['exit']} |",
         "",
-        "## 项目校验（归档样例 archives/cumcm2024anew）",
+        "## 项目校验（测试 fixture sample_incomplete_project）",
         "",
         f"| 指标 | 值 |",
         f"|------|-----|",

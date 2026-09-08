@@ -8,7 +8,7 @@
 
 | 线 | 链路 | 材料 | 状态 |
 |---|---|---|---|
-| S1 Competition | 真题 → Harness → Model → Artifact → Quality Gate | `archives/cumcm2024anew/inputs/problem_cumcm2024A.txt`（2397B，真实 2024A 题面） | **就绪** |
+| S1 Competition | 真题 → Harness → Model → Artifact → Quality Gate | `tests/fixtures/sample_incomplete_project/inputs/problem_cumcm2024A.txt`（2397B，真实 2024A 题面） | **就绪** |
 | S2 Research | 科研问题 → Harness → Model → Experiment → Evidence | 待用户提供科研建模问题 | **阻塞（等材料）** |
 | S3 Provider | 同一 workflow → external provider → canonical artifact | `core/adapters/` 当前为空，需先盘点 runtime/env 层的外部执行路径，定义 smoke 入口 | **阻塞（需盘点）** |
 
