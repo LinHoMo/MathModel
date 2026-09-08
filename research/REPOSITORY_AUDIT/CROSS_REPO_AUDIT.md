@@ -7,6 +7,7 @@
   - **MMA** = `jihe520/MathModelAgent`（LLM 文本接力流水线 + Code Interpreter）
   - **LHM** = `LinHoMo/MathModel`（本项目：LLM-free Harness / Scientific Runtime）
 - **证据分级**: IMPLEMENTED / CONTRACT_ONLY / DOC_CLAIM / INSTRUCTIONAL（沿用 dossier 定义）。
+- **与 FINAL_REPORT.md 的关系**：本文件为快速裁决版（17 节精简）；`FINAL_REPORT.md`（73KB）为同一审计的完整综合报告（Organizer 产出，17 节全量展开）。两份独立并行产出、结论一致，互为交叉验证。行动整合见 `AUDIT_ACTION_PLAN.md`。
 
 ---
 
