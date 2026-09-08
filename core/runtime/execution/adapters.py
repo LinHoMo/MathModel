@@ -36,12 +36,14 @@ from typing import Any
 # 执行状态：唯一合法来源（not_executed 为初始态，绝不默认 success）
 EXEC_STATUS = ("not_executed", "running", "success", "failed", "timeout", "invalid")
 
-# 一等 artifact 的 data 结构（用户指定字段全集）
+# 一等 artifact 的 data 结构（用户指定字段全集；P0-E4 扩展字段标 ★）
 EXECUTION_RESULT_FIELDS = (
     "execution_id", "model_id", "status", "inputs", "outputs",
     "stdout", "stderr", "returncode", "duration_ms",
     "code_hash", "environment_hash",
     "started_at", "finished_at", "provenance",
+    "code",           # ★ P0-E4：code 本体（replay/审计需要；用户最小字段集之外）
+    "environment_manifest",  # ★ P0-E4：执行环境声明（replay 偏差归因）
 )
 
 
@@ -50,13 +52,21 @@ def sha256_text(text: str) -> str:
 
 
 def environment_hash() -> str:
-    """执行环境指纹（python 版本 + 平台 + 主版本），用于 replay 溯源。"""
-    payload = "\n".join([
-        sys.version.split()[0],
-        platform.platform(),
-        sys.executable,
+    """执行环境指纹（python 版本 + 平台 + 主版本），用于 replay 溯源。
+
+    未来将演化为 Execution Environment Manifest（随机种子/包版本/OS/浮点/
+    外部数据/时间/网络/求解器非确定性），见 THREE_LAYER_ARCHITECTURE §2.8。
+    """
+    return sha256_text(environment_manifest())
+
+
+def environment_manifest() -> str:
+    """执行环境声明：确定性可比较的文本（replay 偏差归因用）。"""
+    return "\n".join([
+        f"python={sys.version.split()[0]}",
+        f"platform={platform.platform()}",
+        f"executable={sys.executable}",
     ])
-    return sha256_text(payload)
 
 
 @dataclass
@@ -91,6 +101,8 @@ class ExecutionResultData:
     started_at: str = ""
     finished_at: str = ""
     provenance: dict[str, Any] = field(default_factory=dict)
+    code: str = ""                    # ★ P0-E4：code 本体（replay）
+    environment_manifest: str = ""    # ★ P0-E4：环境声明（replay 归因）
 
     def to_dict(self) -> dict[str, Any]:
         d: dict[str, Any] = {
@@ -108,6 +120,8 @@ class ExecutionResultData:
             "started_at": self.started_at,
             "finished_at": self.finished_at,
             "provenance": self.provenance,
+            "code": self.code,
+            "environment_manifest": self.environment_manifest,
         }
         return d
 
@@ -215,6 +229,7 @@ class LocalPythonAdapter(ExecutionAdapter):
                 environment_hash=env_hash, started_at=started,
                 finished_at=_iso_now(),
                 provenance={"adapter": self.name, "python": self.python},
+                code=plan.code, environment_manifest=environment_manifest(),
             )
         except subprocess.TimeoutExpired as exc:
             duration_ms = int((time.perf_counter() - t0) * 1000)
@@ -226,6 +241,7 @@ class LocalPythonAdapter(ExecutionAdapter):
                 environment_hash=env_hash, started_at=started,
                 finished_at=_iso_now(),
                 provenance={"adapter": self.name, "reason": "timeout"},
+                code=plan.code, environment_manifest=environment_manifest(),
             )
         except Exception as exc:  # 执行框架级错误（写文件失败等）
             duration_ms = int((time.perf_counter() - t0) * 1000)
@@ -236,6 +252,7 @@ class LocalPythonAdapter(ExecutionAdapter):
                 environment_hash=env_hash, started_at=started,
                 finished_at=_iso_now(),
                 provenance={"adapter": self.name, "reason": "framework_error"},
+                code=plan.code, environment_manifest=environment_manifest(),
             )
         finally:
             try:

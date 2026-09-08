@@ -1,28 +1,32 @@
-# Three-Layer Architecture — 三层架构与治理门禁（2026-09-09 审计后重写 v2）
+# Three-Layer Architecture — 三层架构与治理门禁（2026-09-09 P0-E 跃迁后 v3）
 
-> **版本演化**：v1（2026-09-06）为"Agent Brain 主战场"时代的旧三层（Agent Brain / Research Runtime / Guardrails），
-> 已随定位收束（Model Construction=What / Model Representation=How / Harness=How do we know）与
-> 三仓库代码级审计（2026-09-09）**废弃**。本文件 v2 为当前唯一治理版本。
+> **版本演化**：v1（2026-09-06）"Agent Brain 主战场"旧三层已废弃；v2（审计后）确立
+> Epistemic/Execution/Evaluation 三层；**v3（P0-E 完成后）**：定位升级为
+> **最小可执行 Mathematical Modeling Runtime**，核心对象明确为 **Model Lifecycle**。
 >
 > **上游裁决**：`research/REPOSITORY_AUDIT/FINAL_REPORT.md` + `CROSS_REPO_AUDIT.md`（BZD=Knowledge System、
-> MathModelAgent=Execution System、LinHoMo=Epistemic System；三者互补非竞争）。
+> MathModelAgent=Execution System、LinHoMo=Epistemic System；三者互补非竞争）+ 用户战略裁决
+> （2026-09-09 两轮：P0-E 执行闭环 + 本文件五级正确性/三状态/Fidelity）。
 
 ---
 
-## 0. 一句话定位（写死）
+## 0. 一句话定位（写死，v3 更新）
 
-> **LinHoMo 当前是"科学建模系统的操作语义设计 + 受控实验平台"，还不是一个完成的 Mathematical Modeling Engine。
-> 没有任何一个被审计仓库（包括 LinHoMo）已被实验证明拥有更强的数学建模能力。**
-
-这句结论是 2026-09-09 审计后锁定的项目自我认知，任何宣传、README、论文表述不得越过它。
+> **LinHoMo 已形成最小真实执行闭环（P0-E，commit ad917d2）——Model Artifact 可以进入
+> 计算世界并产生带身份/来源/生命周期的 ExecutionResult。但这是"能运行模型"，
+> 不是"能可靠地运行一个模型"，更不是"因此更会建模"。**
+>
+> **边界（必须严格分开）**：P0-E 证明的是"Model Artifact 可以进入真实执行闭环"；
+> **没有证明"系统因此更会建模"**。没有任何被审计仓库（含 LinHoMo）已被实验证明
+> 拥有更强的数学建模能力。
 
 三仓库真实层次：
 
-| 仓库 | 系统类型 | 回答的问题 | 缺失（本轮审计确认） |
-|---|---|---|---|
-| BZD | Knowledge System（评审知识） | "怎么评价" | execution + causal capability evidence |
-| MathModelAgent | Execution System（agent 流水线） | "怎么做完" | model semantics + epistemic state |
-| **LinHoMo** | Epistemic System（科研运行时） | "怎么证明" | **actual computational execution** |
+| 仓库 | 核心对象 | 系统类型 | 回答的问题 | 缺失 |
+|---|---|---|---|---|
+| BZD | Knowledge / Review Rule | Knowledge System | "怎么评价" | execution + causal capability evidence |
+| MathModelAgent | Agent / Workflow / Code Execution | Execution System | "怎么做完" | model semantics + epistemic state |
+| **LinHoMo** | **Model Artifact / Execution / Evidence / State** | **Model Lifecycle Runtime** | "怎么证明" | Model→Code 语义保真；Execution→Validation→Model Correctness |
 
 三个缺口互补。LinHoMo 的战略不是"战胜"另外两者，而是**把它们的优势放进正确的层**：
 BZD → Evaluation 层（reviewer/rubric/knowledge provider）；MathModelAgent → Execution 层参考（Execution Primitive）。
@@ -123,20 +127,83 @@ Concept → Mechanism → Model Family → Model → Method → Solver → Imple
 - Evidence Recording ≠ Evidence of Correctness（R4 反例：2019_C 评分饱和）
 - Formalization ≠ Truth
 - More Context ≠ More Knowledge（K001 Sham=+3.42 > Δ_K：Sham 假说未排除）
+- **Execution Status ≠ Model Status ≠ Evidence Status**（P0-E 后新铁律，见 §2.6）
+
+### 2.5 Model Lifecycle（v3 核心对象，写死）
+
+> LinHoMo 的核心不是 Agent / Workflow / MODEL_IR，而是 **Model Lifecycle**：
+
+```text
+Problem → Model Construction → Model Artifact → Implementation → Execution →
+Evidence → Validation → Evaluation → Model Revision → New Model Version
+```
+
+execution_result 一等 artifact（EXEC）+ `implemented_by`（model→code）与
+`executed_by`（result→execution_result）两条关系使 **implementation 与 execution
+明确分离**：模型不变、实现变、环境变、结果变——真实的实验谱系（lineage）由此成立。
+
+### 2.6 三状态分离铁律（"真执行 + 假模型"防线）
+
+**execution_status = success 绝不推出 model_status = correct。** 下一阶段最危险的
+风险是"真执行 + 假模型"：代码跑通（success）但模型数学假设错误/变量语义错误/
+目标函数错误/约束遗漏/单位错误/边界错误/代码与模型不一致。
+
+完整链条（任何一步失败不得越级）：
+
+```text
+Code executed successfully
+  → ExecutionResult valid
+  → Evidence generated
+  → Validation performed
+  → Model passes validation
+  → Claim supported
+```
+
+### 2.7 五级正确性（L0–L4，替代单一 validator=PASS）
+
+| 级 | 回答 | 含义 |
+|---|---|---|
+| L0 Syntax | Artifact 合法吗？ | schema/结构校验 |
+| L1 Execution | 代码跑了吗？ | execution_result.status（真实执行） |
+| **L2 Model Fidelity** | 跑的是声明的模型吗？ | MODEL_IR 声明 ↔ 代码语义映射一致（目标/约束/变量/方程） |
+| L3 Mathematical Validity | 数学推导/模型逻辑正确吗？ | 推导、量纲、边界、一致性 |
+| L4 Empirical Adequacy | 现实数据/实验支持它吗？ | 数据拟合、预测、可验证性 |
+
+**Model-to-Execution Fidelity（L2）是 LinHoMo 独有核心指标**：例——MODEL_IR 声明
+`objective=minimize total cost; constraints x+y≥10`，代码却 `minimize(x+y); x+y≤10`：
+execution success=1，但 model fidelity=0。K002 起该指标进入测量。
+
+### 2.8 Replay 定义（P0-E4）
+
+- **不是**"再次运行代码"（rerun）。
+- **是**"在相同声明环境下重建一次 execution，并报告偏差"（reproducibility）。
+- `environment_hash` 将演化为 **Execution Environment Manifest**（random seed /
+  package version / OS / floating-point / external data / current time / network /
+  nondeterministic solver），否则 replay 只是 rerun。
+- 支撑字段已就绪：execution_id / code_hash / environment_hash / inputs / outputs /
+  started_at / finished_at / provenance。
 
 ---
 
-## 3. 路线图（审计后压缩为四段）
+## 3. 路线图（P0-E 后定稿，用户 2026-09-09）
 
 ```text
-P15  Research Instrument（✅ 已收口：K001 CLOSED，negative result 按决策门记录）
-  ↓
-P0   Real Execution（进行中：result 占位符治理 → 词表收敛 → Code Interpreter adapter）
-  ↓
-K002 Representation Effect（DRAFT v0.3：3 臂主实验 + block≥6 + L3/L4 终点）
-  ↓
-P16+ Capability Validation（Evidence / Critic / Verification / Replay 逐项 ablation）
+K001 Knowledge Negative（✅）
+  → Repository Audit（✅）
+  → P0-E Execution Runtime（✅ ad917d2：真实执行闭环）
+  → P0-E4 Replay / Provenance（🔄 本轮）
+  → Validation（Execution → Model Correctness）
+  → Code Generation（MODEL_IR → code，语义保真——第二扇门）
+  → K002 Dry Run → Measurement Gate（五 Gate）→ K002 Frozen
+  → Representation Effect → P16
 ```
+
+**两扇门（打通后才算"能可靠地运行一个模型"）**：
+1. **Model → Code 语义保真**（L2 Fidelity）：生成代码执行的是 MODEL_IR 声明的模型。
+2. **Execution → Validation → Model Correctness**（L3/L4）：执行成功 → 验证 → 模型正确。
+再往后 K002 回答：结构化 Model Artifact 是否真的让系统构造出更好的数学模型。
+
+**主线（死守）**：`Representation → Execution → Evidence → Validation → Capability`
 
 **不是**：P15 → 继续加 schema → 继续加 Skill → 继续加 Agent。
 **是**：STOP BUILDING ABSTRACT INFRA → MAKE MODEL EXECUTE → PRODUCE REAL RESULT

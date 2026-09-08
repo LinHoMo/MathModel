@@ -1,13 +1,20 @@
 # P15-K002 — Model Representation Efficacy
-## 预注册（Preregistration）DRAFT v0.4（P0-E 先行 + Measurement Gate）
+## 预注册（Preregistration）DRAFT v0.5（P0-E 完成 + 核心问题升级）
 
-> **状态：`DRAFT`（v0.3 已落实战略裁决；v0.4 增加 Measurement Gate 五 Gate 前置，并明确 K002 冻结排在 P0-E 之后）**
-> **科学定位**：K001（Knowledge 文本注入）已得 negative result；本实验检验**下一个杠杆：强制的结构化 Model Representation（输出契约）本身是否提升外部 Agent 的 Model Construction Quality**。
-> **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认——result 占位、features 硬编码、ontology 分叉）｜ **战略裁决**（docs/architecture/THREE_LAYER_ARCHITECTURE.md v2：Epistemic/Execution/Evaluation 三层；infra 不冒充 capability；ontology 与词汇表分离）｜ **P0-E 裁决**（2026-09-09：Execution Runtime 优先，K002 冻结暂缓）
+> **状态：`DRAFT`（v0.4 已锁 Measurement Gate；v0.5 随 P0-E 落地把核心问题升级为
+> "从模型构造到可执行模型"的过程，新增 Fidelity 等执行级终点）**
+> **科学定位**：K001（Knowledge 文本注入）已得 negative result；本实验检验**下一个杠杆：强制的结构化 Model Representation（输出契约）本身是否提升外部 Agent 的 Model Construction Quality——且现在是"从模型构造到可执行模型"的过程质量**。
+> **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认）｜ **战略裁决**（THREE_LAYER_ARCHITECTURE.md v3：Model Lifecycle 核心；五级正确性 L0–L4；三状态分离铁律；Fidelity 指标）｜ **P0-E ✅**（commit ad917d2：ExecutionAdapter + execution_result 一等 artifact + executed_by 绑定；P0-E4 Replay ✅ 本轮）
 
 > **冻结顺序（用户裁决，写死）**：
-> `P0-E → runtime validation → K002 dry-run → 题目区分度检查 → measurement check（五 Gate）→ PREREGISTERED → FROZEN`
+> `P0-E（✅）→ runtime validation → K002 dry-run → 题目区分度检查 → measurement check（五 Gate）→ PREREGISTERED → FROZEN`
 > 否则 K002 测出来的可能不是 MODEL_IR 的效果，而是 runtime 的缺陷。
+
+> **核心问题（v0.5 升级，替代 v0.4 的"JSON 比自由文本好吗"）**：
+> **结构化 Model Artifact 是否改善"从模型构造到可执行模型"的过程？**
+> 观察对象从"产物好看"移到"产物能否真实执行、执行的是否是声明的模型"。
+
+> **主线（死守）**：`Representation → Execution → Evidence → Validation → Capability`
 
 ---
 
@@ -149,13 +156,21 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 
 ## 4. 测量
 
-### 4.1 主终点（L3/L4 终点裁决版）
+### 4.1 主终点（L3/L4 终点裁决版 + v0.5 执行级终点）
 - **MCQ_primary（主）** = **L2 + L3 + L4 composite**（MODEL_CONSTRUCTION_RUBRIC v1.0，标准化到 /100）：
   - L2 结构完备（L2.1/2.2/2.4/2.5/2.6(权重3)/2.7）——与 K001 **完全一致**，保证跨实验可比；
   - L3 求解层（L3.1–L3.5：可执行性/稳定性/可复现性/合理性）——锚 L3.4（K001 无一 2 分弱环）；
   - L4 验证层（L4.1–L4.5：基线/敏感性/极限检验/不确定性/主张证据）——锚 L4.3（K001 唯一 0 分弱环）。
   - **论文/写作质量不是本实验终点**（治理声明：writing 永不作为 capability 主终点；"better writing ≠ better modeling"）。
 - **VAL_primary（次主）** = L4 composite（/10×100）单列——检验"验证行为字段化"是否提升（S+V vs S）。
+- **执行级终点（v0.5 新增，P0-E 使能）**——回答"从模型构造到可执行模型"的过程质量：
+  - `execution_success_rate`：可执行产物中真实执行 status=success 的比例（**execution_result 一等 artifact 的 status，非 LLM 声称**）；
+  - `invalid_model_rate`：执行失败/无效（failed/timeout/invalid）比例，按失败原因归因；
+  - `correction_count`：从首版到成功执行的迭代修正次数（可追踪版本序列）；
+  - `model_fidelity`（**Model-to-Execution Fidelity，L2 核心指标**）：执行代码与 MODEL_IR 声明的一致性（objective/constraints/variables/equations 语义映射）——代码执行成功 ≠ 跑的是声明的模型；K002 首次测量；
+  - `evidence_completeness`：ExecutionResult → Evidence → Validation 链各环节是否齐备；
+  - `final_mathematical_correctness`：盲评终审的数学正确性（L3/L4 语义判定）。
+  - 执行级终点从 **K002 dry-run** 起预检（Measurement Gate G4 要求），FROZEN 时连同 rubric 冻结。
 - 分层报告：L2（K001 可比）、L3、L4、L1（问题理解）各自独立报告，不混成一个总分掩盖维度差异。
 
 ### 4.2 盲评与盲法（Generator ≠ Evaluator 保持）

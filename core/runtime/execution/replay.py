@@ -146,3 +146,104 @@ def list_runs(project_dir) -> list[dict]:
             "parent_run_id": r.get("parent_run_id"),
         })
     return out
+
+
+# ---------------------------------------------------------------------------
+# P0-E4：Execution-level Replay（用户裁决 2026-09-09）
+# Replay ≠ rerun："在相同声明环境下重建一次 execution，并报告偏差"。
+# ---------------------------------------------------------------------------
+
+def _load_registry(project_dir: str | Path):
+    from runtime.artifacts.registry import ArtifactRegistry
+    reg_path = Path(project_dir) / "state" / "registry.json"
+    if not reg_path.exists():
+        raise FileNotFoundError(f"Registry 不存在: {reg_path}")
+    reg = ArtifactRegistry(reg_path)
+    reg.load()
+    return reg
+
+
+def replay_execution(project_dir: str | Path, exec_id: str,
+                     adapter=None, code_override: str | None = None,
+                     inputs_override: dict | None = None,
+                     timeout_seconds: int | None = None) -> dict:
+    """按 execution_result artifact 声明重建一次执行，并报告偏差。
+
+    返回偏差报告（不是"重跑成功"）：
+      - 同 code 同 env → outputs 一致 = 可重放
+      - code 不同 / env 不同 / status 不同 → 逐项偏差 + 归因
+    """
+    reg = _load_registry(project_dir)
+    art = reg.get(exec_id)
+    if art is None:
+        return {"ok": False, "problems": [f"execution_result 不存在: {exec_id}"],
+                "exec_id": exec_id}
+    data = dict(art.data or {})
+    if data.get("status") in (None, "", "running"):
+        return {"ok": False,
+                "problems": ["原执行无最终状态，无法作为 replay 基准"],
+                "exec_id": exec_id}
+
+    code = code_override if code_override is not None else data.get("code")
+    if not code:
+        return {"ok": False,
+                "problems": ["原 execution_result 未存 code 本体（P0-E4 前产物），"
+                             "无法重建；可传 code_override"],
+                "exec_id": exec_id}
+    if adapter is None:
+        from runtime.execution.adapters import get_adapter
+        adapter = get_adapter("local_python")
+
+    from runtime.execution.adapters import ExecutionPlan
+    plan = ExecutionPlan(
+        model_id=data.get("model_id") or art.artifact_id,
+        code=code,
+        inputs=inputs_override if inputs_override is not None
+              else dict(data.get("inputs") or {}),
+        timeout_seconds=timeout_seconds or data.get("timeout_seconds") or 30,
+    )
+    try:
+        rep = adapter.execute(plan)
+    except Exception as exc:  # noqa: BLE001 —— adapter 自身异常要如实暴露
+        return {"ok": False, "exec_id": exec_id,
+                "problems": [f"replay adapter 异常: {exc}"],
+                "replayed_status": "invalid"}
+
+    deviation = []
+    if rep.status != data.get("status"):
+        deviation.append({"dim": "status", "recorded": data.get("status"),
+                          "replayed": rep.status,
+                          "why": "执行结果状态不一致（原:成功/失败 现:另一状态）"})
+    if rep.code_hash != data.get("code_hash"):
+        deviation.append({"dim": "code_hash", "recorded": data.get("code_hash"),
+                          "replayed": rep.code_hash,
+                          "why": "代码内容不同（code_override 或原记录漂移）"})
+    if rep.environment_hash != data.get("environment_hash"):
+        deviation.append({"dim": "environment_hash",
+                          "recorded": data.get("environment_hash"),
+                          "replayed": rep.environment_hash,
+                          "why": "执行环境不同（python/平台/可执行文件）",
+                          "recorded_manifest": data.get("environment_manifest"),
+                          "replayed_manifest": rep.environment_manifest})
+    if rep.status == "success" and data.get("status") == "success":
+        orig_out = data.get("outputs")
+        if rep.outputs != orig_out:
+            deviation.append({"dim": "outputs", "recorded": orig_out,
+                              "replayed": rep.outputs,
+                              "why": "输出不一致（非确定性/随机种子/浮点/外部数据）"})
+
+    return {
+        "ok": not deviation,
+        "exec_id": exec_id,
+        "replay_id": rep.execution_id,
+        "recorded_status": data.get("status"),
+        "replayed_status": rep.status,
+        "outputs_match": (rep.status == "success"
+                          and data.get("status") == "success"
+                          and rep.outputs == data.get("outputs")),
+        "duration_ms": rep.duration_ms,
+        "deviation": deviation,
+        "problems": ([] if not deviation else
+                     [f"{len(deviation)} 项偏差："
+                      + ", ".join(d["dim"] for d in deviation)]),
+    }
