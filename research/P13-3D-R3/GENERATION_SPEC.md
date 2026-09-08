@@ -1,6 +1,7 @@
 # R3.2 Generation Spec — 真实 Writer 论文生成执行细则
 
 **Status**: FROZEN (2026-09-07) · 供 Writer 执行体逐字遵守
+> 2026-09-07 路径修正：P4 迁移后项目位于 `research\P13-3D-R3`，仅改物理路径，实验规则零改动。
 
 ## 1. 你（Writer）要做什么
 
@@ -17,8 +18,8 @@ W1: 读 artifact + map     → 写  real_papers/W1/{qid}_{arm}.md
 
 | 用途 | 路径 |
 |---|---|
-| W0 完整 prompt | `C:\Users\Lin\Desktop\Programs\MathModel\projects\P13-3D-R3\prompts\{qid}_{arm}_W0.json` |
-| W1 完整 prompt | `C:\Users\Lin\Desktop\Programs\MathModel\projects\P13-3D-R3\prompts\{qid}_{arm}_W1.json` |
+| W0 完整 prompt | `C:\Users\Lin\Desktop\Programs\MathModel\research\P13-3D-R3\prompts\{qid}_{arm}_W0.json` |
+| W1 完整 prompt | `C:\Users\Lin\Desktop\Programs\MathModel\research\P13-3D-R3\prompts\{qid}_{arm}_W1.json` |
 
 prompt JSON 有两个字段：
 
@@ -30,8 +31,8 @@ prompt JSON 有两个字段：
 ## 3. 输出文件（必须写到精确路径）
 
 ```
-C:\Users\Lin\Desktop\Programs\MathModel\projects\P13-3D-R3\real_papers\W0\{qid}_{arm}.md
-C:\Users\Lin\Desktop\Programs\MathModel\projects\P13-3D-R3\real_papers\W1\{qid}_{arm}.md
+C:\Users\Lin\Desktop\Programs\MathModel\research\P13-3D-R3\real_papers\W0\{qid}_{arm}.md
+C:\Users\Lin\Desktop\Programs\MathModel\research\P13-3D-R3\real_papers\W1\{qid}_{arm}.md
 ```
 
 其中 `{arm}` 用 `B0` / `MMA` / `B1_F`（下划线）。例如 `real_papers/W1/2022_A_B1_F.md`。

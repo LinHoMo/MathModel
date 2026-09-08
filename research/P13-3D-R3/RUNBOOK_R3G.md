@@ -2,6 +2,8 @@
 
 **目的**：任何新 session（零上下文）打开本文件即可接着把 48 篇论文生成完。
 **当前状态**：24/48 落盘，但 **0/24 单元通过门禁**（元叙述泄漏），需全部重生成。
+> 路径口径（2026-09-07 P4 迁移后唯一入口）：项目在 `research/P13-3D-R3`，
+> 语料门禁脚本在 `research/P13-3D/scripts/r3g_corpus_check.py`。旧 `projects/` 路径一律作废。
 
 ---
 
@@ -9,7 +11,7 @@
 
 ```bash
 cd C:/Users/Lin/Desktop/Programs/MathModel
-python core/tools/evaluation/r3g_corpus_check.py
+python research/P13-3D/scripts/r3g_corpus_check.py
 ```
 
 输出末尾给出 `deficient:` 列表 —— 那就是本次要补的单元。
@@ -34,14 +36,14 @@ python core/tools/evaluation/r3g_corpus_check.py
 ```
 你是 R3.2 实验的 Writer 执行体。请为题目 {QID} 生成 6 篇真实数学建模竞赛论文。
 
-第一步（必读）：读 C:\Users\Lin\Desktop\Programs\MathModel\projects\P13-3D-R3\GENERATION_SPEC.md，
+第一步（必读）：读 C:\Users\Lin\Desktop\Programs\MathModel\research\P13-3D-R3\GENERATION_SPEC.md，
 逐条遵守，尤其第 7 条「禁止元叙述」。
 
 背景：已预注册的对照实验，自变量只有一个——是否给 Writer 提供"结构化映射层"。
 W0 只给模型构件，W1 给模型构件+映射。两篇必须同等风格、同等深度、同等篇幅，
 W1 不允许额外发挥或写得更详细，只允许结构组织更贴合映射。
 
-根目录：C:\Users\Lin\Desktop\Programs\MathModel\projects\P13-3D-R3
+根目录：C:\Users\Lin\Desktop\Programs\MathModel\research\P13-3D-R3
 按 arm 顺序 B0 → MMA → B1_F，对每个 arm：
 1. Read prompts/{QID}_{arm}_W0.json，将 system 原样作为写作系统指令、user 原样作为写作任务
 2. Write real_papers/W0/{QID}_{arm}.md（覆盖已有文件；6000–11000 字符，10 章节齐全）
@@ -71,7 +73,7 @@ prompt 文件名同构：`prompts/{qid}_{arm}_W0.json` / `_W1.json`。
 
 ```bash
 # R3-G2 门禁：48/48 且全部 ok
-python core/tools/evaluation/r3g_corpus_check.py
+python research/P13-3D/scripts/r3g_corpus_check.py
 
 # R3-G3 STC v2（core/meta/overall，逐元素）
 # R3-G4 Fidelity Gate v2（mutation）

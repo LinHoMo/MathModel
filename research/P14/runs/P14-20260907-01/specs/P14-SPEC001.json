@@ -1,0 +1,68 @@
+{
+  "entity_type": "experiment_spec",
+  "entity_id": "P14-SPEC001",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-07T21:50:00+08:00",
+  "content_sha256": "985810d733a55abf8677ae91e2ccb3a06bcd087bc0af55c5782b33043dec6b28",
+  "parent_ref": {
+    "entity_type": "model_artifact",
+    "entity_id": "2020_B_MMA.json",
+    "content_sha256": "3da8d82ee6708d4339becefa3790f93c5f5cff0e168e88eb298a84f2a25571fa"
+  },
+  "question_id": "2020_B",
+  "condition": "C0",
+  "model_artifact_ref": {
+    "question_id": "2020_B",
+    "arm": "MMA",
+    "path": "research/P13-3D-R2/output/artifacts/2020_B_MMA.json",
+    "model_artifact_hash": "3da8d82ee6708d4339becefa3790f93c5f5cff0e168e88eb298a84f2a25571fa"
+  },
+  "verification_questions": [],
+  "experiments": [
+    {
+      "experiment_id": "EXP-2020B-C0-1",
+      "title": "天气转移概率与总距离的灵敏度",
+      "purpose": "检验机制 M1（状态转移 s' = f(s, a, weather)）与目标 O1 对参数 p2（天气状态转移概率）、p1（总距离 L）的敏感程度",
+      "type": "sensitivity",
+      "procedure": "在 [0.5, 2.0]×基准值网格上分别扰动 p2 与 p1；每点以 seed=42 重跑 M3（Bellman 值迭代）求解最优策略，前向仿真 M1 记录期望总时间与安全到达率；输出弹性表",
+      "metrics": [
+        "E_total_time",
+        "P_safe",
+        "elasticity_p2",
+        "elasticity_p1"
+      ],
+      "seed": 42,
+      "runs": 1
+    },
+    {
+      "experiment_id": "EXP-2020B-C0-2",
+      "title": "蒙特卡洛天气重放",
+      "purpose": "按 p2 采样随机天气序列，检验 M1 随机性下最优策略的 P(安全到达) 分布与约束 C1（r(t) ≥ 0 ∀t）的违反率",
+      "type": "simulation",
+      "procedure": "按 p2 采样 1000 条天气序列；对每条以 M3 求得的策略前向仿真 M1/M2（奖励函数）；统计安全到达频率、资源 r 触底频次与到达时间分布",
+      "metrics": [
+        "P_safe_mc",
+        "c1_violation_rate",
+        "arrival_time_p90"
+      ],
+      "seed": 42,
+      "runs": 3
+    },
+    {
+      "experiment_id": "EXP-2020B-C0-3",
+      "title": "极端天气压力测试",
+      "purpose": "构造持续坏天气的极端序列，检验约束 C1 与目标 O1 在极端情形下的鲁棒性",
+      "type": "extreme_value",
+      "procedure": "构造 worst-case（坏天气概率→1）与 best-case（→0）两端序列；以 M3 策略前向仿真，对比 P(安全到达) 与 r 触底情形，给出安全边际",
+      "metrics": [
+        "P_safe_worst",
+        "P_safe_best",
+        "c1_violation_worst"
+      ],
+      "seed": 42,
+      "runs": 1
+    }
+  ],
+  "generator": "P14.2 executor (CatPaw) per RUNBOOK_P14_1.md §7; C0 = artifact only"
+}

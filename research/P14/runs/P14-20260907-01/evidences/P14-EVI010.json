@@ -1,0 +1,22 @@
+{
+  "entity_type": "evidence",
+  "entity_id": "P14-EVI010",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-08T00:04:40",
+  "result_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES010",
+    "content_sha256": "be76033d7d8c336ca24ca36dae1766d44c6b803906ec65f7565fc03913c8d61c"
+  },
+  "interpretation": "批次蒙特卡洛（2000 批/规模）：N=100/1000/10000 的经验-理论相对误差=0.052/0.114/0.088。",
+  "position": "characterizes",
+  "target_claim_desc": "pilot 场景基线下的模型行为刻画（未被 Claim 直接引用）",
+  "status": "valid",
+  "parent_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES010",
+    "content_sha256": "be76033d7d8c336ca24ca36dae1766d44c6b803906ec65f7565fc03913c8d61c"
+  },
+  "content_sha256": "2d31c66c249e10dde4830ef081f591e573a7bc9cc1156e702a2ab47477dec6c3"
+}

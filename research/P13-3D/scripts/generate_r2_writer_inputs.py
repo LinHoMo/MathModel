@@ -14,7 +14,7 @@ import random
 from pathlib import Path
 from datetime import datetime
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parents[3]  # P4 migration fix: script now at research/P13-3D/scripts/, repo root = parents[3]
 ARTIFACTS_DIR = ROOT / "research" / "P13-3D-R2" / "output" / "artifacts"
 INPUTS_DIR = ROOT / "research" / "P13-3D-R2" / "output" / "writer_inputs"
 INPUTS_DIR.mkdir(parents=True, exist_ok=True)

@@ -366,8 +366,8 @@ def _execute_v3(project_dir: Path, questions: list[str],
         print(f"[V3][FAIL] 执行中断: {exc}", file=sys.stderr)
         return 1
     prog = report["progress"]
-    print(f"\n[V3][EXEC] 波次 {len(report['waves'])} · "
-          f"完成 {len(prog['completed'])}/{prog['total']} · "
+    print(f"\n[V3][EXEC] 处理波次 {len(report['waves'])}（含重试/子波） · "
+          f"节点完成 {len(prog['completed'])}/{prog['total']} · "
           f"阻塞 {len(prog['blocked'])} · 失败 {len(prog['failures'])}")
     st = session.state.data["state"]
     print(f"[V3][EXEC] claims {st['evidence']['claims_supported']}/"

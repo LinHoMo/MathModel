@@ -12,7 +12,7 @@ Each paper has a golden label dict: {element: 0 or 1}
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parents[3]  # P4 migration fix: script now at research/P13-3D/scripts/, repo root = parents[3]
 R2_ARTIFACTS = ROOT / "research" / "P13-3D-R2" / "output" / "artifacts"
 R3_GOLDEN = ROOT / "research" / "P13-3D-R3" / "golden_set"
 R3_GOLDEN.mkdir(parents=True, exist_ok=True)

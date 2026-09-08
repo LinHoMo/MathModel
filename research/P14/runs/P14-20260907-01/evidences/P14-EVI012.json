@@ -1,0 +1,22 @@
+{
+  "entity_type": "evidence",
+  "entity_id": "P14-EVI012",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-08T00:04:40",
+  "result_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES012",
+    "content_sha256": "bed18db66b4e9ce175b2994a708cbe5cacf413f54a4976f33ef6a69850fe36f3"
+  },
+  "interpretation": "泊松近似消融：|Δn*| 最大 4.2 件；成本相对误差<1% 的近似有效边界 n≤1000。",
+  "position": "characterizes",
+  "target_claim_desc": "pilot 场景基线下的模型行为刻画（未被 Claim 直接引用）",
+  "status": "valid",
+  "parent_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES012",
+    "content_sha256": "bed18db66b4e9ce175b2994a708cbe5cacf413f54a4976f33ef6a69850fe36f3"
+  },
+  "content_sha256": "e2031637ae139f1b4edbbd1fbacbb508673a3f31508ea4eff39f81431d1c9acd"
+}

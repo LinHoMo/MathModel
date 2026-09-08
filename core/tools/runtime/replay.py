@@ -32,6 +32,11 @@ def main():
     args = ap.parse_args()
 
     project = Path(args.project)
+    if not project.exists():
+        # 与 state.py 契约对齐： bare 项目名可在 projects/ 下解析（RC-S1 B×1）
+        cand = ROOT / "projects" / args.project
+        if cand.exists():
+            project = cand
     if args.op == "list":
         for r in list_runs(project):
             print(f"{r['run_id']}  {r['status']:<10} {r['started_at']}  "
@@ -52,8 +57,9 @@ def main():
             print(f"  - {p_}")
         for d in rep.get("drift", []):
             print(f"  * {d['field']}: 记录 {d['recorded']} ≠ 当前 {d['current']}（{d['why']}）")
-        if not rep["reconcile"]["ok"]:
-            for p_ in rep["reconcile"]["problems"]:
+        rec_ = rep.get("reconcile")
+        if rec_ is not None and not rec_.get("ok"):
+            for p_ in rec_.get("problems", []):
                 print(f"  * 对账: {p_}")
         return 1
     print(f"[replay] OK（run {rep.get('run_id')}, status {rep.get('status')}）"

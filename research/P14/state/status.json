@@ -1,0 +1,29 @@
+{
+  "project": "P14",
+  "title": "Model → Experiment / Evidence Transmission Pilot",
+  "current_phase": "Phase 4: P14.4 PASS — pilot closed (run P14-20260907-01; report PILOT_REPORT.md)",
+  "track": "research/",
+  "prereg": "PRE_REGISTRATION.md",
+  "runbook": "RUNBOOK_P14_1.md (v1 + v1.1 amendment: UNRESOLVED)",
+  "schema": "schemas/p14_entities.schema.json",
+  "gate": "scripts/p14_integrity_gate.py",
+  "tools": ["scripts/p14_finalize_hashes.py", "scripts/p14_execute.py", "scripts/p14_build_evidence.py"],
+  "pilot_report": "PILOT_REPORT.md",
+  "final_judgment": {
+    "verdict": "PASS",
+    "question": "Harness 是否具备把冻结模型转化为可执行实验，并把实验结果转化为可审计证据与 Claim 判定的能力",
+    "capabilities": {
+      "provenance": "PASS", "deterministic_record": "PASS (21/21 replay match)",
+      "result_binding": "PASS", "traceable_support": "PASS",
+      "failure_invalidation": "PASS (G5 语义全图强制 + selftest 实证)",
+      "evidence_aware_claim_adjudication": "PASS (9 Claims: 5 supported / 4 refuted / 0 unresolved)"
+    },
+    "entity_scale": {"specs": 6, "executions": 21, "results": 21, "evidences": 21, "claims": 9, "replays_match": "21/21"},
+    "no_overclaiming": "所有数字严格限定 pilot 场景；不证明自动高质量实验设计或普适科学有效性；C0/C1 对照非效果结论"
+  },
+  "v1_1_amendment": "RUNBOOK §5 规则 5：Claim 新增 unresolved（UNRESOLVED ≠ REFUTED），门禁强制 unresolved 须绑定 ≥1 Evidence；selftest 9/9；本轮 run 状态不受影响",
+  "next": [
+    "候选（须新一轮预注册）：真实附件数据接入重测 2022_C；C0/C1 对照升级为正式效果实验；组织质量仪器",
+    "RC-S1 16 波认知执行（等用户配额开关）；RC-S2 等用户科研问题"
+  ]
+}

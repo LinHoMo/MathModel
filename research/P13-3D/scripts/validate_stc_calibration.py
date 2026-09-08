@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from stc_evaluator import compute_stc_v2, validate_stc_against_golden
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parents[3]  # P4 migration fix: script now at research/P13-3D/scripts/, repo root = parents[3]
 golden_dir = ROOT / "research" / "P13-3D-R3" / "golden_set"
 artifact = json.loads((golden_dir / "artifact_2019_A_MMA.json").read_text(encoding="utf-8"))
 

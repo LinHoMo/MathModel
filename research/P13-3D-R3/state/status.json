@@ -1,16 +1,53 @@
 {
   "project": "P13-3D-R3",
-  "current_phase": "Phase 4: Reporting",
+  "current_phase": "Phase 7: CLOSED (negative but informative) — P13-3D-R3.1 instrument hardening applied",
+  "closure": {
+    "closed_at": "2026-09-07",
+    "verdict": "Negative but informative result：显式 MODEL_PAPER_MAP 在当前 Writer、冻结模型内容与既有写作规范下，没有产生可检测的结构传输或论文质量增益；同时没有引入额外未授权模型变异。",
+    "interpretation": "Model→Paper 的主要质量瓶颈不在『映射是否显式化』，而在上游 Model Construction 的质量，以及当前 STC 对『组织质量』的测量能力不足。",
+    "four_quadrant": "no-effect & harmless",
+    "reopening_policy": "instrument hardening 不重开 R3；仅当新的真实 failure mode 经预注册批准后才启动新一轮。"
+  },
+  "version_history": [
+    "P13-3D-R3：closed（正式结论 = real_evaluation/R3_2_FINAL_REPORT.md；模拟 48 评估已降级 sanity evidence）",
+    "P13-3D-R3.1：instrument hardening（corpus gate v1.1 配对唯一性固化，复跑 PASS 零回归；篇幅比门禁设计冻结入 Writer Instrument v2，见 INSTRUMENT_HARDENING_NOTES.md）"
+  ],
   "phases_completed": [
     "Phase 1: Mapping Layer Design",
     "Phase 2: Mapping + Paper Generation",
-    "Phase 3: Evaluation"
+    "Phase 3: Evaluation (R3.1 simulated-writer sanity)",
+    "Phase 4: Reporting (R3.1 sanity report)",
+    "Phase 5: R3.2 Real Corpus Generation (G0-G2)",
+    "Phase 6: R3.2 Real Evaluation (G3-G6) + Final Report (G7)",
+    "Phase 7: Closure + Instrument Hardening (R3.1)"
   ],
-  "hypotheses": {
-    "H13": "FAIL",
-    "H14": "FAIL",
-    "H15": "FAIL",
-    "H16": "PASS"
+  "evidence_status": {
+    "simulated_48_evals": {
+      "role": "pipeline/sanity evidence ONLY — 已降级",
+      "source": "output/evaluation/hypothesis_results.json (R3.1 模板语料 + 模拟评估)",
+      "hypotheses": { "H13": "FAIL", "H14": "FAIL", "H15": "FAIL", "H16": "PASS" },
+      "note": "不进入正式结论；正式结论以 real_evaluation/ 为准"
+    },
+    "real_r32": {
+      "role": "CONFIRMATORY — 唯一正式结论来源",
+      "corpus": "real_papers/ 48 篇（24 单元 × W0/W1），corpus gate v1.1 24/24 PASS + pairing OK，全库哈希零重复",
+      "manifest": "real_evaluation/corpus_manifest.json",
+      "stc_v2": "real_evaluation/r32_stc.json",
+      "fidelity_v2": "real_evaluation/r32_fidelity.json",
+      "blind_pq": "real_evaluation/r32_blind_pq.json (8 评委包, seed 42, key 隔离)",
+      "paired_analysis": "real_evaluation/r32_paired_analysis.json",
+      "final_report": "real_evaluation/R3_2_FINAL_REPORT.md",
+      "hypotheses": { "H13": "FAIL", "H14": "FAIL", "H15": "FAIL", "H16": "PASS", "H17": "FAIL", "H18": "FAIL" },
+      "conclusion": "四象限判定 = 无效果且无害；质量方差由构件质量（arm）主导（跨 arm ≈18 分 vs 条件内 ≈0 分）。"
+    }
   },
-  "total_evaluations": 48
+  "provenance_events_20260907": [
+    "P4 迁移缺陷修复：research/P13-3D/scripts/ 27 个脚本 ROOT 计算修正（parents[3]）",
+    "路径卫生：RUNBOOK/GENERATION_SPEC/RESUME 旧 projects/ 路径修正为 research/",
+    "语料门禁盲区外补：48 篇 SHA256 全库去重（发现并修复 2020_B/B0 W0/W1 同内容配对，按冻结 prompt 于 20:25-20:27 重生成）",
+    "G2 修复批次单元：2020_B/B0（batch 敏感性已入分析：剔除后 H13 更负，-0.058, p=0.956）",
+    "R3.1 hardening：corpus gate v1.1 配对唯一性固化（A/B/C/D 四类阻断），现存语料复跑 PASS 零回归"
+  ],
+  "total_evaluations_real": 48,
+  "total_evaluations_simulated": 48
 }

@@ -1,0 +1,84 @@
+{
+  "entity_type": "result",
+  "entity_id": "P14-RES019",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-07T23:59:57",
+  "execution_ref": {
+    "entity_type": "execution",
+    "entity_id": "P14-EXE019",
+    "content_sha256": "a6fce1d915458a7cce581dea24e55c7ab41f4efca0360b19f0842da65179d246"
+  },
+  "data": {
+    "metrics": {
+      "accuracy_grid": [
+        {
+          "K": 2,
+          "kmeans_acc": 0.7
+        },
+        {
+          "K": 3,
+          "kmeans_acc": 1.0
+        },
+        {
+          "K": 4,
+          "kmeans_acc": 1.0
+        },
+        {
+          "K": 5,
+          "kmeans_acc": 1.0
+        },
+        {
+          "K": 6,
+          "kmeans_acc": 1.0
+        },
+        {
+          "K": 7,
+          "kmeans_acc": 1.0
+        },
+        {
+          "K": 8,
+          "kmeans_acc": 1.0
+        }
+      ],
+      "best_K": 3,
+      "best_components": 0.7,
+      "best_kmeans_acc": 1.0,
+      "best_lda_acc": 1.0,
+      "lda_acc_grid": [
+        {
+          "lda_acc": 1.0,
+          "var_keep": 0.7
+        },
+        {
+          "lda_acc": 1.0,
+          "var_keep": 0.75
+        },
+        {
+          "lda_acc": 1.0,
+          "var_keep": 0.8
+        },
+        {
+          "lda_acc": 1.0,
+          "var_keep": 0.85
+        },
+        {
+          "lda_acc": 1.0,
+          "var_keep": 0.9
+        },
+        {
+          "lda_acc": 1.0,
+          "var_keep": 0.95
+        }
+      ]
+    },
+    "experiment_id": "EXP-2022C-C1-2"
+  },
+  "status": "valid",
+  "parent_ref": {
+    "entity_type": "execution",
+    "entity_id": "P14-EXE019",
+    "content_sha256": "a6fce1d915458a7cce581dea24e55c7ab41f4efca0360b19f0842da65179d246"
+  },
+  "content_sha256": "b5096a59ba4290783f2277b7f42409c308320fed6cfa7af36f3fa4f79f862c08"
+}

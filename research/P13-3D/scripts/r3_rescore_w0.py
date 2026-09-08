@@ -12,7 +12,7 @@ from datetime import datetime
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from stc_evaluator import compute_stc_v2
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parents[3]  # P4 migration fix: script now at research/P13-3D/scripts/, repo root = parents[3]
 R2_ARTIFACTS = ROOT / "research" / "P13-3D-R2" / "output" / "artifacts"
 R2_PAPERS = ROOT / "research" / "P13-3D-R2" / "output" / "papers"
 R3_W0_BASELINE = ROOT / "research" / "P13-3D-R3" / "w0_baseline"

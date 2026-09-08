@@ -1,0 +1,58 @@
+{
+  "entity_type": "result",
+  "entity_id": "P14-RES004",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-07T23:59:55",
+  "execution_ref": {
+    "entity_type": "execution",
+    "entity_id": "P14-EXE004",
+    "content_sha256": "b6c5aa79e58e0574d891ab6128f13a6fbe71c87b2fe713f5ce51e3bef50e0adf"
+  },
+  "data": {
+    "metrics": {
+      "configs": [
+        {
+          "E_total_time": 4.0,
+          "P_safe": 1.0,
+          "p2": 0.3
+        },
+        {
+          "E_total_time": 4.0,
+          "P_safe": 1.0,
+          "p2": 0.4
+        },
+        {
+          "E_total_time": 4.0,
+          "P_safe": 1.0,
+          "p2": 0.5
+        },
+        {
+          "E_total_time": 4.0,
+          "P_safe": 1.0,
+          "p2": 0.6
+        },
+        {
+          "E_total_time": 4.0,
+          "P_safe": 1.0,
+          "p2": 0.7
+        },
+        {
+          "E_total_time": 4.0,
+          "P_safe": 1.0,
+          "p2": 0.8
+        }
+      ],
+      "elasticity_p2": 0.0,
+      "policy_stability": 0.9992548435171386
+    },
+    "experiment_id": "EXP-2020B-C1-1"
+  },
+  "status": "valid",
+  "parent_ref": {
+    "entity_type": "execution",
+    "entity_id": "P14-EXE004",
+    "content_sha256": "b6c5aa79e58e0574d891ab6128f13a6fbe71c87b2fe713f5ce51e3bef50e0adf"
+  },
+  "content_sha256": "502524fa5ea14f1f3985de6b410cdaa4a1ec9119b4d9897c0cf818deea8ca347"
+}

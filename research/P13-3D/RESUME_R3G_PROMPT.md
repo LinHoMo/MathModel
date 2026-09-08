@@ -22,10 +22,10 @@
 目标是生成 48 篇"真实 Writer 论文"做 W0(仅构件) vs W1(构件+映射) 配对对照。
 测量器 STC v2 已修复并校准，协议已冻结，现在唯一要做的是**生成合格语料**。
 工作目录：C:\Users\Lin\Desktop\Programs\MathModel
-项目目录：C:\Users\Lin\Desktop\Programs\MathModel\projects\P13-3D-R3
+项目目录：C:\Users\Lin\Desktop\Programs\MathModel\research\P13-3D-R3（P4 迁移后唯一入口；旧 `projects\P13-3D-R3` 路径作废）
 
 ## 第一步（必做）：先定位真实缺口
-python core/tools/evaluation/r3g_corpus_check.py
+python research/P13-3D/scripts/r3g_corpus_check.py
 ```
 （在 MathModel 根目录跑；它会列出 24 个单元中哪些 W0/W1 缺失或不合格，
 原因写在 --json 输出的 reason 里。以此为准，别信口头描述。）
@@ -54,7 +54,7 @@ sensitivity_plan、selected_model、candidate_models、W0、W1、本实验、实
 或等到报错里给的"重置"时间后再跑。宁可串行也不触发限流导致任务卡死。
 
 ## 完成标准
-python core/tools/evaluation/r3g_corpus_check.py   →  24/24 单元 PASS（48 篇齐全、无泄漏、篇幅达标）
+python research/P13-3D/scripts/r3g_corpus_check.py   →  24/24 单元 PASS（48 篇齐全、无泄漏、篇幅达标）
 跑通后停止，回报：已合格单元数/24，并把门禁输出尾部贴给我。
 不要在语料门禁通过前运行任何 STC / PQ 评估，也不要据此修改 prompt 或映射。
 

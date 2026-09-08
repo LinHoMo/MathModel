@@ -15,7 +15,7 @@ from pathlib import Path
 
 random.seed(42)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parents[3]  # P4 migration fix: script now at research/P13-3D/scripts/, repo root = parents[3]
 papers_dir = ROOT / "research" / "P13-3D" / "output" / "papers"
 artifacts_dir = ROOT / "research" / "P13-3D" / "output" / "artifacts"
 eval_dir = ROOT / "research" / "P13-3D" / "output" / "evaluation"

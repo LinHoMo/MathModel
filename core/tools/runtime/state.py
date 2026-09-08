@@ -380,6 +380,20 @@ def cmd_status(project, args):
         print("全部完成")
     print(f"状态文件: {state_path(project)}")
     print(f"可读镜像: {md_path(project)}")
+    v3f = Path(state_path(project)).parent.parent / "state" / "status.json"
+    if v3f.exists():
+        try:
+            v3 = json.loads(v3f.read_text(encoding="utf-8"))
+            s3 = v3.get("state", {})
+            qs = s3.get("questions", {})
+            done_q = sum(1 for q in qs.values()
+                         if q.get("status") in ("validated", "complete", "completed"))
+            ev = s3.get("evidence", {})
+            print(f"v3 视图: questions {done_q}/{len(qs)} validated · "
+                  f"claims {ev.get('claims_supported', 0)}/{ev.get('claims_total', 0)} · "
+                  f"graph v{ev.get('graph_version', '?')}（V3 运行态详见 state.py reconcile）")
+        except (json.JSONDecodeError, OSError):
+            pass
     return 0
 
 

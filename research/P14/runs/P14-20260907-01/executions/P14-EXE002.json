@@ -1,0 +1,30 @@
+{
+  "entity_type": "execution",
+  "entity_id": "P14-EXE002",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-07T23:59:53",
+  "spec_ref": {
+    "entity_type": "experiment_spec",
+    "entity_id": "P14-SPEC001",
+    "content_sha256": "985810d733a55abf8677ae91e2ccb3a06bcd087bc0af55c5782b33043dec6b28"
+  },
+  "experiment_id": "EXP-2020B-C0-2",
+  "runner": {
+    "backend": "python-sandbox",
+    "python_version": "3.12.10",
+    "entrypoint": "code/q2020B.py::EXP-2020B-C0-2",
+    "code_sha256": "91d0f1dd0e337225bf4aaf0ea08f84234a3663d92cad6a46b46a6ec5d329adf1"
+  },
+  "seed": 42,
+  "runs": 3,
+  "status": "completed",
+  "log_path": "logs/P14-EXE002.log",
+  "env_fingerprint": "py3.12-win64;numpy",
+  "parent_ref": {
+    "entity_type": "experiment_spec",
+    "entity_id": "P14-SPEC001",
+    "content_sha256": "985810d733a55abf8677ae91e2ccb3a06bcd087bc0af55c5782b33043dec6b28"
+  },
+  "content_sha256": "4dc330ba61f011d7d12547be7a0fe2e9979d2e07989f019409ff860485e5d284"
+}

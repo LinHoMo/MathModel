@@ -47,8 +47,17 @@ def verify(project_dir, run_id: str | None = None) -> dict:
     """确定性重放校验：现磁盘重算 vs RunRecord。"""
     mode = detect_mode(project_dir)
     if mode != "v3":
+        pd = Path(project_dir)
+        if not pd.exists():
+            hint = (f"项目路径不存在: {pd}（提示：可传项目名，工具会尝试 projects/ 下解析；"
+                    f"或传相对仓库根的完整路径）")
+            return {"ok": False, "mode": mode, "problems": [hint]}
+        runs_dir = pd / "state" / "runs"
+        if not any(runs_dir.glob("*.json")) if runs_dir.exists() else True:
+            return {"ok": False, "mode": mode,
+                    "problems": [f"未找到 RunRecord（{runs_dir} 为空或缺失）"]}
         return {"ok": False, "mode": mode,
-                "problems": ["非 v3 项目，无 RunRecord 可验证"]}
+                "problems": [f"非 v3 项目（mode={mode}），无 RunRecord 可验证"]}
     rec = load_run_record(project_dir, run_id)
     pdir = Path(project_dir)
     sdir = pdir / "state"

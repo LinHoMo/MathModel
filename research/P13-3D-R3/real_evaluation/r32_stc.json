@@ -1,0 +1,6600 @@
+{
+  "ran_at": "2026-09-07T20:38:46",
+  "instrument": "stc_evaluator.py::compute_stc_v2 (STC v2, Golden F1=1.000, 冻结不改)",
+  "prereg": "docs\\architecture\\R3_2_REAL_WRITER_PREREG.md",
+  "n": 48,
+  "results": [
+    {
+      "question": "2019_A",
+      "arm": "B0",
+      "condition": "W0",
+      "chars": 9740,
+      "sha256": "72a1627c2af44b6e365857c8bd46a3f631fc3026f561807eb06140bd0de618df",
+      "mtime": "2026-09-07T13:37:07",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5833333333333334,
+      "stc_meta": 0.25,
+      "stc_overall": 0.5,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "油管内压力",
+              "covered": 1
+            },
+            {
+              "name": "喷油流量",
+              "covered": 1
+            },
+            {
+              "name": "进油阀位移",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "name": "管路容积 V",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "压力动态",
+              "covered": 1
+            },
+            {
+              "name": "喷嘴流量",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "燃油不可压缩，流动为准稳态",
+              "covered": 0
+            },
+            {
+              "text": "喷嘴流量与压力平方根成正比",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "ODE + 伯努利",
+              "covered": 0
+            },
+            {
+              "name": "CFD 数值模拟",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "ODE + 伯努利方程",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "题目要求分析压力变化规律，ODE 模型足够且可解释",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2019_A",
+      "arm": "B0",
+      "condition": "W1",
+      "chars": 10436,
+      "sha256": "81a17c6f9105bff22a93a62aca4dd438e20f3ae3b0e6b862ce8ca932aab6dc8c",
+      "mtime": "2026-09-07T13:39:02",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5833333333333334,
+      "stc_meta": 0.25,
+      "stc_overall": 0.5,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "油管内压力",
+              "covered": 1
+            },
+            {
+              "name": "喷油流量",
+              "covered": 1
+            },
+            {
+              "name": "进油阀位移",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "name": "管路容积 V",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "压力动态",
+              "covered": 1
+            },
+            {
+              "name": "喷嘴流量",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "燃油不可压缩，流动为准稳态",
+              "covered": 0
+            },
+            {
+              "text": "喷嘴流量与压力平方根成正比",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "ODE + 伯努利",
+              "covered": 0
+            },
+            {
+              "name": "CFD 数值模拟",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "ODE + 伯努利方程",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "题目要求分析压力变化规律，ODE 模型足够且可解释",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2019_A",
+      "arm": "MMA",
+      "condition": "W0",
+      "chars": 10513,
+      "sha256": "c93f046cda75bfe133ddb893421174b1c06e190a93494ab535b52af5fbe59c3b",
+      "mtime": "2026-09-07T13:45:54",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.8333333333333334,
+      "stc_meta": 0.3333333333333333,
+      "stc_overall": 0.6666666666666666,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "油管内压力",
+              "covered": 1
+            },
+            {
+              "name": "喷油流量",
+              "covered": 1
+            },
+            {
+              "name": "进油阀位移",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "name": "管路容积 V",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "压力动态",
+              "covered": 1
+            },
+            {
+              "name": "进油流量",
+              "covered": 1
+            },
+            {
+              "name": "喷嘴流量",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "燃油不可压缩，流动为准稳态",
+              "covered": 1
+            },
+            {
+              "text": "喷嘴流量与压力平方根成正比",
+              "covered": 1
+            },
+            {
+              "text": "燃油温度恒定，密度均匀",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "ODE + 伯努利",
+              "covered": 0
+            },
+            {
+              "name": "CFD 数值模拟",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "ODE + 伯努利方程",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "题目要求分析压力变化规律，ODE 模型足够且可解释",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": 0.5,
+          "details": [
+            {
+              "parameter": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "parameter": "凸轮转速",
+              "covered": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "question": "2019_A",
+      "arm": "MMA",
+      "condition": "W1",
+      "chars": 10835,
+      "sha256": "f2a2a5c657fe942c10be771dba6c690a6425d8dd8d070ac95d306541160d4c03",
+      "mtime": "2026-09-07T13:47:24",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.8333333333333334,
+      "stc_meta": 0.3333333333333333,
+      "stc_overall": 0.6666666666666666,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "油管内压力",
+              "covered": 1
+            },
+            {
+              "name": "喷油流量",
+              "covered": 1
+            },
+            {
+              "name": "进油阀位移",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "name": "管路容积 V",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "压力动态",
+              "covered": 1
+            },
+            {
+              "name": "进油流量",
+              "covered": 1
+            },
+            {
+              "name": "喷嘴流量",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "燃油不可压缩，流动为准稳态",
+              "covered": 1
+            },
+            {
+              "text": "喷嘴流量与压力平方根成正比",
+              "covered": 1
+            },
+            {
+              "text": "燃油温度恒定，密度均匀",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "ODE + 伯努利",
+              "covered": 0
+            },
+            {
+              "name": "CFD 数值模拟",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "ODE + 伯努利方程",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "题目要求分析压力变化规律，ODE 模型足够且可解释",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": 0.5,
+          "details": [
+            {
+              "parameter": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "parameter": "凸轮转速",
+              "covered": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "question": "2019_A",
+      "arm": "B1-F",
+      "condition": "W0",
+      "chars": 10120,
+      "sha256": "bdb3e39d6937ed102d778b466b84a72db4310fc30200617e4f1e8910d6218d43",
+      "mtime": "2026-09-07T13:47:18",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.625,
+      "stc_meta": 0.27777777777777773,
+      "stc_overall": 0.5092592592592592,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "油管内压力",
+              "covered": 1
+            },
+            {
+              "name": "进油流量",
+              "covered": 1
+            },
+            {
+              "name": "喷油流量",
+              "covered": 1
+            },
+            {
+              "name": "进油阀位移",
+              "covered": 1
+            },
+            {
+              "name": "凸轮转角",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "name": "管路容积 V",
+              "covered": 0
+            },
+            {
+              "name": "体积弹性模量 E",
+              "covered": 0
+            },
+            {
+              "name": "供油压力 P_in",
+              "covered": 0
+            },
+            {
+              "name": "喷嘴面积 A_out",
+              "covered": 0
+            },
+            {
+              "name": "燃油密度 ρ",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.75,
+          "details": [
+            {
+              "name": "压力动态（体积弹性）",
+              "covered": 0
+            },
+            {
+              "name": "进油流量",
+              "covered": 1
+            },
+            {
+              "name": "喷嘴流量",
+              "covered": 1
+            },
+            {
+              "name": "凸轮型线",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            },
+            {
+              "id": "O2",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            },
+            {
+              "id": "C2",
+              "covered": 1
+            },
+            {
+              "id": "C3",
+              "covered": 1
+            },
+            {
+              "id": "C4",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "燃油近似不可压缩（体积弹性模量 E ≈ 常数）",
+              "covered": 0
+            },
+            {
+              "text": "管内流动为准稳态（压力波传播时间 << 喷射周期）",
+              "covered": 0
+            },
+            {
+              "text": "喷嘴流量遵循伯努利方程，流量系数 Cd 在工作范围内近似常数",
+              "covered": 0
+            },
+            {
+              "text": "进油阀位移由凸轮型线决定，忽略阀弹簧动力学",
+              "covered": 0
+            },
+            {
+              "text": "温度变化可忽略（短时喷射过程）",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "ODE + 伯努利",
+              "covered": 0
+            },
+            {
+              "name": "CFD 数值模拟",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "ODE + 伯努利方程",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "题目要求分析压力变化规律，ODE 模型足够且可解释",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": 0.3333333333333333,
+          "details": [
+            {
+              "parameter": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "parameter": "凸轮转速",
+              "covered": 1
+            },
+            {
+              "parameter": "喷嘴面积 A_out",
+              "covered": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "question": "2019_A",
+      "arm": "B1-F",
+      "condition": "W1",
+      "chars": 10942,
+      "sha256": "f91ebb0ed0b50eab64a0fec669ddf7cb6caf07aeea22a6f0ce1e9249a2464697",
+      "mtime": "2026-09-07T13:50:02",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.625,
+      "stc_meta": 0.27777777777777773,
+      "stc_overall": 0.5092592592592592,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "油管内压力",
+              "covered": 1
+            },
+            {
+              "name": "进油流量",
+              "covered": 1
+            },
+            {
+              "name": "喷油流量",
+              "covered": 1
+            },
+            {
+              "name": "进油阀位移",
+              "covered": 1
+            },
+            {
+              "name": "凸轮转角",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "name": "管路容积 V",
+              "covered": 0
+            },
+            {
+              "name": "体积弹性模量 E",
+              "covered": 0
+            },
+            {
+              "name": "供油压力 P_in",
+              "covered": 0
+            },
+            {
+              "name": "喷嘴面积 A_out",
+              "covered": 0
+            },
+            {
+              "name": "燃油密度 ρ",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.75,
+          "details": [
+            {
+              "name": "压力动态（体积弹性）",
+              "covered": 0
+            },
+            {
+              "name": "进油流量",
+              "covered": 1
+            },
+            {
+              "name": "喷嘴流量",
+              "covered": 1
+            },
+            {
+              "name": "凸轮型线",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            },
+            {
+              "id": "O2",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            },
+            {
+              "id": "C2",
+              "covered": 1
+            },
+            {
+              "id": "C3",
+              "covered": 1
+            },
+            {
+              "id": "C4",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "燃油近似不可压缩（体积弹性模量 E ≈ 常数）",
+              "covered": 0
+            },
+            {
+              "text": "管内流动为准稳态（压力波传播时间 << 喷射周期）",
+              "covered": 0
+            },
+            {
+              "text": "喷嘴流量遵循伯努利方程，流量系数 Cd 在工作范围内近似常数",
+              "covered": 0
+            },
+            {
+              "text": "进油阀位移由凸轮型线决定，忽略阀弹簧动力学",
+              "covered": 0
+            },
+            {
+              "text": "温度变化可忽略（短时喷射过程）",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "ODE + 伯努利",
+              "covered": 0
+            },
+            {
+              "name": "CFD 数值模拟",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "ODE + 伯努利方程",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "题目要求分析压力变化规律，ODE 模型足够且可解释",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": 0.3333333333333333,
+          "details": [
+            {
+              "parameter": "流量系数 Cd",
+              "covered": 0
+            },
+            {
+              "parameter": "凸轮转速",
+              "covered": 1
+            },
+            {
+              "parameter": "喷嘴面积 A_out",
+              "covered": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "question": "2022_A",
+      "arm": "B0",
+      "condition": "W0",
+      "chars": 8921,
+      "sha256": "03f8f9f7b1c35b5dc2a77aa40f69aa1e8678ca91e0ad20fa137c32e6701280a8",
+      "mtime": "2026-09-07T13:45:50",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.3333333333333333,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "浮体位移",
+              "covered": 1
+            },
+            {
+              "name": "浮体速度",
+              "covered": 1
+            },
+            {
+              "name": "输出功率",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "浮体质量 m",
+              "covered": 0
+            },
+            {
+              "name": "弹簧刚度 k",
+              "covered": 0
+            },
+            {
+              "name": "阻尼系数 c",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "振动方程",
+              "covered": 1
+            },
+            {
+              "name": "波浪激励",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "浮体做单自由度垂向振动",
+              "covered": 0
+            },
+            {
+              "text": "波浪激励为正弦函数",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "单自由度受迫振动",
+              "covered": 1
+            },
+            {
+              "name": "多自由度振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "单自由度受迫振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "波浪能装置可简化为单自由度振动系统",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_A",
+      "arm": "B0",
+      "condition": "W1",
+      "chars": 9236,
+      "sha256": "f80fa763be5eb6b39fa9b24cf502527184ffb6e26a6c63349d4d973e6ef77391",
+      "mtime": "2026-09-07T13:47:47",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.3333333333333333,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "浮体位移",
+              "covered": 1
+            },
+            {
+              "name": "浮体速度",
+              "covered": 1
+            },
+            {
+              "name": "输出功率",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "浮体质量 m",
+              "covered": 0
+            },
+            {
+              "name": "弹簧刚度 k",
+              "covered": 0
+            },
+            {
+              "name": "阻尼系数 c",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "振动方程",
+              "covered": 1
+            },
+            {
+              "name": "波浪激励",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "浮体做单自由度垂向振动",
+              "covered": 0
+            },
+            {
+              "text": "波浪激励为正弦函数",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "单自由度受迫振动",
+              "covered": 1
+            },
+            {
+              "name": "多自由度振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "单自由度受迫振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "波浪能装置可简化为单自由度振动系统",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_A",
+      "arm": "MMA",
+      "condition": "W0",
+      "chars": 10110,
+      "sha256": "74d283e61751e52e6507052aea30c9fcf7d38af62c053f743f380d29e8bc6b93",
+      "mtime": "2026-09-07T13:55:19",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.611111111111111,
+      "stc_meta": 1.0,
+      "stc_overall": 0.7083333333333334,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "浮体位移",
+              "covered": 1
+            },
+            {
+              "name": "浮体速度",
+              "covered": 1
+            },
+            {
+              "name": "输出功率",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "浮体质量 m",
+              "covered": 0
+            },
+            {
+              "name": "弹簧刚度 k",
+              "covered": 0
+            },
+            {
+              "name": "阻尼系数 c",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.6666666666666666,
+          "details": [
+            {
+              "name": "振动方程",
+              "covered": 1
+            },
+            {
+              "name": "功率输出",
+              "covered": 0
+            },
+            {
+              "name": "稳态振幅",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "浮体做单自由度垂向振动",
+              "covered": 1
+            },
+            {
+              "text": "波浪激励为正弦函数",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "单自由度受迫振动",
+              "covered": 1
+            },
+            {
+              "name": "多自由度振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "单自由度受迫振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "波浪能装置可简化为单自由度振动系统",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_A",
+      "arm": "MMA",
+      "condition": "W1",
+      "chars": 10261,
+      "sha256": "b5d7fcf6cca00200343ad7f44e17a6858906b1877cd8cb2dfb653bf0c87f8926",
+      "mtime": "2026-09-07T13:57:01",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.4444444444444444,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5833333333333333,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "浮体位移",
+              "covered": 1
+            },
+            {
+              "name": "浮体速度",
+              "covered": 1
+            },
+            {
+              "name": "输出功率",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "浮体质量 m",
+              "covered": 0
+            },
+            {
+              "name": "弹簧刚度 k",
+              "covered": 0
+            },
+            {
+              "name": "阻尼系数 c",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.6666666666666666,
+          "details": [
+            {
+              "name": "振动方程",
+              "covered": 1
+            },
+            {
+              "name": "功率输出",
+              "covered": 0
+            },
+            {
+              "name": "稳态振幅",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "浮体做单自由度垂向振动",
+              "covered": 1
+            },
+            {
+              "text": "波浪激励为正弦函数",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "单自由度受迫振动",
+              "covered": 1
+            },
+            {
+              "name": "多自由度振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "单自由度受迫振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "波浪能装置可简化为单自由度振动系统",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_A",
+      "arm": "B1-F",
+      "condition": "W0",
+      "chars": 9013,
+      "sha256": "edf2052b97a967055d69295ac49a7a996e60deafb01536ab23813e2b1fe47cbf",
+      "mtime": "2026-09-07T13:59:13",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.7666666666666666,
+      "stc_meta": 0.6666666666666666,
+      "stc_overall": 0.7333333333333333,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "浮体位移",
+              "covered": 1
+            },
+            {
+              "name": "浮体速度",
+              "covered": 1
+            },
+            {
+              "name": "输出功率",
+              "covered": 1
+            },
+            {
+              "name": "入射波功率",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "浮体质量 m（含附加质量）",
+              "covered": 0
+            },
+            {
+              "name": "弹簧刚度 k（待优化）",
+              "covered": 0
+            },
+            {
+              "name": "PTO 阻尼系数 c（待优化）",
+              "covered": 0
+            },
+            {
+              "name": "波浪频率 ω",
+              "covered": 0
+            },
+            {
+              "name": "波浪激励幅值 F0",
+              "covered": 0
+            },
+            {
+              "name": "发电机效率 η",
+              "covered": 0
+            },
+            {
+              "name": "浮体截面积 S",
+              "covered": 0
+            },
+            {
+              "name": "海水密度 ρ_w",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.6,
+          "details": [
+            {
+              "name": "振动方程（牛顿第二定律）",
+              "covered": 0
+            },
+            {
+              "name": "稳态振幅",
+              "covered": 1
+            },
+            {
+              "name": "输出功率",
+              "covered": 1
+            },
+            {
+              "name": "入射波功率",
+              "covered": 1
+            },
+            {
+              "name": "capture width ratio",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            },
+            {
+              "id": "O2",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            },
+            {
+              "id": "C2",
+              "covered": 1
+            },
+            {
+              "id": "C3",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "浮体做单自由度垂向振动（升沉运动）",
+              "covered": 1
+            },
+            {
+              "text": "波浪激励为线性规则波（Airy 波理论）",
+              "covered": 1
+            },
+            {
+              "text": "阻尼元件为线性粘性阻尼（PTO 系统）",
+              "covered": 1
+            },
+            {
+              "text": "浮体完全浸没或部分浸没，附加质量为常数",
+              "covered": 1
+            },
+            {
+              "text": "忽略波浪辐射阻尼和兴波阻力",
+              "covered": 1
+            },
+            {
+              "text": "能量转换效率为常数（发电机效率）",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "单自由度受迫振动",
+              "covered": 1
+            },
+            {
+              "name": "多自由度振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "单自由度受迫振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "波浪能装置可简化为单自由度振动系统",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": 0.0,
+          "details": [
+            {
+              "parameter": "弹簧刚度 k",
+              "covered": 0
+            },
+            {
+              "parameter": "PTO 阻尼 c",
+              "covered": 0
+            },
+            {
+              "parameter": "波浪频率 ω",
+              "covered": 0
+            },
+            {
+              "parameter": "波浪幅值 F0",
+              "covered": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "question": "2022_A",
+      "arm": "B1-F",
+      "condition": "W1",
+      "chars": 9300,
+      "sha256": "8d67f7252391d2d1731febe0897ed7cde4435fbf1af559b7f8ff4faa7bef925d",
+      "mtime": "2026-09-07T14:01:32",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.7666666666666666,
+      "stc_meta": 0.6666666666666666,
+      "stc_overall": 0.7333333333333333,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "浮体位移",
+              "covered": 1
+            },
+            {
+              "name": "浮体速度",
+              "covered": 1
+            },
+            {
+              "name": "输出功率",
+              "covered": 1
+            },
+            {
+              "name": "入射波功率",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "浮体质量 m（含附加质量）",
+              "covered": 0
+            },
+            {
+              "name": "弹簧刚度 k（待优化）",
+              "covered": 0
+            },
+            {
+              "name": "PTO 阻尼系数 c（待优化）",
+              "covered": 0
+            },
+            {
+              "name": "波浪频率 ω",
+              "covered": 0
+            },
+            {
+              "name": "波浪激励幅值 F0",
+              "covered": 0
+            },
+            {
+              "name": "发电机效率 η",
+              "covered": 0
+            },
+            {
+              "name": "浮体截面积 S",
+              "covered": 0
+            },
+            {
+              "name": "海水密度 ρ_w",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.6,
+          "details": [
+            {
+              "name": "振动方程（牛顿第二定律）",
+              "covered": 0
+            },
+            {
+              "name": "稳态振幅",
+              "covered": 1
+            },
+            {
+              "name": "输出功率",
+              "covered": 1
+            },
+            {
+              "name": "入射波功率",
+              "covered": 1
+            },
+            {
+              "name": "capture width ratio",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            },
+            {
+              "id": "O2",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            },
+            {
+              "id": "C2",
+              "covered": 1
+            },
+            {
+              "id": "C3",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "浮体做单自由度垂向振动（升沉运动）",
+              "covered": 1
+            },
+            {
+              "text": "波浪激励为线性规则波（Airy 波理论）",
+              "covered": 1
+            },
+            {
+              "text": "阻尼元件为线性粘性阻尼（PTO 系统）",
+              "covered": 1
+            },
+            {
+              "text": "浮体完全浸没或部分浸没，附加质量为常数",
+              "covered": 1
+            },
+            {
+              "text": "忽略波浪辐射阻尼和兴波阻力",
+              "covered": 1
+            },
+            {
+              "text": "能量转换效率为常数（发电机效率）",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "单自由度受迫振动",
+              "covered": 1
+            },
+            {
+              "name": "多自由度振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "单自由度受迫振动",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "波浪能装置可简化为单自由度振动系统",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": 0.0,
+          "details": [
+            {
+              "parameter": "弹簧刚度 k",
+              "covered": 0
+            },
+            {
+              "parameter": "PTO 阻尼 c",
+              "covered": 0
+            },
+            {
+              "parameter": "波浪频率 ω",
+              "covered": 0
+            },
+            {
+              "parameter": "波浪幅值 F0",
+              "covered": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "question": "2017_B",
+      "arm": "B0",
+      "condition": "W0",
+      "chars": 9293,
+      "sha256": "0b1158f930c9a9a72cf7b529666c29593bdaa45dac66854d5f0e796c0c82fc66",
+      "mtime": "2026-09-07T13:55:52",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.27777777777777773,
+      "stc_meta": 1.0,
+      "stc_overall": 0.4583333333333333,
+      "elements": {
+        "variables": {
+          "score": 0.6666666666666666,
+          "details": [
+            {
+              "name": "任务价格",
+              "covered": 1
+            },
+            {
+              "name": "任务完成率",
+              "covered": 1
+            },
+            {
+              "name": "用户到任务距离",
+              "covered": 0
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "价格敏感系数 β",
+              "covered": 0
+            },
+            {
+              "name": "距离衰减系数 α",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "完成率模型",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "用户选择任务基于报酬与距离的权衡",
+              "covered": 0
+            },
+            {
+              "text": "任务完成率与价格正相关",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "Logistic 回归",
+              "covered": 1
+            },
+            {
+              "name": "随机森林",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "Logistic 回归",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "定价问题需要可解释模型",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2017_B",
+      "arm": "B0",
+      "condition": "W1",
+      "chars": 9796,
+      "sha256": "c9ae415b758d41b5e04609b7f8497dec6fcc61cd7af940e73bc95f8574ec2309",
+      "mtime": "2026-09-07T13:56:59",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.27777777777777773,
+      "stc_meta": 1.0,
+      "stc_overall": 0.4583333333333333,
+      "elements": {
+        "variables": {
+          "score": 0.6666666666666666,
+          "details": [
+            {
+              "name": "任务价格",
+              "covered": 1
+            },
+            {
+              "name": "任务完成率",
+              "covered": 1
+            },
+            {
+              "name": "用户到任务距离",
+              "covered": 0
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "价格敏感系数 β",
+              "covered": 0
+            },
+            {
+              "name": "距离衰减系数 α",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "完成率模型",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "用户选择任务基于报酬与距离的权衡",
+              "covered": 0
+            },
+            {
+              "text": "任务完成率与价格正相关",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "Logistic 回归",
+              "covered": 1
+            },
+            {
+              "name": "随机森林",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "Logistic 回归",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "定价问题需要可解释模型",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2017_B",
+      "arm": "MMA",
+      "condition": "W0",
+      "chars": 8973,
+      "sha256": "4739a5d9bd143b5e65c8284f5c12bc06bc602940044a38c191ca1e7bb76f4857",
+      "mtime": "2026-09-07T14:10:36",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5,
+      "stc_meta": 0.75,
+      "stc_overall": 0.5625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "任务价格",
+              "covered": 1
+            },
+            {
+              "name": "任务完成率",
+              "covered": 1
+            },
+            {
+              "name": "用户到任务距离",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "价格敏感系数 β",
+              "covered": 0
+            },
+            {
+              "name": "距离衰减系数 α",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "完成率模型",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "用户选择任务基于报酬与距离的权衡",
+              "covered": 1
+            },
+            {
+              "text": "任务完成率与价格正相关",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "Logistic 回归",
+              "covered": 0
+            },
+            {
+              "name": "随机森林",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "Logistic 回归",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "定价问题需要可解释模型",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2017_B",
+      "arm": "MMA",
+      "condition": "W1",
+      "chars": 9169,
+      "sha256": "f2fd7feb0e77bdf5cfd0f7e3d4c681234703825d469e4ffff011642d602e6a37",
+      "mtime": "2026-09-07T14:13:58",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5,
+      "stc_meta": 0.75,
+      "stc_overall": 0.5625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "任务价格",
+              "covered": 1
+            },
+            {
+              "name": "任务完成率",
+              "covered": 1
+            },
+            {
+              "name": "用户到任务距离",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "价格敏感系数 β",
+              "covered": 0
+            },
+            {
+              "name": "距离衰减系数 α",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "完成率模型",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "用户选择任务基于报酬与距离的权衡",
+              "covered": 1
+            },
+            {
+              "text": "任务完成率与价格正相关",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "Logistic 回归",
+              "covered": 0
+            },
+            {
+              "name": "随机森林",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "Logistic 回归",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "定价问题需要可解释模型",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2017_B",
+      "arm": "B1-F",
+      "condition": "W0",
+      "chars": 8979,
+      "sha256": "e104de1f9d915162b6abc8fb93421f4654f3f96fd2b1bd57c40b1f59a6087b83",
+      "mtime": "2026-09-07T14:08:32",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.16666666666666666,
+      "stc_meta": 0.6666666666666666,
+      "stc_overall": 0.3333333333333333,
+      "elements": {
+        "variables": {
+          "score": 0.6666666666666666,
+          "details": [
+            {
+              "name": "任务价格",
+              "covered": 1
+            },
+            {
+              "name": "任务完成率",
+              "covered": 1
+            },
+            {
+              "name": "用户到任务距离",
+              "covered": 0
+            },
+            {
+              "name": "任务难度",
+              "covered": 0
+            },
+            {
+              "name": "区域虚拟变量",
+              "covered": 1
+            },
+            {
+              "name": "时段虚拟变量",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "价格敏感系数 β_price",
+              "covered": 0
+            },
+            {
+              "name": "距离衰减系数 β_dist",
+              "covered": 0
+            },
+            {
+              "name": "难度系数 β_diff",
+              "covered": 0
+            },
+            {
+              "name": "截距 b",
+              "covered": 0
+            },
+            {
+              "name": "区域效应 γ_r",
+              "covered": 0
+            },
+            {
+              "name": "时段效应 δ_t",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.3333333333333333,
+          "details": [
+            {
+              "name": "完成率模型（多因素 logistic）",
+              "covered": 0
+            },
+            {
+              "name": "收益函数",
+              "covered": 1
+            },
+            {
+              "name": "价格-完成率弹性",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            },
+            {
+              "id": "O2",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            },
+            {
+              "id": "C2",
+              "covered": 0
+            },
+            {
+              "id": "C3",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "用户选择任务基于报酬-距离-难度的效用最大化",
+              "covered": 0
+            },
+            {
+              "text": "任务完成率服从 logistic 函数（S 形曲线）",
+              "covered": 0
+            },
+            {
+              "text": "区域固定效应可通过虚拟变量捕获",
+              "covered": 0
+            },
+            {
+              "text": "时段效应（工作日/周末、白天/晚间）影响用户可用性",
+              "covered": 0
+            },
+            {
+              "text": "任务难度与所需时间成正比",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "Logistic 回归",
+              "covered": 1
+            },
+            {
+              "name": "随机森林",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "Logistic 回归",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "定价问题需要可解释模型",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": 0.0,
+          "details": [
+            {
+              "parameter": "价格 price",
+              "covered": 0
+            },
+            {
+              "parameter": "距离 distance",
+              "covered": 0
+            },
+            {
+              "parameter": "区域效应 γ_r",
+              "covered": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "question": "2017_B",
+      "arm": "B1-F",
+      "condition": "W1",
+      "chars": 8994,
+      "sha256": "6455646e96cc0fd00c2080c1ea0eff53f917409a8a12a9d0b9ec3193d44c0fe7",
+      "mtime": "2026-09-07T14:12:12",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.16666666666666666,
+      "stc_meta": 0.3333333333333333,
+      "stc_overall": 0.2222222222222222,
+      "elements": {
+        "variables": {
+          "score": 0.6666666666666666,
+          "details": [
+            {
+              "name": "任务价格",
+              "covered": 1
+            },
+            {
+              "name": "任务完成率",
+              "covered": 1
+            },
+            {
+              "name": "用户到任务距离",
+              "covered": 0
+            },
+            {
+              "name": "任务难度",
+              "covered": 0
+            },
+            {
+              "name": "区域虚拟变量",
+              "covered": 1
+            },
+            {
+              "name": "时段虚拟变量",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "价格敏感系数 β_price",
+              "covered": 0
+            },
+            {
+              "name": "距离衰减系数 β_dist",
+              "covered": 0
+            },
+            {
+              "name": "难度系数 β_diff",
+              "covered": 0
+            },
+            {
+              "name": "截距 b",
+              "covered": 0
+            },
+            {
+              "name": "区域效应 γ_r",
+              "covered": 0
+            },
+            {
+              "name": "时段效应 δ_t",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.3333333333333333,
+          "details": [
+            {
+              "name": "完成率模型（多因素 logistic）",
+              "covered": 0
+            },
+            {
+              "name": "收益函数",
+              "covered": 1
+            },
+            {
+              "name": "价格-完成率弹性",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            },
+            {
+              "id": "O2",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            },
+            {
+              "id": "C2",
+              "covered": 0
+            },
+            {
+              "id": "C3",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "用户选择任务基于报酬-距离-难度的效用最大化",
+              "covered": 0
+            },
+            {
+              "text": "任务完成率服从 logistic 函数（S 形曲线）",
+              "covered": 0
+            },
+            {
+              "text": "区域固定效应可通过虚拟变量捕获",
+              "covered": 0
+            },
+            {
+              "text": "时段效应（工作日/周末、白天/晚间）影响用户可用性",
+              "covered": 0
+            },
+            {
+              "text": "任务难度与所需时间成正比",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "Logistic 回归",
+              "covered": 1
+            },
+            {
+              "name": "随机森林",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "Logistic 回归",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "定价问题需要可解释模型",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": 0.0,
+          "details": [
+            {
+              "parameter": "价格 price",
+              "covered": 0
+            },
+            {
+              "parameter": "距离 distance",
+              "covered": 0
+            },
+            {
+              "parameter": "区域效应 γ_r",
+              "covered": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "question": "2022_C",
+      "arm": "B0",
+      "condition": "W0",
+      "chars": 8988,
+      "sha256": "014236845036f613ddfb555b4b8df69b1842d999d6ca82f62c78b966fd964bbe",
+      "mtime": "2026-09-07T14:14:01",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.8333333333333334,
+      "stc_meta": 0.5,
+      "stc_overall": 0.75,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "成分向量",
+              "covered": 1
+            },
+            {
+              "name": "玻璃类型标签",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "聚类数 K",
+              "covered": 1
+            },
+            {
+              "name": "主成分保留数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA 降维",
+              "covered": 1
+            },
+            {
+              "name": "K-means 聚类",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "玻璃成分数据服从多元正态分布",
+              "covered": 0
+            },
+            {
+              "text": "不同类型的玻璃有可区分的成分特征",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA + K-means + LDA",
+              "covered": 1
+            },
+            {
+              "name": "t-SNE + DBSCAN",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "PCA + K-means + LDA",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "高维小样本适用 PCA 降维",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_C",
+      "arm": "B0",
+      "condition": "W1",
+      "chars": 8998,
+      "sha256": "b7180c66d3e3046dc3d7e7eb5224d32a24f0e75f9b26eb709cc5c2f583cec2ba",
+      "mtime": "2026-09-07T14:18:46",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.75,
+      "stc_meta": 0.5,
+      "stc_overall": 0.6875,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "成分向量",
+              "covered": 1
+            },
+            {
+              "name": "玻璃类型标签",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "聚类数 K",
+              "covered": 0
+            },
+            {
+              "name": "主成分保留数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA 降维",
+              "covered": 1
+            },
+            {
+              "name": "K-means 聚类",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "玻璃成分数据服从多元正态分布",
+              "covered": 0
+            },
+            {
+              "text": "不同类型的玻璃有可区分的成分特征",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA + K-means + LDA",
+              "covered": 1
+            },
+            {
+              "name": "t-SNE + DBSCAN",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "PCA + K-means + LDA",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "高维小样本适用 PCA 降维",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_C",
+      "arm": "MMA",
+      "condition": "W0",
+      "chars": 9557,
+      "sha256": "7ca14a88799c7ab0db428bad18abe64e97341f9431e47e393be554e3c3b3c256",
+      "mtime": "2026-09-07T14:23:24",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5,
+      "stc_meta": 1.0,
+      "stc_overall": 0.625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "成分向量",
+              "covered": 1
+            },
+            {
+              "name": "玻璃类型标签",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "聚类数 K",
+              "covered": 0
+            },
+            {
+              "name": "主成分保留数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA",
+              "covered": 1
+            },
+            {
+              "name": "K-means",
+              "covered": 1
+            },
+            {
+              "name": "LDA",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.5,
+          "details": [
+            {
+              "text": "玻璃成分数据服从多元正态分布",
+              "covered": 1
+            },
+            {
+              "text": "不同类型的玻璃有可区分的成分特征",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA + K-means + LDA",
+              "covered": 1
+            },
+            {
+              "name": "t-SNE + DBSCAN",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "PCA + K-means + LDA",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "高维小样本适用 PCA 降维",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_C",
+      "arm": "MMA",
+      "condition": "W1",
+      "chars": 9801,
+      "sha256": "37c8981edb86a575588a9a02ffc75cfd6af1058a7ceeccbf18fbe5f5755ad5a2",
+      "mtime": "2026-09-07T14:25:24",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5,
+      "stc_meta": 1.0,
+      "stc_overall": 0.625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "成分向量",
+              "covered": 1
+            },
+            {
+              "name": "玻璃类型标签",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "聚类数 K",
+              "covered": 0
+            },
+            {
+              "name": "主成分保留数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA",
+              "covered": 1
+            },
+            {
+              "name": "K-means",
+              "covered": 1
+            },
+            {
+              "name": "LDA",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.5,
+          "details": [
+            {
+              "text": "玻璃成分数据服从多元正态分布",
+              "covered": 1
+            },
+            {
+              "text": "不同类型的玻璃有可区分的成分特征",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA + K-means + LDA",
+              "covered": 1
+            },
+            {
+              "name": "t-SNE + DBSCAN",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "PCA + K-means + LDA",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "高维小样本适用 PCA 降维",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_C",
+      "arm": "B1-F",
+      "condition": "W0",
+      "chars": 9935,
+      "sha256": "d1404d545acbc40e4ec8372ab1045d62d54568d844ed68eb61423b0cb493644e",
+      "mtime": "2026-09-07T14:23:22",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.4166666666666667,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "成分向量",
+              "covered": 1
+            },
+            {
+              "name": "玻璃类型标签",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "聚类数 K",
+              "covered": 0
+            },
+            {
+              "name": "主成分保留数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "CLR 变换",
+              "covered": 1
+            },
+            {
+              "name": "PCA",
+              "covered": 1
+            },
+            {
+              "name": "K-means",
+              "covered": 1
+            },
+            {
+              "name": "LDA 判别",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "成分数据经对数比变换后近似多元正态",
+              "covered": 0
+            },
+            {
+              "text": "不同年代/产地的玻璃有可区分的成分指纹",
+              "covered": 0
+            },
+            {
+              "text": "样本量较小（n<100），适用小样本方法",
+              "covered": 0
+            },
+            {
+              "text": "成分含量总和 = 100%（闭合约束）",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA + K-means + LDA",
+              "covered": 1
+            },
+            {
+              "name": "t-SNE + DBSCAN",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "PCA + K-means + LDA",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "高维小样本适用 PCA 降维",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2022_C",
+      "arm": "B1-F",
+      "condition": "W1",
+      "chars": 10190,
+      "sha256": "248260e2494add91daa44b6623015bacc5688f7125258212fcc23bc3de70040c",
+      "mtime": "2026-09-07T14:25:52",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.4166666666666667,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "成分向量",
+              "covered": 1
+            },
+            {
+              "name": "玻璃类型标签",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "聚类数 K",
+              "covered": 0
+            },
+            {
+              "name": "主成分保留数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "CLR 变换",
+              "covered": 1
+            },
+            {
+              "name": "PCA",
+              "covered": 1
+            },
+            {
+              "name": "K-means",
+              "covered": 1
+            },
+            {
+              "name": "LDA 判别",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "成分数据经对数比变换后近似多元正态",
+              "covered": 0
+            },
+            {
+              "text": "不同年代/产地的玻璃有可区分的成分指纹",
+              "covered": 0
+            },
+            {
+              "text": "样本量较小（n<100），适用小样本方法",
+              "covered": 0
+            },
+            {
+              "text": "成分含量总和 = 100%（闭合约束）",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "PCA + K-means + LDA",
+              "covered": 1
+            },
+            {
+              "name": "t-SNE + DBSCAN",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "PCA + K-means + LDA",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "高维小样本适用 PCA 降维",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2020_B",
+      "arm": "B0",
+      "condition": "W0",
+      "chars": 6146,
+      "sha256": "1ebbdaebfc1382a02ddcba6ca67fd1693fa2a3b73451b7c9750d9b1058bc2ff5",
+      "mtime": "2026-09-07T20:25:07",
+      "batch_id": "G2-20260907-repair",
+      "stc_core": 0.9166666666666666,
+      "stc_meta": 0.5,
+      "stc_overall": 0.8125,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "位置",
+              "covered": 1
+            },
+            {
+              "name": "剩余资源",
+              "covered": 1
+            },
+            {
+              "name": "行进速度",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "总距离 L",
+              "covered": 0
+            },
+            {
+              "name": "天气状态转移概率",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "资源消耗",
+              "covered": 1
+            },
+            {
+              "name": "天气转移",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "天气随机变化，影响行进速度和资源消耗",
+              "covered": 1
+            },
+            {
+              "text": "队伍携带有限资源，可在绿洲补给",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "动态规划",
+              "covered": 1
+            },
+            {
+              "name": "MDP + 蒙特卡洛",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "动态规划 / MDP",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "随机环境下的序贯决策问题",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2020_B",
+      "arm": "B0",
+      "condition": "W1",
+      "chars": 6369,
+      "sha256": "b91f563bf38e639b301e6bc4594f2cd8f451e9a5d9b4383326d1177b1b8fc7e0",
+      "mtime": "2026-09-07T20:27:37",
+      "batch_id": "G2-20260907-repair",
+      "stc_core": 0.9166666666666666,
+      "stc_meta": 1.0,
+      "stc_overall": 0.9375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "位置",
+              "covered": 1
+            },
+            {
+              "name": "剩余资源",
+              "covered": 1
+            },
+            {
+              "name": "行进速度",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "总距离 L",
+              "covered": 0
+            },
+            {
+              "name": "天气状态转移概率",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "资源消耗",
+              "covered": 1
+            },
+            {
+              "name": "天气转移",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "天气随机变化，影响行进速度和资源消耗",
+              "covered": 1
+            },
+            {
+              "text": "队伍携带有限资源，可在绿洲补给",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "动态规划",
+              "covered": 1
+            },
+            {
+              "name": "MDP + 蒙特卡洛",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "动态规划 / MDP",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "随机环境下的序贯决策问题",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2020_B",
+      "arm": "MMA",
+      "condition": "W0",
+      "chars": 10034,
+      "sha256": "10fa14eac61fbd3011ad6bddc87c4dd2f6646e4190851dd0e667d0d3a2539d9a",
+      "mtime": "2026-09-07T14:33:25",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.8611111111111112,
+      "stc_meta": 1.0,
+      "stc_overall": 0.8958333333333334,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "位置",
+              "covered": 1
+            },
+            {
+              "name": "剩余资源",
+              "covered": 1
+            },
+            {
+              "name": "行进速度",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "总距离 L",
+              "covered": 0
+            },
+            {
+              "name": "天气状态转移概率",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.6666666666666666,
+          "details": [
+            {
+              "name": "状态转移",
+              "covered": 1
+            },
+            {
+              "name": "奖励函数",
+              "covered": 0
+            },
+            {
+              "name": "Bellman 方程",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "天气随机变化，影响行进速度和资源消耗",
+              "covered": 1
+            },
+            {
+              "text": "队伍携带有限资源，可在绿洲补给",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "动态规划",
+              "covered": 1
+            },
+            {
+              "name": "MDP + 蒙特卡洛",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "动态规划 / MDP",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "随机环境下的序贯决策问题",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2020_B",
+      "arm": "MMA",
+      "condition": "W1",
+      "chars": 10262,
+      "sha256": "b5f11f3185b1996b0a360a00794601b927b998ea00440bf1c415b5e364df98c0",
+      "mtime": "2026-09-07T14:35:41",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5277777777777778,
+      "stc_meta": 1.0,
+      "stc_overall": 0.6458333333333334,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "位置",
+              "covered": 1
+            },
+            {
+              "name": "剩余资源",
+              "covered": 1
+            },
+            {
+              "name": "行进速度",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "总距离 L",
+              "covered": 0
+            },
+            {
+              "name": "天气状态转移概率",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.6666666666666666,
+          "details": [
+            {
+              "name": "状态转移",
+              "covered": 1
+            },
+            {
+              "name": "奖励函数",
+              "covered": 0
+            },
+            {
+              "name": "Bellman 方程",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "天气随机变化，影响行进速度和资源消耗",
+              "covered": 1
+            },
+            {
+              "text": "队伍携带有限资源，可在绿洲补给",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "动态规划",
+              "covered": 1
+            },
+            {
+              "name": "MDP + 蒙特卡洛",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "动态规划 / MDP",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "随机环境下的序贯决策问题",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2020_B",
+      "arm": "B1-F",
+      "condition": "W0",
+      "chars": 8432,
+      "sha256": "4d85e946c55beb5daad893203e058ccc2daf2511d9679223728ecda8f020fe35",
+      "mtime": "2026-09-07T14:30:47",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.6666666666666666,
+      "stc_meta": 0.75,
+      "stc_overall": 0.6875,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "位置",
+              "covered": 1
+            },
+            {
+              "name": "剩余资源",
+              "covered": 1
+            },
+            {
+              "name": "行进速度",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "总距离 L",
+              "covered": 0
+            },
+            {
+              "name": "天气状态转移概率",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "位置动态",
+              "covered": 1
+            },
+            {
+              "name": "资源消耗",
+              "covered": 1
+            },
+            {
+              "name": "天气转移",
+              "covered": 1
+            },
+            {
+              "name": "Bellman 方程",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "天气状态服从马尔可夫链（晴/阴/雨），转移概率已知",
+              "covered": 0
+            },
+            {
+              "text": "资源消耗率与速度和天气相关",
+              "covered": 0
+            },
+            {
+              "text": "绿洲位置和补给量已知",
+              "covered": 0
+            },
+            {
+              "text": "队伍速度可连续调节",
+              "covered": 0
+            },
+            {
+              "text": "目标为最小化期望到达时间或最大化安全概率",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "动态规划",
+              "covered": 1
+            },
+            {
+              "name": "MDP + 蒙特卡洛",
+              "covered": 0
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "动态规划 / MDP",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "随机环境下的序贯决策问题",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2020_B",
+      "arm": "B1-F",
+      "condition": "W1",
+      "chars": 7467,
+      "sha256": "8e2fa2a9b3f072b03f6af22ab5d680b4fc27e614d99c8b5277455214ebee3419",
+      "mtime": "2026-09-07T14:31:59",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5833333333333334,
+      "stc_meta": 0.75,
+      "stc_overall": 0.625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "位置",
+              "covered": 1
+            },
+            {
+              "name": "剩余资源",
+              "covered": 1
+            },
+            {
+              "name": "行进速度",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "总距离 L",
+              "covered": 0
+            },
+            {
+              "name": "天气状态转移概率",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "位置动态",
+              "covered": 1
+            },
+            {
+              "name": "资源消耗",
+              "covered": 1
+            },
+            {
+              "name": "天气转移",
+              "covered": 1
+            },
+            {
+              "name": "Bellman 方程",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "天气状态服从马尔可夫链（晴/阴/雨），转移概率已知",
+              "covered": 0
+            },
+            {
+              "text": "资源消耗率与速度和天气相关",
+              "covered": 0
+            },
+            {
+              "text": "绿洲位置和补给量已知",
+              "covered": 0
+            },
+            {
+              "text": "队伍速度可连续调节",
+              "covered": 0
+            },
+            {
+              "text": "目标为最小化期望到达时间或最大化安全概率",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "动态规划",
+              "covered": 1
+            },
+            {
+              "name": "MDP + 蒙特卡洛",
+              "covered": 0
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "动态规划 / MDP",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "随机环境下的序贯决策问题",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_B",
+      "arm": "B0",
+      "condition": "W0",
+      "chars": 9174,
+      "sha256": "b76772d1703a308f102e9fdc88183b16bebfa8db4b86c6f0a058b21f54161e05",
+      "mtime": "2026-09-07T14:31:55",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.6666666666666666,
+      "stc_meta": 1.0,
+      "stc_overall": 0.75,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "抽样量",
+              "covered": 1
+            },
+            {
+              "name": "不合格品率",
+              "covered": 1
+            },
+            {
+              "name": "总成本",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "单件检验成本 c_ins",
+              "covered": 0
+            },
+            {
+              "name": "不合格品流出损失 c_def",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "漏检概率",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "产品合格率已知或可估计",
+              "covered": 0
+            },
+            {
+              "text": "检验本身有成本，不合格品流出有损失",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "二项抽样模型",
+              "covered": 1
+            },
+            {
+              "name": "超几何抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "二项抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "批次大时二项近似足够",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_B",
+      "arm": "B0",
+      "condition": "W1",
+      "chars": 9950,
+      "sha256": "480f7f52cebf3dfba32dfebc3405f9a1c8dd87bf355aeb137f139df214ab36c1",
+      "mtime": "2026-09-07T14:33:35",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.6666666666666666,
+      "stc_meta": 1.0,
+      "stc_overall": 0.75,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "抽样量",
+              "covered": 1
+            },
+            {
+              "name": "不合格品率",
+              "covered": 1
+            },
+            {
+              "name": "总成本",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "单件检验成本 c_ins",
+              "covered": 0
+            },
+            {
+              "name": "不合格品流出损失 c_def",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "漏检概率",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 1
+            }
+          ]
+        },
+        "constraints": {
+          "score": 1.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 1
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "产品合格率已知或可估计",
+              "covered": 0
+            },
+            {
+              "text": "检验本身有成本，不合格品流出有损失",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "二项抽样模型",
+              "covered": 1
+            },
+            {
+              "name": "超几何抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "二项抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "批次大时二项近似足够",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_B",
+      "arm": "MMA",
+      "condition": "W0",
+      "chars": 9529,
+      "sha256": "43ac120018ef042f6a25a38662bd46da789f44d04609267a5af7893e43482c45",
+      "mtime": "2026-09-07T14:46:50",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5,
+      "stc_meta": 1.0,
+      "stc_overall": 0.625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "抽样量",
+              "covered": 1
+            },
+            {
+              "name": "不合格品率",
+              "covered": 1
+            },
+            {
+              "name": "总成本",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "单件检验成本 c_ins",
+              "covered": 0
+            },
+            {
+              "name": "不合格品流出损失 c_def",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "漏检概率",
+              "covered": 1
+            },
+            {
+              "name": "总成本",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "产品合格率已知或可估计",
+              "covered": 1
+            },
+            {
+              "text": "检验本身有成本，不合格品流出有损失",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "二项抽样模型",
+              "covered": 1
+            },
+            {
+              "name": "超几何抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "二项抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "批次大时二项近似足够",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_B",
+      "arm": "MMA",
+      "condition": "W1",
+      "chars": 9708,
+      "sha256": "ba6f23dd2781f0d06695ae0e25a7fee3148544bd29e9f0fde2a4e3b969050285",
+      "mtime": "2026-09-07T14:48:00",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5,
+      "stc_meta": 1.0,
+      "stc_overall": 0.625,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "抽样量",
+              "covered": 1
+            },
+            {
+              "name": "不合格品率",
+              "covered": 1
+            },
+            {
+              "name": "总成本",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "单件检验成本 c_ins",
+              "covered": 0
+            },
+            {
+              "name": "不合格品流出损失 c_def",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "漏检概率",
+              "covered": 1
+            },
+            {
+              "name": "总成本",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "产品合格率已知或可估计",
+              "covered": 1
+            },
+            {
+              "text": "检验本身有成本，不合格品流出有损失",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "二项抽样模型",
+              "covered": 1
+            },
+            {
+              "name": "超几何抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "二项抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "批次大时二项近似足够",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_B",
+      "arm": "B1-F",
+      "condition": "W0",
+      "chars": 10349,
+      "sha256": "a7d90a756baead636d22ce8f92706d0d6363cdf427b5bf440e6640d5aaa83a46",
+      "mtime": "2026-09-07T14:44:01",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.3333333333333333,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "抽样量",
+              "covered": 1
+            },
+            {
+              "name": "不合格品率",
+              "covered": 1
+            },
+            {
+              "name": "总成本",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "单件检验成本 c_ins",
+              "covered": 0
+            },
+            {
+              "name": "不合格品流出损失 c_def",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "漏检概率",
+              "covered": 1
+            },
+            {
+              "name": "总期望成本",
+              "covered": 1
+            },
+            {
+              "name": "最优检验量",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "产品不合格率 p 已知或可通过历史数据估计",
+              "covered": 0
+            },
+            {
+              "text": "检验为破坏性或非破坏性均可，但有单位成本",
+              "covered": 0
+            },
+            {
+              "text": "不合格品流出造成客户损失 c_def >> c_ins",
+              "covered": 0
+            },
+            {
+              "text": "批次内产品独立同分布",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "二项抽样模型",
+              "covered": 1
+            },
+            {
+              "name": "超几何抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "二项抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "批次大时二项近似足够",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_B",
+      "arm": "B1-F",
+      "condition": "W1",
+      "chars": 10757,
+      "sha256": "e8277335a2330e08910a134ac98697df149feed4c683694e8a8e857321788ffd",
+      "mtime": "2026-09-07T14:46:18",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.3333333333333333,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "抽样量",
+              "covered": 1
+            },
+            {
+              "name": "不合格品率",
+              "covered": 1
+            },
+            {
+              "name": "总成本",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "单件检验成本 c_ins",
+              "covered": 0
+            },
+            {
+              "name": "不合格品流出损失 c_def",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "漏检概率",
+              "covered": 1
+            },
+            {
+              "name": "总期望成本",
+              "covered": 1
+            },
+            {
+              "name": "最优检验量",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "产品不合格率 p 已知或可通过历史数据估计",
+              "covered": 0
+            },
+            {
+              "text": "检验为破坏性或非破坏性均可，但有单位成本",
+              "covered": 0
+            },
+            {
+              "text": "不合格品流出造成客户损失 c_def >> c_ins",
+              "covered": 0
+            },
+            {
+              "text": "批次内产品独立同分布",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "二项抽样模型",
+              "covered": 1
+            },
+            {
+              "name": "超几何抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "二项抽样模型",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "批次大时二项近似足够",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2023_C",
+      "arm": "B0",
+      "condition": "W0",
+      "chars": 8937,
+      "sha256": "9959546f264425bade4fa14577756e3c7d0558a3dd6153132f0d48dfca65f526",
+      "mtime": "2026-09-07T14:44:28",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5,
+      "stc_meta": 0.25,
+      "stc_overall": 0.4375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "销售价格",
+              "covered": 1
+            },
+            {
+              "name": "补货量",
+              "covered": 1
+            },
+            {
+              "name": "实际需求",
+              "covered": 1
+            },
+            {
+              "name": "剩余库存",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "进货成本 c",
+              "covered": 0
+            },
+            {
+              "name": "需求分布参数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "需求模型",
+              "covered": 1
+            },
+            {
+              "name": "库存动态",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.5,
+          "details": [
+            {
+              "text": "蔬菜保鲜期有限，过期报废",
+              "covered": 0
+            },
+            {
+              "text": "需求受价格影响",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "报童模型 + 价格优化",
+              "covered": 0
+            },
+            {
+              "name": "动态规划多期",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "报童模型 + 价格优化",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "蔬菜单日决策适用报童框架",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2023_C",
+      "arm": "B0",
+      "condition": "W1",
+      "chars": 9414,
+      "sha256": "87247549022f83590d7acf485aeb7dbeba7d15e82f0ef433896aa28cdd5895e1",
+      "mtime": "2026-09-07T14:46:09",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.5,
+      "stc_meta": 0.25,
+      "stc_overall": 0.4375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "销售价格",
+              "covered": 1
+            },
+            {
+              "name": "补货量",
+              "covered": 1
+            },
+            {
+              "name": "实际需求",
+              "covered": 1
+            },
+            {
+              "name": "剩余库存",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "进货成本 c",
+              "covered": 0
+            },
+            {
+              "name": "需求分布参数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "需求模型",
+              "covered": 1
+            },
+            {
+              "name": "库存动态",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.5,
+          "details": [
+            {
+              "text": "蔬菜保鲜期有限，过期报废",
+              "covered": 0
+            },
+            {
+              "text": "需求受价格影响",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "报童模型 + 价格优化",
+              "covered": 0
+            },
+            {
+              "name": "动态规划多期",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "报童模型 + 价格优化",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "蔬菜单日决策适用报童框架",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2023_C",
+      "arm": "MMA",
+      "condition": "W0",
+      "chars": 10847,
+      "sha256": "c80713db206709a6db73be30da33d21d955203579e7818e92d01758b15b0def3",
+      "mtime": "2026-09-07T14:58:24",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.4166666666666667,
+      "stc_meta": 0.25,
+      "stc_overall": 0.375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "销售价格",
+              "covered": 1
+            },
+            {
+              "name": "补货量",
+              "covered": 1
+            },
+            {
+              "name": "实际需求",
+              "covered": 1
+            },
+            {
+              "name": "剩余库存",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "进货成本 c",
+              "covered": 0
+            },
+            {
+              "name": "需求分布参数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "需求模型",
+              "covered": 1
+            },
+            {
+              "name": "利润函数",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "蔬菜保鲜期有限，过期报废",
+              "covered": 0
+            },
+            {
+              "text": "需求受价格影响",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "报童模型 + 价格优化",
+              "covered": 0
+            },
+            {
+              "name": "动态规划多期",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "报童模型 + 价格优化",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "蔬菜单日决策适用报童框架",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2023_C",
+      "arm": "MMA",
+      "condition": "W1",
+      "chars": 6428,
+      "sha256": "86dded4dbaf52066e5871cf16fcd0f65a97335e74df51fe79d74216ab7c5207b",
+      "mtime": "2026-09-07T15:07:06",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.4166666666666667,
+      "stc_meta": 0.25,
+      "stc_overall": 0.375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "销售价格",
+              "covered": 1
+            },
+            {
+              "name": "补货量",
+              "covered": 1
+            },
+            {
+              "name": "实际需求",
+              "covered": 1
+            },
+            {
+              "name": "剩余库存",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "进货成本 c",
+              "covered": 0
+            },
+            {
+              "name": "需求分布参数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "需求模型",
+              "covered": 1
+            },
+            {
+              "name": "利润函数",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "蔬菜保鲜期有限，过期报废",
+              "covered": 0
+            },
+            {
+              "text": "需求受价格影响",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "报童模型 + 价格优化",
+              "covered": 0
+            },
+            {
+              "name": "动态规划多期",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "报童模型 + 价格优化",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "蔬菜单日决策适用报童框架",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2023_C",
+      "arm": "B1-F",
+      "condition": "W0",
+      "chars": 10471,
+      "sha256": "2760e3988bfe91e2b00372b395348381e0e4a9879202113541743a5db7cd6ffb",
+      "mtime": "2026-09-07T14:55:42",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.45,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5875,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "第 t 日定价",
+              "covered": 1
+            },
+            {
+              "name": "第 t 日补货量",
+              "covered": 1
+            },
+            {
+              "name": "第 t 日需求",
+              "covered": 1
+            },
+            {
+              "name": "第 t 日末库存",
+              "covered": 1
+            },
+            {
+              "name": "第 t 日损耗",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "进货成本 c",
+              "covered": 0
+            },
+            {
+              "name": "需求分布参数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "需求模型",
+              "covered": 1
+            },
+            {
+              "name": "库存动态",
+              "covered": 1
+            },
+            {
+              "name": "损耗",
+              "covered": 1
+            },
+            {
+              "name": "利润函数",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.2,
+          "details": [
+            {
+              "text": "蔬菜保鲜期为 T_max 天，超过则完全损耗",
+              "covered": 0
+            },
+            {
+              "text": "需求受价格影响，线性近似 D = a - b·p",
+              "covered": 0
+            },
+            {
+              "text": "每日补货一次，日末处理剩余库存",
+              "covered": 0
+            },
+            {
+              "text": "历史销售数据可用于需求分布估计",
+              "covered": 0
+            },
+            {
+              "text": "缺货损失 = 毛利率 × 期望缺货量",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "报童模型 + 价格优化",
+              "covered": 1
+            },
+            {
+              "name": "动态规划多期",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "报童模型 + 价格优化",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "蔬菜单日决策适用报童框架",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2023_C",
+      "arm": "B1-F",
+      "condition": "W1",
+      "chars": 9482,
+      "sha256": "cea44d60111c64e2f41a2e9add0c925ab794b7a4ba3e95668b20556102af4cf1",
+      "mtime": "2026-09-07T14:56:53",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.45,
+      "stc_meta": 1.0,
+      "stc_overall": 0.5875,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "第 t 日定价",
+              "covered": 1
+            },
+            {
+              "name": "第 t 日补货量",
+              "covered": 1
+            },
+            {
+              "name": "第 t 日需求",
+              "covered": 1
+            },
+            {
+              "name": "第 t 日末库存",
+              "covered": 1
+            },
+            {
+              "name": "第 t 日损耗",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "进货成本 c",
+              "covered": 0
+            },
+            {
+              "name": "需求分布参数",
+              "covered": 1
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "需求模型",
+              "covered": 1
+            },
+            {
+              "name": "库存动态",
+              "covered": 1
+            },
+            {
+              "name": "损耗",
+              "covered": 1
+            },
+            {
+              "name": "利润函数",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.2,
+          "details": [
+            {
+              "text": "蔬菜保鲜期为 T_max 天，超过则完全损耗",
+              "covered": 0
+            },
+            {
+              "text": "需求受价格影响，线性近似 D = a - b·p",
+              "covered": 0
+            },
+            {
+              "text": "每日补货一次，日末处理剩余库存",
+              "covered": 0
+            },
+            {
+              "text": "历史销售数据可用于需求分布估计",
+              "covered": 0
+            },
+            {
+              "text": "缺货损失 = 毛利率 × 期望缺货量",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "报童模型 + 价格优化",
+              "covered": 1
+            },
+            {
+              "name": "动态规划多期",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "报童模型 + 价格优化",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "蔬菜单日决策适用报童框架",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_C",
+      "arm": "B0",
+      "condition": "W0",
+      "chars": 8136,
+      "sha256": "3a441ef938b9e6f97fbf87fd00b2cf7a8dd5f6d516d887bb7c56a03760f9129f",
+      "mtime": "2026-09-07T14:52:25",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.16666666666666666,
+      "stc_meta": 1.0,
+      "stc_overall": 0.375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "作物 i 种植面积",
+              "covered": 1
+            },
+            {
+              "name": "总收益",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "各作物单位面积收益 r_i",
+              "covered": 0
+            },
+            {
+              "name": "总耕地面积 A",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "收益计算",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            },
+            {
+              "id": "C2",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "耕地面积固定，作物间可轮作",
+              "covered": 0
+            },
+            {
+              "text": "市场需求和价格可预测",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "线性规划",
+              "covered": 1
+            },
+            {
+              "name": "随机规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "线性规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "基础模型适用 LP",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_C",
+      "arm": "B0",
+      "condition": "W1",
+      "chars": 7215,
+      "sha256": "9523b9b961817922d54470ad27d77e9068be954f73eef6955f5ff57ea3fac0f0",
+      "mtime": "2026-09-07T14:53:54",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.3333333333333333,
+      "stc_meta": 0.5,
+      "stc_overall": 0.375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "作物 i 种植面积",
+              "covered": 1
+            },
+            {
+              "name": "总收益",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "各作物单位面积收益 r_i",
+              "covered": 0
+            },
+            {
+              "name": "总耕地面积 A",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "收益计算",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            },
+            {
+              "id": "C2",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "耕地面积固定，作物间可轮作",
+              "covered": 1
+            },
+            {
+              "text": "市场需求和价格可预测",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "线性规划",
+              "covered": 1
+            },
+            {
+              "name": "随机规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "线性规划",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "基础模型适用 LP",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_C",
+      "arm": "MMA",
+      "condition": "W0",
+      "chars": 6029,
+      "sha256": "0d1a522f73ac06ebc6c903af92b32541b0d59ef277e6f53abad8ba095f886796",
+      "mtime": "2026-09-07T15:14:50",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.25,
+      "stc_meta": 1.0,
+      "stc_overall": 0.4375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "作物 i 种植面积",
+              "covered": 1
+            },
+            {
+              "name": "总收益",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "各作物单位面积收益 r_i",
+              "covered": 0
+            },
+            {
+              "name": "总耕地面积 A",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "收益模型",
+              "covered": 0
+            },
+            {
+              "name": "面积约束",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            },
+            {
+              "id": "C2",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.0,
+          "details": [
+            {
+              "text": "耕地面积固定，作物间可轮作",
+              "covered": 0
+            },
+            {
+              "text": "市场需求和价格可预测",
+              "covered": 0
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "线性规划",
+              "covered": 1
+            },
+            {
+              "name": "随机规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "线性规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 1,
+          "details": [
+            {
+              "reason": "基础模型适用 LP",
+              "covered": 1
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_C",
+      "arm": "MMA",
+      "condition": "W1",
+      "chars": 6123,
+      "sha256": "5308c77b02adab070c7ac84ff0087cb4602b2deac3f7f7f3ed623f84adbed813",
+      "mtime": "2026-09-07T15:18:27",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.4166666666666667,
+      "stc_meta": 0.5,
+      "stc_overall": 0.4375,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "作物 i 种植面积",
+              "covered": 1
+            },
+            {
+              "name": "总收益",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "各作物单位面积收益 r_i",
+              "covered": 0
+            },
+            {
+              "name": "总耕地面积 A",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.5,
+          "details": [
+            {
+              "name": "收益模型",
+              "covered": 0
+            },
+            {
+              "name": "面积约束",
+              "covered": 1
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            },
+            {
+              "id": "C2",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 1.0,
+          "details": [
+            {
+              "text": "耕地面积固定，作物间可轮作",
+              "covered": 1
+            },
+            {
+              "text": "市场需求和价格可预测",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "线性规划",
+              "covered": 1
+            },
+            {
+              "name": "随机规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 0,
+          "details": [
+            {
+              "model": "线性规划",
+              "covered": 0
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "基础模型适用 LP",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_C",
+      "arm": "B1-F",
+      "condition": "W0",
+      "chars": 6043,
+      "sha256": "dc078c7255323fcea07a1ff5c0af2d187ca282bbbc0a24248936e6368cb66a4a",
+      "mtime": "2026-09-07T15:18:27",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.35833333333333334,
+      "stc_meta": 1.0,
+      "stc_overall": 0.51875,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "作物 i 种植面积",
+              "covered": 1
+            },
+            {
+              "name": "总收益",
+              "covered": 1
+            },
+            {
+              "name": "收益风险",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "各作物单位面积收益 r_i",
+              "covered": 0
+            },
+            {
+              "name": "总耕地面积 A",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.75,
+          "details": [
+            {
+              "name": "收益模型",
+              "covered": 1
+            },
+            {
+              "name": "面积约束",
+              "covered": 1
+            },
+            {
+              "name": "轮作约束",
+              "covered": 1
+            },
+            {
+              "name": "风险模型",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            },
+            {
+              "id": "C2",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.4,
+          "details": [
+            {
+              "text": "总耕地面积 A 固定，可分配给多种作物",
+              "covered": 0
+            },
+            {
+              "text": "各作物单位面积收益 r_i 已知或可估计",
+              "covered": 0
+            },
+            {
+              "text": "作物间存在轮作约束（同一种作物不能连续种植）",
+              "covered": 0
+            },
+            {
+              "text": "市场需求在计划期内稳定",
+              "covered": 1
+            },
+            {
+              "text": "考虑收益最大化和风险最小化两个目标",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "线性规划",
+              "covered": 1
+            },
+            {
+              "name": "随机规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "线性规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "基础模型适用 LP",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    },
+    {
+      "question": "2024_C",
+      "arm": "B1-F",
+      "condition": "W1",
+      "chars": 6058,
+      "sha256": "8460a7f739315581aecb78d2ac99b644a59dd707d1055dc00792361c1428796f",
+      "mtime": "2026-09-07T15:21:45",
+      "batch_id": "G2-20260907-main",
+      "stc_core": 0.35833333333333334,
+      "stc_meta": 1.0,
+      "stc_overall": 0.51875,
+      "elements": {
+        "variables": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "作物 i 种植面积",
+              "covered": 1
+            },
+            {
+              "name": "总收益",
+              "covered": 1
+            },
+            {
+              "name": "收益风险",
+              "covered": 1
+            }
+          ]
+        },
+        "parameters": {
+          "score": 0.0,
+          "details": [
+            {
+              "name": "各作物单位面积收益 r_i",
+              "covered": 0
+            },
+            {
+              "name": "总耕地面积 A",
+              "covered": 0
+            }
+          ]
+        },
+        "mechanism": {
+          "score": 0.75,
+          "details": [
+            {
+              "name": "收益模型",
+              "covered": 1
+            },
+            {
+              "name": "面积约束",
+              "covered": 1
+            },
+            {
+              "name": "轮作约束",
+              "covered": 1
+            },
+            {
+              "name": "风险模型",
+              "covered": 0
+            }
+          ]
+        },
+        "objective": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "O1",
+              "covered": 0
+            }
+          ]
+        },
+        "constraints": {
+          "score": 0.0,
+          "details": [
+            {
+              "id": "C1",
+              "covered": 0
+            },
+            {
+              "id": "C2",
+              "covered": 0
+            }
+          ]
+        },
+        "assumptions": {
+          "score": 0.4,
+          "details": [
+            {
+              "text": "总耕地面积 A 固定，可分配给多种作物",
+              "covered": 0
+            },
+            {
+              "text": "各作物单位面积收益 r_i 已知或可估计",
+              "covered": 0
+            },
+            {
+              "text": "作物间存在轮作约束（同一种作物不能连续种植）",
+              "covered": 0
+            },
+            {
+              "text": "市场需求在计划期内稳定",
+              "covered": 1
+            },
+            {
+              "text": "考虑收益最大化和风险最小化两个目标",
+              "covered": 1
+            }
+          ]
+        },
+        "candidate_model": {
+          "score": 1.0,
+          "details": [
+            {
+              "name": "线性规划",
+              "covered": 1
+            },
+            {
+              "name": "随机规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selected_model": {
+          "score": 1,
+          "details": [
+            {
+              "model": "线性规划",
+              "covered": 1
+            }
+          ]
+        },
+        "selection_reason": {
+          "score": 0,
+          "details": [
+            {
+              "reason": "基础模型适用 LP",
+              "covered": 0
+            }
+          ]
+        },
+        "sensitivity_plan": {
+          "score": -1,
+          "details": []
+        }
+      }
+    }
+  ]
+}

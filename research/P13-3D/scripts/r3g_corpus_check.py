@@ -2,12 +2,18 @@
 # -*- coding: utf-8 -*-
 """r3g_corpus_check.py — R3.2 语料完整性门禁 (R3-G2).
 
+版本：v1.1（P13-3D-R3.1 instrument hardening, 2026-09-07）
+      v1.0 单元级判定语义冻结不变；v1.1 additive 新增语料级配对唯一性检查。
+
 检查 48 篇真实 Writer 论文：
   1. 存在性（24 单元 × 2 条件）
   2. 篇幅（>= MIN_CHARS）
   3. 10 个必需章节齐全
   4. 无元叙述泄漏
   5. 记录 sha256 / 字符数 / 章节命中
+  6. [v1.1] 配对唯一性：非规范/多余文件、同单元 W0/W1 重复、跨单元内容重复
+
+gate = cells_ok AND pairing_ok —— corpus gate 是实验完整性的最后一道门。
 
 Usage:
   python r3g_corpus_check.py            # 检查并打印报告
@@ -21,7 +27,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parents[3]  # P4 migration fix: script now at research/P13-3D/scripts/, repo root = parents[3]
 R3 = ROOT / "research" / "P13-3D-R3"
 PAPERS = R3 / "real_papers"
 ARTIFACTS = ROOT / "research" / "P13-3D-R2" / "output" / "artifacts"
@@ -72,6 +78,62 @@ def check_sections(text: str):
 
 def check_leak(text: str):
     return [p for p in LEAK_PATTERNS if re.search(p, text)]
+
+
+CANONICAL_PAPER_RE = re.compile(r"^(.+)_(B0|MMA|B1_F)\.md$")
+
+
+def check_pairing_integrity():
+    """P13-3D-R3.1 hardening（additive，v1.1）：语料级配对唯一性。
+
+    阻断四类缺陷（不改变任何单元级判定语义）：
+      A. 同一 (question, arm, writer) 出现多份 paper（非规范命名 / 冗余副本）
+      B. 同一 paper 内容被配给多个单元（跨单元内容重复）
+      C. 同一单元 W0/W1 字节级重复（配对失效）
+      D. 任意不同单元共享完全相同内容 hash
+    """
+    known_questions = set(QUESTIONS)
+    problems = {
+        "unexpected_files": [], "missing_canonical": [],
+        "same_cell_duplicates": [], "cross_cell_duplicates": [],
+    }
+    by_hash = {}
+    files_scanned = 0
+    for cond in ["W0", "W1"]:
+        d = PAPERS / cond
+        if not d.exists():
+            problems["missing_canonical"].append(f"{cond}/<directory missing>")
+            continue
+        for f in sorted(d.glob("*.md")):
+            m = CANONICAL_PAPER_RE.match(f.name)
+            if not (m and m.group(1) in known_questions):
+                problems["unexpected_files"].append(f"{cond}/{f.name}")
+                continue
+            files_scanned += 1
+            by_hash.setdefault(sha256_file(f), []).append(f"{cond}/{f.name}")
+    for qid in QUESTIONS:
+        for arm in ARMS:
+            for cond in ["W0", "W1"]:
+                if not (PAPERS / cond / f"{qid}_{arm}.md").exists():
+                    problems["missing_canonical"].append(f"{cond}/{qid}_{arm}.md")
+    for h, paths in by_hash.items():
+        if len(paths) < 2:
+            continue
+        conds_by_name = {}
+        for p in paths:
+            cond, fname = p.split("/", 1)
+            conds_by_name.setdefault(fname, []).append(cond)
+        for fname in sorted(conds_by_name):
+            if len(conds_by_name[fname]) > 1:
+                problems["same_cell_duplicates"].append(
+                    f"{fname}: {','.join(conds_by_name[fname])}")
+        if len(conds_by_name) > 1:
+            problems["cross_cell_duplicates"].append(
+                {"sha256": h[:16], "paths": sorted(paths)})
+    ok = not any(problems.values())
+    payload = {"stats": {"files_scanned": files_scanned,
+                         "unique_hashes": len(by_hash)}, **problems}
+    return ok, payload
 
 
 def main():
@@ -126,6 +188,8 @@ def main():
             report["cells"].append(cell)
 
     total = len(QUESTIONS) * len(ARMS)
+    pairing_ok, pairing = check_pairing_integrity()
+    report["pairing_integrity"] = {"ok": pairing_ok, **pairing}
     report["summary"] = {
         "cells_total": total,
         "cells_ok": n_ok,
@@ -134,7 +198,8 @@ def main():
             1 for c in report["cells"] for k in ("W0", "W1") if c["files"].get(k, {}).get("exists")
         ),
         "deficient_cells": deficient,
-        "gate": "PASS" if n_ok == total else "FAIL",
+        "pairing": "OK" if pairing_ok else "FAIL",
+        "gate": "PASS" if (n_ok == total and pairing_ok) else "FAIL",
     }
 
     if args.json:
@@ -158,6 +223,13 @@ def main():
     s = report["summary"]
     print(f"  cells ok : {s['cells_ok']}/{s['cells_total']}")
     print(f"  papers   : {s['papers_present']}/{s['papers_total']}")
+    p = report["pairing_integrity"]
+    print(f"  pairing  : {s['pairing']} (files={p['stats']['files_scanned']}, "
+          f"unique_hashes={p['stats']['unique_hashes']})")
+    if not p["ok"]:
+        for k, v in p.items():
+            if k not in ("ok", "stats") and v:
+                print(f"  ! {k}: {v}")
     print(f"  GATE     : {s['gate']}")
     if s["deficient_cells"]:
         print(f"  deficient: {', '.join(s['deficient_cells'])}")

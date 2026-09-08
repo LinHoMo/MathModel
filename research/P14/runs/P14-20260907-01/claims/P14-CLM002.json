@@ -1,0 +1,23 @@
+{
+  "entity_type": "claim",
+  "entity_id": "P14-CLM002",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-08T00:04:40",
+  "text": "在场景基线下，目标 O1 的两种口径（min E[总时间] 与 max P(安全到达)）产生高度一致的最优策略（重合度 ≥ 0.95）",
+  "model_origin": {
+    "element_type": "objective",
+    "anchor": "min E[总时间] 或 max P(安全到达)"
+  },
+  "supported_by": [
+    "P14-EVI007"
+  ],
+  "refuted_by": [],
+  "status": "refuted",
+  "parent_ref": {
+    "entity_type": "model_artifact",
+    "entity_id": "2020_B_MMA.json",
+    "content_sha256": "3da8d82ee6708d4339becefa3790f93c5f5cff0e168e88eb298a84f2a25571fa"
+  },
+  "content_sha256": "4e191b2595aa9d901101ec559f9c1cfdf0a1239f859696c0210a147e3e888a94"
+}

@@ -1,0 +1,22 @@
+{
+  "entity_type": "evidence",
+  "entity_id": "P14-EVI014",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-08T00:04:40",
+  "result_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES014",
+    "content_sha256": "653eb6597cca00ebb270f7176752cd900cc2b497fde7e0f566a532835a5837b0"
+  },
+  "interpretation": "小批次超几何对照：N=50/100/200 的 n* 偏差=4.0/19.5/17.9；C1 binding 区域占比=0.07。",
+  "position": "supports",
+  "target_claim_desc": "超几何精确模型与二项抽样模型在小批次下的 n* 偏差随 N 增大而收敛（50→200 单调下降）",
+  "status": "valid",
+  "parent_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES014",
+    "content_sha256": "653eb6597cca00ebb270f7176752cd900cc2b497fde7e0f566a532835a5837b0"
+  },
+  "content_sha256": "c6e493ee6d10022faf550372ada85fabc9219107162d906990b3e432eb40afcf"
+}

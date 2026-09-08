@@ -15,7 +15,7 @@ import hashlib
 import importlib.util
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parents[3]  # P4 migration fix: script now at research/P13-3D/scripts/, repo root = parents[3]
 
 # Import Fidelity Gate v2
 spec = importlib.util.spec_from_file_location("fidelity_gate", str(ROOT / "core" / "tools" / "evaluation" / "fidelity_gate.py"))

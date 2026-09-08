@@ -1,0 +1,66 @@
+{
+  "entity_type": "experiment_spec",
+  "entity_id": "P14-SPEC005",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-07T21:50:00+08:00",
+  "content_sha256": "52b0d6f9bf2d9822b2752093d795e9262443c8103f05d1ee53ea04d2ebf16338",
+  "parent_ref": {
+    "entity_type": "model_artifact",
+    "entity_id": "2022_C_B1_F.json",
+    "content_sha256": "c15924bee329867701c502d768b338b6c8782f22cbc1bb5ce37b66ccf5468012"
+  },
+  "question_id": "2022_C",
+  "condition": "C0",
+  "model_artifact_ref": {
+    "question_id": "2022_C",
+    "arm": "B1_F",
+    "path": "research/P13-3D-R2/output/artifacts/2022_C_B1_F.json",
+    "model_artifact_hash": "c15924bee329867701c502d768b338b6c8782f22cbc1bb5ce37b66ccf5468012"
+  },
+  "verification_questions": [],
+  "experiments": [
+    {
+      "experiment_id": "EXP-2022C-C0-1",
+      "title": "M1 CLR 变换消融",
+      "purpose": "检验机制 M1（clr(x) = [ln(x_i/g(x))]，g(x) 为几何均值）对下游 M3（K-means）与 M4（LDA 判别）性能的必要性",
+      "type": "ablation",
+      "procedure": "同一数据与 seed 下，分别以 CLR 后特征与原始成分特征运行 M2（PCA）→ M3 → M4 流水线，记录判别准确率与聚类轮廓系数之差",
+      "metrics": [
+        "accuracy_with_clr",
+        "accuracy_without_clr",
+        "silhouette_gap"
+      ],
+      "seed": 42,
+      "runs": 1
+    },
+    {
+      "experiment_id": "EXP-2022C-C0-2",
+      "title": "聚类数 K 与主成分保留数灵敏度",
+      "purpose": "扰动参数 p1（聚类数 K）与 p2（主成分保留数）检验目标 O1（最大化聚类/判别准确率）的稳定性",
+      "type": "sensitivity",
+      "procedure": "K ∈ [2, 8] 整数网格；p2 按方差贡献率 70%–95% 网格；全组合运行 M2 → M3 → M4，记录准确率曲面与最优组合",
+      "metrics": [
+        "accuracy_grid",
+        "best_K",
+        "best_components"
+      ],
+      "seed": 42,
+      "runs": 1
+    },
+    {
+      "experiment_id": "EXP-2022C-C0-3",
+      "title": "测量噪声稳健性",
+      "purpose": "对成分向量 X 施加测量噪声后重新闭合（满足约束 C1：各成分 ≥ 0 且总和 = 100%），检验假设 A1（成分数据经对数比变换后近似多元正态）与 M4 判别的稳健性",
+      "type": "robustness",
+      "procedure": "对成分施加 1%–10% 相对高斯噪声后重新归一化闭合，重复 M1 → M2 → M3 → M4 判别 20 次，统计准确率衰减曲线",
+      "metrics": [
+        "accuracy_noise_curve",
+        "accuracy_drop_at_10pct"
+      ],
+      "seed": 42,
+      "runs": 3
+    }
+  ],
+  "generator": "P14.2 executor (CatPaw) per RUNBOOK_P14_1.md §7; C0 = artifact only"
+}

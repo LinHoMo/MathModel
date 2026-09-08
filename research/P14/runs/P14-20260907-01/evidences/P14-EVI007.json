@@ -1,0 +1,22 @@
+{
+  "entity_type": "evidence",
+  "entity_id": "P14-EVI007",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-08T00:04:40",
+  "result_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES007",
+    "content_sha256": "f736807adcdb3e3a2a465c03f0deb5b58e680fda7adb9b34aea2b6a67bd68224"
+  },
+  "interpretation": "双口径最优策略重合度=0.577；值迭代 P(安全到达)=1.000，较贪心基线增益=+0.000。",
+  "position": "supports",
+  "target_claim_desc": "在场景基线下，目标 O1 的两种口径（min E[总时间] 与 max P(安全到达)）产生高度一致的最优策略（重合度 ≥ 0.95）",
+  "status": "valid",
+  "parent_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES007",
+    "content_sha256": "f736807adcdb3e3a2a465c03f0deb5b58e680fda7adb9b34aea2b6a67bd68224"
+  },
+  "content_sha256": "eade17026ec86f809e25d9aa6fdd8fe59bb25ae02f13da566553db7a39e3aeea"
+}

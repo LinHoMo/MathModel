@@ -1,0 +1,42 @@
+{
+  "entity_type": "result",
+  "entity_id": "P14-RES013",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-07T23:59:56",
+  "execution_ref": {
+    "entity_type": "execution",
+    "entity_id": "P14-EXE013",
+    "content_sha256": "b2a7defc5bdc8883be6b9201f853b7841b69cf123f6e1fbcb750bfe6f9b3ceca"
+  },
+  "data": {
+    "metrics": {
+      "100": {
+        "empirical_E_C": 89.575,
+        "n_star": 87,
+        "relative_error": 0.0520827608827015,
+        "theoretical_E_C": 94.49664622980413
+      },
+      "1000": {
+        "empirical_E_C": 150.0,
+        "n_star": 150,
+        "relative_error": 0.11431838815706347,
+        "theoretical_E_C": 169.36108641555543
+      },
+      "10000": {
+        "empirical_E_C": 198.0,
+        "n_star": 198,
+        "relative_error": 0.08770579243876857,
+        "theoretical_E_C": 217.03524845268802
+      }
+    },
+    "experiment_id": "EXP-2024B-C1-3"
+  },
+  "status": "valid",
+  "parent_ref": {
+    "entity_type": "execution",
+    "entity_id": "P14-EXE013",
+    "content_sha256": "b2a7defc5bdc8883be6b9201f853b7841b69cf123f6e1fbcb750bfe6f9b3ceca"
+  },
+  "content_sha256": "114cdb591aab9f1b4898d6ed6025f165bf08ced8c4b4fbb07934365fbd737292"
+}

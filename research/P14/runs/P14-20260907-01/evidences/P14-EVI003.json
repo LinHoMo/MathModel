@@ -1,0 +1,22 @@
+{
+  "entity_type": "evidence",
+  "entity_id": "P14-EVI003",
+  "schema_version": "p14.v1",
+  "run_id": "P14-20260907-01",
+  "created_at": "2026-09-08T00:04:40",
+  "result_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES003",
+    "content_sha256": "cd6902b80b50a2215ea1def280b2c8cf30e57663dd159678952b8f2d2cba2e35"
+  },
+  "interpretation": "极端压测（p2=0.99）：P(安全到达)=1.000，C1 违反率=0.0000；最好天气（p2=0.01）P(安全到达)=1.000。",
+  "position": "supports",
+  "target_claim_desc": "约束 C1（r(t) ≥ 0 ∀t）在极端坏天气序列下存在可测违反风险（违反率 > 0）",
+  "status": "valid",
+  "parent_ref": {
+    "entity_type": "result",
+    "entity_id": "P14-RES003",
+    "content_sha256": "cd6902b80b50a2215ea1def280b2c8cf30e57663dd159678952b8f2d2cba2e35"
+  },
+  "content_sha256": "675a866d12d4beab2482c8bb5c1b30018dcb2473a8fb04eb731eadad18b18f89"
+}

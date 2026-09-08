@@ -14,7 +14,7 @@ import json
 import hashlib
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parents[3]  # P4 migration fix: script now at research/P13-3D/scripts/, repo root = parents[3]
 PAPERS_DIR = ROOT / "research" / "P13-3D-R2" / "output" / "papers"
 EVAL_DIR = ROOT / "research" / "P13-3D-R2" / "output" / "evaluation"
 EVAL_DIR.mkdir(parents=True, exist_ok=True)
