@@ -143,7 +143,7 @@ threshold = get("modeling.assumption_score_threshold", default=6.0)
 治理原则：
 - Knowledge coverage must constrain evaluation, not constrain creativity
 - Research-layer calibration ≠ Agent capability intervention
-- 多解模型原则：benchmark 用 allowed_model_families，不用 core_methods/gold method
+- 多解模型原则：benchmark 用 allowed_modeling_structures（允许的建模结构），不用 core_methods/gold method（core_methods 仅历史追溯）
 - 结构覆盖优先于算法覆盖：方法卡数量不是核心 KPI
 - Tier 0-3 核心覆盖：不追求全方法覆盖；先 3 张校准样本（mc-dp/mc-numerical-pde/mc-queuing-theory）验证 schema，再 Fresh B0，再决定扩卡
 

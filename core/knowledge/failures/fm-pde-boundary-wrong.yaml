@@ -3,7 +3,7 @@ failure_id: fm-pde-boundary-wrong
 title: PDE 边界条件类型错误
 problem_context: 把对流/辐射边界当 Dirichlet，或边界条件缺失
 method: 数值 PDE
-method_family: numerical_pde
+modeling_structure: numerical_pde
 failure_mode: wrong-usage
 symptom: 数值解偏离物理（温度越过边界值）或定解问题不完整
 root_cause: 边界条件类型（Dirichlet/Neumann/Robin）决定解的物理行为

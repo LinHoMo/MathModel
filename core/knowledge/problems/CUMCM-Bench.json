@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "name": "CUMCM-Bench",
-  "description": "国赛真题标准化索引（借鉴 LLM-MM-Agent 的 MM-Bench 结构），提供机器可读的赛题检索与题型-方法映射，供 type-classifier / method-matcher / model-builder 调用。方法字段采用多解模型原则（multiple acceptable solution families）：allowed_model_families 指定允许的高层建模方法族，acceptable_solution_variants 列出可接受的具体算法；historical_core_methods 仅用于追溯，不参与评估。Benchmark 不指定 gold method。",
+  "description": "国赛真题标准化索引（借鉴 LLM-MM-Agent 的 MM-Bench 结构），提供机器可读的赛题检索与题型-方法映射，供 type-classifier / method-matcher / model-builder 调用。方法字段采用多解模型原则（multiple acceptable solution families）：allowed_modeling_structures 指定允许的高层建模方法族，acceptable_solution_variants 列出可接受的具体算法；historical_core_methods 仅用于追溯，不参与评估。Benchmark 不指定 gold method。",
   "metadata": {
     "competition": "CUMCM",
     "competition_fullname": "高教社杯全国大学生数学建模竞赛",
@@ -48,7 +48,7 @@
         "astronomical_geometry",
         "nonlinear_least_squares"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "inverse_problem",
         "optimization"
@@ -88,7 +88,7 @@
         "supply_demand_analysis",
         "optimization_allocation"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "multi_criteria_decision",
         "optimization",
         "statistical_analysis"
@@ -126,7 +126,7 @@
         "calendar_algorithm",
         "rule_modeling"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "rule_based_modeling",
         "astronomical_calculation"
       ],
@@ -161,7 +161,7 @@
         "nonlinear_equations",
         "parameter_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "differential_equations",
         "optimization",
         "mechanical_modeling"
@@ -200,7 +200,7 @@
         "traffic_flow_modeling",
         "simulation_evaluation"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "network_analysis",
         "simulation",
         "optimization"
@@ -236,7 +236,7 @@
         "regression",
         "time_series"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "regression",
         "time_series_forecasting",
         "statistical_analysis"
@@ -273,7 +273,7 @@
         "geometric_calibration",
         "image_reconstruction"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "inverse_problem",
         "signal_processing"
@@ -310,7 +310,7 @@
         "classification",
         "pricing_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "regression",
         "classification",
         "optimization"
@@ -346,7 +346,7 @@
         "colorimetric_modeling",
         "regression_calibration"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "regression",
         "statistical_analysis",
         "inverse_problem"
@@ -387,7 +387,7 @@
         "parameter_inversion",
         "optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "differential_equations",
         "inverse_problem",
         "optimization",
@@ -432,7 +432,7 @@
         "event-driven_simulation",
         "rolling_rescheduling"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "combinatorial_optimization",
         "simulation",
         "scheduling"
@@ -472,7 +472,7 @@
         "ensemble_weighting",
         "clustering"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "clustering",
         "multi_criteria_decision",
         "statistical_analysis"
@@ -513,7 +513,7 @@
         "numerical_solution",
         "parameter_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "differential_equations",
         "optimization",
         "numerical_methods"
@@ -554,7 +554,7 @@
         "periodic_mapping_stability",
         "parameter_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "simulation",
         "differential_equations",
         "optimization"
@@ -594,7 +594,7 @@
         "optimization",
         "decision_modeling"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "probability_modeling",
         "optimization",
         "simulation",
@@ -632,7 +632,7 @@
         "numerical_solution",
         "parameter_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "differential_equations",
         "optimization",
         "numerical_methods"
@@ -670,7 +670,7 @@
         "game_theory",
         "Monte_Carlo"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "combinatorial_optimization",
         "probability_modeling",
         "simulation",
@@ -710,7 +710,7 @@
         "clustering",
         "sensitivity"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "classification",
         "regression",
         "multi_criteria_decision",
@@ -748,7 +748,7 @@
         "least_squares_fitting",
         "numerical_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "optimization",
         "regression"
@@ -785,7 +785,7 @@
         "factor_analysis",
         "experiment_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "regression",
         "statistical_analysis",
         "optimization"
@@ -823,7 +823,7 @@
         "forecasting",
         "scheduling"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "combinatorial_optimization",
         "time_series_forecasting",
         "scheduling"
@@ -860,7 +860,7 @@
         "numerical_solution",
         "parameter_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "differential_equations",
         "optimization",
         "mechanical_modeling"
@@ -896,7 +896,7 @@
         "geometric_positioning",
         "numerical_optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "optimization",
         "inverse_problem"
@@ -935,7 +935,7 @@
         "PCA",
         "statistical_analysis"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "clustering",
         "classification",
         "statistical_analysis",
@@ -979,7 +979,7 @@
         "numerical_optimization",
         "simulation"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "optimization",
         "simulation"
@@ -1015,7 +1015,7 @@
         "geometric_calculation",
         "numerical_solution"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "optimization",
         "numerical_methods"
@@ -1068,7 +1068,7 @@
         "time_series",
         "optimization"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "time_series_forecasting",
         "optimization",
         "statistical_analysis"
@@ -1115,7 +1115,7 @@
         "geometric_modeling",
         "numerical_solution"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "differential_equations",
         "optimization",
@@ -1156,7 +1156,7 @@
         "optimization",
         "sensitivity"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "probability_modeling",
         "optimization",
         "statistical_analysis"
@@ -1192,7 +1192,7 @@
         "integer_programming",
         "multi-objective"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "combinatorial_optimization",
         "multi_criteria_decision",
         "simulation"
@@ -1227,7 +1227,7 @@
         "optimization",
         "simulation"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "network_analysis",
         "simulation",
         "optimization"
@@ -1286,7 +1286,7 @@
         "optimization",
         "simulation"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "differential_equations",
         "optimization",
@@ -1341,7 +1341,7 @@
         "fitting_inversion",
         "numerical_solution"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "geometric_modeling",
         "inverse_problem",
         "optimization"
@@ -1399,7 +1399,7 @@
         "optimization_grouping",
         "classification"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "regression",
         "classification",
         "statistical_analysis",
@@ -1437,7 +1437,7 @@
         "dynamic_shortest_path",
         "hydraulic_modeling"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "network_analysis",
         "graph_theory",
         "differential_equations",
@@ -1476,7 +1476,7 @@
         "regression",
         "dimensionality_reduction"
       ],
-      "allowed_model_families": [
+      "allowed_modeling_structures": [
         "statistical_analysis",
         "regression",
         "time_series_forecasting"

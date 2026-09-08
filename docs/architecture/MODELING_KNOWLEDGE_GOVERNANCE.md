@@ -72,9 +72,9 @@ Knowledge 永远不替代 Evidence 做最终裁决。
 
 ### 原则 3：多解模型原则（Multiple Acceptable Solution Families）
 
-- 每道题有多个 allowed_model_families，不是一个 gold method
-- benchmark 定义 `allowed_model_families` + `acceptable_solution_variants`
-- 不指定"核心方法"（core_methods 仅保留为 historical_core_methods 用于追溯）
+- 每道题有多个 allowed_modeling_structures，不是一个 gold method
+- benchmark 定义 `allowed_modeling_structures` + `acceptable_solution_variants`
+- 不指定"核心方法"（core_methods 仅保留为 historical_core_methods 用于追溯，不参与评估）
 - Agent 选择任何 allowed family 中的方法都算兼容
 
 ### 原则 4：结构覆盖优先于算法覆盖（v1.1 修正）
@@ -163,30 +163,30 @@ Model Construction Knowledge
 
 每道 benchmark 题必须包含：
 
-- `allowed_model_families`: 允许的模型族列表（评分依据）
+- `allowed_modeling_structures`: 允许的建模结构列表（评分依据，多解原则）
 - `acceptable_solution_variants`: 可接受的具体方法列表
-- `historical_core_methods`: 历史追溯字段（原 core_methods，不参与评估）
+- `historical_core_methods`: 历史追溯字段（原 core_methods 字段值，仅追溯不评估）
 
 ### 可选字段
 
-- `forbidden_misinterpretations`: 明显不适合的方法族
+- `forbidden_misinterpretations`: 明显不匹配的建模结构
 
 ### 禁止事项
 
 Benchmark **禁止**：
 
-- 使用 `core_methods` 作为评估字段
+- 使用 `core_methods` 作为评估字段（唯一评分依据必须是 allowed_modeling_structures）
 - 指定单一 gold method
 - 限制 LLM 提出新方法
 
 ## 6. 评估指标规范
 
-### method_selection（已更名为"方法兼容性评估"）
+### construction_strategy_selection（模型构造策略选择评估）
 
-- **定义**：检查 Agent 选择的方法族是否在 benchmark `allowed_model_families` 中
+- **定义**：检查 Agent 构造模型时识别的问题结构是否对齐 benchmark `allowed_modeling_structures`
 - **评分**：兼容性评分 0-100（家族命中 + 方法卡 requirements 满足度）
 - **catalog 外方法**：标记 `out_of_catalog`，不直接判 0，检查数学合理性
-- **不使用**：参考方法匹配（reference_method matching）、核心方法命中（core_methods hit）
+- **不使用**：参考方法匹配（reference_method matching）、核心方法命中（core_methods hit）；评分依据仅为 allowed_modeling_structures
 
 ## 7. 变更管理
 
@@ -198,7 +198,7 @@ Benchmark **禁止**：
 ## 8. 历史更正记录
 
 - **2026-09-08**: 方向锁定 v1.0 发布。从"方法卡=答案库"彻底改正为"方法卡=约束/先验/验证"。
-  - `core_methods` → `allowed_model_families`
+  - `core_methods` → `allowed_model_families` → `allowed_modeling_structures`（v1.2 再迁移）
   - `reference_method` → 方法兼容性检查
   - 方法卡定位从"推荐/答案"改为"约束/先验/验证"
 - **2026-09-08**: 方向锁定 v1.1（本轮）。核心哲学明确为

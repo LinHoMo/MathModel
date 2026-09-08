@@ -15,10 +15,10 @@
 规则: 输入缺失的指标如实记 null（不臆造分数）；能从产物确定性计算的
 尽量计算。所有指标值域 0-100。
 
-method_selection（方法兼容性评估）:
-    检查 agent 选择的方法族是否在 benchmark allowed_model_families 中。
-    采用多解模型原则：allowed_model_families 是唯一评分依据，
-    catalog 外方法标记 out_of_catalog 不自动判错，需人工审查数学合理性。
+construction_strategy_selection（模型构造策略选择评估）:
+    检查 agent 构造模型时识别的问题结构是否对齐 benchmark allowed_modeling_structures。
+    采用多解模型原则：allowed_modeling_structures 是唯一评分依据，
+    catalog 外结构/模型标记 out_of_catalog 不自动判错，需人工审查数学合理性。
     historical_core_methods 仅用于 detail 展示，不参与评分。
 
 Measurement Integrity（measurement metadata，不是第 9 项能力指标）:
@@ -141,9 +141,9 @@ def _load_card_families() -> dict[str, str]:
 def _load_benchmark_reference(problem_id: str) -> dict:
     """从 CUMCM-Bench-v2.json 加载某题的参考方法家族。
 
-    返回 {"historical_core_methods": [...], "allowed_model_families": [...],
+    返回 {"historical_core_methods": [...], "allowed_modeling_structures": [...],
            "acceptable_solution_variants": [...], "family": [...]}。
-    allowed_model_families 是唯一评分依据；historical_core_methods 仅用于
+    allowed_modeling_structures 是唯一评分依据；historical_core_methods 仅用于
     detail 展示，不参与评分；字段缺失时对应值为 None。
     """
     bench_path = ROOT / "research" / "P15" / "benchmark" / "CUMCM-Bench-v2.json"
@@ -155,7 +155,7 @@ def _load_benchmark_reference(problem_id: str) -> dict:
             if p.get("question_id") == problem_id:
                 return {
                     "historical_core_methods": p.get("historical_core_methods"),
-                    "allowed_model_families": p.get("allowed_model_families"),
+                    "allowed_modeling_structures": p.get("allowed_modeling_structures") or p.get("allowed_model_families"),  # legacy compat
                     "acceptable_solution_variants": p.get("acceptable_solution_variants"),
                     "family": p.get("family"),
                 }
@@ -175,12 +175,12 @@ def _infer_problem_id(project_dir: Path, gt: dict) -> str | None:
     return None
 
 
-def _method_family_hit(card_id: str, card_families: dict[str, str],
+def _structure_hit(card_id: str, card_families: dict[str, str],
                        allowed_families: list[str]) -> tuple[bool, bool]:
-    """方法族兼容性检查：检查 card 的 family 是否在 allowed_model_families 中。
+    """结构对齐检查：检查 card 的 modeling_structure 是否在 allowed_modeling_structures 中。
 
     Returns (hit, is_alternative):
-      hit=True            → 家族在 allowed_model_families 中
+      hit=True            → 结构在 allowed_modeling_structures 中
       hit=False, alt=True → 方法卡存在但家族不匹配（合理替代方法）
       hit=False, alt=False → 方法卡不存在或无家族信息
     """
@@ -293,35 +293,35 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
                              / len(sub_qs), 1)
 
     # 2 method selection（方法兼容性评估）。
-    #   allowed_model_families 是唯一评分依据；historical_core_methods 仅用于
+    #   allowed_modeling_structures 是唯一评分依据；historical_core_methods 仅用于
     #   detail 展示，不参与评分，不做回退。catalog 外方法标记 out_of_catalog，
     #   不自动判 0，需人工审查数学合理性。
     methods_gt = gt.get("methods") or []
     card_families = _load_card_families()
     problem_id = _infer_problem_id(project_dir, gt)
     bench_ref = _load_benchmark_reference(problem_id) if problem_id else {}
-    allowed_families = bench_ref.get("allowed_model_families")
+    allowed_families = bench_ref.get("allowed_modeling_structures") or bench_ref.get("allowed_model_families")  # legacy compat
     historical_core_methods = bench_ref.get("historical_core_methods")
     acceptable_variants = bench_ref.get("acceptable_solution_variants")
 
     method_value = None
     method_detail: dict = {
         "gt_methods": methods_gt,
-        "allowed_model_families": allowed_families,
+        "allowed_modeling_structures": allowed_families,
         "historical_core_methods": historical_core_methods,
         "acceptable_solution_variants": acceptable_variants,
         "problem_id": problem_id,
         "definition": (
             "方法兼容性评估：检查 agent 选择的方法族是否在 benchmark "
-            "allowed_model_families 中；catalog 外方法标记 out_of_catalog 不自动判错"
+            "allowed_modeling_structures 中；catalog 外结构标记 out_of_catalog 不自动判错"
         ),
         "per_question": {},
     }
     if not allowed_families:
-        method_detail["method_selection_basis"] = "unavailable"
-        method_detail["note"] = "allowed_model_families unavailable in benchmark"
+        method_detail["method_selection_basis"] = "unavailable"  # legacy compat: detail 键名（历史 report 契约）
+        method_detail["note"] = "allowed_modeling_structures unavailable in benchmark"
     elif models:
-        method_detail["method_selection_basis"] = "allowed_model_families"
+        method_detail["method_selection_basis"] = "allowed_modeling_structures"  # legacy compat: detail 键名（历史 report 契约）
         t1_hits, t3_hits = [], []
         alt_count = 0
         out_of_catalog_count = 0
@@ -337,10 +337,10 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
             cands = [chosen] + [c for c in shortlist if c != chosen]
             top3 = [c for c in cands if c][:3]
             # 家族检查为主，字符串匹配为向后兼容回退
-            t1_fam, t1_alt = _method_family_hit(chosen, card_families, allowed_families)
+            t1_fam, t1_alt = _structure_hit(chosen, card_families, allowed_families)
             t1_str = _method_hit([chosen], card_names, methods_gt) if methods_gt else False
             t1 = t1_fam or t1_str
-            t3_fam = any(_method_family_hit(c, card_families, allowed_families)[0]
+            t3_fam = any(_structure_hit(c, card_families, allowed_families)[0]
                          for c in top3)
             t3_str = _method_hit(top3, card_names, methods_gt) if methods_gt else False
             t3 = t3_fam or t3_str
@@ -486,7 +486,7 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
 
     metrics = {
         "decomposition_coverage": pack(decomp_value, decomp_detail),
-        "method_selection": pack(method_value, method_detail),
+        "method_selection": pack(method_value, method_detail),  # legacy compat: 输出键（历史 report 数据契约；语义=Model Construction Strategy Selection）
         "model_correctness": pack(model_value, model_detail),
         "experiment_validity": pack(exp_value, exp_detail),
         "validation_reliability": pack(val_value, val_detail),

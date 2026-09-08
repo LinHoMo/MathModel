@@ -3,7 +3,7 @@ failure_id: fm-small-sample-deep-learning
 title: 小样本硬套神经网络，过拟合且无法解释
 problem_context: 题目附件仅给出 8 年年度数据，参赛队直接训练 LSTM 做未来 5 年预测
 method: LSTM 深度时序网络
-method_family: timeseries_learning
+modeling_structure: timeseries_learning
 failure_mode: wrong-method
 symptom: 训练误差极小、测试期预测完全失真；评委问"8 个点凭什么支撑门控网络"无法回答
 root_cause: 模型容量与样本量严重失配；且未与简单基线对比，无法证明复杂度必要

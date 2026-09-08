@@ -3,7 +3,7 @@ failure_id: fm-grey-oscillating-data
 title: GM(1,1) 用于振荡/周期序列，外推完全失真
 problem_context: 月度销量数据带明显周期波动，参赛队用 GM(1,1) 预测下一年度
 method: 灰色预测 GM(1,1)
-method_family: classical_timeseries
+modeling_structure: classical_timeseries
 failure_mode: wrong-method
 symptom: 拟合尚可但预测呈平滑单调趋势，周期性完全丢失；级比检验未做或未通过
 root_cause: GM(1,1) 建模假设近似单调指数规律；振荡序列违反准指数性前提

@@ -3,7 +3,7 @@ failure_id: fm-entropy-identical-columns
 title: 熵权法遇到全相同指标列，权重计算除零/NaN
 problem_context: 某指标所有方案取值相同（信息量为零），归一化后 p_ij 列全零或公式除零
 method: 熵权法
-method_family: composite_evaluation
+modeling_structure: composite_evaluation
 failure_mode: numerical
 symptom: 权重出现 NaN/inf 或程序崩溃；有人为补 0.5 之类的魔法数
 root_cause: 零信息列的熵定义退化；未做除零保护与零方差列剔除

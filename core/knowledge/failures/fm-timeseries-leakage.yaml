@@ -3,7 +3,7 @@ failure_id: fm-timeseries-leakage
 title: 时序任务随机划分训练测试集，指标虚高
 problem_context: LSTM 销量预测用 shuffle 随机划分；树模型 CV 同样随机分折
 method: 深度时序网络/树模型
-method_family: timeseries_learning
+modeling_structure: timeseries_learning
 failure_mode: wrong-usage
 symptom: 验证指标极好，实际滚动预测完全失真；滑窗构造时用到未来特征
 root_cause: 时间依赖被随机打乱，模型"偷看"未来信息；滑窗特征包含 t+1 信息

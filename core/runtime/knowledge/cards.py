@@ -238,7 +238,7 @@ class FailureMemory:
     title: str
     problem_context: str
     method: str
-    method_family: str
+    modeling_structure: str
     failure_mode: str
     symptom: str
     root_cause: str
@@ -268,7 +268,7 @@ class FailureMemory:
             title=_require_str(d, "title", where),
             problem_context=_require_str(d, "problem_context", where),
             method=_require_str(d, "method", where),
-            method_family=_require_str(d, "method_family", where),
+            modeling_structure=_require_str(d, "modeling_structure", where),
             failure_mode=failure_mode,
             symptom=_require_str(d, "symptom", where),
             root_cause=_require_str(d, "root_cause", where),

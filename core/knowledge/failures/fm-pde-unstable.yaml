@@ -3,7 +3,7 @@ failure_id: fm-pde-unstable
 title: 显式差分格式违反稳定性条件导致发散
 problem_context: 显式 Euler(FTCS) 未检查 r=αΔt/Δx²≤0.5（CFL 条件）
 method: 数值 PDE
-method_family: numerical_pde
+modeling_structure: numerical_pde
 failure_mode: numerical
 symptom: 数值振荡/发散，随网格加密反而更差
 root_cause: 显式时间推进有条件稳定，Δt 过大违反稳定性判据

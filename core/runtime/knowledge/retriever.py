@@ -131,7 +131,7 @@ class KnowledgeRetriever:
         return self.patterns[pattern_id]
 
     def failures_for(self, card_id: str) -> list[FailureMemory]:
-        """方法卡的关联失败：known_failures 显式引用 + method_family 匹配 + applies_to 反向引用。"""
+        """方法卡的关联失败：known_failures 显式引用 + modeling_structure 匹配 + applies_to 反向引用。"""
         card = self.cards[card_id]
         out = []
         seen: set[str] = set()
@@ -142,7 +142,7 @@ class KnowledgeRetriever:
         for fm in self.failures.values():
             if fm.failure_id in seen:
                 continue
-            if fm.method_family == card.family or card_id in fm.applies_to:
+            if fm.modeling_structure == card.family or card_id in fm.applies_to:
                 out.append(fm)
                 seen.add(fm.failure_id)
         return out

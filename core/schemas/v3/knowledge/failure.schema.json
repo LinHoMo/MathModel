@@ -9,7 +9,7 @@
     "title",
     "problem_context",
     "method",
-    "method_family",
+    "modeling_structure",
     "failure_mode",
     "symptom",
     "root_cause",
@@ -36,9 +36,9 @@
       "type": "string",
       "description": "当时使用的方法"
     },
-    "method_family": {
+    "modeling_structure": {
       "type": "string",
-      "description": "方法族（用于方法卡关联），通用类用 general"
+      "description": "建模结构（关联 Knowledge Unit 的 Modeling Structure），通用类用 general"
     },
     "failure_mode": {
       "type": "string",
@@ -78,7 +78,7 @@
       "items": {
         "type": "string"
       },
-      "description": "适用的 card_id 列表（除 method_family 外的精确关联）"
+      "description": "适用的 card_id 列表（除 modeling_structure 外的精确关联）"
     },
     "source": {
       "type": "string",

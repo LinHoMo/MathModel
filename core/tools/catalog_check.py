@@ -199,7 +199,84 @@ def check_validators(v3: dict) -> list[str]:
     return problems
 
 
-# ---------------------------------------------------------------- 入口
+# ---------------------------------------------------------------- terminology lint
+
+# 禁止旧术语（production 区零残留；语义定义见 docs/ONTOLOGY_TERMINOLOGY.md）
+# terminology-lint-self: 本表为 lint 的禁止词定义本身，非残留
+FORBIDDEN_TERMS = [
+    "allowed_model_families",      # → allowed_modeling_structures  (terminology-lint-self)
+    "method_family",               # → modeling_structure / model regime  (terminology-lint-self)
+    "reference_method",            # 已废弃  (terminology-lint-self)
+    "algorithm_card",              # 不存在该概念  (terminology-lint-self)
+]
+
+# 允许旧术语的例外路径（migration / history 文档）
+TERMINOLOGY_ALLOWED_PATHS = {
+    "docs/ONTOLOGY_TERMINOLOGY.md",          # 映射表本身需要旧词
+    "docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md",  # §8 历史更正记录
+    "docs/architecture/COMPETITION_INTELLIGENCE_AUDIT.md",  # 历史审计快照
+    "docs/architecture/CAPABILITY_ROADMAP_P13_P17.md",     # 历史路线图
+}
+# 允许旧术语的例外目录片段（research history / 历史报告）
+TERMINOLOGY_ALLOWED_DIR_PARTS = {
+    "research", "REPOSITORY_AUDIT", "knowledge_calibration", "measurement_recovery",
+    "reports", "projects", "legacy", "bench-m4", "archives", "ENGINEERING", "handoff",
+}
+# 代码中允许的兼容标识符（# legacy compat 行内豁免）
+TERMINOLOGY_LEGACY_MARK = "# legacy compat"
+
+
+def _is_terminology_allowed(rel: str) -> bool:
+    """判断路径是否属于 research/history/migration 例外区。"""
+    rel = rel.replace("\\", "/")
+    if rel in TERMINOLOGY_ALLOWED_PATHS:
+        return True
+    parts = rel.split("/")
+    return any(p in TERMINOLOGY_ALLOWED_DIR_PARTS for p in parts)
+
+
+def _terminology_scan() -> list[str]:
+    """扫描 production 区旧术语残留（Zero-residue Gate）。
+
+    范围 = core/ + AGENTS.md + docs/ 现行文档（排除 history/migration）。
+    豁免：research 历史、projects 历史观测、legacy 兼容层、# legacy compat 行。
+    """
+    problems = []
+    targets = [ROOT / "core", ROOT / "AGENTS.md", ROOT / "docs"]
+    suffixes = {".py", ".md", ".json", ".yaml", ".yml", ".txt"}
+    scanned_files = 0
+    for target in targets:
+        if target.is_file():
+            files = [target]
+        else:
+            files = [f for f in target.rglob("*") if f.is_file()]
+        for f in files:
+            if f.suffix not in suffixes:
+                continue
+            rel = str(f.relative_to(ROOT))
+            if _is_terminology_allowed(rel):
+                continue
+            try:
+                text = f.read_text(encoding="utf-8", errors="ignore")
+            except Exception:
+                continue
+            scanned_files += 1
+            for lineno, line in enumerate(text.splitlines(), 1):
+                if TERMINOLOGY_LEGACY_MARK in line:
+                    continue
+                if "terminology-lint-self" in line:
+                    continue
+                for term in FORBIDDEN_TERMS:
+                    if term in line:
+                        problems.append(f"{rel}:{lineno}: 旧术语「{term}」残留（canonical 见 docs/ONTOLOGY_TERMINOLOGY.md）")
+                        break
+    return problems
+
+
+def run_terminology() -> list[str]:
+    return _terminology_scan()
+
+
 
 def run_all() -> list[str]:
     catalog = load_catalog()
@@ -215,10 +292,26 @@ def run_all() -> list[str]:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="catalog.yaml v5 双视图一致性校验")
+    ap = argparse.ArgumentParser(description="catalog.yaml v5 双视图一致性校验 + terminology lint")
     ap.add_argument("--check", action="store_true", help="CI 模式：drift 即 EXIT 1")
     ap.add_argument("--json", action="store_true", help="JSON 输出")
+    ap.add_argument("--check-terminology", action="store_true",
+                    help="Zero-residue Gate：production 区旧术语零残留扫描")
     args = ap.parse_args()
+
+    if args.check_terminology:
+        problems = run_terminology()
+        if args.json:
+            print(json.dumps({"ok": not problems, "problems": problems},
+                             ensure_ascii=False, indent=2))
+        else:
+            if problems:
+                print(f"[terminology] FAIL — {len(problems)} 个问题:")
+                for p in problems:
+                    print(f"  - {p}")
+            else:
+                print("[terminology] OK — production 区旧术语零残留")
+        return 1 if problems else 0
 
     problems = run_all()
 

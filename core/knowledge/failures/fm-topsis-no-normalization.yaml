@@ -3,7 +3,7 @@ failure_id: fm-topsis-no-normalization
 title: TOPSIS 指标未归一化，距离被大量纲指标主导
 problem_context: 指标含"产量（万件）"与"合格率（0-1）"，未标准化直接计算欧氏距离
 method: TOPSIS
-method_family: composite_evaluation
+modeling_structure: composite_evaluation
 failure_mode: wrong-usage
 symptom: 排序结果几乎只由大量纲指标决定；权重分析结论与排序不一致
 root_cause: 欧氏距离对量纲敏感，未消除量纲前距离无意义

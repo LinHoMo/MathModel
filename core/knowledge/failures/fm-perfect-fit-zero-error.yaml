@@ -3,7 +3,7 @@ failure_id: fm-perfect-fit-zero-error
 title: 拟合结果"过于完美"，误差恒为零或小数点后多位一致
 problem_context: 插值/拟合模型在样本点上误差为零，论文宣称"完美拟合"
 method: 高阶多项式插值/过参数拟合
-method_family: statistical_modeling
+modeling_structure: statistical_modeling
 failure_mode: overclaim
 symptom: 误差列全零；或精度虚高到不合理（如 R²=1.0000）；评委怀疑数据编造或过拟合
 root_cause: 插值天然过零误差被当作模型精度；高阶多项式过拟合噪声

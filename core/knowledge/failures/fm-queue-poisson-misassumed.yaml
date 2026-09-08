@@ -3,7 +3,7 @@ failure_id: fm-queue-poisson-misassumed
 title: 排队论泊松到达假设未验证
 problem_context: 批次性到达（如机场出租车按航班批次）硬套 M/M/c
 method: 排队论
-method_family: queuing_theory
+modeling_structure: queuing_theory
 failure_mode: wrong-usage
 symptom: 解析结果与实际等待偏差大；ρ 接近 1 时结论脆弱
 root_cause: M/M/c 闭式解依赖泊松到达+指数服务假设

@@ -3,7 +3,7 @@ failure_id: fm-dp-state-incomplete
 title: DP 状态定义不完整导致马尔可夫性不成立
 problem_context: 状态遗漏关键变量（如剩余资源/位置/天气），历史影响无法压缩
 method: DP/MDP
-method_family: dynamic_programming
+modeling_structure: dynamic_programming
 failure_mode: wrong-usage
 symptom: 策略依赖被丢弃的历史信息；DP 表回溯结果不可复现
 root_cause: 状态必须包含影响未来决策的全部相关信息（无后效性）

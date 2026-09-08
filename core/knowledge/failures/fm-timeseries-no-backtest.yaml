@@ -3,7 +3,7 @@ failure_id: fm-timeseries-no-backtest
 title: 时序模型只报拟合优度，不做样本外回测
 problem_context: ARIMA 拟合 R²=0.98 即宣称预测可靠，未留出样本外期验证
 method: ARIMA/指数平滑/灰色预测等预测类方法
-method_family: classical_timeseries
+modeling_structure: classical_timeseries
 failure_mode: no-evidence
 symptom: 论文只有拟合曲线与 R²，无样本外误差指标（MAPE/RMSE）
 root_cause: 拟合能力 ≠ 预测能力；时序易过拟合历史（尤其长预测期）

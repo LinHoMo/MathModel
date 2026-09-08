@@ -3,7 +3,7 @@ failure_id: fm-pde-interface-missing
 title: 多层介质界面条件缺失
 problem_context: 复合结构（如多层服装）只给温度连续、漏热流连续
 method: 数值 PDE
-method_family: numerical_pde
+modeling_structure: numerical_pde
 failure_mode: wrong-method
 symptom: 界面处温度/热流不连续，总能量不守恒
 root_cause: 界面需同时满足温度连续+热流连续（由守恒律导出）

@@ -3,7 +3,7 @@ failure_id: fm-mc-distribution-assumption
 title: 蒙特卡洛输入分布随手拍，结果分布不可信
 problem_context: 参数不确定性传播模拟，不确定参数直接假设服从正态分布（无数据支持）
 method: 蒙特卡洛模拟
-method_family: uncertainty_propagation
+modeling_structure: uncertainty_propagation
 failure_mode: no-evidence
 symptom: 分布假设无来源说明；结果只报均值不报区间；样本量未论证
 root_cause: GIGO——分布假设错误则仿真结论系统性偏移；样本量不足则估计噪声大

@@ -72,7 +72,7 @@ class TestFailureContract:
         (d / "bad.yaml").write_text(content, encoding="utf-8")
 
     BASE = ("failure_id: fm-bad\ntitle: t\nproblem_context: c\nmethod: m\n"
-            "method_family: f\nfailure_mode: {mode}\nsymptom: s\n"
+            "modeling_structure: f\nfailure_mode: {mode}\nsymptom: s\n"
             "root_cause: r\ndetection: d\nfix: f\navoidance: a\n")
 
     def test_bad_failure_mode_rejected(self, tmp_path):
