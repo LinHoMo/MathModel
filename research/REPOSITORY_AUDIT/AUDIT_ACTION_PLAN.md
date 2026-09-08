@@ -87,9 +87,14 @@
 | 项 | 状态 |
 |---|---|
 | 三仓库审计（dossier + FINAL_REPORT） | ✅ 完成，已 commit（bdb11ee） |
-| 审计行动整合（本文件） | ✅ 完成 |
+| 审计行动整合（AUDIT_ACTION_PLAN） | ✅ 完成 |
+| 战略固化（THREE_LAYER_ARCHITECTURE.md v2 重写） | ✅ 完成 |
 | 全量自检（pytest 774/11、catalog_check OK、terminology OK、freeze PASS） | ✅ 完成 |
-| K002 定稿（DRAFT→v1.0 FROZEN） | ⏸ 待用户确认裁决方向 |
-| 统一词表注册表 catalog/model_families.yaml | ⏸ K002 前置，待排期 |
-| Code Interpreter adapter（R5 修复） | ⏸ P1 工程，待排期 |
-| P15-K001 状态机推 CLOSED | ⏸ 等用户验收 |
+| **P0 工程项① result 占位符治理**（result data 标 not_executed + claim placeholder provenance） | ✅ 完成（774/11 零回归，FIX_LOG P0-2） |
+| **P0 工程项② catalog/model_families.yaml 单一词表**（18 family，三源+ K001 实际命名词全解析；`frozen: false` 待 K002 FROZEN） | ✅ 数据层完成（catalog_check 扩展校验=下一步） |
+| **P0 工程项③ features 外部必传契约**（handler 可观测标记 + orchestrator 显式加载 + 缺省 WARNING） | ✅ 完成（774/11 零回归，FIX_LOG P0-2） |
+| K002 定稿（DRAFT→v1.0 FROZEN） | ⏸ DRAFT v0.3 已按战略裁决更新（3 臂 + block≥6 + L3/L4 终点 + 题目多样性）；**待用户确认新增题与定稿节奏** |
+| Code Interpreter adapter（R5 修复主体） | ⏸ P1 工程，待排期（本轮完成占位符治理与词表，执行闭环是下一大步） |
+| P15-K001 状态机推 CLOSED | ✅ 已 CLOSED（negative result 按决策门记录） |
+
+**下一轮建议**：K002 新增题 Authenticity（≥3 道，block≥6 前置）→ K002 PREREGISTERED+FROZEN → Code Interpreter adapter 设计+实现（R5 核心）。

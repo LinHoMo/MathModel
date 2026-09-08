@@ -1,102 +1,160 @@
-# Three-Layer Architecture — 三层架构与方向门禁（2026-09-06 起）
+# Three-Layer Architecture — 三层架构与治理门禁（2026-09-09 审计后重写 v2）
 
-> 本文件是项目方向的**治理文档**：把全部资产归位到三层，宣布下层冻结，
-> 并立下后续所有开发的准入门禁。背景：P7–P12 完成了 Runtime 与 Guardrails
-> 的地基建设；继续向下挖掘只会得到一个"科研操作系统"而不是"数模 Agent"。
-> 自本文件起，研发主战场是 **Agent Brain**，度量工具是**能力基线**。
+> **版本演化**：v1（2026-09-06）为"Agent Brain 主战场"时代的旧三层（Agent Brain / Research Runtime / Guardrails），
+> 已随定位收束（Model Construction=What / Model Representation=How / Harness=How do we know）与
+> 三仓库代码级审计（2026-09-09）**废弃**。本文件 v2 为当前唯一治理版本。
+>
+> **上游裁决**：`research/REPOSITORY_AUDIT/FINAL_REPORT.md` + `CROSS_REPO_AUDIT.md`（BZD=Knowledge System、
+> MathModelAgent=Execution System、LinHoMo=Epistemic System；三者互补非竞争）。
 
-## 1. 三层结构
+---
 
-```text
-                 ┌────────────────────────────┐
-                 │        Agent Brain         │
-                 │                            │
-                 │ Problem → Model → Experiment│
-                 │ → Validation → Writing     │
-                 └─────────────┬──────────────┘
-                               │
-                         Research Runtime
-                               │
-                 ┌─────────────┴──────────────┐
-                 │ Registry / Workflow / State │
-                 │ Evidence / Recovery        │
-                 └─────────────┬──────────────┘
-                               │
-                           Guardrails
-                               │
-                 ┌─────────────┴──────────────┐
-                 │ Quality / FactCheck / Gate │
-                 └────────────────────────────┘
-```
+## 0. 一句话定位（写死）
 
-## 2. 资产归位
+> **LinHoMo 当前是"科学建模系统的操作语义设计 + 受控实验平台"，还不是一个完成的 Mathematical Modeling Engine。
+> 没有任何一个被审计仓库（包括 LinHoMo）已被实验证明拥有更强的数学建模能力。**
 
-| 层 | 资产 | 规模 | 状态 |
+这句结论是 2026-09-09 审计后锁定的项目自我认知，任何宣传、README、论文表述不得越过它。
+
+三仓库真实层次：
+
+| 仓库 | 系统类型 | 回答的问题 | 缺失（本轮审计确认） |
 |---|---|---|---|
-| **Agent Brain** | `core/<Hand>/agents/*/SKILL.md`（29 agent 指令）、`core/skills/critics/*`、知识层（16 方法卡 / 10 失败案例 / 6 创新模式 / retriever / decision log）、`knowledge.py recommend`、Modeling 层（ExperimentPlanner / candidate arena） | ≈3.5 万行指令 + 知识层 | **主战场**（P13–P17 全部投入于此） |
-| **Research Runtime** | `core/runtime/`：Artifact Registry、Evidence Graph、State、Workflow DAG / WaveExecutor、RuntimeSession、retry/resume/rerun/invalidation、P12 依赖/关系/跨问题上下文、legacy 适配 | ≈8.4 千行 | **冻结** |
-| **Guardrails** | `core/validators/modules/`（21 模块 L1–L6）、gate/gatelib、citation_check、writing_check、fact_check、hash_chain、score_compute → aggregate_scores 五维评分链 | ≈7 千行 | **冻结**（仅修 bug） |
+| BZD | Knowledge System（评审知识） | "怎么评价" | execution + causal capability evidence |
+| MathModelAgent | Execution System（agent 流水线） | "怎么做完" | model semantics + epistemic state |
+| **LinHoMo** | Epistemic System（科研运行时） | "怎么证明" | **actual computational execution** |
 
-事实基线（2026-09-06）：Runtime 与 Guardrails 全部为确定性 Python（零 LLM
-调用）；Brain 的"智能"由宿主 LLM 会话按 SKILL.md 执行。因此"让 Brain 变聪明"
-的工作 = 改进指令与知识层 + 用真实赛题测量宿主 LLM 在此脚手架上的解题表现。
+三个缺口互补。LinHoMo 的战略不是"战胜"另外两者，而是**把它们的优势放进正确的层**：
+BZD → Evaluation 层（reviewer/rubric/knowledge provider）；MathModelAgent → Execution 层参考（Execution Primitive）。
 
-## 3. 冻结声明（change-by-exception）
+---
 
-- **Research Runtime 冻结**：P7–P12 的全部契约（Registry 生命周期、Evidence
-  Graph 14 关系、P7 resume/rerun/recompute、P8 知识运行时、P9 质量层、
-  P10 Paper Intelligence、P11 Expression Contract、P12 依赖/关系/上下文）
-  交付即冻结。契约文本见各 `*_CONTRACT.md` / `RUNTIME_CONTRACTS.md`；
-  P12 收口见 `CROSS_QUESTION_SYNTHESIS_CONTRACT.md`。
-- **Guardrails 冻结**：仅接受 bug 修复与误报修正，不接受新语义层。
-- 例外流程：出现**真实需求**（来自真实赛题执行，而非推演）→ 按下节门禁
-  评估 → 修订契约文档 → 再动代码。禁止"顺手加固"。
-- **已批准例外登记**：
-  - 2026-09-06 `handlers.features_for()`（~6 行，P13-1 Problem→Method
-    接口，Q1 门禁通过）：`RuntimeSession(features)` 现有插座的逐题画像
-    合并。见 `P13_1_REPORT.md`。
-  - 2026-09-06 `validate.py _live_project_dirs` 误报修正：bench e2e 基线
-    项目不适用论文交付门禁。见 `BASELINE_REPORT.md`。
-  - 2026-09-06 `retriever.py` 类型命中权重 +3→+6（P13-2 Ranking 修正，
-    Q1 门禁通过）：两题消融 + 评价类反向检查 + 零测试回归验证。见
-    `P13_2_REPORT.md`。
-  - 2026-09-07 **HARDENING_PROGRAM（P0–P6，System Hardening 一次性授权）**：
-    对冻结层执行 Contract / State / Replay 三项硬化 + Legacy 物理隔离 +
-    Regression Gate 的工程收口（**不引入新语义层**；架构本身自今日起
-    宣布冻结，不再接受新的架构革命）。逐阶段范围与验收见
-    `HARDENING_PROGRAM.md`。
-
-## 4. 三问门禁（每个新阶段 / 能力 PR 的准入检查）
-
-> **Q1** 它是否提升 Agent 的科研解题能力？
-> （更好的问题分解 / 方法兼容性评估 / 建模 / 实验设计 / 结果解释 / 论文表达）
->
-> **Q2** 它是否让 Agent 更可靠？
-> （crash 后可恢复、结果可追溯、错误可归因）
->
-> **Q3** 它只是让内部语义更严谨吗？
-> （新增契约 / 中间层 / 关系系统，但没有直接提高 Q1 或 Q2）
-
-**裁决规则：仅 Q3 成立 → 不做**（最多写进文档）。Q1 或 Q2 成立 → 做，
-且必须定义它的能力指标与预期 Δ。
-
-## 5. 能力进步判据（Δscore 论英雄）
-
-自 P13 基线（`BASELINE_REPORT.md`）建立起，**任何能力升级 PR 必须回答：
-相比 BASELINE，哪个能力指标提升了、提升多少**。八项指标定义见
-`CAPABILITY_ROADMAP_P13_P17.md` / `bench e2e`：
+## 1. 三层结构（v2 正式固化）
 
 ```text
-decomposition / method compatibility assessment / model correctness / experiment validity
-/ validation reliability / innovation / writing completeness / end-to-end
+              ┌───────────────────────────────────────────┐
+              │  Layer 1 · Epistemic Layer（核心创新）      │
+              │  Problem / Knowledge / Model Artifact /    │
+              │  Assumption / Decision / Evidence / Critic │
+              └──────────────────┬────────────────────────┘
+                                 │  Model Artifact（typed, 非文本）
+              ┌──────────────────▼────────────────────────┐
+              │  Layer 2 · Execution Layer（吸收 MMA 原语） │
+              │  Code / Solver / Simulation / Optimization │
+              │  Statistics / Numerical computation        │
+              └──────────────────┬────────────────────────┘
+                                 │  Result / Evidence（真实数值）
+              ┌──────────────────▼────────────────────────┐
+              │  Layer 3 · Evaluation Layer（吸收 BZD 思想） │
+              │  Model Quality / Evidence Quality /         │
+              │  Validation / Failure Attribution /         │
+              │  Blind Evaluation / Benchmark               │
+              └──────────────────┬────────────────────────┘
+                                 │  Model State
+                                 ▼
+                              revision
 ```
 
-- `method compatibility assessment 42% → 57%（+15）` = 实打实的进步；
-- `新增 800 行 / 新增 37 tests / 新增 5 contracts` 但
-  `end-to-end 31% → 31%` = **判定为没有能力进步**。
-- 测试数量的意义是守住下层冻结的两层不回归，不再作为进度度量。
+**层间数据流（真实数据流，不是逻辑图）**：Epistemic 产出 Model Artifact → Execution 消费并产生带真实数值的
+ExecutionResult/Evidence → Evaluation 依据 Evidence 判定 Model State → 判定结果回流 revision。
 
-## 6. 路线图指针
+### 1.1 Execution Primitive（从 MathModelAgent 只吸收这个，不吸收 workflow）
 
-P13–P17 见 `CAPABILITY_ROADMAP_P13_P17.md`（Capability Roadmap，非
-Runtime Roadmap）。基线数据见 `BASELINE_REPORT.md`。
+```text
+ModelArtifact → ExecutionPlan → Code → Code Interpreter → ExecutionResult → Evidence
+```
+
+- MathModelAgent 的闭环是 `Code → Result → Writer`；LinHoMo 必须升级为
+  `Code → Execution → Typed Result → Evidence → Evidence Gate → Model State`。
+- **执行必须产生真实数值**：任何 experiment 节点未真正执行时，产物状态必须为 `not_executed`，
+  禁止用 `"{qid} 结论"` 一类假占位 claim 冒充执行结果（对应 P0 工程项①）。
+
+### 1.2 BZD 资产归位（Evaluation 层，不进入 core/model）
+
+- 吸收：评审逻辑 / 原子扣分 / 模型适用性判断 / 建模规范 / reviewer knowledge / 数模经验
+  → 成为 `ReviewerPolicy` / `ModelingRubric` / `CriticSkill` / `EvaluationRule`。
+- BZD 的 5713 条字典不得直接成为"系统真理"；每条知识必须携带
+  `knowledge_id / source / scope / confidence / provenance / applicability / evidence_requirement`，
+  把知识从 authority 变成 **testable knowledge**。
+
+---
+
+## 2. 治理原则（审计后升级）
+
+### 2.1 最高原则：infra 不冒充 capability（四红线之首）
+
+> 大量 schema + artifact + evidence + validator ≠ 科学。
+> `result = "{qid} 结论"` 时，任何"很科学"的外观都是 false confidence（R4）。
+
+任何新增基础设施必须回答：**它改变了哪个可测量的 Model Construction behavior？**
+回答不了，不得包装成 capability improvement。能力证据只能是受控实验的 Δ（K001 negative 是基准）。
+
+### 2.2 formalized false authority 禁令（BZD 6.81% 教训）
+
+> 无可靠来源的经验判断（如 6.81%、30–50%、advisor_multiplier）经确定性脚本"机械化、结构化"
+> 后会伪装成客观测量结果——这比 LLM hallucination 更危险（systematic false authority）。
+
+Evidence/Provenance 层**明确禁止**：
+- 无 provenance 的常数进入确定性评分/判定代码；
+- 社区经验被写成官方规则（official/community 必须分开标注，UNCERTAIN 就标 UNCERTAIN）；
+- 知识卡/字典中的 claim 不携带来源与置信度。
+
+### 2.3 ontology 与 string vocabulary 分离（RQ5 教训升格为架构原则）
+
+不修 `dynamic_programming` vs `discrete_recurrence` 这一个 bug，而是规定模型本体层级：
+
+```text
+Concept → Mechanism → Model Family → Model → Method → Solver → Implementation
+```
+
+例：`recursive optimization → optimal substructure → dynamic programming → Bellman recurrence
+→ backward induction → custom DP solver → Python implementation`。
+
+- Evaluator 不得问 `model_family.primary == "dynamic_programming"`；
+  应问 **该模型的 structural concept / mechanism / family 是否属于预注册 taxonomy**。
+- 生成侧与评分侧必须共享**单一受控词表**（`catalog/model_families.yaml`，P0 工程项②），
+  族命中判定为 `primary OR secondary OR mechanism OR solver`。
+
+### 2.4 三层层的知识分离
+
+- Knowledge claim ≠ empirical fact（BZD 教训）
+- Model Knowledge ≠ Model Capability（K001：知识注入 Δ=+2.14 CI 触 0）
+- Schema Validity ≠ Mathematical Correctness（R1）
+- Evidence Recording ≠ Evidence of Correctness（R4 反例：2019_C 评分饱和）
+- Formalization ≠ Truth
+- More Context ≠ More Knowledge（K001 Sham=+3.42 > Δ_K：Sham 假说未排除）
+
+---
+
+## 3. 路线图（审计后压缩为四段）
+
+```text
+P15  Research Instrument（✅ 已收口：K001 CLOSED，negative result 按决策门记录）
+  ↓
+P0   Real Execution（进行中：result 占位符治理 → 词表收敛 → Code Interpreter adapter）
+  ↓
+K002 Representation Effect（DRAFT v0.3：3 臂主实验 + block≥6 + L3/L4 终点）
+  ↓
+P16+ Capability Validation（Evidence / Critic / Verification / Replay 逐项 ablation）
+```
+
+**不是**：P15 → 继续加 schema → 继续加 Skill → 继续加 Agent。
+**是**：STOP BUILDING ABSTRACT INFRA → MAKE MODEL EXECUTE → PRODUCE REAL RESULT
+→ BUILD REAL EVIDENCE → BLINDLY EVALUATE → SHOW REPRESENTATION IMPROVES MODEL CONSTRUCTION。
+
+### 3.1 成功标准（写死）
+
+只有当 K002 证明 `MODEL_IR + Validation > Free Text`，且排除以下解释：
+更多 token / 更多上下文 / 更长 prompt / evaluator 偏好 / 写作改善——
+**且提升确实是 Model Construction Quality**，LinHoMo 才有资格宣称：
+"我们不是更复杂的 agent workflow，而是能改变数学建模能力边界的 modeling runtime。"
+
+---
+
+## 4. 三项目哲学定义（审计后正式措辞）
+
+| 项目 | 哲学 | 已解决 | 未证明 |
+|---|---|---|---|
+| BZD | 将优秀数学建模者的隐性评审知识显式化 | What should a good model look like? | Does giving this knowledge improve model construction? |
+| MathModelAgent | 将数学建模团队的工作流自动化 | How can an Agent complete the modeling workflow? | What exactly is the model, and how does the system know it is correct? |
+| LinHoMo | 将建模过程变成可表示、可执行、可验证、可归因、可重放的研究状态 | How should modeling exist as a scientific computational process? | This representation actually produces better models. |

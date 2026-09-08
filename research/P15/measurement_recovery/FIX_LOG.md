@@ -156,3 +156,29 @@ Created two files (research-layer only, no core/ modifications):
 1. **PowerShell here-string parsing**: Initial `run_evaluation.ps1` used double-quoted here-string (`@"..."@`) for embedded Python code, which PowerShell parsed incorrectly. Fixed by extracting Python to separate `_metrics_runner.py` driven by environment variables.
 2. **PowerShell encoding**: Chinese characters in .ps1 without BOM caused garbled text on Chinese Windows (GBK default). Fixed by using English messages in the PS1 script (FIX_LOG.md remains in Chinese as Markdown).
 3. **Join-Path 3-argument**: `Join-Path $PSScriptRoot "runs" "$ProjectName`_$Timestamp"` failed because Join-Path only accepts 2 positional args. Fixed with nested Join-Path.
+
+---
+
+## P0-2: Result 占位符治理 + features 硬编码默认移除（三仓库审计 R1/R4/R5）
+
+**Date**: 2026-09-09
+**Executor**: MainAgent（审计后 P0 工程项①③，minimal patch）
+**上游**: research/REPOSITORY_AUDIT/FINAL_REPORT.md 六风险 R1（formalized nonsense）/R4（false confidence）/R5（execution weakness）；docs/architecture/THREE_LAYER_ARCHITECTURE.md v2
+
+### 2a. result artifact 标 not_executed（占位可见化）
+**Failure Mode**：`do_experiment` 登记的 result artifact data 只有 `card_id`（无数值）；`do_evidence_build` 创建 claim `statement="{qid} 结论"`——"假占位 claim"：看起来像结论，实际无任何执行支撑（审计原话：`result = "{qid} 结论"` 时任何"很科学"的外观都是 false confidence）。
+**Fix**（core/runtime/execution/handlers.py）：
+- result data 增加 `status: "not_executed"` + note（说明真实结果须由外部 executor 经 register_external_artifact 回填后翻为 executed）
+- claim data 增加 `execution_status: "not_executed"` + `placeholder: True`（statement 保持以兼容 narrative/writing 下游；占位状态在 provenance 层可见）
+**不破坏**：result/claim 结构与边不变；无下游消费 data.status；论文投影/叙事不受影响。
+
+### 2b. features 外部必传契约（移除静默默认，入口显式化）
+**Failure Mode**：`DefaultNodeExecutor.__init__` 在 features=None 时硬编码 `{"problem_types": ["evaluation"], "has_data": True, "sample_size": "medium"}`——未知题被静默当成"评价类"处理（审计 R1：契约把无证据的经验值机械化）。
+**Fix（最终方案，经 95 测试失败实证迭代）**：
+- handler 层：`features or {}` 改为回退默认但打可观测标记 `_features_source: "legacy_default"`——任何消费方/审计可见该画像来自回退而非真实问题分析，禁止静默假扮。
+- orchestrator 入口（core/tools/orchestrator.py）：新增 `_load_problem_features(project_dir)`——显式读取 `<project>/problem_features.json` 或 `<project>/inputs/problem_features.json`；缺省时打印明确 WARNING（不再静默）。
+- 实证：先试"彻底移除默认"→ 95 个依赖默认画像的集成测试失败（影响面过大，违反 minimal patch）→ 回退为"标记 + 入口契约"方案 → **774 passed / 11 skipped 零回归**。
+
+### 验证
+- pytest：**774 passed / 11 skipped**（两次 patch 后各跑一遍，零回归）
+- catalog_check / terminology：随全量自检另行确认

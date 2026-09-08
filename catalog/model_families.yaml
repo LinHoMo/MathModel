@@ -1,0 +1,187 @@
+# catalog/model_families.yaml — 单一受控词表 v1.0
+#
+# 用途（P0 工程项②，三仓库审计 R6/RQ5 修复）：
+#   合并 model_ir.schema.json 建议词 + core/knowledge/methods/cards/*.yaml family
+#   + benchmark gt.json allowed_model_families + K001 生成侧实际命名词，
+#   成为 K002 及以后所有实验的 model_family 判定源（single source of truth）。
+#
+# 治理（docs/architecture/THREE_LAYER_ARCHITECTURE.md v2 §2.3：ontology 与字符串分离）：
+#   1. 生成侧/评分侧/gt 必须使用 canonical id，或可被解析到 canonical 的 alias。
+#   2. 族命中判定 = primary OR secondary OR mechanism OR solver 任一落在本表。
+#   3. 未命中 → out_of_catalog：不自动判错，由盲评语义判断（与 K001 一致）。
+#   4. 新 family 必须经 Architecture Gate（定义清晰/层级明确/跨来源支持/可映射真实题/
+#      与现有不重叠），禁止为覆盖率机械新增。
+#
+# 层级参考：Concept → Mechanism → Model Family → Model → Method → Solver → Implementation
+
+schema_version: 1.0
+frozen: false            # K002 FROZEN 时置 true（此后任何词表修改须走修订流程）
+
+canonical_families:
+  # ---- 决策 / 序贯结构 ----
+  - id: dynamic_programming
+    aliases: [discrete_recurrence, dp, bellman_recurrence]
+    mechanism: [optimal_substructure, state_transition, bellman_optimality, no_aftereffect]
+    methods: [backward_induction, forward_induction, value_iteration, policy_iteration]
+    solvers: [custom_dp_solver]
+    cards: [mc-dp]
+    source: [schema, cards, gt, k001_actual]
+
+  - id: markov_decision_process
+    aliases: [mdp, stochastic_control]
+    mechanism: [state_transition, stochastic_dynamics, expected_reward]
+    methods: [value_iteration, policy_iteration, q_learning]
+    solvers: [mdp_solver]
+    cards: []
+    source: [gt]
+
+  # ---- 场 / PDE / 连续动态 ----
+  - id: numerical_pde
+    aliases: [pde, pde_transient_heat_conduction, heat_transfer, transient_heat_transfer,
+              finite_difference, finite_element, finite_volume]
+    mechanism: [conservation_law, spatial_temporal_field, diffusion, boundary_condition]
+    methods: [finite_difference_method, finite_element_method, finite_volume_method, method_of_lines]
+    solvers: [fdm_solver, fem_solver, fvm_solver]
+    cards: [mc-numerical-pde]
+    source: [schema, cards, gt, k001_actual]
+
+  - id: ode_models
+    aliases: [ode, state_space, differential_equation]
+    mechanism: [state_transition, continuous_dynamics, conservation_law]
+    methods: [rk4, euler, shooting, runge_kutta]
+    solvers: [odeint, solve_ivp]
+    cards: []
+    source: [schema]
+
+  - id: inverse_problem
+    aliases: [parameter_estimation, inverse]
+    mechanism: [observation_mismatch, regularization, ill_posedness]
+    methods: [least_squares, gradient_descent, regularization]
+    solvers: [scipy_optimize, leastsq]
+    cards: []
+    source: [gt]
+
+  # ---- 排队 / 随机服务 ----
+  - id: queuing_theory
+    aliases: [queueing_theory, queueing_threshold_decision, mm1, littles_law]
+    mechanism: [arrival_process, service_process, queue_discipline, steady_state]
+    methods: [mm1_analysis, mmc_analysis, simulation]
+    solvers: [queueing_formulas, discrete_event_simulation]
+    cards: [mc-queuing-theory]
+    source: [cards, gt, k001_actual]
+
+  # ---- 优化 ----
+  - id: optimization
+    aliases: [numerical_optimization, resource_allocation_optimization, integer_programming,
+              mathematical_programming, constrained_optimization, linear_programming,
+              nonlinear_programming, milp]
+    mechanism: [objective_function, constraint_set, feasibility, optimality]
+    methods: [simplex, interior_point, branch_and_bound, lagrange_multiplier, gradient_method]
+    solvers: [scipy_optimize, pulp, cplex, gurobi, milp_solver]
+    cards: [mc-ga]               # GA 卡在 optimization 名下（metaheuristics 单独）
+    source: [schema, cards, gt, k001_actual]
+
+  - id: multi_objective_optimization
+    aliases: [moo, pareto]
+    mechanism: [pareto_dominance, tradeoff, weight_sum]
+    methods: [nsga2, weighted_sum, epsilon_constraint, ahp_weighting]
+    solvers: [pymoo, nsga2_solver]
+    cards: []               # 无对应卡（不创建空壳）
+    source: [cards]
+
+  - id: metaheuristics
+    aliases: [ga, pso, simulated_annealing, genetic_algorithm, particle_swarm]
+    mechanism: [population_search, stochastic_exploration, fitness_landscape]
+    methods: [genetic_algorithm, particle_swarm_optimization, simulated_annealing]
+    solvers: [deap, pyswarm, scipy_optimize_differential_evolution]
+    cards: [mc-ga]
+    source: [cards]
+
+  # ---- 评价 / 决策分析 ----
+  - id: decision_analysis
+    aliases: [composite_evaluation, ahp, topsis, entropy_weight, fuzzy_evaluation,
+              cost_benefit_analysis]
+    mechanism: [multi_criteria, preference_structure, weight_aggregation]
+    methods: [ahp, topsis, entropy_weight_method, fuzzy_comprehensive_evaluation]
+    solvers: [manual_matrix, numpy]
+    cards: [mc-ahp, mc-entropy-weight, mc-fuzzy-evaluation]
+    source: [cards, gt]
+
+  - id: game_theory
+    aliases: [game, nash_equilibrium, strategic_interaction, adversarial]
+    mechanism: [strategic_interaction, payoff_structure, equilibrium]
+    methods: [nash_equilibrium, minimax, backward_induction_game, evolutionary_dynamics]
+    solvers: [gambit, custom_equilibrium]
+    cards: []
+    source: [gt]
+
+  # ---- 图 / 网络 ----
+  - id: graph_algorithm
+    aliases: [graph, network_flow, shortest_path, network]
+    mechanism: [node_edge_structure, connectivity, flow_balance, path_cost]
+    methods: [dijkstra, bellman_ford, max_flow, min_cost_flow, matching, coloring]
+    solvers: [networkx, custom_graph]
+    cards: []
+    source: [gt]
+
+  # ---- 统计 / 数据 ----
+  - id: statistical_modeling
+    aliases: [statistical, statistical_classification, regression_analysis, statistical_modeling,
+              supervised_classification, supervised_learning, classical_timeseries,
+              timeseries_learning, correlation_analysis, decision_tree, classification,
+              regression, time_series]
+    mechanism: [distribution_assumption, hypothesis_test, likelihood, fit_error]
+    methods: [linear_regression, logistic_regression, arima, correlation, hypothesis_testing]
+    solvers: [scipy_stats, statsmodels, sklearn]
+    cards: [mc-arima]
+    source: [schema, cards, gt, k001_actual]
+
+  - id: clustering
+    aliases: [unsupervised, clustering_analysis, kmeans]
+    mechanism: [similarity_measure, group_structure, within_group_variance]
+    methods: [kmeans, hierarchical_clustering, dbscan, gaussian_mixture]
+    solvers: [sklearn_cluster]
+    cards: []
+    source: [cards, gt]
+
+  - id: dimensionality_reduction
+    aliases: [pca, factor_analysis, tsne]
+    mechanism: [variance_decomposition, latent_structure, linear_projection]
+    methods: [principal_component_analysis, factor_analysis, t_sne]
+    solvers: [sklearn_decomposition]
+    cards: []
+    source: [cards, gt]
+
+  # ---- 几何 / 运动（K002 新增题关键族）----
+  - id: kinematic_geometry
+    aliases: [kinematic, geometric, kinematics, geometry, differential_geometry,
+              pure_geometric_spiral, hybrid_geometry_optimization, catenary_approximation,
+              multibody_dynamics]
+    mechanism: [position_evolution, geometric_constraint, trajectory, distance_metric,
+                occlusion, curvature]
+    methods: [parametric_curve, vector_geometry, spiral_construction, catenary_fitting,
+              geometric_optimization]
+    solvers: [numpy_geometry, scipy_optimize, custom_parametric]
+    cards: []
+    source: [schema, gt, k001_actual]
+
+  # ---- 仿真 / 不确定性 ----
+  - id: simulation
+    aliases: [monte_carlo, discrete_event_simulation, stochastic_simulation]
+    mechanism: [random_sampling, event_dynamics, law_of_large_numbers]
+    methods: [monte_carlo, bootstrap, discrete_event]
+    solvers: [numpy_random, simpy]
+    cards: []
+    source: [cards, gt]
+
+  - id: uncertainty_propagation
+    aliases: [sensitivity, uncertainty, error_propagation]
+    mechanism: [variance_propagation, taylor_expansion, distribution_mapping]
+    methods: [monte_carlo_propagation, first_order_taylor, interval_analysis]
+    solvers: [numpy, statsmodels]
+    cards: []
+    source: [cards]
+
+# 预留：other / out_of_catalog 语义
+# - 任何 canonical_families 之外的名词 → model_family.primary="out_of_catalog"，
+#   由盲评语义判断，不自动判错（K001 同口径）。

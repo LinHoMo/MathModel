@@ -72,11 +72,13 @@ class DefaultNodeExecutor:
         self.graph = graph
         self.state = state
         self.decisions = decisions
-        self.features = dict(features or {
-            "problem_types": ["evaluation"],
-            "has_data": True,
-            "sample_size": "medium",
-        })
+        # P0-③ features 契约（三仓库审计 R1/R4 修复，legacy 兼容回退）：
+        # 生产调用方必须显式传 features（orchestrator 入口显式加载并警告缺省）；
+        # 未传时回退默认画像但打上 _features_source=legacy_default 可观测标记，
+        # 消费方/审计可见该画像来自回退而非真实问题分析，禁止静默假扮。
+        _LEGACY = {"problem_types": ["evaluation"], "has_data": True,
+                   "sample_size": "medium", "_features_source": "legacy_default"}
+        self.features = dict(features or _LEGACY)
         self.min_coverage = min_coverage
         self.retriever = KnowledgeRetriever(knowledge_root or REPO / "core" / "knowledge")
         self.arena = MethodArena(self.retriever, decisions)
@@ -422,7 +424,9 @@ class DefaultNodeExecutor:
                                  activate=True, created_by=node_id)
         r = self.registry.create("result", title=f"{qid} 结果",
                                  question=qid, depends_on=[e.artifact_id],
-                                 data={"card_id": self._card_id_of(qid, mid)},
+                                 data={"card_id": self._card_id_of(qid, mid),
+                                       "status": "not_executed",
+                                       "note": "确定性 runtime 不执行数值计算；真实结果须由外部 executor 经 register_external_artifact 回填后翻为 executed"},
                                  tags=tags,
                                  activate=True, created_by=node_id)
         f = self.registry.create("figure", title=f"{qid} 结果图",
@@ -511,7 +515,9 @@ class DefaultNodeExecutor:
                                      data={"statement": f"{qid} 结论",
                                            "claim_type": "comparative",
                                            "experiment_refs": [results[-1]],
-                                           "literature_refs": []},
+                                           "literature_refs": [],
+                                           "execution_status": "not_executed",
+                                           "placeholder": True},
                                      activate=True, created_by=node_id)
             ev.append({"from": results[-1], "relation": "supports",
                        "to": c.artifact_id})

@@ -346,6 +346,27 @@ def _run_pipeline(project: str, max_rounds: int, dry_run: bool = False) -> int:
     return 0
 
 
+def _load_problem_features(project_dir: Path) -> dict | None:
+    """P0-③ 问题画像加载：项目显式提供 features 时用之，否则返回 None。
+
+    约定：<project>/problem_features.json（顶层），
+    或 <project>/inputs/problem_features.json。无文件 → None（调用方警告回退）。
+    """
+    for cand in (project_dir / "problem_features.json",
+                 project_dir / "inputs" / "problem_features.json"):
+        if cand.exists():
+            try:
+                import json as _json
+                data = _json.loads(cand.read_text(encoding="utf-8"))
+                if isinstance(data, dict) and data:
+                    return data
+                print(f"[V3][WARN] {cand} 为空或非对象，忽略", file=sys.stderr)
+            except Exception as exc:
+                print(f"[V3][WARN] 读取 {cand} 失败: {exc}", file=sys.stderr)
+            return None
+    return None
+
+
 def _execute_v3(project_dir: Path, questions: list[str],
                 competition: str | None = None) -> int:
     """V3 实际执行（P6）：RuntimeSession + WaveExecutor 跑通完整认知管线。
@@ -357,8 +378,18 @@ def _execute_v3(project_dir: Path, questions: list[str],
     sys.path.insert(0, str(ROOT / "core"))
     from runtime.execution.session import RuntimeSession
 
+    # P0-③ features 外部必传契约（三仓库审计 R1/R4 修复）：
+    # 生产入口显式加载问题画像；缺省时明示警告（不再静默依赖 legacy 默认 evaluation）。
+    features = _load_problem_features(project_dir)
+    if features is None:
+        print("[V3][WARN] 未提供问题画像 features（problem_types 等）。"
+              "方法推荐将以 legacy 默认 evaluation 画像回退运行，"
+              "该画像标记 _features_source=legacy_default，不视为真实问题分析。",
+              file=sys.stderr)
+
     print(f"[V3][EXEC] questions: {questions}")
-    session = RuntimeSession(project_dir, questions, max_workers=1)
+    session = RuntimeSession(project_dir, questions, max_workers=1,
+                             features=features)
     try:
         report = session.run()
     except Exception as exc:

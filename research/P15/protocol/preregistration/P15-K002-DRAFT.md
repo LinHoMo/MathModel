@@ -1,9 +1,9 @@
 # P15-K002 — Model Representation Efficacy
-## 预注册（Preregistration）DRAFT v0.2（三仓库审计已回填）
+## 预注册（Preregistration）DRAFT v0.3（三仓库审计 + 战略裁决已回填）
 
-> **状态：`DRAFT`（审计启示已回填 v0.2；待 K001 CLOSED + 预注册签署 → PREREGISTERED → FROZEN）**
+> **状态：`DRAFT`（审计启示 v0.2 已回填；v0.3 落实战略裁决：3 臂确认 + block≥6 + L3/L4 主终点；待 6 题题集 Authenticity 就绪 + 预注册签署 → PREREGISTERED → FROZEN）**
 > **科学定位**：K001（Knowledge 文本注入）已得 negative result；本实验检验**下一个杠杆：强制的结构化 Model Representation（输出契约）本身是否提升外部 Agent 的 Model Construction Quality**。
-> **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认——result 占位、features 硬编码、ontology 分叉）
+> **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认——result 占位、features 硬编码、ontology 分叉）｜ **战略裁决**（docs/architecture/THREE_LAYER_ARCHITECTURE.md v2：Epistemic/Execution/Evaluation 三层；infra 不冒充 capability；ontology 与词汇表分离）
 
 ---
 
@@ -37,6 +37,17 @@
 - **execution weakness 是公共缺口**：MMA 有 Code Interpreter（最强执行参考）、BZD 显式外包、LHM experiment 节点产占位 result。→ K002 的 S/V 臂产物必须含**真实数值**（validation_plan 强制字段已有此设计）；result 占位符修复列为 P0 工程项（experiment 节点未执行应标 `not_executed`，不得用假占位 claim）。
 - **ontology 分叉直接污染测量**（RQ5 教训：`discrete_recurrence` vs `dynamic_programming`）。→ K002 的 S 臂 `model_family` 字段使用**单一受控词表**（若 `catalog/model_families.yaml` 已建则引用之；未建则用预注册固定枚举并声明为 K002 的受控词表，同时把"词表收敛"列为 P0 工程项）。
 - **"更多上下文"必须对齐**：K001 Sham>K 教训 → K002 指令长度对齐 <10%（§3.1 已设计）+ 信息密度统计（RQ6）。
+
+### 1.5 战略裁决（2026-09-09，用户定稿，本版全部落实）
+
+| 裁决 | 结论 | 本版落实 |
+|---|---|---|
+| 臂结构 | **不扩 6 臂**，维持三臂 F/S/S+V（K001 已测 Knowledge/Sham，边际信息低；3 臂每臂 n 更大、功效更高） | §3.1 不变 |
+| block 数 | **坚持 block ≥ 6**：K001 最小 p=0.25（block=3）是功效失败根因；block=6 → 2^6=64 置换，最小 p≈0.016 | §3.3 主检验 3→6 题 |
+| 题目性质 | **不能只是"多几道"**：须不同建模结构、不同难度、不同 failure mode | §3.6 题目选择标准（新增） |
+| 终点 | **L3/L4 终点**：Model Construction Quality 是核心；**论文/写作质量退为 secondary，永不作为 capability 主终点**（避免 "better writing = better modeling" 陷阱） | §4.1 主终点改为 L2+L3+L4 composite |
+| 词表 | ontology 与 string vocabulary 分离（Concept→Mechanism→Family→Model→Method→Solver→Implementation） | §4.4 族命中 multi-field（新增） |
+| 顺序 | **STOP abstract infra → MAKE MODEL EXECUTE → REAL RESULT → REAL EVIDENCE → BLIND EVALUATE → REPRESENTATION IMPROVES CONSTRUCTION** | 本节为路线承诺 |
 
 ---
 
@@ -96,14 +107,16 @@ Replication = stochastic repeat（seed 42/43/44/45/46，5 rep）
 ```
 统计比较同题配对差（臂内 5 rep 均值差 + 配对 CI），block 吸收题目难度。
 
-### 3.3 规模
+### 3.3 规模（block≥6 裁决版）
 | 用途 | 题 | 臂 | 重复 | runs |
 |---|---|---|---|---|
-| 主检验 | 2020_B、2018_A、2019_C | 3 | 5 | 45 |
+| 主检验 | **6 题**（2020_B、2018_A、2019_C + **3 新增**，见 §3.6） | 3 | 5 | **90** |
 | 泛化观察 | 2022_C、2024_A | 3 | 3 | 18 |
-| **合计** | | | | **63** |
+| **合计** | | | | **108** |
 
-（与 K001 同题集同构；F/S 臂可与 K001 的 A/B 臂交叉参照。）
+- **block=6 → 2^6=64 种配对排列，最小 p≈0.016**（K001 block=3 最小 p=0.25 的 15 倍功效余量）。
+- 3 道新增题的 **Input Authenticity 是 PREREGISTERED 前置**：每道必须走题面来源→官方存档交叉验证→SHA256 冻结→manifest 登记（0 BLOCKED 才允许冻结；找不到可信来源则标记 BLOCKED，不伪造题面）。若新增题在预注册期不可得，退回 §3.6 的备选路径并如实声明功效降级。
+- （与 K001 同题集同构的 3 题保证跨实验可比；F/S 臂可与 K001 的 A/B 臂交叉参照。）
 
 ### 3.4 强制子问题覆盖 gate（K001 教训落点）
 - 每 run 的 `problem_binding.sub_question_id` 必须覆盖该题全部子问题（2020_B→Q1-Q3 等），缺任一子问题 → 该 run 标记 `COVERAGE_FAIL`，**不进入主终点**（单独报告，与 K001 的 2 个 FAIL 同口径）。
@@ -111,19 +124,35 @@ Replication = stochastic repeat（seed 42/43/44/45/46，5 rep）
 
 ### 3.5 题目区分度预检（K001 per-block 教训落点）
 K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有效 block 只有 2/3。K002 预注册：
-- 主检验题集（2020_B/2018_A/2019_C）先各跑 1 个预检 rep（2 臂 × 3 题 = 6 runs），计算每题 F/S 各条件内方差与条件间差。
+- 主检验题集（6 题）先各跑 1 个预检 rep（2 臂 × 6 题 = 12 runs），计算每题 F/S 各条件内方差与条件间差。
 - **预检规则（预先声明）**：某题若 F/S 两臂全部 run 得分相同（条件内方差 = 0 且条件间差 = 0），标记为**无区分度 block**，从主效应估计中剔除并单列报告；剩余题正常进入主检验。
 - 预检 run 计入最终分析（不浪费），仅标注来源。
-- 若 3 题中 ≥2 题无区分度：判定主检验题集区分力不足，STOP 并回到题目选择（不继续跑满）。
+- 若主检验题中 ≥2 题无区分度：判定题集区分力不足，STOP 并回到题目选择（不继续跑满）。
+
+### 3.6 题目选择标准（"多几道"不够——须结构/难度/failure-mode 多样化）
+3 道新增题 + 既有 3 道主检验题，必须在以下三维度上分散（预注册时逐题登记，缺任一维度即换题）：
+
+| 维度 | 要求 | 对应既有题 |
+|---|---|---|
+| **建模结构**（L1 taxonomy） | 6 题覆盖 ≥4 种 Problem Structure（motion/geometry、diffusion、queue/service、decision/evaluation、network、game、data 等） | 2020_B=discrete sequential；2018_A=diffusion/PDE；2019_C=queue（区分度存疑，预检把关） |
+| **难度梯度** | 至少含 1 道"易错在分解"、1 道"易错在求解"、1 道"易错在验证"的题（按 K001 FM 分布预判） | 待新增题补足 |
+| **failure mode 多样性** | 3 道新增题不应与既有题共享同一主导 FM（避免 2019_C 全臂同分重现） | 待新增题补足 |
+
+- 新增题候选必须满足：官方/高校存档来源可得（Input Authenticity 流程）、存在权威 gold/评分标准或可构造验证期望、不在 K001 五题集内。
+- **备选路径（预先声明）**：若某维度无法凑足（如 3 道新增题 authenticity 不可得），退回"5 题就绪集 + 已有主检验 3 题"，同时如实声明 block 退回 3、功效回到 K001 同级——**不降级题目真实性换数量**。
 
 ---
 
 ## 4. 测量
 
-### 4.1 主终点
-- **MCQ_primary** = L2 composite（MODEL_CONSTRUCTION_RUBRIC v1.0：L2.1/2.2/2.4/2.5/2.6(权重3)/2.7，/13×100）——与 K001 **完全一致**，跨实验可比（注意 L2 已饱和，预期区分力有限，如实报告）。
-- **VAL_primary** = L4 composite（L4.1–L4.5，/10×100）——**本实验新增关键终点**，针对 L4.3 0 分率 16.4%、L3.4 无一 2 分的已知弱环，检验"验证行为字段化"是否提升。
-- 次要：L1（歧义处理 L1.4）、L3（求解层 L3.4 可复现性）分层报告。
+### 4.1 主终点（L3/L4 终点裁决版）
+- **MCQ_primary（主）** = **L2 + L3 + L4 composite**（MODEL_CONSTRUCTION_RUBRIC v1.0，标准化到 /100）：
+  - L2 结构完备（L2.1/2.2/2.4/2.5/2.6(权重3)/2.7）——与 K001 **完全一致**，保证跨实验可比；
+  - L3 求解层（L3.1–L3.5：可执行性/稳定性/可复现性/合理性）——锚 L3.4（K001 无一 2 分弱环）；
+  - L4 验证层（L4.1–L4.5：基线/敏感性/极限检验/不确定性/主张证据）——锚 L4.3（K001 唯一 0 分弱环）。
+  - **论文/写作质量不是本实验终点**（治理声明：writing 永不作为 capability 主终点；"better writing ≠ better modeling"）。
+- **VAL_primary（次主）** = L4 composite（/10×100）单列——检验"验证行为字段化"是否提升（S+V vs S）。
+- 分层报告：L2（K001 可比）、L3、L4、L1（问题理解）各自独立报告，不混成一个总分掩盖维度差异。
 
 ### 4.2 盲评与盲法（Generator ≠ Evaluator 保持）
 - 盲评包：仅含 submission_id + 题面 + 产物 + 评分表，无臂标识。
@@ -134,6 +163,11 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 - knowledge_trace：K002 无知识注入，trace 记录**结构遍历**（字段级完成度：18 字段是否全部实质性填充，非空字符串）。
 - tokens / 产物长度 / 信息密度（RQ6）。
 - failure mode 标注（与 K001 FM 分类一致）。
+
+### 4.4 族命中判定（RQ5 教训：ontology 与字符串分离）
+- 不使用 `model_family.primary == "dynamic_programming"` 严格字符串匹配。
+- 命中 = `primary OR secondary OR mechanism OR solver` 任一落在预注册受控词表内（§1.5 的 Concept→Mechanism→Family→Model→Method→Solver 层级，词表在 FROZEN 时一并冻结）。
+- 未命中但可论证的（out_of_catalog）：不自动判错，由盲评语义判断（与 K001 一致）。
 
 ---
 
@@ -195,6 +229,7 @@ S+V 臂在 MODEL_IR 之外强制输出 `validation_plan`，直接锚定 L4.3/L3.
 ## 7. 已知局限（预先声明）
 1. F 臂"自由格式"是相对概念：prompt 仍要求覆盖主要建模成分，测的是 **schema 强制 vs 文本要求**，不是"无结构 vs 有结构"的极端对比。
 2. 盲评形式对齐不完美（JSON vs 文本呈现差异）——已设计敏感性分析。
-3. n=63（主检验 45 + 泛化 18），功效中等（与 K001 同级）——以效应量+CI 为主，不宣称"无效应"为"无差异"。
+3. **n=108**（主检验 90 + 泛化 18；block=6 主检验最小 p≈0.016）。仍以效应量+CI 为主，不宣称"无效应"为"无差异"。
 4. Representation 与 Knowledge 的交互不在本实验范围（K001 已单独测 Knowledge）。
 5. 审计启示的 P0 工程项（result 占位/词表收敛/features 契约）与实验并行推进；若工程项未完成，K002 的 F/S 对照仍有效（research 层独立），但"生产层一致性"结论需以工程项完成后的复检为准。
+6. **3 道新增题是 PREREGISTERED 前置**：若 authenticity 不可得则退回 5 题就绪集（block 降级到 3），如实声明功效降级；**不降级题目真实性换数量**。
