@@ -1,0 +1,50 @@
+# 夜间推进日志 — 2026-09-09（用户睡眠期间）
+
+> 目标（用户指示）：持续让项目更完善；保持 Harness 定位；吸收他项目优点；设计深层实验思考原因；真正解决问题不盲目打补丁；全部记录文档、系统工程。
+
+---
+
+## 1. 会话状态快照
+
+| 项 | 状态 |
+|---|---|
+| P15-K001 实验 | ✅ 已收口并 push（de15d96），negative result 归档 |
+| 三仓库深度审计（Organizer `o_0001iK1w1XA`） | 🔄 运行中（~55%，三子代理证据收集阶段，dossier 未产出） |
+| 本轮新增产出 | 4 项（见 §2），未 commit |
+
+## 2. 本轮完成的独立工作（不依赖审计报告）
+
+### 2.1 P15-K001 深度归因 — `research/P15/analysis/reports/P15-K001-ATTRIBUTION.md`
+基于 55 个 knowledge_trace 全量实证分析，核心发现：
+- **rejected 11 条 = Sham 错位卡 11/11 全部正确拒绝**（如 2019_C 拒 mc-numerical-pde"机理不匹配"、2018_A 拒 mc-dp"不存在离散决策阶段"）→ 外部 Agent 具备真实知识适用性判断，知识注入未产生盲从。
+- used 80% / adapted 58% → 知识作为约束被改编应用，符合"constrains, not dictates"哲学。
+- Negative result 四层归因：①信息增益 ceiling（LLM 已内化，A 臂基线已 37.7/42）②测量粒度（L2 不测过程与 L3/L4——已按 rubric 修正措辞）③注入剂量（每题 1 卡）④功效（n=11/臂，CI 宽）。
+- Sham(Δ=+3.42) > K(Δ=+2.14) → "更多上下文处理效应"与"知识内容效应"必须分离，下一轮需指令长度对齐对照。
+- 2 个 FAIL run（06cb0fb3/37f8a88b）均为 2020_B `sub_question_id=Q1` 单子问题覆盖——**真实 coverage 信号，子问题覆盖度是最强区分维度**，应升级为强制 gate。
+
+### 2.2 知识库质量分层 — `research/P15/analysis/reports/KNOWLEDGE_BASE_QUALITY_BASELINE.md`
+全量扫描 19 张方法卡字段结构（`card_quality_scan.py` + `.json`）：
+- **Tier1（完整建模知识：mechanism+structure_signals+formulations+solvers）仅 3 张**：mc-dp / mc-numerical-pde / mc-queuing-theory
+- **Tier3（缺 mechanism/formulations/solvers）16 张**（84%）：只有 requires/risks/validation/anti_patterns + P8 决策字段
+- 关键推论：K001 注入的恰是库内最优 3 张 Tier1 卡仍 negative → 排除"注入劣质卡"解释；知识卡显式化内容 ≈ LLM 已内化内容（ceiling）；知识库真正的缺口在 **L1 结构覆盖**（game/network/scheduling）与**知识卡→MODEL_IR 结构化映射**（现为文本自由吸收）。
+
+### 2.3 下一轮实验草案 — `research/P15/protocol/preregistration/P15-K002-DRAFT.md`
+**P15-K002 Model Representation Efficacy**（DRAFT v0.1，待审计回填后定稿冻结）：
+- 科学问题：**强制的结构化 MODEL_IR 输出契约是否本身提升外部 Agent 的 Model Construction Quality？**
+- 设计：F（自由文本）/ S（强制 18 字段 schema）2 臂 × 主检验 3 题 × 5 rep + 泛化 2 题 × 3 rep = 42 runs；指令长度对齐 <10%；强制子问题覆盖 gate；rubric 与 K001 完全一致（跨实验可比）。
+- 三种预先声明的结论形态（S>F / S≈F / S<F）分别对应：确立 Model IR 强制价值 / 强化"纯契约无增益"风险 / 结构化有害需重审。
+- 直接回应审计风险 "Infrastructure without capability gain"——这是对 Harness 定位最关键的实证。
+
+## 3. 关键结论（供早上汇报）
+
+1. P15-K001 的知识注入机制本身健康（Sham 100% 正确拒绝），negative result 源于信息 ceiling + 测量粒度 + 功效，**不是"知识卡无效"**。
+2. 知识库 84% 的卡缺建模机理段——但这不是实验瓶颈（注入的是最优卡），是**长期完善项**。
+3. 下一杠杆明确：**Representation（结构化输出契约）**——它强制而非建议，是最可能产生真效应的 Harness 维度，也是验证项目定位的关键实验。
+
+## 4. 待办（审计报告回来后）
+
+1. 三仓库审计报告回填：提炼 BZD/MathModelAgent 可吸收点（不污染 core 语义）+ 对 LinHoMo 六风险逐条回应。
+2. P15-K002 定稿：融入审计启示 → PREREGISTERED → FROZEN（哈希锁定）。
+3. 知识卡升级（P1 工程项）：16 张 Tier3 卡补 mechanism/formulations/solvers，与实验分离。
+4. L1 结构覆盖扩展（game/network/scheduling）过 Architecture Gate。
+5. 全量自检 + commit + push（按既定流程）。
