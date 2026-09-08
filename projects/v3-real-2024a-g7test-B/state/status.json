@@ -1,0 +1,69 @@
+{
+  "schema_version": 3,
+  "project": "v3-real-2024a",
+  "state": {
+    "problem": {
+      "status": "pending"
+    },
+    "questions": {
+      "Q001": {
+        "status": "pending",
+        "models": [],
+        "experiments": [
+          "E001"
+        ],
+        "claims": [
+          "C001"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-08T04:59:12+00:00"
+      }
+    },
+    "models": {
+      "status": "pending",
+      "candidates": [
+        "M001"
+      ],
+      "selected": []
+    },
+    "experiments": {
+      "status": "pending",
+      "by_question": {}
+    },
+    "evidence": {
+      "status": "pending",
+      "graph_version": 3,
+      "claims_supported": 1,
+      "claims_total": 1,
+      "coverage_ratio": 1.0
+    },
+    "narrative": {
+      "status": "pending"
+    },
+    "paper": {
+      "status": "pending",
+      "sections_written": 0,
+      "sections_total": 0
+    },
+    "review": {
+      "status": "pending",
+      "rounds_completed": 0,
+      "verdict": null
+    }
+  },
+  "workflow": {
+    "current_nodes": [],
+    "completed_nodes": [],
+    "blocked_nodes": [],
+    "waiting_approval": [],
+    "retries": {},
+    "notes": []
+  },
+  "run": {
+    "phase": "init",
+    "started_at": "2026-09-08T04:44:15+00:00",
+    "updated_at": "2026-09-08T04:59:12+00:00"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "graph_schema_version": 3,
+  "graph_version": 3,
+  "project": "v3-real-2024a",
+  "updated_at": "2026-09-08T04:59:12+00:00",
+  "relations": [
+    {
+      "from": "P001",
+      "relation": "motivates",
+      "to": "Q001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "D001",
+      "relation": "based_on",
+      "to": "P001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "Q001",
+      "relation": "solved_by",
+      "to": "M001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "M001",
+      "relation": "assumes",
+      "to": "A001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "M001",
+      "relation": "assumes",
+      "to": "A002",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "M001",
+      "relation": "validated_by",
+      "to": "E001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "E001",
+      "relation": "tests",
+      "to": "M001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "E001",
+      "relation": "produces",
+      "to": "R001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "R001",
+      "relation": "visualized_by",
+      "to": "F001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "R001",
+      "relation": "supports",
+      "to": "C001",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "C001",
+      "relation": "appears_in",
+      "to": "S003",
+      "at": "2026-09-08T04:44:15+00:00"
+    },
+    {
+      "from": "D003",
+      "relation": "based_on",
+      "to": "P001",
+      "at": "2026-09-08T04:59:12+00:00"
+    },
+    {
+      "from": "D004",
+      "relation": "based_on",
+      "to": "M001",
+      "at": "2026-09-08T04:59:12+00:00"
+    }
+  ]
+}
