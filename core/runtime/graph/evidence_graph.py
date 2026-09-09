@@ -39,7 +39,7 @@ RELATION_TYPES: dict[str, tuple] = {
     "validated_by":   ({"model"}, {"experiment"}),
     "tests":          ({"experiment"}, {"model"}),
     "uses":           ({"experiment"}, {"dataset", "code"}),
-    "produces":       ({"experiment"}, {"result"}),
+    "produces":       ({"experiment", "execution_result"}, {"result"}),  # P1-VS-001 C7: EXEC 也产出 result
     "visualized_by":  ({"result"}, {"figure", "table"}),
     "supports":       ({"result"}, {"claim"}),
     "appears_in":     ({"claim"}, {"paper_section"}),
