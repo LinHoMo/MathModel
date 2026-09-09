@@ -27,8 +27,13 @@ Contract（冻结语义）· Deterministic Replay（重放审计）。
 > ｜ 治理：[MODELING_KNOWLEDGE_GOVERNANCE.md](docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md)
 
 **当前版本**：V3.1（架构已冻结，P0–P6 硬化收口）｜ 研究阶段：**P15**
-（K001 已 CLOSED · K002 已 FROZEN · P1 Model Construction Loop 已闭环）。
+（K001 已 CLOSED · **K002 正式实验已 CLOSED**（RQ1 S−F(MCQ)=−4.85 CI[−7.98,−2.22] NEGATIVE，不进 P15.2）· **P1 Model Construction Loop 三里程碑完成**（VS-001 闭环 7/7 + M3 候选竞技场 + M4 知识引导））。
 **技术选型**：LaTeX（单一主线，竞赛差异用 template pack 表达）。
+
+> P15 实验报告：K001 → `research/P15/analysis/reports/P15-K001-REPORT.md` ｜
+> K002 → `research/P15/analysis/reports/P15-K002-REPORT.md` ｜
+> P1 → `research/P15/analysis/P1_{VS001,M3,M4}_REPORT.md` ｜
+> 状态数字唯一口径：`docs/STATUS.md`
 
 ---
 

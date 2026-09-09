@@ -1,5 +1,13 @@
 # P1 — Model Construction 最小闭环实施计划
 
+> **状态：✅ 全部完成（2026-09-09 收口）**。C1–C10 主线 + M3/M4 全部落地：
+> VS-001 垂直切片 7/7 PASS（2024_A，M1 FAIL → M2 PASS 闭环 + Replay）→
+> M3 候选竞技场（evidence-based 选型，selects 边真写入）→ M4 知识引导
+> （BZD 试点卡 5 张 + 义务映射 19 项可溯源）。报告：
+> P1_VS001_REPORT.md / P1_M3_REPORT.md / P1_M4_REPORT.md；
+> 验证：pytest 910/4、catalog_check OK、validate 57/0。本计划正文保留为
+> 历史执行蓝本（原始目标/非目标/依赖顺序），实现细节见文末里程碑记录。
+
 - 仓库：`C:\Users\Lin\Desktop\Programs\MathModel` @ HEAD `4c80914`
 - 依据：`MODEL_CONSTRUCTION_GAP_AUDIT.md`（11 环节 Gap Audit，本计划只引用其中已确认的证据）
 - 平台口径：Windows 本机 `py -3.12`；禁止修改除本计划标注文件外的仓库文件，本计划本身不执行 git 操作

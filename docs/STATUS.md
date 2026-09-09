@@ -1,6 +1,6 @@
 # 项目状态
 
-> 更新：2026-09-09（K002 FROZEN + P1 Model Construction Loop 进行中）。治理见
+> 更新：2026-09-09（K002 正式实验 CLOSED + P1 三里程碑完成）。治理见
 > `docs/architecture/THREE_LAYER_ARCHITECTURE.md`，硬化总纲见
 > `docs/architecture/HARDENING_PROGRAM.md`。
 > **本文件是状态数字的唯一出处：所有数字来自机器命令实测并绑定 commit hash，
@@ -37,19 +37,19 @@ Construction 行为？"。
 | Hardening P0–P6 | Architecture/Contract Freeze + State Truth + Replay + Legacy Isolation + Regression Gate + Release Candidate | ✅ | `9d98e86`…`v3.1.0（RC）` |
 | P15.0/P15.1 | CUMCM Benchmark Freeze + B0 Alignment Baseline | ✅ | `8751c45`（tag `p15.0-benchmark-freeze`）/ `af1bbd5`（tag `p15.1-b0-baseline`） |
 | **P15-K001** | 2×2×rep 预注册（Knowledge × Case + Sham），55 runs，盲评 + DATA FREEZE + 配对分析 | ✅ CLOSED | Δ_K=+2.14 CI[+0.00,+6.41] → **negative result**；`de15d96` |
-| **P15-K002** | Model Representation Efficacy（F/S/S+V 三臂），rubric v1.1 测量校准 + 预检区分度验证 + 五 Gate | 🔒 **FROZEN**（38 文件哈希锁定） | `0cf4d5f` |
-| **P1** | Model Construction Loop：Gap Audit（11 环节）→ P1 计划 v2（C1–C10）→ **VS-001 垂直切片 7/7 PASS（M1 FAIL → M2 PASS 闭环，2019_C M/M/c）** | 🔄 C1 ✅ + VS-001 ✅，C6–C10 待续 | `554e4ff`/`1534fa5`/`23dfe7a` |
+| **P15-K002** | Model Representation Efficacy（F/S/S+V 三臂）：契约统一（schema 迁 core、register 真 jsonschema、40 文件冻结）→ 108/108 生成 → 3 evaluator 盲评（锚定澄清，κ=0.4345）→ 配对分析 | ✅ **CLOSED** | RQ1 S−F(MCQ) Δ=−4.85 CI[−7.98,−2.22] **NEGATIVE**（不进 P15.2）；SV−F(VAL) +4.81 **POSITIVE**；报告 `analysis/reports/P15-K002-REPORT.md` |
+| **P1** | Model Construction Loop：Gap Audit（11 环节）→ P1 计划 v2（C1–C10）→ **VS-001 垂直切片 7/7 PASS（2024_A，M1 FAIL → M2 PASS 闭环 + Replay）** → **M3 候选竞技场（evidence-based 选型，D002 selects 边真写入）** → **M4 知识引导（BZD 试点卡 5 张 + 义务映射）** | ✅ **全部完成**（C1–C10 + M3/M4） | 报告 `analysis/P1_{VS001,M3,M4}_REPORT.md` |
 
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-09）
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **882 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **910 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **57 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |
 | K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |
-| K002 冻结校验 | **PASS（38 文件）** | `py -3.12 research/P15/scripts/k002_freeze.py --check` |
+| K002 冻结校验 | **PASS（40 文件）** | `py -3.12 research/P15/scripts/k002_freeze.py --check` |
 
 说明：
 
@@ -64,24 +64,26 @@ Construction 行为？"。
 ## 下一步
 
 ```text
-P1（Model Construction Loop）：
-  C1 MODEL_IR 升入 core ✅（1534fa5）→ VS-001 闭环 ✅（23dfe7a，7/7）
-  → C6 Code 节点 → C7 Execution 接线 → C8 Validation L0-L2 → C9 门禁硬化 → C10 e2e（与 K002 并行）
+已完成（2026-09-09）：
+  P1（Model Construction Loop）：C1–C10 全部完成 + VS-001 7/7（2024_A，M1 FAIL→M2 PASS + Replay）
+    + M3 候选竞技场（evidence-based 选型）+ M4 知识引导（BZD 试点卡 5 张）
+  K002 正式实验：契约统一（40 文件冻结）→ 108/108 生成 → 3 evaluator 盲评（κ=0.4345）
+    → 配对分析 → 状态机 CLOSED（RQ1 NEGATIVE，不进 P15.2）
 
-K002 正式实验（VS-001 已提供产物管线前提）：
-  run_order 生成 → 108 runs（主检验 45 + 泛化 15，F/S/S+V）→ 盲评（rubric v1.1）
-  → 配对分析（Representation Effect）→ 决策门
-
-P16+（K002 之后）：
-  Candidate Arena（基于 Evidence 的选择）→ Knowledge-guided Construction
-  （BZD 知识接入）→ Capability Validation（Δscore 基准）
+待用户拍板（建议顺序）：
+  ① P16 决策：K002 negative 已确认"纯表示层无提升"，下一实验须构造+执行一体化
+     （执行证据进盲评，消除 L3 格式不对称）——即 K003 或 K002-Ext
+  ② Candidate Arena 落地为正式 benchmark 能力（M3 已演示 evidence-based 选型，需固化测试）
+  ③ Knowledge-guided Construction 正式化（M4 已演示义务映射，BZD 知识按候选/假设/义务接入）
+  ④ Capability Validation：以 Δscore（八项指标）度量 P1 改造带来的能力变化
 ```
 
 ## 风险与待办
 
-- **K002 测量边界**：v1.1 重评证实 L2 区分度恢复（E4 候选对比为唯一区分要素）；
-  S 臂若 candidates 缺失将系统性失分——模板已加字段，正式实验须守。
+- **K002 测量局限（已证实）**：RQ1 S−F(MCQ)=−4.85 NEGATIVE 主因 **L3 层格式不对称**（S 臂结构化 JSON 暴露"无执行证据"系统性低分；F 臂自由文本可叙述性声称）。K002 为纯表示实验、产物不含真实执行——**"执行证据声明完备性"≠"真实执行能力"**；下一实验必须构造+执行一体化（执行产物进盲评包）。
+- **盲评 κ 边界**：3 evaluator 校准 κ=0.4345（锚定澄清后），低 κ 维度已在敏感性 B 剔除；报告完整披露（`MODEL_CONSTRUCTION_RUBRIC_ANCHOR_K002.md`）。
 - **P1 闭环铁律**：`execution_status=success` 不得推出 `model_status=correct`；
   `ExecutionResult.status` 只能来自真实执行状态，禁止 handler 默认生成。
+- **E02 残留事件档案**：盲评收尾期预检残留评估者文件被异步写回 scores/（7 份，已恢复+终止污染源）；正式报告数字以 git HEAD 评分版为准（确定性复现）。
 - CUMCM 22 份 rubric 中 13 份 `reference_results` 为空——不凭记忆伪造 GT。
 - 完整 CUMCM 题面语料未导入（现有仅题名索引 + 已 verified 的 K001/K002 题面）。
