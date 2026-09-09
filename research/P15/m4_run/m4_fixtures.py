@@ -136,6 +136,38 @@ def build_unguided_candidate() -> dict:
     return {"model_ir": mir, "code": C2_CODE}
 
 
+
+
+def _align_schema(mir: dict) -> dict:
+    """audit FIX-5.4：最终 MIR 对齐 model_ir.schema.json 各节 required。
+
+    基于 vs001 M2 已 enrich 的结构，再补齐 BZD 义务对象（validations/
+    assumptions 被覆盖为卡义务形态）缺的契约字段。
+    """
+    from vs001_fixtures import _enrich_schema_required
+    mir = _enrich_schema_required(mir)
+    for v in mir.get("validations") or []:
+        v.setdefault("type", "constraint")
+        v.setdefault("method", "deterministic_check")
+        v.setdefault("targets_refs", [])
+        v.setdefault("sub_question_binding", ["Q1"])
+    for a in mir.get("assumptions") or []:
+        if not a.get("text"):
+            a["text"] = (a.get("content") or a.get("statement")
+                         or a.get("assumption") or "")
+        a.setdefault("type", "simplification")
+        if not a.get("rationale"):
+            a["rationale"] = (a.get("text", "")
+                              or ("来自 BZD 卡 " + a["source_card"])
+                              if a.get("source_card") else a.get("text", ""))
+    for v in mir.get("validations") or []:
+        v.setdefault("status", "required")
+    return mir
+
+
 GUIDED = build_guided_candidate()
 UNGUIDED = build_unguided_candidate()
+GUIDED["model_ir"] = _align_schema(GUIDED["model_ir"])
+UNGUIDED["model_ir"] = _align_schema(UNGUIDED["model_ir"])
 CANDIDATES = [GUIDED, UNGUIDED]
+

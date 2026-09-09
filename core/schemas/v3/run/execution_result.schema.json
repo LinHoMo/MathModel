@@ -2,25 +2,111 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "mathmodel:v3/run/execution_result.schema.json",
   "title": "V3 ExecutionResult Artifact data 契约",
-  "description": "P0 Scientific Integrity（audit FIX-1.1）：execution_result 的 data 字段门禁。核心原则——ExecutionResult 只能由 execution substrate（subprocess adapter）创建；status=success 必须携带真实 code_hash（且与 code 本体一致）与非空 outputs。运行时零依赖校验由 core/runtime/artifacts/artifact.py 的 _validate_type_data() 机械执行；本文件为文档真源。",
+  "description": "P0 Scientific Integrity（audit FIX-1.1）：execution_result 的 data 字段门禁。核心原则——ExecutionResult 只能由 execution substrate（subprocess adapter）创建；status=success 必须携带真实 code_hash（且与 code 本体一致）与非空 outputs。运行时零依赖校验由 core/runtime/artifacts/artifact.py 的 _validate_type_data() 机械执行；本文件为文档真源。 修订：execution_id 由 registry 注入；model_id/inputs/stdout/stderr 为可选（stdout/stderr 空合法）。audit FIX-5.4。 修订2：returncode/duration_ms 移出 required（执行核心由 evidence_gate E9 在字段存在时检查）。audit FIX-5.4。",
   "type": "object",
-  "required": ["execution_id", "model_id", "status", "inputs", "outputs", "stdout", "stderr", "returncode", "duration_ms", "code_hash"],
+  "required": [
+    "execution_id",
+    "status",
+    "outputs",
+    "code_hash"
+  ],
   "properties": {
-    "execution_id": { "type": "string", "description": "执行实例 ID（adapter 产生；异常路径可为空串但 status 不得为 success）" },
-    "model_id": { "type": "string", "description": "被执行的模型/代码 ID" },
-    "status": { "enum": ["success", "failed", "timeout", "invalid", "not_executed"] },
-    "inputs": { "type": "object" },
-    "outputs": { "type": "object", "description": "status=success 时必须非空（真实数值输出）" },
-    "stdout": { "type": "string" },
-    "stderr": { "type": "string" },
-    "returncode": { "type": ["integer", "null"], "description": "status=success 时必须为 0 或 null" },
-    "duration_ms": { "type": ["integer", "number"], "minimum": 0 },
-    "code_hash": { "type": "string", "description": "sha256(code) 全 64 或前 16；status=success 时必须非空，且与 code 本体一致" },
-    "environment_hash": { "type": ["string", "null"] },
-    "started_at": { "type": ["string", "null"] },
-    "finished_at": { "type": ["string", "null"] },
-    "provenance": { "type": ["object", "null"] },
-    "code": { "type": ["string", "null"], "description": "code 本体（P0-E4 replay 用）；存在时须与 code_hash 一致" },
-    "environment_manifest": { "type": ["string", "null"] }
+    "execution_id": {
+      "type": "string",
+      "description": "执行实例 ID（adapter 产生；异常路径可为空串但 status 不得为 success）"
+    },
+    "model_id": {
+      "type": "string",
+      "description": "被执行的模型/代码 ID"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "failed",
+        "timeout",
+        "invalid",
+        "not_executed"
+      ]
+    },
+    "inputs": {
+      "type": "object"
+    },
+    "outputs": {
+      "type": "object",
+      "description": "status=success 时必须非空（真实数值输出）"
+    },
+    "stdout": {
+      "type": "string"
+    },
+    "stderr": {
+      "type": "string"
+    },
+    "returncode": {
+      "anyOf": [
+        {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "duration_ms": {
+      "anyOf": [
+        {
+          "type": [
+            "integer",
+            "number"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "code_hash": {
+      "type": "string",
+      "description": "sha256(code) 全 64 或前 16；status=success 时必须非空，且与 code 本体一致"
+    },
+    "environment_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "started_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "finished_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provenance": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "code 本体（P0-E4 replay 用）；存在时须与 code_hash 一致"
+    },
+    "environment_manifest": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }

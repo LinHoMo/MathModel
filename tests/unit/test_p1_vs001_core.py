@@ -59,9 +59,12 @@ class TestModelIRType:
         assert id_type("M001") == "model"
 
     def test_registry_create_model_ir(self, tmp_path):
+        from conftest import mir
         reg = ArtifactRegistry(tmp_path / "registry.json")
+        reg.create("question", title="Q1", data={"question_id": "Q1"},
+                   activate=True)
         art = reg.create("model_ir", title="test MIR",
-                         data={"ir_version": "1.0"}, activate=True)
+                         data=mir("Q1", "M-TEST"), activate=True)
         assert art.artifact_id.startswith("MIR")
         assert art.type == "model_ir"
         assert art.status == "active"

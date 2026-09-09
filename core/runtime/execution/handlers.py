@@ -1051,7 +1051,7 @@ class DefaultNodeExecutor:
         d = self.registry.create(
             "decision", title="文献检索与证据提取",
             payload=[r["card_id"] for r in payload],
-            data={"recommendations": payload},
+            data={"kind": "literature_search", "recommendations": payload},
             depends_on=[pids[0].artifact_id] if pids else [],
             activate=True, created_by=node_id)
         ev = [{"from": d.artifact_id, "relation": "based_on",

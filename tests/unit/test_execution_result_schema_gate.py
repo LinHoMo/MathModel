@@ -58,7 +58,8 @@ def test_real_execution_result_passes(reg):
 def test_fake_status_rejected(reg):
     data = _real_data()
     data["status"] = "fake"
-    with pytest.raises(ContractError, match="status 非法"):
+    # FIX-5.4：jsonschema 实例校验先拦截（status enum），行为等价拒绝
+    with pytest.raises(ContractError, match="status"):
         reg.create("execution_result", data=data)
 
 
@@ -87,7 +88,8 @@ def test_code_hash_mismatch_rejected(reg):
 def test_outputs_not_dict_rejected(reg):
     data = _real_data()
     data["outputs"] = "not a dict"
-    with pytest.raises(ContractError, match="outputs 必须为 dict"):
+    # FIX-5.4：jsonschema 实例校验先拦截（outputs 必须 object）
+    with pytest.raises(ContractError, match="outputs"):
         reg.create("execution_result", data=data)
 
 

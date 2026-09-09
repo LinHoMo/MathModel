@@ -28,40 +28,9 @@ from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
 
 
 def _mir(qid, model_id):
-    return {
-        "ir_version": "1.0", "model_id": model_id,
-        "model_family": {"primary": "linear_regression", "description": "d",
-                         "candidates": [{"family": "linear_regression", "rationale": "r"}]},
-        "problem_binding": {"problem_id": "demo", "sub_question_id": qid,
-                            "problem_sha256": "a" * 64},
-        "assumptions": [{"assumption_id": "A1", "type": "simplification",
-                         "statement": "s"}],
-        "variables": [{"variable_id": "V1", "type": "decision", "symbol": "y",
-                       "domain": "real", "description": "d"}],
-        "parameters": [{"parameter_id": "P1", "symbol": "slope", "value": 2.0,
-                        "source": "假设", "description": "d"},
-                       {"parameter_id": "P2", "symbol": "intercept", "value": 1.0,
-                        "source": "假设", "description": "d"}],
-        "objectives": [{"objective_id": "O1", "type": "estimate",
-                        "expression": "y", "sub_question_binding": qid}],
-        "constraints": [{"constraint_id": "C1", "expression": "y > -100",
-                         "sub_question_binding": qid}],
-        "mechanisms": [{"mechanism_id": "M1", "type": "mechanism_assumption",
-                        "description": "d", "sub_question_binding": qid}],
-        "equations": [{"equation_id": "E1",
-                       "expression": "y = slope*x + intercept"}],
-        "dependencies": [{"dependency_id": "D1", "kind": "data", "target": "x"}],
-        "solvers": [{"solver_id": "S1", "family": "closed_form",
-                     "backend": "python", "method": "evaluate"}],
-        "experiments": [{"experiment_id": "X1", "type": "simulation",
-                         "sub_question_binding": qid}],
-        "validations": [{"validation_id": "VAL1", "type": "sensitivity",
-                         "sub_question_binding": qid}],
-        "claims": [{"claim_id": "CL1", "type": "comparative",
-                    "sub_question_binding": qid}],
-        "model_graph": {"nodes": [], "edges": []},
-        "modeling_trace": [{"step": "construct", "note": "test injection"}],
-    }
+    # audit FIX-5.4：对齐 model_ir.schema.json 契约（conftest.mir 已全量对齐）
+    from conftest import mir
+    return mir(qid, model_id)
 
 
 _CODE = """\

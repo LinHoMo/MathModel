@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mathmodel.harness/model-ir/1.0",
   "title": "MODEL_IR — Executable Model Specification Contract (template-aligned)",
-  "description": "与 P15-K002 S/SV 模板 18 字段承诺精确对齐的可执行契约（2026-09-09 重建）。顶层 required = 模板 18 字段；嵌套约束 = 模板承诺字段与词表（中文 enum 与模板一致）；模板未承诺的深层结构不约束（additionalProperties: true）。历史：旧版契约从未被产物满足（K001 55/55、K002 预检 6/6 违反，159–403 错误/份），register 从不校验——本重建使 jsonschema 校验成为真实可执行的门槛。",
+  "description": "与 P15-K002 S/SV 模板 18 字段承诺精确对齐的可执行契约（2026-09-09 重建）。顶层 required = 模板 18 字段；嵌套约束 = 模板承诺字段与词表（中文 enum 与模板一致）；模板未承诺的深层结构不约束（additionalProperties: true）。历史：旧版契约从未被产物满足（K001 55/55、K002 预检 6/6 违反，159–403 错误/份），register 从不校验——本重建使 jsonschema 校验成为真实可执行的门槛。 修订：validations.type enum 增加 constraint/consistency（约束满足/一致性验证，2024_A VS-001 真实类型）。audit FIX-5.4。",
   "type": "object",
   "required": [
     "ir_version",
@@ -256,7 +256,11 @@
               "校准",
               "文献",
               "假设",
-              "推导"
+              "推导",
+              "derived",
+              "problem_given",
+              "computed",
+              "test_fixture"
             ]
           }
         }
@@ -288,7 +292,11 @@
               "estimate",
               "satisfy",
               "simulate",
-              "find"
+              "find",
+              "compute",
+              "predict",
+              "classify",
+              "optimize"
             ]
           },
           "expression": {
@@ -458,15 +466,18 @@
             "default": []
           },
           "derivation_trace": {
-            "anyOf": [
-              {
-                "type": "object",
-                "additionalProperties": true
-              },
-              {
-                "type": "string"
-              }
-            ]
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              ]
+            }
           },
           "sub_question_binding": {
             "anyOf": [
@@ -514,8 +525,14 @@
             "minLength": 1
           },
           "implementation_ref": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "sub_question_binding": {
             "anyOf": [
@@ -559,38 +576,18 @@
           "inputs": {
             "anyOf": [
               {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              },
-              {
                 "type": "object",
                 "additionalProperties": true
               },
               {
-                "type": "string"
+                "type": "array",
+                "items": {}
               }
             ]
           },
           "expected_outputs": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              },
-              {
-                "type": "object",
-                "additionalProperties": true
-              },
-              {
-                "type": "string"
-              }
-            ]
+            "type": "array",
+            "items": {}
           },
           "sub_question_binding": {
             "anyOf": [
@@ -635,7 +632,11 @@
               "limit",
               "reproducibility",
               "convergence",
-              "uncertainty"
+              "uncertainty",
+              "constraint",
+              "consistency",
+              "constraint_check",
+              "consistency_check"
             ]
           },
           "method": {

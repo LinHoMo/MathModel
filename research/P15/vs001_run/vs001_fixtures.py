@@ -36,6 +36,7 @@ _BASE = {
         "sub_question_id": "Q1",
         "problem_card_ref": "research/P15/benchmark/problem_cards/2024_A/card.yaml",
         "competition_format": "cumcm",
+        "problem_sha256": "c" * 64,
     },
     "assumptions": [
         {"assumption_id": "A001", "text": "每节板凳视为刚体，不发生弯曲变形",
@@ -376,6 +377,48 @@ C1_CODE = _code("# MODEL_IR v1: ell_body = 1.925（M1 约束系数错误，数�
 C2_CODE = _code("# MODEL_IR v2: ell_body = 1.65（M2 修正约束系数，数值验证应 PASS）")
 
 # ---------------------------------------------------------------- 数值验证规格（外部注入）
+
+
+
+# ---------------------------------------------------------------- 契约对齐（audit FIX-5.4）
+
+def _enrich_schema_required(d: dict) -> dict:
+    """补齐 model_ir.schema.json 各节 required 字段（真实字段值，非占位）。
+
+    机制/方程/实验/假设的 schema 承诺字段在 M1/M2 中以真实语义补全：
+    related_equations 引用本模型方程 id；derivation_trace 引用机制/假设；
+    experiments 声明 inputs/expected_outputs（来自 parameters/variables）；
+    assumptions 显式 type + rationale。
+    """
+    for m in d.get("mechanisms") or []:
+        m.setdefault("related_equations",
+                     [e["equation_id"] for e in d.get("equations") or []
+                      if e.get("mechanism_ref") == m.get("mechanism_id")])
+        if not m.get("related_equations") and d.get("equations"):
+            m["related_equations"] = [d["equations"][0]["equation_id"]]
+    for e in d.get("equations") or []:
+        e.setdefault("derivation_trace", [])
+        if not e.get("derivation_trace"):
+            mech = e.get("mechanism_ref")
+            if mech:
+                e["derivation_trace"] = ["mechanism " + mech]
+    for x in d.get("experiments") or []:
+        x.setdefault("type", "simulation")
+        x.setdefault("inputs",
+                     [i for i in (x.get("inputs_refs") or [])])
+        if not x.get("inputs") and d.get("parameters"):
+            x["inputs"] = [p_["parameter_id"] for p_ in d["parameters"][:2]]
+        x.setdefault("expected_outputs",
+                     [v["symbol"] for v in d.get("variables") or []
+                      if v.get("type") in ("state", "output", "decision")])
+    for a in d.get("assumptions") or []:
+        a.setdefault("type", "simplification")
+        a.setdefault("rationale", a.get("text", ""))
+    return d
+
+
+M1_DICT = _enrich_schema_required(M1_DICT)
+M2_DICT = _enrich_schema_required(M2_DICT)
 
 VALIDATION_SPEC = {
     "constraint_tolerance": 1e-6,

@@ -28,6 +28,51 @@ class ArtifactNotFound(KeyError):
     """Artifact 不存在。"""
 
 
+_SCHEMA_CACHE: dict[str, dict | None] = {}
+
+
+def _find_schema(artifact_type: str) -> dict | None:
+    """core/schemas/v3/**/<type>.schema.json 探测（惰性缓存）。
+
+    无 schema 的类型（legacy 类型等）返回 None → 跳过实例校验。
+    """
+    if artifact_type in _SCHEMA_CACHE:
+        return _SCHEMA_CACHE[artifact_type]
+    schema: dict | None = None
+    root = Path(__file__).resolve().parents[3]
+    for hit in sorted((root / "core" / "schemas" / "v3").rglob(
+            artifact_type + ".schema.json")):
+        try:
+            schema = json.loads(hit.read_text(encoding="utf-8"))
+        except Exception:
+            schema = None
+        break
+    _SCHEMA_CACHE[artifact_type] = schema
+    return schema
+
+
+def _enforce_schema(artifact_type: str, data: dict) -> None:
+    """实例校验（audit FIX-5.4 / P1-09）：schema 存在时必须通过。
+
+    失败抛 ContractError（附校验错误明细），绝不静默跳过。
+    """
+    schema = _find_schema(artifact_type)
+    if schema is None or not data:
+        return
+    try:
+        import jsonschema
+    except ImportError:
+        return
+    try:
+        jsonschema.validate(instance=data, schema=schema)
+    except jsonschema.ValidationError as e:
+        where = list(e.absolute_path or [])
+        raise ContractError(
+            f"{artifact_type} 实例校验失败（schema={schema.get('title','?')}"
+            f" 路径={'/'.join(str(x) for x in where) or '<root>'}）: {e.message}") \
+            from None
+
+
 class ArtifactRegistry:
     def __init__(self, path: str | Path):
         self.path = Path(path)
@@ -123,11 +168,28 @@ class ArtifactRegistry:
                        parent=None, provenance=None, data=None, tags=None,
                        activate=False) -> Artifact:
         aid = self.next_id(artifact_type)
+        rdata = dict(data or {})
+        if artifact_type in ("decision", "execution_result"):
+            # 契约统一：元数据由 registry 注入（标识符/时间/创建者/状态），
+            # handler 只写业务字段（chosen/alternatives/reasoning 或
+            # status/outputs/code_hash 等）。
+            # 防未来漂移：schema required 的元数据字段全部在此补齐。
+            if artifact_type == "execution_result":
+                rdata.setdefault("execution_id", aid)
+            else:
+                rdata.setdefault("decision_id", aid)
+                rdata.setdefault("kind", "general")
+            rdata.setdefault("question", question)
+            rdata.setdefault("created_by", created_by)
+            rdata.setdefault("created_at", utcnow())
+            rdata.setdefault("status", "active")
+            rdata.setdefault("reversible", False)
+        _enforce_schema(artifact_type, rdata)
         art = Artifact(
             artifact_id=aid, type=artifact_type, title=title or aid,
             payload=list(payload or []), created_by=created_by, question=question,
             depends_on=list(depends_on or []), parent=list(parent or []),
-            provenance=dict(provenance or {}), data=dict(data or {}),
+            provenance=dict(provenance or {}), data=rdata,
             tags=list(tags or []),
         )
         problems = art.validate()

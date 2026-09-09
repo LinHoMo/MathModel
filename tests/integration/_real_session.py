@@ -56,8 +56,9 @@ if __name__ == "__main__":
 def _minimal_mir(qid: str) -> dict:
     """最小但真实的三层 MODEL_IR（L1 semantic / L2 mathematical / L3 computational）。
 
-    所有数组节非空、id 字段齐备（validate_model_ir 全过）；parameters 携带
-    执行输入（_execution_inputs 从 symbol+value 派生 input.json）。
+    所有数组节非空、id 字段齐备（validate_model_ir 全过 + model_ir.schema.json
+    实例校验全过——audit FIX-5.4 契约对齐）；parameters 携带执行输入
+    （_execution_inputs 从 symbol+value 派生 input.json）。
     """
     return {
         "ir_version": "1.0",
@@ -67,10 +68,12 @@ def _minimal_mir(qid: str) -> dict:
             "secondary": [],
             "description": "线性代数基准模型（测试夹具，外部 Model Constructor 注入）",
         },
-        "problem_binding": {"problem_id": "TEST-PROB", "sub_question_id": "Q1"},
+        "problem_binding": {"problem_id": "TEST-PROB", "sub_question_id": "Q1", "problem_sha256": "b" * 64},
         "assumptions": [{
             "assumption_id": "A001",
             "text": "输入参数 a/x/b 在允许域内且为有限实数",
+            "type": "simplification",
+            "rationale": "测试夹具保证输入域",
             "source": "test_fixture",
             "confidence": 0.9,
             "sub_question_binding": ["Q1"],
@@ -83,11 +86,12 @@ def _minimal_mir(qid: str) -> dict:
             "unit": "-",
             "type": "state",
             "value_range": {"min": 0.0, "max": 1e6},
+            "sub_question_binding": ["Q1"],
         }],
         "parameters": [
-            {"parameter_id": "PARM001", "name": "a", "symbol": "a", "value": 2.0, "unit": "-"},
-            {"parameter_id": "PARM002", "name": "x", "symbol": "x", "value": 3.0, "unit": "-"},
-            {"parameter_id": "PARM003", "name": "b", "symbol": "b", "value": 1.0, "unit": "-"},
+            {"parameter_id": "PARM001", "name": "a", "symbol": "a", "value": 2.0, "unit": "-", "source": "test_fixture"},
+            {"parameter_id": "PARM002", "name": "x", "symbol": "x", "value": 3.0, "unit": "-", "source": "test_fixture"},
+            {"parameter_id": "PARM003", "name": "b", "symbol": "b", "value": 1.0, "unit": "-", "source": "test_fixture"},
         ],
         "objectives": [{
             "objective_id": "OBJ001",
@@ -95,6 +99,7 @@ def _minimal_mir(qid: str) -> dict:
             "expression": "y = a*x + b",
             "variables_refs": ["V001"],
             "parameters_refs": ["PARM001", "PARM002", "PARM003"],
+            "sub_question_binding": ["Q1"],
         }],
         "constraints": [{
             "constraint_id": "C001",
@@ -102,11 +107,14 @@ def _minimal_mir(qid: str) -> dict:
             "expression": "y >= 0",
             "variables_refs": ["V001"],
             "source": "test_fixture",
+            "sub_question_binding": ["Q1"],
         }],
         "mechanisms": [{
             "mechanism_id": "MECH001",
             "name": "linear_mapping",
             "description": "输入到输出的线性映射（affine）",
+            "related_equations": ["E001"],
+            "sub_question_binding": ["Q1"],
         }],
         "equations": [{
             "equation_id": "E001",
@@ -115,6 +123,8 @@ def _minimal_mir(qid: str) -> dict:
             "variables_refs": ["V001"],
             "parameters_refs": ["PARM001", "PARM002", "PARM003"],
             "mechanism_ref": "MECH001",
+            "derivation_trace": ["mechanism MECH001"],
+            "sub_question_binding": ["Q1"],
         }],
         "dependencies": [{
             "dependency_id": "DEP001",
@@ -128,22 +138,33 @@ def _minimal_mir(qid: str) -> dict:
             "type": "direct",
             "method": "algebraic substitution",
             "implementation_ref": "CODE-{}".format(qid),
+            "sub_question_binding": ["Q1"],
         }],
         "experiments": [{
             "experiment_id": "EXP001",
             "description": "基准输入求解 y = 2*3 + 1 = 7",
+            "type": "simulation",
             "inputs": {"a": 2.0, "x": 3.0, "b": 1.0},
+            "expected_outputs": ["y"],
+            "sub_question_binding": ["Q1"],
         }],
         "validations": [{
             "validation_id": "VAL001",
             "type": "constraint_check",
             "spec": "outputs.y == 7.0",
             "status": "required",
+            "method": "deterministic_check",
+            "targets_refs": ["OBJ001"],
+            "sub_question_binding": ["Q1"],
         }],
         "claims": [{
             "claim_id": "CLM001",
-            "statement": "模型输出 y = a*x + b",
+            "text": "模型输出 y = a*x + b",
+            "type": "descriptive",
             "evidence_refs": ["EXP001"],
+            "model_refs": ["M-TEST-{}-v1".format(qid)],
+            "status": "candidate",
+            "sub_question_binding": ["Q1"],
         }],
         "model_graph": {"nodes": ["V001", "E001"], "edges": [["E001", "V001"]]},
         "modeling_trace": [{"step": "linear_model", "note": "测试夹具模型"}],

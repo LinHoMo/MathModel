@@ -247,7 +247,46 @@ def validate_model_ir(model_ir: dict[str, Any]) -> list[str]:
             if not str(item.get(id_field) or "").strip():
                 problems.append(f"{key}[{i}] 缺少 {id_field}")
 
+    if not skeleton:
+        problems.extend(_check_l2_mathematical(model_ir))
+
     return problems
+
+
+def _check_l2_mathematical(model_ir: dict[str, Any]) -> list[str]:
+    """L2 Mathematical 真实接线（audit FIX-5.3 / P2-02）。
+
+    用 core/validators/modules/formula_checker 对 MODEL_IR 全部数学表达式
+    （objectives/constraints/equations 的 expression/equation 字段）做确定性
+    结构检查：括号配对 + LaTeX 语法 + 常见错误（空分母/连续运算符等）。
+    只做语法/结构正确性，不推断数学等价性——数值正确性由 execution +
+    validation 承担。
+    """
+    from validators.modules.formula_checker import check_formulas
+
+    issues: list[str] = []
+    expressions: list[tuple[str, str]] = []   # (来源标签, 表达式)
+    for o in model_ir.get("objectives") or []:
+        for f in ("expression", "target"):
+            v = o.get(f)
+            if isinstance(v, str) and v.strip():
+                expressions.append((f"objective[{o.get('objective_id','?')}].{f}", v))
+    for c in model_ir.get("constraints") or []:
+        for f in ("expression", "inequality", "equality"):
+            v = c.get(f)
+            if isinstance(v, str) and v.strip():
+                expressions.append((f"constraint[{c.get('constraint_id','?')}].{f}", v))
+    for e in model_ir.get("equations") or []:
+        for f in ("equation", "expression"):
+            v = e.get(f)
+            if isinstance(v, str) and v.strip():
+                expressions.append((f"equation[{e.get('equation_id','?')}].{f}", v))
+    for label, expr in expressions:
+        res = check_formulas(expr)
+        if not res.get("valid"):
+            for issue in res.get("issues") or []:
+                issues.append(f"{label}: {issue}")
+    return issues
 
 
 def _is_skeleton(model_ir: dict[str, Any]) -> bool:
