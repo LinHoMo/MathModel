@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# MathModelSkills 全局安装脚本
+# MathModel 全局安装脚本（V3 认知工作流运行时）
 #
 # 用法:
 #   ./install.sh                      # 交互选择目标
@@ -49,6 +49,21 @@ fi
 
 log() { echo "$@"; }
 
+# V3 引擎可复用资产（与 core/ 顶层目录一一对应）
+INSTALL_DIRS=(
+  "core/skills"      # 建模 / 验证 / 论文映射技能
+  "core/roles"       # 5 角色 YAML
+  "core/workflows"   # Workflow DAG 定义
+  "core/runtime"     # V3 认知运行时（artifacts/state/graph/execution/modeling/knowledge）
+  "core/validators"  # L1–L6 门禁
+  "core/schemas"     # v3/ 六域 canonical schema
+  "core/tools"       # 运行时工具（orchestrator / validate / state / new_project …）
+  "core/env"         # 阈值配置
+  "core/knowledge"   # 建模知识方法卡
+  "core/templates"   # 论文 / 代码模板
+  "catalog"          # v3 目录索引
+)
+
 # ---------------- 安装 ----------------
 for t in "${TARGETS[@]}"; do
   dest="${DEST[$t]:-}"
@@ -73,37 +88,22 @@ for t in "${TARGETS[@]}"; do
   fi
 
   if [[ $DRY_RUN -eq 1 ]]; then
-    log "[dry-run] 将创建 $dest 并复制 23 个 agent SKILL.md"
+    log "[dry-run] 将创建 $dest 并安装 V3 运行时（skills/roles/workflows/runtime/validators/schemas/tools/env/knowledge/templates/catalog）"
     continue
   fi
 
   mkdir -p "$dest"
 
-  # 四手编排器
-  for hand in Modeler Programmer Writer Reviewer; do
-    mkdir -p "$dest/$hand"
-    cp "$REPO_ROOT/core/$hand/SKILL.md" "$dest/$hand/SKILL.md"
+  # V3 运行时 + 技能 + 角色 + 工具
+  for dir in "${INSTALL_DIRS[@]}"; do
+    cp -r "$REPO_ROOT/$dir" "$dest/" 2>/dev/null || true
   done
 
-  # 23 个 agent
-  count=0
-  for hand in Modeler Programmer Writer Reviewer; do
-    for d in "$REPO_ROOT/core/$hand/agents"/*/; do
-      agent="$(basename "$d")"
-      mkdir -p "$dest/$hand/agents/$agent"
-      cp "$d/SKILL.md" "$dest/$hand/agents/$agent/SKILL.md"
-      count=$((count + 1))
-    done
-  done
-
-  # 工具与配置（供门禁脚本使用）
-  cp -r "$REPO_ROOT/core/tools" "$dest/tools" 2>/dev/null || true
-  cp -r "$REPO_ROOT/core/env" "$dest/env" 2>/dev/null || true
-  cp -r "$REPO_ROOT/core/knowledge" "$dest/knowledge" 2>/dev/null || true
-  cp -r "$REPO_ROOT/core/schemas" "$dest/schemas" 2>/dev/null || true
+  # 双视图元数据单一真源 + agent 协议入口
   cp "$REPO_ROOT/catalog.yaml" "$dest/" 2>/dev/null || true
+  cp "$REPO_ROOT/AGENTS.md" "$dest/" 2>/dev/null || true
 
-  log "已安装: 4 个手编排器 + $count 个 agent + tools/env/knowledge/schemas"
+  log "已安装: V3 运行时 + 技能 + 角色 + 工具（skills/roles/workflows/runtime/validators/schemas/tools/env/knowledge/templates/catalog）"
 done
 
 log "────────────────────────────────"

@@ -1,4 +1,4 @@
-# MathModelSkills 全局安装脚本（Windows PowerShell）
+﻿# MathModel 全局安装脚本（V3 认知工作流运行时）（Windows PowerShell）
 #
 # 用法:
 #   .\install.ps1 -Target claude
@@ -32,6 +32,21 @@ $DestMap = @{
     workbuddy = Join-Path $HOME '.workbuddy\skills\mathmodel'
     trae      = Join-Path $HOME '.trae\skills\mathmodel'
 }
+
+# V3 引擎可复用资产（与 core/ 顶层目录一一对应）
+$InstallDirs = @(
+    'core\skills',      # 建模 / 验证 / 论文映射技能
+    'core\roles',       # 5 角色 YAML
+    'core\workflows',   # Workflow DAG 定义
+    'core\runtime',     # V3 认知运行时（artifacts/state/graph/execution/modeling/knowledge）
+    'core\validators',  # L1–L6 门禁
+    'core\schemas',     # v3/ 六域 canonical schema
+    'core\tools',       # 运行时工具（orchestrator / validate / state / new_project …）
+    'core\env',         # 阈值配置
+    'core\knowledge',   # 建模知识方法卡
+    'core\templates',   # 论文 / 代码模板
+    'catalog'           # v3 目录索引
+)
 
 if ($All) {
     $targets = @('claude', 'codex', 'workbuddy', 'trae')
@@ -70,40 +85,27 @@ foreach ($t in $targets) {
     }
 
     if ($DryRun) {
-        Write-Host "[dry-run] 将创建 $dest 并复制 23 个 agent SKILL.md"
+        Write-Host "[dry-run] 将创建 $dest 并安装 V3 运行时（skills/roles/workflows/runtime/validators/schemas/tools/env/knowledge/templates/catalog）"
         continue
     }
 
     New-Item -ItemType Directory -Force -Path $dest | Out-Null
 
-    foreach ($hand in @('Modeler', 'Programmer', 'Writer', 'Reviewer')) {
-        $handDest = Join-Path $dest $hand
-        New-Item -ItemType Directory -Force -Path $handDest | Out-Null
-        Copy-Item (Join-Path $RepoRoot "core\$hand\SKILL.md") $handDest -Force
-    }
-
-    $count = 0
-    foreach ($hand in @('Modeler', 'Programmer', 'Writer', 'Reviewer')) {
-        $agentsDir = Join-Path $RepoRoot "core\$hand\agents"
-        if (-not (Test-Path $agentsDir)) { continue }
-        foreach ($d in Get-ChildItem -Path $agentsDir -Directory) {
-            $agentDest = Join-Path $dest "$hand\agents\$($d.Name)"
-            New-Item -ItemType Directory -Force -Path $agentDest | Out-Null
-            Copy-Item (Join-Path $d.FullName 'SKILL.md') $agentDest -Force
-            $count++
-        }
-    }
-
-    foreach ($dir in @('tools', 'env', 'knowledge', 'schemas')) {
-        $src = Join-Path $RepoRoot "core\$dir"
+    # V3 运行时 + 技能 + 角色 + 工具
+    foreach ($dir in $InstallDirs) {
+        $src = Join-Path $RepoRoot $dir
         if (Test-Path $src) {
             Copy-Item $src $dest -Recurse -Force
         }
     }
+
+    # 双视图元数据单一真源 + agent 协议入口
     $catalog = Join-Path $RepoRoot 'catalog.yaml'
     if (Test-Path $catalog) { Copy-Item $catalog $dest -Force }
+    $agents = Join-Path $RepoRoot 'AGENTS.md'
+    if (Test-Path $agents) { Copy-Item $agents $dest -Force }
 
-    Write-Host "已安装: 4 个手编排器 + $count 个 agent + tools/env/knowledge/schemas"
+    Write-Host "已安装: V3 运行时 + 技能 + 角色 + 工具（skills/roles/workflows/runtime/validators/schemas/tools/env/knowledge/templates/catalog）"
 }
 
 Write-Host "────────────────────────────────"
