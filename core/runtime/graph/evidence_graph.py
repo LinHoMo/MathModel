@@ -171,14 +171,22 @@ class EvidenceGraph:
         return art.type
 
     def add_relation(self, from_id: str, relation: str, to_id: str,
-                     *, check_types: bool = True) -> dict:
-        """登记 typed relation（fail-closed：ID 不存在 / 类型不匹配 / 自环 / 重复 均拒绝）。"""
+                     *, check_types: bool = True,
+                     exec_ref: str | None = None) -> dict:
+        """登记 typed relation（fail-closed：ID 不存在 / 类型不匹配 / 自环 / 重复 均拒绝）。
+
+        audit FIX-4.1（P0-01/P0-07）：supports 等证据边可携带 exec_ref——
+        边级 execution provenance（指向真实 EXEC artifact），使 evidence 的
+        "这个结论由哪次执行产生"成为图结构的一部分，而非仅依赖 result.data
+        （data 可被外部构造方写入）。
+        """
         with self._lock:
             return self._add_relation_locked(from_id, relation, to_id,
-                                             check_types=check_types)
+                                             check_types=check_types,
+                                             exec_ref=exec_ref)
 
     def _add_relation_locked(self, from_id, relation, to_id,
-                             *, check_types=True) -> dict:
+                             *, check_types=True, exec_ref=None) -> dict:
         if relation not in RELATION_TYPES:
             raise GraphError(f"未知 relation 类型: {relation!r}（合法: {sorted(RELATION_TYPES)}）")
         if from_id == to_id:
@@ -200,6 +208,8 @@ class EvidenceGraph:
             if (rel["from"], rel["relation"], rel["to"]) == (from_id, relation, to_id):
                 raise GraphError(f"关系已存在: {from_id} -{relation}-> {to_id}")
         edge = {"from": from_id, "relation": relation, "to": to_id, "at": _utcnow()}
+        if exec_ref:
+            edge["exec_ref"] = exec_ref
         self.relations.append(edge)
         self._sync_artifact_view(from_id)
         self._sync_artifact_view(to_id)

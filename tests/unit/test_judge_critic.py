@@ -36,12 +36,11 @@ def healthy(tmp_path):
                data={"statement": "主张成立"})
     reg.create("paper_section", title="结果分析", activate=True)
     g = EvidenceGraph(reg, path=tmp_path / "graph.json")
-    for f, r, t in [
-        ("E001", "produces", "R001"),
-        ("R001", "supports", "C001"),
-        ("C001", "appears_in", "S001"),
-    ]:
-        g.add_relation(f, r, t)
+    # audit FIX-4.1：supports 边携带 exec_ref（边级 execution provenance）
+    g.add_relation("E001", "produces", "R001")
+    g.add_relation("R001", "supports", "C001",
+                   exec_ref=exec_art.artifact_id)
+    g.add_relation("C001", "appears_in", "S001")
     return reg, g
 
 

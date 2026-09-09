@@ -40,14 +40,13 @@ def setup(tmp_path):
     reg.create("claim", title="claim", question="Q001", activate=True)
 
     g = EvidenceGraph(reg, path=tmp_path / "graph.json")
-    for f, r, t in [
-        ("Q001", "solved_by", "M001"),
-        ("M001", "validated_by", "E001"),
-        ("E001", "produces", "R001"),
-        ("EXEC001", "produces", "R001"),
-        ("R001", "supports", "C001"),
-    ]:
-        g.add_relation(f, r, t)
+    # audit FIX-4.1：supports 边携带 exec_ref（边级 execution provenance），
+    # 健康链不再依赖 result.data.execution_ref 回退
+    g.add_relation("Q001", "solved_by", "M001")
+    g.add_relation("M001", "validated_by", "E001")
+    g.add_relation("E001", "produces", "R001")
+    g.add_relation("EXEC001", "produces", "R001")
+    g.add_relation("R001", "supports", "C001", exec_ref="EXEC001")
     return reg, g
 
 

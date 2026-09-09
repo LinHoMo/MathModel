@@ -176,21 +176,32 @@ def evaluate(registry, graph, min_coverage: float = DEFAULT_MIN_COVERAGE) -> Gat
 
 
     # E9: 数值真实性——claim 支撑链必须包含真实成功执行（audit FIX-1.3 / P0-07）
-    # 对每个活跃 claim：沿 supports 边的 from（result）→ execution_ref/EXEC
+    # 对每个活跃 claim：沿 supports 边的 from（result）→ EXEC
     # → EXEC data.status == "success" 且 outputs 非空才视为有真实数值支撑。
+    # audit FIX-4.1（P0-01/P0-07）：优先使用 supports 边自带的 exec_ref
+    # （边级 provenance，外部构造方无法伪造图结构）；边无 exec_ref 时回退
+    # result.data.execution_ref；两者皆无 → fail（无执行溯源）。
     # 占位 claim（无 supports 边）已在 E2 判 fail；这里抓"有边但底下没跑过"。
     no_numeric: list[str] = []
+    edge_missing_ref: list[str] = []
     for c in claims:
-        supported_by = [e["from"] for e in graph.relations
-                        if e["relation"] == "supports" and e["to"] == c]
-        if not supported_by:
+        support_edges = [e for e in graph.relations
+                         if e["relation"] == "supports" and e["to"] == c]
+        if not support_edges:
             continue
-        for rid in supported_by:
+        for e in support_edges:
+            rid = e["from"]
             if rid not in registry.artifacts:
                 no_numeric.append(c + "<-" + rid + "(缺失)")
                 continue
-            rdata = registry.artifacts[rid].data or {}
-            exec_ref = rdata.get("execution_ref") or ""
+            exec_ref = e.get("exec_ref") or ""
+            if not exec_ref:
+                # 兼容旧数据：result.data.execution_ref 可回退，但边级
+                # provenance 缺失记 weak（FIX-4.1 要求新链路必须带 exec_ref）
+                rdata = registry.artifacts[rid].data or {}
+                exec_ref = rdata.get("execution_ref") or ""
+                if exec_ref:
+                    edge_missing_ref.append(c + "<-" + rid)
             if not exec_ref or exec_ref not in registry.artifacts:
                 no_numeric.append(c + "<-" + rid + "(无 execution_ref)")
                 continue
@@ -202,6 +213,12 @@ def evaluate(registry, graph, min_coverage: float = DEFAULT_MIN_COVERAGE) -> Gat
                     c + "<-" + rid + "<-" + exec_ref
                     + "(status=" + str(xstatus) + ", outputs="
                     + ("非空" if outputs else "空") + ")")
+    if edge_missing_ref:
+        findings.append(Finding(
+            "E9", WEAK,
+            "supports 边未携带 exec_ref（仅 result.data 有 execution_ref）；"
+            "FIX-4.1 要求边级 provenance",
+            sorted(edge_missing_ref)))
     if no_numeric:
         findings.append(Finding(
             "E9", FAIL,

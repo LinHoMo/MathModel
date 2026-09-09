@@ -542,6 +542,12 @@ class DefaultNodeExecutor:
                or ref == mir_model_id or ref == tdata.get("solver_id")
                for ref in refs):
             return
+        import os
+        if os.environ.get('MM_DEBUG_MAP'):
+            print('MM_DEBUG_MAP', qid, mir_id, 'refs=', refs,
+                  'code_id=', code_id, 'tdata_model_id=', tdata.get('model_id'),
+                  'mir_model_id=', mir_model_id, 'full_mir=', mir,
+                  'full_code=', tdata, flush=True)
         raise HandlerError(
             f"{qid}/{mir_id}: MIR.solvers[].implementation_ref={refs} 与执行 "
             f"code {code_id}(model_id={tdata.get('model_id')}) 不一致——"
@@ -1562,8 +1568,14 @@ class DefaultNodeExecutor:
                                            "placeholder": placeholder},
                                      activate=True, created_by=node_id)
             if not placeholder:
+                # audit FIX-4.1（P0-01/P0-07）：supports 边必须携带 exec_ref
+                # （指向真实 EXEC artifact），使 evidence 具有边级 execution
+                # provenance——"结论由哪次执行产生"成为图结构的一部分。
+                self.graph.add_relation(r_id, "supports", c.artifact_id,
+                                        exec_ref=exec_id or None)
                 ev.append({"from": r_id, "relation": "supports",
-                           "to": c.artifact_id})
+                           "to": c.artifact_id,
+                           "exec_ref": exec_id or None})
                 n += 1
             else:
                 n_placeholder += 1
