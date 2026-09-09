@@ -88,8 +88,17 @@ def model_quality(registry, graph, knowledge=None, decisions=None) -> list[Quali
     for m in models:
         mid = m.artifact_id
         card_id = str(m.data.get("card_id", ""))
+        sel_status = str(m.data.get("selection_status", ""))
         # M1: 选型的卡片存在且可追溯（复用 P8 applicability 数据，不重算）
-        if not card_id:
+        # audit FIX-2.2：UNSELECTED/pending_evidence 是诚实挂起态（无执行证据
+        # 时如实不选），不是 FAIL；等 VR 后由选型节点落地真实 card_id。
+        if card_id == "UNSELECTED" and sel_status == "pending_evidence":
+            out.append(_finding("model", "weak", "model", mid,
+                                "选型挂起（pending_evidence）：无 VR/EXEC 证据"
+                                "时如实未选，待证据后选型",
+                                artifact_refs=[mid], check_id="M1",
+                                recommended_action="request_evidence"))
+        elif not card_id:
             out.append(_finding("model", "fail", "model", mid,
                                 "模型未登记 card_id，无法追溯选型依据",
                                 artifact_refs=[mid], check_id="M1",
@@ -417,7 +426,11 @@ def decision_quality(registry, graph, knowledge=None,
         did = d.decision_id
         if d.status != "active":
             continue
-        # D1: 知识引用存在
+        # D1: 知识引用存在（audit FIX-2.2：仅真实选型决策适用；Quality Memory
+        # 决策是 blocker 快照，其 knowledge_refs 不是选型依据，不查 D1，
+        # 否则 blocker 递归放大——被记录的 FAIL 会在下一轮再次被判 FAIL）
+        if d.question_type == "quality":
+            continue
         for ref in d.knowledge_refs:
             kid = ref.get("id", "")
             if knowledge is not None and kid not in knowledge.cards:

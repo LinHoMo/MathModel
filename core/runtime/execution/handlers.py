@@ -165,6 +165,22 @@ class DefaultNodeExecutor:
                     return a
         return None
 
+    def _selection_evidence(self, qid: str) -> list[dict]:
+        """FIX-2.2：当前问题已有的机械证据（VR/EXEC）。
+
+        选型必须由证据驱动；无证据 → arena 返回 UNSELECTED/pending_evidence。
+        """
+        out = []
+        for a in self.registry.list_by_type("verification_result"):
+            if a.question == qid:
+                out.append({"type": "vr", "artifact_id": a.artifact_id,
+                            "status": (a.data or {}).get("status")})
+        for a in self.registry.list_by_type("execution_result"):
+            if a.question == qid:
+                out.append({"type": "exec", "artifact_id": a.artifact_id,
+                            "status": (a.data or {}).get("status")})
+        return out
+
     def _card_id_of(self, qid: str, mid: str) -> str:
         """问题的选型 card_id：shared 缓存优先，回退 model.data（Registry 真源）。"""
         info = self.shared.get(qid, {})
@@ -240,12 +256,82 @@ class DefaultNodeExecutor:
     def construct_model_ir(self, qid: str) -> str | None:
         """把单个外部 MODEL_IR dict（shared["external_model_irs"]）登记为 model_ir。
 
-        返回 MIR artifact_id；无外部注入时返回 None（保持原路径，向后兼容）。
+        返回 MIR artifact_id；无外部注入时回退骨架构造（FIX-2.1）。
         """
         external = self._external_model_irs().get(qid)
-        if not external:
+        if external:
+            return self._register_mir(qid, external)
+        return self._skeleton_mir(qid, self._models_of(qid)[-1]
+                                  if self._models_of(qid) else None)
+
+    def _skeleton_mir(self, qid: str, mid: str | None) -> str | None:
+        """FIX-2.1（audit P0-05）：默认路径无外部注入时产骨架 MODEL_IR。
+
+        骨架 = 18 字段契约合规 + 方法卡可提供的信息（family/assumptions），
+        variables/objectives/equations 等**不编造**（无 formulation 信息，
+        禁止伪变量/伪方程）。modeling_trace 显式标注 construction_status=
+        pending_model_spec——不可执行。下游执行链因此如实 FAIL，不再出现
+        "只登记假设就 PASS" 的假闭环。无方法卡 → 返回 None（调用方 FAIL）。
+        """
+        models = self._models_of(qid)
+        if mid is None and models:
+            mid = models[-1]
+        card = self.retriever.cards.get(self._card_id_of(qid, mid)) \
+            if mid else None
+        if card is None:
             return None
-        return self._register_mir(qid, external)
+        assumptions = [{"assumption_id": f"A{i}",
+                        "type": "simplification",
+                        "text": risk[:80],
+                        "rationale": "方法卡风险提示（默认路径骨架）"}
+                       for i, risk in enumerate(
+                           list(card.risks)[:2] or
+                           ["所选方法的前提条件成立"], 1)]
+        data = {
+            "ir_version": "1.0",
+            "model_id": f"M-{qid}-skel",
+            "model_family": {
+                "primary": card.family,
+                "description": f"方法卡 {card.card_id} 骨架",
+                "candidates": [],
+            },
+            "problem_binding": {
+                "problem_id": str(self.features.get("problem_title", "demo")),
+                "sub_question_id": qid,
+                # 无题面文件 → 未知哈希占位（格式合规；语义由 modeling_trace
+                # pending_model_spec 承担——骨架不可执行，不声称绑定真实题面）
+                "problem_sha256": "0" * 64,
+            },
+            "assumptions": assumptions,
+            "variables": [],
+            "parameters": [],
+            "objectives": [],
+            "constraints": [],
+            "mechanisms": [{"mechanism_id": "M1", "type": "mechanism_assumption",
+                            "description": card.name,
+                            "related_equations": [],
+                            "sub_question_binding": qid}],
+            "equations": [],
+            "dependencies": [],
+            "solvers": [],
+            "experiments": [],
+            "validations": [],
+            "claims": [],
+            "model_graph": {"nodes": [], "edges": []},
+            "modeling_trace": [
+                {"step": "skeleton",
+                 "note": "默认路径骨架 MIR（无外部 Model Constructor 注入）："
+                         "construction_status=pending_model_spec，不可执行；"
+                         "下游执行/验证如实 FAIL"},
+            ],
+        }
+        try:
+            return self._register_mir(qid, data)
+        except Exception as exc:
+            # 无 _warn 方法（DefaultNodeExecutor 无告警通道）：落到 shared 记录
+            self.shared.setdefault("warnings", []).append(
+                f"{qid}: 骨架 MIR 构造失败: {exc}")
+            return None
 
     def construct_candidate_mirs(self, qid: str) -> list[str]:
         """P1-M3：把 external_candidates 的每个候选 MODEL_IR 登记为独立 MIR。
@@ -918,8 +1004,9 @@ class DefaultNodeExecutor:
                 count += 1
                 continue
             qf = features_for(self.features, qid)
-            outcome = self.arena.select(qid, qf, created_by=node_id)
-            card = outcome.chosen_card
+            outcome = self.arena.select(qid, qf, created_by=node_id,
+                                       evidence=self._selection_evidence(qid))
+            card = outcome.chosen_card if outcome.chosen != "UNSELECTED" else {}
             models = self._models_of(qid)
             if node_id in self.force_new_lineage:
                 from runtime.artifacts.lifecycle import LifecycleError
@@ -941,6 +1028,7 @@ class DefaultNodeExecutor:
                     depends_on=[qid],
                     data={"card_id": outcome.chosen,
                           "family": card.get("family", ""),
+                          "selection_status": outcome.selection_status,
                           "shortlist": [c["card_id"] for c in outcome.shortlist]},
                     activate=True, created_by=node_id)
                 mid = m.artifact_id
@@ -993,6 +1081,9 @@ class DefaultNodeExecutor:
             if not mir_ids:
                 mir_id = self.construct_model_ir(qid)
                 mir_ids = [mir_id] if mir_id else []
+            if not mir_ids:
+                # FIX-2.1（audit P0-05）：不允许"只登记假设就 PASS"
+                return NodeResult(FAIL, f"{qid}: 无法构造 MODEL_IR（no_model_ir）")
             for mir_id in mir_ids:
                 ev.append({"from": mir_id, "relation": "instantiates", "to": mid})
                 n_mir += 1
@@ -1069,8 +1160,22 @@ class DefaultNodeExecutor:
             if not shortlist and mid:
                 # P7：shortlist 持久化于 model.data（Registry 真源），崩溃后可重建
                 shortlist = list(self.registry.get(mid).data.get("shortlist", []))
-            baseline = next((c for c in shortlist if c != card_id), None)
-            plan = self.planner.plan(qid, [card_id], baseline_card_id=baseline)
+            if card_id == "UNSELECTED":
+                # FIX-2.2 连锁（resume/checkpoint 持久化）：未选状态如实
+                # 声明（不假装已选），但 shortlist 是 selection 的合法探索
+                # 输出（推荐候选集，Registry 真源）——基于候选集生成探索性
+                # 实验计划，计划内 methods=shortlist 而非 chosen 声明。
+                # 无候选集 → 无计划依据 → 如实 FAIL（不编造实验计划）。
+                if not shortlist:
+                    return NodeResult(
+                        FAIL, f"{qid}: 无选型与候选集（UNSELECTED 且无 "
+                              f"shortlist），无法规划实验")
+                methods = shortlist
+                baseline = None
+            else:
+                methods = [card_id]
+                baseline = next((c for c in shortlist if c != card_id), None)
+            plan = self.planner.plan(qid, methods, baseline_card_id=baseline)
             d = self.registry.create(
                 "decision", title=f"{qid} 实验计划",
                 payload=plan.methods,
@@ -1295,7 +1400,14 @@ class DefaultNodeExecutor:
                                    reason="replaced by re-run")
                 except LifecycleError:
                     pass
-        self.shared.pop(qid, None)
+        # FIX-2.2 连锁修复：只清执行/证据产物引用（results/claim），
+        # 保留选型与计划缓存（model/card_id/plan/candidates/shortlist）——
+        # 那些是已完成 model_selection 节点的输出；全清会让下游
+        # experiment_design 重跑时丢失选型，把 "UNSELECTED" 当方法卡崩溃。
+        info = self.shared.get(qid)
+        if info:
+            for _k in ("results", "claim"):
+                info.pop(_k, None)
 
     def do_experiment_critique(self, node_id: str) -> NodeResult:
         qid = self._question_of(node_id)
@@ -1421,7 +1533,7 @@ class DefaultNodeExecutor:
             return NodeResult(
                 FAIL,
                 f"quality FAIL: {len(report.blockers)} 项阻塞"
-                f"（{', '.join(b['check_id'] or b['dimension'] for b in report.blockers[:4])}）",
+                f"（{', '.join((getattr(b, 'check_id', '') or getattr(b, 'dimension', '')) for b in report.blockers[:4])}）",
                 outputs={"metrics": {"blockers": len(report.blockers),
                                      "actions": len(actions["rerun"] or []) +
                                      len(actions["recompute"] or [])}})

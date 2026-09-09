@@ -170,7 +170,7 @@ class ResearchQuality:
                 created_by=created_by,
                 evidence_ids=list(b.artifact_refs)[:5],
                 question_type="quality",
-                knowledge_refs=list(b.knowledge_refs),
+                knowledge_refs=[],   # 快照不引用知识（防引用失效卡 → D1 放大）
                 required_validation=[b.recommended_action],
                 score_breakdown={"dimension": b.dimension,
                                  "severity": b.severity},

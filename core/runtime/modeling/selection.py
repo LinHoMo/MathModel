@@ -27,13 +27,17 @@ class SelectionOutcome:
     question: str
     features: dict
     shortlist: list[dict]                    # 排序候选（Recommendation.as_dict）
-    chosen: str                              # card_id
+    chosen: str                              # card_id 或 "UNSELECTED"
+    selection_status: str = "selected"       # selected / pending_evidence
     decision_id: str = ""
     prior_decisions: list[dict] = field(default_factory=list)  # 历史决策视图
     notes: list[str] = field(default_factory=list)
 
     @property
     def chosen_card(self) -> dict:
+        """UNSELECTED 时返回空 dict（调用方必须检查 chosen != 'UNSELECTED'）。"""
+        if self.chosen == "UNSELECTED":
+            return {}
         return next(c for c in self.shortlist if c["card_id"] == self.chosen)
 
 
@@ -45,13 +49,29 @@ class MethodArena:
 
     def select(self, question: str, features: dict, top_k: int = 3,
                created_by: str = "model_selection",
-               record: bool = True) -> SelectionOutcome:
-        """按问题特征选型。question 如 'Q001' 或自由文本描述。"""
+               record: bool = True,
+               evidence: list[dict] | None = None) -> SelectionOutcome:
+        """按问题特征选型。question 如 'Q001' 或自由文本描述。
+
+        audit FIX-2.2（P0-04）：选型必须有机械证据（VR/EXEC）。无 evidence
+        时如实声明 chosen="UNSELECTED" / selection_status="pending_evidence"
+        / confidence=0，且不登记决策——禁止 recs[0] 硬编码冒充选型。
+        """
         recs: list[Recommendation] = self.retriever.recommend(features, top_k=top_k)
         if not recs:
             raise SelectionError(
                 f"无匹配方法卡: features={features}；"
                 f"检查问题类型标签或先扩充知识库")
+
+        if not evidence:
+            return SelectionOutcome(
+                question=question,
+                features=dict(features),
+                shortlist=[r.as_dict() for r in recs],
+                chosen="UNSELECTED",
+                selection_status="pending_evidence",
+                notes=["无执行/验证证据（VR/EXEC）：选型挂起，不假装已选"],
+            )
 
         outcome = SelectionOutcome(
             question=question,

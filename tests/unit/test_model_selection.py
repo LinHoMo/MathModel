@@ -33,7 +33,8 @@ class TestMethodArena:
     def test_select_returns_shortlist(self, retriever, decisions):
         arena = MethodArena(retriever, decisions)
         out = arena.select("Q001", {"problem_types": ["evaluation", "ranking"],
-                                    "has_data": True})
+                                    "has_data": True},
+                               evidence=[{"type": "vr", "status": "passed"}])
         assert out.chosen.startswith("mc-")
         assert len(out.shortlist) >= 2
         assert out.decision_id == "D001"
@@ -46,7 +47,8 @@ class TestMethodArena:
     def test_decision_recorded_in_log(self, retriever, decisions):
         arena = MethodArena(retriever, decisions)
         arena.select("Q001", {"problem_types": ["optimization"],
-                              "objectives": 2})
+                              "objectives": 2},
+                         evidence=[{"type": "vr", "status": "passed"}])
         rows = decisions.query(question_type="optimization")
         assert len(rows) == 1
         assert rows[0]["chosen"].startswith("mc-")
@@ -58,22 +60,27 @@ class TestMethodArena:
 
     def test_prior_active_decision_consistency_note(self, retriever, decisions):
         arena = MethodArena(retriever, decisions)
-        arena.select("Q001", {"problem_types": ["optimization"], "objectives": 2})
+        arena.select("Q001", {"problem_types": ["optimization"], "objectives": 2},
+                         evidence=[{"type": "vr", "status": "passed"}])
         # 同 question 重新选型且换了方法 → 冲突提示
         out2 = MethodArena(retriever, decisions).select(
-            "Q001", {"problem_types": ["optimization"]})
+            "Q001", {"problem_types": ["optimization"]},
+            evidence=[{"type": "vr", "status": "passed"}])
         assert any("冲突" in n for n in out2.notes)
 
     def test_prior_invalidated_decision_not_conflicting(self, retriever, decisions):
         arena = MethodArena(retriever, decisions)
         out1 = arena.select("Q001", {"problem_types": ["optimization"],
-                                     "objectives": 2})
+                                     "objectives": 2},
+                                evidence=[{"type": "vr", "status": "passed"}])
         out2 = MethodArena(retriever, decisions).select(
-            "Q001", {"problem_types": ["optimization"]})
+            "Q001", {"problem_types": ["optimization"]},
+            evidence=[{"type": "vr", "status": "passed"}])
         # P9.5 R3 修复后：重选型自动失效旧决策（无需手动 invalidate）
         assert decisions.decisions[out1.decision_id].status == "invalidated"
         out3 = MethodArena(retriever, decisions).select(
-            "Q001", {"problem_types": ["optimization"]})
+            "Q001", {"problem_types": ["optimization"]},
+            evidence=[{"type": "vr", "status": "passed"}])
         assert not any("冲突" in n for n in out3.notes)
         # 历史决策视图包含被推翻记录（superseded_note）
         assert any("superseded_note" in d for d in out3.prior_decisions)
@@ -145,7 +152,8 @@ class TestArenaPlannerIntegration:
         """选型 → 规划 的端到端链路（model_selection → experiment_design）。"""
         arena = MethodArena(retriever, decisions)
         out = arena.select("Q001", {"problem_types": ["evaluation", "ranking"],
-                                    "has_data": True}, top_k=3)
+                                    "has_data": True}, top_k=3,
+                               evidence=[{"type": "vr", "status": "passed"}])
         methods = [out.chosen] + out.chosen_card.get("often_combined_with", [])[:1]
         methods = [m for m in methods if m in retriever.cards]
         plan = ExperimentPlanner(retriever).plan(
@@ -153,3 +161,28 @@ class TestArenaPlannerIntegration:
             baseline_card_id=out.shortlist[1]["card_id"] if len(out.shortlist) > 1 else None)
         assert plan.methods[0] == out.chosen
         assert plan.required_checks
+
+
+class TestNoEvidenceUnselected:
+    """audit FIX-2.2：选型必须有机械证据；无 VR/EXEC → 如实 UNSELECTED。"""
+
+    def test_no_evidence_yields_unselected(self, retriever, decisions):
+        arena = MethodArena(retriever, decisions)
+        out = arena.select("Q001", {"problem_types": ["optimization"]})
+        assert out.chosen == "UNSELECTED"
+        assert out.selection_status == "pending_evidence"
+        assert not out.decision_id          # 不假装已选，不登记决策
+        assert any("挂起" in n for n in out.notes)
+        # 空 recs 也不崩溃（UNSELECTED 早退路径）
+        out2 = arena.select("Q002", {"problem_types": ["evaluation"]},
+                            evidence=[{"type": "vr", "status": "passed"}])
+        assert out2.chosen != "UNSELECTED"
+
+    def test_with_evidence_selects(self, retriever, decisions):
+        arena = MethodArena(retriever, decisions)
+        out = arena.select("Q001", {"problem_types": ["optimization"]},
+                           evidence=[{"type": "vr", "status": "passed"},
+                                     {"type": "exec", "status": "success"}])
+        assert out.chosen.startswith("mc-")
+        assert out.selection_status == "selected"
+        assert out.decision_id.startswith("D")

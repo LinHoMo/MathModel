@@ -208,7 +208,14 @@ class CompetitionIntelligence:
 
     def select_and_record(self, profile: ProblemProfile, question: str,
                           record: bool = True):
-        """推荐 + 登记 DecisionLog（唯一有副作用的入口，显式命名）。"""
+        """推荐 + 登记 DecisionLog（唯一有副作用的入口，显式命名）。
+
+        audit FIX-2.2：CompetitionIntelligence 的定位是**知识推荐**（advisory），
+        不是基于执行证据的最终选型——显式传 advisory evidence，区别于
+        harness 默认路径的无证据挂起（UNSELECTED/pending_evidence）。
+        """
         from ..modeling.selection import MethodArena
         arena = MethodArena(self.retriever, self.decisions)
-        return arena.select(question, profile.as_features(), record=record)
+        return arena.select(question, profile.as_features(), record=record,
+                            evidence=[{"type": "advisory",
+                                       "status": "recommended"}])

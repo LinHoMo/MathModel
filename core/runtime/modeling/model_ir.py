@@ -200,12 +200,17 @@ def validate_model_ir(model_ir: dict[str, Any]) -> list[str]:
     elif pb is not None and not pb:
         problems.append("problem_binding 为空对象")
 
-    # 数组节（模板承诺的数组节）：存在性 + list 类型 + 非空
+    # 数组节（模板承诺的数组节）：存在性 + list 类型 + 非空。
+    # FIX-2.1（audit P0-05）契约分层：modeling_trace 显式标注
+    # construction_status=pending_model_spec（骨架 MIR，不可执行）时允许
+    # 空数组——骨架不编造 variables/equations（禁止伪变量/伪方程），
+    # 由 construction_status 显式承担"不可执行"义务；其余结构校验不变。
     _ARRAY_FIELDS = (
         "assumptions", "variables", "parameters",
         "objectives", "constraints", "mechanisms", "equations", "dependencies",
         "solvers", "experiments", "validations", "claims",
     )
+    skeleton = _is_skeleton(model_ir)
     for f in _ARRAY_FIELDS:
         v = model_ir.get(f)
         if v is None:
@@ -213,7 +218,7 @@ def validate_model_ir(model_ir: dict[str, Any]) -> list[str]:
         if not isinstance(v, list):
             problems.append(f"{f} 必须是数组，实际 {type(v).__name__}")
             continue
-        if not v:
+        if not v and not skeleton:
             problems.append(f"{f} 为空数组（模板承诺非空）")
 
     # 数组元素 id 承诺字段
@@ -234,3 +239,14 @@ def validate_model_ir(model_ir: dict[str, Any]) -> list[str]:
                 problems.append(f"{key}[{i}] 缺少 {id_field}")
 
     return problems
+
+
+def _is_skeleton(model_ir: dict[str, Any]) -> bool:
+    """骨架 MODEL_IR 判定：modeling_trace 显式标注 construction_status=
+    pending_model_spec（不可执行，不编造 formulation）。"""
+    trace = model_ir.get("modeling_trace")
+    if not isinstance(trace, list):
+        return False
+    return any(
+        isinstance(t, dict) and "pending_model_spec" in str(t.get("note", ""))
+        for t in trace)
