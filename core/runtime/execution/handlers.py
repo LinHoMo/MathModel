@@ -20,6 +20,7 @@ Artifact Registry + Evidence Graph 的研究状态。LLM 节点后续按同一�
 
 from __future__ import annotations
 
+import json
 import sys
 import time
 from pathlib import Path
@@ -33,6 +34,7 @@ if str(REPO / "core") not in sys.path:
     sys.path.insert(0, str(REPO / "core"))
 
 from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from runtime.modeling.model_ir import ModelIRBuilder, ModelIRError, validate_model_ir  # noqa: E402
 from runtime.modeling.planner import ExperimentPlanner, PlannerError  # noqa: E402
 from runtime.modeling.selection import MethodArena, SelectionError  # noqa: E402
 from runtime.writing.director import ResearchDirector  # noqa: E402
@@ -138,6 +140,64 @@ class DefaultNodeExecutor:
         if mid:
             return str(self.registry.get(mid).data.get("card_id", ""))
         return ""
+
+    # ------------------------------------------------------------ P1-VS-001 外部 MODEL_IR 注入（C5）
+
+    def _external_model_irs(self) -> dict:
+        """外部 Model Constructor 注入的 MODEL_IR dict（shared["external_model_irs"]）。
+
+        核心铁律（LLM-free）：core runtime 内不调用任何 LLM。MODEL_IR 由外部
+        Model Constructor 手写产出（JSON），runtime 只负责登记/校验/执行/保真/
+        验证/谱系/replay。无注入时返回 {}（走原路径，向后兼容）。
+        """
+        return dict(self.shared.get("external_model_irs") or {})
+
+    def construct_model_ir(self, qid: str) -> str | None:
+        """把外部 MODEL_IR dict 登记为 model_ir Artifact，并写 instantiates 边。
+
+        返回 MIR artifact_id；无外部注入时返回 None（保持原路径）。
+        外部 dict 未通过 MODEL_IR 契约校验时抛 HandlerError（fail-closed）。
+        幂等：同问题已有同 model_id 的活跃 MIR 时直接复用，不重复登记。
+        """
+        external = self._external_model_irs().get(qid)
+        if not external:
+            return None
+        models = self._models_of(qid)
+        if not models:
+            raise HandlerError(
+                f"{qid}: 注入外部 MODEL_IR 但无已选模型，无法写 instantiates 边")
+        mid = models[-1]
+        try:
+            mir = ModelIRBuilder.from_dict(external)
+        except ModelIRError as e:
+            raise HandlerError(f"{qid}: 外部 MODEL_IR 契约校验失败: {e}") from e
+        problems = validate_model_ir(mir.data)
+        if problems:
+            raise HandlerError(f"{qid}: MODEL_IR 结构校验失败: {'; '.join(problems[:8])}")
+        # 幂等：同问题同 model_id 的活跃 MIR 复用
+        for a in self.registry.list_by_type("model_ir"):
+            if a.question == qid and a.status not in _TERMINAL:
+                if a.data.get("model_id") == mir.model_id:
+                    return a.artifact_id
+        # 修订谱系（C10）：外部注入 revision_of 目标（M2 revision_of M1），M1 不被覆盖
+        rev_of = external.get("revision_of") or external.get("supersedes")
+        data = dict(external)
+        data["revision_of"] = rev_of or None
+        art = self.registry.create(
+            "model_ir",
+            title=f"{mir.model_id} 可执行模型规范（Executable Model Specification）",
+            question=qid,
+            depends_on=[mid],
+            data=data,
+            activate=True,
+            created_by="do_model_construction")
+        self.graph.add_relation(art.artifact_id, "instantiates", mid)
+        if rev_of:
+            target = self.registry.get(rev_of)
+            if target is not None and target.type == "model_ir":
+                self.graph.add_relation(art.artifact_id, "revision_of", rev_of)
+                self.graph.add_relation(rev_of, "supersedes", art.artifact_id)
+        return art.artifact_id
 
     def _advance_question(self, qid: str, target: str) -> None:
         """沿问题状态机推进（非法转换静默跳过，由 state fail-closed 兜底）。"""
@@ -255,28 +315,41 @@ class DefaultNodeExecutor:
                           outputs={"artifacts": [], "evidence": ev})
 
     def do_model_construction(self, node_id: str) -> NodeResult:
-        """模型构建：登记 model 的关键假设（assumes 证据）。"""
+        """模型构建：登记 model 的关键假设（assumes 证据）。
+
+        P1-VS-001 C5：若 external_model_irs 注入了该问题的 MODEL_IR dict，
+        同时登记 model_ir Artifact 并写 model_ir -instantiates-> model 边。
+        """
         ev = []
         n_assumed = 0
+        n_mir = 0
         for qid in self._question_ids():
             models = self._models_of(qid)
             if not models:
                 return NodeResult(FAIL, f"{qid}: 尚无已选模型（上游缺失）")
             mid = models[-1]
-            if any(r["from"] == mid and r["relation"] == "assumes"
-                   for r in self.graph.relations):
-                continue    # 幂等：rollback 后重跑不重复登记假设
-            card = self.retriever.cards.get(self._card_id_of(qid, mid))
-            risks = list(card.risks)[:2] if card else []
-            if not risks:
-                risks = ["所选方法的前提条件成立（数据规模/类型/独立性）"]
-            for i, risk in enumerate(risks, 1):
-                a = self.registry.create(
-                    "assumption", title=f"{mid} 假设{i}: {risk[:40]}",
-                    depends_on=[mid], activate=True, created_by=node_id)
-                ev.append({"from": mid, "relation": "assumes", "to": a.artifact_id})
-                n_assumed += 1
-        return NodeResult(PASS, f"登记 {n_assumed} 条假设",
+            if not any(r["from"] == mid and r["relation"] == "assumes"
+                       for r in self.graph.relations):
+                card = self.retriever.cards.get(self._card_id_of(qid, mid))
+                risks = list(card.risks)[:2] if card else []
+                if not risks:
+                    risks = ["所选方法的前提条件成立（数据规模/类型/独立性）"]
+                for i, risk in enumerate(risks, 1):
+                    a = self.registry.create(
+                        "assumption", title=f"{mid} 假设{i}: {risk[:40]}",
+                        depends_on=[mid], activate=True, created_by=node_id)
+                    ev.append({"from": mid, "relation": "assumes", "to": a.artifact_id})
+                    n_assumed += 1
+            # P1-VS-001 C5：外部 MODEL_IR → model_ir Artifact + instantiates 边
+            # （construct_model_ir 内部按 model_id 幂等，不依赖假设幂等标记）
+            mir_id = self.construct_model_ir(qid)
+            if mir_id:
+                ev.append({"from": mir_id, "relation": "instantiates", "to": mid})
+                n_mir += 1
+        msg = f"登记 {n_assumed} 条假设"
+        if n_mir:
+            msg += f"，{n_mir} 个可执行 MODEL_IR"
+        return NodeResult(PASS, msg,
                           outputs={"artifacts": [], "evidence": ev})
 
     def do_model_critique(self, node_id: str) -> NodeResult:

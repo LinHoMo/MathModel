@@ -58,11 +58,13 @@ def setup(tmp_path):
 
 class TestRelations:
     def test_all_relation_types_defined(self):
-        assert len(RELATION_TYPES) == 18
-        # P0-E：executed_by（result → execution_result）
-        assert RELATION_TYPES["executed_by"] == ({"result"}, {"execution_result"})
+        assert len(RELATION_TYPES) == 19
+        # P0-E：executed_by（result → execution_result；P1-VS-001 C7 扩展 code → execution_result）
+        assert RELATION_TYPES["executed_by"] == ({"result", "code"}, {"execution_result"})
         # P0-E5：verified_by（execution_result → verification_result）
         assert RELATION_TYPES["verified_by"] == ({"execution_result"}, {"verification_result"})
+        # P1-VS-001 C5：instantiates（model_ir → model）
+        assert RELATION_TYPES["instantiates"] == ({"model_ir"}, {"model"})
         # P1-VS-001：revision_of / supersedes（model / model_ir → model / model_ir）
         assert RELATION_TYPES["revision_of"] == ({"model", "model_ir"}, {"model", "model_ir"})
         assert RELATION_TYPES["supersedes"] == ({"model", "model_ir"}, {"model", "model_ir"})

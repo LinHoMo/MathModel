@@ -131,7 +131,8 @@
               "projection",
               "calibration",
               "mechanism",
-              "simplification"
+              "simplification",
+              "mechanism_assumption"
             ]
           },
           "rationale": {
@@ -183,12 +184,24 @@
               "state",
               "decision",
               "observation",
-              "constant"
+              "constant",
+              "derived",
+              "parameter"
             ]
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           }
         }
       }
@@ -235,7 +248,8 @@
               "题目",
               "校准",
               "文献",
-              "假设"
+              "假设",
+              "推导"
             ]
           }
         }
@@ -264,7 +278,10 @@
             "enum": [
               "minimize",
               "maximize",
-              "estimate"
+              "estimate",
+              "satisfy",
+              "simulate",
+              "find"
             ]
           },
           "expression": {
@@ -280,8 +297,18 @@
             "default": []
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           }
         }
       }
@@ -326,8 +353,18 @@
             "minLength": 1
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           }
         }
       }
@@ -362,8 +399,18 @@
             "default": []
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           }
         }
       }
@@ -415,8 +462,18 @@
             ]
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           }
         }
       }
@@ -454,8 +511,18 @@
             "minLength": 1
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           }
         }
       }
@@ -519,8 +586,18 @@
             ]
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           }
         }
       }
@@ -549,7 +626,9 @@
               "baseline",
               "sensitivity",
               "limit",
-              "reproducibility"
+              "reproducibility",
+              "convergence",
+              "uncertainty"
             ]
           },
           "method": {
@@ -565,8 +644,18 @@
             "default": []
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           }
         }
       }
@@ -616,8 +705,18 @@
             "default": []
           },
           "sub_question_binding": {
-            "type": "string",
-            "minLength": 1
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
           },
           "status": {
             "type": "string",

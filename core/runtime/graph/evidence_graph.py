@@ -34,7 +34,8 @@ RELATION_TYPES: dict[str, tuple] = {
     "motivates":      ({"problem"}, {"question"}),
     "solved_by":      ({"question"}, {"model"}),
     "assumes":        ({"model"}, {"assumption"}),
-    "implemented_by": ({"model"}, {"code"}),
+    "instantiates":   ({"model_ir"}, {"model"}),   # P1-VS-001 C5: MODEL_IR 实例化所选模型
+    "implemented_by": ({"model", "model_ir"}, {"code"}),  # P1-VS-001 C6: model/model_ir 由 code 实现
     "validated_by":   ({"model"}, {"experiment"}),
     "tests":          ({"experiment"}, {"model"}),
     "uses":           ({"experiment"}, {"dataset", "code"}),
@@ -45,7 +46,7 @@ RELATION_TYPES: dict[str, tuple] = {
     "selects":        ({"decision"}, {"model"}),
     "based_on":       ({"decision"}, None),
     "derived_from":   (None, None),
-    "executed_by":    ({"result"}, {"execution_result"}),
+    "executed_by":    ({"result", "code"}, {"execution_result"}),  # P1-VS-001 C7: code/result 被真实执行
     "verified_by":    ({"execution_result"}, {"verification_result"}),
     "revision_of":    ({"model", "model_ir"}, {"model", "model_ir"}),
     "supersedes":     ({"model", "model_ir"}, {"model", "model_ir"}),
@@ -70,6 +71,7 @@ _PROPAGATION: dict[str, tuple] = {
     "motivates":      ("kill", None),      # 问题死了，子问题失去存在依据
     "solved_by":      ("kill", None),      # 问题死了，求解它的模型 moot
     "assumes":        (None, "reval"),     # 假设死了 → 模型需重推导（可修补，不直接判死）
+    "instantiates":   ("kill", None),      # P1-VS-001 C5: MIR 死了 → 实例化的模型 moot
     "implemented_by": ("kill", None),      # 模型死了，实现它的代码 moot
     "validated_by":   ("kill", None),      # 模型死了，验证它的实验 moot
     "tests":          (None, None),        # 实验死了，被测模型不受影响

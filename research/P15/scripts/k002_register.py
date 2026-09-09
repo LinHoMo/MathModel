@@ -28,8 +28,14 @@ import json
 import sys
 from pathlib import Path
 
+import jsonschema  # 真实 jsonschema 校验（S/SV 臂产物必须通过 MODEL_IR 契约）
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import k002_common as K  # noqa: E402
+
+# MODEL_IR 契约 schema（唯一真源 = core；research/P15 旧版已 SUPERSEDED）：
+# S/SV 臂产物必须通过（docstring 承诺的 jsonschema，此处真实执行）
+MODEL_IR_SCHEMA = K.ROOT / "core/schemas/v3/model/model_ir.schema.json"
 
 REQUIRED_TOP = [
     "ir_version", "model_id", "model_family", "problem_binding", "assumptions",
@@ -113,6 +119,20 @@ def main(argv=None) -> int:
         missing = [k for k in REQUIRED_TOP if k not in ir]
         if missing:
             errors.append(f"MODEL_IR 缺顶层字段: {missing}")
+        # 真实 jsonschema 校验（MODEL_IR 契约，core 真源；与模板承诺对齐）
+        try:
+            schema = json.loads(MODEL_IR_SCHEMA.read_text(encoding="utf-8"))
+            verrors = sorted(
+                jsonschema.Draft202012Validator(schema).iter_errors(ir),
+                key=lambda e: list(e.path),
+            )
+            for ve in verrors[:5]:
+                errors.append(
+                    f"MODEL_IR schema 不通过: "
+                    f"{'/'.join(str(p) for p in ve.path) or '(root)'} {ve.message[:120]}"
+                )
+        except Exception as e:
+            errors.append(f"MODEL_IR schema 校验异常: {e}")
         pb = ir.get("problem_binding") or {}
         if pb.get("problem_sha256") != manifest["statement_sha256"]:
             errors.append(f"problem_sha256 不匹配（产物 {pb.get('problem_sha256')} "
