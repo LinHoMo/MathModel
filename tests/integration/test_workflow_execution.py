@@ -58,15 +58,20 @@ class TestEngineFailureRecovery:
 
         eng = WorkflowEngine(exp, executor)
         eng.run()
-        # 回滚后 experiment@Q001 重新变为 pending，critique 持续失败
-        assert "experiment@Q001" not in eng.completed
-        assert "experiment_critique@Q001" not in eng.completed
-        # 回滚发生在重试耗尽之后（reset 会清空 retries 计数）
+        # 回滚后 experiment@Q001 重新变为 pending，critique 持续失败。
+        # 注意：失败循环被 max_steps=1000 截断，终止步落在循环哪一拍与 DAG
+        # 节点数奇偶相关（P1-M3 在 experiment_design 前加 model_selection_decision
+        # 后奇偶翻转），故断言循环不变量而非截断奇偶：
         assert any("exhausted retries" in e["detail"] and
                    f"rollback to {crit.on_fail}" in e["detail"] for e in eng.log)
-        assert "problem_analysis" in eng.completed
+        # critique 持续失败，永不完成
+        assert "experiment_critique@Q001" not in eng.completed
         # 上游无关分支不受影响（problem_analysis 等已完成）
         assert "problem_analysis" in eng.completed
+        # 回滚目标要么 pending（截断在回滚后一拍），要么正在重跑（截断在重跑
+        # 中一拍，此时 critique 必有未耗尽重试计数）——两种均合法
+        assert "experiment@Q001" not in eng.completed or \
+            eng.retries.get("experiment_critique@Q001", 0) >= 1
 
     def test_blocked_node_stops_downstream(self):
         """节点 blocked → 其下游不可执行，无关节点正常完成。"""

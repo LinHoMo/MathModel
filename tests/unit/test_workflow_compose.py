@@ -73,6 +73,8 @@ class TestComposer:
         # 关键节点存在
         for nid in ("problem_analysis", "literature_search", "model_selection",
                     "model_construction", "model_critique", "assumption_check",
+                    "code_generation", "model_execution", "model_validation",
+                    "model_selection_decision",
                     "experiment_design", "evidence_build", "evidence_gate",
                     "research_direction", "paper_projection", "paper_review"):
             assert nid in dag.nodes, nid
@@ -84,11 +86,12 @@ class TestComposer:
         assert "problem_analysis" in dag.nodes["literature_search"].depends_on
         assert "literature_search" in dag.nodes["model_selection"].depends_on
         # P1-VS-001：modeling 尾链 assumption_check → code_generation →
-        # model_execution → model_validation → experiment_design
+        # model_execution → model_validation → model_selection_decision（P1-M3）
         assert "assumption_check" in dag.nodes["code_generation"].depends_on
         assert "code_generation" in dag.nodes["model_execution"].depends_on
         assert "model_execution" in dag.nodes["model_validation"].depends_on
-        assert "model_validation" in dag.nodes["experiment_design"].depends_on
+        assert "model_validation" in dag.nodes["model_selection_decision"].depends_on
+        assert "model_selection_decision" in dag.nodes["experiment_design"].depends_on
         # P9: quality_evaluation 插入 evidence_gate 与 research_direction 之间
         assert "quality_evaluation" in dag.nodes["research_direction"].depends_on
         assert "evidence_gate" in dag.nodes["quality_evaluation"].depends_on
