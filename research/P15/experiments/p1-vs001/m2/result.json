@@ -1,0 +1,80 @@
+{
+  "stage": "m2",
+  "old_model_ir_id": "MIR002",
+  "old_model_id": "M002",
+  "new_model_ir_id": "MIR003",
+  "new_model_id": "M003",
+  "revision_request_id": "D001",
+  "code_id": "CODE003",
+  "execution_id": "EXEC003",
+  "validation_id": "VR003",
+  "validation_status": "passed",
+  "validation_checks": [
+    {
+      "name": "wait_time_exists",
+      "kind": "output_field_exists",
+      "passed": true,
+      "detail": "存在 avg_waiting_time=0.03214286"
+    },
+    {
+      "name": "wait_time_nonnegative",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "avg_waiting_time=0.03214286 在 [0, None]"
+    },
+    {
+      "name": "utilization_le_1",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "server_utilization=0.75 在 [0, 1.0]"
+    },
+    {
+      "name": "queue_length_nonnegative",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "avg_queue_length=1.92857143 在 [0, None]"
+    },
+    {
+      "name": "stability_constraint",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "constraint_violation_max=0.0 在 [0, 1e-06]"
+    },
+    {
+      "name": "wait_time_finite",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "avg_waiting_time=0.03214286 在 [0, 1000000.0]"
+    }
+  ],
+  "outputs": {
+    "avg_waiting_time": 0.03214286,
+    "avg_queue_length": 1.92857143,
+    "server_utilization": 0.75,
+    "probability_wait": 0.64285714,
+    "constraint_violation_max": 0.0,
+    "solver_status": "optimal",
+    "stability_violation": 0.0,
+    "violations": {
+      "stability": 0.0,
+      "utilization_lower": 0.0,
+      "utilization_upper": 0.0,
+      "wait_nonneg": 0.0,
+      "queue_nonneg": 0.0,
+      "prob_wait_lower": 0.0,
+      "prob_wait_upper": 0.0
+    }
+  },
+  "revision_request": {
+    "revision_of": "MIR002",
+    "trigger": "validation_failed",
+    "failed_checks": [
+      "wait_time_nonnegative",
+      "utilization_le_1",
+      "queue_length_nonnegative",
+      "stability_constraint"
+    ],
+    "diagnosis": "M1 v1 的服务率参数错误（mu 过小），导致系统不稳定 (rho >= 1)，排队论公式产生负值或无穷大等待时间。",
+    "corrective_action": "修正服务率 mu 为正确值，确保 rho = lambda/(c*mu) < 1，重新计算 M/M/c 排队指标。"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "ir_version": "1.0",
+  "model_id": "2019C-Q1-MMc-v1",
+  "title": "2019_C Q1 机场出租车 M/M/c 排队模型（v1，缺陷版）",
+  "problem_binding": {
+    "problem_id": "2019_C",
+    "question_id": "Q1",
+    "description": "建立 M/M/c 排队模型分析机场出租车排队：乘客到达率 lambda、出租车（服务台）数量 c、单车服务率 mu，计算平均等待时间 Wq、平均队列长度 Lq、服务台利用率 rho、需要等待的概率 Pw。v1 服务率参数错误（mu 过小），系统不满足稳定条件 rho < 1。"
+  },
+  "semantic": {
+    "entities": ["passenger", "taxi", "queue", "airport"],
+    "variables": {
+      "avg_waiting_time": {"domain": "nonnegative_real", "description": "乘客平均等待时间 Wq", "unit": "小时"},
+      "avg_queue_length": {"domain": "nonnegative_real", "description": "平均队列长度 Lq", "unit": "辆"},
+      "server_utilization": {"domain": "real_0_1", "description": "服务台利用率 rho = lambda/(c*mu)", "unit": "无量纲"},
+      "probability_wait": {"domain": "real_0_1", "description": "到达乘客需要等待的概率 Pw", "unit": "无量纲"}
+    },
+    "parameters": {
+      "arrival_rate": {"value": 60, "unit": "人/小时", "description": "乘客到达率 lambda"},
+      "num_servers": {"value": 2, "unit": "辆", "description": "出租车（服务台）数量 c"},
+      "service_rate": {"value": 20, "unit": "辆/小时", "description": "单车服务率 mu"}
+    }
+  },
+  "mathematical": {
+    "objective": {
+      "sense": "compute",
+      "expression": "Wq, Lq, rho, Pw",
+      "description": "计算 M/M/c 排队系统核心指标"
+    },
+    "constraints": [
+      {"id": "stability", "expression": "lambda/(c*mu) < 1", "description": "系统稳定条件 rho < 1"},
+      {"id": "utilization_range", "expression": "0 <= rho <= 1", "description": "利用率范围"},
+      {"id": "nonneg_wait", "expression": "Wq >= 0", "description": "等待时间非负"},
+      {"id": "nonneg_queue", "expression": "Lq >= 0", "description": "队列长度非负"},
+      {"id": "prob_wait_range", "expression": "0 <= Pw <= 1", "description": "等待概率范围"}
+    ]
+  },
+  "computational": {
+    "solver": {
+      "family": "queueing_theory",
+      "backend": "pure_python_math",
+      "method": "mmc_analytical",
+      "description": "M/M/c 解析公式（Erlang C 型），rho < 1 时有效"
+    },
+    "execution": {
+      "language": "python",
+      "timeout": 120,
+      "abi": "def solve(inputs=None)->dict",
+      "input_format": "self-contained",
+      "output_format": "json_stdout"
+    }
+  },
+  "assumptions": [
+    "泊松到达",
+    "指数服务时间",
+    "无限队列容量",
+    "FCFS"
+  ],
+  "expected_outputs": ["avg_waiting_time", "avg_queue_length", "server_utilization", "probability_wait", "constraint_violation_max"],
+  "validation_obligations": [
+    "rho < 1",
+    "Wq >= 0",
+    "Lq >= 0",
+    "0 <= Pw <= 1"
+  ]
+}

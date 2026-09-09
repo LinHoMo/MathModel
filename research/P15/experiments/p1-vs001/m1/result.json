@@ -1,0 +1,61 @@
+{
+  "stage": "m1",
+  "problem_id": "P002",
+  "question_id": "Q002",
+  "model_ir_id": "MIR002",
+  "model_id": "M002",
+  "code_id": "CODE002",
+  "execution_id": "EXEC002",
+  "validation_id": "VR002",
+  "validation_status": "failed",
+  "validation_checks": [
+    {
+      "name": "wait_time_exists",
+      "kind": "output_field_exists",
+      "passed": true,
+      "detail": "存在 avg_waiting_time=-0.09"
+    },
+    {
+      "name": "wait_time_nonnegative",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "avg_waiting_time=-0.09 超出 [0, None]"
+    },
+    {
+      "name": "utilization_le_1",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "server_utilization=1.5 超出 [0, 1.0]"
+    },
+    {
+      "name": "queue_length_nonnegative",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "avg_queue_length=-5.4 超出 [0, None]"
+    },
+    {
+      "name": "stability_constraint",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "constraint_violation_max=5.4 超出 [0, 1e-06]"
+    }
+  ],
+  "outputs": {
+    "avg_waiting_time": -0.09,
+    "avg_queue_length": -5.4,
+    "server_utilization": 1.5,
+    "probability_wait": 1.8,
+    "constraint_violation_max": 5.4,
+    "solver_status": "unstable",
+    "stability_violation": 0.5,
+    "violations": {
+      "stability": 0.5,
+      "utilization_lower": 0.0,
+      "utilization_upper": 0.5,
+      "wait_nonneg": 0.09,
+      "queue_nonneg": 5.4,
+      "prob_wait_lower": 0.0,
+      "prob_wait_upper": 0.8
+    }
+  }
+}

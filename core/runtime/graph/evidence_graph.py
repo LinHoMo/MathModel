@@ -83,6 +83,8 @@ _PROPAGATION: dict[str, tuple] = {
     "derived_from":   ("reval", "reval"),  # 通用派生：一律弱传播
     "executed_by":    (None, None),        # 结果死了，执行记录不受影响
     "verified_by":    ("kill", None),      # 执行结果死了，其验证产物作废
+    "revision_of":    (None, None),        # 修订谱系：审计边，不传播
+    "supersedes":     (None, None),        # 替代谱系：审计边，不传播
 }
 
 

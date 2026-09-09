@@ -1,0 +1,1715 @@
+{
+  "registry_version": 3,
+  "project": "project",
+  "updated_at": "2026-09-09T02:03:04+00:00",
+  "counters": {
+    "problem": 2,
+    "question": 2,
+    "model_ir": 3,
+    "model": 3,
+    "code": 3,
+    "execution_result": 3,
+    "verification_result": 3,
+    "decision": 1
+  },
+  "artifacts": {
+    "CODE001": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE001",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M001",
+      "question": "Q001",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "implemented_by",
+          "to": "CODE001",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "EXEC001",
+          "relation": "derived_from",
+          "to": "CODE001",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "\"\"\"M0 LP demo — 工厂两产品生产计划。\n\n固定 ABI：def solve(inputs: dict | None = None) -> dict\n代码自包含：参数 baked in（inputs 参数仅用于覆盖默认值，subprocess 无 stdin/文件依赖）。\n输出约定：stdout 最后一行为 JSON（LocalPythonAdapter 解析约定）。\n\"\"\"\nimport json\nfrom itertools import combinations\n\nDEFAULT_PARAMETERS = {\n    \"profit_A\": 3, \"profit_B\": 5,\n    \"machine_time_A\": 2, \"machine_time_B\": 3, \"machine_capacity\": 100,\n    \"labor_time_A\": 1, \"labor_time_B\": 2, \"labor_capacity\": 60,\n}\n\n\ndef solve(inputs: dict | None = None) -> dict:\n    p = dict(DEFAULT_PARAMETERS)\n    if inputs and \"parameters\" in inputs:\n        p.update(inputs[\"parameters\"])\n    elif inputs:\n        p.update(inputs)\n\n    cA = float(p[\"profit_A\"]); cB = float(p[\"profit_B\"])\n    aA = float(p[\"machine_time_A\"]); aB = float(p[\"machine_time_B\"])\n    bA = float(p[\"labor_time_A\"]); bB = float(p[\"labor_time_B\"])\n    mcap = float(p[\"machine_capacity\"]); lcap = float(p[\"labor_capacity\"])\n\n    # 约束行：A_i * x_A + B_i * x_B <= rhs_i\n    rows = [\n        (aA, aB, mcap, \"machine_cap\"),\n        (bA, bB, lcap, \"labor_cap\"),\n        (-1.0, 0.0, 0.0, \"nonneg_A\"),\n        (0.0, -1.0, 0.0, \"nonneg_B\"),\n    ]\n\n    def feasible(x, y):\n        return all(a * x + b * y <= rhs + 1e-9 for a, b, rhs, _ in rows)\n\n    vertices = []\n    for (a1, b1, r1, _), (a2, b2, r2, _) in combinations(rows, 2):\n        det = a1 * b2 - a2 * b1\n        if abs(det) < 1e-12:\n            continue\n        x = (r1 * b2 - r2 * b1) / det\n        y = (a1 * r2 - a2 * r1) / det\n        if feasible(x, y):\n            vertices.append((round(x, 6), round(y, 6)))\n    vertices = list(dict.fromkeys(vertices))\n\n    best_x, best_y, best_obj = 0.0, 0.0, float(\"-inf\")\n    for x, y in vertices:\n        obj = cA * x + cB * y\n        if obj > best_obj:\n            best_obj, best_x, best_y = obj, x, y\n\n    violations = {}\n    for a, b, rhs, name in rows:\n        v = a * best_x + b * best_y - rhs\n        violations[name] = round(max(0.0, v), 8)\n    max_violation = max(violations.values()) if violations else 0.0\n\n    return {\n        \"x_A\": best_x,\n        \"x_B\": best_y,\n        \"objective_value\": round(best_obj, 6),\n        \"constraint_violation_max\": max_violation,\n        \"solver_status\": \"optimal\",\n        \"vertices_checked\": len(vertices),\n        \"violations\": violations,\n    }\n\n\nif __name__ == \"__main__\":\n    result = solve()\n    print(json.dumps(result, ensure_ascii=False))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M001",
+        "solver_id": null,
+        "output_mapping": {
+          "x_A": "x_A",
+          "x_B": "x_B",
+          "objective_value": "objective_value",
+          "constraint_violation_max": "constraint_violation_max"
+        },
+        "sha256": "fdced28df50e0cc8c14f380da7b109ba47fe4cd4c9507f44629bf4ce34dfeed7"
+      }
+    },
+    "CODE002": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE002",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M002",
+      "question": "Q002",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "M002",
+          "relation": "implemented_by",
+          "to": "CODE002",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "EXEC002",
+          "relation": "derived_from",
+          "to": "CODE002",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "\"\"\"M/M/c queue model — 2019_C Q1, version v1 (deliberately flawed).\n\n缺陷设计：service_rate (mu) 故意设得过小，使 rho = lambda/(c*mu) = 1.5 >= 1，\n系统不稳定。代码仍正常运行不崩溃，但 M/M/c 解析公式在 rho >= 1 时失效，\n输出负值/超范围指标，并由代码自检报告 constraint_violation_max > 0。\n\n固定 ABI：def solve(inputs: dict | None = None) -> dict\n代码自包含：参数 baked in（inputs 参数仅用于覆盖默认值，subprocess 无 stdin/文件依赖）。\n输出约定：stdout 最后一行为 JSON（LocalPythonAdapter 解析约定）。\n仅依赖标准库 math / json。\n\"\"\"\nimport json\nimport math\n\nDEFAULT_PARAMETERS = {\n    \"arrival_rate\": 60,   # 人/小时，乘客到达率 lambda\n    \"num_servers\": 2,     # 辆，出租车（服务台）数量 c\n    \"service_rate\": 20,   # 辆/小时，单车服务率 mu（故意过小 -> rho = 1.5 >= 1）\n}\n\n\ndef solve(inputs: dict | None = None) -> dict:\n    p = dict(DEFAULT_PARAMETERS)\n    if inputs and \"parameters\" in inputs:\n        p.update(inputs[\"parameters\"])\n    elif inputs:\n        p.update(inputs)\n\n    lam = float(p[\"arrival_rate\"])\n    c = int(p[\"num_servers\"])\n    mu = float(p[\"service_rate\"])\n\n    rho = lam / (c * mu)\n    a = lam / mu  # lambda/mu\n\n    # M/M/c 解析公式（rho >= 1 时公式失效，但仍照常计算，不抛异常）\n    s = 0.0\n    for n in range(c):\n        s += a ** n / math.factorial(n)\n    term_c = (a ** c) / (math.factorial(c) * (1.0 - rho))\n    P0 = 1.0 / (s + term_c)\n    Pw = (a ** c) * P0 / (math.factorial(c) * (1.0 - rho))\n    Lq = Pw * rho / (1.0 - rho)\n    Wq = Lq / lam\n\n    # 代码自检：计算各约束违反量\n    stability_violation = max(0.0, rho - 1.0)\n    violations = {\n        \"stability\": stability_violation,\n        \"utilization_lower\": max(0.0, 0.0 - rho),\n        \"utilization_upper\": max(0.0, rho - 1.0),\n        \"wait_nonneg\": max(0.0, 0.0 - Wq),\n        \"queue_nonneg\": max(0.0, 0.0 - Lq),\n        \"prob_wait_lower\": max(0.0, 0.0 - Pw),\n        \"prob_wait_upper\": max(0.0, Pw - 1.0),\n    }\n    constraint_violation_max = max(violations.values()) if violations else 0.0\n\n    solver_status = \"unstable\" if rho >= 1.0 else \"optimal\"\n\n    return {\n        \"avg_waiting_time\": round(Wq, 8),\n        \"avg_queue_length\": round(Lq, 8),\n        \"server_utilization\": round(rho, 8),\n        \"probability_wait\": round(Pw, 8),\n        \"constraint_violation_max\": round(constraint_violation_max, 8),\n        \"solver_status\": solver_status,\n        \"stability_violation\": round(stability_violation, 8),\n        \"violations\": {k: round(v, 8) for k, v in violations.items()},\n    }\n\n\nif __name__ == \"__main__\":\n    result = solve()\n    print(json.dumps(result, ensure_ascii=False))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M002",
+        "solver_id": null,
+        "output_mapping": {
+          "avg_waiting_time": "avg_waiting_time",
+          "avg_queue_length": "avg_queue_length",
+          "server_utilization": "server_utilization",
+          "probability_wait": "probability_wait",
+          "constraint_violation_max": "constraint_violation_max"
+        },
+        "sha256": "1998c5b7e5b7a36cd24f51d5327de391ea12e4601ba614322e1cad11b596a4f7"
+      }
+    },
+    "CODE003": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE003",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M003",
+      "question": "Q002",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "M003",
+          "relation": "implemented_by",
+          "to": "CODE003",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "EXEC003",
+          "relation": "derived_from",
+          "to": "CODE003",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "\"\"\"M/M/c queue model — 2019_C Q1, version v2 (corrected).\n\n修正设计：service_rate (mu) 修正为 40，使 rho = lambda/(c*mu) = 0.75 < 1，\n系统稳定，所有指标为正且有限，constraint_violation_max = 0.0。\n\n固定 ABI：def solve(inputs: dict | None = None) -> dict\n代码自包含：参数 baked in（inputs 参数仅用于覆盖默认值，subprocess 无 stdin/文件依赖）。\n输出约定：stdout 最后一行为 JSON（LocalPythonAdapter 解析约定）。\n仅依赖标准库 math / json。\n\"\"\"\nimport json\nimport math\n\nDEFAULT_PARAMETERS = {\n    \"arrival_rate\": 60,   # 人/小时，乘客到达率 lambda\n    \"num_servers\": 2,     # 辆，出租车（服务台）数量 c\n    \"service_rate\": 40,   # 辆/小时，单车服务率 mu（修正值 -> rho = 0.75 < 1）\n}\n\n\ndef solve(inputs: dict | None = None) -> dict:\n    p = dict(DEFAULT_PARAMETERS)\n    if inputs and \"parameters\" in inputs:\n        p.update(inputs[\"parameters\"])\n    elif inputs:\n        p.update(inputs)\n\n    lam = float(p[\"arrival_rate\"])\n    c = int(p[\"num_servers\"])\n    mu = float(p[\"service_rate\"])\n\n    rho = lam / (c * mu)\n    a = lam / mu  # lambda/mu\n\n    # M/M/c 解析公式（rho < 1 时有效）\n    s = 0.0\n    for n in range(c):\n        s += a ** n / math.factorial(n)\n    term_c = (a ** c) / (math.factorial(c) * (1.0 - rho))\n    P0 = 1.0 / (s + term_c)\n    Pw = (a ** c) * P0 / (math.factorial(c) * (1.0 - rho))\n    Lq = Pw * rho / (1.0 - rho)\n    Wq = Lq / lam\n\n    # 代码自检：计算各约束违反量\n    stability_violation = max(0.0, rho - 1.0)\n    violations = {\n        \"stability\": stability_violation,\n        \"utilization_lower\": max(0.0, 0.0 - rho),\n        \"utilization_upper\": max(0.0, rho - 1.0),\n        \"wait_nonneg\": max(0.0, 0.0 - Wq),\n        \"queue_nonneg\": max(0.0, 0.0 - Lq),\n        \"prob_wait_lower\": max(0.0, 0.0 - Pw),\n        \"prob_wait_upper\": max(0.0, Pw - 1.0),\n    }\n    constraint_violation_max = max(violations.values()) if violations else 0.0\n\n    solver_status = \"unstable\" if rho >= 1.0 else \"optimal\"\n\n    return {\n        \"avg_waiting_time\": round(Wq, 8),\n        \"avg_queue_length\": round(Lq, 8),\n        \"server_utilization\": round(rho, 8),\n        \"probability_wait\": round(Pw, 8),\n        \"constraint_violation_max\": round(constraint_violation_max, 8),\n        \"solver_status\": solver_status,\n        \"stability_violation\": round(stability_violation, 8),\n        \"violations\": {k: round(v, 8) for k, v in violations.items()},\n    }\n\n\nif __name__ == \"__main__\":\n    result = solve()\n    print(json.dumps(result, ensure_ascii=False))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M003",
+        "solver_id": null,
+        "output_mapping": {
+          "avg_waiting_time": "avg_waiting_time",
+          "avg_queue_length": "avg_queue_length",
+          "server_utilization": "server_utilization",
+          "probability_wait": "probability_wait",
+          "constraint_violation_max": "constraint_violation_max"
+        },
+        "sha256": "188b171d1620210c4fd121c80ecd0406fc1e7ef0ca465955ed5f881ab3a2260b"
+      }
+    },
+    "D001": {
+      "schema_version": "3.1",
+      "artifact_id": "D001",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "Revision Request",
+      "question": "",
+      "created_by": "p1-vs001",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "revision_of": "MIR002",
+        "supersedes_to": "MIR003"
+      },
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "revision_of": "MIR002",
+        "trigger": "validation_failed",
+        "failed_checks": [
+          "wait_time_nonnegative",
+          "utilization_le_1",
+          "queue_length_nonnegative",
+          "stability_constraint"
+        ],
+        "diagnosis": "M1 v1 的服务率参数错误（mu 过小），导致系统不稳定 (rho >= 1)，排队论公式产生负值或无穷大等待时间。",
+        "corrective_action": "修正服务率 mu 为正确值，确保 rho = lambda/(c*mu) < 1，重新计算 M/M/c 排队指标。"
+      }
+    },
+    "EXEC001": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC001",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE001",
+      "question": "Q001",
+      "created_by": "p1-vs001",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "EXEC001",
+          "relation": "derived_from",
+          "to": "CODE001",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "7dae9962ded5",
+        "model_id": "M001",
+        "status": "success",
+        "inputs": {
+          "parameters": {
+            "profit_A": 3,
+            "profit_B": 5,
+            "machine_time_A": 2,
+            "machine_time_B": 3,
+            "machine_capacity": 100,
+            "labor_time_A": 1,
+            "labor_time_B": 2,
+            "labor_capacity": 60
+          }
+        },
+        "outputs": {
+          "x_A": 20.0,
+          "x_B": 20.0,
+          "objective_value": 160.0,
+          "constraint_violation_max": 0.0,
+          "solver_status": "optimal",
+          "vertices_checked": 4,
+          "violations": {
+            "machine_cap": 0.0,
+            "labor_cap": 0.0,
+            "nonneg_A": 0.0,
+            "nonneg_B": 0.0
+          }
+        },
+        "stdout": "{\"x_A\": 20.0, \"x_B\": 20.0, \"objective_value\": 160.0, \"constraint_violation_max\": 0.0, \"solver_status\": \"optimal\", \"vertices_checked\": 4, \"violations\": {\"machine_cap\": 0.0, \"labor_cap\": 0.0, \"nonneg_A\": 0.0, \"nonneg_B\": 0.0}}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 112,
+        "code_hash": "fdced28df50e0cc8c14f380da7b109ba47fe4cd4c9507f44629bf4ce34dfeed7",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T10:03:04+0800",
+        "finished_at": "2026-09-09T10:03:04+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "x_A": "x_A",
+            "x_B": "x_B",
+            "objective_value": "objective_value",
+            "constraint_violation_max": "constraint_violation_max"
+          }
+        },
+        "code": "\"\"\"M0 LP demo — 工厂两产品生产计划。\n\n固定 ABI：def solve(inputs: dict | None = None) -> dict\n代码自包含：参数 baked in（inputs 参数仅用于覆盖默认值，subprocess 无 stdin/文件依赖）。\n输出约定：stdout 最后一行为 JSON（LocalPythonAdapter 解析约定）。\n\"\"\"\nimport json\nfrom itertools import combinations\n\nDEFAULT_PARAMETERS = {\n    \"profit_A\": 3, \"profit_B\": 5,\n    \"machine_time_A\": 2, \"machine_time_B\": 3, \"machine_capacity\": 100,\n    \"labor_time_A\": 1, \"labor_time_B\": 2, \"labor_capacity\": 60,\n}\n\n\ndef solve(inputs: dict | None = None) -> dict:\n    p = dict(DEFAULT_PARAMETERS)\n    if inputs and \"parameters\" in inputs:\n        p.update(inputs[\"parameters\"])\n    elif inputs:\n        p.update(inputs)\n\n    cA = float(p[\"profit_A\"]); cB = float(p[\"profit_B\"])\n    aA = float(p[\"machine_time_A\"]); aB = float(p[\"machine_time_B\"])\n    bA = float(p[\"labor_time_A\"]); bB = float(p[\"labor_time_B\"])\n    mcap = float(p[\"machine_capacity\"]); lcap = float(p[\"labor_capacity\"])\n\n    # 约束行：A_i * x_A + B_i * x_B <= rhs_i\n    rows = [\n        (aA, aB, mcap, \"machine_cap\"),\n        (bA, bB, lcap, \"labor_cap\"),\n        (-1.0, 0.0, 0.0, \"nonneg_A\"),\n        (0.0, -1.0, 0.0, \"nonneg_B\"),\n    ]\n\n    def feasible(x, y):\n        return all(a * x + b * y <= rhs + 1e-9 for a, b, rhs, _ in rows)\n\n    vertices = []\n    for (a1, b1, r1, _), (a2, b2, r2, _) in combinations(rows, 2):\n        det = a1 * b2 - a2 * b1\n        if abs(det) < 1e-12:\n            continue\n        x = (r1 * b2 - r2 * b1) / det\n        y = (a1 * r2 - a2 * r1) / det\n        if feasible(x, y):\n            vertices.append((round(x, 6), round(y, 6)))\n    vertices = list(dict.fromkeys(vertices))\n\n    best_x, best_y, best_obj = 0.0, 0.0, float(\"-inf\")\n    for x, y in vertices:\n        obj = cA * x + cB * y\n        if obj > best_obj:\n            best_obj, best_x, best_y = obj, x, y\n\n    violations = {}\n    for a, b, rhs, name in rows:\n        v = a * best_x + b * best_y - rhs\n        violations[name] = round(max(0.0, v), 8)\n    max_violation = max(violations.values()) if violations else 0.0\n\n    return {\n        \"x_A\": best_x,\n        \"x_B\": best_y,\n        \"objective_value\": round(best_obj, 6),\n        \"constraint_violation_max\": max_violation,\n        \"solver_status\": \"optimal\",\n        \"vertices_checked\": len(vertices),\n        \"violations\": violations,\n    }\n\n\nif __name__ == \"__main__\":\n    result = solve()\n    print(json.dumps(result, ensure_ascii=False))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "EXEC002": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC002",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE002",
+      "question": "Q002",
+      "created_by": "p1-vs001",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "EXEC002",
+          "relation": "derived_from",
+          "to": "CODE002",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "674ef1758bc0",
+        "model_id": "M002",
+        "status": "success",
+        "inputs": {
+          "parameters": {
+            "arrival_rate": 60,
+            "num_servers": 2,
+            "service_rate": 20
+          }
+        },
+        "outputs": {
+          "avg_waiting_time": -0.09,
+          "avg_queue_length": -5.4,
+          "server_utilization": 1.5,
+          "probability_wait": 1.8,
+          "constraint_violation_max": 5.4,
+          "solver_status": "unstable",
+          "stability_violation": 0.5,
+          "violations": {
+            "stability": 0.5,
+            "utilization_lower": 0.0,
+            "utilization_upper": 0.5,
+            "wait_nonneg": 0.09,
+            "queue_nonneg": 5.4,
+            "prob_wait_lower": 0.0,
+            "prob_wait_upper": 0.8
+          }
+        },
+        "stdout": "{\"avg_waiting_time\": -0.09, \"avg_queue_length\": -5.4, \"server_utilization\": 1.5, \"probability_wait\": 1.8, \"constraint_violation_max\": 5.4, \"solver_status\": \"unstable\", \"stability_violation\": 0.5, \"violations\": {\"stability\": 0.5, \"utilization_lower\": 0.0, \"utilization_upper\": 0.5, \"wait_nonneg\": 0.09, \"queue_nonneg\": 5.4, \"prob_wait_lower\": 0.0, \"prob_wait_upper\": 0.8}}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 29,
+        "code_hash": "1998c5b7e5b7a36cd24f51d5327de391ea12e4601ba614322e1cad11b596a4f7",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T10:03:04+0800",
+        "finished_at": "2026-09-09T10:03:04+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "avg_waiting_time": "avg_waiting_time",
+            "avg_queue_length": "avg_queue_length",
+            "server_utilization": "server_utilization",
+            "probability_wait": "probability_wait",
+            "constraint_violation_max": "constraint_violation_max"
+          }
+        },
+        "code": "\"\"\"M/M/c queue model — 2019_C Q1, version v1 (deliberately flawed).\n\n缺陷设计：service_rate (mu) 故意设得过小，使 rho = lambda/(c*mu) = 1.5 >= 1，\n系统不稳定。代码仍正常运行不崩溃，但 M/M/c 解析公式在 rho >= 1 时失效，\n输出负值/超范围指标，并由代码自检报告 constraint_violation_max > 0。\n\n固定 ABI：def solve(inputs: dict | None = None) -> dict\n代码自包含：参数 baked in（inputs 参数仅用于覆盖默认值，subprocess 无 stdin/文件依赖）。\n输出约定：stdout 最后一行为 JSON（LocalPythonAdapter 解析约定）。\n仅依赖标准库 math / json。\n\"\"\"\nimport json\nimport math\n\nDEFAULT_PARAMETERS = {\n    \"arrival_rate\": 60,   # 人/小时，乘客到达率 lambda\n    \"num_servers\": 2,     # 辆，出租车（服务台）数量 c\n    \"service_rate\": 20,   # 辆/小时，单车服务率 mu（故意过小 -> rho = 1.5 >= 1）\n}\n\n\ndef solve(inputs: dict | None = None) -> dict:\n    p = dict(DEFAULT_PARAMETERS)\n    if inputs and \"parameters\" in inputs:\n        p.update(inputs[\"parameters\"])\n    elif inputs:\n        p.update(inputs)\n\n    lam = float(p[\"arrival_rate\"])\n    c = int(p[\"num_servers\"])\n    mu = float(p[\"service_rate\"])\n\n    rho = lam / (c * mu)\n    a = lam / mu  # lambda/mu\n\n    # M/M/c 解析公式（rho >= 1 时公式失效，但仍照常计算，不抛异常）\n    s = 0.0\n    for n in range(c):\n        s += a ** n / math.factorial(n)\n    term_c = (a ** c) / (math.factorial(c) * (1.0 - rho))\n    P0 = 1.0 / (s + term_c)\n    Pw = (a ** c) * P0 / (math.factorial(c) * (1.0 - rho))\n    Lq = Pw * rho / (1.0 - rho)\n    Wq = Lq / lam\n\n    # 代码自检：计算各约束违反量\n    stability_violation = max(0.0, rho - 1.0)\n    violations = {\n        \"stability\": stability_violation,\n        \"utilization_lower\": max(0.0, 0.0 - rho),\n        \"utilization_upper\": max(0.0, rho - 1.0),\n        \"wait_nonneg\": max(0.0, 0.0 - Wq),\n        \"queue_nonneg\": max(0.0, 0.0 - Lq),\n        \"prob_wait_lower\": max(0.0, 0.0 - Pw),\n        \"prob_wait_upper\": max(0.0, Pw - 1.0),\n    }\n    constraint_violation_max = max(violations.values()) if violations else 0.0\n\n    solver_status = \"unstable\" if rho >= 1.0 else \"optimal\"\n\n    return {\n        \"avg_waiting_time\": round(Wq, 8),\n        \"avg_queue_length\": round(Lq, 8),\n        \"server_utilization\": round(rho, 8),\n        \"probability_wait\": round(Pw, 8),\n        \"constraint_violation_max\": round(constraint_violation_max, 8),\n        \"solver_status\": solver_status,\n        \"stability_violation\": round(stability_violation, 8),\n        \"violations\": {k: round(v, 8) for k, v in violations.items()},\n    }\n\n\nif __name__ == \"__main__\":\n    result = solve()\n    print(json.dumps(result, ensure_ascii=False))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "EXEC003": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC003",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE003",
+      "question": "Q002",
+      "created_by": "p1-vs001",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "EXEC003",
+          "relation": "derived_from",
+          "to": "CODE003",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "adce2951dc0f",
+        "model_id": "M003",
+        "status": "success",
+        "inputs": {
+          "parameters": {
+            "arrival_rate": 60,
+            "num_servers": 2,
+            "service_rate": 40
+          }
+        },
+        "outputs": {
+          "avg_waiting_time": 0.03214286,
+          "avg_queue_length": 1.92857143,
+          "server_utilization": 0.75,
+          "probability_wait": 0.64285714,
+          "constraint_violation_max": 0.0,
+          "solver_status": "optimal",
+          "stability_violation": 0.0,
+          "violations": {
+            "stability": 0.0,
+            "utilization_lower": 0.0,
+            "utilization_upper": 0.0,
+            "wait_nonneg": 0.0,
+            "queue_nonneg": 0.0,
+            "prob_wait_lower": 0.0,
+            "prob_wait_upper": 0.0
+          }
+        },
+        "stdout": "{\"avg_waiting_time\": 0.03214286, \"avg_queue_length\": 1.92857143, \"server_utilization\": 0.75, \"probability_wait\": 0.64285714, \"constraint_violation_max\": 0.0, \"solver_status\": \"optimal\", \"stability_violation\": 0.0, \"violations\": {\"stability\": 0.0, \"utilization_lower\": 0.0, \"utilization_upper\": 0.0, \"wait_nonneg\": 0.0, \"queue_nonneg\": 0.0, \"prob_wait_lower\": 0.0, \"prob_wait_upper\": 0.0}}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 31,
+        "code_hash": "188b171d1620210c4fd121c80ecd0406fc1e7ef0ca465955ed5f881ab3a2260b",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T10:03:04+0800",
+        "finished_at": "2026-09-09T10:03:04+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "avg_waiting_time": "avg_waiting_time",
+            "avg_queue_length": "avg_queue_length",
+            "server_utilization": "server_utilization",
+            "probability_wait": "probability_wait",
+            "constraint_violation_max": "constraint_violation_max"
+          }
+        },
+        "code": "\"\"\"M/M/c queue model — 2019_C Q1, version v2 (corrected).\n\n修正设计：service_rate (mu) 修正为 40，使 rho = lambda/(c*mu) = 0.75 < 1，\n系统稳定，所有指标为正且有限，constraint_violation_max = 0.0。\n\n固定 ABI：def solve(inputs: dict | None = None) -> dict\n代码自包含：参数 baked in（inputs 参数仅用于覆盖默认值，subprocess 无 stdin/文件依赖）。\n输出约定：stdout 最后一行为 JSON（LocalPythonAdapter 解析约定）。\n仅依赖标准库 math / json。\n\"\"\"\nimport json\nimport math\n\nDEFAULT_PARAMETERS = {\n    \"arrival_rate\": 60,   # 人/小时，乘客到达率 lambda\n    \"num_servers\": 2,     # 辆，出租车（服务台）数量 c\n    \"service_rate\": 40,   # 辆/小时，单车服务率 mu（修正值 -> rho = 0.75 < 1）\n}\n\n\ndef solve(inputs: dict | None = None) -> dict:\n    p = dict(DEFAULT_PARAMETERS)\n    if inputs and \"parameters\" in inputs:\n        p.update(inputs[\"parameters\"])\n    elif inputs:\n        p.update(inputs)\n\n    lam = float(p[\"arrival_rate\"])\n    c = int(p[\"num_servers\"])\n    mu = float(p[\"service_rate\"])\n\n    rho = lam / (c * mu)\n    a = lam / mu  # lambda/mu\n\n    # M/M/c 解析公式（rho < 1 时有效）\n    s = 0.0\n    for n in range(c):\n        s += a ** n / math.factorial(n)\n    term_c = (a ** c) / (math.factorial(c) * (1.0 - rho))\n    P0 = 1.0 / (s + term_c)\n    Pw = (a ** c) * P0 / (math.factorial(c) * (1.0 - rho))\n    Lq = Pw * rho / (1.0 - rho)\n    Wq = Lq / lam\n\n    # 代码自检：计算各约束违反量\n    stability_violation = max(0.0, rho - 1.0)\n    violations = {\n        \"stability\": stability_violation,\n        \"utilization_lower\": max(0.0, 0.0 - rho),\n        \"utilization_upper\": max(0.0, rho - 1.0),\n        \"wait_nonneg\": max(0.0, 0.0 - Wq),\n        \"queue_nonneg\": max(0.0, 0.0 - Lq),\n        \"prob_wait_lower\": max(0.0, 0.0 - Pw),\n        \"prob_wait_upper\": max(0.0, Pw - 1.0),\n    }\n    constraint_violation_max = max(violations.values()) if violations else 0.0\n\n    solver_status = \"unstable\" if rho >= 1.0 else \"optimal\"\n\n    return {\n        \"avg_waiting_time\": round(Wq, 8),\n        \"avg_queue_length\": round(Lq, 8),\n        \"server_utilization\": round(rho, 8),\n        \"probability_wait\": round(Pw, 8),\n        \"constraint_violation_max\": round(constraint_violation_max, 8),\n        \"solver_status\": solver_status,\n        \"stability_violation\": round(stability_violation, 8),\n        \"violations\": {k: round(v, 8) for k, v in violations.items()},\n    }\n\n\nif __name__ == \"__main__\":\n    result = solve()\n    print(json.dumps(result, ensure_ascii=False))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "M001": {
+      "schema_version": "3.1",
+      "artifact_id": "M001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "Model M0-v1",
+      "question": "Q001",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "M001",
+          "relation": "implemented_by",
+          "to": "CODE001",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "model_ir_id": "MIR001",
+        "model_family": "linear_programming",
+        "version": "M0-v1"
+      }
+    },
+    "M002": {
+      "schema_version": "3.1",
+      "artifact_id": "M002",
+      "type": "model",
+      "version": 1,
+      "status": "superseded",
+      "title": "Model M1-v1",
+      "question": "Q002",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "M002",
+          "relation": "implemented_by",
+          "to": "CODE002",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "Q002",
+          "relation": "solved_by",
+          "to": "M002",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        },
+        {
+          "from": "active",
+          "to": "superseded",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "validation failed → revised"
+        }
+      ],
+      "invalidation": {
+        "status": "superseded",
+        "reason": "validation failed → revised",
+        "invalidated_by": "M003",
+        "at": "2026-09-09T02:03:04+00:00"
+      },
+      "tags": [],
+      "data": {
+        "model_ir_id": "MIR002",
+        "model_family": "queueing_theory",
+        "version": "M1-v1"
+      }
+    },
+    "M003": {
+      "schema_version": "3.1",
+      "artifact_id": "M003",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "Model M1-v2",
+      "question": "Q002",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "M003",
+          "relation": "implemented_by",
+          "to": "CODE003",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "Q002",
+          "relation": "solved_by",
+          "to": "M003",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "model_ir_id": "MIR003",
+        "model_family": "queueing_theory",
+        "version": "M1-v2"
+      }
+    },
+    "MIR001": {
+      "schema_version": "3.1",
+      "artifact_id": "MIR001",
+      "type": "model_ir",
+      "version": 1,
+      "status": "active",
+      "title": "MODEL_IR M0-v1",
+      "question": "Q001",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {
+        "stage": "M0-v1",
+        "source": "external_constructor"
+      },
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "ir_version": "1.0",
+        "model_id": "M0-LP-demo",
+        "title": "工厂两产品生产计划线性规划",
+        "problem_binding": {
+          "problem_id": "P001",
+          "question_id": "Q1",
+          "description": "工厂生产A、B两种产品，受机器工时和人工工时约束，求利润最大化的生产计划。"
+        },
+        "semantic": {
+          "entities": [
+            "factory",
+            "product_A",
+            "product_B",
+            "machine",
+            "labor"
+          ],
+          "variables": {
+            "x_A": {
+              "domain": "nonnegative_real",
+              "description": "产品A产量",
+              "unit": "件"
+            },
+            "x_B": {
+              "domain": "nonnegative_real",
+              "description": "产品B产量",
+              "unit": "件"
+            }
+          },
+          "parameters": {
+            "profit_A": {
+              "value": 3,
+              "unit": "元/件",
+              "description": "产品A单位利润"
+            },
+            "profit_B": {
+              "value": 5,
+              "unit": "元/件",
+              "description": "产品B单位利润"
+            },
+            "machine_time_A": {
+              "value": 2,
+              "unit": "小时/件",
+              "description": "产品A单位机器工时"
+            },
+            "machine_time_B": {
+              "value": 3,
+              "unit": "小时/件",
+              "description": "产品B单位机器工时"
+            },
+            "machine_capacity": {
+              "value": 100,
+              "unit": "小时",
+              "description": "机器总工时"
+            },
+            "labor_time_A": {
+              "value": 1,
+              "unit": "小时/件",
+              "description": "产品A单位人工工时"
+            },
+            "labor_time_B": {
+              "value": 2,
+              "unit": "小时/件",
+              "description": "产品B单位人工工时"
+            },
+            "labor_capacity": {
+              "value": 60,
+              "unit": "小时",
+              "description": "人工总工时"
+            }
+          }
+        },
+        "mathematical": {
+          "objective": {
+            "sense": "maximize",
+            "expression": "profit_A * x_A + profit_B * x_B",
+            "description": "总利润最大化"
+          },
+          "constraints": [
+            {
+              "id": "machine_cap",
+              "expression": "machine_time_A * x_A + machine_time_B * x_B <= machine_capacity",
+              "description": "机器工时约束"
+            },
+            {
+              "id": "labor_cap",
+              "expression": "labor_time_A * x_A + labor_time_B * x_B <= labor_capacity",
+              "description": "人工工时约束"
+            },
+            {
+              "id": "nonneg_A",
+              "expression": "x_A >= 0",
+              "description": "产量非负"
+            },
+            {
+              "id": "nonneg_B",
+              "expression": "x_B >= 0",
+              "description": "产量非负"
+            }
+          ]
+        },
+        "computational": {
+          "solver": {
+            "family": "linear_programming",
+            "backend": "pure_python_vertex_enumeration",
+            "method": "vertex_enumeration_2d",
+            "description": "2变量LP可行域为多边形，枚举所有顶点求最优"
+          },
+          "execution": {
+            "language": "python",
+            "timeout": 120,
+            "abi": "def solve(inputs) -> outputs",
+            "input_format": "json",
+            "output_format": "json"
+          }
+        },
+        "assumptions": [
+          "产品可无限分割（连续变量）",
+          "单位利润和工时消耗恒定",
+          "机器和人工工时不可存储（当期用完）"
+        ],
+        "expected_outputs": [
+          "x_A",
+          "x_B",
+          "objective_value",
+          "constraint_violation_max"
+        ],
+        "validation_obligations": [
+          "机器工时约束违反量为0",
+          "人工工时约束违反量为0",
+          "产量非负",
+          "目标值为顶点枚举最大值"
+        ]
+      }
+    },
+    "MIR002": {
+      "schema_version": "3.1",
+      "artifact_id": "MIR002",
+      "type": "model_ir",
+      "version": 1,
+      "status": "superseded",
+      "title": "MODEL_IR M1-v1",
+      "question": "Q002",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "MIR003",
+          "relation": "revision_of",
+          "to": "MIR002",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "MIR003",
+          "relation": "supersedes",
+          "to": "MIR002",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {
+        "stage": "M1-v1",
+        "source": "external_constructor"
+      },
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        },
+        {
+          "from": "active",
+          "to": "superseded",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "validation failed → revised"
+        }
+      ],
+      "invalidation": {
+        "status": "superseded",
+        "reason": "validation failed → revised",
+        "invalidated_by": "MIR003",
+        "at": "2026-09-09T02:03:04+00:00"
+      },
+      "tags": [],
+      "data": {
+        "ir_version": "1.0",
+        "model_id": "2019C-Q1-MMc-v1",
+        "title": "2019_C Q1 机场出租车 M/M/c 排队模型（v1，缺陷版）",
+        "problem_binding": {
+          "problem_id": "2019_C",
+          "question_id": "Q1",
+          "description": "建立 M/M/c 排队模型分析机场出租车排队：乘客到达率 lambda、出租车（服务台）数量 c、单车服务率 mu，计算平均等待时间 Wq、平均队列长度 Lq、服务台利用率 rho、需要等待的概率 Pw。v1 服务率参数错误（mu 过小），系统不满足稳定条件 rho < 1。"
+        },
+        "semantic": {
+          "entities": [
+            "passenger",
+            "taxi",
+            "queue",
+            "airport"
+          ],
+          "variables": {
+            "avg_waiting_time": {
+              "domain": "nonnegative_real",
+              "description": "乘客平均等待时间 Wq",
+              "unit": "小时"
+            },
+            "avg_queue_length": {
+              "domain": "nonnegative_real",
+              "description": "平均队列长度 Lq",
+              "unit": "辆"
+            },
+            "server_utilization": {
+              "domain": "real_0_1",
+              "description": "服务台利用率 rho = lambda/(c*mu)",
+              "unit": "无量纲"
+            },
+            "probability_wait": {
+              "domain": "real_0_1",
+              "description": "到达乘客需要等待的概率 Pw",
+              "unit": "无量纲"
+            }
+          },
+          "parameters": {
+            "arrival_rate": {
+              "value": 60,
+              "unit": "人/小时",
+              "description": "乘客到达率 lambda"
+            },
+            "num_servers": {
+              "value": 2,
+              "unit": "辆",
+              "description": "出租车（服务台）数量 c"
+            },
+            "service_rate": {
+              "value": 20,
+              "unit": "辆/小时",
+              "description": "单车服务率 mu"
+            }
+          }
+        },
+        "mathematical": {
+          "objective": {
+            "sense": "compute",
+            "expression": "Wq, Lq, rho, Pw",
+            "description": "计算 M/M/c 排队系统核心指标"
+          },
+          "constraints": [
+            {
+              "id": "stability",
+              "expression": "lambda/(c*mu) < 1",
+              "description": "系统稳定条件 rho < 1"
+            },
+            {
+              "id": "utilization_range",
+              "expression": "0 <= rho <= 1",
+              "description": "利用率范围"
+            },
+            {
+              "id": "nonneg_wait",
+              "expression": "Wq >= 0",
+              "description": "等待时间非负"
+            },
+            {
+              "id": "nonneg_queue",
+              "expression": "Lq >= 0",
+              "description": "队列长度非负"
+            },
+            {
+              "id": "prob_wait_range",
+              "expression": "0 <= Pw <= 1",
+              "description": "等待概率范围"
+            }
+          ]
+        },
+        "computational": {
+          "solver": {
+            "family": "queueing_theory",
+            "backend": "pure_python_math",
+            "method": "mmc_analytical",
+            "description": "M/M/c 解析公式（Erlang C 型），rho < 1 时有效"
+          },
+          "execution": {
+            "language": "python",
+            "timeout": 120,
+            "abi": "def solve(inputs=None)->dict",
+            "input_format": "self-contained",
+            "output_format": "json_stdout"
+          }
+        },
+        "assumptions": [
+          "泊松到达",
+          "指数服务时间",
+          "无限队列容量",
+          "FCFS"
+        ],
+        "expected_outputs": [
+          "avg_waiting_time",
+          "avg_queue_length",
+          "server_utilization",
+          "probability_wait",
+          "constraint_violation_max"
+        ],
+        "validation_obligations": [
+          "rho < 1",
+          "Wq >= 0",
+          "Lq >= 0",
+          "0 <= Pw <= 1"
+        ]
+      }
+    },
+    "MIR003": {
+      "schema_version": "3.1",
+      "artifact_id": "MIR003",
+      "type": "model_ir",
+      "version": 1,
+      "status": "active",
+      "title": "MODEL_IR M1-v2",
+      "question": "Q002",
+      "created_by": "external_model_constructor",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "MIR003",
+          "relation": "revision_of",
+          "to": "MIR002",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "MIR003",
+          "relation": "supersedes",
+          "to": "MIR002",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {
+        "stage": "M1-v2",
+        "source": "external_constructor"
+      },
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "external_model_constructor",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "ir_version": "1.0",
+        "model_id": "2019C-Q1-MMc-v2",
+        "title": "2019_C Q1 机场出租车 M/M/c 排队模型（v2，修正版）",
+        "problem_binding": {
+          "problem_id": "2019_C",
+          "question_id": "Q1",
+          "description": "建立 M/M/c 排队模型分析机场出租车排队：乘客到达率 lambda、出租车（服务台）数量 c、单车服务率 mu，计算平均等待时间 Wq、平均队列长度 Lq、服务台利用率 rho、需要等待的概率 Pw。v2 修正服务率参数（mu 修正为 40），保证稳定条件 rho < 1 成立。"
+        },
+        "semantic": {
+          "entities": [
+            "passenger",
+            "taxi",
+            "queue",
+            "airport"
+          ],
+          "variables": {
+            "avg_waiting_time": {
+              "domain": "nonnegative_real",
+              "description": "乘客平均等待时间 Wq",
+              "unit": "小时"
+            },
+            "avg_queue_length": {
+              "domain": "nonnegative_real",
+              "description": "平均队列长度 Lq",
+              "unit": "辆"
+            },
+            "server_utilization": {
+              "domain": "real_0_1",
+              "description": "服务台利用率 rho = lambda/(c*mu)",
+              "unit": "无量纲"
+            },
+            "probability_wait": {
+              "domain": "real_0_1",
+              "description": "到达乘客需要等待的概率 Pw",
+              "unit": "无量纲"
+            }
+          },
+          "parameters": {
+            "arrival_rate": {
+              "value": 60,
+              "unit": "人/小时",
+              "description": "乘客到达率 lambda"
+            },
+            "num_servers": {
+              "value": 2,
+              "unit": "辆",
+              "description": "出租车（服务台）数量 c"
+            },
+            "service_rate": {
+              "value": 40,
+              "unit": "辆/小时",
+              "description": "单车服务率 mu"
+            }
+          }
+        },
+        "mathematical": {
+          "objective": {
+            "sense": "compute",
+            "expression": "Wq, Lq, rho, Pw",
+            "description": "计算 M/M/c 排队系统核心指标"
+          },
+          "constraints": [
+            {
+              "id": "stability",
+              "expression": "lambda/(c*mu) < 1",
+              "description": "系统稳定条件 rho < 1"
+            },
+            {
+              "id": "utilization_range",
+              "expression": "0 <= rho <= 1",
+              "description": "利用率范围"
+            },
+            {
+              "id": "nonneg_wait",
+              "expression": "Wq >= 0",
+              "description": "等待时间非负"
+            },
+            {
+              "id": "nonneg_queue",
+              "expression": "Lq >= 0",
+              "description": "队列长度非负"
+            },
+            {
+              "id": "prob_wait_range",
+              "expression": "0 <= Pw <= 1",
+              "description": "等待概率范围"
+            }
+          ]
+        },
+        "computational": {
+          "solver": {
+            "family": "queueing_theory",
+            "backend": "pure_python_math",
+            "method": "mmc_analytical",
+            "description": "M/M/c 解析公式（Erlang C 型），rho < 1 时有效"
+          },
+          "execution": {
+            "language": "python",
+            "timeout": 120,
+            "abi": "def solve(inputs=None)->dict",
+            "input_format": "self-contained",
+            "output_format": "json_stdout"
+          }
+        },
+        "assumptions": [
+          "泊松到达",
+          "指数服务时间",
+          "无限队列容量",
+          "FCFS"
+        ],
+        "expected_outputs": [
+          "avg_waiting_time",
+          "avg_queue_length",
+          "server_utilization",
+          "probability_wait",
+          "constraint_violation_max"
+        ],
+        "validation_obligations": [
+          "rho < 1",
+          "Wq >= 0",
+          "Lq >= 0",
+          "0 <= Pw <= 1"
+        ]
+      }
+    },
+    "P001": {
+      "schema_version": "3.1",
+      "artifact_id": "P001",
+      "type": "problem",
+      "version": 1,
+      "status": "active",
+      "title": "M0 工厂生产计划 LP",
+      "question": "",
+      "created_by": "p1-vs001",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "text": "工厂生产A、B两种产品，受机器工时和人工工时约束，求利润最大化。"
+      }
+    },
+    "P002": {
+      "schema_version": "3.1",
+      "artifact_id": "P002",
+      "type": "problem",
+      "version": 1,
+      "status": "active",
+      "title": "2019_C 机场出租车问题",
+      "question": "",
+      "created_by": "p1-vs001",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "P002",
+          "relation": "motivates",
+          "to": "Q002",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "text": "2019 年高教社杯全国大学生数学建模竞赛题目\n（请先阅读\"全国大学生数学建模竞赛论文格式规范\"）\n\nC 题 机场的出租车问题\n\n大多数乘客下飞机后要去市区（或周边）的目的地，出租车是主要的交通工具之一。国内多数机场都是将送客（出发）与接客（到达）通道分开的。送客到机场的出租车司机都将会面临两个选择：\n(A) 前往到达区排队等待载客返回市区。出租车必须到指定的\"蓄车池\"排队等候，依\"先来后到\"排队进场载客，等待时间长短取决于排队出租车和乘客的数量多少，需要付出一定的时间成本。\n(B) 直接放空返回市区拉客。出租车司机会付出空载费用和可能损失潜在的载客收益。\n\n在某时间段抵达的航班数量和\"蓄车池\"里已有的车辆数是司机可观测到的确定信息。通常司机的决策与其个人的经验判断有关，比如在某个季节与某时间段抵达航班的多少和可能乘客数量的多寡等。如果乘客在下飞机后想\"打车\"，就要到指定的\"乘车区\"排队，按先后顺序乘车。机场出租车管理人员负责\"分批定量\"放行出租车进入\"乘车区\"，同时安排一定数量的乘客上车。在实际中，还有很多影响出租车司机决策的确定和不确定因素，其关联关系各异，影响效果也不尽相同。\n\n请你们团队结合实际情况，建立数学模型研究下列问题：\n\n(1) 分析研究与出租车司机决策相关因素的影响机理，综合考虑机场乘客数量的变化规律和出租车司机的收益，建立出租车司机选择决策模型，并给出司机的选择策略。\n\n(2) 收集国内某一机场及其所在城市出租车的相关数据，给出该机场出租车司机的选择方案，并分析模型的合理性和对相关因素的依赖性。\n\n(3) 在某些时候，经常会出现出租车排队载客和乘客排队乘车的情况。某机场\"乘车区\"现有两条并行车道，管理部门应如何设置\"上车点\"，并合理安排出租车和乘客，在保证车辆和乘客安全的条件下，使得总的乘车效率最高。\n\n(4) 机场的出租车载客收益与载客的行驶里程有关，乘客的目的地有远有近，出租车司机不能选择乘客和拒载，但允许出租车多次往返载客。管理部门拟对某些短途载客再次返回的出租车给予一定的\"优先权\"，使得这些出租车的收益尽量均衡，试给出一个可行的\"优先\"安排方案。\n"
+      }
+    },
+    "Q001": {
+      "schema_version": "3.1",
+      "artifact_id": "Q001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "求最优生产计划",
+      "question": "",
+      "created_by": "p1-vs001",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "description": "求最优生产计划"
+      }
+    },
+    "Q002": {
+      "schema_version": "3.1",
+      "artifact_id": "Q002",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "建立机场出租车排队模型（M/M/c），分析平均等待时间与队列长度",
+      "question": "",
+      "created_by": "p1-vs001",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q002",
+          "relation": "solved_by",
+          "to": "M002",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "Q002",
+          "relation": "solved_by",
+          "to": "M003",
+          "at": "2026-09-09T02:03:04+00:00"
+        },
+        {
+          "from": "P002",
+          "relation": "motivates",
+          "to": "Q002",
+          "at": "2026-09-09T02:03:04+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "p1-vs001",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "description": "建立机场出租车排队模型（M/M/c），分析平均等待时间与队列长度"
+      }
+    },
+    "VR001": {
+      "schema_version": "3.1",
+      "artifact_id": "VR001",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC001（passed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC001",
+        "status": "passed",
+        "checks": [
+          {
+            "name": "x_A_exists",
+            "kind": "output_field_exists",
+            "passed": true,
+            "detail": "存在 x_A=20.0"
+          },
+          {
+            "name": "x_B_exists",
+            "kind": "output_field_exists",
+            "passed": true,
+            "detail": "存在 x_B=20.0"
+          },
+          {
+            "name": "obj_numeric",
+            "kind": "output_numeric",
+            "passed": true,
+            "detail": "objective_value=160.0 为数值"
+          },
+          {
+            "name": "obj_positive",
+            "kind": "output_range",
+            "passed": true,
+            "detail": "objective_value=160.0 在 [0, None]"
+          },
+          {
+            "name": "constraint_violation_zero",
+            "kind": "output_range",
+            "passed": true,
+            "detail": "constraint_violation_max=0.0 在 [0, 1e-06]"
+          },
+          {
+            "name": "solver_optimal",
+            "kind": "output_equals",
+            "passed": true,
+            "detail": "solver_status='optimal' 等于期望 'optimal'"
+          }
+        ],
+        "evidence_refs": [
+          "EXEC001"
+        ],
+        "started_at": "2026-09-09T02:03:04+00:00",
+        "finished_at": "2026-09-09T02:03:04+00:00",
+        "provenance": {
+          "engine": "p1-vs001.validation",
+          "check_count": 6
+        }
+      }
+    },
+    "VR002": {
+      "schema_version": "3.1",
+      "artifact_id": "VR002",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC002（failed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC002",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "wait_time_exists",
+            "kind": "output_field_exists",
+            "passed": true,
+            "detail": "存在 avg_waiting_time=-0.09"
+          },
+          {
+            "name": "wait_time_nonnegative",
+            "kind": "output_range",
+            "passed": false,
+            "detail": "avg_waiting_time=-0.09 超出 [0, None]"
+          },
+          {
+            "name": "utilization_le_1",
+            "kind": "output_range",
+            "passed": false,
+            "detail": "server_utilization=1.5 超出 [0, 1.0]"
+          },
+          {
+            "name": "queue_length_nonnegative",
+            "kind": "output_range",
+            "passed": false,
+            "detail": "avg_queue_length=-5.4 超出 [0, None]"
+          },
+          {
+            "name": "stability_constraint",
+            "kind": "output_range",
+            "passed": false,
+            "detail": "constraint_violation_max=5.4 超出 [0, 1e-06]"
+          }
+        ],
+        "evidence_refs": [
+          "EXEC002"
+        ],
+        "started_at": "2026-09-09T02:03:04+00:00",
+        "finished_at": "2026-09-09T02:03:04+00:00",
+        "provenance": {
+          "engine": "p1-vs001.validation",
+          "check_count": 5
+        }
+      }
+    },
+    "VR003": {
+      "schema_version": "3.1",
+      "artifact_id": "VR003",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC003（passed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T02:03:04+00:00",
+      "updated_at": "2026-09-09T02:03:04+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T02:03:04+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC003",
+        "status": "passed",
+        "checks": [
+          {
+            "name": "wait_time_exists",
+            "kind": "output_field_exists",
+            "passed": true,
+            "detail": "存在 avg_waiting_time=0.03214286"
+          },
+          {
+            "name": "wait_time_nonnegative",
+            "kind": "output_range",
+            "passed": true,
+            "detail": "avg_waiting_time=0.03214286 在 [0, None]"
+          },
+          {
+            "name": "utilization_le_1",
+            "kind": "output_range",
+            "passed": true,
+            "detail": "server_utilization=0.75 在 [0, 1.0]"
+          },
+          {
+            "name": "queue_length_nonnegative",
+            "kind": "output_range",
+            "passed": true,
+            "detail": "avg_queue_length=1.92857143 在 [0, None]"
+          },
+          {
+            "name": "stability_constraint",
+            "kind": "output_range",
+            "passed": true,
+            "detail": "constraint_violation_max=0.0 在 [0, 1e-06]"
+          },
+          {
+            "name": "wait_time_finite",
+            "kind": "output_range",
+            "passed": true,
+            "detail": "avg_waiting_time=0.03214286 在 [0, 1000000.0]"
+          }
+        ],
+        "evidence_refs": [
+          "EXEC003"
+        ],
+        "started_at": "2026-09-09T02:03:04+00:00",
+        "finished_at": "2026-09-09T02:03:04+00:00",
+        "provenance": {
+          "engine": "p1-vs001.validation",
+          "check_count": 6
+        }
+      }
+    }
+  },
+  "history": {}
+}

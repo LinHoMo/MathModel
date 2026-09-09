@@ -1,0 +1,67 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M0-LP-demo",
+  "title": "工厂两产品生产计划线性规划",
+  "problem_binding": {
+    "problem_id": "P001",
+    "question_id": "Q1",
+    "description": "工厂生产A、B两种产品，受机器工时和人工工时约束，求利润最大化的生产计划。"
+  },
+  "semantic": {
+    "entities": ["factory", "product_A", "product_B", "machine", "labor"],
+    "variables": {
+      "x_A": {"domain": "nonnegative_real", "description": "产品A产量", "unit": "件"},
+      "x_B": {"domain": "nonnegative_real", "description": "产品B产量", "unit": "件"}
+    },
+    "parameters": {
+      "profit_A": {"value": 3, "unit": "元/件", "description": "产品A单位利润"},
+      "profit_B": {"value": 5, "unit": "元/件", "description": "产品B单位利润"},
+      "machine_time_A": {"value": 2, "unit": "小时/件", "description": "产品A单位机器工时"},
+      "machine_time_B": {"value": 3, "unit": "小时/件", "description": "产品B单位机器工时"},
+      "machine_capacity": {"value": 100, "unit": "小时", "description": "机器总工时"},
+      "labor_time_A": {"value": 1, "unit": "小时/件", "description": "产品A单位人工工时"},
+      "labor_time_B": {"value": 2, "unit": "小时/件", "description": "产品B单位人工工时"},
+      "labor_capacity": {"value": 60, "unit": "小时", "description": "人工总工时"}
+    }
+  },
+  "mathematical": {
+    "objective": {
+      "sense": "maximize",
+      "expression": "profit_A * x_A + profit_B * x_B",
+      "description": "总利润最大化"
+    },
+    "constraints": [
+      {"id": "machine_cap", "expression": "machine_time_A * x_A + machine_time_B * x_B <= machine_capacity", "description": "机器工时约束"},
+      {"id": "labor_cap", "expression": "labor_time_A * x_A + labor_time_B * x_B <= labor_capacity", "description": "人工工时约束"},
+      {"id": "nonneg_A", "expression": "x_A >= 0", "description": "产量非负"},
+      {"id": "nonneg_B", "expression": "x_B >= 0", "description": "产量非负"}
+    ]
+  },
+  "computational": {
+    "solver": {
+      "family": "linear_programming",
+      "backend": "pure_python_vertex_enumeration",
+      "method": "vertex_enumeration_2d",
+      "description": "2变量LP可行域为多边形，枚举所有顶点求最优"
+    },
+    "execution": {
+      "language": "python",
+      "timeout": 120,
+      "abi": "def solve(inputs) -> outputs",
+      "input_format": "json",
+      "output_format": "json"
+    }
+  },
+  "assumptions": [
+    "产品可无限分割（连续变量）",
+    "单位利润和工时消耗恒定",
+    "机器和人工工时不可存储（当期用完）"
+  ],
+  "expected_outputs": ["x_A", "x_B", "objective_value", "constraint_violation_max"],
+  "validation_obligations": [
+    "机器工时约束违反量为0",
+    "人工工时约束违反量为0",
+    "产量非负",
+    "目标值为顶点枚举最大值"
+  ]
+}
