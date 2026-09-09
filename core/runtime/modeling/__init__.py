@@ -20,6 +20,10 @@ from .model_ir import (
 )
 from .planner import ExperimentPlan, ExperimentPlanner
 from .selection import MethodArena, SelectionError, SelectionOutcome
+from .candidates import (
+    Candidate, CandidateArena, InnovationCandidate,
+    map_card_obligations, _merge_obligations,
+)
 
 __all__ = [
     "ExperimentPlan", "ExperimentPlanner",
@@ -28,4 +32,7 @@ __all__ = [
     "MODEL_IR_REQUIRED_FIELDS",
     "L1_SEMANTIC_FIELDS", "L2_MATHEMATICAL_FIELDS", "L3_COMPUTATIONAL_FIELDS",
     "ModelIR", "ModelIRBuilder", "ModelIRError", "validate_model_ir",
+    # P1-M4: 候选 + 知识义务映射
+    "Candidate", "CandidateArena", "InnovationCandidate",
+    "map_card_obligations", "_merge_obligations",
 ]

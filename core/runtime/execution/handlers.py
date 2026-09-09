@@ -342,13 +342,26 @@ class DefaultNodeExecutor:
                     return cand.artifact_id
         return None
 
-    def _active_exec_of(self, qid: str, code_id: str) -> str | None:
-        """该 code 已有的活跃 EXEC（幂等复用，P1-M3 多候选重入安全）。"""
+    def _code_of_mir(self, qid: str, mir_id: str) -> str | None:
+        """该候选 MIR 的 code（沿 implemented_by 边；多候选下不能取"最后一个"）。"""
+        for r in self.graph.relations:
+            if r["relation"] == "implemented_by" and r["from"] == mir_id:
+                c = self.registry.get(r["to"])
+                if c is not None and c.type == "code" and c.question == qid \
+                        and c.status not in _TERMINAL:
+                    return c.artifact_id
+        return None
+
+    def _active_exec_of_mir(self, qid: str, mir_id: str) -> str | None:
+        """该候选 MIR 已有的活跃 EXEC（幂等复用；按 EXEC.model_id == mir_id 定位）。
+
+        P1-M4：同一 code 文本可能被多个候选共享（CODE artifact 按 hash 去重），
+        但 EXEC 必须按候选独立——EXEC 的 data.model_id 记录其所属候选，互不覆盖。
+        """
         for a in self.registry.list_by_type("execution_result"):
-            if a.question == qid and a.status not in _TERMINAL:
-                if any(r["from"] == code_id and r["relation"] == "executed_by"
-                       and r["to"] == a.artifact_id for r in self.graph.relations):
-                    return a.artifact_id
+            if a.question == qid and a.status not in _TERMINAL \
+                    and (a.data or {}).get("model_id") == mir_id:
+                return a.artifact_id
         return None
 
     def _result_of_exec(self, qid: str, exec_id: str) -> str | None:
@@ -361,16 +374,21 @@ class DefaultNodeExecutor:
         return None
 
     def execute_code(self, qid: str, node_id: str = "model_execution") -> list[tuple[str, str]]:
-        """C7/P1-M3：每个活跃 code → LocalPythonAdapter 真 subprocess → EXEC + R。
+        """C7/P1-M3：每个候选 MIR → 其 code → LocalPythonAdapter 真 subprocess → EXEC + R。
 
         返回 [(exec_id, result_id), ...]（每候选一个，独立 ID 链互不覆盖）；
-        无活跃 code 时返回 []。status 只能来自真实 subprocess 退出码（禁止硬编码）。
+        无活跃候选 code 时返回 []。status 只能来自真实 subprocess 退出码（禁止硬编码）。
         接线：input.json → run_model.py → output.json（固定 ABI）；
-        边：code -executed_by-> EXEC、EXEC -produces-> R。幂等：已执行 code 复用 EXEC。
+        边：code -executed_by-> EXEC、EXEC -produces-> R。幂等：同 (mir, code) 复用 EXEC。
+        P1-M4：多个候选可共享同一 code 文本（CODE 按 hash 去重），但每个候选仍
+        得到独立 EXEC/VR——执行/验证结果互不覆盖。
         """
         out: list[tuple[str, str]] = []
-        for code_id in self._active_codes(qid):
-            existing = self._active_exec_of(qid, code_id)
+        for mir_id in self._active_mirs(qid):
+            code_id = self._code_of_mir(qid, mir_id)
+            if code_id is None:
+                continue
+            existing = self._active_exec_of_mir(qid, mir_id)
             if existing:
                 rid = self._result_of_exec(qid, existing)
                 if rid:
@@ -379,7 +397,6 @@ class DefaultNodeExecutor:
             code = (self.registry.get(code_id).data or {}).get("code", "")
             if not code:
                 raise HandlerError(f"{code_id}: code artifact 无 code 本体")
-            mir_id = self._mir_implementing(qid, code_id) or self._active_mir_of(qid)
             mir_art = self.registry.get(mir_id) if mir_id else None
             inputs = self._execution_inputs(mir_art)
             if inputs is None:
@@ -551,28 +568,26 @@ class DefaultNodeExecutor:
     ]
 
     def _candidate_vr_table(self, qid: str) -> dict[str, dict]:
-        """P1-M3：候选 MIR → 其 VR 证据映射（沿 MIR→CODE→EXEC→VR 链）。
+        """P1-M3：候选 MIR → 其 VR 证据映射（沿 VR→EXEC→model_id 归位）。
 
         返回 {mir_id: {"vr_id": ..., "metrics": {VR 字段}}}；
         无 VR 证据的候选（执行未发生/未验证）以 metrics=None 计入（排最后）。
+        P1-M4：CODE artifact 可能被多候选共享（hash 去重），因此不沿
+        CODE→MIR 边反查（有歧义），直接用 EXEC.data.model_id 定位所属候选。
         """
         table: dict[str, dict] = {}
         for mir_id in self._active_mirs(qid):
             table.setdefault(mir_id, {"vr_id": None, "metrics": None})
-        # 沿链归位：VR → EXEC → CODE → MIR
         for r in self.graph.relations:
             if r["relation"] != "verified_by":
                 continue
             vr = self.registry.get(r["to"])
             if vr is None or vr.question != qid or vr.type != "verification_result":
                 continue
-            exec_id = r["from"]
-            code_id = next((e["from"] for e in self.graph.relations
-                            if e["relation"] == "executed_by"
-                            and e["to"] == exec_id), None)
-            mir_id = next((e["from"] for e in self.graph.relations
-                           if e["relation"] == "implemented_by"
-                           and e["to"] == code_id), None) if code_id else None
+            xart = self.registry.get(r["from"])
+            if xart is None:
+                continue
+            mir_id = (xart.data or {}).get("model_id")
             if mir_id and mir_id in table:
                 table[mir_id] = {"vr_id": r["to"],
                                  "metrics": dict(vr.data or {})}

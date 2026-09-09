@@ -1,0 +1,31 @@
+# BZD 试点卡 1：数模竞赛模型适配判断（problem features → method applicability）
+# source: BZD（外部 GitHub 评审知识仓库），本卡为 P1-M4 试点提取（2026-09-09）
+# 定位：Constraint/Prior 知识——约束"适配判断要显式、可溯源"，不指定"必须用 X"。
+card_id: mc-bzd-model-fit
+name: 模型适配判断（数模竞赛）
+family: knowledge_guide
+version: 1
+problem_types: [knowledge_guide]
+good_for:
+  - 竞赛题目 → 候选方法适用性判断（问题特征逐条对照方法卡适用条件）
+  - 多候选建模时防止"按题型标签直觉选方法"（如见"优化"就套线性规划）
+  - 为 M3 候选竞技场提供适配性声明义务（哪些特征被检查、哪些缺失）
+requires:
+  - 题目约束/目标可结构化提取（变量、约束、目标函数可列举）
+  - 候选方法适用条件可对照题目特征逐条核对（不是空泛的"适合/不适合"）
+risks:
+  - 套用与题目不适配的方法（特征不匹配仍入选）
+  - 忽略题目特殊约束，只按题型标签选方法
+  - 适配判断流于形式（matched/missing 无记录，不可溯源）
+validation:
+  - 候选方法适用性自查：题目特征逐条对照方法卡适用条件并记录 matched/missing
+  - 适配判断留下显式记录（哪些特征命中、哪些缺失、哪些违反），供评审追溯
+  - 若适用条件缺失关键信息，如实声明"无法判定"而非默认适配
+applicability:
+  positive: [problem_features_extractable, candidate_methods_enumerable]
+  required_conditions: [problem_features_extractable]
+source_type: BZD
+source_refs:
+  - "BZD 模型适配知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"
+confidence: 0.8
+status: active

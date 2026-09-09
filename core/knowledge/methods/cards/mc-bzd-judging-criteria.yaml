@@ -1,0 +1,32 @@
+# BZD 试点卡 4：评委评审规则（judging criteria）
+# source: BZD（外部 GitHub 评审知识仓库），本卡为 P1-M4 试点提取（2026-09-09）
+# 定位：Prior 知识——评审视角的论文要素与扣分点，约束建模/写作边界。
+card_id: mc-bzd-judging-criteria
+name: 评委评审规则（数模竞赛）
+family: knowledge_guide
+version: 1
+problem_types: [knowledge_guide]
+good_for:
+  - 建模阶段预埋评审要素（摘要含结论数值、图表完备、结论回应题目）
+  - 作为候选声明义务的"评审期望"来源（validations 映射）
+  - 多候选对比时补充"评审适配"维度（非机械数值，仅作声明）
+requires:
+  - 论文要素完整：摘要/问题分析/模型建立/求解/验证/结论
+  - 模型与求解过程对应（模型可复现）
+risks:
+  - 摘要平庸（无结论数值、无创新点提炼）
+  - 图表缺失或排版混乱（关键结果无可视化）
+  - 模型与求解脱节（模型写了但没解出来）
+  - 结论不回应题目小问（各问无明确答复）
+validation:
+  - 摘要自检：含模型名 + 关键结论数值 + 结果
+  - 图表完备性自查：关键结果有图（≥题目小问数）
+  - 结论逐问回应：题目每个小问有明确答复与数值
+applicability:
+  positive: []
+  required_conditions: []
+source_type: BZD
+source_refs:
+  - "BZD 评审规则知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"
+confidence: 0.8
+status: active

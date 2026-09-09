@@ -1,0 +1,32 @@
+# BZD 试点卡 3：验证义务/论文自查（validation obligations）
+# source: BZD（外部 GitHub 评审知识仓库），本卡为 P1-M4 试点提取（2026-09-09）
+# 定位：Validation 知识——评审期望的验证义务，机械映射为候选 validations 声明。
+card_id: mc-bzd-validation-obligations
+name: 验证义务与论文自查（数模竞赛）
+family: knowledge_guide
+version: 1
+problem_types: [knowledge_guide]
+good_for:
+  - 候选建模完成后必须完成的验证义务清单（敏感性/误差/对照/稳健性）
+  - 防止"无验证直接下结论"或"只报最优值不报稳健性"扣分
+  - 为候选 MODEL_IR 的 validations 提供义务来源（每项带 source_card）
+requires:
+  - 模型可计算（能产出真实数值结果）
+  - 关键假设可陈述（模型边界明确）
+risks:
+  - 无验证直接下结论（评审视为结果不可信）
+  - 占位/伪造结果（无真实数值支撑）
+  - 只报最优值不报稳健性（参数一扰动结论就翻盘）
+validation:
+  - 敏感性分析：关键参数 ±10% 扰动，输出变化平滑且可解释
+  - 误差/收敛性分析：求解误差、迭代收敛或网格收敛证据
+  - 与题给参考值或常识基准对照（相对误差可量化）
+  - 多情景/多初始条件鲁棒性（结论不依赖单一设定）
+applicability:
+  positive: [mechanism_known]
+  required_conditions: [mechanism_known]
+source_type: BZD
+source_refs:
+  - "BZD 验证义务知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"
+confidence: 0.8
+status: active

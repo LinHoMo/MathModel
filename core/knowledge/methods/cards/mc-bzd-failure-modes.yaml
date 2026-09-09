@@ -1,0 +1,33 @@
+# BZD 试点卡 2：常见失败模式/扣分点（failure modes）
+# source: BZD（外部 GitHub 评审知识仓库），本卡为 P1-M4 试点提取（2026-09-09）
+# 定位：Validation 知识——把评委常见扣分点固化为候选建模时的验证义务。
+card_id: mc-bzd-failure-modes
+name: 常见失败模式与扣分点（数模竞赛）
+family: knowledge_guide
+version: 1
+problem_types: [knowledge_guide]
+good_for:
+  - 识别题目中的量纲/单位/约束来源，避免数量级错误
+  - 建模阶段预埋约束核对与结果合理性检查（防扣分）
+  - 为候选 MODEL_IR 的 risks/assumptions 提供失败模式清单
+requires:
+  - 能识别题目中的量纲/单位与约束来源（题给数据、物理常识、假设）
+  - 模型结果可对照合理范围（数量级/物理边界）
+risks:
+  - 量纲或单位错误导致结果数量级错误
+  - 遗漏题目显式约束（每句量化约束必须对应模型约束）
+  - 结果无解释直接堆数字（评审无法判断合理性）
+  - 关键参数凭空取值（无题给/假设/估计来源标注）
+validation:
+  - 量纲一致性检查：每个公式左右量纲相同
+  - 约束逐条核对：题目每句量化约束 → 模型约束 一一对应
+  - 结果合理性对照：数量级、物理范围、与常识基准一致
+  - 参数来源标注：每个参数标注题给/假设/估计
+applicability:
+  positive: [problem_features_extractable]
+  required_conditions: [problem_features_extractable]
+source_type: BZD
+source_refs:
+  - "BZD 失败模式知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"
+confidence: 0.8
+status: active

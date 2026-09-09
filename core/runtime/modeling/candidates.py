@@ -57,7 +57,12 @@ class InnovationCandidate:
 
 @dataclass
 class Candidate:
-    """候选方案（P8-4）：baseline / improved / hybrid / innovation。"""
+    """候选方案（P8-4）：baseline / improved / hybrid / innovation。
+
+    P1-M4 知识义务贯穿：validations/dependencies/assumptions 由匹配方法卡
+    机械映射（见 map_card_obligations），每项带 source_card 可溯源。
+    义务是候选声明，不判 PASS——最终由执行/验证裁决。
+    """
     candidate_id: str
     kind: str                            # baseline/improved/hybrid/innovation
     composition: list[str]               # 方法/组件描述序列
@@ -69,6 +74,10 @@ class Candidate:
     required_experiments: list[str] = field(default_factory=list)
     innovations: list[InnovationCandidate] = field(default_factory=list)
     knowledge_refs: list[dict] = field(default_factory=list)
+    # ---- P1-M4 知识义务（映射自方法卡，带 source_card 溯源）----
+    validations: list[dict] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
+    assumptions: list[dict] = field(default_factory=list)
 
     def as_dict(self) -> dict:
         return {
@@ -83,6 +92,9 @@ class Candidate:
             "required_experiments": self.required_experiments,
             "innovations": [i.as_dict() for i in self.innovations],
             "knowledge_refs": self.knowledge_refs,
+            "validations": self.validations,
+            "dependencies": self.dependencies,
+            "assumptions": self.assumptions,
             "reasoning": self.reasoning(),
         }
 
@@ -94,7 +106,62 @@ class Candidate:
                 for i in self.innovations))
         if self.required_experiments:
             parts.append("必做: " + ", ".join(self.required_experiments))
+        if self.validations:
+            parts.append(f"验证义务: {len(self.validations)} 项"
+                         f"（source={sorted({v['source_card'] for v in self.validations})}）")
         return "；".join(parts)
+
+
+def map_card_obligations(card) -> dict:
+    """方法卡 → 候选义务声明（P1-M4 知识引导，机械映射，core 不判 PASS）。
+
+    - card.validation            → validations（每项 obligation + source_card）
+    - card.required_conditions   → assumptions（适用前提即建模须满足的假设）
+    - card.risks                 → risks（结构化风险记录 + source_card）
+    - card.requires              → dependencies（前置依赖声明）
+
+    全部可溯源：knowledge_refs 指向 card_id，义务项带 source_card。
+    """
+    return {
+        "validations": [
+            {"obligation": v, "source_card": card.card_id}
+            for v in (card.validation or [])],
+        "assumptions": [
+            {"assumption": a, "source_card": card.card_id}
+            for a in ((card.required_conditions or [])
+                      + (card.prerequisites or []))],
+        "risks": [
+            {"source": "knowledge_card", "id": card.card_id,
+             "level": "medium", "title": r, "source_card": card.card_id}
+            for r in (card.risks or [])],
+        "dependencies": list(card.requires or []),
+    }
+
+
+def _merge_obligations(base: dict, extra: dict) -> dict:
+    """合并两份义务声明（去重，保序；validations/assumptions/risks 按
+    (source_card, 文本) 去重，dependencies 按文本去重）。"""
+    def dedup(items: list) -> list:
+        seen, out = set(), []
+        for it in items:
+            key = (it.get("source_card"), it.get("obligation")
+                   or it.get("assumption") or it.get("title") or str(it))
+            if key not in seen:
+                seen.add(key)
+                out.append(it)
+        return out
+
+    return {
+        "validations": dedup(list(base.get("validations", []))
+                             + list(extra.get("validations", []))),
+        "assumptions": dedup(list(base.get("assumptions", []))
+                             + list(extra.get("assumptions", []))),
+        "risks": dedup(list(base.get("risks", []))
+                       + list(extra.get("risks", []))),
+        "dependencies": list(dict.fromkeys(
+            list(base.get("dependencies", []))
+            + list(extra.get("dependencies", [])))),
+    }
 
 
 class CandidateArena:
@@ -118,6 +185,9 @@ class CandidateArena:
         _CANDIDATE_SEQ["n"] += 1
         batch = _CANDIDATE_SEQ["n"]
 
+        # P1-M4 知识义务：主方法卡 → 候选声明（机械映射，带 source_card）
+        main_oblig = map_card_obligations(main.card)
+
         # 1) Baseline：主方法单独成案（朴素对照之外的方法学基线）
         cands.append(Candidate(
             candidate_id=f"CA{batch:03d}-A", kind="baseline",
@@ -125,9 +195,12 @@ class CandidateArena:
             rationale=f"top1 {main.card.name}（total={main.score}），"
                       f"作为方法学基线", score=main.score,
             score_detail=main.score_detail.as_dict(),
-            risks=main.risks,
+            risks=main.risks + main_oblig["risks"],
             required_experiments=main.required_experiments,
-            knowledge_refs=main.knowledge_refs))
+            knowledge_refs=main.knowledge_refs,
+            validations=main_oblig["validations"],
+            dependencies=main_oblig["dependencies"],
+            assumptions=main_oblig["assumptions"]))
 
         # 2) Improved：主方法 + 卡片 recommended 证据/组合增强
         improved_parts = [main.card.card_id]
@@ -146,14 +219,19 @@ class CandidateArena:
                       + ("（组合兼容方法）" if len(improved_parts) > 1 else ""),
             score=main.score + (2 if boost else 0),
             score_detail=main.score_detail.as_dict(),
-            risks=main.risks,
+            risks=main.risks + main_oblig["risks"],
             required_experiments=main.required_experiments
             + [f"recommended: {b}" for b in boost],
-            knowledge_refs=main.knowledge_refs))
+            knowledge_refs=main.knowledge_refs,
+            validations=main_oblig["validations"],
+            dependencies=main_oblig["dependencies"],
+            assumptions=main_oblig["assumptions"]))
 
         # 3) Hybrid：主方法 × 次优方法（方法对照型组合）
         if len(recs) > 1:
             alt = recs[1]
+            alt_oblig = map_card_obligations(alt.card)
+            oblig = _merge_obligations(main_oblig, alt_oblig)
             cands.append(Candidate(
                 candidate_id=f"CA{batch:03d}-C", kind="hybrid",
                 composition=[main.card.card_id, alt.card.card_id],
@@ -162,11 +240,14 @@ class CandidateArena:
                           "提供方法层面的稳健性对照",
                 score=max(main.score, alt.score) - 2,
                 score_detail=alt.score_detail.as_dict(),
-                risks=main.risks + alt.risks,
+                risks=main.risks + alt.risks + oblig["risks"],
                 required_experiments=main.required_experiments
                 + [f"ablation: 仅用 {alt.card.card_id} 对照"],
                 knowledge_refs=main.knowledge_refs
-                + [{"id": alt.card.card_id, "version": alt.card.version}]))
+                + [{"id": alt.card.card_id, "version": alt.card.version}],
+                validations=oblig["validations"],
+                dependencies=oblig["dependencies"],
+                assumptions=oblig["assumptions"]))
 
         # 4) Innovation：pattern 命中主方法 → InnovationCandidate（hypothesis）
         for pat in self.retriever.patterns_for(list(features.get(
@@ -189,15 +270,19 @@ class CandidateArena:
                     - {"high": 4, "medium": 2, "low": 0}.get(
                         pat.implementation_cost, 1),
                     score_detail=main.score_detail.as_dict(),
-                    risks=main.risks + [{"source": "pattern",
-                                         "id": pat.pattern_id,
-                                         "level": "medium",
-                                         "title": r} for r in pat.risks[:2]],
+                    risks=main.risks + main_oblig["risks"]
+                    + [{"source": "pattern",
+                        "id": pat.pattern_id,
+                        "level": "medium",
+                        "title": r} for r in pat.risks[:2]],
                     required_experiments=main.required_experiments
                     + inno.to_experiment_requirements(),
                     innovations=[inno],
                     knowledge_refs=main.knowledge_refs
-                    + [{"id": pat.pattern_id, "version": pat.version}]))
+                    + [{"id": pat.pattern_id, "version": pat.version}],
+                    validations=main_oblig["validations"],
+                    dependencies=main_oblig["dependencies"],
+                    assumptions=main_oblig["assumptions"]))
                 break   # 每个 batch 只带一个创新候选（竞赛时间约束）
 
         # Competition Pack 修饰（CI-08：只读参与打分，不改状态）

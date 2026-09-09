@@ -1,0 +1,31 @@
+# BZD 试点卡 5：敏感性分析义务（sensitivity analysis）
+# source: BZD（外部 GitHub 评审知识仓库），本卡为 P1-M4 试点提取（2026-09-09）
+# 定位：Validation 知识——敏感性分析是数模竞赛高频验证义务，独立成卡供映射消费。
+card_id: mc-bzd-sensitivity
+name: 敏感性分析义务（数模竞赛）
+family: knowledge_guide
+version: 1
+problem_types: [knowledge_guide]
+good_for:
+  - 模型建成后必须回答"结论对哪些参数敏感"
+  - 为候选 MODEL_IR 的 validations 提供敏感性义务来源
+  - 与 M3 验证器的 robustness 维度衔接（VR.robustness）
+requires:
+  - 模型有可扰动参数（≥1 个关键参数）
+  - 能定义输出指标（结论依赖的量）
+risks:
+  - 参数扰动范围无依据（乱取 ±50%）
+  - 敏感性分析只做展示不解释（扰动表无结论）
+  - 忽略敏感性结论对模型建议的影响（明知敏感仍给单点建议）
+validation:
+  - 关键参数 ±10%/±20% 扰动，输出变化记录并解释
+  - 敏感性排序：识别主导结果的前 N 个参数
+  - 敏感性结论回写：模型建议/风险随敏感性调整
+applicability:
+  positive: [mechanism_known]
+  required_conditions: [mechanism_known]
+source_type: BZD
+source_refs:
+  - "BZD 敏感性分析知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"
+confidence: 0.8
+status: active
