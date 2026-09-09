@@ -1,0 +1,109 @@
+{
+  "submission_id": "3ff350bf-766e-4b15-874e-bc192ef91276",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:15:48"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "parameters P1-P8：车速60km/h、覆盖阈值3min、A区20平台、要道13、新增[2,5]、案发延迟3min、P=32节点，与题面一致"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1 路网带权无向图+最短路径、A3 平台-要道一对一（每个平台最多封锁一个路口）、A4 嫌疑车沿最短路径扩张（V9 可达域），附推导依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "experiments X1-X5 覆盖 Q1-Q5 交付物：管辖表/封锁匹配/新增平台位置/六区评估排序/围堵方案，与题面五问对应"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 3 条：尽量3分钟软/硬约束、嫌疑车速未给定、围堵时间窗口起算点，各含 interpretations+adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family.primary=optimization（min-max 指派/选址）、secondary=graph_algorithm，与 2011B 组合优化建模范式一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "variables V1-V9 区分 constant/derived/decision（v_i, t_ij, x_kj, y_kl, z_j, w_k, θ, R(t)），覆盖管辖/封锁/选址/围堵全部关键量"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "parameters P1-P8 全声明且含 source（v_p=60题目、Δ=[2,5]题目、v_s 按警车假设），方程符号⊆声明集"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "assumptions A1-A5 分型+rationale：最短路径假设、3分钟阈值、一对一封锁、嫌疑车速假设+灵敏度，均合理可检验"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "objectives O1-O5 与五问逐一对应（min T_max 管辖/封锁/选址/围堵、J=-θ+λCV 六区评估）；瓶颈 min-max 机制 M3 支撑目标量"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "constraints C1 指派、C2 覆盖 t≤T3、C3 匹配一对一、C4 2≤Σz_j≤5、C5 围堵时限，方向正确无符号错误"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E6 与 M1-M4 对应（最短路径→指派→瓶颈→时变可达）；candidates 四候选（optimization/graph/multi_objective/simulation）+选择与排除依据，四要素满足"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "equations E1-E6 含 latex+derivation_trace（Floyd-Warshall、瓶颈线性化 T_max≥x_kj t_kj、可达域 R(t)），符号一致，结构完整可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "solvers S1 Floyd-Warshall、S2 匈牙利/瓶颈指派、S3 分支定界、S4 动态可达+指派，与模型类型完全匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志/实际结果；solvers 仅 implementation_ref，experiments 仅 expected_outputs"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无收敛标志/残差/实际结果数据可核验"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "validation_plan.multi_seed 声明 n_runs=5、seeds=[42,123,456,789,1024]、aggregation=mean_std，但无方差/replay 实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果（expected_outputs 为管辖表/匹配/站点等结构描述）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 基线为单平台单节点/直线路网手工对照+完全图退化验证，基线过于简单且无对比结果报告"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2/validation_plan.sensitivity 对车速±20%、道路长度±10%、嫌疑车速±20% 扰动（敏感参数），但未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "limit_tests LT1-LT4（v_p→∞, m→N, Δ→∞, v_s→0）≥2类，但仅 expected_behavior，无实际结果-主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "validations V1-V4 目标 O1/O2/O3/O5 与 claims C1-C5 对应，覆盖全部核心主张（管辖/封锁/选址/围堵）"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map：C1 supported、C2-C5 hypothesis，均含 evidence_ref，但多数主张未获实际证据支持（证据为计划态）"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 4,
+    "L4_total": 6,
+    "overall": "FAIL"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

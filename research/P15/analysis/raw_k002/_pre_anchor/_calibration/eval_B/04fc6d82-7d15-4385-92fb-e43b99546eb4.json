@@ -1,0 +1,109 @@
+{
+  "submission_id": "04fc6d82-7d15-4385-92fb-e43b99546eb4",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:15:48"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "parameters P1-P12 完整提取题面表1三组参数（m1=[20,23,18], g1=[560,580,545], u_o=[28,30,27], w=[25,30,25]），班次 H=28800s、故障 q=0.01、排除时间[600,1200]s，与题面逐条一致"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1 单RGV单任务（同一时刻只能执行一项作业）、A5 初始状态（初始全部CNC空闲、RGV位于1号位）、M2/M3 一道退化为并行机、两道半成品守恒（W_t），均附推导依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "experiments X1-X3 覆盖任务2的3组参数回放（inputs 组别:第1/2/3组、班次8h；expected_outputs 班次产量），solvers 覆盖任务1的模型+算法"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity 字段；题面故障概率统计口径（按加工次数/按时间）、清洗与上下料衔接等歧义未显式标注处理方案"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family.primary=optimization（时间离散化混合整数规划）、secondary=simulation；RGV调度判定为单资源排序优化，与调度优化建模范式一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "variables V1-V10 区分状态/决策/导出类型（p_t, s_{i,t}, x_{i,t}, N, T_{i,k}, I_RGV, z_{i,k}, R_{i,k}, W_t, C_j），覆盖RGV位置/CNC状态/决策/产量"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "parameters P1-P12 全部声明且 source=题目，取值与题面表1三组数值一致；方程引用符号（m_1..m_3,g_1..g_3,u_o,u_e,w,H,q,a,b）均在声明集内"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "assumptions A1-A6 显式、分型（mechanism/simplification/projection/calibration）并附 rationale，如 A1 单执行机构、A6 移动时间按单位数固定"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "objectives O1-O4 均为最大化班次产量/期望产量（max N=Σ1{C_j≤H}、max E[N]），与题目系统作业效率一致；E2/E6 导出目标量，约束不使目标平凡"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "constraints C1 单资源（Σx≤1）、C2 时间窗、C3 移动时间、C4 两道先后序、C6 截止 C_j≤28800，方向正确且含物理来源标注"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1 机理-题面一致（单机排序优化）；E2 方程-机理一致（E1-E6 与 M1-M4 对应）；E3 目标-约束一致；E4 candidates 含 optimization/simulation/DP/MDP 四候选+选择依据（最优性/规模/随机性）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "equations E1-E6 含 latex/derivation_trace/变量引用，结构完整（递推/代数/差分），A5 给出初始状态；方程符号⊆声明集（x_{i,t}→V3, T_{i,k}→V5, C_j→V10, W_t→V9）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "solvers S1 分支定界MIP、S2 轮询启发式、S3 蒙特卡洛样本均值，与优化主模型/随机故障扩展的模型类型及参数口径匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "solvers 仅含 implementation_ref 字符串（时间轴离散化+0-1变量），无代码、无执行日志、无实际结果（experiments 仅 expected_outputs）"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无收敛标志/残差序列/实际结果；V3 收敛检验（样本数100→2000波动收敛1%）仅为计划声明"
+    },
+    "L3.4": {
+      "score": 0,
+      "evidence": "无 multi_seed/replay 数据；V1/V4 可复现性（与轮询贪心对比、多次运行一致）为计划声明，无方差或 replay 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果；experiments 仅 expected_outputs（班次产量整数件、RGV利用率0.7-0.95），无法核验物理量级"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 声明以轮询贪心策略为基线对比 MIP 产量上界，基线选择合理但未报告对比结果"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 声明对移动时间与上下料时间±10%扰动观察班次产量变化率，扰动参数敏感但未报告弹性系数/鲁棒性边界"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V4 极限检验（清洗时间→0、移动时间→0）为极端参数类检验，无实际结果-主张关联数据"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "validations V1-V4 分别针对 O1/O2（产量上界）、O2（灵敏度）、O4（收敛）、O3（极限），验证目标与全部核心主张对应"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C4 均有 evidence_refs；C1 标 supported、C2-C4 标 hypothesis，证据为计划性实验（X1-X3 仅 expected_outputs），多数主张未获实际证据判定"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 3,
+    "L4_total": 6,
+    "overall": "FAIL"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

@@ -1,0 +1,111 @@
+{
+  "submission_id": "ae849217-1d53-434b-b881-39b9ae270da7",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:20:54+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件捕获：两选择/先来后到/空载费用/可观测信息/分批定量放行/双车道/不能拒载/多次往返/短途优先（A6/CT3）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A2线性投影、A3确定性排队近似、A4常数服务时间、A6里程分布——均给依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 均有 objectives/experiments（决策模型/数据校准方案/上车点效率/优先方案）"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理题面歧义（A5短途阈值校准、P8/P9数据依赖），但无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=decision_analysis secondary=queueing_theory/optimization，判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V19 声明完整（航班/到达率/队长/收益/决策/上车点/服务率/效率/里程/权重/方差）并区分类型"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P9 有来源，但 E5 单位里程运价 p 与 E3 扰动 eps 未在参数/变量表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 带类型与误差量级说明（风险中性误差<5%、确定性近似分钟级）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 与 Q1-Q4 对应（期望收益最大/校准/乘车效率最大/收益方差最小），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "CT1-CT6（二元/非负/m≤2/安全容量/稳定 lambda_p<m*mu_s/优先规则）关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（决策分析+排队论+优化）正确；E2方程与机理对应（Erlang-C公式正确）；E3目标被机制支撑；E4 candidates 3个给选择依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E6 含 derivation_trace 且 rho<1 稳定性条件给出，但 p、eps 符号未声明（符号不一致）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（阈值解析/最小二乘/Erlang-C网格/贪心重排序）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 文件名，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V5 网格收敛检验仅为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 声明多组随机数初值重复运行比较J的均值标准差，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 极端情形对照（W_q=0恒排队/极大恒放空），非标准对比基线"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 对 alpha/R_a/c_t ±20%扰动（敏感参数）观察方案翻转临界点"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V3 极限（lambda_p→0、lambda_p→m*mu_s）+V1（W_q边界）2类极限检验且与模型行为关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 目标覆盖 O1-O4 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "CL1-CL4 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 33
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "决策分析+排队建模完整；缺陷：p/eps 符号未声明、L3 缺执行证据。"
+}

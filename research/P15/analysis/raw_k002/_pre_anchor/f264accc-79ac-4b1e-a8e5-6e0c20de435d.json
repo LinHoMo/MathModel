@@ -1,0 +1,111 @@
+{
+  "submission_id": "f264accc-79ac-4b1e-a8e5-6e0c20de435d",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:35:09+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "参数提取正确：P1-P12（移动20/33/46与23/41/59与18/32/46、加工560/580/545、两道400/280/455与378/500/182、奇偶上下料28/30/27与31/35/32、清洗25/30/25、28800s、故障0.01、[10,20]分钟）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1 传送带不构成瓶颈、A3 两道工序不同机、A5 班初空载——均给依据与误差"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q4 分解完整且 3 组数据批量检验（O4/X4），但附件2 EXCEL 3工作表交付仅 X4'结果表'间接对应，未显式列出文件名"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A4 故障均匀分布最大熵、A6 清洗顺带完成），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=optimization secondary=simulation/dynamic_programming，调度优化判定正确（MDP 排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 声明完整（位置/状态/决策/产量/移动时间/上下料/清洗/加工时间/故障标记/排除时间/利用率/等待）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P12 有来源且三组数值正确，但 E5 中 n_j（第 j 台完成数）未在变量表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 带类型与误差影响（传送带乐观估计、均匀分布最大熵、停靠位置纳入策略）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 max N/O2 max N+min ω/O3 max E[N]/O4 统计报告 与 Q1-Q4 对应"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "CT1单服务/CT2容量/CT3工序顺序/CT4故障/CT5班次——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M4 机理正确（并行机+单服务员/流水线混合/随机失效调度/参数批量）；E1 服务循环/上界/故障随机模型方程与机理对应；candidates 4个（MDP 排除给依据）"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E5 含推导轨迹，但 n_j 符号未声明，无初始条件"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（贪心优先级/两道前瞻/故障感知/批量运行）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 文件名（rgv_greedy.py 等），无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V5 规则参数网格收敛为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 故障注入 20 次随机数初值、标准差<均值5%为声明，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（CL1-CL4 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 理论产量上界 E2 对比差距<5%（合理基准），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V3 加工时间±10% 对产量排序稳定性（敏感参数）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V2 仅 1 类极限（移动时间→0 退化为 8 台独立机）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 目标覆盖 O1-O4 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "CL1-CL4 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 7,
+    "overall": 31
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "RGV 调度 IR 完整（三组参数正确、候选模型对比充分）；缺陷：n_j 未声明、EXCEL 交付未显式识别、仅1类极限、L3 缺执行证据。"
+}

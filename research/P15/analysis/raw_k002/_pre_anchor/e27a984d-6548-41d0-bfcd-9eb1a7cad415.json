@@ -1,0 +1,109 @@
+{
+  "submission_id": "e27a984d-6548-41d0-bfcd-9eb1a7cad415",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:31:43+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件提取完整且数值正确：P1-P16 覆盖附件1物性（k 0.082/0.37/0.045、ρ 300/862/74.2、c 1377/2100/1726、d1=0.6mm、d3=3.6mm）、75/65/80°C、d_2=6mm/d_4=5mm/5.5mm、5400/3600/1800s、47°C/44°C/5min=300s"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1一维忽略边缘、A2物性常数、A3理想接触、A4第三类边界、A5空气层等效导热——均给依据与量级误差（边缘2-3%、物性<5%）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "X1 expected_outputs 明确 'problem1.xlsx 逐分钟皮肤温度'（EXCEL 交付识别）；Q1-Q3 目标/实验完整"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A5 等效导热吸收辐射/对流、A2 常数化），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=pde secondary=heat_transfer，多层非稳态导热判定正确（稳态热阻/集总参数排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V8 声明完整（温度场/坐标/时间/皮肤温度/II层厚度/IV层厚度/热流/超温时长）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P16 有来源且物性数值全部正确，但 V2 灵敏度中 k_4^eq（IV 层等效导热）未在参数表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 带类型与定量误差说明（理想接触、第三类边界、常数化误差可控）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1反演/O2 min d_2/O3 min w1d2+w2d4 与 Q1-Q3 对应，时间单位统一为秒（3600/1800/300）"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1终温/C2超温积分≤300/C3终温/C4超温/C5非负——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（多层非稳态导热）正确；E2方程与机理对应（第三类边界）；E3目标被机制支撑；E4 candidates 3个（稳态/集总排除给依据含 Bi 数）"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E4 含初始条件 T(x,0)=25°C 与边界条件，但 k_4^eq 符号未声明（符号不一致）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S2（Crank-Nicolson+TDMA/黄金分割嵌套瞬态模拟）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V4 步长减半收敛检验为计划"
+    },
+    "L3.4": {
+      "score": 0,
+      "evidence": "无随机性/多组运行可复现性声明（V4 为网格收敛检验非复现设计）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C1-C3 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 0,
+      "evidence": "无基线模型对照设计（V1 为与附件2数据 RMSE 精度验证，非基线对比）"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 h_1/h_2/k_4^eq 各±20%扰动（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V3 极限2类（d_2→0 趋于无II层、t→∞ 稳态线性分布）且预期行为与主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 目标覆盖 O1/O2/O3 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1-C3 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 13,
+    "L3_total": 2,
+    "L4_total": 7,
+    "overall": 31
+  },
+  "failure_modes": [],
+  "notes": "传热 IR 参数数值完整正确且识别 problem1.xlsx 交付；缺陷：k_4^eq 未声明、无基线对照、L3 缺执行证据。"
+}

@@ -1,0 +1,111 @@
+{
+  "submission_id": "fec21bbe-6624-4bfa-8fcc-a39ab683d2e6",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:37:09+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "参数提取正确：P1-P12（移动20/23/18、33/41/32、46/59/46、加工560/580/545、两道400/280/455与378/500/182、奇偶上下料28/30/27与31/35/32、清洗25/30/25、28800、0.01、U(600,1200)s）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A3 供料无限（给高估1-2%误差）、A4 故障独立同分布、A5 两道分组固定（Q4 交叉检验）——均给依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 分解完整且 X4 expected_outputs 明确'excel: 3 工作表结果'——附件2 EXCEL 交付被识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A5 固定分组在 Q4 交叉检验），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=optimization secondary=simulation，优先规则调度判定正确（MILP/MDP 排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V6 声明完整（产量/位置/动作/状态/班次产量/利用率）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P12 有来源且三组数值正确，但 E4 中 K_j（第 j 台完成件数）未声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 带类型与误差影响（供料无限高估1-2%、固定分组在Q4交叉检验）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 与 Q1-Q4 对应（max N/两道流/期望产量/三组统计）"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5（单服务/容量/工序先后/时窗/故障停机）关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M3 优先规则调度+故障鲁棒+三组普适检验机理正确；E1-E4 方程与机理对应；candidates 4个给排除依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E4 含推导轨迹，但 K_j 符号未声明，无初始条件"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 DES 事件队列+S2 规则对比实验（FCFS/SPT/就近/轮询）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V5 单调性检验为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 5 个随机种子 Monte Carlo CV<3% 声明，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C1-C4 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 无故障理想节拍理论产量上限对比（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 p_f 0-3%、t_w ±20% 对 N 影响（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V3 极限2类（t_m→0 趋纯加工上限、p_f→0 与确定性一致）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 目标覆盖 O1-O4 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1-C4 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 33
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "RGV 优先规则 IR 完整（参数三组正确、EXCEL 交付识别、规则对比实验设计）；缺陷：K_j 未声明、L3 缺执行证据。"
+}

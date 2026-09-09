@@ -1,0 +1,109 @@
+{
+  "submission_id": "ece66fa2-fd51-46e6-851b-4cf36123fdf7",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:33:00+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件提取完整且数值正确：P1 75/65/80、P2 37、P3 90/60/30min、P5 (0.6,6,3.6,5)mm、P7 (47,5)；P4 物性按附件1"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1 一维均匀、A2 恒温皮肤边界、A5 初始全场37℃——均给依据与误差量级"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1 显式输出 'problem1.xlsx'（EXCEL 交付识别）；X1-X4 覆盖 Q1-Q3 全部实验"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 4项（皮肤边界类型/IV传热方式/换热系数取值/约束严格性）均给 interpretations+adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=finite_difference secondary=heat_transfer/numerical_optimization，差分求解+约束搜索判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V8 声明完整（离散温度/空间步长/时间步长/皮肤温度/II层厚度/IV层厚度/超温时长/峰值温度）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P8 有来源，但 E2 中热扩散率 α_i（=k_i/ρ_i c_i）未在参数表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 带类型与依据（隐式无条件稳定、CFL 条件、等效导热近似）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1仿真/O2 min d_2/O3 min 加权厚度 与 Q1-Q3 对应，约束 T_max≤47、τ>44≤5 正确"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1稳定性/C2温度上限/C3超温时长/C4正厚度——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（显式/隐式/界面调和平均离散）正确；E2方程与机理对应（FTCS/CN/热阻扫描）；E3目标被机制支撑；E4 candidates 5个（inverse_problem 排除给依据）"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E5 含控制方程/边界/界面/稳态近似完整结构，但 α_i 符号未声明（符号不一致）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（Thomas/网格收敛/二分/双变量网格搜索）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 pseudocode 描述（tridiagonal LU/bisection），无实际代码与执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "X1 三套网格收敛二阶；LT4 'Δt 减半后 T_s 变化 <0.05℃，收敛性通过'；V1 三网格差<0.1℃——有实测收敛结果"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "multi_seed 5组（42-46）实测 'h_conv 的 cv≈1.5%，最优厚度 d_2* 一致，可复现性通过'"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "LT2 '厚度增大5倍后温度余量迅速增大'、LT3 'd_4=0 时峰值温度上升约1.2℃'——有定量合理性结果但无完整产出数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V2 显式与隐式格式交叉验证同一算例（基线对照），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 有实测结果：h_conv +20% 峰值升约0.9℃、k_2 +20% d_2* 增约8%、k_4 +20% d_4* 增约6%（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT4 极限4类（T_amb→37/d_2→∞/d_4→0/Δt→0）均带实测结果（d_4=0 升1.2℃、Δt减半变<0.05℃）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 目标覆盖 O1/O2/O3 全部核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map 3/3 supported（C1←X1、C2←X3、C3←V4），claim status 与证据一致"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 13,
+    "L3_total": 7,
+    "L4_total": 9,
+    "overall": 38
+  },
+  "failure_modes": [],
+  "notes": "传热 IR 含完整实测验证链（收敛/多种子/灵敏度/极限均有数值结果）；缺陷：α_i 未声明、L3.2 缺代码。"
+}

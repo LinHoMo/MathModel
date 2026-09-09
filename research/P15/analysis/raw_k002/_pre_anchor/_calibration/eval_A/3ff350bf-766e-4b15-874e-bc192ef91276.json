@@ -1,0 +1,111 @@
+{
+  "submission_id": "3ff350bf-766e-4b15-874e-bc192ef91276",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:21:20"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P8: v_p=60km/h, T_3=3min, m_A=20平台, n_g=13要道, Δ=[2,5], l_ij=附件数据, τ_d=3min, P=32; 与题面一致"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1 路网带权无向图/最短路径(隐含), A2 管辖单归属, A4 嫌疑车速未定→按警车60假设(P8)并做±20%灵敏度"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O5+X1-X5 覆盖 Q1管辖/Q2封锁/Q3新增平台选址/Q4六区合理性评估/Q5围堵 全部交付; 题面无文件格式要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "validation_plan.ambiguity_handling 3条: '尽量3分钟'软约束、嫌疑车速未定、围堵起算时刻, 各含 interpretations+adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: optimization(指派/选址/min-max)+graph_algorithm; '管辖分配、封锁调度、新增平台选址、围堵出口封锁统一写成优化问题'判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 含 type(state/decision/derived/constant): 节点/行驶时间/管辖指派/封锁指派/T_max/新增平台/工作量/覆盖率/可达域"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 含 source(题目/假设)与取值(v=60, T_3=3, m_A=20, n_g=13, Δ=[2,5], τ_d=3, v_s=60假设)"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 均含 type(mechanism/mechanism_assumption/projection)与 rationale; A4 嫌疑车速度假设显式并做灵敏度"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 与题目一致: min T_max(Q1), min-max封锁(Q2), min-max选址(Q3), 覆盖率+CV合成评估(Q4), min-max围堵(Q5); 机理M3支撑O2/O5, 约束C1-C5一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 单归属∑x=1, C2 3分钟覆盖阈值, C3 平台-要道一对一指派, C4 2≤Σz≤5, C5 封锁时限; 方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(指派/选址/围堵→组合优化); 机理-方程一致(E2/E3/E6 min-max线性化); 机理-目标约束一致(M4时变可达→O5+C5); candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 结构完整, 符号(t_ij,x_kj,y_kl,z_j,R(t),exit)⊆声明集; E5/E6 定义可达域与出口集; 可求解"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 Floyd-Warshall预处理, S2 匈牙利/瓶颈指派, S3 分支定界0-1规划, S4 动态可达+指派; 与模型类型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "solvers 有 implementation_ref, 但无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "求解器均为精确算法(FW/匈牙利/分支定界/动态规划), 收敛性内在保证; 无发散记录"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "validation_plan.multi_seed: n_runs=5, seeds=[42,123,456,789,1024], aggregation=mean_std, 字段齐全(含seed=42)"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X5 预期输出(管辖表/最大响应/覆盖缺口/封锁匹配/出口集/围堵完成时间)合理, 但无实测数值"
+    },
+    "L4.1": {
+      "score": 0,
+      "evidence": "无对照基线(零模型/随机/文献); V1 为'单平台单节点手工对照+完全图退化验证', 非基线对比"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "sensitivity 车速±20%/路长±10%/嫌疑车速±20%(均为敏感参数), 但未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT4(v_p→∞, m→N, Δ→∞, v_s→0)≥2类极限检验, 但无结果字段, 未与主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1/O2/O3/O5 核心主张(管辖/封锁/选址/围堵)"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map C1-C5 每条含 evidence_ref 与 status(supported/hypothesis), 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 8,
+    "L4_total": 6,
+    "overall": "FAIL"
+  },
+  "failure_modes": [
+    "FM-VA-001"
+  ],
+  "notes": "L4.1 无对照基线 → L4 FAIL"
+}

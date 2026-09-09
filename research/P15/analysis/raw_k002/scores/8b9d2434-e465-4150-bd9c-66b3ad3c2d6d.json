@@ -1,109 +1,111 @@
 {
   "submission_id": "8b9d2434-e465-4150-bd9c-66b3ad3c2d6d",
   "evaluator": {
-    "model": "eval_B",
+    "model": "E02",
     "type": "independent_llm",
     "version": "1.0",
-    "timestamp": "2026-09-09T13:31:01+08:00"
+    "timestamp": "2026-09-09T13:47:00+0800"
   },
-  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1a",
   "dimensions": {
     "L1.1": {
-      "score": 2,
-      "evidence": "规则全覆盖（P1-P14 参数），Q1-Q3 全覆盖"
+      "score": 1,
+      "evidence": "P1-P14 提取初始资金、水/食物基准价、负重上限、ρ_w=3、ρ_f=2、基础水/食物消耗、基础挖矿收益、截止天数、村庄价格倍率 β=2、退款比例 α=0.5、多人拥挤倍率 κ=2k/3/4；但题面第（5）（7）条显式给出的消耗倍率体系——行走一天为基础消耗量 2 倍、停留为基础量、挖矿为 3 倍——未进入参数或约束，多人情形的倍率（P14）有而单人的核心倍率缺失"
     },
     "L1.2": {
       "score": 2,
-      "evidence": "A1-A6 隐式条件识别（A1 一阶马尔可夫链/A3 经验频率/A4 静态纳什）"
+      "evidence": "A1 由题面未给天气生成机制推出一阶马尔可夫链并说明高阶依赖误差体现在转移矩阵校准残差中；C4 s_{t+1}∈{s_t}∪N(s_t) 对应注1 的公共边界才相邻；C3 资源非负配合 E1 终端 v_T(≠e)=-∞ 推出水或食物耗尽即失败；C6 起点购买至多一次；A2 按天结算与题面计时规则一致，隐式条件均给出推导依据"
     },
     "L1.3": {
-      "score": 1,
-      "evidence": "Q1要求'填入Result.xlsx'，未识别 Excel 交付"
+      "score": 2,
+      "evidence": "X1 scenario=第一关/第二关 对应 Q1 求解并填入 Result.xlsx、X2 scenario=第三关/第四关 对应 Q2、X3 scenario=第五关 对应 Q3（1）、X4 scenario=第六关 对应 Q3（2）；V3/V4 定义第 t 天结算后的剩余水量/食物量，与注 2 的当日消耗完毕且含购买后的口径一致；X1 expected_outputs 含逐日状态与行动及终局资金"
     },
     "L1.4": {
       "score": 1,
-      "evidence": "ambiguity 3条：天气机制/挖矿时序/同行口径，均有 adopted+justification"
+      "evidence": "ambiguity_handling 三项：天气生成机制（采纳一阶马尔可夫链，i.i.d. 为转移矩阵行相同的退化特例）、到达矿山当天不能挖矿与沙暴日也可挖矿的组合规则（采纳到达当天一律不能挖矿）、Q3 同行判定口径（采纳移动边 (A,B) 完全相同），每项含 interpretations/adopted/justification"
     },
     "L1.5": {
       "score": 2,
-      "evidence": "model_family primary=MDP+game_theory，与2020B gold family一致"
+      "evidence": "model_family.primary=markov_decision_process，secondary=[optimization, game_theory]，candidates 对 MDP（采纳）、dynamic_programming（难统一表达信息更新，排除）、simulation（无法系统寻优，保留为验证工具）逐条给出理由，与 2020_B 序贯决策+多人博弈的范式一致"
     },
     "L2.1": {
       "score": 2,
-      "evidence": "V1-V12 含 type 区分"
+      "evidence": "V1-V12 逐条带 symbol/definition/unit/type/sub_question_binding，类型区分 state（天数、区域、剩余水/食物/资金）、observation（天气、拥挤人数）、decision（行动、策略）、derived（值函数、终局资金）、constant（玩家数），覆盖状态-观测-决策-评估全链关键量"
     },
     "L2.2": {
-      "score": 2,
-      "evidence": "P1-P14 每参数有 source+取值（P5 ρw=3/P6 ρf=2/P12 β=2/P13 α=0.5/P14 κ）"
+      "score": 1,
+      "evidence": "P1-P14 均带 symbol/value/source（题目/校准），覆盖价格、质量、消耗、收益、截止与倍率；但 E2 引用的挖矿指示 y_t、购买量 q^w_t 与 q^f_t、退款量 refund_t 四个符号未在 variables/parameters 中声明，题面给出的一天消耗倍率体系亦未参数化"
     },
     "L2.3": {
       "score": 2,
-      "evidence": "A1-A6 分型附 rationale"
+      "evidence": "A1-A6 均带 type（mechanism_assumption/simplification/projection）与 rationale，A1 说明马尔可夫假设与 MDP 一致且高阶误差进校准残差、A2 说明按天结算误差不超过一天消耗量级、A6 风险中性对应题面保留尽可能多的资金，假设集显式、合理、可检验"
     },
     "L2.4": {
       "score": 2,
-      "evidence": "O1-O3 目标一致"
+      "evidence": "O1 max v_0(s_0)=max M_T(π) 对应 Q1、O2 max E_P[M_T|π] 对应 Q2 仅知当天天气、O3 纳什均衡条件对应 Q3（1）、O4 在信息集 I_t 下最大化 E[M_T^{(j)}] 对应 Q3（2），与题面保留尽可能多资金的目标一致；目标由 M1/M2 贝尔曼与随机博弈机理支撑，C1-C7 不使目标恒无解或恒平凡"
     },
     "L2.5": {
       "score": 2,
-      "evidence": "C1-C7 关键约束全（C6 购买限制/C7 拥挤耦合）"
+      "evidence": "C1 ρ_w W_t+ρ_f F_t≤W_max 负重、C2 t≤T 截止、C3 W_t,F_t≥0 资源非负、C4 s_{t+1}∈{s_t}∪N(s_t) 邻接移动、C5 沙暴⇒stay、C6 起点至多一次购买且村庄价 βp 终点退款 αp、C7 k_t≥2⇒按 κ 调整，七条方向正确、无符号错误，覆盖题面规则 (2)(4)(5)(6)(8) 与多人耦合"
     },
     "L2.6": {
-      "score": 3,
-      "evidence": "E1-E6（贝尔曼/即时奖励/转移核/纳什/序贯值函数/天气条件策略）+ candidates 对比"
+      "score": 2,
+      "evidence": "E1 机理-题面一致：MDP/随机博弈契合按天序贯决策与多人耦合；E2 机理-方程一致：M1→E1/E2、M2→E3/E4/E5、M3→E1/E6 由 related_equations 与 dependencies（P11→E3→E1、E2→E1）挂接；E4 候选对比充分：三候选各给采纳或排除依据；但 E3 有缺陷——题面消耗倍率体系与逐日资源转移未按机理形式化，机理隐含的关键动态未进方程"
     },
     "L2.7": {
-      "score": 2,
-      "evidence": "方程结构完整，符号全声明"
+      "score": 1,
+      "evidence": "E1-E6 有 latex/type/variables_refs/derivation_trace，E1 给出终端条件 v_T(e)=M_T、v_T(≠e)=-∞ 作为边界条件，dependencies 记录 P11→E3→E1→O1/O2、E4→O3、E5→O4、E2→E1；但 E2 的 y_t、q^w_t、q^f_t、refund_t 未进入声明集，符号一致性不成立"
     },
     "L3.1": {
       "score": 2,
-      "evidence": "S1 策略迭代/S2 均衡迭代/S3 MCTS，与模型匹配"
+      "evidence": "no-exec-artifact：S1 策略迭代（策略评估+策略改进，复杂度 O(|S|²) 每轮）匹配有限时域 MDP，S2 均衡迭代（最优反应循环+虚拟对局平滑）匹配 Q3 随机博弈，S3 蒙特卡洛树搜索（UCB 选点+深度截断）匹配 Q3（2）信息集序贯决策，三者与模型类型、状态空间口径一致"
     },
     "L3.2": {
-      "score": 1,
-      "evidence": "implementation_ref 为算法描述，无实际代码"
+      "score": 2,
+      "evidence": "no-exec-artifact：S1-S3 均带 implementation_ref（策略评估+策略改进交替、逐玩家最优反应更新剖面、信息集树上 UCB 选择）作为实现路径，X1-X4 给出 inputs（scenario=第一/二/三/四/五/六关、weather=全知、policy=S1 输出、n_runs=2000、transition=P11、info=逐日公开）与 expected_outputs（trajectory/final_money、mean/std/success_rate、equilibrium/payoffs、strategy_profile/payoff_distribution）的输入-输出约定，关卡数据来自附件"
     },
     "L3.3": {
       "score": 1,
-      "evidence": "策略评估+改进交替收敛/虚拟对局平滑（求解器声明），无实际数值"
+      "evidence": "no-exec-artifact：S1 声明策略评估与策略改进交替收敛于最优策略、S2 声明迭代直至收敛，但两者均未给出收敛容差、迭代上限或残差判据；X2 蒙特卡洛虽给 n_runs=2000 亦未给出样本量收敛判据，属声明收敛但无判据"
     },
     "L3.4": {
-      "score": 1,
-      "evidence": "multi_seed 5 组描述，无实际 cv 数值"
+      "score": 2,
+      "evidence": "no-exec-artifact：validation_plan.multi_seed n_runs=5、seeds=[42,123,456,789,1024] 固定、aggregation=mean_std，description 说明对 Q2/Q3 的随机模拟与均衡迭代报告期望资金与均衡资金的均值±标准差以检验算法稳定性；种子数、固定性与稳定性判据齐备"
     },
     "L3.5": {
       "score": 0,
-      "evidence": "无实际结果数值"
+      "evidence": "no-exec-artifact：X1-X4 expected_outputs 仅声明输出形式（M_T、平均终局资金与标准差与完成率、均衡资金、资金分布），未给出任何终局资金或完成率的预期量级或范围；C1-C4 的策略结构与均衡性质主张均为定性表述，无可与题面资金与箱数物理量级对照的数值预期"
     },
     "L4.1": {
-      "score": 1,
-      "evidence": "LT 退化（合理基线），无对比结果数值"
+      "score": 2,
+      "evidence": "V1 在单玩家、天气恒定、无矿山村庄的平凡地图上与解析解对比，策略迭代输出应一致，targets_refs=[O1]，属明确的解析基线并给出预期对比结论"
     },
     "L4.2": {
       "score": 1,
-      "evidence": "sensitivity 4 组无 result"
+      "evidence": "V2 扰动转移矩阵 P 与基础消耗 ±20% 检查最优策略结构与期望资金敏感性，validation_plan.sensitivity 含 P11±20%→O2、P7±20%→O1、P9±30%→O3、P4±15%→O1 的 one_at_a_time；扰动对象为转移矩阵、基础消耗、挖矿收益与负重上限等敏感量，但未报告弹性系数或鲁棒性边界"
     },
     "L4.3": {
       "score": 1,
-      "evidence": "LT1 W_max→∞/LT2 N→1/LT3 T→0/LT4 g_0→0 仅 expected_behavior"
+      "evidence": "validation_plan.limit_tests LT1 W_max→∞ 约束 C1 非活化、LT2 N→1 拥挤耦合消失退化为单人 MDP、LT3 T→0 值函数趋于 -∞、LT4 g_0→0 挖矿动作占比趋零，四类极限/退化检验且各带 expected_behavior；no-exec-artifact：无执行结果可与主张关联"
     },
     "L4.4": {
       "score": 2,
-      "evidence": "validation_plan 覆盖 O1-O3"
+      "evidence": "V1→O1（解析基线）、V2→O2（转移与消耗敏感性）、V3→O3（N→1 与负重松弛极限）、V4→O2/O3（重复求解稳定性），validations targets_refs 覆盖 O1-O4 全部四个目标，验证指标与题面最优策略、期望资金、均衡性质等核心主张对应"
     },
     "L4.5": {
       "score": 1,
-      "evidence": "claim_evidence_map C1=supported（计划态）其余 hypothesis"
+      "evidence": "claim_evidence_map 中 C1 evidence_ref=V1 status=supported，但 C2/C3/C4 的 status 均为 hypothesis（分别指向 V2/V3/V4），四条中三条未达 supported/refuted 判定；引用可解析到产物中的 validation，无 unsupported claim"
     }
   },
   "vector": {
     "L1_total": 8,
-    "L2_total": 15,
-    "L3_total": 5,
-    "L4_total": 6,
+    "L2_total": 12,
+    "L3_total": 7,
+    "L4_total": 7,
     "overall": 34
   },
-  "failure_modes": [],
-  "notes": ""
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "按锚定规则 A 对 L3/L4 以设计完备性评分（no-exec-artifact）；主要失分点为题面消耗倍率体系（行走 2 倍、挖矿 3 倍）未进入模型，以及 E2 的 y_t/q_t/refund_t 符号未声明。"
 }

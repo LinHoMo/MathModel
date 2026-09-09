@@ -1,0 +1,111 @@
+{
+  "submission_id": "aaf91531-0200-41f0-8768-a84fa76afde6",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:18:24+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 1,
+      "evidence": "P1-P11 提取板长/板宽/223节/速度/初始圈数/调头圆半径/速度上限，但遗漏孔径5.5cm与孔距板头27.5cm（关键几何条件），导致把手间距误用板长"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A2刚性杆弦长约束、A4碰撞判据（板宽几何干涉）、A3中心差分——隐式条件识别并给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "O1 输出 k=0..300 每秒位置速度、O2 t_end、O4 k=-100..100 已捕获时间范围，但 result1/2/4.xlsx 文件名与6位小数精度未显式识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 3项（初始相位θ_A=32π/碰撞判据/圆弧调整范围）均给 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=kinematics，离散时间运动学判定正确，与运动学问题一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 声明完整（时间网格/极角/极径/把手位置/速度/速率比/最小间距/终止时刻/调头弧长）并区分类型"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P11 有来源，但 E1 中螺距 p（Q1=0.55/Q3待求/Q4=1.7）与初始极径 a 未在参数表声明"
+    },
+    "L2.3": {
+      "score": 1,
+      "evidence": "A1-A5 带类型，但 A2 把手间距恒等于板长与题面孔位置27.5cm冲突（应为板长-2×27.5），几何假设不准确"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 与 Q1-Q5 对应（逐秒仿真/碰撞终止/最小螺距/最短调头/最大速度），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1链长、C2弧长推进、C3无碰撞、C4调头边界、C5相切、C6速度上限——关键约束齐备方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理家族（离散时间运动学+链约束）正确；E2-E6方程与机理对应（弧长推进/弦长定位/中心差分/二分/链式法则）；E3目标被机制支撑；E4 candidates 3个给选择依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E6 含 derivation_trace 且初始条件（θ_A=32π）与边界（r=R_T）齐备，但 E1 符号 a、p 未声明（符号不一致）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（逐秒步进/中心差分/二分细分/一维网格搜索）与运动学模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "盲评包无代码与执行日志，无法验证可执行性"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V2 步长收敛检验仅为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 声明 n_runs=5、seeds 42-1024、mean_std，无实际方差/阈值结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验合理性"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 与直线匀速链解析解对照（基线），未报告实际对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 对板宽±10%、安全裕度±5mm、R_T±5%扰动（敏感参数），target O2/O3"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT3（Δt→0、w→0、v0→0）3类极限检验，expected_behavior 与模型主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V6 目标覆盖 O1-O5 全部核心主张（链长约束收敛/碰撞稳健/最小螺距/调头连续/速度上限）"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map C1-C5 全部映射证据并判定 supported"
+    }
+  },
+  "vector": {
+    "L1_total": 7,
+    "L2_total": 12,
+    "L3_total": 3,
+    "L4_total": 9,
+    "overall": 31
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "运动学建模框架完整；主要缺陷：把手间距误用板长（孔位置条件未提取）、螺距 p 未声明、L3 缺执行证据。"
+}

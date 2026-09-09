@@ -1,0 +1,112 @@
+{
+  "submission_id": "7c69dee1-bb5e-4bcf-95ed-626914296c07",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:15:48"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 0,
+      "evidence": "parameters 多处与题面不符：P4 移动时间 18/27/36/45/54 与题面三组（20/33/46、23/41/59、18/32/46）均不一致；P2 清洗 35/30 vs 题面 25/30/25；P3 上下料 20 vs 28/31；P8 刀具寿命为题面无此参数；错误率>30%"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1 单服务、A2 加工→清洗→上下料流程、A4 移动时间线性假设（题面1/2/3单位时间确为线性递推），附合理性说明"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "P6 T_shift=28800 识别班次时长，experiments 覆盖 Q1-Q4 产量输出，但未识别任务2的3组参数回放与 EXCEL 交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 4 条（服务优先级/修复时长/工序间缓冲/班末统计）各含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family.primary=dynamic_programming（事件驱动调度）、secondary optimization/MDP；RGV调度建模范式正确"
+    },
+    "L2.1": {
+      "score": 1,
+      "evidence": "variables V1-V7 区分 state/decision/derived/observation；缺两道工序半成品/在制品变量与完工时刻变量（Q4 串行产线关键量）"
+    },
+    "L2.2": {
+      "score": 0,
+      "evidence": "P1 二道加工 560/280 与题面（400/378、280/500、455/182）不符；P2/P3/P4 取值错误；P8 刀具寿命为虚构；错误率>30%"
+    },
+    "L2.3": {
+      "score": 1,
+      "evidence": "A5 称题面未给修复时长，与题面故障排除10~20分钟矛盾；刀具寿命假设题面无依据；A1-A4 合理"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 均为最大化班次产量/期望产量（含两道工序4台串行产线），与题目一致；事件DP机制可产生目标量"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1 单服务、C2 工序约束、C3 时间窗、C4 故障状态正确；缺 RGV 移动时间约束（调度关键）；C5 刀具约束为虚构"
+    },
+    "L2.6": {
+      "score": 1,
+      "evidence": "E1 机理家族正确（事件驱动调度）但 E2/E3 有缺陷：E4 节拍公式 T_j=(8/4)t_proc+... 口径错误（两道工序每工序4台），DP方程与启发式前向搜索 solver 脱节，漏移动时间约束；E4 候选对比充分（DP/opt/MDP/sim 四候选+依据）"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E4 存在但无初始/边界条件声明；E4 节拍公式符号口径错误；其余方程符号基本在声明集内"
+    },
+    "L3.1": {
+      "score": 1,
+      "evidence": "S1 事件驱动前向搜索（启发式+剪枝）与声明的 DP 价值迭代模型口径不一致；S3 MC 与随机故障匹配；S4 节拍分析"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "solvers 仅 pseudocode 引用（event simulation with greedy candidate pruning），无代码/执行/实际结果"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无收敛标志/残差数据；V5 收敛检验（产量对阈值不敏感）为计划声明"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "multi_seed n_runs=5、seeds=[42,43,44,45,46]、aggregation=mean_std，result: cv≈4.2% 可复现性通过（<10% 满足判据）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际产量数值（experiments 仅 expected_outputs N_prod；multi_seed 仅给 cv 不给绝对产量）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 以固定轮询顺序策略为基线比较 DP 策略产量提升，基线合理但无实际对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "validation_plan.sensitivity 含 3 组结果：故障率翻倍产量损失约翻倍（线性敏感）、t_move+20% 产量降约3%、t_proc2+20% 产量降约9%（二道为瓶颈），扰动敏感参数"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "limit_tests LT1-LT4（t_move→0、p_f→0、t_proc→∞、T_shift→0）≥2类且均含 result 并与预期关联（如 p_f=0 时两模型产量一致）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "validations V1-V5 目标 O1/O2/O4 与 claims C1-C3 对应，覆盖无故障产量、故障期望产量、瓶颈产量等核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C3 均标 supported 且有 evidence_refs，但 C1 证据 X1 无实际结果；C2/C3 有实际结果支撑"
+    }
+  },
+  "vector": {
+    "L1_total": 6,
+    "L2_total": 7,
+    "L3_total": 4,
+    "L4_total": 8,
+    "overall": "FAIL"
+  },
+  "failure_modes": [
+    "FM-PA-003",
+    "FM-MC-003"
+  ],
+  "notes": ""
+}

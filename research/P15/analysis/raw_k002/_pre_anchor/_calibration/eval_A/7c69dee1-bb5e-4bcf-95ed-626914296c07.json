@@ -1,0 +1,112 @@
+{
+  "submission_id": "7c69dee1-bb5e-4bcf-95ed-626914296c07",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:21:20"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 0,
+      "evidence": "参数提取错误率>30%: P1 二道加工'560s/280s'与题面3组不符(组1为400/378), P2 清洗'一道35s'错误(表为25/30/25), P3 上下料20错误(表为28/31/27/32), P4 移动时间按9s/单位线性外推(表为20/33/46等)且仅用一组数据"
+    },
+    "L1.2": {
+      "score": 1,
+      "evidence": "识别了 A1 单执行机构、A2 加工→清洗→上下料流程、A4 匀速移动; 但 A5 误称'题面未给修复时长'而忽略题面10~20分钟修复时间"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "P6 T_shift=28800(8h)✓; 但未按3组数据检验(experiments X1-X4 只分一道/二道), 未识别附件2 EXCEL交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 4条(RGV服务优先级/故障修复时长/工序缓冲/班末统计)含 interpretations+adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: dynamic_programming+optimization+MDP+simulation; 调度问题范式判定正确(与gold family有交集)"
+    },
+    "L2.1": {
+      "score": 1,
+      "evidence": "V1-V7 声明含 type; 但两道工序 WIP/完工时刻等关键变量缺失(缺失率约10-30%)"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P8 均声明且 source=题目, 但 P1/P2/P3/P4 取值与题面表1不符"
+    },
+    "L2.3": {
+      "score": 1,
+      "evidence": "A1-A5 有类型与 rationale; 但 A5'修复立即完成'与题面'排除时间10~20分钟'矛盾, A4 移动时间线性外推与表不符"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "O1-O4 目标量(产量最大化)正确, 但子问题结构(Q1无故障/Q2故障/Q3一般/Q4两道)与题目三情形×两任务偏移"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1 单服务/C3 时间窗/C4 故障状态 已形式化; 但移动时间与清洗流程约束未显式, 故障修复时长约束缺失"
+    },
+    "L2.6": {
+      "score": 1,
+      "evidence": "机理家族正确(事件驱动DP/MDP, E1满足); 但 E2/E3 有缺陷: 故障修复时长未进方程(E3 仅 Bernoulli(0.01)), 且参数取值错误"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E4 符号⊆声明集; 但无显式初始/边界条件, E4 节拍公式基于错误移动时间参数"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 事件驱动前向搜索/S2 滚动重调度/S3 蒙特卡洛策略评估/S4 节拍分析, 与 DP/MDP 模型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "evidence": "validation_plan 报告具体执行结果: multi_seed cv≈4.2%, 极限检验 result'符合预期', 灵敏度数值(3%/9%/线性敏感)"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V5 声明'调度搜索深度/剪枝阈值收敛: 产量对阈值不敏感'但未报告残差/收敛数值"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "multi_seed: n_runs=5, seeds=[42,43,44,45,46], aggregation=mean_std, result cv≈4.2%<10%"
+    },
+    "L3.5": {
+      "score": 2,
+      "evidence": "结果物理合理: 故障率翻倍产量损失约翻倍(线性), t_move+20%→-3%, t_proc2+20%→-9%, 量级正确"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 基线=固定轮询顺序策略, '比较DP策略产量提升'"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 故障率0.5%-2%/移动±20%/二道加工±20%, 报告弹性(线性敏感/3%/9%)"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT4(t_move→0, p_f→0, t_proc→∞, T_shift→0)≥2类极限检验, 各含 result'符合预期'并与主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1/O2/O4 核心主张(产量/故障损失/两道瓶颈)"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map C1-C3 全部 supported, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 5,
+    "L2_total": 7,
+    "L3_total": 9,
+    "L4_total": 9,
+    "overall": "FAIL"
+  },
+  "failure_modes": [
+    "FM-PA-003",
+    "FM-MC-004"
+  ],
+  "notes": "L1/L2 参数提取错误与机理缺陷, 前级FAIL阻断"
+}

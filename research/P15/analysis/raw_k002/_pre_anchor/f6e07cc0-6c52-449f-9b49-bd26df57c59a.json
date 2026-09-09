@@ -1,0 +1,111 @@
+{
+  "submission_id": "f6e07cc0-6c52-449f-9b49-bd26df57c59a",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:37:09+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "参数提取正确：P1-P9（移动20/33/46；23/41/59；18/32/46、加工560/580/545、两道400/280/455与378/500/182、奇偶上下料28/31；30/35；27/32、清洗25/30/25、28800、0.01、[600,1200]s）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A2 传送带不构成瓶颈、A5 两道不同机且同机不连任、A4 班初空载——均给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q4 分解完整（O4'三组参数×三种工况'批量），但附件2 EXCEL 交付未显式识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 3项（传送带节拍/RGV停靠位置/二道CNC选择范围）均给 interpretations+adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=simulation secondary=optimization/MDP，离散事件仿真判定正确（DP/MDP 排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 声明完整（仿真时钟/事件表/剩余时间/服务序列/产量/在制品队列/优先级分数/故障状态/统计）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P10 有来源且三组数值正确；E2 打分公式符号（w_req/w_dist/w_bal=P10、d(p,j)）均已声明或内联"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 带类型与误差影响（传送带乐观估计、最大熵均匀分布）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 max N/O2 双目标/O3 max E[N]/O4 统计表 与 Q1-Q4 对应"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "CT1-CT5（单服务/容量/工序顺序/故障/时域）关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M4 事件仿真机理正确；E1-E5（事件循环/优先级打分/状态机/故障注入/统计定义）与机理对应；candidates 4个给排除依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E5 含推导轨迹且符号一致（打分公式三项参数均声明）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（DES 事件队列/状态机扩展/故障注入20次/权重网格）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 文件名（rgv_sim.py 等），无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V5 重复次数10→50收敛为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 5组（42/123/456/789/1024）mean_std 声明，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（CL1-CL4 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单台 CNC 独立运行解析节拍对比（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity P2/P3 ±10%、P8 ±50%、P10 全区间网格扫描"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT4 极限4类（τ_m→0 独立机、τ_c→0 产量上界、π_f→0 收敛无故障、π_f→1 产量趋零）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 + LT 测试覆盖 O1-O4 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map 4/4 标注 supported，但对应实验均为未实跑计划，主张状态与 hypothesis 不一致"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 34
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "RGV 事件仿真 IR 完整（参数正确/歧义处理明确/极限4类）；缺陷：L3 缺执行证据、claim 状态过度声明。"
+}

@@ -1,0 +1,109 @@
+{
+  "submission_id": "3ff350bf-766e-4b15-874e-bc192ef91276",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:16:08+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P8 提取车速60、3分钟阈值、20平台、13要道、[2,5]新增、案发延迟3、附件路网长度，与题面一致"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1（路网无向图+最短路径）、A4（嫌疑车沿最短路径扩张）、A5（变异系数度量不均衡）为隐式条件并给出依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q5 全部子问题有 objectives/experiments 对应（管辖、封锁、选址、六区评估、围堵），交付内容完整识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 含3项（'尽量3分钟'软约束、嫌疑车速未知、围堵时间窗原点）均给出 interpretations 与 adopted 方案"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=optimization secondary=graph_algorithm/decision_analysis，指派/选址/封锁的组合优化判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 声明完整并区分 constant/derived/decision（节点、时间、管辖、封锁、新增平台、工作量、覆盖率、可达域）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 全部声明 source（题目/假设）；方程符号 t_ij/x_kj/y_kl/z_j/T_max/R(t)/v_p/T_3/Δ/τ_d/v_s 均在声明集内"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 显式、带类型与合理性说明；嫌疑车速按警车假设并做灵敏度，合理"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 分别对应 Q1-Q5（min-max响应/封锁/选址/评估/围堵），目标-机制-约束三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1指派、C2覆盖阈值、C3一对一封锁匹配、C4选址预算[2,5]、C5围堵时限——关键约束齐备方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理家族（指派/选址组合优化+图算法）与问题一致；E2-E6方程与机理对应（min-max线性化、可达域递推）；E3目标被机制支撑约束不冲突；E4 candidates 4个给出选择/排除依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 含latex/derivation_trace（Floyd-Warshall、瓶颈指派、选址、可达域、出口封锁）；符号均在声明集内"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（Floyd-Warshall、瓶颈指派、分支定界、动态可达+指派）与模型类型完全匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "盲评包无代码与执行日志，无法验证可执行性"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无 results/convergence 字段，只有 expected_outputs 计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "validation_plan.multi_seed 声明 n_runs=5、seeds=[42,123,456,789,1024]、mean_std，但未给出实际方差/阈值结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验合理性"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 以单平台单节点/直线路网手工对照与完全图退化作为合理性基线，非标准对比基线且未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "validation_plan.sensitivity 对 v_p±20%、路长±10%、v_s±20%（敏感参数）扰动，target 指向 O1/O2/O3/O5"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "limit_tests LT1-LT4（v_p→∞、m→N、Δ→∞、v_s→0）共4类极限检验，expected_behavior 与模型主张（T_max→0、θ→1）关联"
+    },
+    "L4.4": {
+      "score": 1,
+      "evidence": "V1-V4 目标覆盖 O1/O2/O3/O5，但 Q4（六区合理性评估，O4）无对应 validation 目标，仅 X4 实验支撑"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map 中 C1=supported、C2-C5=hypothesis 未决，主张均有证据引用但多数未判定"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 3,
+    "L4_total": 7,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": "L1/L2 建模质量高；L3 缺代码执行证据；L4 验证设计完整但 Q4 验证目标覆盖有缺口。"
+}

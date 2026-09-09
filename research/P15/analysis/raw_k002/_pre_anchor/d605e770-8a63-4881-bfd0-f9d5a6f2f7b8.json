@@ -1,0 +1,111 @@
+{
+  "submission_id": "d605e770-8a63-4881-bfd0-f9d5a6f2f7b8",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:28:09+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P8 取自题面（v=60/T_3=3/n_p=20/n_r=13/n_a=[2,5]/δ=3/p_0=32/附件2路网），显式条件提取正确"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1最短路匀速行驶、A3工作量代理、A4等速围堵先到封锁、A6跨区等权——均给依据与误差影响"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q5 均有 objectives/experiments（管辖/全封锁/增点/六区合理性/围堵）"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A1忽略红绿灯、A3工作量口径、A6跨区等权并在Q4修正），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=optimization secondary=graph_algorithm/decision_analysis，指派/瓶颈/选址/围堵统一为整数规划判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V10 声明完整（管辖指派/最短路时间/最大出警/工作量/封锁指派/封锁时刻/新增位置/围堵到达/嫌疑犯到达/围堵圈标记）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P9 有来源，但 E4 中节点权重 w_j 未在参数/变量表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 带类型与误差说明（红绿灯乐观、等权假设在Q4讨论中修正）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 与 Q1-Q5 对应（min T_max/min max C_k/多目标均衡/六区审计/最小围堵圈），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1覆盖/C2时限/C3一平台一要道/C4预算/C5围堵时间/C6切断路径——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（覆盖指派/瓶颈指派/均衡选址/动态围堵统一优化）正确；E2方程与机理对应；E3目标被机制支撑；E4 candidates 3个给选择依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E6 含 derivation_trace，但 w_j 符号未声明（符号不一致），无显式初始/边界条件"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（Floyd-Warshall/0-1整数规划分支定界/贪心+局部搜索/时间可达圈剪枝）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 方法描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V5 确定性重复一致为复现声明"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V5 声明确定性算法重复运行完全一致，无实际运行证据"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C2-C5 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 与最近邻贪心分配对比（MIP T_max 不劣于贪心，合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 车速±10%扰动对3min覆盖节点数（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V3 极限2类（平台数→节点数 T_max→0、权重均匀时增点对称）且预期行为与模型主张关联"
+    },
+    "L4.4": {
+      "score": 1,
+      "evidence": "V1-V5 目标覆盖 O1/O3/O5（及 O2 经 V5），但 Q4（O4 六区合理性）无对应 validation 目标"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1 status=supported，C2-C5 均 hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 7,
+    "overall": 32
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "优化建模完整；缺陷：w_j 未声明、Q4 无验证目标、C2-C5 证据未决、L3 缺执行证据。"
+}

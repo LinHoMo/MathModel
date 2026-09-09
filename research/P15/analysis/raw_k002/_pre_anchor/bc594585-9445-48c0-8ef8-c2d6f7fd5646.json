@@ -1,0 +1,111 @@
+{
+  "submission_id": "bc594585-9445-48c0-8ef8-c2d6f7fd5646",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:23:30+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P5/P7 取自题面（60/3/20/13/2-5/延迟3）；P6 嫌疑犯速度[60,90]为假设并做鲁棒；显式条件提取正确"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A4工作量代理、A3速度不确定鲁棒设计、E1最短路输入——均给依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q5 均有 objectives/experiments（管辖/封锁/新增/六区审计/围堵）"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 3项（嫌疑犯车速/管辖标准/工作量口径）均给 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=optimization secondary=graph_algorithm/decision_analysis，判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V8 声明完整（最短时间矩阵/覆盖指派/覆盖状态/封锁指派/封锁时间/新增节点/工作量/围堵集）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P8 有来源，但 E1 中 w_e、l_e（边权与边长）未在参数/变量表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 带类型与误差说明（速度最坏情况、边权近似由灵敏度检验）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 与 Q1-Q5 对应（覆盖-响应双目标/min-max封锁/方差-覆盖权衡/六区评价/鲁棒围堵），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1唯一归属/C2响应≤3/C3单平台封锁/C4要道全覆盖/C5新增[2,5]/C6鲁棒围堵——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（ILP覆盖+瓶颈指派+鲁棒围堵）正确；E2方程与机理对应；E3目标被机制支撑；E4 candidates 3个给选择依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E4 含 derivation_trace，但 w_e/l_e 符号未声明（符号不一致），无显式初始/边界条件"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3（ILP分支定界/瓶颈二分+匹配/鲁棒场景枚举）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref（scipy.optimize.milp 等），无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V3 极限检验与 V5 为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 声明 n_runs=5、seeds 42-1024、mean_std（多场景重跑），无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 ILP 与贪心最近指派对照（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 对 v_s[60,90]、omega±20%、延迟2-5min扰动（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1（v_p→∞全覆盖）、LT2（n_add端点2/5）2类极限检验且预期行为与主张关联"
+    },
+    "L4.4": {
+      "score": 1,
+      "evidence": "V1-V5 目标覆盖 O1/O2/O3/O5，但 Q4（C4）无对应 validation 目标"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map 中 C1-C3 supported、C5 unresolved，且 C4 未入映射"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 7,
+    "overall": 32
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "鲁棒优化建模完整；缺陷：w_e/l_e 未声明、Q4 无验证目标、C4/C5 证据未决、L3 缺执行证据。"
+}

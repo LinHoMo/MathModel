@@ -1,0 +1,111 @@
+{
+  "submission_id": "c5e7ce8a-3a57-4a8e-a948-8d990bbb2599",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:25:39+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件提取完整：P11-P21 覆盖 75/65/80°C、d2=6、d4=5/5.5、90/60/30min、47°C、44°C/5min；P7/P8 附件1厚度量级、附件2测量"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1一维、A2物性常数、A4空气层等效、A5初始热平衡——均给依据（边缘效应可忽略、Biot数排除集总）"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q3 目标与实验（X1-X3）完整，但 problem1.xlsx 温度分布交付文件未显式识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A3 h反演校准、A4 k_IV等效、A5初始37°C），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=pde secondary=finite_difference/heat_transfer，传热问题判定正确（Fourier定律+四层介质）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V11 声明完整（厚度坐标/时间/温度场/皮肤温度/层厚/决策厚度/超温时长/终温/环境温度/热流密度）并区分类型"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P21 有来源，但 O3 中权重 w_2/w_4、E3 中总厚度 L、E6 中 τ_f 未在参数/变量表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 带类型与合理性（Biot数排除集总、空气层等效吸收对流辐射、初始场偏差影响衰减）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 RMSE反演/O2 min d_2/O3 min w_2d_2+w_4d_4 与 Q1-Q3 对应，三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1终温47/C2超温时限/C3 Q3终温/C4厚度界/C5边界/C6界面/C7初始——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（Fourier四层PDE+CN差分）正确；E2方程与机理对应（反演/超温约束）；E3目标被机制支撑；E4 candidates 4个（排除集总/回归给依据）"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E6 含初始/边界条件，但 L、w_2/w_4、τ_f 符号未声明（符号不一致）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3（CN隐式差分+TDMA/LM反演/网格扫描+可行性过滤）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V4 网格无关性检验仅为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "X4 反演诊断多组初值声明，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C1-C3 均为 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单层均匀介质解析解（误差函数解）对照离散实现（基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 k_4/h ±20%扰动对 T_s 与最优厚度（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V3 极限3类（d_2→∞趋37°C、d_2→0趋环境、t→∞稳态线性）且预期行为与模型主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 目标覆盖 O1/O2/O3 全部核心主张（复现/最小厚度/前沿）"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1-C3 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 32
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "传热建模完整度高（21参数/11变量/7约束）；缺陷：problem1.xlsx 未识别、w_2/w_4/L/τ_f 符号未声明、L3 缺执行证据。"
+}

@@ -1,0 +1,111 @@
+{
+  "submission_id": "ee87905e-4ca4-45ea-8dfa-6a56d12dbc9a",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:33:00+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件提取完整且含关键几何参数：P1 3.41/P2 2.2/P3 0.3/P4 孔心距板头 0.275（27.5cm 正确纳入把手局部坐标）/P5 223/P6 1.0/P7 16/P8 0.55与1.7/P9 4.5/P10 2.0"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1 平面矩形刚体、A2 铰接开链、A4 刚体对最小距离碰撞判据——均给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q5 均有 objectives/experiments（链仿真/干涉/螺距可行域/调头仿真/速度上限），但 result1/2/4.xlsx 与 6 位小数交付格式未识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A4 碰撞判据、A3 驱动约束），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=multibody_dynamics secondary=kinematics，多刚体开链判定正确（纯几何螺线/优化框架排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V8 声明完整（刚体位姿/铰点坐标/广义速度/铰接约束残差/刚体间距/链端弧长/速度放大系数/调头半径）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P10 有来源且数值正确，但 E5 中圆心角 α_1/α_2 未在变量/参数表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 带类型与依据（铰接重合、分离轴干涉判据、路径切换速度连续）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 与 Q1-Q5 对应（仿真/t_end 上确界/min p/min s_T/max v0），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1铰接/C2链端驱动/C3无干涉/C4调头边界/C5相切/C6速度上限——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（开链刚体+约束雅可比递推）正确且几何精确（把手局部坐标 ℓ 纳入）；E2方程与机理对应；E3目标被机制支撑；E4 candidates 3个给选择依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E5 含铰接约束/速度递推/干涉判据结构，但 α_1/α_2 符号未声明，无初始位形条件"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（牛顿-拉弗森位形/雅可比递推/分离轴碰撞+二分/相切优化）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V2 步长收敛检验为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V5 声明确定性算法同输入重复逐位一致，无实际运行证据"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C1-C5 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单节直线运动解析解对照雅可比递推（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V3 板宽±10%、V6 半径比±10%扰动（敏感参数）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V4 仅 1 类极限（曲率半径→∞ 速度放大系数→1）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V6 目标覆盖 O1-O5 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1-C5 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 7,
+    "overall": 31
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "板凳龙多刚体框架几何精确（孔距 0.275m 纳入把手坐标）；缺陷：α_1/α_2 未声明、result xlsx 交付未识别、仅 1 类极限检验、L3 缺执行证据。"
+}

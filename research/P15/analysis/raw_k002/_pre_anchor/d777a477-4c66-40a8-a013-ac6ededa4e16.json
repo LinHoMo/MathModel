@@ -1,0 +1,111 @@
+{
+  "submission_id": "d777a477-4c66-40a8-a013-ac6ededa4e16",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T12:28:09+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "参数提取正确（对比题面）：P1 移动20/33/46、P2 加工560/580/545、P3 两工序400/378、P4 奇偶上下料28/31、P5 清洗25/30/25、P6 28800、P7 q=0.01、P8 [600,1200]、P9 m=8，三组数据完整"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A3 加工完成等待期间占用CNC、A6 初始空闲无预热、A2 两道工序不同机——均给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q4 分解完整且 3 组数据批量检验（O4/X4），但附件2 EXCEL 结果表交付仅 A5 提及'结果表'未显式列出"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A4排除时间均匀分布、A5产量口径），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=optimization secondary=simulation/dynamic_programming，RGV 调度判定正确（DP/排队排除给理由）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V10 声明完整（CNC编号/服务序号/指派/完工时刻/产量/CNC状态/RGV位置/故障指示/排除时长/工序段）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P9 有来源且取值正确，但 E1 中 CNC 就绪时刻 A_j、O4 中 Ȳ_ref 未在参数/变量表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 带类型与合理性（均匀分布最大熵、占用假设显式化、忽略预热误差集中班初）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 与 Q1-Q4 对应（一道 max Y/两道成对/故障期望/3组效率），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1单机/C2服务次序/C3可服务性/C4两工序异机/C5班次/C6故障处理——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（完工时间递推+瓶颈识别+故障仿真）正确；E2方程与机理对应；E3目标被机制支撑；E4 candidates 4个（DP/排队排除给依据）"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E6 含初始 C_{0,·}=0 与班次终止，但 A_j、Ȳ_ref 符号未声明（符号不一致）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（最短就绪优先+前瞻贪心/邻域搜索/DES/3组批量）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；X3 n_runs=200 为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 声明固定随机数初始化多组一致，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C4 的 ρ∈[0.85,0.98] 为 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单台CNC平凡情形解析解 ⌊T_s/(p+τ+τ_w)⌋ 对照（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 移动/上下料±20%、V5 加工时间±5%扰动（敏感参数）验证瓶颈判断"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V3 极限2类（q→0 趋近确定性最优、q→1 产量趋0）且预期行为与模型主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 目标覆盖 O1-O4 全部核心主张（调度规律/瓶颈/鲁棒/普适性）"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1-C4 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 32
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "RGV 建模质量高（参数三组数据正确、故障10-20min正确纳入）；缺陷：A_j/Ȳ_ref 未声明、L3 缺执行证据。"
+}
