@@ -17,6 +17,7 @@ import hashlib
 import json
 import sys
 import time
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -50,8 +51,14 @@ def sha256_text(text: str) -> str:
 
 
 def make_submission_id(problem_id: str, arm: str, seed: int) -> str:
-    raw = f"P15-K003_{problem_id}_{arm}_seed{seed}"
-    return hashlib.sha256(raw.encode()).hexdigest()[:12]
+    """audit FIX-4.4（P0-09/F-002）：submission ID 必须不可逆。
+
+    旧实现 sha256(f"P15-K003_{problem_id}_{arm}_seed{seed}")[:12] 可被暴力
+    反推 problem_id+arm，泄漏盲评分组。改为 uuid4（随机、不可链接）：
+    即使拿到全部 submission_id 也无法推出任何 run 的分组。
+    run_order 由冻结配置决定（FROZEN 阶段生成并哈希冻结），ID 与顺序无关。
+    """
+    return uuid.uuid4().hex[:12]
 
 
 def utc_now_iso() -> str:
@@ -743,38 +750,22 @@ def generate_and_run(problem_id: str, arm: str, seed: int) -> dict:
         code_id = pipe_result.get("code_id", "")
         exec_id = pipe_result.get("exec_id", "")
 
-        # FIX-1.6（audit P0-03）：execution_result 只从 registry 读 EXEC 真实
-        # 字段（run_code_pipeline 只返回 7 个 key，不返回 returncode/outputs/
-        # duration/code_hash 等；旧写法 pipe_result.get(...) 全部落到默认值
-        # 0/""/{}，构成"半真半假"产物）。registry 读不到 → status="invalid"
-        # 并注明原因（空壳守卫），绝不写默认数值冒充真实。
-        exec_data = _load_exec_data(FORMAL_DIR, exec_id)
-        if exec_data is None:
-            exec_status = "invalid"
-            execution_result = {
-                "model_id": model_id,
-                "status": "invalid",
-                "error": f"registry 无 execution_result {exec_id}（无法生成真实产物）",
-                "code_id": code_id,
-                "exec_id": exec_id,
-                "executed_at": utc_now_iso(),
-            }
-        else:
-            execution_result = {
-                "model_id": model_id,
-                "status": exec_data.get("status", "unknown"),
-                "returncode": exec_data.get("returncode"),
-                "outputs": exec_data.get("outputs", {}),
-                "stdout_tail": (exec_data.get("stdout") or "")[-2000:],
-                "stderr": exec_data.get("stderr", ""),
-                "duration_ms": exec_data.get("duration_ms"),
-                "code_hash": exec_data.get("code_hash", ""),
-                "environment_hash": exec_data.get("environment_hash", ""),
-                "code_id": code_id,
-                "exec_id": exec_id,
-                "executed_at": utc_now_iso(),
-            }
-        write_json(run_dir / "execution_result.json", execution_result)
+        # FIX-1.6 + FIX-4.2/4.3（audit P0-03/F-001）：execution_result 只能由
+        # execution_writer 模块写入（唯一写入路径，从 registry 读 EXEC 真实
+        # 字段；registry 读不到 → status="invalid" 壳守卫，绝不写默认数值
+        # 冒充真实）。runner 只提供 exec_id/code_id/model_id，不拼写产物。
+        from scripts.execution_writer import write_run_execution
+        write_run_execution(
+            run_dir, FORMAL_DIR, exec_id, code_id, model_id,
+            fidelity={
+                "execution_id": exec_id,
+                "fidelity_status": fidelity_status,
+                "fidelity_score": fidelity_score,
+                "checks": [],
+                "passed": 0,
+                "total": 0,
+                "evaluated_at": utc_now_iso(),
+            })
 
         # FIX-1.6：fidelity checks/passed/total 从 verify_fidelity 报告文件读
         # （run_code_pipeline 的 fidelity_report 是 report 路径，非内联字段）。
@@ -804,10 +795,18 @@ def generate_and_run(problem_id: str, arm: str, seed: int) -> dict:
         exec_status = "error"
         fidelity_status = "error"
         fidelity_score = None
-        execution_result = {"model_id": model_id, "status": "error", "error": str(e)}
-        write_json(run_dir / "execution_result.json", execution_result)
-        fidelity_report = {"fidelity_status": "error", "error": str(e)}
-        write_json(run_dir / "fidelity_report.json", fidelity_report)
+        # FIX-4.3：错误形态也走 execution_writer（统一唯一写入路径）
+        from scripts.execution_writer import write_run_execution
+        try:
+            write_run_execution(
+                run_dir, FORMAL_DIR, "", "", model_id,
+                fidelity={"fidelity_status": "error", "error": str(e)})
+        except Exception:
+            # writer 自身失败也要如实记录（绝不让错误静默）
+            (run_dir / "execution_result.json").write_text(
+                json.dumps({"model_id": model_id, "status": "error",
+                            "error": str(e)}, ensure_ascii=False, indent=2),
+                encoding="utf-8")
 
     # 写 manifest
     manifest = {
