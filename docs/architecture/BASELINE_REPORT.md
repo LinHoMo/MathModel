@@ -1,9 +1,12 @@
+<!-- ARCHIVAL-NOTE
+本文件为历史规划/报告快照（撰写时的真实状态），部分内部路径与术语已被后续架构演进取代（如 core/tools/evaluation/ 已迁至 core/tools/、V2 agent 目录已重组为 V3 roles）。当前权威口径以 AGENTS.md 与 docs/architecture/HARDENING_PROGRAM.md 为准；历史文档仅作溯源，不作为实现依据。
+ARCHIVAL-NOTE -->
 # Capability Baseline Report — 首次能力基线（P13.0）
 
 > 日期：2026-09-06 · 题目：**MCM/ICM 2000 C**（大象避孕飞镖种群控制，
 > 本地 MMBench 语料 `2000_C`，含真实数据 data1/data2.csv）
 > 项目：`projects/bench-m4-2000c/` · 测评链：`bench e2e`（run → metrics → report）
-> 指标定义：`CAPABILITY_ROADMAP_P13_P17.md` §1 · 实现：`core/tools/evaluation/e2e_metrics.py`
+> 指标定义：`CAPABILITY_ROADMAP_P13_P17.md` §1 · 实现：`core/tools/e2e_metrics.py`
 
 这是本项目**第一次**回答"这个系统到底会不会做数模题"。分数不重要，
 可复现、可比较的测量回路已经建立：**Baseline → 修改 Brain → 再跑 → Δscore**。

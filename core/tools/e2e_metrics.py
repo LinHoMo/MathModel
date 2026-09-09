@@ -85,44 +85,6 @@ def _is_empty_artifact(a) -> bool:
     return payload_empty and data_empty
 
 
-def _method_hit(candidate_ids: list[str], card_names: dict[str, str],
-                gt_methods: list[str]) -> bool:
-    """top-k 候选与金标准方法做归一化包含匹配（双向）。
-
-    P13-2：在空格规整外增加**紧凑匹配**（去空格后包含）——修复 GT 串
-    "time series" 永远无法命中卡族 classical_timeseries 这类连写 token 的
-    归一化伪影。紧凑匹配统一适用于所有 GT 与卡（非针对单题）。
-    """
-    gts = [_norm(g) for g in gt_methods if _norm(g)]
-    gts_compact = [g.replace(" ", "") for g in gts]
-    for cid in candidate_ids:
-        hay = " ".join(filter(None, {_norm(cid), _norm(card_names.get(cid, ""))}))
-        hay_compact = hay.replace(" ", "")
-        for gt, gt_c in zip(gts, gts_compact):
-            if gt and (gt in hay or hay in gt):
-                return True
-            if gt_c and (gt_c in hay_compact or hay_compact in gt_c):
-                return True
-    return False
-
-
-def _load_card_names() -> dict[str, str]:
-    """从方法卡 YAML 提取 {card_id: "name family"}（零依赖正则解析）。"""
-    cards_dir = ROOT / "core" / "knowledge" / "methods" / "cards"
-    out: dict[str, str] = {}
-    if not cards_dir.exists():
-        return out
-    for f in sorted(cards_dir.glob("*.yaml")):
-        text = f.read_text(encoding="utf-8", errors="ignore")
-        cid_m = re.search(r"^card_id:\s*(\S+)", text, flags=re.M)
-        name_m = re.search(r'^name:\s*(.+)$', text, flags=re.M)
-        fam_m = re.search(r"^family:\s*(\S+)", text, flags=re.M)
-        if cid_m:
-            out[cid_m.group(1)] = " ".join(
-                g.group(0).strip() for g in (name_m, fam_m) if g)
-    return out
-
-
 def _load_card_families() -> dict[str, str]:
     """P0-3: 从方法卡 YAML 提取 {card_id: family}（零依赖正则解析）。"""
     cards_dir = ROOT / "core" / "knowledge" / "methods" / "cards"
@@ -155,7 +117,7 @@ def _load_benchmark_reference(problem_id: str) -> dict:
             if p.get("question_id") == problem_id:
                 return {
                     "historical_core_methods": p.get("historical_core_methods"),
-                    "allowed_modeling_structures": p.get("allowed_modeling_structures") or p.get("allowed_model_families"),  # legacy compat
+                    "allowed_modeling_structures": p.get("allowed_modeling_structures"),
                     "acceptable_solution_variants": p.get("acceptable_solution_variants"),
                     "family": p.get("family"),
                 }
@@ -253,7 +215,6 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
     results_raw = [a for a in reg.list_by_type("result")
                    if a.status not in ("invalidated", "superseded", "deprecated")]
     models_raw = [a for a in reg.list_by_type("model")]
-    card_names = _load_card_names()
 
     # P0-2: 空壳 artifact 过滤（payload=[] 且 data={} 的不计入评分）
     questions = [a for a in questions_raw if not _is_empty_artifact(a)]
@@ -300,7 +261,7 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
     card_families = _load_card_families()
     problem_id = _infer_problem_id(project_dir, gt)
     bench_ref = _load_benchmark_reference(problem_id) if problem_id else {}
-    allowed_families = bench_ref.get("allowed_modeling_structures") or bench_ref.get("allowed_model_families")  # legacy compat
+    allowed_families = bench_ref.get("allowed_modeling_structures")
     historical_core_methods = bench_ref.get("historical_core_methods")
     acceptable_variants = bench_ref.get("acceptable_solution_variants")
 
@@ -318,10 +279,10 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
         "per_question": {},
     }
     if not allowed_families:
-        method_detail["method_selection_basis"] = "unavailable"  # legacy compat: detail 键名（历史 report 契约）
+        method_detail["structure_alignment_basis"] = "unavailable"
         method_detail["note"] = "allowed_modeling_structures unavailable in benchmark"
     elif models:
-        method_detail["method_selection_basis"] = "allowed_modeling_structures"  # legacy compat: detail 键名（历史 report 契约）
+        method_detail["structure_alignment_basis"] = "allowed_modeling_structures"
         t1_hits, t3_hits = [], []
         alt_count = 0
         out_of_catalog_count = 0
@@ -336,14 +297,13 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
                          for c in (data.get("shortlist") or [])]
             cands = [chosen] + [c for c in shortlist if c != chosen]
             top3 = [c for c in cands if c][:3]
-            # 家族检查为主，字符串匹配为向后兼容回退
+            # 结构命中为唯一评分依据（allowed_modeling_structures 唯一评分依据，
+            # 无字符串方法兜底；methods_gt 仅保留在 detail 展示）
             t1_fam, t1_alt = _structure_hit(chosen, card_families, allowed_families)
-            t1_str = _method_hit([chosen], card_names, methods_gt) if methods_gt else False
-            t1 = t1_fam or t1_str
+            t1 = t1_fam
             t3_fam = any(_structure_hit(c, card_families, allowed_families)[0]
                          for c in top3)
-            t3_str = _method_hit(top3, card_names, methods_gt) if methods_gt else False
-            t3 = t3_fam or t3_str
+            t3 = t3_fam
             is_alt = (not t1_fam) and t1_alt and chosen
             # out_of_catalog 检测：card_id 不在方法卡目录中
             is_out_of_catalog = bool(chosen) and chosen not in card_families
@@ -355,8 +315,8 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
             t3_hits.append(t3)
             method_detail["per_question"][q.artifact_id] = {
                 "top1_chosen": chosen,
-                "top1_family": card_families.get(chosen, ""),
-                "top1_hit": t1, "top1_family_hit": t1_fam,
+                "top1_structure": card_families.get(chosen, ""),
+                "top1_hit": t1, "top1_structure_hit": t1_fam,
                 "top1_alternative": is_alt,
                 "out_of_catalog": is_out_of_catalog,
                 "top3": top3, "top3_hit": t3,
@@ -486,7 +446,7 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
 
     metrics = {
         "decomposition_coverage": pack(decomp_value, decomp_detail),
-        "method_selection": pack(method_value, method_detail),  # legacy compat: 输出键（历史 report 数据契约；语义=Model Construction Strategy Selection）
+        "structure_alignment": pack(method_value, method_detail),  # 输出键=结构对齐（Model Construction Strategy Selection 语义，v1.2 统一）
         "model_correctness": pack(model_value, model_detail),
         "experiment_validity": pack(exp_value, exp_detail),
         "validation_reliability": pack(val_value, val_detail),

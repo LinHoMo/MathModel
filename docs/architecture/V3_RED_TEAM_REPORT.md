@@ -1,3 +1,6 @@
+<!-- ARCHIVAL-NOTE
+本文件为历史规划/报告快照（撰写时的真实状态），部分内部路径与术语已被后续架构演进取代（如 core/tools/evaluation/ 已迁至 core/tools/、V2 agent 目录已重组为 V3 roles）。当前权威口径以 AGENTS.md 与 docs/architecture/HARDENING_PROGRAM.md 为准；历史文档仅作溯源，不作为实现依据。
+ARCHIVAL-NOTE -->
 # V3 Red Team Report — P9.5 跨层完整性审计
 
 > 攻击范围：Plan → Evidence → Decision → Quality → Rerun 十个攻击面。

@@ -44,8 +44,7 @@ def load_problem_spec() -> dict:
         if not stmt.exists():
             raise FileNotFoundError(f"statement missing: {stmt}")
         gt = K.read_json(gt_path)
-        allowed = (gt.get("allowed_modeling_structures")
-                   or gt.get("allowed_model_families") or [])
+        allowed = gt.get("allowed_modeling_structures") or []
         problems.append({
             "problem_id": pid,
             "block_role": "main" if pid in K.PRIMARY_BLOCKS else "generalization",

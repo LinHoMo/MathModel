@@ -222,8 +222,6 @@ TERMINOLOGY_ALLOWED_DIR_PARTS = {
     "research", "REPOSITORY_AUDIT", "knowledge_calibration", "measurement_recovery",
     "reports", "projects", "legacy", "bench-m4", "archives", "ENGINEERING", "handoff",
 }
-# 代码中允许的兼容标识符（# legacy compat 行内豁免）
-TERMINOLOGY_LEGACY_MARK = "# legacy compat"
 
 
 def _is_terminology_allowed(rel: str) -> bool:
@@ -239,7 +237,8 @@ def _terminology_scan() -> list[str]:
     """扫描 production 区旧术语残留（Zero-residue Gate）。
 
     范围 = core/ + AGENTS.md + docs/ 现行文档（排除 history/migration）。
-    豁免：research 历史、projects 历史观测、legacy 兼容层、# legacy compat 行。
+    豁免：research 历史、projects 历史观测、legacy 兼容层、terminology-lint-self 定义行。
+    无行内豁免：production 区不允许以任何注释形式携带旧术语。
     """
     problems = []
     targets = [ROOT / "core", ROOT / "AGENTS.md", ROOT / "docs"]
@@ -262,8 +261,6 @@ def _terminology_scan() -> list[str]:
                 continue
             scanned_files += 1
             for lineno, line in enumerate(text.splitlines(), 1):
-                if TERMINOLOGY_LEGACY_MARK in line:
-                    continue
                 if "terminology-lint-self" in line:
                     continue
                 for term in FORBIDDEN_TERMS:

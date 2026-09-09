@@ -10,7 +10,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "core"))
-sys.path.insert(0, str(REPO / "core" / "tools" / "evaluation"))
+sys.path.insert(0, str(REPO / "core" / "tools"))
 
 from runtime.execution.session import RuntimeSession  # noqa: E402
 
@@ -65,10 +65,13 @@ def test_overall_real_artifact(tmp_path):
     assert mi["value"] == round(100.0 * mi["numerator"] / mi["denominator"], 1)
 
 
-def test_method_hit_compact_canonicalization():
-    """P13-2：GT 串与卡族连写 token 的归一化伪影修复（统一规则，非单题特判）。"""
+def test_structure_hit_compact_canonicalization():
+    """P13-2 统一规则（非单题特判）：allowed_modeling_structures 与卡族名的
+    紧凑匹配归一化（v1.2 起结构为唯一评分依据，字符串方法匹配已移除）。"""
     em = importlib.import_module("e2e_metrics")
-    names = {"mc-arima": "ARIMA 差分整合移动平均自回归 classical_timeseries"}
-    assert em._method_hit(["mc-arima"], names, ["time series"]) is True
-    assert em._method_hit(["mc-topsis"], {"mc-topsis": "TOPSIS evaluation"},
-                          ["time series"]) is False
+    fam = {"mc-arima": "classical_timeseries"}
+    assert em._structure_hit("mc-arima", fam, ["time series"])[0] is True
+    assert em._structure_hit("mc-topsis", {"mc-topsis": "decision_analysis"},
+                             ["time series"])[0] is False
+    assert em._structure_hit("mc-arima", fam,
+                             ["classical_timeseries"])[0] is True

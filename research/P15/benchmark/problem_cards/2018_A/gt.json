@@ -1,7 +1,11 @@
 {
   "problem_id": "2018_A",
   "title": "高温作业专用服装设计",
-  "sub_questions": ["Q1", "Q2", "Q3"],
+  "sub_questions": [
+    "Q1",
+    "Q2",
+    "Q3"
+  ],
   "methods": [
     "heat_conduction_pde",
     "finite_difference_method",
@@ -10,17 +14,17 @@
     "parameter_estimation",
     "transient_heat_transfer"
   ],
-  "allowed_model_families": [
-    "pde",
-    "finite_difference",
-    "numerical_optimization",
-    "inverse_problem",
-    "heat_transfer"
-  ],
   "acceptable_solution_variants": [
     "finite_difference_method",
     "finite_element_method",
     "Levenberg_Marquardt",
     "genetic_algorithm"
+  ],
+  "allowed_modeling_structures": [
+    "pde",
+    "finite_difference",
+    "numerical_optimization",
+    "inverse_problem",
+    "heat_transfer"
   ]
 }

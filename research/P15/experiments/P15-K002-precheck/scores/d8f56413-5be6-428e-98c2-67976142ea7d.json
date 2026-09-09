@@ -1,0 +1,36 @@
+{
+  "submission_id": "d8f56413-5be6-428e-98c2-67976142ea7d",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "timestamp": "2026-09-09T08:00:00Z"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "提取 2011_B 五问：A 区 20 平台管辖、13 要道封锁、增设平台、全市六区合理性、P 点围堵。"},
+    "L1.2": {"score": 2, "evidence": "隐式条件：静态最短路（无动态交通信息）、警车匀速、单平台封锁一路口。"},
+    "L1.3": {"score": 2, "evidence": "交付要求：管辖分配、封锁方案、增设位置、六区评价、围堵方案，绑定目标。"},
+    "L1.4": {"score": 1, "evidence": "在假设说明中处理动态信息缺失等口径（静态最短路）。"},
+    "L1.5": {"score": 2, "evidence": "判定最短路+指派（匈牙利）+选址+围堵网络优化，类型正确。"},
+    "L2.1": {"score": 2, "evidence": "变量含最短时间、指派、覆盖标志、平台位置、评分，定义完整。"},
+    "L2.2": {"score": 2, "evidence": "参数含速度、3min 阈值、权重、平台数上界，来源标注。"},
+    "L2.3": {"score": 2, "evidence": "假设带类型与合理性说明。"},
+    "L2.4": {"score": 2, "evidence": "五问目标正确（覆盖最大、封锁最短、增设施最少、评分、围堵最短）。"},
+    "L2.5": {"score": 2, "evidence": "约束含 3min 覆盖、单平台封锁、平台数限制。"},
+    "L2.6": {"score": 3, "evidence": "机理最短路/指派/选址/围堵正确。"},
+    "L2.7": {"score": 2, "evidence": "方程含最短路、指派、覆盖、评分与围堵截获条件。"},
+    "L3.1": {"score": 2, "evidence": "Floyd/匈牙利/二分+匹配/贪心+局部搜索，与模型匹配。"},
+    "L3.2": {"score": 2, "evidence": "实现引用具体（最短路、指派、选址），可执行。"},
+    "L3.3": {"score": 1, "evidence": "确定性算法重复一致+随机重启稳定，无显式收敛判据。"},
+    "L3.4": {"score": 1, "evidence": "确定性算法复现声明与随机重启稳定性，但未声明固定种子。"},
+    "L3.5": {"score": 0, "evidence": "未给出结果量级/趋势预期。"},
+    "L4.1": {"score": 2, "evidence": "VAL1 管辖分配与题述 3 分钟标准对比（覆盖率 C 与超时节点）。"},
+    "L4.2": {"score": 2, "evidence": "VAL2 嫌疑犯车速 40/60/80 km/h 扫描，检验围堵先到条件。"},
+    "L4.3": {"score": 1, "evidence": "极限检验：平台全覆盖 T_max→0、权重均匀 G→1、撤除平台覆盖率单调下降。"},
+    "L4.4": {"score": 2, "evidence": "验证绑定目标与变量（v_coverage/v_resp_max 等）。"},
+    "L4.5": {"score": 2, "evidence": "主张挂 baseline/速度敏感性/极限/可复现证据。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9, "pass": true},
+    "L2": {"score": 15, "max": 15, "pass": true},
+    "L3": {"score": 6, "max": 9, "pass": false},
+    "L4": {"score": 9, "max": 9, "pass": true}
+  },
+  "notes": "结构化 IR 对 2011_B 五问建模完整，3 分钟标准基线与车速灵敏度清晰；求解收敛判据、种子与结果量级预期缺失，L3 未达阈值。"
+}

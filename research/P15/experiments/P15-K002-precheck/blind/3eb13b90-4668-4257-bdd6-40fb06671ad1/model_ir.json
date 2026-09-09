@@ -1,0 +1,1530 @@
+{
+  "ir_version": "1.0",
+  "model_id": "m-adefae0f",
+  "model_family": {
+    "primary": "dynamic_programming",
+    "secondary": [
+      "optimization",
+      "game_theory",
+      "markov_decision_process"
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2020_B",
+    "sub_question_id": "ALL",
+    "problem_sha256": "a2d0867169b94c592caafb438f608dfa12fc91c7e5df0aab5acaa5a9408ed4f2"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A-01",
+      "text": "水和食物的购买量在优化模型中按连续量处理，允许非整数箱；实际填表时再取整到合法箱数。",
+      "type": "simplification",
+      "rationale": "游戏以箱为最小计量单位，但连续化可显著简化最优性条件求解，且箱数规模较大时取整误差可忽略。"
+    },
+    {
+      "assumption_id": "A-02",
+      "text": "天气对资源消耗的影响通过乘性倍率 α_w 作用于基础消耗量：晴朗 α=1，高温 α=3，沙暴 α=1 但禁止移动。",
+      "type": "mechanism",
+      "rationale": "题目规定每天天气为晴朗/高温/沙暴三态，附件给出各天气下基础消耗，乘性结构符合题意且可参数化。"
+    },
+    {
+      "assumption_id": "A-03",
+      "text": "玩家决策只依赖当前状态 (位置, 水量, 食物量, 资金, 当天天气)，即马尔可夫性成立，历史路径不影响后续最优决策。",
+      "type": "projection",
+      "rationale": "游戏的资源结算与转移规则均只涉及当天状态，满足动态规划的无后效性要求。"
+    },
+    {
+      "assumption_id": "A-04",
+      "text": "一天内按顺序结算：先进行移动/挖矿等行动并消耗资源，再执行购买行为，最后得到当天结束时的剩余量。",
+      "type": "mechanism",
+      "rationale": "与题目注2中‘剩余资金/水量/食物量指当日所需资源全部消耗完毕且完成购买后’的口径一致。"
+    },
+    {
+      "assumption_id": "A-05",
+      "text": "Q3 中 n 名玩家同质：初始资金、消耗参数、天气感知完全相同，仅通过同日同区域行动产生交互。",
+      "type": "projection",
+      "rationale": "题目给定相同的初始资金和公共天气，同质假设使多人问题可对称化，便于博弈分析。"
+    },
+    {
+      "assumption_id": "A-06",
+      "text": "Q2 与 Q3(2) 中玩家对未来天气仅有统计认知，未来天气概率 π_w 由历史同期统计或题设分布给定。",
+      "type": "calibration",
+      "rationale": "玩家仅知道当天天气，对未来只能采用概率刻画，这是部分可观测环境下的标准处理。"
+    },
+    {
+      "assumption_id": "A-07",
+      "text": "Q3 中玩家均为理性个体：Q3(1) 采用离线协调视角（第0天固定方案），Q3(2) 采用非合作动态博弈视角。",
+      "type": "projection",
+      "rationale": "多人相互影响消耗与收益，需区分离线合作与在线竞争两种信息结构。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "v_t",
+      "name": "时间索引",
+      "symbol": "t",
+      "definition": "游戏天数索引，t=0 表示起点日，t=1..T 为推进天数",
+      "unit": "天",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_R",
+      "name": "玩家所在区域",
+      "symbol": "R_t",
+      "definition": "第 t 天结束时玩家所在地图区域节点",
+      "unit": "-",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_W",
+      "name": "剩余水量",
+      "symbol": "W_t",
+      "definition": "第 t 天结束时玩家剩余的水量（箱）",
+      "unit": "箱",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_F",
+      "name": "剩余食物量",
+      "symbol": "F_t",
+      "definition": "第 t 天结束时玩家剩余的食物量（箱）",
+      "unit": "箱",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_M",
+      "name": "剩余资金",
+      "symbol": "M_t",
+      "definition": "第 t 天结束时玩家剩余的资金（元）",
+      "unit": "元",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_w",
+      "name": "当天天气",
+      "symbol": "w_t",
+      "definition": "第 t 天的天气状态：晴朗 / 高温 / 沙暴",
+      "unit": "-",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_a",
+      "name": "当天行动",
+      "symbol": "a_t",
+      "definition": "第 t 天的行动：停留、移动到某相邻区域、挖矿、购买的组合",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_bw",
+      "name": "当天购水量",
+      "symbol": "buyw_t",
+      "definition": "第 t 天购买的水量（箱）",
+      "unit": "箱",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_bf",
+      "name": "当天购食物量",
+      "symbol": "buyf_t",
+      "definition": "第 t 天购买的食物量（箱）",
+      "unit": "箱",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_mine",
+      "name": "挖矿指示",
+      "symbol": "mine_t",
+      "definition": "第 t 天是否挖矿的 0/1 指示变量",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_s",
+      "name": "状态向量",
+      "symbol": "s_t",
+      "definition": "第 t 天决策前完整状态 (R_t, W_t, F_t, M_t)",
+      "unit": "-",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_V",
+      "name": "值函数",
+      "symbol": "V_t",
+      "definition": "从状态 s_t 出发到终点的最优剩余资金期望值",
+      "unit": "元",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_i",
+      "name": "玩家索引",
+      "symbol": "i",
+      "definition": "Q3 中玩家编号 i=1..n",
+      "unit": "-",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_k",
+      "name": "同日同行人数",
+      "symbol": "k",
+      "definition": "某天从同一区域 A 走到同一区域 B 的玩家数（2≤k≤n），或同矿山挖矿、同村庄购买的人数",
+      "unit": "人",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_Ri",
+      "name": "玩家 i 所在区域",
+      "symbol": "R_{i,t}",
+      "definition": "第 t 天玩家 i 所在区域节点",
+      "unit": "-",
+      "type": "state",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_Wi",
+      "name": "玩家 i 剩余水量",
+      "symbol": "W_{i,t}",
+      "definition": "第 t 天结束时玩家 i 剩余水量（箱）",
+      "unit": "箱",
+      "type": "state",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_Fi",
+      "name": "玩家 i 剩余食物量",
+      "symbol": "F_{i,t}",
+      "definition": "第 t 天结束时玩家 i 剩余食物量（箱）",
+      "unit": "箱",
+      "type": "state",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_Mi",
+      "name": "玩家 i 剩余资金",
+      "symbol": "M_{i,t}",
+      "definition": "第 t 天结束时玩家 i 剩余资金（元）",
+      "unit": "元",
+      "type": "state",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_ai",
+      "name": "玩家 i 当天行动",
+      "symbol": "a_{i,t}",
+      "definition": "第 t 天玩家 i 的行动决策",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_minei",
+      "name": "玩家 i 挖矿指示",
+      "symbol": "mine_{i,t}",
+      "definition": "第 t 天玩家 i 是否挖矿的 0/1 指示",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_bwi",
+      "name": "玩家 i 当天购水量",
+      "symbol": "buyw_{i,t}",
+      "definition": "第 t 天玩家 i 购买的水量（箱）",
+      "unit": "箱",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_bfi",
+      "name": "玩家 i 当天购食物量",
+      "symbol": "buyf_{i,t}",
+      "definition": "第 t 天玩家 i 购买的食物量（箱）",
+      "unit": "箱",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_Ii",
+      "name": "玩家 i 信息集",
+      "symbol": "I_{i,t}",
+      "definition": "第 t 天行动结束后玩家 i 观测到的其余玩家状态集合",
+      "unit": "-",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_j",
+      "name": "他人玩家索引",
+      "symbol": "j",
+      "definition": "Q3 中除玩家 i 外的任意玩家编号 j≠i",
+      "unit": "-",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_J",
+      "name": "终点总资金",
+      "symbol": "J",
+      "definition": "到达终点后的总资金（剩余资金 + 退回剩余资源所得）",
+      "unit": "元",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_ta",
+      "name": "到达天数",
+      "symbol": "t_a",
+      "definition": "玩家实际到达终点的天数（须 ≤ T）",
+      "unit": "天",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_abar",
+      "name": "锁定行动方案",
+      "symbol": "\\bar{a}_{i,t}",
+      "definition": "Q3(1) 第 0 天确定且此后不可更改的玩家 i 行动方案",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "p_c0",
+      "name": "基础水消耗量",
+      "symbol": "c_0",
+      "value": "由附件关卡参数确定（建模示例取 3）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_f0",
+      "name": "基础食物消耗量",
+      "symbol": "f_0",
+      "value": "由附件关卡参数确定（建模示例取 3）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_pw",
+      "name": "水基准价格",
+      "symbol": "p_w",
+      "value": "由附件关卡参数确定（建模示例取 5）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_pf",
+      "name": "食物基准价格",
+      "symbol": "p_f",
+      "value": "由附件关卡参数确定（建模示例取 10）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_g",
+      "name": "基础挖矿收益",
+      "symbol": "g",
+      "value": "由附件关卡参数确定（建模示例取 1000）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_L",
+      "name": "负重上限",
+      "symbol": "L",
+      "value": "由附件关卡参数确定（建模示例取 1000）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_rw",
+      "name": "每箱水质量",
+      "symbol": "\\rho_w",
+      "value": "由附件关卡参数确定（建模示例取 3）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_rf",
+      "name": "每箱食物质量",
+      "symbol": "\\rho_f",
+      "value": "由附件关卡参数确定（建模示例取 2）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_T",
+      "name": "截止天数",
+      "symbol": "T",
+      "value": "由附件关卡参数确定（建模示例取 30）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_alpha_sun",
+      "name": "晴朗天气消耗倍率",
+      "symbol": "\\alpha_{\\text{sun}}",
+      "value": 1.0,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_alpha_hot",
+      "name": "高温天气消耗倍率",
+      "symbol": "\\alpha_{\\text{hot}}",
+      "value": 3.0,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_alpha_storm",
+      "name": "沙暴天气消耗倍率",
+      "symbol": "\\alpha_{\\text{storm}}",
+      "value": 1.0,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_beta_stay",
+      "name": "停留行动消耗倍率",
+      "symbol": "\\beta_{\\text{stay}}",
+      "value": 1,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_beta_move",
+      "name": "行走行动消耗倍率",
+      "symbol": "\\beta_{\\text{move}}",
+      "value": 2,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_beta_mine",
+      "name": "挖矿行动消耗倍率",
+      "symbol": "\\beta_{\\text{mine}}",
+      "value": 3,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_refund",
+      "name": "终点退回价格率",
+      "symbol": "r",
+      "value": 0.5,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_village",
+      "name": "村庄价格倍率（单人）",
+      "symbol": "\\lambda_v",
+      "value": 2,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_v4",
+      "name": "村庄价格倍率（多人同村）",
+      "symbol": "\\lambda_{v,k}",
+      "value": 4,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_n",
+      "name": "玩家总数",
+      "symbol": "n",
+      "value": "由关卡确定（建模示例取 3）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_pi_sun",
+      "name": "晴朗天气先验概率",
+      "symbol": "\\pi_{\\text{sun}}",
+      "value": "由历史统计校准（示例 0.5）",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "p_pi_hot",
+      "name": "高温天气先验概率",
+      "symbol": "\\pi_{\\text{hot}}",
+      "value": "由历史统计校准（示例 0.3）",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "p_pi_storm",
+      "name": "沙暴天气先验概率",
+      "symbol": "\\pi_{\\text{storm}}",
+      "value": "由历史统计校准（示例 0.2）",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "p_beta_k",
+      "name": "多人同行行走消耗倍率",
+      "symbol": "\\beta_k",
+      "value": "2k（由同日同路径人数 k 决定）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_gi",
+      "name": "多人挖矿单日收益",
+      "symbol": "g_i",
+      "value": "g/k（由同日同矿山人数 k 决定）",
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "OBJ-01",
+      "type": "maximize",
+      "expression": "最大化到达终点时的剩余资金（含退回剩余资源所得）：J = M_T + r(p_w W_T + p_f F_T)",
+      "variables_refs": [
+        "v_M",
+        "v_W",
+        "v_F",
+        "v_t"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "objective_id": "OBJ-02",
+      "type": "maximize",
+      "expression": "最大化终点剩余资金的期望值 E[J]，其中天气按先验概率 π_w 分布，决策仅依赖当天可观测天气",
+      "variables_refs": [
+        "v_M",
+        "v_W",
+        "v_F",
+        "v_w",
+        "v_V"
+      ],
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "objective_id": "OBJ-03",
+      "type": "maximize",
+      "expression": "Q3(1) 离线协调：在天气全知且第0天锁定行动方案的约束下，最大化全部玩家终点资金之和（或平均）",
+      "variables_refs": [
+        "v_Mi",
+        "v_Wi",
+        "v_Fi",
+        "v_ai",
+        "v_k",
+        "v_i"
+      ],
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "objective_id": "OBJ-04",
+      "type": "maximize",
+      "expression": "Q3(2) 动态博弈：每个玩家在观测他人前一天行动后，最大化自身终点资金的期望值（纳什均衡视角）",
+      "variables_refs": [
+        "v_Mi",
+        "v_Wi",
+        "v_Fi",
+        "v_ai",
+        "v_Ii",
+        "v_i"
+      ],
+      "sub_question_binding": [
+        "Q3"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C-01",
+      "type": "capacity",
+      "expression": "负重约束：\\rho_w W_t + \\rho_f F_t \\le L，任意 t",
+      "variables_refs": [
+        "v_W",
+        "v_F"
+      ],
+      "source": "题目规则(2)",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-02",
+      "type": "nonnegativity",
+      "expression": "资源非负且不可耗尽失败：W_t \\ge 0, F_t \\ge 0；到达终点前任一项为负则失败",
+      "variables_refs": [
+        "v_W",
+        "v_F"
+      ],
+      "source": "题目规则(2)",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-03",
+      "type": "topological",
+      "expression": "移动邻接约束：R_t \\in \\text{adj}(R_{t-1}) \\cup \\{R_{t-1}\\}，仅公共边相邻",
+      "variables_refs": [
+        "v_R"
+      ],
+      "source": "题目规则(4)与注1",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-04",
+      "type": "weather_rule",
+      "expression": "沙暴日必须停留：w_t=\\text{沙暴} \\Rightarrow R_t = R_{t-1}",
+      "variables_refs": [
+        "v_w",
+        "v_R"
+      ],
+      "source": "题目规则(3)(4)",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-05",
+      "type": "deadline",
+      "expression": "到达时限：到达天数 t_a \\le T，且 R_{t_a} = \\text{终点}",
+      "variables_refs": [
+        "v_R",
+        "v_t"
+      ],
+      "source": "题目规则(1)",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-06",
+      "type": "purchase_rule",
+      "expression": "起点仅在 t=0 可按基准价购买一次，回到起点不可再买；村庄按 \\lambda_v 倍价购买",
+      "variables_refs": [
+        "v_bw",
+        "v_bf",
+        "v_R",
+        "v_t"
+      ],
+      "source": "题目规则(6)(8)",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-07",
+      "type": "commitment",
+      "expression": "Q3(1) 行动方案提前固定：a_{i,t} = \\bar{a}_{i,t}, \\forall i,t，第0天后不可更改",
+      "variables_refs": [
+        "v_ai",
+        "v_i",
+        "v_t"
+      ],
+      "source": "题目 Q3(1)",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-08",
+      "type": "congestion",
+      "expression": "Q3 同行消耗放大：同天同路径 k 名玩家行走时每人消耗倍率 \\beta_k = 2k",
+      "variables_refs": [
+        "v_k",
+        "v_ai",
+        "v_Ri"
+      ],
+      "source": "题目 Q3",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-09",
+      "type": "congestion",
+      "expression": "Q3 同矿山/同村庄规则：k 人同矿挖矿每人收益 g/k、消耗3倍基础；k 人同村购买价格 \\lambda_{v,k}=4 倍基准",
+      "variables_refs": [
+        "v_k",
+        "v_minei",
+        "v_bwi",
+        "v_bfi"
+      ],
+      "source": "题目 Q3",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C-10",
+      "type": "settlement",
+      "expression": "当日结算顺序：先消耗后购买，购买后余额作为当天结束状态",
+      "variables_refs": [
+        "v_W",
+        "v_F",
+        "v_M",
+        "v_bw",
+        "v_bf"
+      ],
+      "source": "题目注2",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "MECH-01",
+      "description": "资源消耗机制：当天消耗 = 行动倍率 β × 天气倍率 α × 基础消耗量；行走2倍、挖矿3倍、停留1倍，高温3倍。",
+      "related_equations": [
+        "EQ-01",
+        "EQ-02"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "mechanism_id": "MECH-02",
+      "description": "资金流转机制：挖矿收入（单人 g，多人 g/k）、购买支出（基准/村庄价）、终点退回（半价）共同决定资金状态。",
+      "related_equations": [
+        "EQ-03",
+        "EQ-08"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "mechanism_id": "MECH-03",
+      "description": "确定性状态转移与最优值递推：Q1 天气全知，采用确定性动态规划，值函数沿状态图向后递推。",
+      "related_equations": [
+        "EQ-10"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "mechanism_id": "MECH-04",
+      "description": "天气不确定性与滚动决策机制：Q2 仅知当天天气，未来天气按概率分布进入期望值函数，形成开环-反馈混合策略。",
+      "related_equations": [
+        "EQ-11"
+      ],
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "mechanism_id": "MECH-05",
+      "description": "多人交互放大机制：同路径行走消耗放大为 2k 倍、同矿收益摊薄为 g/k、同村价格抬升至 4 倍，改变单人的边际成本结构。",
+      "related_equations": [
+        "EQ-12",
+        "EQ-13",
+        "EQ-14"
+      ],
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "mechanism_id": "MECH-06",
+      "description": "信息结构与博弈更新机制：Q3(1) 离线锁定；Q3(2) 每天行动结束后公开他人行动与剩余量，玩家据此更新信息集并决定次日行动。",
+      "related_equations": [
+        "EQ-15",
+        "EQ-16"
+      ],
+      "sub_question_binding": [
+        "Q3"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "EQ-01",
+      "latex": "W_t = W_{t-1} - \\beta_{a_t} \\alpha_{w_t} c_0 + \\mathrm{buyw}_t",
+      "type": "state_transition",
+      "variables_refs": [
+        "v_W",
+        "v_bw",
+        "v_a",
+        "v_w",
+        "v_t"
+      ],
+      "derivation_trace": "由题目规则(4)(5)(7)：行动倍率×天气倍率×基础水消耗，加购买补给。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-02",
+      "latex": "F_t = F_{t-1} - \\beta_{a_t} \\alpha_{w_t} f_0 + \\mathrm{buyf}_t",
+      "type": "state_transition",
+      "variables_refs": [
+        "v_F",
+        "v_bf",
+        "v_a",
+        "v_w",
+        "v_t"
+      ],
+      "derivation_trace": "与 EQ-01 同构，作用于食物资源。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-03",
+      "latex": "M_t = M_{t-1} + g\\,\\mathrm{mine}_t - p_w\\,\\mathrm{buyw}_t - p_f\\,\\mathrm{buyf}_t",
+      "type": "state_transition",
+      "variables_refs": [
+        "v_M",
+        "v_mine",
+        "v_bw",
+        "v_bf",
+        "v_t"
+      ],
+      "derivation_trace": "由题目规则(6)(7)(8)：挖矿收入加项、购买支出减项，村庄购买按倍率计入 p_w/p_f。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-04",
+      "latex": "\\rho_w W_t + \\rho_f F_t \\le L",
+      "type": "capacity",
+      "variables_refs": [
+        "v_W",
+        "v_F",
+        "v_t"
+      ],
+      "derivation_trace": "题目规则(2)：水食物总质量不超过负重上限。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-05",
+      "latex": "W_t \\ge 0,\\quad F_t \\ge 0",
+      "type": "feasibility",
+      "variables_refs": [
+        "v_W",
+        "v_F",
+        "v_t"
+      ],
+      "derivation_trace": "题目规则(2)：未到终点而耗尽资源判定游戏失败。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-06",
+      "latex": "R_t \\in \\mathrm{adj}(R_{t-1}) \\cup \\{R_{t-1}\\}",
+      "type": "topological",
+      "variables_refs": [
+        "v_R",
+        "v_t"
+      ],
+      "derivation_trace": "题目规则(4)与注1：只能移动到公共边相邻区域或原地停留。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-07",
+      "latex": "\\mathbb{1}[w_t=\\text{沙暴}] \\Rightarrow R_t = R_{t-1}",
+      "type": "weather_rule",
+      "variables_refs": [
+        "v_w",
+        "v_R",
+        "v_t"
+      ],
+      "derivation_trace": "题目规则(3)(4)：沙暴日必须原地停留。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-08",
+      "latex": "J = M_T + r\\,(p_w W_T + p_f F_T)",
+      "type": "objective",
+      "variables_refs": [
+        "v_M",
+        "v_W",
+        "v_F",
+        "v_t"
+      ],
+      "derivation_trace": "题目规则(6)：终点退回剩余资源，价格为基准价一半。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-09",
+      "latex": "R_{t_a} = \\text{终点},\\quad t_a \\le T",
+      "type": "termination",
+      "variables_refs": [
+        "v_R",
+        "v_t"
+      ],
+      "derivation_trace": "题目规则(1)：截止日前到达终点游戏结束。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-10",
+      "latex": "V_t(s_t) = \\max_{a_t}\\left[ (M_t - M_{t-1}) + V_{t+1}(s_{t+1}) \\right],\\quad V_{T+1}=J",
+      "type": "recurrence",
+      "variables_refs": [
+        "v_V",
+        "v_s",
+        "v_a",
+        "v_M",
+        "v_t"
+      ],
+      "derivation_trace": "确定性动态规划最优性原理：Q1 天气序列已知，向后递推最优值函数。",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "equation_id": "EQ-11",
+      "latex": "V_t(s_t) = \\mathbb{E}_{w_t}\\left[ \\max_{a_t}\\left( (M_t - M_{t-1}) + V_{t+1}(s_{t+1}) \\right) \\right],\\quad w_t \\sim \\pi",
+      "type": "recurrence",
+      "variables_refs": [
+        "v_V",
+        "v_s",
+        "v_a",
+        "v_M",
+        "v_w",
+        "v_t"
+      ],
+      "derivation_trace": "仅知当天天气：未来天气取期望，当天天气观测后再决策，形成部分可观测马尔可夫决策过程。",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "equation_id": "EQ-12",
+      "latex": "\\beta_k = 2k,\\quad 2 \\le k \\le n",
+      "type": "congestion",
+      "variables_refs": [
+        "v_k",
+        "v_ai",
+        "v_Ri"
+      ],
+      "derivation_trace": "题目 Q3：任意 k 名玩家同天同路径行走，每人消耗为基础消耗的 2k 倍。",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-13",
+      "latex": "g_i = g / k",
+      "type": "congestion",
+      "variables_refs": [
+        "v_k",
+        "v_minei",
+        "v_i"
+      ],
+      "derivation_trace": "题目 Q3：k 人同矿山挖矿，每人每日收益为基础收益的 1/k，消耗仍为 3 倍基础。",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-14",
+      "latex": "\\lambda_{v,k} = 4",
+      "type": "congestion",
+      "variables_refs": [
+        "v_k",
+        "v_bwi",
+        "v_bfi"
+      ],
+      "derivation_trace": "题目 Q3：k 人同村庄购买，每箱价格为基准价 4 倍。",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-15",
+      "latex": "a_{i,t} = \\bar{a}_{i,t},\\quad \\forall i, t",
+      "type": "commitment",
+      "variables_refs": [
+        "v_ai",
+        "v_i",
+        "v_t"
+      ],
+      "derivation_trace": "题目 Q3(1)：行动方案在第 0 天确定且此后不能更改，等价于离线开环控制。",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "EQ-16",
+      "latex": "I_{i,t} = \\left\\{ (R_{j,t}, W_{j,t}, F_{j,t}, M_{j,t}) : j \\ne i \\right\\}",
+      "type": "information",
+      "variables_refs": [
+        "v_Ii",
+        "v_Ri",
+        "v_Wi",
+        "v_Fi",
+        "v_Mi",
+        "v_i",
+        "v_t"
+      ],
+      "derivation_trace": "题目 Q3(2)：第 t 天行动结束后玩家 i 知道其余玩家当天行动与剩余资源，据此决定 t+1 天行动。",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_id": "DEP-01",
+      "from": "EQ-01",
+      "to": "EQ-05",
+      "description": "水/食物动态转移必须满足非负可行性，耗尽即失败。"
+    },
+    {
+      "dependency_id": "DEP-02",
+      "from": "EQ-03",
+      "to": "EQ-08",
+      "description": "目标函数直接依赖资金动态的终点值。"
+    },
+    {
+      "dependency_id": "DEP-03",
+      "from": "EQ-01",
+      "to": "EQ-10",
+      "description": "DP 递推建立在资源与资金转移方程之上，转移不可行则值函数取 -∞。"
+    },
+    {
+      "dependency_id": "DEP-04",
+      "from": "p_pi_sun",
+      "to": "EQ-11",
+      "description": "Q2 期望递推依赖天气先验概率参数。"
+    },
+    {
+      "dependency_id": "DEP-05",
+      "from": "EQ-12",
+      "to": "EQ-03",
+      "description": "Q3 多人消耗/收益规则进入资金与资源动态。"
+    },
+    {
+      "dependency_id": "DEP-06",
+      "from": "EQ-16",
+      "to": "EQ-15",
+      "description": "信息结构决定 Q3 是离线锁定（EQ-15）还是在线博弈（EQ-16）两种求解范式。"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "SOL-01",
+      "method": "确定性动态规划（记忆化递归/自底向上值迭代），状态空间 (R,W,F,M)×t 剪枝",
+      "implementation_ref": "runs/3eb13b90-4668-4257-bdd6-40fb06671ad1/code/q1_dp.py（预检规划实现）",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "solver_id": "SOL-02",
+      "method": "滚动时域控制（receding horizon）：每日本地求解剩余时域期望最优，仅执行当天决策",
+      "implementation_ref": "runs/3eb13b90-4668-4257-bdd6-40fb06671ad1/code/q2_rhc.py（预检规划实现）",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "solver_id": "SOL-03",
+      "method": "Q3(1) 离线协调：整数规划/模拟退火搜索联合行动方案；Q3(2) 在线博弈：迭代最佳响应求纯策略纳什均衡",
+      "implementation_ref": "runs/3eb13b90-4668-4257-bdd6-40fb06671ad1/code/q3_game.py（预检规划实现）",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "solver_id": "SOL-04",
+      "method": "MILP 精确重构用于交叉验证 DP 结果（线性化天气与购买决策）",
+      "implementation_ref": "runs/3eb13b90-4668-4257-bdd6-40fb06671ad1/code/verify_milp.py（预检规划实现）",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "EXP-01",
+      "type": "optimization",
+      "inputs": "附件第一关地图与参数，种子 42",
+      "expected_outputs": "最优行动序列、最优终点资金、剩余水/食物量，与 Result.xlsx 对照",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "experiment_id": "EXP-02",
+      "type": "optimization",
+      "inputs": "附件第二关地图与参数，种子 42",
+      "expected_outputs": "最优行动序列与终点资金，与 Result.xlsx 对照",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "experiment_id": "EXP-03",
+      "type": "simulation",
+      "inputs": "附件第三关参数与天气统计分布，种子 42",
+      "expected_outputs": "滚动决策策略及其期望终点资金分布（均值±标准差）",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "experiment_id": "EXP-04",
+      "type": "simulation",
+      "inputs": "附件第四关参数，种子 42",
+      "expected_outputs": "策略性能对比：滚动决策 vs 固定计划",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "experiment_id": "EXP-05",
+      "type": "optimization",
+      "inputs": "附件第五关参数，n 名玩家，第 0 天锁定方案，种子 42",
+      "expected_outputs": "离线协调行动方案与各玩家终点资金",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "experiment_id": "EXP-06",
+      "type": "simulation",
+      "inputs": "附件第六关参数，n 名玩家在线博弈，种子 42",
+      "expected_outputs": "迭代最佳响应收敛的均衡策略与收益分布",
+      "sub_question_binding": [
+        "Q3"
+      ]
+    },
+    {
+      "experiment_id": "EXP-07",
+      "type": "sensitivity",
+      "inputs": "对 α_hot、p_w、p_f、g 做 ±20% 扰动",
+      "expected_outputs": "终点资金对参数的弹性与最优路径稳定性",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "VAL-01",
+      "type": "baseline",
+      "method": "将 Q1 求解结果与附件 Result.xlsx 的官方参考数值逐项核对",
+      "targets_refs": [
+        "OBJ-01",
+        "EQ-10"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "validation_id": "VAL-02",
+      "type": "baseline",
+      "method": "Q2 第三/四关结果与公开参考解答的收益区间对照",
+      "targets_refs": [
+        "OBJ-02",
+        "EQ-11"
+      ],
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "validation_id": "VAL-03",
+      "type": "sensitivity",
+      "method": "对天气倍率与价格参数 ±20% 扰动，检查最优策略与目标资金变化幅度",
+      "targets_refs": [
+        "OBJ-01",
+        "OBJ-02"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "validation_id": "VAL-04",
+      "type": "limit",
+      "method": "极限情形：负重上限趋紧、连续沙暴日、起点资金极小时检查模型仍满足可行性约束",
+      "targets_refs": [
+        "C-01",
+        "C-02",
+        "C-04"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "VAL-05",
+      "type": "reproducibility",
+      "method": "固定种子 42 多次运行，检查 DP/博弈求解结果逐位一致",
+      "targets_refs": [
+        "EQ-10",
+        "EQ-11"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "VAL-06",
+      "type": "limit",
+      "method": "退化检验：令 n=1（k 无效）时 Q3 模型应还原为 Q1/Q2 单人模型",
+      "targets_refs": [
+        "EQ-12",
+        "EQ-13",
+        "EQ-14"
+      ],
+      "sub_question_binding": [
+        "Q3"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CLM-01",
+      "text": "在天气全知条件下，穿越沙漠问题存在最优策略，且可由确定性动态规划（EQ-10）精确求得。",
+      "type": "theorem",
+      "evidence_refs": [
+        "EXP-01",
+        "EXP-02",
+        "VAL-01"
+      ],
+      "model_refs": [
+        "EQ-10",
+        "OBJ-01"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ],
+      "status": "proposed"
+    },
+    {
+      "claim_id": "CLM-02",
+      "text": "仅知当天天气时，基于天气先验的滚动决策（EQ-11）在期望收益意义下不劣于任何第0天固定的开环计划。",
+      "type": "proposition",
+      "evidence_refs": [
+        "EXP-03",
+        "EXP-04",
+        "VAL-02"
+      ],
+      "model_refs": [
+        "EQ-11",
+        "OBJ-02"
+      ],
+      "sub_question_binding": [
+        "Q2"
+      ],
+      "status": "proposed"
+    },
+    {
+      "claim_id": "CLM-03",
+      "text": "Q3 中同行消耗放大与收益摊薄使同路径聚集的边际成本上升，均衡状态下玩家倾向于错峰出行或分散挖矿。",
+      "type": "behavioral",
+      "evidence_refs": [
+        "EXP-05",
+        "EXP-06"
+      ],
+      "model_refs": [
+        "EQ-12",
+        "EQ-13",
+        "EQ-14"
+      ],
+      "sub_question_binding": [
+        "Q3"
+      ],
+      "status": "proposed"
+    },
+    {
+      "claim_id": "CLM-04",
+      "text": "多人模型在 n=1 时严格退化为单人模型（2k→2、g/k→g、村庄价 4→2），结构自洽。",
+      "type": "consistency",
+      "evidence_refs": [
+        "VAL-06"
+      ],
+      "model_refs": [
+        "EQ-12",
+        "EQ-13",
+        "EQ-14"
+      ],
+      "sub_question_binding": [
+        "Q3"
+      ],
+      "status": "validated"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "node_id": "N-INPUT",
+        "label": "输入：地图、关卡参数、天气序列/分布",
+        "type": "source"
+      },
+      {
+        "node_id": "N-STATE",
+        "label": "状态 (R_t, W_t, F_t, M_t)",
+        "type": "state"
+      },
+      {
+        "node_id": "N-DEC",
+        "label": "决策 a_t = (移动, 挖矿, 购买)",
+        "type": "decision"
+      },
+      {
+        "node_id": "N-TRANS",
+        "label": "转移机制 EQ-01..EQ-07",
+        "type": "mechanism"
+      },
+      {
+        "node_id": "N-OBJ",
+        "label": "目标 OBJ-01..OBJ-04",
+        "type": "objective"
+      },
+      {
+        "node_id": "N-DP",
+        "label": "确定性 DP / 期望 MDP 求解",
+        "type": "solver"
+      },
+      {
+        "node_id": "N-GAME",
+        "label": "多人博弈均衡求解",
+        "type": "solver"
+      },
+      {
+        "node_id": "N-OUT",
+        "label": "输出：策略、终点资金、Result 数值",
+        "type": "sink"
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "E-01",
+        "from": "N-INPUT",
+        "to": "N-STATE",
+        "label": "初始化 t=0 状态"
+      },
+      {
+        "edge_id": "E-02",
+        "from": "N-STATE",
+        "to": "N-DEC",
+        "label": "状态驱动决策"
+      },
+      {
+        "edge_id": "E-03",
+        "from": "N-DEC",
+        "to": "N-TRANS",
+        "label": "决策代入转移方程"
+      },
+      {
+        "edge_id": "E-04",
+        "from": "N-TRANS",
+        "to": "N-STATE",
+        "label": "更新下一时刻状态"
+      },
+      {
+        "edge_id": "E-05",
+        "from": "N-TRANS",
+        "to": "N-OBJ",
+        "label": "累积阶段收益"
+      },
+      {
+        "edge_id": "E-06",
+        "from": "N-OBJ",
+        "to": "N-DP",
+        "label": "目标进入值函数"
+      },
+      {
+        "edge_id": "E-07",
+        "from": "N-STATE",
+        "to": "N-GAME",
+        "label": "Q3 多人状态进入博弈"
+      },
+      {
+        "edge_id": "E-08",
+        "from": "N-DP",
+        "to": "N-OUT",
+        "label": "Q1/Q2 最优策略输出"
+      },
+      {
+        "edge_id": "E-09",
+        "from": "N-GAME",
+        "to": "N-OUT",
+        "label": "Q3 均衡策略输出"
+      }
+    ]
+  },
+  "modeling_trace": [
+    {
+      "step": 1,
+      "action": "解析题面 8 条规则并抽取参数集（消耗、价格、收益、负重、时限）",
+      "output": "parameters 22 项"
+    },
+    {
+      "step": 2,
+      "action": "定义四维状态与行动空间，建立资源/资金动态与可行性约束",
+      "output": "EQ-01..EQ-09"
+    },
+    {
+      "step": 3,
+      "action": "对 Q1 建立天气全知的确定性动态规划，值函数沿时间向后递推",
+      "output": "EQ-10, SOL-01"
+    },
+    {
+      "step": 4,
+      "action": "对 Q2 引入天气先验概率，建立部分可观测滚动决策模型",
+      "output": "EQ-11, SOL-02"
+    },
+    {
+      "step": 5,
+      "action": "对 Q3 引入多人同行/同矿/同村规则，区分离线协调与在线博弈两种信息结构",
+      "output": "EQ-12..EQ-16, SOL-03"
+    },
+    {
+      "step": 6,
+      "action": "设计实验矩阵与验证门禁（baseline/sensitivity/limit/reproducibility/退化）",
+      "output": "EXP-01..07, VAL-01..06"
+    }
+  ]
+}

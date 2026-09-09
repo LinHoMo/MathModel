@@ -1,0 +1,209 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-28df6ec4",
+  "model_family": {
+    "primary": "optimization",
+    "secondary": ["simulation", "dynamic_programming"]
+  },
+  "problem_binding": {
+    "problem_id": "2018_B",
+    "sub_question_id": ["Q1", "Q2", "Q3", "Q4"],
+    "problem_sha256": "f00ef29490cc2ef0ca87d7bf17b598ecae98021e8049addfa222649bee410152"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "RGV 在直线轨道上的移动时间仅由移动距离决定，忽略加减速、轨道占用与避让，移动时间为题目给定的离散常量。",
+      "type": "simplification",
+      "rationale": "题目仅给出移动 1/2/3 个单位的耗时，将其视为确定常量是唯一可标定的简化。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "每台 CNC 同时最多加工一个物料，加工过程不可中断；物料在任一台 CNC 上加工完成即为合格品。",
+      "type": "mechanism",
+      "rationale": "符合数控加工的单件作业特性，也是建立排队/周期模型的基础。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "班次内上料传送带物料供给充足、无缺料停线，RGV 与 CNC 在 8 小时内连续作业。",
+      "type": "projection",
+      "rationale": "题目未给出缺料情形，供给充足假设给出班次产量的上界视角，便于评估系统极限效率。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "CNC 故障相互独立，每台 CNC 每个加工周期以概率 p_f=1% 发生故障；故障排除时长在 [10,20] 分钟上均匀分布，排除后即刻重新加入作业序列。",
+      "type": "calibration",
+      "rationale": "题目给出故障概率约 1% 与排除时间 10~20 分钟，均匀分布是对区间信息的最小信息量假设。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "RGV 的初始停靠位置与首轮服务顺序可自由设定，属于调度优化的自由度。",
+      "type": "simplification",
+      "rationale": "初始位置对稳态班次产量的影响可被循环周期吸收，故不单独固定。"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "两道工序情形下，第一道与第二道工序分别由两台不同 CNC 依次完成，RGV 负责工序间的物料搬运与第二道完工件的清洗。",
+      "type": "mechanism",
+      "rationale": "题意明确两道工序由不同 CNC 完成，RGV 搬运是衔接两道工序的唯一物流通道。"
+    }
+  ],
+  "variables": [
+    {"variable_id": "v_pos", "name": "RGV位置", "symbol": "p(t)", "definition": "t 时刻 RGV 停靠的 CNC 编号（1..8）", "unit": "CNC编号", "type": "state", "sub_question_binding": ["Q1", "Q2", "Q3"]},
+    {"variable_id": "v_dispatch", "name": "调度决策", "symbol": "a_{t,i}", "definition": "t 时刻是否派 RGV 服务 CNC i（1 是 / 0 否）", "unit": "无", "type": "decision", "sub_question_binding": ["Q1", "Q2", "Q3", "Q4"]},
+    {"variable_id": "v_cnc_state", "name": "CNC状态", "symbol": "s_i(t)", "definition": "CNC i 在 t 时刻的状态：IDLE/PROCESSING/WAITING/FAILED", "unit": "无", "type": "state", "sub_question_binding": ["Q1", "Q2", "Q3"]},
+    {"variable_id": "v_fail", "name": "故障指示", "symbol": "f_i(t)", "definition": "CNC i 在 t 时刻是否处于故障（1 是 / 0 否）", "unit": "无", "type": "state", "sub_question_binding": ["Q3"]},
+    {"variable_id": "v_repair", "name": "修复时长", "symbol": "tau_i", "definition": "CNC i 本次故障的排除（修复）时长", "unit": "s", "type": "state", "sub_question_binding": ["Q3"]},
+    {"variable_id": "v_mov_time", "name": "移动时间", "symbol": "T_mov(i,j)", "definition": "RGV 从 CNC i 移动到 CNC j 的耗时", "unit": "s", "type": "observation", "sub_question_binding": ["Q1", "Q2", "Q3"]},
+    {"variable_id": "v_serv", "name": "单次服务时间", "symbol": "T_si", "definition": "RGV 服务 CNC i 一次（上下料，必要时清洗）的耗时", "unit": "s", "type": "observation", "sub_question_binding": ["Q1", "Q2", "Q3"]},
+    {"variable_id": "v_serv_avg", "name": "平均单次服务时间", "symbol": "T_sbar", "definition": "一轮中 8 台 CNC 单次服务时间的平均值", "unit": "s", "type": "observation", "sub_question_binding": ["Q1", "Q2"]},
+    {"variable_id": "v_delta", "name": "清洗指示", "symbol": "delta_i", "definition": "本次在 CNC i 取出的物料是否为完工件（需清洗取 1，否则 0）", "unit": "无", "type": "observation", "sub_question_binding": ["Q1", "Q2"]},
+    {"variable_id": "v_rnd", "name": "轮服务时间", "symbol": "T_rnd", "definition": "RGV 完成一轮（服务全部 8 台 CNC）的总耗时", "unit": "s", "type": "observation", "sub_question_binding": ["Q1"]},
+    {"variable_id": "v_cyc", "name": "稳态循环周期", "symbol": "T_cyc", "definition": "一道工序稳态下每台 CNC 相邻两次被服务的时间间隔", "unit": "s", "type": "observation", "sub_question_binding": ["Q1"]},
+    {"variable_id": "v_throughput1", "name": "一道工序班次产量", "symbol": "W", "definition": "一道工序情形下 8 小时班次完成的物料总数", "unit": "件", "type": "observation", "sub_question_binding": ["Q1", "Q4"]},
+    {"variable_id": "v_throughput2", "name": "两道工序班次产量", "symbol": "W2", "definition": "两道工序情形下 8 小时班次完成的成品总数", "unit": "件", "type": "observation", "sub_question_binding": ["Q2", "Q4"]},
+    {"variable_id": "v_util", "name": "CNC利用率", "symbol": "U", "definition": "CNC 平均加工时间占循环周期的比例", "unit": "无", "type": "observation", "sub_question_binding": ["Q1", "Q2"]},
+    {"variable_id": "v_eff", "name": "系统作业效率", "symbol": "eta", "definition": "班次产量与班次时长的比值（单位时间完工件数）", "unit": "件/s", "type": "observation", "sub_question_binding": ["Q4"]},
+    {"variable_id": "v_avail", "name": "CNC可用度", "symbol": "A_i", "definition": "故障场景下 CNC i 的稳态可用度（加工时间占比）", "unit": "无", "type": "observation", "sub_question_binding": ["Q3"]},
+    {"variable_id": "v_w_exp", "name": "期望班次产量", "symbol": "W_exp", "definition": "故障场景下考虑可用度折损后的期望班次产量", "unit": "件", "type": "observation", "sub_question_binding": ["Q3"]},
+    {"variable_id": "v_scrap", "name": "期望报废件数", "symbol": "L", "definition": "故障导致的在制品报废期望件数", "unit": "件", "type": "observation", "sub_question_binding": ["Q3"]},
+    {"variable_id": "v_tau_mean", "name": "平均修复时长", "symbol": "tau_bar", "definition": "故障排除时长的期望值", "unit": "s", "type": "observation", "sub_question_binding": ["Q3"]},
+    {"variable_id": "v_proc_i", "name": "单件加工时间", "symbol": "t_pi", "definition": "CNC i 的单件加工时间（一道工序取 t_p1，两道按工序取 t_p2a/t_p2b）", "unit": "s", "type": "observation", "sub_question_binding": ["Q3"]},
+    {"variable_id": "v_n_proc", "name": "单机班次加工件数", "symbol": "N_i^proc", "definition": "CNC i 在一个班次内加工（或完工）的物料数", "unit": "件", "type": "observation", "sub_question_binding": ["Q1", "Q2", "Q3"]},
+    {"variable_id": "v_nF", "name": "第一道CNC数", "symbol": "n_F", "definition": "承担第一道工序的 CNC 台数（标准配置 4 台）", "unit": "台", "type": "constant", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_nS", "name": "第二道CNC数", "symbol": "n_S", "definition": "承担第二道工序的 CNC 台数（标准配置 4 台）", "unit": "台", "type": "constant", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_wF", "name": "第一道产量", "symbol": "W_F", "definition": "第一道工序的班次加工能力", "unit": "件", "type": "observation", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_wS", "name": "第二道产量", "symbol": "W_S", "definition": "第二道工序的班次加工能力（含清洗）", "unit": "件", "type": "observation", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_cycF", "name": "第一道循环周期", "symbol": "T_cycF", "definition": "两道工序下第一道 CNC 的稳态循环周期", "unit": "s", "type": "observation", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_cycS", "name": "第二道循环周期", "symbol": "T_cycS", "definition": "两道工序下第二道 CNC 的稳态循环周期", "unit": "s", "type": "observation", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_rndF", "name": "第一道轮服务时间", "symbol": "T_rndF", "definition": "RGV 服务全部第一道 CNC 一轮的耗时", "unit": "s", "type": "observation", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_rndS", "name": "第二道轮服务时间", "symbol": "T_rndS", "definition": "RGV 服务全部第二道 CNC 一轮的耗时", "unit": "s", "type": "observation", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_servF", "name": "第一道单次服务时间", "symbol": "T_sF", "definition": "RGV 服务一台第一道 CNC 的平均耗时（上料+下料+搬运）", "unit": "s", "type": "observation", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_servS", "name": "第二道单次服务时间", "symbol": "T_sS", "definition": "RGV 服务一台第二道 CNC 的平均耗时（上料+下料+清洗）", "unit": "s", "type": "observation", "sub_question_binding": ["Q2"]},
+    {"variable_id": "v_arr", "name": "RGV到达时刻", "symbol": "t_arr_i", "definition": "RGV 到达 CNC i 的时刻", "unit": "s", "type": "state", "sub_question_binding": ["Q1", "Q2"]},
+    {"variable_id": "v_ready", "name": "CNC就绪时刻", "symbol": "t_ready_i", "definition": "CNC i 可以被服务（空闲或已完工）的最早时刻", "unit": "s", "type": "state", "sub_question_binding": ["Q1", "Q2"]},
+    {"variable_id": "v_dep", "name": "RGV离开时刻", "symbol": "t_dep_i", "definition": "RGV 完成 CNC i 服务后的离开时刻", "unit": "s", "type": "state", "sub_question_binding": ["Q1", "Q2"]}
+  ],
+  "parameters": [
+    {"parameter_id": "p_v1", "name": "移动1单位时间", "symbol": "v_1", "value": 20, "source": "题目"},
+    {"parameter_id": "p_v2", "name": "移动2单位时间", "symbol": "v_2", "value": 33, "source": "题目"},
+    {"parameter_id": "p_v3", "name": "移动3单位时间", "symbol": "v_3", "value": 46, "source": "题目"},
+    {"parameter_id": "p_tp1", "name": "一道工序加工时间", "symbol": "t_p1", "value": 560, "source": "题目"},
+    {"parameter_id": "p_tp2a", "name": "两道第一道工序时间", "symbol": "t_p2a", "value": 400, "source": "题目"},
+    {"parameter_id": "p_tp2b", "name": "两道第二道工序时间", "symbol": "t_p2b", "value": 378, "source": "题目"},
+    {"parameter_id": "p_tld_odd", "name": "奇号CNC上下料时间", "symbol": "t_ld^odd", "value": 28, "source": "题目"},
+    {"parameter_id": "p_tld_even", "name": "偶号CNC上下料时间", "symbol": "t_ld^even", "value": 31, "source": "题目"},
+    {"parameter_id": "p_tw", "name": "清洗作业时间", "symbol": "t_w", "value": 25, "source": "题目"},
+    {"parameter_id": "p_D", "name": "班次时长", "symbol": "D", "value": 28800, "source": "题目"},
+    {"parameter_id": "p_pf", "name": "故障发生概率", "symbol": "p_f", "value": 0.01, "source": "题目"},
+    {"parameter_id": "p_taumin", "name": "故障排除时间下界", "symbol": "tau_min", "value": 600, "source": "题目"},
+    {"parameter_id": "p_taumax", "name": "故障排除时间上界", "symbol": "tau_max", "value": 1200, "source": "题目"},
+    {"parameter_id": "p_ncnc", "name": "CNC总台数", "symbol": "n", "value": 8, "source": "题目"}
+  ],
+  "objectives": [
+    {"objective_id": "OBJ_Q1", "type": "maximize", "expression": "max W = 8*floor(D/T_cyc)，通过最小化轮服务时间 T_rnd 与循环周期 T_cyc 实现", "variables_refs": ["v_throughput1", "v_cyc", "v_rnd", "v_serv_avg"], "sub_question_binding": ["Q1"]},
+    {"objective_id": "OBJ_Q2", "type": "maximize", "expression": "max W2 = min(W_F, W_S)，平衡第一道与第二道工序能力，消除瓶颈", "variables_refs": ["v_throughput2", "v_wF", "v_wS", "v_cycF", "v_cycS"], "sub_question_binding": ["Q2"]},
+    {"objective_id": "OBJ_Q3", "type": "maximize", "expression": "max W_exp = sum_i A_i*N_i^proc 且 min L = p_f*sum_i N_i^proc，故障场景下期望产量最大、报废最少", "variables_refs": ["v_w_exp", "v_avail", "v_scrap", "v_n_proc"], "sub_question_binding": ["Q3"]},
+    {"objective_id": "OBJ_Q4", "type": "estimate", "expression": "estimate W、W2 与 eta 在 3 组系统作业参数下的取值，输出附件2 三个工作表要求的调度策略与作业效率", "variables_refs": ["v_throughput1", "v_throughput2", "v_eff"], "sub_question_binding": ["Q4"]}
+  ],
+  "constraints": [
+    {"constraint_id": "C1", "type": "integrality", "expression": "a_{t,i} in {0,1} 且 sum_i a_{t,i} <= 1（RGV 同一时刻至多服务一台 CNC）", "variables_refs": ["v_dispatch"], "source": "机制假设", "sub_question_binding": ["Q1", "Q2", "Q3", "Q4"]},
+    {"constraint_id": "C2", "type": "capacity", "expression": "s_i(t) in {IDLE, PROCESSING, WAITING, FAILED}，每台 CNC 同时最多一个物料", "variables_refs": ["v_cnc_state"], "source": "机制假设", "sub_question_binding": ["Q1", "Q2", "Q3"]},
+    {"constraint_id": "C3", "type": "timing", "expression": "t_arr_i >= t_ready_i（RGV 到达不早于 CNC 就绪）", "variables_refs": ["v_arr", "v_ready"], "source": "机制假设", "sub_question_binding": ["Q1", "Q2"]},
+    {"constraint_id": "C4", "type": "equality", "expression": "t_dep_i = t_arr_i + T_si（服务时间守恒）", "variables_refs": ["v_dep", "v_arr", "v_serv"], "source": "定义", "sub_question_binding": ["Q1", "Q2"]},
+    {"constraint_id": "C5", "type": "flow_conservation", "expression": "sum_{i in F} N_i^proc = sum_{i in S} N_i^proc（两道工序物料流转守恒）", "variables_refs": ["v_n_proc", "v_nF", "v_nS"], "source": "题意", "sub_question_binding": ["Q2"]},
+    {"constraint_id": "C6", "type": "bound", "expression": "tau_min <= tau_i <= tau_max（修复时长区间）", "variables_refs": ["v_repair"], "source": "题目", "sub_question_binding": ["Q3"]},
+    {"constraint_id": "C7", "type": "horizon", "expression": "调度总时长 <= D（8 小时班次）", "variables_refs": ["v_dep"], "source": "题目", "sub_question_binding": ["Q1", "Q2", "Q3", "Q4"]}
+  ],
+  "mechanisms": [
+    {"mechanism_id": "M1", "description": "循环服务机制：RGV 沿轨道按轮询序依次服务 8 台 CNC，完工件立即下料并清洗，形成稳定循环周期", "related_equations": ["EQ1", "EQ2", "EQ3", "EQ4", "EQ5", "EQ6"], "sub_question_binding": ["Q1"]},
+    {"mechanism_id": "M2", "description": "两道工序流转机制：第一道完工物料由 RGV 搬运至第二道 CNC，第二道完工后清洗，两道工序能力取小决定成品产量", "related_equations": ["EQ9", "EQ10", "EQ11"], "sub_question_binding": ["Q2"]},
+    {"mechanism_id": "M3", "description": "故障-修复-报废机制：加工周期内以概率 p_f 发生故障，在制品报废，修复时长在 [10,20] 分钟随机，修复后重新入列，可用度折损产量", "related_equations": ["EQ12", "EQ13", "EQ14", "EQ15"], "sub_question_binding": ["Q3"]},
+    {"mechanism_id": "M4", "description": "参数适配机制：同一模型接受题目表 1 的三组系统作业参数，输出对应调度策略与作业效率并填表", "related_equations": ["EQ6", "EQ8", "EQ11"], "sub_question_binding": ["Q4"]}
+  ],
+  "equations": [
+    {"equation_id": "EQ1", "latex": "T_{mov}(i,j) = v_{|i-j|}", "type": "definition", "variables_refs": ["v_mov_time", "p_v1", "p_v2", "p_v3"], "derivation_trace": "由题目表 1 移动时间定义直接给出", "sub_question_binding": ["Q1", "Q2", "Q3"]},
+    {"equation_id": "EQ2", "latex": "T_{si} = T_{mov}(p(t),i) + t_{ld}(i) + \\delta_i t_w", "type": "balance", "variables_refs": ["v_serv", "v_mov_time", "v_pos", "v_delta", "p_tld_odd", "p_tld_even", "p_tw"], "derivation_trace": "单次服务时间 = 移动时间 + 上下料时间 + 完工件清洗时间", "sub_question_binding": ["Q1", "Q2"]},
+    {"equation_id": "EQ3", "latex": "\\bar{T}_s = \\frac{1}{8}\\sum_{i=1}^{8} T_{si}", "type": "aggregation", "variables_refs": ["v_serv_avg", "v_serv"], "derivation_trace": "8 台 CNC 单次服务时间取平均", "sub_question_binding": ["Q1", "Q2"]},
+    {"equation_id": "EQ4", "latex": "T_{rnd} = 8\\bar{T}_s", "type": "balance", "variables_refs": ["v_rnd", "v_serv_avg"], "derivation_trace": "一轮服务总时间为 8 次服务时间之和", "sub_question_binding": ["Q1"]},
+    {"equation_id": "EQ5", "latex": "T_{cyc} = \\max(T_{rnd},\\, t_{p1} + \\bar{T}_s)", "type": "mechanism", "variables_refs": ["v_cyc", "v_rnd", "p_tp1", "v_serv_avg"], "derivation_trace": "稳态循环周期受 RGV 轮服务时间与 CNC 加工周期两者较大者约束（防饥饿条件）", "sub_question_binding": ["Q1"]},
+    {"equation_id": "EQ6", "latex": "W = 8\\left\\lfloor \\frac{D}{T_{cyc}} \\right\\rfloor", "type": "throughput", "variables_refs": ["v_throughput1", "p_D", "v_cyc"], "derivation_trace": "班次时长除以循环周期取整，乘以 8 台 CNC", "sub_question_binding": ["Q1", "Q4"]},
+    {"equation_id": "EQ7", "latex": "U = \\frac{t_{p1}}{T_{cyc}}", "type": "utilization", "variables_refs": ["v_util", "p_tp1", "v_cyc"], "derivation_trace": "CNC 加工时间占循环周期比例", "sub_question_binding": ["Q1"]},
+    {"equation_id": "EQ8", "latex": "\\eta = \\frac{W}{D}", "type": "efficiency", "variables_refs": ["v_eff", "v_throughput1", "p_D"], "derivation_trace": "系统作业效率定义为单位时间完工件数", "sub_question_binding": ["Q4"]},
+    {"equation_id": "EQ9", "latex": "T_{cycF} = \\max(T_{rndF},\\, t_{p2a} + T_{sF})", "type": "mechanism", "variables_refs": ["v_cycF", "v_rndF", "p_tp2a", "v_servF"], "derivation_trace": "第一道工序稳态周期取 RGV 轮服务与加工周期较大者", "sub_question_binding": ["Q2"]},
+    {"equation_id": "EQ10", "latex": "T_{cycS} = \\max(T_{rndS},\\, t_{p2b} + T_{sS})", "type": "mechanism", "variables_refs": ["v_cycS", "v_rndS", "p_tp2b", "v_servS"], "derivation_trace": "第二道工序稳态周期，服务时间已含清洗", "sub_question_binding": ["Q2"]},
+    {"equation_id": "EQ11", "latex": "W_2 = \\min\\left(n_F\\left\\lfloor \\frac{D}{T_{cycF}} \\right\\rfloor,\\, n_S\\left\\lfloor \\frac{D}{T_{cycS}} \\right\\rfloor\\right)", "type": "throughput", "variables_refs": ["v_throughput2", "v_nF", "v_nS", "p_D", "v_cycF", "v_cycS"], "derivation_trace": "成品产量受两道工序能力较小者约束（瓶颈决定）", "sub_question_binding": ["Q2", "Q4"]},
+    {"equation_id": "EQ12", "latex": "\\bar{\\tau} = \\frac{\\tau_{min} + \\tau_{max}}{2}", "type": "aggregation", "variables_refs": ["v_tau_mean", "p_taumin", "p_taumax"], "derivation_trace": "均匀分布 [10,20] 分钟的期望", "sub_question_binding": ["Q3"]},
+    {"equation_id": "EQ13", "latex": "A_i = \\frac{t_{pi}}{t_{pi} + p_f\\bar{\\tau}}", "type": "mechanism", "variables_refs": ["v_avail", "v_proc_i", "p_pf", "v_tau_mean"], "derivation_trace": "可用度 = MTBF/(MTBF+MTTR)，MTBF=t_pi/p_f，MTTR=tau_bar", "sub_question_binding": ["Q3"]},
+    {"equation_id": "EQ14", "latex": "W_{exp} = \\sum_{i=1}^{8} A_i N_i^{proc}", "type": "throughput", "variables_refs": ["v_w_exp", "v_avail", "v_n_proc"], "derivation_trace": "故障下期望产量 = 各 CNC 可用度加权加工件数之和", "sub_question_binding": ["Q3"]},
+    {"equation_id": "EQ15", "latex": "L = p_f\\sum_{i=1}^{8} N_i^{proc}", "type": "loss", "variables_refs": ["v_scrap", "p_pf", "v_n_proc"], "derivation_trace": "每次故障报废在制品，期望报废数 = 故障概率 × 加工件数", "sub_question_binding": ["Q3"]}
+  ],
+  "dependencies": [
+    {"dependency_id": "DEP1", "from": "EQ2", "to": "EQ1", "type": "equation", "description": "服务时间依赖移动时间函数"},
+    {"dependency_id": "DEP2", "from": "EQ3", "to": "EQ2", "type": "equation", "description": "平均服务时间由单次服务时间聚合"},
+    {"dependency_id": "DEP3", "from": "EQ4", "to": "EQ3", "type": "equation", "description": "轮服务时间依赖平均服务时间"},
+    {"dependency_id": "DEP4", "from": "EQ5", "to": "EQ4", "type": "equation", "description": "循环周期依赖轮服务时间与加工时间"},
+    {"dependency_id": "DEP5", "from": "EQ6", "to": "EQ5", "type": "equation", "description": "班次产量依赖循环周期"},
+    {"dependency_id": "DEP6", "from": "EQ11", "to": ["EQ9", "EQ10"], "type": "equation", "description": "两道工序产量依赖两道循环周期"},
+    {"dependency_id": "DEP7", "from": ["EQ13", "EQ14"], "to": "EQ12", "type": "equation", "description": "故障期望产量依赖平均修复时长"},
+    {"dependency_id": "DEP8", "from": "SOL1", "to": ["EQ1", "EQ2", "EQ3", "EQ4", "EQ5", "EQ6", "EQ9", "EQ10", "EQ11", "EQ12", "EQ13", "EQ14", "EQ15"], "type": "solver", "description": "离散事件仿真求解器使用全部平衡/吞吐方程"},
+    {"dependency_id": "DEP9", "from": "SOL2", "to": ["EQ1", "EQ4"], "type": "solver", "description": "动态规划最小化轮服务时间"},
+    {"dependency_id": "DEP10", "from": "EXP1", "to": "SOL1", "type": "experiment", "description": "三组参数实验驱动仿真求解器"},
+    {"dependency_id": "DEP11", "from": ["VAL1", "VAL2", "VAL3", "VAL4"], "to": ["EXP1", "EXP2", "EXP3", "EXP4"], "type": "validation", "description": "验证引用实验输出"},
+    {"dependency_id": "DEP12", "from": ["CL1", "CL2", "CL3", "CL4"], "to": ["VAL1", "VAL2", "VAL3", "VAL4"], "type": "claim", "description": "结论由验证支撑"}
+  ],
+  "solvers": [
+    {"solver_id": "SOL1", "method": "事件驱动离散事件仿真 + 贪心调度（按最短空闲/最早完工优先级派单）", "implementation_ref": "research/P15/experiments/P15-K002-precheck/code/rgv_scheduler.py", "sub_question_binding": ["Q1", "Q2", "Q3"]},
+    {"solver_id": "SOL2", "method": "动态规划：对一道工序循环周期做状态转移优化，最小化 T_rnd", "implementation_ref": "research/P15/experiments/P15-K002-precheck/code/rgv_dp.py", "sub_question_binding": ["Q1"]},
+    {"solver_id": "SOL3", "method": "解析公式计算：用 EQ6/EQ8/EQ11 直接求三组参数下的产量与效率并填表", "implementation_ref": "research/P15/experiments/P15-K002-precheck/code/rgv_formula.py", "sub_question_binding": ["Q4"]}
+  ],
+  "experiments": [
+    {"experiment_id": "EXP1", "type": "ablation", "inputs": "3 组参数（v_1,v_2,v_3,t_p1,t_p2a,t_p2b,t_ld^odd,t_ld^even,t_w）× 2 场景（一/两道工序）× 故障开关，共 12 个单元格", "expected_outputs": "各单元格的 W、W2、W_exp、eta", "sub_question_binding": ["Q1", "Q2", "Q3", "Q4"]},
+    {"experiment_id": "EXP2", "type": "reproducibility", "inputs": "随机种子 42，同一故障场景重复 5 次", "expected_outputs": "W_exp 的均值±标准差，变异系数 CV < 0.10", "sub_question_binding": ["Q3"]},
+    {"experiment_id": "EXP3", "type": "sensitivity", "inputs": "故障概率扫描 p_f in {0, 0.005, 0.01, 0.02}", "expected_outputs": "W_exp 随 p_f 单调下降，L 随 p_f 线性上升", "sub_question_binding": ["Q3"]},
+    {"experiment_id": "EXP4", "type": "calibration", "inputs": "三组系统作业参数（表 1）", "expected_outputs": "附件2 三个工作表的调度策略与作业效率结果", "sub_question_binding": ["Q4"]}
+  ],
+  "validations": [
+    {"validation_id": "VAL1", "type": "baseline", "method": "与理论上界 W_max = 8*floor(D/(t_p1+T_sbar)) 比较，要求 W <= W_max 且相对差距 < 5%", "targets_refs": ["v_throughput1"], "sub_question_binding": ["Q1"]},
+    {"validation_id": "VAL2", "type": "sensitivity", "method": "对 p_f 做 0~2% 扫描，检验 W_exp 单调性与 EQ13/EQ14 解析一致性", "targets_refs": ["v_w_exp", "v_avail"], "sub_question_binding": ["Q3"]},
+    {"validation_id": "VAL3", "type": "limit", "method": "极限检验：t_p1 -> inf 时 W -> 0；移动与清洗时间 -> 0 时 W -> 8*floor(D/(t_ld))；两道工序瓶颈切换点验证", "targets_refs": ["v_throughput1", "v_throughput2", "v_cyc"], "sub_question_binding": ["Q2"]},
+    {"validation_id": "VAL4", "type": "reproducibility", "method": "固定 seed=42 的 5 次独立运行，CV < 0.10 判定稳定", "targets_refs": ["v_w_exp", "v_throughput1"], "sub_question_binding": ["Q4"]}
+  ],
+  "claims": [
+    {"claim_id": "CL1", "text": "一道工序情形下，模型给出三组参数对应的班次产量 W 与效率 eta，且产量不超过理论上界 8*floor(D/(t_p1+T_sbar))。", "type": "quantitative", "evidence_refs": ["EXP1", "VAL1"], "model_refs": ["v_throughput1", "v_eff"], "sub_question_binding": ["Q1"], "status": "validated"},
+    {"claim_id": "CL2", "text": "两道工序情形的成品产量由瓶颈工序决定：W2 = min(W_F, W_S)，第二道工序（t_p2b 与清洗叠加）通常构成瓶颈。", "type": "mechanistic", "evidence_refs": ["EXP1"], "model_refs": ["v_throughput2", "v_wF", "v_wS"], "sub_question_binding": ["Q2"], "status": "validated"},
+    {"claim_id": "CL3", "text": "故障使期望班次产量折损为 sum_i A_i*N_i^proc，且每次故障报废一件在制品，期望报废数 L = p_f*sum_i N_i^proc。", "type": "quantitative", "evidence_refs": ["EXP2", "EXP3"], "model_refs": ["v_w_exp", "v_scrap", "v_avail"], "sub_question_binding": ["Q3"], "status": "validated"},
+    {"claim_id": "CL4", "text": "模型可输出 3 组系统作业参数下的调度策略与作业效率，结果可直接填入附件2 的三个工作表。", "type": "predictive", "evidence_refs": ["EXP4", "VAL4"], "model_refs": ["v_throughput1", "v_throughput2", "v_eff"], "sub_question_binding": ["Q4"], "status": "validated"}
+  ],
+  "model_graph": {
+    "nodes": [
+      {"id": "N1", "label": "问题 2018_B（RGV 动态调度）", "type": "problem"},
+      {"id": "N2", "label": "模型族 optimization + simulation", "type": "family"},
+      {"id": "N3", "label": "假设集 A1-A6", "type": "assumption"},
+      {"id": "N4", "label": "变量/参数声明（30 变量 + 14 参数）", "type": "declaration"},
+      {"id": "N5", "label": "方程网 EQ1-EQ15", "type": "equation"},
+      {"id": "N6", "label": "求解器 SOL1-SOL3", "type": "solver"},
+      {"id": "N7", "label": "实验 EXP1-EXP4", "type": "experiment"},
+      {"id": "N8", "label": "验证 VAL1-VAL4", "type": "validation"},
+      {"id": "N9", "label": "结论 CL1-CL4", "type": "claim"}
+    ],
+    "edges": [
+      {"from": "N1", "to": "N2", "type": "bind"},
+      {"from": "N2", "to": "N3", "type": "assume"},
+      {"from": "N3", "to": "N4", "type": "declare"},
+      {"from": "N4", "to": "N5", "type": "compose"},
+      {"from": "N5", "to": "N6", "type": "solve"},
+      {"from": "N6", "to": "N7", "type": "run"},
+      {"from": "N7", "to": "N8", "type": "verify"},
+      {"from": "N8", "to": "N9", "type": "support"}
+    ]
+  },
+  "modeling_trace": [
+    {"step": 1, "action": "解析题面", "detail": "识别 8 台 CNC、1 台 RGV、上/下料传送带与清洗槽，四类子问题：一道工序、两道工序、故障场景、三组参数检验"},
+    {"step": 2, "action": "确定模型族", "detail": "以 optimization 为主结构（产量最大化/周期最小化），辅以 simulation 承载随机故障与调度验证、dynamic_programming 优化循环周期"},
+    {"step": 3, "action": "建立符号体系", "detail": "声明状态/决策/观测变量 30 个与题目参数 14 个，保证方程符号全部可解析"},
+    {"step": 4, "action": "推导方程", "detail": "一道工序给出轮服务-循环周期-产量链（EQ1-EQ8）；两道工序给出瓶颈取小公式（EQ9-EQ11）；故障给出可用度-期望产量-报废公式（EQ12-EQ15）"},
+    {"step": 5, "action": "设计求解与实验", "detail": "离散事件仿真 + 贪心调度为主求解器，DP 优化周期；设计 12 单元格消融、5 次重复、故障概率敏感性三组实验"},
+    {"step": 6, "action": "验证与结论", "detail": "baseline 上界、敏感性、极限行为、可复现性四类验证支撑 Q1-Q4 结论"}
+  ]
+}

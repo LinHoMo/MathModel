@@ -1,0 +1,35 @@
+{
+  "submission_id": "07a0ca6e-0822-48f3-ac03-1199972a8469",
+  "evaluator": {"id": "evaluator_B", "model": "doubao-pro", "type": "independent_llm"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "关键数字/参数完整提取：parameters 含 T_env(Q1=75/Q2=65/Q3=80°C)、τ(90/60/30min)、T_lim=47、T_0=44、t_lim=5、T_body=37；variables 中 d_2（Q1 固定 6mm、Q2 设计）、d_4（Q1=5mm、Q2=5.5mm、Q3 设计）；附件1 物性（k/ρ/c 四层）与附件2 实测序列（v_Tmeas, v_tm）均入参；无遗漏。"},
+    "L1.2": {"score": 2, "evidence": "隐式条件经假设显式化并附依据：A-01 一维多层平板传热（忽略侧向边缘与曲率）、A-02 恒物性+层间理想热接触（温度/热流连续）、A-03 对流 Robin 边界、A-04 初始均匀 37°C、A-07 皮肤外侧温度映射为 x=L 边界温度。"},
+    "L1.3": {"score": 2, "evidence": "交付要求识别：OBJ-01 '输出温度分布文件 problem1.xlsx'；EXP-01 expected_outputs '生成 problem1.xlsx'；Q2/Q3 输出最优厚度 d_2*、(d_2*,d_4*) 及皮肤温度曲线；附件2 实测数据作为 Q1 校准输入被识别。"},
+    "L1.4": {"score": 2, "evidence": "A-05 显式标注歧义/不确定参数：'h1/h2 题目未直接给出，属不确定参数，需用附件2 测量数据校准，属于逆问题环节'并给出处理方案与理由；A-07 处理测量点口径；实质完成歧义识别与处理。"},
+    "L1.5": {"score": 2, "evidence": "model_family primary=pde, secondary=[heat_transfer, finite_difference, numerical_optimization, inverse_problem]；2018_A 为一维多层瞬态热传导正问题（Q1）+ 厚度反演优化（Q2/Q3）+ 参数校准（h1/h2），类型判定正确。"},
+    "L2.1": {"score": 2, "evidence": "variables 11 项全部声明并区分类型：v_T（温度场, state）、v_Ts（皮肤外侧温度, observation）、v_d2/v_d4（厚度, decision）、v_tex（超温累计时长, observation）、v_Tmeas（实测, observation）、v_j/v_n（网格/时间层索引, constant），关键变量无缺失。"},
+    "L2.2": {"score": 2, "evidence": "parameters 30 项逐项带 source（题目/校准/假设）与取值（示例值标注'由附件1确定'）；EQ-01..EQ-13 引用的 k_i, ρ_i, c_i, h_1, h_2, T_env, T_body, τ, T_lim, T_0, t_lim, r_i, Δx, Δt, w_2, w_4, L, Ω_i, x_m 全部在 parameters 声明；方程符号集 ⊆ 参数声明集。"},
+    "L2.3": {"score": 2, "evidence": "A-01..A-07 均标类型（simplification/mechanism/projection/calibration）并给 rationale：A-01 一维化依据（覆盖面积≫厚度）、A-02 恒物性+理想接触、A-03 对流边界、A-05 校准锚、A-06 厚度连续化；假设集显式、合理、可检验。"},
+    "L2.4": {"score": 2, "evidence": "目标与题面一致：OBJ-01 estimate（Q1 正问题计算温度场）、OBJ-02 minimize d_2（Q2 在 T_skin(60min)≤47 且 t_ex≤5 下最小化 II 层厚度）、OBJ-03 minimize w_2 d_2 + w_4 d_4（Q3 双厚度加权最小化），输出类型匹配。"},
+    "L2.5": {"score": 2, "evidence": "约束形式化且方向正确：C-01 T_skin(τ)≤T_lim=47、C-02 t_ex=∫1[T_skin>T_0]ds≤5min、C-03 厚度设计可行域、C-04 显式格式稳定性 r_i≤1/2、C-05 温度场物理单调；关键约束（结束温度+超温时长）无缺失。"},
+    "L2.6": {"score": 2, "evidence": "MECH-01..05 机理正确：多层 Fourier 热传导（能量守恒）+ 边界/界面耦合（Robin+连续条件）+ 有限差分离散 + 厚度设计-约束反演 + 参数校准（附件2 反演 h）；控制方程与 2018_A 物理机制一致；缺显式候选模型对比表（如 1D vs 2D、FDM vs FEM），故不给 3 分。"},
+    "L2.7": {"score": 2, "evidence": "方程结构完整可求解：EQ-01 控制 PDE + EQ-02/03 外/内 Robin 边界 + EQ-04 层间界面连续 + EQ-05 初值 37°C + EQ-06 显式/隐式离散更新 + EQ-07 观测 + EQ-08 超温度量 + EQ-09/10 约束 + EQ-11/12 设计优化 + EQ-13 逆问题校准；控制方程+边界+初值齐全。"},
+    "L3.1": {"score": 2, "evidence": "求解策略与模型类型匹配：SOL-01 显式 FDM（C-04 保证稳定）或 Crank-Nicolson 隐式（Thomas 追赶）；SOL-02 网格搜索+二分或 SLSQP 解厚度优化；SOL-03 最小二乘+Gauss-Newton/LM 解逆问题校准；与 PDE/约束优化/逆问题口径一致。"},
+    "L3.2": {"score": 2, "evidence": "执行路径具体可落地：SOL-01..03 的 implementation_ref 指向 q1_heat_fd.py / q2_q3_design.py / q1_calibrate.py（预检规划实现）；EXP-01..05 给出输入/期望输出；设计层面代码无崩溃因素（无实际代码运行，按描述策略评可执行性）。"},
+    "L3.3": {"score": 2, "evidence": "收敛安排明确：EXP-04 网格加密序列（Δx,Δt 逐次减半）验证温度误差随细化趋零（网格无关性）；C-04 给出 r_i≤1/2 稳定性条件；Crank-Nicolson 无条件稳定备选；收敛性设计充分。"},
+    "L3.4": {"score": 2, "evidence": "VAL-04 固定 seed=42 多轮求解数值逐位一致，且显式/隐式两种格式结果互校；确定性 PDE 求解场景下以'固定种子+格式互校'替代多 seed 统计，复现安排合理充分。"},
+    "L3.5": {"score": 2, "evidence": "VAL-02 极限检验覆盖物理合理性：长时间极限趋近环境温度、极薄/极厚厚度下温度行为；C-05 要求温度场单调介于环境与体内温度之间；合理性预期与量级检查设计完整。"},
+    "L4.1": {"score": 2, "evidence": "VAL-01 以附件2 实测皮肤温度序列为对照基线：Q1 模型预测 T_skin(t) 与实测对比，计算 RMSE/最大偏差；为真实数据基线，报告对比结果的设计完整。"},
+    "L4.2": {"score": 2, "evidence": "EXP-05/VAL-03 对 k_i, h_1, h_2, ρ_i, c_i 做 ±10% 扰动，报告皮肤温度对物性参数的敏感度排序与 Q2/Q3 最优厚度稳健性；扰动的正是敏感参数（h_1/h_2 为校准关键参数、k_i 控制导热速率）。"},
+    "L4.3": {"score": 2, "evidence": "VAL-02 极限检验：长时间极限→环境温度、极薄/极厚厚度下温度行为的物理一致性；非关键维度 L4.3 亦完整覆盖。"},
+    "L4.4": {"score": 2, "evidence": "验证目标对应核心主张：VAL-01 验证 Q1'模型复现附件2 实测曲线'（CLM-01）；VAL-05 回代正问题验证 Q2/Q3 约束成立（CLM-02/03）；VAL-03 验证最优厚度稳健性；验证指标与 evaluation targets 对应。"},
+    "L4.5": {"score": 2, "evidence": "CLM-01..04 每条 claim 均有 evidence_refs（EXP-01..05/VAL-01..05）与 model_refs（EQ/OBJ 引用），status 如实标注 proposed（预检未执行）；证据-主张一一对应，无 unsupported claim。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 9, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  }
+}

@@ -7,8 +7,8 @@
 ### core/tools 统一（4 commits，`7f29443`…`9199f03`，non-regression 774/11）
 
 - **core/tools/ 子目录内联**：7 个子目录（runtime/validation/knowledge/devtools/rendering/evaluation/friendly）的 37 个实现文件内联到 `core/tools/*.py`，删除全部子目录。loose 文件从 shim 变为自包含实现。
-- **core/evaluation/ 空壳删除**：3 个 `__init__.py`（零导入，功能由 `core/tools/evaluation/` 承担）。
-- **adapters 迁移**：`adapters/openai.yaml` → `core/runtime/adapters/openai.yaml`；修复 `gen_runtime_manifest.py` 输出路径 + `instructions_file` 路径（`core/AGENTS.md` → `AGENTS.md`）。
+- **core/evaluation/ 空壳删除**：3 个 `__init__.py`（零导入，功能由 `core/tools/` 承担）。
+- **adapters 迁移**：`adapters/openai.yaml` → `core/runtime/adapters/openai.yaml`；修复 `gen_runtime_manifest.py` 输出路径 + `instructions_file` 路径（`AGENTS.md` → `AGENTS.md`）。
 - **AI 工具配置 V2→V3**：`.clinerules` / `.cursorrules` / `.windsurfrules` 更新为 V3 表述；`GEMINI.md` 合并为 `@CLAUDE.md` 指针。
 - **文档更新**：`TEAM_GUIDE.md`（V2 四手→V3 五角色）、`harness-compat.md`（V2 契约→V3 Artifact Registry）。
 - **测试修正**：`test_validate_project.py` 路径更新；`test_tex_to_docx_quick.py` 转为 pytest 格式并迁入 `tests/unit/`；删除 `test_evaluation_bridge.py`（core/evaluation/ 已删）。
@@ -70,7 +70,7 @@
 
 ### Fixed（core/tools，bug-fix-only）
 
-- **replay CLI KeyError 崩溃（RC-S1 A 类）**：`core/tools/runtime/replay.py` verify 失败路径裸取 `rep["reconcile"]` 导致崩溃，改为 `.get` 兜底。
+- **replay CLI KeyError 崩溃（RC-S1 A 类）**：`core/tools/replay.py` verify 失败路径裸取 `rep["reconcile"]` 导致崩溃，改为 `.get` 兜底。
 - **replay CLI 项目名归一化（B 类）**：裸项目名现在按 `projects/` 解析（与 state.py 契约对齐）。
 - **verify 分诊报错（B 类）**：路径不存在 / 无 RunRecord / 非 v3 三种情形分别给出可行动提示，取代误导性的"非 v3 项目"。
 - **state.py status 双视图展示（B 类）**：新增 `v3 视图` 进度行（questions/claims/graph version），消除 V2 0/29 与 V3 完成态的展示割裂。

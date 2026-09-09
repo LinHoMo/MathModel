@@ -1,0 +1,36 @@
+{
+  "submission_id": "815ef6d1-3b8f-4a18-b7f8-a88b17fc695a",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "timestamp": "2026-09-09T08:00:00Z"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "§1.1 覆盖环境温度三档、层结构、物性、假人皮肤温度约束（≤47℃/超温时长）与 Q1-Q3 要求。"},
+    "L1.2": {"score": 2, "evidence": "§1.2 隐式条件含一维传热、理想接触、忽略辐射、恒温核心、初始 37℃ 等。"},
+    "L1.3": {"score": 2, "evidence": "交付要求：Q1 温度分布、Q2 (L2,L4)、Q3 最优厚度，均明确到输出形式。"},
+    "L1.4": {"score": 1, "evidence": "§1.3 歧义表 D1-D9（层间接触热阻、L4 可行范围、边界条件等）给出采纳解释。"},
+    "L1.5": {"score": 2, "evidence": "判定 PDE 正问题 + 逆问题/优化，理由充分（连续介质多层、能量守恒）。"},
+    "L2.1": {"score": 2, "evidence": "变量含 T_j(x,t)、L_i、Δx/Δt 网格与决策厚度，定义与绑定完整。"},
+    "L2.2": {"score": 2, "evidence": "参数表含物性典型值与来源，h_out 与 T_0 用附件 2 最小二乘校准。"},
+    "L2.3": {"score": 2, "evidence": "12 条假设均带类型与合理性说明（空气层静止纯导热、稳态极限存在等）。"},
+    "L2.4": {"score": 2, "evidence": "三问目标正确（温度分布、厚度反演、约束下最优厚度）。"},
+    "L2.5": {"score": 2, "evidence": "约束含温度上限、超温时长、物理边界 37≤T≤T_env 与设计范围。"},
+    "L2.6": {"score": 3, "evidence": "机理含候选对比（解析解/隐式 FD/FEM/ML）并选型论证，PDE 机制正确。"},
+    "L2.7": {"score": 2, "evidence": "E1-E10 覆盖热方程、C-N 离散、界面能量守恒型离散、初边值与稳态参照。"},
+    "L3.1": {"score": 2, "evidence": "隐式 FD（无条件稳定）+ 直接扫描/约束筛选（确定性全局）与模型匹配。"},
+    "L3.2": {"score": 2, "evidence": "步长 0.05-0.1mm/0.1-1s、每层 ≥10 节点，方案可执行。"},
+    "L3.3": {"score": 2, "evidence": "C-N 无条件稳定（von Neumann |G|≤1）+ 网格收敛检验 + 稳态极限对照。"},
+    "L3.4": {"score": 2, "evidence": "seed=42 全局固定，多 seed 集 {42,2018,12345} 重复灵敏度抽样。"},
+    "L3.5": {"score": 1, "evidence": "§9.4 量级预期：稳态 60-70℃、L2 数 mm 量级、超温时长约束更紧等。"},
+    "L4.1": {"score": 2, "evidence": "基线 1 稳态解析热阻网络对照（<1%），基线 2 附件 2 实测 RMSE<1-2℃。"},
+    "L4.2": {"score": 2, "evidence": "对 k2,k4,h_out,T0,Δx,Δt ±10% 扰动，预期主导参数 h_out 与 k2。"},
+    "L4.3": {"score": 1, "evidence": "极限检验：h_out→∞ 第一类边界极限、T_env=37℃ 平凡极限、稳态渐近。"},
+    "L4.4": {"score": 2, "evidence": "验证逐问绑定目标与温度/厚度结论。"},
+    "L4.5": {"score": 2, "evidence": "主张有校准残差、灵敏度、极限证据支撑，归因路径清晰。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9, "pass": true},
+    "L2": {"score": 15, "max": 15, "pass": true},
+    "L3": {"score": 9, "max": 9, "pass": true},
+    "L4": {"score": 9, "max": 9, "pass": true}
+  },
+  "notes": "自由文本文档对 2018_A 建模完整，机理选型与数值稳定性论证充分，验证含解析稳态与实测双重基线，质量高。"
+}

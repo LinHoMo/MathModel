@@ -1,7 +1,13 @@
 {
   "problem_id": "2024_A",
   "title": "板凳龙闹元宵",
-  "sub_questions": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+  "sub_questions": [
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q4",
+    "Q5"
+  ],
   "methods": [
     "multibody_dynamics",
     "numerical_optimization",
@@ -9,18 +15,18 @@
     "catenary_approximation",
     "pure_geometric_spiral"
   ],
-  "allowed_model_families": [
+  "acceptable_solution_variants": [
+    "multi_body_dynamics",
+    "spiral_geometry",
+    "collision_detection",
+    "constrained_optimization"
+  ],
+  "allowed_modeling_structures": [
     "multibody_dynamics",
     "catenary_approximation",
     "differential_geometry",
     "numerical_optimization",
     "pure_geometric_spiral",
     "kinematics"
-  ],
-  "acceptable_solution_variants": [
-    "multi_body_dynamics",
-    "spiral_geometry",
-    "collision_detection",
-    "constrained_optimization"
   ]
 }

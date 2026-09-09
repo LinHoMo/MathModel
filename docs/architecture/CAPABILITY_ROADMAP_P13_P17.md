@@ -39,7 +39,7 @@ Efficiency = 同一 Writer 下模型分 → 论文分的转化率）。
 ## 1. 八项能力指标（可计算定义）
 
 全部指标 0–100%；输入缺失时如实记 `n/a`（不臆造分数）。计算实现：
-`core/tools/evaluation/e2e_metrics.py`（确定性，零 LLM）；题集与金标准：
+`core/tools/e2e_metrics.py`（确定性，零 LLM）；题集与金标准：
 MMBench 本地语料（111 题，全文+数据）+ CUMCM rubric 种子。
 
 | # | 指标 | 可计算定义 | 金标准来源 |

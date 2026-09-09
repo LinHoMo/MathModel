@@ -15,7 +15,7 @@
 |---|---|---|
 | product | `core/` | 引擎本体：runtime / roles / workflows / validators / schemas / evaluation / tools / skills / knowledge / env / templates / adapters |
 | legacy | `core/legacy/hands/` | V2 兼容层（Modeler / Programmer / Writer / Reviewer），只读兼容不新增 |
-| benchmark | `core/tools/evaluation/` | 评分链 / benchmark / 八项能力指标（语料在仓库外 `MMBENCH_ROOT`） |
+| benchmark | `core/tools/`（benchmark.py / e2e_metrics.py / bench_mmbench.py） | 评分链 / benchmark / 八项能力指标（语料在仓库外 `MMBENCH_ROOT`） |
 | research | `research/` | 研究实验（P13-3D 系列、bench 运行）与其实验专属脚本 |
 | instance | `projects/` | 用户运行实例（仅 `new_project.py` 创建） |
 

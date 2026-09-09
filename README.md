@@ -66,7 +66,7 @@ Registry（稳定 ID + 生命周期），依赖进 Evidence Graph（上游变化
 |---|---|---|
 | product（引擎） | `core/` | 长期维护，架构已冻结 |
 | legacy（兼容层） | `core/legacy/hands/` | 只读兼容，不新增 |
-| benchmark（能力测量） | `core/tools/evaluation/`（能力层 8 件） | 长期；语料在仓库外（`MMBENCH_ROOT`） |
+| benchmark（能力测量） | `core/tools/`（能力层 8 件：benchmark.py / e2e_metrics.py / bench_mmbench.py） | 长期；语料在仓库外（`MMBENCH_ROOT`） |
 | research（研究实验） | `research/` | 实验生命周期，收尾可归档 |
 | instance（用户实例） | `projects/` | 仅 `new_project.py` 创建的运行实例 |
 

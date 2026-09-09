@@ -13,7 +13,7 @@
     e2e report --project <name>
 
 指标定义见 docs/architecture/CAPABILITY_ROADMAP_P13_P17.md §1；
-实现 core/tools/evaluation/e2e_metrics.py（确定性，零 LLM）。
+实现 core/tools/e2e_metrics.py（确定性，零 LLM）。
 
 零第三方依赖。pipeline 模式的临时项目命名 `_bench-*`，结束后自动删除。
 """

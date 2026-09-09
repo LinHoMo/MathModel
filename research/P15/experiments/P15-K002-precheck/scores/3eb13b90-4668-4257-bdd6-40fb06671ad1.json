@@ -1,0 +1,36 @@
+{
+  "submission_id": "3eb13b90-4668-4257-bdd6-40fb06671ad1",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "timestamp": "2026-09-09T08:00:00Z"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "约束与参数逐条覆盖题面规则：负重上限、资源耗尽失败、邻接移动、沙暴停留、时限、购买/村庄/挖矿/退回规则与多人条款；EXP 明确与 Result.xlsx 对照。"},
+    "L1.2": {"score": 2, "evidence": "A-03 马尔可夫性、A-06 天气先验与部分可观测（Q2 仅知当天）、注2 结算口径、连续性近似等隐式条件被识别并说明。"},
+    "L1.3": {"score": 2, "evidence": "OBJ-01..04 与 EXP-01..06 逐问映射 Q1/Q2/Q3(1)/Q3(2)，明确与 Result.xlsx 对照的填表交付要求。"},
+    "L1.4": {"score": 1, "evidence": "在假设说明中处理了非整数购买、结算口径、天气认知等题面歧义（如 A-01 引注2 口径），但未设独立歧义清单。"},
+    "L1.5": {"score": 2, "evidence": "判定 Q1 确定性 DP、Q2 部分可观测 MDP/滚动时域、Q3 开环/动态博弈，类型正确且有依据。"},
+    "L2.1": {"score": 2, "evidence": "27 个变量覆盖资源/资金/位置/行动/观测/值函数，含 Q3 玩家级变量与类型、单位、子问绑定。"},
+    "L2.2": {"score": 2, "evidence": "24 个参数覆盖消耗倍率、价格、收益、负重、天气先验、多人放大条款，来源标注完整。"},
+    "L2.3": {"score": 2, "evidence": "7 条假设均带类型与合理性说明（连续化、马尔可夫、同质理性玩家等），合理。"},
+    "L2.4": {"score": 2, "evidence": "OBJ-01 终局资金最大化、OBJ-02 期望最大、OBJ-03/04 开环与动态博弈收益，四问目标正确。"},
+    "L2.5": {"score": 2, "evidence": "C-01..C-10 覆盖负重、非负、邻接、沙暴、时限、购买规则、开环承诺与多人耦合约束，完备。"},
+    "L2.6": {"score": 3, "evidence": "机理 6 项覆盖消耗倍率、资金流转、DP 递推、天气滚动、多人放大与信息结构，与题目机制一致。"},
+    "L2.7": {"score": 2, "evidence": "EQ-01..EQ-16 含状态转移、容量约束、DP 递推、期望 MDP 与多人耦合方程，依赖关系完整自洽。"},
+    "L3.1": {"score": 2, "evidence": "SOL-01..04：确定性 DP/滚动时域/迭代最佳响应/MILP 交叉验证，与各问模型类型匹配。"},
+    "L3.2": {"score": 2, "evidence": "每个求解器给出 implementation_ref（q1_dp.py/q2_rhc.py/q3_game.py/verify_milp.py）与具体算法。"},
+    "L3.3": {"score": 1, "evidence": "EXP-06 期望输出提及“迭代最佳响应收敛”，但未给出迭代上限或收敛判据。"},
+    "L3.4": {"score": 1, "evidence": "实验均固定种子 42 且 VAL-05 多次运行逐位一致，但未提供多种子集。"},
+    "L3.5": {"score": 0, "evidence": "未给出结果量级/趋势预期（如终点资金合理区间、关间对比方向）。"},
+    "L4.1": {"score": 2, "evidence": "VAL-01 与 Result.xlsx 官方数值对照，VAL-02 与公开参考解答收益区间对照。"},
+    "L4.2": {"score": 2, "evidence": "EXP-07/VAL-03 对天气倍率、价格、收益等 ±20% 扰动并考察策略与终点资金弹性。"},
+    "L4.3": {"score": 1, "evidence": "VAL-04 负重趋紧/连续沙暴/资金极小等极限，VAL-06 n=1 退化还原单人模型。"},
+    "L4.4": {"score": 2, "evidence": "各验证绑定目标/方程（targets_refs），直接服务对应子问题结论。"},
+    "L4.5": {"score": 2, "evidence": "CLM-01..04 均挂 evidence_refs 与 model_refs，主张-证据对应明确。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9, "pass": true},
+    "L2": {"score": 15, "max": 15, "pass": true},
+    "L3": {"score": 6, "max": 9, "pass": false},
+    "L4": {"score": 9, "max": 9, "pass": true}
+  },
+  "notes": "结构化 IR，2020_B 三问机理与约束覆盖完整、方程自洽，验证含官方数值与极限退化检验；求解部分收敛判据、多种子与结果量级预期缺失，L3 未达阈值。"
+}

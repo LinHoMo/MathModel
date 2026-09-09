@@ -1,0 +1,36 @@
+{
+  "submission_id": "de8a774b-cf36-458b-8737-819096da1dac",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "timestamp": "2026-09-09T08:00:00Z"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "§1.1 提取 8 台 CNC/单 RGV、表 1 三组参数、移动/上下料/清洗时间、故障 1%、修复 10-20min 与四问要求。"},
+    "L1.2": {"score": 2, "evidence": "§1.2 隐式条件：班次空载启动、班末未完件不计产量、CNC 一次一件等。"},
+    "L1.3": {"score": 2, "evidence": "交付要求：Q1/Q2 三组数据产量、Q3 故障期望产量、Q4 检验结论，明确。"},
+    "L1.4": {"score": 1, "evidence": "§1.3 歧义表 A1-A6（班次边界、两道工序清洗等）给出采纳解释。"},
+    "L1.5": {"score": 2, "evidence": "判定 DEDS/调度优化+仿真，类型正确。"},
+    "L2.1": {"score": 2, "evidence": "变量分问声明：位置、状态、服务时刻、产量、故障标志等，定义完整。"},
+    "L2.2": {"score": 2, "evidence": "参数含表 1 三组数据与 T=28800、p_f、t_rep，来源标注。"},
+    "L2.3": {"score": 2, "evidence": "11 条假设带类型与合理性说明。"},
+    "L2.4": {"score": 2, "evidence": "四问目标正确（班产最大、故障期望最大、检验结论）。"},
+    "L2.5": {"score": 2, "evidence": "C1-C17 覆盖单 RGV 串行、服务次序、容量、截止等。"},
+    "L2.6": {"score": 3, "evidence": "机理 DEDS 事件驱动 + 策略 P1-P4 + 候选机制对比（轮询/饥饿/最短路径），正确。"},
+    "L2.7": {"score": 2, "evidence": "8.1-8.9 方程含移动时间表、事件循环、产量递推与故障模型。"},
+    "L3.1": {"score": 2, "evidence": "事件驱动仿真（heapq）+ 策略搜索 + 蒙特卡洛，与 DEDS 匹配。"},
+    "L3.2": {"score": 2, "evidence": "自写仿真器（Python 3.12, random.Random(seed)）实现细节具体。"},
+    "L3.3": {"score": 2, "evidence": "事件时间戳单调+浮点容差防护；CV>5% 时增加重复至 R=20 的自适应收敛。"},
+    "L3.4": {"score": 2, "evidence": "seed=42 + 多 seed 集 {42,1,7,13,2026}，Q3 报告均值±标准差。"},
+    "L3.5": {"score": 1, "evidence": "§9.4 量级预期（组 1 一道工序 300-410 件/班、Q3 降 5-10%）。"},
+    "L4.1": {"score": 2, "evidence": "基线：理论加工瓶颈上界 + 组间互校 + Q4 填报合理性校验。"},
+    "L4.2": {"score": 2, "evidence": "t_a、T_mv、p_f 灵敏度并给出产量弹性预期。"},
+    "L4.3": {"score": 1, "evidence": "极限检验：p_f→0 退化 Q1/Q2、MC 方差→0。"},
+    "L4.4": {"score": 2, "evidence": "验证逐问绑定目标。"},
+    "L4.5": {"score": 2, "evidence": "主张-证据对应清晰，归因路径明确。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9, "pass": true},
+    "L2": {"score": 15, "max": 15, "pass": true},
+    "L3": {"score": 9, "max": 9, "pass": true},
+    "L4": {"score": 9, "max": 9, "pass": true}
+  },
+  "notes": "自由文本文档对 2018_B 调度建模完整，事件驱动仿真与策略机制清晰，基线上界、灵敏度、极限、多 seed 全覆盖，质量高。"
+}

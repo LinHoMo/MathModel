@@ -29,9 +29,9 @@ MathModelSkills 采用角色化架构，把「一道赛题 → 一篇论文」�
 
 | 文件路径 | 作用 |
 |---|---|
-| `core/tools/validation/citation_check.py` | 引用可信度静态扫描（占位符/格式/闭合/承诺兑现） |
-| `core/tools/evaluation/benchmark.py bench *` | 国赛复盘基准（rubric 列表/模板/重算/报告） |
-| `core/tools/evaluation/bench_mmbench.py` | LLM-MM-Agent MMBench 题库导入适配器 |
+| `core/tools/citation_check.py` | 引用可信度静态扫描（占位符/格式/闭合/承诺兑现） |
+| `core/tools/benchmark.py bench *` | 国赛复盘基准（rubric 列表/模板/重算/报告） |
+| `core/tools/bench_mmbench.py` | LLM-MM-Agent MMBench 题库导入适配器 |
 | `core/knowledge/bench/cumcm/` | 22 年 CUMCM 评分细则 rubric |
 
 核心原则：**引擎（`core/`）是唯一可复用资产**，实例（`projects/`）是引擎在校验下跑出来的结果；

@@ -1,0 +1,36 @@
+{
+  "submission_id": "28df6ec4-ce4a-4bbd-8241-330b01a9e71f",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "timestamp": "2026-09-09T08:00:00Z"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "提取表 1 三组参数（移动/加工/上下料/清洗时间）、故障 1% 与修复 10-20min、四问要求。"},
+    "L1.2": {"score": 2, "evidence": "隐式条件：供给充足、一次一件、RGV 单机串行、初始位置自由等。"},
+    "L1.3": {"score": 2, "evidence": "交付要求：Q1/Q2 三组产量、Q3 故障期望、Q4 检验，绑定实验与主张。"},
+    "L1.4": {"score": 1, "evidence": "在假设说明中处理缺料未给、故障分布未给等口径（给出上界视角/均匀假设）。"},
+    "L1.5": {"score": 2, "evidence": "判定 DEDS/离散事件仿真+调度优化，类型正确。"},
+    "L2.1": {"score": 2, "evidence": "变量含 RGV 位置、CNC 状态、服务队列、产量、故障标志，定义完整。"},
+    "L2.2": {"score": 2, "evidence": "参数含表 1 全部时间参数、T=28800、p_f=1%、t_rep∈[600,1200]。"},
+    "L2.3": {"score": 2, "evidence": "6 条假设带类型与合理性说明。"},
+    "L2.4": {"score": 2, "evidence": "四问目标正确（班产最大、期望产量最大、三组填报）。"},
+    "L2.5": {"score": 2, "evidence": "约束覆盖单 RGV 串行、服务优先、容量、时限等。"},
+    "L2.6": {"score": 3, "evidence": "机理含循环服务/事件驱动/故障机制，正确。"},
+    "L2.7": {"score": 2, "evidence": "EQ1-EQ16 含移动时间表、事件循环、产量递推、故障与两阶段方程。"},
+    "L3.1": {"score": 2, "evidence": "事件驱动仿真+贪心策略+蒙特卡洛，与 DEDS 匹配。"},
+    "L3.2": {"score": 2, "evidence": "实现引用具体（仿真器、策略调度），可执行。"},
+    "L3.3": {"score": 2, "evidence": "CV<0.10 判定稳定 + 稳定循环周期机制说明。"},
+    "L3.4": {"score": 1, "evidence": "seed=42 固定、5 次独立运行 CV<0.10，但无多种子集。"},
+    "L3.5": {"score": 1, "evidence": "基线要求 W≤W_max=8*floor(D/(t_p1+T_sbar)) 且差距<5%，给出产量上界预期。"},
+    "L4.1": {"score": 2, "evidence": "VAL-01 与理论上界 W_max 比较（相对差距<5%）。"},
+    "L4.2": {"score": 2, "evidence": "对移动/加工时间等参数扫描的灵敏度验证。"},
+    "L4.3": {"score": 1, "evidence": "极限检验：t_p1→∞ W→0、移动清洗→0 W→8*floor(D/t_ld)、瓶颈切换点。"},
+    "L4.4": {"score": 2, "evidence": "验证绑定目标与方程。"},
+    "L4.5": {"score": 2, "evidence": "主张挂 baseline/敏感性/极限/可复现四类证据。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9, "pass": true},
+    "L2": {"score": 15, "max": 15, "pass": true},
+    "L3": {"score": 8, "max": 9, "pass": true},
+    "L4": {"score": 9, "max": 9, "pass": true}
+  },
+  "notes": "结构化 IR 对 2018_B 建模完整，理论上界基线与 CV 判据明确；仅多种子缺失，L3 略降。"
+}

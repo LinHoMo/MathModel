@@ -1,0 +1,36 @@
+{
+  "submission_id": "ce9ff57f-43b7-43a6-9a8d-ca03580d7b71",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "timestamp": "2026-09-09T08:00:00Z"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "§1.1 提取五问：管辖分配、13 要道封锁、增设平台、六区合理性、P 点围堵。"},
+    "L1.2": {"score": 2, "evidence": "§1.2 隐式条件：警车 60km/h、嫌疑犯车速待定、单平台封锁一路口、平台职能相同。"},
+    "L1.3": {"score": 2, "evidence": "交付要求五问明确（覆盖/封锁/增设/评价/围堵方案）。"},
+    "L1.4": {"score": 1, "evidence": "§1.3 歧义表 C1-C6（Q4 合理性口径、嫌疑犯车速等）给出采纳解释。"},
+    "L1.5": {"score": 2, "evidence": "判定最短路+指派+选址+网络评估，类型正确。"},
+    "L2.1": {"score": 2, "evidence": "变量含最短时间 t_ij、覆盖标志 y_j、指派 x_ij、评分 S_r，定义完整。"},
+    "L2.2": {"score": 2, "evidence": "参数含速度、3min 阈值、权重 λ、平台数，标注来源/校准。"},
+    "L2.3": {"score": 2, "evidence": "假设带类型与合理性说明。"},
+    "L2.4": {"score": 2, "evidence": "五问目标正确。"},
+    "L2.5": {"score": 2, "evidence": "约束含覆盖、封锁、均衡、评分口径。"},
+    "L2.6": {"score": 3, "evidence": "机理含候选对比（贪心 vs SA/GA）与选型论证，正确。"},
+    "L2.7": {"score": 2, "evidence": "方程含最短路、指派、覆盖、评分与围堵递推。"},
+    "L3.1": {"score": 2, "evidence": "Floyd/匈牙利/贪心+局部交换/二分，与模型匹配。"},
+    "L3.2": {"score": 2, "evidence": "networkx floyd_warshall、scipy linear_sum_assignment，复杂度 O(k n²)。"},
+    "L3.3": {"score": 2, "evidence": "贪心+交换收敛稳定、二分确定性 + 5 次随机化一致判据。"},
+    "L3.4": {"score": 2, "evidence": "seed=42 + 多 seed 集 {42,1,7,13,2026} 随机化初始点验证稳定。"},
+    "L3.5": {"score": 0, "evidence": "未给出结果量级预期（仅 Q4 权重扰动排名不变<10% 的敏感性预期）。"},
+    "L4.1": {"score": 2, "evidence": "基线：与 A 区现网方案/3 分钟标准对照。"},
+    "L4.2": {"score": 2, "evidence": "3min 阈值、权重、车速 40-80 km/h 灵敏度（敏感性<10% 判据）。"},
+    "L4.3": {"score": 1, "evidence": "极限/边界检验（§9.3 (c)）。"},
+    "L4.4": {"score": 2, "evidence": "验证逐问绑定目标。"},
+    "L4.5": {"score": 2, "evidence": "主张-证据对应清晰。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9, "pass": true},
+    "L2": {"score": 15, "max": 15, "pass": true},
+    "L3": {"score": 8, "max": 9, "pass": true},
+    "L4": {"score": 9, "max": 9, "pass": true}
+  },
+  "notes": "自由文本文档对 2011_B 建模完整，歧义表、多 seed 与收敛判据齐全；仅结果量级预期缺失，L3 略降。"
+}

@@ -1,7 +1,12 @@
 {
   "problem_id": "2022_C",
   "title": "古代玻璃制品的成分分析与鉴别",
-  "sub_questions": ["Q1", "Q2", "Q3", "Q4"],
+  "sub_questions": [
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q4"
+  ],
   "methods": [
     "statistical_classification",
     "regression_analysis",
@@ -10,18 +15,18 @@
     "decision_tree",
     "correlation_analysis"
   ],
-  "allowed_model_families": [
+  "acceptable_solution_variants": [
+    "kmeans",
+    "LDA",
+    "PCA",
+    "random_forest"
+  ],
+  "allowed_modeling_structures": [
     "statistical_classification",
     "regression_analysis",
     "clustering",
     "pca",
     "decision_tree",
     "supervised_learning"
-  ],
-  "acceptable_solution_variants": [
-    "kmeans",
-    "LDA",
-    "PCA",
-    "random_forest"
   ]
 }

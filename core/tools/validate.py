@@ -68,13 +68,33 @@ USER_CONTENT_EXCLUDE_DIRS = {
 # === 仓库级扫描：跳过临时与缓存目录 ===
 # _scratch/_debug 为临时区，node_modules/__pycache__ 为构建缓存，均排除在实时校验外。
 REPO_SCAN_EXCLUDE_DIRS = {"_scratch", "_debug", "node_modules", "__pycache__"}
+RESEARCH_PROJECT_PREFIXES = ("p151-", "rcs1-", "v3-real-", "bench-")
+
+
+def _is_research_scan_path(p: Path) -> bool:
+    """路径是否属于研究实验（research/ 或 projects/ 下的 P15/历史实验项目）。
+
+    研究实验不属于论文交付校验范围（validate.py 文档声明）；projects/ 内
+    滞留的历史研究实验项目（p151-*/rcs1-*/v3-real-*/bench-*）同样排除。
+    """
+    parts = p.parts
+    for idx, part in enumerate(parts):
+        if part == "research":
+            return True
+        if part == "projects" and idx + 1 < len(parts):
+            nxt = parts[idx + 1]
+            if nxt.startswith(RESEARCH_PROJECT_PREFIXES):
+                return True
+    return False
 
 
 def iter_repo(root, pattern):
-    """遍历 root 下匹配 pattern 的文件，跳过归档/临时目录。"""
+    """遍历 root 下匹配 pattern 的文件，跳过归档/临时/研究实验路径。"""
     root = Path(root)
     for p in root.rglob(pattern):
         if any(part in REPO_SCAN_EXCLUDE_DIRS for part in p.parts):
+            continue
+        if _is_research_scan_path(p):
             continue
         yield p
 
@@ -86,15 +106,17 @@ def _live_project_dirs(project_path):
     （all_results.json / 随机种子 / 论文 .tex）仅在存在活跃实例时才应报失败，
     否则库模式下的空 projects/ 会持续产生假失败。
 
-    研究实验（P13-3D 系列 / bench 运行）自 Hardening P4 起迁至 research/，
-    不属于论文交付校验范围（research/ 不在本函数扫描内）。
+    研究实验（P13-3D 系列 / bench 运行 / P15 实验项目 p151-*/rcs1-*/v3-real-*）
+    不属于论文交付校验范围（research/ 不在本函数扫描内；projects/ 内滞留的
+    P15 历史研究实验项目同样排除——它们没有论文交付契约）。
     """
     pdir = project_path / "projects"
     if not pdir.is_dir():
         return []
     return [d for d in pdir.iterdir()
             if d.is_dir() and not d.name.startswith(".")
-            and not (d / "work" / "e2e_problem.json").exists()]
+            and not (d / "work" / "e2e_problem.json").exists()
+            and not d.name.startswith(RESEARCH_PROJECT_PREFIXES)]
 
 
 # === env 阈值读取（动态加载 env/loader.get；缺失时回退默认值）===

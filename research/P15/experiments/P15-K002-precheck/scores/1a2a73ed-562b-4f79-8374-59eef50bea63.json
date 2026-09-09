@@ -1,0 +1,36 @@
+{
+  "submission_id": "1a2a73ed-562b-4f79-8374-59eef50bea63",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "timestamp": "2026-09-09T08:00:00Z"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "提取 2017_B 定价规律/未完成原因/新定价/打包/附件三定价要求与附件数据。"},
+    "L1.2": {"score": 2, "evidence": "隐式条件：概率响应口径、任务-会员匹配两级过程等。"},
+    "L1.3": {"score": 2, "evidence": "交付要求：Q1-Q4 输出明确（定价表、预期完成率、效果评价）。"},
+    "L1.4": {"score": 1, "evidence": "在假设说明中处理缺个体时序数据等口径（统计概率近似）。"},
+    "L1.5": {"score": 2, "evidence": "判定离散选择+优化+聚类+仿真，类型正确。"},
+    "L2.1": {"score": 2, "evidence": "变量含完成概率、定价、特征、包价，定义完整。"},
+    "L2.2": {"score": 2, "evidence": "参数含 Logit 系数、折扣、预算、聚类参数，标注来源。"},
+    "L2.3": {"score": 2, "evidence": "假设带类型与合理性说明。"},
+    "L2.4": {"score": 2, "evidence": "四问目标正确。"},
+    "L2.5": {"score": 2, "evidence": "约束含预算、价格范围、打包口径。"},
+    "L2.6": {"score": 3, "evidence": "机理 Logit 定价 + 打包 + 特征聚类，正确。"},
+    "L2.7": {"score": 2, "evidence": "方程含 Logit、优化 KKT/拉格朗日、打包收益与 MC 评价。"},
+    "L3.1": {"score": 2, "evidence": "逻辑回归 + 拉格朗日/网格搜索 + DBSCAN + 蒙特卡洛，匹配。"},
+    "L3.2": {"score": 2, "evidence": "实现引用具体，算法可执行。"},
+    "L3.3": {"score": 1, "evidence": "有 AUC 标准差<0.02、MC 1000 次稳定判据，但无求解收敛性讨论。"},
+    "L3.4": {"score": 1, "evidence": "仅描述 CV/抽样稳定性，未声明固定随机种子或多种子集。"},
+    "L3.5": {"score": 1, "evidence": "回测基线要求完成率偏差<5pp，给出结果量级校验目标。"},
+    "L4.1": {"score": 2, "evidence": "VAL-01 回测附件一原方案完成率，与附件统计对照偏差<5pp。"},
+    "L4.2": {"score": 2, "evidence": "参数灵敏度验证（特征/系数扰动）。"},
+    "L4.3": {"score": 1, "evidence": "极限检验：p_j→∞ P_j→1、γ→1 退化为原模型。"},
+    "L4.4": {"score": 2, "evidence": "验证绑定目标与方程。"},
+    "L4.5": {"score": 2, "evidence": "主张挂 baseline/敏感性/极限/可复现证据。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9, "pass": true},
+    "L2": {"score": 15, "max": 15, "pass": true},
+    "L3": {"score": 7, "max": 9, "pass": true},
+    "L4": {"score": 9, "max": 9, "pass": true}
+  },
+  "notes": "结构化 IR 对 2017_B 建模完整，回测基线明确；求解收敛性讨论与种子声明缺失，L3 处阈值边缘。"
+}

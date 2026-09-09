@@ -1,3 +1,6 @@
+<!-- ARCHIVAL-NOTE
+本文件为历史规划/报告快照（撰写时的真实状态），部分内部路径与术语已被后续架构演进取代（如 core/tools/evaluation/ 已迁至 core/tools/、V2 agent 目录已重组为 V3 roles）。当前权威口径以 AGENTS.md 与 docs/architecture/HARDENING_PROGRAM.md 为准；历史文档仅作溯源，不作为实现依据。
+ARCHIVAL-NOTE -->
 # P13-3 Report — Model Construction（Round 1 基线 + Round 2 干预）
 
 > 日期：2026-09-06 · 核心问题：**选对方法以后，Agent 能不能把数学模型正确地
