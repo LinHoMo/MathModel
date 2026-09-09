@@ -1,0 +1,41 @@
+{
+  "plan_id": "VP-2011B",
+  "limit_tests": [
+    {
+      "name": "单平台系统",
+      "description": "仅1个平台时，所有节点分配给该平台，最大响应时间应较大",
+      "expected": "t_max > 多平台时的t_max"
+    },
+    {
+      "name": "全连接图",
+      "description": "所有节点间距离相等时，所有平台到所有节点距离相同",
+      "expected": "coverage=1.0, workload完全均衡"
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "响应时间要求",
+      "range": [
+        2,
+        3,
+        5
+      ],
+      "expected_effect": "要求放宽→覆盖率提高"
+    },
+    {
+      "parameter": "平台数量",
+      "range": [
+        5,
+        10,
+        20
+      ],
+      "expected_effect": "平台增加→覆盖率提高→最大响应时间降低"
+    }
+  ],
+  "validation_targets": [
+    "OBJ1",
+    "OBJ2"
+  ],
+  "constraint_violation_check": true,
+  "residual_check": false
+}

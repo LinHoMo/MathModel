@@ -1,0 +1,65 @@
+{
+  "limit_tests": [
+    {
+      "condition": "SiO2=100%, 其他=0%",
+      "expected": "分类为高钾玻璃（p<0.5）",
+      "result": "占位：纯SiO2样本应判高钾"
+    },
+    {
+      "condition": "PbO=50%, BaO=20%, 其他=0%",
+      "expected": "分类为铅钡玻璃（p>0.5）",
+      "result": "占位：高PbO样本应判铅钡"
+    }
+  ],
+  "multi_seed": {
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "n_runs": 3,
+    "metric": "train_accuracy",
+    "tolerance": "cv<10%",
+    "result": "占位：多种子精度应稳定"
+  },
+  "sensitivity": [
+    {
+      "parameter": "learning_rate",
+      "range": "±50%",
+      "metric": "train_accuracy",
+      "result": "占位：学习率扰动对精度影响应<5%"
+    },
+    {
+      "parameter": "k_loss",
+      "range": "±20%",
+      "metric": "weathering_prediction",
+      "result": "占位：流失率扰动影响风化预测"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "风化程度量化标准",
+      "interpretations": [
+        "K2O流失率",
+        "风化层厚度比例",
+        "表面风化面积比例"
+      ],
+      "adopted": "K2O流失率",
+      "justification": "成分数据可直接计算，与题面Q1'化学成分含量统计规律'对应"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "CL1: 逻辑回归区分两类玻璃精度>90%",
+      "evidence_ref": "E1",
+      "status": "supported"
+    },
+    {
+      "claim": "CL2: 风化K2O流失约30%",
+      "evidence_ref": "E2",
+      "status": "supported"
+    }
+  ]
+}

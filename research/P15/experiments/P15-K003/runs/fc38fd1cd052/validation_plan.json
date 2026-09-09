@@ -1,0 +1,40 @@
+{
+  "plan_id": "VP-2018B",
+  "limit_tests": [
+    {
+      "name": "单CNC系统",
+      "description": "n_cnc=1时RGV无需移动，吞吐量受加工时间+上下料限制",
+      "expected": "throughput ≈ 3600/(560+28*2+25)"
+    },
+    {
+      "name": "零移动时间",
+      "description": "move_time=0时RGV可瞬间到达，吞吐量应提高",
+      "expected": "total_parts > 基准值"
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "加工时间",
+      "range": [
+        400,
+        560,
+        700
+      ],
+      "expected_effect": "加工时间减少→CNC利用率降低→RGV成为瓶颈→吞吐量可能不增"
+    },
+    {
+      "parameter": "CNC数量",
+      "range": [
+        4,
+        8,
+        12
+      ],
+      "expected_effect": "CNC增加→并行度提高→吞吐量增加但边际递减"
+    }
+  ],
+  "validation_targets": [
+    "OBJ1"
+  ],
+  "constraint_violation_check": true,
+  "residual_check": false
+}

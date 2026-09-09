@@ -1,0 +1,40 @@
+{
+  "plan_id": "VP-2018A",
+  "limit_tests": [
+    {
+      "name": "零厚度II层",
+      "description": "d2=0时II层消失，热阻减小，皮肤温度应更高",
+      "expected": "T_skin_max > 基准值"
+    },
+    {
+      "name": "环境温度=体温",
+      "description": "T_ambient=37°C时无温差，皮肤温度应恒为37°C",
+      "expected": "T_skin_final≈37.0"
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "II层厚度",
+      "range": [
+        0.003,
+        0.006,
+        0.012
+      ],
+      "expected_effect": "厚度增加→热阻增大→皮肤温度降低"
+    },
+    {
+      "parameter": "环境温度",
+      "range": [
+        65,
+        75,
+        85
+      ],
+      "expected_effect": "环境温度升高→皮肤温度单调升高"
+    }
+  ],
+  "validation_targets": [
+    "OBJ1"
+  ],
+  "constraint_violation_check": true,
+  "residual_check": true
+}

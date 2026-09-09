@@ -1,0 +1,341 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2019C-QUEUE",
+  "model_family": {
+    "primary": "queuing_theory",
+    "secondary": [
+      "decision_analysis",
+      "optimization",
+      "game_theory"
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2019_C",
+    "sub_questions": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "focus": "Q1 出租车司机选择决策模型"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "type": "mechanism_assumption",
+      "statement": "乘客到达服从Poisson过程（λ=30/分钟），出租车服务时间服从指数分布（μ=40/分钟）",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A2",
+      "type": "simplification",
+      "statement": "蓄车池为单服务台M/M/1模型，先到先服务",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A3",
+      "type": "projection",
+      "statement": "放空回市区的时间和成本为确定值，忽略交通波动",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "v_lambda",
+      "name": "乘客到达率",
+      "symbol": "lambda",
+      "definition": "单位时间到达乘车区的乘客数",
+      "unit": "人/分钟",
+      "type": "input",
+      "value_range": {
+        "min": 0,
+        "max": 60
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_mu",
+      "name": "服务率",
+      "symbol": "mu",
+      "definition": "单位时间一辆出租车可完成的载客服务数",
+      "unit": "辆/分钟",
+      "type": "input",
+      "value_range": {
+        "min": 0,
+        "max": 100
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_Wq",
+      "name": "平均等待时间",
+      "symbol": "W_q",
+      "definition": "出租车在蓄车池的平均等待时间",
+      "unit": "分钟",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 120
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_pq",
+      "name": "排队收益",
+      "symbol": "profit_q",
+      "definition": "排队等待载客策略的期望净收益",
+      "unit": "元",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_pc",
+      "name": "放空收益",
+      "symbol": "profit_c",
+      "definition": "放空回市区拉客策略的期望净收益",
+      "unit": "元",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_dec",
+      "name": "最优决策",
+      "symbol": "decision",
+      "definition": "司机应选择的策略（queue/return）",
+      "unit": "无",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "p_lam",
+      "name": "乘客到达率",
+      "value": 30,
+      "unit": "人/分钟",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "p_mu",
+      "name": "服务率",
+      "value": 40,
+      "unit": "辆/分钟",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "p_fare_q",
+      "name": "排队平均车费",
+      "value": 80,
+      "unit": "元",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "p_fare_c",
+      "name": "市区平均车费",
+      "value": 50,
+      "unit": "元",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "p_wc",
+      "name": "等待成本",
+      "value": 1.5,
+      "unit": "元/分钟",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "p_ec",
+      "name": "放空成本",
+      "value": 25,
+      "unit": "元",
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "OBJ1",
+      "type": "max",
+      "expression": "maximize 司机期望净收益 max(profit_q, profit_c)",
+      "variables_refs": [
+        "v_pq",
+        "v_pc",
+        "v_dec"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "stability",
+      "expression": "系统稳定要求 rho=lambda/mu < 1",
+      "variables_refs": [
+        "v_lambda",
+        "v_mu"
+      ],
+      "source": "排队论",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "nonnegative",
+      "expression": "等待时间 W_q >= 0",
+      "variables_refs": [
+        "v_Wq"
+      ],
+      "source": "物理约束",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "M/M/1排队系统",
+      "description": "Poisson到达+指数服务+单服务台+先到先服务，由Little定律和生灭过程推导稳态指标",
+      "equations_refs": [
+        "EQ1",
+        "EQ2"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "EQ1",
+      "latex": "W_q = \\frac{1}{\\mu - \\lambda}, \\quad \\rho = \\frac{\\lambda}{\\mu} < 1",
+      "type": "queueing_formula",
+      "variables_refs": [
+        "v_Wq",
+        "v_lambda",
+        "v_mu"
+      ],
+      "derivation_trace": "M/M/1稳态平均等待时间，由生灭过程平衡方程推导",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "equation_id": "EQ2",
+      "latex": "\\pi_q = F_q - (c_w+c_f)W_q, \\quad \\pi_c = F_c - C_e - c_w t_c",
+      "type": "profit_formula",
+      "variables_refs": [
+        "v_pq",
+        "v_pc",
+        "v_Wq"
+      ],
+      "derivation_trace": "排队收益=车费-等待成本×等待时间；放空收益=市区车费-放空成本-时间成本",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "name": "M/M/1解析求解+收益比较",
+      "description": "解析计算排队指标，比较两策略期望收益，求临界到达率",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "E1",
+      "name": "基准场景决策",
+      "description": "λ=30/分钟, μ=40/分钟, 排队车费80元, 市区车费50元，比较最优决策",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "experiment_id": "E2",
+      "name": "到达率敏感性扫描",
+      "description": "λ从10到38扫描，观测决策切换点和临界到达率",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "stability",
+      "description": "rho<1时系统稳定，W_q有限；rho>=1时队列无限增长",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "validation_id": "V2",
+      "type": "monotonicity",
+      "description": "等待时间W_q随λ增大而单调增大，排队收益随λ增大而单调减小",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "statement": "M/M/1排队模型可量化出租车等待时间，收益比较给出最优决策",
+      "evidence_refs": [
+        "E1",
+        "E2",
+        "V1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "model_graph": {
+    "nodes": 3,
+    "edges": 2,
+    "type": "decision_tree"
+  },
+  "modeling_trace": [
+    {
+      "step": 1,
+      "action": "queue_modeling",
+      "detail": "蓄车池建模为M/M/1"
+    },
+    {
+      "step": 2,
+      "action": "profit_modeling",
+      "detail": "两策略期望收益公式"
+    },
+    {
+      "step": 3,
+      "action": "decision_rule",
+      "detail": "收益比较+临界到达率"
+    }
+  ]
+}

@@ -1,0 +1,299 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2018B-DES",
+  "model_family": {
+    "primary": "simulation",
+    "secondary": [
+      "optimization",
+      "graph_algorithm",
+      "metaheuristics"
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2018_B",
+    "sub_questions": [
+      "Q1",
+      "Q2",
+      "Q3"
+    ],
+    "focus": "任务1 一道工序RGV动态调度模型"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "type": "projection",
+      "statement": "一道工序情形，8台CNC安装相同刀具，物料可在任一台加工完成",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A2",
+      "type": "mechanism_assumption",
+      "statement": "RGV采用贪心最近策略：总是前往最近的已完成或即将完成的CNC进行上下料",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A3",
+      "type": "simplification",
+      "statement": "忽略CNC故障（Q3单独考虑），物料充足，清洗后直接上料",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "v_N",
+      "name": "完成物料数",
+      "symbol": "N",
+      "definition": "一个班次内系统完成的物料总数",
+      "unit": "件",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 500
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_thr",
+      "name": "吞吐量",
+      "symbol": "throughput",
+      "definition": "每小时完成的物料数",
+      "unit": "件/小时",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_cyc",
+      "name": "平均周期",
+      "symbol": "cycle",
+      "definition": "完成一件物料的平均时间",
+      "unit": "秒",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_util",
+      "name": "RGV利用率",
+      "symbol": "util",
+      "definition": "RGV非空闲时间占比",
+      "unit": "比例",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 1
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_cnc",
+      "name": "CNC利用率",
+      "symbol": "cnc_util",
+      "definition": "每台CNC的加工时间占比",
+      "unit": "比例",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "p_pt",
+      "name": "加工时间",
+      "value": 560,
+      "unit": "秒",
+      "source": "表1第1组"
+    },
+    {
+      "parameter_id": "p_m1",
+      "name": "移动1单位时间",
+      "value": 20,
+      "unit": "秒",
+      "source": "表1第1组"
+    },
+    {
+      "parameter_id": "p_lo",
+      "name": "奇数CNC上下料",
+      "value": 28,
+      "unit": "秒",
+      "source": "表1第1组"
+    },
+    {
+      "parameter_id": "p_le",
+      "name": "偶数CNC上下料",
+      "value": 31,
+      "unit": "秒",
+      "source": "表1第1组"
+    },
+    {
+      "parameter_id": "p_ct",
+      "name": "清洗时间",
+      "value": 25,
+      "unit": "秒",
+      "source": "表1第1组"
+    },
+    {
+      "parameter_id": "p_shift",
+      "name": "班次时长",
+      "value": 28800,
+      "unit": "秒",
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "OBJ1",
+      "type": "max",
+      "expression": "maximize 班次内完成物料数 N（即系统吞吐量）",
+      "variables_refs": [
+        "v_N",
+        "v_thr"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "resource",
+      "expression": "RGV同一时刻只能为一台CNC服务",
+      "variables_refs": [
+        "v_util"
+      ],
+      "source": "物理约束",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "sequence",
+      "expression": "CNC必须完成当前物料加工后才能上下料",
+      "variables_refs": [
+        "v_cnc"
+      ],
+      "source": "工艺约束",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "离散事件仿真",
+      "description": "以事件驱动模拟RGV移动、CNC加工、上下料清洗等操作，时间推进到下一事件",
+      "equations_refs": [
+        "EQ1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "EQ1",
+      "latex": "N = \\sum_{i=1}^{8} n_i, \\quad \\text{throughput} = N / T_{shift}",
+      "type": "accounting",
+      "variables_refs": [
+        "v_N",
+        "v_thr",
+        "v_cnc"
+      ],
+      "derivation_trace": "总产出为各CNC产出之和，吞吐量为总产出除以班次时长",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "name": "贪心最近调度+离散事件仿真",
+      "description": "RGV总是前往最近的已完成/即将完成CNC，事件驱动仿真8小时班次",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "E1",
+      "name": "第1组参数一道工序",
+      "description": "使用表1第1组数据（移动20/33/46s, 加工560s, 上下料28/31s, 清洗25s），仿真8小时",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "conservation",
+      "description": "总物料数=各CNC物料数之和",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "validation_id": "V2",
+      "type": "utilization_bound",
+      "description": "CNC利用率和RGV利用率均在[0,1]范围内",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "statement": "贪心最近调度策略在一道工序下可实现较高系统吞吐量",
+      "evidence_refs": [
+        "E1",
+        "V1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "model_graph": {
+    "nodes": 9,
+    "edges": 8,
+    "type": "linear_track"
+  },
+  "modeling_trace": [
+    {
+      "step": 1,
+      "action": "system_modeling",
+      "detail": "8CNC+1RGV线性轨道系统"
+    },
+    {
+      "step": 2,
+      "action": "scheduling_design",
+      "detail": "贪心最近调度策略"
+    },
+    {
+      "step": 3,
+      "action": "des_implementation",
+      "detail": "事件驱动离散事件仿真"
+    }
+  ]
+}

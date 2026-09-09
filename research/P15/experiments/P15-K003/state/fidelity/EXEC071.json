@@ -1,0 +1,116 @@
+{
+  "execution_id": "EXEC071",
+  "verification_id": "VR071",
+  "fidelity_status": "misaligned",
+  "fidelity_score": 0.2,
+  "passed": 3,
+  "total": 15,
+  "checks": [
+    {
+      "name": "F1 变量可观测: 二氧化硅含量",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '二氧化硅含量'（候选 ['二氧化硅含量', 'SiO2'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 氧化钾含量",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '氧化钾含量'（候选 ['氧化钾含量', 'K2O'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 氧化铅含量",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '氧化铅含量'（候选 ['氧化铅含量', 'PbO'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 分类标签",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '分类标签'（候选 ['分类标签', 'y'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 预测概率",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '预测概率'（候选 ['预测概率', 'p'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 训练精度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'train_accuracy' 存在（声明 '训练精度'）",
+      "resolved_key": "train_accuracy"
+    },
+    {
+      "name": "F1 变量可观测: 训练样本数",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'n_training_samples' 存在（声明 '训练样本数'）",
+      "resolved_key": "n_training_samples"
+    },
+    {
+      "name": "F1 变量可观测: 分类边界",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'classification_boundary' 存在（声明 '分类边界'）",
+      "resolved_key": "classification_boundary"
+    },
+    {
+      "name": "F2 目标: 交叉熵损失 L = -Σ[y log(p) + (1-y) log(1-p)]",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '交叉熵损失 L = -Σ[y log(p) + (1-y) log(1-p)]'（候选 ['分类标签', 'y', '预测概率', 'p'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F2 目标: 未知样本类别 ŷ = argmax(p, 1-p)",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '未知样本类别 ŷ = argmax(p, 1-p)'（候选 ['分类标签', 'y', '预测概率', 'p'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: 0 ≤ p ≤ 1",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '0 ≤ p ≤ 1'（候选 ['预测概率', 'p'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: 85% ≤ Σ成分比例 ≤ 105%",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '85% ≤ Σ成分比例 ≤ 105%'（候选 ['二氧化硅含量', 'SiO2', '氧化钾含量', 'K2O', '氧化铅含量', 'PbO'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E1",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E1'（候选 ['预测概率', 'p'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E2",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E2'（候选 ['分类标签', 'y', '预测概率', 'p'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E3",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E3'（候选 ['氧化钾含量', 'K2O'] 均未命中输出 key）",
+      "resolved_key": null
+    }
+  ],
+  "engine": "execution.fidelity"
+}

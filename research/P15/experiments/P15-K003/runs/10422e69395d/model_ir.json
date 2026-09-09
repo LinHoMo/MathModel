@@ -1,0 +1,354 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2017B-LOGIT",
+  "model_family": {
+    "primary": "statistical_modeling",
+    "secondary": [
+      "optimization",
+      "clustering",
+      "decision_analysis"
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2017_B",
+    "sub_questions": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "focus": "Q1 任务定价规律分析 + Q2 新定价方案"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "type": "mechanism_assumption",
+      "statement": "任务完成概率服从Logistic分布，受价格、距离、会员密度影响",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A2",
+      "type": "simplification",
+      "statement": "使用合成数据模拟附件一（200个任务），特征关系已知",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A3",
+      "type": "projection",
+      "statement": "会员信誉和预订限额的影响暂归入member_density特征",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "v_p",
+      "name": "定价",
+      "symbol": "price",
+      "definition": "任务的标定酬金",
+      "unit": "元",
+      "type": "input",
+      "value_range": {
+        "min": 5,
+        "max": 50
+      },
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "v_d",
+      "name": "距离",
+      "symbol": "distance",
+      "definition": "任务到最近会员的距离",
+      "unit": "km",
+      "type": "input",
+      "value_range": {
+        "min": 0,
+        "max": 15
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_m",
+      "name": "会员密度",
+      "symbol": "density",
+      "definition": "任务附近的会员数量",
+      "unit": "人",
+      "type": "input",
+      "value_range": {
+        "min": 1,
+        "max": 30
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_c",
+      "name": "完成概率",
+      "symbol": "P_complete",
+      "definition": "任务被完成的概率（Logistic模型输出）",
+      "unit": "概率",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 1
+      },
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "v_popt",
+      "name": "最优定价",
+      "symbol": "price_opt",
+      "definition": "最大化期望利润的定价",
+      "unit": "元",
+      "type": "output",
+      "value_range": {
+        "min": 5,
+        "max": 50
+      },
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "v_prof",
+      "name": "期望利润",
+      "symbol": "profit",
+      "definition": "定价×完成概率的期望收益",
+      "unit": "元",
+      "type": "output",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "p_n",
+      "name": "样本量",
+      "value": 200,
+      "unit": "个",
+      "source": "合成数据"
+    },
+    {
+      "parameter_id": "p_lr",
+      "name": "学习率",
+      "value": 0.1,
+      "unit": "无",
+      "source": "超参数"
+    },
+    {
+      "parameter_id": "p_epoch",
+      "name": "训练轮数",
+      "value": 500,
+      "unit": "轮",
+      "source": "超参数"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "OBJ1",
+      "type": "estimate",
+      "expression": "估计任务完成概率 P(complete=1|price,distance,density)",
+      "variables_refs": [
+        "v_c",
+        "v_p",
+        "v_d",
+        "v_m"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "objective_id": "OBJ2",
+      "type": "max",
+      "expression": "maximize 期望利润 price * P_complete(price)",
+      "variables_refs": [
+        "v_popt",
+        "v_prof",
+        "v_c"
+      ],
+      "sub_question_binding": [
+        "Q2"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "range",
+      "expression": "定价在[5, 50]元范围内",
+      "variables_refs": [
+        "v_p"
+      ],
+      "source": "业务约束",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "probability",
+      "expression": "完成概率 P_complete ∈ [0, 1]",
+      "variables_refs": [
+        "v_c"
+      ],
+      "source": "概率公理",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "Logistic回归",
+      "description": "任务完成概率由Logistic函数建模：P=1/(1+exp(-(β0+β1*price+β2*distance+β3*density)))",
+      "equations_refs": [
+        "EQ1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "EQ1",
+      "latex": "P(y=1|x) = \\frac{1}{1+\\exp(-(\\beta_0+\\beta_1 x_{price}+\\beta_2 x_{dist}+\\beta_3 x_{dens}))}",
+      "type": "logistic",
+      "variables_refs": [
+        "v_c",
+        "v_p",
+        "v_d",
+        "v_m"
+      ],
+      "derivation_trace": "广义线性模型，连接函数为logit，假设误差服从二项分布",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "equation_id": "EQ2",
+      "latex": "\\pi(p) = p \\cdot P_{complete}(p), \\quad p^* = \\arg\\max_{p} \\pi(p)",
+      "type": "optimization",
+      "variables_refs": [
+        "v_prof",
+        "v_popt",
+        "v_c"
+      ],
+      "derivation_trace": "期望利润=定价×完成概率，在价格网格上搜索最优",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "name": "梯度下降Logistic回归+网格搜索",
+      "description": "标准化特征后梯度下降训练Logistic回归，在价格网格上搜索最优定价",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "E1",
+      "name": "200任务合成数据回归",
+      "description": "生成200个合成任务（距离指数分布、价格线性+噪声、完成概率Logistic），训练回归模型",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "experiment_id": "E2",
+      "name": "定价网格搜索",
+      "description": "在[5,40]元网格上计算期望利润，搜索最优定价",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "accuracy",
+      "description": "模型在训练集上的预测准确率",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "validation_id": "V2",
+      "type": "monotonicity",
+      "description": "距离系数应为负，会员密度系数应为正",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "statement": "Logistic回归可量化定价/距离/密度对任务完成率的影响",
+      "evidence_refs": [
+        "E1",
+        "V1",
+        "V2"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "claim_id": "CL2",
+      "statement": "存在最优定价使期望利润最大化",
+      "evidence_refs": [
+        "E2"
+      ],
+      "sub_question_binding": [
+        "Q2"
+      ]
+    }
+  ],
+  "model_graph": {
+    "nodes": 4,
+    "edges": 3,
+    "type": "regression_chain"
+  },
+  "modeling_trace": [
+    {
+      "step": 1,
+      "action": "data_generation",
+      "detail": "合成200任务数据"
+    },
+    {
+      "step": 2,
+      "action": "model_training",
+      "detail": "Logistic回归梯度下降"
+    },
+    {
+      "step": 3,
+      "action": "price_optimization",
+      "detail": "网格搜索最优定价"
+    }
+  ]
+}

@@ -1,0 +1,309 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2020B-DP",
+  "model_family": {
+    "primary": "dynamic_programming",
+    "secondary": [
+      "markov_decision_process",
+      "optimization",
+      "graph_algorithm"
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2020_B",
+    "sub_questions": [
+      "Q1",
+      "Q2",
+      "Q3"
+    ],
+    "focus": "Q1 确定性天气最优策略"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "type": "projection",
+      "statement": "地图简化为5节点线性图（Start-Village-Mine-Waypoint-End），保留核心资源约束机制",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A2",
+      "type": "mechanism_assumption",
+      "statement": "天气全部已知（Q1设定），沙暴日必须停留，消耗倍率按题目规则",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A3",
+      "type": "simplification",
+      "statement": "水/食物离散为整数箱，负重上限20箱，初始资金10000",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "v_profit",
+      "name": "最优收益",
+      "symbol": "profit",
+      "definition": "到达终点后剩余资金+退回资源的总金额",
+      "unit": "元",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 50000
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_water",
+      "name": "剩余水量",
+      "symbol": "water",
+      "definition": "到达终点时剩余水量（箱）",
+      "unit": "箱",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 20
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_food",
+      "name": "剩余食物",
+      "symbol": "food",
+      "definition": "到达终点时剩余食物量（箱）",
+      "unit": "箱",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 20
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_day",
+      "name": "到达天数",
+      "symbol": "day",
+      "definition": "到达终点的天数",
+      "unit": "天",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 10
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_path",
+      "name": "最优路径",
+      "symbol": "path",
+      "definition": "从起点到终点的最优行动序列",
+      "unit": "无",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "p_cap",
+      "name": "负重上限",
+      "value": 20,
+      "unit": "箱",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_money",
+      "name": "初始资金",
+      "value": 10000,
+      "unit": "元",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "p_days",
+      "name": "游戏天数",
+      "value": 10,
+      "unit": "天",
+      "source": "简化"
+    },
+    {
+      "parameter_id": "p_mine",
+      "name": "挖矿基础收益",
+      "value": 1000,
+      "unit": "元/天",
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "OBJ1",
+      "type": "max",
+      "expression": "maximize 到达终点时的总资金（含剩余资源退回）",
+      "variables_refs": [
+        "v_profit",
+        "v_water",
+        "v_food"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "resource_capacity",
+      "expression": "water + food <= 20（负重上限）",
+      "variables_refs": [
+        "v_water",
+        "v_food"
+      ],
+      "source": "题目",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "non_depletion",
+      "expression": "每日消耗后 water>=0 且 food>=0，否则游戏失败",
+      "variables_refs": [
+        "v_water",
+        "v_food"
+      ],
+      "source": "题目",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "weather_constraint",
+      "expression": "沙暴日必须在原地停留",
+      "variables_refs": [
+        "v_day"
+      ],
+      "source": "题目",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "Bellman最优性原理",
+      "description": "状态=(day,position,water,food)，值函数V(s)=max_a [reward(a)+V(s')]，无后效性满足",
+      "equations_refs": [
+        "EQ1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "EQ1",
+      "latex": "V(d,p,w,f)=\\max_{a\\in A(d,p)}[r(a)+V(d+1,p',w-c_w(a),f-c_f(a))]",
+      "type": "dp_recurrence",
+      "variables_refs": [
+        "v_profit",
+        "v_water",
+        "v_food",
+        "v_day"
+      ],
+      "derivation_trace": "由Bellman最优性原理，消耗c_w/c_f依行动类型(stay/move/mine)取1/2/3倍基础消耗",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "name": "后向动态规划",
+      "description": "从day=0前向推进DP表，状态空间=days×positions×water×food，回溯最优路径",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "E1",
+      "name": "10天5节点确定性天气",
+      "description": "固定天气序列，初始资金10000，负重20，验证DP收敛与路径可行性",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "feasibility",
+      "description": "最优路径中每日资源消耗后water>=0且food>=0",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "validation_id": "V2",
+      "type": "constraint_check",
+      "description": "负重约束water+food<=20在所有状态满足",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "statement": "确定性天气下存在资源约束最优策略，DP可在多项式状态空间内求解",
+      "evidence_refs": [
+        "E1",
+        "V1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "model_graph": {
+    "nodes": 5,
+    "edges": 4,
+    "type": "linear_chain"
+  },
+  "modeling_trace": [
+    {
+      "step": 1,
+      "action": "problem_decomposition",
+      "detail": "Q1确定性天气→确定性DP"
+    },
+    {
+      "step": 2,
+      "action": "state_design",
+      "detail": "(day,pos,water,food)四元组"
+    },
+    {
+      "step": 3,
+      "action": "solver_selection",
+      "detail": "前向DP表+回溯"
+    }
+  ]
+}

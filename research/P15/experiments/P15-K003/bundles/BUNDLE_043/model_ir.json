@@ -1,0 +1,308 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2018A-PDE",
+  "model_family": {
+    "primary": "numerical_pde",
+    "secondary": [
+      "optimization",
+      "inverse_problem",
+      "ode_models"
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2018_A",
+    "sub_questions": [
+      "Q1",
+      "Q2",
+      "Q3"
+    ],
+    "focus": "Q1 温度分布计算"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "type": "projection",
+      "statement": "一维热传导，忽略横向温度梯度，四层材料均匀各向同性",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A2",
+      "type": "mechanism_assumption",
+      "statement": "皮肤侧为对流边界（h=8 W/m²K），体核温度恒定37°C",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A3",
+      "type": "simplification",
+      "statement": "物性参数不随温度变化，忽略相变和辐射",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "v_T",
+      "name": "温度场",
+      "symbol": "T",
+      "definition": "四层织物内的温度分布 T(x,t)",
+      "unit": "°C",
+      "type": "field",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_Ts",
+      "name": "皮肤侧温度",
+      "symbol": "T_skin",
+      "definition": "假人皮肤外侧（IV层右边界）的温度随时间变化",
+      "unit": "°C",
+      "type": "output",
+      "value_range": {
+        "min": 37,
+        "max": 80
+      },
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "v_t",
+      "name": "时间",
+      "symbol": "t",
+      "definition": "工作时间",
+      "unit": "s",
+      "type": "independent",
+      "value_range": {
+        "min": 0,
+        "max": 5400
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_x",
+      "name": "空间坐标",
+      "symbol": "x",
+      "definition": "沿厚度方向坐标，x=0为I层外表面",
+      "unit": "m",
+      "type": "independent",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "p_k1",
+      "name": "I层导热系数",
+      "value": 0.045,
+      "unit": "W/mK",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "p_k2",
+      "name": "II层导热系数",
+      "value": 0.055,
+      "unit": "W/mK",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "p_d2",
+      "name": "II层厚度",
+      "value": 0.006,
+      "unit": "m",
+      "source": "题目Q1"
+    },
+    {
+      "parameter_id": "p_d4",
+      "name": "IV层厚度",
+      "value": 0.005,
+      "unit": "m",
+      "source": "题目Q1"
+    },
+    {
+      "parameter_id": "p_Tamb",
+      "name": "环境温度",
+      "value": 75,
+      "unit": "°C",
+      "source": "题目Q1"
+    },
+    {
+      "parameter_id": "p_h",
+      "name": "对流系数",
+      "value": 8.0,
+      "unit": "W/m²K",
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "OBJ1",
+      "type": "estimate",
+      "expression": "计算温度场T(x,t)和皮肤侧温度T_skin(t)",
+      "variables_refs": [
+        "v_T",
+        "v_Ts",
+        "v_t",
+        "v_x"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "temperature_limit",
+      "expression": "T_skin(t) <= 47°C（工作结束时）",
+      "variables_refs": [
+        "v_Ts"
+      ],
+      "source": "题目Q2/Q3",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "time_limit",
+      "expression": "T_skin超过44°C的累计时间 <= 5分钟",
+      "variables_refs": [
+        "v_Ts",
+        "v_t"
+      ],
+      "source": "题目Q2/Q3",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "Fourier热传导定律",
+      "description": "一维瞬态热传导方程ρc∂T/∂t = k∂²T/∂x²，层间界面用调和平均热导率",
+      "equations_refs": [
+        "EQ1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "EQ1",
+      "latex": "\\rho_i c_i \\frac{\\partial T}{\\partial t} = k_i \\frac{\\partial^2 T}{\\partial x^2}, \\quad x\\in\\Omega_i,\\; i=1,2,3,4",
+      "type": "pde",
+      "variables_refs": [
+        "v_T",
+        "v_x",
+        "v_t"
+      ],
+      "derivation_trace": "由Fourier定律与能量守恒导出，i遍历I-IV层",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "equation_id": "EQ2",
+      "latex": "-k\\frac{\\partial T}{\\partial x}\\bigg|_{x=L} = h(T(L,t)-T_{body})",
+      "type": "boundary_condition",
+      "variables_refs": [
+        "v_Ts",
+        "v_x"
+      ],
+      "derivation_trace": "皮肤侧对流边界（Newton冷却定律）",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "name": "显式有限差分法",
+      "description": "时间前向+空间中心差分，dt满足CFL稳定性条件，层间界面调和平均",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "E1",
+      "name": "75°C环境90分钟温度场",
+      "description": "II层6mm/IV层5mm，环境75°C，工作90分钟，计算皮肤侧温度曲线",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "stability",
+      "description": "显式FDM满足CFL条件 dt <= dx²/(2α_max)",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "validation_id": "V2",
+      "type": "boundary_check",
+      "description": "左边界温度恒等于环境温度，右边界满足对流条件",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "statement": "一维四层瞬态热传导FDM可稳定计算皮肤侧温度变化",
+      "evidence_refs": [
+        "E1",
+        "V1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "model_graph": {
+    "nodes": 4,
+    "edges": 3,
+    "type": "layered_1d"
+  },
+  "modeling_trace": [
+    {
+      "step": 1,
+      "action": "physics_modeling",
+      "detail": "一维瞬态热传导PDE"
+    },
+    {
+      "step": 2,
+      "action": "discretization",
+      "detail": "显式FDM，CFL稳定时间步"
+    },
+    {
+      "step": 3,
+      "action": "boundary_handling",
+      "detail": "左Dirichlet+右对流Neumann"
+    }
+  ]
+}

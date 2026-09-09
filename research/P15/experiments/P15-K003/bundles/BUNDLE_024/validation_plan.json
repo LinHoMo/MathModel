@@ -1,0 +1,40 @@
+{
+  "plan_id": "VP-2020B",
+  "limit_tests": [
+    {
+      "name": "零资源边界",
+      "description": "初始water=0,food=0时应无法出发",
+      "expected": "游戏失败或profit=0"
+    },
+    {
+      "name": "全沙暴天气",
+      "description": "10天全沙暴时只能停留，应无法到达终点",
+      "expected": "arrival_day=-1"
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "初始资金",
+      "range": [
+        5000,
+        10000,
+        20000
+      ],
+      "expected_effect": "资金增加→可购买更多资源→profit单调不减"
+    },
+    {
+      "parameter": "负重上限",
+      "range": [
+        10,
+        20,
+        30
+      ],
+      "expected_effect": "负重增加→策略空间扩大→profit不减"
+    }
+  ],
+  "validation_targets": [
+    "OBJ1"
+  ],
+  "constraint_violation_check": true,
+  "residual_check": false
+}

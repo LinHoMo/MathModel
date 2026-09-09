@@ -1,0 +1,41 @@
+{
+  "plan_id": "VP-2019C",
+  "limit_tests": [
+    {
+      "name": "零到达率",
+      "description": "λ=0时无乘客，排队收益应为负无穷（永远等不到）",
+      "expected": "decision=return"
+    },
+    {
+      "name": "高到达率接近服务率",
+      "description": "λ→μ⁻时W_q→∞，排队收益→-∞",
+      "expected": "decision=return"
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "乘客到达率λ",
+      "range": [
+        10,
+        20,
+        30,
+        38
+      ],
+      "expected_effect": "λ增大→等待时间增大→排队收益减小→可能切换为return"
+    },
+    {
+      "parameter": "排队车费F_q",
+      "range": [
+        50,
+        80,
+        120
+      ],
+      "expected_effect": "车费增加→排队收益增大→更倾向queue"
+    }
+  ],
+  "validation_targets": [
+    "OBJ1"
+  ],
+  "constraint_violation_check": true,
+  "residual_check": false
+}

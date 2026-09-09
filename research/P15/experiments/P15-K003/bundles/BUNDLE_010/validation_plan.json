@@ -1,0 +1,75 @@
+{
+  "limit_tests": [
+    {
+      "condition": "pitch→0（螺距趋近于零）",
+      "expected": "螺线退化为圆，r=r0恒定",
+      "result": "占位：pitch=0.001时r近似恒定"
+    },
+    {
+      "condition": "N=1（仅龙头一节）",
+      "expected": "无碰撞，后节递推不触发",
+      "result": "占位：单节仿真应无碰撞"
+    }
+  ],
+  "multi_seed": {
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "n_runs": 3,
+    "metric": "collision_time",
+    "tolerance": "cv<10%",
+    "result": "占位：多种子碰撞时刻应稳定（几何确定性，seed不影响结果）"
+  },
+  "sensitivity": [
+    {
+      "parameter": "pitch",
+      "range": "±10%",
+      "metric": "collision_time",
+      "result": "占位：螺距扰动影响盘入速度和碰撞时刻"
+    },
+    {
+      "parameter": "v0",
+      "range": "±20%",
+      "metric": "collision_time",
+      "result": "占位：速度扰动线性影响碰撞时刻"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "碰撞判定标准",
+      "interpretations": [
+        "中心距<板宽",
+        "边缘距<0",
+        "包围盒重叠"
+      ],
+      "adopted": "中心距<板宽",
+      "justification": "计算简单且保守，板宽为最小安全间距"
+    },
+    {
+      "source": "后节速度递推",
+      "interpretations": [
+        "刚体近似v_i=v_{i-1}",
+        "角速度相同v_i=ω×r_i",
+        "完整动力学"
+      ],
+      "adopted": "刚体近似（Q1/Q2），角速度修正（Q5）",
+      "justification": "刚体近似计算高效，Q5单独分析速度差异"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "CL1: 刚体链递推有效仿真223节运动",
+      "evidence_ref": "E1",
+      "status": "supported"
+    },
+    {
+      "claim": "CL2: 非相邻节碰撞可由最小间距检测确定",
+      "evidence_ref": "E1",
+      "status": "supported"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "experiment_id": "P15-K003",
   "protocol_version": "0.1",
-  "phase": "FROZEN",
+  "phase": "RUNNING",
   "revisions": [],
   "history": [
     {
@@ -54,6 +54,20 @@
       "from": "PREREGISTERED",
       "to": "FROZEN",
       "note": "v0.1 冻结 36 文件 root=94b14d4f"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T08:23:56Z",
+      "from": "FROZEN",
+      "to": "PREFLIGHT",
+      "note": "PREFLIGHT 3/3 exec success (2020_B x F/S/SV)"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T08:31:35Z",
+      "from": "PREFLIGHT",
+      "to": "RUNNING",
+      "note": "66/66 runs exec_success rate=1.0 (主检验54+泛化12)"
     }
   ],
   "gates": {

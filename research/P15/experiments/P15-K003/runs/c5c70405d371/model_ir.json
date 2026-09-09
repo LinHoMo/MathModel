@@ -1,0 +1,350 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2022C-stats",
+  "model_family": {
+    "primary": "statistical_modeling",
+    "secondary": [],
+    "description": "逻辑回归二分类 + 风化元素交换统计模型",
+    "candidates": [
+      {
+        "family": "statistical_modeling",
+        "rationale": "成分数据为连续变量，分类目标明确，逻辑回归可解释性强"
+      },
+      {
+        "family": "simulation",
+        "rationale": "排除：无随机过程需仿真，数据驱动分类更合适"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2022_C",
+    "sub_question_id": "Q1,Q2,Q3",
+    "problem_sha256": "pending"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "玻璃成分数据服从近似线性可分分布（高钾 vs 铅钡在 K2O/PbO/BaO 上有显著差异）",
+      "type": "mechanism_assumption",
+      "rationale": "题面指出两类玻璃助熔剂不同，化学成分差异显著"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "风化过程中 K+ 离子优先淋滤，SiO2 比例相对富集",
+      "type": "mechanism",
+      "rationale": "钾玻璃中 K2O 为网络修饰体，易受风化淋滤"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "成分比例累加和在 85%-105% 范围内的数据为有效数据",
+      "type": "simplification",
+      "rationale": "题面明确给出有效数据范围"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "二氧化硅含量",
+      "symbol": "SiO2",
+      "definition": "玻璃中 SiO2 的质量百分比",
+      "unit": "%",
+      "type": "observation",
+      "sub_question_binding": "Q1,Q2"
+    },
+    {
+      "variable_id": "V2",
+      "name": "氧化钾含量",
+      "symbol": "K2O",
+      "definition": "玻璃中 K2O 的质量百分比，高钾玻璃的特征成分",
+      "unit": "%",
+      "type": "observation",
+      "sub_question_binding": "Q1,Q2"
+    },
+    {
+      "variable_id": "V3",
+      "name": "氧化铅含量",
+      "symbol": "PbO",
+      "definition": "玻璃中 PbO 的质量百分比，铅钡玻璃的特征成分",
+      "unit": "%",
+      "type": "observation",
+      "sub_question_binding": "Q1,Q2"
+    },
+    {
+      "variable_id": "V4",
+      "name": "分类标签",
+      "symbol": "y",
+      "definition": "玻璃类型：0=高钾玻璃，1=铅钡玻璃",
+      "unit": "无",
+      "type": "state",
+      "sub_question_binding": "Q2,Q3"
+    },
+    {
+      "variable_id": "V5",
+      "name": "预测概率",
+      "symbol": "p",
+      "definition": "逻辑回归输出的铅钡玻璃概率",
+      "unit": "无",
+      "type": "derived",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V6",
+      "name": "训练精度",
+      "symbol": "train_accuracy",
+      "definition": "逻辑回归在训练集上的分类精度",
+      "unit": "无",
+      "type": "derived",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V7",
+      "name": "训练样本数",
+      "symbol": "n_training_samples",
+      "definition": "用于训练的玻璃样本总数",
+      "unit": "无",
+      "type": "derived",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V8",
+      "name": "分类边界",
+      "symbol": "classification_boundary",
+      "definition": "高钾与铅钡玻璃的分类决策边界值",
+      "unit": "无",
+      "type": "derived",
+      "sub_question_binding": "Q2,Q3"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "学习率",
+      "symbol": "lr",
+      "value": 0.01,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "训练轮数",
+      "symbol": "n_epochs",
+      "value": 200,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "分类阈值",
+      "symbol": "threshold",
+      "value": 0.5,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "风化钾流失率",
+      "symbol": "k_loss",
+      "value": 0.3,
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "minimize",
+      "expression": "交叉熵损失 L = -Σ[y log(p) + (1-y) log(1-p)]",
+      "variables_refs": [
+        "V4",
+        "V5"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O2",
+      "type": "estimate",
+      "expression": "未知样本类别 ŷ = argmax(p, 1-p)",
+      "variables_refs": [
+        "V4",
+        "V5"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "range",
+      "expression": "0 ≤ p ≤ 1",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "range",
+      "expression": "85% ≤ Σ成分比例 ≤ 105%",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V3"
+      ],
+      "source": "题面给定",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "逻辑回归：通过 sigmoid 函数将线性组合映射为概率，梯度下降最小化交叉熵",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": "Q2,Q3"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "风化元素交换：K+ 优先淋滤导致 K2O 下降，SiO2 相对富集",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "p = \\sigma(\\mathbf{w}^\\top \\mathbf{x} + b) = \\frac{1}{1+e^{-(\\mathbf{w}^\\top \\mathbf{x}+b)}}",
+      "type": "代数",
+      "variables_refs": [
+        "V5"
+      ],
+      "derivation_trace": "sigmoid 函数定义",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "\\mathcal{L} = -\\sum_{i=1}^n [y_i \\log(p_i) + (1-y_i)\\log(1-p_i)]",
+      "type": "代数",
+      "variables_refs": [
+        "V4",
+        "V5"
+      ],
+      "derivation_trace": "交叉熵损失",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "K2O_{weathered} = K2O_{fresh} \\times (1 - k_{loss})",
+      "type": "代数",
+      "variables_refs": [
+        "V2"
+      ],
+      "derivation_trace": "风化淋滤模型",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "M1",
+      "to": "O1"
+    },
+    {
+      "from": "M2",
+      "to": "O2"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "梯度下降",
+      "implementation_ref": "run_model.py",
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "E1",
+      "type": "training",
+      "inputs": {
+        "n_samples": 14,
+        "n_features": 14
+      },
+      "expected_outputs": {
+        "train_accuracy": ">0.9"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "E2",
+      "type": "prediction",
+      "inputs": {
+        "n_unknown": 3
+      },
+      "expected_outputs": {
+        "predictions": "3个类别预测"
+      },
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "convergence",
+      "method": "训练损失随 epoch 下降",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "学习率 ±50% 扰动",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "text": "逻辑回归可有效区分高钾玻璃与铅钡玻璃（训练精度 >90%）",
+      "type": "performance",
+      "evidence_refs": [
+        "E1"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL2",
+      "text": "风化导致 K2O 流失约 30%，SiO2 相对富集",
+      "type": "mechanism",
+      "evidence_refs": [
+        "E2"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      "数据预处理",
+      "逻辑回归训练",
+      "未知样本预测",
+      "风化分析"
+    ],
+    "edges": [
+      "数据预处理->逻辑回归训练",
+      "逻辑回归训练->未知样本预测"
+    ]
+  },
+  "modeling_trace": "1. 题面分析：成分数据分类+风化预测；2. 模型选择：逻辑回归（可解释、适合二分类）；3. 候选对比：排除仿真（无随机过程）；4. 实现：纯Python梯度下降；5. 验证：训练精度+灵敏度分析"
+}

@@ -1,0 +1,94 @@
+{
+  "execution_id": "EXEC054",
+  "verification_id": "VR054",
+  "fidelity_status": "aligned",
+  "fidelity_score": 1.0,
+  "passed": 12,
+  "total": 12,
+  "checks": [
+    {
+      "name": "F1 变量可观测: 3分钟覆盖率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'coverage_rate_3min' 存在（声明 '3分钟覆盖率'）",
+      "resolved_key": "coverage_rate_3min"
+    },
+    {
+      "name": "F5 变量范围: 3分钟覆盖率 ∈ [0, 1]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "coverage_rate_3min=1.0 在 [0, 1]"
+    },
+    {
+      "name": "F1 变量可观测: 最大响应时间",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'max_response_time_min' 存在（声明 '最大响应时间'）",
+      "resolved_key": "max_response_time_min"
+    },
+    {
+      "name": "F1 变量可观测: 工作量变异系数",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'workload_cv' 存在（声明 '工作量变异系数'）",
+      "resolved_key": "workload_cv"
+    },
+    {
+      "name": "F1 变量可观测: 管辖分配",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'allocation' 存在（声明 '管辖分配'）",
+      "resolved_key": "allocation"
+    },
+    {
+      "name": "F1 变量可观测: 封锁调度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'blockade_schedule' 存在（声明 '封锁调度'）",
+      "resolved_key": "blockade_schedule"
+    },
+    {
+      "name": "F2 目标: minimize 最大响应时间 t_max（管辖分配优化）",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'max_response_time_min' 存在（声明 'minimize 最大响应时间 t_max（管辖分配优化）'）",
+      "resolved_key": "max_response_time_min"
+    },
+    {
+      "name": "F2 目标: minimize 封锁调度总距离（13路口分配）",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'blockade_schedule' 存在（声明 'minimize 封锁调度总距离（13路口分配）'）",
+      "resolved_key": "blockade_schedule"
+    },
+    {
+      "name": "F3 约束: 尽量3分钟内到达事发地（coverage最大化）",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'coverage_rate_3min' 存在（声明 '尽量3分钟内到达事发地（coverage最大化）'）",
+      "resolved_key": "coverage_rate_3min"
+    },
+    {
+      "name": "F3 约束: 一个平台最多封锁一个路口",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'blockade_schedule' 存在（声明 '一个平台最多封锁一个路口'）",
+      "resolved_key": "blockade_schedule"
+    },
+    {
+      "name": "F4 方程: EQ1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'allocation' 存在（声明 'EQ1'）",
+      "resolved_key": "allocation"
+    },
+    {
+      "name": "F4 方程: EQ2",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'allocation' 存在（声明 'EQ2'）",
+      "resolved_key": "allocation"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

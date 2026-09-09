@@ -1,0 +1,446 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2024A-kinematics",
+  "model_family": {
+    "primary": "simulation",
+    "secondary": [],
+    "description": "阿基米德螺线参数化 + 刚体链正向运动学仿真",
+    "candidates": [
+      {
+        "family": "simulation",
+        "rationale": "多体运动学系统，需时间步进仿真各节位置速度"
+      },
+      {
+        "family": "numerical_pde",
+        "rationale": "排除：无偏微分方程，为代数几何+约束递推"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2024_A",
+    "sub_question_id": "Q1,Q2,Q3,Q4,Q5",
+    "problem_sha256": "pending"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "每节板凳视为刚体，相邻节孔中心间距守恒",
+      "type": "mechanism",
+      "rationale": "板凳通过把手刚性连接，间距由板长决定"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "龙头前把手严格沿阿基米德螺线运动，速度恒定 1 m/s",
+      "type": "simplification",
+      "rationale": "题面Q1明确设定"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "后节速度近似等于前节速度（刚体链近似，忽略角速度差异）",
+      "type": "simplification",
+      "rationale": "简化递推，Q5单独分析速度差异"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "碰撞判定：任意两节中心距 < 板宽 0.30m 视为碰撞",
+      "type": "projection",
+      "rationale": "板宽为最小安全间距"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "螺线极角",
+      "symbol": "theta",
+      "definition": "阿基米德螺线参数，龙头位置的极角",
+      "unit": "rad",
+      "type": "state",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V2",
+      "name": "螺线半径",
+      "symbol": "r",
+      "definition": "r = r0 + pitch * theta",
+      "unit": "m",
+      "type": "derived",
+      "sub_question_binding": "Q1,Q3"
+    },
+    {
+      "variable_id": "V3",
+      "name": "第i节位置",
+      "symbol": "(x_i, y_i)",
+      "definition": "第i节把手中心的笛卡尔坐标",
+      "unit": "m",
+      "type": "state",
+      "sub_question_binding": "Q1,Q2"
+    },
+    {
+      "variable_id": "V4",
+      "name": "第i节速度",
+      "symbol": "v_i",
+      "definition": "第i节把手中心的速度大小",
+      "unit": "m/s",
+      "type": "derived",
+      "sub_question_binding": "Q1,Q5"
+    },
+    {
+      "variable_id": "V5",
+      "name": "最小节间距",
+      "symbol": "d_min",
+      "definition": "所有非相邻节对的最小中心距",
+      "unit": "m",
+      "type": "derived",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V6",
+      "name": "龙头末速度",
+      "symbol": "head_final_velocity",
+      "definition": "仿真结束时龙头前把手的速度大小",
+      "unit": "m/s",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V7",
+      "name": "碰撞时刻",
+      "symbol": "collision_time_s",
+      "definition": "首次检测到非相邻节碰撞的时刻（无碰撞则为null）",
+      "unit": "s",
+      "type": "derived",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V8",
+      "name": "最小螺距",
+      "symbol": "min_pitch_q3",
+      "definition": "Q3 盘入到调头空间边界的最小螺距",
+      "unit": "m",
+      "type": "derived",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V9",
+      "name": "最大龙头速度",
+      "symbol": "max_head_speed_q5",
+      "definition": "Q5 各把手速度≤2m/s约束下的最大龙头速度",
+      "unit": "m/s",
+      "type": "derived",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "总节数",
+      "symbol": "N",
+      "value": 223,
+      "source": "题面"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "龙头板长",
+      "symbol": "L_head",
+      "value": 3.41,
+      "source": "题面"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "龙身板长",
+      "symbol": "L_body",
+      "value": 2.2,
+      "source": "题面"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "板宽",
+      "symbol": "W",
+      "value": 0.3,
+      "source": "题面"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "螺距",
+      "symbol": "pitch",
+      "value": 0.55,
+      "source": "题面"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "龙头速度",
+      "symbol": "v0",
+      "value": 1.0,
+      "source": "题面"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "调头空间半径",
+      "symbol": "R_turn",
+      "value": 4.5,
+      "source": "题面"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "simulate",
+      "expression": "各节位置速度 x_i(t), y_i(t), v_i(t) for t=0..300",
+      "variables_refs": [
+        "V3",
+        "V4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "find",
+      "expression": "t_collision = min{t: d_min(t) < W}",
+      "variables_refs": [
+        "V5"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "minimize",
+      "expression": "pitch_min s.t. r(theta_end) = R_turn",
+      "variables_refs": [
+        "V2"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "maximize",
+      "expression": "v0_max s.t. max(v_i) <= 2.0",
+      "variables_refs": [
+        "V4"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "distance",
+      "expression": "|(x_i,y_i) - (x_{i-1},y_{i-1})| = L_i",
+      "variables_refs": [
+        "V3"
+      ],
+      "source": "刚体约束",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "collision",
+      "expression": "d_min >= W (无碰撞)",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "speed",
+      "expression": "v_i <= 2.0 for all i",
+      "variables_refs": [
+        "V4"
+      ],
+      "source": "题面Q5",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "阿基米德螺线参数化：r(theta)=r0+pitch*theta，龙头沿螺线匀速运动",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": "Q1,Q3"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "刚体链正向递推：后节位置 = 前节位置 - 前节速度方向 × 节长",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q1,Q2"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "碰撞检测：非相邻节对中心距 < 板宽即碰撞",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "r(\\theta) = r_0 + p \\cdot \\theta",
+      "type": "代数",
+      "variables_refs": [
+        "V2"
+      ],
+      "derivation_trace": "阿基米德螺线定义",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "(x, y) = (r\\cos\\theta, r\\sin\\theta)",
+      "type": "代数",
+      "variables_refs": [
+        "V3"
+      ],
+      "derivation_trace": "极坐标转笛卡尔",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\mathbf{p}_i = \\mathbf{p}_{i-1} - \\hat{\\mathbf{v}}_{i-1} \\cdot L_i",
+      "type": "递推",
+      "variables_refs": [
+        "V3"
+      ],
+      "derivation_trace": "刚体链正向递推",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "d_{min} = \\min_{|i-j|>1} \\sqrt{(x_i-x_j)^2 + (y_i-y_j)^2}",
+      "type": "代数",
+      "variables_refs": [
+        "V5"
+      ],
+      "derivation_trace": "碰撞检测距离",
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "M1",
+      "to": "M2"
+    },
+    {
+      "from": "M2",
+      "to": "M3"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "时间步进正向仿真",
+      "implementation_ref": "run_model.py",
+      "sub_question_binding": "Q1,Q2"
+    },
+    {
+      "solver_id": "S2",
+      "method": "数值积分（螺线弧长）",
+      "implementation_ref": "run_model.py",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "E1",
+      "type": "forward_simulation",
+      "inputs": {
+        "duration": 300,
+        "dt": 1
+      },
+      "expected_outputs": {
+        "positions": "223节×301帧",
+        "collision_time": "可能的碰撞时刻"
+      },
+      "sub_question_binding": "Q1,Q2"
+    },
+    {
+      "experiment_id": "E2",
+      "type": "parameter_optimization",
+      "inputs": {
+        "R_turn": 4.5
+      },
+      "expected_outputs": {
+        "min_pitch": "最小螺距数值"
+      },
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "convergence",
+      "method": "时间步长减半（dt=1→0.5）关键节点位置变化 <0.1%",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "reproducibility",
+      "method": "固定 seed 多次运行结果一致",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "pitch→0 时螺线退化为圆，验证半径公式",
+      "targets_refs": [
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "text": "刚体链正向递推可有效仿真223节板凳龙的运动学行为",
+      "type": "performance",
+      "evidence_refs": [
+        "E1"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "CL2",
+      "text": "螺线盘入过程中非相邻节可能发生碰撞，碰撞时刻可由最小间距检测确定",
+      "type": "mechanism",
+      "evidence_refs": [
+        "E1"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "supported"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      "螺线参数化",
+      "龙头运动",
+      "刚体链递推",
+      "碰撞检测",
+      "参数优化"
+    ],
+    "edges": [
+      "螺线参数化->龙头运动",
+      "龙头运动->刚体链递推",
+      "刚体链递推->碰撞检测"
+    ]
+  },
+  "modeling_trace": "1. 题面分析：多体运动学+几何优化，5个子问题；2. 模型选择：阿基米德螺线+刚体链正向仿真；3. 候选对比：排除PDE（无微分方程）、排除纯优化（Q1/Q2需仿真）；4. 实现：纯Python时间步进+数值积分；5. 验证：收敛性+可复现性+极限检验"
+}
