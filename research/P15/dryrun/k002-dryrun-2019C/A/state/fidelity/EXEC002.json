@@ -1,0 +1,235 @@
+{
+  "execution_id": "EXEC002",
+  "verification_id": "VR002",
+  "fidelity_status": "aligned",
+  "fidelity_score": 1.0,
+  "passed": 32,
+  "total": 32,
+  "checks": [
+    {
+      "name": "F1 变量可观测: 时段索引",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'i' 存在（声明 '时段索引'）",
+      "resolved_key": "i"
+    },
+    {
+      "name": "F1 变量可观测: 时段乘客到达率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'lambda_p' 存在（声明 '时段乘客到达率'）",
+      "resolved_key": "lambda_p"
+    },
+    {
+      "name": "F1 变量可观测: 时段出租车到达率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'lambda_t' 存在（声明 '时段出租车到达率'）",
+      "resolved_key": "lambda_t"
+    },
+    {
+      "name": "F1 变量可观测: 时段初排队长度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'n' 存在（声明 '时段初排队长度'）",
+      "resolved_key": "n"
+    },
+    {
+      "name": "F1 变量可观测: 期望等待时间",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Wq' 存在（声明 '期望等待时间'）",
+      "resolved_key": "Wq"
+    },
+    {
+      "name": "F1 变量可观测: 期望排队长度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Lq' 存在（声明 '期望排队长度'）",
+      "resolved_key": "Lq"
+    },
+    {
+      "name": "F1 变量可观测: 班次总收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'J' 存在（声明 '班次总收益'）",
+      "resolved_key": "J"
+    },
+    {
+      "name": "F1 变量可观测: 阈值排队长度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'nstar' 存在（声明 '阈值排队长度'）",
+      "resolved_key": "nstar"
+    },
+    {
+      "name": "F1 变量可观测: 系统空闲概率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'P0' 存在（声明 '系统空闲概率'）",
+      "resolved_key": "P0"
+    },
+    {
+      "name": "F1 变量可观测: 排队等待概率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Pw' 存在（声明 '排队等待概率'）",
+      "resolved_key": "Pw"
+    },
+    {
+      "name": "F1 变量可观测: 蓄车净收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Rq' 存在（声明 '蓄车净收益'）",
+      "resolved_key": "Rq"
+    },
+    {
+      "name": "F1 变量可观测: 放空净收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Rl' 存在（声明 '放空净收益'）",
+      "resolved_key": "Rl"
+    },
+    {
+      "name": "F1 变量可观测: 值函数",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'V' 存在（声明 '值函数'）",
+      "resolved_key": "V"
+    },
+    {
+      "name": "F1 变量可观测: 决策变量",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'd' 存在（声明 '决策变量'）",
+      "resolved_key": "d"
+    },
+    {
+      "name": "F1 变量可观测: 求和指标",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'k' 存在（声明 '求和指标'）",
+      "resolved_key": "k"
+    },
+    {
+      "name": "F2 目标: J",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'J' 存在（声明 'J'）",
+      "resolved_key": "J"
+    },
+    {
+      "name": "F2 目标: Wq",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Wq' 存在（声明 'Wq'）",
+      "resolved_key": "Wq"
+    },
+    {
+      "name": "F3 约束: n >= 0",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'n' 存在（声明 'n >= 0'）",
+      "resolved_key": "n"
+    },
+    {
+      "name": "F3 约束: lambda_t < c*mu",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'lambda_t' 存在（声明 'lambda_t < c*mu'）",
+      "resolved_key": "lambda_t"
+    },
+    {
+      "name": "F3 约束: d in {0,1}",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'd' 存在（声明 'd in {0,1}'）",
+      "resolved_key": "d"
+    },
+    {
+      "name": "F3 约束: Wq >= 0",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Wq' 存在（声明 'Wq >= 0'）",
+      "resolved_key": "Wq"
+    },
+    {
+      "name": "F3 约束: n <= N_max",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'n' 存在（声明 'n <= N_max'）",
+      "resolved_key": "n"
+    },
+    {
+      "name": "F4 方程: E1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'P0' 存在（声明 'E1'）",
+      "resolved_key": "P0"
+    },
+    {
+      "name": "F4 方程: E2",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Pw' 存在（声明 'E2'）",
+      "resolved_key": "Pw"
+    },
+    {
+      "name": "F4 方程: E3",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Wq' 存在（声明 'E3'）",
+      "resolved_key": "Wq"
+    },
+    {
+      "name": "F4 方程: E4",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Lq' 存在（声明 'E4'）",
+      "resolved_key": "Lq"
+    },
+    {
+      "name": "F4 方程: E5",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Rq' 存在（声明 'E5'）",
+      "resolved_key": "Rq"
+    },
+    {
+      "name": "F4 方程: E6",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'Rl' 存在（声明 'E6'）",
+      "resolved_key": "Rl"
+    },
+    {
+      "name": "F4 方程: E7",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'J' 存在（声明 'E7'）",
+      "resolved_key": "J"
+    },
+    {
+      "name": "F4 方程: E8",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'V' 存在（声明 'E8'）",
+      "resolved_key": "V"
+    },
+    {
+      "name": "F4 方程: E9",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'V' 存在（声明 'E9'）",
+      "resolved_key": "V"
+    },
+    {
+      "name": "F4 方程: E10",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'nstar' 存在（声明 'E10'）",
+      "resolved_key": "nstar"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

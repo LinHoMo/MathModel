@@ -1,0 +1,235 @@
+{
+  "execution_id": "EXEC001",
+  "verification_id": "VR001",
+  "fidelity_status": "aligned",
+  "fidelity_score": 1.0,
+  "passed": 32,
+  "total": 32,
+  "checks": [
+    {
+      "name": "F1 变量可观测: 时段索引",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'period' 存在（声明 '时段索引'）",
+      "resolved_key": "period"
+    },
+    {
+      "name": "F1 变量可观测: 时段乘客到达率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'arr_p' 存在（声明 '时段乘客到达率'）",
+      "resolved_key": "arr_p"
+    },
+    {
+      "name": "F1 变量可观测: 时段出租车到达率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'arr_t' 存在（声明 '时段出租车到达率'）",
+      "resolved_key": "arr_t"
+    },
+    {
+      "name": "F1 变量可观测: 时段初排队长度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'q_len' 存在（声明 '时段初排队长度'）",
+      "resolved_key": "q_len"
+    },
+    {
+      "name": "F1 变量可观测: 期望等待时间",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'wait_time' 存在（声明 '期望等待时间'）",
+      "resolved_key": "wait_time"
+    },
+    {
+      "name": "F1 变量可观测: 期望排队长度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'queue_len' 存在（声明 '期望排队长度'）",
+      "resolved_key": "queue_len"
+    },
+    {
+      "name": "F1 变量可观测: 班次总收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit_total' 存在（声明 '班次总收益'）",
+      "resolved_key": "profit_total"
+    },
+    {
+      "name": "F1 变量可观测: 阈值排队长度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'threshold' 存在（声明 '阈值排队长度'）",
+      "resolved_key": "threshold"
+    },
+    {
+      "name": "F1 变量可观测: 系统空闲概率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'idle_prob' 存在（声明 '系统空闲概率'）",
+      "resolved_key": "idle_prob"
+    },
+    {
+      "name": "F1 变量可观测: 排队等待概率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'wait_prob' 存在（声明 '排队等待概率'）",
+      "resolved_key": "wait_prob"
+    },
+    {
+      "name": "F1 变量可观测: 蓄车净收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'gain_hold' 存在（声明 '蓄车净收益'）",
+      "resolved_key": "gain_hold"
+    },
+    {
+      "name": "F1 变量可观测: 放空净收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'gain_empty' 存在（声明 '放空净收益'）",
+      "resolved_key": "gain_empty"
+    },
+    {
+      "name": "F1 变量可观测: 值函数",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'value_fn' 存在（声明 '值函数'）",
+      "resolved_key": "value_fn"
+    },
+    {
+      "name": "F1 变量可观测: 决策变量",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'dec' 存在（声明 '决策变量'）",
+      "resolved_key": "dec"
+    },
+    {
+      "name": "F1 变量可观测: 求和指标",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'idx' 存在（声明 '求和指标'）",
+      "resolved_key": "idx"
+    },
+    {
+      "name": "F2 目标: J",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit_total' 存在（声明 'J'）",
+      "resolved_key": "profit_total"
+    },
+    {
+      "name": "F2 目标: Wq",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'wait_time' 存在（声明 'Wq'）",
+      "resolved_key": "wait_time"
+    },
+    {
+      "name": "F3 约束: n >= 0",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'q_len' 存在（声明 'n >= 0'）",
+      "resolved_key": "q_len"
+    },
+    {
+      "name": "F3 约束: lambda_t < c*mu",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'arr_t' 存在（声明 'lambda_t < c*mu'）",
+      "resolved_key": "arr_t"
+    },
+    {
+      "name": "F3 约束: d in {0,1}",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'dec' 存在（声明 'd in {0,1}'）",
+      "resolved_key": "dec"
+    },
+    {
+      "name": "F3 约束: Wq >= 0",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'wait_time' 存在（声明 'Wq >= 0'）",
+      "resolved_key": "wait_time"
+    },
+    {
+      "name": "F3 约束: n <= N_max",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'q_len' 存在（声明 'n <= N_max'）",
+      "resolved_key": "q_len"
+    },
+    {
+      "name": "F4 方程: E1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'idle_prob' 存在（声明 'E1'）",
+      "resolved_key": "idle_prob"
+    },
+    {
+      "name": "F4 方程: E2",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'wait_prob' 存在（声明 'E2'）",
+      "resolved_key": "wait_prob"
+    },
+    {
+      "name": "F4 方程: E3",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'wait_time' 存在（声明 'E3'）",
+      "resolved_key": "wait_time"
+    },
+    {
+      "name": "F4 方程: E4",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'queue_len' 存在（声明 'E4'）",
+      "resolved_key": "queue_len"
+    },
+    {
+      "name": "F4 方程: E5",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'gain_hold' 存在（声明 'E5'）",
+      "resolved_key": "gain_hold"
+    },
+    {
+      "name": "F4 方程: E6",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'gain_empty' 存在（声明 'E6'）",
+      "resolved_key": "gain_empty"
+    },
+    {
+      "name": "F4 方程: E7",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit_total' 存在（声明 'E7'）",
+      "resolved_key": "profit_total"
+    },
+    {
+      "name": "F4 方程: E8",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'value_fn' 存在（声明 'E8'）",
+      "resolved_key": "value_fn"
+    },
+    {
+      "name": "F4 方程: E9",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'value_fn' 存在（声明 'E9'）",
+      "resolved_key": "value_fn"
+    },
+    {
+      "name": "F4 方程: E10",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'threshold' 存在（声明 'E10'）",
+      "resolved_key": "threshold"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

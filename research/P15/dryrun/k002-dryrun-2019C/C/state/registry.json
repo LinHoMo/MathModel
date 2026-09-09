@@ -1,0 +1,940 @@
+{
+  "registry_version": 3,
+  "project": "C",
+  "updated_at": "2026-09-09T00:21:30+00:00",
+  "counters": {
+    "code": 2,
+    "execution_result": 2,
+    "verification_result": 2
+  },
+  "artifacts": {
+    "CODE001": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE001",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M-C",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T00:21:01+00:00",
+      "updated_at": "2026-09-09T00:21:01+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T00:21:01+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T00:21:01+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "import json\n# 外部 Agent 生成：mapping 撒谎——声明 '期望等待时间' 输出 Wq，但实际没有\nprint(json.dumps({\"nstar\": 14, \"J\": 12.5}))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M-C",
+        "solver_id": "S-2019C",
+        "output_mapping": {
+          "时段索引": "i",
+          "时段乘客到达率": "lambda_p",
+          "时段出租车到达率": "lambda_t",
+          "时段初排队长度": "n",
+          "期望等待时间": "Wq",
+          "期望排队长度": "Lq",
+          "班次总收益": "J",
+          "阈值排队长度": "nstar",
+          "系统空闲概率": "P0",
+          "排队等待概率": "Pw",
+          "蓄车净收益": "Rq",
+          "放空净收益": "Rl",
+          "值函数": "V",
+          "决策变量": "d",
+          "求和指标": "k",
+          "服务台数": "c",
+          "服务率": "mu"
+        },
+        "sha256": "4bc8a4a3dad888323519209a240e92bd81b803a6e5a0773a5e603c9d6139ac56"
+      }
+    },
+    "CODE002": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE002",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M-C",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T00:21:30+00:00",
+      "updated_at": "2026-09-09T00:21:30+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T00:21:30+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T00:21:30+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "import json\n# 外部 Agent 生成：mapping 撒谎——声明 '期望等待时间' 输出 wait_time，但实际没有\nprint(json.dumps({\"threshold\": 14, \"profit_total\": 12.5}))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M-C",
+        "solver_id": "S-2019C",
+        "output_mapping": {
+          "时段索引": "period",
+          "i": "period",
+          "时段乘客到达率": "arr_p",
+          "lambda_p": "arr_p",
+          "时段出租车到达率": "arr_t",
+          "lambda_t": "arr_t",
+          "时段初排队长度": "q_len",
+          "n": "q_len",
+          "期望等待时间": "wait_time",
+          "Wq": "wait_time",
+          "期望排队长度": "queue_len",
+          "Lq": "queue_len",
+          "班次总收益": "profit_total",
+          "J": "profit_total",
+          "阈值排队长度": "threshold",
+          "nstar": "threshold",
+          "系统空闲概率": "idle_prob",
+          "P0": "idle_prob",
+          "排队等待概率": "wait_prob",
+          "Pw": "wait_prob",
+          "蓄车净收益": "gain_hold",
+          "Rq": "gain_hold",
+          "放空净收益": "gain_empty",
+          "Rl": "gain_empty",
+          "值函数": "value_fn",
+          "V": "value_fn",
+          "决策变量": "dec",
+          "d": "dec",
+          "求和指标": "idx",
+          "k": "idx",
+          "服务台数": "servers",
+          "c": "servers",
+          "服务率": "serv_rate",
+          "mu": "serv_rate"
+        },
+        "sha256": "027f03ebeabb77dd6b6cb9b24c8b8593f3e7b718c1d7e455a51e7d33345fc135"
+      }
+    },
+    "EXEC001": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC001",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE001",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T00:21:01+00:00",
+      "updated_at": "2026-09-09T00:21:01+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T00:21:01+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T00:21:01+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "5cac178b0fcc",
+        "model_id": "M-C",
+        "status": "success",
+        "inputs": {},
+        "outputs": {
+          "nstar": 14,
+          "J": 12.5
+        },
+        "stdout": "{\"nstar\": 14, \"J\": 12.5}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 28,
+        "code_hash": "4bc8a4a3dad888323519209a240e92bd81b803a6e5a0773a5e603c9d6139ac56",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T08:21:01+0800",
+        "finished_at": "2026-09-09T08:21:01+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "时段索引": "i",
+            "时段乘客到达率": "lambda_p",
+            "时段出租车到达率": "lambda_t",
+            "时段初排队长度": "n",
+            "期望等待时间": "Wq",
+            "期望排队长度": "Lq",
+            "班次总收益": "J",
+            "阈值排队长度": "nstar",
+            "系统空闲概率": "P0",
+            "排队等待概率": "Pw",
+            "蓄车净收益": "Rq",
+            "放空净收益": "Rl",
+            "值函数": "V",
+            "决策变量": "d",
+            "求和指标": "k",
+            "服务台数": "c",
+            "服务率": "mu"
+          }
+        },
+        "code": "import json\n# 外部 Agent 生成：mapping 撒谎——声明 '期望等待时间' 输出 Wq，但实际没有\nprint(json.dumps({\"nstar\": 14, \"J\": 12.5}))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "EXEC002": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC002",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE002",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T00:21:30+00:00",
+      "updated_at": "2026-09-09T00:21:30+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T00:21:30+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T00:21:30+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "6ab72ffde2c8",
+        "model_id": "M-C",
+        "status": "success",
+        "inputs": {},
+        "outputs": {
+          "threshold": 14,
+          "profit_total": 12.5
+        },
+        "stdout": "{\"threshold\": 14, \"profit_total\": 12.5}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 29,
+        "code_hash": "027f03ebeabb77dd6b6cb9b24c8b8593f3e7b718c1d7e455a51e7d33345fc135",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T08:21:30+0800",
+        "finished_at": "2026-09-09T08:21:30+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "时段索引": "period",
+            "i": "period",
+            "时段乘客到达率": "arr_p",
+            "lambda_p": "arr_p",
+            "时段出租车到达率": "arr_t",
+            "lambda_t": "arr_t",
+            "时段初排队长度": "q_len",
+            "n": "q_len",
+            "期望等待时间": "wait_time",
+            "Wq": "wait_time",
+            "期望排队长度": "queue_len",
+            "Lq": "queue_len",
+            "班次总收益": "profit_total",
+            "J": "profit_total",
+            "阈值排队长度": "threshold",
+            "nstar": "threshold",
+            "系统空闲概率": "idle_prob",
+            "P0": "idle_prob",
+            "排队等待概率": "wait_prob",
+            "Pw": "wait_prob",
+            "蓄车净收益": "gain_hold",
+            "Rq": "gain_hold",
+            "放空净收益": "gain_empty",
+            "Rl": "gain_empty",
+            "值函数": "value_fn",
+            "V": "value_fn",
+            "决策变量": "dec",
+            "d": "dec",
+            "求和指标": "idx",
+            "k": "idx",
+            "服务台数": "servers",
+            "c": "servers",
+            "服务率": "serv_rate",
+            "mu": "serv_rate"
+          }
+        },
+        "code": "import json\n# 外部 Agent 生成：mapping 撒谎——声明 '期望等待时间' 输出 wait_time，但实际没有\nprint(json.dumps({\"threshold\": 14, \"profit_total\": 12.5}))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "VR001": {
+      "schema_version": "3.1",
+      "artifact_id": "VR001",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC001（failed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T00:21:01+00:00",
+      "updated_at": "2026-09-09T00:21:01+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T00:21:01+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T00:21:01+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC001",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "F1 变量可观测: 时段索引",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 时段乘客到达率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 时段出租车到达率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 时段初排队长度",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 期望等待时间",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 期望排队长度",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 班次总收益",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 阈值排队长度",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 系统空闲概率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 排队等待概率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 蓄车净收益",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 放空净收益",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 值函数",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 决策变量",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 求和指标",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F2 目标: J",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F2 目标: Wq",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: n >= 0",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: lambda_t < c*mu",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: d in {0,1}",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: Wq >= 0",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: n <= N_max",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E1",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E2",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E3",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E4",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E5",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E6",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E7",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E8",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E9",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E10",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          }
+        ],
+        "evidence_refs": [
+          "EXEC001"
+        ],
+        "started_at": "2026-09-09T00:21:01+00:00",
+        "finished_at": "2026-09-09T00:21:01+00:00",
+        "provenance": {
+          "engine": "execution.fidelity",
+          "experiment_idx": 0,
+          "fidelity_status": "misaligned",
+          "output_mapping": {
+            "时段索引": "i",
+            "时段乘客到达率": "lambda_p",
+            "时段出租车到达率": "lambda_t",
+            "时段初排队长度": "n",
+            "期望等待时间": "Wq",
+            "期望排队长度": "Lq",
+            "班次总收益": "J",
+            "阈值排队长度": "nstar",
+            "系统空闲概率": "P0",
+            "排队等待概率": "Pw",
+            "蓄车净收益": "Rq",
+            "放空净收益": "Rl",
+            "值函数": "V",
+            "决策变量": "d",
+            "求和指标": "k",
+            "服务台数": "c",
+            "服务率": "mu"
+          }
+        }
+      }
+    },
+    "VR002": {
+      "schema_version": "3.1",
+      "artifact_id": "VR002",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC002（failed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T00:21:30+00:00",
+      "updated_at": "2026-09-09T00:21:30+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T00:21:30+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T00:21:30+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC002",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "F1 变量可观测: 时段索引",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 时段乘客到达率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 时段出租车到达率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 时段初排队长度",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 期望等待时间",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 期望排队长度",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 班次总收益",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 阈值排队长度",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 系统空闲概率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 排队等待概率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 蓄车净收益",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 放空净收益",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 值函数",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 决策变量",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 求和指标",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F2 目标: J",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F2 目标: Wq",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: n >= 0",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: lambda_t < c*mu",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: d in {0,1}",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: Wq >= 0",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: n <= N_max",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E1",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E2",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E3",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E4",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E5",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E6",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E7",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E8",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E9",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E10",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          }
+        ],
+        "evidence_refs": [
+          "EXEC002"
+        ],
+        "started_at": "2026-09-09T00:21:30+00:00",
+        "finished_at": "2026-09-09T00:21:30+00:00",
+        "provenance": {
+          "engine": "execution.fidelity",
+          "experiment_idx": 0,
+          "fidelity_status": "misaligned",
+          "output_mapping": {
+            "时段索引": "period",
+            "i": "period",
+            "时段乘客到达率": "arr_p",
+            "lambda_p": "arr_p",
+            "时段出租车到达率": "arr_t",
+            "lambda_t": "arr_t",
+            "时段初排队长度": "q_len",
+            "n": "q_len",
+            "期望等待时间": "wait_time",
+            "Wq": "wait_time",
+            "期望排队长度": "queue_len",
+            "Lq": "queue_len",
+            "班次总收益": "profit_total",
+            "J": "profit_total",
+            "阈值排队长度": "threshold",
+            "nstar": "threshold",
+            "系统空闲概率": "idle_prob",
+            "P0": "idle_prob",
+            "排队等待概率": "wait_prob",
+            "Pw": "wait_prob",
+            "蓄车净收益": "gain_hold",
+            "Rq": "gain_hold",
+            "放空净收益": "gain_empty",
+            "Rl": "gain_empty",
+            "值函数": "value_fn",
+            "V": "value_fn",
+            "决策变量": "dec",
+            "d": "dec",
+            "求和指标": "idx",
+            "k": "idx",
+            "服务台数": "servers",
+            "c": "servers",
+            "服务率": "serv_rate",
+            "mu": "serv_rate"
+          }
+        }
+      }
+    }
+  },
+  "history": {}
+}

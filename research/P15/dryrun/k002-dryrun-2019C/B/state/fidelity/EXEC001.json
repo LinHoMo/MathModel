@@ -1,0 +1,235 @@
+{
+  "execution_id": "EXEC001",
+  "verification_id": "VR001",
+  "fidelity_status": "misaligned",
+  "fidelity_score": 0.0,
+  "passed": 0,
+  "total": 32,
+  "checks": [
+    {
+      "name": "F1 变量可观测: 时段索引",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '时段索引'（候选 ['时段索引', 'i'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 时段乘客到达率",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '时段乘客到达率'（候选 ['时段乘客到达率', 'lambda_p'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 时段出租车到达率",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '时段出租车到达率'（候选 ['时段出租车到达率', 'lambda_t'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 时段初排队长度",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '时段初排队长度'（候选 ['时段初排队长度', 'n'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 期望等待时间",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '期望等待时间'（候选 ['期望等待时间', 'Wq'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 期望排队长度",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '期望排队长度'（候选 ['期望排队长度', 'Lq'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 班次总收益",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '班次总收益'（候选 ['班次总收益', 'J'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 阈值排队长度",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '阈值排队长度'（候选 ['阈值排队长度', 'nstar'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 系统空闲概率",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '系统空闲概率'（候选 ['系统空闲概率', 'P0'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 排队等待概率",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '排队等待概率'（候选 ['排队等待概率', 'Pw'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 蓄车净收益",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '蓄车净收益'（候选 ['蓄车净收益', 'Rq'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 放空净收益",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '放空净收益'（候选 ['放空净收益', 'Rl'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 值函数",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '值函数'（候选 ['值函数', 'V'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 决策变量",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '决策变量'（候选 ['决策变量', 'd'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 求和指标",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '求和指标'（候选 ['求和指标', 'k'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F2 目标: J",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'J'（候选 ['班次总收益', 'J'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F2 目标: Wq",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'Wq'（候选 ['期望等待时间', 'Wq'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: n >= 0",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'n >= 0'（候选 ['时段初排队长度', 'n'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: lambda_t < c*mu",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'lambda_t < c*mu'（候选 ['时段出租车到达率', 'lambda_t'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: d in {0,1}",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'd in {0,1}'（候选 ['决策变量', 'd'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: Wq >= 0",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'Wq >= 0'（候选 ['期望等待时间', 'Wq'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: n <= N_max",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'n <= N_max'（候选 ['时段初排队长度', 'n'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E1",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E1'（候选 ['系统空闲概率', 'P0', '时段出租车到达率', 'lambda_t'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E2",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E2'（候选 ['排队等待概率', 'Pw', '时段出租车到达率', 'lambda_t', '系统空闲概率', 'P0'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E3",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E3'（候选 ['期望等待时间', 'Wq', '排队等待概率', 'Pw', '时段出租车到达率', 'lambda_t'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E4",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E4'（候选 ['期望排队长度', 'Lq', '时段出租车到达率', 'lambda_t', '期望等待时间', 'Wq'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E5",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E5'（候选 ['蓄车净收益', 'Rq', '期望等待时间', 'Wq'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E6",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E6'（候选 ['放空净收益', 'Rl'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E7",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E7'（候选 ['班次总收益', 'J', '决策变量', 'd', '蓄车净收益', 'Rq', '放空净收益', 'Rl'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E8",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E8'（候选 ['值函数', 'V', '蓄车净收益', 'Rq', '放空净收益', 'Rl'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E9",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E9'（候选 ['值函数', 'V'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E10",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E10'（候选 ['阈值排队长度', 'nstar', '时段出租车到达率', 'lambda_t'] 均未命中输出 key）",
+      "resolved_key": null
+    }
+  ],
+  "engine": "execution.fidelity"
+}

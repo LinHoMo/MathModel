@@ -27,24 +27,36 @@ FIDELITY_ENGINE = "execution.fidelity"
 
 # ------------------------------------------------------------ checks 生成
 
-def _candidate_names(decl: dict, extra: list[str] | None = None) -> list[str]:
-    """从声明项提取候选输出名：name / symbol / 其他别名。"""
+def _candidate_names(decl: dict, extra: list[str] | None = None,
+                     output_mapping: dict | None = None) -> list[str]:
+    """从声明项提取候选输出名：mapping 值（优先）→ name → symbol → 其他别名。
+
+    output_mapping = {声明名或符号: 代码输出 key}，由外部 Agent 交付 code 时
+    显式声明（存于 CODE artifact，可审计）。它只解决命名空间翻译
+    （同一实体的不同名字），不掩盖实体缺失（mapping 和输出都没有 → 仍失败）。
+    """
     names: list[str] = []
+    mapping = output_mapping or {}
     for key in ("name", "symbol"):
         v = decl.get(key)
         if isinstance(v, str) and v.strip():
-            names.append(v.strip())
+            mapped = mapping.get(v.strip())
+            if mapped and mapped not in names:
+                names.append(mapped)
+            if v.strip() not in names:
+                names.append(v.strip())
     for v in extra or []:
         if v and v not in names:
             names.append(v)
     return names
 
 
-def fidelity_checks_from_ir(model_ir: dict, experiment_idx: int = 0) -> list[dict]:
+def fidelity_checks_from_ir(model_ir: dict, experiment_idx: int = 0,
+                            output_mapping: dict | None = None) -> list[dict]:
     """把 MODEL_IR 声明转成确定性检查清单（K002 的 model_fidelity 以此测量）。
 
     检查族（每项独立、可归因）：
-      F1 variables   —— 每个变量的 name/symbol 必须能在执行输出中解析
+      F1 variables   —— 每个变量的 name/symbol（经 output_mapping 翻译）可在输出中解析
       F2 objectives  —— 每个目标的 expression 引用的变量（variables_refs → name/symbol）可观测
       F3 constraints —— 每个约束的 variables_refs 引用的变量可观测
       F4 equations   —— 每个方程的 variables_refs 引用的变量可观测
@@ -63,18 +75,21 @@ def fidelity_checks_from_ir(model_ir: dict, experiment_idx: int = 0) -> list[dic
 
     for v in model_ir.get("variables") or []:
         by_id[v.get("variable_id")] = v
-        names = _candidate_names(v)
+        names = _candidate_names(v, output_mapping=output_mapping)
         if not names:
             continue
         _reg(f"F1 变量可观测: {v.get('name') or v.get('symbol')}",
              "output_key_exists", v.get("name") or v.get("symbol"), names)
-        vr = v.get("value_range") or {}
-        lo, hi = vr.get("min"), vr.get("max")
-        if lo is not None or hi is not None:
-            _reg(f"F5 变量范围: {v.get('name') or v.get('symbol')} ∈ "
-                 f"[{lo}, {hi}]", "output_range",
-                 v.get("name") or v.get("symbol"), names,
-                 {"path": "", "min": lo, "max": hi})
+        # value_range 生产数据形态不统一（dict / str / null）：仅 dict 且
+        # 含 min/max 时生成 F5 范围检查，其余形态跳过（不因形态误报）
+        vr = v.get("value_range")
+        if isinstance(vr, dict):
+            lo, hi = vr.get("min"), vr.get("max")
+            if lo is not None or hi is not None:
+                _reg(f"F5 变量范围: {v.get('name') or v.get('symbol')} ∈ "
+                     f"[{lo}, {hi}]", "output_range",
+                     v.get("name") or v.get("symbol"), names,
+                     {"path": "", "min": lo, "max": hi})
 
     def _refs_checks(kind_label: str, items: list[dict], prefix: str) -> None:
         for it in items:
@@ -84,11 +99,14 @@ def fidelity_checks_from_ir(model_ir: dict, experiment_idx: int = 0) -> list[dic
                     (x for x in model_ir.get("variables") or []
                      if x.get("variable_id") == rid), None)
                 if v:
-                    refs.extend(_candidate_names(v))
+                    refs.extend(_candidate_names(v, output_mapping=output_mapping))
             if refs:
-                _reg(f"{prefix} {kind_label}: {it.get('expression') or it.get('name')}",
-                     "output_key_exists",
-                     it.get("expression") or it.get("name"), list(dict.fromkeys(refs)))
+                # expression 缺失时用声明项的 id（防 F4 name=None）
+                label = (it.get("expression") or it.get("name")
+                         or it.get("equation_id") or it.get("objective_id")
+                         or it.get("constraint_id") or "未命名")
+                _reg(f"{prefix} {kind_label}: {label}",
+                     "output_key_exists", label, list(dict.fromkeys(refs)))
 
     _refs_checks("目标", model_ir.get("objectives") or [], "F2")
     _refs_checks("约束", model_ir.get("constraints") or [], "F3")
@@ -99,12 +117,14 @@ def fidelity_checks_from_ir(model_ir: dict, experiment_idx: int = 0) -> list[dic
 # ---------------------------------------------------------------- 计算
 
 def check_fidelity(model_ir: dict, execution_data: dict,
-                   experiment_idx: int = 0) -> dict:
+                   experiment_idx: int = 0,
+                   output_mapping: dict | None = None) -> dict:
     """对 execution 跑 MODEL_IR 派生的 fidelity 检查。
 
     返回 {status, fidelity_score, passed, total, checks}：
       status = aligned（score==1）/ misaligned（0<score<1）/
                unverifiable（execution 非 success 或 MODEL_IR 无可用声明）
+    output_mapping = {声明名或符号: 代码输出 key}，见 fidelity_checks_from_ir。
     """
     if execution_data.get("status") != "success":
         return {"status": "unverifiable", "fidelity_score": None,
@@ -113,7 +133,7 @@ def check_fidelity(model_ir: dict, execution_data: dict,
                             "passed": False,
                             "detail": f"execution status={execution_data.get('status')}，"
                                       "无输出可做 fidelity 映射"}]}
-    checks = fidelity_checks_from_ir(model_ir, experiment_idx)
+    checks = fidelity_checks_from_ir(model_ir, experiment_idx, output_mapping)
     if not checks:
         return {"status": "unverifiable", "fidelity_score": None,
                 "passed": 0, "total": 0,
@@ -138,7 +158,8 @@ def check_fidelity(model_ir: dict, execution_data: dict,
 
 
 def verify_fidelity(project_dir: str | Path, model_ir: dict, exec_id: str,
-                    experiment_idx: int = 0) -> dict:
+                    experiment_idx: int = 0,
+                    output_mapping: dict | None = None) -> dict:
     """端到端：从 registry 取 execution_result，做 fidelity 检查，
     注册 VR（provenance 标 execution.fidelity）+ 写 fidelity 报告文件。
 
@@ -155,14 +176,20 @@ def verify_fidelity(project_dir: str | Path, model_ir: dict, exec_id: str,
     if art is None:
         raise ValueError(f"execution_result 不存在: {exec_id}")
     exec_data = dict(art.data or {})
+    if output_mapping is None:
+        # 未显式传入时，回退到执行产物的 provenance.output_mapping
+        # （register_code 会把它写进 EXEC provenance 由 execute_code 透传）
+        output_mapping = exec_data.get("provenance", {}).get("output_mapping") \
+            if isinstance(exec_data.get("provenance"), dict) else None
 
-    fid = check_fidelity(model_ir, exec_data, experiment_idx)
+    fid = check_fidelity(model_ir, exec_data, experiment_idx, output_mapping)
     checks = fid["checks"]
     # 复用 VR 框架注册验证产物
     vr = validate_execution(project_dir, exec_id, checks,
                             provenance={"engine": FIDELITY_ENGINE,
                                         "experiment_idx": experiment_idx,
-                                        "fidelity_status": fid["status"]})
+                                        "fidelity_status": fid["status"],
+                                        "output_mapping": output_mapping})
     # fidelity 报告文件（与 execution 同目录系，K002 测量层直接消费）
     rep_dir = project_dir / "state" / "fidelity"
     rep_dir.mkdir(parents=True, exist_ok=True)

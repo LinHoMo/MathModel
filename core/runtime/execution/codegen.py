@@ -46,12 +46,14 @@ def register_code(project_dir: str | Path, code: str, *,
                   framework: str | None = None,
                   model_id: str | None = None,
                   solver_id: str | None = None,
+                  output_mapping: dict | None = None,
                   title: str | None = None,
                   created_by: str = "external_agent",
                   question: str | None = None) -> Any:
     """把外部 Agent 产出的 code 登记为 CODE 一等 artifact。
 
-    data 契约：code / language / framework / model_id / solver_id / sha256。
+    data 契约：code / language / framework / model_id / solver_id /
+               output_mapping（声明名→输出 key，可审计）/ sha256。
     code 为空或 language 为空时抛 ValueError（不登记空壳）。
     """
     if not code or not code.strip():
@@ -67,6 +69,7 @@ def register_code(project_dir: str | Path, code: str, *,
         data={"code": code, "language": language,
               "framework": framework, "model_id": model_id,
               "solver_id": solver_id,
+              "output_mapping": output_mapping or {},
               "sha256": sha256_text(code)},
         activate=True, created_by=created_by)
     reg.save()
@@ -106,6 +109,11 @@ def execute_code(project_dir: str | Path, code_artifact_id: str, *,
         code=code, inputs=inputs or {}, timeout_seconds=timeout_seconds)
     adapter = adapter or LocalPythonAdapter()
     xr = adapter.execute(plan)
+    # output_mapping 透传进 EXEC provenance：fidelity 校验时无需再次显式传入
+    prov = dict(xr.provenance or {})
+    if data.get("output_mapping"):
+        prov["output_mapping"] = data["output_mapping"]
+    xr.provenance = prov
 
     g = EvidenceGraph(reg, project_dir / "state" / "evidence_graph.json")
     if g.path.exists():
@@ -130,12 +138,16 @@ def run_code_pipeline(project_dir: str | Path, model_ir: dict, code: str, *,
                       framework: str | None = None,
                       model_id: str | None = None,
                       solver_id: str | None = None,
+                      output_mapping: dict | None = None,
                       inputs: dict[str, Any] | None = None,
                       adapter: ExecutionAdapter | None = None,
                       experiment_idx: int = 0,
                       question: str | None = None) -> dict:
     """K002 一个 run 的 harness 侧完整闭环：
     register_code → execute_code → verify_fidelity。
+
+    output_mapping = {声明名/符号: 代码输出 key}：外部 Agent 交付 code 时声明，
+    存于 CODE artifact（可审计），经 EXEC provenance 透传给 fidelity 校验。
 
     返回 {code_id, exec_id, exec_status, verification_id,
           fidelity_status, fidelity_score, fidelity_report}
@@ -145,7 +157,8 @@ def run_code_pipeline(project_dir: str | Path, model_ir: dict, code: str, *,
     project_dir = Path(project_dir)
     c = register_code(project_dir, code, language=language,
                       framework=framework, model_id=model_id,
-                      solver_id=solver_id, question=question)
+                      solver_id=solver_id, output_mapping=output_mapping,
+                      question=question)
     x = execute_code(project_dir, c.artifact_id, inputs=inputs,
                      adapter=adapter, question=question)
     vr = verify_fidelity(project_dir, model_ir, x.artifact_id,

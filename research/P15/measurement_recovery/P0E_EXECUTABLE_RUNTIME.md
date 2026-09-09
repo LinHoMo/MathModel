@@ -33,7 +33,8 @@ MODEL_IR ──→ ExecutionPlan ──→ Code Generation* ──→ Code Inter
 | **P0-E5 Validation** | `core/runtime/execution/validation.py` + ids.py（VR 类型）+ evidence_graph（verified_by 边） | **三状态铁律机械落地**：ExecutionResult → 确定性检查集 → VerificationResult（VR 一等 artifact）→ verified_by 边。VR.status：passed⟺execution success 且全检通过；failed⟺success 但有可归因失败项；invalid⟺execution 非 success（不得 passed） |
 | **P0-E6 Fidelity** | `core/runtime/execution/fidelity.py` + validation.py（output_key_exists 别名解析） | **第二扇门（Model→Code 语义保真）测量原语**：MODEL_IR 声明（variables/objectives/constraints/equations 的 name/symbol）→ 确定性映射检查（F1-F5）→ fidelity_score=passed/total；execution success=1 但 fidelity<1 如实记录（misaligned） |
 | **P0-E7 CodeGen 接入** | `core/runtime/execution/codegen.py`（register_code / execute_code / run_code_pipeline） | **外部 Agent 产出的 code 进入 harness 的登记/执行/校验闭环**：CODE artifact（sha256 自动计算，solver/model 绑定）→ 真实执行（EXEC）→ fidelity 校验（VR + state/fidelity/）。core 不生成代码；"生成的代码是否执行了声明的模型"由 fidelity 机械回答 |
-| 测试 | `tests/unit/test_execution_adapter.py` + `tests/integration/test_execution_runtime.py` + `tests/integration/test_replay_execution.py` + `tests/integration/test_execution_validation.py` + `tests/integration/test_execution_fidelity.py` + `tests/integration/test_execution_codegen.py` | 12 + 4 + 4 + 8 + 9 + 9 用例 |
+| **P0-E8 K002 dry-run** | `research/P15/analysis/k002_dryrun_v2.py` + `research/P15/dryrun/K002_DRYRUN_REPORT.md` | **G4（Execution validity）预检**：真实 2019_C MODEL_IR × 五场景外部 code，判定 5/5 符合；修复 3 个真实测量问题（value_range 形态 / 命名空间错位→output_mapping 契约 / F4 name=None）；执行级终点（execution_success_rate / model_fidelity / evidence_completeness）机械可测 |
+| 测试 | `tests/unit/test_execution_adapter.py` + `tests/integration/test_execution_runtime.py` + `tests/integration/test_replay_execution.py` + `tests/integration/test_execution_validation.py` + `tests/integration/test_execution_fidelity.py` + `tests/integration/test_execution_codegen.py` | 12 + 4 + 4 + 8 + 13 + 9 用例 |
 
 ## 3. ExecutionResult 一等 artifact 契约（用户指定字段全集）
 
@@ -87,15 +88,15 @@ MODEL_IR ──→ ExecutionPlan ──→ Code Generation* ──→ Code Inter
 | `tests/integration/test_execution_validation.py` | 8 passed（三状态铁律：passed/failed/invalid；failed execution 不得 passed；范围/字段/数值检查可归因；VR 注册 + verified_by 边；未知 exec_id 报错） |
 | `tests/integration/test_execution_fidelity.py` | 9 passed（F1-F5 映射检查；success=1 但缺声明变量→misaligned；symbol 别名解析；范围越界；failed/unverifiable；端到端 VR+报告） |
 | `tests/integration/test_execution_codegen.py` | 9 passed（CODE 登记契约/sha256/空壳拒绝；CODE→EXEC 执行与 code_hash 一致性；failed 代码如实 failed；run_code_pipeline 端到端：aligned / success 但错模型→misaligned / failed→unverifiable） |
-| 全量 pytest | **826 passed / 4 skipped**（817 + 9 新） |
+| `tests/integration/test_execution_fidelity.py` 回归补充 | +4 passed（value_range str 形态防御 / mapping 命名空间翻译 / mapping 撒谎检测 / F4 缺 expression 用 id 命名） |
+| 全量 pytest | **830 passed / 4 skipped**（826 + 4 新） |
 
 ## 7. 后续（P0-E 余项，按用户优先级 v2）
 
-- **P0-E8 K002 dry-run**：用 1-2 道题完整走 run_code_pipeline（外部 Agent 生成 code →
-  harness 登记/执行/校验），预检执行级终点可测量（execution_success_rate /
-  invalid_model_rate / correction_count / model_fidelity / evidence_completeness），
-  即五 Gate 的 G4（Execution validity）。
+- **K002 正式冻结流程**：题目区分度预检（G2）→ 五 Gate 全过 → PREREGISTERED →
+  FROZEN；dry-run 已确认 G4（Execution validity）机械可测，output_mapping 契约
+  将写入冻结规格（外部 Agent 交付 code 必须同时交付输出映射，可审计）。
 - **Environment Manifest 演化**：environment_hash → 完整执行环境声明（随机种子/
   包版本/OS/浮点/外部数据/时间/网络/求解器非确定性）。
-- **K002 冻结顺序**：P0-E runtime validation → K002 dry-run → 题目区分度检查 →
+- **K002 冻结顺序**：P0-E runtime validation ✅ → K002 dry-run ✅ → 题目区分度检查 →
   五 Gate → PREREGISTERED → FROZEN。
