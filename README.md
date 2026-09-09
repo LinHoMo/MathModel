@@ -14,7 +14,7 @@ Problem → Model Construction → Model Artifact → Execution → Validation
 > 人工建模者都可以作为可插拔执行器接入，不反过来定义系统
 > （**The Agent Is Not The State**）。
 
-核心组件：Artifact Registry（稳定 ID + 生命周期）· Typed Evidence Graph（19 种
+核心组件：Artifact Registry（稳定 ID + 生命周期）· Typed Evidence Graph（23 种
 关系 + 失效传播 + Revision lineage）· Workflow DAG（15 节点，反馈环，Per-Question
 展开）· Wave Execution（波次并行）· Research Quality（七维质量层）· Runtime
 Contract（冻结语义）· Deterministic Replay（重放审计）。
@@ -103,7 +103,7 @@ P1-VS-001 已首次跑通完整闭环：M1（缺陷模型）→ 真实执行 →
 | 实验 | 状态 | 结论 |
 |---|---|---|
 | **P15-K001**（2×2×rep 预注册：Knowledge × Case + Sham） | ✅ CLOSED（55 runs，盲评，DATA FREEZE，配对分析） | Δ_K = +2.14 CI[+0.00, +6.41] → **negative result**；Sham > K 提示"更多上下文"与"建模知识"须分离；RQ5 词表错位为 tertiary measurement limitation |
-| **P15-K002**（Model Representation Efficacy：F / S / S+V 三臂） | 🔒 **FROZEN**（38 文件哈希锁定，rubric v1.1，五 Gate 全 PASS） | 预检 6 题区分度验证；v1.1 重评证实 L2 区分度恢复（E4 候选对比为唯一区分要素）；正式实验在 P1 闭环之后执行 |
+| **P15-K002**（Model Representation Efficacy：F / S / S+V 三臂） | ✅ **CLOSED**（108 runs 盲评，配对分析） | RQ1 S−F(MCQ)=−4.85 CI[−7.98,−2.22] **NEGATIVE**（不进 P15.2）；SV−F(VAL) +4.81 POSITIVE；报告 nalysis/reports/P15-K002-REPORT.md |
 | **P1**（Model Construction Loop） | ✅ **闭环**（VS-001 7/7 验收 PASS） | Gap Audit（11 环节）→ P1 计划第 2 版（C1–C10）→ 垂直切片 M1 FAIL → M2 PASS → Replay 可重现；C1（MODEL_IR 升入 core）已完成，C5–C10 按计划推进 |
 
 - 协议/工具链：`research/P15/protocol/`（预注册、冻结规格、rubric、prompt 模板）
@@ -125,7 +125,7 @@ py -3.12 core/tools/orchestrator.py my-problem         # V3 DAG 干跑计划
 py -3.12 core/tools/orchestrator.py my-problem --execute   # 真实执行（登记 Artifact/Evidence/State）
 
 # 验证产物完整性（交付前必跑）
-py -3.12 core/tools/validate.py                        # 项目级 57 项校验
+py -3.12 core/tools/validate.py                        # 项目级 58 项校验
 py -3.12 core/tools/catalog_check.py --check           # 双视图三方一致性
 py -3.12 -m pytest tests -q                            # 单元/集成/端到端（以 STATUS.md 实测为准）
 ```
@@ -188,7 +188,7 @@ STATUS.md 当前口径为准。**
 ```text
 # V3 运行时
 py -3.12 core/tools/orchestrator.py <项目> [--execute]   # DAG 干跑 / 真实执行
-py -3.12 core/tools/validate.py                          # 项目级 57 项校验
+py -3.12 core/tools/validate.py                          # 项目级 58 项校验
 py -3.12 core/tools/catalog_check.py --check             # catalog 三方一致
 py -3.12 core/tools/catalog_check.py --check-terminology # 术语零残留
 py -3.12 core/tools/replay.py <项目> [<run_id> [diff <run_id>]]   # 重放 / 差异归因

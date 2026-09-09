@@ -196,11 +196,11 @@ MathModelSkills 采用角色化架构，把「一道赛题 → 一篇论文」�
 
 - **单步门禁**：`python core/tools/gate.py <项目> <hand> <agent>`，由脚本判定而非人工勾选
 - **全链路门禁**：`python core/tools/gate.py <项目> all`
-- **项目级校验**：`python core/tools/validate.py`（57 项，覆盖 L1–L6）
+- **项目级校验**：`python core/tools/validate.py`（58 项，覆盖 L1–L6）
 - **单项目校验**：`python core/tools/validate_project.py <项目>`
 - **测试套件**：`python -m pytest tests -q`（unit / integration / e2e 三层）
 
-### validate.py 57 项检查分布
+### validate.py 58 项检查分布
 
 | 层 | 项数 | 覆盖内容 |
 |---|---|---|

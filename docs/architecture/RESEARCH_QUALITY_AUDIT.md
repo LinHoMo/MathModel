@@ -21,7 +21,7 @@ ARCHIVAL-NOTE -->
 | Decision Quality | DecisionLog（仅记录） | `core/runtime/decisions/log.py` | — | Decision(knowledge_refs…) | ✅ 追踪字段 | **无审查器**：引用的知识/证据死亡后决策仍 active；required_validation 无人验收 |
 | Problem Quality | **无** | — | — | — | — | question/problem artifacts 无任何质量检查 |
 | Reproducibility | 无 V3 检查（legacy 有 repro_checklist） | `core/tools/validation/repro_checklist.py`（legacy） | — | — | — | V3 路径无确定性重放检查 |
-| 文本/格式护栏 | guardrails + validate.py 57 项 | `core/validators/modules/` | 文件 | 检查项 | ✅ | 与研究质量正交，不在 P9 范围 |
+| 文本/格式护栏 | guardrails + validate.py 58 项 | `core/validators/modules/` | 文件 | 检查项 | ✅ | 与研究质量正交，不在 P9 范围 |
 | 5 维评分卡（legacy） | score_compute/aggregate_scores | `core/tools/evaluation/` | 项目产物 | 分数卡 | ⚠️ | V2 遗产，黑箱总分味道浓；P9 不扩展它，也不对接（避免双头分数） |
 
 ## 2. 重复计算识别（Q2）

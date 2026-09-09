@@ -60,8 +60,7 @@ class RuntimeSession:
             raise SessionError("questions 不能为空")
         self.questions = list(questions)
         # audit FIX-2.5：读取项目 inputs 题面 → 结构化 representation
-        # （缺失 → None，建模节点回退 legacy 粗画像 source=legacy_fallback；
-        #  格式错误 → 明确报错，禁止静默回退）
+        # （缺失 → None，建模节点如实处理；格式错误 → 明确报错，禁止回退）
         self.problem_repr = load_problem_representation(self.project_dir)
         # Hardening P3：外部 executor 溯源（model_provider/model_version/
         # token_cost/decision）；additive，None 时记录为 null

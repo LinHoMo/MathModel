@@ -2,8 +2,9 @@
 """V3 问题表示层（audit FIX-2.5）：把项目 inputs 的题面/规格解析为
 结构化 ProblemRepresentation，供 features 与建模节点使用。
 
-缺失时回退到 legacy 6 键粗画像（source=legacy_fallback）；格式错误
-明确报错（禁止静默回退掩盖损坏）。
+来源单一真源：inputs/question_spec.json（结构化）或 inputs/problem.txt
+（纯文本）。两者皆缺 → 返回 None（节点如实处理，禁止回退掩盖）。
+格式错误明确报错（禁止静默回退掩盖损坏）。
 """
 
 from dataclasses import dataclass, field, asdict
@@ -23,7 +24,7 @@ class ProblemRepresentation:
     constraints: list[dict[str, Any]] = field(default_factory=list)
     data: list[dict[str, Any]] = field(default_factory=list)
     delivery: list[dict[str, Any]] = field(default_factory=list)
-    source: str = "question_spec"          # question_spec | legacy_fallback
+    source: str = "question_spec"          # question_spec | problem_txt
     raw_text: str = ""
 
     def as_dict(self) -> dict[str, Any]:

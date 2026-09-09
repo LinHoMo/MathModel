@@ -1003,14 +1003,14 @@ class DefaultNodeExecutor:
 
         audit FIX-2.5：有结构化题面（ProblemRepresentation）时，Problem
         artifact 携带题面内容（background/problems/constraints/data/delivery），
-        features 粗画像标记 source=legacy_fallback 仅作回退。
+        无题面表示时 source 如实标记 "none"（禁止 legacy 回退掩盖缺失）。
         """
         pr = getattr(self, "problem_repr", None)
         title = self.features.get("problem_title", "赛题")
         if pr is not None and pr.background:
             title = pr.background.strip().splitlines()[0][:60] or title
         if not self.registry.list_by_type("problem"):
-            pdata = {"source": pr.source if pr is not None else "legacy_fallback"}
+            pdata = {"source": pr.source if pr is not None else "none"}
             if pr is not None:
                 pdata.update({
                     "background": pr.background,
