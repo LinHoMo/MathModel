@@ -1,0 +1,109 @@
+{
+  "submission_id": "47378190-96da-4dac-b2ff-5d2a386ecbe0",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 显式条件清单: 天数/起点/截止/负重/耗尽/三天气/停留行走挖矿消耗/起点一次购买/终点半价/村庄2倍/多人规则"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "§1 隐式条件: 购买与消耗先后(先消耗后购买)、沙暴日挖矿、到达终点当天消耗、多人同购4倍价"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q3 覆盖三关, 但未显式提及 Result.xlsx 结算文件交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 4 条含处理方案"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "类型=DP/MDP+博弈, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量 9 项含符号/单位/类型"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数含来源: θ_v=2、θ_r=0.5、P_s 校准"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含类型与合理性"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 max m_T/Q2 max E[m_T]/Q3 协同+纳什, 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束 7 条(负重/生存/截止/行动/购买/矿山时序)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理-题面一致(确定DP与MDP采纳、MILP校验、贪心基线); 机理-方程一致(E1-E5+边界终止); 候选 4 项含选择依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 5 个+边界终止, 符号自洽"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "倒推 DP 记忆化+支配剪枝、值迭代、同步迭代 DP、耦合迭代不动点, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "倒推 DP 为一次性精确递推, 无迭代收敛问题(主求解器)"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "5 组随机起点均值±标准差, 未提 seed=42"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果预期合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "基线=直达最短路径策略(命名启发式对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "价格/消耗/挖矿收益 ±20%, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 W→0/截止→∞/沙暴→0(3类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖期望资金/收敛/多玩家不动点/cv<10%"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

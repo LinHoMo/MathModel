@@ -1,0 +1,109 @@
+{
+  "submission_id": "04fc6d82-7d15-4385-92fb-e43b99546eb4",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:23:46+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "parameters P1-P12 完整提取表1全部数值（[20,23,18]等9组参数、H=28800、q=0.01、[600,1200]），与题面表1逐条一致"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1（RGV单执行机构）与A5（初始状态：全空闲、RGV在1号位）识别隐式条件并给出推导依据；C1 source='物理限制'"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "捕获8h班时（H=28800）与3组参数回放实验（X1-X3），但未显式识别'填入附件2 EXCEL表'的交付格式"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A4对'约1%故障'给出独立同分布假设与处理方案；A3对'两道工序不同CNC'给出解释"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=optimization secondary=simulation，判定为调度优化（混合整数规划）与gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "variables V1-V10 声明完整并区分 state/decision/derived 类型（RGV位置、CNC状态、决策、产量、完工时刻、在制品）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "parameters P1-P12 全部有 source='题目' 与取值；方程符号 m/g/u/w/H/q/a,b 均在参数集内"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "assumptions A1-A6 显式、带 type（mechanism/simplification/projection/calibration）与 rationale，可检验"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 均为最大化班次产量/期望产量，与题目'给出调度策略和系统作业效率'一致；机制M1可产生N，约束C1-C6不与目标冲突"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1单资源、C2时间窗、C3移动时间、C4先后序、C5容量、C6截止——关键约束齐备且方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理家族（排序优化0-1规划）与调度问题一致；E2方程与机理对应（完成时刻递推）；E3机理支撑产量目标且约束含单RGV/先后序；E4 candidates 4个（optimization/simulation/DP/MDP）给出选择/排除依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 含 latex/类型/derivation_trace，初始状态由A5给出；方程符号均已在 variables/parameters 声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "solvers S1 分支定界解MIP、S2 轮询启发式、S3 蒙特卡洛样本均值——与模型类型（整数规划/随机故障）匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "盲评包无代码、无执行日志、无 exit code，仅 implementation_ref 描述，无法验证可执行性"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无 experiments[].results 或 solvers[].convergence 字段，仅有 expected_outputs 计划，无收敛证据"
+    },
+    "L3.4": {
+      "score": 0,
+      "evidence": "无 multi_seed/reproducibility 字段，S3 仅提及固定随机数发生器，无多seed方差或replay记录"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无任何实际数值结果（expected_outputs 仅为计划），无法核验结果合理性"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 以轮询贪心策略为基线并设'MIP应不小于贪心解'判据，但未报告实际对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 对移动时间与上下料时间±10%扰动（敏感参数）观察班次产量变化率，目标O2"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V4 含2类极限检验（清洗时间→0、移动时间→0）并预期产量趋近加工时间极限，与C3瓶颈主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 目标分别对应 O1/O2/O4/O3，覆盖C1-C4全部核心主张（上界、策略、瓶颈、鲁棒性）"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C4 均有 evidence_refs，但 C2-C4 标注 status=hypothesis 未决，仅C1=supported"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 2,
+    "L4_total": 8,
+    "overall": 33
+  },
+  "failure_modes": [],
+  "notes": "结构化 MODEL IR 完整（L2 满分），但盲评包无代码执行与数值结果，L3 缺证据；L4 验证设计完整但多数结果未报告。"
+}

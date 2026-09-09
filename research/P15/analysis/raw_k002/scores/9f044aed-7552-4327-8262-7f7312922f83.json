@@ -1,0 +1,109 @@
+{
+  "submission_id": "9f044aed-7552-4327-8262-7f7312922f83",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全（板宽/航迹约束/调头规则/时间范围 t=0..300），Q1-Q4 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（弧长参数化/法向间隙判据）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2023A 无文件交付要求；O1-O4 输出（位置速度序列/终止时刻/最短航迹）全"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 有：龙头初始位置极角起点（取 θ_A=32π 整圈起点）、其他题面歧义，均有 interpretations/adopted/justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=differential_geometry secondary=[numerical_optimization]，与2023A曲线几何gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 模拟位置速度/O2 终止时刻/O3 p_min/O4 最短 s_T，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 弧长参数/C2 弦长约束/C3 法向间隙，关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E3（螺线弧长/曲率/法向间隙）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 弧长积分+反解（自适应积分+二分）/S2 曲线求根（牛顿），匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V2 积分容差与步长加密验证收敛（声明，无实际数值）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 5 seeds 描述（数值积分容差与求根初值配置），无实际数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 圆弧路径解析解对照弧长与曲率（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V3 板宽±10% 灵敏度，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V4 极限检验（存在），无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V6 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C5 全 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 35
+  },
+  "failure_modes": [],
+  "notes": ""
+}

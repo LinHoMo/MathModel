@@ -1,0 +1,111 @@
+{
+  "submission_id": "ec1b8ca1-f91e-4d4c-9ff4-9b7889463e85",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:33:50+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 1,
+      "evidence": "核心规则/参数大部分提取正确（负重C1、行走2倍P9、挖矿3倍P10、村庄2倍P5、退货半价P6、起点一次性购买C5），但遗漏'到达矿山当天不能挖矿'、'沙暴日可挖矿'及 Q3 的 2k 倍行走消耗与 4 倍村庄价格规则"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1 马尔可夫状态、A4 风险中性、A5 在线天气先验——均给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q3 目标/实验覆盖（X1-X3 分关卡），但 Result.xlsx 填入与注2'当日消耗完毕后剩余'口径未显式识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A3 天气系数、A5 先验取历史分布），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=dynamic_programming secondary=optimization，序贯资源决策判定正确（网络流/贪心排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V7 声明完整（位置/水/食物/资金/行动/天气/终局资金）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P11 有来源，但 E2 中 buy/refund 与 E5 中 g_t^(i) 未在变量/参数表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 带类型与依据（马尔可夫性、风险中性、先验近似）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1确定性 max m_T/O2 期望 max E[m_T]/O3 多玩家均衡与 Q1-Q3 对应"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1-C5 核心约束齐备，但矿山到达日不能挖矿、沙暴日可挖矿、Q3 的 2k 行走消耗与 4 倍村庄价约束缺失"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "E1机理（确定性/期望 Bellman）对 Q1/Q2 正确；E3目标被机制支撑；E4 candidates 4个给依据；但 M3 多玩家交互机理仅覆盖挖矿 g_0/k，未纳入 2k 行走/4 倍村庄交互"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E5 含 Bellman 递推结构，但 buy/refund/g_t^(i) 符号未声明，无初始资源/资金条件"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3（逆推DP/滚动时域期望外推/迭代最优反应）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V5 均衡收敛性检验为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 声明多 seed 在线仿真 CV<5%，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C1-C3 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 手工可解短关卡与 DP 对照（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 c_w/c_f/g_0 各±20%扰动（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V3 极限2类（W_max→∞ 多买多带、T→∞ 稳态挖矿）且预期行为与主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 目标覆盖 O1-O3 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1-C3 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 7,
+    "L2_total": 11,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 29
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "穿越沙漠 DP 建模主体正确；缺陷：矿山到达日/沙暴日/Q3 交互规则遗漏、Result.xlsx 口径未识别、符号未声明、L3 缺执行证据。"
+}

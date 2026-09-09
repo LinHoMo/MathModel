@@ -1,0 +1,109 @@
+{
+  "submission_id": "295b4715-c333-4861-9fb8-d16c2720797d",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P9 全 source=题目: d1/d2/d3 三组移动时间、p1、p21/p22、τ_j 奇偶、τ_c、T_s=28800、q=0.01、[600,1200]、m=8"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A2 RGV单服务台(物理互斥)、A3 两道工序异机+缓冲、A4 故障报废、A6 初始空闲 等隐式处理"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖 Q1-Q4; A5 明确'产量按完成并清洗完毕计数, 与结果表一致'、O4 三组效率输出(附件2)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "validation_plan.ambiguity_handling 3 条(故障统计口径/同机异机/产量口径)含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=simulation, secondary=optimization/DP; candidates 4族(仿真/优化/排队论/Petri网)含选择依据, 判定合理"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 含 type(state/decision/derived/observation): 仿真时钟/事件队列/CNC状态/RGV状态/服务决策/产量/等待/故障/利用率"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数含 symbol+value+source=题目"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含 type 与 rationale; 事件时间确定性/故障均匀分布等显式"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 max Y/O2 max Y(两道)/O3 max Ê[Y]=1/R ΣY^(r)/O4 estimate 3组效率, 与任务1/任务2一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 RGV互斥/C2 CNC条件/C3 异机先后/C4 班次截止/C5 故障报废, 方向正确且 form 化"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(异步并发→离散事件仿真); 机理-方程一致(M1→E1/E2); 机理-目标约束一致(M3→O3+C5); candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 结构完整: 事件推进/产量统计/调度规则ETA/故障抽样/置信区间/系统效率; 符号⊆声明集"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 离散事件仿真器/S2 规则库(最短就绪/循环扫描/前瞻贪婪)/S3 批量随机仿真 R=200, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "仿真方法, 收敛性验证(V4 多组运行一致)设计但无数值"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "validation_plan.multi_seed: n_runs=5, seeds=[42,123,456,789,1024], aggregation=mean_std"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出(最优规则/产量/效率向量)合理但无实测"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单CNC平凡情形解析对照 ⌊T_s/(p+τ+τ_c)⌋(退化情形核对, 非替代策略基线)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 移动/上下料±20% 扰动, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT4(d→0/p→0/q→0/q→1, 4类)设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map C1-C4 含 evidence_ref 与 status, C1 supported/C2-C4 hypothesis, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

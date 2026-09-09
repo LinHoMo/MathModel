@@ -1,0 +1,109 @@
+{
+  "submission_id": "610461e3-2a25-4888-8f02-bad0e7067ef4",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全：P1-P8（v=60、3min、20平台、13要道、[2,5]、P=32、3min延迟、P8=3min报警延迟），Q1-Q5 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（最短路径/单归属/一对一封锁）完整"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2011B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity 3条（3分钟软硬、嫌疑车速、工作量口径），均有 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family 图优化与2011B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（state/decision/derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 每参数有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 目标与题面五问一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6 关键约束全形式化"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M4 机理 + candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解（Dijkstra/瓶颈指派/枚举）与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为 pseudocode，无实际代码"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "确定性图算法+数值验证（LT1 v→∞ 符合预期、LT2 |Z|=2→κ91%/|Z|=5→97%、LT3 Δ=0 需全部出口 均带 result）"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "multi_seed 5 seeds 有 result：κ 的 cv≈0.5%、|C| 的 cv≈8.5%，均<10% 通过"
+    },
+    "L3.5": {
+      "score": 2,
+      "evidence": "结果量级正确：灵敏度 3 组带数值（v 50-70→T_B 9.6→6.9min 线性、Δ 1-5min 每+1min 少1封口、t0 每+1min 覆盖率+4%）"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 就近贪心管辖为基线比较瓶颈指派的 τ_max 与负荷方差，且 claims 带数值（92%覆盖率/8分钟）"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 3组带 result 弹性数值（v/Δ/t0 影响量）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT3 3类极限均带 result 且与主张关联（91%/97%/需全部出口）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 targets_refs 覆盖 O1/O2/O3/O5"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claims C1-C5 全 supported 且带实际数值（92%覆盖率、8分钟、增3-4平台、围堵4-6封口）"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 9,
+    "L4_total": 10,
+    "overall": 43
+  },
+  "failure_modes": [],
+  "notes": ""
+}

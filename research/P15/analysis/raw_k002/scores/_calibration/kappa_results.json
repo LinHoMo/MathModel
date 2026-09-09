@@ -1,0 +1,217 @@
+{
+  "calibration_sids": [
+    "04fc6d82-7d15-4385-92fb-e43b99546eb4",
+    "3ff350bf-766e-4b15-874e-bc192ef91276",
+    "7c69dee1-bb5e-4bcf-95ed-626914296c07",
+    "c37459ee-f50b-4a63-b71e-cd7b27cd8130",
+    "ff5e9ff0-ff50-4de4-b825-67b85cabcc97"
+  ],
+  "evaluators": [
+    "eval_A",
+    "eval_B",
+    "eval_C"
+  ],
+  "dimension_kappa": {
+    "L1.1": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 1.0,
+        "eval_B_vs_eval_C": 1.0
+      },
+      "mean_kappa": 1.0,
+      "pass": true
+    },
+    "L1.2": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0,
+        "eval_A_vs_eval_C": 1.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L1.3": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.1667,
+        "eval_A_vs_eval_C": 0.1667,
+        "eval_B_vs_eval_C": 0.1667
+      },
+      "mean_kappa": 0.1667,
+      "pass": false
+    },
+    "L1.4": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0,
+        "eval_A_vs_eval_C": 1.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L1.5": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 1.0,
+        "eval_B_vs_eval_C": 1.0
+      },
+      "mean_kappa": 1.0,
+      "pass": true
+    },
+    "L2.1": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 1.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L2.2": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 0.1667,
+        "eval_B_vs_eval_C": 0.1667
+      },
+      "mean_kappa": 0.4445,
+      "pass": false
+    },
+    "L2.3": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 1.0,
+        "eval_B_vs_eval_C": 1.0
+      },
+      "mean_kappa": 1.0,
+      "pass": true
+    },
+    "L2.4": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L2.5": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L2.6": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 1.0,
+        "eval_B_vs_eval_C": 1.0
+      },
+      "mean_kappa": 1.0,
+      "pass": true
+    },
+    "L2.7": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 1.0,
+        "eval_B_vs_eval_C": 1.0
+      },
+      "mean_kappa": 1.0,
+      "pass": true
+    },
+    "L3.1": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0,
+        "eval_A_vs_eval_C": 1.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L3.2": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.0,
+      "pass": false
+    },
+    "L3.3": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.6154,
+        "eval_A_vs_eval_C": 0.0909,
+        "eval_B_vs_eval_C": 0.1304
+      },
+      "mean_kappa": 0.2789,
+      "pass": false
+    },
+    "L3.4": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0625,
+        "eval_A_vs_eval_C": -0.0714,
+        "eval_B_vs_eval_C": 0.4444
+      },
+      "mean_kappa": 0.1452,
+      "pass": false
+    },
+    "L3.5": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 0.2857
+      },
+      "mean_kappa": 0.0952,
+      "pass": false
+    },
+    "L4.1": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 1.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L4.2": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L4.3": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L4.4": {
+      "pairs": {
+        "eval_A_vs_eval_B": 1.0,
+        "eval_A_vs_eval_C": 0.0,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.3333,
+      "pass": false
+    },
+    "L4.5": {
+      "pairs": {
+        "eval_A_vs_eval_B": 0.0,
+        "eval_A_vs_eval_C": 0.2857,
+        "eval_B_vs_eval_C": 0.0
+      },
+      "mean_kappa": 0.0952,
+      "pass": false
+    }
+  },
+  "overall_mean_kappa": 0.4345,
+  "pass_count": 5,
+  "total_dimensions": 22
+}

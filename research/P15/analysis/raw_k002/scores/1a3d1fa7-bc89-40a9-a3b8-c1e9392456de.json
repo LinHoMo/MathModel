@@ -1,0 +1,109 @@
+{
+  "submission_id": "1a3d1fa7-bc89-40a9-a3b8-c1e9392456de",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 显式条件清单完整: 天数/第0天起点/截止/负重/耗尽/三天气/停留行走挖矿消耗/起点一次购买/终点半价/村庄2倍/多人规则"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "§1 隐式条件: 相邻区域才可移动、行动需资源内可行、多人信息结构两种情形"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q3 子问题覆盖三关, 但未显式提及 Result.xlsx 结算文件交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 3 条(天气生成、同行判定、沙暴日挖矿)含处理方案"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "§1 类型=DP+MDP+博弈论, 范式判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "§3 变量表 13 项含符号/单位/类型(状态/决策/派生)"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "§4 参数表: ρ_w=3/ρ_f=2、μ_w=2/μ_m=3、β=2、α=1/2、κ_c=2k/κ_g=1/k/κ_p=4, 含来源"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "§2 A1-A7 含类型与合理性说明"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "§5 目标 Q1-Q3(2) 与题面三关对应"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "§6 约束 9 条(负重/生存/截止/行动/购买/矿山时序/多人)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "§7 机理+候选对比 4 项含优劣势与选择依据; 方程与机理对应"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "§8 方程: 位置/资源/资金/贝尔曼/随机贝尔曼/均衡/序贯值函数, 含边界"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "§9 支配剪枝/最优反应迭代/MCTS, 与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "迭代求解(最优反应/MCTS)未报告残差/收敛数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "5 组随机初始化, 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果预期(枚举基线/灵敏度/极限)合理但无实测"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线=平凡地图手工枚举(退化情形), 非替代策略对照"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 W_max→∞/n→1/T→0(3类)设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖期望资金/收敛/多初值稳定性等核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 6,
+    "L4_total": 6,
+    "overall": "FAIL"
+  },
+  "failure_modes": [],
+  "notes": "L3/L4 均<70%: 验证结果未执行报告"
+}

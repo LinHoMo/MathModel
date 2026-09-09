@@ -1,0 +1,109 @@
+{
+  "submission_id": "4458a885-ab90-49a4-b5a2-40ae5af30553",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§一 显式条件: 75/65/80°C、II=6mm、IV=5/5.5mm、90/60/30min、47°C/44°C-5min、37°C; P5 T_env=75/65/80、P6 t_end=5400/3600/1800s"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件: 界面温度/热流连续、皮肤第三类边界、一维简化"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q3 覆盖(反演 h、min d2、min(d2+d4)), 但未显式提及 problem1.xlsx 交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A4/A5 以假设处理 k4 不确定、h 反演等歧义(无独立歧义清单节)"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "类型=集总 RC 传热+参数反演+约束优化, 范式判定合理"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量 V1-V9 含符号/单位/类型(状态/决策/派生): 温度/厚度/超温时长等"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数 P1-P10 含来源: 各层物性、d1=0.6mm、d3=3.6mm、h1=8.0 文献、h2=9.0 校准、T_env、t_end、P10 h 反演"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含类型与合理性说明(RC 网络)"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 min 反演误差/Q2 min d2/Q3 min(d2+d4), 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5: 47°C/300s 各子问、d≥0、制造步长"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理-题面一致(传热→集总 RC 采纳); 机理-方程一致(RC 递推+稳定性 Δt≤min C_i/(1/R_i+1/R_{i+1})); 机理-目标约束一致; 候选 4 项含弃选依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "RC 递推+稳定性条件+超温时长+厚度优化, 含初始条件; 符号自洽"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "最小二乘反演 h+一维/二维网格扫描, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "RC 递推含显式稳定性判据 Δt≤min C_i/(1/R_i+1/R_{i+1}), Δt=0.1s"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "§可复现 5 组随机数(42/123/456/789/1024)报告均值±标准差"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果预期(Q1 误差<1°C)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "基线=RC vs 一维差分<0.2°C(独立数值方法对照)"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "灵敏度 h/k_i ±15%→厚度变化<0.5mm(量化鲁棒性边界)"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 d2→∞→37°C 与 d4→0 退化三层(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "结构化叙述, 无显式 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 8,
+    "L4_total": 8,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

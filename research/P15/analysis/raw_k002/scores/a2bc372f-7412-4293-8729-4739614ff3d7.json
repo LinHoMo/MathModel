@@ -1,0 +1,109 @@
+{
+  "submission_id": "a2bc372f-7412-4293-8729-4739614ff3d7",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P9 显式条件全（四层结构/T_env/t_end/附件2），Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（一维热传导/界面连续/皮肤侧定温）"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'将结果填入problem1.xlsx'，X1-X3 输出'温度曲线/厚度'，未识别 Excel 交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity/ambiguity_handling 段；题面存在边界条件形式、初始温度口径等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=pde secondary=[finite_difference, numerical_optimization]，与2018A gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 计算温度场/O2 最小厚度/O3 双变量设计，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 约束全（热传导/界面/边界/厚度可行域）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E5（热传导 PDE/界面连续/边界/厚度优化）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 CN 隐式差分/S2 网格搜索/S3 反演，与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述（三对角追赶法），无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V3 空间网格减半与时间步减半变化<0.1°C（声明，无实际数值）"
+    },
+    "L3.4": {
+      "score": 0,
+      "evidence": "无 multi_seed 字段；V1 标 reproducibility 但内容为解析退化对照"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单层均匀介质退化与解析解对比误差<0.5%（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 h 与 k_i ±15%→<0.8°C（声明），无 result 数值"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V4 limit 检验（存在），无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1 supported（证据计划态）、C2/C3 hypothesis"
+    }
+  },
+  "vector": {
+    "L1_total": 7,
+    "L2_total": 15,
+    "L3_total": 4,
+    "L4_total": 6,
+    "overall": 32
+  },
+  "failure_modes": [],
+  "notes": ""
+}

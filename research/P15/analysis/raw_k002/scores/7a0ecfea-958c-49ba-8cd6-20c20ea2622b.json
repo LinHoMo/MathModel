@@ -1,0 +1,109 @@
+{
+  "submission_id": "7a0ecfea-958c-49ba-8cd6-20c20ea2622b",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全（60km/h、3min、20平台、13要道、[2,5]、P=32、3min延迟），Q1-Q5 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 隐式条件识别完整"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2011B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity/ambiguity_handling 段；题面存在 3 分钟约束口径、嫌疑车速等实质歧义未标注（A4 仅作 1.2 倍鲁棒设计）"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family 图优化与2011B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 每参数有 source+取值（P8=3min 报警延迟）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 目标与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6 关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M3 与 E1-E4 对应；candidates 对比（Dijkstra/覆盖判定/瓶颈指派/围堵可行性）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解（Dijkstra/指派/围堵）与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 仅实现描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V5 指派求解器阈值二分收敛性检验（声明，无实际数值）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 确定性图算法多场景复跑结果一致（复现性声明，无数值）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 覆盖统计与单平台 3km 理论半径对照（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 λ 与 Δt 变化对围堵方案影响，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 v_p→∞ 全覆盖/n_add=0 退化，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1/O2/O3/O5"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C5 全 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

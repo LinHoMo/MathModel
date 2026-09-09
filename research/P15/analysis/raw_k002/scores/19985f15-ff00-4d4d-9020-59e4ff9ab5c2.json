@@ -1,0 +1,109 @@
+{
+  "submission_id": "19985f15-ff00-4d4d-9020-59e4ff9ab5c2",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P12 题面参数齐备: L0=3.41/L1=2.20/w=0.30/d_h=0.055/ℓ=0.275/N=223/v0=1/p1=0.55/R_T=4.5/p4=1.7/n0=16/vmax=2, 均 source=题目"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 处理隐式: 链节间距由板宽+孔距推导、cm→m 换算、碰撞判据、切点自由变量"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "O1-O5 覆盖五问(极角/碰撞/调头/速度), 但未显式提及结果表格/精度交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A4/A5 以假设处理; 无显式歧义清单节"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=kinematics, secondary=differential_geometry; 范式判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V11 含 type/unit, 覆盖极角/坐标/速度/曲率/碰撞时间等"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数含 value+source=题目"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含 rationale; 板凳视为刚体等假设显式"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 与题面五问一致(极角定位/碰撞判据/调头半径/速度限制)"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C7 完整(几何/速度/碰撞/时间步进)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(运动学); 机理-方程一致(曲率/间隙公式); 机理-目标约束一致; candidates 含 rationale"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 结构完整, 符号⊆声明集(L0/L1/w/θ/v 等)"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S5 二分求 θ/逐节链式定位一维求根/时间步进碰撞/圆弧参数扫描/速度放大扫描, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "解析运动学+求根/二分确定性算法; V2 步长收敛 0.01s 设计"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V5 重复运行逐位一致, 无 seed 值"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X5 预期输出合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 直线等距链解析解基线(独立解析对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V3 板宽±10% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V4 极限 w→0→t_end→∞(1类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V6 覆盖 O1-O5"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "C1-C5 每条含 evidence_refs 与 status, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 8,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

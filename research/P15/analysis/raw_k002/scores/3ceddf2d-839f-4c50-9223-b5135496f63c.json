@@ -1,0 +1,111 @@
+{
+  "submission_id": "3ceddf2d-839f-4c50-9223-b5135496f63c",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面四问+附件角色捕获(附件一/二/三); P1 逻辑回归系数、P2 预算按历史总酬金"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 处理隐式: 完成概率机制、会员按预订限额比例分配容量、打包共享流量"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖四问(规律反演/新方案/打包/新项目定价)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "validation_plan.ambiguity_handling 2 条(预算约束存在性/打包折扣承担方)含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=optimization, secondary=[statistical_modeling,clustering]; candidates 4族含 rationale"
+    },
+    "L2.1": {
+      "score": 1,
+      "evidence": "V1-V9 声明完整, 但 E1/E3 核心逻辑模型引用 d_j(距离) 未在变量表声明(关键派生量缺失)"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P7 含 source(校准/假设): B 按历史总酬金、p_min/p_max 假设、r_c=2km 校准、η∈[0.85,1] 假设、ȳ*=0.85 假设"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 min Σ(y_j-π_j)² 反演/O2 max N_c s.t. Σp≤B/O3 max N_c^bundle/O4 estimate, 与四问一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5: 预算/价格箱/分组划分(半径≤r_c)/折扣域/容量"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(定价→预算优化); 机理-方程一致(M1→E1/E2, M2→E3/E4, M3→E5/E6); 机理-目标约束一致(O2+C1); candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1/E3/E6 引用 d_j、E5 引用 c_g、E6 引用 ρ_g^bundle 均未在变量/参数声明集"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 投影梯度上升/S2 K-means+坐标下降/S3 牛顿-拉弗森, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S3 牛顿-拉弗森收敛阈值 1e-6 明确"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "validation_plan.multi_seed: n_runs=5, seeds=[42,123,456,789,1024] 字段齐全"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出(系数方向/完成率提升10pp/打包更优)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 统一价方案 vs 差异化方案对比完成率(命名替代策略)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 预算±20% 扰动, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT3(p_max→∞/B→0/ρ_j→0, 3类)设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map C1 supported/C2-C4 hypothesis, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 13,
+    "L3_total": 8,
+    "L4_total": 8,
+    "overall": "PASS"
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": ""
+}

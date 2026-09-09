@@ -1,0 +1,109 @@
+{
+  "submission_id": "11ce5dd2-b45e-41f0-b139-d32c93cd59bf",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T15:30:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 显式条件清单完整: 环境温度75/65/80°C、II层6mm、IV层5/5.5mm、工作时长90/60/30min、阈值47°C/44°C/5min、假人恒温37°C、附件1物性/附件2测量、交付Excel"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "§1 隐式条件: 热流一维传播、初始37°C均匀、层间理想接触、空气层等效导热、换热系数不可直接测量须反演"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q3 分解正确且显式提及交付 problem1.xlsx; Q2/Q3 厚度优化需求识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 3 条(IV层传热机理/超温时限粒度取分钟级/换热系数反演校准)含处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "§1 类型判定: 传热扩散(PDE)主范式, Q1附加参数反演, Q2/Q3附加约束优化, 正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "§3 变量 10 项含符号/定义/单位/类型/子问题: x,t,T_i(x,t),T_s(t),d_i,d_2,d_4,τ_>44,q,T_∞"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "§4 参数含取值与来源: k1-k3附件1、k4/h反演、ρ_i,c_i附件1、T_skin=37、T_∞=75/65/80、τ_f=90/60/30、T_47/T_44/τ_lim、[d_min,d_max]=[2,12]假设"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含类型/合理性/误差影响: A1一维(面内≫厚)、A3 h待校准(反演消除)、A4 k4等效(偏差并入反演)"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "§5 目标: Q1 min RMSE(T_s^model,T_s^meas)反演k4,h; Q2 min d2 s.t. T_s(60)≤47,τ>44≤5; Q3 min w2d2+w4d4 s.t. T_s(30)≤47,τ>44≤5, 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "§6 约束 8 条: 终温上限Q2/Q3、超温时限、厚度范围、外边界第三类、内边界37°C、界面连续、初始条件"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(热阻串联→热传导); 机理-方程一致(Fourier+能量守恒→PDE+BC/IC); 机理-目标约束一致(反演与厚度优化均源自温度场); 候选4项含弃选依据(集总Bi数/数据回归不可外推/有限元过重)"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "§8 热传导方程+三类外边界+一类内边界+界面连续+皮肤温度提取+反演目标+超温时限, 含初始条件与离散化; 符号自洽"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "§9 Crank-Nicolson隐式差分正演+Levenberg-Marquardt反演k4,h; Q2一维扫描0.1mm/Q3二维扫描先过滤约束; 三对角追赶法, 与PDE+反演+优化匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志, 仅求解器算法描述"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "C-N隐式无条件稳定、三对角追赶精确求解, 离散化Δx≤0.1mm/Δt≤0.5min, 收敛性由格式保证"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "§9 5 组随机初始化取均值±标准差, 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果预期(Q1 RMSE<0.3°C、Q2 厚度落约束交界)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "基线=单层均匀介质恒温边界解析解(误差函数解)对照, 独立解析方法交叉验证"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度 k4,h ±20% 对最优厚度影响, 扰动敏感参数但未报告弹性系数/边界"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 3 类(d2→∞→37°C、d2→0→环境、t→∞稳态线性)设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1(对标)/Q2/Q3(最优厚度)+网格无关性+反演不确定性, 指向核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无显式 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": "L4.2/L4.3 仅设计未报结果; L3.2 无代码执行"
+}

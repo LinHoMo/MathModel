@@ -1,0 +1,109 @@
+{
+  "submission_id": "a97065e1-8e46-4534-888a-618efed4057d",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:33:50+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "parameters P1-P7 提取 v=60/T0=3/Np=20/Nk=13/pmax=5/tau0=3/P=32 且全部 source=题目；E1 边权 w_e、E5 负载 L_j、E6 t_{P,xi} 等派生符号均有内联定义，无参数幻觉"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "assumptions A1-A6 识别无向加权图、最短时间路径、等速围堵（最小保守情形）、节点度数代理案发率等隐式条件，均带 type 与 rationale"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "sub_question_id=Q1..Q5 全覆盖，objectives O1-O5 与 experiments X1-X5 逐一对应（覆盖/封锁/选址/区际统计/前缘推演），附件2 五工作表数据被引用"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 3 项：工作量度量（采纳度数加权和）、围堵成功判据（采纳出口先到封锁）、新增平台效果口径（采纳缺口消减率），均含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family.primary=graph_algorithm，candidates 对比 optimization/decision_analysis/simulation 四族并给出选主族理由，类型判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "variables V1-V12 声明最短时间矩阵/管辖归属/时间半径覆盖集/未覆盖集/封锁指派/封锁最长耗时/新增平台位置/图覆盖率/平台度均衡/嫌疑犯可达前缘/拦截点集/闭合时刻，unit 与 sub_question_binding 齐全"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "parameters P1-P7 全部来自题面且数值正确；E1-E6 中的 w_e、L_j、t_{P,xi} 等符号均有内联定义或对应变量引用，无未声明符号"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 每项含 type 与 rationale，如等速假设（最小保守）、度数代理案发率（缺少真实案发数据时的代理变量），假设合理有依据"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 min|U| 对应 Q1 覆盖、O2 min T_b 对应 Q2 瓶颈封锁、O3 min|U(Z)| 对应 Q3 选址、O4 min kappa 对应 Q4 均衡、O5 min tau_e 对应 Q5 围堵，表达式与问题目标匹配"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "constraints CT1 覆盖归属、CT2 一对一封锁（sum_k y_jk<=1, sum_j y_jk=1）、CT3 2<=|Z|<=5、CT4 围堵闭合条件、CT5 0-1 整数性，来源标注题面/物理限制/模型假设"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "mechanisms M1-M5（图覆盖分析/瓶颈匹配/p-中心选址/图指标评价/前缘围堵）机理正确，E1-E6 对应支撑，model_family.candidates 四族权衡完整"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "equations E1-E6 全源最短路/时间圆盘覆盖/瓶颈指派/覆盖增益/负载变异系数/前缘闭合时刻，均含 latex 与 derivation_trace"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "solvers S1 Floyd-Warshall O(n^3)、S2 二分+匈牙利匹配、S3 覆盖增益贪心（p=2..5 枚举）、S4 图指标批量、S5 前缘扩张+整数规划精化，与各子问题求解需求匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "solvers 仅含 implementation_ref（all_pair_shortest.py/bottleneck_match.py/coverage_gain.py/graph_metrics.py/frontier_encircle.py），无代码内容或执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "experiments X1-X5 均为 expected_outputs（D/U、Y*与T_b*、Delta_eta(p)、指标表、tau_e），无实际数值结果；validations V5 收敛性仅为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "validation plan multi_seed n_runs=5 seeds=[42,123,456,789,1024] aggregation=mean_std 为声明，无实际多次运行输出"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "claims CL1-CL5 全部 status=hypothesis，无实际结果数值可核验合理性"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "validations V1 与手算单路径最短时间核对作为对照基线（reproducibility），但无对照结果数值"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V3 边权 ±15% 扰动灵敏度；sensitivity 含 P1±10%(O1/O2)、P6±30%(O5)、P5±20%(O3) one_at_a_time"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "limit_tests LT1 T0->0、LT2 T0->inf、LT3 v->inf、LT4 tau0->0 共 4 项极限检验，expected_behavior 明确"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "validations V1-V5 targets_refs 覆盖 O1/O2/O5，类型含 reproducibility/limit/sensitivity/convergence，验证目标与模型目标对应"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map CL1-CL5 均 status=supported，但 claims 全部为 hypothesis，证据仅指向实验计划而非实测结果，存在过度声明"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 35
+  },
+  "failure_modes": [],
+  "notes": ""
+}

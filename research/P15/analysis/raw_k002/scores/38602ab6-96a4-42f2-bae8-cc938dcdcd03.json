@@ -1,0 +1,111 @@
+{
+  "submission_id": "38602ab6-96a4-42f2-bae8-cc938dcdcd03",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面四问+附件角色捕获(附件一/二/三); P1-P6 含 R=3 假设、D_pack=2 假设、K_max=10 假设等显式"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 处理隐式: logit 代理、利润=预算-定价、信誉配额竞争、打包组内统一标价+规模上限、附件三同分布外推"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖四问(规律/新方案/打包/新项目评价)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "validation_plan.ambiguity_handling 3 条(收益结构/打包判据/附件三评价)含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=optimization, secondary=[statistical_modeling,clustering]; candidates 4族含弃选依据(黑箱排除)"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V11 含 type: i/c_i/p_i/y_i/π_i/d_i/ρ_i/λ_i/z_ig/P_g/Π"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P6 含 source(校准/假设): β 校准、R=3 假设、B 按类型固定假设、[5,30] 假设、D_pack=2 假设、K_max=10 假设"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 estimate/O2 max Π=Σπ_i(p_i)(B-p_i)/O3 max 打包+单发/O4 max EΠ 附件三, 与四问一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5: 价格箱/不劣于原方案 π_i(p*)≥π_i(old)/组内距离≤D_pack/|g|≤K_max/Σz≤1"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(代理-优化双层); 机理-方程一致(logit/利润/一阶条件/定点/组定价/蒙特卡洛); 机理-目标约束一致(O2+C2); candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E4 定点公式 p*=clip((1/β_p)ln((B-p*)/p*)-(...)/β_p) 与 E3 一阶条件 σ'(·)β_p(B-p)-π=0 推导不自洽; E5 组平均特征 d̄_g/ρ̄_g/λ̄_g 未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 IRLS/S2 定点迭代+投影/S3 DBSCAN+组定价枚举+局部交换/S4 MC S=2000, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "定点迭代/IRLS 未报告收敛判据数值"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "validation_plan.multi_seed: n_runs=5, seeds=[42,123,456,789,1024] 字段齐全"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 训练-测试+原方案完成率基线(命名对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 R/B/D_pack ±30% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT4(p→0/p→∞/d→∞/K_max→∞, 4类)设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1 supported/C2-C4 hypothesis, C4 含 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 14,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": ""
+}

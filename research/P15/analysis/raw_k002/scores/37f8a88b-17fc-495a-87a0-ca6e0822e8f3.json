@@ -1,0 +1,109 @@
+{
+  "submission_id": "37f8a88b-17fc-495a-87a0-ca6e0822e8f3",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P11: λ_w=2/λ_m=3/ρ=0.5/κ_v=2/λ_k=2k/κ_k=4/γ_k=1/k 均 source=题目; 三关/终点/沙暴/村庄规则捕获"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 处理隐式: 天气马尔可夫链、全知退化确定性、多人耦合经消耗/收益/价格、同步学习、矿山行动过滤"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "O1-O3 覆盖三关任务, 但未显式提及 Result.xlsx 结算文件交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "validation_plan.ambiguity_handling 2 条(挖矿日消耗口径、多人同行计数范围)含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=markov_decision_process, secondary=[dynamic_programming]; candidates 4族含 rationale, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 含 type: s_t=(r,w,f,M,c)/a_t/P(c'|c)/λ/V/π/s_t^(i)/k_t/M_T"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P11 含 source(题目/假设/校准): q_w=3/q_f=2/W_max=1200 标注 source=假设、P10 天气矩阵校准"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 贝尔曼最优/O2 E[M_T|s_t,P]/O3 马尔可夫博弈均衡, 与三关对应"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6: 负重/生存/截止/行动过滤/耦合/起点一次购买"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(MDP+多人博弈); 机理-方程一致(贝尔曼/资源守恒/转移分解/多人E4/同步最优响应E5/终点半价E6); 机理-目标约束一致(O3+C5); candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 结构完整, 符号⊆声明集; 状态压缩粗化网格设计"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 值迭代残差<1e-4/S2 策略迭代收敛=策略稳定/S3 状态压缩粗化网格, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "值迭代残差阈值 1e-4 明确; V2 残差 1e-3→1e-5 策略不变收敛检验"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "validation_plan.multi_seed: n_runs=5, seeds=[42,123,456,789,1024] 字段齐全"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X3 预期输出(关卡回放/在线期望区间/博弈仿真)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 确定性 MDP vs 显式枚举(独立精确方法对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V3 天气矩阵±20%, 未报告弹性系数(声明资金变化<10%为预期)"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT3(W_max→∞/P→确定性/d→0, 3类)设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map C1 supported/C2-C3 hypothesis, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 8,
+    "L4_total": 8,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

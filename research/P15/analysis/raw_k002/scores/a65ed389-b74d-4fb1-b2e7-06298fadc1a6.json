@@ -1,0 +1,109 @@
+{
+  "submission_id": "a65ed389-b74d-4fb1-b2e7-06298fadc1a6",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全（规则1-8、六关/Result.xlsx 注1注2、Q1-Q3 三信息结构），问题理解完整"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（相邻定义/未到终点耗尽判负/购买时机）"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'将相应结果分别填入Result.xlsx'，问题理解未识别 Excel 文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "歧义点标注存在（天气转移概率校准、多人耦合机制等），均有处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "问题类型：情景树随机优化（全知/在线/多人），与2020B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（state/decision/derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P11 每参数有来源：P3 ρ=0.5 题面、P4 κ_v=2 题面、P5 λ_k=2k 题面、P6 κ_k=4 题面、P7 γ_k=1/k 题面、P8 箱重(3,2)kg 假设、P9 W_max=1200kg 假设、P10 附件参数表、P11 天气转移概率 校准"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型（mechanism/projection/simplification）附合理性说明与误差影响"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 max M_T/Q2 max E[M_T]/Q3 max E[M_T^(i)]（全知/在线），与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6 约束全：负重/生存/期限/行动过滤/耦合/购买一次，方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理：情景树承载随机性+非预期约束承载信息结构+多人耦合外部参数；候选模型对比表（情景树随机优化选、确定性DP退化、MDP 备、博弈迭代 备）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程完整（资源资金转移/非预期约束/多人耦合），符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解（情景树/随机 DP/迭代均衡）与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "model_doc 无代码，算法描述为主"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "博弈收敛：多人迭代从不同初始策略出发收敛到同一资金区间（声明，无实际数值）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "多初值稳定性：5 组情景抽样期望资金标准差<2%（声明，无实际数值）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "合理性预期（全知第一关资金显著高于在线等）仅为预期"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线：全知结果与逐状态枚举最优对比（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度：天气转移概率±20%、消耗倍数±10%→资金变化率<10%（声明），无 result 数值"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限：天气转移趋于确定收敛到全知策略，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证方案（基线/灵敏度/极限/多初值/博弈收敛）覆盖 Q1-Q3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "无 claims 表，验证全计划态"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

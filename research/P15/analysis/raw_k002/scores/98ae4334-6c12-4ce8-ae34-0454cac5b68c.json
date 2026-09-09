@@ -1,0 +1,109 @@
+{
+  "submission_id": "98ae4334-6c12-4ce8-ae34-0454cac5b68c",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P9 显式条件全，Q1-Q4 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（泊松到达/指数服务/期望效用）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2019C 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity/ambiguity_handling 段；题面存在'分批定量放行'控制方式、司机经验判断等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=decision_analysis secondary=[queueing_theory, game_theory]，与2019C gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数有 source+取值（γ=0.6 文献）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 均值-方差效用/O2 期望收益/O3 上车点/O4 短途优先，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 选择约束/C2 稳定性 λ_t<μ/C3 安全距离车道数，关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E3（均值-方差效用/等待时间/收益差）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整（E1 U_q/U_e、E2 W(λ_t)=λ_t/(μ(μ-λ_t))），符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 效用比较解析求解+S2 分段参数扫描+阈值定位，匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为 pseudocode，无实际代码"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "模型主体为解析公式（均值-方差效用/M/M/1 闭式），解析解默认收敛"
+    },
+    "L3.4": {
+      "score": 0,
+      "evidence": "无 multi_seed 字段，validations 中 reproducibility 类为基线对照非多起点复现"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 全部排队/全部空驶双极端基线（合理），无数值对比结果"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 γ 与 c_w ±20%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 λ_p→0/∞ 极限，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C4 全 supported 但证据全为计划态（X/V 均无实际数值）"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

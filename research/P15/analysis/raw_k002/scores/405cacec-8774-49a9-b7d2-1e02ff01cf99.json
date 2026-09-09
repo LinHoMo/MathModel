@@ -1,0 +1,109 @@
+{
+  "submission_id": "405cacec-8774-49a9-b7d2-1e02ff01cf99",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 题面条件捕获: 排队/空返、蓄车池、乘车区、两条车道(Q3)、短途优先(Q4)、多次往返"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式: 两段串联排队、稳态、风险厌恶"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 覆盖四问"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 4 条含处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "类型=两段串联排队+决策分析+优化, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量 14 项含符号/单位/类型"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数 8 项含来源: c_w=30 元/h、c_e=1.8 元/km、l_s=6km、γ=0.6、α=0.7"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含类型与合理性"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1-Q4 目标: Q3 max E_load、Q4 min 基尼 等与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束 6 条(稳态/容量/安全/公平)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理-题面一致(两段串联排队); 机理-方程一致(排队+边界条件 ρ<1/8h); 候选 5 项含选择依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 5 个+边界条件(ρ<1、8h), 符号自洽"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "闭式 O(1)、阈值扫描、枚举 c∈{1,2}、网格 α, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "闭式解析为主, 确定性收敛"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "5 组随机数, 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果预期合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "全排队/全空驶基线(命名替代策略)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "λ_t/λ_p ±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 2 类设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

@@ -1,0 +1,109 @@
+{
+  "submission_id": "366eb16f-508e-4ad7-b7c9-3acfe059a0ee",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 显式条件: 75/65/80°C、II=6mm、IV=5/5.5mm、90/60/30min、47°C/44°C-5min、37°C、problem1.xlsx、附件1"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件: 界面温度/热流连续、皮肤第三类边界、一维简化"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q3 覆盖(反演 h2/k4eq、min d2、min w1d2+w2d4), problem1.xlsx 明确提及"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 3 条(IV层等效导热、皮肤测点位置、超温=积分指示函数)含处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "类型=传热 PDE 正演+数值优化逆设计+参数反演, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量 7 项含符号/单位/类型: T(x,t)/x/t/T_s(t)/d_2/d_4/q/τ_44"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数表: ρ/c/k 各层(附件1)、d1=0.6mm、d3=3.6mm、h1=8.0 文献、h2=9.0 校准、T_env、T_b=37、t_end=5400/3600/1800"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含类型与合理性; 一维/均匀各向同性/理想接触等显式"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 min Σ(ĥT_s-T_s^obs)² 校准/Q2 min d2 s.t. T_s≤47 且 τ_44≤300s/Q3 min w1d2+w2d4, 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束 6 条: 47°C/300s 各子问、d≥0、制造步长 0.1mm"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理-题面一致(非稳态一维导热→PDE); 机理-方程一致(抛物PDE+CN); 机理-目标约束一致(反演→Q1, 优化→Q2/Q3); 候选 4 项(稳态热阻弃/集总弃 Bi≈0.5-2/CFD弃)含依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "抛物 PDE ρ_j c_j ∂T/∂t=∂/∂x(k_j ∂T/∂x)、外/内 Robin 边界、界面连续、初始条件、CN Δx=0.05mm/Δt=1s 调和平均导热; 初终条件齐备"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "三对角追赶 O(Nx·Nt)/黄金分割校准/一维+二维扫描, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "CN 隐式无条件稳定; 网格收敛验证(ΔxΔt 减半<0.1°C)设计"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "固定 seed 42 声明确定性, 无 multi-seed 统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果合理性预期(42-48°C 量级/指数趋近)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "基线=附件2 实测 vs 预测 RMSE<1°C(独立数据基准)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "h1/h2/k4eq ±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 d2→0/t→∞(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

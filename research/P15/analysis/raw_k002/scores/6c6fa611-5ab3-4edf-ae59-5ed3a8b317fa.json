@@ -1,0 +1,109 @@
+{
+  "submission_id": "6c6fa611-5ab3-4edf-ae59-5ed3a8b317fa",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "附件一/二/三识别，Q1-Q4 全覆盖；P1-P8 参数（P8 核密度带宽 h=2km）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 隐式条件识别（A1 机制/A3 S形/A5 预算简化）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2017B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity/ambiguity_handling 段；题面存在打包粒度、预算口径等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family statistical_modeling+optimization/clustering，与2017B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 含 type 区分（state/decision/derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 每参数有 source（P2 β 系数源=校准）+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 负对数似然/O2 预算约束完成数最大/O3 打包簇级最大/O4 外推，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "CT1-CT4 关键约束全（预算/价格下限/分割/概率）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M4（逻辑回归/预算优化/空间聚类打包/外推）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E5（核密度/logit/完成数最大化/打包增益/新任务定价）符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4 求解与统计优化模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 仅文件名（logit_fit.py 等），无实际代码"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无数值收敛/残差验证（仅 V3 极限定性）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 聚类多种子稳定性声明，无实际数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 零模型对照（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 h 与价格系数 ±20%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 P→0 基线/P→∞→1 极限，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims CL1-CL4 全 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 4,
+    "L4_total": 6,
+    "overall": 33
+  },
+  "failure_modes": [],
+  "notes": ""
+}

@@ -1,0 +1,111 @@
+{
+  "submission_id": "286218b8-48f4-4f12-9e99-53d23e896c64",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 显式条件: L0=3.41/L1=2.20/w=0.30/N=223/v_0=1/n_0=16/R_T=4.5 等; 参数表含 λ=2.0/p=0.55/1.7/v_max=2"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件: A点极角 θ=32π、碰撞判据(相邻圈法向间隙<板宽)、切点自由变量"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q5 覆盖五问, 但未显式提及结果表格/精度交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 3 条含处理方案; 假设 B1-B5"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "类型=运动学+微分几何(曲线曲率/间隙), 范式判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量表含类型(状态/决策/派生), 覆盖极角/坐标/曲率/间隙/速度等"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数表含取值与来源(L_0/L_1/w/N/v_0/n_0/R_T/λ/p/v_max)"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "B1-B5 含类型与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1-Q5 目标(极角定位/碰撞判据/调头半径/速度)与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束 6 条(几何/速度/时间步进)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理(曲率/间隙公式)与题面结构对应; 候选对比含选择依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "方程引用 a/β(θ)/α_1/α_2/s_i 等符号未在变量/参数声明集"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "解析+牛顿迭代+一维搜索, 与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "解析解为主+收敛验证设计"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "无 multi-seed/seed 值记录"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果预期合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "基线=圆弧/直线解析解(独立解析对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度±10%, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 p→∞/w→0(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q5"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 14,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": ""
+}

@@ -1,0 +1,109 @@
+{
+  "submission_id": "4b0dbb41-8d52-48f1-942c-3fe860e7a113",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "规则全覆盖：P1-P10 参数（P1 c 基础消耗、P2 箱重、P3 负重、P4 基准价、P5 村庄倍数、P6 退回倍数、P7 同行倍数2k、P8 挖矿收益、P9 矿收益分成、P10 天气系数），Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 识别同质玩家、承诺、序贯信念、风险中性、无联盟等隐式条件；P10 天气消耗系数标注 source=校准"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'填入Result.xlsx'，X1-X3 输出'资金/策略'，未识别 Result.xlsx 文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity 3条：同行触发人数、起点再买、沙暴日行动，均有 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=game_theory secondary=[DP, optimization]，与2020B多人博弈gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V7 含 type：v_t state、a_t decision、π_t strategy、k_t observation"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P10 每参数有 source+取值：P7 β_k=2k 题面、P8 g_k 题面、P10 α_θ=[1.0,1.3,1.0] 校准"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型（机制/简化/投影）附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 max m_T、O2 max E[m_T]、O3 纳什均衡（含全知/序贯两子情形），与题面一致"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1-C5 负重/可行/沙暴/拥挤/承诺在，但题面'挖矿消耗3倍基础'约束未在方程/约束表体现（E1 β_k 仅覆盖行走2k）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M3 与 E1-E6 对应；candidates 4项对比（game_theory 选、DP 退化、optimization 辅助、MDP 内核）"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E6 结构完整，但 E1 用 c_w/c_f（P1 仅 c 统称未分解）、E2 cost/refund 未符号化"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 MDP/DP 值迭代、S2 迭代最优反应/Fictitious Play、S3 情景仿真，与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述（desert_dp.py 等文件名+方法），无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V5 FP 收敛声明（策略稳定），无实际残差/收敛数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 多种子 CV<5% 声明，无实际 cv 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "X1-X3 全 expected_outputs，无任何实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 n=1 退化对照（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "sensitivity 3组（P1/P5/P7 等）无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1 n=1、LT2 k→n 两类极限，仅 expected_behavior 无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 targets_refs 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1/C2 supported（证据计划态）、C3 unresolved，有 unresolved 降档"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 13,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 32
+  },
+  "failure_modes": [],
+  "notes": ""
+}

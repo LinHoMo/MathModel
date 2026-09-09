@@ -1,0 +1,109 @@
+{
+  "submission_id": "6142ea7d-17be-4111-9a2a-73ed562b0f79",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "规则全覆盖（P1-P9 参数），Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 隐式条件识别完整"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'填入Result.xlsx'，未识别 Excel 交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity 3条（天气机制/挖矿时序/同行口径），均有处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=MDP，与2020B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V11 含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O3 目标一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E5（即时收益/贝尔曼/Q值/最优响应）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3 求解与 MDP 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "S3 最优响应交替更新至收敛阈值（求解器声明），无实际数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 描述无实际 cv 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "LT 基线/退化（合理），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "sensitivity P1/P5/P7±20%/P9±25%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT4 极限仅 expected_behavior，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V11/validation_plan 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims 全 supported（计划态证据）"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

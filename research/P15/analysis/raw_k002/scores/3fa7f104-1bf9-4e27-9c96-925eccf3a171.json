@@ -1,0 +1,109 @@
+{
+  "submission_id": "3fa7f104-1bf9-4e27-9c96-925eccf3a171",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 题面四问+附件角色捕获(附件一/二/三); 信誉配额机制"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 处理隐式: 逻辑接单率、完成概率 1-(1-p)^n、距离衰减 r_0=3km、打包折扣 γ=0.85"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 覆盖(规律/新方案对比/打包/新项目定价)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 3 条含处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "类型=统计建模+优化+空间聚类, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量 8 项含符号/单位/类型"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数 8 项含来源: β 校准、p_0≈65-70、α=0.5、r_c=1km"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含类型与合理性说明"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1-Q4 目标: Q2 max R s.t. C≤C_0 等与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束 5 条(预算/价格箱/分组)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理-题面一致(logistic 接单率+核密度); 机理-方程一致(E1-E5); 候选 4 项含选择依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 5 个: logistic/核密度/预算优化/组级概率/聚合, 符号自洽"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "logistic+核密度、梯度上升/网格, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "梯度上升未报告收敛判据数值"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "§9 5 seed bootstrap CV<5%、80/20 交叉验证, 明确 seed=42"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果预期合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "原方案 vs 新方案历史回测基线(命名替代策略)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "α/β_1/γ ±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 p_i→∞→R→1 与 ρ→0→R→0(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

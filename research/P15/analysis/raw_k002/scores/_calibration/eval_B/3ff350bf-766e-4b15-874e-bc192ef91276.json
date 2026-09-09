@@ -1,0 +1,109 @@
+{
+  "submission_id": "3ff350bf-766e-4b15-874e-bc192ef91276",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:03:29+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P8 显式条件全：v_p=60、T_3=3、m_A=20、n_g=13、Δ=[2,5]、l_ij 附件数据、τ_d=3、v_s=60（假设标注），Q1-Q5 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 识别最短路径匀速、最近管辖单归属、平台-要道一对一指派、嫌疑车最短路径扩张等隐式条件并附 rationale"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2011B 无文件交付要求；X1-X5 覆盖管辖/封锁/选址/多区评估/围堵全部输出"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 3条：3分钟'尽量'软约束→目标化+缺口报告、嫌疑车速未给→=警车+±20%灵敏度、围堵时间窗口→报警时刻起算，均有 interpretations/adopted/justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=optimization secondary=[graph_algorithm, decision_analysis]，与2011B网络优化gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 含 type：v_i constant、t_ij derived、x_kj/y_kl decision、w_k/θ/R(t) derived"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 每参数 source+取值：P1 60、P2 3、P5 [2,5]、P8 v_s=60（假设），P6 l_ij 附件数据"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型（mechanism/mechanism_assumption/projection）且附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 全：min T_max 管辖/封锁/选址、O4 覆盖率+CV 合成评估、O5 围堵 min-max，三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 关键约束全：指派单归属、3分钟覆盖（软）、一对一封锁、2≤新增≤5、封锁不晚于嫌疑车到达"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M4 与 E1-E6 对应（指派/覆盖选址/瓶颈min-max/时变可达）；candidates 4项明确对比（multi_objective、simulation 排除）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 完整（Floyd最短时间/瓶颈指派线性化/选址0-1/可达域/出口封锁），符号 v_p/d_ij/z_j/v_s 均声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 Floyd O(N³) 预处理、S2 匈牙利/瓶颈指派、S3 分支定界选址、S4 动态可达+指派，与图优化模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为方法描述（Floyd-Warshall/二分图瓶颈匹配/动态可达），无实际代码"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "模型主体为确定性精确图算法+整数规划，无数值收敛问题；LT1-LT4 极限检验覆盖边界行为"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed n_runs=5 seeds=[42,123,456,789,1024] 描述'确定性算法逐位一致'，无 cv/std 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "X1-X5 expected_outputs 全为预期（'管辖表/最大响应'等），无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单平台单节点/直线路网手工对照与完全图退化验证（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 车速±20%、路长±10%、嫌疑车速±20% 扰动（计划态），无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT4（v_p→∞、m→N、Δ→∞、v_s→0）4类极限，但均仅 expected_behavior 无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 targets_refs 覆盖 O1-O5 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1 supported（证据 V1 计划态）、C2-C5 均 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 6,
+    "L4_total": 6,
+    "overall": 36
+  },
+  "failure_modes": [],
+  "notes": ""
+}

@@ -1,0 +1,109 @@
+{
+  "submission_id": "98543881-118a-4d29-af92-3996d9f195d0",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全：SiO2/助熔剂体系、有效区间 85%~105%、两类标签、表单1/2/3、Q1-Q4 分解完整"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别：成分性数据非负、空白成分非零、风化属性一致、采样点差异"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2022C 无文件交付要求；Q1-Q4 输出（复原/亚类/鉴别/关联）全"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "歧义点3条：空白成分缺失处理（按低于检出限+均值插补）、风化前成分无观测（未风化代理）、'合适的化学成分'未限定（数据驱动）"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "问题类型判定：统计建模与模式识别（回归复原+判别+聚类+相关），与2022C gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（observation/derived，如 d_i 风化程度 derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数6项每项有来源：有效区间[85,105]题面、α=0.05 文献、λ=0.1 数据校准、τ_sub 校准、π_k 校准、n_min=3 假设"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型（calibration/mechanism/simplification）附合理性说明与误差影响（代理噪声1-2个百分点）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 min_β 复原回归、Q2 min_Z 聚类、Q3 min_w 错分率、Q4 ρ̂_ab 相关结构，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束5条全：数据有效性 85≤S_i≤105、成分非负、亚类互斥、亚类规模、类别合法、相关矩阵正定"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理：风化=元素迁移+回归结构，两类助熔剂差异构成判别结构；候选模型对比（多元回归+LDA 选、岭回归 备、PCA 降维 备、聚类替代 弃用）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整（logit/回归/聚类/马氏），符号均在变量/参数表声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解（岭回归/距离回归/判别）与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "model_doc 无代码，算法描述为主"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无数值收敛验证（岭回归 λ 变化为灵敏度非收敛检验）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "稳定性：Bootstrap 重采样 100 次报告系数与判别结果变异（声明，无实际数值）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "结果合理性预期（复原误差 2-3 个百分点等）仅为预期，无实际数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线：风化复原与'风化点均值'、判别与'多数类'比较（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度：亚类阈值 ±20%、岭回归 λ 0.01-1（计划态），无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限：d→0 复原收敛到未风化均值、S 取 85/105 边界判定连续（2类），无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证方案（基线/灵敏度/极限/稳定性）覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "无 claims 表，验证全计划态，主张无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 4,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

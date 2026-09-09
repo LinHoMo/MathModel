@@ -1,0 +1,111 @@
+{
+  "submission_id": "e5d7b875-6dad-46c7-95a7-6d79bf3c4c06",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:33:50+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件提取完整：双车道乘车区、先来后到、不拒载、可多次往返、蓄车池分批定量放行均有对应（A2/C4/O3/O4）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1 分时段泊松平稳、A2 FCFS 单队列、A3 返回概率由里程分布校准——均给依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 均有 objectives/experiments（稳态分析/实例应用/吞吐对比/优先权评估），Q2 收集数据要求由 X2 某机场数据实例覆盖"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 3项（到达过程形式/优先权实现/短途阈值）均给 interpretations+adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=queueing_theory secondary=optimization/simulation/decision_analysis，排队网络判定正确（macro_traffic 排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V11 声明完整（时段/蓄车队长/候车队长/等待/乘客到达率/服务率/上车点数/两类收益/变异系数/短途比例）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P9 有来源，但 E1/E4 中服务台数 c 未在参数表声明（V7 n_s 为决策，c 未列）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 带类型与依据（泊松标准假设、两级优先级可控实现、风险中性为二阶修正）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1决策比较/O2实例化/O3 max吞吐/O4 min CV 与 Q1-Q4 对应，三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1稳定性ρ<1/C2蓄车池容量/C3安全布局/C4不拒载/C5优先级——关键约束齐备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1机理（M/M/c 排队网络+收益比较）正确；E2方程与机理对应（Erlang C/Little/优先等待）；E3目标被机制支撑；E4 candidates 4个（macro_traffic 排除给依据）"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E6 含推导轨迹与退化解，但 c 符号未声明（符号不一致）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3（Erlang C稳态/服务台枚举/优先级排队+仿真）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；C3 的'2~3个上车点'为 hypothesis 无实测支撑"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 声明 n_runs=5 seeds mean_std，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C1-C4 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 c=1 退化 M/M/1 经典公式对照（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity P1/P2/P6 ±20%、P7 短途阈值±30%（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT4 极限4类（λ_p→0/LT2 λ_p→cμ_s/LT3 c→1/LT4 q_s→0）且预期行为与主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 目标覆盖 O1-O4 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1 supported、C2-C4 hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 13,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 33
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "机场出租车排队网络 IR 完整（显式歧义处理+四类极限）；缺陷：c 未声明、L3 缺执行证据。"
+}

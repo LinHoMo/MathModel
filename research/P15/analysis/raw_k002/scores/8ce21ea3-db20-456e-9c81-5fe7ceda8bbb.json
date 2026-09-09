@@ -1,0 +1,109 @@
+{
+  "submission_id": "8ce21ea3-db20-456e-9c81-5fe7ceda8bbb",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全（60km/h、3min、20平台、13要道、[2,5]、P=32、3min延迟），Q1-Q5 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别完整附推导依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2011B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "歧义3条（3分钟软硬、嫌疑车速、工作量度量）均有处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "图论/网络优化+组合调度，与2011B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数每项有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附合理性"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1a-Q2b 目标全"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理 4 候选对比有依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解与图优化匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "确定性图算法，无数值收敛问题"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "验证含复现性方案，无 multi_seed 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线（合理），无对比结果"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度计划态，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限两类，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q5"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "验证全计划态，主张无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 6,
+    "L4_total": 6,
+    "overall": 36
+  },
+  "failure_modes": [],
+  "notes": ""
+}

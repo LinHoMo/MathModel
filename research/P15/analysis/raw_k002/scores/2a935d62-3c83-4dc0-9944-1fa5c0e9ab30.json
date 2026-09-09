@@ -1,0 +1,109 @@
+{
+  "submission_id": "2a935d62-3c83-4dc0-9944-1fa5c0e9ab30",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P9 题面参数: v=60km/h、T_3=3min、n_p=20、n_r=13、n_a=2-5、δ=3min、p_0=节点32、附件1/2 角色"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1 无向图、A2 3km覆盖球、A3 一平台一封锁、A4 同速最短路外逃 等隐式处理"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q5 子问题分解覆盖全部交付(管辖/封锁/增点/全市评估/围堵)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A5 案发权重均匀、A6 候选集 以假设处理不确定性; 无独立歧义清单节"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "§七 图论模型(最短路+匹配+最小割), 候选对比 4 项含优劣势与选择依据, 范式判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V10 含符号/单位/类型(derived/decision): d_ij/φ(j)/B_3(p)/M/C_k/Z/R_P,t/U/T_max/L_p"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数含取值与来源(题面)"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含类型/合理性说明/误差影响(表格完整)"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1-Q5 目标: min T_max 且检验≤3、封锁 min-max、双目标选址、全市评估、围堵 min|U| 割断外逃, 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6: 覆盖(标注'尽量满足'软约束)/指派唯一/匹配/封锁时限/增点预算/围堵时间, 与题面口径吻合"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理主线(最短路→覆盖→匹配→选址→时间扩展图割)与题面结构一一对应; 候选 4 项含选择依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 6 个: 最短路/管辖划分/瓶颈匹配(二分+匈牙利)/选址/可达集/围堵最小割, 含边界(d_ii=0, R_P,0={P})"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "Floyd-Warshall/阈值二分+匈牙利/贪心+局部交换/最小割, 与图模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "精确图算法(FW/匈牙利/最小割)确定性; 贪心局部搜索附 5 组初值稳定性验证"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "§九 固定 5 组随机数初值(42、123、456、789、1024)报告均值与标准差"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果合理性预期(边界节点超时/Q2 分钟量级/增点边际递减)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "基线=Q1 管辖方案与'全局最近平台'方案对比 T_max 与覆盖比率(命名替代策略)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "边权整体±10% 扰动检验稳定性, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 2 类(平台数→节点数 T_max→0; 覆盖半径→∞ 覆盖比率→1), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q5(基线/灵敏度/极限/多初值/围堵有效性)"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 8,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

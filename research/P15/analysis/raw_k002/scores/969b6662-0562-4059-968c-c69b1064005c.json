@@ -1,0 +1,109 @@
+{
+  "submission_id": "969b6662-0562-4059-968c-c69b1064005c",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "附件识别与 P1-P6 参数（P1 β 系数 MLE 校准、P4 [5,30] 元、P2 R=3km）完整，Q1-Q4 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（逻辑回归机制/特征构造）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2017B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity 段；题面存在打包粒度、预算口径等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family 统计建模与2017B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 含 type 区分（V5 接单指示 observation/V3 价格 decision）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P6 每参数有 source+取值（P1 β 系数由附件一 MLE 估计、P2 R=3km、P4 [5,30] 元）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 目标一致（logit/利润/打包/外推）"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E6（logit(p)=βX/特征工程/一阶条件 p_i*/打包定价/外推）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1 符号 β 全在 P1 声明，方程与变量表对齐"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解（MLE/一阶条件/打包）与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "S1 收敛判据梯度范数<1e-6（求解器声明），无实际数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V1 80/20 训练测试划分（复现性方案声明），无实际数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 原方案完成率对照（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 R(1~5km) 与 B ±30%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 p_i→0/∞、d_i→∞ 极限，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V3 覆盖 O1/O2/O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims 全 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

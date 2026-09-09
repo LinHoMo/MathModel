@@ -1,0 +1,109 @@
+{
+  "submission_id": "434308bc-89fa-4a68-8fb5-d27bbeb79919",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面条件捕获: 排队/空返、蓄车池、两车道(Q3)、短途优先(Q4)、多次往返"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 处理隐式: 风险中性、时段平稳、双车道双服务台、优先级排队实现优先权、机会成本折算"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖四问"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "P1-P9 多'校准', 仅 c_w/K_p=2 假设显式; 无独立歧义清单节"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=decision_analysis, secondary=[queueing,optimization,simulation]; candidates 5族(game_theory/macroscopic_traffic_flow 排除)含 rationale"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V13 含 type(state/decision/derived), 覆盖收益/等待/吞吐/班次收益/公平"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数含 source(校准/假设)"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4: Q3 max Λ s.t. 安全、Q4 min CV(Π_j) 等与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 完整(稳态/容量/安全/公平)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(决策+排队); 机理-方程一致(U_A=E[R_f(L)]-c_w W_q、吞吐 min(μ_s n_s,λ_p)、Π_j 班次递推、W_q^pri<W_q^ord); 机理-目标约束一致; candidates 5族含排除依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E7 符号一致, 结构完整"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4 阈值网格/M/M/c 稳态/吞吐+安全过滤/离散事件仿真, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "解析排队稳态为主, 确定性收敛"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "多初始化均值±标准差, 无 seed 值"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出合理但无实测"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "W_q=0 退化基线(退化情形核对, 非替代策略对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 λ_p→0 全返回与 λ_p→μ_q 饱和(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "C1-C4 每条含 evidence_refs 与 status(hypothesis), 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

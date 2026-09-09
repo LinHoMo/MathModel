@@ -1,0 +1,109 @@
+{
+  "submission_id": "14822f53-8201-4c62-b5f5-9b220e8fa8e0",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面参数齐备: 有效区间[85,105]、表单1分类/表单2成分/表单3未知角色、四问; P1-P8 含 85/105、PbO=1% 检出限等"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 处理风化点/未风化点、缺失成分(低于检出限)、亚类细分等隐含结构"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 与题面四问对应(高钾铅钡判别/风化复原/亚类划分/关联分析)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A3/A5 以假设处理风化偏移方向与缺失值策略; ambiguity 处理节存在"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=statistical_classification, secondary=regression_analysis; 范式判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 含 type/unit, 覆盖成分/风化标记/类别/复原估计/差异向量等"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 含 source(题目/文献/校准): α=0.05、λ=0.1 岭回归、PbO=1% 检出、亚类阈值 PbO=10%/K2O=5%、n_min=3"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含 rationale; 风化偏移可复原/类别可分等假设显式"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 与四问一一对应; 目标被机理(E1-E6)支撑, 约束不冲突"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6 完整(类别互斥/概率归一/样本量下限/阈值边界等)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(分类+复原); 机理-方程一致(M1-M3→E1-E6); 机理-目标约束一致; candidates 含多族 rationale"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 含风化复原回归/PCA/LDA/相关系数, 符号⊆声明集, 结构完整"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4 回归/PCA/LDA/相关系数估计, 与统计分类模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "确定性统计方法(回归/PCA/LDA), 无迭代收敛问题, 解析求解"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V3 重采样错分率/bootstrap, 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出(错分率/复原残差)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 风化点均值朴素基线(命名对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 阈值±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V4 α=0.01/0.10 极限(仅1类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4(基线/灵敏度/重采样/极限/缺失敏感性)"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "C1-C4 每条含 evidence_refs 与 status, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 8,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

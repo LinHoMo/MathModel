@@ -1,0 +1,111 @@
+{
+  "submission_id": "aaf91531-0200-41f0-8768-a84fa76afde6",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:37:04+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 1,
+      "evidence": "parameters P1-P11 提取 L0=3.41/L1=2.2/w=0.3/N=223/v0=1.0/n0=16/Δt=1/R_T=4.5/vmax=2，但题面显式给出的孔径 5.5cm 与孔中心距 27.5cm 未进入参数表，链长直接取板长 L_i"
+    },
+    "L1.2": {
+      "score": 1,
+      "evidence": "A1-A5 覆盖等速离散/刚性杆/中心差分/碰撞判据/相切调头，但相邻把手间距应为板长减两倍孔距（220-2×27.5=165cm）的隐含几何未识别，且题面'各把手中心均位于螺线上'的几何约束未纳入模型"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1/O4 对应逐秒位置速度输出，X1/X4 expected_outputs 与 result1.xlsx/result4.xlsx 及表1/表2 指定时刻格式对应，Q1-Q5 全覆盖"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 3 项：龙头初始相位（采纳 θ_A=32π）、碰撞物理判据（采纳板凳几何干涉）、调头圆弧调整范围（采纳半径与切点），均含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family.primary=kinematics，description 以离散时间运动学为主线，candidates 对比 differential_geometry 与 numerical_optimization，类型判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "variables V1-V9 声明时间网格/龙头极角/极径/把手位置/速度/极角速率比/最小间距/终止时刻/调头弧长，unit 与 sub_question_binding 齐全"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P11 含 L0/L1/w/N/v0/n0/Δt/Δt_f/R_T/vmax/δw 且标注 source；但螺距 p（0.55m，见 X1 输入）与调头圆弧半径 R1/R2 未声明为参数，孔径/孔距亦缺失"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 均带 type 与 rationale，刚性杆弦长约束、中心差分二阶精度、离散碰撞检测配合二分细化等假设合理"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 仿真逐秒位置速度、O2 求终止时刻、O3 最小螺距、O4 最短调头弧长、O5 最大龙头速度，与 Q1-Q5 一一对应"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1-C6 覆盖链长/弧长推进/无碰撞/调头边界/相切/速度上限；但 C1 用 ||P_{i+1,k}-P_{i,k}||=L_i 与物理两孔距不符（约 55cm 偏差），且缺'把手中心在螺线上'约束"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "M1-M3 离散运动学-碰撞二分-速率比放大机理主线正确，E1-E6 支撑；但链长取板长引入约 55cm 系统偏差，机理存在关键偏差扣 1 分"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "equations E1 螺线方程+弧长推进、E2 逐节弦长定位、E3 中心差分、E4 碰撞定位、E5 速率比链式法则、E6 调头弧长，均含 derivation_trace"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "solvers S1 逐秒时间步进、S2 中心差分、S3 二分细分碰撞定位（0.05s）、S4 一维网格搜索（p 与 R2 网格+精化），与问题求解需求匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "solvers 仅 implementation_ref（弧长推进+逐节弦长求根/向量化差分计算/检测后0.05s细分/网格+精化），无代码内容或执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "experiments X1-X5 均为 expected_outputs（300组位置速度/t_end/p_min/序列/v_head^max），无实际数值结果；V2 步长收敛仅为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "validation plan multi_seed n_runs=5 seeds=[42,123,456,789,1024] aggregation=mean_std 为声明，无实际多次运行输出"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "claims C1-C5 全部 status=hypothesis，无实际结果数值可核验合理性"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "validations V1 与直线匀速链解析解对照中心差分精度，作为解析基线，方法具体可执行"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V3 板宽±10%与安全裕度±5mm 灵敏度；sensitivity 含 P3±10%(O2)、P11±5mm(O3)、P9±5%(O3) one_at_a_time"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "limit_tests LT1 Δt->0 中心差分收敛、LT2 w->0 t_end->inf 且 p_min->0、LT3 v0->0 全链静止，3 项极限检验且 expected_behavior 明确"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "validations V1-V6 targets_refs 覆盖 O1-O5 全部目标，类型含 reproducibility/convergence/sensitivity/limit/uncertainty，验证目标对应完整"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1-C5 均 status=supported，但 claims 全部为 hypothesis，证据链仅指向实验计划而非实测结果，存在过度声明"
+    }
+  },
+  "vector": {
+    "L1_total": 7,
+    "L2_total": 12,
+    "L3_total": 3,
+    "L4_total": 9,
+    "overall": 31
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": ""
+}

@@ -1,0 +1,109 @@
+{
+  "submission_id": "922fe15a-e1e3-4b63-af7d-dc76b92da22b",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P7 参数（P2 p_min=65/P3 p_max=90）与附件识别完整，Q1-Q4 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 隐式条件识别完整"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2017B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无独立 ambiguity 段；题面存在打包粒度、预算口径等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=optimization+statistical_modeling，与2017B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P7 每参数有 source+取值（P2 p_min=65/P3 p_max=90）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 目标一致（logit 拟合/完成数最大/等边际/打包）"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E5（logit(ln p)/完成率均值/等边际 ∂π/∂p/打包 π_k/反解 w_j）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（IRLS 拟合/一阶条件/打包优化/反解）与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "S1-S4 为 pseudocode，无实际代码"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无数值收敛验证（IRLS/投影梯度无收敛判据报告）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 多种子声明，无实际 cv 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 原方案基线（合理），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 B 与 α1±20%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 r_pack→0 极限，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims 全 supported 但证据均为计划态（X 全 expected_outputs），无实际数值"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 4,
+    "L4_total": 6,
+    "overall": 33
+  },
+  "failure_modes": [],
+  "notes": ""
+}

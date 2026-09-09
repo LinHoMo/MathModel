@@ -1,0 +1,109 @@
+{
+  "submission_id": "7656af72-29d4-4eef-beab-edcbbaa80dd4",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全（T_env/t_end/附件2数据），Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（皮肤侧恒温、外表面 h 反演）"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'填入problem1.xlsx'，未识别 Excel 交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "歧义4条：皮肤侧恒温/外表面 h 反演/IV 等效导热/约束严格性，均有处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "问题类型热传导 PDE，与2018A gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量6项含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数8项有 source+取值（h_conv 附件2 反演）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型附合理性"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 simulate/Q2 min d_2/Q3 min(d_2,d_4)，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束4条全（热传导/边界/安全≤47/可行性）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理+候选对比 4 项（CN 离散/热阻近似等）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程6条（含 CN 离散/热阻近似），符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解（CN+Thomas、二分、二维网格帕累托）匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码，算法描述为主"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "网格收敛检验三套网格差<0.1℃（声明，无实际数值）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "校准与优化固定多种子随机数起点（声明，无数值）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "结果合理性预期（Q1 MAE<0.5℃、Q2 数毫米量级）仅为预期"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线：附件 2 测量曲线 MAE<0.5℃（合理基线），无实际对比数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度 h/k ±20%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 d2→∞ 等，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证 5 条覆盖 Q1-Q3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "验证全计划态，主张无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

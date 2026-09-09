@@ -1,0 +1,109 @@
+{
+  "submission_id": "32ebd689-9be5-48c7-81f6-31d4a39231a7",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 显式条件: 表1 三组参数完整、8h/28800s、故障1%、排除10-20min、两道工序"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件: RGV单机互斥、CNC等待占用、两道工序缓冲、故障报废、产量口径"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 覆盖: Q4=3组参数填附件2 EXCEL"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 3 条(故障统计口径、两道工序同机→异机、产量口径)含处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "§1 类型=调度优化(组合优化)+随机仿真+参数敏感性, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量 10 项含符号/定义/类型: x_kj/C_kj/Y/σ_j/r_k/ξ_j/η_j/u_j"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数表完整: t1/t2/t3 三组、p1、p21/p22、τ_o/τ_e/τ_w、T_s=28800、q=0.01、[600,1200]"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含类型与合理性说明"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1-Q4 目标(max Y/E[Y]/ρ_g)与任务一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束 6 条(单机/时序/可用/异机/班次截止/故障)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "§机理+候选 4 项(贪心/邻域采纳、MILP弃规模爆炸、排队论弃、DES Q3采纳)含选择依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 5 个: 完工递推/产量计数/瓶颈 μ_RGV 与 μ_CNC/故障抽样/期望产量/系统效率, 符号一致"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "最短就绪优先贪心+邻域搜索 O(Km)、DES R=200、Q4 批量, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "贪心/邻域搜索未报告收敛判据数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "故障仿真固定随机数 5 组初始化均值±标准差, 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果合理性预期(ρ 0.85~0.98)合理但无实测"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "单 CNC 平凡解析对照(退化情形核对, 非替代策略基线)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 q→0/q→1(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖产量/故障/效率核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 6,
+    "L4_total": 6,
+    "overall": "FAIL"
+  },
+  "failure_modes": [],
+  "notes": "L3/L4 均<70%: 无执行结果与实测数值"
+}

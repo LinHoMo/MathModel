@@ -1,0 +1,109 @@
+{
+  "submission_id": "5ec42e08-29a3-42e9-9d65-a441d58842de",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P9 显式条件全：T_env=[75,65,80]、t_end=[5400,3600,1800]、h 反演、Δx=0.01/Δt=0.5，Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 隐式条件识别（一维、界面连续、边界条件）"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'将结果填入problem1.xlsx'，X1 输出'期望温度曲线'，未识别 Excel 交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity 2条：外表面散热边界形式、皮肤侧边界，均有 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=finite_difference，与2018A热传导gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V8 含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数有 source+取值（k_1=0.082 等、ρc、d、h）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O3 目标（模拟/最小厚度/双厚度）与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 约束全（隐式差分/界面/边界/安全≤47≤5min/可行性 d2∈[0.6,25]）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E6（三对角/调和平均/超温时长/厚度最小化）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 Thomas/S2 网格扫描/S3 最小二乘反演，匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V1 网格收敛<0.1°C 声明（步长减半），无实际数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 描述，无实际 cv 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V2 单层解析解对照（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V3 h/k ±15%→<0.8°C 声明，无 result 数值"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V4 d2→∞/d4→0 极限，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1 supported（计划态）、C2/C3 hypothesis、C3 unresolved 有 unresolved 降档"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

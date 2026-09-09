@@ -1,0 +1,109 @@
+{
+  "submission_id": "9e8fc965-0a2c-427e-9832-685694340a03",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全（成分体系/有效区间/两类标签/表单结构/Q1-Q4），问题理解完整"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别：闭包性质、非负、未检出非零、采样点属性"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2022C 无文件交付要求；Q1-Q4 输出全"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "歧义点3条：风化前无观测（未风化代理+代理误差）、'合适的化学成分'未指定（PCA 载荷自动识别）、未知鉴别无真值（交叉验证评估）"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "问题类型：成分数据统计模式识别（低维结构发现+判别建模），与2022C gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（observation/derived，马氏距离 D_Mi derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数6项每项有来源：有效区间题面、η=0.85 假设、K 校准、χ² 文献、|p|*=0.4 假设、e_tol=3% 假设"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "B1-B5 分型（calibration/mechanism/simplification）附合理性说明与误差影响（非线性残差约2个百分点）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 得分空间复原/Q2 聚类亚类/Q3 马氏判别/Q4 谱比较，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束5条全：有效性、载荷正交、方差占比、亚类互斥、归属唯一"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理：配方约束导致强共线→主成分压缩；候选模型对比（PCA+马氏选、全成分 LDA 弃用、聚类 备）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整（谱分解/马氏距离/复原），符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解（PCA/聚类/马氏判别）与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "model_doc 无代码，算法描述为主"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "聚类迭代收敛终止条件（求解器声明），无实际数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "稳定性：Bootstrap 100 次重估载荷与判别一致率（声明，无实际数值）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "合理性预期（第一主成分>40%、错分率<10%）仅为预期"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线：得分空间 vs 原始空间回归、多数类基线（合理），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度：方差比 0.75~0.90 扰动亚类成员（计划态），无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限：η→1 复原收敛到全空间、d→0 复原收敛到未风化均值（2类），无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证方案覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "无 claims 表，验证全计划态"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 35
+  },
+  "failure_modes": [],
+  "notes": ""
+}

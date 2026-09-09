@@ -1,0 +1,109 @@
+{
+  "submission_id": "36d8393a-7c44-4fe7-ab42-20a7474a493b",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§一 显式条件: 附件一任务/附件二会员/附件三新项目、四问、信誉配额机制(A3)"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 处理隐式: 逻辑概率、预算固定、信誉加权密度代理、打包折扣、附件三同分布"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 覆盖(规律反演/新方案对比/打包/新项目定价评价)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A4 打包折扣/A6 期望化 以假设处理歧义(无独立歧义清单节)"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "类型=统计建模+优化+空间聚类, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 含符号/单位/类型, 覆盖价格/概率/坐标/密度/分组/折扣/完成数/预算"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 含来源: θ 校准、B 按历史总酬金、p_min/p_max 假设、r_c=2km 校准、η∈[0.85,1] 假设、ȳ*=0.85 假设"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含类型与合理性说明"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 min 正则化回归反演/Q2 max N_c s.t. Σp≤B/Q3 max 打包 N_c/Q4 estimate, 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5: 预算/价格箱/分组划分/折扣域/会员容量"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理-题面一致(逻辑回归+预算优化); 机理-方程一致(组级 logit π_g=σ(θ0+θ_p η_g p_g+θ_ρ ρ_g^bundle)); 机理-目标约束一致; 候选 5 项含弃选依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 5 个: logit π_j/正则化反演/定价优化二阶条件/组级 logit/聚合 N_c=Σπ; d_j、ρ_g^bundle 在文中内联定义, 符号自洽"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "牛顿/L-BFGS、投影梯度+回溯、K-means+坐标下降, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "收敛判据明确: 梯度范数<1e-6, 凸优化唯一解"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "§可复现性 5 组随机初值(42/123/456/789/1024)报告 mean±std"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果合理性预期(提升10pp/打包0.9最优/新项目85%±5%)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "基线=统一价方案 vs 差异化方案对比(命名替代策略)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "预算±20%/系数±20%, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 p上限→∞→完成率1 与 预算→0→最低价(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 8,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

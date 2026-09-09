@@ -1,0 +1,109 @@
+{
+  "submission_id": "956b8c0c-a849-4b92-ab52-52e314fcdd54",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "有效区间 85-105%、两类玻璃、表单1/2/3、Q1-Q4 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 隐式条件识别（A1 有效区间/A2 风化回归映射/A3 未风化点代理/A4 logistic 边界/A5 均值插补）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2022C 无文件交付要求；O1-O4 输出（复原/判别/鉴别/关联）全"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity 段；题面存在'风化前成分无真值'、累加和口径等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=regression_analysis，与2022C统计建模gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（observation/derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P7 每参数有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4（风化复原回归/逻辑回归/未知鉴别/偏相关）与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 约束全（C1 有效性区间/C5 复原归一 Σx̂=100）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E5（S_i 与 δ_i/多元回归 x̂_ij/logistic p_i/分位亚类/偏相关 r_a）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 正规方程/S2 IRLS/S3 递推回归，与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 仅 expected_outputs/实现描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V4 IRLS 收敛声明，无实际残差数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V3 bootstrap 100 次声明，无实际数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "X1-X4 全 expected_outputs，无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 基线（下降20%声明），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 C 0.1-10 灵敏度，无 result"
+    },
+    "L4.3": {
+      "score": 0,
+      "evidence": "无 limit 类极限检验（V1-V5 均非极限）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C4 全 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 5,
+    "overall": 33
+  },
+  "failure_modes": [],
+  "notes": ""
+}

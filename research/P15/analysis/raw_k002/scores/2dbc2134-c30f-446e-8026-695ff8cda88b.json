@@ -1,0 +1,111 @@
+{
+  "submission_id": "2dbc2134-c30f-446e-8026-695ff8cda88b",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面四问捕获: 排队/空返两选择、蓄车池先来后到、分批定量放行、两条并行车道(Q3)、短途优先(Q4)、多次往返"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1 泊松近似、A2 指数服务、C1 稳态条件 λ_c<n_p μ(排队论隐含)"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖四问(决策模型/数据方案/上车点优化/优先方案)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "参数 P3/P5/P6/P8 以假设显式处理; 无独立歧义清单节"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=queueing_theory, secondary=decision_analysis; candidates 4族含 rationale, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V8 含 type(state/decision/derived): L(t)/W_q/d/u/η/n_p/ρ/I"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 含 source(校准/假设/文献): λ_c 分段估计/μ 标定/r_e 按机场/c_f 文献/c_t 假设等"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 max E[u(d)]/O2 estimate 阈值/O3 max η s.t. 安全/O4 min|I-0.5|, 与四问一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 稳态/C2 车道容量 n_p≤floor(D_lane/l_s)/C3 非负/C4 服务质量/C5 公平下限, 完备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(排队+优先权→Q1/Q3/Q4); 机理-方程一致(M1→E1 Erlang C, M3→E4); 机理-目标约束一致(C1 支撑 E1 有效); candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E4 I=u_long/(u_long+u_short) 中 u_long/u_short 未在变量/参数声明集; μ_short=μ/(1-ρ) 把优先权等效为服务率提升与标准优先排队模型不同"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 Erlang C 解析/S2 离散事件仿真(优先权队列)/S3 阈值参数扫描, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "S2 提及 SimPy 风格但盲评包无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "解析闭式为主(Erlang C); V5 ρ 扫描 I 连续单调收敛设计"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "S2 提及多 seed 但无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出(W*/分时段等待/最优 n_p/公平区间)合理但无实测"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 M/M/1 特例闭式解对照(退化情形核对, 非替代策略基线)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 c_f/c_t/λ_p 各±20%, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 极限 λ_c→0 与 λ_c→cμ(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "C1-C4 每条含 evidence_refs 与 status(hypothesis), 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 14,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": ""
+}

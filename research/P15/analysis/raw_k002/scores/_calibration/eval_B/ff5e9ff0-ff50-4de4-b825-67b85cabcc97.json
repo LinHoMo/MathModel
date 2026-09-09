@@ -1,0 +1,109 @@
+{
+  "submission_id": "ff5e9ff0-ff50-4de4-b825-67b85cabcc97",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:03:29+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面A/B选择、蓄车池先来后到、空载费用、两条并行车道、短途优先权等显式条件在假设/约束中覆盖；Q1-Q4 子问题分解"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1 乘客泊松流/服务指数、A2 期望收益理性决策、A4 蓄车池容量有限溢出必须返回"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q2要求'收集国内某一机场…数据'，但 P1/P2/P8 标'按附件数据'校准——2019C 无附件，数据收集任务被误为附件数据"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "2019C 经验判断/分批定量/短途优先等歧义在 A2（经验判断→期望收益）、A5/P6（短途阈值）、C3（分批放行→阈值策略）中实质处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "问题类型：收益均衡+排队网络混合框架（微观决策+排队论），与2019C gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V10 含 type：W_q/L state、δ decision、λ_p/λ_t/μ/θ parameter、R/C_0/Π derived"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 每参数有 source+取值：P3 c_d 题面、P5 d_0 题面、P6 d_short 假设、P8 T_h 校准（P1/P2/P8 数据来源标注失真见L1.3）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型（mechanism/mechanism_assumption/simplification/calibration/projection）附合理性说明与误差影响"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 estimate 收益比较、Q2 simulate 排队指标、Q3 find 阈值策略、Q4 evaluate 短途优先，与题面四问一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5：容量 L≤K、稳态 λ_t<μ、决策边界、短途比例、公平下限，关键约束全且方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理论证收益模型与排队模型联立成均衡；候选对比4项：收益+M/M/c 选、离散事件仿真折中、博弈论补充、纯统计回归排除"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "方程结构完整（收益比较/Erlang-C排队/阈值策略/短途优先守恒），但 c_w（Q1机会成本核心参数）、c（服务台数）、P_0 未入参数/变量声明集"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "Q1 数据估计临界值、Q2 M/M/c 公式+溢出修正、Q3 二分法解阈值、Q4 注入排队内核+仿真交叉验证，匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "求解节为算法描述（估计/公式/二分法），无实际代码"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "模型主体为解析闭式公式（收益比较、Erlang-C、短途优先守恒），解析解默认收敛"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "可复现性：固定5组随机数初值（42,123,456,789,1024）运行仿真报告均值标准差（声明，无实际数值）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "结果合理性预期（W_q*几十分钟量级、短途节省30%以上）仅为预期，无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线：M/M/c 解析结果与离散事件仿真对比 W_q 误差<10%（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度：λ_t/λ_p/θ ±20% 扰动（计划态），无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限：λ_t→μ 系统失稳、θ→0 退化普通排队（2类），无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证方案（基线/灵敏度/极限/多初值/公平）覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "无 claims 表，验证方案全部计划态，主张无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 14,
+    "L3_total": 6,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

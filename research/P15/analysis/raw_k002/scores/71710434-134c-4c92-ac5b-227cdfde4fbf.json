@@ -1,0 +1,109 @@
+{
+  "submission_id": "71710434-134c-4c92-ac5b-227cdfde4fbf",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全（60km/h、3min、20平台、13要道、[2,5]、P=32、3min延迟），Q1-Q5 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（最短路径/单归属/一对一封锁）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2011B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity/ambiguity_handling 段；题面存在 3 分钟约束口径、嫌疑车速等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family 图优化与2011B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 每参数有 source+取值（P8 按警车 60 假设标注）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 目标与题面五问一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6 关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E6（Floyd/就近覆盖/min-max封锁/覆盖选址/可达域 R(t)/出口封锁）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解与图优化匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "确定性图算法（Floyd/瓶颈指派/可达域），无数值收敛问题"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 确定性图算法多场景复跑结果一致（复现性声明，无数值）"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单平台单节点/直线路网手工对照（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 车速±20%、路长±10%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 速度→∞/平台数→∞/新增→∞ 极限，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1-O5"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims 全 hypothesis 或 supported 计划态，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 6,
+    "L4_total": 6,
+    "overall": 35
+  },
+  "failure_modes": [],
+  "notes": ""
+}

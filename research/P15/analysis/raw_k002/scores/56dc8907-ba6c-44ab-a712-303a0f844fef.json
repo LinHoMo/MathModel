@@ -1,0 +1,109 @@
+{
+  "submission_id": "56dc8907-ba6c-44ab-a712-303a0f844fef",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "附件一/二/三识别、Q1-Q4 全覆盖；P1 beta_0=-4.2、P2 beta_1=0.06、P3 beta_2=0.35 等校准参数"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：接单率逻辑函数、密度修正、打包折扣机制等"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2017B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity 段；题面存在打包粒度、预算口径等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=statistical_modeling，与2017B统计建模gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（observation/decision/derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P10 每参数有 source=校准+具体取值（P1 beta_0=-4.2、P2 0.06、P3 0.35、P4 r_0=3、P5 p_0=68）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附合理性"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 目标全（估计/最大化/打包/外推），与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 预算/价格下限/配额/概率/打包约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1 逻辑回归接单率、E2 P=1-(1-q)^n、E4 密度定价公式；candidates 有对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程符号（beta/γ/ρ）均在 P 表声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解与回归+优化模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V5 convergence：80/20 训练测试交叉验证回归稳定（声明，无数值）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 bootstrap 5 seed CV<5% 声明，无实际 cv 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 新方案 vs 原方案回测（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 beta_1/alpha/gamma ±20% 扰动，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 p→∞→R→1、ρ→0→R→0 两类极限，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C4 全 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

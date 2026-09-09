@@ -1,0 +1,109 @@
+{
+  "submission_id": "8715a103-43da-4043-aa45-c2ab8cbfedb0",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全：8 CNC、双爪清洗槽、三情形、故障 1%/10-20min、三组参数、8h，Q1-Q4 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式4条（RGV 单服务、CNC 单件、两工序顺序、故障停机）识别完整"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "任务2'填入附件2的EXCEL表'被识别（X 输出按三组参数回放）"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "歧义3条：投料节拍/停靠位置/第二道 CNC 范围，均有处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "问题类型贪心优先级+事件仿真，与2018B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量12项含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数12项三组取值全（source=题目）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型附合理性"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1-Q4 目标全（节拍/产量/故障/利用率），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束5条全（工序/清洗/移动/期限）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理（贪心优先级+事件仿真）+ 候选对比 4 项"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E5（循环节拍/产量上界/两工序完工/故障注入/利用率）符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解与事件仿真模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码，算法描述为主"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "验证5：重复次数 10→50 期望产量估计稳定（声明，无实际数值）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "验证含多初值稳定性（产量标准差<5% 均值声明），无实际数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "结果合理性预期（60-80 件、故障降 2-4%）仅为预期，无实际数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线（合理），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度加工时间±10%/故障率±50%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 τ_m→0/π_f→0/π_f→1，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证5条覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "验证全计划态，主张无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 35
+  },
+  "failure_modes": [],
+  "notes": ""
+}

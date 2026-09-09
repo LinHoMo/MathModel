@@ -1,0 +1,109 @@
+{
+  "submission_id": "3eb13b90-4668-4257-bdd6-40fb06671ad1",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P18: ρ_w=3/ρ_f=2/μ_w=2/μ_m=3/β=2/α=0.5/κ_c=2k/κ_g=1/k/κ_p=4 等, 三关/终点/沙暴/村庄规则捕获"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 处理隐式: Q3(1) 纯策略 NE、Q3(2) 完美不完全序贯信息、多人耦合"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "O1-O4 覆盖三关(Q3 拆两子问), 但未显式提及 Result.xlsx 结算文件交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设处理在线信息/多人信息结构; 无独立歧义清单节"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=DP, secondary=[optimization,graph_algorithm]; candidates DP(选)/MDP(排除)/IP(排除) 含 rationale"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V14 含 type(state/decision/derived), 覆盖位置/资源/资金/天气/行动/信息集"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P18 每参数含 value+source(题目/校准), P18 转移概率校准"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4: Q1 确定性收益/Q2 期望/Q3(1) 纯策略 NE/Q3(2) max E[m_T|I_t], 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C9 完整(负重/生存/截止/行动/耦合/购买/转移)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(序贯决策→DP/博弈); 机理-方程一致(E1-E11 含随机贝尔曼/NE/信息集/序贯值函数); 机理-目标约束一致; candidates 含排除依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E11 结构完整, 符号⊆声明集"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3 值迭代/策略迭代/耦合迭代, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "值/策略迭代未报告残差阈值数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 多次运行一致, 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出(n_sim=1000)合理但无实测"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 退化单人误差 0(退化情形核对, 非替代策略基线)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 ±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 极限 n→1 与 W_max→∞(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "C1-C4 每条含 evidence_refs 与 status(hypothesis), 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 6,
+    "L4_total": 7,
+    "overall": "FAIL"
+  },
+  "failure_modes": [],
+  "notes": "L3=6/15 未达70%: 迭代无收敛判据、无 seed 值"
+}

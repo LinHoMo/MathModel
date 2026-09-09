@@ -1,0 +1,109 @@
+{
+  "submission_id": "9132b63e-f162-47e4-a9c3-49e03602f8ac",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P12 显式条件全（k_1=0.082/k_2=0.37/k_3=0.045、ρc 413100/1810200/128000、d_1=0.0006/d_3=0.0036、h_1=8.0/h_2=9.0），Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 隐式条件识别（A5 初始温度 75/25 双对照——题面假人 37℃ 的差异经附件2校准曲线处理可接受）"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'填入problem1.xlsx'，未识别 Excel 交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity 2条：空气层传热/初始温度，均有 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=finite_difference，与2018A gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source+取值（含具体热物性数值）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O3 目标一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 约束全（含 C5 Fo≤0.5 稳定性）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E4（FTCS/调和平均/边界差分/τ_44 累加）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 FTCS/S2 二分/S3 反演，与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 仅实现描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V4 dx 与 dt 同时减半离散解收敛<0.1°C（声明，无实际数值）"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 描述，无实际 cv 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "LT 基线（合理），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "sensitivity P8/P9/P4±20%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1 d_2→0/LT2 t→∞，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "validation_plan 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1/C2=supported（计划态）、C3=unresolved 有 unresolved 降档"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

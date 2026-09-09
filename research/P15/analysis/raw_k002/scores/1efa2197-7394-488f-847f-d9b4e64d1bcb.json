@@ -1,0 +1,109 @@
+{
+  "submission_id": "1efa2197-7394-488f-847f-d9b4e64d1bcb",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 题面显式条件: 8台CNC/1辆RGV/三组参数/8h班次/故障1%/排除10-20min; 表1 三组参数值完整(20/33/46、23/41/59、18/32/46 等)"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件: RGV单机互斥、CNC等待占用、两道工序缓冲、故障报废、产量口径"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 覆盖(一般模型/Q3故障/Q4三组参数填附件2 EXCEL)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 3 条(故障统计口径、两道工序同机→异机、产量口径)含处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "§1 类型=调度优化+随机仿真+参数敏感性, 范式判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量 10 项含符号/定义/类型: x_kj/C_kj/Y/σ_j/r_k/ξ_j/η_j/u_j 等"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数表完整: t1/t2/t3 三组、p1、p21/p22、τ_o/τ_e/τ_w、T_s=28800、q=0.01、[600,1200]"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含类型与合理性; 确定性/异机/清洗即移等显式"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1-Q4 目标(max Y/E[Y]/ρ_g)与题面任务一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束 6 条: 单机/时序/可用/异机/班次截止/故障处理"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "§7 机理+候选 4 项(贪心/邻域采纳、MILP弃、排队论弃、DES采纳)含选择依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 5 个: 完工递推 C_kj=max(C+td,A_j)+τ+τ_w、产量计数、瓶颈 μ_RGV=1/(t̄_d+τ̄+τ_w) 与 μ_CNC=m/p、故障抽样、期望产量、系统效率"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "最短就绪优先贪心+邻域搜索 O(Km)、DES R=200、Q4 批量, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "贪心/仿真求解未报告收敛判据数值"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "§9 多 seed CV<3%, 明确 seed=42"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果合理性预期(ρ 0.85~0.98)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "基线=理论产量上限(独立解析容量基准)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度 p_f/±20%, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 t_m→0/p_f→0(2类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖产量/故障/效率核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 7,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

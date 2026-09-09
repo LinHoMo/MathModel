@@ -1,0 +1,109 @@
+{
+  "submission_id": "8b9d2434-e465-4150-bd9c-66b3ad3c2d6d",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "规则全覆盖（P1-P14 参数），Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 隐式条件识别（A1 一阶马尔可夫链/A3 经验频率/A4 静态纳什）"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'填入Result.xlsx'，未识别 Excel 交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity 3条：天气机制/挖矿时序/同行口径，均有 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=MDP+game_theory，与2020B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P14 每参数有 source+取值（P5 ρw=3/P6 ρf=2/P12 β=2/P13 α=0.5/P14 κ）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O3 目标一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C7 关键约束全（C6 购买限制/C7 拥挤耦合）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E6（贝尔曼/即时奖励/转移核/纳什/序贯值函数/天气条件策略）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 策略迭代/S2 均衡迭代/S3 MCTS，与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "策略评估+改进交替收敛/虚拟对局平滑（求解器声明），无实际数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 5 组描述，无实际 cv 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "LT 退化（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "sensitivity 4 组无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1 W_max→∞/LT2 N→1/LT3 T→0/LT4 g_0→0 仅 expected_behavior"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "validation_plan 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1=supported（计划态）其余 hypothesis"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

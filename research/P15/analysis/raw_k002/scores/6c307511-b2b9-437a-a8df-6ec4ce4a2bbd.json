@@ -1,0 +1,109 @@
+{
+  "submission_id": "6c307511-b2b9-437a-a8df-6ec4ce4a2bbd",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:31:01+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "规则全覆盖（P1-P10 参数），Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 隐式条件识别完整"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'填入Result.xlsx'，未识别 Excel 文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity 4条（天气转移/挖矿时序/同行口径/终点结算），均有 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family 动态规划/博弈与2020B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（state/decision/derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P10 每参数有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O3 目标一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E6（消耗/资金/贝尔曼/多人收益）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3 求解与 DP 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述，无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V5 迭代至不动点收敛阈值声明，无实际数值"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "multi_seed 5 seeds 有 result：期望资金 cv≈2.8%（<10%）"
+    },
+    "L3.5": {
+      "score": 2,
+      "evidence": "sensitivity 3组带数值：水价+20%→购水-15%、挖矿收益+20%→挖矿天数+1、消耗+20%→E[m_T]-12%，量级合理"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线'最短路径直达'（合理），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 3组带 result 弹性数值（水价/挖矿收益/消耗）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT3（W_max→0 无可行解、T→∞ 收敛、k→n 完全分散）均带 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "validation_plan 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claims C1-C3 全 supported 且带实际 result 数值"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 8,
+    "L4_total": 9,
+    "overall": 40
+  },
+  "failure_modes": [],
+  "notes": ""
+}

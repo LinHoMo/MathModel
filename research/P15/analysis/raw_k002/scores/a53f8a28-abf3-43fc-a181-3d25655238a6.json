@@ -1,0 +1,109 @@
+{
+  "submission_id": "a53f8a28-abf3-43fc-a181-3d25655238a6",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "有效区间/两类玻璃/表单结构/Q1-Q4 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（成分非负/未检出非零）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2022C 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 有：亚类划分的化学依据（树规则/主导成分阈值/聚类转规则）、其他歧义，均有 interpretations/adopted/justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=decision_tree secondary=[statistical_classification]，与2022C判别建模gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 min_T 复原误差/O2 亚类划分/O3 判别/O4 关联，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 数据有效性 85≤S_i≤105/C2 树复杂度/C3 规则确定性，关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E3（Gini 不纯度/轴对齐规则/叶均值）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 CART 贪心分裂与后剪枝/S2 回归树叶均值，与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为算法描述（递归二分+代价复杂度剪枝），无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V4 验证误差随复杂度单调先降后升（收敛类声明），无实际数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "multi_seed 5 seeds Bootstrap 重采样描述，无实际数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单变量阈值基线与逻辑回归基线（合理），无数值对比结果"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V3 深度/叶样本数扰动，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限检验（存在），无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1-C4 全 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 35
+  },
+  "failure_modes": [],
+  "notes": ""
+}

@@ -1,0 +1,111 @@
+{
+  "submission_id": "eeea163e-21e8-4c68-83e4-2caf8181a8cc",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:33:50+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 1,
+      "evidence": "P1-P10 大部分提取正确（板长3.41/2.2、板宽0.3、223、v0=1、16圈、R_T=4.5、半径比2、v_max=2、螺距0.55/1.7），但遗漏孔径5.5cm与孔心距板头27.5cm（导致 C2 弦长约束 ‖P_{i+1}-P_i‖=L_i 用错参数）"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1 等距阿基米德螺线、A3 圈间隙干涉判据、A5 匀速弧长参数化——均给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q5 均有 objectives/experiments（几何仿真/间隙/螺距扫描/调头优化/速度上限），但 result1/2/4.xlsx 与 6 位小数交付格式未识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A2 弦长=板长、A4 圆弧族），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=pure_geometric_spiral secondary=differential_geometry，几何主线判定正确（运动学/数值优化排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V9 声明完整（极径/极角/曲率半径/把手点/把手速度/圈间隙/调头弧长/圆弧半径/速度比）"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P10 有来源，但孔心距板头/孔径参数缺失，且 E4 中圆心角 α_1/α_2 未声明"
+    },
+    "L2.3": {
+      "score": 1,
+      "evidence": "A2 显式假设'相邻把手距离等于板长'与题面'孔中心距最近板头27.5cm'冲突——把手间距应为 L−2ℓ（龙身1.65m）而非板长2.2m"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O5 与 Q1-Q5 对应（仿真/t_end/min p/min s_T/max v0），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1螺线/C3干涉间隙/C4调头边界/C5相切/C6速度上限齐备，但 C2 弦长约束用 L_i 而非 L_i−2ℓ"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1/E2 螺线几何与曲率公式正确；E3 圈间隙判据、E4 弧长相切、E5 速度传递与机理对应；E4 candidates 3个给选择依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E5 结构完整含推导轨迹，但 α_1/α_2 符号未声明，且弦长定位（A2）未进入方程体系"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S5（弦长二分/间隙扫描/可行域一维搜索/相切优化/速度比扫描）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 implementation_ref 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V4 极角网格加密收敛为计划"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V5 声明确定性算法同输入重复逐位一致，无实际运行证据"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C1-C5 均 hypothesis）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 与半径恒定圆盘链几何解析解对照（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V3 板宽±10%、V6 半径比±10%扰动（敏感参数）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V2 仅 1 类极限（螺距→∞ 退化为直线链）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V6 目标覆盖 O1-O5 全部核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1-C5 均有 evidence_refs 但全部 status=hypothesis 未决"
+    }
+  },
+  "vector": {
+    "L1_total": 7,
+    "L2_total": 12,
+    "L3_total": 3,
+    "L4_total": 7,
+    "overall": 29
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "几何视角完整；缺陷：漏孔径/孔距且弦长约束错用板长（位形系统性偏差）、α 未声明、result xlsx 交付未识别、L3 缺执行证据。"
+}

@@ -1,0 +1,111 @@
+{
+  "submission_id": "c241330b-01a9-471f-9e8a-774bcf36d58b",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:33:50+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 1,
+      "evidence": "规则(1)-(8) 大部分转录（消耗倍率/价格/负重/沙暴/挖矿时序/拥挤规则），但规则(6)起点单次购买与终点半价退回未进入约束/资金动力学"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1一阶马尔可夫、A2风险中性、A5拥挤系数可知性、A3状态更新口径（对应注2）"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "X1-X4 对应第一至六关映射完整，但 Result.xlsx 交付文件未显式识别"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理天气机制歧义（A1一阶马尔可夫由附件校准），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=markov_decision_process，按信息结构（全知/当天已知/多玩家）分型判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V8 声明完整（策略/状态/行动/消耗系数/购买量/资金/拥挤人数/期望终局资金）并区分类型"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P9 有来源（各关给定/校准），但 E1 中 p_loc（位置价格）与 C1 中 alpha_w/alpha_f（箱重）未声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 带类型与合理性（一阶马尔可夫最小假设、注2口径对齐）"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O3 与 Q1-Q3 对应（全知/在线/多玩家的 E[m_T] 最大化），三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1负重/C2生存/C3截止/C4沙暴/C5资金/C6挖矿时序——关键约束齐备方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "evidence": "E1机理家族（MDP+倒推DP+拥挤修正）正确、E2方程与机理对应、E4 candidates 5个充分；但 E3 有轻微缺陷：终点半价退回未计入资金状态转移，机理-目标存在小缺口"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E3 含递推与贝尔曼方程（gamma=1），但 p_loc、alpha_w/alpha_f 符号未声明（符号不一致）"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（值迭代/确定性倒推/耦合迭代/支配剪枝）与模型类型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "implementation_ref 为伪代码，无实际代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；V4 多玩家迭代收敛检验仅为方案"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V5 多种子重抽样校准 P_s 声明，无实际方差/阈值结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 与直达最短路径基线比较终局资金（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V2 天气转移矩阵 P_s ±20%扰动（敏感参数）观察期望资金与策略变化"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 沙暴概率→0 时 Q2 趋近 Q1 仅1类极限检验"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 目标覆盖 O1/O2/O3 全部核心主张（全知最优/在线敏感/多玩家协同）"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claims C1-C3 均有 evidence_refs 且 status=supported"
+    }
+  },
+  "vector": {
+    "L1_total": 7,
+    "L2_total": 12,
+    "L3_total": 3,
+    "L4_total": 8,
+    "overall": 30
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": "MDP 建模质量高；缺陷：终点退回/起点单次购买未计入、p_loc 等符号未声明、L3 缺执行证据。"
+}

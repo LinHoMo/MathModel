@@ -1,0 +1,109 @@
+{
+  "submission_id": "436d76e2-b83c-4e0b-a037-e5edb8db0672",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面条件捕获: 排队/空返、蓄车池、两车道(Q3)、短途优先(Q4)、多次往返; 管理方加权目标(A1)"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 处理隐式: 短途再返、区间结论"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖四问"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "validation_plan.ambiguity_handling 3 条含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=decision_analysis; 范式判定合理"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V8 含 type(state/decision/derived)"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 含 source: c_f 文献、c_t/D_lane 假设、l_s 文献、λ_p 校准、ω=0.5 假设"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4: Q3 max ωη+(1-ω)·service quality、Q4 min|I-0.5| 带长途收益下限, 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5: n_p≤floor(D_lane/l_s)、λ_p<n_p μ、ρ∈[0,1)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(决策+排队); 机理-方程一致(E1-E4); 机理-目标约束一致(O4+C5); candidates 含 rationale"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1 引用 ε 未在 V1-V8/P1-P9 声明; E2 τ*=c_f r_e/c_t 由 E1 推导应含 ε 项, 漏项不一致; E4 引用 u_long/u_short 未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3 解析+枚举, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "解析闭式为主, 确定性收敛"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "validation_plan.multi_seed: n_runs=5, seeds=[42,123,456,789,1024] 字段齐全"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出合理但无实测"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 单时段手算一致(手算核对, 非替代策略对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 c_f/c_t/λ_p ±20%, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT3(λ_p→0 全排队/λ_p→cμ 全空返等, 3类)设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1/C2 supported/C4 unresolved(C3 未列入)"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 14,
+    "L3_total": 8,
+    "L4_total": 6,
+    "overall": "FAIL"
+  },
+  "failure_modes": [],
+  "notes": "L4=6/9 未达70%: 手算核对非对照基线, 验证未执行"
+}

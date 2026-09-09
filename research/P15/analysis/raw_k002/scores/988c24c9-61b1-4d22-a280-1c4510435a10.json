@@ -1,0 +1,109 @@
+{
+  "submission_id": "988c24c9-61b1-4d22-a280-1c4510435a10",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P9 显式条件全（机场布局/排队规则/空驶成本等），Q1-Q4 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别（泊松到达/指数服务/收益理性）"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2019C 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 有：'分批定量放行'控制方式（动态放行）、司机'个人经验判断'建模方式等，均有 interpretations/adopted/justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=queueing_theory secondary=[decision_analysis, optimization]，与2019C gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（V4 队列长 state/V6 决策 decision/V13 利用率 derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P9 每参数有 source+取值"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "假设分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 等待时间估计/O2 收益差决策/O3 上车点设置/O4 短途优先，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1 稳定性 ρ<1/C2 安全间距/C3 容量≤2 车道，关键约束全"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E3（M/M/1 等待/决策阈值/收益差）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整（E1 W_q^t=ρ_t/(μ_t(1-ρ_t))），符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 排队公式闭式求解+S2 阈值策略扫描，与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 为 pseudocode（hourly segmentation/closed-form W_q），无实际代码"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "模型主体为解析排队公式（闭式解），解析解默认收敛"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "multi_seed 5 seeds 有 result：W_q 的 cv≈4.1%、收益 CV 的 cv≈6.2%，均<10% 通过"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "sensitivity 有 result（切换时刻偏移约 1 小时、阈值策略结构不变）量级合理，但主结果（等待时间/收益）仍为计划态"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 空驶率100%与全部排队双极端基线（合理），无数值对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 3组带 result：λ_t/λ_p ±20% 切换时刻偏移约1小时、阈值结构不变（有弹性数值）"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 ρ→1 等待时间发散预警（limit 检验），无 result 数值"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claims C1-C4 全 supported，且 multi_seed/sensitivity 带实际数值支撑"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 8,
+    "L4_total": 8,
+    "overall": 40
+  },
+  "failure_modes": [],
+  "notes": ""
+}

@@ -1,0 +1,112 @@
+{
+  "submission_id": "f26b4776-913e-4de2-a0c5-3cb83da9c2a9",
+  "evaluator": {
+    "model": "eval_C",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:33:50+0800"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 0,
+      "evidence": "参数大量错误：P1 加工时间'工序1=560/工序2=280'混淆一道与两道且第二道应为378；P2 清洗'35/30'非题面值（应为25）；P3 上下料20实为移动1单位（应为28/31）；P4 移动'18/27/36/45/54'除18外均非题面值（应为20/33/46）；3组数据未区分"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件：A1 单机械手不可抢占、A2 工序节拍、A5 在制品暂存——均给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1-Q4 有 objectives/experiments，但任务2的'3组数据填入附件2 EXCEL'被重构为 O4'两道工序各4台'，未识别三组数据批量交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设层处理歧义（A4 故障立即修复、A5 暂存），无显式歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "primary=optimization secondary=simulation/DP，调度优化判定正确（MDP 排除给依据）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V6 声明完整（服务序列/完成时刻/状态/产量/等待/故障指示）"
+    },
+    "L2.2": {
+      "score": 0,
+      "evidence": "参数值大量错误：清洗35/30、上下料20、移动18/27/36/45/54 均与题面冲突，E4 中 t_serve/t_move^avg 亦未声明"
+    },
+    "L2.3": {
+      "score": 1,
+      "evidence": "A1-A5 带类型，但 A4'故障发生后立即修复'与题面'排除时间10~20分钟'显式冲突"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "O1-O4 与题面任务映射混乱：O4'两道工序各4台'非任务2的3组数据检验，O3'同料一道工序'非原题 Q3"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1-C4 结构齐备，但缺故障排除时长约束（A4 冲突）且无三组数据批量约束"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M4 机理（循环节拍/时间窗指派/故障鲁棒/瓶颈节拍）与 RGV 问题一致；E1/E2/E4 方程与机理对应；candidates 4个给选择依据"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E4 含推导轨迹，但 t_serve/t_move^avg 符号未声明，无初始条件"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4（MILP启发式/离散事件仿真/参数化/产线平衡）与模型匹配"
+    },
+    "L3.2": {
+      "score": 0,
+      "evidence": "仅 pseudocode 描述，无代码与执行日志"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无实际结果；无收敛检验实测"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V2 故障仿真 5 组种子声明，无实际结果"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际数值结果可核验（C1-C3 标注 supported 但无运行证据）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 与固定轮询策略比较产量提升（合理基线），未报告对比结果"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "V3 加工/移动时间±20%、V5 加工±5%（敏感参数）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "V4 极限2类（t_move→0 趋加工下界、p_f→0 趋 Q1）"
+    },
+    "L4.4": {
+      "score": 1,
+      "evidence": "V1-V5 覆盖 O1/O2/O4，但 O3（一般化模型）无对应 validation 目标"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "C1-C3 标注 supported 但对应实验均为计划无实际运行——主张状态过度声明"
+    }
+  },
+  "vector": {
+    "L1_total": 6,
+    "L2_total": 9,
+    "L3_total": 3,
+    "L4_total": 7,
+    "overall": 25
+  },
+  "failure_modes": [
+    "FM-PA-003",
+    "FM-FC-002"
+  ],
+  "notes": "RGV 参数大量错误（清洗/上下料/移动/加工全乱）且任务2三组数据检验被重构；机理框架本身合理。"
+}

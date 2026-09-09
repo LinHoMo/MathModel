@@ -1,0 +1,111 @@
+{
+  "submission_id": "30beb45f-6835-44f2-8eb8-1f9d7914c120",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T15:20:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面四问+附件角色捕获: 附件一历史任务/附件二会员/附件三新项目; P7 信誉分、P2 预算按历史总酬金"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 处理隐式: 完成概率机制、伯努利独立、核密度光滑、预算锚定、打包去内耗"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖四问(定价规律/新方案对比/打包/新项目定价评价)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "validation_plan.ambiguity_handling 3 条含 interpretations+adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=statistical_modeling, secondary=[optimization,clustering]; candidates 4族含 rationale"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V14 含 type: p_i/y_i/π_i/x_i,z_i/ρ_m/ρ_t/d_i/n_i^cmp/g_k/q_k/w_j/R/r_i"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 含 source: p_min=65/p_max=90 校准、B=附件一原价和、r_cmp=2.0 假设、r_pack=1.5 校准、β 极大似然、h=0.02 校准"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 估计逻辑回归/O2 max R(p') s.t. Σp≤B/O3 max R_pack/O4 外推新项目, 与四问一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5: 价格箱/预算/组内邻近/分组完备/新预算"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(供需比/效用-完成概率); 机理-方程一致(logit/均值/预算优化/组级logit/打包); 机理-目标约束一致(O2+C2); candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "组级 logit π_k=σ(γ0+γ1 q_k+γ2 n_k^mem) 中 γ0-γ2 与 n_k^mem 未在变量/参数声明集"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 IRLS/S2 边际收益排序+网格/S3 DBSCAN/S4 bootstrap 500, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "S1 IRLS 收敛判据 ||Δβ||<1e-6 明确"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "validation_plan.multi_seed: n_runs=5, seeds=[42,43,44,45,46], result R 标准差≈0.8%、cv≈2.3%"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "validation_plan 报告执行结果: LT1 p_i→65 时 π≈0.35、LT2 r_pack→0 时 R_pack→R、敏感性预算±20%→R±6%, 数值自洽"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 常数概率+均值定价基线(命名对照)"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 预算±20%→R±6%(弹性数值+边界)"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT3 三类极限(p_i→65/r_pack→0/r_i→∞)均含 result 并与主张关联"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map C1-C4 全 supported, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 14,
+    "L3_total": 8,
+    "L4_total": 9,
+    "overall": "PASS"
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": ""
+}

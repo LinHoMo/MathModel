@@ -1,0 +1,109 @@
+{
+  "submission_id": "06cb0fb3-9a1d-4644-815e-f6d13b8faa18",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P13: λ_w=2/λ_m=3/ρ=0.5/κ_v=2/λ_k=2k/κ_k=4 均 source=题目; 三关结构/终点结算/沙暴/村庄/矿山规则捕获"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 处理多人耦合、在线信息结构(X1 第一二关全知/X2 第三四关在线)等题面未明示部分"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "O1-O3 覆盖三关子任务(单人/在线/多人), 但未显式提及 Result.xlsx 结算文件交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "A4/A5 以假设形式处理在线信息与多人耦合的不确定性, 无独立歧义清单节"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=DP, secondary=optimization; candidates DP(主)/optimization(对照)/MDP(Q2扩展)/game_theory(工具) 含 rationale"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V10 含 type(state/decision/derived/observation)与符号定义: 状态 s_t=(r,w,f,m,c)、行动、策略、消耗/收益/在线策略变量"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P13 每参数含 symbol+value+source(题目/假设); q_w=3/q_f=2/W_max=1200 均显式标注 source=假设"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 均含 type 与 rationale; 天气马尔可夫化/资源整数化/多人耦合等假设显式"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 单人多关卡收益/O2 在线期望收益/O3 多人均衡, 与题面三关任务对应; 机理 DP 支撑, 约束 C1-C7 不冲突"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C7 负重/生存/截止/行动过滤/多人耦合/起点一次购买/状态转移, 方向正确且 form 化"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(序贯决策→DP); 机理-方程一致(贝尔曼/随机贝尔曼/多人耦合方程); 机理-目标约束一致(M3→O3+C5); candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 结构完整: 状态转移/资源资金守恒/贝尔曼最优/随机转移分解/多人消耗收益/终点半价退回; 符号⊆声明集"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 自后向前 DP(值迭代)/S2 策略迭代/S3 多人耦合迭代, 与 DP/MDP 模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志/退出状态"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "值迭代为迭代算法, 未报告残差阈值或收敛数值(与校准包 c37459ee 同型)"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 固定天气先验与随机数序列重复运行(方差<1%), 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X3 预期输出(贪心对比更优/在线介于两界/均衡稳定)合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 与贪心基线对比'应显著更优'(命名替代策略)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 天气先验±20%, 未报告弹性系数/鲁棒性边界"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 极限 W_max→∞ 与基础消耗加倍(2类), 未报告结果未关联主张"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O3(基线/灵敏度/极限/方差/均衡稳定性)"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "C1-C3 每条含 evidence_refs(X1/V1-V4)与 status(supported/hypothesis), 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 6,
+    "L4_total": 8,
+    "overall": "FAIL"
+  },
+  "failure_modes": [],
+  "notes": "L3=6/15 未达70%: 无代码、值迭代无收敛判据、无 seed 值"
+}

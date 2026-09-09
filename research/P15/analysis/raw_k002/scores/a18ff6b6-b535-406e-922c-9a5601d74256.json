@@ -1,0 +1,109 @@
+{
+  "submission_id": "a18ff6b6-b535-406e-922c-9a5601d74256",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全（附件一/二/三结构、信誉配额机制），Q1-Q4 分解完整"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别：会员理性选择、任务完成与定价距离竞争相关、平台预算上限、打包需位置集中"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2017B 无文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "歧义点3条：平台收益结构（采纳利润=预算−定价）、打包判据（聚类+距离阈值）、附件三无标签评价（外推+模拟）"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "问题类型：统计建模（定价回归/分类）+优化+聚类，与2017B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量11项含 type 区分（decision/observation/derived，p_i decision、π_i derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数每项有来源（β 系数校准、R 假设、预算 假设）"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 分型（mechanism/mechanism_assumption/projection/simplification）附合理性说明与误差影响"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1 定价规律研究/Q2 新方案对比/Q3 打包/Q4 外推评价，与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束6条全：预算 p_min≤p_i≤p_max、不劣于原方案、打包地理/规模/单组归属、概率"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理：逻辑回归代理模型+利润优化经典结构；候选对比4项（逻辑回归选、随机森林弃用、空间扫描弃用、ABM 弃用）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程完整（logit/特征工程/利润函数/一阶条件），符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解（MLE/一阶条件/组合优化）与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "model_doc 无代码，算法描述为主"
+    },
+    "L3.3": {
+      "score": 0,
+      "evidence": "无数值收敛验证"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "多初始化稳定性（声明），无实际数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "合理性预期（利润提升5%~15%等）仅为预期"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线（原方案对照），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度 R/B/D_pack ±30%，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 p→0/d→∞，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证方案（80/20/灵敏度/极限/稳定性）覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "无 claims 表，验证全计划态"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 4,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

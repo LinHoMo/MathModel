@@ -1,0 +1,111 @@
+{
+  "submission_id": "1c8eaee9-5715-4d6f-a416-1293c4c2e2e3",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面条件捕获: 排队/空返、蓄车池、两车道、短途优先、多次往返; P1 r̄=48/P2 r̄_c=35/P3 c_w=30/P4 d_0=22/P5 μ=55/P6 d_s=5/P7 β=95/P8 C_s=80"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 处理隐式(稳态/容量/优先/风险)"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖四问"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "validation_plan.ambiguity_handling 3 条含 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=queueing_theory; 范式判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 含 type/unit, 覆盖队列/收益/阈值/公平指标等"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 每参数含 value+source(校准/文献/假设)"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 与四问一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 完整"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致; 机理-方程一致(E1-E6); 机理-目标约束一致; candidates 含 rationale"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1/E2 引用 μ_v/L_v/v 未在变量/参数声明集; E6 用平均绝对离差 G 度量与 V12 声明符号不一致"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4 含 implementation_ref(queue_threshold.py/hourly_calib.py/mmc_search.py/priority_sim.py)"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "引用实现文件名但盲评包无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "解析闭式为主, 确定性收敛"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "validation_plan.multi_seed: n_runs=5, seeds=[42,123,456,789,1024] 字段齐全"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 仿真对照(独立方法对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 ±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "LT1-LT4 极限设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "claim_evidence_map CL1-CL4 全 supported, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 14,
+    "L3_total": 8,
+    "L4_total": 8,
+    "overall": "PASS"
+  },
+  "failure_modes": [
+    "FM-FC-002"
+  ],
+  "notes": ""
+}

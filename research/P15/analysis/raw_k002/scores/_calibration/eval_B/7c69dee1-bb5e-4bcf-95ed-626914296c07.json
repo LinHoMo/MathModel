@@ -1,0 +1,112 @@
+{
+  "submission_id": "7c69dee1-bb5e-4bcf-95ed-626914296c07",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:03:29+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 0,
+      "evidence": "参数取值大面积与题面表1不符：P1 二道 t_proc='560s/280s'（题面二道第一/二道分别为400/280/455与378/500/182）、P2 t_wash='一道35s；二道30s'（题面25/30/25）、P3 t_load=20（题面奇偶28/30/27与31/35/32）、P4 t_move 等差18/27/36/45/54（题面非线性三组），错误率>30%"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A3 识别单机械手串行服务、加工→清洗→上下料流程、故障1%独立发生等隐式条件"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "任务2要求'填入附件2的EXCEL表'，但 X1-X4 expected_outputs 仅'产量/调度序列'，未识别 Excel 交付结构"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity_handling 4条：服务优先级、故障修复时长、工序间缓冲、班末统计，均有 adopted+justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=dynamic_programming secondary=[optimization, markov_decision_process]，与2018B动态调度gold family有交集"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V7 含 type：p_t/σ_t/τ_t state、a_t decision、N_prod derived、ξ_t observation"
+    },
+    "L2.2": {
+      "score": 1,
+      "evidence": "P1-P8 均有 source=题目+取值，但 P1-P4 取值与题面表1不符（见L1.1），P8 N_knife'每10000件更换'为自造规则非题面内容"
+    },
+    "L2.3": {
+      "score": 1,
+      "evidence": "A4'移动时间按单位距离线性'与表1非线性数据矛盾；A5称'题面未给修复时长'与题面'10~20分钟'直接矛盾"
+    },
+    "L2.4": {
+      "score": 1,
+      "evidence": "O1/O2 有数学目标（max N_prod/max E[N_prod]），但 O3/O4 目标表达式仅为文字（'一般模型（一道工序…）'），无数学形式"
+    },
+    "L2.5": {
+      "score": 1,
+      "evidence": "C1-C4 关键约束（单服务/工序/时间窗/故障）在，但 C5'每台CNC累计加工10000件需换刀'为自造约束且 source 误标'题面'"
+    },
+    "L2.6": {
+      "score": 1,
+      "evidence": "M1-M4 与 E1-E4 结构对应、candidates 4项对比，但 E4 理想节拍公式建立在错误参数（t_proc/t_wash/t_move 错值）上，机理-方程联动失真"
+    },
+    "L2.7": {
+      "score": 1,
+      "evidence": "E1-E4 有递推结构（含 E3 期望化边界），但 E4 节拍公式 T_j=(8/4)t_proc,j+... 符号取值绑定错误参数、E2/E3 中 τ_t 未实际使用"
+    },
+    "L3.1": {
+      "score": 1,
+      "evidence": "S1 事件驱动前向搜索（启发式+剪枝）与 E2 的后向价值递推口径不完全一致；S2 滚动重调度/S3 蒙特卡洛/S4 节拍分析匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 全为 pseudocode 描述（event simulation with greedy candidate pruning 等），无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V5 convergence：调度搜索深度/剪枝阈值收敛、产量对阈值不敏感（方案声明，无实际数值）"
+    },
+    "L3.4": {
+      "score": 2,
+      "evidence": "multi_seed n_runs=5 seeds=[42,43,44,45,46] 含42，result='E[N_prod] 的 cv≈4.2%，可复现性通过'（有实际数值<10%）"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "LT1-LT4 带 result（t_move=0逼近上限、p_f=0两模型一致、t_proc扩大10倍产量趋零、T_shift=0产量为0）量级合理，但主结果（班次产量）无实际数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 以固定轮询策略为基线比较 DP 策略产量提升（合理基线），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 2,
+      "evidence": "sensitivity 3组带 result：p_f 0.5%~2%翻倍时产量损失约翻倍、t_move +20%产量降约3%、t_proc2 +20%产量降约9%（有弹性数值）"
+    },
+    "L4.3": {
+      "score": 2,
+      "evidence": "LT1-LT4 4类极限均带 result 且与主张关联（逼近上限/一致/趋零/为0）"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 targets_refs 覆盖 O1/O2/O4 核心主张"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claim_evidence_map C1-C3 全 supported，但 C1 证据 X1 为 expected_outputs 计划态，无实际产量数值支撑定量结论"
+    }
+  },
+  "vector": {
+    "L1_total": 6,
+    "L2_total": 8,
+    "L3_total": 6,
+    "L4_total": 8,
+    "overall": 28
+  },
+  "failure_modes": [
+    "FM-PA-003",
+    "FM-MC-003"
+  ],
+  "notes": ""
+}

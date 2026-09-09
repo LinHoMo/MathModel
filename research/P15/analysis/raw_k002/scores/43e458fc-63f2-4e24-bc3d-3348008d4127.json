@@ -1,0 +1,111 @@
+{
+  "submission_id": "43e458fc-63f2-4e24-bc3d-3348008d4127",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "P1-P8: v=60、t_0=3、N_p=20、K=13、n_max=5、n_min=2、Δt_0=3、E=附件2, 与题面一致"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A5 处理隐式: 60km/h、一平台一封锁路口、工作量代理、新增平台设节点、同速最短路"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O5 覆盖 Q1-Q5(管辖/封锁/新增平台/六区评估/围堵)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "以假设处理嫌疑车速/工作量口径; 无独立歧义清单节"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=optimization, secondary=[graph_algorithm,decision_analysis]; candidates 4族(queueing 排除)含 rationale"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 含 type(state/decision/derived), 覆盖指派/封锁/选址/工作量/围堵变量"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 每参数含 value+source=题目"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A5 含 type 与 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 min max t_ij/O2 min max w_i 且 2≤n_add≤5/O3 评估/O4 estimate κ/O5 min T_enc s.t. 封闭全部可达出口, 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6 含 p(t)∩S_cut=∅ 等, 完备"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(指派/选址/围堵); 机理-方程一致(瓶颈指派+λ|w_i-w̄| 惩罚、T_block^* 阈值二分+匹配 O(K³logT)、S_cut^* 贪心+枚举); 机理-目标约束一致; candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E5 结构完整, 符号⊆声明集"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S4 瓶颈指派/二分+匹配/贪心+枚举, 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "精确算法为主(匹配/二分), 收敛性内在保证"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 工作量权重稳定, 无 seed 值"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X5 预期输出合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 就近分配贪心基线(命名替代策略)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 速度 50~70km/h 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 增补数边界(1类), 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O5"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "C1-C5 每条含 evidence_refs 与 status(supported), 无 unresolved; 但 supported 判定缺乏包内实测数值"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 8,
+    "overall": "PASS"
+  },
+  "failure_modes": [
+    "FM-EV-001"
+  ],
+  "notes": "claims 全标 supported 但包内无实测数值支撑(主张判定过早)"
+}

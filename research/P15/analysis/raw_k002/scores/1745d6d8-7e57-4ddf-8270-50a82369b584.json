@@ -1,0 +1,109 @@
+{
+  "submission_id": "1745d6d8-7e57-4ddf-8270-50a82369b584",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:10:38"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "题面定性条件捕获: 排队/空返两选择、蓄车池先来后到、乘车区分批定量、两条并行车道(Q3)、短途优先(Q4)、允许多次往返"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 处理隐式: 稳态条件(C2 λ<μ)、蓄车池容量有限、优先级实现、乘客到达近似"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "O1-O4 覆盖四问(决策模型/数据方案/上车点优化/短途优先)"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "P6 D_s=10、P7 α=0.6 等参数以假设显式处理; 无独立歧义清单"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family: primary=decision_analysis, secondary=optimization/queueing_theory; 范式判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V12 含 type(状态/决策/派生), 覆盖收益/等待/阈值/布局变量等"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P8 含 source(题面/假设/校准); D_s=10 假设、m=2 题面均标注"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含 rationale; 风险中性/时段平稳/双车道双服务台等显式"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O4 与四问一致; O3 max 吞吐率=min(λ_p,cμ) s.t. 安全 与题面吻合"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C5 完整(容量/稳态/决策边界/布局/优先)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "四要素齐备: 机理-题面一致(收益权衡+排队); 机理-方程一致(E1-E7); 机理-目标约束一致; candidates 4族含 rationale"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E7 符号一致; E6 布局优化=仿真标定 f(n,b,λ) 自洽"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3 解析计算+枚举+仿真交叉验证, 与模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "排队解析闭式为主, 确定性收敛"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 仿真方差<1% 设计, 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "X1-X4 预期输出合理但无实测"
+    },
+    "L4.1": {
+      "score": 2,
+      "evidence": "V1 全排队/全空返上下界基线(命名对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 ±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 λ→0/∞ 极限, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O4"
+    },
+    "L4.5": {
+      "score": 2,
+      "evidence": "C1-C4 每条含 evidence_refs 与 status, 无 unresolved"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 8,
+    "overall": "PASS"
+  },
+  "failure_modes": [],
+  "notes": ""
+}

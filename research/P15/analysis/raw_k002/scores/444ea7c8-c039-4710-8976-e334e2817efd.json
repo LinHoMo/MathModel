@@ -1,0 +1,109 @@
+{
+  "submission_id": "444ea7c8-c039-4710-8976-e334e2817efd",
+  "evaluator": {
+    "model": "eval_A",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T15:25:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "§1 题面条件捕获: 排队/空返、蓄车池、两车道(Q3)、短途优先(Q4)、多次往返"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式: 风险中性误差约5%、短途固定6km±1km不敏感"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "Q1-Q4 覆盖四问"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "§1 歧义点 3 条含处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "类型=排队+序贯决策+配置优化混合, 判定正确"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量 17 项含符号/单位/类型"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数 9 项含来源: α=0.85 校准、R_a=46、R_c=37、d_e=24km、c_t=30、c_k=2.4、μ_s=50、D_s=6km、C_max=80"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 含类型与合理性"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1-Q4 目标: Q3 max E=mμ_s/(1+L_q)、Q4 min J=收益方差, 与题面一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束 6 条(稳态/容量/安全/公平)"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理-题面一致(排队+序贯决策); 机理-方程一致(E1-E6 含 ρ<0.9 校验); 候选 4 项含选择依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 E1-E6 符号自洽, 结构完整"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "解析阈值、最小二乘、网格 2×20、贪心重排+局部搜索 O(n²), 匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码/执行日志"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "解析闭式为主; 网格步长减半收敛设计"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "5 组随机初值, 无 seed 值/统计结果"
+    },
+    "L3.5": {
+      "score": 1,
+      "evidence": "结果预期(5 组随机初值 J 标准差<10%)合理但无实测"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "W_q=0/∞ 退化基线(退化情形核对, 非替代策略对照)"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "±20% 灵敏度, 未报告弹性系数"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 2 类设计, 未报告结果"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证覆盖 Q1-Q4"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "叙述式 model_doc, 无 claim-evidence 映射表"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 7,
+    "L4_total": 6,
+    "overall": "FAIL"
+  },
+  "failure_modes": [],
+  "notes": "L4=6/9 未达70%: 退化基线且验证未执行"
+}

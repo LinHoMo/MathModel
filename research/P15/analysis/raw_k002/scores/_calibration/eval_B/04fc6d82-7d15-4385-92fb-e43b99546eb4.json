@@ -1,0 +1,109 @@
+{
+  "submission_id": "04fc6d82-7d15-4385-92fb-e43b99546eb4",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:03:29+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "parameters P1-P12 全部取自题面表1三组数值：P1 m_1=[20,23,18]、P4 g_1=[560,580,545]、P9 w=[25,30,25]、P10 H=28800、P11 q=0.01、P12 [a,b]=[600,1200]，Q1-Q4 sub_question_binding 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 识别隐式条件：A1 RGV 单执行机构、A2 同刀具并行机、A3 两道工序异机、A4 故障独立投影，均附 rationale"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "任务2要求'填入附件2的EXCEL表'，X1/X2 按'第1/2/3组'参数回放（对应附件2三个工作表）并输出班次产量，交付结构被识别"
+    },
+    "L1.4": {
+      "score": 0,
+      "evidence": "IR 无 ambiguity/ambiguity_handling 段；题面存在一道工序是否需清洗、故障时刻物料处理时点等实质歧义未标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=optimization secondary=simulation，与2018B调度优化gold family有交集；candidates 4项对比（DP因状态爆炸排除、MDP因确定工况排除）"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "V1-V10 均含 type 区分：V1 p_t state、V3 x_{i,t} decision、V4 N derived、V7 z_{i,k} state，缺失率<10%"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source=题目+三组取值（P2 m_2=[33,41,32]、P7 u_o=[28,30,27]、P8 u_e=[31,35,32]），符号与方程一致"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型（mechanism/simplification/mechanism_assumption/projection/calibration）且附 rationale，无与题面矛盾假设"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1 max N、O2 max N_1、O3 max N_2、O4 max E[N]，均为2018B班次产量最大化目标，三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "C1-C6 关键约束全形式化：C1 单资源、C2 时间窗、C3 移动时间、C4 先后序、C6 期限 H=28800s，方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "M1-M4 与 E1-E6 对应（排序/并行机/两阶段流水/随机故障）；candidates 4项明确对比（simulation 作验证、DP 排除）"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "E1-E6 结构完整（0-1决策/完成时刻 C_j/库存守恒 W_t/故障恢复 R_{i,k}），符号 m_1/g_1/u_i/w/H/q 均在 P 表声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1 分支定界 MIP 按决策时刻滚动、S2 轮询启发式作初始解、S3 蒙特卡洛样本均值，与优化+仿真模型类型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 仅为算法描述（'时间轴离散化+0-1变量；穷举剪枝/贪心上界'），无实际可运行代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V3 convergence：故障样本数 100→2000 期望产量应收敛于 1% 以内（方案声明，无实际残差/收敛数值）"
+    },
+    "L3.4": {
+      "score": 0,
+      "evidence": "无 multi_seed 段，无种子列表与 cv/std 数值；V1 是策略对比非多起点复现性"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "X1-X3 expected_outputs 均为预期值（'班次产量:整数件'、'下降5%-15%'），无任何实际结果数值"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 以轮询贪心策略为基线对照 MIP 产量上界（合理基线），但无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 对移动/上下料时间 ±10% 扰动观察产量变化率（计划态），无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V4 清洗→0 与移动→0 两类极限检验（计划态），无 result，未与主张关联数值"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V4 targets_refs 覆盖 O1/O2/O3/O4（对照/灵敏度/收敛/极限）"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "claims C1 supported（证据 X1/V1 均计划态）、C2-C4 全 hypothesis，主张缺乏实际证据落实"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 4,
+    "L4_total": 6,
+    "overall": 33
+  },
+  "failure_modes": [],
+  "notes": ""
+}

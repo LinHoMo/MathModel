@@ -1,0 +1,109 @@
+{
+  "submission_id": "580d7b71-d8f5-4413-9be6-128e18c26797",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "规则全覆盖：P1-P12（消耗/资金/箱重/负重/价格/倍数/天气转移），Q1-Q3 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "A1-A6 隐式条件识别完整"
+    },
+    "L1.3": {
+      "score": 1,
+      "evidence": "Q1要求'填入Result.xlsx'，未识别 Excel 文件交付要求"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "ambiguity 3条（含 P12 天气转移概率题面未给标注待定），均有处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "model_family primary=DP+optimization+game_theory，与2020B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量含 type 区分（state/decision/derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "P1-P12 每参数有 source（P12 天气转移概率标注待定），取值基本完整"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型附 rationale"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "O1-O3 目标（确定性/期望/多人）一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "CT1-CT7 关键约束全（负重/资金/沙暴/矿山/起点/多人）"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "E1-E6（消耗/资金/确定递推/期望递推/多人规则）+ candidates 对比"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程结构完整，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "S1-S3 求解与 DP/优化模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "implementation_ref 仅文件名（desert_dp.py 等），无实际代码"
+    },
+    "L3.3": {
+      "score": 1,
+      "evidence": "V5 网格收敛声明（步长减半后最优不变），无实际数值"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "V4 多种子声明，无实际 cv 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无实际结果数值（X 全 expected_outputs）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "V1 全晴基线（合理），无对比结果数值"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "V2 ±20% 灵敏度，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "V3 资金趋零、V5 网格收敛等极限/边界，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "V1-V5 覆盖 O1-O3"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "CL1-CL3 全 hypothesis，无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 8,
+    "L2_total": 15,
+    "L3_total": 5,
+    "L4_total": 6,
+    "overall": 34
+  },
+  "failure_modes": [],
+  "notes": ""
+}

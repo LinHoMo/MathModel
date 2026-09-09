@@ -1,0 +1,109 @@
+{
+  "submission_id": "504867ba-bf7b-439b-8f9a-ea4b8acd4e10",
+  "evaluator": {
+    "model": "eval_B",
+    "type": "independent_llm",
+    "version": "1.0",
+    "timestamp": "2026-09-09T13:22:45+08:00"
+  },
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {
+      "score": 2,
+      "evidence": "显式条件全：60km/h、3分钟=3km、20平台、13要道、[2,5]、P=32、3分钟报警延迟，Q1-Q5 全覆盖"
+    },
+    "L1.2": {
+      "score": 2,
+      "evidence": "隐式条件识别：最短路径匀速行驶、单平台单路口、嫌疑车速度假设，附推导依据"
+    },
+    "L1.3": {
+      "score": 2,
+      "evidence": "2011B 无文件交付要求；输出覆盖管辖分配/封锁/选址/评估/围堵全部结果"
+    },
+    "L1.4": {
+      "score": 1,
+      "evidence": "歧义3条：3分钟软硬约束（硬约束90%覆盖处理）、嫌疑车速1.2倍鲁棒、工作量度量方差，均有处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "evidence": "问题类型=图论/网络优化+组合调度，与2011B gold family一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "evidence": "变量8项含 type 区分（state/decision/derived）"
+    },
+    "L2.2": {
+      "score": 2,
+      "evidence": "参数8项每项有 source+取值：v=60、T3=3、m=20、n_gate=13、P=32 题面"
+    },
+    "L2.3": {
+      "score": 2,
+      "evidence": "A1-A6 分型（投影/校准锚/机制/简化）附合理性"
+    },
+    "L2.4": {
+      "score": 2,
+      "evidence": "Q1a-Q2b 目标全：管辖/封锁/新增/合理性/围堵，三角一致"
+    },
+    "L2.5": {
+      "score": 2,
+      "evidence": "约束6条关键约束全形式化且方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "evidence": "机理4候选对比（最短路+覆盖、ILP、启发式、仿真排除）有依据"
+    },
+    "L2.7": {
+      "score": 2,
+      "evidence": "方程 Dijkstra/瓶颈指派/围堵可行性 d(P,B)/v_s+3≥...，符号全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "evidence": "求解 Dijkstra+匈牙利+ILP 枚举，与图优化模型匹配"
+    },
+    "L3.2": {
+      "score": 1,
+      "evidence": "无代码，算法描述为主"
+    },
+    "L3.3": {
+      "score": 2,
+      "evidence": "模型主体为确定性图算法+精确求解，无数值收敛问题"
+    },
+    "L3.4": {
+      "score": 1,
+      "evidence": "验证5条含复现性方案，无 multi_seed 数值"
+    },
+    "L3.5": {
+      "score": 0,
+      "evidence": "无任何实际结果数值（验证全计划态）"
+    },
+    "L4.1": {
+      "score": 1,
+      "evidence": "基线：单平台理论对照（合理基线），无对比结果"
+    },
+    "L4.2": {
+      "score": 1,
+      "evidence": "灵敏度 vs 与 Δt 计划态，无 result"
+    },
+    "L4.3": {
+      "score": 1,
+      "evidence": "极限 v_p→∞/n_add=0 两类，无 result"
+    },
+    "L4.4": {
+      "score": 2,
+      "evidence": "验证5条覆盖 Q1-Q5"
+    },
+    "L4.5": {
+      "score": 1,
+      "evidence": "无 claims 表，验证全计划态，主张无实际证据"
+    }
+  },
+  "vector": {
+    "L1_total": 9,
+    "L2_total": 15,
+    "L3_total": 6,
+    "L4_total": 6,
+    "overall": 36
+  },
+  "failure_modes": [],
+  "notes": ""
+}
