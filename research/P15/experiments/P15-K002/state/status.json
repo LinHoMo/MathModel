@@ -1,7 +1,7 @@
 {
   "experiment_id": "P15-K002",
   "protocol_version": "0.7",
-  "phase": "ANALYSIS",
+  "phase": "CLOSED",
   "revisions": [
     {
       "version": "v0.7",
@@ -863,6 +863,13 @@
       "from": "VALIDATION",
       "to": "ANALYSIS",
       "note": "paired analysis: RQ1 S-F(MCQ) -4.95 CI[-8.08,-2.53] NEGATIVE, RQ2 SV-S(VAL) +2.22 inclusive, REPORT committed"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T05:50:57Z",
+      "from": "ANALYSIS",
+      "to": "CLOSED",
+      "note": "formal report committed (corrected scores, anchoring disclosed), data archived, analysis complete"
     }
   ],
   "gates": {
