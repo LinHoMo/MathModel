@@ -1,0 +1,23 @@
+{
+  "scorer": "adversarial",
+  "final_score": 5.5,
+  "deductions": [
+    {
+      "dimension": "sensitivity",
+      "amount": 1.0,
+      "finding": "缺少敏感性分析（blocking：必须补充）"
+    }
+  ],
+  "blocking_issues": [
+    {
+      "issue": "未做极端参数检验",
+      "severity": "blocking"
+    }
+  ],
+  "skeptic_additions": {
+    "note": "补充极端场景检验"
+  },
+  "evidence_refs": [
+    "code/run_all.py#sens"
+  ]
+}

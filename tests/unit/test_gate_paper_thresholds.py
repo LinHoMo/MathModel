@@ -8,13 +8,22 @@ pytestmark = pytest.mark.integration
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-# 使用新建的测试项目（不达标论文，用于验证 gate 拦截）
-PROJ = ROOT / "tests" / "fixtures" / "sample_incomplete_project"
+# 使用不达标论文 fixture（故意缺版面指标，用于验证 gate 拦截）
+PROJ = ROOT / "tests" / "fixtures" / "sample_paper_project"
 GATE_PY = ROOT / "core" / "tools" / "gate.py"
 
 
 class TestGatePaperThresholds(unittest.TestCase):
     """新建项目（无完整论文）应被 gate.py 拦截。"""
+
+    @classmethod
+    def tearDownClass(cls):
+        """清理 gate.py --level all 的运行时副产物，保持 fixture 静态入库。
+        （main.pdf 来自 LaTeX 编译检查，inputs_baseline.json 来自输入基线生成）"""
+        for rel in ("paper/main.pdf", "work/inputs_baseline.json"):
+            f = (ROOT / "tests" / "fixtures" / "sample_paper_project" / rel)
+            if f.exists():
+                f.unlink()
 
     @classmethod
     def setUpClass(cls):

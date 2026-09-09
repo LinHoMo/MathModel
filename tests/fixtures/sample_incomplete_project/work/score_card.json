@@ -1,0 +1,61 @@
+{
+  "dimensions": [
+    {
+      "name": "scorer-academic",
+      "score": 7.5,
+      "weight": 0.25,
+      "evidence": "figures/all_results.json#p1"
+    },
+    {
+      "name": "scorer-engineering",
+      "score": 7.2,
+      "weight": 0.2,
+      "evidence": "code/run_all.py#main"
+    },
+    {
+      "name": "scorer-judge",
+      "score": 6.9,
+      "weight": 0.25,
+      "evidence": "paper/main.tex#sec3"
+    },
+    {
+      "name": "scorer-reader",
+      "score": 7.5,
+      "weight": 0.15,
+      "evidence": "paper/main.tex#sec2"
+    },
+    {
+      "name": "scorer-adversarial",
+      "score": 5.5,
+      "weight": 0.15,
+      "evidence": "code/run_all.py#sens"
+    }
+  ],
+  "weighted_score": 6.99,
+  "blocking": [
+    {
+      "source": "scorer-adversarial/deduction",
+      "issue": "缺少敏感性分析（blocking：必须补充）",
+      "severity": "blocking",
+      "action_required": "修正该项后重跑 scorer-adversarial 复核"
+    },
+    {
+      "source": "scorer-adversarial/blocking_issues",
+      "issue": "未做极端参数检验",
+      "severity": "blocking",
+      "action_required": "修正该项后重跑 scorer-adversarial 复核"
+    },
+    {
+      "source": "weakness-hunter/unknown",
+      "issue": "paper/main.tex#sec5",
+      "severity": "blocking",
+      "action_required": "修正该项后重跑 scorer-adversarial 复核"
+    }
+  ],
+  "skeptic_additions_summary": {
+    "note": "补充极端场景检验"
+  },
+  "topic_type": null,
+  "generated_by": "aggregate_scores.py",
+  "timestamp": "2026-09-08T23:58:57Z"
+}

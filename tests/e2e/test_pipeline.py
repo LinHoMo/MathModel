@@ -37,6 +37,8 @@ class TestEndToEndPipeline:
         """Modeler 产物：MODEL_SPEC.md"""
         if not self.has_proj:
             pytest.skip("测试项目不存在，跳过")
+        # [legacy 冻结] V2 流水线产物不再重建，此 skip 为显式占位（非覆盖空洞）；
+        # V3 主线产物由 Artifact Registry 管理，对应断言见 tests/integration/test_*_runtime.py
         path = f"{self.PROJECT}/output/MODEL_SPEC.md"
         if not os.path.isfile(path):
             pytest.skip("Modeler 产物尚未生成，跳过")

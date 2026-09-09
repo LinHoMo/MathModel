@@ -1,0 +1,17 @@
+{
+  "scorer": "academic",
+  "weighted_score": 7.5,
+  "evidence_refs": [
+    "figures/all_results.json#p1"
+  ],
+  "sub_scores": {
+    "model_correctness": {
+      "score": 7.5,
+      "evidence": "模型与题面约束一致"
+    },
+    "assumption_quality": {
+      "score": 7.0,
+      "evidence": "假设逐条可验证"
+    }
+  }
+}
