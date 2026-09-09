@@ -1,13 +1,19 @@
 {
   "experiment_id": "P15-K002",
   "protocol_version": "0.7",
-  "phase": "FROZEN",
+  "phase": "RUNNING",
   "revisions": [
     {
       "version": "v0.7",
       "at": "2026-09-09T01:51:19Z",
       "note": "rubric v1.1 + candidates 字段 + 预检/G2 结论回填",
       "from_phase": "DESIGN"
+    },
+    {
+      "version": "v0.8",
+      "at": "2026-09-09T02:13:04Z",
+      "note": "MODEL_IR 契约真源迁移 core（P1 C1）+ 词表完备化 + register 真 jsonschema + 模板同步 description/词表",
+      "from_phase": "FROZEN"
     }
   ],
   "history": [
@@ -67,6 +73,26 @@
       "from": "PREREGISTERED",
       "to": "FROZEN",
       "note": "38 文件哈希冻结 frozen_root=7695767d；rubric v1.1 + 模板 candidates + 8 题 + 词表 + 预注册"
+    },
+    {
+      "event": "revision",
+      "at": "2026-09-09T02:13:04Z",
+      "version": "v0.8",
+      "note": "MODEL_IR 契约真源迁移 core（P1 C1）+ 词表完备化 + register 真 jsonschema + 模板同步 description/词表"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T02:13:21Z",
+      "from": "FROZEN",
+      "to": "PREFLIGHT",
+      "note": "108 bundles 生成 + run_order 锁定（seed=42）+ 40 文件冻结（含 run_order）"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T02:13:21Z",
+      "from": "PREFLIGHT",
+      "to": "RUNNING",
+      "note": "进入正式实验：108 runs 待生成（主 90 + 泛化 18）"
     }
   ],
   "gates": {
