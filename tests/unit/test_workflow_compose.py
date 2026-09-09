@@ -83,7 +83,12 @@ class TestComposer:
         # 跨 stage 串联: problem_analysis → literature_search → model_selection
         assert "problem_analysis" in dag.nodes["literature_search"].depends_on
         assert "literature_search" in dag.nodes["model_selection"].depends_on
-        assert "assumption_check" in dag.nodes["experiment_design"].depends_on
+        # P1-VS-001：modeling 尾链 assumption_check → code_generation →
+        # model_execution → model_validation → experiment_design
+        assert "assumption_check" in dag.nodes["code_generation"].depends_on
+        assert "code_generation" in dag.nodes["model_execution"].depends_on
+        assert "model_execution" in dag.nodes["model_validation"].depends_on
+        assert "model_validation" in dag.nodes["experiment_design"].depends_on
         # P9: quality_evaluation 插入 evidence_gate 与 research_direction 之间
         assert "quality_evaluation" in dag.nodes["research_direction"].depends_on
         assert "evidence_gate" in dag.nodes["quality_evaluation"].depends_on

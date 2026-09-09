@@ -30,3 +30,21 @@ nodes:
     validator: assumption-checker
     description: 假设四维评分验证，产出 A artifacts
     depends_on: [model_critique]
+  code_generation:
+    type: reasoning
+    role: experimenter
+    description: P1-VS-001 C6: 由 MODEL_IR 生成可执行代码（固定 ABI def solve(inputs) -> outputs），产出 CODE artifacts
+    depends_on: [assumption_check]
+    outputs: [state/registry.json]
+  model_execution:
+    type: execution
+    role: experimenter
+    description: P1-VS-001 C7: 真 subprocess 执行可执行代码（input.json → run_model.py → output.json），产出 EXEC/R artifacts
+    depends_on: [code_generation]
+    outputs: [artifacts/exec/, state/registry.json]
+  model_validation:
+    type: validation
+    role: experimenter
+    description: P1-VS-001 C8: 基于真实数值验证执行结果（constraint/objective/domain），产出 VR artifacts
+    depends_on: [model_execution]
+    outputs: [state/registry.json]

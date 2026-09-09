@@ -42,6 +42,15 @@ v3:
       role: critic
       validator: assumption-checker
       stage: modeling
+    - name: code_generation
+      role: experimenter
+      stage: modeling
+    - name: model_execution
+      role: experimenter
+      stage: modeling
+    - name: model_validation
+      role: experimenter
+      stage: modeling
     - name: experiment_design
       role: experimenter
       stage: experiment
