@@ -1,0 +1,147 @@
+{
+  "scenario": "P1-M4 知识引导 vs 无引导（2024_A Q1）",
+  "elapsed_sec": 0.53,
+  "guide_cards": [
+    {
+      "id": "mc-bzd-model-fit",
+      "version": 1,
+      "source_type": "BZD"
+    },
+    {
+      "id": "mc-bzd-validation-obligations",
+      "version": 1,
+      "source_type": "BZD"
+    }
+  ],
+  "obligations": {
+    "MIR001": {
+      "model_id": "M2024A-Q1-GUIDED",
+      "n_validations": 8,
+      "n_assumptions": 5,
+      "n_risks": 6,
+      "n_dependencies": 6,
+      "obligation_total": 19,
+      "source_cards": [
+        "mc-bzd-model-fit",
+        "mc-bzd-validation-obligations"
+      ],
+      "knowledge_refs": [
+        {
+          "id": "mc-bzd-model-fit",
+          "version": 1
+        },
+        {
+          "id": "mc-bzd-validation-obligations",
+          "version": 1
+        }
+      ]
+    },
+    "MIR002": {
+      "model_id": "M2024A-Q1-UNGUIDED",
+      "n_validations": 1,
+      "n_assumptions": 1,
+      "n_risks": 0,
+      "n_dependencies": 2,
+      "obligation_total": 2,
+      "source_cards": [],
+      "knowledge_refs": []
+    }
+  },
+  "exec_summary": {
+    "EXEC001": {
+      "status": "success",
+      "returncode": 0,
+      "body_spacing": 1.65
+    },
+    "EXEC002": {
+      "status": "success",
+      "returncode": 0,
+      "body_spacing": 1.65
+    }
+  },
+  "vr_summary": {
+    "VR001": {
+      "execution_id": "EXEC001",
+      "status": "passed",
+      "mathematical_valid": true,
+      "execution_valid": true,
+      "constraint_violation_max": 0.0,
+      "domain_violation": null,
+      "robustness": 1.0
+    },
+    "VR002": {
+      "execution_id": "EXEC002",
+      "status": "passed",
+      "mathematical_valid": true,
+      "execution_valid": true,
+      "constraint_violation_max": 0.0,
+      "domain_violation": null,
+      "robustness": 1.0
+    }
+  },
+  "selection": {
+    "chosen": "MIR001",
+    "confidence": 0.6,
+    "alternatives": [
+      {
+        "model_ir": "MIR001",
+        "vr": "VR001",
+        "mathematical_valid": true,
+        "constraint_violation_max": 0.0,
+        "execution_valid": true
+      },
+      {
+        "model_ir": "MIR002",
+        "vr": "VR002",
+        "mathematical_valid": true,
+        "constraint_violation_max": 0.0,
+        "execution_valid": true
+      }
+    ],
+    "criteria": [
+      "mathematical_valid",
+      "constraint_violation_max",
+      "execution_valid",
+      "variable_domain_violation",
+      "empirical_valid"
+    ],
+    "evidence_ids": [
+      "VR001",
+      "VR002"
+    ],
+    "reasoning": "chosen=MIR001 because VR001.mathematical_valid=True; MIR002(VR002.constraint_violation_max=0.0) worse than VR001.constraint_violation_max=0.0)",
+    "selects_edges": [
+      [
+        "D002",
+        "selects",
+        "M001"
+      ]
+    ]
+  },
+  "node_results": {
+    "problem_analysis": "pass",
+    "literature_search": "pass",
+    "model_selection": "pass",
+    "model_construction": "pass",
+    "model_critique": "pass",
+    "assumption_check": "pass",
+    "code_generation": "pass",
+    "model_execution": "pass",
+    "model_validation": "pass",
+    "model_selection_decision": "pass"
+  },
+  "replay": {
+    "EXEC001": {
+      "ok": true,
+      "outputs_match": true,
+      "deviation": [],
+      "original_id": null
+    },
+    "EXEC002": {
+      "ok": true,
+      "outputs_match": true,
+      "deviation": [],
+      "original_id": null
+    }
+  }
+}

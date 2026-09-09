@@ -246,3 +246,44 @@ C2 Candidate 持久化（candidate→artifact+assumes 边）
 - **P2**：语义保真（semantic fidelity）——约束残差/目标最优/方程数值正确性、L3 数学语义校验、fidelity 从"符号可观测"升级为"数值满足"，本计划只在 C8 埋 `output_residual`/`output_feasibility` 两个原语，不做全套。
 - **P3**：L3/L4 校验体系——feasibility/stability/domain 全套检查、五层 L0–L4 统一分层落地，本计划仅做 L0（schema 门禁）与 L1/L2 最小集。
 - **P4**：Revision 闭环——"V1 FAIL→M2" 端到端自动触发、revision_of/supersedes 类型化边、幂等复用语义修正（`handlers.py:377-402`），本计划只保证失败可观测（节点 FAIL/VR failed），不实现自动重建模。
+
+
+---
+
+## P1 里程碑执行记录（VS-001 / M3 / M4 追加）
+
+> 本节为 P1 后续里程碑在实施过程中对原计划的追加记录（2026-09-09），原计划 C1–C10
+> 保留为历史规划；实际交付以各里程碑 REPORT 为准。
+
+### M1 / VS-001（可执行模型闭环）— 已完成
+- 落地：C1 MODEL_IR 升入 core（model_ir.py 18 字段）+ C5 外部 MODEL_IR 登记（instantiates 边）
+  + C6 Code 节点（implemented_by 边，固定 ABI `def solve(inputs) -> outputs`）
+  + C7 真 subprocess 执行（executed_by/produces 边，status 来自真实退出码）
+  + C8 数值验证（verified_by 边，VR 四字段）+ C10 e2e 闭环（revision lineage 不覆盖 M1）
+- 证据：`research/P15/analysis/P1_VS001_REPORT.md`；演示 `research/P15/vs001_run/`
+
+### M3（Candidate Competition + Evidence-based Selection）— 已完成
+- 落地：多候选独立链 MIR-i→CODE-i→EXEC-i→R-i→VR-i；`do_model_selection` 消除 recs[0]
+  假选型（容器登记）；新增 `model_selection_decision` 节点做 VR 机械指标排序
+  （mathematical_valid 优先 → constraint_violation_max 升序 → … → model_id tie-break）；
+  decision 全字段（alternatives/criteria/evidence_ids/chosen/confidence/reasoning）；
+  首次真正写入 `decision -selects-> model` 边；无证据如实 UNSELECTED。
+- 证据：`research/P15/analysis/P1_M3_REPORT.md`；演示 `research/P15/m3_run/`
+
+### M4（Knowledge-guided Construction）— 已完成（本计划收尾）
+- 落地：知识义务显式贯穿（`candidates.map_card_obligations`：card.validation/risks/requires
+  /required_conditions → 候选 validations/assumptions/risks/dependencies，每项带
+  source_card 可溯源）；BZD 试点知识卡 5 张（`core/knowledge/methods/cards/mc-bzd-*.yaml`，
+  source_type=BZD，可被 retriever 检索）；知识引导 vs 无引导对比 demo（义务完备度可测量）。
+- 结果摘要：引导候选义务 19 项（validations 8 / assumptions 5 / risks 6，来源 2 张 BZD 卡）
+  vs 无引导候选 2 项；两候选共用同一正确求解器，EXEC/VR 数值一致（均 PASS、cv=0.0），
+  选型平局按确定性 tie-break——如实展示"义务完备度差异可测量，执行/验证无差异"
+  （不预设"知识必胜"）。
+- 证据：`research/P15/analysis/P1_M4_REPORT.md`；演示 `research/P15/m4_run/`
+- 验证数字：pytest 910 passed / 4 skipped；catalog_check OK；validate 57/0。
+
+### P1 结论（三里程碑合流）
+`Problem → Knowledge Retrieval → Candidate Models → Execution → Validation → Evidence
+→ Selection` 全链已接通：知识（BZD 试点卡）→ 候选（义务声明，可溯源）→ 执行/验证
+（真实数值裁决）→ 证据（VR）→ 选型（机械排序 + selects 边）。K002 可在此链上测量
+"知识是否提升建模能力"（义务完备度已可量化）。
