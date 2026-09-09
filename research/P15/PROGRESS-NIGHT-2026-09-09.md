@@ -81,3 +81,29 @@
 3. 知识卡升级（P1 工程项）：16 张 Tier3 卡补 mechanism/formulations/solvers，与实验分离。
 4. L1 结构覆盖扩展（game/network/scheduling）过 Architecture Gate。
 5. ~~全量自检 + commit + push~~ → ✅ 自检全绿（pytest 774/11、catalog OK、terminology 零残留、freeze PASS），10 个 commit 待 push。
+
+
+---
+
+## 追加：治理 v1.2 收口 + K002 预检 CLOSEOUT（2026-09-09 凌晨）
+
+### 治理 v1.2（commit 8b23608 + 05c0ac1，已 push）
+- 真正迁移（非注释兼容）：5 题 gt.json allowed_model_families→allowed_modeling_structures（旧字段删除）；
+  e2e_metrics 输出键 method_selection→structure_alignment、detail 键同步、删 _method_hit 字符串兜底与 _load_card_names；
+  k002_gen_bundles 删字段回退；catalog_check 删 # legacy compat 行内豁免。
+- 校验范围统一：validate.py 新增 RESEARCH_PROJECT_PREFIXES + _is_research_scan_path，iter_repo 与 _live_project_dirs 共用排除语义；57/0 全绿。
+- 引用路径：活跃文档 8 文件 22 处批量迁移 core/tools/evaluation/*→core/tools/*；删空目录；
+  抓出测试真实缺陷 test_e2e_metrics.py sys.path 指向已删目录（单文件运行挂）。
+- 新契约：P15-EXPERIMENT-CONTRACT-v2.md（八层节点标准 + 通信协议 + 扩展指引）。
+- 历史文档：23 份 ARCHIVAL-NOTE + PRE_REGISTRATION v1 标 SUPERSEDED。
+- 验证：pytest 855/4、catalog --check OK、--check-terminology OK、validate.py 57/0。
+
+### K002 预检 CLOSEOUT（commit 384ee8c，已 push；Organizer o_0001iAuITsS finished）
+- 12 runs（6 题 × {F,S}）全 GENERATED；主盲评 12/12；G2 三评估者 3×5 评分全落盘。
+- 区分度：零区分度 0/6（全保留，不触发 STOP）；但 S<F 方向一致（6/6，Δ=-1~-3）→
+  格式不对称风险（JSON vs MD 呈现给评估者）→ 协议新增盲评呈现层统一声明。
+- L2 结构维度全 15/15 满分（饱和）→ MCQ_primary 保持 L2 口径（与 K001 可比），差异实测在 L3/非强制字段。
+- G2：逐对 Cohen κ 平均 0.879（18/22=1.0）、加权 Fleiss 0.424（惩罚 B 的 +3 系统偏移）；
+  分歧可归因（B 尺度偏移 + 天花板效应）→ G2 PASS（带校准条件：黄金样例锚定 + 离群评估者检测）。
+- 产物：PRECHECK_REPORT.md、precheck_closeout.json、g2_kappa.json、analysis_summary.json。
+- 下一步（待用户确认）：K002 PREREGISTERED → FROZEN（hash 锁定），或按 AUDIT_ACTION_PLAN §3 先做 4 强制修正。
