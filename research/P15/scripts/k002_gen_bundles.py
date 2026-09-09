@@ -114,6 +114,7 @@ def render_bundle(row: dict, problem: dict) -> str:
 
 def main() -> int:
     dry_run = "--dry-run" in sys.argv
+    precheck = "--precheck" in sys.argv
     spec = load_problem_spec()
     pidx = {p["problem_id"]: p for p in spec["problems"]}
 
@@ -122,6 +123,9 @@ def main() -> int:
         if not tpl.exists():
             print(f"[FAIL] prompt 模板缺失：{tpl}")
             return 1
+
+    if precheck:
+        return precheck_main(pidx)
 
     rows = build_rows()
     if dry_run:
@@ -172,6 +176,59 @@ def main() -> int:
     print("  臂分布:", dict(Counter(r["arm"] for r in rows)))
     print("  condition_map 已写入 key/（严禁外泄）")
     print("  run_order 已写入 frozen_specs_k002/")
+    return 0
+
+
+def precheck_main(pidx: dict) -> int:
+    """题目区分度预检：主检验 6 题 × F/S 臂 × 1 rep = 12 runs。
+
+    产出到 research/P15/experiments/P15-K002-precheck/（不污染正式实验目录）。
+    """
+    from collections import Counter
+    pre = K.EXP.parent / "P15-K002-precheck"
+    bundles_dir = pre / "bundles"
+    runs_dir = pre / "runs"
+    bundles_dir.mkdir(parents=True, exist_ok=True)
+    runs_dir.mkdir(parents=True, exist_ok=True)
+
+    rng = random.Random(SEED)
+    rows = []
+    seq = 0
+    for pid in K.PRIMARY_BLOCKS:
+        problem = pidx[pid]
+        arms = ["F", "S"]
+        rng.shuffle(arms)
+        for pos, arm in enumerate(arms):
+            seq += 1
+            rows.append({
+                "seq": seq, "problem_id": pid, "arm": arm, "rep": 1,
+                "seed": K.SEEDS[0], "sequence_in_block": pos,
+                "submission_id": K.deterministic_uuid4(rng),
+                "sub_questions": problem["sub_questions"],
+                "allowed_modeling_structures": problem["allowed_modeling_structures"],
+            })
+
+    condition_map = {"experiment_id": K.EXPERIMENT_ID, "phase": "PRECHECK",
+                     "warning": "分组明细严禁外泄", "map": {}}
+    for row in rows:
+        problem = pidx[row["problem_id"]]
+        bundle = render_bundle(row, problem)
+        sid = row["submission_id"]
+        (bundles_dir / f"{sid}.md").write_text(bundle, encoding="utf-8")
+        K.write_json(runs_dir / sid / "manifest.json", {
+            "submission_id": sid, "problem_id": row["problem_id"],
+            "arm": row["arm"], "rep": 1, "seed": row["seed"], "batch": "precheck",
+            "block_role": "main", "status": "PENDING",
+            "statement_sha256": problem["statement_sha256"],
+            "bundle_sha256": K.sha256_text(bundle),
+        })
+        condition_map["map"][sid] = {"problem_id": row["problem_id"], "arm": row["arm"]}
+
+    K.write_json(pre / "key" / "condition_map.json", condition_map)
+    print(f"[OK] precheck {len(rows)} bundles → {K.rel(bundles_dir)}")
+    print("  分布:", dict(Counter(r["arm"] for r in rows)),
+          dict(Counter(r["problem_id"] for r in rows)))
+    print("  注意：区分度判定依据 = 条件内方差与条件间差异（见 DRAFT §3.5）")
     return 0
 
 
