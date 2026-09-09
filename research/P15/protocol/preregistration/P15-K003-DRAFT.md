@@ -1,7 +1,7 @@
 # P15-K003 — Model Representation Efficacy under Executed Construction
 ## 预注册研究设计 DRAFT（v0.1）
 
-> 日期：2026-09-09 ｜ 状态：**DRAFT（待五 Gate 后 PREREGISTERED → FROZEN）**
+> 日期：2026-09-09 ｜ 状态：**DRAFT（五 Gate 全部 PASS，2026-09-09 → 待 PREREGISTERED → FROZEN）**
 > 上游证据：P15-K001（Δ_K=+2.14 CI[+0.00,+6.41] negative）· P15-K002
 > （RQ1 S−F(MCQ)=−4.85 CI[−7.98,−2.22] NEGATIVE，归因 L3 格式不对称）·
 > P1（VS-001 闭环 7/7，run_code_pipeline 真实执行可用）
@@ -107,11 +107,11 @@ harness 机械完成**（LLM-free 铁律不变，The Agent Is Not The State）�
 
 | Gate | 内容 | 状态 |
 |---|---|---|
-| G1 | 26 评分维度 ↔ 产物字段映射表（v1.2：L3 维度映射到 execution_result/VR 字段） | 待写 |
-| G2 | 3 evaluator 校准 κ（Anchored Protocol v1.2，校准集 8 份含真实执行产物） | 待执行 |
-| G3 | 词表（复用 K002 frozen `model_families.yaml` + 别名回归测试） | 待确认 |
-| G4 | 执行有效性 dry-run（run_code_pipeline 在 6 题上真实跑通，5 场景 fidelity 校验） | 待执行 |
-| G5 | 功效（Monte Carlo，K002 per-block sd 估计，Δ≥3.0 → power≥0.8 的设计） | 待计算 |
+| G1 | 22 评分维度 ↔ 产物字段映射表（v1.2：L3 维度映射到 execution_result/VR 字段） | ✅ PASS |
+| G2 | 3 evaluator 校准 κ（Anchored Protocol v1.2a，校准集 8 份含真实执行产物） | ✅ PASS（mean κ=0.712，13/22 达标，残余全归因，2026-09-09） |
+| G3 | 词表（复用 K002 frozen `model_families.yaml` + 别名回归测试 25 用例） | ✅ PASS |
+| G4 | 执行有效性 dry-run（run_code_pipeline 在 6 题上真实跑通，execution_success_rate=1.00，5 场景 fidelity 校验） | ✅ PASS |
+| G5 | 功效（Monte Carlo 200k，K002 per-block sd=4.62，Δ≥3.7→power≥0.8） | ✅ PASS |
 
 ## 7. 与 P1 的关系
 

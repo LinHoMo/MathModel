@@ -1,0 +1,72 @@
+{
+  "experiment_id": "P15-K003",
+  "protocol_version": "0.1",
+  "phase": "FROZEN",
+  "revisions": [],
+  "history": [
+    {
+      "event": "gate",
+      "at": "2026-09-09T08:12:16Z",
+      "name": "G1",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-09T08:12:16Z",
+      "name": "G2",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-09T08:12:16Z",
+      "name": "G3",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-09T08:12:16Z",
+      "name": "G4",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-09T08:12:16Z",
+      "name": "G5",
+      "result": "PASS"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T08:12:33Z",
+      "from": "DESIGN",
+      "to": "REVIEW",
+      "note": "五 Gate 证据归档完成 (GATES/DRAFT 更新)"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T08:12:33Z",
+      "from": "REVIEW",
+      "to": "PREREGISTERED",
+      "note": "五 Gate 全部 PASS"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T08:12:33Z",
+      "from": "PREREGISTERED",
+      "to": "FROZEN",
+      "note": "v0.1 冻结 36 文件 root=94b14d4f"
+    }
+  ],
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS",
+    "G5": "PASS"
+  },
+  "batches": {},
+  "runs": {
+    "total": 0,
+    "by_status": {}
+  },
+  "notes": []
+}

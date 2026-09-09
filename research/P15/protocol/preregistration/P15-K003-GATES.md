@@ -3,7 +3,8 @@
 > 日期：2026-09-09 ｜ 设计真源：`P15-K003-DRAFT.md`（v0.1）
 > 词表：复用 K002 frozen `catalog/model_families.yaml`（18 canonical，冻结未动）
 > 题面：复用 K002 verified 8 题（`input_manifest.json` 全 verified）
-> 状态：G1/G3/G5 已 PASS（本文件归档）；G2/G4 设计待 PREREGISTERED 前执行
+> 状态：**G1–G5 全部 PASS（本文件归档，2026-09-09）**——G1/G3/G5 已 PASS；
+> G2（Instrument validity）与 G4（执行有效性）已执行通过，见下
 
 ## G1 — 评分维度 ↔ 产物字段映射表（v1.2，L3 判据切换到执行事实）
 
@@ -57,19 +58,37 @@ K003 三臂执行地位平等，L3 不再依赖声明。）
   区分度预检后观测效应不支持 → 如实报告低功效，不做事后提 rep）
 - **G5 结论：PASS**（功效计算完成，边界已声明；无设计外调参）
 
-## G2 — Instrument validity（设计，待 PREREGISTERED 前执行）
+## G2 — Instrument validity（**PASS，2026-09-09**）
 
-- Anchored Protocol **v1.2**：校准集 8 份（覆盖 3 臂 × 代表性强弱，**每份含真实
-  执行产物**——与 K002 的"无执行产物"校准集不同，L3 判据有事实对象）
-- 通过标准：维度级 Cohen's κ ≥ 0.6，或分歧可归因（逐条记录）
-- K002 锚定澄清保留：证据缺位判据显式化、L3.5/L4.3 二档、格式中立
-- evaluator 池：复用 K002 3 独立 evaluator（GENERATOR≠EVALUATOR 隔离）
+- Anchored Protocol **v1.2**：校准集 8 份（覆盖 3 臂 × fidelity 四档
+  1.0/0.9/0.82/unverifiable × 5 题，**每份含真实执行产物**——L3 判据有事实对象），
+  从预检 18 runs 选取，匿名化（condition_map 单独存放，未外泄给 evaluator）
+- 3 独立 evaluator（互不可见）按 rubric v1.1 + 锚定澄清评分，22 维度
+- **Round 1：mean κ=0.5749 FAIL**（9/22 达标）→ 6 类真实分歧逐条归因
+  （L1.4 假设≠歧义标注 / L1.2 隐式条件定义 / L3.3 F 臂 fidelity=null /
+  L2.6 公式符号标注 / L4.1 内部检验≠对照基线 / L4.5 证据-主张严格对应）
+  + L3.4 Kappa 悖论伪影（po=0.9167、κ=0.3333、23/24 同分仅 1 包分歧）
+- **锚定澄清 v1.2a**：仅判据显式化（维度/权重/阈值/满分不动）→ Round 2
+- **Round 2：mean κ=0.712 PASS**（13/22 维度 ≥0.6；mean QWK=0.7322；
+  残余 9 个 κ<0.6 维度全部可归因：2 个 Kappa 悖论伪影 + 3 个边际偏斜 +
+  4 个边界判据理解差异，**0 个无法解释**）
+- **关键验证**：L3 真实执行判据维度（L3.2 代码可执行性、L3.5 结果合理性）
+  κ=1.0 完美一致——v1.2 "L3=执行事实"核心修订有效，消除 K002 的 L3 格式不对称分歧
+- 通过标准（κ≥0.6 或分歧可归因）满足；**G2 PASS**
+- 证据：`research/P15/experiments/P15-K003-precheck/g2/`（g2_kappa.json /
+  ANCHORED_PROTOCOL_v1.2a.md / evaluator_{A,B,C}/ 24 份评分 / G2_REPORT.md）
 
-## G4 — 执行有效性（设计，待 PREREGISTERED 前执行）
+## G4 — 执行有效性（**PASS，2026-09-09**）
 
-- dry-run：run_code_pipeline 在 6 题（主检验）× 3 臂的预检产物上真实跑通
-- 5 场景 fidelity 校验（复用 K002 dry-run 模式）：对齐 1.0 / 私有命名空间无
-  mapping 0.0 / 私有+mapping 1.0 / 跑通但模型错 0.0 / mapping 撒谎 0.16
-- output_mapping 契约：外部 Agent 交付 code 必须声明 {声明名→输出 key}，
-  随 CODE artifact 登记（可审计），经 EXEC provenance 透传
-- 通过标准：execution_success_rate=1.00（6 题全部真实执行）+ fidelity 报告落盘
+- dry-run：run_code_pipeline 在 6 题（主检验）上真实跑通，**execution_success_rate
+  = 1.00**（6/6 全部 subprocess 真实执行，status 仅来自 returncode）
+- 18/18 runs（6 题 × 3 臂 × 1 rep）全部落盘：表示文件 + 自包含 run_model.py
+  （纯标准库，ABI `def solve(inputs)->dict`）+ output_mapping + execution_result
+  + fidelity VR；三臂执行地位完全平等（F 臂同样真实执行、同样进盲评包）
+- 5 场景 fidelity 校验全过：对齐 1.0 / 私有无 mapping 0.0 / 私有+mapping 1.0 /
+  跑通但模型错 0.0 / mapping 撒谎 0.3636（partial，符合"撒谎不能掩盖实体缺失"设计意图）
+- output_mapping 契约有效：CODE artifact 登记 → EXEC provenance 透传 →
+  fidelity 校验消费，全链路可审计
+- 词表合规：6 题 model_family.primary 全部取自 catalog 18 canonical，无 out_of_catalog
+- **G4 PASS**；证据：`research/P15/experiments/P15-K003-precheck/`
+  （PRECHECK_REPORT.md / dryrun/g4_dryrun_report.json / runs/）
