@@ -1,0 +1,75 @@
+{
+  "mode": "capability_delta",
+  "pre": "projects/p151-2024a-r2",
+  "post": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\research\\P15\\experiments\\p1-vs001\\project",
+  "eight_metrics": [
+    {
+      "metric": "decomposition_coverage",
+      "label": "问题分解覆盖",
+      "pre": 20.0,
+      "post": 40.0,
+      "delta": 20.0
+    },
+    {
+      "metric": "structure_alignment",
+      "label": "模型结构对齐（allowed_modeling_structures）",
+      "pre": 0.0,
+      "post": 0.0,
+      "delta": 0.0
+    },
+    {
+      "metric": "model_correctness",
+      "label": "模型正确性（gt 数值对照）",
+      "pre": null,
+      "post": null,
+      "delta": null
+    },
+    {
+      "metric": "experiment_validity",
+      "label": "实验有效性",
+      "pre": 100.0,
+      "post": null,
+      "delta": null
+    },
+    {
+      "metric": "validation_reliability",
+      "label": "验证可靠性",
+      "pre": 100.0,
+      "post": null,
+      "delta": null
+    },
+    {
+      "metric": "innovation",
+      "label": "创新性",
+      "pre": 0.0,
+      "post": 0.0,
+      "delta": 0.0
+    },
+    {
+      "metric": "writing_completeness",
+      "label": "论文完备性",
+      "pre": 16.2,
+      "post": null,
+      "delta": null
+    },
+    {
+      "metric": "end_to_end",
+      "label": "端到端",
+      "pre": null,
+      "post": null,
+      "delta": null
+    }
+  ],
+  "p1_loop": {
+    "execution_total": 3,
+    "execution_success": 3,
+    "execution_success_rate": 1.0,
+    "validation_total": 3,
+    "validation_fail_observed": 1,
+    "model_ir_total": 3,
+    "revision_lineage_edges": 1,
+    "supersede_edges": 1,
+    "implemented_by_edges": 3,
+    "verified_by_edges": 3
+  }
+}
