@@ -31,8 +31,19 @@
 3. **candidates.py / planner.py 无直接单测**（依赖 handlers 间接覆盖，需补）
 4. core/runtime/adapters 很薄（openai.yaml 配置 + __init__），符合 LLM-free 定位，无需扩展
 
-## 四、待 Organizer Gap Audit 确认
+## 四、摸底补充（2026-09-09 第二轮探测）
 
+1. **handlers.py 对 codegen/fidelity 零引用**（codegen/register_code/execute_code/run_code_pipeline/fidelity 均 0 处）——
+   确认 P0-E7（Code→Execution→Fidelity）**未接入 V3 运行时主路径**
+2. **catalog/v3.yaml 无 codegen/fidelity 节点**——V3 DAG 中不存在"实现/执行/保真"节点类型
+3. **Revision 现状 = V2 legacy 论文评审闭环**（revision-planner/revision-executor，产物 work/revision_plan.json / execution_report.json，
+   由 gate.py/state.py/orchestrator.py 支撑）——**不是 model 层的版本化修正闭环**；
+   "M1→E1→V1 FAIL→M2" 的 model revision 循环**不存在**
+4. **链路分界**：
+   - ✅ 前半段（Problem→Candidates→Selection→Decision→Planner→MODEL_IR）已接入 handlers
+   - ❌ 后半段（MODEL_IR→Code→Execution→Fidelity→Validation→Model Revision）P0-E7 存在但未接线、model revision 缺失
+
+## 五、待 Organizer Gap Audit 确认
 - 10 环节 × 10 问逐环节证据（是否存在占位/hardcoded）
 - 端到端入口（orchestrator DAG 是否真的会触发 candidates→selection→…→codegen）
 - P1 Implementation Plan 的具体文件/函数/测试/commit 顺序
