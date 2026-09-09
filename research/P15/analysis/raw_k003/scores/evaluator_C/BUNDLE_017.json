@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_017",
+  "evaluator": "C",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 2,
+    "L2.2": 0,
+    "L2.3": 2,
+    "L2.4": 2,
+    "L2.5": 2,
+    "L2.6": 1,
+    "L2.7": 1,
+    "L3.1": 2,
+    "L3.2": 2,
+    "L3.3": 2,
+    "L3.4": 2,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 0,
+    "L4.3": 1,
+    "L4.4": 1,
+    "L4.5": 2
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 10,
+    "L3": 9,
+    "L4": 4
+  },
+  "MCQ_primary": 69.7,
+  "VAL_primary": 44.44,
+  "notes": "2019C机场出租车(model_ir)。同016执行(最优决策queue); L2.2=0 EQ2引用c_f(怠速燃油)/t_c(回市区时间)未声明(>30%); L2.6=1 W_q公式错误; L3.3=2 fidelity aligned=1.0; L4.5=2 CL1由E1/E2/V1支撑"
+}

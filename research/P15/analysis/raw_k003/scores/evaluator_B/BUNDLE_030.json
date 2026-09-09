@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_030",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 2,
+    "L2.3": 1,
+    "L2.4": 1,
+    "L2.5": 2,
+    "L2.6": 2,
+    "L2.7": 1,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 0,
+    "L3.4": 1,
+    "L3.5": 0,
+    "L4.1": 0,
+    "L4.2": 0,
+    "L4.3": 0,
+    "L4.4": 2,
+    "L4.5": 2
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 10,
+    "L3": 4,
+    "L4": 4
+  },
+  "MCQ_primary": 54.55,
+  "VAL_primary": 44.44,
+  "notes": "2011_B 交巡警 IR格式,与BUNDLE_003同构但无validation_plan(fidelity aligned但输出退化:每节点设平台→全0距离/coverage=1.0/response=0);L2.3=1:每节点均设平台假设使问题平凡;L2.4=1:目标被A3平凡化且Q3-Q5未覆盖;L2.7=1:仅最短路径+分配两方程;L3.3=0:aligned但输出退化(全0距离/0响应);L3.5=0:平凡解;L4.2=0:无plan无灵敏度;L4.3=0:无极限检验;L4.4=2:CL1/CL2有输出;L4.5=2:CL1/CL2证据E1/E2/V1/V2可解析到allocation/blockade_schedule"
+}

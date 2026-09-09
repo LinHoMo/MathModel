@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_051",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 1,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 1,
+    "L2.6": 3,
+    "L2.7": 1,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 1,
+    "L3.4": 1,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 1,
+    "L4.3": 1,
+    "L4.4": 1,
+    "L4.5": 1
+  },
+  "layer_totals": {
+    "L1": 7,
+    "L2": 10,
+    "L3": 6,
+    "L4": 4
+  },
+  "MCQ_primary": 60.61,
+  "VAL_primary": 44.44,
+  "notes": "2022_C IR+plan,与013完全同构(seed=42,misaligned 0.2);L1.4=1:plan ambiguity_handling显式多解释+adopted+justification;L2.6=3:机理+候选对比;L4.2=1:plan灵敏度(学习率±50%/k_loss±20%);L4.3=1:plan极限检验(SiO2=100%/PbO=50%);L4.4=1;L4.5=1:CL2证据E2错位"
+}

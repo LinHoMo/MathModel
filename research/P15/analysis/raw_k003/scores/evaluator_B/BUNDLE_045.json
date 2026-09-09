@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_045",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 1,
+    "L2.6": 3,
+    "L2.7": 1,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 1,
+    "L3.4": 1,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 1,
+    "L4.3": 0,
+    "L4.4": 1,
+    "L4.5": 1
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 10,
+    "L3": 6,
+    "L4": 3
+  },
+  "MCQ_primary": 57.58,
+  "VAL_primary": 33.33,
+  "notes": "2022_C IR格式,与036/051同模型(seed=43,misaligned 0.2)但无plan;L2.2=1:lr/epochs/threshold/k_loss声明但数据生成参数未声明;L2.6=3:机理正确+候选对比(排除仿真/聚类);L3.1=1:合成数据;L3.3=1:misaligned≈0.2;L4.2=1:IR V2声明学习率±50%灵敏度;L4.3=0:无极限检验;L4.4=1:CL1/CL2部分支持;L4.5=1:CL2证据引用E2错位"
+}

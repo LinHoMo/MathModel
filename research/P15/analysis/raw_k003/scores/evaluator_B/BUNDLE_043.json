@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_043",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 2,
+    "L2.2": 0,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 2,
+    "L2.6": 2,
+    "L2.7": 1,
+    "L3.1": 2,
+    "L3.2": 2,
+    "L3.3": 2,
+    "L3.4": 1,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 0,
+    "L4.3": 0,
+    "L4.4": 2,
+    "L4.5": 2
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 10,
+    "L3": 8,
+    "L4": 4
+  },
+  "MCQ_primary": 66.67,
+  "VAL_primary": 44.44,
+  "notes": "2018_A IR格式,与019同码a207db(misaligned 0.9091)但无validation_plan;L2.2=0:IR参数节仅6个参数,k/ρc未全声明(缺失>30%);L2.6=2:机理正确但无候选对比;L3.3=2:misaligned≥0.8且输出完整合理(T_skin 37→42.525);L4.2=0:无plan;L4.3=0:IR V1/V2为稳定性/边界检查非极限检验;L4.4=2:CL1温度主张被输出曲线支持;L4.5=2:CL1证据E1/V1可解析"
+}

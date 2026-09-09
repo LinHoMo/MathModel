@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_056",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 2,
+    "L2.5": 1,
+    "L2.6": 2,
+    "L2.7": 1,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 2,
+    "L3.4": 1,
+    "L3.5": 0,
+    "L4.1": 0,
+    "L4.2": 0,
+    "L4.3": 0,
+    "L4.4": 1,
+    "L4.5": 1
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 10,
+    "L3": 6,
+    "L4": 2
+  },
+  "MCQ_primary": 54.55,
+  "VAL_primary": 22.22,
+  "notes": "2017_B doc格式,与054同码e1f3d3f3(seed=42,unverifiable,无plan),系数符号与解释矛盾;L3.3=2:unverifiable按outputs完整判定;L3.5=0:输出矛盾;L4.2=0:doc验证(准确率/单调性/收敛性)非灵敏度;L4.3=0;L4.4=1:CL1被符号矛盾部分反驳;L4.5=1"
+}

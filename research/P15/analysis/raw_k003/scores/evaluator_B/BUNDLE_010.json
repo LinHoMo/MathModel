@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_010",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 1,
+    "L1.5": 2,
+    "L2.1": 2,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 2,
+    "L2.6": 2,
+    "L2.7": 1,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 1,
+    "L3.4": 1,
+    "L3.5": 0,
+    "L4.1": 0,
+    "L4.2": 1,
+    "L4.3": 1,
+    "L4.4": 1,
+    "L4.5": 2
+  },
+  "layer_totals": {
+    "L1": 7,
+    "L2": 11,
+    "L3": 5,
+    "L4": 5
+  },
+  "MCQ_primary": 63.64,
+  "VAL_primary": 55.56,
+  "notes": "2024_A 与BUNDLE_008代码同构(seed=42),输出/IR/plan全同;评分同008;L3.4=1:seed=42正确但无多seed实际记录(plan占位);其余维度同BUNDLE_008注记"
+}

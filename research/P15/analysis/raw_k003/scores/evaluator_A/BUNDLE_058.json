@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_058",
+  "evaluator": "A",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 2,
+    "L2.5": 2,
+    "L2.6": 2,
+    "L2.7": 1,
+    "L3.1": 2,
+    "L3.2": 2,
+    "L3.3": 2,
+    "L3.4": 2,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 2,
+    "L4.3": 0,
+    "L4.4": 2,
+    "L4.5": 1
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 11,
+    "L3": 9,
+    "L4": 5
+  },
+  "MCQ_primary": 75.76,
+  "VAL_primary": 55.56,
+  "notes": "机场出租车2019C IR：L1.1=1仅Q1，Q2-Q4未建模；L2.2=1缺fuel_idle/time_city/n_taxis；L3.3=2 aligned 1.0；L4.2=2 λ灵敏度扫描已执行(敏感参数+临界边界)；L4.5=1 E2扫描区间[10,38]未跨临界39.98，切换点未观测到(unresolved)。"
+}

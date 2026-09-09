@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_063",
+  "evaluator": "A",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 0,
+    "L2.3": 2,
+    "L2.4": 2,
+    "L2.5": 2,
+    "L2.6": 2,
+    "L2.7": 1,
+    "L3.1": 2,
+    "L3.2": 2,
+    "L3.3": 0,
+    "L3.4": 2,
+    "L3.5": 0,
+    "L4.1": 0,
+    "L4.2": 0,
+    "L4.3": 0,
+    "L4.4": 1,
+    "L4.5": 0
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 10,
+    "L3": 6,
+    "L4": 1
+  },
+  "MCQ_primary": 51.52,
+  "VAL_primary": 11.11,
+  "notes": "穿越沙漠2020B IR：L1.3=1部分识别交付(策略内容)但缺Result.xlsx；L2.2=0价格/消耗/天气参数未声明；L3.3=0退化解(optimal_path=[]/arrival_day=-1/profit=0/n_states=1)；L4.5=0最优策略主张被空路径证据反驳。"
+}

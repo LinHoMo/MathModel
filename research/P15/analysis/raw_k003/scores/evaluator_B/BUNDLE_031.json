@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_031",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 2,
+    "L2.2": 0,
+    "L2.3": 2,
+    "L2.4": 2,
+    "L2.5": 2,
+    "L2.6": 2,
+    "L2.7": 2,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 2,
+    "L3.4": 1,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 1,
+    "L4.3": 1,
+    "L4.4": 2,
+    "L4.5": 2
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 12,
+    "L3": 7,
+    "L4": 6
+  },
+  "MCQ_primary": 75.76,
+  "VAL_primary": 66.67,
+  "notes": "2017_B 拍照 IR+plan,与BUNDLE_022同构(seed=44,misaligned 0.8235);L2.2=0:合成数据生成参数(距离指数分布/价格生成/真实模型系数)未声明;L2.7=1:Logistic+利润两方程;L3.3=2:misaligned≥0.8且输出完整;L3.4=1:seed=44固定无多种子;L4.2=1:plan声明定价/距离灵敏度;L4.3=1:limit_tests零价格/极远任务;L4.4=2;L4.5=2"
+}

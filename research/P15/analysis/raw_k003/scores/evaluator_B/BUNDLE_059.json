@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_059",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 2,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 2,
+    "L2.6": 3,
+    "L2.7": 2,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 1,
+    "L3.4": 1,
+    "L3.5": 0,
+    "L4.1": 0,
+    "L4.2": 0,
+    "L4.3": 1,
+    "L4.4": 1,
+    "L4.5": 2
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 13,
+    "L3": 5,
+    "L4": 4
+  },
+  "MCQ_primary": 66.67,
+  "VAL_primary": 44.44,
+  "notes": "2024_A IR格式,新码fdd7cd52(misaligned 0.2,无plan,seed=42);L2.1=2:V1-V9完整声明;L2.2=1:题面参数P1-P7全声明但r0/0.85倍率/max_speed_ratio未声明;L2.6=3:机理+候选对比(排除PDE/纯优化);L2.7=2:E1-E4含latex与推导;L3.3=1:misaligned≈0.2;L3.5=0:min_gap恒3.74碰撞检测失效,Q3/Q5为粗估算;L4.2=0:IR V1/V2(收敛/可复现)非灵敏度;L4.3=1:IR V3 pitch→0极限检验;L4.4=1:CL2被min_gap恒定反驳;L4.5=2:CL1/CL2有E1证据"
+}

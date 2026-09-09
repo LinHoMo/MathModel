@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_013",
+  "evaluator": "A",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 1,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 2,
+    "L2.6": 3,
+    "L2.7": 1,
+    "L3.1": 2,
+    "L3.2": 2,
+    "L3.3": 1,
+    "L3.4": 2,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 1,
+    "L4.3": 0,
+    "L4.4": 1,
+    "L4.5": 1
+  },
+  "layer_totals": {
+    "L1": 7,
+    "L2": 11,
+    "L3": 8,
+    "L4": 3
+  },
+  "MCQ_primary": 66.67,
+  "VAL_primary": 33.33,
+  "notes": "玻璃2022C IR+验证计划：同IR但validation_plan含ambiguity_handling(风化量化标准)故L1.4=1；limit/multi_seed/sensitivity结果均为占位未执行；claim_evidence_map声明CL1/CL2 supported但CL2证据不覆盖(风化)故L4.5=1。"
+}

@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_036",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 1,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 2,
+    "L2.6": 3,
+    "L2.7": 1,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 2,
+    "L3.4": 1,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 1,
+    "L4.3": 1,
+    "L4.4": 1,
+    "L4.5": 1
+  },
+  "layer_totals": {
+    "L1": 7,
+    "L2": 11,
+    "L3": 7,
+    "L4": 4
+  },
+  "MCQ_primary": 66.67,
+  "VAL_primary": 44.44,
+  "notes": "2022_C 古代玻璃 doc格式,无plan,unverifiable;合成数据14样本Logistic;L1.4=1:歧义点风化量化标准(采用K2O流失30%)显式;L2.2=1:lr/epochs/threshold/k_loss声明但样本数据未参数化;L2.6=3:机理正确+候选对比(排除仿真/纯聚类);L3.1=1:合成数据;L3.3=2:unverifiable按outputs完整合理(acc=1.0/预测合理/PbO权重最大);L3.4=1:seed=43固定;L3.5=1:输出与机理一致但风化分析为硬编码假设;L4.2=1:doc验证方案声明学习率±50%灵敏度;L4.3=1:doc声明极端成分极限检验;L4.4=1:收敛性声明无输出证据;L4.5=1:doc无claims结构"
+}

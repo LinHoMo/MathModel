@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_013",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 1,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 1,
+    "L2.6": 3,
+    "L2.7": 1,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 1,
+    "L3.4": 1,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 1,
+    "L4.3": 1,
+    "L4.4": 1,
+    "L4.5": 1
+  },
+  "layer_totals": {
+    "L1": 7,
+    "L2": 10,
+    "L3": 6,
+    "L4": 4
+  },
+  "MCQ_primary": 60.61,
+  "VAL_primary": 44.44,
+  "notes": "2022_C 与BUNDLE_001同构(seed=43)+validation_plan;L1.4=1:ambiguity_handling含风化程度量化标准(3解释+adopted);L2.6=3:统计分类机理正确候选对比充分;L3.1=1:合成数据;L3.3=1:misaligned 0.2;L3.4=1:seed=43无多seed;L4.2=1:plan声明lr/k_loss扰动未执行(k_loss为敏感参数);L4.3=1:limit_tests 2类(纯SiO2/高PbO);L4.4=1:CL1/CL2有输出但验证未执行;L4.5=1:CL2证据引用错位unresolved"
+}

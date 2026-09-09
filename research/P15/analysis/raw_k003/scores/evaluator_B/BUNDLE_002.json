@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_002",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 2,
+    "L2.2": 0,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 2,
+    "L2.6": 2,
+    "L2.7": 1,
+    "L3.1": 2,
+    "L3.2": 2,
+    "L3.3": 2,
+    "L3.4": 1,
+    "L3.5": 1,
+    "L4.1": 0,
+    "L4.2": 1,
+    "L4.3": 1,
+    "L4.4": 2,
+    "L4.5": 2
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 10,
+    "L3": 8,
+    "L4": 6
+  },
+  "MCQ_primary": 72.73,
+  "VAL_primary": 66.67,
+  "notes": "L1.1=1:Q1条件(75C/6mm/5mm/90min)已提取但附件1材料参数与Q2/Q3条件未完整提取;L1.4=0:材料参数赋值(h=8,k)无显式歧义声明;L2.1=2:温度场/时间/空间/皮肤温度均声明且区分类型;L2.2=0:EQ1引用rho_i/c_i/k_i(i=1..4),仅k1/k2声明,缺失率>30%;L2.4=1:仅Q1温度计算目标,Q2/Q3厚度优化目标未声明;L2.5=2:C1(47C)/C2(44C超5min)方向正确;L2.6=2:Fourier机理正确E1-E3满足,无候选对比E4缺;L2.7=1:有控制方程+边界但初始条件未入IR且rho/c符号未声明;L3.1=2:显式FDM+CFL稳定步长匹配PDE;L3.2=2:success+outputs完整;L3.3=2:fidelity misaligned score=0.9091>=0.8无NaN;L3.4=1:确定性代码无seed设置无多seed记录;L3.5=1:42.5C结果量级合理但低于已知实测参考;L4.1=0:limit/sensitivity为内部自洽非外部基线;L4.2=1:validation_plan声明II厚度/环境温度扰动(敏感参数)但未执行;L4.3=1:limit_tests含2类(d2=0,Tamb=37)带预期效果;L4.4=2:OBJ1为验证目标且temperature_curve输出支撑CL1;L4.5=2:CL1证据可解析(temperature_curve/CFL)"
+}

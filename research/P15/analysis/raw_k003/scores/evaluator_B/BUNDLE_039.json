@@ -1,0 +1,39 @@
+{
+  "bundle_id": "BUNDLE_039",
+  "evaluator": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "anchored_protocol": "v1.2a",
+  "scores": {
+    "L1.1": 1,
+    "L1.2": 2,
+    "L1.3": 1,
+    "L1.4": 0,
+    "L1.5": 2,
+    "L2.1": 1,
+    "L2.2": 1,
+    "L2.3": 2,
+    "L2.4": 1,
+    "L2.5": 2,
+    "L2.6": 3,
+    "L2.7": 1,
+    "L3.1": 1,
+    "L3.2": 2,
+    "L3.3": 1,
+    "L3.4": 1,
+    "L3.5": 0,
+    "L4.1": 0,
+    "L4.2": 0,
+    "L4.3": 1,
+    "L4.4": 1,
+    "L4.5": 2
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 11,
+    "L3": 5,
+    "L4": 4
+  },
+  "MCQ_primary": 60.61,
+  "VAL_primary": 44.44,
+  "notes": "2024_A 板凳龙 IR格式,无plan,misaligned 0.2;新code_hash 7058e971(seed=43);L2.2=1:题面参数全声明但r0/0.85倍率/max_speed_ratio经验值未声明;L2.6=3:机理正确+显式候选对比(排除PDE/纯优化);L3.1=1:孔距0.85近似非题面27.5cm;L3.3=1:misaligned≈0.2;L3.5=0:Q3/Q5粗估值;L4.2=0:无plan且IR validations(收敛/可复现/极限)无灵敏度;L4.3=1:IR V3声明pitch→0极限检验;L4.4=1:CL2碰撞主张被min_gap恒定3.74反驳;L4.5=2:CL1/CL2有evidence_refs"
+}
