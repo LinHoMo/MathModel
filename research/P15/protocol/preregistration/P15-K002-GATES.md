@@ -9,9 +9,15 @@
   - prompt 模板 F/S/SV 已定稿（F/S 长度差 5.9% < 10%）
   - register 三 gate 实测：COVERAGE_FAIL（Q1-only）/ validation_plan FAIL（n_runs<3）/ REGISTERED（3/3 覆盖）
 
-## G1 — Construct validity：评分维度 ↔ 产物字段映射（v1，冻结）
+## G1 — Construct validity：评分维度 ↔ 产物字段映射（v1.1，冻结）
 
 规则：每个评分维度至少 1 个产物字段可支撑（评分项可被产物字段触发）。
+
+**Rubric 版本**：`MODEL_CONSTRUCTION_RUBRIC-v1.1`（2026-09-09 测量校准，总分/PASS 阈值不变，判据粒度升级——动因：预检 L1/L2/L4 天花板零区分度）。v1.1 校准点：
+- §0.4 格式中立规则：结构化 MODEL_IR 与叙述式 model_doc 评分等价（字段齐全=满分，叙述不额外加分，缺字段才扣分）
+- L2.6 四要素（E1 机理-题面 / E2 机理-方程 / E3 机理-目标约束 / E4 候选对比）：3 分要求四要素全满足
+- L2.4 目标-机制-约束三角一致性；L2.7 方程符号集 ⊆ 变量/参数声明集；L4.3 ≥2 类极限检验 + 结果-主张关联
+- 版本迁移：K001 评分文件引用 `v1.0`（历史冻结，不变）；K002 全程用 `v1.1`
 
 ### L1 Problem Understanding（产物来源：MODEL_IR 18 字段 + 外部 problem_analysis）
 
@@ -32,8 +38,8 @@
 | L2.3 假设合理性 | `assumptions[]`（每条含合理性说明） |
 | L2.4 目标正确性 | `objectives[]`（type/expression/variables_refs） |
 | L2.5 约束完备性 | `constraints[]`（constraint_id/type/expression/variables_refs/source） |
-| L2.6 机理正确性 | `mechanisms[]` + `model_family`（受控词表） |
-| L2.7 方程结构完整性 | `equations[]`（latex/type/边界初始条件声明） |
+| L2.6 机理正确性 | `mechanisms[]` + `model_family`（受控词表）+ **E4 候选对比**：`model_family.secondary`（候选家族）+ `modeling_trace`（选择动作） | v1.1 四要素：E1 机理-题面 / E2 机理-方程 / E3 机理-目标约束 / E4 候选对比（≥2 候选 + 依据） |
+| L2.7 方程结构完整性 | `equations[]`（latex/type/边界初始条件声明）+ 变量/参数符号交叉核验 | v1.1：方程符号集 ⊆ variables∪parameters |
 
 ### L3 Solving（产物来源：执行级 artifacts + MODEL_IR.solvers）
 
