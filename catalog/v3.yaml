@@ -51,6 +51,9 @@ v3:
     - name: model_validation
       role: experimenter
       stage: modeling
+    - name: model_selection_decision
+      role: modeler
+      stage: modeling
     - name: experiment_design
       role: experimenter
       stage: experiment

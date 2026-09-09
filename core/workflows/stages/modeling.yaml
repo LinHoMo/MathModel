@@ -48,3 +48,9 @@ nodes:
     description: P1-VS-001 C8: 基于真实数值验证执行结果（constraint/objective/domain），产出 VR artifacts
     depends_on: [model_execution]
     outputs: [state/registry.json]
+  model_selection_decision:
+    type: reasoning
+    role: modeler
+    description: P1-M3: 基于候选真实数值验证结果（VR 机械指标）选型，产出 decision artifact + selects 边
+    depends_on: [model_validation]
+    outputs: [state/registry.json]

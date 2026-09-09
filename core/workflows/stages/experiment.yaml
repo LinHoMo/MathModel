@@ -7,7 +7,7 @@ nodes:
     type: reasoning
     role: experimenter
     description: 实验规划（baseline / sensitivity / 多起点），选择代码模板
-    depends_on: [model_validation]
+    depends_on: [model_selection_decision]
     outputs: [state/experiment_plan.json]
   experiment:
     type: execution
