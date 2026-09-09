@@ -408,7 +408,8 @@ class DefaultNodeExecutor:
             "code", title=f"{mir_id} 可执行实现",
             question=qid, depends_on=[mir_id],
             data={"code": code, "code_hash": code_hash,
-                  "abi": "def solve(inputs) -> outputs"},
+                  "abi": "def solve(inputs) -> outputs",
+                  "model_id": mir_id},
             activate=True, created_by=node_id)
         self.graph.add_relation(mir_id, "implemented_by", art.artifact_id)
         return art.artifact_id
@@ -506,6 +507,36 @@ class DefaultNodeExecutor:
                     return a.artifact_id
         return None
 
+    def _check_ir_code_mapping(self, qid: str, mir_id: str,
+                               code_id: str) -> None:
+        """FIX-3.1（audit P1-03/P1-09）：MODEL_IR→Code 映射一致性校验。
+
+        MIR.solvers[].implementation_ref 声明实现引用（CODE artifact id 或
+        code.model_id/solver_id）时，实际执行的 code 必须命中其一；未声明
+        （测试注入/骨架 MIR）跳过。映射断裂直接抛 HandlerError（不静默）。
+        """
+        mir = self.registry.get(mir_id).data if mir_id else {}
+        refs = []
+        for s in mir.get("solvers") or []:
+            r = (s or {}).get("implementation_ref")
+            if r:
+                refs.append(str(r))
+        if not refs:
+            return
+        target = self.registry.get(code_id)
+        tdata = target.data or {} if target is not None else {}
+        # 匹配对象：code artifact id / code 登记的 model_id（MIR001 系）/
+        # MIR 外部声明的 model_id（M-Q001 系）/ solver_id
+        mir_model_id = mir.get("model_id")
+        if any(ref == code_id or ref == tdata.get("model_id")
+               or ref == mir_model_id or ref == tdata.get("solver_id")
+               for ref in refs):
+            return
+        raise HandlerError(
+            f"{qid}/{mir_id}: MIR.solvers[].implementation_ref={refs} 与执行 "
+            f"code {code_id}(model_id={tdata.get('model_id')}) 不一致——"
+            f"MODEL_IR→CODE 映射断裂")
+
     def execute_code(self, qid: str, node_id: str = "model_execution") -> list[tuple[str, str]]:
         """C7/P1-M3：每个候选 MIR → 其 code → LocalPythonAdapter 真 subprocess → EXEC + R。
 
@@ -539,6 +570,11 @@ class DefaultNodeExecutor:
             code = (self.registry.get(code_id).data or {}).get("code", "")
             if not code:
                 raise HandlerError(f"{code_id}: code artifact 无 code 本体")
+            # FIX-3.1（audit P1-03/P1-09）：MODEL_IR→Code 映射校验。
+            # MIR.solvers[].implementation_ref 声明了实现引用（CODE artifact id
+            # 或 model_id）时，必须与实际执行的 code 一致；未声明（测试注入/
+            # 骨架 MIR）跳过。防"MIR 说用 MILP、实际跑的却是别的代码"。
+            self._check_ir_code_mapping(qid, mir_id, code_id)
             mir_art = self.registry.get(mir_id) if mir_id else None
             inputs = self._execution_inputs(mir_art)
             if inputs is None:
@@ -867,6 +903,13 @@ class DefaultNodeExecutor:
                 question=qid, payload=[chosen], data=ddata,
                 depends_on=[mid] if mid else [],
                 activate=True, created_by=node_id)
+            # audit FIX-2.4：候选评估证据 + 选型来源写入 Evidence Graph
+            for mir_id, info in table.items():
+                vr_id = info.get("vr_id")
+                if vr_id:
+                    self.graph.add_relation("evaluated_by", mir_id, vr_id)
+            if chosen != "UNSELECTED" and mid:
+                self.graph.add_relation("selected_from", mid, chosen)
             if mid:
                 self.graph.add_relation(d.artifact_id, "selects", mid)
                 ev.append({"from": d.artifact_id, "relation": "selects", "to": mid})
@@ -935,12 +978,44 @@ class DefaultNodeExecutor:
     # ------------------------------------------------------------ 节点实现
 
     def do_problem_analysis(self, node_id: str) -> NodeResult:
-        """登记 Problem Artifact + motivates 证据（Question 已由 session 预登记）。"""
+        """登记 Problem Artifact + motivates 证据（Question 已由 session 预登记）。
+
+        audit FIX-2.5：有结构化题面（ProblemRepresentation）时，Problem
+        artifact 携带题面内容（background/problems/constraints/data/delivery），
+        features 粗画像标记 source=legacy_fallback 仅作回退。
+        """
+        pr = getattr(self, "problem_repr", None)
+        title = self.features.get("problem_title", "赛题")
+        if pr is not None and pr.background:
+            title = pr.background.strip().splitlines()[0][:60] or title
         if not self.registry.list_by_type("problem"):
-            self.registry.create("problem", title=self.features.get(
-                "problem_title", "赛题"), activate=True, created_by=node_id)
+            pdata = {"source": pr.source if pr is not None else "legacy_fallback"}
+            if pr is not None:
+                pdata.update({
+                    "background": pr.background,
+                    "problems": pr.problems,
+                    "constraints": pr.constraints,
+                    "data": pr.data,
+                    "delivery": pr.delivery,
+                })
+            self.registry.create("problem", title=title, data=pdata,
+                                 activate=True, created_by=node_id)
         problem_id = self.registry.list_by_type("problem")[0].artifact_id
         qids = self._question_ids()
+        # Question artifact 题面内容（来自 structured representation）
+        if pr is not None and pr.problems:
+            for qid in qids:
+                qa = self.registry.get(qid)
+                if qa is not None:
+                    d = dict(qa.data or {})
+                    d.setdefault("problem_repr_source", pr.source)
+                    for prob in pr.problems:
+                        if prob.get("id") == qid or str(prob.get("id")) == qid:
+                            d.setdefault("problem_statement",
+                                         prob.get("description")
+                                         or prob.get("title") or "")
+                            break
+                    qa.data = d
         ev = [{"from": problem_id, "relation": "motivates", "to": qid}
               for qid in qids]
         return NodeResult(PASS, f"{len(qids)} 个问题已登记",
