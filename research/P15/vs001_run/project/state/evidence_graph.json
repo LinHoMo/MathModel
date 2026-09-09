@@ -1,0 +1,110 @@
+{
+  "graph_schema_version": 3,
+  "graph_version": 2,
+  "project": "project",
+  "updated_at": "2026-09-09T02:39:48+00:00",
+  "relations": [
+    {
+      "from": "P001",
+      "relation": "motivates",
+      "to": "Q001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "D001",
+      "relation": "based_on",
+      "to": "P001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "Q001",
+      "relation": "solved_by",
+      "to": "M001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "MIR001",
+      "relation": "instantiates",
+      "to": "M001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "M001",
+      "relation": "assumes",
+      "to": "A001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "M001",
+      "relation": "assumes",
+      "to": "A002",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "MIR001",
+      "relation": "implemented_by",
+      "to": "CODE001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "CODE001",
+      "relation": "executed_by",
+      "to": "EXEC001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "EXEC001",
+      "relation": "produces",
+      "to": "R001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "EXEC001",
+      "relation": "verified_by",
+      "to": "VR001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "MIR002",
+      "relation": "instantiates",
+      "to": "M001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "MIR002",
+      "relation": "revision_of",
+      "to": "MIR001",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "MIR001",
+      "relation": "supersedes",
+      "to": "MIR002",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "MIR002",
+      "relation": "implemented_by",
+      "to": "CODE002",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "CODE002",
+      "relation": "executed_by",
+      "to": "EXEC002",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "EXEC002",
+      "relation": "produces",
+      "to": "R002",
+      "at": "2026-09-09T02:39:48+00:00"
+    },
+    {
+      "from": "EXEC002",
+      "relation": "verified_by",
+      "to": "VR002",
+      "at": "2026-09-09T02:39:48+00:00"
+    }
+  ]
+}

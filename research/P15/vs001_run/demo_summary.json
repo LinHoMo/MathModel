@@ -1,0 +1,127 @@
+{
+  "project_dir": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\research\\P15\\vs001_run\\project",
+  "problem": "2024_A Q1",
+  "m1_run": {
+    "execution_id": "EXEC001",
+    "exit_code": 0,
+    "status": "success",
+    "body_spacing_measured": 1.924999999999999,
+    "head_speed_60": 0.9993718594038493,
+    "verification_id": "VR001",
+    "verdict": "failed",
+    "mathematical_valid": false,
+    "constraint_violation_max": 0.275
+  },
+  "m2_run": {
+    "execution_id": "EXEC002",
+    "exit_code": 0,
+    "status": "success",
+    "body_spacing_measured": 1.6499999999999997,
+    "head_speed_60": 0.9993718594038493,
+    "verification_id": "VR002",
+    "verdict": "passed",
+    "mathematical_valid": true,
+    "empirical_valid": true,
+    "robustness": 1.0,
+    "constraint_violation_max": 0.0
+  },
+  "relations": [
+    {
+      "from": "CODE001",
+      "relation": "executed_by",
+      "to": "EXEC001"
+    },
+    {
+      "from": "CODE002",
+      "relation": "executed_by",
+      "to": "EXEC002"
+    },
+    {
+      "from": "D001",
+      "relation": "based_on",
+      "to": "P001"
+    },
+    {
+      "from": "EXEC001",
+      "relation": "produces",
+      "to": "R001"
+    },
+    {
+      "from": "EXEC001",
+      "relation": "verified_by",
+      "to": "VR001"
+    },
+    {
+      "from": "EXEC002",
+      "relation": "produces",
+      "to": "R002"
+    },
+    {
+      "from": "EXEC002",
+      "relation": "verified_by",
+      "to": "VR002"
+    },
+    {
+      "from": "M001",
+      "relation": "assumes",
+      "to": "A001"
+    },
+    {
+      "from": "M001",
+      "relation": "assumes",
+      "to": "A002"
+    },
+    {
+      "from": "MIR001",
+      "relation": "implemented_by",
+      "to": "CODE001"
+    },
+    {
+      "from": "MIR001",
+      "relation": "instantiates",
+      "to": "M001"
+    },
+    {
+      "from": "MIR001",
+      "relation": "supersedes",
+      "to": "MIR002"
+    },
+    {
+      "from": "MIR002",
+      "relation": "implemented_by",
+      "to": "CODE002"
+    },
+    {
+      "from": "MIR002",
+      "relation": "instantiates",
+      "to": "M001"
+    },
+    {
+      "from": "MIR002",
+      "relation": "revision_of",
+      "to": "MIR001"
+    },
+    {
+      "from": "P001",
+      "relation": "motivates",
+      "to": "Q001"
+    },
+    {
+      "from": "Q001",
+      "relation": "solved_by",
+      "to": "M001"
+    }
+  ],
+  "replay": {
+    "run1": {
+      "ok": true,
+      "outputs_match": true,
+      "replayed_status": "success"
+    },
+    "run2": {
+      "ok": true,
+      "outputs_match": true,
+      "replayed_status": "success"
+    }
+  }
+}
