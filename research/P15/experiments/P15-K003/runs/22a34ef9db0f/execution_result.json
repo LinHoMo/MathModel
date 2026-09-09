@@ -2,13 +2,94 @@
   "model_id": "M-22a34ef9db0f",
   "status": "success",
   "returncode": 0,
-  "outputs": {},
+  "outputs": {
+    "n_tasks": 200,
+    "actual_completion_rate": 0.435,
+    "model_accuracy": 0.6,
+    "logistic_coefficients": {
+      "intercept": -0.2643,
+      "price": -0.169,
+      "distance": 0.1366,
+      "member_density": 0.1842
+    },
+    "coefficient_interpretation": {
+      "price": "正系数→价格越高完成概率越高（在合理范围内）",
+      "distance": "负系数→距离越远完成概率越低",
+      "member_density": "正系数→会员越多完成概率越高"
+    },
+    "optimal_price": 40,
+    "optimal_expected_profit": 11.31,
+    "profit_curve": [
+      {
+        "price": 5,
+        "completion_prob": 0.5464,
+        "expected_profit": 2.73
+      },
+      {
+        "price": 8,
+        "completion_prob": 0.5225,
+        "expected_profit": 4.18
+      },
+      {
+        "price": 10,
+        "completion_prob": 0.5066,
+        "expected_profit": 5.07
+      },
+      {
+        "price": 12,
+        "completion_prob": 0.4906,
+        "expected_profit": 5.89
+      },
+      {
+        "price": 15,
+        "completion_prob": 0.4667,
+        "expected_profit": 7.0
+      },
+      {
+        "price": 18,
+        "completion_prob": 0.443,
+        "expected_profit": 7.97
+      },
+      {
+        "price": 20,
+        "completion_prob": 0.4273,
+        "expected_profit": 8.55
+      },
+      {
+        "price": 25,
+        "completion_prob": 0.3888,
+        "expected_profit": 9.72
+      },
+      {
+        "price": 30,
+        "completion_prob": 0.3516,
+        "expected_profit": 10.55
+      },
+      {
+        "price": 35,
+        "completion_prob": 0.3161,
+        "expected_profit": 11.06
+      },
+      {
+        "price": 40,
+        "completion_prob": 0.2826,
+        "expected_profit": 11.31
+      }
+    ],
+    "loss_final": 0.679124,
+    "feature_standardization": {
+      "price_mean": 19.1,
+      "price_std": 5.29,
+      "distance_mean": 2.09,
+      "distance_std": 2.15
+    }
+  },
   "stdout_tail": "",
   "stderr": "",
-  "duration_ms": 0,
-  "code_hash": "",
-  "environment_hash": "",
-  "code_id": "CODE040",
-  "exec_id": "EXEC040",
-  "executed_at": "2026-09-09T08:28:30Z"
+  "duration_ms": 255,
+  "code_hash": "e1f3d3f333816b58b1f499ad60bbc6b59e81fec71e0b554cc07ad3855b58ff23",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "code_id": "CODE001",
+  "exec_id": "EXEC001",
+  "executed_at": ""
 }

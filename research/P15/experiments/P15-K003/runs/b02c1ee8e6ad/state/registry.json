@@ -1,0 +1,447 @@
+{
+  "registry_version": 3,
+  "project": "b02c1ee8e6ad",
+  "updated_at": "2026-09-09T08:41:24+00:00",
+  "counters": {
+    "code": 1,
+    "execution_result": 1,
+    "verification_result": 1
+  },
+  "artifacts": {
+    "CODE001": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE001",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M-b02c1ee8e6ad",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T08:41:24+00:00",
+      "updated_at": "2026-09-09T08:41:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:41:24+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:41:24+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "\"\"\"2011_B 交巡警服务平台 — 图论Dijkstra+最近邻分配（自包含，纯标准库）。\"\"\"\nimport json\nimport heapq\nimport math\n\ndef solve(inputs: dict) -> dict:\n    # 构建A区简化交通网络：20个节点，模拟城区道路\n    # 节点坐标（km），用于计算距离\n    random_seed = 42\n    # 固定的20个节点坐标（模拟A区交通网络）\n    coords = [\n        (0.5, 0.5), (1.5, 0.3), (2.5, 0.6), (3.5, 0.4), (4.5, 0.7),\n        (0.8, 1.5), (1.8, 1.8), (2.8, 1.5), (3.8, 1.9), (4.8, 1.6),\n        (0.3, 2.8), (1.3, 3.0), (2.3, 2.7), (3.3, 3.1), (4.3, 2.8),\n        (1.0, 4.0), (2.0, 4.2), (3.0, 3.9), (4.0, 4.1), (4.8, 3.8),\n    ]\n    n_nodes = len(coords)\n\n    # 构建邻接表：相邻节点（距离<1.5km）之间有道路\n    adj = {i: [] for i in range(n_nodes)}\n    edges = []\n    for i in range(n_nodes):\n        for j in range(i + 1, n_nodes):\n            dist = math.sqrt((coords[i][0] - coords[j][0])**2 +\n                             (coords[i][1] - coords[j][1])**2)\n            if dist < 1.5:\n                adj[i].append((j, dist))\n                adj[j].append((i, dist))\n                edges.append((i, j, round(dist, 3)))\n\n    # 20个交巡警服务平台（设在节点0,2,4,6,8,10,12,14,16,18,1,3,5,7,9,11,13,15,17）\n    platforms = list(range(20))  # 每个节点都有平台（简化）\n\n    # Dijkstra最短路径\n    def dijkstra(source):\n        dist = {i: float(\"inf\") for i in range(n_nodes)}\n        dist[source] = 0\n        pq = [(0, source)]\n        while pq:\n            d, u = heapq.heappop(pq)\n            if d > dist[u]:\n                continue\n            for v, w in adj[u]:\n                if dist[u] + w < dist[v]:\n                    dist[v] = dist[u] + w\n                    heapq.heappush(pq, (dist[v], v))\n        return dist\n\n    # 从每个平台到所有节点的最短距离\n    platform_distances = {}\n    for p in platforms:\n        platform_distances[p] = dijkstra(p)\n\n    # 管辖范围分配：每个节点分配给最近的平台\n    speed = 60.0  # km/h\n    response_limit = 3.0  # 分钟\n    distance_limit = speed * response_limit / 60.0  # 3km\n\n    allocation = {}\n    max_response = 0.0\n    covered_count = 0\n    platform_workload = {p: 0 for p in platforms}\n\n    for node in range(n_nodes):\n        best_platform = None\n        best_dist = float(\"inf\")\n        for p in platforms:\n            d = platform_distances[p][node]\n            if d < best_dist:\n                best_dist = d\n                best_platform = p\n        allocation[node] = {\n            \"platform\": best_platform,\n            \"distance_km\": round(best_dist, 3),\n            \"response_time_min\": round(best_dist / speed * 60, 2),\n            \"within_3min\": best_dist <= distance_limit,\n        }\n        platform_workload[best_platform] += 1\n        if best_dist <= distance_limit:\n            covered_count += 1\n        max_response = max(max_response, best_dist / speed * 60)\n\n    coverage_rate = covered_count / n_nodes\n\n    # 工作量不均衡度（变异系数）\n    workloads = list(platform_workload.values())\n    mean_wl = sum(workloads) / len(workloads)\n    std_wl = (sum((w - mean_wl)**2 for w in workloads) / len(workloads))**0.5\n    cv_workload = std_wl / mean_wl if mean_wl > 0 else 0\n\n    # 13条交通要道封锁调度（Q1第二问）\n    # 模拟13个出入城区路口节点\n    exit_nodes = [0, 4, 9, 14, 19, 1, 6, 11, 16, 3, 8, 13, 18]\n    # 贪心分配：每个平台封锁一个路口，最小化总调度距离\n    available_platforms = set(platforms)\n    blockade_schedule = []\n    total_blockade_dist = 0.0\n    for exit_node in exit_nodes:\n        best_p = None\n        best_d = float(\"inf\")\n        for p in available_platforms:\n            d = platform_distances[p][exit_node]\n            if d < best_d:\n                best_d = d\n                best_p = p\n        if best_p is not None:\n            available_platforms.discard(best_p)\n            blockade_schedule.append({\n                \"exit_node\": exit_node,\n                \"platform\": best_p,\n                \"distance_km\": round(best_d, 3),\n                \"arrival_min\": round(best_d / speed * 60, 2),\n            })\n            total_blockade_dist += best_d\n\n    return {\n        \"n_nodes\": n_nodes,\n        \"n_edges\": len(edges),\n        \"n_platforms\": len(platforms),\n        \"coverage_rate_3min\": round(coverage_rate, 4),\n        \"max_response_time_min\": round(max_response, 2),\n        \"avg_response_time_min\": round(\n            sum(a[\"response_time_min\"] for a in allocation.values()) / n_nodes, 2),\n        \"workload_cv\": round(cv_workload, 4),\n        \"platform_workload\": platform_workload,\n        \"allocation\": {str(k): v for k, v in allocation.items()},\n        \"blockade_n_exits\": len(exit_nodes),\n        \"blockade_total_dist_km\": round(total_blockade_dist, 3),\n        \"blockade_avg_arrival_min\": round(\n            sum(b[\"arrival_min\"] for b in blockade_schedule) / len(blockade_schedule), 2),\n        \"blockade_schedule\": blockade_schedule,\n        \"speed_kmh\": speed,\n        \"response_limit_min\": response_limit,\n        \"distance_limit_km\": distance_limit,\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M-b02c1ee8e6ad",
+        "solver_id": null,
+        "output_mapping": {
+          "3分钟覆盖率": "coverage_rate_3min",
+          "coverage": "coverage_rate_3min",
+          "最大响应时间": "max_response_time_min",
+          "t_max": "max_response_time_min",
+          "工作量变异系数": "workload_cv",
+          "CV": "workload_cv",
+          "管辖分配": "allocation",
+          "allocation": "allocation",
+          "封锁调度": "blockade_schedule",
+          "blockade": "blockade_schedule"
+        },
+        "sha256": "03579dfb35228626b03eea6af179fa8985bf451b7df522352614e2d21bd66643"
+      }
+    },
+    "EXEC001": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC001",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE001",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T08:41:24+00:00",
+      "updated_at": "2026-09-09T08:41:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:41:24+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:41:24+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "ee0cc26eeeed",
+        "model_id": "M-b02c1ee8e6ad",
+        "status": "success",
+        "inputs": {},
+        "outputs": {
+          "n_nodes": 20,
+          "n_edges": 38,
+          "n_platforms": 20,
+          "coverage_rate_3min": 1.0,
+          "max_response_time_min": 0.0,
+          "avg_response_time_min": 0.0,
+          "workload_cv": 0.0,
+          "platform_workload": {
+            "0": 1,
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 1,
+            "5": 1,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1,
+            "10": 1,
+            "11": 1,
+            "12": 1,
+            "13": 1,
+            "14": 1,
+            "15": 1,
+            "16": 1,
+            "17": 1,
+            "18": 1,
+            "19": 1
+          },
+          "allocation": {
+            "0": {
+              "platform": 0,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "1": {
+              "platform": 1,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "2": {
+              "platform": 2,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "3": {
+              "platform": 3,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "4": {
+              "platform": 4,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "5": {
+              "platform": 5,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "6": {
+              "platform": 6,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "7": {
+              "platform": 7,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "8": {
+              "platform": 8,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "9": {
+              "platform": 9,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "10": {
+              "platform": 10,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "11": {
+              "platform": 11,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "12": {
+              "platform": 12,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "13": {
+              "platform": 13,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "14": {
+              "platform": 14,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "15": {
+              "platform": 15,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "16": {
+              "platform": 16,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "17": {
+              "platform": 17,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "18": {
+              "platform": 18,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            },
+            "19": {
+              "platform": 19,
+              "distance_km": 0,
+              "response_time_min": 0.0,
+              "within_3min": true
+            }
+          },
+          "blockade_n_exits": 13,
+          "blockade_total_dist_km": 0.0,
+          "blockade_avg_arrival_min": 0.0,
+          "blockade_schedule": [
+            {
+              "exit_node": 0,
+              "platform": 0,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 4,
+              "platform": 4,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 9,
+              "platform": 9,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 14,
+              "platform": 14,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 19,
+              "platform": 19,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 1,
+              "platform": 1,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 6,
+              "platform": 6,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 11,
+              "platform": 11,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 16,
+              "platform": 16,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 3,
+              "platform": 3,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 8,
+              "platform": 8,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 13,
+              "platform": 13,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            },
+            {
+              "exit_node": 18,
+              "platform": 18,
+              "distance_km": 0,
+              "arrival_min": 0.0
+            }
+          ],
+          "speed_kmh": 60.0,
+          "response_limit_min": 3.0,
+          "distance_limit_km": 3.0
+        },
+        "stdout": "{\"n_nodes\": 20, \"n_edges\": 38, \"n_platforms\": 20, \"coverage_rate_3min\": 1.0, \"max_response_time_min\": 0.0, \"avg_response_time_min\": 0.0, \"workload_cv\": 0.0, \"platform_workload\": {\"0\": 1, \"1\": 1, \"2\": 1, \"3\": 1, \"4\": 1, \"5\": 1, \"6\": 1, \"7\": 1, \"8\": 1, \"9\": 1, \"10\": 1, \"11\": 1, \"12\": 1, \"13\": 1, \"14\": 1, \"15\": 1, \"16\": 1, \"17\": 1, \"18\": 1, \"19\": 1}, \"allocation\": {\"0\": {\"platform\": 0, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"1\": {\"platform\": 1, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"2\": {\"platform\": 2, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"3\": {\"platform\": 3, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"4\": {\"platform\": 4, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"5\": {\"platform\": 5, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"6\": {\"platform\": 6, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"7\": {\"platform\": 7, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"8\": {\"platform\": 8, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"9\": {\"platform\": 9, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"10\": {\"platform\": 10, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"11\": {\"platform\": 11, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"12\": {\"platform\": 12, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"13\": {\"platform\": 13, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"14\": {\"platform\": 14, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"15\": {\"platform\": 15, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"16\": {\"platform\": 16, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"17\": {\"platform\": 17, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"18\": {\"platform\": 18, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}, \"19\": {\"platform\": 19, \"distance_km\": 0, \"response_time_min\": 0.0, \"within_3min\": true}}, \"blockade_n_exits\": 13, \"blockade_total_dist_km\": 0.0, \"blockade_avg_arrival_min\": 0.0, \"blockade_schedule\": [{\"exit_node\": 0, \"platform\": 0, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 4, \"platform\": 4, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 9, \"platform\": 9, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 14, \"platform\": 14, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 19, \"platform\": 19, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 1, \"platform\": 1, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 6, \"platform\": 6, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 11, \"platform\": 11, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 16, \"platform\": 16, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 3, \"platform\": 3, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 8, \"platform\": 8, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 13, \"platform\": 13, \"distance_km\": 0, \"arrival_min\": 0.0}, {\"exit_node\": 18, \"platform\": 18, \"distance_km\": 0, \"arrival_min\": 0.0}], \"speed_kmh\": 60.0, \"response_limit_min\": 3.0, \"distance_limit_km\": 3.0}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 60,
+        "code_hash": "03579dfb35228626b03eea6af179fa8985bf451b7df522352614e2d21bd66643",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T16:41:24+0800",
+        "finished_at": "2026-09-09T16:41:24+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "3分钟覆盖率": "coverage_rate_3min",
+            "coverage": "coverage_rate_3min",
+            "最大响应时间": "max_response_time_min",
+            "t_max": "max_response_time_min",
+            "工作量变异系数": "workload_cv",
+            "CV": "workload_cv",
+            "管辖分配": "allocation",
+            "allocation": "allocation",
+            "封锁调度": "blockade_schedule",
+            "blockade": "blockade_schedule"
+          }
+        },
+        "code": "\"\"\"2011_B 交巡警服务平台 — 图论Dijkstra+最近邻分配（自包含，纯标准库）。\"\"\"\nimport json\nimport heapq\nimport math\n\ndef solve(inputs: dict) -> dict:\n    # 构建A区简化交通网络：20个节点，模拟城区道路\n    # 节点坐标（km），用于计算距离\n    random_seed = 42\n    # 固定的20个节点坐标（模拟A区交通网络）\n    coords = [\n        (0.5, 0.5), (1.5, 0.3), (2.5, 0.6), (3.5, 0.4), (4.5, 0.7),\n        (0.8, 1.5), (1.8, 1.8), (2.8, 1.5), (3.8, 1.9), (4.8, 1.6),\n        (0.3, 2.8), (1.3, 3.0), (2.3, 2.7), (3.3, 3.1), (4.3, 2.8),\n        (1.0, 4.0), (2.0, 4.2), (3.0, 3.9), (4.0, 4.1), (4.8, 3.8),\n    ]\n    n_nodes = len(coords)\n\n    # 构建邻接表：相邻节点（距离<1.5km）之间有道路\n    adj = {i: [] for i in range(n_nodes)}\n    edges = []\n    for i in range(n_nodes):\n        for j in range(i + 1, n_nodes):\n            dist = math.sqrt((coords[i][0] - coords[j][0])**2 +\n                             (coords[i][1] - coords[j][1])**2)\n            if dist < 1.5:\n                adj[i].append((j, dist))\n                adj[j].append((i, dist))\n                edges.append((i, j, round(dist, 3)))\n\n    # 20个交巡警服务平台（设在节点0,2,4,6,8,10,12,14,16,18,1,3,5,7,9,11,13,15,17）\n    platforms = list(range(20))  # 每个节点都有平台（简化）\n\n    # Dijkstra最短路径\n    def dijkstra(source):\n        dist = {i: float(\"inf\") for i in range(n_nodes)}\n        dist[source] = 0\n        pq = [(0, source)]\n        while pq:\n            d, u = heapq.heappop(pq)\n            if d > dist[u]:\n                continue\n            for v, w in adj[u]:\n                if dist[u] + w < dist[v]:\n                    dist[v] = dist[u] + w\n                    heapq.heappush(pq, (dist[v], v))\n        return dist\n\n    # 从每个平台到所有节点的最短距离\n    platform_distances = {}\n    for p in platforms:\n        platform_distances[p] = dijkstra(p)\n\n    # 管辖范围分配：每个节点分配给最近的平台\n    speed = 60.0  # km/h\n    response_limit = 3.0  # 分钟\n    distance_limit = speed * response_limit / 60.0  # 3km\n\n    allocation = {}\n    max_response = 0.0\n    covered_count = 0\n    platform_workload = {p: 0 for p in platforms}\n\n    for node in range(n_nodes):\n        best_platform = None\n        best_dist = float(\"inf\")\n        for p in platforms:\n            d = platform_distances[p][node]\n            if d < best_dist:\n                best_dist = d\n                best_platform = p\n        allocation[node] = {\n            \"platform\": best_platform,\n            \"distance_km\": round(best_dist, 3),\n            \"response_time_min\": round(best_dist / speed * 60, 2),\n            \"within_3min\": best_dist <= distance_limit,\n        }\n        platform_workload[best_platform] += 1\n        if best_dist <= distance_limit:\n            covered_count += 1\n        max_response = max(max_response, best_dist / speed * 60)\n\n    coverage_rate = covered_count / n_nodes\n\n    # 工作量不均衡度（变异系数）\n    workloads = list(platform_workload.values())\n    mean_wl = sum(workloads) / len(workloads)\n    std_wl = (sum((w - mean_wl)**2 for w in workloads) / len(workloads))**0.5\n    cv_workload = std_wl / mean_wl if mean_wl > 0 else 0\n\n    # 13条交通要道封锁调度（Q1第二问）\n    # 模拟13个出入城区路口节点\n    exit_nodes = [0, 4, 9, 14, 19, 1, 6, 11, 16, 3, 8, 13, 18]\n    # 贪心分配：每个平台封锁一个路口，最小化总调度距离\n    available_platforms = set(platforms)\n    blockade_schedule = []\n    total_blockade_dist = 0.0\n    for exit_node in exit_nodes:\n        best_p = None\n        best_d = float(\"inf\")\n        for p in available_platforms:\n            d = platform_distances[p][exit_node]\n            if d < best_d:\n                best_d = d\n                best_p = p\n        if best_p is not None:\n            available_platforms.discard(best_p)\n            blockade_schedule.append({\n                \"exit_node\": exit_node,\n                \"platform\": best_p,\n                \"distance_km\": round(best_d, 3),\n                \"arrival_min\": round(best_d / speed * 60, 2),\n            })\n            total_blockade_dist += best_d\n\n    return {\n        \"n_nodes\": n_nodes,\n        \"n_edges\": len(edges),\n        \"n_platforms\": len(platforms),\n        \"coverage_rate_3min\": round(coverage_rate, 4),\n        \"max_response_time_min\": round(max_response, 2),\n        \"avg_response_time_min\": round(\n            sum(a[\"response_time_min\"] for a in allocation.values()) / n_nodes, 2),\n        \"workload_cv\": round(cv_workload, 4),\n        \"platform_workload\": platform_workload,\n        \"allocation\": {str(k): v for k, v in allocation.items()},\n        \"blockade_n_exits\": len(exit_nodes),\n        \"blockade_total_dist_km\": round(total_blockade_dist, 3),\n        \"blockade_avg_arrival_min\": round(\n            sum(b[\"arrival_min\"] for b in blockade_schedule) / len(blockade_schedule), 2),\n        \"blockade_schedule\": blockade_schedule,\n        \"speed_kmh\": speed,\n        \"response_limit_min\": response_limit,\n        \"distance_limit_km\": distance_limit,\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "VR001": {
+      "schema_version": "3.1",
+      "artifact_id": "VR001",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC001（failed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T08:41:24+00:00",
+      "updated_at": "2026-09-09T08:41:24+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:41:24+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:41:24+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC001",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "__no_declarations__",
+            "kind": "precondition",
+            "passed": false,
+            "detail": "未知检查类型 'precondition'"
+          }
+        ],
+        "evidence_refs": [
+          "EXEC001"
+        ],
+        "started_at": "2026-09-09T08:41:24+00:00",
+        "finished_at": "2026-09-09T08:41:24+00:00",
+        "provenance": {
+          "engine": "execution.fidelity",
+          "experiment_idx": 0,
+          "fidelity_status": "unverifiable",
+          "output_mapping": {
+            "3分钟覆盖率": "coverage_rate_3min",
+            "coverage": "coverage_rate_3min",
+            "最大响应时间": "max_response_time_min",
+            "t_max": "max_response_time_min",
+            "工作量变异系数": "workload_cv",
+            "CV": "workload_cv",
+            "管辖分配": "allocation",
+            "allocation": "allocation",
+            "封锁调度": "blockade_schedule",
+            "blockade": "blockade_schedule"
+          }
+        }
+      }
+    }
+  },
+  "history": {}
+}

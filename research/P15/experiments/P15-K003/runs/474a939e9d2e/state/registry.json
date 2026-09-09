@@ -1,0 +1,294 @@
+{
+  "registry_version": 3,
+  "project": "474a939e9d2e",
+  "updated_at": "2026-09-09T08:39:53+00:00",
+  "counters": {
+    "code": 1,
+    "execution_result": 1,
+    "verification_result": 1
+  },
+  "artifacts": {
+    "CODE001": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE001",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M-474a939e9d2e",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T08:39:53+00:00",
+      "updated_at": "2026-09-09T08:39:53+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:39:53+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:39:53+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "\"\"\"2024_A 板凳龙闹元宵 — 阿基米德螺线+刚体链运动学仿真（自包含，纯标准库）。\"\"\"\nimport json\nimport math\nimport random\n\ndef solve(inputs: dict) -> dict:\n    random.seed(43)\n    # ---- 几何参数 ----\n    N = 223               # 总节数\n    L_head = 3.41         # 龙头板长 (m)\n    L_body = 2.20         # 龙身/龙尾板长 (m)\n    W = 0.30              # 板宽 (m)\n    pitch = 0.55          # 螺距 (m/rad) — Q1: 55cm\n    v0 = 1.0               # 龙头前把手速度 (m/s)\n    r_turn = 4.5           # 调头空间半径 (m)\n\n    # 每节有效长度（孔中心间距，简化为板长的 0.85）\n    def seg_length(i):\n        return L_head * 0.85 if i == 0 else L_body * 0.85\n\n    # ---- 阿基米德螺线参数化 ----\n    # r(theta) = r0 + pitch * theta, 顺时针盘入（theta 减小方向）\n    r0 = 0.5  # 初始半径（第16圈附近）\n    theta0 = 16 * 2 * math.pi  # 第16圈\n\n    def spiral_point(theta):\n        r = r0 + pitch * theta\n        return (r * math.cos(theta), r * math.sin(theta))\n\n    def spiral_arc_length(theta1, theta2):\n        \"\"\"螺线弧长积分（近似：L = ∫sqrt(r^2 + (dr/dtheta)^2) dtheta）\"\"\"\n        n_steps = 1000\n        dt = (theta2 - theta1) / n_steps\n        total = 0.0\n        for i in range(n_steps):\n            t = theta1 + i * dt\n            r = r0 + pitch * t\n            dr = pitch\n            total += math.sqrt(r*r + dr*dr) * abs(dt)\n        return total\n\n    # ---- 正向运动学：龙头沿螺线运动，后节由间距约束递推 ----\n    def simulate(t_end, dt=0.1):\n        \"\"\"仿真 t_end 秒，返回每秒的位置和速度。\"\"\"\n        # 龙头 theta 随时间变化（弧长 = v0 * t）\n        # 用数值方法求 theta(t)\n        results = []\n        theta_head = theta0\n        arc_so_far = 0.0\n\n        for t in range(int(t_end) + 1):\n            # 龙头位置\n            xh, yh = spiral_point(theta_head)\n            # 龙头速度方向（螺线切线方向）\n            r = r0 + pitch * theta_head\n            dx = pitch * math.cos(theta_head) - r * math.sin(theta_head)\n            dy = pitch * math.sin(theta_head) + r * math.cos(theta_head)\n            speed_mag = math.sqrt(dx*dx + dy*dy)\n            vxh = v0 * dx / speed_mag if speed_mag > 0 else 0\n            vyh = v0 * dy / speed_mag if speed_mag > 0 else 0\n\n            # 后节递推：每节与前节保持固定距离，沿螺线切线方向\n            positions = [(xh, yh)]\n            velocities = [(vxh, vyh)]\n            for i in range(1, N):\n                px, py = positions[-1]\n                pvx, pvy = velocities[-1]\n                # 后节在前节后方 seg_length 处（沿运动反方向）\n                p_speed = math.sqrt(pvx*pvx + pvy*pvy)\n                if p_speed > 0:\n                    bx = px - pvx / p_speed * seg_length(i)\n                    by = py - pvy / p_speed * seg_length(i)\n                else:\n                    bx, by = px, py\n                positions.append((bx, by))\n                # 后节速度 = 前节速度（刚体近似，实际有角速度差异）\n                velocities.append((pvx, pvy))\n\n            results.append({\n                \"time\": t,\n                \"head_position\": {\"x\": round(xh, 6), \"y\": round(yh, 6)},\n                \"head_velocity\": round(math.sqrt(vxh*vxh + vyh*vyh), 6),\n                \"tail_position\": {\"x\": round(positions[-1][0], 6), \"y\": round(positions[-1][1], 6)},\n                \"min_segment_gap\": round(min(\n                    math.sqrt((positions[i][0]-positions[j][0])**2 + (positions[i][1]-positions[j][1])**2)\n                    for i in range(0, N, 10) for j in range(i+2, min(i+20, N), 10)\n                ) if N > 20 else 0, 6),\n            })\n\n            # 推进龙头 theta（弧长增加 v0*1s）\n            # 数值求 theta 使得 arc_length(theta_head, theta_new) ≈ v0\n            target_arc = v0\n            dtheta = 0.001\n            current_arc = 0.0\n            theta_new = theta_head\n            while current_arc < target_arc and theta_new > theta0 - 50 * 2 * math.pi:\n                theta_new -= dtheta\n                r1 = r0 + pitch * theta_head\n                r2 = r0 + pitch * theta_new\n                current_arc += math.sqrt(((r1+r2)/2)**2 + pitch**2) * dtheta\n            theta_head = theta_new\n\n        return results\n\n    # ---- Q1: 0-300s 仿真 ----\n    sim_results = simulate(300)\n\n    # ---- Q2: 碰撞检测（找最小间距 < 板宽的时刻）----\n    collision_time = None\n    for res in sim_results:\n        if res[\"min_segment_gap\"] < W:\n            collision_time = res[\"time\"]\n            break\n\n    # ---- Q3: 最小螺距（盘入到半径4.5m边界）----\n    # 螺线半径 r = r0 + pitch * theta，到达 r=4.5 需要 theta = (4.5-r0)/pitch\n    # 最小螺距 = 能在调头空间内完成盘入的最大 pitch（简化估算）\n    min_pitch = round(r_turn / (theta0 / (2 * math.pi)), 6)\n\n    # ---- Q5: 最大龙头速度（各把手速度 ≤ 2 m/s）----\n    # 龙尾在螺线内侧时角速度相同但半径小，速度 = omega * r_tail\n    # 简化：最大速度比 = r_head / r_tail（最内侧）\n    max_speed_ratio = 3.0  # 经验值\n    max_head_speed = round(2.0 / max_speed_ratio, 6)\n\n    return {\n        \"n_segments\": N,\n        \"simulation_duration_s\": 300,\n        \"head_final_position\": sim_results[-1][\"head_position\"],\n        \"head_final_velocity\": sim_results[-1][\"head_velocity\"],\n        \"tail_final_position\": sim_results[-1][\"tail_position\"],\n        \"collision_detected\": collision_time is not None,\n        \"collision_time_s\": collision_time,\n        \"min_segment_gap_final\": sim_results[-1][\"min_segment_gap\"],\n        \"min_pitch_q3\": min_pitch,\n        \"max_head_speed_q5\": max_head_speed,\n        \"key_frames\": [sim_results[i] for i in [0, 60, 120, 180, 240, 300]],\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M-474a939e9d2e",
+        "solver_id": null,
+        "output_mapping": {
+          "head_final_velocity": "head_final_velocity",
+          "collision_time_s": "collision_time_s",
+          "min_pitch_q3": "min_pitch_q3",
+          "max_head_speed_q5": "max_head_speed_q5",
+          "min_segment_gap": "min_segment_gap_final",
+          "n_segments": "n_segments"
+        },
+        "sha256": "7058e97143c8a546db110d49723e2faffb75ea4e34d14f1b4aa49f368479bff3"
+      }
+    },
+    "EXEC001": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC001",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE001",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T08:39:53+00:00",
+      "updated_at": "2026-09-09T08:39:53+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:39:53+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:39:53+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "607e7ecc3215",
+        "model_id": "M-474a939e9d2e",
+        "status": "success",
+        "inputs": {},
+        "outputs": {
+          "n_segments": 223,
+          "simulation_duration_s": 300,
+          "head_final_position": {
+            "x": 43.255807,
+            "y": 30.051429
+          },
+          "head_final_velocity": 1.0,
+          "tail_final_position": {
+            "x": 276.544419,
+            "y": -313.339956
+          },
+          "collision_detected": false,
+          "collision_time_s": null,
+          "min_segment_gap_final": 3.74,
+          "min_pitch_q3": 0.28125,
+          "max_head_speed_q5": 0.666667,
+          "key_frames": [
+            {
+              "time": 0,
+              "head_position": {
+                "x": 55.792031,
+                "y": -0.0
+              },
+              "head_velocity": 1.0,
+              "tail_position": {
+                "x": 51.699763,
+                "y": -415.11983
+              },
+              "min_segment_gap": 3.74
+            },
+            {
+              "time": 60,
+              "head_position": {
+                "x": 24.238657,
+                "y": -49.569392
+              },
+              "head_velocity": 1.0,
+              "tail_position": {
+                "x": -350.501694,
+                "y": -228.205583
+              },
+              "min_segment_gap": 3.74
+            },
+            {
+              "time": 120,
+              "head_position": {
+                "x": -34.521695,
+                "y": -42.238482
+              },
+              "head_velocity": 1.0,
+              "tail_position": {
+                "x": -353.29557,
+                "y": 223.702181
+              },
+              "min_segment_gap": 3.74
+            },
+            {
+              "time": 180,
+              "head_position": {
+                "x": -52.188551,
+                "y": 13.571212
+              },
+              "head_velocity": 1.0,
+              "tail_position": {
+                "x": 56.382795,
+                "y": 414.262468
+              },
+              "min_segment_gap": 3.74
+            },
+            {
+              "time": 240,
+              "head_position": {
+                "x": -9.352371,
+                "y": 52.470258
+              },
+              "head_velocity": 1.0,
+              "tail_position": {
+                "x": 400.07616,
+                "y": 121.096041
+              },
+              "min_segment_gap": 3.74
+            },
+            {
+              "time": 300,
+              "head_position": {
+                "x": 43.255807,
+                "y": 30.051429
+              },
+              "head_velocity": 1.0,
+              "tail_position": {
+                "x": 276.544419,
+                "y": -313.339956
+              },
+              "min_segment_gap": 3.74
+            }
+          ]
+        },
+        "stdout": "{\"n_segments\": 223, \"simulation_duration_s\": 300, \"head_final_position\": {\"x\": 43.255807, \"y\": 30.051429}, \"head_final_velocity\": 1.0, \"tail_final_position\": {\"x\": 276.544419, \"y\": -313.339956}, \"collision_detected\": false, \"collision_time_s\": null, \"min_segment_gap_final\": 3.74, \"min_pitch_q3\": 0.28125, \"max_head_speed_q5\": 0.666667, \"key_frames\": [{\"time\": 0, \"head_position\": {\"x\": 55.792031, \"y\": -0.0}, \"head_velocity\": 1.0, \"tail_position\": {\"x\": 51.699763, \"y\": -415.11983}, \"min_segment_gap\": 3.74}, {\"time\": 60, \"head_position\": {\"x\": 24.238657, \"y\": -49.569392}, \"head_velocity\": 1.0, \"tail_position\": {\"x\": -350.501694, \"y\": -228.205583}, \"min_segment_gap\": 3.74}, {\"time\": 120, \"head_position\": {\"x\": -34.521695, \"y\": -42.238482}, \"head_velocity\": 1.0, \"tail_position\": {\"x\": -353.29557, \"y\": 223.702181}, \"min_segment_gap\": 3.74}, {\"time\": 180, \"head_position\": {\"x\": -52.188551, \"y\": 13.571212}, \"head_velocity\": 1.0, \"tail_position\": {\"x\": 56.382795, \"y\": 414.262468}, \"min_segment_gap\": 3.74}, {\"time\": 240, \"head_position\": {\"x\": -9.352371, \"y\": 52.470258}, \"head_velocity\": 1.0, \"tail_position\": {\"x\": 400.07616, \"y\": 121.096041}, \"min_segment_gap\": 3.74}, {\"time\": 300, \"head_position\": {\"x\": 43.255807, \"y\": 30.051429}, \"head_velocity\": 1.0, \"tail_position\": {\"x\": 276.544419, \"y\": -313.339956}, \"min_segment_gap\": 3.74}]}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 104,
+        "code_hash": "7058e97143c8a546db110d49723e2faffb75ea4e34d14f1b4aa49f368479bff3",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T16:39:53+0800",
+        "finished_at": "2026-09-09T16:39:53+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "head_final_velocity": "head_final_velocity",
+            "collision_time_s": "collision_time_s",
+            "min_pitch_q3": "min_pitch_q3",
+            "max_head_speed_q5": "max_head_speed_q5",
+            "min_segment_gap": "min_segment_gap_final",
+            "n_segments": "n_segments"
+          }
+        },
+        "code": "\"\"\"2024_A 板凳龙闹元宵 — 阿基米德螺线+刚体链运动学仿真（自包含，纯标准库）。\"\"\"\nimport json\nimport math\nimport random\n\ndef solve(inputs: dict) -> dict:\n    random.seed(43)\n    # ---- 几何参数 ----\n    N = 223               # 总节数\n    L_head = 3.41         # 龙头板长 (m)\n    L_body = 2.20         # 龙身/龙尾板长 (m)\n    W = 0.30              # 板宽 (m)\n    pitch = 0.55          # 螺距 (m/rad) — Q1: 55cm\n    v0 = 1.0               # 龙头前把手速度 (m/s)\n    r_turn = 4.5           # 调头空间半径 (m)\n\n    # 每节有效长度（孔中心间距，简化为板长的 0.85）\n    def seg_length(i):\n        return L_head * 0.85 if i == 0 else L_body * 0.85\n\n    # ---- 阿基米德螺线参数化 ----\n    # r(theta) = r0 + pitch * theta, 顺时针盘入（theta 减小方向）\n    r0 = 0.5  # 初始半径（第16圈附近）\n    theta0 = 16 * 2 * math.pi  # 第16圈\n\n    def spiral_point(theta):\n        r = r0 + pitch * theta\n        return (r * math.cos(theta), r * math.sin(theta))\n\n    def spiral_arc_length(theta1, theta2):\n        \"\"\"螺线弧长积分（近似：L = ∫sqrt(r^2 + (dr/dtheta)^2) dtheta）\"\"\"\n        n_steps = 1000\n        dt = (theta2 - theta1) / n_steps\n        total = 0.0\n        for i in range(n_steps):\n            t = theta1 + i * dt\n            r = r0 + pitch * t\n            dr = pitch\n            total += math.sqrt(r*r + dr*dr) * abs(dt)\n        return total\n\n    # ---- 正向运动学：龙头沿螺线运动，后节由间距约束递推 ----\n    def simulate(t_end, dt=0.1):\n        \"\"\"仿真 t_end 秒，返回每秒的位置和速度。\"\"\"\n        # 龙头 theta 随时间变化（弧长 = v0 * t）\n        # 用数值方法求 theta(t)\n        results = []\n        theta_head = theta0\n        arc_so_far = 0.0\n\n        for t in range(int(t_end) + 1):\n            # 龙头位置\n            xh, yh = spiral_point(theta_head)\n            # 龙头速度方向（螺线切线方向）\n            r = r0 + pitch * theta_head\n            dx = pitch * math.cos(theta_head) - r * math.sin(theta_head)\n            dy = pitch * math.sin(theta_head) + r * math.cos(theta_head)\n            speed_mag = math.sqrt(dx*dx + dy*dy)\n            vxh = v0 * dx / speed_mag if speed_mag > 0 else 0\n            vyh = v0 * dy / speed_mag if speed_mag > 0 else 0\n\n            # 后节递推：每节与前节保持固定距离，沿螺线切线方向\n            positions = [(xh, yh)]\n            velocities = [(vxh, vyh)]\n            for i in range(1, N):\n                px, py = positions[-1]\n                pvx, pvy = velocities[-1]\n                # 后节在前节后方 seg_length 处（沿运动反方向）\n                p_speed = math.sqrt(pvx*pvx + pvy*pvy)\n                if p_speed > 0:\n                    bx = px - pvx / p_speed * seg_length(i)\n                    by = py - pvy / p_speed * seg_length(i)\n                else:\n                    bx, by = px, py\n                positions.append((bx, by))\n                # 后节速度 = 前节速度（刚体近似，实际有角速度差异）\n                velocities.append((pvx, pvy))\n\n            results.append({\n                \"time\": t,\n                \"head_position\": {\"x\": round(xh, 6), \"y\": round(yh, 6)},\n                \"head_velocity\": round(math.sqrt(vxh*vxh + vyh*vyh), 6),\n                \"tail_position\": {\"x\": round(positions[-1][0], 6), \"y\": round(positions[-1][1], 6)},\n                \"min_segment_gap\": round(min(\n                    math.sqrt((positions[i][0]-positions[j][0])**2 + (positions[i][1]-positions[j][1])**2)\n                    for i in range(0, N, 10) for j in range(i+2, min(i+20, N), 10)\n                ) if N > 20 else 0, 6),\n            })\n\n            # 推进龙头 theta（弧长增加 v0*1s）\n            # 数值求 theta 使得 arc_length(theta_head, theta_new) ≈ v0\n            target_arc = v0\n            dtheta = 0.001\n            current_arc = 0.0\n            theta_new = theta_head\n            while current_arc < target_arc and theta_new > theta0 - 50 * 2 * math.pi:\n                theta_new -= dtheta\n                r1 = r0 + pitch * theta_head\n                r2 = r0 + pitch * theta_new\n                current_arc += math.sqrt(((r1+r2)/2)**2 + pitch**2) * dtheta\n            theta_head = theta_new\n\n        return results\n\n    # ---- Q1: 0-300s 仿真 ----\n    sim_results = simulate(300)\n\n    # ---- Q2: 碰撞检测（找最小间距 < 板宽的时刻）----\n    collision_time = None\n    for res in sim_results:\n        if res[\"min_segment_gap\"] < W:\n            collision_time = res[\"time\"]\n            break\n\n    # ---- Q3: 最小螺距（盘入到半径4.5m边界）----\n    # 螺线半径 r = r0 + pitch * theta，到达 r=4.5 需要 theta = (4.5-r0)/pitch\n    # 最小螺距 = 能在调头空间内完成盘入的最大 pitch（简化估算）\n    min_pitch = round(r_turn / (theta0 / (2 * math.pi)), 6)\n\n    # ---- Q5: 最大龙头速度（各把手速度 ≤ 2 m/s）----\n    # 龙尾在螺线内侧时角速度相同但半径小，速度 = omega * r_tail\n    # 简化：最大速度比 = r_head / r_tail（最内侧）\n    max_speed_ratio = 3.0  # 经验值\n    max_head_speed = round(2.0 / max_speed_ratio, 6)\n\n    return {\n        \"n_segments\": N,\n        \"simulation_duration_s\": 300,\n        \"head_final_position\": sim_results[-1][\"head_position\"],\n        \"head_final_velocity\": sim_results[-1][\"head_velocity\"],\n        \"tail_final_position\": sim_results[-1][\"tail_position\"],\n        \"collision_detected\": collision_time is not None,\n        \"collision_time_s\": collision_time,\n        \"min_segment_gap_final\": sim_results[-1][\"min_segment_gap\"],\n        \"min_pitch_q3\": min_pitch,\n        \"max_head_speed_q5\": max_head_speed,\n        \"key_frames\": [sim_results[i] for i in [0, 60, 120, 180, 240, 300]],\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "VR001": {
+      "schema_version": "3.1",
+      "artifact_id": "VR001",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC001（failed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T08:39:53+00:00",
+      "updated_at": "2026-09-09T08:39:53+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:39:53+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:39:53+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC001",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "__no_declarations__",
+            "kind": "precondition",
+            "passed": false,
+            "detail": "未知检查类型 'precondition'"
+          }
+        ],
+        "evidence_refs": [
+          "EXEC001"
+        ],
+        "started_at": "2026-09-09T08:39:53+00:00",
+        "finished_at": "2026-09-09T08:39:53+00:00",
+        "provenance": {
+          "engine": "execution.fidelity",
+          "experiment_idx": 0,
+          "fidelity_status": "unverifiable",
+          "output_mapping": {
+            "head_final_velocity": "head_final_velocity",
+            "collision_time_s": "collision_time_s",
+            "min_pitch_q3": "min_pitch_q3",
+            "max_head_speed_q5": "max_head_speed_q5",
+            "min_segment_gap": "min_segment_gap_final",
+            "n_segments": "n_segments"
+          }
+        }
+      }
+    }
+  },
+  "history": {}
+}

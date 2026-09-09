@@ -1,9 +1,150 @@
 {
-  "execution_id": "EXEC078",
+  "execution_id": "EXEC001",
   "fidelity_status": "misaligned",
   "fidelity_score": 0.2,
-  "checks": [],
-  "passed": 0,
-  "total": 0,
-  "evaluated_at": "2026-09-09T08:31:14Z"
+  "checks": [
+    {
+      "name": "F1 变量可观测: 螺线极角",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '螺线极角'（候选 ['螺线极角', 'theta'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 螺线半径",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '螺线半径'（候选 ['螺线半径', 'r'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 第i节位置",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '第i节位置'（候选 ['第i节位置', '(x_i, y_i)'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 第i节速度",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '第i节速度'（候选 ['第i节速度', 'v_i'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 最小节间距",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '最小节间距'（候选 ['最小节间距', 'd_min'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F1 变量可观测: 龙头末速度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'head_final_velocity' 存在（声明 '龙头末速度'）",
+      "resolved_key": "head_final_velocity"
+    },
+    {
+      "name": "F1 变量可观测: 碰撞时刻",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'collision_time_s' 存在（声明 '碰撞时刻'）",
+      "resolved_key": "collision_time_s"
+    },
+    {
+      "name": "F1 变量可观测: 最小螺距",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'min_pitch_q3' 存在（声明 '最小螺距'）",
+      "resolved_key": "min_pitch_q3"
+    },
+    {
+      "name": "F1 变量可观测: 最大龙头速度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'max_head_speed_q5' 存在（声明 '最大龙头速度'）",
+      "resolved_key": "max_head_speed_q5"
+    },
+    {
+      "name": "F2 目标: 各节位置速度 x_i(t), y_i(t), v_i(t) for t=0..300",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '各节位置速度 x_i(t), y_i(t), v_i(t) for t=0..300'（候选 ['第i节位置', '(x_i, y_i)', '第i节速度', 'v_i'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F2 目标: t_collision = min{t: d_min(t) < W}",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 't_collision = min{t: d_min(t) < W}'（候选 ['最小节间距', 'd_min'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F2 目标: pitch_min s.t. r(theta_end) = R_turn",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'pitch_min s.t. r(theta_end) = R_turn'（候选 ['螺线半径', 'r'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F2 目标: v0_max s.t. max(v_i) <= 2.0",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'v0_max s.t. max(v_i) <= 2.0'（候选 ['第i节速度', 'v_i'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: |(x_i,y_i) - (x_{i-1},y_{i-1})| = L_i",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '|(x_i,y_i) - (x_{i-1},y_{i-1})| = L_i'（候选 ['第i节位置', '(x_i, y_i)'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: d_min >= W (无碰撞)",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'd_min >= W (无碰撞)'（候选 ['最小节间距', 'd_min'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: v_i <= 2.0 for all i",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'v_i <= 2.0 for all i'（候选 ['第i节速度', 'v_i'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E1",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E1'（候选 ['螺线半径', 'r'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E2",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E2'（候选 ['第i节位置', '(x_i, y_i)'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E3",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E3'（候选 ['第i节位置', '(x_i, y_i)'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: E4",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'E4'（候选 ['最小节间距', 'd_min'] 均未命中输出 key）",
+      "resolved_key": null
+    }
+  ],
+  "passed": 4,
+  "total": 20,
+  "evaluated_at": ""
 }

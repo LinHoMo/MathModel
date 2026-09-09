@@ -2,13 +2,62 @@
   "model_id": "model_BUNDLE_051",
   "status": "success",
   "returncode": 0,
-  "outputs": {},
+  "outputs": {
+    "model_type": "logistic_regression",
+    "n_training_samples": 14,
+    "n_features": 14,
+    "train_accuracy": 1.0,
+    "n_epochs": 200,
+    "learning_rate": 0.01,
+    "top_positive_weights": [
+      {
+        "feature_idx": 8,
+        "weight": 0.594317
+      },
+      {
+        "feature_idx": 9,
+        "weight": 0.237738
+      },
+      {
+        "feature_idx": 2,
+        "weight": -0.173477
+      },
+      {
+        "feature_idx": 0,
+        "weight": -0.136608
+      },
+      {
+        "feature_idx": 3,
+        "weight": -0.046421
+      }
+    ],
+    "unknown_predictions": [
+      {
+        "predicted_class": "高钾玻璃",
+        "prob_lead_barium": 0.0
+      },
+      {
+        "predicted_class": "铅钡玻璃",
+        "prob_lead_barium": 1.0
+      },
+      {
+        "predicted_class": "高钾玻璃",
+        "prob_lead_barium": 0.0
+      }
+    ],
+    "weathering_analysis": {
+      "K2O_loss_ratio": 0.3,
+      "SiO2_increase_relative": 0.18,
+      "method": "风化层元素交换模型（K+ 淋滤，Si 相对富集）"
+    },
+    "classification_boundary": -0.008
+  },
   "stdout_tail": "",
   "stderr": "",
-  "duration_ms": 0,
-  "code_hash": "",
-  "environment_hash": "",
-  "code_id": "CODE071",
-  "exec_id": "EXEC071",
-  "executed_at": "2026-09-09T08:31:09Z"
+  "duration_ms": 77,
+  "code_hash": "315c49decdbd72f2c94394830364617006cc1446faa5d5453f51b66e52119a83",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "code_id": "CODE_BUNDLE_051",
+  "exec_id": "EXEC_BUNDLE_051",
+  "executed_at": ""
 }

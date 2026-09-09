@@ -1,9 +1,104 @@
 {
-  "execution_id": "EXEC002",
+  "execution_id": "EXEC001",
   "fidelity_status": "misaligned",
   "fidelity_score": 0.9286,
-  "checks": [],
-  "passed": 0,
-  "total": 0,
-  "evaluated_at": "2026-09-09T08:23:48Z"
+  "checks": [
+    {
+      "name": "F1 变量可观测: 最优收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_profit' 存在（声明 '最优收益'）",
+      "resolved_key": "optimal_profit"
+    },
+    {
+      "name": "F5 变量范围: 最优收益 ∈ [0, 50000]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "optimal_profit=0.0 在 [0, 50000]"
+    },
+    {
+      "name": "F1 变量可观测: 剩余水量",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'remaining_water' 存在（声明 '剩余水量'）",
+      "resolved_key": "remaining_water"
+    },
+    {
+      "name": "F5 变量范围: 剩余水量 ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "remaining_water=0.0 在 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: 剩余食物",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'remaining_food' 存在（声明 '剩余食物'）",
+      "resolved_key": "remaining_food"
+    },
+    {
+      "name": "F5 变量范围: 剩余食物 ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "remaining_food=0.0 在 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: 到达天数",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'arrival_day' 存在（声明 '到达天数'）",
+      "resolved_key": "arrival_day"
+    },
+    {
+      "name": "F5 变量范围: 到达天数 ∈ [0, 10]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "arrival_day=-1.0 超出 [0, 10]"
+    },
+    {
+      "name": "F1 变量可观测: 最优路径",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_path' 存在（声明 '最优路径'）",
+      "resolved_key": "optimal_path"
+    },
+    {
+      "name": "F2 目标: maximize 到达终点时的总资金（含剩余资源退回）",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_profit' 存在（声明 'maximize 到达终点时的总资金（含剩余资源退回）'）",
+      "resolved_key": "optimal_profit"
+    },
+    {
+      "name": "F3 约束: water + food <= 20（负重上限）",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'remaining_water' 存在（声明 'water + food <= 20（负重上限）'）",
+      "resolved_key": "remaining_water"
+    },
+    {
+      "name": "F3 约束: 每日消耗后 water>=0 且 food>=0，否则游戏失败",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'remaining_water' 存在（声明 '每日消耗后 water>=0 且 food>=0，否则游戏失败'）",
+      "resolved_key": "remaining_water"
+    },
+    {
+      "name": "F3 约束: 沙暴日必须在原地停留",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'arrival_day' 存在（声明 '沙暴日必须在原地停留'）",
+      "resolved_key": "arrival_day"
+    },
+    {
+      "name": "F4 方程: EQ1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_profit' 存在（声明 'EQ1'）",
+      "resolved_key": "optimal_profit"
+    }
+  ],
+  "passed": 13,
+  "total": 14,
+  "evaluated_at": ""
 }

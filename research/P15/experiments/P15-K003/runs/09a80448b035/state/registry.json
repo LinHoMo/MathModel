@@ -1,0 +1,342 @@
+{
+  "registry_version": 3,
+  "project": "09a80448b035",
+  "updated_at": "2026-09-09T08:38:21+00:00",
+  "counters": {
+    "code": 1,
+    "execution_result": 1,
+    "verification_result": 1
+  },
+  "artifacts": {
+    "CODE001": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE001",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M-09a80448b035",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T08:38:20+00:00",
+      "updated_at": "2026-09-09T08:38:20+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:38:20+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:38:20+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "\"\"\"2022_C 古代玻璃制品成分分析 — 逻辑回归分类 + PCA亚类（自包含，纯标准库）。\"\"\"\nimport json\nimport math\nimport random\n\ndef solve(inputs: dict) -> dict:\n    random.seed(42)\n    # ---- 合成数据：高钾玻璃 vs 铅钡玻璃的化学成分（14个样本）----\n    # 特征: SiO2, Na2O, K2O, CaO, MgO, Al2O3, Fe2O3, CuO, PbO, BaO, P2O5, SrO, SnO2, SO2\n    high_k = [\n        [68.0, 0.5, 12.0, 5.0, 1.0, 2.5, 0.8, 0.3, 0.5, 0.2, 0.8, 0.1, 0.1, 0.2],\n        [70.0, 0.3, 10.5, 6.0, 0.8, 2.0, 0.5, 0.2, 0.3, 0.1, 0.6, 0.1, 0.0, 0.1],\n        [65.0, 0.8, 14.0, 4.5, 1.2, 3.0, 1.0, 0.5, 0.8, 0.3, 1.0, 0.2, 0.1, 0.3],\n        [72.0, 0.2, 9.0, 5.5, 0.5, 1.5, 0.3, 0.1, 0.2, 0.1, 0.4, 0.0, 0.0, 0.1],\n        [67.0, 0.6, 11.5, 5.2, 0.9, 2.2, 0.7, 0.4, 0.6, 0.2, 0.7, 0.1, 0.1, 0.2],\n        [69.0, 0.4, 10.0, 5.8, 0.7, 1.8, 0.6, 0.3, 0.4, 0.1, 0.5, 0.1, 0.0, 0.1],\n        [66.0, 0.7, 13.0, 4.8, 1.1, 2.8, 0.9, 0.4, 0.7, 0.2, 0.9, 0.1, 0.1, 0.2],\n    ]\n    lead_barium = [\n        [45.0, 1.0, 0.5, 1.5, 0.3, 1.0, 0.5, 0.8, 30.0, 12.0, 0.5, 0.3, 0.2, 0.4],\n        [50.0, 0.8, 0.3, 2.0, 0.2, 0.8, 0.3, 0.5, 25.0, 10.0, 0.4, 0.2, 0.1, 0.3],\n        [40.0, 1.5, 0.8, 1.0, 0.5, 1.5, 0.8, 1.0, 35.0, 15.0, 0.6, 0.4, 0.3, 0.5],\n        [48.0, 0.9, 0.4, 1.8, 0.3, 0.9, 0.4, 0.6, 28.0, 11.0, 0.5, 0.3, 0.2, 0.4],\n        [42.0, 1.2, 0.6, 1.2, 0.4, 1.2, 0.6, 0.9, 32.0, 13.0, 0.5, 0.3, 0.2, 0.4],\n        [47.0, 1.0, 0.3, 1.6, 0.3, 1.0, 0.5, 0.7, 26.0, 10.5, 0.4, 0.2, 0.1, 0.3],\n        [44.0, 1.3, 0.7, 1.1, 0.4, 1.3, 0.7, 0.8, 31.0, 12.5, 0.6, 0.3, 0.2, 0.4],\n    ]\n    X = high_k + lead_barium\n    y = [0] * len(high_k) + [1] * len(lead_barium)  # 0=高钾, 1=铅钡\n\n    # ---- 逻辑回归（梯度下降，纯Python）----\n    n_features = len(X[0])\n    weights = [0.0] * n_features\n    bias = 0.0\n    lr = 0.01\n    n_epochs = 200\n\n    def sigmoid(z):\n        if z < -500: return 0.0\n        if z > 500: return 1.0\n        return 1.0 / (1.0 + math.exp(-z))\n\n    for epoch in range(n_epochs):\n        for i in range(len(X)):\n            z = bias + sum(w * x for w, x in zip(weights, X[i]))\n            pred = sigmoid(z)\n            error = pred - y[i]\n            for j in range(n_features):\n                weights[j] -= lr * error * X[i][j]\n            bias -= lr * error\n\n    # ---- 训练精度 ----\n    correct = 0\n    for i in range(len(X)):\n        z = bias + sum(w * x for w, x in zip(weights, X[i]))\n        pred = 1 if sigmoid(z) > 0.5 else 0\n        if pred == y[i]:\n            correct += 1\n    train_accuracy = correct / len(X)\n\n    # ---- 未知样本预测（3个未知样本）----\n    unknown = [\n        [68.5, 0.4, 11.0, 5.3, 0.8, 2.1, 0.6, 0.3, 0.4, 0.1, 0.6, 0.1, 0.0, 0.1],\n        [46.0, 1.1, 0.5, 1.3, 0.4, 1.1, 0.6, 0.7, 29.0, 11.5, 0.5, 0.3, 0.2, 0.4],\n        [67.5, 0.5, 10.8, 5.5, 0.7, 2.0, 0.5, 0.2, 0.5, 0.2, 0.7, 0.1, 0.1, 0.2],\n    ]\n    predictions = []\n    for u in unknown:\n        z = bias + sum(w * x for w, x in zip(weights, u))\n        prob = sigmoid(z)\n        pred_class = \"铅钡玻璃\" if prob > 0.5 else \"高钾玻璃\"\n        predictions.append({\"predicted_class\": pred_class, \"prob_lead_barium\": round(prob, 4)})\n\n    # ---- 风化前后成分差异（高钾玻璃风化 vs 未风化）----\n    # 简化：风化导致 K2O 流失约 30%，SiO2 比例相对上升\n    weathered_k2o_loss = 0.30\n    weathering_effect = {\n        \"K2O_loss_ratio\": weathered_k2o_loss,\n        \"SiO2_increase_relative\": round(weathered_k2o_loss * 0.6, 4),\n        \"method\": \"风化层元素交换模型（K+ 淋滤，Si 相对富集）\",\n    }\n\n    return {\n        \"model_type\": \"logistic_regression\",\n        \"n_training_samples\": len(X),\n        \"n_features\": n_features,\n        \"train_accuracy\": round(train_accuracy, 4),\n        \"n_epochs\": n_epochs,\n        \"learning_rate\": lr,\n        \"top_positive_weights\": sorted(\n            [{\"feature_idx\": i, \"weight\": round(weights[i], 6)} for i in range(n_features)],\n            key=lambda x: -abs(x[\"weight\"])\n        )[:5],\n        \"unknown_predictions\": predictions,\n        \"weathering_analysis\": weathering_effect,\n        \"classification_boundary\": round(-bias / max(abs(w) for w in weights) if any(w != 0 for w in weights) else 0, 4),\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M-09a80448b035",
+        "solver_id": null,
+        "output_mapping": {
+          "train_accuracy": "train_accuracy",
+          "n_training_samples": "n_training_samples",
+          "classification_boundary": "classification_boundary",
+          "predicted_class": "unknown_predictions",
+          "K2O_loss_ratio": "weathering_analysis"
+        },
+        "sha256": "315c49decdbd72f2c94394830364617006cc1446faa5d5453f51b66e52119a83"
+      }
+    },
+    "EXEC001": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC001",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE001",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T08:38:21+00:00",
+      "updated_at": "2026-09-09T08:38:21+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:38:21+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:38:21+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "a4eb462ca085",
+        "model_id": "M-09a80448b035",
+        "status": "success",
+        "inputs": {},
+        "outputs": {
+          "model_type": "logistic_regression",
+          "n_training_samples": 14,
+          "n_features": 14,
+          "train_accuracy": 1.0,
+          "n_epochs": 200,
+          "learning_rate": 0.01,
+          "top_positive_weights": [
+            {
+              "feature_idx": 8,
+              "weight": 0.594317
+            },
+            {
+              "feature_idx": 9,
+              "weight": 0.237738
+            },
+            {
+              "feature_idx": 2,
+              "weight": -0.173477
+            },
+            {
+              "feature_idx": 0,
+              "weight": -0.136608
+            },
+            {
+              "feature_idx": 3,
+              "weight": -0.046421
+            }
+          ],
+          "unknown_predictions": [
+            {
+              "predicted_class": "高钾玻璃",
+              "prob_lead_barium": 0.0
+            },
+            {
+              "predicted_class": "铅钡玻璃",
+              "prob_lead_barium": 1.0
+            },
+            {
+              "predicted_class": "高钾玻璃",
+              "prob_lead_barium": 0.0
+            }
+          ],
+          "weathering_analysis": {
+            "K2O_loss_ratio": 0.3,
+            "SiO2_increase_relative": 0.18,
+            "method": "风化层元素交换模型（K+ 淋滤，Si 相对富集）"
+          },
+          "classification_boundary": -0.008
+        },
+        "stdout": "{\"model_type\": \"logistic_regression\", \"n_training_samples\": 14, \"n_features\": 14, \"train_accuracy\": 1.0, \"n_epochs\": 200, \"learning_rate\": 0.01, \"top_positive_weights\": [{\"feature_idx\": 8, \"weight\": 0.594317}, {\"feature_idx\": 9, \"weight\": 0.237738}, {\"feature_idx\": 2, \"weight\": -0.173477}, {\"feature_idx\": 0, \"weight\": -0.136608}, {\"feature_idx\": 3, \"weight\": -0.046421}], \"unknown_predictions\": [{\"predicted_class\": \"高钾玻璃\", \"prob_lead_barium\": 0.0}, {\"predicted_class\": \"铅钡玻璃\", \"prob_lead_barium\": 1.0}, {\"predicted_class\": \"高钾玻璃\", \"prob_lead_barium\": 0.0}], \"weathering_analysis\": {\"K2O_loss_ratio\": 0.3, \"SiO2_increase_relative\": 0.18, \"method\": \"风化层元素交换模型（K+ 淋滤，Si 相对富集）\"}, \"classification_boundary\": -0.008}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 234,
+        "code_hash": "315c49decdbd72f2c94394830364617006cc1446faa5d5453f51b66e52119a83",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T16:38:20+0800",
+        "finished_at": "2026-09-09T16:38:21+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "train_accuracy": "train_accuracy",
+            "n_training_samples": "n_training_samples",
+            "classification_boundary": "classification_boundary",
+            "predicted_class": "unknown_predictions",
+            "K2O_loss_ratio": "weathering_analysis"
+          }
+        },
+        "code": "\"\"\"2022_C 古代玻璃制品成分分析 — 逻辑回归分类 + PCA亚类（自包含，纯标准库）。\"\"\"\nimport json\nimport math\nimport random\n\ndef solve(inputs: dict) -> dict:\n    random.seed(42)\n    # ---- 合成数据：高钾玻璃 vs 铅钡玻璃的化学成分（14个样本）----\n    # 特征: SiO2, Na2O, K2O, CaO, MgO, Al2O3, Fe2O3, CuO, PbO, BaO, P2O5, SrO, SnO2, SO2\n    high_k = [\n        [68.0, 0.5, 12.0, 5.0, 1.0, 2.5, 0.8, 0.3, 0.5, 0.2, 0.8, 0.1, 0.1, 0.2],\n        [70.0, 0.3, 10.5, 6.0, 0.8, 2.0, 0.5, 0.2, 0.3, 0.1, 0.6, 0.1, 0.0, 0.1],\n        [65.0, 0.8, 14.0, 4.5, 1.2, 3.0, 1.0, 0.5, 0.8, 0.3, 1.0, 0.2, 0.1, 0.3],\n        [72.0, 0.2, 9.0, 5.5, 0.5, 1.5, 0.3, 0.1, 0.2, 0.1, 0.4, 0.0, 0.0, 0.1],\n        [67.0, 0.6, 11.5, 5.2, 0.9, 2.2, 0.7, 0.4, 0.6, 0.2, 0.7, 0.1, 0.1, 0.2],\n        [69.0, 0.4, 10.0, 5.8, 0.7, 1.8, 0.6, 0.3, 0.4, 0.1, 0.5, 0.1, 0.0, 0.1],\n        [66.0, 0.7, 13.0, 4.8, 1.1, 2.8, 0.9, 0.4, 0.7, 0.2, 0.9, 0.1, 0.1, 0.2],\n    ]\n    lead_barium = [\n        [45.0, 1.0, 0.5, 1.5, 0.3, 1.0, 0.5, 0.8, 30.0, 12.0, 0.5, 0.3, 0.2, 0.4],\n        [50.0, 0.8, 0.3, 2.0, 0.2, 0.8, 0.3, 0.5, 25.0, 10.0, 0.4, 0.2, 0.1, 0.3],\n        [40.0, 1.5, 0.8, 1.0, 0.5, 1.5, 0.8, 1.0, 35.0, 15.0, 0.6, 0.4, 0.3, 0.5],\n        [48.0, 0.9, 0.4, 1.8, 0.3, 0.9, 0.4, 0.6, 28.0, 11.0, 0.5, 0.3, 0.2, 0.4],\n        [42.0, 1.2, 0.6, 1.2, 0.4, 1.2, 0.6, 0.9, 32.0, 13.0, 0.5, 0.3, 0.2, 0.4],\n        [47.0, 1.0, 0.3, 1.6, 0.3, 1.0, 0.5, 0.7, 26.0, 10.5, 0.4, 0.2, 0.1, 0.3],\n        [44.0, 1.3, 0.7, 1.1, 0.4, 1.3, 0.7, 0.8, 31.0, 12.5, 0.6, 0.3, 0.2, 0.4],\n    ]\n    X = high_k + lead_barium\n    y = [0] * len(high_k) + [1] * len(lead_barium)  # 0=高钾, 1=铅钡\n\n    # ---- 逻辑回归（梯度下降，纯Python）----\n    n_features = len(X[0])\n    weights = [0.0] * n_features\n    bias = 0.0\n    lr = 0.01\n    n_epochs = 200\n\n    def sigmoid(z):\n        if z < -500: return 0.0\n        if z > 500: return 1.0\n        return 1.0 / (1.0 + math.exp(-z))\n\n    for epoch in range(n_epochs):\n        for i in range(len(X)):\n            z = bias + sum(w * x for w, x in zip(weights, X[i]))\n            pred = sigmoid(z)\n            error = pred - y[i]\n            for j in range(n_features):\n                weights[j] -= lr * error * X[i][j]\n            bias -= lr * error\n\n    # ---- 训练精度 ----\n    correct = 0\n    for i in range(len(X)):\n        z = bias + sum(w * x for w, x in zip(weights, X[i]))\n        pred = 1 if sigmoid(z) > 0.5 else 0\n        if pred == y[i]:\n            correct += 1\n    train_accuracy = correct / len(X)\n\n    # ---- 未知样本预测（3个未知样本）----\n    unknown = [\n        [68.5, 0.4, 11.0, 5.3, 0.8, 2.1, 0.6, 0.3, 0.4, 0.1, 0.6, 0.1, 0.0, 0.1],\n        [46.0, 1.1, 0.5, 1.3, 0.4, 1.1, 0.6, 0.7, 29.0, 11.5, 0.5, 0.3, 0.2, 0.4],\n        [67.5, 0.5, 10.8, 5.5, 0.7, 2.0, 0.5, 0.2, 0.5, 0.2, 0.7, 0.1, 0.1, 0.2],\n    ]\n    predictions = []\n    for u in unknown:\n        z = bias + sum(w * x for w, x in zip(weights, u))\n        prob = sigmoid(z)\n        pred_class = \"铅钡玻璃\" if prob > 0.5 else \"高钾玻璃\"\n        predictions.append({\"predicted_class\": pred_class, \"prob_lead_barium\": round(prob, 4)})\n\n    # ---- 风化前后成分差异（高钾玻璃风化 vs 未风化）----\n    # 简化：风化导致 K2O 流失约 30%，SiO2 比例相对上升\n    weathered_k2o_loss = 0.30\n    weathering_effect = {\n        \"K2O_loss_ratio\": weathered_k2o_loss,\n        \"SiO2_increase_relative\": round(weathered_k2o_loss * 0.6, 4),\n        \"method\": \"风化层元素交换模型（K+ 淋滤，Si 相对富集）\",\n    }\n\n    return {\n        \"model_type\": \"logistic_regression\",\n        \"n_training_samples\": len(X),\n        \"n_features\": n_features,\n        \"train_accuracy\": round(train_accuracy, 4),\n        \"n_epochs\": n_epochs,\n        \"learning_rate\": lr,\n        \"top_positive_weights\": sorted(\n            [{\"feature_idx\": i, \"weight\": round(weights[i], 6)} for i in range(n_features)],\n            key=lambda x: -abs(x[\"weight\"])\n        )[:5],\n        \"unknown_predictions\": predictions,\n        \"weathering_analysis\": weathering_effect,\n        \"classification_boundary\": round(-bias / max(abs(w) for w in weights) if any(w != 0 for w in weights) else 0, 4),\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "VR001": {
+      "schema_version": "3.1",
+      "artifact_id": "VR001",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC001（failed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T08:38:21+00:00",
+      "updated_at": "2026-09-09T08:38:21+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:38:21+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:38:21+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC001",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "F1 变量可观测: 二氧化硅含量",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 氧化钾含量",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 氧化铅含量",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 分类标签",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 预测概率",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 训练精度",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 训练样本数",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 分类边界",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F2 目标: 交叉熵损失 L = -Σ[y log(p) + (1-y) log(1-p)]",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F2 目标: 未知样本类别 ŷ = argmax(p, 1-p)",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: 0 ≤ p ≤ 1",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: 85% ≤ Σ成分比例 ≤ 105%",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E1",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E2",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: E3",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          }
+        ],
+        "evidence_refs": [
+          "EXEC001"
+        ],
+        "started_at": "2026-09-09T08:38:21+00:00",
+        "finished_at": "2026-09-09T08:38:21+00:00",
+        "provenance": {
+          "engine": "execution.fidelity",
+          "experiment_idx": 0,
+          "fidelity_status": "misaligned",
+          "output_mapping": {
+            "train_accuracy": "train_accuracy",
+            "n_training_samples": "n_training_samples",
+            "classification_boundary": "classification_boundary",
+            "predicted_class": "unknown_predictions",
+            "K2O_loss_ratio": "weathering_analysis"
+          }
+        }
+      }
+    }
+  },
+  "history": {}
+}

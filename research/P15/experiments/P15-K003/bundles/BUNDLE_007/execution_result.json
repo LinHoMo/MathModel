@@ -2,13 +2,94 @@
   "model_id": "model_BUNDLE_007",
   "status": "success",
   "returncode": 0,
-  "outputs": {},
+  "outputs": {
+    "n_tasks": 200,
+    "actual_completion_rate": 0.45,
+    "model_accuracy": 0.545,
+    "logistic_coefficients": {
+      "intercept": -0.2038,
+      "price": 0.1192,
+      "distance": -0.2269,
+      "member_density": 0.1647
+    },
+    "coefficient_interpretation": {
+      "price": "正系数→价格越高完成概率越高（在合理范围内）",
+      "distance": "负系数→距离越远完成概率越低",
+      "member_density": "正系数→会员越多完成概率越高"
+    },
+    "optimal_price": 40,
+    "optimal_expected_profit": 23.36,
+    "profit_curve": [
+      {
+        "price": 5,
+        "completion_prob": 0.3638,
+        "expected_profit": 1.82
+      },
+      {
+        "price": 8,
+        "completion_prob": 0.3818,
+        "expected_profit": 3.05
+      },
+      {
+        "price": 10,
+        "completion_prob": 0.394,
+        "expected_profit": 3.94
+      },
+      {
+        "price": 12,
+        "completion_prob": 0.4063,
+        "expected_profit": 4.88
+      },
+      {
+        "price": 15,
+        "completion_prob": 0.425,
+        "expected_profit": 6.37
+      },
+      {
+        "price": 18,
+        "completion_prob": 0.4439,
+        "expected_profit": 7.99
+      },
+      {
+        "price": 20,
+        "completion_prob": 0.4566,
+        "expected_profit": 9.13
+      },
+      {
+        "price": 25,
+        "completion_prob": 0.4886,
+        "expected_profit": 12.21
+      },
+      {
+        "price": 30,
+        "completion_prob": 0.5206,
+        "expected_profit": 15.62
+      },
+      {
+        "price": 35,
+        "completion_prob": 0.5525,
+        "expected_profit": 19.34
+      },
+      {
+        "price": 40,
+        "completion_prob": 0.584,
+        "expected_profit": 23.36
+      }
+    ],
+    "loss_final": 0.681021,
+    "feature_standardization": {
+      "price_mean": 18.84,
+      "price_std": 4.65,
+      "distance_mean": 1.92,
+      "distance_std": 1.97
+    }
+  },
   "stdout_tail": "",
   "stderr": "",
-  "duration_ms": 0,
-  "code_hash": "",
-  "environment_hash": "",
-  "code_id": "CODE039",
-  "exec_id": "EXEC039",
-  "executed_at": "2026-09-09T08:28:29Z"
+  "duration_ms": 256,
+  "code_hash": "3c53120bc137164cadd19c8b80ed989e98b9b0f68f6b55c6b977371636b1787f",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "code_id": "CODE_BUNDLE_007",
+  "exec_id": "EXEC_BUNDLE_007",
+  "executed_at": ""
 }

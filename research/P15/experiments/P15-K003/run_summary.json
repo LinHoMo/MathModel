@@ -1,26 +1,29 @@
 {
+  "experiment_id": "P15-K003",
   "total_runs": 66,
   "exec_success_rate": 1.0,
+  "n_real_outputs": 66,
+  "n_real_code_hash": 66,
   "by_arm": {
     "S": 22,
     "SV": 22,
     "F": 22
   },
   "by_problem": {
-    "2022_C": 6,
-    "2018_A": 9,
     "2011_B": 9,
-    "2020_B": 9,
     "2017_B": 9,
-    "2024_A": 6,
+    "2018_A": 9,
     "2018_B": 9,
-    "2019_C": 9
+    "2019_C": 9,
+    "2020_B": 9,
+    "2022_C": 6,
+    "2024_A": 6
   },
   "by_fidelity_status": {
-    "aligned": 27,
-    "misaligned": 39,
-    "unverifiable": 0,
-    "other": 0
+    "misaligned": 26,
+    "aligned": 18,
+    "unverifiable": 22
   },
-  "bundles_generated": 66
+  "bundles_generated": 66,
+  "note": "真实执行重建（2026-09-09）：run_code_pipeline subprocess 执行，status 仅来自 returncode；F 臂 fidelity=unverifiable（无结构化 MODEL_IR 声明，设计预期）"
 }

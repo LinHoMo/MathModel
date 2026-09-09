@@ -1,9 +1,16 @@
 {
-  "execution_id": "EXEC004",
-  "fidelity_status": "misaligned",
-  "fidelity_score": 0.9286,
-  "checks": [],
+  "execution_id": "EXEC001",
+  "fidelity_status": "unverifiable",
+  "fidelity_score": null,
+  "checks": [
+    {
+      "name": "__no_declarations__",
+      "kind": "precondition",
+      "passed": false,
+      "detail": "MODEL_IR 无可用变量/目标/约束/方程声明"
+    }
+  ],
   "passed": 0,
   "total": 0,
-  "evaluated_at": "2026-09-09T08:24:40Z"
+  "evaluated_at": ""
 }

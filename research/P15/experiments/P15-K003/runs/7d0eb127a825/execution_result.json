@@ -2,13 +2,110 @@
   "model_id": "M-7d0eb127a825",
   "status": "success",
   "returncode": 0,
-  "outputs": {},
+  "outputs": {
+    "skin_temp_final": 42.525,
+    "skin_temp_max": 42.525,
+    "time_above_44C_s": 0.0,
+    "time_above_44C_min": 0.0,
+    "total_thickness_m": 0.021,
+    "n_grid_points": 42,
+    "n_time_steps": 2016000,
+    "dt_s": 0.0027,
+    "temperature_curve": [
+      {
+        "time_s": 0.0,
+        "temp_C": 37.0
+      },
+      {
+        "time_s": 270.0,
+        "temp_C": 37.083
+      },
+      {
+        "time_s": 540.0,
+        "temp_C": 37.904
+      },
+      {
+        "time_s": 810.0,
+        "temp_C": 38.994
+      },
+      {
+        "time_s": 1080.0,
+        "temp_C": 39.919
+      },
+      {
+        "time_s": 1350.0,
+        "temp_C": 40.624
+      },
+      {
+        "time_s": 1620.0,
+        "temp_C": 41.144
+      },
+      {
+        "time_s": 1890.0,
+        "temp_C": 41.524
+      },
+      {
+        "time_s": 2160.0,
+        "temp_C": 41.801
+      },
+      {
+        "time_s": 2430.0,
+        "temp_C": 42.003
+      },
+      {
+        "time_s": 2700.0,
+        "temp_C": 42.15
+      },
+      {
+        "time_s": 2970.0,
+        "temp_C": 42.257
+      },
+      {
+        "time_s": 3240.0,
+        "temp_C": 42.334
+      },
+      {
+        "time_s": 3510.0,
+        "temp_C": 42.391
+      },
+      {
+        "time_s": 3780.0,
+        "temp_C": 42.432
+      },
+      {
+        "time_s": 4050.0,
+        "temp_C": 42.462
+      },
+      {
+        "time_s": 4320.0,
+        "temp_C": 42.484
+      },
+      {
+        "time_s": 4590.0,
+        "temp_C": 42.499
+      },
+      {
+        "time_s": 4860.0,
+        "temp_C": 42.511
+      },
+      {
+        "time_s": 5130.0,
+        "temp_C": 42.519
+      },
+      {
+        "time_s": 5400.0,
+        "temp_C": 42.525
+      }
+    ],
+    "ambient_temp": 75.0,
+    "duration_s": 5400.0
+  },
   "stdout_tail": "",
   "stderr": "",
-  "duration_ms": 0,
-  "code_hash": "",
-  "environment_hash": "",
-  "code_id": "CODE011",
-  "exec_id": "EXEC011",
-  "executed_at": "2026-09-09T08:25:23Z"
+  "duration_ms": 29831,
+  "code_hash": "a207dba35a24e333309fd22be623223eb78767d1047075a50e4597d080f807eb",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "code_id": "CODE001",
+  "exec_id": "EXEC001",
+  "executed_at": ""
 }

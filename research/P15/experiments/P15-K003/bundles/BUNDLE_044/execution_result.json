@@ -2,13 +2,44 @@
   "model_id": "model_BUNDLE_044",
   "status": "success",
   "returncode": 0,
-  "outputs": {},
+  "outputs": {
+    "total_parts": 248,
+    "throughput_per_hour": 31.0,
+    "avg_cycle_time_s": 116.13,
+    "rgv_utilization": 0.996,
+    "rgv_move_total_s": 7616.0,
+    "rgv_idle_total_s": 114.0,
+    "cnc_utilization": [
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028
+    ],
+    "cnc_parts_per_machine": [
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31
+    ],
+    "shift_duration_s": 28800,
+    "n_cnc": 8,
+    "process_time_s": 560,
+    "scheduling_strategy": "greedy_nearest"
+  },
   "stdout_tail": "",
   "stderr": "",
-  "duration_ms": 0,
-  "code_hash": "",
-  "environment_hash": "",
-  "code_id": "CODE029",
-  "exec_id": "EXEC029",
-  "executed_at": "2026-09-09T08:28:26Z"
+  "duration_ms": 65,
+  "code_hash": "4116db6f48bed86a091eed3f1dd7866abd1acf359780174e79a160511c95ad53",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "code_id": "CODE_BUNDLE_044",
+  "exec_id": "EXEC_BUNDLE_044",
+  "executed_at": ""
 }

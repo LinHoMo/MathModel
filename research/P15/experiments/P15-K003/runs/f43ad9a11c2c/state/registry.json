@@ -1,0 +1,369 @@
+{
+  "registry_version": 3,
+  "project": "f43ad9a11c2c",
+  "updated_at": "2026-09-09T08:42:57+00:00",
+  "counters": {
+    "code": 1,
+    "execution_result": 1,
+    "verification_result": 1
+  },
+  "artifacts": {
+    "CODE001": {
+      "schema_version": "3.1",
+      "artifact_id": "CODE001",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "代码实现 M-f43ad9a11c2c",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T08:42:27+00:00",
+      "updated_at": "2026-09-09T08:42:27+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:42:27+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:42:27+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "code": "\"\"\"2018_A 高温作业专用服装 — 一维四层瞬态热传导显式有限差分（自包含，纯标准库）。\"\"\"\nimport json\nimport math\n\ndef solve(inputs: dict) -> dict:\n    # 四层材料参数 (k W/mK, rho*c J/m3K, thickness m)\n    layers = [\n        {\"name\": \"I\",   \"k\": 0.045, \"rhoc\": 1.2e6, \"d\": 0.006},\n        {\"name\": \"II\",  \"k\": 0.055, \"rhoc\": 1.0e6, \"d\": 0.006},\n        {\"name\": \"III\", \"k\": 0.065, \"rhoc\": 0.8e6, \"d\": 0.004},\n        {\"name\": \"IV\",  \"k\": 0.028, \"rhoc\": 1.2e3, \"d\": 0.005},\n    ]\n    T_ambient = 75.0   # 环境温度 °C\n    T_skin_init = 37.0  # 初始皮肤侧温度\n    T_body = 37.0       # 体核温度\n    h_conv = 8.0        # 皮肤侧对流系数 W/m2K\n    total_time = 5400.0  # 90分钟 = 5400秒\n    dx = 0.0005          # 空间步长 0.5mm\n\n    # 构建网格\n    xs = []\n    layer_idx = []\n    x = 0.0\n    for li, layer in enumerate(layers):\n        n_pts = int(round(layer[\"d\"] / dx))\n        for i in range(n_pts):\n            xs.append(x)\n            layer_idx.append(li)\n            x += dx\n    N = len(xs)\n    L = x\n\n    # 时间步长（稳定性：dt <= dx^2 / (2*alpha_max)）\n    alpha_max = max(l[\"k\"] / l[\"rhoc\"] for l in layers)\n    dt = 0.25 * dx * dx / alpha_max\n    n_steps = int(math.ceil(total_time / dt))\n\n    # 初始化温度场\n    T = [T_skin_init] * N\n    T[0] = T_ambient  # 左边界Dirichlet\n\n    skin_temps = []  # 记录皮肤侧温度随时间\n    sample_interval = max(1, n_steps // 100)\n\n    for step in range(n_steps):\n        T_new = T[:]\n        T_new[0] = T_ambient  # 左边界固定环境温度\n        # 内部节点显式更新（层间界面用调和平均热扩散率）\n        for i in range(1, N - 1):\n            li = layer_idx[i]\n            k = layers[li][\"k\"]\n            rhoc = layers[li][\"rhoc\"]\n            alpha = k / rhoc\n            # 层间界面处理：用相邻层k的调和平均\n            if layer_idx[i - 1] != li:\n                k_left = layers[layer_idx[i - 1]][\"k\"]\n                k_eff = 2 * k * k_left / (k + k_left)\n                alpha = k_eff / rhoc\n            elif layer_idx[i + 1] != li:\n                k_right = layers[layer_idx[i + 1]][\"k\"]\n                k_eff = 2 * k * k_right / (k + k_right)\n                alpha = k_eff / rhoc\n            T_new[i] = T[i] + alpha * dt / (dx * dx) * (T[i + 1] - 2 * T[i] + T[i - 1])\n        # 右边界：对流边界（皮肤侧与体核换热）\n        i = N - 1\n        li = layer_idx[i]\n        k = layers[li][\"k\"]\n        rhoc = layers[li][\"rhoc\"]\n        # Neumann型对流：-k dT/dx = h(T - T_body)\n        # 用ghost node方法\n        T_ghost = T[i - 1] + 2 * dx * h_conv / k * (T_body - T[i])\n        alpha = k / rhoc\n        T_new[i] = T[i] + alpha * dt / (dx * dx) * (T_ghost - 2 * T[i] + T[i - 1])\n        T = T_new\n        if step % sample_interval == 0 or step == n_steps - 1:\n            t = (step + 1) * dt\n            skin_temps.append({\"time_s\": round(t, 1), \"temp_C\": round(T[N - 1], 3)})\n\n    T_skin_final = T[N - 1]\n    T_skin_max = max(s[\"temp_C\"] for s in skin_temps)\n    # 超过44°C的时间\n    time_above_44 = 0.0\n    for j in range(1, len(skin_temps)):\n        if skin_temps[j][\"temp_C\"] > 44.0:\n            dt_sample = skin_temps[j][\"time_s\"] - skin_temps[j - 1][\"time_s\"]\n            time_above_44 += dt_sample\n\n    return {\n        \"skin_temp_final\": round(T_skin_final, 3),\n        \"skin_temp_max\": round(T_skin_max, 3),\n        \"time_above_44C_s\": round(time_above_44, 1),\n        \"time_above_44C_min\": round(time_above_44 / 60.0, 2),\n        \"total_thickness_m\": round(L, 5),\n        \"n_grid_points\": N,\n        \"n_time_steps\": n_steps,\n        \"dt_s\": round(dt, 4),\n        \"temperature_curve\": skin_temps[::max(1, len(skin_temps) // 20)],\n        \"ambient_temp\": T_ambient,\n        \"duration_s\": total_time,\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+        "language": "python",
+        "framework": null,
+        "model_id": "M-f43ad9a11c2c",
+        "solver_id": null,
+        "output_mapping": {
+          "皮肤侧温度": "skin_temp_final",
+          "T_skin": "skin_temp_final",
+          "最高皮肤温度": "skin_temp_max",
+          "超温时间": "time_above_44C_s",
+          "温度场": "temperature_curve",
+          "T": "temperature_curve",
+          "时间": "duration_s",
+          "t": "duration_s"
+        },
+        "sha256": "a207dba35a24e333309fd22be623223eb78767d1047075a50e4597d080f807eb"
+      }
+    },
+    "EXEC001": {
+      "schema_version": "3.1",
+      "artifact_id": "EXEC001",
+      "type": "execution_result",
+      "version": 1,
+      "status": "active",
+      "title": "执行结果 CODE001",
+      "question": null,
+      "created_by": "external_agent",
+      "created_at": "2026-09-09T08:42:57+00:00",
+      "updated_at": "2026-09-09T08:42:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:42:57+00:00",
+          "by": "external_agent",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:42:57+00:00",
+          "by": "external_agent",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "execution_id": "45fa5b683197",
+        "model_id": "M-f43ad9a11c2c",
+        "status": "success",
+        "inputs": {},
+        "outputs": {
+          "skin_temp_final": 42.525,
+          "skin_temp_max": 42.525,
+          "time_above_44C_s": 0.0,
+          "time_above_44C_min": 0.0,
+          "total_thickness_m": 0.021,
+          "n_grid_points": 42,
+          "n_time_steps": 2016000,
+          "dt_s": 0.0027,
+          "temperature_curve": [
+            {
+              "time_s": 0.0,
+              "temp_C": 37.0
+            },
+            {
+              "time_s": 270.0,
+              "temp_C": 37.083
+            },
+            {
+              "time_s": 540.0,
+              "temp_C": 37.904
+            },
+            {
+              "time_s": 810.0,
+              "temp_C": 38.994
+            },
+            {
+              "time_s": 1080.0,
+              "temp_C": 39.919
+            },
+            {
+              "time_s": 1350.0,
+              "temp_C": 40.624
+            },
+            {
+              "time_s": 1620.0,
+              "temp_C": 41.144
+            },
+            {
+              "time_s": 1890.0,
+              "temp_C": 41.524
+            },
+            {
+              "time_s": 2160.0,
+              "temp_C": 41.801
+            },
+            {
+              "time_s": 2430.0,
+              "temp_C": 42.003
+            },
+            {
+              "time_s": 2700.0,
+              "temp_C": 42.15
+            },
+            {
+              "time_s": 2970.0,
+              "temp_C": 42.257
+            },
+            {
+              "time_s": 3240.0,
+              "temp_C": 42.334
+            },
+            {
+              "time_s": 3510.0,
+              "temp_C": 42.391
+            },
+            {
+              "time_s": 3780.0,
+              "temp_C": 42.432
+            },
+            {
+              "time_s": 4050.0,
+              "temp_C": 42.462
+            },
+            {
+              "time_s": 4320.0,
+              "temp_C": 42.484
+            },
+            {
+              "time_s": 4590.0,
+              "temp_C": 42.499
+            },
+            {
+              "time_s": 4860.0,
+              "temp_C": 42.511
+            },
+            {
+              "time_s": 5130.0,
+              "temp_C": 42.519
+            },
+            {
+              "time_s": 5400.0,
+              "temp_C": 42.525
+            }
+          ],
+          "ambient_temp": 75.0,
+          "duration_s": 5400.0
+        },
+        "stdout": "{\"skin_temp_final\": 42.525, \"skin_temp_max\": 42.525, \"time_above_44C_s\": 0.0, \"time_above_44C_min\": 0.0, \"total_thickness_m\": 0.021, \"n_grid_points\": 42, \"n_time_steps\": 2016000, \"dt_s\": 0.0027, \"temperature_curve\": [{\"time_s\": 0.0, \"temp_C\": 37.0}, {\"time_s\": 270.0, \"temp_C\": 37.083}, {\"time_s\": 540.0, \"temp_C\": 37.904}, {\"time_s\": 810.0, \"temp_C\": 38.994}, {\"time_s\": 1080.0, \"temp_C\": 39.919}, {\"time_s\": 1350.0, \"temp_C\": 40.624}, {\"time_s\": 1620.0, \"temp_C\": 41.144}, {\"time_s\": 1890.0, \"temp_C\": 41.524}, {\"time_s\": 2160.0, \"temp_C\": 41.801}, {\"time_s\": 2430.0, \"temp_C\": 42.003}, {\"time_s\": 2700.0, \"temp_C\": 42.15}, {\"time_s\": 2970.0, \"temp_C\": 42.257}, {\"time_s\": 3240.0, \"temp_C\": 42.334}, {\"time_s\": 3510.0, \"temp_C\": 42.391}, {\"time_s\": 3780.0, \"temp_C\": 42.432}, {\"time_s\": 4050.0, \"temp_C\": 42.462}, {\"time_s\": 4320.0, \"temp_C\": 42.484}, {\"time_s\": 4590.0, \"temp_C\": 42.499}, {\"time_s\": 4860.0, \"temp_C\": 42.511}, {\"time_s\": 5130.0, \"temp_C\": 42.519}, {\"time_s\": 5400.0, \"temp_C\": 42.525}], \"ambient_temp\": 75.0, \"duration_s\": 5400.0}\n",
+        "stderr": "",
+        "returncode": 0,
+        "duration_ms": 29977,
+        "code_hash": "a207dba35a24e333309fd22be623223eb78767d1047075a50e4597d080f807eb",
+        "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+        "started_at": "2026-09-09T16:42:27+0800",
+        "finished_at": "2026-09-09T16:42:57+0800",
+        "provenance": {
+          "adapter": "local_python",
+          "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "output_mapping": {
+            "皮肤侧温度": "skin_temp_final",
+            "T_skin": "skin_temp_final",
+            "最高皮肤温度": "skin_temp_max",
+            "超温时间": "time_above_44C_s",
+            "温度场": "temperature_curve",
+            "T": "temperature_curve",
+            "时间": "duration_s",
+            "t": "duration_s"
+          }
+        },
+        "code": "\"\"\"2018_A 高温作业专用服装 — 一维四层瞬态热传导显式有限差分（自包含，纯标准库）。\"\"\"\nimport json\nimport math\n\ndef solve(inputs: dict) -> dict:\n    # 四层材料参数 (k W/mK, rho*c J/m3K, thickness m)\n    layers = [\n        {\"name\": \"I\",   \"k\": 0.045, \"rhoc\": 1.2e6, \"d\": 0.006},\n        {\"name\": \"II\",  \"k\": 0.055, \"rhoc\": 1.0e6, \"d\": 0.006},\n        {\"name\": \"III\", \"k\": 0.065, \"rhoc\": 0.8e6, \"d\": 0.004},\n        {\"name\": \"IV\",  \"k\": 0.028, \"rhoc\": 1.2e3, \"d\": 0.005},\n    ]\n    T_ambient = 75.0   # 环境温度 °C\n    T_skin_init = 37.0  # 初始皮肤侧温度\n    T_body = 37.0       # 体核温度\n    h_conv = 8.0        # 皮肤侧对流系数 W/m2K\n    total_time = 5400.0  # 90分钟 = 5400秒\n    dx = 0.0005          # 空间步长 0.5mm\n\n    # 构建网格\n    xs = []\n    layer_idx = []\n    x = 0.0\n    for li, layer in enumerate(layers):\n        n_pts = int(round(layer[\"d\"] / dx))\n        for i in range(n_pts):\n            xs.append(x)\n            layer_idx.append(li)\n            x += dx\n    N = len(xs)\n    L = x\n\n    # 时间步长（稳定性：dt <= dx^2 / (2*alpha_max)）\n    alpha_max = max(l[\"k\"] / l[\"rhoc\"] for l in layers)\n    dt = 0.25 * dx * dx / alpha_max\n    n_steps = int(math.ceil(total_time / dt))\n\n    # 初始化温度场\n    T = [T_skin_init] * N\n    T[0] = T_ambient  # 左边界Dirichlet\n\n    skin_temps = []  # 记录皮肤侧温度随时间\n    sample_interval = max(1, n_steps // 100)\n\n    for step in range(n_steps):\n        T_new = T[:]\n        T_new[0] = T_ambient  # 左边界固定环境温度\n        # 内部节点显式更新（层间界面用调和平均热扩散率）\n        for i in range(1, N - 1):\n            li = layer_idx[i]\n            k = layers[li][\"k\"]\n            rhoc = layers[li][\"rhoc\"]\n            alpha = k / rhoc\n            # 层间界面处理：用相邻层k的调和平均\n            if layer_idx[i - 1] != li:\n                k_left = layers[layer_idx[i - 1]][\"k\"]\n                k_eff = 2 * k * k_left / (k + k_left)\n                alpha = k_eff / rhoc\n            elif layer_idx[i + 1] != li:\n                k_right = layers[layer_idx[i + 1]][\"k\"]\n                k_eff = 2 * k * k_right / (k + k_right)\n                alpha = k_eff / rhoc\n            T_new[i] = T[i] + alpha * dt / (dx * dx) * (T[i + 1] - 2 * T[i] + T[i - 1])\n        # 右边界：对流边界（皮肤侧与体核换热）\n        i = N - 1\n        li = layer_idx[i]\n        k = layers[li][\"k\"]\n        rhoc = layers[li][\"rhoc\"]\n        # Neumann型对流：-k dT/dx = h(T - T_body)\n        # 用ghost node方法\n        T_ghost = T[i - 1] + 2 * dx * h_conv / k * (T_body - T[i])\n        alpha = k / rhoc\n        T_new[i] = T[i] + alpha * dt / (dx * dx) * (T_ghost - 2 * T[i] + T[i - 1])\n        T = T_new\n        if step % sample_interval == 0 or step == n_steps - 1:\n            t = (step + 1) * dt\n            skin_temps.append({\"time_s\": round(t, 1), \"temp_C\": round(T[N - 1], 3)})\n\n    T_skin_final = T[N - 1]\n    T_skin_max = max(s[\"temp_C\"] for s in skin_temps)\n    # 超过44°C的时间\n    time_above_44 = 0.0\n    for j in range(1, len(skin_temps)):\n        if skin_temps[j][\"temp_C\"] > 44.0:\n            dt_sample = skin_temps[j][\"time_s\"] - skin_temps[j - 1][\"time_s\"]\n            time_above_44 += dt_sample\n\n    return {\n        \"skin_temp_final\": round(T_skin_final, 3),\n        \"skin_temp_max\": round(T_skin_max, 3),\n        \"time_above_44C_s\": round(time_above_44, 1),\n        \"time_above_44C_min\": round(time_above_44 / 60.0, 2),\n        \"total_thickness_m\": round(L, 5),\n        \"n_grid_points\": N,\n        \"n_time_steps\": n_steps,\n        \"dt_s\": round(dt, 4),\n        \"temperature_curve\": skin_temps[::max(1, len(skin_temps) // 20)],\n        \"ambient_temp\": T_ambient,\n        \"duration_s\": total_time,\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+        "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      }
+    },
+    "VR001": {
+      "schema_version": "3.1",
+      "artifact_id": "VR001",
+      "type": "verification_result",
+      "version": 1,
+      "status": "active",
+      "title": "验证 EXEC001（failed）",
+      "question": "",
+      "created_by": "execution.validation",
+      "created_at": "2026-09-09T08:42:57+00:00",
+      "updated_at": "2026-09-09T08:42:57+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-09T08:42:57+00:00",
+          "by": "execution.validation",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-09T08:42:57+00:00",
+          "by": "execution.validation",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "verification_id": "",
+        "execution_id": "EXEC001",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "F1 变量可观测: 温度场",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F1 变量可观测: 皮肤侧温度",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F5 变量范围: 皮肤侧温度 ∈ [37, 80]",
+            "kind": "output_range",
+            "passed": false,
+            "detail": "=None 超出 [None, None]"
+          },
+          {
+            "name": "F1 变量可观测: 时间",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F5 变量范围: 时间 ∈ [0, 5400]",
+            "kind": "output_range",
+            "passed": false,
+            "detail": "=None 超出 [None, None]"
+          },
+          {
+            "name": "F1 变量可观测: 空间坐标",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F2 目标: 计算温度场T(x,t)和皮肤侧温度T_skin(t)",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: T_skin(t) <= 47°C（工作结束时）",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F3 约束: T_skin超过44°C的累计时间 <= 5分钟",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: EQ1",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          },
+          {
+            "name": "F4 方程: EQ2",
+            "kind": "output_key_exists",
+            "passed": false,
+            "detail": "缺失声明 None（候选 [] 均未命中输出 key）",
+            "resolved_key": null
+          }
+        ],
+        "evidence_refs": [
+          "EXEC001"
+        ],
+        "started_at": "2026-09-09T08:42:57+00:00",
+        "finished_at": "2026-09-09T08:42:57+00:00",
+        "provenance": {
+          "engine": "execution.fidelity",
+          "experiment_idx": 0,
+          "fidelity_status": "misaligned",
+          "output_mapping": {
+            "皮肤侧温度": "skin_temp_final",
+            "T_skin": "skin_temp_final",
+            "最高皮肤温度": "skin_temp_max",
+            "超温时间": "time_above_44C_s",
+            "温度场": "temperature_curve",
+            "T": "temperature_curve",
+            "时间": "duration_s",
+            "t": "duration_s"
+          }
+        }
+      }
+    }
+  },
+  "history": {}
+}

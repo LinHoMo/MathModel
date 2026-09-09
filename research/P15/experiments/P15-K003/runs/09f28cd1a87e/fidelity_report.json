@@ -1,9 +1,85 @@
 {
-  "execution_id": "EXEC016",
+  "execution_id": "EXEC001",
   "fidelity_status": "misaligned",
   "fidelity_score": 0.9091,
-  "checks": [],
-  "passed": 0,
-  "total": 0,
-  "evaluated_at": "2026-09-09T08:27:23Z"
+  "checks": [
+    {
+      "name": "F1 变量可观测: 温度场",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'temperature_curve' 存在（声明 '温度场'）",
+      "resolved_key": "temperature_curve"
+    },
+    {
+      "name": "F1 变量可观测: 皮肤侧温度",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'skin_temp_final' 存在（声明 '皮肤侧温度'）",
+      "resolved_key": "skin_temp_final"
+    },
+    {
+      "name": "F5 变量范围: 皮肤侧温度 ∈ [37, 80]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "skin_temp_final=42.525 在 [37, 80]"
+    },
+    {
+      "name": "F1 变量可观测: 时间",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'duration_s' 存在（声明 '时间'）",
+      "resolved_key": "duration_s"
+    },
+    {
+      "name": "F5 变量范围: 时间 ∈ [0, 5400]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "duration_s=5400.0 在 [0, 5400]"
+    },
+    {
+      "name": "F1 变量可观测: 空间坐标",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '空间坐标'（候选 ['空间坐标', 'x'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F2 目标: 计算温度场T(x,t)和皮肤侧温度T_skin(t)",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'temperature_curve' 存在（声明 '计算温度场T(x,t)和皮肤侧温度T_skin(t)'）",
+      "resolved_key": "temperature_curve"
+    },
+    {
+      "name": "F3 约束: T_skin(t) <= 47°C（工作结束时）",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'skin_temp_final' 存在（声明 'T_skin(t) <= 47°C（工作结束时）'）",
+      "resolved_key": "skin_temp_final"
+    },
+    {
+      "name": "F3 约束: T_skin超过44°C的累计时间 <= 5分钟",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'skin_temp_final' 存在（声明 'T_skin超过44°C的累计时间 <= 5分钟'）",
+      "resolved_key": "skin_temp_final"
+    },
+    {
+      "name": "F4 方程: EQ1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'temperature_curve' 存在（声明 'EQ1'）",
+      "resolved_key": "temperature_curve"
+    },
+    {
+      "name": "F4 方程: EQ2",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'skin_temp_final' 存在（声明 'EQ2'）",
+      "resolved_key": "skin_temp_final"
+    }
+  ],
+  "passed": 10,
+  "total": 11,
+  "evaluated_at": ""
 }

@@ -2,13 +2,110 @@
   "model_id": "model_BUNDLE_010",
   "status": "success",
   "returncode": 0,
-  "outputs": {},
+  "outputs": {
+    "n_segments": 223,
+    "simulation_duration_s": 300,
+    "head_final_position": {
+      "x": 43.255807,
+      "y": 30.051429
+    },
+    "head_final_velocity": 1.0,
+    "tail_final_position": {
+      "x": 276.544419,
+      "y": -313.339956
+    },
+    "collision_detected": false,
+    "collision_time_s": null,
+    "min_segment_gap_final": 3.74,
+    "min_pitch_q3": 0.28125,
+    "max_head_speed_q5": 0.666667,
+    "key_frames": [
+      {
+        "time": 0,
+        "head_position": {
+          "x": 55.792031,
+          "y": -0.0
+        },
+        "head_velocity": 1.0,
+        "tail_position": {
+          "x": 51.699763,
+          "y": -415.11983
+        },
+        "min_segment_gap": 3.74
+      },
+      {
+        "time": 60,
+        "head_position": {
+          "x": 24.238657,
+          "y": -49.569392
+        },
+        "head_velocity": 1.0,
+        "tail_position": {
+          "x": -350.501694,
+          "y": -228.205583
+        },
+        "min_segment_gap": 3.74
+      },
+      {
+        "time": 120,
+        "head_position": {
+          "x": -34.521695,
+          "y": -42.238482
+        },
+        "head_velocity": 1.0,
+        "tail_position": {
+          "x": -353.29557,
+          "y": 223.702181
+        },
+        "min_segment_gap": 3.74
+      },
+      {
+        "time": 180,
+        "head_position": {
+          "x": -52.188551,
+          "y": 13.571212
+        },
+        "head_velocity": 1.0,
+        "tail_position": {
+          "x": 56.382795,
+          "y": 414.262468
+        },
+        "min_segment_gap": 3.74
+      },
+      {
+        "time": 240,
+        "head_position": {
+          "x": -9.352371,
+          "y": 52.470258
+        },
+        "head_velocity": 1.0,
+        "tail_position": {
+          "x": 400.07616,
+          "y": 121.096041
+        },
+        "min_segment_gap": 3.74
+      },
+      {
+        "time": 300,
+        "head_position": {
+          "x": 43.255807,
+          "y": 30.051429
+        },
+        "head_velocity": 1.0,
+        "tail_position": {
+          "x": 276.544419,
+          "y": -313.339956
+        },
+        "min_segment_gap": 3.74
+      }
+    ]
+  },
   "stdout_tail": "",
   "stderr": "",
-  "duration_ms": 0,
-  "code_hash": "",
-  "environment_hash": "",
-  "code_id": "CODE077",
-  "exec_id": "EXEC077",
-  "executed_at": "2026-09-09T08:31:13Z"
+  "duration_ms": 105,
+  "code_hash": "fdd7cd529ed1522e4c4d7c22fba1ca7ac4a99c37b70f59c710705b9683ad4af8",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "code_id": "CODE_BUNDLE_010",
+  "exec_id": "EXEC_BUNDLE_010",
+  "executed_at": ""
 }

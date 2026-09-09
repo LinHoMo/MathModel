@@ -2,13 +2,90 @@
   "model_id": "M-8227a3c95a44",
   "status": "success",
   "returncode": 0,
-  "outputs": {},
+  "outputs": {
+    "optimal_decision": "queue",
+    "optimal_decision_cn": "前往到达区排队等待载客",
+    "profit_queue": 79.8,
+    "profit_city": -5.0,
+    "profit_diff": 84.8,
+    "expected_wait_min": 0.1,
+    "queue_length_avg": 3.0,
+    "rho_utilization": 0.75,
+    "queue_stable": true,
+    "lambda_critical": 39.98,
+    "n_taxis_in_pool": 50,
+    "decision_scan": [
+      {
+        "lambda": 10,
+        "wait_min": 0.03,
+        "profit_queue": 79.93,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      },
+      {
+        "lambda": 15,
+        "wait_min": 0.04,
+        "profit_queue": 79.92,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      },
+      {
+        "lambda": 20,
+        "wait_min": 0.05,
+        "profit_queue": 79.9,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      },
+      {
+        "lambda": 25,
+        "wait_min": 0.07,
+        "profit_queue": 79.87,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      },
+      {
+        "lambda": 28,
+        "wait_min": 0.08,
+        "profit_queue": 79.83,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      },
+      {
+        "lambda": 30,
+        "wait_min": 0.1,
+        "profit_queue": 79.8,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      },
+      {
+        "lambda": 32,
+        "wait_min": 0.12,
+        "profit_queue": 79.75,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      },
+      {
+        "lambda": 35,
+        "wait_min": 0.2,
+        "profit_queue": 79.6,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      },
+      {
+        "lambda": 38,
+        "wait_min": 0.5,
+        "profit_queue": 79.0,
+        "profit_city": -5.0,
+        "optimal": "queue"
+      }
+    ]
+  },
   "stdout_tail": "",
   "stderr": "",
-  "duration_ms": 0,
-  "code_hash": "",
-  "environment_hash": "",
-  "code_id": "CODE025",
-  "exec_id": "EXEC025",
-  "executed_at": "2026-09-09T08:28:25Z"
+  "duration_ms": 59,
+  "code_hash": "0e57dd35ad658934899923f091c160dd85c2da8bb34d7cfa0360101aa1d74b1e",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "code_id": "CODE001",
+  "exec_id": "EXEC001",
+  "executed_at": ""
 }

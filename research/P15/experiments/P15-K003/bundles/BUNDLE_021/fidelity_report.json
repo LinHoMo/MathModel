@@ -1,9 +1,16 @@
 {
-  "execution_id": "exec_BUNDLE_021",
-  "fidelity_status": "misaligned",
-  "fidelity_score": 0.2,
-  "checks": [],
+  "execution_id": "EXEC_BUNDLE_021",
+  "fidelity_status": "unverifiable",
+  "fidelity_score": null,
+  "checks": [
+    {
+      "name": "__no_declarations__",
+      "kind": "precondition",
+      "passed": false,
+      "detail": "MODEL_IR 无可用变量/目标/约束/方程声明"
+    }
+  ],
   "passed": 0,
   "total": 0,
-  "evaluated_at": "2026-09-09T08:31:11Z"
+  "evaluated_at": ""
 }
