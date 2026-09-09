@@ -168,6 +168,129 @@ def run_checks(execution_data: dict, checks: list[dict]) -> tuple[str, list[dict
     return status, results
 
 
+# ---------------------------------------------------------------- P1-VS-001 数值验证（C8）
+
+NUMERIC_VALIDATION_FIELDS = (
+    "execution_valid", "mathematical_valid", "empirical_valid", "robustness",
+    "constraint_violation_max", "objective_value", "objective_sane",
+    "variable_domain_violation", "checks", "detail",
+)
+
+
+def run_numeric_validation(outputs: dict, spec: dict,
+                           execution_status: str = "success") -> dict:
+    """基于真实数值判 FAIL（P1-VS-001 C8，ValidationResult 四字段）。
+
+    检查（全部确定性，零 LLM）：
+      1. constraint_violation_max —— outputs["pair_distances"][t][i] 与
+         spec.constraints[].reference 之差的绝对最大值（pair_index 0=头板，
+         "1+"=全部体板）；> tolerance → mathematical_valid=False
+      2. objective_sanity —— outputs["head_speeds"] 均值 vs spec.objective
+         .expected ± tolerance → empirical_valid
+      3. variable_domain_violation —— outputs["positions"] 全部坐标落在
+         spec.domain [min,max] 内
+      4. robustness —— 约束余量归一（1 − violation/最坏参考，clip [0,1]）
+    判 FAIL 独立于 evidence_gate（evidence_gate 只查边不查数值）。
+    """
+    if execution_status != "success":
+        return {
+            "execution_valid": False, "mathematical_valid": False,
+            "empirical_valid": False, "robustness": 0.0,
+            "constraint_violation_max": None, "objective_value": None,
+            "objective_sane": False, "variable_domain_violation": True,
+            "status": "invalid", "detail": f"execution status={execution_status}",
+            "checks": [{"name": "__execution_status__", "kind": "precondition",
+                        "passed": False,
+                        "detail": f"execution status={execution_status}，"
+                                  "无输出可验证（铁律：不得 passed）"}],
+        }
+
+    checks: list[dict] = []
+    pair_distances = outputs.get("pair_distances") or {}
+    constraints = spec.get("constraints") or []
+    constraint_violation_max = 0.0
+    for c in constraints:
+        ref = float(c.get("reference"))
+        tol = float(c.get("tolerance", 1e-6))
+        pi = c.get("pair_index")
+        viol = 0.0
+        n_checked = 0
+        for t, ds in pair_distances.items():
+            for i, d in enumerate(ds):
+                if pi == "1+" and i < 1:
+                    continue
+                if pi != "1+" and i != pi:
+                    continue
+                n_checked += 1
+                viol = max(viol, abs(float(d) - ref))
+        ok = viol <= tol
+        constraint_violation_max = max(constraint_violation_max, viol)
+        checks.append({"name": c.get("name"), "kind": "constraint",
+                       "passed": ok, "reference": ref, "max_violation": viol,
+                       "checked_pairs": n_checked,
+                       "detail": (f"max|d-ref|={viol:.6g}（≤{tol}）"
+                                  if ok else
+                                  f"max|d-ref|={viol:.6g} > tol={tol}")})
+
+    obj = spec.get("objective") or {}
+    exp = obj.get("expected")
+    otol = float(obj.get("tolerance", 0.05))
+    speeds = [float(v) for v in (outputs.get("head_speeds") or {}).values()
+              if v is not None]
+    objective_value = (sum(speeds) / len(speeds)) if speeds else None
+    objective_sane = (objective_value is not None and exp is not None
+                      and abs(objective_value - exp) <= otol)
+    checks.append({"name": obj.get("name", "objective_sanity"),
+                   "kind": "objective", "passed": objective_sane,
+                   "expected": exp, "measured": objective_value,
+                   "detail": (f"mean head speed={objective_value:.6g} m/s"
+                              f"（期望 {exp}±{otol}）")})
+
+    dom = spec.get("domain") or {}
+    dmin, dmax = dom.get("min"), dom.get("max")
+    domain_ok = True
+    if dmin is not None and dmax is not None:
+        for frame in outputs.get("positions") or []:
+            for pt in frame.get("points") or []:
+                for coord in pt:
+                    if not (dmin <= coord <= dmax):
+                        domain_ok = False
+                        break
+                if not domain_ok:
+                    break
+            if not domain_ok:
+                break
+    variable_domain_violation = not domain_ok
+    if not domain_ok:
+        checks.append({"name": "variable_domain", "kind": "domain",
+                       "passed": False, "range": [dmin, dmax],
+                       "detail": f"存在坐标超出 [{dmin}, {dmax}]"})
+
+    constraint_tolerance = float(spec.get("constraint_tolerance", 1e-6))
+    mathematical_valid = (constraint_violation_max <= constraint_tolerance
+                          and domain_ok)
+    empirical_valid = objective_sane
+    if constraint_violation_max <= 1e-12:
+        robustness = 1.0
+    else:
+        worst_ref = max((float(c.get("reference") or 1.0)) for c in constraints)
+        robustness = max(0.0, 1.0 - constraint_violation_max / worst_ref)
+    status = "passed" if (mathematical_valid and empirical_valid) else "failed"
+
+    return {
+        "execution_valid": True, "mathematical_valid": mathematical_valid,
+        "empirical_valid": empirical_valid, "robustness": round(robustness, 6),
+        "constraint_violation_max": round(constraint_violation_max, 9),
+        "objective_value": objective_value,
+        "objective_sane": objective_sane,
+        "variable_domain_violation": variable_domain_violation,
+        "status": status, "checks": checks,
+        "detail": (f"constraint_violation_max={constraint_violation_max:.6g}，"
+                   f"objective={objective_value:.6g}，"
+                   f"domain_ok={domain_ok}"),
+    }
+
+
 # ------------------------------------------------------------ registration
 
 def validate_execution(project_dir: str | Path, exec_id: str,
