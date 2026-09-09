@@ -56,8 +56,9 @@ Construction 行为？"。
 - **双真源问题档案**：历史文档出现过 228/16、574/11、751/11、774/11、855/4 多套
   测试数字与本表并存。自 Hardening P0 起，全部状态数字以本表口径为准；旧数字
   一律作废（P1 进行期间 pytest 计数随 Organizer 提交演进，以每次 commit 时实测为准）。
-- K001 冻结基线于 2026-09-09 因术语治理迁移（`allowed_model_families` →
-  `allowed_modeling_structures`，5 题 gt.json）重冻——评分数据独立冻结于 DATA
+- K001 冻结基线于 2026-09-09 因术语治理迁移（旧字段名 →
+  `allowed_modeling_structures`，5 题 gt.json，旧名详见 GOVERNANCE_REPORT §7.1）
+  重冻——评分数据独立冻结于 DATA
   FREEZE（165 文件）未受影响，漂移原因记录于 `GOVERNANCE_REPORT §7.1`。
 - Windows 本机 `py` 默认解释器（3.14/3.13）安装损坏，统一用 `py -3.12`。
 
