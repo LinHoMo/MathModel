@@ -20,6 +20,7 @@ Artifact Registry + Evidence Graph 的研究状态。LLM 节点后续按同一�
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 import time
@@ -198,6 +199,222 @@ class DefaultNodeExecutor:
                 self.graph.add_relation(art.artifact_id, "revision_of", rev_of)
                 self.graph.add_relation(rev_of, "supersedes", art.artifact_id)
         return art.artifact_id
+
+    # ------------------------------------------------------------ P1-VS-001 可执行模型闭环（C6/C7/C8）
+
+    def _external_code(self, qid: str) -> str | None:
+        """外部 Model Constructor 注入的可执行代码（shared["external_code"][qid]）。"""
+        return (self.shared.get("external_code") or {}).get(qid)
+
+    def _validation_spec(self, qid: str) -> dict | None:
+        """外部注入的数值验证规格（shared["validation_specs"][qid]）。"""
+        return (self.shared.get("validation_specs") or {}).get(qid)
+
+    def _active_mir_of(self, qid: str) -> str | None:
+        """该问题活跃的 model_ir（终态不计入）。"""
+        mirs = [a.artifact_id for a in self.registry.list_by_type("model_ir")
+                if a.question == qid and a.status not in _TERMINAL]
+        return mirs[-1] if mirs else None
+
+    def _exec_workdir(self) -> str:
+        """执行工作目录：shared["_workdir"] 优先（演示/测试可落盘到项目内），否则系统临时目录。"""
+        import tempfile
+        wd = self.shared.get("_workdir") or tempfile.gettempdir()
+        Path(wd).mkdir(parents=True, exist_ok=True)
+        return str(wd)
+
+    def generate_code(self, qid: str, node_id: str = "code_generation") -> str | None:
+        """C6：登记 code Artifact 并写 model_ir -implemented_by-> code 边。
+
+        固定 ABI（L0 契约）：code 必须含 `def solve(inputs) -> outputs`。
+        无外部注入返回 None（no-op，向后兼容）。幂等：同问题同 code_hash 复用。
+        """
+        code = self._external_code(qid)
+        if not code:
+            return None
+        mir_id = self._active_mir_of(qid)
+        if not mir_id:
+            raise HandlerError(f"{qid}: 注入代码但无活跃 model_ir，无法写 implemented_by 边")
+        if "def solve(inputs)" not in code:
+            raise HandlerError(
+                f"{qid}: code 不满足固定 ABI（必须含 def solve(inputs) -> outputs）")
+        code_hash = hashlib.sha256(code.encode("utf-8")).hexdigest()
+        for a in self.registry.list_by_type("code"):
+            if a.question == qid and a.status not in _TERMINAL \
+                    and a.data.get("code_hash") == code_hash:
+                return a.artifact_id    # 幂等
+        art = self.registry.create(
+            "code", title=f"{mir_id} 可执行实现",
+            question=qid, depends_on=[mir_id],
+            data={"code": code, "code_hash": code_hash,
+                  "abi": "def solve(inputs) -> outputs"},
+            activate=True, created_by=node_id)
+        self.graph.add_relation(mir_id, "implemented_by", art.artifact_id)
+        return art.artifact_id
+
+    def _execution_inputs(self, mir_art) -> dict | None:
+        """从 model_ir.parameters 派生执行输入（input.json 内容，固定 ABI）。"""
+        if mir_art is None:
+            return None
+        out: dict = {}
+        for p in mir_art.data.get("parameters") or []:
+            sym = p.get("symbol") or p.get("parameter_id")
+            if sym and "value" in p:
+                out[sym] = p["value"]
+        out["times"] = [0, 60, 120, 180, 240, 300]
+        return out
+
+    def execute_code(self, qid: str, node_id: str = "model_execution"):
+        """C7：code → LocalPythonAdapter 真 subprocess → execution_result + result。
+
+        返回 (exec_id, result_id)；无活跃 code 时返回 (None, None)。
+        status 只能来自真实 subprocess 退出码（禁止硬编码）。
+        接线：input.json → run_model.py → output.json（固定 ABI）；
+        边：code -executed_by-> EXEC、EXEC -produces-> R。
+        """
+        codes = [a.artifact_id for a in self.registry.list_by_type("code")
+                 if a.question == qid and a.status not in _TERMINAL]
+        if not codes:
+            return (None, None)
+        code_id = codes[-1]
+        code = (self.registry.get(code_id).data or {}).get("code", "")
+        if not code:
+            raise HandlerError(f"{code_id}: code artifact 无 code 本体")
+        mir_id = self._active_mir_of(qid)
+        mir_art = self.registry.get(mir_id) if mir_id else None
+        inputs = self._execution_inputs(mir_art)
+        if inputs is None:
+            raise HandlerError(f"{qid}: 无法从 model_ir 派生执行输入")
+        from runtime.execution.adapters import ExecutionPlan, ExecutionResultData
+        adapter = self.execution_adapter
+        if adapter is None:
+            from runtime.execution.adapters import LocalPythonAdapter
+            adapter = LocalPythonAdapter()
+        wd = self._exec_workdir()
+        try:
+            # input.json 落盘（固定 ABI：input.json → run_model.py → output.json）
+            Path(wd, "input.json").write_text(
+                json.dumps(inputs, ensure_ascii=False, indent=2), encoding="utf-8")
+            xplan = ExecutionPlan(model_id=mir_id or qid, code=code,
+                                  inputs=inputs, workdir=wd)
+            xr = adapter.execute(xplan)
+        except Exception as exc:
+            xr = ExecutionResultData(
+                execution_id="", model_id=mir_id or qid, status="invalid",
+                stderr=f"adapter error: {exc}",
+                provenance={"reason": "adapter_exception"})
+        xr.code = code
+        xart = self.registry.create(
+            "execution_result",
+            title=f"{code_id} 执行结果",
+            question=qid, depends_on=[code_id],
+            data=xr.to_dict(),
+            activate=True, created_by=node_id)
+        self.graph.add_relation(code_id, "executed_by", xart.artifact_id)
+        # result artifact（真实 outputs）+ EXEC -produces-> R 边
+        r = self.registry.create(
+            "result", title=f"{qid} 模型执行结果",
+            question=qid, depends_on=[xart.artifact_id],
+            data={"status": "computed", "execution_ref": xart.artifact_id,
+                  "value": xr.outputs, "outputs": xr.outputs,
+                  "exit_code": xr.returncode,
+                  "note": "真实数值来自 model_execution 子进程执行"},
+            activate=True, created_by=node_id)
+        self.graph.add_relation(xart.artifact_id, "produces", r.artifact_id)
+        return (xart.artifact_id, r.artifact_id)
+
+    def validate_execution(self, qid: str, node_id: str = "model_validation") -> str | None:
+        """C8：基于真实数值判 FAIL——constraint_violation / objective_sanity /
+        variable_domain → VerificationResult（ValidationResult 四字段）。
+
+        返回 VR artifact_id；无活跃 EXEC 或未注入验证规格时返回 None。
+        判 FAIL 不依赖 evidence_gate（它只查边不查数值）。
+        """
+        execs = [a.artifact_id for a in self.registry.list_by_type("execution_result")
+                 if a.question == qid and a.status not in _TERMINAL]
+        if not execs:
+            return None
+        spec = self._validation_spec(qid)
+        if not spec:
+            return None
+        exec_id = execs[-1]
+        xart = self.registry.get(exec_id)
+        xdata = dict(xart.data or {})
+        from runtime.execution.validation import _now, run_numeric_validation
+        verdict = run_numeric_validation(xdata.get("outputs") or {}, spec,
+                                         execution_status=xdata.get("status"))
+        vdata = {
+            "verification_id": "", "execution_id": exec_id,
+            "status": verdict["status"],
+            "execution_valid": verdict["execution_valid"],
+            "mathematical_valid": verdict["mathematical_valid"],
+            "empirical_valid": verdict["empirical_valid"],
+            "robustness": verdict["robustness"],
+            "constraint_violation_max": verdict["constraint_violation_max"],
+            "objective_value": verdict["objective_value"],
+            "objective_sane": verdict["objective_sane"],
+            "variable_domain_violation": verdict["variable_domain_violation"],
+            "checks": verdict["checks"],
+            "evidence_refs": [exec_id],
+            "started_at": _now(), "finished_at": _now(),
+            "provenance": {"engine": "handlers.do_model_validation",
+                           "kind": "numeric_validation",
+                           "spec": spec},
+        }
+        vr = self.registry.create(
+            "verification_result",
+            title=f"数值验证 {exec_id}（{verdict['status']}）",
+            question=qid, depends_on=[exec_id],
+            data=vdata, activate=True, created_by=node_id)
+        self.graph.add_relation(exec_id, "verified_by", vr.artifact_id)
+        return vr.artifact_id
+
+    def do_code_generation(self, node_id: str) -> NodeResult:
+        """C6 DAG 节点：为各问题登记可执行 code + implemented_by 边。"""
+        ev = []
+        n = 0
+        for qid in self._question_ids():
+            cid = self.generate_code(qid, node_id)
+            if cid:
+                mir_id = self._active_mir_of(qid)
+                if mir_id:
+                    ev.append({"from": mir_id, "relation": "implemented_by", "to": cid})
+                n += 1
+        return NodeResult(PASS, f"生成 {n} 个可执行代码",
+                          outputs={"artifacts": [], "evidence": ev})
+
+    def do_model_execution(self, node_id: str) -> NodeResult:
+        """C7 DAG 节点：真 subprocess 执行各问题可执行代码 → EXEC + R。"""
+        ev = []
+        n = 0
+        for qid in self._question_ids():
+            xid, rid = self.execute_code(qid, node_id)
+            if xid:
+                ev.append({"from": xid, "relation": "produces", "to": rid})
+                n += 1
+        return NodeResult(PASS, f"执行 {n} 个模型（真实 subprocess）",
+                          outputs={"artifacts": [], "evidence": ev})
+
+    def do_model_validation(self, node_id: str) -> NodeResult:
+        """C8 DAG 节点：基于真实数值验证各问题执行结果 → VR（四字段）。"""
+        ev = []
+        n_pass = 0
+        n_fail = 0
+        for qid in self._question_ids():
+            vr_id = self.validate_execution(qid, node_id)
+            if not vr_id:
+                continue
+            vr = self.registry.get(vr_id)
+            status = (vr.data or {}).get("status")
+            xid = (vr.data or {}).get("execution_id")
+            ev.append({"from": xid, "relation": "verified_by", "to": vr_id})
+            if status == "passed":
+                n_pass += 1
+            else:
+                n_fail += 1
+        msg = f"数值验证: {n_pass} 通过 / {n_fail} 未通过"
+        return NodeResult(PASS if n_fail == 0 else FAIL, msg,
+                          outputs={"artifacts": [], "evidence": ev})
 
     def _advance_question(self, qid: str, target: str) -> None:
         """沿问题状态机推进（非法转换静默跳过，由 state fail-closed 兜底）。"""
@@ -459,12 +676,12 @@ class DefaultNodeExecutor:
                     if plan.get(key)]
             if tags and not r_art.tags:
                 r_art.tags = tags
-            e_art = self.registry.get(
-                next(f for f, r2, t2 in
-                     [(x["from"], x["relation"], x["to"])
-                      for x in self.graph.relations]
-                     if r2 == "produces" and t2 == r))
-            if plan_art and not e_art.data.get("plan_ref"):
+            e_art = None
+            for x in self.graph.relations:
+                if x["relation"] == "produces" and x["to"] == r:
+                    e_art = self.registry.get(x["from"])
+                    break
+            if plan_art and e_art is not None and not e_art.data.get("plan_ref"):
                 entries = plan.get("entries") or [{}]
                 e_art.data.update({
                     "plan_ref": plan_art.artifact_id,
