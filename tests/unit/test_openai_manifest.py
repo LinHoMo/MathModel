@@ -109,10 +109,11 @@ class TestCatalogV3View(unittest.TestCase):
             names, {"analyst", "modeler", "experimenter", "critic", "writer"},
             f"v3.roles 应为 5 角色，实际 {sorted(names)}")
 
-    def test_v3_nodes_are_16(self):
-        """P9 起 quality_evaluation 节点加入（15→16）。"""
+    def test_v3_nodes_are_19(self):
+        """P9 起 quality_evaluation 节点加入（15→16）；P1-VS-001 加
+        code_generation/model_execution/model_validation（16→19）。"""
         nodes = self.v3.get("nodes", [])
-        self.assertEqual(len(nodes), 16, f"v3.nodes 应为 16 节点，实际 {len(nodes)}")
+        self.assertEqual(len(nodes), 19, f"v3.nodes 应为 19 节点，实际 {len(nodes)}")
 
     def test_v3_validators_paths_exist(self):
         for v in self.v3.get("validators", []):
