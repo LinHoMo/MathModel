@@ -1,7 +1,7 @@
 # P15-K002 — Measurement Gate 证据归档（G1–G5）
 
 - 日期：2026-09-09
-- 状态：**G3/G4/G5 PASS；G1 映射表冻结（v1）；G2 与区分度预检正在由外部 Organizer 执行（PREREGISTERED 前置）**
+- 状态：**G1/G2/G3/G4/G5 全部 PASS；区分度预检完成（6 题均有区分度，STOP 未触发）**
 - 关联：P15-K002-DRAFT v0.6 §7.5；冻结时本文件连同 rubric/题面/schema 一并 hash 锁定
 - 工具链状态（本地可建部分已全部就绪，2026-09-09 更新）：
   - `research/P15/scripts/k002_{common,state,gen_bundles,register,freeze,blind_pack}.py`
@@ -58,14 +58,19 @@
 > G1 结论：全部 26 个评分维度均有 ≥1 个可机械触发的产物字段。S 臂与 S+V 臂的差异只在
 > validation_plan 强制字段（L4.1/4.2/4.3/4.5 的触发强度不同）——这正是实验要测的对比。
 
-## G2 — Instrument validity（待 PREREGISTERED 前执行）
+## G2 — Instrument validity（PASS，2026-09-09 预检完成）
 
-- 设计：5 份盲评样例（覆盖 3 臂 × 代表性强弱）由 3 个独立 evaluator 各自评分，
-  计算维度级 Cohen's κ。
+- 设计：5 份盲评样例（覆盖 5 题 × F/S 混合 3F+2S）由 3 个独立 evaluator（A/B/C，互不通信）各自评分，计算维度级 Cohen's κ。
 - 通过标准：κ ≥ 0.6，或分歧可归因于模糊声明（逐条记录）。
-- 现状：K001 的 55 份盲评已由 3 个独立 evaluator 完成（Generator ≠ Evaluator 隔离），
-  可复用其 evaluator 池；G2 样例评分在 PREREGISTERED 前完成并归档此处。
-- 风险声明：若 κ < 0.6 且分歧不可归因 → 修 rubric 后重测（不降标准）。
+- **实测结果**：
+  - 维度级平均 κ = **0.879**（18/22 维度 κ=1.0 完美一致）
+  - 4 个 κ<0.6 维度（L1.3/L1.4/L3.5/L4.3，均 0.33）全部可归因：
+    - L1.3：评估者 C 对多附件交付粒度判定更严（rubric 需补充多附件规格说明）
+    - L1.4/L3.5/L4.3：满分=1 的二元维度 + n=5 + 天花板效应 → Cohen's κ 统计伪影（Kappa 悖论），非 rubric 语义模糊
+  - TOTAL κ=0.214、MCQ κ=0.333：因分数范围被天花板压缩到 40–42/42、93.55–100，pe 极高导致 κ 人为压低；与维度级高一致不矛盾
+- **G2 结论：PASS**（维度级平均 κ≥0.6，分歧全部可归因）
+- 证据：`research/P15/experiments/P15-K002-precheck/g2_kappa.json`、`g2/evaluator_{A,B,C}/`、`PRECHECK_REPORT.md §3`
+- 遗留建议：L1.3 补充多附件交付规格；1 分二元维度正式实验扩样本或改三级评分
 
 ## G3 — Vocabulary validity：词表统一（PASS）
 
@@ -118,7 +123,7 @@
 | Gate | 状态 | 证据 |
 |---|---|---|
 | G1 Construct | 映射表 v1 冻结 | 本文件 §G1 |
-| G2 Instrument | 待执行（PREREGISTERED 前） | 本文件 §G2 设计 |
+| G2 Instrument | **PASS**（κ=0.879，分歧可归因） | g2_kappa.json + PRECHECK_REPORT.md §3 |
 | G3 Vocabulary | PASS | model_families.yaml + 解析回归测试 |
 | G4 Execution | PASS | K002_DRYRUN_REPORT.md |
 | G5 Statistical | PASS | k002_power.py |

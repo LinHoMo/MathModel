@@ -1,0 +1,35 @@
+{
+  "submission_id": "07a0ca6e-0822-48f3-ac03-1199972a8469",
+  "evaluator": {"id": "evaluator_C", "model": "doubao-pro", "type": "independent_llm"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "显式条件提取完整：parameters 26项全部由附件1确定(I-IV层k/ρ/c、d1=0.6mm、d3=3.6mm)；场景参数 p_Tenv(Q1=75/Q2=65/Q3=80°C)、p_tau(90/60/30min)、T_lim=47°C、T_0=44°C、t_lim=5min、d2 Q1固定6mm、d4 Q1=5mm/Q2=5.5mm 均在 parameters/objectives/constraints 中提取。"},
+    "L1.2": {"score": 2, "evidence": "隐式条件经假设与约束识别并附推导：A-02 层间理想热接触(温度/热流连续)、A-03 外表面与皮肤侧对流换热(Robin边界)、A-04 初始均匀37°C稳态场(假人入炉前)、C-05 温度场物理合理(介于环境与体内温度之间)；均给出依据。"},
+    "L1.3": {"score": 1, "evidence": "部分识别交付要求：OBJ-01 明确'输出温度分布文件 problem1.xlsx'，EXP-01 expected_outputs 亦为 problem1.xlsx；但未显式命名 problem2.xlsx/problem3.xlsx 及其中按时刻输出的具体要求（题面要求 Q2/Q3 结果填写到对应工作表），交付格式覆盖不完整。"},
+    "L1.4": {"score": 1, "evidence": "无显式歧义清单，但隐含处理了题面未明示项：A-05 说明 h1/h2 题目未直接给出属不确定参数需用附件2校准、A-07 将'皮肤外侧温度'映射为模型最内层边界 T(L,t)；处理了歧义但未以歧义标注形式显式化。"},
+    "L1.5": {"score": 2, "evidence": "model_family 判定正确：primary=pde，secondary=[heat_transfer, finite_difference, numerical_optimization, inverse_problem]；2018_A 为多层瞬态热传导正问题+换热系数反演+厚度优化，范式判定与gold一致。"},
+    "L2.1": {"score": 2, "evidence": "variables 11项含类型(constant/state/decision/observation)与单位、子问题绑定：T(x,t)状态、T_skin观测、d_2/d_4决策、t_ex超温累计、T_meas实测序列、网格索引j/n；关键变量无缺失。"},
+    "L2.2": {"score": 2, "evidence": "parameters 26项全部声明来源(题目/校准/假设)与取值：k1-k4、ρ1-4、c1-4、d1/d3、h1/h2(校准)、T_env/T_body/τ/T_lim/T_0/t_lim、Δx/Δt(校准)、w2/w4、r_i、L、Ω_i、x_m；方程EQ-01..13引用的所有符号均被覆盖。"},
+    "L2.3": {"score": 2, "evidence": "assumptions A-01..A-07 每条标注类型(simplification/mechanism/projection/calibration)与合理性说明：一维平板近似(边缘效应占比小)、恒物性(附件1单点参数标准处理)、理想接触、初始均匀37°C、A-05 校准阈值可检验、A-06 连续厚度+0.1mm网格、A-07 测量点映射；合理且可检验。"},
+    "L2.4": {"score": 2, "evidence": "objectives 与题目一致：OBJ-01 Q1正问题估计温度场T_skin(t)并输出problem1.xlsx；OBJ-02 Q2在 T_skin(60min)≤47°C 且 t_ex≤5min 下最小化 II 层厚度 d_2；OBJ-03 Q3在双约束下最小化加权厚度组合 w_2 d_2+w_4 d_4；估计量/优化目标类型匹配。"},
+    "L2.5": {"score": 2, "evidence": "constraints C-01..C-05 全部形式化且方向正确：T_skin(τ)≤47°C(≤)、t_ex=∫1[T_skin>T_0]ds≤5min(≤)、d_2/d_4可行域(∈)、显式FD稳定性 r_i≤1/2(≤，数值方法要求)、温度场物理合理(≥)；关键约束齐备。"},
+    "L2.6": {"score": 2, "evidence": "机理正确：MECH-01 多层Fourier热传导(能量守恒)、MECH-02 对流边界+层间连续、MECH-03 有限差分离散、MECH-04 厚度设计-约束反演、MECH-05 逆问题校准；控制方程与问题物理一致。但无模型族级候选对比（仅 SOL-01 列出显式/Crank-Nicolson 两种数值格式并在 VAL-04 互校，属求解器对比而非候选模型对比），故不给3分。"},
+    "L2.7": {"score": 2, "evidence": "equations EQ-01..EQ-13 结构完整：PDE(EQ-01)+外边界Robin(EQ-02)+皮肤侧Robin(EQ-03)+层间界面连续(EQ-04)+初始条件37°C(EQ-05)+显式差分(EQ-06)+观测(EQ-07)+超温指标(EQ-08)+约束(EQ-09/10)+设计目标(EQ-11/12)+逆问题(EQ-13)，控制方程+边界+初值齐全可求解。"},
+    "L3.1": {"score": 2, "evidence": "solvers 与模型匹配：SOL-01 显式FD(C-04保证稳定)或Crank-Nicolson隐式+Thomas追赶；SOL-02 网格搜索+二分或SLSQP解EQ-11/12；SOL-03 Gauss-Newton/Levenberg-Marquardt最小二乘解EQ-13；求解器配置与PDE/优化/反演口径匹配。"},
+    "L3.2": {"score": 2, "evidence": "无实际代码，但 SOL-01..03 给出完整可执行的实现方案（含稳定性条件、三对角系统解法、标准优化/反演算法），EXP-01..05 定义输入输出；基于描述可实现完整运行产出全部要求结果，不给0分。"},
+    "L3.3": {"score": 2, "evidence": "EXP-04 网格加密序列(Δx,Δt逐次减半)验证网格无关性；C-04 显式稳定性条件 r_i≤1/2 保证不发散；VAL-04 显式与隐式格式结果互校；收敛机制完整。"},
+    "L3.4": {"score": 2, "evidence": "VAL-04 固定种子42、多轮求解数值逐位一致，显式/隐式格式互校；可复现性设计满足 seed 固定与重复一致要求。"},
+    "L3.5": {"score": 1, "evidence": "C-05 要求温度场物理合理(皮肤恒温为最低温度源、空间单调介于环境与体内之间)；VAL-02 极限检验长时间极限趋近环境温度、极薄/极厚厚度行为；结果合理性有物理约束与极限预期。"},
+    "L4.1": {"score": 2, "evidence": "VAL-01 对照基线：Q1 模型预测 T_skin(t) 与附件2 实测皮肤温度序列对比，计算 RMSE/最大偏差——以真实测量数据为实证基线，基线选择合理并报告对比方式。"},
+    "L4.2": {"score": 2, "evidence": "EXP-05/VAL-03 灵敏度分析：对 k_i、h_1、h_2、ρ_i、c_i 做 ±10% 扰动，输出皮肤温度敏感度排序与最优厚度稳健性——扰动了 h、k 等敏感参数并有弹性预期。"},
+    "L4.3": {"score": 1, "evidence": "VAL-02 极限/边界检验：长时间极限趋近环境温度、极薄/极厚厚度下温度行为的物理一致性，覆盖主要极端情形。"},
+    "L4.4": {"score": 2, "evidence": "验证目标对应核心主张：CLM-01 复现附件2曲线(VAL-01)、CLM-02 Q2可行域下边界(VAL-05回代验证约束)、CLM-03 Q3双约束最优解(VAL-05)、CLM-04 网格无关性(EXP-04/VAL-04)；全部核心主张均被验证设计覆盖。"},
+    "L4.5": {"score": 2, "evidence": "claims CLM-01..04 每条均有 evidence_refs(EXP/VAL引用)与 model_refs，状态 proposed 且验证设计一一映射，无 unsupported claim 与 unresolved claim。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 8, "max": 9},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 9, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  }
+}

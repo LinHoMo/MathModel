@@ -1,0 +1,35 @@
+{
+  "submission_id": "371ecd7b-27cd-4130-8722-9389571aa876",
+  "evaluator": {"id": "evaluator_B", "model": "doubao-pro", "type": "independent_llm"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "§1.1 显式条件完整提取：附件一（任务位置/定价/完成情况二值）、附件二（会员位置/信誉值/预订限额及按比例配发规则）、附件三（新任务仅位置）；Q1 定价规律+未完成归因、Q2 新定价方案与原方案比较、Q3 打包发布下模型修改与影响、Q4 附件三定价与实施效果评价；业务规则（信誉越高越优先、配额越大）识别准确。"},
+    "L1.2": {"score": 2, "evidence": "§1.2 隐式条件识别 7 项：空间距离衰减、价格敏感性（价格-需求关系）、竞争/拥堵两端效应、会员配额约束、平台预算约束、完成率软约束目标、数据口径（会员响应到领取到履约两级过程、附件三无历史数据只能模拟）；并给出现实依据。"},
+    "L1.3": {"score": 2, "evidence": "§1.1/§1.3 交付要求识别：Q1 定价规律与未完成原因、Q2 新定价方案+对比（同一 alpha 下成本对比/同一成本下完成率对比）、Q3 打包模型修改+DeltaR/DeltaC 影响、Q4 附件三定价方案+预测完成率/总成本/均摊成本+Bootstrap 95% 区间；交付物与评价指标明确。"},
+    "L1.4": {"score": 2, "evidence": "§1.3 标注 B1-B6 歧义点，每条含'歧义表述-采纳解释-理由'：B1 定价规律形式（回归+Logit）、B2 完成口径（承接并成功提交）、B3 配额机制宏观近似、B4 打包折扣 delta 规则（delta=1 退化）、B5 Q4 无真实数据用模型外推+置信区间、B6 附件数据以数据接口形式声明；处理方案合理。"},
+    "L1.5": {"score": 2, "evidence": "§1.4 判定：核心范式=定价回归+需求建模+定价优化+组合定价；Q1 回归/分类（价格-特征回归+Logit 归因）、Q2 定价优化（预算/完成率约束）、Q3 聚类+集合定价组合优化、Q4 外推预测与模拟评估；范式判定正确。"},
+    "L2.1": {"score": 2, "evidence": "§3 变量表按 Q1-Q4 分组声明并区分 state/decision/observation/constant：p_j（Q1 observation/Q2-4 decision 双重标注）、y_j、d_jk、d_bar_j、rho_M、rho_T、a_j、C、R、lambda、z_jm、B_m、P_m、p_tilde_j、p_j*、R_hat、y_hat_j^(s)；类型区分完整，关键变量无缺失。"},
+    "L2.2": {"score": 2, "evidence": "§4 参数表逐项带取值与来源（数据校准/假设设定/任务约定）：beta_p, beta_d, beta_rho, beta_T, beta_0, gamma_0..gamma_3（附件一 Logit/OLS 校准）、p_min/p_max（5%/95% 分位）、B、alpha=0.85、c_k、h（交叉验证）、r_T=2km、epsilon=1.5km、MinPts=3、delta=0.85、seed=42；§8 方程引用符号全部声明。"},
+    "L2.3": {"score": 2, "evidence": "§2 假设 H1-H10 均标类型（mech/calib/proj/simp）并给合理性说明：H2 Logit 接受概率（离散选择标准形式）、H3 KDE 会员密度（带宽交叉验证）、H4 信誉机制宏观近似（误差<10% 量级）、H8 打包等效单价机制、H10 同分布外推（漂移时重校准）；核心机制假设 H2/H7-H8 单独标出。"},
+    "L2.4": {"score": 2, "evidence": "§5 目标与题面一致：Q1 estimate（回归最小二乘+Logit 极大似然归因）；Q2 min C=sum p_j s.t. 完成率>=alpha（备选预算制 max R）；Q3 min C s.t. 完成率（打包后）；Q4 预测+评估（p_j*、R_hat、C*、Bootstrap 区间）；主目标成本最小化与题面'以最低总成本达成足够完成率'吻合。"},
+    "L2.5": {"score": 2, "evidence": "§6 约束 C1-C10 形式化且方向正确：价格上下界 p_min<=p_j<=p_max、预算/完成率约束、概率合法 0<=a_j<=1、会员配额 sum pi_jk<=c_k、y_j∈{0,1}、距离/密度非负、打包划分完备互斥 sum z_jm+z_j0=1、打包空间邻接（包内两两距离<=2epsilon）、包价非负 P_m=delta*sum p_j、附件三逐任务满足 C1。"},
+    "L2.6": {"score": 3, "evidence": "§7 机理正确且有对比分析：核心为价格-需求均衡（定价可控、会员响应概率）；Q1 双层归因（回归揭示平台定价公式+Logit 揭示会员响应方向）；Q3 打包规模经济（等效单价 p_tilde_j=P_m/n_m 进入需求函数、消除包内竞争）；候选对比表 C-A 纯回归/C-B Logit+约束优化（选用）/C-C 双层规划（弃用）/C-D 强化学习（弃用）/C-E 聚类打包（Q3 选用）并给选择依据（可校准性/可解释性/可求解性）。"},
+    "L2.7": {"score": 2, "evidence": "§8 方程完整可求解：Haversine 球面距离、KDE 密度与竞争度、定价回归、Logit 接受概率（含极大似然校准）、Q2 定价优化 KKT 一阶条件（1-lambda/|J|*a_j(1-a_j)*beta_p=0）、DBSCAN 聚类+包价/等效单价+打包后接受概率、Q4 蒙特卡洛/Bootstrap；代数+逻辑+优化结构齐全。"},
+    "L3.1": {"score": 2, "evidence": "§9.1 求解策略与模型匹配：Q1 statsmodels/sklearn（OLS+LogisticRegression L2 正则 C=1、5 折交叉验证）；Q2 一维分解（Logit 单调性保证 p_j 独立可解、公共乘子 lambda 二分 20 次内收敛、复杂度 O(|J|*20)）；Q3 DBSCAN epsilon 扫描×delta 扫描调 Q2 求解器；Q4 外推+Bootstrap S=1000；与回归/优化/组合模型口径一致。"},
+    "L3.2": {"score": 2, "evidence": "§9.1 执行路径具体：明确工具（statsmodels/sklearn.cluster.DBSCAN）、复杂度（|J|≈800 时毫秒级、O(|J|log|J|+|delta|*|J|)）、特征工程为确定性管线；设计层面完整可运行（无实际代码运行，按描述策略评可执行性）。"},
+    "L3.3": {"score": 2, "evidence": "§9.1 收敛安排：二分法 20 次内收敛（Logit 单调性保证一维问题良态）、Bootstrap S=1000 区间稳定性检验（区间宽度波动<1%）、KKT 结构给出解析一阶条件；收敛设计充分。"},
+    "L3.4": {"score": 2, "evidence": "§9.1/§9.2 seed=42 固定；KDE/DBSCAN/Bootstrap/随机初始化均由带 seed 生成器驱动；Q4 用 seed 集 {42,1,7,13,2026} 各跑 1 次 Bootstrap 检验 R_hat 区间稳定性；Q1/Q2 确定性优化报告 5 折划分均值±std；输出含参数指纹与 seed 记录。"},
+    "L3.5": {"score": 2, "evidence": "§9.4 结果合理性预期：原方案完成率 60-75%、alpha=0.85 下成本增幅 10-25%、打包同成本下完成率 +3-6%、偏远低密度任务定价显著高于城区（距离补偿）；完成率-成本曲线凹（边际成本递增）；并给出偏离归因路径。"},
+    "L4.1": {"score": 2, "evidence": "§9.3(a) 对照基线齐全：基线1 原方案实际价格向量（R_hat^orig, C^orig，要求新方案 R_hat^new>=R_hat^orig 且 C^new<C^orig）；基线2 统一均价（检验差异化定价是否优于一刀切）；基线3 beta_d 置零（验证距离补偿增量价值）。"},
+    "L4.2": {"score": 2, "evidence": "§9.3(b) 灵敏度：扰动 beta_p(±20%)、h(±30%)、r_T(1到3km)、delta(0.7到1.0)、epsilon(0.5到3km)、alpha(0.80到0.95)，给出方向预期（alpha+0.05 成本+8~15%、delta-0.1 完成率+2~4%、epsilon 存在最优）；扰动的均为敏感参数（beta_p 需求弹性、delta 打包收益、alpha 约束强度）。"},
+    "L4.3": {"score": 2, "evidence": "§9.3(c) 极限/边界检验覆盖：p_j 到 p_max 需求饱和（a_j 到 sigma(beta_0+beta_p*p_max+...) <1）、p_j 到 p_min 自然完成率、d_bar_j 到无穷 极偏远输出不可行标记、delta 到 1 退化为 Q2、rho_M 到 0 无人区提示放弃或提价；均给预期行为。"},
+    "L4.4": {"score": 2, "evidence": "§9.3 验证目标对应核心主张：新方案优于原方案（基线1）、差异化定价优于一刀切（基线2）、距离补偿有效（基线3）、打包提升完成率（灵敏度 delta/epsilon）、Q4 外推有效性（H10 漂移检查）；验证指标与 claims 对应。"},
+    "L4.5": {"score": 2, "evidence": "§9.3/§9.4 每项主张均绑定证据：'新方案满足 R_hat^new>=R_hat^orig 且 C^new<C^orig'绑定基线1、'打包后完成率 +3-6%'绑定 delta 灵敏度、'epsilon 过大导致跨区打包完成率回落'绑定 C8 检查；归因路径区分 Logit 拟合差/打包实现错/分布漂移，无 unsupported claim。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9},
+    "L2": {"score": 15, "max": 15},
+    "L3": {"score": 9, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "submission_id": "28df6ec4-ce4a-4bbd-8241-330b01a9e71f",
+  "evaluator": {"id": "evaluator_A", "model": "doubao-pro", "type": "independent_llm"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "parameters 捕获全部显式数值条件：移动1/2/3单位时间20/33/46s、一道工序加工560s、两道工序400/378s、奇偶号CNC上下料28/31s、清洗25s、班次时长28800s、故障概率1%、故障排除时间[600,1200]s、CNC台数8；problem_binding覆盖Q1-Q4；OBJ_Q4明确输出附件2三个工作表。"},
+    "L1.2": {"score": 2, "evidence": "assumptions/constraints 识别隐式条件并给出依据：RGV同一时刻至多服务一台CNC（C1）、每台CNC同时最多一个物料且加工不可中断（A2）、物料供给充足连续作业（A3）、故障相互独立且修复后重新入列（A4）、初始停靠位置为调度自由度（A5）、两道工序物料流转守恒（C5）、RGV到达不早于CNC就绪的时序约束（C3/C4）。"},
+    "L1.3": {"score": 2, "evidence": "OBJ_Q4 明确'输出附件2 三个工作表要求的调度策略与作业效率'；OBJ_Q1/Q2/Q3 分别覆盖一道工序班次产量、两道工序成品产量、故障场景期望产量与报废件数；EXP-04 三组系统作业参数填表——交付要求识别完整。"},
+    "L1.4": {"score": 1, "evidence": "题面未明说点以假设形式给出采纳口径：A4 对故障排除时长在[10,20]分钟的分布（均匀分布为最小信息量假设）、A5 对RGV初始停靠位置（可自由设定属优化自由度）、A3 对供给是否充足（充足假设给上界视角）；歧义被识别处理但无独立ambiguities列表，故不高于1分档。"},
+    "L1.5": {"score": 2, "evidence": "model_family: primary=optimization, secondary=[simulation, dynamic_programming]；2018_B RGV动态调度为调度优化（产量最大化/周期最小化）+随机故障仿真+循环周期DP优化，判定正确。"},
+    "L2.1": {"score": 2, "evidence": "variables 30项含符号/定义/单位/类型(state/decision/observation/constant)/子问题绑定：RGV位置、调度决策、CNC状态、故障指示、修复时长、移动/服务时间、轮服务时间、循环周期、班次产量W/W2、利用率、作业效率、可用度、期望产量、报废件数、工序CNC数、到达/就绪/离开时刻等——关键变量齐备且类型区分。"},
+    "L2.2": {"score": 2, "evidence": "parameters 14项均含数值与来源（题目）：v_1/v_2/v_3、t_p1/t_p2a/t_p2b、t_ld^odd/t_ld^even、t_w、D、p_f、tau_min/tau_max、n；方程（EQ1-EQ15）引用符号全部在parameters声明。"},
+    "L2.3": {"score": 2, "evidence": "A1-A6 假设集显式含类型(simplification/mechanism/projection/calibration)与合理性说明：移动时间仅由距离决定（唯一可标定简化）、单件加工不可中断、供给充足、故障独立+均匀修复时长（最小信息量假设）、初始位置自由、两道工序由不同CNC完成——合理可检验。"},
+    "L2.4": {"score": 2, "evidence": "objectives 与题目一致：OBJ_Q1 maximize W=8*floor(D/T_cyc)（一道工序班次产量）；OBJ_Q2 maximize W2=min(W_F,W_S)（平衡两道工序消除瓶颈）；OBJ_Q3 maximize期望产量且minimize报废（故障场景）；OBJ_Q4 estimate三组参数下的W/W2/η并填附件2——目标类型与输出匹配。"},
+    "L2.5": {"score": 2, "evidence": "constraints 关键约束形式化且方向正确：C1 RGV单服务积分性、C2 CNC容量（状态机）、C3 时序（t_arr≥t_ready）、C4 服务时间守恒、C5 两道工序流转守恒、C6 修复时长区间、C7 班次时域上限——每条含type/source/子问题绑定。"},
+    "L2.6": {"score": 2, "evidence": "M1-M4 机理正确：循环服务机制（轮询服务8台CNC形成稳定循环周期，EQ5=max(T_rnd, t_p1+T_sbar)防饥饿条件）、两道工序流转+瓶颈取小（EQ11）、故障-修复-报废机制（可用度A_i=t_pi/(t_pi+p_f τ̄)、期望报废L=p_f ΣN_i^proc）、三组参数适配；机理与RGV调度现实一致。未提供候选模型对比表（modeling_trace给出模型族选择说明但无系统候选对比），故不给3分档。"},
+    "L2.7": {"score": 2, "evidence": "equations 结构完整可求解：EQ1移动时间、EQ2单次服务时间（含清洗）、EQ3平均服务、EQ4轮服务、EQ5/EQ9/EQ10循环周期、EQ6/EQ11班次产量（瓶颈取小）、EQ7利用率、EQ8效率、EQ12平均修复时长、EQ13可用度、EQ14期望产量、EQ15期望报废；每式含derivation_trace，代数/机理/吞吐链完整。"},
+    "L3.1": {"score": 2, "evidence": "solvers 与模型类型匹配：SOL1事件驱动离散事件仿真+贪心调度（按最短空闲/最早完工优先级派单）承载随机故障与调度验证；SOL2动态规划最小化轮服务时间T_rnd；SOL3解析公式（EQ6/EQ8/EQ11）直接求三组参数产量效率填表——确定性/随机部分算法口径对应正确。"},
+    "L3.2": {"score": 2, "evidence": "solvers 均给出implementation_ref（rgv_scheduler.py、rgv_dp.py、rgv_formula.py）与具体方法（DES+贪心派单、DP状态转移、解析公式）；虽为设计文档无实际运行日志，执行计划在设计层面完整可落地。"},
+    "L3.3": {"score": 2, "evidence": "收敛性设计：EXP2 同一故障场景重复5次、变异系数CV<0.10判定稳定；EXP3 p_f扫描（0/0.005/0.01/0.02）验证W_exp单调下降、L线性上升；VAL1 与理论上界相对差距<5%；未发现发散/NaN设计缺口。"},
+    "L3.4": {"score": 2, "evidence": "VAL4/EXP2 可复现性设计：固定seed=42、5次独立运行CV<0.10判定稳定；EXP1 12单元格消融覆盖三组参数×两场景×故障开关，可复现口径完整。"},
+    "L3.5": {"score": 1, "evidence": "VAL1 理论上界W_max=8*floor(D/(t_p1+T_sbar))约束结果不越界；VAL3 极限检验（t_p1→∞→W→0；移动与清洗时间→0→W→8floor(D/t_ld)；两道工序瓶颈切换点验证）保证结果在物理/逻辑合理范围。"},
+    "L4.1": {"score": 2, "evidence": "VAL1 对照基线：与理论上界W_max=8*floor(D/(t_p1+T_sbar))比较，要求W≤W_max且相对差距<5%——合理的解析上界基线并报告对比阈值。"},
+    "L4.2": {"score": 2, "evidence": "EXP3/VAL2 灵敏度分析扰动敏感参数：对故障概率p_f做0~2%扫描，检验W_exp单调性与EQ13/EQ14解析一致性——p_f为故障场景主导敏感参数，扰动对象正确。"},
+    "L4.3": {"score": 1, "evidence": "VAL3 极限/边界检验：t_p1→∞时W→0、移动与清洗时间→0时W→8floor(D/t_ld)、两道工序瓶颈切换点验证——覆盖关键极限行为。"},
+    "L4.4": {"score": 2, "evidence": "claims 与验证目标对应：CL1班次产量与上界（VAL1）、CL2两道工序瓶颈决定（EXP1消融）、CL3故障折损与报废（EXP2/EXP3）、CL4三组参数填表输出（EXP4/VAL4）；验证了模型全部核心主张（产量、瓶颈、故障、填表）。"},
+    "L4.5": {"score": 2, "evidence": "每个claim含evidence_refs指向实验/验证（CL1→EXP1+VAL1；CL2→EXP1；CL3→EXP2+EXP3；CL4→EXP4+VAL4），状态validated（设计阶段验证计划）；CL2以12单元格消融实验承载瓶颈主张，证据链成立，无unsupported claim。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 9, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "submission_id": "28df6ec4-ce4a-4bbd-8241-330b01a9e71f",
+  "evaluator": {"id": "evaluator_B", "model": "doubao-pro", "type": "independent_llm"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "题面数字/参数完整提取：parameters 14 项全部取自题目（v_1=20, v_2=33, v_3=46, t_p1=560, t_p2a=400, t_p2b=378, t_ld^odd=28, t_ld^even=31, t_w=25, D=28800, p_f=0.01, tau_min=600, tau_max=1200, n=8）；EXP1 识别三组系统作业参数 × 一/两道工序 × 故障开关 12 单元格；Q1-Q4 子问题绑定完整。"},
+    "L1.2": {"score": 2, "evidence": "隐式条件经假设显式化：A1 移动时间仅由距离决定（忽略加减速/轨道占用）、A2 单件加工不可中断、A3 物料供给充足（并注明题目未给出缺料情形）、A4 故障独立+修复时长均匀分布（对区间信息的最小信息量假设）、A5 初始停靠位置为调度自由度。"},
+    "L1.3": {"score": 2, "evidence": "交付要求识别：OBJ_Q4 输出附件2 三个工作表要求的调度策略与作业效率；EXP-04 expected_outputs 为附件2 三个工作表的调度策略与作业效率结果；Q1 班次产量 W、Q2 成品产量 W2、Q3 故障场景 W_exp/L 均有明确输出对象。"},
+    "L1.4": {"score": 2, "evidence": "歧义/未定项实质处理：A4 故障修复时长区间 [10,20] 分钟用均匀分布（最小信息量假设，明示题面只给区间）；A5 初始位置未给列为调度自由度；A3 缺料情形未给采用供给充足假设并说明视角；均有处理方案与理由。"},
+    "L1.5": {"score": 2, "evidence": "model_family primary=optimization, secondary=[simulation, dynamic_programming]；2018_B 为 RGV 动态调度（产量最大化/周期最小化+随机故障仿真），判定正确；modeling_trace step2 说明以 optimization 为主结构，辅以 simulation 承载随机故障与调度验证、dynamic_programming 优化循环周期。"},
+    "L2.1": {"score": 2, "evidence": "variables 30 项全部声明并区分 state/decision/observation/constant：p(t) 位置 state、a_{t,i} 调度 decision、s_i(t)/f_i(t) CNC 状态 state、T_mov/T_si 观测、T_cyc/T_rnd 观测、W/W2/U/eta/A_i/W_exp/L 观测、n_F/n_S constant；类型区分完整，无关键变量缺失。"},
+    "L2.2": {"score": 2, "evidence": "parameters 14 项逐项带 value 与 source=题目；EQ1-EQ15 引用的 v_1/v_2/v_3, t_p1, t_p2a, t_p2b, t_ld^odd/even, t_w, D, p_f, tau_min/tau_max 全部在 parameters 声明；方程符号集包含于参数声明集，无未声明参数。"},
+    "L2.3": {"score": 2, "evidence": "A1-A6 均标类型（simplification/mechanism/projection/calibration）并给 rationale：A1 移动时间常量（唯一可标定的简化）、A2 单件加工（建立排队/周期模型的基础）、A4 故障概率 1%+均匀分布（calibration）、A6 两道工序搬运衔接（mechanism）；假设显式、合理、可检验。"},
+    "L2.4": {"score": 2, "evidence": "目标与题面一致：OBJ_Q1 max W=8*floor(D/T_cyc)（最小化 T_rnd/T_cyc）；OBJ_Q2 max W2=min(W_F,W_S)（消除瓶颈）；OBJ_Q3 max W_exp=sum A_i*N_i^proc 且 min L=p_f*sum N_i^proc；OBJ_Q4 estimate 三组参数下 W/W2/eta 并填附件2 三表；输出类型匹配。"},
+    "L2.5": {"score": 2, "evidence": "约束 C1-C7 形式化且方向正确：C1 a_{t,i}∈{0,1} 且 sum_i a_{t,i}<=1（RGV 同时至多服务一台）、C2 每台 CNC 同时最多一个物料、C3 t_arr_i>=t_ready_i、C4 t_dep_i=t_arr_i+T_si、C5 两道工序流转守恒 sum_F N=sum_S N、C6 tau_min<=tau_i<=tau_max、C7 调度总时长<=D；关键约束无缺失。"},
+    "L2.6": {"score": 2, "evidence": "M1-M4 机理正确：循环服务机制（轮询序+防饥饿周期）、两道工序瓶颈取小流转、故障-修复-报废（可用度 A_i=t_pi/(t_pi+p_f*tau_bar) 为 MTBF/(MTBF+MTTR) 标准形式）、参数适配机制；控制方程与 2018_B 物理一致；缺显式候选模型对比表（如轮询 vs 动态派单、DES vs 解析），故不给 3 分。"},
+    "L2.7": {"score": 2, "evidence": "方程 EQ1-EQ15 结构完整：移动时间定义、单次服务时间（含清洗）、平均/轮服务时间、循环周期 T_cyc=max(T_rnd, t_p1+T_sbar)（防饥饿）、班次产量、利用率、效率、两道工序周期与瓶颈取小、平均修复时长、可用度、期望产量、期望报废；定义/平衡/机理/吞吐方程链完整可求解。"},
+    "L3.1": {"score": 2, "evidence": "求解策略与模型匹配：SOL1 事件驱动离散事件仿真+贪心调度（按最短空闲/最早完工优先级派单）；SOL2 动态规划最小化 T_rnd；SOL3 解析公式直接求三组参数产量与效率；仿真承载随机故障、解析承载确定性填表，口径一致。"},
+    "L3.2": {"score": 2, "evidence": "执行路径具体：SOL1-3 的 implementation_ref 指向 rgv_scheduler.py / rgv_dp.py / rgv_formula.py；EXP1 定义 12 单元格消融实验输入输出；设计层面完整可运行（无实际代码运行，按描述策略评可执行性）。"},
+    "L3.3": {"score": 2, "evidence": "收敛安排：EXP2 同一故障场景重复 5 次、期望 CV<0.10；VAL1 与理论上界比较要求相对差距<5%；稳态循环周期公式为确定性计算；收敛/稳定性检验设计明确。"},
+    "L3.4": {"score": 2, "evidence": "EXP2/VAL4 固定 seed=42 的 5 次独立运行，CV<0.10 判定稳定；复现实验（reproducibility 类型）与 seed 配置在 experiments/validations 中显式登记。"},
+    "L3.5": {"score": 2, "evidence": "VAL3 极限检验覆盖合理性：t_p1 趋于无穷时 W 趋于 0；移动与清洗时间趋于 0 时 W 趋于 8*floor(D/t_ld)；两道工序瓶颈切换点验证；VAL1 产量不超理论上界 8*floor(D/(t_p1+T_sbar))，物理逻辑合理。"},
+    "L4.1": {"score": 2, "evidence": "VAL1 对照基线：与理论上界 W_max=8*floor(D/(t_p1+T_sbar)) 比较，要求 W<=W_max 且相对差距<5%；为合理的解析上界基线并报告对比口径。"},
+    "L4.2": {"score": 2, "evidence": "EXP3/VAL2 灵敏度：故障概率扫描 p_f∈{0,0.005,0.01,0.02}，检验 W_exp 单调下降、L 线性上升，并与 EQ13/EQ14 解析一致性对照；扰动的 p_f 为 Q3 核心敏感参数。"},
+    "L4.3": {"score": 2, "evidence": "VAL3 极限检验：t_p1 趋于无穷、移动/清洗时间趋于 0、两道工序瓶颈切换点验证；非关键维度 L4.3 亦完整覆盖并报告预期行为。"},
+    "L4.4": {"score": 2, "evidence": "验证目标对应核心主张：CL1 产量不超上界（VAL1）、CL2 瓶颈决定（EXP1 证据）、CL3 故障折损（EXP2/EXP3）、CL4 三组参数填表（EXP4/VAL4）；验证指标与 claims 对应。"},
+    "L4.5": {"score": 2, "evidence": "CL1-CL4 每条 claim 均有 evidence_refs（EXP/VAL 引用）与 model_refs，status 标注 validated（CL2 证据为 EXP1 实验输出，其余为专属验证）；证据-主张对应完整，无 unsupported claim。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 9, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  }
+}

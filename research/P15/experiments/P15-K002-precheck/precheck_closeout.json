@@ -1,0 +1,256 @@
+{
+  "phase": "PRECHECK_CLOSEOUT",
+  "runs": [
+    {
+      "sid": "ce9ff57f",
+      "problem": "2011_B",
+      "arm": "F",
+      "total": 36,
+      "l2": 15
+    },
+    {
+      "sid": "d8f56413",
+      "problem": "2011_B",
+      "arm": "S",
+      "total": 34,
+      "l2": 15
+    },
+    {
+      "sid": "371ecd7b",
+      "problem": "2017_B",
+      "arm": "F",
+      "total": 37,
+      "l2": 15
+    },
+    {
+      "sid": "1a2a73ed",
+      "problem": "2017_B",
+      "arm": "S",
+      "total": 35,
+      "l2": 15
+    },
+    {
+      "sid": "815ef6d1",
+      "problem": "2018_A",
+      "arm": "F",
+      "total": 37,
+      "l2": 15
+    },
+    {
+      "sid": "07a0ca6e",
+      "problem": "2018_A",
+      "arm": "S",
+      "total": 36,
+      "l2": 15
+    },
+    {
+      "sid": "de8a774b",
+      "problem": "2018_B",
+      "arm": "F",
+      "total": 37,
+      "l2": 15
+    },
+    {
+      "sid": "28df6ec4",
+      "problem": "2018_B",
+      "arm": "S",
+      "total": 36,
+      "l2": 15
+    },
+    {
+      "sid": "386ecbe0",
+      "problem": "2019_C",
+      "arm": "F",
+      "total": 37,
+      "l2": 15
+    },
+    {
+      "sid": "a65ed389",
+      "problem": "2019_C",
+      "arm": "S",
+      "total": 35,
+      "l2": 15
+    },
+    {
+      "sid": "1a3d1fa7",
+      "problem": "2020_B",
+      "arm": "F",
+      "total": 37,
+      "l2": 15
+    },
+    {
+      "sid": "3eb13b90",
+      "problem": "2020_B",
+      "arm": "S",
+      "total": 34,
+      "l2": 15
+    }
+  ],
+  "discrimination": {
+    "2011_B": {
+      "F": [
+        {
+          "sid": "ce9ff57f",
+          "problem": "2011_B",
+          "arm": "F",
+          "total": 36,
+          "l2": 15
+        }
+      ],
+      "S": [
+        {
+          "sid": "d8f56413",
+          "problem": "2011_B",
+          "arm": "S",
+          "total": 34,
+          "l2": 15
+        }
+      ]
+    },
+    "2017_B": {
+      "F": [
+        {
+          "sid": "371ecd7b",
+          "problem": "2017_B",
+          "arm": "F",
+          "total": 37,
+          "l2": 15
+        }
+      ],
+      "S": [
+        {
+          "sid": "1a2a73ed",
+          "problem": "2017_B",
+          "arm": "S",
+          "total": 35,
+          "l2": 15
+        }
+      ]
+    },
+    "2018_A": {
+      "F": [
+        {
+          "sid": "815ef6d1",
+          "problem": "2018_A",
+          "arm": "F",
+          "total": 37,
+          "l2": 15
+        }
+      ],
+      "S": [
+        {
+          "sid": "07a0ca6e",
+          "problem": "2018_A",
+          "arm": "S",
+          "total": 36,
+          "l2": 15
+        }
+      ]
+    },
+    "2018_B": {
+      "F": [
+        {
+          "sid": "de8a774b",
+          "problem": "2018_B",
+          "arm": "F",
+          "total": 37,
+          "l2": 15
+        }
+      ],
+      "S": [
+        {
+          "sid": "28df6ec4",
+          "problem": "2018_B",
+          "arm": "S",
+          "total": 36,
+          "l2": 15
+        }
+      ]
+    },
+    "2019_C": {
+      "F": [
+        {
+          "sid": "386ecbe0",
+          "problem": "2019_C",
+          "arm": "F",
+          "total": 37,
+          "l2": 15
+        }
+      ],
+      "S": [
+        {
+          "sid": "a65ed389",
+          "problem": "2019_C",
+          "arm": "S",
+          "total": 35,
+          "l2": 15
+        }
+      ]
+    },
+    "2020_B": {
+      "F": [
+        {
+          "sid": "1a3d1fa7",
+          "problem": "2020_B",
+          "arm": "F",
+          "total": 37,
+          "l2": 15
+        }
+      ],
+      "S": [
+        {
+          "sid": "3eb13b90",
+          "problem": "2020_B",
+          "arm": "S",
+          "total": 34,
+          "l2": 15
+        }
+      ]
+    }
+  },
+  "g2": {
+    "fleiss_kappa_weighted": 0.424,
+    "total_by_eval": {
+      "A": [
+        37,
+        37,
+        37,
+        37,
+        37
+      ],
+      "B": [
+        40,
+        40,
+        40,
+        40,
+        40
+      ],
+      "C": [
+        37,
+        36,
+        37,
+        37,
+        37
+      ]
+    },
+    "mad_pairs": [
+      {
+        "pair": "A-B",
+        "mad": 3.0
+      },
+      {
+        "pair": "A-C",
+        "mad": 0.2
+      },
+      {
+        "pair": "B-C",
+        "mad": 3.2
+      }
+    ],
+    "pass": false
+  },
+  "verdict": {
+    "g2_pass": false,
+    "zero_discrimination_count": 0
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "submission_id": "07a0ca6e-0822-48f3-ac03-1199972a8469",
+  "evaluator": {"id": "evaluator_A", "model": "doubao-pro", "type": "independent_llm"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "parameters/objectives/constraints 捕获全部显式条件：T_env（Q1=75/Q2=65/Q3=80）、τ（90/60/30 min）、T_lim=47、T_0=44、t_lim=5、I/II/III/IV层厚度与物性（k/ρ/c，由附件1确定）、d2(Q1=6mm)/d4(Q1=5mm,Q2=5.5mm)、附件2实测温度序列T_skin^meas；OBJ-01输出温度分布文件problem1.xlsx；C-01/C-02 形式化47°C与超温5分钟约束。"},
+    "L1.2": {"score": 2, "evidence": "assumptions A-01~A-07 识别主要隐式物理条件并给出推导依据：一维厚度方向传热忽略边缘（A-01）、恒物性与层间理想热接触（A-02）、外表面与皮肤侧对流Robin边界（A-03）、初始均匀37°C（A-04）、皮肤外侧温度=IV层边界温度（A-07）；EQ-04界面温度/热流连续、EQ-05初始条件均为隐式条件的显式化。"},
+    "L1.3": {"score": 2, "evidence": "OBJ-01 明确Q1交付物'输出温度分布文件 problem1.xlsx'；OBJ-02/OBJ-03 输出最优II层厚度d2*与厚度组合(d2*,d4*)；EXP-01~EXP-03 给出各子问题输入输出口径；满足题面Q1温度分布、Q2/Q3最小厚度设计交付要求。"},
+    "L1.4": {"score": 1, "evidence": "A-05 显式识别'h1/h2 题目未直接给出，属不确定参数'并采用附件2实测数据校准处理；A-04 对初始温度状态、A-07 对'皮肤外侧温度'测量点映射、A-06 对厚度连续化均给出采纳口径与理由；歧义以假设+rationale形式被识别并处理（无独立ambiguities列表，故不高于1分档）。"},
+    "L1.5": {"score": 2, "evidence": "model_family: primary=pde, secondary=[heat_transfer, finite_difference, numerical_optimization, inverse_problem]；2018_A 高温作业服装问题为正问题（瞬态传热PDE）+逆问题（校准h）+约束优化（厚度设计），判定正确。"},
+    "L2.1": {"score": 2, "evidence": "variables 11项含符号/定义/单位/类型(constant/state/decision/observation)/子问题绑定：空间坐标x、时间t、温度场T(x,t)、皮肤外侧温度T_skin、II层厚度d2(decision)、IV层厚度d4(decision)、超温累计时长t_ex、网格索引j/n、实测温度T_skin^meas与采样时刻t_m；关键变量齐备且类型区分。"},
+    "L2.2": {"score": 2, "evidence": "parameters 26项均含取值与来源（题目/校准/假设）：k_i/ρ_i/c_i(i=1..4)、d_1/d_3、h_1/h_2(校准)、T_env/T_body、τ、T_lim/T_0/t_lim、Δx/Δt(校准)、w_2/w_4、r_i、L、Ω_i、x_m；方程（EQ-01~EQ-13）引用符号全部在parameters声明并有source字段。"},
+    "L2.3": {"score": 2, "evidence": "A-01~A-07 假设集显式且每条含类型(simplification/mechanism/projection/calibration)与合理性说明：1D多层平板、恒物性、理想接触、Robin边界、初始均匀37°C、h校准、厚度连续化、测量点映射；假设可检验、与题面不矛盾。"},
+    "L2.4": {"score": 2, "evidence": "objectives 与题目一致：OBJ-01(estimate)正问题计算温度场并输出problem1.xlsx；OBJ-02(minimize)在T_skin(60min)≤47°C且t_ex≤5min下最小化d2；OBJ-03(minimize)在T_skin(30min)≤47°C且t_ex≤5min下最小化加权厚度组合；目标类型与输出匹配。"},
+    "L2.5": {"score": 2, "evidence": "constraints 关键约束全部形式化且方向正确：C-01 T_skin(τ)≤T_lim=47、C-02 超温时长积分≤t_lim=5（含指示函数定义）、C-03 设计变量可行域、C-04 显式差分稳定性r_i≤1/2（数值约束）、C-05 物理合理性（T≥T_body且单调介于环境与体内）；每条含type/source/子问题绑定。"},
+    "L2.6": {"score": 2, "evidence": "MECH-01~MECH-05 机理正确：各层Fourier热传导（能量守恒）、边界与界面耦合（对流Robin+温度/热流连续）、数值离散、厚度设计-约束反演、参数校准逆问题；控制方程与问题物理机制一致（1D多层瞬态传热为2018_A标准机理）。未提供候选模型对比表（A-01给出1D选择理由但无系统对比），故不给3分档。"},
+    "L2.7": {"score": 2, "evidence": "equations 结构完整可求解：EQ-01控制PDE + EQ-02/EQ-03对流边界条件 + EQ-04层间界面连续条件 + EQ-05初始条件(37°C) + EQ-06显式差分离散（含r_i定义）+ EQ-07观测 + EQ-08超温指标 + EQ-09/EQ-10约束指标 + EQ-11/EQ-12设计目标 + EQ-13逆问题校准；每式含derivation_trace，控制方程+边界+初始+离散齐全。"},
+    "L3.1": {"score": 2, "evidence": "solvers 与模型类型/口径匹配：SOL-01 显式有限差分（C-04稳定性保证）或Crank-Nicolson隐式（Thomas追赶三对角）；SOL-02 网格搜索+二分法或SLSQP求解厚度设计；SOL-03 最小二乘+Gauss-Newton/Levenberg-Marquardt求解逆问题校准；算法-方程类型对应正确。"},
+    "L3.2": {"score": 2, "evidence": "solvers 均给出implementation_ref（q1_heat_fd.py、q2_q3_design.py、q1_calibrate.py预检规划实现）与具体算法配置（稳定性条件、追赶法、LM法）；虽为设计文档无实际运行日志，执行计划在设计层面完整可落地。"},
+    "L3.3": {"score": 2, "evidence": "收敛性设计完整：EXP-04 网格加密序列（Δx,Δt逐次减半）做网格无关性验证（温度误差随细化趋零）；C-04 显式格式稳定性条件r_i≤1/2；VAL-04 显式/隐式格式结果互校；未发现发散/NaN设计缺口。"},
+    "L3.4": {"score": 2, "evidence": "VAL-04 可复现性设计：固定种子42、多轮求解数值逐位一致、显式与隐式格式互校；EXP-04 网格收敛为确定性检验；随机分量受控（逆问题/优化均确定性算法）。"},
+    "L3.5": {"score": 1, "evidence": "C-05 物理合理性约束（T(x,t)≥T_body、空间温度单调介于环境与体内之间）保证结果物理可行；VAL-02 极限检验设计（长时间极限趋近环境温度、极薄/极厚厚度温度行为一致）；预期行为在物理合理范围内。"},
+    "L4.1": {"score": 2, "evidence": "VAL-01 对照基线有力：Q1模型预测T_skin(t)与附件2实测皮肤温度序列对比并计算RMSE/最大偏差（实测数据基线）；VAL-05 将Q2/Q3最优解回代正问题求解器验证约束在数值容差内成立（自洽性基线）。"},
+    "L4.2": {"score": 2, "evidence": "EXP-05/VAL-03 灵敏度分析扰动敏感参数：对k_i、h_1、h_2、ρ_i、c_i做±10%扰动，输出皮肤温度对物性参数的敏感度排序与最优厚度稳健性；换热系数与导热系数为传热问题主导参数，扰动对象正确。"},
+    "L4.3": {"score": 1, "evidence": "VAL-02 极限/边界检验：长时间极限趋近环境温度、极薄/极厚厚度下温度行为的物理一致性；覆盖关键边界行为。"},
+    "L4.4": {"score": 2, "evidence": "claims 与验证目标对应：CLM-01复现附件2温度曲线（VAL-01实测对比）、CLM-02 Q2唯一最小可行厚度（VAL-05约束回代）、CLM-03 Q3双约束下边界与单调性（VAL-05+EXP-05）、CLM-04网格无关与显隐互校（EXP-04/VAL-04）；验证了模型全部核心主张。"},
+    "L4.5": {"score": 2, "evidence": "每个claim含evidence_refs指向具体实验/验证（CLM-01→EXP-01+VAL-01；CLM-02→EXP-02+VAL-05；CLM-03→EXP-03+EXP-05+VAL-05；CLM-04→EXP-04+VAL-04），状态proposed（设计阶段），主张均有对应证据载体，无unsupported claim。"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 9, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  }
+}
