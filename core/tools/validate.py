@@ -1021,6 +1021,44 @@ def _load_env_loader_module(project_path):
     except Exception as e:
         return None, f"加载 env/loader.py 失败: {e}"
 
+def check_validator_modules_importable(project_path):
+    """L6: validator modules 必须可导入且有校验入口（audit FIX-5.1 / P1-16）。
+
+    替换"字符串存在性检查"：对 core/validators/modules/ 下每个模块做真实
+    包路径 import + 冒烟（暴露顶层可调用对象 check/validate/evaluate/
+    类等）。import 失败或无任何可调用入口 = 死代码，如实报告。接线状态
+    （哪些已接入 DAG 节点）在 STATUS.md 声明，这里只保证模块本身可运行。
+    """
+    import importlib
+    import sys
+    mods_dir = project_path / "core" / "validators" / "modules"
+    if not mods_dir.exists():
+        return False, "core/validators/modules 目录不存在"
+    py_files = sorted(p for p in mods_dir.glob("*.py")
+                      if not p.name.startswith("_"))
+    if not py_files:
+        return False, "validator modules 为空"
+    core_dir = str(project_path / "core")
+    if core_dir not in sys.path:
+        sys.path.insert(0, core_dir)
+    broken = []
+    loaded = 0
+    for py in py_files:
+        try:
+            module = importlib.import_module(
+                "validators.modules." + py.stem)
+            loaded += 1
+            entries = [n for n, v in vars(module).items()
+                       if not n.startswith("_") and callable(v)]
+            if not entries:
+                broken.append(py.name + ": 无顶层可调用对象")
+        except Exception as e:
+            broken.append(py.name + ": import 失败 " + str(e))
+    if broken:
+        return False, str(len(broken)) + "/" + str(len(py_files)) \
+            + " validator modules 死代码: " + "; ".join(broken[:5])
+    return True, str(loaded) + " 个 validator modules 可导入且有顶层可调用入口"
+
 
 def check_env_config_exists(project_path):
     """L1: env 配置三件套存在（config.yaml / loader.py / README.md）"""
@@ -1646,6 +1684,7 @@ def validate_project(project_path):
         ("L6", "规则迭代", lambda: check_rule_iterator(project_path)),
         
         # L6: 综合质量检查
+        ("L6", "validator模块冒烟", lambda: check_validator_modules_importable(project_path)),
         ("L6", "文档完整性", lambda: check_documentation_completeness(project_path)),
         ("L6", "测试覆盖率", lambda: check_test_coverage(project_path)),
 

@@ -1,6 +1,6 @@
 # 项目状态
 
-> 更新：2026-09-09（K003 预注册 FROZEN：五 Gate 全 PASS）。治理见
+> 更新：2026-09-09（audit Batch 5：validator 冒烟、验证通用化）。治理见
 > `docs/architecture/THREE_LAYER_ARCHITECTURE.md`，硬化总纲见
 > `docs/architecture/HARDENING_PROGRAM.md`。
 > **本文件是状态数字的唯一出处：所有数字来自机器命令实测并绑定 commit hash，

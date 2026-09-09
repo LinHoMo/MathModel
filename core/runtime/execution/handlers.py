@@ -356,7 +356,12 @@ class DefaultNodeExecutor:
         return (self.shared.get("external_code") or {}).get(qid)
 
     def _validation_spec(self, qid: str) -> dict | None:
-        """外部注入的数值验证规格（shared["validation_specs"][qid]）。"""
+        """数值验证规格（外部注入，唯一来源）。
+
+        不自动派生：无验证规格 = 不做数值验证（诚实语义，防止"无 spec 也
+        假装验证"）。从 MODEL_IR 派生检查（audit FIX-5.2 的 derive_checks_
+        from_mir）由外部构造方显式调用，不自动回退。
+        """
         return (self.shared.get("validation_specs") or {}).get(qid)
 
     def _active_mirs(self, qid: str) -> list[str]:

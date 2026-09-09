@@ -177,6 +177,36 @@ NUMERIC_VALIDATION_FIELDS = (
 )
 
 
+def derive_checks_from_mir(mir_data: dict) -> list[dict]:
+    """audit FIX-5.2：从 MODEL_IR 动态派生验证检查（消除硬编码字段依赖）。
+
+    无外部 validation_spec 时，从 variables[].symbol / objectives 的 target
+    派生 output_field_exists 检查——验证"执行输出必须包含模型声明的变量与
+    目标"，作为最小真实验证兜底。只做确定性结构检查，不推断数值正确性；
+    具体数值规格仍由外部 validation_spec 提供（VS-001 等注入路径不受影响）。
+    """
+    checks: list[dict] = []
+    for v in mir_data.get("variables") or []:
+        sym = v.get("symbol") or v.get("variable_id")
+        if sym:
+            checks.append({
+                "name": f"output_has_variable_{sym}",
+                "kind": "output_field_exists",
+                "path": sym,
+                "expect": f"MODEL_IR 声明变量 {sym} 必须出现在执行输出",
+            })
+    for o in mir_data.get("objectives") or []:
+        t = o.get("target") or o.get("symbol")
+        if t:
+            checks.append({
+                "name": f"output_has_objective_{t}",
+                "kind": "output_field_exists",
+                "path": t,
+                "expect": f"MODEL_IR 声明目标 {t} 必须出现在执行输出",
+            })
+    return checks
+
+
 def run_numeric_validation(outputs: dict, spec: dict,
                            execution_status: str = "success") -> dict:
     """基于真实数值判 FAIL（P1-VS-001 C8，ValidationResult 四字段）。
