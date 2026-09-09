@@ -1,0 +1,52 @@
+{
+  "evaluator_id": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_02",
+  "L1": {
+    "total": 4,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {"score": 1, "evidence": "model_doc.md §4 参数：正确提取表1第1组（移动20/33/46s、加工560s、上下料28/31s、清洗25s、班次28800s）；但题面情况2（两道工序400/378等）、情况3（故障1%/10-20分钟）及表1第2/3组参数未提取，遗漏>30%"},
+      "L1.2": {"score": 1, "evidence": "model_doc.md §2：识别了物料充足、忽略故障等简化类隐式条件，但未说明推导依据且类目较单一；贪心最近为策略选择而非隐式条件"},
+      "L1.3": {"score": 1, "evidence": "model_doc.md §1：识别了任务1交付（一道工序动态调度模型+算法）；任务2（表1三组数据检验+附件2 EXCEL）交付要求未识别，仅做第1组单场景"},
+      "L1.4": {"score": 0, "evidence": "v1.2a §2.1：model_doc.md §2 假设直接给出（'忽略CNC故障（Q3单独考虑）''物料充足'），无'题面未给定/存在歧义'的显式陈述；'忽略故障'属范围决策而非歧义声明"},
+      "L1.5": {"score": 1, "evidence": "model_doc.md §7：仅将所处理场景判定为离散事件仿真+贪心调度；未识别情况2/3与任务2的建模范式"}
+    }
+  },
+  "L2": {
+    "total": 12,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {"score": 1, "evidence": "model_doc.md §3 变量：声明N、throughput、cycle、util、cnc_util；执行输出中的rgv_move_total、rgv_idle_total、cnc_parts_per_machine未声明，且未区分变量类型/取值范围"},
+      "L2.2": {"score": 2, "evidence": "model_doc.md §4：移动1/2/3单位20/33/46s、加工560s、上下料28/31s、清洗25s、班次28800s均有取值且来源为表1第1组/题面；方程引用参数全部有声明"},
+      "L2.3": {"score": 2, "evidence": "model_doc.md §2：相同刀具、贪心最近、忽略故障、物料充足等假设显式、合理、可检验"},
+      "L2.4": {"score": 2, "evidence": "model_doc.md §5：目标'最大化班次内完成物料数N'与任务1/2作业效率一致，输出类型（total_parts/throughput）匹配，与DES机理和约束一致"},
+      "L2.5": {"score": 2, "evidence": "model_doc.md §6：RGV同一时刻服务一台CNC、CNC完成加工后才能上下料、物料须经RGV清洗下料三项关键约束已形式化且方向正确"},
+      "L2.6": {"score": 2, "evidence": "model_doc.md §7：E1机理（离散事件仿真）与题面8CNC+1RGV一致；E2方程形式（N=Σn_i、吞吐量=N/T）与DES机理结构匹配；E3与目标约束一致；无候选调度策略对比，E4不满足"},
+      "L2.7": {"score": 1, "evidence": "model_doc.md §7：方程仅N=Σn_i与吞吐量=N/T两个核算式；n_i符号未在变量节声明，无边界/初始条件的显式方程描述"}
+    }
+  },
+  "L3": {
+    "total": 8,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {"score": 1, "evidence": "model_doc.md §2/§8 声明'贪心最近策略'；run_model.py find_nearest_done 实际按 cnc_done_time 最早者选择（min done_time），声明与实现口径不一致；execution_result.json: status=success 确认DES执行"},
+      "L3.2": {"score": 2, "evidence": "execution_result.json: status=success, returncode=0, stderr=''；outputs 含 total_parts=248、throughput_per_hour=31.0、cnc_utilization、rgv_utilization 等全部声明输出字段"},
+      "L3.3": {"score": 2, "evidence": "v1.2a §2.3 情况2（unverifiable）：fidelity_report.json: fidelity_status=unverifiable, fidelity_score=null；按 outputs 真实数值完整性判定——execution_result.json outputs 包含全部声称输出字段（total_parts/throughput_per_hour/avg_cycle_time_s/rgv_utilization/cnc_utilization等），数值全部有限无NaN/空值且物理合理"},
+      "L3.4": {"score": 2, "evidence": "execution_result.json: code_hash=4116db6f..., environment_hash=fd3a9026... 齐全, duration_ms=59（<30s）；run_model.py 无随机操作（确定性DES），可复现"},
+      "L3.5": {"score": 1, "evidence": "execution_result.json outputs: total_parts=248, throughput=31.0（<理论上限51）、rgv_util=0.996、cnc_util=0.6028∈[0,1] 数值物理合理；fidelity_report 无 output_range 检查（unverifiable），无范围检查失败"}
+    }
+  },
+  "L4": {
+    "total": 3,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {"score": 0, "evidence": "v1.2a §2.5：model_doc.md §9 的守恒/利用率[0,1]/吞吐理论上限51件/小时均为内部自洽或派生可行性检验，非独立外部对照基线（无零模型/随机/文献/贪婪/真实数据对比），未报告模型vs基线数值对比"},
+      "L4.2": {"score": 0, "evidence": "model_doc.md/execution_result.json：无任何参数扰动/灵敏度分析"},
+      "L4.3": {"score": 1, "evidence": "model_doc.md §9/run_model.py：利用率边界[0,1]与守恒检验属边界/一致性检验（≥1类）"},
+      "L4.4": {"score": 1, "evidence": "model_doc.md §9：验证了守恒、利用率边界等部分主张；任务2要求的3组数据实用性检验、调度策略有效性未验证，有遗漏"},
+      "L4.5": {"score": 1, "evidence": "model_doc.md §9 三主张（守恒/利用率[0,1]/吞吐上限）可由 execution_result.json 输出（31*8=248、cnc_util=0.6028、throughput=31<51）支撑；但§2/§8'贪心最近'策略描述与代码实际按最早完成时间选择不符，存在未解决（unresolved）的对应缺口"}
+    }
+  },
+  "overall": {"total": 27, "pass": false, "note": "round 2（v1.2a）：L1=4<6.3 FAIL（L1.4=0：无显式歧义声明；仅覆盖情况1第1组）；L4=3 FAIL（L4.1=0无外部基线，L4.2=0无灵敏度）；L2=12/L3=8 PASS。L1 FAIL 故整体 FAIL。"}
+}

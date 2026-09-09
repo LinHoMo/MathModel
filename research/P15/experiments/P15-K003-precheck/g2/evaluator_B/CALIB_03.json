@@ -1,0 +1,52 @@
+{
+  "evaluator_id": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_03",
+  "L1": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {"score": 1, "evidence": "model_ir.json problem_binding: sub_questions=[Q1,Q2,Q3,Q4], focus=Q1；variables/parameters 提取了Q1建模参数（λ=30、μ=40、车费80/50、成本1.5/25）；题面Q3'两条并行车道/上车点'、Q4'不能拒载/多次往返/优先权'显式条件未提取为建模对象"},
+      "L1.2": {"score": 2, "evidence": "model_ir.json assumptions: A1(type=mechanism_assumption, Poisson到达/指数服务——随机性/分布类)、A2(type=simplification, M/M/1——简化类)、A3(type=projection, 放空确定性忽略交通波动——简化/投影类)，≥2类核心建模依赖前提且带类型标注"},
+      "L1.3": {"score": 1, "evidence": "model_ir.json problem_binding: 列出Q1-Q4子问题但 focus=Q1；仅覆盖Q1交付（决策模型+策略），Q2（数据收集方案）、Q3（上车点方案）、Q4（优先方案）交付规格未识别"},
+      "L1.4": {"score": 0, "evidence": "v1.2a §2.1：model_ir.json assumptions A1-A3 为带类型标注的假设陈述、parameters 的 source='假设'仅为取值来源标注，均无'题面未给定/存在歧义/数据不足'的显式陈述（如'由于题面未给定λ，假设为30'）"},
+      "L1.5": {"score": 2, "evidence": "model_ir.json model_family: primary=queuing_theory（Q1正确），secondary=[decision_analysis、optimization(Q3)、game_theory(Q4)]，综合题各问范式识别正确"}
+    }
+  },
+  "L2": {
+    "total": 12,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {"score": 2, "evidence": "model_ir.json variables[]: v_lambda/v_mu(输入,带单位与范围)、v_Wq/v_pq/v_pc/v_dec(输出,带定义与单位)，关键变量齐全、区分类型；注：v_Wq标注'等待时间'但公式1/(μ-λ)为逗留时间，符号标注问题按 v1.2a §2.4 归入L2.1（已因范围/单位完整计2分，此项为瑕疵备注）"},
+      "L2.2": {"score": 1, "evidence": "model_ir.json parameters[]: p_lam=30、p_mu=40、p_fare_q=80、p_fare_c=50、p_wc=1.5、p_ec=25（source=假设）；但 EQ2 引用的 c_f（怠速燃油0.5，run_model.py fuel_idle）与 t_c（回市区20分钟，run_model.py time_city）未在 parameters[] 声明"},
+      "L2.3": {"score": 2, "evidence": "model_ir.json assumptions A1-A3：显式、合理、可检验，且区分类型（mechanism_assumption/simplification/projection）"},
+      "L2.4": {"score": 2, "evidence": "model_ir.json objectives OBJ1: 'maximize 司机期望净收益 max(profit_q, profit_c)'，与Q1一致，输出类型匹配，与M/M/1机理和ρ<1约束一致"},
+      "L2.5": {"score": 2, "evidence": "model_ir.json constraints: C1(type=stability, rho<1)、C2(type=nonnegative, W_q>=0)，关键约束已形式化且方向正确"},
+      "L2.6": {"score": 2, "evidence": "model_ir.json mechanisms M1+equations EQ1/EQ2：E1机理与题面一致；E2方程形式（W_q=1/(μ-λ)、π_q/π_c）与M/M/1机理结构匹配（符号标注问题不构成E2不满足）；E3与目标约束一致；无候选机理对比，E4不满足"},
+      "L2.7": {"score": 1, "evidence": "model_ir.json equations: EQ1(W_q=1/(μ-λ),含ρ<1)可解；EQ2(π_q/π_c)中符号 c_f、t_c 未在 variables/parameters 声明集内，符号集⊄声明集"}
+    }
+  },
+  "L3": {
+    "total": 9,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {"score": 2, "evidence": "model_ir.json solvers S1（M/M/1解析求解+收益比较）；run_model.py 直接实现解析公式与λ扫描；execution_result.json: status=success 三者一致"},
+      "L3.2": {"score": 2, "evidence": "execution_result.json: status=success, returncode=0, stderr=''；outputs 含 optimal_decision/profit_queue/profit_city/expected_wait_min/rho_utilization/lambda_critical 等全部声明输出字段"},
+      "L3.3": {"score": 2, "evidence": "v1.2a §2.3 情况1（aligned）：fidelity_report.json: fidelity_status=aligned, fidelity_score=1.0≥0.8, passed=14/total=14；execution_result.json outputs 完整无NaN/Inf/空值"},
+      "L3.4": {"score": 2, "evidence": "execution_result.json: code_hash=0e57dd35..., environment_hash=fd3a9026... 齐全, duration_ms=56（<30s）；run_model.py 无随机操作（解析计算），确定性可复现"},
+      "L3.5": {"score": 1, "evidence": "execution_result.json outputs: profit_queue=79.8, expected_wait_min=0.1, rho=0.75, lambda_critical=39.98 数值合理；fidelity_report checks F5 output_range（λ∈[0,60]、μ∈[0,100]、W_q∈[0,120]）全部通过"}
+    }
+  },
+  "L4": {
+    "total": 5,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {"score": 0, "evidence": "v1.2a §2.5：model_ir.json validations V1(stability)/V2(monotonicity)均为内部自洽检验，非独立外部对照基线（无零模型/随机/文献/贪婪/真实数据对比）"},
+      "L4.2": {"score": 1, "evidence": "model_ir.json experiments E2/execution_result.json decision_scan：λ从10到38扫描属灵敏度扫描，但未报告弹性系数或鲁棒性边界"},
+      "L4.3": {"score": 1, "evidence": "model_ir.json validations V1(type=stability)：ρ>=1时队列无限增长的极限/退化情形检验（≥1类）"},
+      "L4.4": {"score": 1, "evidence": "model_ir.json validations V1/V2：验证了稳定性与单调性等部分核心主张；未对Q2要求的决策策略真实数据合理性验证，有遗漏"},
+      "L4.5": {"score": 2, "evidence": "v1.2a §2.6：claims[CL1]'M/M/1排队模型可量化出租车等待时间，收益比较给出最优决策'由 execution_result.json 支撑（profit_queue=79.8>profit_city=-5→optimal_decision=queue，W_q=0.1可量化）；E2'观测切换点'仅为实验描述非claim，不构成unsupported"}
+    }
+  },
+  "overall": {"total": 32, "pass": false, "note": "round 2（v1.2a）：L1=6<6.3 FAIL（L1.4=0：无显式歧义声明）；L4=5 FAIL（L4.1=0无外部基线）；L2=12/L3=9 PASS。L1 FAIL 故整体 FAIL。"}
+}

@@ -1,0 +1,891 @@
+{
+  "n_evaluators": 3,
+  "n_calibration_packages": 8,
+  "n_dimensions": 22,
+  "dimension_kappa": {
+    "L1.1": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 2,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L1.2": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.875,
+        "pe": 0.875,
+        "qwk": 0.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.875,
+        "pe": 0.875,
+        "qwk": 0.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.3333,
+      "mean_qwk": 0.3333,
+      "max_score": 2,
+      "mean_po": 0.9167,
+      "kappa_paradox": false
+    },
+    "L1.3": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 2,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L1.4": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 1,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L1.5": {
+      "A-B": {
+        "kappa": 0.3846,
+        "po": 0.75,
+        "pe": 0.5938,
+        "qwk": 0.3846,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 0.0,
+        "po": 0.875,
+        "pe": 0.875,
+        "qwk": 0.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.625,
+        "pe": 0.625,
+        "qwk": 0.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.1282,
+      "mean_qwk": 0.1282,
+      "max_score": 2,
+      "mean_po": 0.75,
+      "kappa_paradox": false
+    },
+    "L2.1": {
+      "A-B": {
+        "kappa": 0.5,
+        "po": 0.75,
+        "pe": 0.5,
+        "qwk": 0.5,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 0.5,
+        "po": 0.75,
+        "pe": 0.5,
+        "qwk": 0.5,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 0.3333,
+        "po": 0.75,
+        "pe": 0.625,
+        "qwk": 0.3333,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.4444,
+      "mean_qwk": 0.4444,
+      "max_score": 2,
+      "mean_po": 0.75,
+      "kappa_paradox": false
+    },
+    "L2.2": {
+      "A-B": {
+        "kappa": 0.8095,
+        "po": 0.875,
+        "pe": 0.3438,
+        "qwk": 0.8889,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 0.8095,
+        "po": 0.875,
+        "pe": 0.3438,
+        "qwk": 0.8889,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.375,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.873,
+      "mean_qwk": 0.9259,
+      "max_score": 2,
+      "mean_po": 0.9167,
+      "kappa_paradox": false
+    },
+    "L2.3": {
+      "A-B": {
+        "kappa": 0.7143,
+        "po": 0.875,
+        "pe": 0.5625,
+        "qwk": 0.7143,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 0.3333,
+        "po": 0.625,
+        "pe": 0.4375,
+        "qwk": 0.3333,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 0.5294,
+        "po": 0.75,
+        "pe": 0.4688,
+        "qwk": 0.5294,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.5257,
+      "mean_qwk": 0.5257,
+      "max_score": 2,
+      "mean_po": 0.75,
+      "kappa_paradox": false
+    },
+    "L2.4": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 2,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L2.5": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.7812,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.7812,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.7812,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 2,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L2.6": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 3,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L2.7": {
+      "A-B": {
+        "kappa": 0.1429,
+        "po": 0.625,
+        "pe": 0.5625,
+        "qwk": 0.1429,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 0.7143,
+        "po": 0.875,
+        "pe": 0.5625,
+        "qwk": 0.7143,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": -0.0667,
+        "po": 0.5,
+        "pe": 0.5312,
+        "qwk": -0.0667,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.2635,
+      "mean_qwk": 0.2635,
+      "max_score": 2,
+      "mean_po": 0.6667,
+      "kappa_paradox": false
+    },
+    "L3.1": {
+      "A-B": {
+        "kappa": 0.1579,
+        "po": 0.5,
+        "pe": 0.4062,
+        "qwk": 0.1579,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 0.3846,
+        "po": 0.75,
+        "pe": 0.5938,
+        "qwk": 0.3846,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 0.5294,
+        "po": 0.75,
+        "pe": 0.4688,
+        "qwk": 0.5294,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.3573,
+      "mean_qwk": 0.3573,
+      "max_score": 2,
+      "mean_po": 0.6667,
+      "kappa_paradox": false
+    },
+    "L3.2": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 2,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L3.3": {
+      "A-B": {
+        "kappa": 0.3143,
+        "po": 0.625,
+        "pe": 0.4531,
+        "qwk": 0.6471,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 0.3143,
+        "po": 0.625,
+        "pe": 0.4531,
+        "qwk": 0.6471,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.7812,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.5429,
+      "mean_qwk": 0.7647,
+      "max_score": 2,
+      "mean_po": 0.75,
+      "kappa_paradox": false
+    },
+    "L3.4": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.875,
+        "pe": 0.875,
+        "qwk": 0.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.875,
+        "pe": 0.875,
+        "qwk": 0.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.3333,
+      "mean_qwk": 0.3333,
+      "max_score": 2,
+      "mean_po": 0.9167,
+      "kappa_paradox": false
+    },
+    "L3.5": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.5312,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.5312,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.5312,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 1,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L4.1": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 2,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L4.2": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.5312,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.5312,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.5312,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 2,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L4.3": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.7812,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.7812,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.7812,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 1,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L4.4": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.625,
+        "pe": 0.625,
+        "qwk": 0.0,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 0.3846,
+        "po": 0.75,
+        "pe": 0.5938,
+        "qwk": 0.3846,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.875,
+        "pe": 0.875,
+        "qwk": 0.0,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.1282,
+      "mean_qwk": 0.1282,
+      "max_score": 2,
+      "mean_po": 0.75,
+      "kappa_paradox": false
+    },
+    "L4.5": {
+      "A-B": {
+        "kappa": 0.6,
+        "po": 0.75,
+        "pe": 0.375,
+        "qwk": 0.8571,
+        "n_packages": 8
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 0.5,
+        "qwk": 1.0,
+        "n_packages": 8
+      },
+      "B-C": {
+        "kappa": 0.6,
+        "po": 0.75,
+        "pe": 0.375,
+        "qwk": 0.8571,
+        "n_packages": 8
+      },
+      "mean_kappa": 0.7333,
+      "mean_qwk": 0.9047,
+      "max_score": 2,
+      "mean_po": 0.8333,
+      "kappa_paradox": false
+    }
+  },
+  "overall": {
+    "mean_kappa": 0.712,
+    "mean_qwk": 0.7322,
+    "n_dimensions_ge_0.6": 13,
+    "n_dimensions_lt_0.6": 9,
+    "pass_rate": 0.5909
+  },
+  "disagreements": [
+    {
+      "dimension": "L1.2",
+      "mean_kappa": 0.3333,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_02",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    },
+    {
+      "dimension": "L1.5",
+      "mean_kappa": 0.1282,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_01",
+          "scores": [
+            1,
+            1,
+            2
+          ]
+        },
+        {
+          "calib_id": "CALIB_02",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        },
+        {
+          "calib_id": "CALIB_04",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    },
+    {
+      "dimension": "L2.1",
+      "mean_kappa": 0.4444,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_02",
+          "scores": [
+            1,
+            1,
+            2
+          ]
+        },
+        {
+          "calib_id": "CALIB_03",
+          "scores": [
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "calib_id": "CALIB_06",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    },
+    {
+      "dimension": "L2.3",
+      "mean_kappa": 0.5257,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_01",
+          "scores": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "calib_id": "CALIB_02",
+          "scores": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "calib_id": "CALIB_04",
+          "scores": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    },
+    {
+      "dimension": "L2.7",
+      "mean_kappa": 0.2635,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_02",
+          "scores": [
+            1,
+            1,
+            2
+          ]
+        },
+        {
+          "calib_id": "CALIB_05",
+          "scores": [
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "calib_id": "CALIB_06",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    },
+    {
+      "dimension": "L3.1",
+      "mean_kappa": 0.3573,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_02",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        },
+        {
+          "calib_id": "CALIB_05",
+          "scores": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "calib_id": "CALIB_06",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    },
+    {
+      "dimension": "L3.3",
+      "mean_kappa": 0.5429,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_05",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "calib_id": "CALIB_07",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "calib_id": "CALIB_08",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    },
+    {
+      "dimension": "L3.4",
+      "mean_kappa": 0.3333,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_07",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    },
+    {
+      "dimension": "L4.4",
+      "mean_kappa": 0.1282,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "calib_id": "CALIB_06",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        },
+        {
+          "calib_id": "CALIB_07",
+          "scores": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "calib_id": "CALIB_08",
+          "scores": [
+            2,
+            1,
+            1
+          ]
+        }
+      ],
+      "attribution": "待人工审查判据歧义（见 G2_REPORT 归因分析）"
+    }
+  ],
+  "missing_files": [],
+  "kappa_threshold": 0.6,
+  "pass_criterion": "维度级 mean κ ≥ 0.6，或分歧可归因（含 Kappa 悖论伪影标注）"
+}

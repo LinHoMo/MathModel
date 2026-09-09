@@ -1,0 +1,52 @@
+{
+  "evaluator_id": "B",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_04",
+  "L1": {
+    "total": 5,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {"score": 1, "evidence": "model_ir.json parameters: p_cap=20(题目)、p_money=10000(假设)、p_days=10(简化)、p_mine=1000(假设)；负重/沙暴停留/消耗倍率规则提取，但题面基准价格、基础消耗量、退回半价、村庄2倍价、起点不能重复购买、到达矿山当天不能挖矿等显式规则未提取，且第一/二关附件参数未使用"},
+      "L1.2": {"score": 2, "evidence": "model_ir.json assumptions: A1(type=projection, 地图简化为5节点线性图)、A2(type=mechanism_assumption, 天气全知+沙暴停留)、A3(type=simplification, 整数箱/负重20/资金10000)，≥2类核心建模依赖前提且带类型标注"},
+      "L1.3": {"score": 1, "evidence": "model_ir.json problem_binding: sub_questions=[Q1,Q2,Q3], focus=Q1；识别了Q1'确定性天气最优策略'交付，但Q1'求解第一关/第二关并填入Result.xlsx'关卡求解与Excel交付未识别，Q2/Q3交付未覆盖"},
+      "L1.4": {"score": 0, "evidence": "v1.2a §2.1：model_ir.json A1'地图简化为5节点线性图'、parameters source='假设/简化'均为处理方案或取值来源标注，无'题面未给定/数据不足/存在歧义'的显式陈述"},
+      "L1.5": {"score": 1, "evidence": "model_ir.json model_family: primary=dynamic_programming（Q1正确），secondary=[markov_decision_process(Q2)、optimization、graph_algorithm]；Q3多玩家博弈范式（game theory）未识别，类型判定部分完整"}
+    }
+  },
+  "L2": {
+    "total": 9,
+    "pass": false,
+    "dimensions": {
+      "L2.1": {"score": 2, "evidence": "model_ir.json variables[]: v_profit(输出,元,[0,50000])、v_water(输出,箱,[0,20])、v_food(输出,箱,[0,20])、v_day(输出,天,[0,10])、v_path(输出)，关键输出变量齐全、区分类型、有单位/范围"},
+      "L2.2": {"score": 0, "evidence": "model_ir.json parameters[] 仅4项(cap/money/days/mine)；EQ1引用的消耗量 c_w(a)/c_f(a) 依赖 base_water/base_food，且 run_model.py 使用的 price_water=5、price_food=10、refund_mult=0.5、village_mult=2 均未声明，方程引用参数未声明率>30%"},
+      "L2.3": {"score": 1, "evidence": "model_ir.json assumptions A1-A3 显式且带类型；但 A1'5节点线性图简化'与附件真实地图不符、A3 初始资金10000/天数10为自设值，部分假设不合理"},
+      "L2.4": {"score": 2, "evidence": "model_ir.json objectives OBJ1: 'maximize 到达终点时的总资金（含剩余资源退回）'，与题面'保留尽可能多的资金'一致，输出类型匹配，与DP机理和资源约束一致"},
+      "L2.5": {"score": 1, "evidence": "model_ir.json constraints: C1(water+food<=20)、C2(非耗尽)、C3(沙暴停留)已形式化；但'起点不能多次购买''到达矿山当天不能挖矿''到达终点后游戏结束'等关键约束缺失（后者正是执行退化的原因）"},
+      "L2.6": {"score": 2, "evidence": "model_ir.json mechanisms M1(Bellman)+equations EQ1：E1机理与Q1确定性决策一致；E2递推方程形式（V=max_a[r(a)+V(...)]）与DP机理结构匹配；E3与目标约束一致；无候选建模方法对比，E4不满足"},
+      "L2.7": {"score": 1, "evidence": "model_ir.json equations EQ1: 递推式存在，但 c_w/c_f 符号未声明，且缺少'到达终点即终止'的终端边界条件形式化"}
+    }
+  },
+  "L3": {
+    "total": 5,
+    "pass": false,
+    "dimensions": {
+      "L3.1": {"score": 1, "evidence": "model_ir.json solvers S1：name='后向动态规划'但 description='从day=0前向推进DP表'，声明内部矛盾；run_model.py 实现前向DP；execution_result.json: status=success 但输出无解（DP未处理到达终点终止条件）"},
+      "L3.2": {"score": 2, "evidence": "execution_result.json: status=success, returncode=0, stderr=''；outputs 含 optimal_profit/remaining_water/remaining_food/arrival_day/optimal_path 全部声明输出键（机械判定：可执行且结构完整；退化值由L3.3/L3.5捕获）"},
+      "L3.3": {"score": 0, "evidence": "v1.2a §2.3 退化解判定：execution_result.json outputs 出现退化解——optimal_path=[], path_length=0（路径为空）、arrival_day=-1（负索引/超范围）、n_states_explored=1（搜索未展开）、optimal_profit=0.0；fidelity_report.json F5'到达天数∈[0,10]' passed=false"},
+      "L3.4": {"score": 2, "evidence": "execution_result.json: code_hash=a37f4bf4..., environment_hash=fd3a9026... 齐全, duration_ms=48（<30s）；run_model.py: random.seed(42) 固定种子"},
+      "L3.5": {"score": 0, "evidence": "execution_result.json outputs: arrival_day=-1 为非法哨兵值（负天数明显不合理）、optimal_path=[]/profit=0 表示模型未给出解；fidelity_report.json F5 arrival_day 范围检查 failed"}
+    }
+  },
+  "L4": {
+    "total": 2,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {"score": 0, "evidence": "v1.2a §2.5：model_ir.json validations V1(feasibility)/V2(constraint_check)均为内部自洽检验，无任何独立外部对照基线"},
+      "L4.2": {"score": 0, "evidence": "model_ir.json/execution_result.json：无任何灵敏度分析"},
+      "L4.3": {"score": 1, "evidence": "model_ir.json validations V1/V2：资源非耗尽与负重上限属边界/退化情形检验（≥1类）"},
+      "L4.4": {"score": 1, "evidence": "model_ir.json validations V1/V2 针对资源约束可行性；但'DP可求解出最优策略'的核心主张（CL1）未被验证（执行输出无解），验证不完整"},
+      "L4.5": {"score": 0, "evidence": "v1.2a §2.6：claims[CL1]'确定性天气下存在资源约束最优策略，DP可在多项式状态空间内求解' evidence_refs=[E1,V1]；execution_result.json 输出 optimal_profit=0.0/arrival_day=-1/optimal_path=[]（无解），与CL1主张直接矛盾→unsupported/refuted"}
+    }
+  },
+  "overall": {"total": 21, "pass": false, "note": "round 2（v1.2a）：L1=5<6.3 FAIL（L1.4=0）；L2=9<10.5 FAIL（L2.2=0参数声明缺失>30%）；L3=5 FAIL（执行输出退化解arrival_day=-1/空路径/n_states_explored=1）；L4=2 FAIL（CL1被执行结果证伪）。整体 FAIL。"}
+}

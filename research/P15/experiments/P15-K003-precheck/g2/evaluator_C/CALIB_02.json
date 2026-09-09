@@ -1,0 +1,52 @@
+{
+  "evaluator_id": "C",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_02",
+  "L1": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {"score": 1, "evidence": "model_doc.md §4 完整提取表1第1组参数（移动20/33/46s、加工560s、上下料28/31s、清洗25s、班次28800s），但未提取两道工序参数（400/378等6值）、第2/3组数据（18值）、故障概率1%与排除时间10~20分钟，遗漏率>30%"},
+      "L1.2": {"score": 2, "evidence": "model_doc.md §2 假设：识别了建模核心依赖的隐式前提——物料充足（供给前提）、忽略CNC故障（可靠性简化）、贪心最近策略（调度前提），覆盖DES模型实际依赖（v1.2a §2.2）"},
+      "L1.3": {"score": 1, "evidence": "model_doc.md §1 识别了任务1（模型+算法）与第1组数据检验，但未识别任务2交付要求（3组数据检验+调度策略+作业效率+附件2 EXCEL 3工作表），两道工序/故障情形亦未覆盖"},
+      "L1.4": {"score": 0, "evidence": "model_doc.md §2 仅有假设取值（贪心策略、忽略故障等），全文无'题面未给定/存在歧义'的显式歧义声明，不满足 v1.2a §2.1 两要素（如RGV初始位置/调度策略的未指定均未显式声明）"},
+      "L1.5": {"score": 2, "evidence": "model_doc.md §7：离散事件仿真+贪心调度，对任务1动态调度问题的类型/建模范式判定正确"}
+    }
+  },
+  "L2": {
+    "total": 13,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {"score": 2, "evidence": "model_doc.md §3 变量节：N(件)、throughput(件/小时)、cycle(秒)、util(比例)、cnc_util(比例) 均声明带单位/定义，输出类型可区分；rgv_move_total/rgv_idle_total为代码统计量非模型关键变量"},
+      "L2.2": {"score": 2, "evidence": "model_doc.md §4 参数节：代码使用的全部参数均已声明并标注来源'表1第1组/题目'——移动1/2/3单位20/33/46s、加工560s、上下料28/31s、清洗25s、班次28800s"},
+      "L2.3": {"score": 1, "evidence": "model_doc.md §2 假设：显式且合理（相同刀具/贪心策略/忽略故障/物料充足），但未区分假设类型标签（无 projection/mechanism_assumption 分类）"},
+      "L2.4": {"score": 2, "evidence": "model_doc.md §5 目标：'最大化班次内完成物料数N（即系统吞吐量）'，与任务2作业效率指标一致，输出类型(吞吐量/利用率)匹配，目标-机理-约束一致"},
+      "L2.5": {"score": 2, "evidence": "model_doc.md §6 约束：RGV同一时刻只服务一台CNC、CNC完成当前加工后才能上下料、加工完成后必须经RGV清洗下料，关键约束已形式化且方向正确"},
+      "L2.6": {"score": 2, "evidence": "model_doc.md §7 机理与方程：E1 离散事件仿真匹配动态调度题面、E2 方程 N=Σn_i 与DES机理结构匹配、E3 目标-约束-机理一致；E4 无候选调度策略对比（无SPT/最优解/其他启发式对照）"},
+      "L2.7": {"score": 2, "evidence": "model_doc.md §7 方程：N=Σn_i、吞吐量=N/T_shift，结构完整（DES含初始条件：RGV在1#CNC旁、CNC初始idle，见 run_model.py 第34-79行），符号集⊆变量/参数声明集"}
+    }
+  },
+  "L3": {
+    "total": 9,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {"score": 2, "evidence": "model_doc.md §8 声明'贪心最近调度+离散事件仿真'；run_model.py 第42-116行实现；execution_result.json status=success 确认执行，声明-实现-执行三者一致"},
+      "L3.2": {"score": 2, "evidence": "execution_result.json: status=success, returncode=0；outputs 含 total_parts/throughput_per_hour/avg_cycle_time_s/rgv_utilization/cnc_utilization/cnc_parts_per_machine 全部声明输出字段"},
+      "L3.3": {"score": 2, "evidence": "execution_result.json outputs 全为有限值（total_parts=248、throughput=31.0、利用率均在[0,1]），无NaN/Inf；fidelity_report.json fidelity_status=unverifiable、fidelity_score=null（F臂无结构化声明），按 v1.2a §2.3 情况2 以 outputs 真实数值完整性判 2 分"},
+      "L3.4": {"score": 2, "evidence": "execution_result.json: code_hash=4116db6f...、environment_hash=fd3a9026... 齐全，duration_ms=59（<30s）；run_model.py 无随机调用（确定性仿真），输出可复现"},
+      "L3.5": {"score": 1, "evidence": "execution_result.json outputs 数值物理合理（吞吐量31件/小时低于理论上限51、利用率0.6028/0.996∈[0,1]）；fidelity_report.json 无 output_range 检查项，无范围检查失败"}
+    }
+  },
+  "L4": {
+    "total": 4,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {"score": 0, "evidence": "model_doc.md §9 '理论上限51件/小时'由模型自身参数（加工560s×8台）推导，属模型内部自洽边界检验，按 v1.2a §2.5 不构成独立外部对照基线；无零模型/替代策略/文献/真实数据对比"},
+      "L4.2": {"score": 0, "evidence": "model_doc.md §9 无任何灵敏度分析（无参数扰动实验）"},
+      "L4.3": {"score": 1, "evidence": "model_doc.md §9 守恒检验（总物料数=各CNC之和）与利用率边界[0,1]检查，存在≥1类边界/守恒检验"},
+      "L4.4": {"score": 1, "evidence": "model_doc.md §9 验证了守恒与利用率边界等部分核心主张，但调度策略的最优性/有效性（任务2核心）未被验证（无与最优解或替代策略对比）"},
+      "L4.5": {"score": 2, "evidence": "model_doc.md §9 三主张均有真实证据：守恒（execution_result.json cnc_parts_per_machine=[31]*8，Σ=248=total_parts）、利用率边界（0.6028/0.996∈[0,1]）、理论上限（31.0≤51），无 unsupported claim（v1.2a §2.6 证据严格覆盖）"}
+    }
+  },
+  "overall": {"total": 32, "pass": false, "note": "L1=6<6.3 FAIL，L2=13 PASS，L3=9 PASS，L4=4<6.3 FAIL；L1 FAIL → 整体判定 FAIL（round 2，v1.2a 判据）"}
+}

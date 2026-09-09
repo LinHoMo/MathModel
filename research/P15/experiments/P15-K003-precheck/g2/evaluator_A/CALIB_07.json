@@ -1,0 +1,122 @@
+{
+  "evaluator_id": "A",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_07",
+  "L1": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {
+        "score": 1,
+        "evidence": "model_ir.json p_Tamb=75/p_d2=0.006/p_d4=0.005（source='题目Q1'）正确提取Q1参数，C1（T_skin<=47°C）/C2（超过44°C<=5分钟）提取Q2/Q3约束；但附件1物性参数（III/IV层k、ρc、I/III层厚度）未提取（k1/k2标'假设'而非附件），Q2（65°C/5.5mm/60min）与Q3（80°C/30min）数值未入parameters，错误率约10-30%"
+      },
+      "L1.2": {
+        "score": 2,
+        "evidence": "model_ir.json assumptions识别主要隐式条件≥2类：A1 projection（一维导热/均匀各向同性）、A2 mechanism_assumption（对流边界h=8/体核37°C）、A3 simplification（物性恒定/忽略相变辐射），并给出推导基础——符合v1.2a §2.2"
+      },
+      "L1.3": {
+        "score": 1,
+        "evidence": "model_ir.json OBJ1识别Q1'计算温度分布'交付，但未识别'生成温度分布的Excel文件（problem1.xlsx）'与Q2/Q3'确定II层（及IV层）最优厚度'的交付要求（constraints绑定Q2/Q3但无优化目标）"
+      },
+      "L1.4": {
+        "score": 0,
+        "evidence": "model_ir.json 无显式歧义声明；附件1材料参数未加载而直接假设k值（p_k1/p_k2 source=假设），未以'题面未给定/数据不足，假设为Y'形式标注——按v1.2a §2.1=0"
+      },
+      "L1.5": {
+        "score": 2,
+        "evidence": "model_ir.json model_family.primary=numerical_pde，secondary=[optimization, inverse_problem, ode_models]，对2018_A热传导PDE+参数优化问题判定正确"
+      }
+    }
+  },
+  "L2": {
+    "total": 11,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {
+        "score": 2,
+        "evidence": "model_ir.json variables[] 4个变量（T场/T_skin/t/x）均有symbol/definition/unit/type（field/output/independent），T_skin含[37,80]、t含[0,5400]范围"
+      },
+      "L2.2": {
+        "score": 0,
+        "evidence": "model_ir.json parameters[]仅6个（k1/k2/d2/d4/Tamb/h）；run_model.py L8-11使用k3=0.065/k4=0.028/ρc1-4（1.2e6/1.0e6/0.8e6/1.2e3）/T_body=37/dx=0.0005等均未声明，EQ1中ρ_i·c_i、EQ2中k_IV与T_body未覆盖，方程引用参数>30%未声明"
+      },
+      "L2.3": {
+        "score": 2,
+        "evidence": "model_ir.json assumptions显式、区分类型、物理合理（一维假设、对流边界、物性恒定、忽略相变辐射）"
+      },
+      "L2.4": {
+        "score": 2,
+        "evidence": "model_ir.json OBJ1 '计算温度场T(x,t)和皮肤侧温度T_skin(t)'与Q1一致，输出temperature_curve/skin_temp_final匹配"
+      },
+      "L2.5": {
+        "score": 2,
+        "evidence": "model_ir.json C1 T_skin(t)<=47°C（工作结束时）与C2 超过44°C累计时间<=5分钟（source='题目Q2/Q3'）方向正确，为Q2/Q3关键约束"
+      },
+      "L2.6": {
+        "score": 2,
+        "evidence": "model_ir.json M1 Fourier热传导定律与题面一致（E1）；EQ1（ρc∂T/∂t=k∂²T/∂x²）与EQ2（对流边界）在结构上与热传导机理匹配（E2，按v1.2a §2.4）；与目标/约束一致（E3）；未对比隐式FDM/Crank-Nicolson/解析解等候选（E4不满足）"
+      },
+      "L2.7": {
+        "score": 1,
+        "evidence": "model_ir.json EQ1控制方程+EQ2右边界条件完整，但缺初始条件T(x,0)=37°C与左边界T(0,t)=75°C的方程形式（仅modeling_trace'左Dirichlet+右对流Neumann'提及）；EQ2中T_body与ρ_i·c_i符号未声明"
+      }
+    }
+  },
+  "L3": {
+    "total": 8,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {
+        "score": 2,
+        "evidence": "model_ir.json solvers[0]声明'显式有限差分法（CFL稳定性+层间界面调和平均）'；run_model.py L45-77实现显式FDM与调和平均；execution_result.json status=success、n_time_steps=2016000确认执行，三者一致"
+      },
+      "L3.2": {
+        "score": 2,
+        "evidence": "execution_result.json: status=success, returncode=0, outputs完整（skin_temp_final/skin_temp_max/time_above_44C_s/temperature_curve等）"
+      },
+      "L3.3": {
+        "score": 1,
+        "evidence": "按v1.2a §2.3情况1：fidelity_report.json fidelity_score=0.9091（10/11）≥0.8，outputs无NaN，但F1'空间坐标'未命中输出key（passed=false，声明变量不可观测——输出为皮肤侧温度曲线，未输出全场T(x,t)）→outputs部分缺失→1分"
+      },
+      "L3.4": {
+        "score": 2,
+        "evidence": "execution_result.json code_hash=a207dba35a24.../environment_hash=fd3a9026...齐全，duration_ms=30026（约30s，确定性固定步长循环2,016,000步，远低于60s非确定性阈值）；run_model.py无随机调用，输出可精确复现。按归因G：该维度round1仅CALIB_07分歧且为边际偏斜伪影，本判据不变"
+      },
+      "L3.5": {
+        "score": 1,
+        "evidence": "execution_result.json 数值物理合理（skin_temp_final=42.525∈[37,80]、温度曲线37→42.525单调上升、time_above_44C_s=0）；fidelity_report.json F5范围检查通过2项（皮肤温度/时间）"
+      }
+    }
+  },
+  "L4": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {
+        "score": 0,
+        "evidence": "按v1.2a §2.5：validation_plan.json limit_tests（零厚度II层/环境温度=体温）为极限检验而非对照基线；IR V1（CFL）/V2（边界检查）为内部自洽检验；附件2实测皮肤温度未用于对比（模型未加载附件2数据）→无外部参照基线→0分"
+      },
+      "L4.2": {
+        "score": 1,
+        "evidence": "validation_plan.json sensitivity扰动敏感参数（II层厚度0.003/0.006/0.012、环境温度65/75/85——均直接决定皮肤温度）并给出expected_effect方向（厚度↑→温度↓、环境↑→温度↑），但未报告弹性系数与鲁棒性边界数值"
+      },
+      "L4.3": {
+        "score": 1,
+        "evidence": "validation_plan.json limit_tests含'零厚度II层（d2=0）'与'环境温度=体温（37°C）→T_skin≈37'两类退化/极限检验"
+      },
+      "L4.4": {
+        "score": 2,
+        "evidence": "validation_plan.json validation_targets=['OBJ1']，对应Q1温度分布计算核心主张；IR V1（CFL稳定性）/V2（边界检查）均指向OBJ1，验证指标与题面evaluation_targets对应"
+      },
+      "L4.5": {
+        "score": 2,
+        "evidence": "按v1.2a §2.6：CL1'一维四层瞬态热传导FDM可稳定计算皮肤侧温度变化'，evidence_refs=[E1,V1]——E1由execution_result.json skin_temp_final=42.525/temperature_curve 21采样点37→42.525单调无NaN支撑；V1由dt_s=0.0027/n_time_steps=2016000（CFL稳定约束下完成全时段计算）支撑。无unresolved/unsupported"
+      }
+    }
+  },
+  "overall": {
+    "total": 31,
+    "pass": false,
+    "note": "round2（v1.2a）：L1=6 FAIL（附件1参数未提取、L1.4无显式歧义声明）；L2=11 PASS（L2.2物性参数>30%未声明）；L3=8 PASS（真实执行success、空间坐标不可观测→L3.3=1）；L4=6 FAIL（L4.1按v1.2a极限检验≠对照基线→0，总分6<6.3）。L1 FAIL→整体FAIL。"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "evaluator_id": "C",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_06",
+  "L1": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {"score": 1, "evidence": "model_ir.json parameters 完整提取表1第1组参数（p_pt=560/p_m1=20/p_lo=28/p_le=31/p_ct=25/p_shift=28800，source=表1第1组/题目），但未提取两道工序参数、第2/3组数据（18值）、故障概率1%与排除时间10~20分钟，遗漏率>30%"},
+      "L1.2": {"score": 2, "evidence": "model_ir.json assumptions：A1(projection) 一道工序情形（简化假设）、A2(mechanism_assumption) 贪心最近策略（调度前提）、A3(simplification) 忽略故障+物料充足（简化假设），≥2类且覆盖DES建模核心依赖（v1.2a §2.2）"},
+      "L1.3": {"score": 1, "evidence": "model_ir.json problem_binding focus='任务1 一道工序RGV动态调度模型'，但未识别任务2交付要求（3组数据检验+调度策略+作业效率+附件2 EXCEL 3工作表），两道工序/故障情形亦未覆盖"},
+      "L1.4": {"score": 0, "evidence": "model_ir.json assumptions A1-A3 仅有假设取值（一道工序/贪心策略/忽略故障），无'题面未给定/存在歧义'显式歧义声明（如RGV初始位置未指定），不满足 v1.2a §2.1 两要素"},
+      "L1.5": {"score": 2, "evidence": "model_ir.json model_family.primary=simulation, secondary=[optimization,graph_algorithm,metaheuristics]，对任务1动态调度问题类型/建模范式判定正确"}
+    }
+  },
+  "L2": {
+    "total": 13,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {"score": 2, "evidence": "model_ir.json variables[]：v_N(件,[0,500])/v_thr(件/小时)/v_cyc(秒)/v_util(比例,[0,1])/v_cnc(比例) 均含type/unit/definition，输出变量声明完整"},
+      "L2.2": {"score": 1, "evidence": "model_ir.json parameters[] 声明6项（p_pt/p_m1/p_lo/p_le/p_ct/p_shift）均有取值+来源（表1第1组/题目），但 run_model.py 中 move_times 的2单位33s、3单位46s 未在parameters[]声明，存在未声明参数（大部分已声明）"},
+      "L2.3": {"score": 2, "evidence": "model_ir.json assumptions A1(projection)/A2(mechanism_assumption)/A3(simplification) 类型区分、显式、合理（一道工序范围、贪心策略、忽略故障/物料充足），可检验"},
+      "L2.4": {"score": 2, "evidence": "model_ir.json objectives OBJ1：maximize 班次内完成物料数N（系统吞吐量），与任务2'作业效率'一致，输出类型(吞吐量/利用率)匹配，目标-机理-约束一致"},
+      "L2.5": {"score": 2, "evidence": "model_ir.json constraints C1(RGV单服务)/C2(CNC完成当前加工后才能上下料) 已形式化且方向正确（source=物理约束/工艺约束）"},
+      "L2.6": {"score": 2, "evidence": "model_ir.json mechanisms M1(离散事件仿真)+equations EQ1(N=Σn_i)：E1 DES匹配动态调度题面、E2 方程与DES机理结构匹配、E3 目标-约束-机理一致；E4 无候选调度策略对比（无SPT/最优解对照）"},
+      "L2.7": {"score": 2, "evidence": "model_ir.json equations EQ1：N=Σn_i、throughput=N/T_shift，结构完整（DES含初始条件见 run_model.py 第68-79行），符号集⊆变量/参数声明集"}
+    }
+  },
+  "L3": {
+    "total": 9,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {"score": 2, "evidence": "model_ir.json solvers S1'贪心最近调度+离散事件仿真'；run_model.py 第42-116行实现；execution_result.json status=success 确认执行，声明-实现-执行三者一致"},
+      "L3.2": {"score": 2, "evidence": "execution_result.json: status=success, returncode=0；outputs 含 total_parts/throughput_per_hour/rgv_utilization/cnc_utilization/cnc_parts_per_machine 全部声明输出字段"},
+      "L3.3": {"score": 2, "evidence": "execution_result.json outputs 全为有限值（total_parts=248、利用率∈[0,1]）；fidelity_report.json fidelity_status=aligned、fidelity_score=1.0、passed=11/11，v1.2a §2.3 情况1 → 2 分"},
+      "L3.4": {"score": 2, "evidence": "execution_result.json: code_hash=4116db6f...、environment_hash=fd3a9026... 齐全，duration_ms=57（<30s）；run_model.py 无随机调用（确定性DES），输出可复现"},
+      "L3.5": {"score": 1, "evidence": "execution_result.json outputs 数值物理合理（吞吐量31件/小时<理论上限51、利用率0.6028/0.996∈[0,1]）；fidelity_report.json F5 范围检查全部通过（total_parts=248∈[0,500]、rgv_utilization=0.996∈[0,1]）"}
+    }
+  },
+  "L4": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {"score": 0, "evidence": "validation_plan.json limit_tests：'单CNC系统'解析期望吞吐量公式（由模型自身参数推导）、'零移动时间'与基准值比较（自身对比），均为模型内部自洽检验，按 v1.2a §2.5 不构成独立外部对照基线 → 0 分"},
+      "L4.2": {"score": 1, "evidence": "validation_plan.json sensitivity：加工时间[400,560,700]、CNC数量[4,8,12] 均扰动敏感参数并给出expected_effect，但未报告弹性系数且无实际灵敏度执行结果"},
+      "L4.3": {"score": 1, "evidence": "validation_plan.json limit_tests：单CNC系统(n_cnc=1边界)与零移动时间(move_time=0边界)两项极限/边界检验，≥1类"},
+      "L4.4": {"score": 2, "evidence": "validation_plan.json validation_targets=[OBJ1] 直接对应模型核心目标（吞吐量）；validations V1(守恒)/V2(利用率边界)与核心主张对应，且 execution_result.json 实际验证守恒成立（31×8=248）"},
+      "L4.5": {"score": 2, "evidence": "model_ir.json claims CL1 evidence_refs=[E1,V1] 严格可解析：E1 由 execution_result.json 真实输出支持（total_parts=248、throughput=31.0），V1 守恒由 cnc_parts_per_machine 求和=248 验证，无 unsupported/unresolved（v1.2a §2.6）"}
+    }
+  },
+  "overall": {"total": 34, "pass": false, "note": "L1=6<6.3 FAIL，L2=13 PASS，L3=9 PASS，L4=6<6.3 FAIL（L4.1=0，limit_tests非外部基线）；L1 FAIL → 整体判定 FAIL（round 2，v1.2a 判据）"}
+}

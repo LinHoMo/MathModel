@@ -1,0 +1,122 @@
+{
+  "evaluator_id": "A",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_05",
+  "L1": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {
+        "score": 1,
+        "evidence": "model_ir.json 识别定价/距离/会员密度为关键特征（Q1）；但A2声明'使用合成数据模拟附件一（200个任务）'，未提取附件一任务数据/附件二会员数据/附件三新项目数据的真实条件，Q3打包发布、Q4新项目定价与效果评价的显式条件未建模，错误率约10-30%"
+      },
+      "L1.2": {
+        "score": 2,
+        "evidence": "model_ir.json assumptions识别主要隐式条件≥2类：A1 mechanism_assumption（完成概率服从Logistic分布——分布假设）、A2 simplification（合成数据模拟附件一）、A3 projection（会员信誉与预订限额归入member_density）——符合v1.2a §2.2"
+      },
+      "L1.3": {
+        "score": 1,
+        "evidence": "model_ir.json problem_binding focus='Q1 任务定价规律分析 + Q2 新定价方案'；但Q2'与原方案进行比较'、Q3打包发布方案、Q4新项目定价与实施效果评价等交付要求未识别"
+      },
+      "L1.4": {
+        "score": 0,
+        "evidence": "model_ir.json 无显式歧义声明；C1'定价在[5,50]元范围内'（source=业务约束）为自设假设，未以'题面未给定X，假设为Y'形式标注为题面定价区间的歧义-处理方案——按v1.2a §2.1=0"
+      },
+      "L1.5": {
+        "score": 2,
+        "evidence": "model_ir.json model_family.primary=statistical_modeling，secondary=[optimization, clustering, decision_analysis]，对2017_B'定价规律统计+定价优化'问题判定正确"
+      }
+    }
+  },
+  "L2": {
+    "total": 11,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {
+        "score": 2,
+        "evidence": "model_ir.json variables[] 6个变量（price/distance/density/P_complete/price_opt/profit）均有symbol/definition/unit/type/value_range（profit缺range），类型区分input/output"
+      },
+      "L2.2": {
+        "score": 1,
+        "evidence": "model_ir.json parameters[]（p_n=200/p_lr=0.1/p_epoch=500）有值+source；但EQ1中回归系数β0-β3未在parameters/variables声明（仅作为执行输出logistic_coefficients出现）"
+      },
+      "L2.3": {
+        "score": 1,
+        "evidence": "model_ir.json A1/A3合理；但A2'使用合成数据模拟附件一'与题面'研究附件一中项目的任务定价规律'的数据驱动要求不符——合成数据与真实附件数据分布无保证，部分假设与题面相冲突"
+      },
+      "L2.4": {
+        "score": 2,
+        "evidence": "model_ir.json OBJ1（estimate P(complete=1|price,distance,density)）与OBJ2（maximize 期望利润 price*P_complete）分别对应Q1/Q2，输出optimal_price/actual_completion_rate匹配"
+      },
+      "L2.5": {
+        "score": 2,
+        "evidence": "model_ir.json C1定价∈[5,50]（range）、C2完成概率∈[0,1]（probability公理）方向正确，为定价优化模型的关键约束"
+      },
+      "L2.6": {
+        "score": 2,
+        "evidence": "model_ir.json M1 Logistic回归与Q1'研究定价规律'匹配（E1）；EQ1 logistic方程与EQ2期望利润公式在结构上与Logistic机理匹配（E2，按v1.2a §2.4）；与OBJ1/OBJ2/C1/C2一致（E3）；无候选模型对比（E4不满足）"
+      },
+      "L2.7": {
+        "score": 1,
+        "evidence": "model_ir.json EQ1/EQ2公式完整（含derivation_trace）；但符号β0-β3未在variables/parameters声明集，EQ1变量refs（v_p/v_d/v_m）已声明"
+      }
+    }
+  },
+  "L3": {
+    "total": 7,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {
+        "score": 2,
+        "evidence": "model_ir.json solvers[0]声明'梯度下降Logistic回归+网格搜索'；run_model.py L64-110实现梯度下降训练与[5,40]价格网格；execution_result.json status=success、loss_final=0.679124确认执行，三者一致"
+      },
+      "L3.2": {
+        "score": 2,
+        "evidence": "execution_result.json: status=success, returncode=0, outputs含全部声明字段（n_tasks/actual_completion_rate/logistic_coefficients/optimal_price/profit_curve等）"
+      },
+      "L3.3": {
+        "score": 1,
+        "evidence": "按v1.2a §2.3情况1：fidelity_report.json fidelity_score=0.8235（14/17）≥0.8但outputs有部分声明变量不可观测——F1'会员密度'未命中输出key（passed=false）、F5'距离/会员密度'范围检查失败（feature_standardization=None，为dict被当标量）→1分"
+      },
+      "L3.4": {
+        "score": 2,
+        "evidence": "execution_result.json code_hash=e1f3d3f333816b58.../environment_hash=fd3a9026...齐全，duration_ms=249（<30s）；run_model.py L7 random.seed(42)固定随机种子"
+      },
+      "L3.5": {
+        "score": 0,
+        "evidence": "fidelity_report.json F5 output_range检查失败2项（距离feature_standardization=None超出[0,15]、会员密度=None超出[1,30]）；且execution_result.json logistic_coefficients.price=-0.169（负值）与coefficient_interpretation.price'正系数→价格越高完成概率越高'自相矛盾，distance=+0.1366与'负系数→距离越远完成概率越低'亦矛盾"
+      }
+    }
+  },
+  "L4": {
+    "total": 1,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {
+        "score": 0,
+        "evidence": "model_ir.json validations V1（accuracy）/V2（monotonicity）为模型内部自洽检验，按v1.2a §2.5不属于对照基线（无零模型/随机/文献/贪婪/真实数据外部参照）；Q2'与原方案进行比较'未执行；包内无validation_plan.json"
+      },
+      "L4.2": {
+        "score": 0,
+        "evidence": "model_ir.json 无灵敏度分析（V2单调性为符号方向检验，非参数扰动实验，未扰动任何参数）"
+      },
+      "L4.3": {
+        "score": 0,
+        "evidence": "model_ir.json 无极限/边界/退化情形检验（V1/V2均非极限检验）"
+      },
+      "L4.4": {
+        "score": 1,
+        "evidence": "model_ir.json V1训练集准确率0.6部分验证Q1回归主张；但V2'距离系数应为负'被执行结果distance=+0.1366反证，且Q2最优定价主张无独立验证"
+      },
+      "L4.5": {
+        "score": 0,
+        "evidence": "按v1.2a §2.6：CL1 evidence_refs含V2（'距离系数应为负，会员密度系数应为正'），但execution_result.json logistic_coefficients.distance=+0.1366（正）与V2期望方向矛盾，且coefficient_interpretation声明的符号与真实系数相反——主张与证据矛盾→unsupported→存在unsupported claim→0分（CL2由optimal_price=40支撑但不影响整体判0）"
+      }
+    }
+  },
+  "overall": {
+    "total": 25,
+    "pass": false,
+    "note": "round2（v1.2a）：L1=6 FAIL（合成数据替代真实附件、L1.4无显式歧义声明）；L2=11 PASS；L3=7 PASS（会员密度不可观测→L3.3=1，系数符号与解释矛盾+范围检查失败→L3.5=0）；L4=1 FAIL（L4.5按严格覆盖：V2单调性期望被真实系数反证→unsupported→0）。L1 FAIL→整体FAIL。"
+  }
+}

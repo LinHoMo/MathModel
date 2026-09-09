@@ -1,0 +1,14 @@
+{
+  "calibration_n": 8,
+  "evaluators": ["A", "B", "C"],
+  "protocol": "ANCHORED_PROTOCOL_v1.2.md",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2-k003",
+  "packages": [
+    "CALIB_01", "CALIB_02", "CALIB_03", "CALIB_04",
+    "CALIB_05", "CALIB_06", "CALIB_07", "CALIB_08"
+  ],
+  "output_dir_pattern": "g2/evaluator_{id}/",
+  "independence_note": "3 evaluators 互不可见、互不通信；condition_map 严禁外泄",
+  "scoring_dimensions": 22,
+  "max_scores": {"L1": 9, "L2": 15, "L3": 9, "L4": 9, "total": 42}
+}

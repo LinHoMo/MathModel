@@ -1,0 +1,52 @@
+{
+  "evaluator_id": "C",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_05",
+  "L1": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {"score": 1, "evidence": "model_ir.json variables 提取了附件一特征（price/distance/density），但附件二显式字段（会员信誉值、预订限额）未提取而被A3投影掉；且未使用附件一真实数据（A2合成数据替代），显式数据条件未真正落实"},
+      "L1.2": {"score": 2, "evidence": "model_ir.json assumptions：A1(mechanism_assumption) Logistic机理（分布假设）、A2(simplification) 合成数据模拟附件一（数据前提）、A3(projection) 信誉/限额归入member_density（简化假设），≥2类且覆盖建模核心依赖（v1.2a §2.2）"},
+      "L1.3": {"score": 1, "evidence": "model_ir.json problem_binding 声明Q1-Q4但仅建模Q1+Q2；Q2'和原方案比较'未落实，Q3(打包发布)、Q4(附件三新项目定价+效果评价)交付要求未识别"},
+      "L1.4": {"score": 0, "evidence": "model_ir.json assumptions A2 仅陈述'使用合成数据模拟附件一（200个任务），特征关系已知'，无'附件数据未提供/题面未给定/存在歧义'的显式歧义声明，不满足 v1.2a §2.1 两要素"},
+      "L1.5": {"score": 2, "evidence": "model_ir.json model_family.primary=statistical_modeling（Logistic回归估计完成概率），secondary=[optimization,clustering,decision_analysis]，对Q1定价规律分析的问题类型判定正确"}
+    }
+  },
+  "L2": {
+    "total": 11,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {"score": 2, "evidence": "model_ir.json variables[]：v_p(元,[5,50])/v_d(km,[0,15])/v_m(人,[1,30])/v_c(概率,[0,1])/v_popt(元,[5,50])/v_prof(元) 均含type/unit/definition，输入输出类型区分明确，关键变量完整"},
+      "L2.2": {"score": 1, "evidence": "model_ir.json parameters[] 声明 p_n(200)/p_lr(0.1)/p_epoch(500) 有取值和来源，但合成数据生成参数（距离指数均值2、密度高斯(10,4)、真实Logit系数-2.0/0.08/-0.15/0.05）与EQ1的β系数未在parameters[]声明"},
+      "L2.3": {"score": 1, "evidence": "model_ir.json assumptions A1/A3合理，但 A2'使用合成数据模拟附件一'直接替换题面提供的真实附件数据，使模型未按Q1要求分析附件一实际定价规律，假设部分不合理"},
+      "L2.4": {"score": 2, "evidence": "model_ir.json objectives OBJ1(估计P(complete=1|price,distance,density))匹配Q1、OBJ2(maximize price*P_complete)匹配Q2，输出类型匹配，目标-机理-约束一致"},
+      "L2.5": {"score": 2, "evidence": "model_ir.json constraints C1(定价∈[5,50])、C2(P_complete∈[0,1]) 已形式化且方向正确（价格区间/概率公理），为Q1/Q2关键约束"},
+      "L2.6": {"score": 2, "evidence": "model_ir.json mechanisms M1(Logistic回归)+equations EQ1/EQ2：E1 Logistic机理匹配统计建模题面、E2 EQ1 logistic方程形式与机理结构匹配（按 v1.2a §2.4，系数符号与解释的矛盾不属E2扣分项）、E3 目标-约束-机理一致；E4 无候选模型对比"},
+      "L2.7": {"score": 1, "evidence": "model_ir.json equations EQ1/EQ2 结构完整，但 EQ1 中符号 β0-β3 未在 variables/parameters 声明集中，不满足符号集⊆声明集"}
+    }
+  },
+  "L3": {
+    "total": 7,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {"score": 1, "evidence": "model_ir.json solvers S1'梯度下降Logistic回归+网格搜索'与 run_model.py 实现一致且 status=success，但网格搜索范围[5,40]（E2描述）与声明约束C1[5,50]不一致，且最优定价40落在网格边界（截断伪最优），存在口径问题"},
+      "L3.2": {"score": 2, "evidence": "execution_result.json: status=success, returncode=0；outputs 含 n_tasks/model_accuracy/logistic_coefficients/optimal_price/profit_curve/loss_final 等全部声明输出字段"},
+      "L3.3": {"score": 2, "evidence": "fidelity_report.json fidelity_status=misaligned、fidelity_score=0.8235（14/17）≥0.8；execution_result.json outputs 无NaN/Inf/空值（profit_curve 完整、loss_final=0.679124），按 v1.2a §2.3 情况1 → 2 分"},
+      "L3.4": {"score": 2, "evidence": "execution_result.json: code_hash=e1f3d3f3...、environment_hash=fd3a9026... 齐全，duration_ms=249（<30s）；run_model.py 第7行 random.seed(42) 固定随机种子，输出可复现"},
+      "L3.5": {"score": 0, "evidence": "fidelity_report.json F5'距离∈[0,15]'范围检查失败（feature_standardization 值超出）、F5'会员密度∈[1,30]'范围检查失败；且 execution_result.json coefficient_interpretation 与 logistic_coefficients 矛盾（price=-0.169 被解释为'正系数'、distance=+0.1366 被解释为'负系数'），输出内容自相矛盾 → 0 分"}
+    }
+  },
+  "L4": {
+    "total": 1,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {"score": 0, "evidence": "model_ir.json validations V1(训练集准确率0.6)/V2(符号检验)均无对照基线（model_accuracy=0.6未与随机0.5基线对比）；Q2要求的与原方案对比未进行；按 v1.2a §2.5 无独立外部参照 → 0 分"},
+      "L4.2": {"score": 0, "evidence": "model_ir.json 无灵敏度分析（profit_curve 为定价优化搜索本身，非模型灵敏度/弹性分析）"},
+      "L4.3": {"score": 0, "evidence": "model_ir.json 无极限/边界/退化情形检验（无零价格/极远距离/边界参数测试）"},
+      "L4.4": {"score": 1, "evidence": "model_ir.json validations V1/V2 目标与核心主张相关（准确率、符号方向），但 V2'距离系数应为负'被真实执行结果违背（distance=+0.1366>0），仅验证部分主张且有遗漏"},
+      "L4.5": {"score": 0, "evidence": "model_ir.json claims CL1 evidence_refs 含 V2，但 V2 预期（距离负）被 execution_result.json 真实系数（distance=+0.1366）反驳；且 coefficient_interpretation 主张（price正/距离负）与 logistic_coefficients（price=-0.169, distance=+0.1366）直接矛盾，存在与证据矛盾的主张（v1.2a §2.6 unsupported）→ 0 分"}
+    }
+  },
+  "overall": {"total": 25, "pass": false, "note": "L1=6<6.3 FAIL，L2=11 PASS，L3=7 PASS，L4=1<6.3 FAIL；L1 FAIL → 整体判定 FAIL（round 2，v1.2a 判据）"}
+}

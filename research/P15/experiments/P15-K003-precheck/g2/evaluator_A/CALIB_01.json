@@ -1,0 +1,122 @@
+{
+  "evaluator_id": "A",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_01",
+  "L1": {
+    "total": 5,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {
+        "score": 1,
+        "evidence": "model_doc.md §3-4 提取A/B两策略结构与λ=30、μ=40等参数，但题面Q3'两条并行车道/上车点设置'、Q4'不能拒载/多次往返/优先权'等显式条件未提取，Q1'蓄车池已有车辆数可观测、分批定量放行'机制未建模；错误率约10-30%"
+      },
+      "L1.2": {
+        "score": 2,
+        "evidence": "model_doc.md §2 识别主要隐式条件≥2类：随机性/分布假设（Poisson到达、指数服务）、简化假设（放空时间成本确定忽略交通波动）、边界/结构假设（单服务台M/M/1、FCFS），并说明M/M/1推导依据——符合v1.2a §2.2判据"
+      },
+      "L1.3": {
+        "score": 1,
+        "evidence": "model_doc.md §1/§8 仅识别Q1'建立决策模型并给出策略'交付；未识别Q2数据收集与合理性/依赖性分析、Q3乘车区上车点设置、Q4优先安排方案的交付要求"
+      },
+      "L1.4": {
+        "score": 0,
+        "evidence": "model_doc.md §2/§4 仅直接给出参数假设取值（λ=30、μ=40、等待成本1.5等），无'由于题面未给定X，假设为Y'或'X存在歧义，采用Y处理'的显式歧义声明——按v1.2a §2.1，单纯参数赋值≠歧义标注，两者缺一=0"
+      },
+      "L1.5": {
+        "score": 1,
+        "evidence": "model_doc.md §7 仅识别排队论范式（M/M/1），对综合题2019_C（决策/数据/优化/调度四子问题）未识别Q3优化与Q4调度范式，属综合题只识别一个类型"
+      }
+    }
+  },
+  "L2": {
+    "total": 13,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {
+        "score": 1,
+        "evidence": "model_doc.md §3 声明λ/μ/W_q/profit_q/profit_c/decision共6个变量，含单位与定义；但未区分输入/输出类型、未给取值范围，且代码输出中的L_q/ρ等计算量未声明（W_q符号标注问题在此维度体现，按v1.2a §2.4）"
+      },
+      "L2.2": {
+        "score": 2,
+        "evidence": "model_doc.md §4 参数全部有取值（等待成本1.5元/分钟、怠速燃油0.5、放空成本25、回市区20分钟、蓄车池50辆、车费80/50），方程π_q=F_q-(c_w+c_f)W_q、π_c=F_c-C_e-c_w·t_c引用的F_q/c_w/c_f/F_c/C_e/t_c均有对应值"
+      },
+      "L2.3": {
+        "score": 2,
+        "evidence": "model_doc.md §2 假设显式且合理（Poisson到达、指数服务、放空时间确定忽略波动），可检验，覆盖随机性与简化两类"
+      },
+      "L2.4": {
+        "score": 2,
+        "evidence": "model_doc.md §5 目标'最大化司机期望净收益 max(profit_q, profit_c)'与题面Q1一致，输出optimal_decision匹配决策类型，满足目标-机制-约束三角一致性"
+      },
+      "L2.5": {
+        "score": 2,
+        "evidence": "model_doc.md §6 约束ρ=λ/μ<1（稳定性）与W_q>=0均已形式化且方向正确，为M/M/1排队决策模型的关键约束"
+      },
+      "L2.6": {
+        "score": 2,
+        "evidence": "model_doc.md §7 机理M/M/1排队与题面蓄车池FCFS一致（E1）；方程W_q=1/(μ-λ)与收益公式在形式上与M/M/1机理结构匹配（E2，按v1.2a §2.4符号标注问题不在此扣分）；与目标/约束一致（E3）；未对比其他候选模型（E4不满足）"
+      },
+      "L2.7": {
+        "score": 2,
+        "evidence": "model_doc.md §7 方程W_q=1/(μ-λ)、π_q=F_q-(c_w+c_f)W_q、π_c=F_c-C_e-c_w·t_c结构完整，含ρ<1边界条件；参数值均在§2/§4以数值形式给出，解析可求解"
+      }
+    }
+  },
+  "L3": {
+    "total": 9,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {
+        "score": 2,
+        "evidence": "model_doc.md §8 声明'解析计算M/M/1稳态指标+收益比较'；run_model.py L17-49实现解析公式与临界到达率；execution_result.json status=success且lambda_critical=39.98确认执行了该求解器，三者一致"
+      },
+      "L3.2": {
+        "score": 2,
+        "evidence": "execution_result.json: status=success, returncode=0, outputs包含全部声明输出字段（optimal_decision/profit_queue/profit_city/expected_wait_min/decision_scan等结构化JSON）"
+      },
+      "L3.3": {
+        "score": 2,
+        "evidence": "按v1.2a §2.3情况2：fidelity_report.json fidelity_status=unverifiable/fidelity_score=null（F臂无结构化声明），改以execution_result.outputs真实数值完整性判定——outputs含全部声明字段且数值全部为有限值（profit_queue=79.8、rho_utilization=0.75、decision_scan 9项无NaN/Inf/None），物理合理→2分"
+      },
+      "L3.4": {
+        "score": 2,
+        "evidence": "execution_result.json code_hash=0e57dd35ad658934.../environment_hash=fd3a9026...齐全，duration_ms=60（<30s）；run_model.py无任何随机调用（确定性代码），无需seed即可精确复现"
+      },
+      "L3.5": {
+        "score": 1,
+        "evidence": "execution_result.json 数值合理（profit_queue=79.8≈车费80-等待成本、profit_city=-5.0=50-25-1.5×20、expected_wait_min=0.1=1/(40-30)、rho=0.75）；fidelity_report.json无output_range检查（unverifiable）→'无范围检查'判据通过"
+      }
+    }
+  },
+  "L4": {
+    "total": 3,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {
+        "score": 0,
+        "evidence": "model_doc.md §9 稳定性/单调性/决策一致性均为模型内部自洽检验，按v1.2a §2.5不属于对照基线（零模型/随机/文献/贪婪/真实数据五类之一）；包内无validation_plan.json"
+      },
+      "L4.2": {
+        "score": 1,
+        "evidence": "model_doc.md §8 实验2对λ从10到38扫描（敏感参数：到达率直接决定等待时间）并报告临界到达率λ*=39.98，但未报告弹性系数与鲁棒性边界数值"
+      },
+      "L4.3": {
+        "score": 1,
+        "evidence": "model_doc.md §9 含极限检验'ρ<1时W_q有限，ρ>=1时队列无限增长'（ρ=1边界情形）"
+      },
+      "L4.4": {
+        "score": 1,
+        "evidence": "model_doc.md §9 验证了稳定性/单调性/决策一致性等部分核心主张，但未独立验证收益公式正确性，亦未覆盖题面Q2'数据验证合理性'等evaluation_targets"
+      },
+      "L4.5": {
+        "score": 0,
+        "evidence": "按v1.2a §2.6严格覆盖：model_doc.md §9主张'决策一致性：扫描结果中决策切换点与解析临界值一致'，但execution_result.json decision_scan的λ∈[10,15,20,25,28,30,32,35,38]，最大λ=38<lambda_critical=39.98，扫描区间未跨过临界值、未观测到任何切换（全部optimal=queue）→该主张无证据支撑=unsupported→存在unsupported claim→0分"
+      }
+    }
+  },
+  "overall": {
+    "total": 30,
+    "pass": false,
+    "note": "round2（v1.2a）：L1=5 FAIL（L1.4无显式歧义声明）；L2=13 PASS；L3=9 PASS（F臂fidelity=null按outputs完整性判L3.3=2）；L4=3 FAIL（L4.5按严格覆盖：扫描未跨临界值39.98→'决策切换点一致'主张unsupported→0）。L1 FAIL→整体FAIL。"
+  }
+}

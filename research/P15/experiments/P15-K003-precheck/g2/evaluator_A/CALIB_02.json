@@ -1,0 +1,122 @@
+{
+  "evaluator_id": "A",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_02",
+  "L1": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {
+        "score": 1,
+        "evidence": "model_doc.md §4 正确提取表1第1组参数（移动1/2/3单位20/33/46s、加工560s、上下料28/31s、清洗25s、班次28800s），无提取错误；但两工序参数（400/378s等）、故障情形（概率1%、修复10-20min）及第2/3组数据未提取，错误率约10-30%"
+      },
+      "L1.2": {
+        "score": 2,
+        "evidence": "model_doc.md §2 识别主要隐式条件≥2类：简化/结构假设（一道工序同刀具、物料充足、忽略故障、8小时班次）与机理假设（贪心最近策略），并说明调度依据——符合v1.2a §2.2（不要求识别季节/经验等外部未建模因素）"
+      },
+      "L1.3": {
+        "score": 1,
+        "evidence": "model_doc.md §1 仅识别任务1（调度模型+算法）与第1组数据检验交付；未识别任务2'利用3组数据检验、将结果填入附件2 EXCEL表'及故障情形（情形3）的交付要求"
+      },
+      "L1.4": {
+        "score": 0,
+        "evidence": "题面仅给出RGV移动1/2/3单位时间，>3单位距离（线性轨道最远7单位）存在歧义，run_model.py L22-23用'3单位时间+每额外单位约13秒'线性插值处理，但model_doc.md未作'题面未给定X，假设为Y'的显式歧义声明——按v1.2a §2.1=0"
+      },
+      "L1.5": {
+        "score": 2,
+        "evidence": "model_doc.md §7 判定为'离散事件仿真+贪心调度'（动态调度问题建模范式），与题面'RGV动态调度策略'一致"
+      }
+    }
+  },
+  "L2": {
+    "total": 12,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {
+        "score": 1,
+        "evidence": "model_doc.md §3 声明N/throughput/cycle/util/cnc_util，含单位与定义；但未区分输入/输出类型、未给取值范围，rgv_move_total/rgv_idle_total等计算量未声明"
+      },
+      "L2.2": {
+        "score": 2,
+        "evidence": "model_doc.md §4 参数来源标注'表1第1组'，移动1/2/3单位、加工、奇数/偶数上下料、清洗、班次时长均有取值；方程N=Σn_i、throughput=N/T_shift引用的符号均有对应声明"
+      },
+      "L2.3": {
+        "score": 2,
+        "evidence": "model_doc.md §2 假设显式且合理（每台CNC同刀具、贪心最近、忽略故障、物料充足、8小时班次），可检验"
+      },
+      "L2.4": {
+        "score": 2,
+        "evidence": "model_doc.md §5 目标'最大化班次内完成物料数N（即系统吞吐量）'与任务1/2'系统的作业效率'一致，输出total_parts/throughput_per_hour匹配"
+      },
+      "L2.5": {
+        "score": 2,
+        "evidence": "model_doc.md §6 约束'RGV同一时刻只能为一台CNC服务、CNC完成当前加工后才能上下料、物料必须经RGV清洗下料'均为调度系统关键约束且方向正确"
+      },
+      "L2.6": {
+        "score": 2,
+        "evidence": "model_doc.md §7 离散事件仿真机理与RGV调度题面一致（E1）；汇总方程N=Σn_i、throughput=N/T_shift与仿真的事件推进/计数结构匹配（E2）；与目标/约束一致（E3）；未对比其他调度策略（E4不满足）"
+      },
+      "L2.7": {
+        "score": 1,
+        "evidence": "model_doc.md §7 仅给出汇总方程N=Σn_i、throughput=N/T_shift；n_i符号未在§3变量节声明（代码中为cnc_parts），仿真动态事件逻辑未形式化为控制方程，初始条件仅叙述于§8"
+      }
+    }
+  },
+  "L3": {
+    "total": 9,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {
+        "score": 2,
+        "evidence": "model_doc.md §8 声明'贪心最近调度+离散事件仿真'；run_model.py L42-116实现find_nearest_done与事件循环；execution_result.json status=success、total_parts=248确认执行，三者一致"
+      },
+      "L3.2": {
+        "score": 2,
+        "evidence": "execution_result.json: status=success, returncode=0, outputs完整（total_parts=248, throughput_per_hour=31.0, cnc_utilization[8项], scheduling_strategy等）"
+      },
+      "L3.3": {
+        "score": 2,
+        "evidence": "按v1.2a §2.3情况2：fidelity_report.json fidelity_status=unverifiable/fidelity_score=null，改以execution_result.outputs真实数值完整性判定——outputs含全部声明字段且数值全部为有限值（total_parts=248、rgv_utilization=0.996、cnc_utilization 8项0.6028，无NaN/Inf/空值），物理合理→2分"
+      },
+      "L3.4": {
+        "score": 2,
+        "evidence": "execution_result.json code_hash=4116db6f48bed86a.../environment_hash=fd3a9026...齐全，duration_ms=59（<30s）；run_model.py无随机调用（确定性），输出可精确复现"
+      },
+      "L3.5": {
+        "score": 1,
+        "evidence": "execution_result.json 数值合理（248件/8h=31件/h，低于理论上限51件/h；cnc_utilization=0.6028与rgv_utilization=0.996∈[0,1]）；fidelity_report.json无output_range检查→通过"
+      }
+    }
+  },
+  "L4": {
+    "total": 4,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {
+        "score": 0,
+        "evidence": "model_doc.md §9 守恒检验/利用率边界/物理上限均为模型内部自洽检验，按v1.2a §2.5不属于对照基线（无零模型/随机/文献/贪婪/真实数据外部参照）；包内无validation_plan.json"
+      },
+      "L4.2": {
+        "score": 0,
+        "evidence": "model_doc.md 无灵敏度分析：仅表1第1组参数单次仿真，未扰动任何参数"
+      },
+      "L4.3": {
+        "score": 1,
+        "evidence": "model_doc.md §9 含边界检验'吞吐量受加工时间560s/8台≈理论上限51件/小时约束'"
+      },
+      "L4.4": {
+        "score": 1,
+        "evidence": "model_doc.md §9 验证守恒与利用率边界等部分主张，但未验证调度策略最优性，亦未对应题面任务2'检验模型实用性和算法有效性'的对照要求"
+      },
+      "L4.5": {
+        "score": 2,
+        "evidence": "按v1.2a §2.6：model_doc.md §9 三条主张均有真实执行证据覆盖——守恒主张由execution_result.json cnc_parts_per_machine=[31]*8之和=248=total_parts支撑；利用率边界由rgv_utilization=0.996/cnc_utilization=0.6028∈[0,1]支撑；物理上限由31<51支撑。无unresolved/unsupported"
+      }
+    }
+  },
+  "overall": {
+    "total": 31,
+    "pass": false,
+    "note": "round2（v1.2a）：L1=6 FAIL（L1.4无显式歧义声明）；L2=12 PASS；L3=9 PASS（F臂fidelity=null按outputs完整性判L3.3=2）；L4=4 FAIL（无对照基线、无灵敏度）。L1 FAIL→整体FAIL。"
+  }
+}

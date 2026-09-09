@@ -1,0 +1,52 @@
+{
+  "evaluator_id": "C",
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.2a-k003",
+  "calib_id": "CALIB_01",
+  "L1": {
+    "total": 6,
+    "pass": false,
+    "dimensions": {
+      "L1.1": {"score": 1, "evidence": "model_doc.md §1/§2：提取Q1两策略(A/B)、排队FCFS结构，但题面显式结构条件未完整提取：乘车区两条并行车道(Q3)、司机不能拒载且允许多次往返(Q4)、分批定量放行均未出现；题面无数字参数故数字无遗漏"},
+      "L1.2": {"score": 2, "evidence": "model_doc.md §2 假设：识别了建模核心依赖的隐式前提——Poisson到达（随机性假设）、指数服务时间（分布假设）、M/M/1单服务台与忽略交通波动（简化假设），≥2类且覆盖模型核心依赖（v1.2a §2.2，不要求识别季节/经验等外部未建模因素）"},
+      "L1.3": {"score": 1, "evidence": "model_doc.md §1 仅识别Q1交付要求'建立司机选择决策模型并给出策略'；Q2(数据收集+方案+合理性/依赖性)、Q3(上车点设置)、Q4(优先安排方案)三项交付物未识别"},
+      "L1.4": {"score": 0, "evidence": "model_doc.md §2 仅有参数假设取值（'λ=30人/分钟''排队载客平均车费80元'等），全文无'题面未给定/存在歧义/数据不足'的显式歧义声明，不满足 v1.2a §2.1 '显式歧义陈述+处理方案'两要素"},
+      "L1.5": {"score": 2, "evidence": "model_doc.md §7：M/M/1排队+收益比较决策模型，对Q1问题类型/建模范式判定正确（排队论+决策分析）"}
+    }
+  },
+  "L2": {
+    "total": 12,
+    "pass": true,
+    "dimensions": {
+      "L2.1": {"score": 1, "evidence": "model_doc.md §3 变量均声明带单位，但 v_Wq 定义为'平均等待时间'而 §7 公式 W_q=1/(μ-λ) 实为 M/M/1 系统逗留时间公式，属符号标注问题，按 v1.2a §2.4 在 L2.1 扣分"},
+      "L2.2": {"score": 2, "evidence": "model_doc.md §2/§4：代码使用的全部参数均已声明——λ=30、μ=40、车费80/50（§2假设）、等待成本1.5元/分钟、怠速燃油0.5元/分钟、放空成本25元、回市区时间20分钟、蓄车池50辆（§4），均有取值与来源"},
+      "L2.3": {"score": 1, "evidence": "model_doc.md §2 假设：显式且基本合理（Poisson/指数/M/M/1/确定放空），但未区分假设类型标签，车费80/50元与成本参数无数据支撑不可检验"},
+      "L2.4": {"score": 2, "evidence": "model_doc.md §5 目标：'最大化司机期望净收益 max(profit_q, profit_c)'，与Q1一致，输出类型(最优决策+两策略收益)匹配，目标-机理-约束一致"},
+      "L2.5": {"score": 2, "evidence": "model_doc.md §6 约束：系统稳定 ρ=λ/μ<1、等待时间 W_q>=0，方向正确且为Q1决策模型关键约束，已形式化"},
+      "L2.6": {"score": 2, "evidence": "model_doc.md §7 机理与方程：E1 M/M/1排队匹配题面、E2 方程 W_q=1/(μ-λ) 与 M/M/1 机理结构匹配（符号标注问题按 v1.2a §2.4 不在此扣分）、E3 目标-约束-机理一致；E4 无候选机理对比（无替代模型/仿真/经验对照）"},
+      "L2.7": {"score": 2, "evidence": "model_doc.md §7 方程：W_q=1/(μ-λ)、ρ=λ/μ、π_q=F_q-(c_w+c_f)W_q、π_c=F_c-C_e-c_w t_c，稳态排队无需边界/初始条件，符号集均已在变量/参数节声明（F_q/c_w/c_f/C_e/t_c 均有对应），结构完整可求解"}
+    }
+  },
+  "L3": {
+    "total": 9,
+    "pass": true,
+    "dimensions": {
+      "L3.1": {"score": 2, "evidence": "model_doc.md §8 声明'解析计算M/M/1稳态指标'；run_model.py 第17-49行实现解析公式与收益比较；execution_result.json status=success 确认执行，声明-实现-执行三者一致"},
+      "L3.2": {"score": 2, "evidence": "execution_result.json: status=success, returncode=0；outputs 含 optimal_decision/profit_queue/profit_city/expected_wait_min/queue_length_avg/rho_utilization/lambda_critical/decision_scan 全部声明输出字段，无缺失"},
+      "L3.3": {"score": 2, "evidence": "execution_result.json outputs 全为有限值（profit_queue=79.8、expected_wait_min=0.1、rho_utilization=0.75、lambda_critical=39.98），无NaN/Inf/空值；fidelity_report.json fidelity_status=unverifiable、fidelity_score=null（F臂无结构化声明），按 v1.2a §2.3 情况2 以 outputs 真实数值完整性判 2 分"},
+      "L3.4": {"score": 2, "evidence": "execution_result.json: code_hash=0e57dd35...、environment_hash=fd3a9026... 齐全，duration_ms=60（<30s）；run_model.py 无随机调用（确定性），输出可复现"},
+      "L3.5": {"score": 1, "evidence": "execution_result.json outputs 数值在逻辑合理范围（收益/等待时间/负载为有限合理量级）；fidelity_report.json 无 output_range 检查项，无范围检查失败；profit_city=-5.0 为参数设定导致的负期望收益，不属负概率/负密度/超物理范围"}
+    }
+  },
+  "L4": {
+    "total": 3,
+    "pass": false,
+    "dimensions": {
+      "L4.1": {"score": 0, "evidence": "model_doc.md §9 稳定性/单调性/决策一致性均为模型内部自洽检验，按 v1.2a §2.5 不构成对照基线；无零模型/随机/文献/贪婪/真实数据等独立外部参照"},
+      "L4.2": {"score": 1, "evidence": "model_doc.md §8 实验2：λ从10到38扫描（敏感参数到达率），报告利润单调下降与临界λ*=39.98（鲁棒性边界），但未报告弹性系数，且扫描区间[10,38]未跨越切换点39.98"},
+      "L4.3": {"score": 1, "evidence": "model_doc.md §9 稳定性检验 ρ<1时W_q有限、ρ>=1时队列无限增长；run_model.py 第18-25行含 rho>=1 分支，存在≥1类极限/边界检验"},
+      "L4.4": {"score": 1, "evidence": "model_doc.md §9 验证了稳定性、单调性（W_q随λ增、收益随λ减）等部分核心主张，但'决策切换点一致'主张未被验证（扫描未跨39.98），Q2要求的数据验证亦未进行"},
+      "L4.5": {"score": 0, "evidence": "model_doc.md §9 主张'决策一致性：扫描结果中决策切换点与解析临界值一致'，但 execution_result.json decision_scan 扫描区间λ∈[10,38] 未跨过 lambda_critical=39.98，无实际切换点观测数据，按 v1.2a §2.6 证据严格覆盖原则该主张 unsupported → 0 分"}
+    }
+  },
+  "overall": {"total": 30, "pass": false, "note": "L1=6<6.3 FAIL，L2=12 PASS，L3=9 PASS，L4=3<6.3 FAIL；L1 FAIL → 整体判定 FAIL（round 2，v1.2a 判据）"}
+}
