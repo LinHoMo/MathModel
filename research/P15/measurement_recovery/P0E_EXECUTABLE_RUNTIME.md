@@ -31,7 +31,8 @@ MODEL_IR ──→ ExecutionPlan ──→ Code Generation* ──→ Code Inter
 | do_experiment 集成 | `core/runtime/execution/handlers.py` | adapter+code → 真实执行 → result.status 翻写 + EXEC artifact + executed_by 边 |
 | **P0-E4 Replay** | `core/runtime/execution/replay.py` + adapters.py（code/environment_manifest 字段） | **重建执行 + 偏差报告**（replay ≠ rerun）：同 code 同 env → outputs 一致；code/env 变化 → 逐项偏差归因 |
 | **P0-E5 Validation** | `core/runtime/execution/validation.py` + ids.py（VR 类型）+ evidence_graph（verified_by 边） | **三状态铁律机械落地**：ExecutionResult → 确定性检查集 → VerificationResult（VR 一等 artifact）→ verified_by 边。VR.status：passed⟺execution success 且全检通过；failed⟺success 但有可归因失败项；invalid⟺execution 非 success（不得 passed） |
-| 测试 | `tests/unit/test_execution_adapter.py` + `tests/integration/test_execution_runtime.py` + `tests/integration/test_replay_execution.py` + `tests/integration/test_execution_validation.py` | 12 + 4 + 4 + 8 用例 |
+| **P0-E6 Fidelity** | `core/runtime/execution/fidelity.py` + validation.py（output_key_exists 别名解析） | **第二扇门（Model→Code 语义保真）测量原语**：MODEL_IR 声明（variables/objectives/constraints/equations 的 name/symbol）→ 确定性映射检查（F1-F5）→ fidelity_score=passed/total；execution success=1 但 fidelity<1 如实记录（misaligned） |
+| 测试 | `tests/unit/test_execution_adapter.py` + `tests/integration/test_execution_runtime.py` + `tests/integration/test_replay_execution.py` + `tests/integration/test_execution_validation.py` + `tests/integration/test_execution_fidelity.py` | 12 + 4 + 4 + 8 + 9 用例 |
 
 ## 3. ExecutionResult 一等 artifact 契约（用户指定字段全集）
 
@@ -83,13 +84,14 @@ MODEL_IR ──→ ExecutionPlan ──→ Code Generation* ──→ Code Inter
 | `tests/unit/test_evidence_graph.py` | 更新为 16 关系类型（+verified_by），passed |
 | `tests/integration/test_replay_execution.py` | 4 passed（同 code 同 env→可重放；code 变化→code_hash+outputs 偏差；缺 code→明确报错+override 可用；failed 原执行→复现失败=一致） |
 | `tests/integration/test_execution_validation.py` | 8 passed（三状态铁律：passed/failed/invalid；failed execution 不得 passed；范围/字段/数值检查可归因；VR 注册 + verified_by 边；未知 exec_id 报错） |
-| 全量 pytest | **808 passed / 4 skipped**（800 + 8 新） |
+| `tests/integration/test_execution_fidelity.py` | 9 passed（F1-F5 映射检查；success=1 但缺声明变量→misaligned；symbol 别名解析；范围越界；failed/unverifiable；端到端 VR+报告） |
+| 全量 pytest | **817 passed / 4 skipped**（808 + 9 新） |
 
 ## 7. 后续（P0-E 余项，按用户优先级 v2）
 
-- **P0-E6 Code Generation 语义保真（第二扇门）**：MODEL_IR → code 的 **L2 Fidelity**——
-  生成的代码必须执行 MODEL_IR 声明的模型；fidelity=0 的 success 不算建模。
-  已验证的原语基础：replay（代码可重建）+ validation（输出可校验）。
+- **P0-E7 Code Generation 接入**：harness 提供 fidelity 校验器（已完成），生成侧由外部
+  Agent 承担（MODEL_IR → code）；接入后"生成的代码是否执行了声明的模型"成为
+  **可机械回答的问题**（fidelity_report.json）。
 - **Environment Manifest 演化**：environment_hash → 完整执行环境声明（随机种子/
   包版本/OS/浮点/外部数据/时间/网络/求解器非确定性）。
 - **K002 冻结顺序**：P0-E runtime validation → K002 dry-run → 题目区分度检查 →

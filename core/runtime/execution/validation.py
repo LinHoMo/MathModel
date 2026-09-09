@@ -74,6 +74,31 @@ def _get_path(outputs: dict, path: str) -> Any:
     return cur
 
 
+def _norm_key(key: str) -> str:
+    """小写 + 去下划线/空格：'total_cost' == 'TotalCost' == 'total cost'。"""
+    return "".join(ch for ch in key.lower() if ch.isalnum())
+
+
+def resolve_output_key(outputs: dict, *names: str) -> str | None:
+    """按候选名（name/symbol/别名）解析执行输出中的字段 key。
+
+    精确匹配优先；其次小写归一匹配。返回命中的 key 或 None。
+    """
+    for n in names:
+        if not n:
+            continue
+        if n in outputs:
+            return n
+    normed = {_norm_key(k): k for k in outputs}
+    for n in names:
+        if not n:
+            continue
+        hit = normed.get(_norm_key(n))
+        if hit is not None:
+            return hit
+    return None
+
+
 # ---------------------------------------------------------------- checks
 
 def run_check(kind: str, outputs: dict, spec: dict) -> dict:
@@ -110,6 +135,16 @@ def run_check(kind: str, outputs: dict, spec: dict) -> dict:
         return {"name": name, "kind": kind, "passed": ok,
                 "detail": (f"{path}={value!r} 等于期望 {spec.get('expect')!r}"
                            if ok else f"{path}={value!r} != {spec.get('expect')!r}")}
+
+    if kind == "output_key_exists":
+        # Fidelity 专用：按候选名（name/symbol/别名）解析输出字段
+        hit = resolve_output_key(outputs, *(spec.get("names") or []))
+        detail = (f"输出字段 {hit!r} 存在（声明 {spec.get('declared')!r}）"
+                  if hit else
+                  f"缺失声明 {spec.get('declared')!r}（候选 "
+                  f"{spec.get('names') or []} 均未命中输出 key）")
+        return {"name": name, "kind": kind, "passed": hit is not None,
+                "detail": detail, "resolved_key": hit}
 
     return {"name": name, "kind": kind, "passed": False,
             "detail": f"未知检查类型 {kind!r}"}
