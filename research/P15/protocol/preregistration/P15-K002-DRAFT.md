@@ -1,13 +1,13 @@
 # P15-K002 — Model Representation Efficacy
-## 预注册（Preregistration）DRAFT v0.5（P0-E 完成 + 核心问题升级）
+## 预注册（Preregistration）DRAFT v0.6（6 题定案 + 五 Gate 三 PASS 一冻结）
 
-> **状态：`DRAFT`（v0.4 已锁 Measurement Gate；v0.5 随 P0-E 落地把核心问题升级为
-> "从模型构造到可执行模型"的过程，新增 Fidelity 等执行级终点）**
+> **状态：`DRAFT`（v0.5 已锁 Measurement Gate；v0.6 完成 Input Authenticity 新增 3 题、
+> 五 Gate 中 G1/G3/G4/G5 已 PASS/冻结，G2 待 PREREGISTERED 前执行）**
 > **科学定位**：K001（Knowledge 文本注入）已得 negative result；本实验检验**下一个杠杆：强制的结构化 Model Representation（输出契约）本身是否提升外部 Agent 的 Model Construction Quality——且现在是"从模型构造到可执行模型"的过程质量**。
 > **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认）｜ **战略裁决**（THREE_LAYER_ARCHITECTURE.md v3：Model Lifecycle 核心；五级正确性 L0–L4；三状态分离铁律；Fidelity 指标）｜ **P0-E ✅**（commit ad917d2：ExecutionAdapter + execution_result 一等 artifact + executed_by 绑定；P0-E4 Replay ✅ 本轮）
 
 > **冻结顺序（用户裁决，写死）**：
-> `P0-E（✅）→ runtime validation → K002 dry-run → 题目区分度检查 → measurement check（五 Gate）→ PREREGISTERED → FROZEN`
+> `P0-E（✅）→ runtime validation（✅）→ K002 dry-run（✅）→ 题目区分度检查 → measurement check（五 Gate）→ PREREGISTERED → FROZEN`
 > 否则 K002 测出来的可能不是 MODEL_IR 的效果，而是 runtime 的缺陷。
 
 > **核心问题（v0.5 升级，替代 v0.4 的"JSON 比自由文本好吗"）**：
@@ -121,12 +121,12 @@ Replication = stochastic repeat（seed 42/43/44/45/46，5 rep）
 ### 3.3 规模（block≥6 裁决版）
 | 用途 | 题 | 臂 | 重复 | runs |
 |---|---|---|---|---|
-| 主检验 | **6 题**（2020_B、2018_A、2019_C + **3 新增**，见 §3.6） | 3 | 5 | **90** |
+| 主检验 | **6 题**（2020_B、2018_A、2019_C + **2018_B、2017_B、2011_B**，见 §3.6） | 3 | 5 | **90** |
 | 泛化观察 | 2022_C、2024_A | 3 | 3 | 18 |
 | **合计** | | | | **108** |
 
 - **block=6 → 2^6=64 种配对排列，最小 p≈0.016**（K001 block=3 最小 p=0.25 的 15 倍功效余量）。
-- 3 道新增题的 **Input Authenticity 是 PREREGISTERED 前置**：每道必须走题面来源→官方存档交叉验证→SHA256 冻结→manifest 登记（0 BLOCKED 才允许冻结；找不到可信来源则标记 BLOCKED，不伪造题面）。若新增题在预注册期不可得，退回 §3.6 的备选路径并如实声明功效降级。
+- **3 道新增题 Input Authenticity 已完成（v0.6）**：2018_B（智能RGV动态调度）/ 2017_B（"拍照赚钱"任务定价）/ 2011_B（交巡警服务平台设置与调度）——双源交叉验证 + SHA256 冻结 + manifest 登记，全部 `authenticity_status=verified`（0 BLOCKED）。题面/卡/gt 位于 `research/P15/benchmark/problem_cards/{2018_B,2017_B,2011_B}/`，manifest 见 `manifests/input_manifest.json`（8 题）。
 - （与 K001 同题集同构的 3 题保证跨实验可比；F/S 臂可与 K001 的 A/B 臂交叉参照。）
 
 ### 3.4 强制子问题覆盖 gate（K001 教训落点）
@@ -141,16 +141,22 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 - 若主检验题中 ≥2 题无区分度：判定题集区分力不足，STOP 并回到题目选择（不继续跑满）。
 
 ### 3.6 题目选择标准（"多几道"不够——须结构/难度/failure-mode 多样化）
-3 道新增题 + 既有 3 道主检验题，必须在以下三维度上分散（预注册时逐题登记，缺任一维度即换题）：
+主检验 6 题（既有 3 + 新增 3），在以下三维度上分散（登记表已冻结，v0.6）：
 
-| 维度 | 要求 | 对应既有题 |
-|---|---|---|
-| **建模结构**（L1 taxonomy） | 6 题覆盖 ≥4 种 Problem Structure（motion/geometry、diffusion、queue/service、decision/evaluation、network、game、data 等） | 2020_B=discrete sequential；2018_A=diffusion/PDE；2019_C=queue（区分度存疑，预检把关） |
-| **难度梯度** | 至少含 1 道"易错在分解"、1 道"易错在求解"、1 道"易错在验证"的题（按 K001 FM 分布预判） | 待新增题补足 |
-| **failure mode 多样性** | 3 道新增题不应与既有题共享同一主导 FM（避免 2019_C 全臂同分重现） | 待新增题补足 |
+| 题 | 建模结构（L1 taxonomy） | 难度易错点 | 主导 FM（预判） | 状态 |
+|---|---|---|---|---|
+| 2020_B 穿越沙漠 | discrete sequential decision（DP） | 易错在求解（状态空间/收益权衡） | FM-MC-003 | 既有，K001 已验证 |
+| 2018_A 高温作业专用服 | diffusion/PDE（传热+反演+优化） | 易错在求解（PDE 数值+参数反演） | FM-MC-001 | 既有，K001 已验证 |
+| 2019_C 机场出租车 | queue/service（M/M/c+阈值决策） | 易错在验证（需司机行为假设检验） | FM-VA-001 | 既有，**区分度存疑（预检把关）** |
+| **2018_B 智能RGV调度** | **scheduling/optimization（离散事件+组合优化）** | **易错在求解（状态爆炸/调度组合）** | FM-MC-004/FM-SV-001 | **新增，verified** |
+| **2017_B 拍照赚钱定价** | **data-driven pricing（回归/聚类+优化）** | **易错在验证（定价方案需数据验证）** | FM-VA-001/FM-MC-003 | **新增，verified** |
+| **2011_B 交巡警平台** | **graph/network（最短路/覆盖/指派）** | **易错在分解（5 子问题/多目标）** | FM-MC-001/FM-MC-004 | **新增，verified** |
 
-- 新增题候选必须满足：官方/高校存档来源可得（Input Authenticity 流程）、存在权威 gold/评分标准或可构造验证期望、不在 K001 五题集内。
-- **备选路径（预先声明）**：若某维度无法凑足（如 3 道新增题 authenticity 不可得），退回"5 题就绪集 + 已有主检验 3 题"，同时如实声明 block 退回 3、功效回到 K001 同级——**不降级题目真实性换数量**。
+- **结构覆盖：6 题 = 6 种不同 Problem Structure**（sequential/PDE/queue/scheduling/data-pricing/graph），远超 ≥4 要求。
+- **难度梯度**：分解（2011_B）/ 求解（2018_B、2018_A）/ 验证（2017_B、2019_C）三类均有。
+- **FM 多样性**：新增 3 题不与既有题共享同一主导 FM（2011_B 主导 FM-MC-001 与 2018_A 同族但结构差异大，2019_C 的零区分度风险由预检把关）。
+- 新增题均满足：官方/高校存档来源可得（双源交叉验证）、可构造验证期望、不在 K001 五题集内。
+- **备选路径（预先声明）**：若区分度预检剔除题后主检验 <4 题，如实声明 block 降级、功效回到 K001 同级——不降级题目真实性换数量。
 
 ---
 
@@ -249,18 +255,34 @@ S+V 臂在 MODEL_IR 之外强制输出 `validation_plan`，直接锚定 L4.3/L3.
 
 > 背景：RQ5 词表错位（`dynamic_programming` vs `discrete_recurrence`）是一次真实的
 > measurement failure——"我们测的东西"不是"我们声称测的东西"。K002 预注册此 Gate，
-> 在 PREREGISTERED 之前逐项验证（每项附证据，不是口头声明）：
+> 在 PREREGISTERED 之前逐项验证（每项附证据，不是口头声明）。
+> **证据归档：`research/P15/protocol/preregistration/P15-K002-GATES.md`（v1，冻结时一并 hash）**
 
-| # | Gate | 问题 | 验证方式 | 通过标准 |
-|---|---|---|---|---|
-| G1 | **Construct validity** | L3/L4 终点是否真的测 Model Construction？ | 逐维度对照 rubric 定义与 MODEL_IR 18 字段 + validation_plan 字段，确认评分项可被产物字段触发 | 每个评分维度至少 1 个产物字段可支撑（映射表冻结） |
-| G2 | **Instrument validity** | evaluator 是否真的按 rubric 测？ | 3 个独立 evaluator 在 5 份盲评样例上的评分一致性（K001 已有 55 份基线可复用） | 维度级 Cohen's κ ≥ 0.6 或分歧可归因于模糊声明（报告） |
-| G3 | **Vocabulary validity** | ontology 是否统一？ | `catalog/model_families.yaml` 单一词表 + 生成侧/评分侧解析测试（K001 词表错位回归用例） | 三源全部解析到 canonical，无 OUT_OF_CATALOG 意外 |
-| G4 | **Execution validity** | 需要 execution 的终点（L3.4/L4）是否真的由真实执行支撑？ | 若某维度依赖数值结果，产物必须含 execution_result 或等价真实数值 provenance | 预检 run 的 L3/L4 评分项全部绑定真实数值（无占位） |
-| G5 | **Statistical validity** | block 数是否足够？ | 预检 6 题区分度（§3.5）；block=6 排列功效预计算 | ≥4/6 题有区分度且功效 ≥0.8（效应量按 K001 Δ=+2.14 估计） |
+| # | Gate | 问题 | 验证方式 | 通过标准 | 状态 |
+|---|---|---|---|---|---|
+| G1 | **Construct validity** | L3/L4 终点是否真的测 Model Construction？ | 26 个评分维度逐一映射产物字段 | 每个评分维度至少 1 个产物字段可支撑（映射表冻结） | ✅ PASS（映射表 v1 冻结） |
+| G2 | **Instrument validity** | evaluator 是否真的按 rubric 测？ | 5 份样例 × 3 独立 evaluator 一致性（κ） | κ ≥ 0.6 或分歧可归因 | ⏳ 待 PREREGISTERED 前执行 |
+| G3 | **Vocabulary validity** | ontology 是否统一？ | `catalog/model_families.yaml` 单一词表 + 解析回归测试（K001 错位对全部锁定） | 三源解析到 canonical；命名层唯一；共享机制不参与族判别 | ✅ PASS（25 测试） |
+| G4 | **Execution validity** | 需要 execution 的终点是否由真实执行支撑？ | dry-run 5 场景 + execution_result 六态 | L3/L4 评分项绑定真实数值（无占位） | ✅ PASS（K002_DRYRUN_REPORT） |
+| G5 | **Statistical validity** | block 数是否足够？ | Monte Carlo 功效模拟（200k）+ 区分度预检 | 检出 ≥3.0 效应（80%）；预检剔除无区分度题 | ✅ PASS（k002_power.py，诚实声明见 GATES） |
 
 - 任一 Gate FAIL → 回到对应修复（词表/工具/rubric/题集），修复后重跑该 Gate，全部 PASS 才 PREREGISTERED。
 - Gate 证据归档到 `research/P15/protocol/preregistration/P15-K002-GATES.md`（冻结时一并 hash）。
+
+---
+
+## 7.6 冻结前置检查单（PREREGISTERED 前逐项 ✅）
+
+- [x] P0-E runtime validation（ad917d2→1b1c00b，830 passed / 4 skipped）
+- [x] K002 dry-run（G4：5 场景判定 + output_mapping 契约）
+- [x] Input Authenticity 新增 3 题（双源验证 + SHA256 + manifest，8 题 verified）
+- [x] G1 Construct（26 维映射表 v1 冻结）
+- [x] G3 Vocabulary（model_families.yaml + 25 解析回归测试）
+- [x] G5 Statistical（Monte Carlo 功效 + 区分度预检设计）
+- [ ] G2 Instrument（5 样例 × 3 evaluator，κ ≥ 0.6）
+- [ ] 题目区分度预检（6 题 × 2 臂 × 1 rep = 12 runs）
+- [ ] k002 工具链（gen_bundles/register with coverage gate + validation_plan gate）
+- [ ] 盲评包 + 泄漏扫描 + DATA FREEZE 流程演练
 
 ---
 

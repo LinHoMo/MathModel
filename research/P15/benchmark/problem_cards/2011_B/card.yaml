@@ -1,0 +1,105 @@
+# Problem Card: 2011_B — 交巡警服务平台的设置与调度
+# 生成日期: 2026-09-09
+# 状态: VERIFIED（Input Authenticity 双源交叉验证）
+# 来源: (1) 中国大学生在线官方题目页 (2) 新乡学院数学与统计学院存档（全文一致）
+
+problem_id: 2011_B
+title: 交巡警服务平台的设置与调度
+official_source:
+  url: https://dxs.moe.gov.cn/zx/a/qkt_sxjm/120829/1185246.shtml
+  publisher: 全国大学生数学建模竞赛组委会
+  publication_date: "2011-09"
+  retrieval_date: "2026-09-09"
+  text_sha256: 85dd446264bab8f212a936bc1ee5ffeddecf8495ffafa6f759b42236052ab441
+  authenticity_status: verified
+  local_text_path: problem_statement.txt
+
+family:
+  - graph_algorithm        # 图/网络（最短路/覆盖/指派）
+  - optimization           # 组合优化（覆盖/调度）
+sub_questions:
+  - id: Q1
+    desc: "A 区 20 个交巡警平台管辖范围分配（3 分钟到达约束，警车 60km/h）"
+    type: graph_partition
+    required_deliverables: [管辖范围分配]
+    depends_on: []
+  - id: Q2
+    desc: "重大突发事件：20 个平台对 13 条交通要道快速全封锁的警力调度方案（一平台最多封锁一路口）"
+    type: assignment_optimization
+    required_deliverables: [封锁调度方案]
+    depends_on: [Q1]
+  - id: Q3
+    desc: "针对工作量不均衡与出警时间过长，确定新增 2~5 个平台的具体个数和位置"
+    type: facility_location
+    required_deliverables: [新增平台位置方案]
+    depends_on: [Q1]
+  - id: Q4
+    desc: "全市（主城六区 A-F）现有平台设置方案合理性分析；不合理则给解决方案"
+    type: system_evaluation
+    required_deliverables: [合理性分析, 改进方案]
+    depends_on: [Q1]
+  - id: Q5
+    desc: "P 点（第 32 节点）重大刑事案件的最佳围堵方案（案发 3 分钟后报警，嫌疑人驾车逃跑）"
+    type: pursuit_optimization
+    required_deliverables: [最佳围堵方案]
+    depends_on: [Q1, Q2]
+
+allowed_modeling_structures:
+  - graph_algorithm        # 最短路/网络（Dijkstra/Floyd）
+  - optimization           # 覆盖/指派/选址（0-1 整数规划）
+  - decision_analysis      # 合理性评价（多准则）
+  # canonical 词表：catalog/model_families.yaml
+
+acceptable_solution_variants:
+  - dijkstra               # 最短路（3 分钟覆盖）
+  - assignment_model       # 指派模型（封锁）
+  - integer_programming    # 0-1 整数规划（选址/围堵）
+  - greedy_heuristic
+
+key_variables:
+  - node_distance          # 节点间最短路距离
+  - response_time          # 出警时间（3 分钟约束）
+  - platform_assignment    # 平台-节点管辖指派
+  - workload_balance       # 平台工作量均衡
+  - blockade_scheme        # 封锁/围堵方案
+
+key_constraints:
+  - 3 分钟到达约束（60km/h）
+  - 一平台警力最多封锁一个路口
+  - 新增 2~5 个平台
+  - 全市六区平台设置的合理性原则
+
+evaluation_targets:
+  - 管辖分配满足 3 分钟约束的比例
+  - 封锁/围堵方案的最优性（最短时间/最少平台）
+  - 合理性分析依据明确（工作量/出警时间指标）
+
+known_failure_modes:
+  - FM-MC-001   # wrong_mechanism：不用图结构做距离，直接欧氏距离
+  - FM-MC-004   # missing_subproblem：只做 Q1 不做围堵/全市
+  - FM-SV-001   # infeasible_solution：指派不可行未检验
+  - FM-VA-001   # missing_validation：方案未用附件数据验证
+
+known_invalid_model_patterns: UNKNOWN
+forbidden_misinterpretations:
+  - 忽略道路网络（用直线距离代替路网最短路径）
+  - 把围堵当纯最短路而非动态拦截问题
+
+validation_expectations:
+  - 管辖分配可复现（最短路径算法确定）
+  - 封锁方案满足一平台一路口约束
+  - 围堵方案在给定速度/延迟下可行
+
+common_human_errors: UNKNOWN
+common_llm_errors:
+  - 用欧氏距离代替路网最短路径（关键错误）
+  - 封锁与围堵混为一谈
+  - Q3 选址不做工作量均衡量化
+
+evidence_sources:
+  - benchmark: research/P15/benchmark/CUMCM-Bench-v2.json
+  - problem_text: research/P15/benchmark/problem_cards/2011_B/problem_statement.txt（verified）
+card_version: "1.0-verified"
+card_date: "2026-09-09"
+card_status: verified
+notes: "K002 新增题候选 3：图/网络覆盖结构（非既有五题）。双源交叉验证：中国大学生在线 + 新乡学院存档，全文逐字一致。"

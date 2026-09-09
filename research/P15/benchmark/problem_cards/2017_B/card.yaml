@@ -1,0 +1,101 @@
+# Problem Card: 2017_B — “拍照赚钱”的任务定价
+# 生成日期: 2026-09-09
+# 状态: VERIFIED（Input Authenticity 双源交叉验证）
+# 来源: (1) 长治学院数学系存档 (2) 中国大学生在线官方赛题下载页
+
+problem_id: 2017_B
+title: “拍照赚钱”的任务定价
+official_source:
+  url: https://sxx.czc.edu.cn/info/1039/2577.htm
+  publisher: 全国大学生数学建模竞赛组委会
+  publication_date: "2017-09"
+  retrieval_date: "2026-09-09"
+  text_sha256: 1ee25170116df366bccb7d3b391dc0f93d5970541c7012ca69a2c5f3a11a9a38
+  authenticity_status: verified
+  local_text_path: problem_statement.txt
+
+family:
+  - statistical_modeling   # 定价规律（回归/聚类）
+  - optimization           # 定价方案优化
+  - decision_analysis      # 方案比较与评价
+sub_questions:
+  - id: Q1
+    desc: "研究任务定价规律，分析任务未完成的原因（附件一数据）"
+    type: data_analysis
+    required_deliverables: [定价规律, 未完成原因归因]
+    depends_on: []
+  - id: Q2
+    desc: "设计新任务定价方案并与原方案比较"
+    type: pricing_optimization
+    required_deliverables: [新定价模型, 与原方案比较]
+    depends_on: [Q1]
+  - id: Q3
+    desc: "考虑任务打包发布时如何修改定价模型及对完成情况的影响"
+    type: model_extension
+    required_deliverables: [打包定价模型, 影响分析]
+    depends_on: [Q2]
+  - id: Q4
+    desc: "对附件三新项目给出定价方案并评价实施效果"
+    type: model_application
+    required_deliverables: [新项目定价方案, 实施效果评价]
+    depends_on: [Q1, Q2]
+
+allowed_modeling_structures:
+  - statistical_modeling   # 回归/聚类/相关性（定价规律）
+  - optimization           # 定价方案优化
+  - clustering             # 任务/会员空间聚类
+  - decision_analysis      # 方案比较评价
+  # canonical 词表：catalog/model_families.yaml
+
+acceptable_solution_variants:
+  - linear_regression
+  - logistic_regression    # 完成率预测
+  - kmeans                 # 任务/会员聚类
+  - weighted_objective_optimization
+
+key_variables:
+  - task_price             # 任务定价
+  - task_completion        # 完成情况（0/1）
+  - member_credit          # 会员信誉值
+  - task_position          # 任务位置
+  - completion_rate        # 任务完成率
+
+key_constraints:
+  - 定价与任务位置、会员密度、信誉相关
+  - 会员信誉越高越优先挑选任务、配额越大
+  - 打包发布影响用户选择行为
+
+evaluation_targets:
+  - 定价规律解释力（未完成原因可归因）
+  - 新方案与原方案比较（完成率提升/成本）
+  - 打包模型与单任务模型的一致性
+
+known_failure_modes:
+  - FM-MC-001   # wrong_mechanism：把定价当纯回归，忽略供需/效用机制
+  - FM-MC-003   # method_overfit：堆叠复杂模型无数据支撑
+  - FM-VA-001   # missing_validation：新方案未用数据验证
+  - FM-VA-002   # weak_validation：比较无量化指标
+
+known_invalid_model_patterns: UNKNOWN
+forbidden_misinterpretations:
+  - 把完成情况当确定性结果而非概率事件
+  - 忽略会员行为（信誉/配额）对定价的影响
+
+validation_expectations:
+  - 定价规律用数据可复现（回归系数/聚类中心）
+  - 新方案与原方案比较有量化指标（完成率/成本/鲁棒性）
+  - 打包模型在相同数据上的效果差异有解释
+
+common_human_errors: UNKNOWN
+common_llm_errors:
+  - 只做回归不做机制解释（为什么未完成）
+  - 新方案没有与原方案在同一口径下比较
+  - 打包模型直接假设线性叠加
+
+evidence_sources:
+  - benchmark: research/P15/benchmark/CUMCM-Bench-v2.json
+  - problem_text: research/P15/benchmark/problem_cards/2017_B/problem_statement.txt（verified）
+card_version: "1.0-verified"
+card_date: "2026-09-09"
+card_status: verified
+notes: "K002 新增题候选 2：数据驱动定价结构（非既有五题）。双源交叉验证：长治学院存档 + 中国大学生在线下载页。"

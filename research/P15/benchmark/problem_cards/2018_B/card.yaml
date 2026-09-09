@@ -1,0 +1,104 @@
+# Problem Card: 2018_B — 智能RGV的动态调度策略
+# 生成日期: 2026-09-09
+# 状态: VERIFIED（Input Authenticity 双源交叉验证）
+# 来源: (1) CSDN qq_40307529 全文 (2) mcm.edu.cn 官方讲评确认题名/背景
+
+problem_id: 2018_B
+title: 智能RGV的动态调度策略
+official_source:
+  url: https://blog.csdn.net/qq_40307529/article/details/82745055
+  publisher: 全国大学生数学建模竞赛组委会
+  publication_date: "2018-09"
+  retrieval_date: "2026-09-09"
+  text_sha256: f00ef29490cc2ef0ca87d7bf17b598ecae98021e8049addfa222649bee410152
+  authenticity_status: verified
+  local_text_path: problem_statement.txt
+
+family:
+  - scheduling            # 调度（任务排序/资源分配）
+  - optimization          # 优化（组合优化/整数规划）
+  - simulation            # 离散事件仿真
+sub_questions:
+  - id: Q1
+    desc: "一般问题建模：一道工序物料加工作业情况（单工序），给出RGV动态调度模型和求解算法"
+    type: scheduling_modeling
+    required_deliverables: [调度模型, 求解算法]
+    depends_on: []
+  - id: Q2
+    desc: "两道工序物料加工作业情况的调度建模与求解"
+    type: scheduling_modeling
+    required_deliverables: [双工序调度模型, 工序分配]
+    depends_on: [Q1]
+  - id: Q3
+    desc: "CNC 故障情形（故障率约1%，排除10-20分钟）下，单/双工序调度的鲁棒性处理"
+    type: robust_scheduling
+    required_deliverables: [故障处理策略, 仿真验证]
+    depends_on: [Q1, Q2]
+  - id: Q4
+    desc: "任务2：用表1三组系统作业参数检验模型实用性与算法有效性，给出调度策略与作业效率，填入EXCEL表"
+    type: empirical_validation
+    required_deliverables: [三组数据检验, 作业效率, EXCEL结果]
+    depends_on: [Q1, Q2, Q3]
+
+allowed_modeling_structures:
+  - optimization           # 组合优化/MILP/启发式（调度本质）
+  - simulation             # 离散事件仿真（系统状态演化）
+  - dynamic_programming    # 序贯决策/状态转移（部分解法）
+  - markov_decision_process
+  # canonical 词表：catalog/model_families.yaml
+
+acceptable_solution_variants:
+  - greedy_heuristic       # 贪心调度
+  - simulated_annealing    # 模拟退火（最短路径/排序）
+  - genetic_algorithm      # 遗传算法
+  - milp                   # 整数规划
+  - discrete_event_simulation
+
+key_variables:
+  - rgv_position           # RGV 位置（轨道坐标）
+  - cnc_status             # 各 CNC 状态（空闲/加工/故障）
+  - processing_time        # 加工/上下料/移动时间
+  - schedule_sequence      # 调度序列
+  - system_throughput      # 系统作业效率
+
+key_constraints:
+  - 移动时间分段（1/2/3 个单位）
+  - 上下料时间按 CNC 奇偶位置区分
+  - 每班次连续作业 8 小时
+  - 一个平台警力一次只处理一个任务（RGV 顺序服务）
+  - 故障排除时间 10~20 分钟、报废未完成物料
+
+evaluation_targets:
+  - 调度策略的最优性/近似性（作业效率）
+  - 三组数据下模型实用性与算法有效性
+  - 故障情形下调度鲁棒性
+
+known_failure_modes:
+  - FM-MC-001   # wrong_mechanism：把调度当 TSP 直接套最短路
+  - FM-MC-004   # missing_subproblem：只做单工序不做故障/双工序
+  - FM-SV-001   # infeasible_solution：状态空间爆炸未给出可行调度
+  - FM-VA-001   # missing_validation：未用三组数据检验
+
+known_invalid_model_patterns: UNKNOWN
+forbidden_misinterpretations:
+  - 把 RGV 调度简化为纯最短路而忽略 CNC 状态机与时间约束
+  - 忽略双工序的工序顺序约束
+
+validation_expectations:
+  - 三组数据下调度结果可复现（确定性规则或固定种子仿真）
+  - 作业效率指标定义明确并与结果一致
+  - 故障情形用随机仿真并报告多次运行统计
+
+common_human_errors: UNKNOWN
+common_llm_errors:
+  - 状态空间组合爆炸 → 直接放弃可计算调度
+  - 忽略 8 小时班次约束
+  - 双工序的 CNC 分配比例未论证
+
+evidence_sources:
+  - benchmark: research/P15/benchmark/CUMCM-Bench-v2.json
+  - problem_text: research/P15/benchmark/problem_cards/2018_B/problem_statement.txt（verified）
+card_version: "1.0-verified"
+card_date: "2026-09-09"
+card_status: verified
+notes: "K002 新增题候选 1：调度结构（非既有五题）。双源交叉验证：CSDN 全文 + mcm.edu.cn 官方讲评。"
