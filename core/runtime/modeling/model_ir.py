@@ -98,6 +98,11 @@ class ModelIR:
     model_graph: Any = None
     modeling_trace: Any = None
 
+    # audit FIX-2.3（P1-03）：code_mapping（equation_id → code section/symbol）。
+    # 可选字段，不加入 REQUIRED（18 字段契约稳定）；codegen 登记代码时
+    # 校验 implementation_ref 指向真实 CODE artifact。
+    code_mapping: dict[str, str] = field(default_factory=dict)
+
     # ------------------------------------------------------------ 视图
 
     @property
@@ -122,7 +127,10 @@ class ModelIR:
                 "L3_computational": self.l3}
 
     def to_dict(self) -> dict[str, Any]:
-        return self.data
+        d = dict(self.data)
+        if self.code_mapping:
+            d["code_mapping"] = self.code_mapping
+        return d
 
     def parameters_dict(self) -> dict[str, Any]:
         """参数 → {symbol: value}（执行 input.json 的派生源）。"""
@@ -165,6 +173,7 @@ class ModelIRBuilder:
             solvers=list(data.get("solvers") or []),
             experiments=list(data.get("experiments") or []),
             validations=list(data.get("validations") or []),
+            code_mapping=dict(data.get("code_mapping") or {}),
             claims=list(data.get("claims") or []),
             model_graph=data.get("model_graph"),
             modeling_trace=data.get("modeling_trace"),

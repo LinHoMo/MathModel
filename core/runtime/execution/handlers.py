@@ -528,6 +528,16 @@ class DefaultNodeExecutor:
         # 匹配对象：code artifact id / code 登记的 model_id（MIR001 系）/
         # MIR 外部声明的 model_id（M-Q001 系）/ solver_id
         mir_model_id = mir.get("model_id")
+        # audit FIX-3.1 回归：harness 登记 code 使用 registry 自动 ID
+        # （CODE001 系），而外部 MIR 声明的 implementation_ref 是外部命名
+        # （CODE-Q001 系）——两个命名空间。兼容规则：ref 是外部 code 命名
+        # （CODE-<qid>）且该 code 确实实现了该 MIR（implemented_by 边）→
+        # 映射成立；否则 ref 必须是可解析的真实身份（见下方身份匹配）。
+        if any(ref.startswith("CODE-") and
+               any(r["relation"] == "implemented_by" and r["from"] == mir_id
+                   and r["to"] == code_id for r in self.graph.relations)
+               for ref in refs):
+            return
         if any(ref == code_id or ref == tdata.get("model_id")
                or ref == mir_model_id or ref == tdata.get("solver_id")
                for ref in refs):
@@ -907,9 +917,9 @@ class DefaultNodeExecutor:
             for mir_id, info in table.items():
                 vr_id = info.get("vr_id")
                 if vr_id:
-                    self.graph.add_relation("evaluated_by", mir_id, vr_id)
+                    self.graph.add_relation(mir_id, "evaluated_by", vr_id)
             if chosen != "UNSELECTED" and mid:
-                self.graph.add_relation("selected_from", mid, chosen)
+                self.graph.add_relation(mid, "selected_from", chosen)
             if mid:
                 self.graph.add_relation(d.artifact_id, "selects", mid)
                 ev.append({"from": d.artifact_id, "relation": "selects", "to": mid})

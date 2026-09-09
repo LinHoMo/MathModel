@@ -58,7 +58,7 @@ def setup(tmp_path):
 
 class TestRelations:
     def test_all_relation_types_defined(self):
-        assert len(RELATION_TYPES) == 19
+        assert len(RELATION_TYPES) == 21
         # P0-E：executed_by（result → execution_result；P1-VS-001 C7 扩展 code → execution_result）
         assert RELATION_TYPES["executed_by"] == ({"result", "code"}, {"execution_result"})
         # P0-E5：verified_by（execution_result → verification_result）
@@ -68,6 +68,11 @@ class TestRelations:
         # P1-VS-001：revision_of / supersedes（model / model_ir → model / model_ir）
         assert RELATION_TYPES["revision_of"] == ({"model", "model_ir"}, {"model", "model_ir"})
         assert RELATION_TYPES["supersedes"] == ({"model", "model_ir"}, {"model", "model_ir"})
+        # audit FIX-2.4（P1-04）：候选评估证据与选型来源（弱边，不传播失效）
+        assert RELATION_TYPES["evaluated_by"] == (
+            {"model", "model_ir"},
+            {"experiment", "execution_result", "verification_result"})
+        assert RELATION_TYPES["selected_from"] == ({"model", "model_ir"}, {"model", "model_ir"})
 
     def test_relation_added(self, setup):
         _, g = setup

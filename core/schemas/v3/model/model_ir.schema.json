@@ -25,6 +25,13 @@
     "modeling_trace"
   ],
   "properties": {
+    "code_mapping": {
+      "type": "object",
+      "description": "audit FIX-2.3：equation_id → code section/symbol 映射（可选）",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "ir_version": {
       "const": "1.0",
       "description": "固定 '1.0'"

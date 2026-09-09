@@ -90,6 +90,11 @@ def build_guided_candidate() -> dict:
 
     mir = dict(M2_DICT)
     mir["model_id"] = GUIDED_MODEL_ID
+    # FIX-3.1（audit P1-03/P1-09）：多候选竞技场中 implementation_ref 指向
+    # 候选自身的 model_id（registry 按创建顺序分配 CODE001/CODE002 编号，
+    # 外部声明的实现引用以 model_id 为稳定标识，避免与内部编号错位）。
+    mir["solvers"] = [dict(s, implementation_ref=GUIDED_MODEL_ID)
+                      for s in mir.get("solvers") or []]
     merged = _merge_obligations({
         "validations": mir.get("validations", []),
         "assumptions": mir.get("assumptions", []),
@@ -113,6 +118,8 @@ def build_unguided_candidate() -> dict:
     """
     mir = dict(M2_DICT)
     mir["model_id"] = UNGUIDED_MODEL_ID
+    mir["solvers"] = [dict(s, implementation_ref=UNGUIDED_MODEL_ID)
+                      for s in mir.get("solvers") or []]
     mir["validations"] = [{
         "validation_id": "VALBASE01",
         "type": "constraint",

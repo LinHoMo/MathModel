@@ -50,13 +50,17 @@ RELATION_TYPES: dict[str, tuple] = {
     "verified_by":    ({"execution_result"}, {"verification_result"}),
     "revision_of":    ({"model", "model_ir"}, {"model", "model_ir"}),
     "supersedes":     ({"model", "model_ir"}, {"model", "model_ir"}),
+    # audit FIX-2.4（P1-04）：候选评估证据与选型来源（弱边，不传播失效）
+    "evaluated_by":   ({"model", "model_ir"}, {"experiment", "execution_result",
+                                               "verification_result"}),
+    "selected_from":  ({"model", "model_ir"}, {"model", "model_ir"}),
 }
 
 STRONG_RELATIONS = frozenset({
     "solved_by", "implemented_by", "validated_by", "uses", "assumes",
     "produces", "visualized_by", "supports", "selects", "based_on",
 })
-WEAK_RELATIONS = frozenset({"appears_in", "derived_from", "revision_of", "supersedes"})
+WEAK_RELATIONS = frozenset({"appears_in", "derived_from", "revision_of", "supersedes", "evaluated_by", "selected_from"})
 
 # ------------------------------------------------------------- 传播语义
 #
