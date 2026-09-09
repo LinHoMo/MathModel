@@ -1,8 +1,13 @@
 # P15-K002 — Measurement Gate 证据归档（G1–G5）
 
 - 日期：2026-09-09
-- 状态：**G3/G4/G5 PASS；G1 映射表冻结（v1）；G2 待 PREREGISTERED 前执行**
-- 关联：P15-K002-DRAFT v0.5 §7.5；冻结时本文件连同 rubric/题面/schema 一并 hash 锁定
+- 状态：**G3/G4/G5 PASS；G1 映射表冻结（v1）；G2 与区分度预检正在由外部 Organizer 执行（PREREGISTERED 前置）**
+- 关联：P15-K002-DRAFT v0.6 §7.5；冻结时本文件连同 rubric/题面/schema 一并 hash 锁定
+- 工具链状态（本地可建部分已全部就绪，2026-09-09 更新）：
+  - `research/P15/scripts/k002_{common,state,gen_bundles,register,freeze,blind_pack}.py`
+  - `research/P15/analysis/scripts/k002_analysis.py`（三臂配对 + DATA FREEZE，--selftest PASS）
+  - prompt 模板 F/S/SV 已定稿（F/S 长度差 5.9% < 10%）
+  - register 三 gate 实测：COVERAGE_FAIL（Q1-only）/ validation_plan FAIL（n_runs<3）/ REGISTERED（3/3 覆盖）
 
 ## G1 — Construct validity：评分维度 ↔ 产物字段映射（v1，冻结）
 
