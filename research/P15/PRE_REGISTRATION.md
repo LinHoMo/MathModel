@@ -1,3 +1,10 @@
+<!-- SUPERSEDED
+本文件为 P15 早期预注册（v1，2026-09-08）。已被后续更严格的预注册取代：
+P15-K001-v1.0（2×2 知识×案例实验，已 CLOSED）与 P15-K002-DRAFT（Model
+Representation Efficacy，三臂 F/S/SV）。当前权威口径见
+protocol/preregistration/ 与 protocol/P15-EXPERIMENT-CONTRACT-v2.md。
+历史快照仅作溯源，不作为现行执行依据。
+SUPERSEDED -->
 # P15 预注册（v1 freeze）：Competition Modeling Capability Program
 
 - Status: **FROZEN v1 (2026-09-08)** · 轨道：`research/P15/`（全程不进 core/）
