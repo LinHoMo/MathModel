@@ -41,21 +41,8 @@ def bzd_cards():
 
 
 def _requires_to_dependencies(cards, model_id: str) -> list[dict]:
-    """方法卡 requires → MODEL_IR.dependencies 结构化声明（可溯源）。"""
-    deps, i = [], 0
-    for c in cards:
-        for req in (c.requires or []):
-            i += 1
-            deps.append({
-                "dependency_id": f"DEPBZD{i:02d}",
-                "from_type": "knowledge_card",
-                "from_id": c.card_id,
-                "to_type": "model",
-                "to_id": model_id,
-                "relation": "requires",
-                "note": req,
-            })
-    return deps
+    """方法卡 requires → MODEL_IR.dependencies 结构化声明（正式模块委托）。"""
+    return requires_to_dependencies(cards, model_id)
 
 
 def _with_ids(oblig: dict) -> dict:
@@ -81,13 +68,9 @@ def _with_ids(oblig: dict) -> dict:
 
 
 def build_guided_candidate() -> dict:
-    """知识引导候选：建模者自身声明（M2 基线）∪ BZD 卡义务（去重，带 source_card）。"""
+    """知识引导候选：建模者自身声明（M2 基线）∪ BZD 卡义务（正式模块嵌入）。"""
+    from runtime.modeling.knowledge_guided import apply_knowledge_obligations
     cards = bzd_cards()
-    oblig = {"validations": [], "assumptions": [], "risks": [], "dependencies": []}
-    for c in cards:
-        oblig = _merge_obligations(oblig, map_card_obligations(c))
-    oblig = _with_ids(oblig)
-
     mir = dict(M2_DICT)
     mir["model_id"] = GUIDED_MODEL_ID
     # FIX-3.1（audit P1-03/P1-09）：多候选竞技场中 implementation_ref 指向
@@ -95,19 +78,7 @@ def build_guided_candidate() -> dict:
     # 外部声明的实现引用以 model_id 为稳定标识，避免与内部编号错位）。
     mir["solvers"] = [dict(s, implementation_ref=GUIDED_MODEL_ID)
                       for s in mir.get("solvers") or []]
-    merged = _merge_obligations({
-        "validations": mir.get("validations", []),
-        "assumptions": mir.get("assumptions", []),
-        "risks": mir.get("risks", []),
-        "dependencies": [],
-    }, oblig)
-    mir["validations"] = merged["validations"]
-    mir["assumptions"] = merged["assumptions"]
-    mir["risks"] = merged["risks"]
-    mir["dependencies"] = list(mir.get("dependencies", [])) \
-        + _requires_to_dependencies(cards, GUIDED_MODEL_ID)
-    mir["knowledge_refs"] = [{"id": c.card_id, "version": c.version}
-                             for c in cards]
+    mir = apply_knowledge_obligations(mir, cards, model_id=GUIDED_MODEL_ID)
     return {"model_ir": mir, "code": C2_CODE}
 
 
