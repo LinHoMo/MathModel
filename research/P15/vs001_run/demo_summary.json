@@ -42,6 +42,11 @@
       "to": "P001"
     },
     {
+      "from": "D002",
+      "relation": "selects",
+      "to": "MIR002"
+    },
+    {
       "from": "EXEC001",
       "relation": "produces",
       "to": "R001"
@@ -67,9 +72,9 @@
       "to": "A001"
     },
     {
-      "from": "M001",
-      "relation": "assumes",
-      "to": "A002"
+      "from": "MIR001",
+      "relation": "diagnosed_by",
+      "to": "DIAG001"
     },
     {
       "from": "MIR001",
@@ -99,6 +104,11 @@
     {
       "from": "MIR002",
       "relation": "revision_of",
+      "to": "MIR001"
+    },
+    {
+      "from": "MIR002",
+      "relation": "supersedes",
       "to": "MIR001"
     },
     {
