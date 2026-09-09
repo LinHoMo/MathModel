@@ -1,0 +1,53 @@
+{
+  "run_id": "aa69ed329d67",
+  "problem_id": "2018_A",
+  "arm": "SV",
+  "rep": 1,
+  "seed": 42,
+  "batch": "precheck",
+  "block_role": "main",
+  "status": "EXECUTED",
+  "model_family_primary": "numerical_pde",
+  "artifact_type": "model_ir.json+validation_plan.json",
+  "code_sha256": "a207dba35a24e333309fd22be623223eb78767d1047075a50e4597d080f807eb",
+  "output_mapping": {
+    "皮肤侧温度": "skin_temp_final",
+    "T_skin": "skin_temp_final",
+    "最高皮肤温度": "skin_temp_max",
+    "超温时间": "time_above_44C_s",
+    "温度场": "temperature_curve",
+    "T": "temperature_curve",
+    "时间": "duration_s",
+    "t": "duration_s"
+  },
+  "execution": {
+    "code_id": "CODE017",
+    "exec_id": "EXEC017",
+    "exec_status": "success",
+    "duration_ms": 30026,
+    "returncode": 0,
+    "outputs_keys": [
+      "skin_temp_final",
+      "skin_temp_max",
+      "time_above_44C_s",
+      "time_above_44C_min",
+      "total_thickness_m",
+      "n_grid_points",
+      "n_time_steps",
+      "dt_s",
+      "temperature_curve",
+      "ambient_temp",
+      "duration_s"
+    ]
+  },
+  "fidelity": {
+    "status": "misaligned",
+    "score": 0.9091,
+    "verification_id": "VR017"
+  },
+  "generated_at": "2026-09-09T14:54:50+0800",
+  "generator": {
+    "agent_identity": "organizer_agent",
+    "role": "external_constructor"
+  }
+}

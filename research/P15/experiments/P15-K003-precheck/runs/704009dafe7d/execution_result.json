@@ -1,0 +1,64 @@
+{
+  "execution_id": "0c72549d0426",
+  "model_id": "M-2018_B-F-precheck",
+  "status": "success",
+  "inputs": {},
+  "outputs": {
+    "total_parts": 248,
+    "throughput_per_hour": 31.0,
+    "avg_cycle_time_s": 116.13,
+    "rgv_utilization": 0.996,
+    "rgv_move_total_s": 7616.0,
+    "rgv_idle_total_s": 114.0,
+    "cnc_utilization": [
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028,
+      0.6028
+    ],
+    "cnc_parts_per_machine": [
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31
+    ],
+    "shift_duration_s": 28800,
+    "n_cnc": 8,
+    "process_time_s": 560,
+    "scheduling_strategy": "greedy_nearest"
+  },
+  "stdout": "{\"total_parts\": 248, \"throughput_per_hour\": 31.0, \"avg_cycle_time_s\": 116.13, \"rgv_utilization\": 0.996, \"rgv_move_total_s\": 7616.0, \"rgv_idle_total_s\": 114.0, \"cnc_utilization\": [0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028], \"cnc_parts_per_machine\": [31, 31, 31, 31, 31, 31, 31, 31], \"shift_duration_s\": 28800, \"n_cnc\": 8, \"process_time_s\": 560, \"scheduling_strategy\": \"greedy_nearest\"}\n",
+  "stderr": "",
+  "returncode": 0,
+  "duration_ms": 59,
+  "code_hash": "4116db6f48bed86a091eed3f1dd7866abd1acf359780174e79a160511c95ad53",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "started_at": "2026-09-09T14:54:51+0800",
+  "finished_at": "2026-09-09T14:54:51+0800",
+  "provenance": {
+    "adapter": "local_python",
+    "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "output_mapping": {
+      "完成物料数": "total_parts",
+      "N": "total_parts",
+      "吞吐量": "throughput_per_hour",
+      "throughput": "throughput_per_hour",
+      "平均周期": "avg_cycle_time_s",
+      "cycle": "avg_cycle_time_s",
+      "RGV利用率": "rgv_utilization",
+      "util": "rgv_utilization",
+      "CNC利用率": "cnc_utilization",
+      "cnc_util": "cnc_utilization"
+    }
+  },
+  "code": "\"\"\"2018_B 智能RGV动态调度 — 离散事件仿真+贪心调度（自包含，纯标准库）。\"\"\"\nimport json\nimport heapq\n\ndef solve(inputs: dict) -> dict:\n    # 系统参数（第1组数据）\n    move_times = {1: 20, 2: 33, 3: 46}  # RGV移动1/2/3个单位时间（秒）\n    process_time = 560  # 一道工序加工时间（秒）\n    load_odd = 28   # RGV为1#,3#,5#,7#上下料时间\n    load_even = 31  # RGV为2#,4#,6#,8#上下料时间\n    clean_time = 25  # 清洗时间\n    n_cnc = 8\n    shift_time = 8 * 3600  # 8小时 = 28800秒\n\n    def move_time(from_pos, to_pos):\n        dist = abs(from_pos - to_pos)\n        if dist == 0:\n            return 0\n        # 线性插值：已知1/2/3单位时间\n        if dist <= 3:\n            return move_times[dist]\n        # 超过3单位：用3单位时间 + 每额外单位约13秒\n        return move_times[3] + (dist - 3) * 13\n\n    # 离散事件仿真\n    # 事件: (time, type, cnc_id)\n    # type: \"cnc_done\" (CNC加工完成), \"rgv_arrive\" (RGV到达某CNC)\n    events = []\n    # CNC状态: \"idle\" / \"processing\" / \"done_waiting\"\n    cnc_state = [\"idle\"] * n_cnc\n    cnc_done_time = [0.0] * n_cnc\n    cnc_parts = [0] * n_cnc  # 每台CNC完成的物料数\n\n    rgv_pos = 0  # RGV初始位置（在1#CNC旁，位置索引0）\n    rgv_busy_until = 0.0\n    total_parts = 0\n    rgv_move_total = 0.0\n    rgv_idle_total = 0.0\n    last_event_time = 0.0\n\n    # 初始化：所有CNC idle，RGV依次上料\n    # 贪心策略：RGV总是去最近的需要上下料的CNC\n    def find_nearest_idle(pos):\n        best = None\n        best_dist = float(\"inf\")\n        for i in range(n_cnc):\n            if cnc_state[i] == \"idle\":\n                d = abs(pos - i)\n                if d < best_dist:\n                    best_dist = d\n                    best = i\n        return best\n\n    def find_nearest_done(pos):\n        best = None\n        best_time = float(\"inf\")\n        for i in range(n_cnc):\n            if cnc_state[i] == \"done_waiting\":\n                if cnc_done_time[i] < best_time:\n                    best_time = cnc_done_time[i]\n                    best = i\n            elif cnc_state[i] == \"processing\":\n                if cnc_done_time[i] < best_time:\n                    best_time = cnc_done_time[i]\n                    best = i\n        return best\n\n    current_time = 0.0\n    # 初始：给所有CNC上料（RGV依次移动）\n    init_order = list(range(n_cnc))\n    for cnc_id in init_order:\n        mt = move_time(rgv_pos, cnc_id)\n        current_time += mt\n        rgv_move_total += mt\n        lt = load_odd if cnc_id % 2 == 0 else load_even\n        current_time += lt\n        cnc_state[cnc_id] = \"processing\"\n        cnc_done_time[cnc_id] = current_time + process_time\n        rgv_pos = cnc_id\n\n    # 主仿真循环\n    while current_time < shift_time:\n        # 找最近的已完成或即将完成的CNC\n        target = find_nearest_done(rgv_pos)\n        if target is None:\n            break\n\n        # 移动到目标\n        mt = move_time(rgv_pos, target)\n        arrival_time = current_time + mt\n        rgv_move_total += mt\n\n        # 等待CNC加工完成（如果还没完成）\n        if arrival_time < cnc_done_time[target]:\n            wait = cnc_done_time[target] - arrival_time\n            rgv_idle_total += wait\n            arrival_time = cnc_done_time[target]\n\n        if arrival_time > shift_time:\n            break\n\n        # 下料+上料+清洗\n        lt = load_odd if target % 2 == 0 else load_even\n        service_time = lt * 2 + clean_time  # 下料+上料+清洗\n        finish_time = arrival_time + service_time\n\n        if finish_time > shift_time:\n            break\n\n        # 完成一个物料\n        total_parts += 1\n        cnc_parts[target] += 1\n        cnc_state[target] = \"processing\"\n        cnc_done_time[target] = finish_time + process_time\n        current_time = finish_time\n        rgv_pos = target\n\n    # 统计\n    utilization = []\n    for i in range(n_cnc):\n        busy = cnc_parts[i] * process_time\n        utilization.append(round(min(1.0, busy / shift_time), 4))\n\n    avg_cycle = shift_time / total_parts if total_parts > 0 else 0\n    rgv_util = round(1.0 - rgv_idle_total / shift_time, 4) if shift_time > 0 else 0\n\n    return {\n        \"total_parts\": total_parts,\n        \"throughput_per_hour\": round(total_parts / 8.0, 2),\n        \"avg_cycle_time_s\": round(avg_cycle, 2),\n        \"rgv_utilization\": rgv_util,\n        \"rgv_move_total_s\": round(rgv_move_total, 1),\n        \"rgv_idle_total_s\": round(rgv_idle_total, 1),\n        \"cnc_utilization\": utilization,\n        \"cnc_parts_per_machine\": cnc_parts,\n        \"shift_duration_s\": shift_time,\n        \"n_cnc\": n_cnc,\n        \"process_time_s\": process_time,\n        \"scheduling_strategy\": \"greedy_nearest\",\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+  "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+}

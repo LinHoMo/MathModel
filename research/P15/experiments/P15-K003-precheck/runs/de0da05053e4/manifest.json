@@ -1,0 +1,60 @@
+{
+  "run_id": "de0da05053e4",
+  "problem_id": "2011_B",
+  "arm": "S",
+  "rep": 1,
+  "seed": 42,
+  "batch": "precheck",
+  "block_role": "main",
+  "status": "EXECUTED",
+  "model_family_primary": "graph_algorithm",
+  "artifact_type": "model_ir.json",
+  "code_sha256": "03579dfb35228626b03eea6af179fa8985bf451b7df522352614e2d21bd66643",
+  "output_mapping": {
+    "3分钟覆盖率": "coverage_rate_3min",
+    "coverage": "coverage_rate_3min",
+    "最大响应时间": "max_response_time_min",
+    "t_max": "max_response_time_min",
+    "工作量变异系数": "workload_cv",
+    "CV": "workload_cv",
+    "管辖分配": "allocation",
+    "allocation": "allocation",
+    "封锁调度": "blockade_schedule",
+    "blockade": "blockade_schedule"
+  },
+  "execution": {
+    "code_id": "CODE028",
+    "exec_id": "EXEC028",
+    "exec_status": "success",
+    "duration_ms": 62,
+    "returncode": 0,
+    "outputs_keys": [
+      "n_nodes",
+      "n_edges",
+      "n_platforms",
+      "coverage_rate_3min",
+      "max_response_time_min",
+      "avg_response_time_min",
+      "workload_cv",
+      "platform_workload",
+      "allocation",
+      "blockade_n_exits",
+      "blockade_total_dist_km",
+      "blockade_avg_arrival_min",
+      "blockade_schedule",
+      "speed_kmh",
+      "response_limit_min",
+      "distance_limit_km"
+    ]
+  },
+  "fidelity": {
+    "status": "aligned",
+    "score": 1.0,
+    "verification_id": "VR028"
+  },
+  "generated_at": "2026-09-09T14:54:53+0800",
+  "generator": {
+    "agent_identity": "organizer_agent",
+    "role": "external_constructor"
+  }
+}

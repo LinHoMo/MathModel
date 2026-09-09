@@ -1,0 +1,56 @@
+{
+  "run_id": "704009dafe7d",
+  "problem_id": "2018_B",
+  "arm": "F",
+  "rep": 1,
+  "seed": 42,
+  "batch": "precheck",
+  "block_role": "main",
+  "status": "EXECUTED",
+  "model_family_primary": "simulation",
+  "artifact_type": "model_doc.md",
+  "code_sha256": "4116db6f48bed86a091eed3f1dd7866abd1acf359780174e79a160511c95ad53",
+  "output_mapping": {
+    "完成物料数": "total_parts",
+    "N": "total_parts",
+    "吞吐量": "throughput_per_hour",
+    "throughput": "throughput_per_hour",
+    "平均周期": "avg_cycle_time_s",
+    "cycle": "avg_cycle_time_s",
+    "RGV利用率": "rgv_utilization",
+    "util": "rgv_utilization",
+    "CNC利用率": "cnc_utilization",
+    "cnc_util": "cnc_utilization"
+  },
+  "execution": {
+    "code_id": "CODE021",
+    "exec_id": "EXEC021",
+    "exec_status": "success",
+    "duration_ms": 59,
+    "returncode": 0,
+    "outputs_keys": [
+      "total_parts",
+      "throughput_per_hour",
+      "avg_cycle_time_s",
+      "rgv_utilization",
+      "rgv_move_total_s",
+      "rgv_idle_total_s",
+      "cnc_utilization",
+      "cnc_parts_per_machine",
+      "shift_duration_s",
+      "n_cnc",
+      "process_time_s",
+      "scheduling_strategy"
+    ]
+  },
+  "fidelity": {
+    "status": "unverifiable",
+    "score": null,
+    "verification_id": "VR021"
+  },
+  "generated_at": "2026-09-09T14:54:51+0800",
+  "generator": {
+    "agent_identity": "organizer_agent",
+    "role": "external_constructor"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "scenarios": {
+    "S1_aligned": {
+      "expected": 1.0,
+      "actual": 1.0,
+      "status": "aligned",
+      "pass": true
+    },
+    "S2_private_no_mapping": {
+      "expected": 0.0,
+      "actual": 0.0,
+      "status": "misaligned",
+      "pass": true
+    },
+    "S3_private_with_mapping": {
+      "expected": 1.0,
+      "actual": 1.0,
+      "status": "aligned",
+      "pass": true
+    },
+    "S4_runs_wrong_model": {
+      "expected": 0.0,
+      "actual": 0.0,
+      "status": "misaligned",
+      "pass": true
+    },
+    "S5_mapping_lies": {
+      "expected": "~0.16 (partial)",
+      "actual": 0.3636,
+      "status": "misaligned",
+      "pass": true
+    }
+  },
+  "execution_tests": [
+    {
+      "problem_id": "2020_B",
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.9286,
+      "code_id": "CODE001",
+      "exec_id": "EXEC001"
+    },
+    {
+      "problem_id": "2018_A",
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.9091,
+      "code_id": "CODE002",
+      "exec_id": "EXEC002"
+    },
+    {
+      "problem_id": "2019_C",
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "code_id": "CODE003",
+      "exec_id": "EXEC003"
+    },
+    {
+      "problem_id": "2018_B",
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "code_id": "CODE004",
+      "exec_id": "EXEC004"
+    },
+    {
+      "problem_id": "2017_B",
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.8235,
+      "code_id": "CODE005",
+      "exec_id": "EXEC005"
+    },
+    {
+      "problem_id": "2011_B",
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "code_id": "CODE006",
+      "exec_id": "EXEC006"
+    }
+  ],
+  "conclusion": {
+    "execution_success_rate": 1.0,
+    "execution_pass": true,
+    "fidelity_scenarios_pass": true,
+    "g4_pass": true,
+    "timestamp": "2026-09-09T14:53:24+0800"
+  },
+  "execution_success_rate": 1.0
+}

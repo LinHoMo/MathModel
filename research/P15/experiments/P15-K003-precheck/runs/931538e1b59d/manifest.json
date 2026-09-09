@@ -1,0 +1,58 @@
+{
+  "run_id": "931538e1b59d",
+  "problem_id": "2019_C",
+  "arm": "S",
+  "rep": 1,
+  "seed": 42,
+  "batch": "precheck",
+  "block_role": "main",
+  "status": "EXECUTED",
+  "model_family_primary": "queuing_theory",
+  "artifact_type": "model_ir.json",
+  "code_sha256": "0e57dd35ad658934899923f091c160dd85c2da8bb34d7cfa0360101aa1d74b1e",
+  "output_mapping": {
+    "最优决策": "optimal_decision",
+    "decision": "optimal_decision",
+    "排队收益": "profit_queue",
+    "profit_q": "profit_queue",
+    "放空收益": "profit_city",
+    "profit_c": "profit_city",
+    "平均等待时间": "expected_wait_min",
+    "W_q": "expected_wait_min",
+    "乘客到达率": "lambda_critical",
+    "lambda": "lambda_critical",
+    "服务率": "rho_utilization",
+    "mu": "rho_utilization"
+  },
+  "execution": {
+    "code_id": "CODE019",
+    "exec_id": "EXEC019",
+    "exec_status": "success",
+    "duration_ms": 56,
+    "returncode": 0,
+    "outputs_keys": [
+      "optimal_decision",
+      "optimal_decision_cn",
+      "profit_queue",
+      "profit_city",
+      "profit_diff",
+      "expected_wait_min",
+      "queue_length_avg",
+      "rho_utilization",
+      "queue_stable",
+      "lambda_critical",
+      "n_taxis_in_pool",
+      "decision_scan"
+    ]
+  },
+  "fidelity": {
+    "status": "aligned",
+    "score": 1.0,
+    "verification_id": "VR019"
+  },
+  "generated_at": "2026-09-09T14:54:50+0800",
+  "generator": {
+    "agent_identity": "organizer_agent",
+    "role": "external_constructor"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "execution_id": "EXEC003",
+  "verification_id": "VR003",
+  "fidelity_status": "aligned",
+  "fidelity_score": 1.0,
+  "passed": 14,
+  "total": 14,
+  "checks": [
+    {
+      "name": "F1 变量可观测: 乘客到达率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'lambda_critical' 存在（声明 '乘客到达率'）",
+      "resolved_key": "lambda_critical"
+    },
+    {
+      "name": "F5 变量范围: 乘客到达率 ∈ [0, 60]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "lambda_critical=39.98 在 [0, 60]"
+    },
+    {
+      "name": "F1 变量可观测: 服务率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'rho_utilization' 存在（声明 '服务率'）",
+      "resolved_key": "rho_utilization"
+    },
+    {
+      "name": "F5 变量范围: 服务率 ∈ [0, 100]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "rho_utilization=0.75 在 [0, 100]"
+    },
+    {
+      "name": "F1 变量可观测: 平均等待时间",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'expected_wait_min' 存在（声明 '平均等待时间'）",
+      "resolved_key": "expected_wait_min"
+    },
+    {
+      "name": "F5 变量范围: 平均等待时间 ∈ [0, 120]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "expected_wait_min=0.1 在 [0, 120]"
+    },
+    {
+      "name": "F1 变量可观测: 排队收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit_queue' 存在（声明 '排队收益'）",
+      "resolved_key": "profit_queue"
+    },
+    {
+      "name": "F1 变量可观测: 放空收益",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit_city' 存在（声明 '放空收益'）",
+      "resolved_key": "profit_city"
+    },
+    {
+      "name": "F1 变量可观测: 最优决策",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_decision' 存在（声明 '最优决策'）",
+      "resolved_key": "optimal_decision"
+    },
+    {
+      "name": "F2 目标: maximize 司机期望净收益 max(profit_q, profit_c)",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit_queue' 存在（声明 'maximize 司机期望净收益 max(profit_q, profit_c)'）",
+      "resolved_key": "profit_queue"
+    },
+    {
+      "name": "F3 约束: 系统稳定要求 rho=lambda/mu < 1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'lambda_critical' 存在（声明 '系统稳定要求 rho=lambda/mu < 1'）",
+      "resolved_key": "lambda_critical"
+    },
+    {
+      "name": "F3 约束: 等待时间 W_q >= 0",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'expected_wait_min' 存在（声明 '等待时间 W_q >= 0'）",
+      "resolved_key": "expected_wait_min"
+    },
+    {
+      "name": "F4 方程: EQ1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'expected_wait_min' 存在（声明 'EQ1'）",
+      "resolved_key": "expected_wait_min"
+    },
+    {
+      "name": "F4 方程: EQ2",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit_queue' 存在（声明 'EQ2'）",
+      "resolved_key": "profit_queue"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

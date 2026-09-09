@@ -1,0 +1,125 @@
+{
+  "execution_id": "EXEC025",
+  "verification_id": "VR025",
+  "fidelity_status": "misaligned",
+  "fidelity_score": 0.8235,
+  "passed": 14,
+  "total": 17,
+  "checks": [
+    {
+      "name": "F1 变量可观测: 定价",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_price' 存在（声明 '定价'）",
+      "resolved_key": "optimal_price"
+    },
+    {
+      "name": "F5 变量范围: 定价 ∈ [5, 50]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "optimal_price=40.0 在 [5, 50]"
+    },
+    {
+      "name": "F1 变量可观测: 距离",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'feature_standardization' 存在（声明 '距离'）",
+      "resolved_key": "feature_standardization"
+    },
+    {
+      "name": "F5 变量范围: 距离 ∈ [0, 15]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "feature_standardization=None 超出 [0, 15]"
+    },
+    {
+      "name": "F1 变量可观测: 会员密度",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 '会员密度'（候选 ['会员密度', 'density'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F5 变量范围: 会员密度 ∈ [1, 30]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "=None 超出 [1, 30]"
+    },
+    {
+      "name": "F1 变量可观测: 完成概率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'actual_completion_rate' 存在（声明 '完成概率'）",
+      "resolved_key": "actual_completion_rate"
+    },
+    {
+      "name": "F5 变量范围: 完成概率 ∈ [0, 1]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "actual_completion_rate=0.435 在 [0, 1]"
+    },
+    {
+      "name": "F1 变量可观测: 最优定价",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_price' 存在（声明 '最优定价'）",
+      "resolved_key": "optimal_price"
+    },
+    {
+      "name": "F5 变量范围: 最优定价 ∈ [5, 50]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "optimal_price=40.0 在 [5, 50]"
+    },
+    {
+      "name": "F1 变量可观测: 期望利润",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_expected_profit' 存在（声明 '期望利润'）",
+      "resolved_key": "optimal_expected_profit"
+    },
+    {
+      "name": "F2 目标: 估计任务完成概率 P(complete=1|price,distance,density)",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'actual_completion_rate' 存在（声明 '估计任务完成概率 P(complete=1|price,distance,density)'）",
+      "resolved_key": "actual_completion_rate"
+    },
+    {
+      "name": "F2 目标: maximize 期望利润 price * P_complete(price)",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_price' 存在（声明 'maximize 期望利润 price * P_complete(price)'）",
+      "resolved_key": "optimal_price"
+    },
+    {
+      "name": "F3 约束: 定价在[5, 50]元范围内",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_price' 存在（声明 '定价在[5, 50]元范围内'）",
+      "resolved_key": "optimal_price"
+    },
+    {
+      "name": "F3 约束: 完成概率 P_complete ∈ [0, 1]",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'actual_completion_rate' 存在（声明 '完成概率 P_complete ∈ [0, 1]'）",
+      "resolved_key": "actual_completion_rate"
+    },
+    {
+      "name": "F4 方程: EQ1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'actual_completion_rate' 存在（声明 'EQ1'）",
+      "resolved_key": "actual_completion_rate"
+    },
+    {
+      "name": "F4 方程: EQ2",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'optimal_expected_profit' 存在（声明 'EQ2'）",
+      "resolved_key": "optimal_expected_profit"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

@@ -1,0 +1,84 @@
+{
+  "execution_id": "EXEC007",
+  "verification_id": "VR007",
+  "fidelity_status": "aligned",
+  "fidelity_score": 1.0,
+  "passed": 11,
+  "total": 11,
+  "checks": [
+    {
+      "name": "F1 变量可观测: profit",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit' 存在（声明 'profit'）",
+      "resolved_key": "profit"
+    },
+    {
+      "name": "F5 变量范围: profit ∈ [0, 10000]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "profit=1500.5 在 [0, 10000]"
+    },
+    {
+      "name": "F1 变量可观测: water",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'water' 存在（声明 'water'）",
+      "resolved_key": "water"
+    },
+    {
+      "name": "F5 变量范围: water ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "water=8.0 在 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: food",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'food' 存在（声明 'food'）",
+      "resolved_key": "food"
+    },
+    {
+      "name": "F5 变量范围: food ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "food=5.0 在 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: day",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'day' 存在（声明 'day'）",
+      "resolved_key": "day"
+    },
+    {
+      "name": "F5 变量范围: day ∈ [0, 10]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "day=7.0 在 [0, 10]"
+    },
+    {
+      "name": "F2 目标: max profit",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit' 存在（声明 'max profit'）",
+      "resolved_key": "profit"
+    },
+    {
+      "name": "F3 约束: water+food<=20",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'water' 存在（声明 'water+food<=20'）",
+      "resolved_key": "water"
+    },
+    {
+      "name": "F4 方程: e1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit' 存在（声明 'e1'）",
+      "resolved_key": "profit"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

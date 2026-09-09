@@ -1,0 +1,84 @@
+{
+  "execution_id": "EXEC008",
+  "verification_id": "VR008",
+  "fidelity_status": "misaligned",
+  "fidelity_score": 0.0,
+  "passed": 0,
+  "total": 11,
+  "checks": [
+    {
+      "name": "F1 变量可观测: profit",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'profit'（候选 ['profit'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F5 变量范围: profit ∈ [0, 10000]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "=None 超出 [0, 10000]"
+    },
+    {
+      "name": "F1 变量可观测: water",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'water'（候选 ['water'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F5 变量范围: water ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "=None 超出 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: food",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'food'（候选 ['food'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F5 变量范围: food ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "=None 超出 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: day",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'day'（候选 ['day'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F5 变量范围: day ∈ [0, 10]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "=None 超出 [0, 10]"
+    },
+    {
+      "name": "F2 目标: max profit",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'max profit'（候选 ['profit'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F3 约束: water+food<=20",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'water+food<=20'（候选 ['water', 'food'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: e1",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'e1'（候选 ['profit', 'water', 'food'] 均未命中输出 key）",
+      "resolved_key": null
+    }
+  ],
+  "engine": "execution.fidelity"
+}

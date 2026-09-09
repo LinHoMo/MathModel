@@ -1,0 +1,41 @@
+{
+  "plan_id": "VP-2017B",
+  "limit_tests": [
+    {
+      "name": "零价格",
+      "description": "price=0时完成概率应极低（无激励）",
+      "expected": "P_complete < 0.1"
+    },
+    {
+      "name": "极远任务",
+      "description": "distance=15km时完成概率应显著降低",
+      "expected": "P_complete < 距离均值时的概率"
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "定价",
+      "range": [
+        5,
+        15,
+        30
+      ],
+      "expected_effect": "定价增加→完成概率增加→期望利润先增后减（存在最优）"
+    },
+    {
+      "parameter": "距离",
+      "range": [
+        1,
+        5,
+        10
+      ],
+      "expected_effect": "距离增加→完成概率降低→最优定价可能提高"
+    }
+  ],
+  "validation_targets": [
+    "OBJ1",
+    "OBJ2"
+  ],
+  "constraint_violation_check": true,
+  "residual_check": true
+}

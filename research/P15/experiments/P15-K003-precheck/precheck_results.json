@@ -1,0 +1,1822 @@
+{
+  "total_runs": 18,
+  "execution_success": 18,
+  "runs": [
+    {
+      "run_id": "858b0324f521",
+      "problem_id": "2020_B",
+      "arm": "F",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "unverifiable",
+      "fidelity_score": null,
+      "duration_ms": 61,
+      "outputs": {
+        "optimal_profit": 0.0,
+        "remaining_water": 0,
+        "remaining_food": 0,
+        "arrival_day": -1,
+        "path_length": 0,
+        "optimal_path": [],
+        "n_states_explored": 1,
+        "weather_known": true
+      },
+      "model_family": "dynamic_programming"
+    },
+    {
+      "run_id": "d77b53955292",
+      "problem_id": "2020_B",
+      "arm": "S",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.9286,
+      "duration_ms": 48,
+      "outputs": {
+        "optimal_profit": 0.0,
+        "remaining_water": 0,
+        "remaining_food": 0,
+        "arrival_day": -1,
+        "path_length": 0,
+        "optimal_path": [],
+        "n_states_explored": 1,
+        "weather_known": true
+      },
+      "model_family": "dynamic_programming"
+    },
+    {
+      "run_id": "d22420277a02",
+      "problem_id": "2020_B",
+      "arm": "SV",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.9286,
+      "duration_ms": 47,
+      "outputs": {
+        "optimal_profit": 0.0,
+        "remaining_water": 0,
+        "remaining_food": 0,
+        "arrival_day": -1,
+        "path_length": 0,
+        "optimal_path": [],
+        "n_states_explored": 1,
+        "weather_known": true
+      },
+      "model_family": "dynamic_programming"
+    },
+    {
+      "run_id": "54a3c95cbec3",
+      "problem_id": "2018_A",
+      "arm": "F",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "unverifiable",
+      "fidelity_score": null,
+      "duration_ms": 27085,
+      "outputs": {
+        "skin_temp_final": 42.525,
+        "skin_temp_max": 42.525,
+        "time_above_44C_s": 0.0,
+        "time_above_44C_min": 0.0,
+        "total_thickness_m": 0.021,
+        "n_grid_points": 42,
+        "n_time_steps": 2016000,
+        "dt_s": 0.0027,
+        "temperature_curve": [
+          {
+            "time_s": 0.0,
+            "temp_C": 37.0
+          },
+          {
+            "time_s": 270.0,
+            "temp_C": 37.083
+          },
+          {
+            "time_s": 540.0,
+            "temp_C": 37.904
+          },
+          {
+            "time_s": 810.0,
+            "temp_C": 38.994
+          },
+          {
+            "time_s": 1080.0,
+            "temp_C": 39.919
+          },
+          {
+            "time_s": 1350.0,
+            "temp_C": 40.624
+          },
+          {
+            "time_s": 1620.0,
+            "temp_C": 41.144
+          },
+          {
+            "time_s": 1890.0,
+            "temp_C": 41.524
+          },
+          {
+            "time_s": 2160.0,
+            "temp_C": 41.801
+          },
+          {
+            "time_s": 2430.0,
+            "temp_C": 42.003
+          },
+          {
+            "time_s": 2700.0,
+            "temp_C": 42.15
+          },
+          {
+            "time_s": 2970.0,
+            "temp_C": 42.257
+          },
+          {
+            "time_s": 3240.0,
+            "temp_C": 42.334
+          },
+          {
+            "time_s": 3510.0,
+            "temp_C": 42.391
+          },
+          {
+            "time_s": 3780.0,
+            "temp_C": 42.432
+          },
+          {
+            "time_s": 4050.0,
+            "temp_C": 42.462
+          },
+          {
+            "time_s": 4320.0,
+            "temp_C": 42.484
+          },
+          {
+            "time_s": 4590.0,
+            "temp_C": 42.499
+          },
+          {
+            "time_s": 4860.0,
+            "temp_C": 42.511
+          },
+          {
+            "time_s": 5130.0,
+            "temp_C": 42.519
+          },
+          {
+            "time_s": 5400.0,
+            "temp_C": 42.525
+          }
+        ],
+        "ambient_temp": 75.0,
+        "duration_s": 5400.0
+      },
+      "model_family": "numerical_pde"
+    },
+    {
+      "run_id": "373dac478428",
+      "problem_id": "2018_A",
+      "arm": "S",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.9091,
+      "duration_ms": 27696,
+      "outputs": {
+        "skin_temp_final": 42.525,
+        "skin_temp_max": 42.525,
+        "time_above_44C_s": 0.0,
+        "time_above_44C_min": 0.0,
+        "total_thickness_m": 0.021,
+        "n_grid_points": 42,
+        "n_time_steps": 2016000,
+        "dt_s": 0.0027,
+        "temperature_curve": [
+          {
+            "time_s": 0.0,
+            "temp_C": 37.0
+          },
+          {
+            "time_s": 270.0,
+            "temp_C": 37.083
+          },
+          {
+            "time_s": 540.0,
+            "temp_C": 37.904
+          },
+          {
+            "time_s": 810.0,
+            "temp_C": 38.994
+          },
+          {
+            "time_s": 1080.0,
+            "temp_C": 39.919
+          },
+          {
+            "time_s": 1350.0,
+            "temp_C": 40.624
+          },
+          {
+            "time_s": 1620.0,
+            "temp_C": 41.144
+          },
+          {
+            "time_s": 1890.0,
+            "temp_C": 41.524
+          },
+          {
+            "time_s": 2160.0,
+            "temp_C": 41.801
+          },
+          {
+            "time_s": 2430.0,
+            "temp_C": 42.003
+          },
+          {
+            "time_s": 2700.0,
+            "temp_C": 42.15
+          },
+          {
+            "time_s": 2970.0,
+            "temp_C": 42.257
+          },
+          {
+            "time_s": 3240.0,
+            "temp_C": 42.334
+          },
+          {
+            "time_s": 3510.0,
+            "temp_C": 42.391
+          },
+          {
+            "time_s": 3780.0,
+            "temp_C": 42.432
+          },
+          {
+            "time_s": 4050.0,
+            "temp_C": 42.462
+          },
+          {
+            "time_s": 4320.0,
+            "temp_C": 42.484
+          },
+          {
+            "time_s": 4590.0,
+            "temp_C": 42.499
+          },
+          {
+            "time_s": 4860.0,
+            "temp_C": 42.511
+          },
+          {
+            "time_s": 5130.0,
+            "temp_C": 42.519
+          },
+          {
+            "time_s": 5400.0,
+            "temp_C": 42.525
+          }
+        ],
+        "ambient_temp": 75.0,
+        "duration_s": 5400.0
+      },
+      "model_family": "numerical_pde"
+    },
+    {
+      "run_id": "aa69ed329d67",
+      "problem_id": "2018_A",
+      "arm": "SV",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.9091,
+      "duration_ms": 30026,
+      "outputs": {
+        "skin_temp_final": 42.525,
+        "skin_temp_max": 42.525,
+        "time_above_44C_s": 0.0,
+        "time_above_44C_min": 0.0,
+        "total_thickness_m": 0.021,
+        "n_grid_points": 42,
+        "n_time_steps": 2016000,
+        "dt_s": 0.0027,
+        "temperature_curve": [
+          {
+            "time_s": 0.0,
+            "temp_C": 37.0
+          },
+          {
+            "time_s": 270.0,
+            "temp_C": 37.083
+          },
+          {
+            "time_s": 540.0,
+            "temp_C": 37.904
+          },
+          {
+            "time_s": 810.0,
+            "temp_C": 38.994
+          },
+          {
+            "time_s": 1080.0,
+            "temp_C": 39.919
+          },
+          {
+            "time_s": 1350.0,
+            "temp_C": 40.624
+          },
+          {
+            "time_s": 1620.0,
+            "temp_C": 41.144
+          },
+          {
+            "time_s": 1890.0,
+            "temp_C": 41.524
+          },
+          {
+            "time_s": 2160.0,
+            "temp_C": 41.801
+          },
+          {
+            "time_s": 2430.0,
+            "temp_C": 42.003
+          },
+          {
+            "time_s": 2700.0,
+            "temp_C": 42.15
+          },
+          {
+            "time_s": 2970.0,
+            "temp_C": 42.257
+          },
+          {
+            "time_s": 3240.0,
+            "temp_C": 42.334
+          },
+          {
+            "time_s": 3510.0,
+            "temp_C": 42.391
+          },
+          {
+            "time_s": 3780.0,
+            "temp_C": 42.432
+          },
+          {
+            "time_s": 4050.0,
+            "temp_C": 42.462
+          },
+          {
+            "time_s": 4320.0,
+            "temp_C": 42.484
+          },
+          {
+            "time_s": 4590.0,
+            "temp_C": 42.499
+          },
+          {
+            "time_s": 4860.0,
+            "temp_C": 42.511
+          },
+          {
+            "time_s": 5130.0,
+            "temp_C": 42.519
+          },
+          {
+            "time_s": 5400.0,
+            "temp_C": 42.525
+          }
+        ],
+        "ambient_temp": 75.0,
+        "duration_s": 5400.0
+      },
+      "model_family": "numerical_pde"
+    },
+    {
+      "run_id": "2968df5edf16",
+      "problem_id": "2019_C",
+      "arm": "F",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "unverifiable",
+      "fidelity_score": null,
+      "duration_ms": 60,
+      "outputs": {
+        "optimal_decision": "queue",
+        "optimal_decision_cn": "前往到达区排队等待载客",
+        "profit_queue": 79.8,
+        "profit_city": -5.0,
+        "profit_diff": 84.8,
+        "expected_wait_min": 0.1,
+        "queue_length_avg": 3.0,
+        "rho_utilization": 0.75,
+        "queue_stable": true,
+        "lambda_critical": 39.98,
+        "n_taxis_in_pool": 50,
+        "decision_scan": [
+          {
+            "lambda": 10,
+            "wait_min": 0.03,
+            "profit_queue": 79.93,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 15,
+            "wait_min": 0.04,
+            "profit_queue": 79.92,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 20,
+            "wait_min": 0.05,
+            "profit_queue": 79.9,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 25,
+            "wait_min": 0.07,
+            "profit_queue": 79.87,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 28,
+            "wait_min": 0.08,
+            "profit_queue": 79.83,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 30,
+            "wait_min": 0.1,
+            "profit_queue": 79.8,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 32,
+            "wait_min": 0.12,
+            "profit_queue": 79.75,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 35,
+            "wait_min": 0.2,
+            "profit_queue": 79.6,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 38,
+            "wait_min": 0.5,
+            "profit_queue": 79.0,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          }
+        ]
+      },
+      "model_family": "queuing_theory"
+    },
+    {
+      "run_id": "931538e1b59d",
+      "problem_id": "2019_C",
+      "arm": "S",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "duration_ms": 56,
+      "outputs": {
+        "optimal_decision": "queue",
+        "optimal_decision_cn": "前往到达区排队等待载客",
+        "profit_queue": 79.8,
+        "profit_city": -5.0,
+        "profit_diff": 84.8,
+        "expected_wait_min": 0.1,
+        "queue_length_avg": 3.0,
+        "rho_utilization": 0.75,
+        "queue_stable": true,
+        "lambda_critical": 39.98,
+        "n_taxis_in_pool": 50,
+        "decision_scan": [
+          {
+            "lambda": 10,
+            "wait_min": 0.03,
+            "profit_queue": 79.93,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 15,
+            "wait_min": 0.04,
+            "profit_queue": 79.92,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 20,
+            "wait_min": 0.05,
+            "profit_queue": 79.9,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 25,
+            "wait_min": 0.07,
+            "profit_queue": 79.87,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 28,
+            "wait_min": 0.08,
+            "profit_queue": 79.83,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 30,
+            "wait_min": 0.1,
+            "profit_queue": 79.8,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 32,
+            "wait_min": 0.12,
+            "profit_queue": 79.75,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 35,
+            "wait_min": 0.2,
+            "profit_queue": 79.6,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 38,
+            "wait_min": 0.5,
+            "profit_queue": 79.0,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          }
+        ]
+      },
+      "model_family": "queuing_theory"
+    },
+    {
+      "run_id": "2db44834eafd",
+      "problem_id": "2019_C",
+      "arm": "SV",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "duration_ms": 54,
+      "outputs": {
+        "optimal_decision": "queue",
+        "optimal_decision_cn": "前往到达区排队等待载客",
+        "profit_queue": 79.8,
+        "profit_city": -5.0,
+        "profit_diff": 84.8,
+        "expected_wait_min": 0.1,
+        "queue_length_avg": 3.0,
+        "rho_utilization": 0.75,
+        "queue_stable": true,
+        "lambda_critical": 39.98,
+        "n_taxis_in_pool": 50,
+        "decision_scan": [
+          {
+            "lambda": 10,
+            "wait_min": 0.03,
+            "profit_queue": 79.93,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 15,
+            "wait_min": 0.04,
+            "profit_queue": 79.92,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 20,
+            "wait_min": 0.05,
+            "profit_queue": 79.9,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 25,
+            "wait_min": 0.07,
+            "profit_queue": 79.87,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 28,
+            "wait_min": 0.08,
+            "profit_queue": 79.83,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 30,
+            "wait_min": 0.1,
+            "profit_queue": 79.8,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 32,
+            "wait_min": 0.12,
+            "profit_queue": 79.75,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 35,
+            "wait_min": 0.2,
+            "profit_queue": 79.6,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          },
+          {
+            "lambda": 38,
+            "wait_min": 0.5,
+            "profit_queue": 79.0,
+            "profit_city": -5.0,
+            "optimal": "queue"
+          }
+        ]
+      },
+      "model_family": "queuing_theory"
+    },
+    {
+      "run_id": "704009dafe7d",
+      "problem_id": "2018_B",
+      "arm": "F",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "unverifiable",
+      "fidelity_score": null,
+      "duration_ms": 59,
+      "outputs": {
+        "total_parts": 248,
+        "throughput_per_hour": 31.0,
+        "avg_cycle_time_s": 116.13,
+        "rgv_utilization": 0.996,
+        "rgv_move_total_s": 7616.0,
+        "rgv_idle_total_s": 114.0,
+        "cnc_utilization": [
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028
+        ],
+        "cnc_parts_per_machine": [
+          31,
+          31,
+          31,
+          31,
+          31,
+          31,
+          31,
+          31
+        ],
+        "shift_duration_s": 28800,
+        "n_cnc": 8,
+        "process_time_s": 560,
+        "scheduling_strategy": "greedy_nearest"
+      },
+      "model_family": "simulation"
+    },
+    {
+      "run_id": "6d8f9e801997",
+      "problem_id": "2018_B",
+      "arm": "S",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "duration_ms": 61,
+      "outputs": {
+        "total_parts": 248,
+        "throughput_per_hour": 31.0,
+        "avg_cycle_time_s": 116.13,
+        "rgv_utilization": 0.996,
+        "rgv_move_total_s": 7616.0,
+        "rgv_idle_total_s": 114.0,
+        "cnc_utilization": [
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028
+        ],
+        "cnc_parts_per_machine": [
+          31,
+          31,
+          31,
+          31,
+          31,
+          31,
+          31,
+          31
+        ],
+        "shift_duration_s": 28800,
+        "n_cnc": 8,
+        "process_time_s": 560,
+        "scheduling_strategy": "greedy_nearest"
+      },
+      "model_family": "simulation"
+    },
+    {
+      "run_id": "d732378e0f15",
+      "problem_id": "2018_B",
+      "arm": "SV",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "duration_ms": 57,
+      "outputs": {
+        "total_parts": 248,
+        "throughput_per_hour": 31.0,
+        "avg_cycle_time_s": 116.13,
+        "rgv_utilization": 0.996,
+        "rgv_move_total_s": 7616.0,
+        "rgv_idle_total_s": 114.0,
+        "cnc_utilization": [
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028,
+          0.6028
+        ],
+        "cnc_parts_per_machine": [
+          31,
+          31,
+          31,
+          31,
+          31,
+          31,
+          31,
+          31
+        ],
+        "shift_duration_s": 28800,
+        "n_cnc": 8,
+        "process_time_s": 560,
+        "scheduling_strategy": "greedy_nearest"
+      },
+      "model_family": "simulation"
+    },
+    {
+      "run_id": "55fcc43a4cc5",
+      "problem_id": "2017_B",
+      "arm": "F",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "unverifiable",
+      "fidelity_score": null,
+      "duration_ms": 285,
+      "outputs": {
+        "n_tasks": 200,
+        "actual_completion_rate": 0.435,
+        "model_accuracy": 0.6,
+        "logistic_coefficients": {
+          "intercept": -0.2643,
+          "price": -0.169,
+          "distance": 0.1366,
+          "member_density": 0.1842
+        },
+        "coefficient_interpretation": {
+          "price": "正系数→价格越高完成概率越高（在合理范围内）",
+          "distance": "负系数→距离越远完成概率越低",
+          "member_density": "正系数→会员越多完成概率越高"
+        },
+        "optimal_price": 40,
+        "optimal_expected_profit": 11.31,
+        "profit_curve": [
+          {
+            "price": 5,
+            "completion_prob": 0.5464,
+            "expected_profit": 2.73
+          },
+          {
+            "price": 8,
+            "completion_prob": 0.5225,
+            "expected_profit": 4.18
+          },
+          {
+            "price": 10,
+            "completion_prob": 0.5066,
+            "expected_profit": 5.07
+          },
+          {
+            "price": 12,
+            "completion_prob": 0.4906,
+            "expected_profit": 5.89
+          },
+          {
+            "price": 15,
+            "completion_prob": 0.4667,
+            "expected_profit": 7.0
+          },
+          {
+            "price": 18,
+            "completion_prob": 0.443,
+            "expected_profit": 7.97
+          },
+          {
+            "price": 20,
+            "completion_prob": 0.4273,
+            "expected_profit": 8.55
+          },
+          {
+            "price": 25,
+            "completion_prob": 0.3888,
+            "expected_profit": 9.72
+          },
+          {
+            "price": 30,
+            "completion_prob": 0.3516,
+            "expected_profit": 10.55
+          },
+          {
+            "price": 35,
+            "completion_prob": 0.3161,
+            "expected_profit": 11.06
+          },
+          {
+            "price": 40,
+            "completion_prob": 0.2826,
+            "expected_profit": 11.31
+          }
+        ],
+        "loss_final": 0.679124,
+        "feature_standardization": {
+          "price_mean": 19.1,
+          "price_std": 5.29,
+          "distance_mean": 2.09,
+          "distance_std": 2.15
+        }
+      },
+      "model_family": "statistical_modeling"
+    },
+    {
+      "run_id": "d0f569ac0c2b",
+      "problem_id": "2017_B",
+      "arm": "S",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.8235,
+      "duration_ms": 249,
+      "outputs": {
+        "n_tasks": 200,
+        "actual_completion_rate": 0.435,
+        "model_accuracy": 0.6,
+        "logistic_coefficients": {
+          "intercept": -0.2643,
+          "price": -0.169,
+          "distance": 0.1366,
+          "member_density": 0.1842
+        },
+        "coefficient_interpretation": {
+          "price": "正系数→价格越高完成概率越高（在合理范围内）",
+          "distance": "负系数→距离越远完成概率越低",
+          "member_density": "正系数→会员越多完成概率越高"
+        },
+        "optimal_price": 40,
+        "optimal_expected_profit": 11.31,
+        "profit_curve": [
+          {
+            "price": 5,
+            "completion_prob": 0.5464,
+            "expected_profit": 2.73
+          },
+          {
+            "price": 8,
+            "completion_prob": 0.5225,
+            "expected_profit": 4.18
+          },
+          {
+            "price": 10,
+            "completion_prob": 0.5066,
+            "expected_profit": 5.07
+          },
+          {
+            "price": 12,
+            "completion_prob": 0.4906,
+            "expected_profit": 5.89
+          },
+          {
+            "price": 15,
+            "completion_prob": 0.4667,
+            "expected_profit": 7.0
+          },
+          {
+            "price": 18,
+            "completion_prob": 0.443,
+            "expected_profit": 7.97
+          },
+          {
+            "price": 20,
+            "completion_prob": 0.4273,
+            "expected_profit": 8.55
+          },
+          {
+            "price": 25,
+            "completion_prob": 0.3888,
+            "expected_profit": 9.72
+          },
+          {
+            "price": 30,
+            "completion_prob": 0.3516,
+            "expected_profit": 10.55
+          },
+          {
+            "price": 35,
+            "completion_prob": 0.3161,
+            "expected_profit": 11.06
+          },
+          {
+            "price": 40,
+            "completion_prob": 0.2826,
+            "expected_profit": 11.31
+          }
+        ],
+        "loss_final": 0.679124,
+        "feature_standardization": {
+          "price_mean": 19.1,
+          "price_std": 5.29,
+          "distance_mean": 2.09,
+          "distance_std": 2.15
+        }
+      },
+      "model_family": "statistical_modeling"
+    },
+    {
+      "run_id": "21225b715693",
+      "problem_id": "2017_B",
+      "arm": "SV",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "misaligned",
+      "fidelity_score": 0.8235,
+      "duration_ms": 231,
+      "outputs": {
+        "n_tasks": 200,
+        "actual_completion_rate": 0.435,
+        "model_accuracy": 0.6,
+        "logistic_coefficients": {
+          "intercept": -0.2643,
+          "price": -0.169,
+          "distance": 0.1366,
+          "member_density": 0.1842
+        },
+        "coefficient_interpretation": {
+          "price": "正系数→价格越高完成概率越高（在合理范围内）",
+          "distance": "负系数→距离越远完成概率越低",
+          "member_density": "正系数→会员越多完成概率越高"
+        },
+        "optimal_price": 40,
+        "optimal_expected_profit": 11.31,
+        "profit_curve": [
+          {
+            "price": 5,
+            "completion_prob": 0.5464,
+            "expected_profit": 2.73
+          },
+          {
+            "price": 8,
+            "completion_prob": 0.5225,
+            "expected_profit": 4.18
+          },
+          {
+            "price": 10,
+            "completion_prob": 0.5066,
+            "expected_profit": 5.07
+          },
+          {
+            "price": 12,
+            "completion_prob": 0.4906,
+            "expected_profit": 5.89
+          },
+          {
+            "price": 15,
+            "completion_prob": 0.4667,
+            "expected_profit": 7.0
+          },
+          {
+            "price": 18,
+            "completion_prob": 0.443,
+            "expected_profit": 7.97
+          },
+          {
+            "price": 20,
+            "completion_prob": 0.4273,
+            "expected_profit": 8.55
+          },
+          {
+            "price": 25,
+            "completion_prob": 0.3888,
+            "expected_profit": 9.72
+          },
+          {
+            "price": 30,
+            "completion_prob": 0.3516,
+            "expected_profit": 10.55
+          },
+          {
+            "price": 35,
+            "completion_prob": 0.3161,
+            "expected_profit": 11.06
+          },
+          {
+            "price": 40,
+            "completion_prob": 0.2826,
+            "expected_profit": 11.31
+          }
+        ],
+        "loss_final": 0.679124,
+        "feature_standardization": {
+          "price_mean": 19.1,
+          "price_std": 5.29,
+          "distance_mean": 2.09,
+          "distance_std": 2.15
+        }
+      },
+      "model_family": "statistical_modeling"
+    },
+    {
+      "run_id": "2d6f1abf5873",
+      "problem_id": "2011_B",
+      "arm": "F",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "unverifiable",
+      "fidelity_score": null,
+      "duration_ms": 63,
+      "outputs": {
+        "n_nodes": 20,
+        "n_edges": 38,
+        "n_platforms": 20,
+        "coverage_rate_3min": 1.0,
+        "max_response_time_min": 0.0,
+        "avg_response_time_min": 0.0,
+        "workload_cv": 0.0,
+        "platform_workload": {
+          "0": 1,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1,
+          "10": 1,
+          "11": 1,
+          "12": 1,
+          "13": 1,
+          "14": 1,
+          "15": 1,
+          "16": 1,
+          "17": 1,
+          "18": 1,
+          "19": 1
+        },
+        "allocation": {
+          "0": {
+            "platform": 0,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "1": {
+            "platform": 1,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "2": {
+            "platform": 2,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "3": {
+            "platform": 3,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "4": {
+            "platform": 4,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "5": {
+            "platform": 5,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "6": {
+            "platform": 6,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "7": {
+            "platform": 7,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "8": {
+            "platform": 8,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "9": {
+            "platform": 9,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "10": {
+            "platform": 10,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "11": {
+            "platform": 11,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "12": {
+            "platform": 12,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "13": {
+            "platform": 13,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "14": {
+            "platform": 14,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "15": {
+            "platform": 15,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "16": {
+            "platform": 16,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "17": {
+            "platform": 17,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "18": {
+            "platform": 18,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "19": {
+            "platform": 19,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          }
+        },
+        "blockade_n_exits": 13,
+        "blockade_total_dist_km": 0.0,
+        "blockade_avg_arrival_min": 0.0,
+        "blockade_schedule": [
+          {
+            "exit_node": 0,
+            "platform": 0,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 4,
+            "platform": 4,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 9,
+            "platform": 9,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 14,
+            "platform": 14,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 19,
+            "platform": 19,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 1,
+            "platform": 1,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 6,
+            "platform": 6,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 11,
+            "platform": 11,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 16,
+            "platform": 16,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 3,
+            "platform": 3,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 8,
+            "platform": 8,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 13,
+            "platform": 13,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 18,
+            "platform": 18,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          }
+        ],
+        "speed_kmh": 60.0,
+        "response_limit_min": 3.0,
+        "distance_limit_km": 3.0
+      },
+      "model_family": "graph_algorithm"
+    },
+    {
+      "run_id": "de0da05053e4",
+      "problem_id": "2011_B",
+      "arm": "S",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "duration_ms": 62,
+      "outputs": {
+        "n_nodes": 20,
+        "n_edges": 38,
+        "n_platforms": 20,
+        "coverage_rate_3min": 1.0,
+        "max_response_time_min": 0.0,
+        "avg_response_time_min": 0.0,
+        "workload_cv": 0.0,
+        "platform_workload": {
+          "0": 1,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1,
+          "10": 1,
+          "11": 1,
+          "12": 1,
+          "13": 1,
+          "14": 1,
+          "15": 1,
+          "16": 1,
+          "17": 1,
+          "18": 1,
+          "19": 1
+        },
+        "allocation": {
+          "0": {
+            "platform": 0,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "1": {
+            "platform": 1,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "2": {
+            "platform": 2,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "3": {
+            "platform": 3,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "4": {
+            "platform": 4,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "5": {
+            "platform": 5,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "6": {
+            "platform": 6,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "7": {
+            "platform": 7,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "8": {
+            "platform": 8,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "9": {
+            "platform": 9,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "10": {
+            "platform": 10,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "11": {
+            "platform": 11,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "12": {
+            "platform": 12,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "13": {
+            "platform": 13,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "14": {
+            "platform": 14,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "15": {
+            "platform": 15,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "16": {
+            "platform": 16,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "17": {
+            "platform": 17,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "18": {
+            "platform": 18,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "19": {
+            "platform": 19,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          }
+        },
+        "blockade_n_exits": 13,
+        "blockade_total_dist_km": 0.0,
+        "blockade_avg_arrival_min": 0.0,
+        "blockade_schedule": [
+          {
+            "exit_node": 0,
+            "platform": 0,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 4,
+            "platform": 4,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 9,
+            "platform": 9,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 14,
+            "platform": 14,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 19,
+            "platform": 19,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 1,
+            "platform": 1,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 6,
+            "platform": 6,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 11,
+            "platform": 11,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 16,
+            "platform": 16,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 3,
+            "platform": 3,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 8,
+            "platform": 8,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 13,
+            "platform": 13,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 18,
+            "platform": 18,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          }
+        ],
+        "speed_kmh": 60.0,
+        "response_limit_min": 3.0,
+        "distance_limit_km": 3.0
+      },
+      "model_family": "graph_algorithm"
+    },
+    {
+      "run_id": "07d9cc9fa5af",
+      "problem_id": "2011_B",
+      "arm": "SV",
+      "rep": 1,
+      "exec_status": "success",
+      "fidelity_status": "aligned",
+      "fidelity_score": 1.0,
+      "duration_ms": 63,
+      "outputs": {
+        "n_nodes": 20,
+        "n_edges": 38,
+        "n_platforms": 20,
+        "coverage_rate_3min": 1.0,
+        "max_response_time_min": 0.0,
+        "avg_response_time_min": 0.0,
+        "workload_cv": 0.0,
+        "platform_workload": {
+          "0": 1,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1,
+          "10": 1,
+          "11": 1,
+          "12": 1,
+          "13": 1,
+          "14": 1,
+          "15": 1,
+          "16": 1,
+          "17": 1,
+          "18": 1,
+          "19": 1
+        },
+        "allocation": {
+          "0": {
+            "platform": 0,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "1": {
+            "platform": 1,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "2": {
+            "platform": 2,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "3": {
+            "platform": 3,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "4": {
+            "platform": 4,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "5": {
+            "platform": 5,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "6": {
+            "platform": 6,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "7": {
+            "platform": 7,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "8": {
+            "platform": 8,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "9": {
+            "platform": 9,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "10": {
+            "platform": 10,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "11": {
+            "platform": 11,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "12": {
+            "platform": 12,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "13": {
+            "platform": 13,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "14": {
+            "platform": 14,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "15": {
+            "platform": 15,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "16": {
+            "platform": 16,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "17": {
+            "platform": 17,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "18": {
+            "platform": 18,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          },
+          "19": {
+            "platform": 19,
+            "distance_km": 0,
+            "response_time_min": 0.0,
+            "within_3min": true
+          }
+        },
+        "blockade_n_exits": 13,
+        "blockade_total_dist_km": 0.0,
+        "blockade_avg_arrival_min": 0.0,
+        "blockade_schedule": [
+          {
+            "exit_node": 0,
+            "platform": 0,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 4,
+            "platform": 4,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 9,
+            "platform": 9,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 14,
+            "platform": 14,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 19,
+            "platform": 19,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 1,
+            "platform": 1,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 6,
+            "platform": 6,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 11,
+            "platform": 11,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 16,
+            "platform": 16,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 3,
+            "platform": 3,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 8,
+            "platform": 8,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 13,
+            "platform": 13,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          },
+          {
+            "exit_node": 18,
+            "platform": 18,
+            "distance_km": 0,
+            "arrival_min": 0.0
+          }
+        ],
+        "speed_kmh": 60.0,
+        "response_limit_min": 3.0,
+        "distance_limit_km": 3.0
+      },
+      "model_family": "graph_algorithm"
+    }
+  ],
+  "timestamp": "2026-09-09T14:54:53+0800"
+}

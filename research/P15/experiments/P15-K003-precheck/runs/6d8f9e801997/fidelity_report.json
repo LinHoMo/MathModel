@@ -1,0 +1,86 @@
+{
+  "execution_id": "EXEC022",
+  "verification_id": "VR022",
+  "fidelity_status": "aligned",
+  "fidelity_score": 1.0,
+  "passed": 11,
+  "total": 11,
+  "checks": [
+    {
+      "name": "F1 变量可观测: 完成物料数",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'total_parts' 存在（声明 '完成物料数'）",
+      "resolved_key": "total_parts"
+    },
+    {
+      "name": "F5 变量范围: 完成物料数 ∈ [0, 500]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "total_parts=248.0 在 [0, 500]"
+    },
+    {
+      "name": "F1 变量可观测: 吞吐量",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'throughput_per_hour' 存在（声明 '吞吐量'）",
+      "resolved_key": "throughput_per_hour"
+    },
+    {
+      "name": "F1 变量可观测: 平均周期",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'avg_cycle_time_s' 存在（声明 '平均周期'）",
+      "resolved_key": "avg_cycle_time_s"
+    },
+    {
+      "name": "F1 变量可观测: RGV利用率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'rgv_utilization' 存在（声明 'RGV利用率'）",
+      "resolved_key": "rgv_utilization"
+    },
+    {
+      "name": "F5 变量范围: RGV利用率 ∈ [0, 1]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "rgv_utilization=0.996 在 [0, 1]"
+    },
+    {
+      "name": "F1 变量可观测: CNC利用率",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'cnc_utilization' 存在（声明 'CNC利用率'）",
+      "resolved_key": "cnc_utilization"
+    },
+    {
+      "name": "F2 目标: maximize 班次内完成物料数 N（即系统吞吐量）",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'total_parts' 存在（声明 'maximize 班次内完成物料数 N（即系统吞吐量）'）",
+      "resolved_key": "total_parts"
+    },
+    {
+      "name": "F3 约束: RGV同一时刻只能为一台CNC服务",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'rgv_utilization' 存在（声明 'RGV同一时刻只能为一台CNC服务'）",
+      "resolved_key": "rgv_utilization"
+    },
+    {
+      "name": "F3 约束: CNC必须完成当前物料加工后才能上下料",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'cnc_utilization' 存在（声明 'CNC必须完成当前物料加工后才能上下料'）",
+      "resolved_key": "cnc_utilization"
+    },
+    {
+      "name": "F4 方程: EQ1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'total_parts' 存在（声明 'EQ1'）",
+      "resolved_key": "total_parts"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

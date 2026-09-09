@@ -1,0 +1,52 @@
+{
+  "run_id": "858b0324f521",
+  "problem_id": "2020_B",
+  "arm": "F",
+  "rep": 1,
+  "seed": 42,
+  "batch": "precheck",
+  "block_role": "main",
+  "status": "EXECUTED",
+  "model_family_primary": "dynamic_programming",
+  "artifact_type": "model_doc.md",
+  "code_sha256": "a37f4bf4781c92b0c7647885a66db74212fd1c44a8fb9f72e1ee59b10a3652c4",
+  "output_mapping": {
+    "最优收益": "optimal_profit",
+    "profit": "optimal_profit",
+    "剩余水量": "remaining_water",
+    "water": "remaining_water",
+    "剩余食物": "remaining_food",
+    "food": "remaining_food",
+    "到达天数": "arrival_day",
+    "day": "arrival_day",
+    "最优路径": "optimal_path",
+    "path": "optimal_path"
+  },
+  "execution": {
+    "code_id": "CODE012",
+    "exec_id": "EXEC012",
+    "exec_status": "success",
+    "duration_ms": 61,
+    "returncode": 0,
+    "outputs_keys": [
+      "optimal_profit",
+      "remaining_water",
+      "remaining_food",
+      "arrival_day",
+      "path_length",
+      "optimal_path",
+      "n_states_explored",
+      "weather_known"
+    ]
+  },
+  "fidelity": {
+    "status": "unverifiable",
+    "score": null,
+    "verification_id": "VR012"
+  },
+  "generated_at": "2026-09-09T14:53:25+0800",
+  "generator": {
+    "agent_identity": "organizer_agent",
+    "role": "external_constructor"
+  }
+}

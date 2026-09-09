@@ -1,0 +1,84 @@
+{
+  "execution_id": "EXEC009",
+  "verification_id": "VR009",
+  "fidelity_status": "aligned",
+  "fidelity_score": 1.0,
+  "passed": 11,
+  "total": 11,
+  "checks": [
+    {
+      "name": "F1 变量可观测: profit",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'my_profit_val' 存在（声明 'profit'）",
+      "resolved_key": "my_profit_val"
+    },
+    {
+      "name": "F5 变量范围: profit ∈ [0, 10000]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "my_profit_val=1500.5 在 [0, 10000]"
+    },
+    {
+      "name": "F1 变量可观测: water",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'my_water_box' 存在（声明 'water'）",
+      "resolved_key": "my_water_box"
+    },
+    {
+      "name": "F5 变量范围: water ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "my_water_box=8.0 在 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: food",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'food_left' 存在（声明 'food'）",
+      "resolved_key": "food_left"
+    },
+    {
+      "name": "F5 变量范围: food ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "food_left=5.0 在 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: day",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'arrival' 存在（声明 'day'）",
+      "resolved_key": "arrival"
+    },
+    {
+      "name": "F5 变量范围: day ∈ [0, 10]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "arrival=7.0 在 [0, 10]"
+    },
+    {
+      "name": "F2 目标: max profit",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'my_profit_val' 存在（声明 'max profit'）",
+      "resolved_key": "my_profit_val"
+    },
+    {
+      "name": "F3 约束: water+food<=20",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'my_water_box' 存在（声明 'water+food<=20'）",
+      "resolved_key": "my_water_box"
+    },
+    {
+      "name": "F4 方程: e1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'my_profit_val' 存在（声明 'e1'）",
+      "resolved_key": "my_profit_val"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

@@ -1,0 +1,334 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2011B-GRAPH",
+  "model_family": {
+    "primary": "graph_algorithm",
+    "secondary": [
+      "optimization",
+      "decision_analysis",
+      "simulation"
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2011_B",
+    "sub_questions": [
+      "Q1",
+      "Q2"
+    ],
+    "focus": "Q1 管辖范围分配 + 交通要道封锁调度"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "type": "projection",
+      "statement": "A区简化为20节点交通网络，相邻节点（距离<1.5km）间有道路",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A2",
+      "type": "mechanism_assumption",
+      "statement": "警车时速60km/h，3分钟响应要求对应3km覆盖半径",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "assumption_id": "A3",
+      "type": "simplification",
+      "statement": "每个节点均设有交巡警服务平台（20个平台），管辖分配采用最近邻原则",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "v_cov",
+      "name": "3分钟覆盖率",
+      "symbol": "coverage",
+      "definition": "能在3分钟内到达的节点比例",
+      "unit": "比例",
+      "type": "output",
+      "value_range": {
+        "min": 0,
+        "max": 1
+      },
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_resp",
+      "name": "最大响应时间",
+      "symbol": "t_max",
+      "definition": "所有节点中最远的出警时间",
+      "unit": "分钟",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_cv",
+      "name": "工作量变异系数",
+      "symbol": "CV",
+      "definition": "各平台管辖节点数的变异系数（衡量均衡性）",
+      "unit": "无",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_alloc",
+      "name": "管辖分配",
+      "symbol": "allocation",
+      "definition": "每个节点分配到的最近平台及距离",
+      "unit": "无",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "variable_id": "v_block",
+      "name": "封锁调度",
+      "symbol": "blockade",
+      "definition": "13条交通要道的封锁平台分配方案",
+      "unit": "无",
+      "type": "output",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "p_speed",
+      "name": "警车时速",
+      "value": 60,
+      "unit": "km/h",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_resp",
+      "name": "响应时间要求",
+      "value": 3,
+      "unit": "分钟",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_nplat",
+      "name": "平台数量",
+      "value": 20,
+      "unit": "个",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "p_nexit",
+      "name": "出入城区路口数",
+      "value": 13,
+      "unit": "个",
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "OBJ1",
+      "type": "min",
+      "expression": "minimize 最大响应时间 t_max（管辖分配优化）",
+      "variables_refs": [
+        "v_resp",
+        "v_alloc"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "objective_id": "OBJ2",
+      "type": "min",
+      "expression": "minimize 封锁调度总距离（13路口分配）",
+      "variables_refs": [
+        "v_block"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "response_time",
+      "expression": "尽量3分钟内到达事发地（coverage最大化）",
+      "variables_refs": [
+        "v_cov",
+        "v_resp"
+      ],
+      "source": "题目",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "resource",
+      "expression": "一个平台最多封锁一个路口",
+      "variables_refs": [
+        "v_block"
+      ],
+      "source": "题目",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "name": "Dijkstra最短路径",
+      "description": "从每个平台出发计算到所有节点的最短路径距离，用于管辖分配和封锁调度",
+      "equations_refs": [
+        "EQ1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "name": "贪心分配",
+      "description": "管辖分配用最近邻原则；封锁调度用贪心最小总距离分配",
+      "equations_refs": [
+        "EQ2"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "EQ1",
+      "latex": "d(p,v) = \\min_{path\\;p\\to v} \\sum_{e\\in path} w(e)",
+      "type": "shortest_path",
+      "variables_refs": [
+        "v_alloc",
+        "v_resp"
+      ],
+      "derivation_trace": "Dijkstra算法求解单源最短路径，边权为道路距离",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "equation_id": "EQ2",
+      "latex": "p^*(v) = \\arg\\min_{p\\in P} d(p,v), \\quad \\forall v\\in V",
+      "type": "assignment",
+      "variables_refs": [
+        "v_alloc",
+        "v_cov"
+      ],
+      "derivation_trace": "最近邻管辖分配：每个节点分配给距离最近的平台",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "name": "Dijkstra+最近邻分配+贪心封锁",
+      "description": "Dijkstra计算全对最短路径，最近邻分配管辖范围，贪心分配封锁路口",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "E1",
+      "name": "A区20节点管辖分配",
+      "description": "20节点交通网络，20平台，计算3分钟覆盖率和最大响应时间",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "experiment_id": "E2",
+      "name": "13路口封锁调度",
+      "description": "贪心分配20平台到13个出入城区路口，最小化总调度距离",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "coverage_check",
+      "description": "3分钟覆盖率在[0,1]范围内，每节点有且仅有一个分配平台",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "validation_id": "V2",
+      "type": "blockade_feasibility",
+      "description": "13个路口各分配一个不同平台，无重复分配",
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "statement": "Dijkstra+最近邻分配可有效划分交巡警管辖范围",
+      "evidence_refs": [
+        "E1",
+        "V1"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    },
+    {
+      "claim_id": "CL2",
+      "statement": "贪心调度可实现13路口快速全封锁",
+      "evidence_refs": [
+        "E2",
+        "V2"
+      ],
+      "sub_question_binding": [
+        "Q1"
+      ]
+    }
+  ],
+  "model_graph": {
+    "nodes": 20,
+    "edges": 0,
+    "type": "road_network"
+  },
+  "modeling_trace": [
+    {
+      "step": 1,
+      "action": "graph_construction",
+      "detail": "20节点交通网络邻接表"
+    },
+    {
+      "step": 2,
+      "action": "shortest_path",
+      "detail": "Dijkstra全对最短路径"
+    },
+    {
+      "step": 3,
+      "action": "allocation",
+      "detail": "最近邻管辖分配+贪心封锁"
+    }
+  ]
+}

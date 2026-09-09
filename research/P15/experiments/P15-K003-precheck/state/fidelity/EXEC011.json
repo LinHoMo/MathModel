@@ -1,0 +1,84 @@
+{
+  "execution_id": "EXEC011",
+  "verification_id": "VR011",
+  "fidelity_status": "misaligned",
+  "fidelity_score": 0.3636,
+  "passed": 4,
+  "total": 11,
+  "checks": [
+    {
+      "name": "F1 变量可观测: alpha",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit' 存在（声明 'alpha'）",
+      "resolved_key": "profit"
+    },
+    {
+      "name": "F5 变量范围: alpha ∈ [0, 10000]",
+      "kind": "output_range",
+      "passed": true,
+      "detail": "profit=1500.5 在 [0, 10000]"
+    },
+    {
+      "name": "F1 变量可观测: beta",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'beta'（候选 ['nonexistent_beta', 'beta'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F5 变量范围: beta ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "=None 超出 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: gamma",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'gamma'（候选 ['nonexistent_gamma', 'gamma'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F5 变量范围: gamma ∈ [0, 20]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "=None 超出 [0, 20]"
+    },
+    {
+      "name": "F1 变量可观测: delta",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'delta'（候选 ['nonexistent_delta', 'delta'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F5 变量范围: delta ∈ [0, 10]",
+      "kind": "output_range",
+      "passed": false,
+      "detail": "=None 超出 [0, 10]"
+    },
+    {
+      "name": "F2 目标: max alpha",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit' 存在（声明 'max alpha'）",
+      "resolved_key": "profit"
+    },
+    {
+      "name": "F3 约束: beta+gamma<=20",
+      "kind": "output_key_exists",
+      "passed": false,
+      "detail": "缺失声明 'beta+gamma<=20'（候选 ['nonexistent_beta', 'beta', 'nonexistent_gamma', 'gamma'] 均未命中输出 key）",
+      "resolved_key": null
+    },
+    {
+      "name": "F4 方程: e1",
+      "kind": "output_key_exists",
+      "passed": true,
+      "detail": "输出字段 'profit' 存在（声明 'e1'）",
+      "resolved_key": "profit"
+    }
+  ],
+  "engine": "execution.fidelity"
+}

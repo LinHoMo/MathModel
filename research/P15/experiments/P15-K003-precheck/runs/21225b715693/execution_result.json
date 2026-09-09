@@ -1,0 +1,115 @@
+{
+  "execution_id": "e3335b712e93",
+  "model_id": "M-2017_B-SV-precheck",
+  "status": "success",
+  "inputs": {},
+  "outputs": {
+    "n_tasks": 200,
+    "actual_completion_rate": 0.435,
+    "model_accuracy": 0.6,
+    "logistic_coefficients": {
+      "intercept": -0.2643,
+      "price": -0.169,
+      "distance": 0.1366,
+      "member_density": 0.1842
+    },
+    "coefficient_interpretation": {
+      "price": "正系数→价格越高完成概率越高（在合理范围内）",
+      "distance": "负系数→距离越远完成概率越低",
+      "member_density": "正系数→会员越多完成概率越高"
+    },
+    "optimal_price": 40,
+    "optimal_expected_profit": 11.31,
+    "profit_curve": [
+      {
+        "price": 5,
+        "completion_prob": 0.5464,
+        "expected_profit": 2.73
+      },
+      {
+        "price": 8,
+        "completion_prob": 0.5225,
+        "expected_profit": 4.18
+      },
+      {
+        "price": 10,
+        "completion_prob": 0.5066,
+        "expected_profit": 5.07
+      },
+      {
+        "price": 12,
+        "completion_prob": 0.4906,
+        "expected_profit": 5.89
+      },
+      {
+        "price": 15,
+        "completion_prob": 0.4667,
+        "expected_profit": 7.0
+      },
+      {
+        "price": 18,
+        "completion_prob": 0.443,
+        "expected_profit": 7.97
+      },
+      {
+        "price": 20,
+        "completion_prob": 0.4273,
+        "expected_profit": 8.55
+      },
+      {
+        "price": 25,
+        "completion_prob": 0.3888,
+        "expected_profit": 9.72
+      },
+      {
+        "price": 30,
+        "completion_prob": 0.3516,
+        "expected_profit": 10.55
+      },
+      {
+        "price": 35,
+        "completion_prob": 0.3161,
+        "expected_profit": 11.06
+      },
+      {
+        "price": 40,
+        "completion_prob": 0.2826,
+        "expected_profit": 11.31
+      }
+    ],
+    "loss_final": 0.679124,
+    "feature_standardization": {
+      "price_mean": 19.1,
+      "price_std": 5.29,
+      "distance_mean": 2.09,
+      "distance_std": 2.15
+    }
+  },
+  "stdout": "{\"n_tasks\": 200, \"actual_completion_rate\": 0.435, \"model_accuracy\": 0.6, \"logistic_coefficients\": {\"intercept\": -0.2643, \"price\": -0.169, \"distance\": 0.1366, \"member_density\": 0.1842}, \"coefficient_interpretation\": {\"price\": \"正系数→价格越高完成概率越高（在合理范围内）\", \"distance\": \"负系数→距离越远完成概率越低\", \"member_density\": \"正系数→会员越多完成概率越高\"}, \"optimal_price\": 40, \"optimal_expected_profit\": 11.31, \"profit_curve\": [{\"price\": 5, \"completion_prob\": 0.5464, \"expected_profit\": 2.73}, {\"price\": 8, \"completion_prob\": 0.5225, \"expected_profit\": 4.18}, {\"price\": 10, \"completion_prob\": 0.5066, \"expected_profit\": 5.07}, {\"price\": 12, \"completion_prob\": 0.4906, \"expected_profit\": 5.89}, {\"price\": 15, \"completion_prob\": 0.4667, \"expected_profit\": 7.0}, {\"price\": 18, \"completion_prob\": 0.443, \"expected_profit\": 7.97}, {\"price\": 20, \"completion_prob\": 0.4273, \"expected_profit\": 8.55}, {\"price\": 25, \"completion_prob\": 0.3888, \"expected_profit\": 9.72}, {\"price\": 30, \"completion_prob\": 0.3516, \"expected_profit\": 10.55}, {\"price\": 35, \"completion_prob\": 0.3161, \"expected_profit\": 11.06}, {\"price\": 40, \"completion_prob\": 0.2826, \"expected_profit\": 11.31}], \"loss_final\": 0.679124, \"feature_standardization\": {\"price_mean\": 19.1, \"price_std\": 5.29, \"distance_mean\": 2.09, \"distance_std\": 2.15}}\n",
+  "stderr": "",
+  "returncode": 0,
+  "duration_ms": 231,
+  "code_hash": "e1f3d3f333816b58b1f499ad60bbc6b59e81fec71e0b554cc07ad3855b58ff23",
+  "environment_hash": "fd3a9026b2863096bbc4ef6ff142b29d11083f7cdbbd8fa638ce3e05b19e8fc2",
+  "started_at": "2026-09-09T14:54:52+0800",
+  "finished_at": "2026-09-09T14:54:52+0800",
+  "provenance": {
+    "adapter": "local_python",
+    "python": "C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "output_mapping": {
+      "完成概率": "actual_completion_rate",
+      "P_complete": "actual_completion_rate",
+      "最优定价": "optimal_price",
+      "price_opt": "optimal_price",
+      "期望利润": "optimal_expected_profit",
+      "profit": "optimal_expected_profit",
+      "定价": "optimal_price",
+      "price": "optimal_price",
+      "距离": "feature_standardization",
+      "distance": "feature_standardization",
+      "模型准确率": "model_accuracy"
+    }
+  },
+  "code": "\"\"\"2017_B 拍照赚钱任务定价 — Logistic回归+定价优化（自包含，纯标准库）。\"\"\"\nimport json\nimport math\nimport random\n\ndef solve(inputs: dict) -> dict:\n    random.seed(42)\n    # 生成合成数据（模拟附件一：任务位置、定价、完成情况）\n    n_tasks = 200\n    data = []\n    for i in range(n_tasks):\n        # 任务到最近会员的距离（km）\n        distance = random.expovariate(1.0 / 2.0)  # 均值2km\n        distance = min(distance, 15.0)\n        # 会员密度（附近会员数）\n        member_density = max(1, int(random.gauss(10, 4)))\n        # 原定价（元）\n        price = round(15 + distance * 2 + random.gauss(0, 3), 1)\n        price = max(5, price)\n        # 完成概率（真实模型：价格越高、距离越近、会员越多→越可能完成）\n        p_complete = 1.0 / (1.0 + math.exp(-(\n            -2.0 + 0.08 * price - 0.15 * distance + 0.05 * member_density\n        )))\n        completed = 1 if random.random() < p_complete else 0\n        data.append({\n            \"task_id\": i, \"distance_km\": round(distance, 2),\n            \"member_density\": member_density, \"price\": price,\n            \"completed\": completed\n        })\n\n    # Logistic回归（梯度下降，纯Python）\n    # 特征: [1, price, distance, member_density]\n    def sigmoid(z):\n        if z >= 0:\n            return 1.0 / (1.0 + math.exp(-z))\n        else:\n            ez = math.exp(z)\n            return ez / (1.0 + ez)\n\n    def predict(x, beta):\n        z = sum(b * xi for b, xi in zip(beta, x))\n        return sigmoid(z)\n\n    # 标准化特征\n    prices = [d[\"price\"] for d in data]\n    distances = [d[\"distance_km\"] for d in data]\n    densities = [d[\"member_density\"] for d in data]\n    p_mean, p_std = sum(prices) / len(prices), (sum((p - sum(prices)/len(prices))**2 for p in prices) / len(prices))**0.5 or 1\n    d_mean, d_std = sum(distances) / len(distances), (sum((d - sum(distances)/len(distances))**2 for d in distances) / len(distances))**0.5 or 1\n    m_mean, m_std = sum(densities) / len(densities), (sum((m - sum(densities)/len(densities))**2 for m in densities) / len(densities))**0.5 or 1\n\n    X = []\n    y = []\n    for d in data:\n        X.append([\n            1.0,\n            (d[\"price\"] - p_mean) / p_std,\n            (d[\"distance_km\"] - d_mean) / d_std,\n            (d[\"member_density\"] - m_mean) / m_std,\n        ])\n        y.append(d[\"completed\"])\n\n    # 梯度下降\n    beta = [0.0, 0.0, 0.0, 0.0]\n    lr = 0.1\n    n_epochs = 500\n    losses = []\n    for epoch in range(n_epochs):\n        grad = [0.0, 0.0, 0.0, 0.0]\n        loss = 0.0\n        for xi, yi in zip(X, y):\n            pred = predict(xi, beta)\n            error = pred - yi\n            loss -= yi * math.log(max(pred, 1e-15)) + (1 - yi) * math.log(max(1 - pred, 1e-15))\n            for j in range(4):\n                grad[j] += error * xi[j]\n        for j in range(4):\n            beta[j] -= lr * grad[j] / len(X)\n        losses.append(round(loss / len(X), 6))\n\n    # 模型评估\n    correct = 0\n    for xi, yi in zip(X, y):\n        pred = predict(xi, beta)\n        if (pred >= 0.5 and yi == 1) or (pred < 0.5 and yi == 0):\n            correct += 1\n    accuracy = correct / len(X)\n\n    # 实际完成率\n    actual_completion = sum(d[\"completed\"] for d in data) / len(data)\n\n    # 定价优化：最大化期望利润 = price * P(完成|price, distance=均值, density=均值)\n    best_price = 0\n    best_profit = -1\n    profit_curve = []\n    for price_test in [5, 8, 10, 12, 15, 18, 20, 25, 30, 35, 40]:\n        x_test = [\n            1.0,\n            (price_test - p_mean) / p_std,\n            0.0,  # 距离均值\n            0.0,  # 密度均值\n        ]\n        p = predict(x_test, beta)\n        profit = price_test * p\n        profit_curve.append({\"price\": price_test, \"completion_prob\": round(p, 4),\n                             \"expected_profit\": round(profit, 2)})\n        if profit > best_profit:\n            best_profit = profit\n            best_price = price_test\n\n    return {\n        \"n_tasks\": n_tasks,\n        \"actual_completion_rate\": round(actual_completion, 4),\n        \"model_accuracy\": round(accuracy, 4),\n        \"logistic_coefficients\": {\n            \"intercept\": round(beta[0], 4),\n            \"price\": round(beta[1], 4),\n            \"distance\": round(beta[2], 4),\n            \"member_density\": round(beta[3], 4),\n        },\n        \"coefficient_interpretation\": {\n            \"price\": \"正系数→价格越高完成概率越高（在合理范围内）\",\n            \"distance\": \"负系数→距离越远完成概率越低\",\n            \"member_density\": \"正系数→会员越多完成概率越高\",\n        },\n        \"optimal_price\": best_price,\n        \"optimal_expected_profit\": round(best_profit, 2),\n        \"profit_curve\": profit_curve,\n        \"loss_final\": losses[-1] if losses else None,\n        \"feature_standardization\": {\n            \"price_mean\": round(p_mean, 2), \"price_std\": round(p_std, 2),\n            \"distance_mean\": round(d_mean, 2), \"distance_std\": round(d_std, 2),\n        },\n    }\n\nif __name__ == \"__main__\":\n    print(json.dumps(solve({}), ensure_ascii=False))\n",
+  "environment_manifest": "python=3.12.10\nplatform=Windows-11-10.0.26200-SP0\nexecutable=C:\\Users\\Lin\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+}

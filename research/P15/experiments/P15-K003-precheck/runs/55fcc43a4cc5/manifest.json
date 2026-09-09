@@ -1,0 +1,55 @@
+{
+  "run_id": "55fcc43a4cc5",
+  "problem_id": "2017_B",
+  "arm": "F",
+  "rep": 1,
+  "seed": 42,
+  "batch": "precheck",
+  "block_role": "main",
+  "status": "EXECUTED",
+  "model_family_primary": "statistical_modeling",
+  "artifact_type": "model_doc.md",
+  "code_sha256": "e1f3d3f333816b58b1f499ad60bbc6b59e81fec71e0b554cc07ad3855b58ff23",
+  "output_mapping": {
+    "完成概率": "actual_completion_rate",
+    "P_complete": "actual_completion_rate",
+    "最优定价": "optimal_price",
+    "price_opt": "optimal_price",
+    "期望利润": "optimal_expected_profit",
+    "profit": "optimal_expected_profit",
+    "定价": "optimal_price",
+    "price": "optimal_price",
+    "距离": "feature_standardization",
+    "distance": "feature_standardization",
+    "模型准确率": "model_accuracy"
+  },
+  "execution": {
+    "code_id": "CODE024",
+    "exec_id": "EXEC024",
+    "exec_status": "success",
+    "duration_ms": 285,
+    "returncode": 0,
+    "outputs_keys": [
+      "n_tasks",
+      "actual_completion_rate",
+      "model_accuracy",
+      "logistic_coefficients",
+      "coefficient_interpretation",
+      "optimal_price",
+      "optimal_expected_profit",
+      "profit_curve",
+      "loss_final",
+      "feature_standardization"
+    ]
+  },
+  "fidelity": {
+    "status": "unverifiable",
+    "score": null,
+    "verification_id": "VR024"
+  },
+  "generated_at": "2026-09-09T14:54:52+0800",
+  "generator": {
+    "agent_identity": "organizer_agent",
+    "role": "external_constructor"
+  }
+}
