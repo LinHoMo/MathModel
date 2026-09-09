@@ -1,0 +1,41 @@
+{
+  "schema_version": 3,
+  "updated_at": "2026-09-09T03:23:10+00:00",
+  "decisions": [
+    {
+      "decision_id": "D001",
+      "question": "Q001 候选竞技场选型",
+      "chosen": "MIR002",
+      "alternatives": [
+        "MIR001（VR=VR001）",
+        "MIR002（VR=VR002）"
+      ],
+      "criteria": [
+        "mathematical_valid",
+        "constraint_violation_max",
+        "execution_valid",
+        "variable_domain_violation",
+        "empirical_valid"
+      ],
+      "evidence_ids": [
+        "VR001",
+        "VR002"
+      ],
+      "reasoning": "chosen=MIR002 because VR002.mathematical_valid=True; MIR001(VR001.constraint_violation_max=0.275) worse than VR002.constraint_violation_max=0.0)",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_selection_decision",
+      "created_at": "2026-09-09T03:23:10+00:00",
+      "status": "active",
+      "question_type": "",
+      "knowledge_refs": [],
+      "failure_refs": [],
+      "required_validation": [],
+      "score_breakdown": {},
+      "consequences": [],
+      "invalidated_by": null,
+      "invalidated_reason": null,
+      "invalidated_at": null
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "scenario": "P1-M3 candidate competition (2024_A Q1)",
+  "elapsed_sec": 0.49,
+  "artifacts": {
+    "model": [
+      "M001"
+    ],
+    "model_ir": [
+      "MIR001",
+      "MIR002"
+    ],
+    "code": [
+      "CODE001",
+      "CODE002"
+    ],
+    "execution_result": [
+      "EXEC001",
+      "EXEC002"
+    ],
+    "result": [
+      "R001",
+      "R002"
+    ],
+    "verification_result": [
+      "VR001",
+      "VR002"
+    ]
+  },
+  "selection": {
+    "decision_id": "D002",
+    "chosen": "MIR002",
+    "alternatives": [
+      {
+        "model_ir": "MIR001",
+        "vr": "VR001",
+        "mathematical_valid": false,
+        "constraint_violation_max": 0.275,
+        "execution_valid": true
+      },
+      {
+        "model_ir": "MIR002",
+        "vr": "VR002",
+        "mathematical_valid": true,
+        "constraint_violation_max": 0.0,
+        "execution_valid": true
+      }
+    ],
+    "criteria": [
+      "mathematical_valid",
+      "constraint_violation_max",
+      "execution_valid",
+      "variable_domain_violation",
+      "empirical_valid"
+    ],
+    "evidence_ids": [
+      "VR001",
+      "VR002"
+    ],
+    "confidence": 0.95,
+    "reasoning": "chosen=MIR002 because VR002.mathematical_valid=True; MIR001(VR001.constraint_violation_max=0.275) worse than VR002.constraint_violation_max=0.0)",
+    "ranked": [
+      "MIR002",
+      "MIR001"
+    ],
+    "selects_edges": [
+      [
+        "D002",
+        "selects",
+        "M001"
+      ]
+    ]
+  },
+  "vr_summary": {
+    "VR001": {
+      "execution_id": "EXEC001",
+      "status": "failed",
+      "mathematical_valid": false,
+      "constraint_violation_max": 0.275,
+      "objective_value": 0.9990499183248304,
+      "robustness": 0.903846
+    },
+    "VR002": {
+      "execution_id": "EXEC002",
+      "status": "passed",
+      "mathematical_valid": true,
+      "constraint_violation_max": 0.0,
+      "objective_value": 0.9990499183248304,
+      "robustness": 1.0
+    }
+  },
+  "exec_summary": {
+    "EXEC001": {
+      "status": "success",
+      "returncode": 0,
+      "body_spacing": 1.924999999999999,
+      "head_speed_60": 0.9993718594038493
+    },
+    "EXEC002": {
+      "status": "success",
+      "returncode": 0,
+      "body_spacing": 1.6499999999999997,
+      "head_speed_60": 0.9993718594038493
+    }
+  },
+  "replay": {
+    "EXEC001": {
+      "ok": true,
+      "exec_id": "EXEC001",
+      "replay_id": "4e6e8b3d4d06",
+      "recorded_status": "success",
+      "replayed_status": "success",
+      "outputs_match": true,
+      "duration_ms": 138,
+      "deviation": [],
+      "problems": []
+    },
+    "EXEC002": {
+      "ok": true,
+      "exec_id": "EXEC002",
+      "replay_id": "9da746988b90",
+      "recorded_status": "success",
+      "replayed_status": "success",
+      "outputs_match": true,
+      "duration_ms": 126,
+      "deviation": [],
+      "problems": []
+    }
+  },
+  "node_results": {
+    "problem_analysis": "pass",
+    "literature_search": "pass",
+    "model_selection": "pass",
+    "model_construction": "pass",
+    "model_critique": "pass",
+    "assumption_check": "pass",
+    "code_generation": "pass",
+    "model_execution": "pass",
+    "model_validation": "pass",
+    "model_selection_decision": "pass"
+  }
+}

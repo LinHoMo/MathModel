@@ -1,0 +1,59 @@
+{
+  "scenario": "P1-M3 candidate competition (2024_A Q1)",
+  "selection": {
+    "decision_id": "D002",
+    "chosen": "MIR002",
+    "alternatives": [
+      {
+        "model_ir": "MIR001",
+        "vr": "VR001",
+        "mathematical_valid": false,
+        "constraint_violation_max": 0.275,
+        "execution_valid": true
+      },
+      {
+        "model_ir": "MIR002",
+        "vr": "VR002",
+        "mathematical_valid": true,
+        "constraint_violation_max": 0.0,
+        "execution_valid": true
+      }
+    ],
+    "criteria": [
+      "mathematical_valid",
+      "constraint_violation_max",
+      "execution_valid",
+      "variable_domain_violation",
+      "empirical_valid"
+    ],
+    "evidence_ids": [
+      "VR001",
+      "VR002"
+    ],
+    "confidence": 0.95,
+    "reasoning": "chosen=MIR002 because VR002.mathematical_valid=True; MIR001(VR001.constraint_violation_max=0.275) worse than VR002.constraint_violation_max=0.0)",
+    "ranked": [
+      "MIR002",
+      "MIR001"
+    ],
+    "selects_edges": [
+      [
+        "D002",
+        "selects",
+        "M001"
+      ]
+    ]
+  },
+  "node_results": {
+    "problem_analysis": "pass",
+    "literature_search": "pass",
+    "model_selection": "pass",
+    "model_construction": "pass",
+    "model_critique": "pass",
+    "assumption_check": "pass",
+    "code_generation": "pass",
+    "model_execution": "pass",
+    "model_validation": "pass",
+    "model_selection_decision": "pass"
+  }
+}
