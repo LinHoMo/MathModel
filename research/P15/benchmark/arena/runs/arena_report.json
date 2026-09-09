@@ -1,0 +1,2383 @@
+{
+  "mode": "arena_benchmark",
+  "pool": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\research\\P15\\experiments\\P15-K003\\runs",
+  "generated_at": "2026-09-09T23:49:49+00:00",
+  "skipped_runs": [
+    {
+      "run_id": "15a2ee8ecda8",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "16face68d44d",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "3cbf2ed2a580",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "3d25d7d8d1fb",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "3da18dba54f4",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "418eaa4c460b",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "474a939e9d2e",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "73fdcfe3ffb2",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "7d0eb127a825",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "87b28b4aa510",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "90dc27b63e54",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "954404c04173",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "9b1a83809567",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "aaad64adfd09",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "b02c1ee8e6ad",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "b409a83f3a00",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "c15a0eed0a01",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "c4dd1671b8d1",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "d9a8e905d18a",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "dd8b81eab9be",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "e46c24a582a6",
+      "reason": "F 臂无 model_ir"
+    },
+    {
+      "run_id": "e7f0d3f25d6c",
+      "reason": "F 臂无 model_ir"
+    }
+  ],
+  "problems": [
+    {
+      "problem_id": "2011_B",
+      "candidates": [
+        {
+          "run_id": "0a01718be67c",
+          "arm": "SV",
+          "model_id": "M-2011B-GRAPH",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC031",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_coverage",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 coverage_rate_3min=1.0"
+            },
+            {
+              "name": "output_has_variable_t_max",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_response_time_min=0.0"
+            },
+            {
+              "name": "output_has_variable_CV",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 workload_cv=0.0"
+            },
+            {
+              "name": "output_has_variable_allocation",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 allocation={'0': {'platform': 0, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '1': {'platform': 1, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '2': {'platform': 2, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '3': {'platform': 3, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '4': {'platform': 4, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '5': {'platform': 5, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '6': {'platform': 6, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '7': {'platform': 7, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '8': {'platform': 8, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '9': {'platform': 9, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '10': {'platform': 10, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '11': {'platform': 11, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '12': {'platform': 12, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '13': {'platform': 13, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '14': {'platform': 14, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '15': {'platform': 15, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '16': {'platform': 16, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '17': {'platform': 17, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '18': {'platform': 18, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '19': {'platform': 19, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}}"
+            },
+            {
+              "name": "output_has_variable_blockade",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ]
+        },
+        {
+          "run_id": "8a0f3939fcb1",
+          "arm": "S",
+          "model_id": "M-2011B-GRAPH",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC032",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_coverage",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 coverage_rate_3min=1.0"
+            },
+            {
+              "name": "output_has_variable_t_max",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_response_time_min=0.0"
+            },
+            {
+              "name": "output_has_variable_CV",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 workload_cv=0.0"
+            },
+            {
+              "name": "output_has_variable_allocation",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 allocation={'0': {'platform': 0, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '1': {'platform': 1, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '2': {'platform': 2, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '3': {'platform': 3, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '4': {'platform': 4, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '5': {'platform': 5, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '6': {'platform': 6, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '7': {'platform': 7, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '8': {'platform': 8, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '9': {'platform': 9, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '10': {'platform': 10, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '11': {'platform': 11, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '12': {'platform': 12, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '13': {'platform': 13, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '14': {'platform': 14, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '15': {'platform': 15, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '16': {'platform': 16, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '17': {'platform': 17, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '18': {'platform': 18, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '19': {'platform': 19, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}}"
+            },
+            {
+              "name": "output_has_variable_blockade",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ]
+        },
+        {
+          "run_id": "911f5bf61f13",
+          "arm": "SV",
+          "model_id": "M-2011B-GRAPH",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC033",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_coverage",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 coverage_rate_3min=1.0"
+            },
+            {
+              "name": "output_has_variable_t_max",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_response_time_min=0.0"
+            },
+            {
+              "name": "output_has_variable_CV",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 workload_cv=0.0"
+            },
+            {
+              "name": "output_has_variable_allocation",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 allocation={'0': {'platform': 0, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '1': {'platform': 1, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '2': {'platform': 2, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '3': {'platform': 3, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '4': {'platform': 4, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '5': {'platform': 5, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '6': {'platform': 6, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '7': {'platform': 7, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '8': {'platform': 8, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '9': {'platform': 9, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '10': {'platform': 10, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '11': {'platform': 11, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '12': {'platform': 12, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '13': {'platform': 13, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '14': {'platform': 14, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '15': {'platform': 15, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '16': {'platform': 16, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '17': {'platform': 17, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '18': {'platform': 18, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '19': {'platform': 19, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}}"
+            },
+            {
+              "name": "output_has_variable_blockade",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ]
+        },
+        {
+          "run_id": "cba5d544d4f4",
+          "arm": "S",
+          "model_id": "M-2011B-GRAPH",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC034",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_coverage",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 coverage_rate_3min=1.0"
+            },
+            {
+              "name": "output_has_variable_t_max",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_response_time_min=0.0"
+            },
+            {
+              "name": "output_has_variable_CV",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 workload_cv=0.0"
+            },
+            {
+              "name": "output_has_variable_allocation",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 allocation={'0': {'platform': 0, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '1': {'platform': 1, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '2': {'platform': 2, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '3': {'platform': 3, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '4': {'platform': 4, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '5': {'platform': 5, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '6': {'platform': 6, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '7': {'platform': 7, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '8': {'platform': 8, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '9': {'platform': 9, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '10': {'platform': 10, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '11': {'platform': 11, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '12': {'platform': 12, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '13': {'platform': 13, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '14': {'platform': 14, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '15': {'platform': 15, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '16': {'platform': 16, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '17': {'platform': 17, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '18': {'platform': 18, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '19': {'platform': 19, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}}"
+            },
+            {
+              "name": "output_has_variable_blockade",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ]
+        },
+        {
+          "run_id": "d10cf9a6b072",
+          "arm": "SV",
+          "model_id": "M-2011B-GRAPH",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC035",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_coverage",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 coverage_rate_3min=1.0"
+            },
+            {
+              "name": "output_has_variable_t_max",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_response_time_min=0.0"
+            },
+            {
+              "name": "output_has_variable_CV",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 workload_cv=0.0"
+            },
+            {
+              "name": "output_has_variable_allocation",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 allocation={'0': {'platform': 0, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '1': {'platform': 1, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '2': {'platform': 2, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '3': {'platform': 3, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '4': {'platform': 4, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '5': {'platform': 5, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '6': {'platform': 6, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '7': {'platform': 7, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '8': {'platform': 8, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '9': {'platform': 9, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '10': {'platform': 10, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '11': {'platform': 11, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '12': {'platform': 12, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '13': {'platform': 13, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '14': {'platform': 14, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '15': {'platform': 15, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '16': {'platform': 16, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '17': {'platform': 17, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '18': {'platform': 18, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '19': {'platform': 19, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}}"
+            },
+            {
+              "name": "output_has_variable_blockade",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ]
+        },
+        {
+          "run_id": "d694cc3714e8",
+          "arm": "S",
+          "model_id": "M-2011B-GRAPH",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC036",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_coverage",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 coverage_rate_3min=1.0"
+            },
+            {
+              "name": "output_has_variable_t_max",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_response_time_min=0.0"
+            },
+            {
+              "name": "output_has_variable_CV",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 workload_cv=0.0"
+            },
+            {
+              "name": "output_has_variable_allocation",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 allocation={'0': {'platform': 0, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '1': {'platform': 1, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '2': {'platform': 2, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '3': {'platform': 3, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '4': {'platform': 4, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '5': {'platform': 5, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '6': {'platform': 6, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '7': {'platform': 7, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '8': {'platform': 8, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '9': {'platform': 9, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '10': {'platform': 10, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '11': {'platform': 11, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '12': {'platform': 12, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '13': {'platform': 13, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '14': {'platform': 14, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '15': {'platform': 15, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '16': {'platform': 16, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '17': {'platform': 17, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '18': {'platform': 18, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}, '19': {'platform': 19, 'distance_km': 0, 'response_time_min': 0.0, 'within_3min': True}}"
+            },
+            {
+              "name": "output_has_variable_blockade",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ]
+        }
+      ],
+      "decision": {
+        "selected": true,
+        "chosen": "M-2011B-GRAPH",
+        "basis": [
+          "exec_status=success",
+          "valid=True",
+          "cvm=0.0",
+          "fidelity=1.0"
+        ],
+        "evidence": [
+          "EXEC031",
+          "EXEC032",
+          "EXEC033",
+          "EXEC034",
+          "EXEC035",
+          "EXEC036"
+        ]
+      }
+    },
+    {
+      "problem_id": "2017_B",
+      "candidates": [
+        {
+          "run_id": "10422e69395d",
+          "arm": "SV",
+          "model_id": "M-2017B-LOGIT",
+          "exec_status": "success",
+          "fidelity_score": 0.8235,
+          "execution_id": "EXEC037",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_price",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_distance",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 feature_standardization={'price_mean': 18.53, 'price_std': 4.44, 'distance_mean': 1.84, 'distance_std': 1.8}"
+            },
+            {
+              "name": "output_has_variable_density",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'density'"
+            },
+            {
+              "name": "output_has_variable_P_complete",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 actual_completion_rate=0.405"
+            },
+            {
+              "name": "output_has_variable_price_opt",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_expected_profit=36.76"
+            }
+          ]
+        },
+        {
+          "run_id": "22a34ef9db0f",
+          "arm": "S",
+          "model_id": "M-2017B-LOGIT",
+          "exec_status": "success",
+          "fidelity_score": 0.8235,
+          "execution_id": "EXEC038",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_price",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_distance",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 feature_standardization={'price_mean': 19.1, 'price_std': 5.29, 'distance_mean': 2.09, 'distance_std': 2.15}"
+            },
+            {
+              "name": "output_has_variable_density",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'density'"
+            },
+            {
+              "name": "output_has_variable_P_complete",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 actual_completion_rate=0.435"
+            },
+            {
+              "name": "output_has_variable_price_opt",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_expected_profit=11.31"
+            }
+          ]
+        },
+        {
+          "run_id": "497caeb28f17",
+          "arm": "S",
+          "model_id": "M-2017B-LOGIT",
+          "exec_status": "success",
+          "fidelity_score": 0.8235,
+          "execution_id": "EXEC039",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_price",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_distance",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 feature_standardization={'price_mean': 18.84, 'price_std': 4.65, 'distance_mean': 1.92, 'distance_std': 1.97}"
+            },
+            {
+              "name": "output_has_variable_density",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'density'"
+            },
+            {
+              "name": "output_has_variable_P_complete",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 actual_completion_rate=0.45"
+            },
+            {
+              "name": "output_has_variable_price_opt",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_expected_profit=23.36"
+            }
+          ]
+        },
+        {
+          "run_id": "8b0750226105",
+          "arm": "SV",
+          "model_id": "M-2017B-LOGIT",
+          "exec_status": "success",
+          "fidelity_score": 0.8235,
+          "execution_id": "EXEC040",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_price",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_distance",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 feature_standardization={'price_mean': 18.84, 'price_std': 4.65, 'distance_mean': 1.92, 'distance_std': 1.97}"
+            },
+            {
+              "name": "output_has_variable_density",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'density'"
+            },
+            {
+              "name": "output_has_variable_P_complete",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 actual_completion_rate=0.45"
+            },
+            {
+              "name": "output_has_variable_price_opt",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_expected_profit=23.36"
+            }
+          ]
+        },
+        {
+          "run_id": "d7469d1f6245",
+          "arm": "SV",
+          "model_id": "M-2017B-LOGIT",
+          "exec_status": "success",
+          "fidelity_score": 0.8235,
+          "execution_id": "EXEC041",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_price",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_distance",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 feature_standardization={'price_mean': 19.1, 'price_std': 5.29, 'distance_mean': 2.09, 'distance_std': 2.15}"
+            },
+            {
+              "name": "output_has_variable_density",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'density'"
+            },
+            {
+              "name": "output_has_variable_P_complete",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 actual_completion_rate=0.435"
+            },
+            {
+              "name": "output_has_variable_price_opt",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_expected_profit=11.31"
+            }
+          ]
+        },
+        {
+          "run_id": "fd79250ae638",
+          "arm": "S",
+          "model_id": "M-2017B-LOGIT",
+          "exec_status": "success",
+          "fidelity_score": 0.8235,
+          "execution_id": "EXEC042",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_price",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_distance",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 feature_standardization={'price_mean': 18.53, 'price_std': 4.44, 'distance_mean': 1.84, 'distance_std': 1.8}"
+            },
+            {
+              "name": "output_has_variable_density",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'density'"
+            },
+            {
+              "name": "output_has_variable_P_complete",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 actual_completion_rate=0.405"
+            },
+            {
+              "name": "output_has_variable_price_opt",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_price=40"
+            },
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_expected_profit=36.76"
+            }
+          ]
+        }
+      ],
+      "decision": {
+        "selected": true,
+        "chosen": "M-2017B-LOGIT",
+        "basis": [
+          "exec_status=success",
+          "valid=False",
+          "cvm=0.0",
+          "fidelity=0.8235",
+          "（无候选通过数值验证，在存活候选中选择约束违反最小者——如实标注降级选型）"
+        ],
+        "evidence": [
+          "EXEC037",
+          "EXEC038",
+          "EXEC039",
+          "EXEC040",
+          "EXEC041",
+          "EXEC042"
+        ]
+      }
+    },
+    {
+      "problem_id": "2018_A",
+      "candidates": [
+        {
+          "run_id": "09f28cd1a87e",
+          "arm": "SV",
+          "model_id": "M-2018A-PDE",
+          "exec_status": "success",
+          "fidelity_score": 0.9091,
+          "execution_id": "EXEC043",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_T",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 temperature_curve=[{'time_s': 0.0, 'temp_C': 37.0}, {'time_s': 270.0, 'temp_C': 37.083}, {'time_s': 540.0, 'temp_C': 37.904}, {'time_s': 810.0, 'temp_C': 38.994}, {'time_s': 1080.0, 'temp_C': 39.919}, {'time_s': 1350.0, 'temp_C': 40.624}, {'time_s': 1620.0, 'temp_C': 41.144}, {'time_s': 1890.0, 'temp_C': 41.524}, {'time_s': 2160.0, 'temp_C': 41.801}, {'time_s': 2430.0, 'temp_C': 42.003}, {'time_s': 2700.0, 'temp_C': 42.15}, {'time_s': 2970.0, 'temp_C': 42.257}, {'time_s': 3240.0, 'temp_C': 42.334}, {'time_s': 3510.0, 'temp_C': 42.391}, {'time_s': 3780.0, 'temp_C': 42.432}, {'time_s': 4050.0, 'temp_C': 42.462}, {'time_s': 4320.0, 'temp_C': 42.484}, {'time_s': 4590.0, 'temp_C': 42.499}, {'time_s': 4860.0, 'temp_C': 42.511}, {'time_s': 5130.0, 'temp_C': 42.519}, {'time_s': 5400.0, 'temp_C': 42.525}]"
+            },
+            {
+              "name": "output_has_variable_T_skin",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 skin_temp_final=42.525"
+            },
+            {
+              "name": "output_has_variable_t",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 duration_s=5400.0"
+            },
+            {
+              "name": "output_has_variable_x",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'x'"
+            }
+          ]
+        },
+        {
+          "run_id": "35e757a8ec91",
+          "arm": "SV",
+          "model_id": "M-2018A-PDE",
+          "exec_status": "success",
+          "fidelity_score": 0.9091,
+          "execution_id": "EXEC044",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_T",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 temperature_curve=[{'time_s': 0.0, 'temp_C': 37.0}, {'time_s': 270.0, 'temp_C': 37.083}, {'time_s': 540.0, 'temp_C': 37.904}, {'time_s': 810.0, 'temp_C': 38.994}, {'time_s': 1080.0, 'temp_C': 39.919}, {'time_s': 1350.0, 'temp_C': 40.624}, {'time_s': 1620.0, 'temp_C': 41.144}, {'time_s': 1890.0, 'temp_C': 41.524}, {'time_s': 2160.0, 'temp_C': 41.801}, {'time_s': 2430.0, 'temp_C': 42.003}, {'time_s': 2700.0, 'temp_C': 42.15}, {'time_s': 2970.0, 'temp_C': 42.257}, {'time_s': 3240.0, 'temp_C': 42.334}, {'time_s': 3510.0, 'temp_C': 42.391}, {'time_s': 3780.0, 'temp_C': 42.432}, {'time_s': 4050.0, 'temp_C': 42.462}, {'time_s': 4320.0, 'temp_C': 42.484}, {'time_s': 4590.0, 'temp_C': 42.499}, {'time_s': 4860.0, 'temp_C': 42.511}, {'time_s': 5130.0, 'temp_C': 42.519}, {'time_s': 5400.0, 'temp_C': 42.525}]"
+            },
+            {
+              "name": "output_has_variable_T_skin",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 skin_temp_final=42.525"
+            },
+            {
+              "name": "output_has_variable_t",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 duration_s=5400.0"
+            },
+            {
+              "name": "output_has_variable_x",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'x'"
+            }
+          ]
+        },
+        {
+          "run_id": "4367031a01a9",
+          "arm": "SV",
+          "model_id": "M-2018A-PDE",
+          "exec_status": "success",
+          "fidelity_score": 0.9091,
+          "execution_id": "EXEC045",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_T",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 temperature_curve=[{'time_s': 0.0, 'temp_C': 37.0}, {'time_s': 270.0, 'temp_C': 37.083}, {'time_s': 540.0, 'temp_C': 37.904}, {'time_s': 810.0, 'temp_C': 38.994}, {'time_s': 1080.0, 'temp_C': 39.919}, {'time_s': 1350.0, 'temp_C': 40.624}, {'time_s': 1620.0, 'temp_C': 41.144}, {'time_s': 1890.0, 'temp_C': 41.524}, {'time_s': 2160.0, 'temp_C': 41.801}, {'time_s': 2430.0, 'temp_C': 42.003}, {'time_s': 2700.0, 'temp_C': 42.15}, {'time_s': 2970.0, 'temp_C': 42.257}, {'time_s': 3240.0, 'temp_C': 42.334}, {'time_s': 3510.0, 'temp_C': 42.391}, {'time_s': 3780.0, 'temp_C': 42.432}, {'time_s': 4050.0, 'temp_C': 42.462}, {'time_s': 4320.0, 'temp_C': 42.484}, {'time_s': 4590.0, 'temp_C': 42.499}, {'time_s': 4860.0, 'temp_C': 42.511}, {'time_s': 5130.0, 'temp_C': 42.519}, {'time_s': 5400.0, 'temp_C': 42.525}]"
+            },
+            {
+              "name": "output_has_variable_T_skin",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 skin_temp_final=42.525"
+            },
+            {
+              "name": "output_has_variable_t",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 duration_s=5400.0"
+            },
+            {
+              "name": "output_has_variable_x",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'x'"
+            }
+          ]
+        },
+        {
+          "run_id": "c495cd73bf66",
+          "arm": "S",
+          "model_id": "M-2018A-PDE",
+          "exec_status": "success",
+          "fidelity_score": 0.9091,
+          "execution_id": "EXEC046",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_T",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 temperature_curve=[{'time_s': 0.0, 'temp_C': 37.0}, {'time_s': 270.0, 'temp_C': 37.083}, {'time_s': 540.0, 'temp_C': 37.904}, {'time_s': 810.0, 'temp_C': 38.994}, {'time_s': 1080.0, 'temp_C': 39.919}, {'time_s': 1350.0, 'temp_C': 40.624}, {'time_s': 1620.0, 'temp_C': 41.144}, {'time_s': 1890.0, 'temp_C': 41.524}, {'time_s': 2160.0, 'temp_C': 41.801}, {'time_s': 2430.0, 'temp_C': 42.003}, {'time_s': 2700.0, 'temp_C': 42.15}, {'time_s': 2970.0, 'temp_C': 42.257}, {'time_s': 3240.0, 'temp_C': 42.334}, {'time_s': 3510.0, 'temp_C': 42.391}, {'time_s': 3780.0, 'temp_C': 42.432}, {'time_s': 4050.0, 'temp_C': 42.462}, {'time_s': 4320.0, 'temp_C': 42.484}, {'time_s': 4590.0, 'temp_C': 42.499}, {'time_s': 4860.0, 'temp_C': 42.511}, {'time_s': 5130.0, 'temp_C': 42.519}, {'time_s': 5400.0, 'temp_C': 42.525}]"
+            },
+            {
+              "name": "output_has_variable_T_skin",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 skin_temp_final=42.525"
+            },
+            {
+              "name": "output_has_variable_t",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 duration_s=5400.0"
+            },
+            {
+              "name": "output_has_variable_x",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'x'"
+            }
+          ]
+        },
+        {
+          "run_id": "cd1d7e0244af",
+          "arm": "S",
+          "model_id": "M-2018A-PDE",
+          "exec_status": "success",
+          "fidelity_score": 0.9091,
+          "execution_id": "EXEC047",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_T",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 temperature_curve=[{'time_s': 0.0, 'temp_C': 37.0}, {'time_s': 270.0, 'temp_C': 37.083}, {'time_s': 540.0, 'temp_C': 37.904}, {'time_s': 810.0, 'temp_C': 38.994}, {'time_s': 1080.0, 'temp_C': 39.919}, {'time_s': 1350.0, 'temp_C': 40.624}, {'time_s': 1620.0, 'temp_C': 41.144}, {'time_s': 1890.0, 'temp_C': 41.524}, {'time_s': 2160.0, 'temp_C': 41.801}, {'time_s': 2430.0, 'temp_C': 42.003}, {'time_s': 2700.0, 'temp_C': 42.15}, {'time_s': 2970.0, 'temp_C': 42.257}, {'time_s': 3240.0, 'temp_C': 42.334}, {'time_s': 3510.0, 'temp_C': 42.391}, {'time_s': 3780.0, 'temp_C': 42.432}, {'time_s': 4050.0, 'temp_C': 42.462}, {'time_s': 4320.0, 'temp_C': 42.484}, {'time_s': 4590.0, 'temp_C': 42.499}, {'time_s': 4860.0, 'temp_C': 42.511}, {'time_s': 5130.0, 'temp_C': 42.519}, {'time_s': 5400.0, 'temp_C': 42.525}]"
+            },
+            {
+              "name": "output_has_variable_T_skin",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 skin_temp_final=42.525"
+            },
+            {
+              "name": "output_has_variable_t",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 duration_s=5400.0"
+            },
+            {
+              "name": "output_has_variable_x",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'x'"
+            }
+          ]
+        },
+        {
+          "run_id": "f43ad9a11c2c",
+          "arm": "S",
+          "model_id": "M-2018A-PDE",
+          "exec_status": "success",
+          "fidelity_score": 0.9091,
+          "execution_id": "EXEC048",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_T",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 temperature_curve=[{'time_s': 0.0, 'temp_C': 37.0}, {'time_s': 270.0, 'temp_C': 37.083}, {'time_s': 540.0, 'temp_C': 37.904}, {'time_s': 810.0, 'temp_C': 38.994}, {'time_s': 1080.0, 'temp_C': 39.919}, {'time_s': 1350.0, 'temp_C': 40.624}, {'time_s': 1620.0, 'temp_C': 41.144}, {'time_s': 1890.0, 'temp_C': 41.524}, {'time_s': 2160.0, 'temp_C': 41.801}, {'time_s': 2430.0, 'temp_C': 42.003}, {'time_s': 2700.0, 'temp_C': 42.15}, {'time_s': 2970.0, 'temp_C': 42.257}, {'time_s': 3240.0, 'temp_C': 42.334}, {'time_s': 3510.0, 'temp_C': 42.391}, {'time_s': 3780.0, 'temp_C': 42.432}, {'time_s': 4050.0, 'temp_C': 42.462}, {'time_s': 4320.0, 'temp_C': 42.484}, {'time_s': 4590.0, 'temp_C': 42.499}, {'time_s': 4860.0, 'temp_C': 42.511}, {'time_s': 5130.0, 'temp_C': 42.519}, {'time_s': 5400.0, 'temp_C': 42.525}]"
+            },
+            {
+              "name": "output_has_variable_T_skin",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 skin_temp_final=42.525"
+            },
+            {
+              "name": "output_has_variable_t",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 duration_s=5400.0"
+            },
+            {
+              "name": "output_has_variable_x",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'x'"
+            }
+          ]
+        }
+      ],
+      "decision": {
+        "selected": true,
+        "chosen": "M-2018A-PDE",
+        "basis": [
+          "exec_status=success",
+          "valid=False",
+          "cvm=0.0",
+          "fidelity=0.9091",
+          "（无候选通过数值验证，在存活候选中选择约束违反最小者——如实标注降级选型）"
+        ],
+        "evidence": [
+          "EXEC043",
+          "EXEC044",
+          "EXEC045",
+          "EXEC046",
+          "EXEC047",
+          "EXEC048"
+        ]
+      }
+    },
+    {
+      "problem_id": "2018_B",
+      "candidates": [
+        {
+          "run_id": "1db7f2aa6188",
+          "arm": "S",
+          "model_id": "M-2018B-DES",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC049",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_N",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 total_parts=248"
+            },
+            {
+              "name": "output_has_variable_throughput",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 throughput_per_hour=31.0"
+            },
+            {
+              "name": "output_has_variable_cycle",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 avg_cycle_time_s=116.13"
+            },
+            {
+              "name": "output_has_variable_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rgv_utilization=0.996"
+            },
+            {
+              "name": "output_has_variable_cnc_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ]
+        },
+        {
+          "run_id": "44781f3efc79",
+          "arm": "SV",
+          "model_id": "M-2018B-DES",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC050",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_N",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 total_parts=248"
+            },
+            {
+              "name": "output_has_variable_throughput",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 throughput_per_hour=31.0"
+            },
+            {
+              "name": "output_has_variable_cycle",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 avg_cycle_time_s=116.13"
+            },
+            {
+              "name": "output_has_variable_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rgv_utilization=0.996"
+            },
+            {
+              "name": "output_has_variable_cnc_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ]
+        },
+        {
+          "run_id": "7e8677777977",
+          "arm": "SV",
+          "model_id": "M-2018B-DES",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC051",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_N",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 total_parts=248"
+            },
+            {
+              "name": "output_has_variable_throughput",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 throughput_per_hour=31.0"
+            },
+            {
+              "name": "output_has_variable_cycle",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 avg_cycle_time_s=116.13"
+            },
+            {
+              "name": "output_has_variable_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rgv_utilization=0.996"
+            },
+            {
+              "name": "output_has_variable_cnc_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ]
+        },
+        {
+          "run_id": "9bc2dd392465",
+          "arm": "S",
+          "model_id": "M-2018B-DES",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC052",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_N",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 total_parts=248"
+            },
+            {
+              "name": "output_has_variable_throughput",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 throughput_per_hour=31.0"
+            },
+            {
+              "name": "output_has_variable_cycle",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 avg_cycle_time_s=116.13"
+            },
+            {
+              "name": "output_has_variable_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rgv_utilization=0.996"
+            },
+            {
+              "name": "output_has_variable_cnc_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ]
+        },
+        {
+          "run_id": "c5c91a4e4718",
+          "arm": "S",
+          "model_id": "M-2018B-DES",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC053",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_N",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 total_parts=248"
+            },
+            {
+              "name": "output_has_variable_throughput",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 throughput_per_hour=31.0"
+            },
+            {
+              "name": "output_has_variable_cycle",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 avg_cycle_time_s=116.13"
+            },
+            {
+              "name": "output_has_variable_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rgv_utilization=0.996"
+            },
+            {
+              "name": "output_has_variable_cnc_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ]
+        },
+        {
+          "run_id": "fc38fd1cd052",
+          "arm": "SV",
+          "model_id": "M-2018B-DES",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC054",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_N",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 total_parts=248"
+            },
+            {
+              "name": "output_has_variable_throughput",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 throughput_per_hour=31.0"
+            },
+            {
+              "name": "output_has_variable_cycle",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 avg_cycle_time_s=116.13"
+            },
+            {
+              "name": "output_has_variable_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rgv_utilization=0.996"
+            },
+            {
+              "name": "output_has_variable_cnc_util",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ]
+        }
+      ],
+      "decision": {
+        "selected": true,
+        "chosen": "M-2018B-DES",
+        "basis": [
+          "exec_status=success",
+          "valid=True",
+          "cvm=0.0",
+          "fidelity=1.0"
+        ],
+        "evidence": [
+          "EXEC049",
+          "EXEC050",
+          "EXEC051",
+          "EXEC052",
+          "EXEC053",
+          "EXEC054"
+        ]
+      }
+    },
+    {
+      "problem_id": "2019_C",
+      "candidates": [
+        {
+          "run_id": "3e4fde2ecda3",
+          "arm": "S",
+          "model_id": "M-2019C-QUEUE",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC055",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_lambda",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 lambda_critical=39.98"
+            },
+            {
+              "name": "output_has_variable_mu",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rho_utilization=0.75"
+            },
+            {
+              "name": "output_has_variable_W_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 expected_wait_min=0.1"
+            },
+            {
+              "name": "output_has_variable_profit_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_queue=79.8"
+            },
+            {
+              "name": "output_has_variable_profit_c",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_city=-5.0"
+            },
+            {
+              "name": "output_has_variable_decision",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_decision='queue'"
+            }
+          ]
+        },
+        {
+          "run_id": "5e84f6063845",
+          "arm": "SV",
+          "model_id": "M-2019C-QUEUE",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC056",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_lambda",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 lambda_critical=39.98"
+            },
+            {
+              "name": "output_has_variable_mu",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rho_utilization=0.75"
+            },
+            {
+              "name": "output_has_variable_W_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 expected_wait_min=0.1"
+            },
+            {
+              "name": "output_has_variable_profit_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_queue=79.8"
+            },
+            {
+              "name": "output_has_variable_profit_c",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_city=-5.0"
+            },
+            {
+              "name": "output_has_variable_decision",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_decision='queue'"
+            }
+          ]
+        },
+        {
+          "run_id": "8227a3c95a44",
+          "arm": "SV",
+          "model_id": "M-2019C-QUEUE",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC057",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_lambda",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 lambda_critical=39.98"
+            },
+            {
+              "name": "output_has_variable_mu",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rho_utilization=0.75"
+            },
+            {
+              "name": "output_has_variable_W_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 expected_wait_min=0.1"
+            },
+            {
+              "name": "output_has_variable_profit_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_queue=79.8"
+            },
+            {
+              "name": "output_has_variable_profit_c",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_city=-5.0"
+            },
+            {
+              "name": "output_has_variable_decision",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_decision='queue'"
+            }
+          ]
+        },
+        {
+          "run_id": "d7be89bd0190",
+          "arm": "S",
+          "model_id": "M-2019C-QUEUE",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC058",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_lambda",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 lambda_critical=39.98"
+            },
+            {
+              "name": "output_has_variable_mu",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rho_utilization=0.75"
+            },
+            {
+              "name": "output_has_variable_W_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 expected_wait_min=0.1"
+            },
+            {
+              "name": "output_has_variable_profit_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_queue=79.8"
+            },
+            {
+              "name": "output_has_variable_profit_c",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_city=-5.0"
+            },
+            {
+              "name": "output_has_variable_decision",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_decision='queue'"
+            }
+          ]
+        },
+        {
+          "run_id": "de42ece22e46",
+          "arm": "SV",
+          "model_id": "M-2019C-QUEUE",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC059",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_lambda",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 lambda_critical=39.98"
+            },
+            {
+              "name": "output_has_variable_mu",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rho_utilization=0.75"
+            },
+            {
+              "name": "output_has_variable_W_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 expected_wait_min=0.1"
+            },
+            {
+              "name": "output_has_variable_profit_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_queue=79.8"
+            },
+            {
+              "name": "output_has_variable_profit_c",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_city=-5.0"
+            },
+            {
+              "name": "output_has_variable_decision",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_decision='queue'"
+            }
+          ]
+        },
+        {
+          "run_id": "df1716aea762",
+          "arm": "S",
+          "model_id": "M-2019C-QUEUE",
+          "exec_status": "success",
+          "fidelity_score": 1.0,
+          "execution_id": "EXEC060",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_lambda",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 lambda_critical=39.98"
+            },
+            {
+              "name": "output_has_variable_mu",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 rho_utilization=0.75"
+            },
+            {
+              "name": "output_has_variable_W_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 expected_wait_min=0.1"
+            },
+            {
+              "name": "output_has_variable_profit_q",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_queue=79.8"
+            },
+            {
+              "name": "output_has_variable_profit_c",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 profit_city=-5.0"
+            },
+            {
+              "name": "output_has_variable_decision",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_decision='queue'"
+            }
+          ]
+        }
+      ],
+      "decision": {
+        "selected": true,
+        "chosen": "M-2019C-QUEUE",
+        "basis": [
+          "exec_status=success",
+          "valid=True",
+          "cvm=0.0",
+          "fidelity=1.0"
+        ],
+        "evidence": [
+          "EXEC055",
+          "EXEC056",
+          "EXEC057",
+          "EXEC058",
+          "EXEC059",
+          "EXEC060"
+        ]
+      }
+    },
+    {
+      "problem_id": "2020_B",
+      "candidates": [
+        {
+          "run_id": "0cd422af4c41",
+          "arm": "S",
+          "model_id": "M-2020B-DP",
+          "exec_status": "success",
+          "fidelity_score": 0.9286,
+          "execution_id": "EXEC061",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_profit=0.0"
+            },
+            {
+              "name": "output_has_variable_water",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_water=0"
+            },
+            {
+              "name": "output_has_variable_food",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_food=0"
+            },
+            {
+              "name": "output_has_variable_day",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 arrival_day=-1"
+            },
+            {
+              "name": "output_has_variable_path",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_path=[]"
+            }
+          ]
+        },
+        {
+          "run_id": "67c7b2375303",
+          "arm": "SV",
+          "model_id": "M-2020B-DP",
+          "exec_status": "success",
+          "fidelity_score": 0.9286,
+          "execution_id": "EXEC062",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_profit=0.0"
+            },
+            {
+              "name": "output_has_variable_water",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_water=0"
+            },
+            {
+              "name": "output_has_variable_food",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_food=0"
+            },
+            {
+              "name": "output_has_variable_day",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 arrival_day=-1"
+            },
+            {
+              "name": "output_has_variable_path",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_path=[]"
+            }
+          ]
+        },
+        {
+          "run_id": "9928a110f5de",
+          "arm": "S",
+          "model_id": "M-2020B-DP",
+          "exec_status": "success",
+          "fidelity_score": 0.9286,
+          "execution_id": "EXEC063",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_profit=0.0"
+            },
+            {
+              "name": "output_has_variable_water",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_water=0"
+            },
+            {
+              "name": "output_has_variable_food",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_food=0"
+            },
+            {
+              "name": "output_has_variable_day",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 arrival_day=-1"
+            },
+            {
+              "name": "output_has_variable_path",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_path=[]"
+            }
+          ]
+        },
+        {
+          "run_id": "cd7358e970bc",
+          "arm": "SV",
+          "model_id": "M-2020B-DP",
+          "exec_status": "success",
+          "fidelity_score": 0.9286,
+          "execution_id": "EXEC064",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_profit=0.0"
+            },
+            {
+              "name": "output_has_variable_water",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_water=0"
+            },
+            {
+              "name": "output_has_variable_food",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_food=0"
+            },
+            {
+              "name": "output_has_variable_day",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 arrival_day=-1"
+            },
+            {
+              "name": "output_has_variable_path",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_path=[]"
+            }
+          ]
+        },
+        {
+          "run_id": "d689acb004c1",
+          "arm": "SV",
+          "model_id": "M-2020B-DP",
+          "exec_status": "success",
+          "fidelity_score": 0.9286,
+          "execution_id": "EXEC065",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_profit=0.0"
+            },
+            {
+              "name": "output_has_variable_water",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_water=0"
+            },
+            {
+              "name": "output_has_variable_food",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_food=0"
+            },
+            {
+              "name": "output_has_variable_day",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 arrival_day=-1"
+            },
+            {
+              "name": "output_has_variable_path",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_path=[]"
+            }
+          ]
+        },
+        {
+          "run_id": "e9d8fbe54841",
+          "arm": "S",
+          "model_id": "M-2020B-DP",
+          "exec_status": "success",
+          "fidelity_score": 0.9286,
+          "execution_id": "EXEC066",
+          "valid": true,
+          "constraint_violation_max": 0.0,
+          "status": "passed",
+          "checks": [
+            {
+              "name": "output_has_variable_profit",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_profit=0.0"
+            },
+            {
+              "name": "output_has_variable_water",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_water=0"
+            },
+            {
+              "name": "output_has_variable_food",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 remaining_food=0"
+            },
+            {
+              "name": "output_has_variable_day",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 arrival_day=-1"
+            },
+            {
+              "name": "output_has_variable_path",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 optimal_path=[]"
+            }
+          ]
+        }
+      ],
+      "decision": {
+        "selected": true,
+        "chosen": "M-2020B-DP",
+        "basis": [
+          "exec_status=success",
+          "valid=True",
+          "cvm=0.0",
+          "fidelity=0.9286"
+        ],
+        "evidence": [
+          "EXEC061",
+          "EXEC062",
+          "EXEC063",
+          "EXEC064",
+          "EXEC065",
+          "EXEC066"
+        ]
+      }
+    },
+    {
+      "problem_id": "2022_C",
+      "candidates": [
+        {
+          "run_id": "09a80448b035",
+          "arm": "S",
+          "model_id": "M-2022C-stats",
+          "exec_status": "success",
+          "fidelity_score": 0.2,
+          "execution_id": "EXEC067",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_SiO2",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'SiO2'"
+            },
+            {
+              "name": "output_has_variable_K2O",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'K2O'"
+            },
+            {
+              "name": "output_has_variable_PbO",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'PbO'"
+            },
+            {
+              "name": "output_has_variable_y",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'y'"
+            },
+            {
+              "name": "output_has_variable_p",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'p'"
+            },
+            {
+              "name": "output_has_variable_train_accuracy",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 train_accuracy=1.0"
+            },
+            {
+              "name": "output_has_variable_n_training_samples",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 n_training_samples=14"
+            },
+            {
+              "name": "output_has_variable_classification_boundary",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 classification_boundary=-0.008"
+            }
+          ]
+        },
+        {
+          "run_id": "3b6c64b4985d",
+          "arm": "SV",
+          "model_id": "M-2022C-stats",
+          "exec_status": "success",
+          "fidelity_score": 0.2,
+          "execution_id": "EXEC068",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_SiO2",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'SiO2'"
+            },
+            {
+              "name": "output_has_variable_K2O",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'K2O'"
+            },
+            {
+              "name": "output_has_variable_PbO",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'PbO'"
+            },
+            {
+              "name": "output_has_variable_y",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'y'"
+            },
+            {
+              "name": "output_has_variable_p",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'p'"
+            },
+            {
+              "name": "output_has_variable_train_accuracy",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 train_accuracy=1.0"
+            },
+            {
+              "name": "output_has_variable_n_training_samples",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 n_training_samples=14"
+            },
+            {
+              "name": "output_has_variable_classification_boundary",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 classification_boundary=-0.008"
+            }
+          ]
+        },
+        {
+          "run_id": "c5c70405d371",
+          "arm": "S",
+          "model_id": "M-2022C-stats",
+          "exec_status": "success",
+          "fidelity_score": 0.2,
+          "execution_id": "EXEC069",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_SiO2",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'SiO2'"
+            },
+            {
+              "name": "output_has_variable_K2O",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'K2O'"
+            },
+            {
+              "name": "output_has_variable_PbO",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'PbO'"
+            },
+            {
+              "name": "output_has_variable_y",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'y'"
+            },
+            {
+              "name": "output_has_variable_p",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'p'"
+            },
+            {
+              "name": "output_has_variable_train_accuracy",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 train_accuracy=1.0"
+            },
+            {
+              "name": "output_has_variable_n_training_samples",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 n_training_samples=14"
+            },
+            {
+              "name": "output_has_variable_classification_boundary",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 classification_boundary=-0.008"
+            }
+          ]
+        },
+        {
+          "run_id": "d1c242bff87b",
+          "arm": "SV",
+          "model_id": "M-2022C-stats",
+          "exec_status": "success",
+          "fidelity_score": 0.2,
+          "execution_id": "EXEC070",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_SiO2",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'SiO2'"
+            },
+            {
+              "name": "output_has_variable_K2O",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'K2O'"
+            },
+            {
+              "name": "output_has_variable_PbO",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'PbO'"
+            },
+            {
+              "name": "output_has_variable_y",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'y'"
+            },
+            {
+              "name": "output_has_variable_p",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'p'"
+            },
+            {
+              "name": "output_has_variable_train_accuracy",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 train_accuracy=1.0"
+            },
+            {
+              "name": "output_has_variable_n_training_samples",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 n_training_samples=14"
+            },
+            {
+              "name": "output_has_variable_classification_boundary",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 classification_boundary=-0.008"
+            }
+          ]
+        }
+      ],
+      "decision": {
+        "selected": true,
+        "chosen": "M-2022C-stats",
+        "basis": [
+          "exec_status=success",
+          "valid=False",
+          "cvm=0.0",
+          "fidelity=0.2",
+          "（无候选通过数值验证，在存活候选中选择约束违反最小者——如实标注降级选型）"
+        ],
+        "evidence": [
+          "EXEC067",
+          "EXEC068",
+          "EXEC069",
+          "EXEC070"
+        ]
+      }
+    },
+    {
+      "problem_id": "2024_A",
+      "candidates": [
+        {
+          "run_id": "1db4196e2f77",
+          "arm": "SV",
+          "model_id": "M-2024A-kinematics",
+          "exec_status": "success",
+          "fidelity_score": 0.2,
+          "execution_id": "EXEC071",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_theta",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'theta'"
+            },
+            {
+              "name": "output_has_variable_r",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'r'"
+            },
+            {
+              "name": "output_has_variable_(x_i, y_i)",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 '(x_i, y_i)'"
+            },
+            {
+              "name": "output_has_variable_v_i",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'v_i'"
+            },
+            {
+              "name": "output_has_variable_d_min",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'd_min'"
+            },
+            {
+              "name": "output_has_variable_head_final_velocity",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 head_final_velocity=1.0"
+            },
+            {
+              "name": "output_has_variable_collision_time_s",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'collision_time_s'"
+            },
+            {
+              "name": "output_has_variable_min_pitch_q3",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 min_pitch_q3=0.28125"
+            },
+            {
+              "name": "output_has_variable_max_head_speed_q5",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_head_speed_q5=0.666667"
+            }
+          ]
+        },
+        {
+          "run_id": "1dbb1df6dde8",
+          "arm": "SV",
+          "model_id": "M-2024A-kinematics",
+          "exec_status": "success",
+          "fidelity_score": 0.2,
+          "execution_id": "EXEC072",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_theta",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'theta'"
+            },
+            {
+              "name": "output_has_variable_r",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'r'"
+            },
+            {
+              "name": "output_has_variable_(x_i, y_i)",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 '(x_i, y_i)'"
+            },
+            {
+              "name": "output_has_variable_v_i",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'v_i'"
+            },
+            {
+              "name": "output_has_variable_d_min",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'd_min'"
+            },
+            {
+              "name": "output_has_variable_head_final_velocity",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 head_final_velocity=1.0"
+            },
+            {
+              "name": "output_has_variable_collision_time_s",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'collision_time_s'"
+            },
+            {
+              "name": "output_has_variable_min_pitch_q3",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 min_pitch_q3=0.28125"
+            },
+            {
+              "name": "output_has_variable_max_head_speed_q5",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_head_speed_q5=0.666667"
+            }
+          ]
+        },
+        {
+          "run_id": "ac2de07410e4",
+          "arm": "S",
+          "model_id": "M-2024A-kinematics",
+          "exec_status": "success",
+          "fidelity_score": 0.2,
+          "execution_id": "EXEC073",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_theta",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'theta'"
+            },
+            {
+              "name": "output_has_variable_r",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'r'"
+            },
+            {
+              "name": "output_has_variable_(x_i, y_i)",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 '(x_i, y_i)'"
+            },
+            {
+              "name": "output_has_variable_v_i",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'v_i'"
+            },
+            {
+              "name": "output_has_variable_d_min",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'd_min'"
+            },
+            {
+              "name": "output_has_variable_head_final_velocity",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 head_final_velocity=1.0"
+            },
+            {
+              "name": "output_has_variable_collision_time_s",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'collision_time_s'"
+            },
+            {
+              "name": "output_has_variable_min_pitch_q3",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 min_pitch_q3=0.28125"
+            },
+            {
+              "name": "output_has_variable_max_head_speed_q5",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_head_speed_q5=0.666667"
+            }
+          ]
+        },
+        {
+          "run_id": "de79e4d62a22",
+          "arm": "S",
+          "model_id": "M-2024A-kinematics",
+          "exec_status": "success",
+          "fidelity_score": 0.2,
+          "execution_id": "EXEC074",
+          "valid": false,
+          "constraint_violation_max": 0.0,
+          "status": "failed",
+          "checks": [
+            {
+              "name": "output_has_variable_theta",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'theta'"
+            },
+            {
+              "name": "output_has_variable_r",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'r'"
+            },
+            {
+              "name": "output_has_variable_(x_i, y_i)",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 '(x_i, y_i)'"
+            },
+            {
+              "name": "output_has_variable_v_i",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'v_i'"
+            },
+            {
+              "name": "output_has_variable_d_min",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'd_min'"
+            },
+            {
+              "name": "output_has_variable_head_final_velocity",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 head_final_velocity=1.0"
+            },
+            {
+              "name": "output_has_variable_collision_time_s",
+              "kind": "output_field_exists",
+              "passed": false,
+              "detail": "缺失字段 'collision_time_s'"
+            },
+            {
+              "name": "output_has_variable_min_pitch_q3",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 min_pitch_q3=0.28125"
+            },
+            {
+              "name": "output_has_variable_max_head_speed_q5",
+              "kind": "output_field_exists",
+              "passed": true,
+              "detail": "存在 max_head_speed_q5=0.666667"
+            }
+          ]
+        }
+      ],
+      "decision": {
+        "selected": true,
+        "chosen": "M-2024A-kinematics",
+        "basis": [
+          "exec_status=success",
+          "valid=False",
+          "cvm=0.0",
+          "fidelity=0.2",
+          "（无候选通过数值验证，在存活候选中选择约束违反最小者——如实标注降级选型）"
+        ],
+        "evidence": [
+          "EXEC071",
+          "EXEC072",
+          "EXEC073",
+          "EXEC074"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "problems": 8,
+    "candidates": 44,
+    "selected": 8,
+    "unselected": 0
+  }
+}
