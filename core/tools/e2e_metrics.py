@@ -167,26 +167,38 @@ def _structure_hit(card_id: str, card_families: dict[str, str],
 def _model_structural_check(models: list) -> dict:
     """P0-4: 基于 artifact 内容的 minimal model_correctness 结构检查。
 
-    检查每个 model artifact 是否包含 objective（优化目标）、constraints（约束）、
-    variables（变量定义）。这只是 structural check，不是 semantic correctness。
+    检查 **MODEL_IR 契约 artifact**（data 含 ir_version 或 model_family 结构）是否包含
+    objectives（优化目标）、constraints（约束）、variables（变量定义）——字段名以
+    MODEL_IR 契约为准（复数），见 model_ir.schema.json。旧式指针 artifact
+    （{card_id, family, shortlist}，K001 时代）无契约字段 → 标记 legacy_pointer
+    （N/A），不判 FAIL 也不计入 structural_pass。这只是 structural check，不是
+    semantic correctness。
 
-    返回 {"structural_pass": bool, "per_model": {artifact_id: {field: bool}},
-           "models_checked": int}
+    返回 {"structural_pass": bool|None, "per_model": {artifact_id: {field: bool|None}},
+           "models_checked": int, "legacy_pointer_skipped": int}
     """
     per_model: dict[str, dict] = {}
     all_pass = True
     checked = 0
+    skipped = 0
     for m in models:
         data = getattr(m, "data", None) or {}
         payload = getattr(m, "payload", None) or []
-        # 优先从 data 检查，也检查 payload 引用的文件（仅检查存在性）
+        # 旧式指针 artifact 无 MODEL_IR 契约字段 → N/A（不判 FAIL）
+        if "ir_version" not in data and not isinstance(data.get("model_family"), dict):
+            per_model[m.artifact_id] = {
+                "legacy_pointer": True,
+                "objective": None,
+                "constraints": None,
+                "variables": None,
+            }
+            skipped += 1
+            continue
+        # MODEL_IR 契约字段（复数）：objectives / constraints / variables
         fields = {}
-        for field in ("objective", "constraints", "variables"):
+        for field in ("objectives", "constraints", "variables"):
             val = data.get(field)
-            if field == "objective":
-                ok = isinstance(val, str) and len(val.strip()) > 0
-            else:
-                ok = isinstance(val, list) and len(val) > 0
+            ok = isinstance(val, list) and len(val) > 0
             # 如果 data 中没有但 payload 有文件，视为可能有内容（不判 FAIL）
             if not ok and payload:
                 ok = None  # 无法从内联数据判定
@@ -197,10 +209,11 @@ def _model_structural_check(models: list) -> dict:
         if any(v is False for v in fields.values()):
             all_pass = False
     return {
-        "structural_pass": all_pass if checked > 0 else False,
+        "structural_pass": all_pass if checked > 0 else None,
         "per_model": per_model,
         "models_checked": checked,
-        "note": "structural check only (objective/constraints/variables), not semantic correctness",
+        "legacy_pointer_skipped": skipped,
+        "note": "structural check on MODEL_IR contract fields (objectives/constraints/variables), not semantic correctness",
     }
 
 
@@ -214,7 +227,9 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
     questions_raw = [a for a in reg.list_by_type("question")]
     results_raw = [a for a in reg.list_by_type("result")
                    if a.status not in ("invalidated", "superseded", "deprecated")]
-    models_raw = [a for a in reg.list_by_type("model")]
+    # P1 统一：MODEL_IR（type=model_ir）是 model 的契约新形态，与 model 一并纳入结构检查
+    models_raw = ([a for a in reg.list_by_type("model")]
+                  + [a for a in reg.list_by_type("model_ir")])
 
     # P0-2: 空壳 artifact 过滤（payload=[] 且 data={} 的不计入评分）
     questions = [a for a in questions_raw if not _is_empty_artifact(a)]

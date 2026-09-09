@@ -22,7 +22,7 @@
   (a) 2000C top-1 GT 命中  (b) 2023C top-1 GT 命中  (c) 反向检查通过
 的变体；都不满足 → 如实报告并停止（不加权重、不造新层）。
 
-用法: python core/tools/evaluation/ranking_ablation.py [--json]
+用法: python core/tools/ranking_ablation.py [--json]
 """
 from __future__ import annotations
 

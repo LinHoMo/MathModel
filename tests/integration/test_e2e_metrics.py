@@ -75,3 +75,46 @@ def test_structure_hit_compact_canonicalization():
                              ["time series"])[0] is False
     assert em._structure_hit("mc-arima", fam,
                              ["classical_timeseries"])[0] is True
+
+
+def test_model_structural_check_modelir_contract():
+    """P1 统一后：structural check 以 MODEL_IR 契约为准（objectives 复数）；
+    旧式指针 artifact（card_id/family/shortlist）标记 legacy_pointer 不判 FAIL。"""
+    import types
+
+    em = importlib.import_module("e2e_metrics")
+
+    def art(aid, data, payload=None):
+        return types.SimpleNamespace(artifact_id=aid, data=data, payload=payload or [])
+
+    mir = art("MIR001", {
+        "ir_version": "1.0",
+        "model_family": {"primary": "multibody_dynamics", "description": "x"},
+        "objectives": [{"objective_id": "O001", "type": "simulate"}],
+        "constraints": [{"constraint_id": "C001", "type": "equality"}],
+        "variables": [{"variable_id": "V001", "type": "state"}],
+    })
+    legacy = art("M001", {"card_id": "mc-x", "family": "dp", "shortlist": ["dp"]})
+    broken = art("MIR002", {
+        "ir_version": "1.0",
+        "objectives": [],
+        "constraints": [{"constraint_id": "C001"}],
+        "variables": [{"variable_id": "V001"}],
+    })
+
+    r1 = em._model_structural_check([mir, legacy])
+    assert r1["structural_pass"] is True
+    assert r1["models_checked"] == 1
+    assert r1["legacy_pointer_skipped"] == 1
+    assert r1["per_model"]["M001"]["legacy_pointer"] is True
+    assert all(r1["per_model"]["MIR001"][f] is True
+               for f in ("objectives", "constraints", "variables"))
+
+    r2 = em._model_structural_check([broken])
+    assert r2["structural_pass"] is False
+    assert r2["per_model"]["MIR002"]["objectives"] is False
+
+    # 全为 legacy pointer → 无可查契约模型，不判 FAIL（None）
+    r3 = em._model_structural_check([legacy])
+    assert r3["structural_pass"] is None
+    assert r3["legacy_pointer_skipped"] == 1

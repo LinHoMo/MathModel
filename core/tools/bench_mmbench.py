@@ -23,7 +23,9 @@ for _cat in ("runtime", "validation", "evaluation", "knowledge", "devtools", "re
 
 import metrics as M  # noqa: E402
 
-MMBENCH_ROOT = ROOT / "core" / "tools" / "evaluation" / "mmbench"
+# MMBench 语料真源：环境变量 MMBENCH_ROOT 优先（仓库外语料），否则仓库内约定目录。
+# 历史路径 core/tools/evaluation/mmbench 已于 2026-09-09 治理迁移删除，不再引用。
+MMBENCH_ROOT = Path(__import__("os").environ.get("MMBENCH_ROOT", str(ROOT / "core" / "tools" / "mmbench")))
 
 
 def _load_split(split: str) -> list[dict]:
