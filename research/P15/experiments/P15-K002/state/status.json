@@ -1,0 +1,85 @@
+{
+  "experiment_id": "P15-K002",
+  "protocol_version": "0.7",
+  "phase": "FROZEN",
+  "revisions": [
+    {
+      "version": "v0.7",
+      "at": "2026-09-09T01:51:19Z",
+      "note": "rubric v1.1 + candidates 字段 + 预检/G2 结论回填",
+      "from_phase": "DESIGN"
+    }
+  ],
+  "history": [
+    {
+      "event": "gate",
+      "at": "2026-09-09T01:51:19Z",
+      "name": "G1",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-09T01:51:19Z",
+      "name": "G2",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-09T01:51:19Z",
+      "name": "G3",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-09T01:51:19Z",
+      "name": "G4",
+      "result": "PASS"
+    },
+    {
+      "event": "gate",
+      "at": "2026-09-09T01:51:19Z",
+      "name": "G5",
+      "result": "PASS"
+    },
+    {
+      "event": "revision",
+      "at": "2026-09-09T01:51:19Z",
+      "version": "v0.7",
+      "note": "rubric v1.1 + candidates 字段 + 预检/G2 结论回填"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T01:51:24Z",
+      "from": "DESIGN",
+      "to": "REVIEW",
+      "note": "五 Gate 全 PASS + 预检结论"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T01:51:24Z",
+      "from": "REVIEW",
+      "to": "PREREGISTERED",
+      "note": "rubric v1.1 + candidates 字段 + 区分度预检 0/6 + G2 κ=0.879 + v1.1 重评 L2 区分度恢复"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-09T01:51:50Z",
+      "from": "PREREGISTERED",
+      "to": "FROZEN",
+      "note": "38 文件哈希冻结 frozen_root=7695767d；rubric v1.1 + 模板 candidates + 8 题 + 词表 + 预注册"
+    }
+  ],
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS",
+    "G5": "PASS"
+  },
+  "batches": {},
+  "runs": {
+    "total": 0,
+    "by_status": {}
+  },
+  "notes": []
+}

@@ -34,13 +34,14 @@ ARTIFACT_TYPES: dict[str, str] = {
     "deliverable": "DELIV",
     "execution_result": "EXEC",
     "verification_result": "VR",
+    "model_ir": "MIR",
 }
 
 # 反查：前缀 → 类型
 PREFIX_TO_TYPE: dict[str, str] = {v: k for k, v in ARTIFACT_TYPES.items()}
 
 # ID 正则：前缀 + 1-6 位数字（三位零填充为规范形态，宽松接受 1-6 位）
-_ID_RE = re.compile(r"^(P|Q|M|A|DATA|CODE|E|R|F|T|C|D|N|S|DELIV|EXEC|VR)(\d{1,6})$")
+_ID_RE = re.compile(r"^(P|Q|MIR|M|A|DATA|CODE|E|R|F|T|C|D|N|S|DELIV|EXEC|VR)(\d{1,6})$")
 
 
 class IDFormatError(ValueError):

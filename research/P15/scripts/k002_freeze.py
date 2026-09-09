@@ -30,6 +30,7 @@ HASHES_PATH = K.FROZEN / "hashes.json"
 EXTRA_FILES = [
     "research/P15/protocol/preregistration/P15-K002-DRAFT.md",
     "research/P15/protocol/preregistration/P15-K002-GATES.md",
+    "research/P15/capability/MODEL_CONSTRUCTION_RUBRIC.md",  # v1.1 评分标准（K002 全程使用）
     "catalog/model_families.yaml",
     "core/knowledge/methods/cards/mc-dp.yaml",
     "core/knowledge/methods/cards/mc-numerical-pde.yaml",

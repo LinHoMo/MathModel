@@ -47,13 +47,15 @@ RELATION_TYPES: dict[str, tuple] = {
     "derived_from":   (None, None),
     "executed_by":    ({"result"}, {"execution_result"}),
     "verified_by":    ({"execution_result"}, {"verification_result"}),
+    "revision_of":    ({"model", "model_ir"}, {"model", "model_ir"}),
+    "supersedes":     ({"model", "model_ir"}, {"model", "model_ir"}),
 }
 
 STRONG_RELATIONS = frozenset({
     "solved_by", "implemented_by", "validated_by", "uses", "assumes",
     "produces", "visualized_by", "supports", "selects", "based_on",
 })
-WEAK_RELATIONS = frozenset({"appears_in", "derived_from"})
+WEAK_RELATIONS = frozenset({"appears_in", "derived_from", "revision_of", "supersedes"})
 
 # ------------------------------------------------------------- 传播语义
 #

@@ -94,6 +94,13 @@ V3_ARCHITECTURE_PLAN / V3_MIGRATION_MAP / V3_BASELINE_AUDIT / V3_IMPLEMENTATION_
 - `py -3.12 core/tools/catalog_check.py --check-terminology` → OK（production 零残留，无行内豁免）
 - `py -3.12 core/tools/validate.py` → **57 通过 / 0 失败**
 
+## 7.1 K001 冻结基线更新（术语治理迁移，2026-09-09 补充）
+
+- **事件**：本报告 §3 的字段迁移（5 题 `gt.json` `allowed_model_families` → `allowed_modeling_structures`，删除旧键）改变了 K001 冻结清单中的 `problem_cards/*/gt.json` → `k001_freeze.py --check` 报 5 处 CHANGED。
+- **性质**：K001 已 CLOSED（实验完成），评分数据独立冻结于 DATA FREEZE（165 文件，未受影响，未漂移）；gt.json 迁移是术语统一治理（删除旧键，非注释兼容）——**恢复旧字段违背治理指令，故不恢复**。
+- **处置**：K001 冻结基线重冻（44 文件，frozen_root `a9fe304…`）；治理报告与 git 历史共同记录此次一次性漂移的原因。此后 K001 冻结校验以新基线为准。
+- **审计含义**：K001 的实验期协议（评分时点的 gt.json 内容）由 DATA FREEZE 165 文件 + 评分文件内嵌 `rubric_version`/题面 sha256 追溯；术语迁移不改变 K001 的 55 个 runs 的评分依据（评分对照冻结题面与产物，不依赖 gt.json 字段名）。
+
 ## 8. 遗留（不属本轮范围，记录观察）
 
 1. `projects/` 内 19 个 P15 历史研究项目**保持原位**（B0/B0-R2 报告路径引用为历史快照；K001/K002 正式 runs 已各自独立目录，不再依赖 projects/）。未来若需要，可整体迁至 research/ 并更新报告链接（会破坏历史快照，需显式决策）。
