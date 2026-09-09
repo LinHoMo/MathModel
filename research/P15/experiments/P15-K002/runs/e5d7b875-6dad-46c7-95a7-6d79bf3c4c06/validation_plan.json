@@ -1,0 +1,124 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "乘客到达率趋于 0：排队系统空载，等待时间趋于 0，司机决策退化为载客收益与返回收益直接比较。",
+      "parameter": "λ_p",
+      "limit": "λ_p → 0",
+      "expected_behavior": "W_q → 0，U_A → R̄，司机全选排队（若 R̄ > U_B）"
+    },
+    {
+      "test_id": "LT2",
+      "description": "乘客到达率趋于服务容量：系统饱和，队长与等待发散。",
+      "parameter": "λ_p",
+      "limit": "λ_p → c·μ_s",
+      "expected_behavior": "L_q → ∞，W_q → ∞，U_A → -∞，司机全选返回"
+    },
+    {
+      "test_id": "LT3",
+      "description": "服务台数趋于 1：M/M/c 退化为 M/M/1，队长公式应与经典 M/M/1 公式一致。",
+      "parameter": "c",
+      "limit": "c → 1",
+      "expected_behavior": "L_q = ρ²/(1-ρ)，与 M/M/1 完全一致"
+    },
+    {
+      "test_id": "LT4",
+      "description": "短途比例趋于 0：优先权无服务对象，系统退化为单级 FCFS 队列。",
+      "parameter": "q_s",
+      "limit": "q_s → 0",
+      "expected_behavior": "W_pri 无定义，CV 与无优先权情形一致"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "Q4 优先级仿真与参数抽样采用 5 组随机数初始化，报告收益变异系数与等待时间的均值±标准差。"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P2",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P6",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P7",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O4"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "航班到达与乘客到达的随机过程形式未给定",
+      "interpretations": [
+        "泊松过程（平稳分段）",
+        "确定性时刻表",
+        "一般到达过程"
+      ],
+      "adopted": "泊松过程（A1）",
+      "justification": "排队论标准假设、解析可解；确定性时刻表可由泊松高到达率近似，一般过程留给仿真验证"
+    },
+    {
+      "source": "“优先权”的实现方式未明确",
+      "interpretations": [
+        "两级优先级排队（短途优先）",
+        "按里程加权插队",
+        "经济补贴"
+      ],
+      "adopted": "两级优先级排队（A4）",
+      "justification": "题面要求“优先”而非补贴，排队等级是最直接的可实现机制，且不改变运价"
+    },
+    {
+      "source": "短途/长途划分阈值未给定",
+      "interpretations": [
+        "按里程固定阈值",
+        "按收益分位",
+        "按运价结构"
+      ],
+      "adopted": "按城市运价结构的里程阈值（P7）",
+      "justification": "短途收益低的语义由运价结构决定；阈值在灵敏度中检验影响"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V4",
+      "status": "hypothesis"
+    }
+  ]
+}

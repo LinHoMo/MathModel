@@ -1,0 +1,89 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "II 层厚度趋于 0 时皮肤温度应趋于无 II 层防护情形（上限），验证模型退化行为",
+      "parameter": "d_2",
+      "limit": "d_2 -> 0",
+      "expected_behavior": "T_s(t) 单调上升至无 II 层时的更高温度曲线"
+    },
+    {
+      "test_id": "LT2",
+      "description": "工作时间趋于无穷时温度场应趋于稳态线性分布",
+      "parameter": "t",
+      "limit": "t -> infinity",
+      "expected_behavior": "T(x) 收敛到各层线性稳态解，T_s 趋近稳态值"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "确定性 PDE 求解无随机性，但校准环节引入的扰动项用不同种子重复，检验最优厚度稳定性"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P8",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P9",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "IV 层空气间隙的传热方式",
+      "interpretations": [
+        "纯空气导热",
+        "导热+辐射+自然对流复合",
+        "等效导热系数"
+      ],
+      "adopted": "等效导热系数",
+      "justification": "避免辐射-对流强耦合求解，5mm 间隙下等效法误差 5–10%，用附件 2 校准补偿"
+    },
+    {
+      "source": "初始温度取值",
+      "interpretations": [
+        "室温 25°C",
+        "环境温度 75°C",
+        "两者取平均"
+      ],
+      "adopted": "室温 25°C（另做 75°C 对照）",
+      "justification": "着装前服装与实验室环境平衡更符合实际，参考实验量化敏感性"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "unresolved"
+    }
+  ]
+}

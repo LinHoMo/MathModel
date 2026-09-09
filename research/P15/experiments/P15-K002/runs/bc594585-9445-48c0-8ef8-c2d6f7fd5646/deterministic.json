@@ -1,0 +1,42 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4,Q5",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "optimization",
+  "mechanism_count": 3,
+  "equation_count": 4,
+  "validation_plan": {
+    "limit_tests": 2,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "确定性 ILP 无随机性；对嫌疑犯速度与需求权重的不确定场景做多场景重跑，统计围堵集与指标稳定性"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 4
+  }
+}

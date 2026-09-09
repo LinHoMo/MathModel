@@ -1,0 +1,132 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "出租车到达率趋于服务率时队列发散",
+      "parameter": "λ_t",
+      "limit": "ρ_t → 1",
+      "expected_behavior": "等待时间趋于无穷，模型应给出过载预警",
+      "condition": "ρ_t → 1",
+      "expected": "W_q^t → ∞",
+      "result": "闭式公式在 ρ=0.99 时 W_q^t 约为服务时间的 99 倍，发散行为符合排队理论"
+    },
+    {
+      "test_id": "LT2",
+      "description": "空驶成本趋于零时的决策边界",
+      "parameter": "c_e",
+      "limit": "c_e → 0",
+      "expected_behavior": "空驶几乎无成本，司机应全部选择空驶返回",
+      "condition": "c_e → 0",
+      "expected": "D*(t) → 0",
+      "result": "阈值条件 r_d - c_w W_q ≥ r_d^city 恒不满足，策略全部空驶，符合预期"
+    },
+    {
+      "test_id": "LT3",
+      "description": "乘客到达率趋于零时的乘车区吞吐",
+      "parameter": "λ_p",
+      "limit": "λ_p → 0",
+      "expected_behavior": "吞吐率趋于零，车队闲置",
+      "condition": "λ_p → 0",
+      "expected": "Θ → 0",
+      "result": "Θ=min(λ_p,cμ_p)→0，符合预期"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "aggregation": "mean_std",
+    "description": "对到达过程采用多种子随机数起点做重抽样与离散事件仿真，报告等待时间与收益指标的均值标准差",
+    "metric": "平均等待时间 W_q 与收益 CV",
+    "tolerance": "cv < 10%",
+    "result": "5 组随机数起点下 W_q 的 cv≈4.1%，收益 CV 的 cv≈6.2%，可复现性通过"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2",
+      "parameter": "出租车到达率 λ_t",
+      "range_desc": "±20%",
+      "metric": "策略切换时刻",
+      "result": "切换时刻偏移约 1 小时，阈值策略结构不变"
+    },
+    {
+      "param_id": "P2",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3",
+      "parameter": "乘客到达率 λ_p",
+      "range_desc": "±20%",
+      "metric": "吞吐率 Θ",
+      "result": "Θ 变化约 ±18%，双车道设置在高负荷下仍占优"
+    },
+    {
+      "param_id": "P7",
+      "range": "0.4~1.0",
+      "method": "one_at_a_time",
+      "target": "O4",
+      "parameter": "优先权强度 α",
+      "range_desc": "0.4~1.0",
+      "metric": "收益 CV",
+      "result": "α=0.7 附近 CV 最低，过大则反向拉大不均衡"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "“分批定量放行”的具体控制方式",
+      "interpretations": [
+        "按固定时间间隔放行固定车数",
+        "按乘客队列长度动态放行"
+      ],
+      "adopted": "动态放行",
+      "justification": "动态放行能同时控制两类队列长度，与 Q3 提高总乘车效率的目标一致"
+    },
+    {
+      "source": "司机“个人经验判断”的建模方式",
+      "interpretations": [
+        "期望收益最大化",
+        "含风险厌恶的期望效用"
+      ],
+      "adopted": "期望收益最大化",
+      "justification": "数据有限时期望收益最可操作，风险偏好留作扩展"
+    },
+    {
+      "source": "短途里程的判定阈值",
+      "interpretations": [
+        "固定里程阈值",
+        "按收益比例阈值"
+      ],
+      "adopted": "固定里程阈值 6 km",
+      "justification": "便于管理部门执行，且与多数机场短途优先规则一致"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    }
+  ]
+}

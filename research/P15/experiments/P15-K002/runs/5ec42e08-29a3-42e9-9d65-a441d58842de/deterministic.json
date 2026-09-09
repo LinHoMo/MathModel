@@ -1,0 +1,38 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3",
+      "Q2",
+      "Q3"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "finite_difference",
+  "mechanism_count": 3,
+  "equation_count": 6,
+  "validation_plan": {
+    "limit_tests": 3,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "换热系数反演含拟合初始值选择，多种子运行报告最优厚度与皮肤温度均值标准差"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 2,
+    "claim_evidence_map": 3
+  }
+}

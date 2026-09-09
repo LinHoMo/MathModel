@@ -1,0 +1,103 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "警车速度趋于无穷时所有节点应被覆盖（覆盖缺口趋于 0）",
+      "parameter": "v_p",
+      "limit": "v_p -> infinity",
+      "expected_behavior": "sum_i (1-c_i) -> 0"
+    },
+    {
+      "test_id": "LT2",
+      "description": "新增平台数取端点 n_add=2 与 5 时，方差-覆盖缺口应在两端行为一致且有界",
+      "parameter": "n_add",
+      "limit": "n_add in {2, 5}",
+      "expected_behavior": "指标单调改善但边际递减"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "确定性 ILP 无随机性；对嫌疑犯速度与需求权重的不确定场景做多场景重跑，统计围堵集与指标稳定性"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P6",
+      "range": "[60, 90] km/h",
+      "method": "one_at_a_time",
+      "target": "O5"
+    },
+    {
+      "param_id": "P8",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P7",
+      "range": "2–5 min",
+      "method": "one_at_a_time",
+      "target": "O5"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "嫌疑犯车速未知",
+      "interpretations": [
+        "与警车同速 60km/h",
+        "略快 72km/h",
+        "区间 [60,90] km/h 不确定"
+      ],
+      "adopted": "区间 [60,90] km/h 的鲁棒设计",
+      "justification": "速度是围堵可行性的关键不确定量，最坏情况布防保证方案稳健"
+    },
+    {
+      "source": "管辖范围分配标准",
+      "interpretations": [
+        "纯最近平台",
+        "3 分钟硬约束优先",
+        "双目标（覆盖+响应）"
+      ],
+      "adopted": "双目标（覆盖+响应）",
+      "justification": "兼顾题面时限与工作量均衡"
+    },
+    {
+      "source": "工作量度量口径",
+      "interpretations": [
+        "管辖节点数",
+        "按人口/需求加权"
+      ],
+      "adopted": "管辖节点数",
+      "justification": "附件无需求数据，节点数作代理并在评价中说明"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "C5",
+      "evidence_ref": "V5",
+      "status": "unresolved"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "负重上限趋于无穷时策略应趋于无约束采购",
+      "parameter": "负重上限 W_max",
+      "limit": "W_max -> inf",
+      "expected_behavior": "最终资金趋于仅由基础消耗与挖矿收益决定的上界"
+    },
+    {
+      "test_id": "LT2",
+      "description": "天气转移趋于确定时在线策略应收敛到全知策略",
+      "parameter": "天气转移矩阵 P",
+      "limit": "P -> 确定性(0/1)",
+      "expected_behavior": "在线值函数与全知值函数一致"
+    },
+    {
+      "test_id": "LT3",
+      "description": "基础消耗趋于0时玩家无需补给即可直达终点",
+      "parameter": "基础消耗 d_w,d_f",
+      "limit": "d -> 0",
+      "expected_behavior": "最优策略为最短路径直达，最终资金最大化"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "在线推演与多人博弈迭代涉及随机天气抽样与策略初值，多种子运行评估期望资金稳定性"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P10",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P8",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P2",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "挖矿日的消耗口径：挖矿日是否同时叠加行走消耗",
+      "interpretations": [
+        "挖矿即停留，只按3倍基础消耗",
+        "挖矿叠加当天行走的2倍",
+        "按停留计但可另走一步"
+      ],
+      "adopted": "挖矿即停留，只按3倍基础消耗",
+      "justification": "题面规则7定义挖矿消耗为基础消耗3倍，未提叠加行走，按停留处理最贴近规则"
+    },
+    {
+      "source": "多人'任意k名玩家同行'的计数范围",
+      "interpretations": [
+        "仅统计从同一A到同一B的玩家",
+        "统计同区域全部移动玩家",
+        "统计全部玩家含停留"
+      ],
+      "adopted": "仅统计从同一A到同一B的玩家",
+      "justification": "题面明确'均从区域A行走到区域B'，计数范围限定同行同向"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "hypothesis"
+    }
+  ]
+}

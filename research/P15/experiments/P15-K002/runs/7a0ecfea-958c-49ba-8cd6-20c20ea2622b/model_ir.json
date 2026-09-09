@@ -1,0 +1,745 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-7a0ecfea",
+  "model_family": {
+    "primary": "graph_algorithm",
+    "secondary": [
+      "optimization"
+    ],
+    "description": "把交通网络建模为加权图，用全对最短路驱动覆盖、指派与围堵三类子问题的求解。",
+    "candidates": [
+      {
+        "family": "graph_algorithm（最短路 + 覆盖/指派）",
+        "rationale": "覆盖、封锁、围堵均归结为图上的最短路与指派运算，结构清晰且可解释，选为最终模型。"
+      },
+      {
+        "family": "optimization（ILP 精确优化）",
+        "rationale": "可证明最优，作为指派与新增平台的求解内核，与图算法组合使用。"
+      },
+      {
+        "family": "decision_analysis（多准则评估）",
+        "rationale": "用于六区合理性评价的指标框架，不承担核心求解，辅助层。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2011_B",
+    "sub_question_id": "Q1,Q2,Q3,Q4,Q5",
+    "problem_sha256": "85dd446264bab8f212a936bc1ee5ffeddecf8495ffafa6f759b42236052ab441"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "道路为无向加权图，边权为行驶时间（距离/速度）。",
+      "type": "mechanism",
+      "rationale": "交通网络以图论抽象，最短路给出到达时间。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "警车匀速 60km/h 沿最短路行驶。",
+      "type": "simplification",
+      "rationale": "标准假设，忽略交通延误。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "一个平台警力最多封锁一个路口。",
+      "type": "mechanism",
+      "rationale": "题面明确约束。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "嫌疑犯车速为警车 1.2 倍（鲁棒设计）。",
+      "type": "projection",
+      "rationale": "保守假设，做灵敏度检验。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "平台工作量以管辖节点数度量。",
+      "type": "simplification",
+      "rationale": "无需求数据时的合理代理。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "最短行驶时间",
+      "symbol": "d_ij",
+      "definition": "平台/节点 i 到 j 的最短行驶时间",
+      "unit": "min",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4",
+        "Q5"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "管辖指派",
+      "symbol": "x_ij",
+      "definition": "节点 i 是否指派给平台 j",
+      "unit": "",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "覆盖指示",
+      "symbol": "c_i",
+      "definition": "节点 i 是否 3 分钟内可达",
+      "unit": "",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "封锁指派",
+      "symbol": "y_jk",
+      "definition": "平台 j 是否封锁要道 k",
+      "unit": "",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q2",
+        "Q5"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "封锁完成时间",
+      "symbol": "T_max",
+      "definition": "全部要道封锁完成的最后时刻",
+      "unit": "min",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q5"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "新增平台位置",
+      "symbol": "z_l",
+      "definition": "新增平台所在节点",
+      "unit": "",
+      "type": "decision",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V7",
+      "name": "平台工作量",
+      "symbol": "W_j",
+      "definition": "平台 j 管辖节点数",
+      "unit": "个",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V8",
+      "name": "嫌疑犯可达集",
+      "symbol": "S(t)",
+      "definition": "t 时刻嫌疑犯可能所在节点集",
+      "unit": "",
+      "type": "state",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "警车速度",
+      "symbol": "v_p",
+      "value": 60,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "出警时限",
+      "symbol": "t_0",
+      "value": 3,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "覆盖半径",
+      "symbol": "r_0",
+      "value": 3,
+      "source": "推导"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "A 区平台数",
+      "symbol": "N_A",
+      "value": 20,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "要道数",
+      "symbol": "K",
+      "value": 13,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "新增平台数范围",
+      "symbol": "n_add",
+      "value": "2-5",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "嫌疑犯速度倍数",
+      "symbol": "lambda",
+      "value": 1.2,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "报警延迟",
+      "symbol": "delta_t",
+      "value": 3,
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "minimize",
+      "expression": "minimize sum_i (1 - c_i) with tie-break minimize mean d_ij",
+      "variables_refs": [
+        "V2",
+        "V3",
+        "V1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "minimize",
+      "expression": "minimize T_max = max_k sum_j y_jk d_{j,k}",
+      "variables_refs": [
+        "V4",
+        "V5",
+        "V1"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "minimize",
+      "expression": "minimize Var(W_j) + lambda * sum_i (1 - c_i) over new platforms",
+      "variables_refs": [
+        "V6",
+        "V7",
+        "V3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "estimate",
+      "expression": "estimate coverage, workload balance, service radius across six districts",
+      "variables_refs": [
+        "V3",
+        "V7",
+        "V1"
+      ],
+      "sub_question_binding": "Q4"
+    },
+    {
+      "objective_id": "O5",
+      "type": "minimize",
+      "expression": "minimize encircle completion time subject to all exits blocked before suspect arrival",
+      "variables_refs": [
+        "V4",
+        "V5",
+        "V8"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "assignment_single",
+      "expression": "sum_j x_ij = 1 for each node i",
+      "variables_refs": [
+        "V2"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "response_time",
+      "expression": "d_ij <= 3 for assigned pairs (hard on critical nodes)",
+      "variables_refs": [
+        "V1",
+        "V2"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "one_blockade_per_platform",
+      "expression": "sum_k y_jk <= 1",
+      "variables_refs": [
+        "V4"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q2",
+        "Q5"
+      ]
+    },
+    {
+      "constraint_id": "C4",
+      "type": "all_exits_blocked",
+      "expression": "sum_j y_jk = 1 for each exit k",
+      "variables_refs": [
+        "V4"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "constraint_id": "C5",
+      "type": "add_count",
+      "expression": "2 <= n_add <= 5",
+      "variables_refs": [
+        "V6"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C6",
+      "type": "encirclement",
+      "expression": "t_suspect(B_m) >= t_police(B_m) for all exits B_m",
+      "variables_refs": [
+        "V8",
+        "V5"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "设施覆盖：管辖分配按最短路最近指派，覆盖缺口由 3 分钟半径判定。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "瓶颈指派：封锁调度最小化最大完成时间，等价于瓶颈指派问题。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": [
+        "Q2"
+      ]
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "动态围堵：嫌疑犯可达集随时间扩张，警方抢占出城节点形成包围。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "d_{ij} = \\min_{P(i\\to j)} \\sum_{e\\in P} w_e, \\quad w_e = l_e / v_p",
+      "type": "递推",
+      "variables_refs": [
+        "V1"
+      ],
+      "derivation_trace": "Dijkstra 全对最短路",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4",
+        "Q5"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "c_i = \\mathbb{1}[\\min_j d_{ij} \\le 3]",
+      "type": "逻辑",
+      "variables_refs": [
+        "V1",
+        "V3"
+      ],
+      "derivation_trace": "覆盖判定",
+      "sub_question_binding": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "T_{max} = \\min_{y} \\max_k \\sum_j y_{jk} d_{j,k}, \\quad \\text{s.t. } \\sum_j y_{jk}=1, \\sum_k y_{jk}\\le 1",
+      "type": "代数",
+      "variables_refs": [
+        "V4",
+        "V5",
+        "V1"
+      ],
+      "derivation_trace": "瓶颈指派问题",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "d(P, B_m)/v_s + \\Delta t \\ge d_{j^*(B_m), B_m}/v_p, \\quad \\forall B_m \\in \\mathcal{E}",
+      "type": "代数",
+      "variables_refs": [
+        "V1",
+        "V8",
+        "V5"
+      ],
+      "derivation_trace": "围堵可行性：警方先于嫌疑犯到达出城节点",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds"
+    },
+    {
+      "from": "E1",
+      "to": "E3",
+      "type": "feeds"
+    },
+    {
+      "from": "E1",
+      "to": "E4",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "O1",
+      "type": "evaluates"
+    },
+    {
+      "from": "E3",
+      "to": "O2",
+      "type": "solves"
+    },
+    {
+      "from": "E4",
+      "to": "O5",
+      "type": "constrains"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "Dijkstra 全对最短路（堆优化）",
+      "implementation_ref": "O(N log N + E) 每源",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4",
+        "Q5"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "瓶颈指派（匈牙利算法/二分阈值+匹配）",
+      "implementation_ref": "O(K^3)",
+      "sub_question_binding": [
+        "Q2",
+        "Q5"
+      ]
+    },
+    {
+      "solver_id": "S3",
+      "method": "ILP 枚举新增平台组合",
+      "implementation_ref": "mip 求解器",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "coverage_analysis",
+      "inputs": {
+        "platforms": "20 in district A",
+        "radius": 3
+      },
+      "expected_outputs": {
+        "coverage": "覆盖节点集",
+        "assignments": "管辖表"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "bottleneck_assignment",
+      "inputs": {
+        "platforms": 20,
+        "exits": 13
+      },
+      "expected_outputs": {
+        "T_max": "封锁完成时间",
+        "plan": "指派表"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "facility_addition",
+      "inputs": {
+        "n_add": "2..5"
+      },
+      "expected_outputs": {
+        "positions": "新增平台位置",
+        "var_reduction": "方差下降"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "district_evaluation",
+      "inputs": {
+        "districts": "A-F"
+      },
+      "expected_outputs": {
+        "indicators": "六区合理性指标"
+      },
+      "sub_question_binding": "Q4"
+    },
+    {
+      "experiment_id": "X5",
+      "type": "encirclement_search",
+      "inputs": {
+        "P": "node32",
+        "delta_t": 3,
+        "lambda": 1.2
+      },
+      "expected_outputs": {
+        "blocking_set": "围堵节点集",
+        "T_enc": "围堵时间"
+      },
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "覆盖统计与单平台 3km 理论半径对照",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "lambda 与 delta_t 变化对围堵方案影响",
+      "targets_refs": [
+        "O5"
+      ],
+      "sub_question_binding": "Q5"
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "v_p->inf 覆盖全图；n_add=0 退化为原方案",
+      "targets_refs": [
+        "O1",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "确定性图算法多场景复跑结果一致",
+      "targets_refs": [
+        "O1",
+        "O2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "validation_id": "V5",
+      "type": "convergence",
+      "method": "指派求解器阈值二分收敛性检验",
+      "targets_refs": [
+        "O2"
+      ],
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "A 区 20 平台在 3km 半径下覆盖绝大多数节点，未覆盖集中于边缘。",
+      "type": "coverage_claim",
+      "evidence_refs": [
+        "X1",
+        "V1"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "13 条要道可在瓶颈最优指派下完成全封锁，完成时间有界。",
+      "type": "feasibility_claim",
+      "evidence_refs": [
+        "X2",
+        "V5"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "新增 2–5 平台可显著降低工作量方差与覆盖缺口。",
+      "type": "improvement_claim",
+      "evidence_refs": [
+        "X3",
+        "V3"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "六区现有配置存在覆盖与服务半径不均，合理性指标可量化。",
+      "type": "evaluation_claim",
+      "evidence_refs": [
+        "X4",
+        "V4"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C5",
+      "text": "在嫌疑犯速度假设下存在可行围堵方案，围堵时间随速度假设单调变化。",
+      "type": "feasibility_claim",
+      "evidence_refs": [
+        "X5",
+        "V2"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q5",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "覆盖机理"
+      },
+      {
+        "id": "M2",
+        "label": "瓶颈指派机理"
+      },
+      {
+        "id": "M3",
+        "label": "动态围堵机理"
+      },
+      {
+        "id": "E1",
+        "label": "最短路"
+      },
+      {
+        "id": "E3",
+        "label": "瓶颈指派"
+      },
+      {
+        "id": "O5",
+        "label": "围堵目标"
+      }
+    ],
+    "edges": [
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "uses"
+      },
+      {
+        "from": "M2",
+        "to": "E3",
+        "relation": "instantiates"
+      },
+      {
+        "from": "E1",
+        "to": "E3",
+        "relation": "feeds"
+      },
+      {
+        "from": "E1",
+        "to": "O5",
+        "relation": "feeds"
+      },
+      {
+        "from": "M3",
+        "to": "O5",
+        "relation": "defines"
+      }
+    ]
+  },
+  "modeling_trace": "识别为图上的覆盖-指派-围堵复合问题；对比 ILP 与启发式后选择 Dijkstra 最短路 + 瓶颈指派 + 动态可达集框架；新增平台用 ILP 枚举；围堵对嫌疑犯速度做鲁棒假设并灵敏度检验。"
+}

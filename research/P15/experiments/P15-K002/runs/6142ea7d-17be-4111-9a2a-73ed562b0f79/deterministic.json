@@ -1,0 +1,38 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3",
+      "Q2",
+      "Q3"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "markov_decision_process",
+  "mechanism_count": 3,
+  "equation_count": 5,
+  "validation_plan": {
+    "limit_tests": 4,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "天气路径抽样与多人均衡求解以多组随机数初值重复，报告期望资金与策略分布的标准差，标准差小于均值 10% 视为稳定"
+    },
+    "sensitivity": 4,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 3
+  }
+}

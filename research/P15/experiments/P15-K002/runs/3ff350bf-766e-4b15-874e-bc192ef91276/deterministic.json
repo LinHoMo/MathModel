@@ -1,0 +1,42 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4,Q5",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "optimization",
+  "mechanism_count": 4,
+  "equation_count": 6,
+  "validation_plan": {
+    "limit_tests": 4,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "整数规划求解器分支顺序与启发式初始化使用 5 组随机初始化；确定性算法部分报告逐位一致结果。"
+    },
+    "sensitivity": 4,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 5
+  }
+}

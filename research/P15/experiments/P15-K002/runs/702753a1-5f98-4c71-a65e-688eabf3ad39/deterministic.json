@@ -1,0 +1,40 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "dynamic_programming",
+  "mechanism_count": 3,
+  "equation_count": 4,
+  "validation_plan": {
+    "limit_tests": 2,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "故障与修复时间随机性用多种子蒙特卡洛评估，产量取均值±标准差，CV<3% 判稳"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 4
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "负重上限趋于零时的可行性",
+      "parameter": "W_max",
+      "limit": "W_max → 0",
+      "expected_behavior": "无法携带跨日资源，除第0天外无解（返回失败）",
+      "condition": "W_max → 0",
+      "expected": "目标函数值 → -∞（无可行解）",
+      "result": "状态空间为空，求解器报告不可行，符合预期"
+    },
+    {
+      "test_id": "LT2",
+      "description": "截止日期趋于无限",
+      "parameter": "T",
+      "limit": "T → ∞",
+      "expected_behavior": "最优策略收敛为‘先挖矿积累资金再直达终点’的极限策略",
+      "condition": "T → ∞",
+      "expected": "终局资金单调趋近上界",
+      "result": "T 增大 20% 后资金增幅趋缓，收敛行为符合预期"
+    },
+    {
+      "test_id": "LT3",
+      "description": "同路线玩家数趋于 n",
+      "parameter": "k",
+      "limit": "k → n",
+      "expected_behavior": "同行消耗 2n 倍，多人同路线完全不可取，策略应全部分散",
+      "condition": "k → n",
+      "expected": "拥挤路径在最优解中占比 → 0",
+      "result": "k=n 时协同最优解中无同路线日，符合预期"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "aggregation": "mean_std",
+    "description": "天气转移概率校准与多玩家初始猜测采用多种子随机数起点，报告期望资金均值标准差",
+    "metric": "终局期望资金 E[m_T]",
+    "tolerance": "cv < 10%",
+    "result": "5 组随机数起点下 E[m_T] 的 cv≈2.8%，可复现性通过"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P2",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1",
+      "parameter": "基准水价 p_w0",
+      "range_desc": "±20%",
+      "metric": "最优携带量",
+      "result": "水价 +20% 时第0天购水量下降约 15%，路径不变"
+    },
+    {
+      "param_id": "P7",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1",
+      "parameter": "挖矿收益 r_mine",
+      "range_desc": "±20%",
+      "metric": "挖矿天数",
+      "result": "收益 +20% 时挖矿天数增加约 1 天，阈值行为稳定"
+    },
+    {
+      "param_id": "P5",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2",
+      "parameter": "基础水消耗 η_w",
+      "range_desc": "±20%",
+      "metric": "期望资金 E[m_T]",
+      "result": "消耗 +20% 时 E[m_T] 下降约 12%，资源冗余策略不变"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "购买与消耗的先后顺序（注2口径）",
+      "interpretations": [
+        "先消耗后购买",
+        "先购买后消耗"
+      ],
+      "adopted": "先消耗后购买",
+      "justification": "题面注2明确剩余资金指当日所需资源全部消耗完毕后的资金，若有购买则指购买后"
+    },
+    {
+      "source": "沙暴日挖矿是否允许",
+      "interpretations": [
+        "沙暴日可挖矿",
+        "沙暴日仅停留不挖矿"
+      ],
+      "adopted": "沙暴日可挖矿",
+      "justification": "题面规则(7)明确‘沙暴日也可挖矿’"
+    },
+    {
+      "source": "到达终点当天的消耗是否计入",
+      "interpretations": [
+        "到达即结束不再消耗",
+        "到达日仍消耗"
+      ],
+      "adopted": "到达即结束",
+      "justification": "题面规则(1)到达终点后游戏结束，次日不再消耗"
+    },
+    {
+      "source": "多玩家‘同村庄购买’的价格口径",
+      "interpretations": [
+        "按4倍价统一",
+        "仅同日同村才4倍"
+      ],
+      "adopted": "仅同日同村4倍",
+      "justification": "题面限定‘若某天任意k名玩家在同一村庄购买资源’时4倍价"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V4",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X4",
+      "status": "supported"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4,Q5",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "kinematics",
+  "mechanism_count": 3,
+  "equation_count": 6,
+  "validation_plan": {
+    "limit_tests": 3,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "不同细分步长与求根初值配置下重复仿真与搜索，报告位置速度与最优值的均值标准差"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 5
+  }
+}

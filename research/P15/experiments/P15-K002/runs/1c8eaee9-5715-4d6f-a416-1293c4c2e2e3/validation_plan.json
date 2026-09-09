@@ -1,0 +1,124 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "乘客到达率趋近于零时，乘车区应无排队、等待时间趋近于零",
+      "parameter": "lambda",
+      "limit": "0",
+      "expected_behavior": "W_q -> 0, L_q -> 0, 效率趋于单台服务率"
+    },
+    {
+      "test_id": "LT2",
+      "description": "乘客到达率趋近服务能力 c*mu 时，排队系统进入饱和，等待时间应发散",
+      "parameter": "rho",
+      "limit": "1",
+      "expected_behavior": "W_q -> +inf，效率趋于 0"
+    },
+    {
+      "test_id": "LT3",
+      "description": "空载里程趋近于零时，放空返回行动的机会成本消失，司机应偏向放空",
+      "parameter": "d_0",
+      "limit": "0",
+      "expected_behavior": "pi_c 上升，行动阈值 T_w* 上移"
+    },
+    {
+      "test_id": "LT4",
+      "description": "短途比例趋近于零时，优先方案应退化为先来先服务",
+      "parameter": "delta 比例",
+      "limit": "0",
+      "expected_behavior": "G 与无优先情形一致"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "排队仿真器与重排序算法以多组随机数初值重复运行，报告效率与收益离差的均值及标准差，标准差小于均值的10%视为稳定"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P7",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P5",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P6",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O4"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "司机决策中的经验因素如何量化",
+      "interpretations": [
+        "用期望收益最大化刻画",
+        "用累积前景理论刻画风险偏好",
+        "用阈值启发式刻画"
+      ],
+      "adopted": "期望收益最大化",
+      "justification": "题面未提供个体偏好数据，期望收益是群体层面的合理平均，且可解析求解阈值策略"
+    },
+    {
+      "source": "短途载客的界定标准",
+      "interpretations": [
+        "按里程阈值界定",
+        "按行驶时间界定",
+        "按运价金额界定"
+      ],
+      "adopted": "按起步里程阈值界定",
+      "justification": "里程阈值与运价结构一致、管理上易于执行，且数据可观测"
+    },
+    {
+      "source": "乘车效率的定义",
+      "interpretations": [
+        "单位时间服务乘客数",
+        "乘客平均等待时间倒数",
+        "吞吐率与等待时间比值"
+      ],
+      "adopted": "吞吐率与等待时间比值",
+      "justification": "同时反映服务量与服务水平，避免只追求吞吐而牺牲等待体验"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "CL1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "CL2",
+      "evidence_ref": "V3",
+      "status": "supported"
+    },
+    {
+      "claim": "CL3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "CL4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    }
+  ]
+}

@@ -1,0 +1,872 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-d777a477",
+  "model_family": {
+    "primary": "optimization",
+    "secondary": [
+      "simulation",
+      "dynamic_programming"
+    ],
+    "description": "以 RGV 服务序列为决策变量的确定性调度优化模型：把 8 台 CNC 的上下料、加工、清洗与 RGV 移动时间嵌入完工时间递推，最大化班次产量，故障情形用鲁棒策略加仿真评估。",
+    "candidates": [
+      {
+        "family": "optimization",
+        "rationale": "选择：一道/两道工序无故障情形是确定性的调度决策，目标是最大化班次产量，决策变量为 RGV 的逐次服务指派，天然构成组合优化问题，可用精确或近似方法求解。"
+      },
+      {
+        "family": "simulation",
+        "rationale": "选择用于 Q3 故障评估而非主框架：故障随机性与排除时间使确定性最优不再存在，离散事件仿真用于评价鲁棒调度策略的期望产量；故放入 secondary。"
+      },
+      {
+        "family": "dynamic_programming",
+        "rationale": "排除为主框架：状态（各 CNC 剩余加工时间 + RGV 位置）维度随班次时间爆炸，DP 难以在全 8 小时尺度精确求解；仅用于单步决策的局部优化。"
+      },
+      {
+        "family": "queueing_theory",
+        "rationale": "排除：闭合排队网络可给稳态产量近似，但无法处理 RGV 单机强耦合、移动时间不对称与上下料时间差异，近似误差不可控。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2018_B",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "f00ef29490cc2ef0ca87d7bf17b598ecae98021e8049addfa222649bee410152"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "无故障情形下系统参数完全确定，RGV 与 CNC 无随机扰动，RGV 每次只服务一台 CNC 且服务不可中断。",
+      "type": "mechanism",
+      "rationale": "题面给出全部作业参数与确定性规则；RGV 单机是物理事实，是调度模型的核心机制。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "一道工序物料可在任意 CNC 完成；两道工序物料第一道与第二道必须在不同 CNC 上完成。",
+      "type": "mechanism",
+      "rationale": "题面第 1、2 条明确；两道工序不能同机完成是工序约束的核心。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "RGV 完成上下料后立即开始清洗作业，清洗完成后即可移动至下一目标；物料在 CNC 加工完成后等待 RGV 上下料期间占用 CNC。",
+      "type": "mechanism_assumption",
+      "rationale": "题面描述 RGV 自带清洗槽且完成上下料及清洗作业；占用假设使 CNC 空闲时间显式进入模型。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "Q3 故障发生概率约为 1%（按单台 CNC 加工分钟计），故障排除时间在 10~20 分钟间均匀分布，故障导致未完成物料报废。",
+      "type": "projection",
+      "rationale": "题面给出概率与时间范围；均匀分布是无更多信息下的最大熵选择，用于仿真抽样。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "班次连续作业 8 小时，产量统计以完成全部工序并清洗完毕的物料数计；RGV 在 8 小时末停止新任务。",
+      "type": "simplification",
+      "rationale": "题面规定每班次 8 小时；以完工清洗物料数为产量口径，与结果表要求一致。"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "CNC 初始为空闲状态，班次开始后由 RGV 依次上料，不考虑预热等启动过程。",
+      "type": "simplification",
+      "rationale": "题面未给启动过程；忽略预热使模型聚焦调度规律，误差集中在班次开头数分钟。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "CNC 编号",
+      "symbol": "j",
+      "definition": "8 台 CNC 的索引 j=1..8",
+      "unit": "台",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "RGV 服务序号",
+      "symbol": "k",
+      "definition": "RGV 第 k 次上下料服务的编号",
+      "unit": "次",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "服务指派",
+      "symbol": "x_{k,j}",
+      "definition": "RGV 第 k 次服务是否指派给 CNC j（0/1）",
+      "unit": "—",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "完工时刻",
+      "symbol": "C_{k,j}",
+      "definition": "RGV 第 k 次服务在 CNC j 的上下料完成时刻",
+      "unit": "s",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "班次产量",
+      "symbol": "Y",
+      "definition": "8 小时班次内完成全部工序并清洗完毕的物料数",
+      "unit": "件",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "CNC 加工状态",
+      "symbol": "\\sigma_j(t)",
+      "definition": "CNC j 在时刻 t 的状态：空闲/加工中/待上下料/故障",
+      "unit": "—",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V7",
+      "name": "RGV 位置",
+      "symbol": "r_k",
+      "definition": "第 k 次服务开始时 RGV 所在的 CNC 编号",
+      "unit": "台",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V8",
+      "name": "故障指示",
+      "symbol": "\\xi_j(t)",
+      "definition": "CNC j 在时刻 t 是否发生故障（0/1）",
+      "unit": "—",
+      "type": "observation",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V9",
+      "name": "排除时长",
+      "symbol": "\\eta_j",
+      "definition": "CNC j 故障后的排除时间（10~20 分钟）",
+      "unit": "min",
+      "type": "observation",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V10",
+      "name": "工序段",
+      "symbol": "s",
+      "definition": "两道工序中的工序段索引（s=1 第一道，s=2 第二道）",
+      "unit": "—",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "RGV 移动 1/2/3 单位时间",
+      "symbol": "t_1,t_2,t_3",
+      "value": "三组数据（20/33/46 等）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "一道工序加工时间",
+      "symbol": "p_1",
+      "value": "三组数据（560/580/545）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "两道工序第一/二道加工时间",
+      "symbol": "p_{21},p_{22}",
+      "value": "三组数据（400/378 等）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "奇偶 CNC 上下料时间",
+      "symbol": "\\tau_o,\\tau_e",
+      "value": "28/31 等（1,3,5,7# vs 2,4,6,8#）",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "清洗时间",
+      "symbol": "\\tau_w",
+      "value": "25/30/25",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "班次时长",
+      "symbol": "T_s",
+      "value": 28800,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "故障概率",
+      "symbol": "q",
+      "value": 0.01,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "排除时间区间",
+      "symbol": "[\\eta_{min},\\eta_{max}]",
+      "value": "[600,1200]",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "CNC 数量",
+      "symbol": "m",
+      "value": 8,
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "maximize",
+      "expression": "\\max Y = \\sum_k \\sum_j x_{k,j} \\mathbb{1}[C_{k,j} \\le T_s] \\;\\text{（一道工序）}",
+      "variables_refs": [
+        "V5",
+        "V3",
+        "V4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "maximize",
+      "expression": "\\max Y = \\sum_k \\sum_j x_{k,j}^{(2)} \\mathbb{1}[C_{k,j} \\le T_s] \\;\\text{（两道工序，成对计数）}",
+      "variables_refs": [
+        "V5",
+        "V3",
+        "V4"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "maximize",
+      "expression": "\\max \\; \\mathbb{E}_{\\xi,\\eta}[Y] \\;\\text{（故障下期望产量）}",
+      "variables_refs": [
+        "V5",
+        "V8",
+        "V9"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "estimate",
+      "expression": "\\text{对 3 组数据分别计算 } Y^{(g)},\\; g=1,2,3 \\;\\text{，并报告系统效率 } \\rho = Y / \\bar{Y}_{ref}",
+      "variables_refs": [
+        "V5",
+        "V2"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "single_machine",
+      "expression": "\\sum_j x_{k,j} = 1, \\;\\forall k",
+      "variables_refs": [
+        "V3"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "service_order",
+      "expression": "C_{k+1,j'} \\ge C_{k,j} + t_{d}(r_k,j') + \\tau_{j'} + \\tau_w",
+      "variables_refs": [
+        "V4",
+        "V7",
+        "P1",
+        "P4",
+        "P5"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "cnc_availability",
+      "expression": "CNC j 仅当其加工完成或空闲时才可被服务",
+      "variables_refs": [
+        "V4",
+        "V6"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C4",
+      "type": "two_stage_sequence",
+      "expression": "物料第二道工序的 CNC 必须异于第一道，且第一道完成后方可开始第二道",
+      "variables_refs": [
+        "V10",
+        "V4"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C5",
+      "type": "shift_horizon",
+      "expression": "所有服务完成时刻 C_{k,j} \\le T_s",
+      "variables_refs": [
+        "V4",
+        "P6"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C6",
+      "type": "failure_handling",
+      "expression": "故障发生时未完成物料报废，排除后 CNC 即刻回到作业序列",
+      "variables_refs": [
+        "V8",
+        "V9",
+        "V6"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "完工时间递推机理：RGV 单机与 CNC 并行机耦合，任何调度方案的效果可由服务完成时刻递推完全描述，产量是递推末端的计数。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "瓶颈识别机理：CNC 加工时间与 RGV 服务周期（移动+上下料+清洗）的相对大小决定系统瓶颈在加工侧还是运输侧，调度策略按瓶颈类型分化（满载连续作业 vs 提前备料）。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "随机故障机理：故障使 CNC 服务能力随机中断，确定性最优被鲁棒调度替代，期望产量由离散事件仿真评估。",
+      "related_equations": [
+        "E4",
+        "E5"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "mechanism_id": "M4",
+      "description": "多参数组评估机理：同一调度算法在 3 组参数下运行，产量差异反映参数敏感性，系统效率以相对基准衡量。",
+      "related_equations": [
+        "E2",
+        "E6"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "C_{k,j} = \\max\\big(C_{k-1,j'} + t_d(r_{k-1},j),\\; A_j\\big) + \\tau_j + \\tau_w",
+      "type": "递推",
+      "variables_refs": [
+        "V4",
+        "V7",
+        "V6",
+        "P1",
+        "P4",
+        "P5"
+      ],
+      "derivation_trace": "RGV 第 k 次服务完成时刻 = 到达时刻（上次服务完成 + 移动）与 CNC 就绪时刻（加工完成/空闲）取大，再叠加上下料与清洗；初始 C_{0,·}=0。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "Y = \\sum_k \\sum_j x_{k,j} \\mathbb{1}[C_{k,j} \\le T_s]",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V3",
+        "V4",
+        "P6"
+      ],
+      "derivation_trace": "产量为班次内完成服务的物料计数；两道工序以成对（两道均完成）物料计。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\mu_{RGV} = \\frac{1}{\\bar{t}_d + \\bar{\\tau} + \\tau_w}, \\quad \\mu_{CNC} = \\frac{m}{p} \\;\\Rightarrow\\; \\text{瓶颈} = \\min(\\mu_{RGV},\\mu_{CNC})",
+      "type": "代数",
+      "variables_refs": [
+        "V7",
+        "V2",
+        "P1",
+        "P4",
+        "P5",
+        "P2",
+        "P3"
+      ],
+      "derivation_trace": "稳态产能对比：RGV 服务率与 CNC 加工率的最小者决定系统上限，指导调度侧重。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E4",
+      "latex": "\\xi_j(t) \\sim \\mathrm{Bernoulli}(q), \\quad \\eta_j \\sim U[\\eta_{min},\\eta_{max}]",
+      "type": "代数",
+      "variables_refs": [
+        "V8",
+        "V9",
+        "P7",
+        "P8"
+      ],
+      "derivation_trace": "故障过程建模：加工分钟内以概率 q 故障，排除时间均匀分布，用于仿真抽样。",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "\\hat{Y} = \\frac{1}{R}\\sum_{r=1}^{R} Y^{(r)}(\\xi^{(r)},\\eta^{(r)})",
+      "type": "递推",
+      "variables_refs": [
+        "V5",
+        "V8",
+        "V9"
+      ],
+      "derivation_trace": "期望产量估计：R 次独立故障样本下的平均产量，标准差同时报告。",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E6",
+      "latex": "\\rho_g = \\frac{Y^{(g)}}{\\min\\big(T_s\\mu_{RGV}^{(g)},\\; T_s\\mu_{CNC}^{(g)}\\big)}",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V2",
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "derivation_trace": "系统作业效率 = 实际产量 / 理论产能上限（瓶颈产能），衡量调度算法的有效性。",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "O1",
+      "type": "derives"
+    },
+    {
+      "from": "E2",
+      "to": "O2",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "E1",
+      "type": "informs"
+    },
+    {
+      "from": "E4",
+      "to": "E5",
+      "type": "feeds"
+    },
+    {
+      "from": "E5",
+      "to": "O3",
+      "type": "derives"
+    },
+    {
+      "from": "E2",
+      "to": "E6",
+      "type": "feeds"
+    },
+    {
+      "from": "E6",
+      "to": "O4",
+      "type": "derives"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "优先规则 + 前瞻贪心调度",
+      "implementation_ref": "每步选择使 C_{k,j} 最小的可服务 CNC（最短就绪优先），前瞻一步避免 RGV 空驶；O(m) 每步",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "邻域搜索（2-opt / 交换）",
+      "implementation_ref": "以贪心解为初始，交换服务序列中相邻指派改进产量，收敛到局部最优",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "solver_id": "S3",
+      "method": "离散事件仿真",
+      "implementation_ref": "事件驱动推进（上下料完成、加工完成、故障、排除），按 E4 抽样故障，报告期望产量与标准差",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S4",
+      "method": "多参数组批量运行",
+      "implementation_ref": "3 组参数分别跑 S1-S3，输出产量与效率 ρ_g，检验算法普适性",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "确定性调度",
+      "inputs": {
+        "scenario": "一道工序无故障",
+        "params": "3 组数据"
+      },
+      "expected_outputs": {
+        "schedule": "RGV 服务序列",
+        "yield": "班次产量",
+        "utilization": "各 CNC 利用率"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "确定性调度",
+      "inputs": {
+        "scenario": "两道工序无故障",
+        "params": "3 组数据"
+      },
+      "expected_outputs": {
+        "schedule": "成对服务序列",
+        "yield": "班次产量"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "故障仿真",
+      "inputs": {
+        "scenario": "一道/两道工序 + 故障",
+        "n_runs": 200,
+        "q": 0.01
+      },
+      "expected_outputs": {
+        "mean_yield": "期望产量",
+        "std": "标准差",
+        "downtime": "故障影响"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "效率评估",
+      "inputs": {
+        "groups": "3 组数据",
+        "method": "S1-S3"
+      },
+      "expected_outputs": {
+        "rho": "系统效率向量",
+        "ranking": "组间对比"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "单台 CNC 单物料平凡情形：产量应等于 ⌊T_s/(p+τ+τ_w)⌋ 解析值",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "扰动移动时间 t_1..t_3 与上下料时间 ±20%，观察产量变化，验证瓶颈判断 E3",
+      "targets_refs": [
+        "O1",
+        "O2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "令故障概率 q→0：仿真期望产量应趋近确定性最优产量；令 q→1：产量趋近 0",
+      "targets_refs": [
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "固定随机数初始化方案下仿真结果均值±标准差报告，多组初始化应一致",
+      "targets_refs": [
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "V5",
+      "type": "uncertainty",
+      "method": "产量对加工时间 p 的 ±5% 扰动检验，判断对参数表的依赖强度",
+      "targets_refs": [
+        "O4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "一道工序无故障时，RGV 应采用“满载连续作业 + 最短就绪优先”策略，系统瓶颈决定产量上限，利用率接近瓶颈率。",
+      "type": "调度规律",
+      "evidence_refs": [
+        "X1",
+        "V1",
+        "V2"
+      ],
+      "model_refs": [
+        "M1",
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "两道工序无故障时，第一二道工序的 CNC 配对与缓冲决定产量，最优策略优先保持两道工序的负载均衡。",
+      "type": "调度规律",
+      "evidence_refs": [
+        "X2",
+        "V2"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "故障概率 1% 下，鲁棒调度（故障后重指派）的期望产量损失与故障停机时长成正比，且小于无重指派的静态策略。",
+      "type": "鲁棒性结论",
+      "evidence_refs": [
+        "X3",
+        "V3",
+        "V4"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "3 组参数下系统效率 ρ 应稳定在 0.85~0.98 区间，说明调度算法对不同参数组合具有普适性。",
+      "type": "普适性结论",
+      "evidence_refs": [
+        "X4",
+        "V5"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "完工时间递推"
+      },
+      {
+        "id": "M2",
+        "label": "瓶颈识别"
+      },
+      {
+        "id": "M3",
+        "label": "故障仿真"
+      },
+      {
+        "id": "M4",
+        "label": "多组评估"
+      },
+      {
+        "id": "E1",
+        "label": "服务完成时刻"
+      },
+      {
+        "id": "E2",
+        "label": "产量计数"
+      },
+      {
+        "id": "E3",
+        "label": "瓶颈产能"
+      },
+      {
+        "id": "E4",
+        "label": "故障抽样"
+      },
+      {
+        "id": "E5",
+        "label": "期望产量"
+      },
+      {
+        "id": "E6",
+        "label": "系统效率"
+      }
+    ],
+    "edges": [
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "递推"
+      },
+      {
+        "from": "E3",
+        "to": "M2",
+        "relation": "瓶颈"
+      },
+      {
+        "from": "E2",
+        "to": "O1",
+        "relation": "目标"
+      },
+      {
+        "from": "E4",
+        "to": "E5",
+        "relation": "抽样"
+      },
+      {
+        "from": "E5",
+        "to": "O3",
+        "relation": "目标"
+      },
+      {
+        "from": "E2",
+        "to": "E6",
+        "relation": "效率"
+      }
+    ]
+  },
+  "modeling_trace": "按题面三种情况与两项任务组织：先建立 RGV 服务完成时刻递推与产量计数，形成确定性调度优化框架；用瓶颈产能公式判别系统瓶颈以指导策略；Q3 引入故障随机过程，用离散事件仿真评估鲁棒策略期望产量；Q4 将 3 组参数批量运行并计算系统效率，最后以平凡情形解析解与极限行为验证。"
+}

@@ -1,0 +1,42 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4,Q5",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "graph_algorithm",
+  "mechanism_count": 4,
+  "equation_count": 6,
+  "validation_plan": {
+    "limit_tests": 3,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "选址贪心的初始点与交换顺序引入随机性，多种子运行报告T_max与覆盖指标的稳定性"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 2,
+    "claim_evidence_map": 5
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "II 层厚度趋于 0：皮肤温度应趋近环境温度（65/80°C），安全约束必然违反，可行域为空。",
+      "parameter": "x_2",
+      "limit": "x_2 → 0",
+      "expected_behavior": "T_e → T_a > 47，C1 违反，优化返回不可行"
+    },
+    {
+      "test_id": "LT2",
+      "description": "厚度趋于无穷：皮肤温度应趋近 37°C，约束全部满足但目标成本趋于无穷。",
+      "parameter": "x_2, x_4",
+      "limit": "x → ∞",
+      "expected_behavior": "T_e → 37，τ_c → 0，目标函数发散，最优必在有限边界内"
+    },
+    {
+      "test_id": "LT3",
+      "description": "时间趋于无穷：温度场应收敛到各层线性稳态分布，皮肤温度趋于由热阻比决定的稳态值。",
+      "parameter": "t",
+      "limit": "t → ∞",
+      "expected_behavior": "∂T/∂t → 0，温度分布呈分段线性，皮肤温度趋于稳态常数"
+    },
+    {
+      "test_id": "LT4",
+      "description": "超温阈值 T_c 趋于 47°C：超温时限约束应自动满足（终温上限更紧），约束组退化为单一约束。",
+      "parameter": "T_c",
+      "limit": "T_c → 47",
+      "expected_behavior": "g_2 变为非活性，最优解由 g_1 单独决定"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "反演初始化与扫描细化采用 5 组随机初始化运行，报告最优厚度与反演参数的均值±标准差，检验优化与反演的数值稳定性。"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P3",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P1",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P2",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P13",
+      "range": "0.5~2.0 权重比",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "IV 层空气空隙的传热机制未明确（导热/对流/辐射）",
+      "interpretations": [
+        "显式建模空气自然对流与辐射",
+        "以等效导热系数 k_4 统一吸收"
+      ],
+      "adopted": "等效导热系数 k_4，由 Q1 数据反演（A2）",
+      "justification": "空隙厚度毫米级，等效系数能吸收综合效应且参数可辨识；显式建模需额外经验关联式，引入更多不确定性"
+    },
+    {
+      "source": "超温时限的判定粒度未明确（秒/分钟）",
+      "interpretations": [
+        "逐秒判定超过 44°C 的累计时间",
+        "按分钟粒度判定"
+      ],
+      "adopted": "分钟粒度判定（A5）",
+      "justification": "题面约束以分钟表述，附件 2 观测亦为分钟级；分钟粒度偏保守安全"
+    },
+    {
+      "source": "Q3 厚度组合的目标未明确（成本/厚度/其他）",
+      "interpretations": [
+        "最小化总厚度",
+        "最小化加权成本（两厚度权重不同）",
+        "满足约束下尽量薄"
+      ],
+      "adopted": "加权厚度目标 w_2 x_2 + w_4 x_4，权重默认 1:1",
+      "justification": "题面只要求确定最优厚度，未给成本函数；加权厚度为最小假设，权重可在 sensitivity 中检验影响"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    }
+  ]
+}

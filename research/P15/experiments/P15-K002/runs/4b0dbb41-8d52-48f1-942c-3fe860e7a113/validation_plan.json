@@ -1,0 +1,96 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "玩家数 n=1 时博弈应退化到单智能体最优，均衡收益等于单人最优资金",
+      "parameter": "n",
+      "limit": "n = 1",
+      "expected_behavior": "均衡策略与单人最优策略一致，m_T 相等"
+    },
+    {
+      "test_id": "LT2",
+      "description": "同区域人数 k 趋于 n 时消耗线性增大且挖矿收益反比下降，拥挤完全抵消集聚收益",
+      "parameter": "k",
+      "limit": "k -> n",
+      "expected_behavior": "边际收益趋于 0，玩家倾向于完全分散"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "在线决策与均衡收益估计用多种子情景仿真，报告均值±标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P3",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P6",
+      "range": "n ± 2",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "多玩家同区域判定的触发人数",
+      "interpretations": [
+        "任意 k>=2 触发",
+        "仅整区同地触发"
+      ],
+      "adopted": "任意 k>=2 触发",
+      "justification": "题面明确'任意 k(2<=k<=n)名玩家'，采用最严格触发口径"
+    },
+    {
+      "source": "第 0 天购买后回到起点能否再买",
+      "interpretations": [
+        "不能（题面规则）",
+        "可再次购买但受限"
+      ],
+      "adopted": "不能",
+      "justification": "题面明确'不能多次在起点购买'"
+    },
+    {
+      "source": "沙暴日可否购买/挖矿",
+      "interpretations": [
+        "可挖矿不可行走",
+        "完全不可行动"
+      ],
+      "adopted": "可挖矿、可购买但不可行走",
+      "justification": "题面明确'沙暴日也可挖矿'，购买不受行动类型限制"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V5",
+      "status": "unresolved"
+    }
+  ]
+}

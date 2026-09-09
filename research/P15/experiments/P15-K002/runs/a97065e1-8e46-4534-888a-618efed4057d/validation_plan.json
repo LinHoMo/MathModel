@@ -1,0 +1,129 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "出警时限趋近于零时，覆盖集应退化为平台自身所在节点",
+      "parameter": "T_0",
+      "limit": "0",
+      "expected_behavior": "覆盖率趋近 N_p / N_n，未覆盖节点接近全部普通节点"
+    },
+    {
+      "test_id": "LT2",
+      "description": "出警时限趋近无穷时，所有节点应被覆盖",
+      "parameter": "T_0",
+      "limit": "inf",
+      "expected_behavior": "覆盖率趋近 1，未覆盖集为空"
+    },
+    {
+      "test_id": "LT3",
+      "description": "警车速度趋近无穷时，封锁完成时间应趋近于零",
+      "parameter": "v",
+      "limit": "inf",
+      "expected_behavior": "T_b 与所有 t_ij 趋近 0"
+    },
+    {
+      "test_id": "LT4",
+      "description": "接警延迟趋近零时，围堵闭合时间应等于嫌疑犯与警车同时出发的最短闭合时刻",
+      "parameter": "tau_0",
+      "limit": "0",
+      "expected_behavior": "tau_e 取到理论下界"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "案发节点随机抽样与多组随机数初值下重复运行前缘扩张与选址算法，报告围堵闭合时间与覆盖增益的均值标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P1",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P6",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O5"
+    },
+    {
+      "param_id": "P5",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "平台工作量如何度量",
+      "interpretations": [
+        "管辖节点数",
+        "管辖节点度数加权和",
+        "案发率加权"
+      ],
+      "adopted": "管辖节点度数加权和",
+      "justification": "缺少案发数据时节点度数作为案发率代理，兼顾网络结构与工作量"
+    },
+    {
+      "source": "围堵成功判据",
+      "interpretations": [
+        "所有逃逸出口被先到封锁",
+        "嫌疑犯被限定在封闭区域内",
+        "警车追上嫌疑犯"
+      ],
+      "adopted": "所有逃逸出口被先到封锁",
+      "justification": "题面要求围堵而非追捕，出口封锁是可验证的静态判据"
+    },
+    {
+      "source": "新增平台的效果评价口径",
+      "interpretations": [
+        "覆盖缺口消减率",
+        "平均出警时间下降",
+        "工作量均衡改善"
+      ],
+      "adopted": "覆盖缺口消减率为主、其余为辅",
+      "justification": "Q3 的动因是覆盖缺口与超时，缺口消减直接对应题面关切"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "CL1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "CL2",
+      "evidence_ref": "V3",
+      "status": "supported"
+    },
+    {
+      "claim": "CL3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "CL4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    },
+    {
+      "claim": "CL5",
+      "evidence_ref": "V4",
+      "status": "supported"
+    }
+  ]
+}

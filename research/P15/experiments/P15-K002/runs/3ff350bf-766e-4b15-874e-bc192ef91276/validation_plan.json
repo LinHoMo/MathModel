@@ -1,0 +1,129 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "警车速度趋于无穷：行驶时间趋于 0，最大响应时间应趋于 0。",
+      "parameter": "v_p",
+      "limit": "v_p → ∞",
+      "expected_behavior": "T_max → 0，管辖与封锁均瞬时可达"
+    },
+    {
+      "test_id": "LT2",
+      "description": "平台数趋于节点数：每节点一个平台，最大响应时间应趋于 0，覆盖缺口为空。",
+      "parameter": "m",
+      "limit": "m → N",
+      "expected_behavior": "T_max → 0，覆盖率 θ → 1"
+    },
+    {
+      "test_id": "LT3",
+      "description": "新增平台数上限放宽趋于无穷：覆盖趋于完备，最大响应单调不增。",
+      "parameter": "Δ",
+      "limit": "Δ → ∞",
+      "expected_behavior": "max_j min_k t_kj 单调不增，最终趋于平台选址下界"
+    },
+    {
+      "test_id": "LT4",
+      "description": "嫌疑车速趋于 0：案发点可达域不扩张，围堵只需封锁案发点邻域出口。",
+      "parameter": "v_s",
+      "limit": "v_s → 0",
+      "expected_behavior": "R(t) 收缩为 {P}，出口集为 P 的邻接节点，围堵快速完成"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "整数规划求解器分支顺序与启发式初始化使用 5 组随机初始化；确定性算法部分报告逐位一致结果。"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P6",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P8",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O5"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "“尽量在 3 分钟内有交巡警到达”为软约束",
+      "interpretations": [
+        "硬约束：所有节点必须 3 分钟可达",
+        "软约束：最小化超时节点数",
+        "目标化：最小化最大响应"
+      ],
+      "adopted": "目标化（O1 最小化最大响应）+ 超时节点作为覆盖缺口报告（A2）",
+      "justification": "题面“尽量”表明不可强行满足，把 3 分钟作为评估阈值而非硬约束，覆盖缺口指导后续增设平台"
+    },
+    {
+      "source": "Q5 嫌疑车辆速度未给定",
+      "interpretations": [
+        "等于警车速度 60km/h",
+        "低于警车速度（如 40）",
+        "按高速逃逸假设"
+      ],
+      "adopted": "等于警车速度，且做 ±20% 灵敏度（P8）",
+      "justification": "同城道路车速上限一致；灵敏度检验保证方案对速度假设稳健"
+    },
+    {
+      "source": "围堵“快速搜捕”的时间窗口未给定",
+      "interpretations": [
+        "以案发时刻为原点",
+        "以报警时刻（案发后 3 分钟）为原点",
+        "以出警时刻为原点"
+      ],
+      "adopted": "报警时刻（案发后 3 分钟）起算调度，嫌疑车从案发时刻起算逃逸（P7）",
+      "justification": "题面“案发 3 分钟后接到报警”；起算点不一致正是围堵紧迫性的来源，按题面时间线分别起算"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C5",
+      "evidence_ref": "V4",
+      "status": "hypothesis"
+    }
+  ]
+}

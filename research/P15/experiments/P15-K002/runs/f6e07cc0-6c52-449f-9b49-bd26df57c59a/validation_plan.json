@@ -1,0 +1,124 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "RGV 移动时间趋近于零时，系统退化为 8 台独立 CNC",
+      "parameter": "tau_m",
+      "limit": "0",
+      "expected_behavior": "产量趋近 8 × 单机班次加工数，RGV 不再构成瓶颈"
+    },
+    {
+      "test_id": "LT2",
+      "description": "清洗时间趋近于零时，服务循环缩短、产量上升",
+      "parameter": "tau_c",
+      "limit": "0",
+      "expected_behavior": "产量趋近加工与上下料决定的上界"
+    },
+    {
+      "test_id": "LT3",
+      "description": "故障概率趋近于零时，期望产量收敛到无故障仿真结果",
+      "parameter": "pi_f",
+      "limit": "0",
+      "expected_behavior": "E[N] -> N(无故障)"
+    },
+    {
+      "test_id": "LT4",
+      "description": "故障概率趋近于 1 时，系统产量趋近于零",
+      "parameter": "pi_f",
+      "limit": "1",
+      "expected_behavior": "全部 CNC 长期不可用，产量趋近 0"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "故障注入与权重扫描以多组随机数初值重复，报告期望产量与统计量的均值标准差，标准差小于均值 5% 视为稳定"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P2",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P3",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P8",
+      "range": "±50%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P10",
+      "range": "全区间扫描",
+      "method": "grid",
+      "target": "O4"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "物料到达是否受传送带节拍限制",
+      "interpretations": [
+        "传送带无瓶颈、物料连续到达",
+        "传送带节拍限制投料速率",
+        "人工投料随机间隔"
+      ],
+      "adopted": "传送带无瓶颈、物料连续到达",
+      "justification": "题面未给传送带参数，无瓶颈假设给出系统能力上限，符合任务 2 检验目的"
+    },
+    {
+      "source": "RGV 空闲时的停靠位置",
+      "interpretations": [
+        "停在最后服务位置",
+        "停在轨道中点",
+        "停在 1 号位"
+      ],
+      "adopted": "停在最后服务位置",
+      "justification": "最小化下一趟移动期望距离的贪心选择，且实现简单"
+    },
+    {
+      "source": "两道工序第二道的 CNC 选择范围",
+      "interpretations": [
+        "任意不同于第一道的空闲 CNC",
+        "限定奇偶组",
+        "任一空闲 CNC 含第一道机"
+      ],
+      "adopted": "任意不同于第一道的空闲 CNC",
+      "justification": "题面仅要求两台不同 CNC，不做额外限制最忠实于规则"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "CL1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "CL2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "CL3",
+      "evidence_ref": "V4",
+      "status": "supported"
+    },
+    {
+      "claim": "CL4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    }
+  ]
+}

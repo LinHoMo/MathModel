@@ -1,0 +1,859 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-434308bc",
+  "model_family": {
+    "primary": "decision_analysis",
+    "secondary": [
+      "queueing_theory",
+      "optimization",
+      "simulation"
+    ],
+    "description": "以司机两方案（排队载客 vs 空车返回）的期望收益比较为决策内核，等待时间由排队模型供给，收益由载客里程分布刻画，构成阈值型决策分析模型；乘车区与优先权问题叠加排队与优化。",
+    "candidates": [
+      {
+        "family": "decision_analysis",
+        "rationale": "选择：Q1 的核心是“司机在确定信息下选择方案”，两方案收益对比是标准决策分析（期望效用比较）；影响因素作为收益函数的变量显式进入。"
+      },
+      {
+        "family": "queueing_theory",
+        "rationale": "选择用于等待时间与乘车区效率：蓄车池与乘车区排队由航班到达率与车辆数驱动，排队模型供给决策所需的等待时间；故放入 secondary。"
+      },
+      {
+        "family": "optimization",
+        "rationale": "选择用于 Q3 上车点设置与放行策略：以乘车效率为目标的资源分配优化；故放入 secondary。"
+      },
+      {
+        "family": "game_theory",
+        "rationale": "排除：司机间存在竞争但题面 Q1 只要求个体决策策略（可观测信息下的最优反应），无显式策略互动均衡需求；用个体决策分析更直接。"
+      },
+      {
+        "family": "macroscopic_traffic_flow",
+        "rationale": "排除：宏观交通流模型适合道路网络容量分析，对机场出租车微观决策与排队细节刻画不足。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2019_C",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "司机为风险中性理性人，选择期望收益更大的方案；两方案收益由载客里程分布、等待时间、空载成本与市区接单期望决定。",
+      "type": "mechanism",
+      "rationale": "决策分析的基本假设；题面描述的司机权衡正是收益比较，风险偏好差异为二阶修正。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "航班到达与乘客到达近似平稳过程（分时段），蓄车池车辆数与候车乘客数可观测且为决策信息。",
+      "type": "projection",
+      "rationale": "题面给出司机可观测确定信息；分时段平稳化使模型可计算，时段内波动并入参数估计。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "载客里程分布由城市数据拟合（均值与分位数），短途/长途分类以里程阈值划分；出租车不能拒载。",
+      "type": "calibration",
+      "rationale": "题面 Q4 明确按里程划分收益；里程分布是收益期望的核心输入，须用城市出租车数据校准。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "Q3 乘车区双车道为两个并行服务台，乘客按先后顺序乘车，上车点设置影响服务时间与吞吐。",
+      "type": "mechanism",
+      "rationale": "题面给出两条并行车道；服务台抽象支持排队论与优化分析。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "Q4 短途返程优先权以排队等级实现：短途司机返场后进入优先队列，普通司机进入普通队列。",
+      "type": "mechanism_assumption",
+      "rationale": "题面要求“给予一定优先权”且不拒载；优先级排队是直接可行的实现机制。"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "司机排队的时间成本按单位时间机会成本折算；空车返回成本含油费/电费与市区接单的期望净收益。",
+      "type": "projection",
+      "rationale": "收益比较需统一量纲到金额；机会成本参数由城市运营数据校准。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "时段",
+      "symbol": "\\tau",
+      "definition": "司机决策所在时段（航班密度分层）",
+      "unit": "—",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "蓄车池车辆数",
+      "symbol": "N_q",
+      "definition": "排队等待的出租车数量",
+      "unit": "辆",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "候车乘客数",
+      "symbol": "N_p",
+      "definition": "乘车区排队乘客数量",
+      "unit": "人",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "排队等待时间",
+      "symbol": "W_q",
+      "definition": "司机加入队列到载客离开的期望等待时间",
+      "unit": "min",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "载客里程",
+      "symbol": "L",
+      "definition": "单次载客行驶里程（随机变量）",
+      "unit": "km",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "载客收益",
+      "symbol": "R_f(L)",
+      "definition": "载客里程 L 对应的车费收入",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V7",
+      "name": "排队期望收益",
+      "symbol": "U_A",
+      "definition": "方案 A（排队载客）的期望净收益",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "V8",
+      "name": "返回期望收益",
+      "symbol": "U_B",
+      "definition": "方案 B（空车返回）的期望净收益",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "V9",
+      "name": "决策变量",
+      "symbol": "d",
+      "definition": "司机选择：排队（A）或返回（B）",
+      "unit": "—",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "V10",
+      "name": "上车点数",
+      "symbol": "n_s",
+      "definition": "乘车区设置的上车点数量",
+      "unit": "个",
+      "type": "decision",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V11",
+      "name": "乘车吞吐量",
+      "symbol": "\\Lambda",
+      "definition": "单位时间完成乘车的出租车数",
+      "unit": "辆/h",
+      "type": "derived",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V12",
+      "name": "短途比例",
+      "symbol": "q_s",
+      "definition": "短途载客（里程低于阈值）占比",
+      "unit": "—",
+      "type": "observation",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "variable_id": "V13",
+      "name": "司机收益",
+      "symbol": "\\Pi_j",
+      "definition": "第 j 位司机的班次收益",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "航班到达率",
+      "symbol": "\\lambda_f",
+      "value": "机场数据校准",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "乘客打车率",
+      "symbol": "\\alpha",
+      "value": "机场数据校准",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "蓄车池服务率",
+      "symbol": "\\mu_q",
+      "value": "由上车点与服务时间决定",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "载客里程分布",
+      "symbol": "F_L",
+      "value": "城市出租车数据拟合",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "空载返程成本",
+      "symbol": "c_B",
+      "value": "按里程油耗标定",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "市区接单期望",
+      "symbol": "R_0",
+      "value": "城市数据校准",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "等待机会成本率",
+      "symbol": "c_w",
+      "value": "单位时间机会成本",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "短途里程阈值",
+      "symbol": "L_s",
+      "value": "按城市运价结构设定",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "优先权等级数",
+      "symbol": "K_p",
+      "value": 2,
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "maximize",
+      "expression": "d^* = \\arg\\max_{d\\in\\{A,B\\}} U_d(N_q,N_p,\\tau)",
+      "variables_refs": [
+        "V9",
+        "V7",
+        "V8"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "estimate",
+      "expression": "\\text{对某机场数据给出 } d^*(\\tau) \\text{ 并检验对参数的依赖性}",
+      "variables_refs": [
+        "V9",
+        "V7",
+        "V8"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "maximize",
+      "expression": "\\max_{n_s,\\;\\text{放行策略}} \\; \\Lambda(n_s) \\;\\text{s.t. 安全约束}",
+      "variables_refs": [
+        "V11",
+        "V10"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "minimize",
+      "expression": "\\min \\; \\text{CV}(\\Pi_j) = \\frac{\\text{std}(\\Pi_j)}{\\text{mean}(\\Pi_j)} \\;\\text{（收益均衡）}",
+      "variables_refs": [
+        "V13",
+        "V12"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "capacity",
+      "expression": "\\text{乘车区最多容纳 } N_{max} \\text{ 辆出租车/乘客}",
+      "variables_refs": [
+        "V3",
+        "V2"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "safety",
+      "expression": "上车点间距与车道容量满足安全规范",
+      "variables_refs": [
+        "V10"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "no_refusal",
+      "expression": "司机不能选择乘客和拒载（Q4）",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "stability",
+      "expression": "排队系统稳定：\\lambda_p < \\mu_q（乘客到达率低于服务率）",
+      "variables_refs": [
+        "V4",
+        "P3"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C5",
+      "type": "priority_order",
+      "expression": "优先队列短途司机先于普通队列服务",
+      "variables_refs": [
+        "V12"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "期望收益比较机理：排队方案收益 = 载客收益期望 − 等待时间成本；返回方案收益 = 市区接单期望 − 空载成本；两者差值的符号决定决策，形成阈值。",
+      "related_equations": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "排队供给机理：等待时间 W_q 由蓄车池队列长度、乘客到达率与服务率决定，是连接供需与决策的桥梁。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "效率-安全权衡机理：上车点越多吞吐越高但占用空间与冲突风险上升，Q3 在安全约束下优化乘车效率。",
+      "related_equations": [
+        "E5"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "mechanism_id": "M4",
+      "description": "优先级均衡机理：短途返程司机进入优先队列，缩短其周转时间、补偿短途低收益，使收益分布更均衡。",
+      "related_equations": [
+        "E6",
+        "E7"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "U_A(N_q,N_p,\\tau) = \\mathbb{E}[R_f(L)] - c_w W_q(N_q,N_p)",
+      "type": "代数",
+      "variables_refs": [
+        "V7",
+        "V6",
+        "V4",
+        "P7"
+      ],
+      "derivation_trace": "排队方案净收益：载客收入期望减去等待机会成本；载客收益由里程分布 F_L 计算。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "U_B = R_0 - c_B",
+      "type": "代数",
+      "variables_refs": [
+        "V8",
+        "P6",
+        "P5"
+      ],
+      "derivation_trace": "返回方案净收益：市区接单期望减空载返程成本，与机场状态无关。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "d^* = \\begin{cases} A, & U_A \\ge U_B \\\\ B, & U_A < U_B \\end{cases}",
+      "type": "逻辑",
+      "variables_refs": [
+        "V9",
+        "V7",
+        "V8"
+      ],
+      "derivation_trace": "决策规则：期望收益比较的阈值决策。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "equation_id": "E4",
+      "latex": "W_q = \\frac{N_q}{\\mu_q} - \\frac{1}{\\lambda_p} \\;\\text{（稳态，}\\lambda_p<\\mu_q\\text{）}, \\quad \\lambda_p = \\alpha\\lambda_f",
+      "type": "代数",
+      "variables_refs": [
+        "V4",
+        "V2",
+        "P3",
+        "P2",
+        "P1"
+      ],
+      "derivation_trace": "排队等待时间：队列长度/服务率减乘客到达间隔；乘客到达率 = 航班到达率×打车率。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E5",
+      "latex": "\\Lambda(n_s) = \\min\\big(\\mu_s n_s,\\; \\lambda_p\\big)",
+      "type": "代数",
+      "variables_refs": [
+        "V11",
+        "V10",
+        "P3"
+      ],
+      "derivation_trace": "乘车吞吐 = 上车点总服务能力与乘客到达率的最小值；安全约束限制 n_s 上限。",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E6",
+      "latex": "\\Pi_j = \\sum_{r} \\big(R_f(L_{j,r}) - c_w W_{j,r} - c_B \\mathbb{1}[\\text{空返}],\\big)",
+      "type": "递推",
+      "variables_refs": [
+        "V13",
+        "V6",
+        "V4",
+        "P5"
+      ],
+      "derivation_trace": "司机班次累计收益：各次载客收入减等待与空返成本。",
+      "sub_question_binding": [
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E7",
+      "latex": "W_q^{pri} < W_q^{ord} \\;\\text{（短途优先队列等待短于普通队列）}",
+      "type": "代数",
+      "variables_refs": [
+        "V4",
+        "V12"
+      ],
+      "derivation_trace": "优先权实现：短途司机返场进入优先队列，优先服务使等待缩短。",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E4",
+      "to": "E1",
+      "type": "feeds"
+    },
+    {
+      "from": "E1",
+      "to": "E3",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "E3",
+      "type": "feeds"
+    },
+    {
+      "from": "E3",
+      "to": "O1",
+      "type": "derives"
+    },
+    {
+      "from": "E5",
+      "to": "O3",
+      "type": "derives"
+    },
+    {
+      "from": "E6",
+      "to": "O4",
+      "type": "feeds"
+    },
+    {
+      "from": "E7",
+      "to": "O4",
+      "type": "feeds"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "阈值决策枚举",
+      "implementation_ref": "对 (N_q,N_p,τ) 网格计算 U_A、U_B 差值，输出决策边界与策略表",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "排队稳态求解",
+      "implementation_ref": "M/M/c 或 M/G/1 近似计算 W_q，检查稳定性条件 λ_p<μ_q",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "solver_id": "S3",
+      "method": "吞吐优化 + 安全过滤",
+      "implementation_ref": "枚举 n_s∈{1,2,3,4} 与放行批次，安全约束过滤后取最大吞吐",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S4",
+      "method": "离散事件仿真",
+      "implementation_ref": "模拟司机循环（载客-返场-排队-再载客），比较有无优先权下的收益变异系数",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "决策边界分析",
+      "inputs": {
+        "scenario": "不同时段/队列长度",
+        "data": "机场参数"
+      },
+      "expected_outputs": {
+        "decision_table": "策略表",
+        "threshold": "决策阈值曲线"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "机场实例",
+      "inputs": {
+        "airport": "某机场数据",
+        "city": "城市出租车数据"
+      },
+      "expected_outputs": {
+        "strategy": "分时段选择方案",
+        "sensitivity": "参数依赖分析"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "吞吐优化",
+      "inputs": {
+        "lanes": 2,
+        "arrival": "航班时刻"
+      },
+      "expected_outputs": {
+        "n_s": "最优上车点数",
+        "throughput": "乘车吞吐量"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "优先权仿真",
+      "inputs": {
+        "short_ratio": "q_s 扫描",
+        "priority": "K_p=2"
+      },
+      "expected_outputs": {
+        "CV": "收益变异系数",
+        "wait": "两类等待时间"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "无等待（W_q=0）时决策应退化为“载客收益 vs 返回收益”的直接比较；无乘客时必选返回",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "航班到达率、打车率、载客里程分布扰动 ±20%，检验决策阈值与策略的稳健性",
+      "targets_refs": [
+        "O1",
+        "O2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "λ_p→0 乘客极少：等待时间发散，应全选返回；λ_p→μ_q 系统饱和：吞吐趋于服务上限",
+      "targets_refs": [
+        "O1",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "仿真固定随机数初始化方案，多组初始化报告均值±标准差",
+      "targets_refs": [
+        "O4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "司机决策存在阈值：蓄车池车辆数超过某临界值时排队等待不可取；该阈值随时段（航班密度）与乘客打车率显著移动。",
+      "type": "行为规律",
+      "evidence_refs": [
+        "X1",
+        "V1",
+        "V2"
+      ],
+      "model_refs": [
+        "M1",
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "某机场实例中，航班高峰后 1~2 小时为排队载客窗口，其余时段空车返回更优；模型对打车率与里程分布敏感。",
+      "type": "实例结论",
+      "evidence_refs": [
+        "X2",
+        "V2"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "双车道乘车区设 2~3 个上车点、分批放行可在安全约束内最大化吞吐，吞吐受乘客到达率而非上车点数上限制约。",
+      "type": "设计结论",
+      "evidence_refs": [
+        "X3",
+        "V3"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "短途返程优先权显著降低司机收益变异系数，使短途司机周转加快、收益更均衡，同时不显著恶化长途司机等待。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X4",
+        "V4"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "期望收益决策"
+      },
+      {
+        "id": "M2",
+        "label": "排队供给"
+      },
+      {
+        "id": "M3",
+        "label": "吞吐优化"
+      },
+      {
+        "id": "M4",
+        "label": "优先权均衡"
+      },
+      {
+        "id": "E1",
+        "label": "排队收益"
+      },
+      {
+        "id": "E2",
+        "label": "返回收益"
+      },
+      {
+        "id": "E3",
+        "label": "阈值决策"
+      },
+      {
+        "id": "E4",
+        "label": "等待时间"
+      },
+      {
+        "id": "E5",
+        "label": "吞吐"
+      },
+      {
+        "id": "E7",
+        "label": "优先级"
+      }
+    ],
+    "edges": [
+      {
+        "from": "E4",
+        "to": "E1",
+        "relation": "供给"
+      },
+      {
+        "from": "E1",
+        "to": "E3",
+        "relation": "比较"
+      },
+      {
+        "from": "E2",
+        "to": "E3",
+        "relation": "比较"
+      },
+      {
+        "from": "E3",
+        "to": "O1",
+        "relation": "策略"
+      },
+      {
+        "from": "E5",
+        "to": "O3",
+        "relation": "目标"
+      },
+      {
+        "from": "E7",
+        "to": "O4",
+        "relation": "均衡"
+      }
+    ]
+  },
+  "modeling_trace": "将司机决策抽象为两方案期望收益比较：排队收益由载客里程分布与排队等待时间决定，返回收益由市区接单期望与空载成本决定；等待时间由蓄车池排队稳态供给；Q3 把乘车区建模为并行服务台并优化上车点与放行；Q4 引入优先级排队实现短途返程优先，以收益变异系数度量均衡，并用仿真验证。"
+}

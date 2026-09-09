@@ -1,0 +1,40 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "simulation",
+  "mechanism_count": 4,
+  "equation_count": 5,
+  "validation_plan": {
+    "limit_tests": 4,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "故障注入与权重扫描以多组随机数初值重复，报告期望产量与统计量的均值标准差，标准差小于均值 5% 视为稳定"
+    },
+    "sensitivity": 4,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 4
+  }
+}

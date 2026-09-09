@@ -1,0 +1,659 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-9132b63e",
+  "model_family": {
+    "primary": "finite_difference",
+    "secondary": [
+      "pde",
+      "heat_transfer"
+    ],
+    "description": "将多层非稳态热传导方程用有限差分格式离散，以显式 FTCS 与隐式格式相结合的方式求解温度场，并驱动逆设计优化。",
+    "candidates": [
+      {
+        "family": "finite_difference（有限差分离散）",
+        "rationale": "分层界面与复合边界易处理，程序实现简单、可显式控制步长，选为最终模型。"
+      },
+      {
+        "family": "pde（解析级数解）",
+        "rationale": "多层变系数解析解存在性差，仅均匀单层可用分离变量法，对本题四层结构不适用，排除。"
+      },
+      {
+        "family": "finite_element（有限元）",
+        "rationale": "通用性强但实现与网格剖分成本高，对一维问题收益有限，排除。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2018_A",
+    "sub_question_id": "Q1,Q2,Q3",
+    "problem_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "一维厚度方向传热，面内温度均匀。",
+      "type": "simplification",
+      "rationale": "服装面积远大于厚度，侧向梯度可忽略。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "空气间隙 IV 层采用等效导热系数，包含辐射与自然对流贡献。",
+      "type": "calibration",
+      "rationale": "间隙内复合换热等效为导热，由附件 2 反演标定。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "皮肤侧为对流边界，体内恒温 37°C。",
+      "type": "mechanism",
+      "rationale": "假人体温恒定，皮肤血流换热以对流系数表征。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "层间接触热阻为零。",
+      "type": "simplification",
+      "rationale": "织物层压紧，接触热阻相对织物热阻可忽略。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "初始温度取环境温度 75°C 与室温 25°C 两种情形对比检验。",
+      "type": "projection",
+      "rationale": "着装初始状态未知，双初始设定可量化其影响。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "离散温度",
+      "symbol": "T_i^n",
+      "definition": "第 i 个空间节点第 n 个时间层的温度",
+      "unit": "°C",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "空间节点",
+      "symbol": "x_i",
+      "definition": "厚度方向均匀网格节点坐标",
+      "unit": "m",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "时间层",
+      "symbol": "t_n",
+      "definition": "第 n 个时间层对应时刻",
+      "unit": "s",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "皮肤侧温度序列",
+      "symbol": "T_s^n",
+      "definition": "皮肤边界节点在各时刻的温度",
+      "unit": "°C",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "II 层厚度",
+      "symbol": "d_2",
+      "definition": "II 层织物厚度决策量",
+      "unit": "m",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "IV 层厚度",
+      "symbol": "d_4",
+      "definition": "空气间隙厚度决策量",
+      "unit": "m",
+      "type": "decision",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V7",
+      "name": "超温累计时间",
+      "symbol": "tau_44",
+      "definition": "皮肤温度大于 44°C 的累计时长",
+      "unit": "s",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "I 层导热系数",
+      "symbol": "k_1",
+      "value": 0.082,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "II 层导热系数",
+      "symbol": "k_2",
+      "value": 0.37,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "III 层导热系数",
+      "symbol": "k_3",
+      "value": 0.045,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "空气层等效导热系数",
+      "symbol": "k_4",
+      "value": 0.045,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "各层密度比热乘积",
+      "symbol": "rho_j c_j",
+      "value": "413100/1810200/128000",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "I 层厚度",
+      "symbol": "d_1",
+      "value": 0.0006,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "III 层厚度",
+      "symbol": "d_3",
+      "value": 0.0036,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "外表面换热系数",
+      "symbol": "h_1",
+      "value": 8.0,
+      "source": "文献"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "皮肤侧换热系数",
+      "symbol": "h_2",
+      "value": 9.0,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P10",
+      "name": "环境温度",
+      "symbol": "T_env",
+      "value": "75/65/80",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P11",
+      "name": "体内温度",
+      "symbol": "T_b",
+      "value": 37,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P12",
+      "name": "工作总时长",
+      "symbol": "t_end",
+      "value": "5400/3600/1800",
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "estimate",
+      "expression": "minimize ||T_s(hat) - T_s(obs)||_2 over h_2, k_4",
+      "variables_refs": [
+        "V4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "minimize",
+      "expression": "minimize d_2 such that max T_s^n<=47 and tau_44<=300 at t=3600",
+      "variables_refs": [
+        "V5",
+        "V4",
+        "V7"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "minimize",
+      "expression": "minimize d_2 + lambda*d_4 such that max T_s^n<=47 and tau_44<=300 at t=1800",
+      "variables_refs": [
+        "V5",
+        "V6",
+        "V4",
+        "V7"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "temperature_limit",
+      "expression": "T_s^n <= 47 for all n <= 3600/dt",
+      "variables_refs": [
+        "V4"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "overheat_duration",
+      "expression": "tau_44 = sum_n dt*I(T_s^n>44) <= 300",
+      "variables_refs": [
+        "V4",
+        "V7"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "temperature_limit",
+      "expression": "T_s^n <= 47 for all n <= 1800/dt",
+      "variables_refs": [
+        "V4"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "overheat_duration",
+      "expression": "tau_44 = sum_n dt*I(T_s^n>44) <= 300",
+      "variables_refs": [
+        "V4",
+        "V7"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "stability",
+      "expression": "Fo = alpha*dt/dx^2 <= 0.5 for explicit scheme",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V3"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "多层介质的瞬态导热用空间离散网格上的能量平衡差分方程描述，层界面用调和平均导热系数保持热流连续。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "厚度增大增加热阻与热容，减慢皮肤升温，从而满足 47°C 与超温时长约束。",
+      "related_equations": [
+        "E3",
+        "E4"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\rho_j c_j \\frac{T_i^{n+1} - T_i^n}{\\Delta t} = k_j \\frac{T_{i+1}^n - 2T_i^n + T_{i-1}^n}{\\Delta x^2}",
+      "type": "差分",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V3"
+      ],
+      "derivation_trace": "FTCS 显式格式离散抛物型方程，稳定性条件 Fo<=0.5",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "k_{i+1/2} = 2 k_i k_{i+1}/(k_i + k_{i+1})",
+      "type": "代数",
+      "variables_refs": [
+        "V1"
+      ],
+      "derivation_trace": "层界面调和平均导热系数，保证界面热流连续",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "-k_1 (T_1^n - T_0^n)/\\Delta x = h_1 (T_{env} - T_0^n);\\quad -k_3 (T_N^n - T_{N-1}^n)/\\Delta x = h_2 (T_N^n - T_b)",
+      "type": "差分",
+      "variables_refs": [
+        "V1",
+        "V4"
+      ],
+      "derivation_trace": "边界节点的一阶差分形式的第三类边界条件",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E4",
+      "latex": "\\tau_{44} = \\sum_{n=1}^{N} \\Delta t \\cdot \\mathbb{1}[T_s^n > 44]",
+      "type": "递推",
+      "variables_refs": [
+        "V4",
+        "V7"
+      ],
+      "derivation_trace": "超温指示函数的时间累加",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "V4",
+      "type": "produces"
+    },
+    {
+      "from": "E2",
+      "to": "E1",
+      "type": "provides_interface_k"
+    },
+    {
+      "from": "V4",
+      "to": "E4",
+      "type": "feeds"
+    },
+    {
+      "from": "E4",
+      "to": "O2",
+      "type": "constrains"
+    },
+    {
+      "from": "E4",
+      "to": "O3",
+      "type": "constrains"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "显式 FTCS 推进（校验 Fo 稳定条件），必要时切换隐式格式",
+      "implementation_ref": "逐层网格推进，界面用 E2 的调和平均",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "网格搜索 + 可行域筛选",
+      "implementation_ref": "Q2 一维扫描 d_2；Q3 二维扫描 (d_2,d_4)",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "calibration_run",
+      "inputs": {
+        "T_env": 75,
+        "d_2": 0.006,
+        "d_4": 0.005,
+        "t_end": 5400,
+        "target": "attachment2_series"
+      },
+      "expected_outputs": {
+        "calibrated": {
+          "h_2": 9.0,
+          "k_4": 0.045
+        }
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "design_scan_1d",
+      "inputs": {
+        "T_env": 65,
+        "d_4": 0.0055,
+        "t_end": 3600,
+        "grid": "d_2 in [3,12]mm step 0.1mm"
+      },
+      "expected_outputs": {
+        "d_2_star": "最小可行厚度"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "design_scan_2d",
+      "inputs": {
+        "T_env": 80,
+        "t_end": 1800,
+        "grid": "d_2 x d_4"
+      },
+      "expected_outputs": {
+        "d2_d4_star": "成本最小可行组合"
+      },
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "复现 Q1 工况并与附件 2 实测对比，RMSE 目标 <1°C",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "扰动 h_1,h_2,k_4 各 ±20%，评估最优厚度对参数的稳定性",
+      "targets_refs": [
+        "O2",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "d_2 或 d_4 趋于 0 时皮肤温度趋近上限，趋于无穷时趋近 T_b",
+      "targets_refs": [
+        "O2",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V4",
+      "type": "convergence",
+      "method": "dx 与 dt 同时减半，验证离散解收敛（变化 <0.1°C）",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "有限差分离散模型可在允许误差内再现实测皮肤温度曲线。",
+      "type": "accuracy_claim",
+      "evidence_refs": [
+        "X1",
+        "V1"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "65°C 环境下存在可行 II 层厚度，且随 h_2 增大最优厚度单调下降。",
+      "type": "structural_claim",
+      "evidence_refs": [
+        "X2",
+        "V2"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "80°C 环境下 II/IV 双厚度存在 Pareto 可行前沿，成本最小解位于前沿端点。",
+      "type": "structural_claim",
+      "evidence_refs": [
+        "X3",
+        "V3"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "有限差分导热机理"
+      },
+      {
+        "id": "E1",
+        "label": "FTCS 离散方程"
+      },
+      {
+        "id": "E3",
+        "label": "离散边界条件"
+      },
+      {
+        "id": "E4",
+        "label": "超温时长累加"
+      },
+      {
+        "id": "O2",
+        "label": "Q2 优化"
+      },
+      {
+        "id": "O3",
+        "label": "Q3 优化"
+      }
+    ],
+    "edges": [
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "instantiates"
+      },
+      {
+        "from": "E1",
+        "to": "E3",
+        "relation": "with_bc"
+      },
+      {
+        "from": "E1",
+        "to": "E4",
+        "relation": "skin_series"
+      },
+      {
+        "from": "E4",
+        "to": "O2",
+        "relation": "constrains"
+      },
+      {
+        "from": "E4",
+        "to": "O3",
+        "relation": "constrains"
+      }
+    ]
+  },
+  "modeling_trace": "判定为多层瞬态导热问题；对比解析级数解与有限元后选择有限差分离散；采用显式 FTCS 并校验 Fo 稳定性，层界面用调和平均导热；Q1 以附件 2 校准 h_2 与 k_4，Q2/Q3 用网格搜索求解带双约束的厚度优化。"
+}

@@ -1,0 +1,42 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4,Q5",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "graph_algorithm",
+  "mechanism_count": 5,
+  "equation_count": 6,
+  "validation_plan": {
+    "limit_tests": 4,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "案发节点随机抽样与多组随机数初值下重复运行前缘扩张与选址算法，报告围堵闭合时间与覆盖增益的均值标准差"
+    },
+    "sensitivity": 4,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 5
+  }
+}

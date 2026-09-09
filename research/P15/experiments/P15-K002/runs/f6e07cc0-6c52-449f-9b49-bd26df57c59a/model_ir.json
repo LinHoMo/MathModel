@@ -1,0 +1,745 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-f6e07cc0",
+  "model_family": {
+    "primary": "simulation",
+    "secondary": [
+      "optimization",
+      "markov_decision_process"
+    ],
+    "description": "以离散事件仿真为核心的建模框架：RGV 与 CNC 的交互按事件时间轴推进，策略差异通过仿真输出对比，故障随机性由事件注入刻画。",
+    "candidates": [
+      {
+        "family": "simulation",
+        "rationale": "系统行为由离散事件（上下料完成、加工完成、清洗完成、故障）驱动，事件推进仿真可直接复现班次过程并统计产量与利用率，故选为主模型族。"
+      },
+      {
+        "family": "optimization",
+        "rationale": "策略参数（优先级权重）可在仿真上做网格优化，作为策略调优层列为辅助。"
+      },
+      {
+        "family": "markov_decision_process",
+        "rationale": "故障可用马尔可夫状态建模，但班次目标与事件时序更适合仿真表述，不选为主。"
+      },
+      {
+        "family": "dynamic_programming",
+        "rationale": "可求小规模最优服务序，但 8 台机与 8 小时时域使状态爆炸，仅作对照。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2018_B",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "f00ef29490cc2ef0ca87d7bf17b598ecae98021e8049addfa222649bee410152"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "系统按离散事件推进：事件为加工完成、上下料完成、清洗完成、故障发生与排除。",
+      "type": "mechanism",
+      "rationale": "所有时间参数为固定值或区间分布，事件驱动是精确复现系统演化的标准方式。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "物料在传送带与清洗槽之间无额外等待，RGV 串行执行移动-上下料-清洗。",
+      "type": "simplification",
+      "rationale": "题面未给出传送带节拍，假设其不成为瓶颈。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "故障概率 1% 作用于每次加工开始，排除时间在 10~20 分钟均匀分布。",
+      "type": "projection",
+      "rationale": "题面给出概率与区间，均匀分布为最大熵选择。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "班次 8 小时从空载状态开始，结束时未完工物料不计入产量。",
+      "type": "calibration",
+      "rationale": "题面规定班次时长，空载起始统一结果口径。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "两道工序中，第二道可在任意尚未加工第一道的空闲 CNC 上进行，但同机不得连续承担同一物料两道工序。",
+      "type": "mechanism",
+      "rationale": "题面要求两道工序由两台不同 CNC 完成。"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "RGV 策略由优先级规则决定：目标选择按（服务请求、距离、奇偶负载）打分，分数最高者优先。",
+      "type": "mechanism_assumption",
+      "rationale": "仿真需要显式决策规则，优先级打分是覆盖多种启发式的统一形式。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "仿真时钟",
+      "symbol": "\\theta",
+      "definition": "事件推进中的当前时刻",
+      "unit": "秒",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "事件表",
+      "symbol": "\\mathcal{E}",
+      "definition": "未来事件按时间排序的优先队列",
+      "unit": "队列",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "CNC 加工剩余时间",
+      "symbol": "\\{r_j\\}",
+      "definition": "各 CNC 当前加工剩余时间",
+      "unit": "秒",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "RGV 服务序列",
+      "symbol": "\\sigma",
+      "definition": "RGV 依次服务的目标 CNC 序列",
+      "unit": "序列",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "班次产量",
+      "symbol": "N",
+      "definition": "8 小时完成物料数",
+      "unit": "件",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "在制品队列",
+      "symbol": "\\mathcal{W}",
+      "definition": "等待 RGV 服务的 CNC 集合",
+      "unit": "集合",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V7",
+      "name": "优先级分数",
+      "symbol": "\\phi_j",
+      "definition": "第 j 台 CNC 的候选服务打分",
+      "unit": "分",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V8",
+      "name": "故障状态",
+      "symbol": "\\gamma_j",
+      "definition": "第 j 台 CNC 故障标记与剩余排除时间",
+      "unit": "混合",
+      "type": "state",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V9",
+      "name": "累计统计",
+      "symbol": "\\{N, \\eta_j, \\omega\\}",
+      "definition": "产量、利用率、等待时间等输出统计",
+      "unit": "混合",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "移动时间三档",
+      "symbol": "\\tau_m^{(1,2,3)}",
+      "value": "20/33/46；23/41/59；18/32/46",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "一道工序加工时间",
+      "symbol": "\\tau_p^{(1)}",
+      "value": "560/580/545",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "两道第一道时间",
+      "symbol": "\\tau_p^{(A)}",
+      "value": "400/280/455",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "两道第二道时间",
+      "symbol": "\\tau_p^{(B)}",
+      "value": "378/500/182",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "奇偶上下料时间",
+      "symbol": "\\tau_l^{(o/e)}",
+      "value": "28/31；30/35；27/32",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "清洗时间",
+      "symbol": "\\tau_c",
+      "value": "25/30/25",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "班次时长",
+      "symbol": "T_s",
+      "value": "28800",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "故障概率",
+      "symbol": "\\pi_f",
+      "value": "0.01",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "排除时间区间",
+      "symbol": "[a,b]",
+      "value": "[600,1200] 秒",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P10",
+      "name": "优先级权重",
+      "symbol": "\\mathbf{w}",
+      "value": "[w_req, w_dist, w_bal]",
+      "source": "校准"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "maximize",
+      "expression": "\\max_\\sigma N(\\sigma)，仿真中搜索服务序列使一道工序班次产量最大",
+      "variables_refs": [
+        "V4",
+        "V5"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "maximize",
+      "expression": "\\max_\\sigma N(\\sigma) \\land \\min_\\sigma \\omega(\\sigma)，两道工序产量与在制品等待双目标",
+      "variables_refs": [
+        "V4",
+        "V5",
+        "V9"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "maximize",
+      "expression": "\\max_\\sigma E[N(\\sigma)]，故障注入下期望产量",
+      "variables_refs": [
+        "V4",
+        "V5",
+        "V8"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "estimate",
+      "expression": "三组参数 × 三种工况的仿真输出统计表，检验实用性与有效性",
+      "variables_refs": [
+        "V5",
+        "V9"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "CT1",
+      "type": "server",
+      "expression": "任意时刻 RGV 至多服务一台 CNC",
+      "variables_refs": [
+        "V4"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "CT2",
+      "type": "machine",
+      "expression": "每台 CNC 同时最多加工一件",
+      "variables_refs": [
+        "V3"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "CT3",
+      "type": "sequence",
+      "expression": "两道工序：第二道在另一台 CNC，且不早于第一道完成",
+      "variables_refs": [
+        "V3",
+        "V6"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "CT4",
+      "type": "failure",
+      "expression": "故障期间 CNC 不可服务，排除后回到空闲",
+      "variables_refs": [
+        "V8"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "CT5",
+      "type": "horizon",
+      "expression": "\\theta \\le T_s",
+      "variables_refs": [
+        "V1"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "事件推进机制精确复现 RGV-CNC 交互：每个服务循环由移动、上下料、加工、清洗事件链组成，仿真时钟按最早事件跳跃。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "两道工序通过物料状态机（待一道、待搬运、待二道、完成）建模，事件触发工序转移。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "故障作为随机事件注入：每次加工完成时以概率 1% 生成故障事件，排除时间均匀抽样。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "mechanism_id": "M4",
+      "description": "策略比较与参数批量运行在仿真平台上完成，输出统计表用于实用性检验。",
+      "related_equations": [
+        "E5"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\theta \\leftarrow \\min\\{t_e : e\\in\\mathcal{E}\\}，事件循环推进",
+      "type": "递推",
+      "variables_refs": [
+        "V1",
+        "V2"
+      ],
+      "derivation_trace": "离散事件仿真主循环：取出最早事件并执行其副作用，生成后继事件。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "\\phi_j = w_{req}\\, \\mathbb{1}[j\\in\\mathcal{W}] - w_{dist}\\, d(p,j) + w_{bal}\\, \\mathbb{1}[\\text{奇偶负载低}]",
+      "type": "代数",
+      "variables_refs": [
+        "V6",
+        "V7"
+      ],
+      "derivation_trace": "候选 CNC 优先级打分，RGV 选择分数最高的目标。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\text{物料状态}: \\text{待一道} \\to \\text{待搬运} \\to \\text{待二道} \\to \\text{完成}",
+      "type": "逻辑",
+      "variables_refs": [
+        "V6"
+      ],
+      "derivation_trace": "两道工序物料状态机，事件驱动状态转移。",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "\\gamma_j: \\text{加工完成} \\Rightarrow \\xi \\sim \\text{Bernoulli}(0.01)，\\ \\tau_r \\sim U(600,1200)",
+      "type": "逻辑",
+      "variables_refs": [
+        "V8"
+      ],
+      "derivation_trace": "故障事件生成规则，排除时间均匀抽样。",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "N = \\sum \\mathbb{1}[\\text{完成}],\\quad \\eta_j = \\frac{\\text{加工时长}_j}{T_s},\\quad \\omega = \\sum \\text{等待时长}",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V9"
+      ],
+      "derivation_trace": "仿真输出统计量的定义。",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "驱动"
+    },
+    {
+      "from": "E2",
+      "to": "O1",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "O2",
+      "type": "derives"
+    },
+    {
+      "from": "E4",
+      "to": "O3",
+      "type": "derives"
+    },
+    {
+      "from": "E5",
+      "to": "O4",
+      "type": "derives"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "离散事件仿真器：事件优先队列 + 优先级打分策略，单班次推演",
+      "implementation_ref": "rgv_sim.py",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "method": "两道工序状态机扩展仿真器",
+      "implementation_ref": "rgv_sim_two_stage.py",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S3",
+      "method": "故障注入 + 多次重复运行（20 次）统计期望产量",
+      "implementation_ref": "rgv_sim_failure.py",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S4",
+      "method": "参数网格扫描：优先级权重 w 在 [0,1]³ 上抽样寻优",
+      "implementation_ref": "rgv_sim_tune.py",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "仿真运行",
+      "inputs": {
+        "工况": "一道/第一组参数"
+      },
+      "expected_outputs": {
+        "产量与事件统计": "N、η、空闲占比"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "仿真运行",
+      "inputs": {
+        "工况": "两道/第一组参数"
+      },
+      "expected_outputs": {
+        "在制品曲线": "W(t) 与产量"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "随机注入",
+      "inputs": {
+        "故障率 1%": "20 次重复"
+      },
+      "expected_outputs": {
+        "期望产量分布": "E[N]±σ"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "批量对比",
+      "inputs": {
+        "三组参数": "全部工况"
+      },
+      "expected_outputs": {
+        "汇总表": "产量/利用率/等待"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "单台 CNC 独立运行的解析节拍与仿真对比",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "limit",
+      "method": "移动时间趋零时仿真产量应趋近加工时间上界",
+      "targets_refs": [
+        "O1",
+        "O2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V3",
+      "type": "sensitivity",
+      "method": "优先级权重扰动下产量变化幅度，判定策略鲁棒性",
+      "targets_refs": [
+        "O4"
+      ],
+      "sub_question_binding": "Q4"
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "多组随机数初值重复运行，产量标准差与均值比",
+      "targets_refs": [
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "V5",
+      "type": "convergence",
+      "method": "重复次数从 10 增到 50，期望产量估计的稳定性",
+      "targets_refs": [
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "text": "事件仿真精确复现班次过程，优先级打分策略下产量接近理论上界，主要损耗为 RGV 移动等待。",
+      "type": "机制性结论",
+      "evidence_refs": [
+        "X1",
+        "V1",
+        "V2"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "CL2",
+      "text": "两道工序下在制品曲线呈周期性起伏，第二道预约策略可压低等待峰值。",
+      "type": "机制性结论",
+      "evidence_refs": [
+        "X2",
+        "V5"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "CL3",
+      "text": "1% 故障率下期望产量损失约 2%~4%，故障感知打分的增益主要体现在偶发长排除时段。",
+      "type": "机制性结论",
+      "evidence_refs": [
+        "X3",
+        "V4",
+        "V5"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "CL4",
+      "text": "三组参数下策略产量排序稳定，参数变化不改变策略优劣次序，算法具有通用性。",
+      "type": "实证结论",
+      "evidence_refs": [
+        "X4",
+        "V3"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "事件仿真内核"
+      },
+      {
+        "id": "M2",
+        "label": "工序状态机"
+      },
+      {
+        "id": "M3",
+        "label": "故障注入"
+      },
+      {
+        "id": "M4",
+        "label": "批量统计"
+      },
+      {
+        "id": "E1",
+        "label": "事件循环"
+      },
+      {
+        "id": "E2",
+        "label": "优先级打分"
+      },
+      {
+        "id": "E3",
+        "label": "状态转移"
+      },
+      {
+        "id": "E4",
+        "label": "故障生成"
+      },
+      {
+        "id": "E5",
+        "label": "统计输出"
+      }
+    ],
+    "edges": [
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "驱动"
+      },
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "决策点"
+      },
+      {
+        "from": "M2",
+        "to": "E3",
+        "relation": "驱动"
+      },
+      {
+        "from": "M3",
+        "to": "E4",
+        "relation": "驱动"
+      },
+      {
+        "from": "M4",
+        "to": "E5",
+        "relation": "驱动"
+      }
+    ]
+  },
+  "modeling_trace": "本题系统行为高度事件化（移动、上下料、加工、清洗、故障），离散事件仿真能精确复现班次演化，故选仿真为主模型族。策略以优先级打分形式注入仿真器，通过仿真输出评估；优化仅用于权重调参。候选族中马尔可夫决策与动态规划因状态空间或目标匹配度不足列为辅助。表 1 三组参数直接作为仿真输入，班次 8 小时为仿真时域。"
+}

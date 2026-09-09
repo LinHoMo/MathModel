@@ -1,0 +1,41 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3",
+      "Q2",
+      "Q3"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "finite_difference",
+  "mechanism_count": 5,
+  "equation_count": 5,
+  "validation_plan": {
+    "limit_tests": 4,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "aggregation": "mean_std",
+      "description": "换热系数校准时对初值与数据子采样采用多种子随机数起点，报告校准参数与峰值温度的均值标准差",
+      "metric": "校准 h_conv 与 Q2 最优厚度",
+      "tolerance": "cv < 5%",
+      "result": "5 组随机数起点下 h_conv 的 cv≈1.5%，最优厚度 d_2* 一致，可复现性通过"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 4,
+    "claim_evidence_map": 3
+  }
+}

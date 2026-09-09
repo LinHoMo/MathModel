@@ -1,0 +1,119 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "总热阻趋近于零时皮肤温度应逼近环境温度",
+      "parameter": "R_th",
+      "limit": "0",
+      "expected_behavior": "u_s(t) 快速上升到接近 T_a，峰值逼近环境温度"
+    },
+    {
+      "test_id": "LT2",
+      "description": "总热阻趋近无穷时皮肤温度应保持 37°C",
+      "parameter": "R_th",
+      "limit": "inf",
+      "expected_behavior": "u_s(t) 恒为 37°C，温升为零"
+    },
+    {
+      "test_id": "LT3",
+      "description": "环境温度等于 37°C 时系统应无热流",
+      "parameter": "T_a",
+      "limit": "37",
+      "expected_behavior": "u(x,t) 恒为 37°C，无温升"
+    },
+    {
+      "test_id": "LT4",
+      "description": "IV 层厚度趋近零时问题退化为三层服装",
+      "parameter": "d_4",
+      "limit": "0",
+      "expected_behavior": "皮肤温升曲线与三层模型一致"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "反演初值与搜索初值以多组随机数设定重复运行，报告校准参数与最优厚度的均值标准差，判定收敛到同一区域"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P8",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P8",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P1",
+      "range": "±5°C",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P9",
+      "range": "±5%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "IV 空气层的传热方式",
+      "interpretations": [
+        "纯导热",
+        "等效导热+自然对流",
+        "导热+辐射"
+      ],
+      "adopted": "纯导热（等效导热系数）",
+      "justification": "空气层薄且温差小，自然对流与辐射贡献并入等效导热系数，避免非线性"
+    },
+    {
+      "source": "初始温度场的设定",
+      "interpretations": [
+        "等于环境温度",
+        "等于 37°C",
+        "线性插值"
+      ],
+      "adopted": "等于环境温度",
+      "justification": "实验前服装在实验室热平衡，且与反演残差前段偏差的诊断一致"
+    },
+    {
+      "source": "皮肤边界类型",
+      "interpretations": [
+        "第一类等温 37°C",
+        "第二类绝热",
+        "第三类对流"
+      ],
+      "adopted": "第一类等温",
+      "justification": "题面明确假人体温控制为 37°C，等温边界与实验装置一致"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "CL1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "CL2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "CL3",
+      "evidence_ref": "V3",
+      "status": "supported"
+    }
+  ]
+}

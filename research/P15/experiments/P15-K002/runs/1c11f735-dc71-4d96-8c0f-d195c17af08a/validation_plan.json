@@ -1,0 +1,101 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "服务强度趋于1（到达率等于服务能力）时平均等待时间应发散",
+      "parameter": "到达率 lambda_p",
+      "limit": "lambda_p -> c*mu",
+      "expected_behavior": "W_q -> +inf，排队不稳定，需要增加服务台或限流"
+    },
+    {
+      "test_id": "LT2",
+      "description": "到达率趋于0时系统无排队",
+      "parameter": "到达率 lambda_p",
+      "limit": "lambda_p -> 0",
+      "expected_behavior": "W_q -> 1/mu（仅剩服务时间），队列长度为0"
+    },
+    {
+      "test_id": "LT3",
+      "description": "短途优先占比趋于0时退化为无优先的普通排队",
+      "parameter": "优先占比 theta",
+      "limit": "theta -> 0",
+      "expected_behavior": "长短途等待时间相同，等于基础W_q"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "布局优化与优先仿真中涉及随机到达与随机服务，多种子运行取平均与标准差衡量稳定性"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P7",
+      "range": "±15%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "等待时间口径：司机排队等待是否包含从蓄车池进乘车区的二次等待",
+      "interpretations": [
+        "仅计蓄车池等待",
+        "计蓄车池+乘车区等待总和",
+        "计到上车为止的全部时间"
+      ],
+      "adopted": "计蓄车池+乘车区等待总和",
+      "justification": "司机决策基于到载客为止的总时间成本，总等待最贴近其收益比较"
+    },
+    {
+      "source": "短途阈值如何界定",
+      "interpretations": [
+        "按里程固定阈值",
+        "按车费区间",
+        "按行驶时间"
+      ],
+      "adopted": "按里程固定阈值",
+      "justification": "题面以行驶里程表述收益，里程阈值可操作且与计价规则一致"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "hypothesis"
+    }
+  ]
+}

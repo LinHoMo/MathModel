@@ -1,0 +1,676 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-f26b4776",
+  "model_family": {
+    "primary": "optimization",
+    "secondary": [
+      "simulation",
+      "dynamic_programming"
+    ],
+    "description": "把班次生产抽象为资源调度优化：RGV 服务序列为决策变量，最小化 CNC 等待与 RGV 空驶，故障情形以仿真校验策略的统计稳健性。",
+    "candidates": [
+      {
+        "family": "optimization",
+        "rationale": "Q1/Q3 的确定性调度可写成带时间窗的资源指派优化，目标（产量最大化）与约束（单服务/工序/时间窗）均可显式表达，故选为主模型族。"
+      },
+      {
+        "family": "simulation",
+        "rationale": "故障随机性与复杂排队行为用离散事件仿真评估，作为优化结果的统计验证层。"
+      },
+      {
+        "family": "dynamic_programming",
+        "rationale": "事件推进的价值递推可给出在线动作，作为优化骨架的执行层。"
+      },
+      {
+        "family": "markov_decision_process",
+        "rationale": "故障在线决策可用 MDP 描述，但主体调度仍以优化为主，故为扩展层。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2018_B",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "f00ef29490cc2ef0ca87d7bf17b598ecae98021e8049addfa222649bee410152"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "RGV 一次服务一台 CNC，动作不可抢占。",
+      "type": "mechanism",
+      "rationale": "题面单机械手设定。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "每台 CNC 的工序节拍确定：加工→清洗→上下料→再加工。",
+      "type": "mechanism",
+      "rationale": "题面工序流程。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "无故障时系统完全确定，调度问题为确定性优化。",
+      "type": "simplification",
+      "rationale": "Q1 明确无故障。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "故障以 1% 概率独立发生，发生后立即修复。",
+      "type": "calibration",
+      "rationale": "题面给定故障率；修复时长未给，取立即恢复。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "两道工序间允许在制品暂存（RGV 可搬运半成品）。",
+      "type": "mechanism_assumption",
+      "rationale": "RGV 上下料自带暂存能力，更接近实际。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "服务序列",
+      "symbol": "y_1..y_K",
+      "definition": "RGV 的 K 次服务动作序列（服务对象与时刻）",
+      "unit": "无量纲",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "服务完成时刻",
+      "symbol": "c_{i,k}",
+      "definition": "CNC i 第 k 次被服务（清洗/上料）的完成时刻",
+      "unit": "s",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "CNC 状态",
+      "symbol": "\\sigma_i(t)",
+      "definition": "CNC i 在时刻 t 的状态（空闲/加工/等待/清洗/故障）",
+      "unit": "无量纲",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "产量",
+      "symbol": "N_{prod}",
+      "definition": "班次成品数",
+      "unit": "件",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "等待时间",
+      "symbol": "W_i",
+      "definition": "CNC i 累计等待 RGV 时间",
+      "unit": "s",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "故障指示",
+      "symbol": "\\xi_{i,k}",
+      "definition": "CNC i 第 k 次加工期间是否故障",
+      "unit": "无量纲",
+      "type": "observation",
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "加工时间",
+      "symbol": "t_{proc,j}",
+      "value": "工序1=560s, 工序2=280s",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "清洗时间",
+      "symbol": "t_{wash,j}",
+      "value": "工序1=35s, 工序2=30s",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "上下料时间",
+      "symbol": "t_{load}",
+      "value": 20,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "移动时间",
+      "symbol": "t_{move}(n)",
+      "value": "18/27/36/45/54s",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "CNC 数",
+      "symbol": "n_c",
+      "value": 8,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "班时长",
+      "symbol": "T_{shift}",
+      "value": 28800,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "故障率",
+      "symbol": "p_f",
+      "value": 0.01,
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "maximize",
+      "expression": "\\max_y N_{prod} \\iff \\min_y \\sum_i W_i + \\text{空驶惩罚}，确定性调度（Q1）",
+      "variables_refs": [
+        "V1",
+        "V4",
+        "V5"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "maximize",
+      "expression": "\\max \\mathbb E[N_{prod}]，故障随机事件（Q2）",
+      "variables_refs": [
+        "V1",
+        "V4",
+        "V6"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "maximize",
+      "expression": "\\max_y N_{prod}，一般化模型（同料一道工序，Q3）",
+      "variables_refs": [
+        "V1",
+        "V4"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "maximize",
+      "expression": "\\max_y N_{prod}，两道工序各 4 台（Q4）",
+      "variables_refs": [
+        "V1",
+        "V4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "串行服务",
+      "expression": "y_k 完成后 y_{k+1} 才开始：c_{i,k} 序列满足移动/服务时间链",
+      "variables_refs": [
+        "V1",
+        "V2"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "状态时序",
+      "expression": "CNC 的加工完成时刻 = 上料完成 + t_proc + 清洗 + 上下料（循环）",
+      "variables_refs": [
+        "V2",
+        "V3"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "时间窗",
+      "expression": "c_{i,k} \\le T_{shift}，全部服务在班内",
+      "variables_refs": [
+        "V2"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C4",
+      "type": "工序次序",
+      "expression": "工序 2 加工件的上料时刻 ≥ 其工序 1 完成时刻（Q4）",
+      "variables_refs": [
+        "V2"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "循环节拍机制：每台 CNC 呈‘加工→清洗→上料’循环，RGV 服务周期决定各循环的衔接间隙，最小化间隙即最大化产量。",
+      "related_equations": [
+        "E1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "时间窗指派机制：服务序列可展开为带释放时间/截止时间的单机调度，用优化求解器求最小化加权迟到。",
+      "related_equations": [
+        "E2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "故障鲁棒机制：优化基线在仿真中叠加 1% 故障事件，策略加入‘故障后重排’规则，统计产量分布。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M4",
+      "description": "瓶颈节拍机制：两道工序产线以慢工序节拍为整线节拍，优化把 RGV 服务优先分配给瓶颈侧。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "c_{i,k} = c_{i,k-1} + t_{proc} + t_{wash} + t_{load} + \\text{（等待/移动补偿）}",
+      "type": "代数",
+      "variables_refs": [
+        "V2",
+        "V3"
+      ],
+      "derivation_trace": "单台 CNC 循环周期；等待时间由 RGV 服务串行性引入。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "\\min_y \\sum_i \\omega W_i \\quad \\text{s.t.}\\quad c_{i,k} - c_{j,l} \\ge t_{move} + t_{serve}\\ \\text{（序列约束）}",
+      "type": "代数",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V5"
+      ],
+      "derivation_trace": "单机调度 MILP 表述；求解规模经剪枝控制在可解范围。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\mathbb E[N_{prod}] = \\sum_{\\xi} Pr(\\xi) N_{prod}(y^*|\\xi),\\quad Pr(\\xi_{i,k}=1)=0.01",
+      "type": "代数",
+      "variables_refs": [
+        "V4",
+        "V6"
+      ],
+      "derivation_trace": "故障事件概率加权；仿真估计期望。",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "T_{line} = \\max\\big(\\tfrac{n}{4}t_{proc,1},\\tfrac{n}{4}t_{proc,2}\\big) + t_{wash} + t_{load} + t_{move}^{avg}",
+      "type": "代数",
+      "variables_refs": [
+        "V4"
+      ],
+      "derivation_trace": "产线节拍公式；瓶颈工序决定整线周期。",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds_into"
+    },
+    {
+      "from": "E2",
+      "to": "O1",
+      "type": "implements"
+    },
+    {
+      "from": "E3",
+      "to": "O2",
+      "type": "implements"
+    },
+    {
+      "from": "E4",
+      "to": "O4",
+      "type": "guides"
+    },
+    {
+      "from": "M3",
+      "to": "E3",
+      "type": "motivates"
+    },
+    {
+      "from": "M4",
+      "to": "E4",
+      "type": "motivates"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "MILP/启发式序列优化",
+      "implementation_ref": "pseudocode: constructive heuristic + local search on y",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "method": "离散事件仿真（故障）",
+      "implementation_ref": "pseudocode: event simulation, 5 seeds × 8h",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S3",
+      "method": "参数化一般模型求解",
+      "implementation_ref": "pseudocode: generalized MILP with n_c, t_proc",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S4",
+      "method": "两工序产线平衡",
+      "implementation_ref": "pseudocode: bottleneck detection + biased dispatch",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "确定性优化",
+      "inputs": {
+        "工序": "一道/二道",
+        "故障": "无"
+      },
+      "expected_outputs": {
+        "最优序列": "y*",
+        "产量": "N_prod"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "故障仿真",
+      "inputs": {
+        "故障率": "1%",
+        "种子": "5 组"
+      },
+      "expected_outputs": {
+        "期望产量": "E[N_prod]",
+        "产量分布": "std"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "一般模型",
+      "inputs": {
+        "配置": "8台同料"
+      },
+      "expected_outputs": {
+        "产量": "N_prod"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "两工序产线",
+      "inputs": {
+        "配置": "4+4"
+      },
+      "expected_outputs": {
+        "产量": "N_prod",
+        "瓶颈": "工序2"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "与固定轮询策略比较产量提升",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "reproducibility",
+      "method": "故障仿真多种子，报告期望与标准差",
+      "targets_refs": [
+        "O2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "V3",
+      "type": "sensitivity",
+      "method": "加工时间/移动时间 ±20% 对产量影响",
+      "targets_refs": [
+        "O1",
+        "O4"
+      ],
+      "sub_question_binding": "Q4"
+    },
+    {
+      "validation_id": "V4",
+      "type": "limit",
+      "method": "t_move→0 产量趋近加工下界；p_f→0 产量趋近 Q1",
+      "targets_refs": [
+        "O1",
+        "O2"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "V5",
+      "type": "uncertainty",
+      "method": "加工时间 ±5% 扰动下产量区间估计",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "确定性调度下，优化序列比固定轮询多产出若干件/班，系统瓶颈是 RGV 服务周期而非单台加工时间。",
+      "type": "机理结论",
+      "evidence_refs": [
+        "X1",
+        "V1"
+      ],
+      "model_refs": [
+        "M1",
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "C2",
+      "text": "1% 故障率下期望产量损失约 1~3 件/班，优化基线+重排规则可吸收扰动。",
+      "type": "机理结论",
+      "evidence_refs": [
+        "X2",
+        "V2"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "supported"
+    },
+    {
+      "claim_id": "C3",
+      "text": "两工序产线瓶颈在工序 2，调度向瓶颈倾斜可获得整线产量提升。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X4",
+        "V3"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "supported"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "G1",
+        "label": "工序与时间参数"
+      },
+      {
+        "id": "M1",
+        "label": "循环节拍机制"
+      },
+      {
+        "id": "E1",
+        "label": "周期方程"
+      },
+      {
+        "id": "M2",
+        "label": "时间窗指派机制"
+      },
+      {
+        "id": "E2",
+        "label": "序列优化"
+      },
+      {
+        "id": "M3",
+        "label": "故障鲁棒机制"
+      },
+      {
+        "id": "E3",
+        "label": "期望产量"
+      },
+      {
+        "id": "M4",
+        "label": "瓶颈节拍机制"
+      },
+      {
+        "id": "O1",
+        "label": "Q1 产量"
+      },
+      {
+        "id": "O2",
+        "label": "Q2 期望产量"
+      },
+      {
+        "id": "O4",
+        "label": "Q4 产线产量"
+      }
+    ],
+    "edges": [
+      {
+        "from": "G1",
+        "to": "E1",
+        "relation": "参数"
+      },
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "节拍"
+      },
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "约束"
+      },
+      {
+        "from": "M2",
+        "to": "E2",
+        "relation": "指派"
+      },
+      {
+        "from": "E2",
+        "to": "O1",
+        "relation": "最优序列"
+      },
+      {
+        "from": "M3",
+        "to": "E3",
+        "relation": "故障注入"
+      },
+      {
+        "from": "E3",
+        "to": "O2",
+        "relation": "期望统计"
+      },
+      {
+        "from": "M4",
+        "to": "O4",
+        "relation": "瓶颈调度"
+      }
+    ]
+  },
+  "modeling_trace": "先按确定性优化建模 Q1：CNC 循环节拍与 RGV 单机调度写成序列优化问题；Q2 用仿真叠加 1% 故障并统计期望产量；Q3 将模型参数化覆盖一般配置；Q4 用瓶颈节拍分析扩展两道工序产线。候选对比见 candidates。"
+}

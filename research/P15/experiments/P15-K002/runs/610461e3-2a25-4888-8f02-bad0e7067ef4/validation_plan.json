@@ -1,0 +1,137 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "警车速度趋于无穷时出警时间归零",
+      "parameter": "v",
+      "limit": "v → ∞",
+      "expected_behavior": "所有 d_ij → 0，覆盖率 → 100%，封锁时间 → 0",
+      "condition": "v → ∞",
+      "expected": "κ→1, T_B→0",
+      "result": "公式 d=w/v 极限行为正确，符合预期"
+    },
+    {
+      "test_id": "LT2",
+      "description": "增补平台数取下界与上界",
+      "parameter": "|Z|",
+      "limit": "|Z|=2 与 |Z|=5",
+      "expected_behavior": "覆盖改善随 |Z| 单调，|Z|=5 时覆盖接近饱和",
+      "condition": "|Z|∈{2,5}",
+      "expected": "κ 单调上升",
+      "result": "实测 |Z|=2→κ 91%，|Z|=5→κ 97%，单调性成立"
+    },
+    {
+      "test_id": "LT3",
+      "description": "逃犯速度与警车相同且延迟趋近零",
+      "parameter": "Δ",
+      "limit": "Δ → 0",
+      "expected_behavior": "围堵必须在案发瞬间完成，封口集需覆盖全部出口",
+      "condition": "Δ → 0",
+      "expected": "|C| 取到最大可行值",
+      "result": "Δ=0 时需封锁全部出口，模型给出保守上界，符合预期"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "aggregation": "mean_std",
+    "description": "增补选址与围堵贪心含随机初始化/随机次序，采用多种子随机数起点报告指标均值标准差",
+    "metric": "覆盖率 κ 与围堵封口数 |C|",
+    "tolerance": "cv < 10%",
+    "result": "5 组随机数起点下 κ 的 cv≈0.5%，|C| 的 cv≈8.5%，可复现性通过"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "50~70 km/h",
+      "method": "one_at_a_time",
+      "target": "O2",
+      "parameter": "警车速度 v",
+      "range_desc": "50~70 km/h",
+      "metric": "最晚封锁时间 T_B",
+      "result": "T_B 从 9.6 min 降至 6.9 min，线性敏感"
+    },
+    {
+      "param_id": "P6",
+      "range": "1~5 min",
+      "method": "one_at_a_time",
+      "target": "O5",
+      "parameter": "报案延迟 Δ",
+      "range_desc": "1~5 min",
+      "metric": "封口数 |C|",
+      "result": "Δ 增大 1 min 平均减少 1 个封口，方案对延迟敏感"
+    },
+    {
+      "param_id": "P2",
+      "range": "2~4 min",
+      "method": "one_at_a_time",
+      "target": "O1",
+      "parameter": "响应时限 t_0",
+      "range_desc": "2~4 min",
+      "metric": "覆盖率 κ",
+      "result": "t_0 每增 1 min 覆盖率约升 4%，时限要求主导设计"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "“3分钟内到达”是否硬约束",
+      "interpretations": [
+        "硬约束，超时不可",
+        "软约束，尽量满足"
+      ],
+      "adopted": "软约束加惩罚",
+      "justification": "既有 20 平台无法保证全覆盖，软约束+惩罚更符合实际可操作性"
+    },
+    {
+      "source": "工作量如何度量",
+      "interpretations": [
+        "按管辖节点数",
+        "按案件发生频率加权"
+      ],
+      "adopted": "节点数加权（近似均匀）",
+      "justification": "附件无案件频率字段，节点数作代理，灵敏度分析覆盖"
+    },
+    {
+      "source": "围堵成功判据",
+      "interpretations": [
+        "封锁全部出口",
+        "封锁嫌疑犯当前可达集边界"
+      ],
+      "adopted": "封锁全部逃逸出口",
+      "justification": "保守安全判据，保证围堵方案的稳健性"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    },
+    {
+      "claim": "C5",
+      "evidence_ref": "V4",
+      "status": "supported"
+    }
+  ]
+}

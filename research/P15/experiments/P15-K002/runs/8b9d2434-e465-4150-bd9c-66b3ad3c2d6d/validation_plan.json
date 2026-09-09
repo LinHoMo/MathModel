@@ -1,0 +1,122 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "负重上限趋于无穷：资源约束应松弛，最优策略变为携带最大可行水食物组合，终局资金仅受购买预算与退款损失限制。",
+      "parameter": "W_max",
+      "limit": "W_max → ∞",
+      "expected_behavior": "约束 C1 变为非活性，值函数对 W_max 的偏导趋于 0"
+    },
+    {
+      "test_id": "LT2",
+      "description": "玩家数 N 退化为 1：拥挤倍率 κ 应全部失效，多人模型应还原为单玩家 MDP 的结果。",
+      "parameter": "N",
+      "limit": "N → 1",
+      "expected_behavior": "E4 均衡退化为单玩家最优，C7 约束自动满足，终局资金与单人模型逐位一致"
+    },
+    {
+      "test_id": "LT3",
+      "description": "截止天数 T 趋于 0：玩家无时间到达终点，任何可行策略均失败，值函数应趋于负无穷。",
+      "parameter": "T",
+      "limit": "T → 0",
+      "expected_behavior": "v_0(s_0) → -∞，所有策略被判定不可行"
+    },
+    {
+      "test_id": "LT4",
+      "description": "挖矿收益 g_0 趋于 0：矿山失去经济价值，最优策略应回避矿山并减少停留挖矿。",
+      "parameter": "g_0",
+      "limit": "g_0 → 0",
+      "expected_behavior": "策略中挖矿动作占比趋于 0，路径变为最短可行路径"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "对 Q2/Q3 的随机模拟与均衡迭代，采用 5 组随机数初始化分别运行，报告期望资金与均衡资金的均值±标准差，检验算法稳定性。"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P11",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P7",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P9",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P4",
+      "range": "±15%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "题面未给出天气过程生成机制，仅区分三种天气与消耗规则",
+      "interpretations": [
+        "假设天气独立同分布，按经验频率抽样",
+        "假设天气为一阶马尔可夫链，按转移矩阵演化"
+      ],
+      "adopted": "一阶马尔可夫链（A1），并在 sensitivity 中对转移矩阵整体扰动以覆盖两种解释",
+      "justification": "马尔可夫假设与 MDP 框架一致，且能表达相邻日天气的相关性；i.i.d. 是转移矩阵行相同的退化特例"
+    },
+    {
+      "source": "“到达矿山当天不能挖矿”与“沙暴日也可挖矿”的组合规则",
+      "interpretations": [
+        "到达当天若为沙暴日仍不能挖矿",
+        "沙暴日挖矿规则优先于到达日限制"
+      ],
+      "adopted": "到达当天一律不能挖矿，无论是否沙暴日（A4 的机制约束）",
+      "justification": "题面第（7）条“到达矿山当天不能挖矿”为一般性限制，沙暴日条款仅解除沙暴对挖矿的禁止"
+    },
+    {
+      "source": "Q3 中“任意 k 名玩家均从 A 行走到 B”的判定口径",
+      "interpretations": [
+        "以出发区域 A 相同判定同行",
+        "以到达区域 B 相同判定同行",
+        "以移动边 (A,B) 完全相同判定同行"
+      ],
+      "adopted": "移动边 (A,B) 完全相同才计为同行（A5 的拥挤口径）",
+      "justification": "题面表述为“均从区域 A 行走到区域 B(B≠A)”，强调的是同一路段，故以完整移动边为口径"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V4",
+      "status": "hypothesis"
+    }
+  ]
+}

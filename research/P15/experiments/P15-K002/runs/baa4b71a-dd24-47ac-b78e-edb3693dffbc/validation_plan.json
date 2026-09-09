@@ -1,0 +1,124 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "预算趋于零时无任务可提价，期望完成数趋零",
+      "parameter": "C_max",
+      "limit": "0",
+      "expected_behavior": "N -> 0，全部定价落在下限附近"
+    },
+    {
+      "test_id": "LT2",
+      "description": "预算趋于无穷时所有任务定价饱和，完成率趋近地理可达性上界",
+      "parameter": "C_max",
+      "limit": "inf",
+      "expected_behavior": "完成率不再随预算增长，稳定于上界"
+    },
+    {
+      "test_id": "LT3",
+      "description": "会员密度趋于零时即使高价也无会员接单，完成率趋零",
+      "parameter": "rho",
+      "limit": "0",
+      "expected_behavior": "pi_i -> 0，价格不再有效"
+    },
+    {
+      "test_id": "LT4",
+      "description": "距离成本系数趋于零时距离不再是约束，完成率仅由价格决定",
+      "parameter": "alpha_d",
+      "limit": "0",
+      "expected_behavior": "完成率排序与距离解耦"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "优化初值与聚类初值以多组随机数设定重复运行，报告期望完成数与定价方案的均值标准差，验证收敛到同一方案区域"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P2",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P7",
+      "range": "1~5 km",
+      "method": "grid",
+      "target": "O3"
+    },
+    {
+      "param_id": "P5",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "会员接单行为是否受信誉影响",
+      "interpretations": [
+        "信誉仅影响排序与配额",
+        "信誉直接进入效用函数",
+        "信誉不影响接单"
+      ],
+      "adopted": "信誉直接进入效用函数",
+      "justification": "附件二显式给出信誉值，纳入效用可解释高信誉会员更易接单的观测"
+    },
+    {
+      "source": "打包后簇内任务的完成概率",
+      "interpretations": [
+        "竞争折扣降低单任务概率",
+        "打包整体作为一个任务",
+        "打包不改变概率"
+      ],
+      "adopted": "竞争折扣降低单任务概率",
+      "justification": "簇内争相选择导致单任务被选概率下降，但簇整体完成率上升，符合实际撮合机制"
+    },
+    {
+      "source": "预算约束的口径",
+      "interpretations": [
+        "原方案总成本",
+        "平台固定预算未知",
+        "无限预算"
+      ],
+      "adopted": "原方案总成本",
+      "justification": "题面要求与原有方案比较，预算一致才可比"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "CL1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "CL2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "CL3",
+      "evidence_ref": "V4",
+      "status": "supported"
+    },
+    {
+      "claim": "CL4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    }
+  ]
+}

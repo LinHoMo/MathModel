@@ -1,0 +1,640 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-a53f8a28",
+  "model_family": {
+    "primary": "decision_tree",
+    "secondary": [
+      "statistical_classification"
+    ],
+    "description": "以决策树为主线：用可读的树规则刻画类型判别与亚类划分，用回归树实现风化复原，树的分裂变量与重要性揭示成分关联与类别差异。",
+    "candidates": [
+      {
+        "family": "decision_tree",
+        "rationale": "题面要求给出'具体的划分方法及划分结果'，决策树直接产出成分阈值形式的显式规则，天然满足可解释与可复现要求。"
+      },
+      {
+        "family": "clustering",
+        "rationale": "聚类产出软性分组但无显式规则，难以转化为成分阈值判据，作为对照候选。"
+      },
+      {
+        "family": "supervised_learning",
+        "rationale": "通用监督模型预测精度高但规则可读性弱，对'给出划分方法'的交付要求支持不足，作为备选。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2022_C",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "有效数据为累加和85%至105%的样品，树模型在该子集上生长。",
+      "type": "calibration",
+      "rationale": "统一训练口径，避免噪声样品诱导伪分裂。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "类别与亚类边界可被有限个成分阈值近似，即边界是轴对齐的分段常值结构。",
+      "type": "simplification",
+      "rationale": "树模型的轴对齐分裂与成分阈值的解释性天然匹配；若边界倾斜可用少量树集成补偿。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "风化偏移在同一叶节点（同类型同亚类）内近似一致，可用叶内回归常数实现复原。",
+      "type": "mechanism_assumption",
+      "rationale": "叶节点聚集同质样品，叶内偏移一致性高于全局，复原精度随叶纯度提升。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "树的分裂变量重要性反映成分对类别区分的贡献，即成分关联结构的直接体现。",
+      "type": "mechanism",
+      "rationale": "基尼/信息增益按贡献分配重要性，重要性排序即区分与关联的关键成分排序。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "为防止过拟合，树深度与叶最小样本数由交叉验证确定，重要分裂需满足最小增益阈值。",
+      "type": "simplification",
+      "rationale": "小样本高维数据易过拟合，剪枝与增益阈值是必要约束。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "风化标记",
+      "symbol": "W_i",
+      "definition": "样品风化与否",
+      "unit": "类别",
+      "type": "observation",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V2",
+      "name": "类型标签",
+      "symbol": "T_i",
+      "definition": "高钾/铅钡类别",
+      "unit": "类别",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "纹饰颜色",
+      "symbol": "(D_i,C_i)",
+      "definition": "外观特征",
+      "unit": "类别",
+      "type": "observation",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V4",
+      "name": "成分特征",
+      "symbol": "x_i",
+      "definition": "成分向量（含缺失标志）",
+      "unit": "%",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "累加和",
+      "symbol": "S_i",
+      "definition": "成分之和",
+      "unit": "%",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V6",
+      "name": "叶节点标签",
+      "symbol": "L_i",
+      "definition": "第i样品所属叶节点",
+      "unit": "类别",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V7",
+      "name": "复原预测",
+      "symbol": "\\hat{x}_i^{pre}",
+      "definition": "回归树叶内均值复原值",
+      "unit": "%",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V8",
+      "name": "分裂规则",
+      "symbol": "R_m",
+      "definition": "第m条形如'成分j > 阈值'的规则",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V9",
+      "name": "特征重要性",
+      "symbol": "\\phi_j",
+      "definition": "第j成分的基尼重要性",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "有效区间",
+      "symbol": "[L_{lo},L_{hi}]",
+      "value": "[85,105]",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "最大深度",
+      "symbol": "d_{max}",
+      "value": 4,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "叶最小样本数",
+      "symbol": "n_{leaf}",
+      "value": 3,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "最小增益",
+      "symbol": "\\Delta_{min}",
+      "value": 0.01,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "交叉验证折数",
+      "symbol": "k_{cv}",
+      "value": 5,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "重要性阈值",
+      "symbol": "\\phi_{th}",
+      "value": 0.05,
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "minimize",
+      "expression": "\\min_{T} \\sum_{i} (x_i^{未风化} - \\hat{x}_i^{pre})^2",
+      "variables_refs": [
+        "V7",
+        "V4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "minimize",
+      "expression": "\\min_{T} \\sum_{m} \\text{Gini}(\\text{节点}_m)",
+      "variables_refs": [
+        "V8",
+        "V6",
+        "V4"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "minimize",
+      "expression": "\\min_{T} \\frac{1}{n} \\sum_i \\mathbb{1}[\\hat{T}_i \\ne T_i]",
+      "variables_refs": [
+        "V6",
+        "V2",
+        "V4"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "estimate",
+      "expression": "\\phi_j = \\sum_{m} \\Delta \\text{Gini}_m \\cdot \\mathbb{1}[\\text{分裂用} j]",
+      "variables_refs": [
+        "V9",
+        "V8"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "数据有效性",
+      "expression": "85 \\le S_i \\le 105",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "树复杂度",
+      "expression": "\\text{depth} \\le d_{max}, \\quad |\\text{叶}| \\ge n_{leaf}",
+      "variables_refs": [
+        "V6"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "规则确定性",
+      "expression": "\\text{每条路径对应唯一类别/叶}",
+      "variables_refs": [
+        "V8"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C4",
+      "type": "成分非负",
+      "expression": "\\hat{x}_i^{pre} \\ge 0",
+      "variables_refs": [
+        "V7"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "类型判别与亚类划分需要显式成分阈值规则，树的贪心分裂天然产出阈值，且每条路径即一条可读判据。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "回归树将样品递归分割为同质叶，叶内均值作为风化前成分估计，叶纯度越高复原越准。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "分裂变量的基尼重要性累计各节点纯度增益，排序揭示成分对类别区分的贡献，即关联结构。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\text{Gini}(\\text{节点}) = 1 - \\sum_k p_k^2",
+      "type": "代数",
+      "variables_refs": [
+        "V6",
+        "V2"
+      ],
+      "derivation_trace": "基尼不纯度定义，选择使不纯度下降最大的成分阈值分裂",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "R_m: \\ x_j \\le \\tau_m \\ \\text{或} \\ x_j > \\tau_m",
+      "type": "逻辑",
+      "variables_refs": [
+        "V8",
+        "V4"
+      ],
+      "derivation_trace": "轴对齐阈值规则，路径合取构成叶",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\hat{x}_i^{pre} = \\frac{1}{|\\text{叶}(i)|} \\sum_{i' \\in \\text{叶}(i)} x_{i'}^{未风化}",
+      "type": "代数",
+      "variables_refs": [
+        "V7",
+        "V6",
+        "V4"
+      ],
+      "derivation_trace": "回归树叶内均值预测，叶由风化特征与类型分裂定义",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "\\phi_j = \\frac{1}{N} \\sum_{m} N_m \\Delta \\text{Gini}_m \\mathbb{1}[j \\in \\text{split}(m)]",
+      "type": "代数",
+      "variables_refs": [
+        "V9",
+        "V8"
+      ],
+      "derivation_trace": "基尼重要性：节点样本加权纯度增益累计到分裂成分",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "derives"
+    },
+    {
+      "from": "E2",
+      "to": "E3",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "E4",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "O1",
+      "type": "implements"
+    },
+    {
+      "from": "E2",
+      "to": "O3",
+      "type": "implements"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "CART贪心分裂与后剪枝",
+      "implementation_ref": "递归二分+代价复杂度剪枝",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "回归树叶均值估计",
+      "implementation_ref": "树预测器批量推断",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S3",
+      "method": "基尼重要性汇总",
+      "implementation_ref": "遍历树节点累计",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "规则提取实验",
+      "inputs": {
+        "数据": "已知类别样本",
+        "方法": "E1+E2"
+      },
+      "expected_outputs": {
+        "输出": "判别规则集",
+        "评价": "规则覆盖度与准确率"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "叶内复原实验",
+      "inputs": {
+        "数据": "成对点",
+        "方法": "E3"
+      },
+      "expected_outputs": {
+        "输出": "复原值",
+        "评价": "叶内CV误差"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "鉴别实验",
+      "inputs": {
+        "数据": "表单3",
+        "方法": "E2路径推断"
+      },
+      "expected_outputs": {
+        "输出": "类型预测与规则路径",
+        "评价": "交叉验证错分率"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "重要性实验",
+      "inputs": {
+        "数据": "全样本",
+        "方法": "E4"
+      },
+      "expected_outputs": {
+        "输出": "重要性排序",
+        "评价": "排序稳定性"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "与单变量阈值基线和逻辑回归基线比较判别准确率",
+      "targets_refs": [
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "V2",
+      "type": "reproducibility",
+      "method": "Bootstrap重采样重长树，报告规则集合的一致率",
+      "targets_refs": [
+        "O2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "V3",
+      "type": "sensitivity",
+      "method": "扰动深度与叶最小样本数，观察错分率与规则变化",
+      "targets_refs": [
+        "O2",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V4",
+      "type": "convergence",
+      "method": "验证剪枝路径上验证误差随复杂度单调先降后升",
+      "targets_refs": [
+        "O2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "V5",
+      "type": "uncertainty",
+      "method": "对缺失填充变体比较重要性排序差异",
+      "targets_refs": [
+        "O4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "判别树产出的规则集以PbO、BaO、K2O为主分裂变量，规则可读且覆盖全部训练样本。",
+      "type": "统计结论",
+      "evidence_refs": [
+        "X1",
+        "V2",
+        "V4"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "叶内均值复原在成对点上误差低于全局均值基线，叶纯度提升复原精度。",
+      "type": "统计结论",
+      "evidence_refs": [
+        "X2"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "未知样品沿规则路径的鉴别结果对剪枝参数扰动稳健，错分率与逻辑回归基线相当或更优。",
+      "type": "预测结论",
+      "evidence_refs": [
+        "X3",
+        "V1",
+        "V3"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "基尼重要性排序表明两类区分主要由PbO/BaO与K2O贡献，重要性排序在Bootstrap下稳定。",
+      "type": "统计结论",
+      "evidence_refs": [
+        "X4",
+        "V5"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "V4",
+        "label": "成分特征"
+      },
+      {
+        "id": "E1",
+        "label": "基尼分裂选择"
+      },
+      {
+        "id": "E2",
+        "label": "规则树"
+      },
+      {
+        "id": "E3",
+        "label": "叶内复原回归"
+      },
+      {
+        "id": "E4",
+        "label": "基尼重要性"
+      }
+    ],
+    "edges": [
+      {
+        "from": "V4",
+        "to": "E1",
+        "relation": "输入"
+      },
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "生长"
+      },
+      {
+        "from": "E2",
+        "to": "E3",
+        "relation": "叶供给"
+      },
+      {
+        "from": "E2",
+        "to": "E4",
+        "relation": "统计"
+      }
+    ]
+  },
+  "modeling_trace": "题面明确要求给出'划分方法与划分结果'，可读的阈值规则是交付核心，故选决策树主线：CART树产出显式规则用于判别与亚类划分，回归树叶均值用于风化复原，基尼重要性用于关联分析。对比聚类（无显式规则）与通用监督模型（规则不可读）后确认。复杂度由交叉验证与剪枝控制，结果以Bootstrap评估稳定性。"
+}

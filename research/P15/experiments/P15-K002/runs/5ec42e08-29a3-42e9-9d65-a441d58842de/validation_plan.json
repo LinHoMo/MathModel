@@ -1,0 +1,96 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "II层厚度趋于无穷时皮肤温度应趋于恒温37°C",
+      "parameter": "II层厚度 d2",
+      "limit": "d2 -> inf",
+      "expected_behavior": "皮肤外侧温度趋于37°C，超温时长为0"
+    },
+    {
+      "test_id": "LT2",
+      "description": "IV层厚度趋于0时皮肤温度趋于III层表面温度",
+      "parameter": "IV层厚度 d4",
+      "limit": "d4 -> 0",
+      "expected_behavior": "皮肤温度与III层外表面温度一致，隔热能力下降"
+    },
+    {
+      "test_id": "LT3",
+      "description": "时间步长趋于0时差分解应收敛到连续方程解",
+      "parameter": "时间步长 dt",
+      "limit": "dt -> 0",
+      "expected_behavior": "皮肤温度曲线趋于网格无关极限，差异<0.05°C"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "换热系数反演含拟合初始值选择，多种子运行报告最优厚度与皮肤温度均值标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P7",
+      "range": "±15%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P1",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P5",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "外表面换热边界的形式",
+      "interpretations": [
+        "对流换热边界 h(T_env - T)",
+        "第一类边界直接给环境温度",
+        "辐射+对流复合边界"
+      ],
+      "adopted": "对流换热边界 h(T_env - T)",
+      "justification": "题面为高温空气环境，对流换热为主；h由实测反演可吸收辐射贡献"
+    },
+    {
+      "source": "皮肤侧边界条件",
+      "interpretations": [
+        "皮肤恒温37°C",
+        "皮肤绝热",
+        "皮肤侧对流"
+      ],
+      "adopted": "皮肤恒温37°C",
+      "justification": "题面将假人体内温度控制在37°C，恒温边界最贴近实验设置"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V4",
+      "status": "hypothesis"
+    }
+  ]
+}

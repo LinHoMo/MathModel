@@ -1,0 +1,40 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "optimization",
+  "mechanism_count": 4,
+  "equation_count": 6,
+  "validation_plan": {
+    "limit_tests": 4,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "训练-测试划分与蒙特卡洛评价采用 5 组随机初始化，报告利润与完成率的均值±标准差。"
+    },
+    "sensitivity": 4,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 4
+  }
+}

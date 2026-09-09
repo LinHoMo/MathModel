@@ -1,0 +1,40 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "supervised_learning",
+  "mechanism_count": 3,
+  "equation_count": 5,
+  "validation_plan": {
+    "limit_tests": 3,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "多次重采样训练并取均值与标准差，检验交叉验证误差与复原误差的稳定性"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 4
+  }
+}

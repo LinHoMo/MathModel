@@ -1,0 +1,119 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "负重上限趋于无穷时，应在起点一次性购满全程所需资源并直线赶路",
+      "parameter": "W_max",
+      "limit": "inf",
+      "expected_behavior": "策略趋于一次购买直达终点，无中途补给"
+    },
+    {
+      "test_id": "LT2",
+      "description": "基础消耗量趋于零时，挖矿收益应主导策略，玩家应全程挖矿",
+      "parameter": "q_0",
+      "limit": "0",
+      "expected_behavior": "停留挖矿比例趋近 100%"
+    },
+    {
+      "test_id": "LT3",
+      "description": "截止天数趋近最短路径长度时，任何挖矿停留都会导致超期",
+      "parameter": "T",
+      "limit": "min_path",
+      "expected_behavior": "策略中无挖矿与绕行，直接最短路径"
+    },
+    {
+      "test_id": "LT4",
+      "description": "玩家数趋近无穷时，多人惩罚使错峰出行成为唯一可行策略",
+      "parameter": "n",
+      "limit": "inf",
+      "expected_behavior": "同区域同行动人数趋近 1，消耗回到单人基准"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "天气路径抽样与多人均衡求解以多组随机数初值重复，报告期望资金与策略分布的标准差，标准差小于均值 10% 视为稳定"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P5",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P7",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P9",
+      "range": "±25%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "购买与退回的结算时点",
+      "interpretations": [
+        "天初结算",
+        "天末结算",
+        "行动后即时结算"
+      ],
+      "adopted": "行动后即时结算",
+      "justification": "与附件结果口径一致：剩余资金指当日消耗完毕后、购买完成后"
+    },
+    {
+      "source": "多人同时决策的均衡概念",
+      "interpretations": [
+        "纳什均衡",
+        "完全协调的全局最优",
+        "对称策略均衡"
+      ],
+      "adopted": "对称策略均衡",
+      "justification": "玩家目标一致但无法事前约定，对称策略均衡刻画信息公布后的理性调整"
+    },
+    {
+      "source": "天气转移概率的来源",
+      "interpretations": [
+        "按关卡统计数据估计",
+        "均匀分布假设",
+        "历史天气频率"
+      ],
+      "adopted": "按关卡统计数据估计",
+      "justification": "附件提供关卡天气数据，频率估计是最小假设的信息利用"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "CL1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "CL2",
+      "evidence_ref": "V3",
+      "status": "supported"
+    },
+    {
+      "claim": "CL3",
+      "evidence_ref": "V5",
+      "status": "supported"
+    }
+  ]
+}

@@ -1,0 +1,829 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-969b6662",
+  "model_family": {
+    "primary": "statistical_modeling",
+    "secondary": [
+      "optimization",
+      "clustering"
+    ],
+    "description": "以任务完成概率的逻辑回归为核心统计模型，将位置、会员密度、距离、信誉等特征映射为完成概率，据此解释定价规律并设计新定价，打包问题用聚类辅助。",
+    "candidates": [
+      {
+        "family": "statistical_modeling",
+        "rationale": "选择：Q1 要求“研究定价规律、分析未完成原因”，本质是从历史数据中识别特征-完成关系，逻辑回归/回归类模型直接给出可解释的定价规律与归因。"
+      },
+      {
+        "family": "optimization",
+        "rationale": "选择用于 Q2/Q4 的定价方案生成：以完成概率模型为内层，外层优化定价使利润/完成率最大；故放入 secondary。"
+      },
+      {
+        "family": "clustering",
+        "rationale": "选择用于 Q3 任务打包：位置集中度用聚类识别，打包后定价作为组合单元处理；故放入 secondary。"
+      },
+      {
+        "family": "spatial_scan",
+        "rationale": "排除：空间扫描统计适合疾病聚集检验，对定价-完成关系的解释力弱于回归模型。"
+      },
+      {
+        "family": "agent_based",
+        "rationale": "排除：ABM 能模拟会员逐任务选择但参数多、标定难，数据规模下回归+优化已足够。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2017_B",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "1ee25170116df366bccb7d3b391dc0f93d5970541c7012ca69a2c5f3a11a9a38"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "任务完成与否是二值响应，由任务定价、会员可达性（距离）、竞争程度（周边会员数与任务数）与会员属性共同决定。",
+      "type": "mechanism",
+      "rationale": "众包平台任务完成的供需逻辑：价格激励、地理可达、竞争稀释是三大机制，是统计模型的变量选择依据。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "会员选择任务遵循理性行为：在可及范围内优先选择性价比高（单位距离收益大）且未被抢完的任务；会员信誉决定选择优先级与配额。",
+      "type": "mechanism_assumption",
+      "rationale": "题面给出信誉-预订时间-配额机制，将其作为竞争与完成概率的调节变量。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "完成概率模型采用逻辑回归形式 logit(P)=βX，参数由附件一最大似然估计。",
+      "type": "projection",
+      "rationale": "逻辑回归在二值响应上可解释、可检验且外推稳定；非线性交互用特征工程吸收。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "附件三新项目的任务位置分布与附件一类似，可用附件一估计的参数外推定价。",
+      "type": "projection",
+      "rationale": "同一平台同一业务类型的任务属性相近；外推风险在 Q4 用模拟完成率评价。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "平台利润 = 完成任务的预算收益 − 定价支出；任务预算按类型固定。",
+      "type": "simplification",
+      "rationale": "题面未给平台收益结构，预算-支出差是自然的目标函数；灵敏度中检验预算取值影响。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "任务编号",
+      "symbol": "i",
+      "definition": "任务索引",
+      "unit": "—",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "任务坐标",
+      "symbol": "(x_i,y_i)",
+      "definition": "任务的经纬度位置",
+      "unit": "度",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "任务定价",
+      "symbol": "p_i",
+      "definition": "平台标定的任务酬金",
+      "unit": "元",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "完成状态",
+      "symbol": "y_i",
+      "definition": "任务是否完成（1/0）",
+      "unit": "—",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "完成概率",
+      "symbol": "\\pi_i",
+      "definition": "任务 i 被完成的模型概率",
+      "unit": "—",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "会员位置",
+      "symbol": "(u_m,v_m)",
+      "definition": "会员 m 的位置",
+      "unit": "度",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V7",
+      "name": "最近距离",
+      "symbol": "d_i",
+      "definition": "任务 i 到最近会员的距离",
+      "unit": "km",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V8",
+      "name": "会员密度",
+      "symbol": "\\rho_i",
+      "definition": "任务 i 周边单位半径内会员数",
+      "unit": "人/km²",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V9",
+      "name": "竞争强度",
+      "symbol": "\\lambda_i",
+      "definition": "任务 i 周边单位半径内任务数与会员数之比",
+      "unit": "—",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V10",
+      "name": "会员信誉",
+      "symbol": "r_m",
+      "definition": "会员信誉值（决定优先级与配额）",
+      "unit": "—",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V11",
+      "name": "打包指示",
+      "symbol": "z_i",
+      "definition": "任务 i 是否属于某打包组（Q3）",
+      "unit": "—",
+      "type": "decision",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V12",
+      "name": "平台利润",
+      "symbol": "\\Pi",
+      "definition": "平台总利润 = 预算收益 − 定价支出",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "回归系数",
+      "symbol": "\\beta_0,\\beta_p,\\beta_d,\\beta_\\rho,\\beta_\\lambda",
+      "value": "由附件一 MLE 估计",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "邻域半径",
+      "symbol": "R",
+      "value": "3 km（敏感性检验）",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "预算收益",
+      "symbol": "B",
+      "value": "按任务类型固定",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "任务预算约束",
+      "symbol": "p_{min},p_{max}",
+      "value": "[5, 30] 元",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "信誉分位阈值",
+      "symbol": "\\phi",
+      "value": "0.7（高信誉划分）",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "打包规模上限",
+      "symbol": "K_{max}",
+      "value": 10,
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "estimate",
+      "expression": "\\text{估计 } \\Pr(y_i=1 \\mid p_i,d_i,\\rho_i,\\lambda_i) = \\sigma(\\beta_0+\\beta_p p_i+\\beta_d d_i+\\beta_\\rho \\rho_i+\\beta_\\lambda \\lambda_i)",
+      "variables_refs": [
+        "V5",
+        "V3",
+        "V7",
+        "V8",
+        "V9"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "maximize",
+      "expression": "\\max_{p_i} \\; \\Pi = \\sum_i \\pi_i(p_i)\\, B - \\sum_i \\pi_i(p_i)\\, p_i",
+      "variables_refs": [
+        "V12",
+        "V5",
+        "V3"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "maximize",
+      "expression": "\\max_{z,p} \\; \\Pi = \\sum_g \\big[\\pi_g(\\bar p_g)\\, B_g - \\pi_g(\\bar p_g)\\, \\bar p_g\\big] \\;\\text{（打包组为单位）}",
+      "variables_refs": [
+        "V12",
+        "V11",
+        "V3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "estimate",
+      "expression": "\\text{给定附件三位置，求解 } p_i^* \\text{ 并模拟完成率 } \\hat{\\pi} = \\frac{1}{n}\\sum_i \\pi_i(p_i^*)",
+      "variables_refs": [
+        "V5",
+        "V3",
+        "V2"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "budget",
+      "expression": "p_{min} \\le p_i \\le p_{max}",
+      "variables_refs": [
+        "V3",
+        "P4"
+      ],
+      "source": "假设",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "fairness",
+      "expression": "完成概率不低于基线：\\pi_i(p_i^*) \\ge \\pi_i(p_i^{old})",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "packing",
+      "expression": "打包组内任务两两距离 \\le D_{pack}，组规模 \\le K_{max}",
+      "variables_refs": [
+        "V11",
+        "V2",
+        "P6"
+      ],
+      "source": "假设",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "single_group",
+      "expression": "\\sum_g z_{i,g} = 1 \\;\\forall i（每个任务至多属于一组）",
+      "variables_refs": [
+        "V11"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "probability",
+      "expression": "0 \\le \\pi_i \\le 1",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "供需定价机理：完成概率随定价上升、随距离上升而下降、随竞争稀释而下降，逻辑回归刻画该单调关系，未完成归因于“定价不足以覆盖距离成本与竞争稀释”。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "利润权衡机理：提价提高完成率但压缩单件利润，最优定价在完成率弹性与利润率之间平衡，由一阶条件给出。",
+      "related_equations": [
+        "E3",
+        "E4"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "打包规模经济机理：位置集中任务打包后以组为单位定价，降低单位定价支出、提高单组完成概率，用聚类识别聚集区。",
+      "related_equations": [
+        "E5"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "mechanism_id": "M4",
+      "description": "外推评价机理：附件一估计的模型外推到附件三，用模拟完成率与利润评价方案实施效果。",
+      "related_equations": [
+        "E6"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\log\\frac{\\pi_i}{1-\\pi_i} = \\beta_0 + \\beta_p p_i + \\beta_d d_i + \\beta_\\rho \\rho_i + \\beta_\\lambda \\lambda_i",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V3",
+        "V7",
+        "V8",
+        "V9",
+        "P1"
+      ],
+      "derivation_trace": "逻辑回归模型：对附件一数据最大似然估计；预测完成概率为 sigmoid。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "d_i = \\min_m \\| (x_i,y_i) - (u_m,v_m) \\|, \\quad \\rho_i = \\frac{\\#\\{m: \\|\\cdot\\| \\le R\\}}{\\pi R^2}, \\quad \\lambda_i = \\frac{\\#\\{i': \\|\\cdot\\| \\le R\\}}{\\#\\{m: \\|\\cdot\\| \\le R\\}}",
+      "type": "代数",
+      "variables_refs": [
+        "V7",
+        "V8",
+        "V9",
+        "V2",
+        "V6",
+        "P2"
+      ],
+      "derivation_trace": "位置特征工程：最近距离、会员密度、竞争强度由坐标与邻域半径计算。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\pi_i = \\sigma(\\beta_0 + \\beta_p p_i + \\beta_d d_i + \\beta_\\rho \\rho_i + \\beta_\\lambda \\lambda_i)",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V3",
+        "P1"
+      ],
+      "derivation_trace": "sigmoid 变换：E1 的对数几率反解。",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E4",
+      "latex": "\\frac{\\partial \\Pi_i}{\\partial p_i} = 0 \\;\\Rightarrow\\; p_i^* = \\frac{1}{\\beta_p}\\Big(\\log\\frac{B-p_i^*}{p_i^*} - \\beta_0 - \\beta_d d_i - \\beta_\\rho \\rho_i - \\beta_\\lambda \\lambda_i\\Big)",
+      "type": "代数",
+      "variables_refs": [
+        "V12",
+        "V3",
+        "V7",
+        "P1",
+        "P3"
+      ],
+      "derivation_trace": "单任务利润最大化的一阶条件：完成率弹性与利润率平衡；边界用 p_min/p_max 截断。",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "\\bar p_g = \\frac{1}{|g|}\\sum_{i\\in g} p_i, \\quad \\pi_g = \\sigma(\\beta_0 + \\beta_p \\bar p_g + \\beta_d \\bar d_g + \\beta_\\rho \\bar\\rho_g + \\beta_\\lambda \\bar\\lambda_g)",
+      "type": "代数",
+      "variables_refs": [
+        "V11",
+        "V3",
+        "V5",
+        "V7",
+        "V8",
+        "V9"
+      ],
+      "derivation_trace": "打包组以平均特征与组定价参与模型，体现“一组一单”的规模经济。",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E6",
+      "latex": "\\hat{\\pi} = \\frac{1}{n}\\sum_i \\sigma(\\beta_0+\\beta_p p_i^*+\\beta_d d_i+\\beta_\\rho \\rho_i+\\beta_\\lambda \\lambda_i)",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V3"
+      ],
+      "derivation_trace": "Q4 效果评价：新项目定价方案的期望完成率。",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E2",
+      "to": "E1",
+      "type": "feeds"
+    },
+    {
+      "from": "E1",
+      "to": "E3",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "E4",
+      "type": "feeds"
+    },
+    {
+      "from": "E4",
+      "to": "O2",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "E5",
+      "type": "feeds"
+    },
+    {
+      "from": "E5",
+      "to": "O3",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "E6",
+      "type": "feeds"
+    },
+    {
+      "from": "E6",
+      "to": "O4",
+      "type": "derives"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "最大似然估计（IRLS）",
+      "implementation_ref": "逻辑回归参数估计，收敛判据梯度范数 < 1e-6，输出系数与标准误",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "method": "逐任务一阶条件 + 截断",
+      "implementation_ref": "对 E4 迭代求解 p_i^*，检查边界，批量向量化计算",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S3",
+      "method": "密度聚类 + 组定价迭代",
+      "implementation_ref": "DBSCAN 识别聚集区形成候选打包组，组定价迭代到利润稳定",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S4",
+      "method": "外推模拟",
+      "implementation_ref": "对附件三逐任务计算特征、定价与完成率，汇总利润",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "回归诊断",
+      "inputs": {
+        "data": "附件一",
+        "model": "E1"
+      },
+      "expected_outputs": {
+        "coef": "系数与显著性",
+        "pseudoR2": "拟合优度",
+        "importance": "变量重要性"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "定价对比",
+      "inputs": {
+        "scenario": "附件一",
+        "new": "E4 定价",
+        "old": "原定价"
+      },
+      "expected_outputs": {
+        "profit_gain": "利润提升",
+        "rate_gain": "完成率提升",
+        "price_diff": "定价分布差异"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "打包对比",
+      "inputs": {
+        "clusters": "DBSCAN 结果",
+        "scenario": "打包 vs 单发"
+      },
+      "expected_outputs": {
+        "profit_change": "利润变化",
+        "rate_change": "完成率变化"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "外推评价",
+      "inputs": {
+        "data": "附件三",
+        "model": "附件一估计"
+      },
+      "expected_outputs": {
+        "price_plan": "定价方案",
+        "simulated_rate": "模拟完成率",
+        "profit": "预期利润"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "训练-测试划分（80/20）检验预测 AUC 与完成率校准；与原方案完成率对照",
+      "targets_refs": [
+        "O1",
+        "O2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "邻域半径 R（1~5km）与预算 B 扰动 ±30%，检验最优定价与利润变化",
+      "targets_refs": [
+        "O2",
+        "O4"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "p_i→0 完成率趋于 0；p_i→∞ 完成率趋于 1（受会员供给上限约束）；d_i→∞ 完成率趋于 0",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "随机抽样划分与模拟多次运行，结果均值±标准差一致",
+      "targets_refs": [
+        "O2",
+        "O4"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q4"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "附件一任务的未完成主要由“定价不足以覆盖距离成本与竞争稀释”导致：完成率随最近会员距离增大、竞争强度增大而显著下降。",
+      "type": "归因结论",
+      "evidence_refs": [
+        "X1",
+        "V1",
+        "V3"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "按利润最大化定价，新方案在总定价支出小幅上升的情况下显著提高完成率与平台利润，优于原方案。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X2",
+        "V2"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "位置集中任务打包后，单位定价支出下降而单组完成率上升，平台利润进一步提高；打包对偏远孤立任务无增益。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X3",
+        "V2"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "附件三新项目按外推定价方案实施，模拟完成率达到平台目标区间，方案可行。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X4",
+        "V4"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "完成概率统计模型"
+      },
+      {
+        "id": "M2",
+        "label": "利润优化定价"
+      },
+      {
+        "id": "M3",
+        "label": "打包定价"
+      },
+      {
+        "id": "M4",
+        "label": "外推评价"
+      },
+      {
+        "id": "E1",
+        "label": "logit 模型"
+      },
+      {
+        "id": "E2",
+        "label": "特征工程"
+      },
+      {
+        "id": "E4",
+        "label": "一阶条件"
+      },
+      {
+        "id": "E5",
+        "label": "组定价"
+      },
+      {
+        "id": "E6",
+        "label": "完成率估计"
+      }
+    ],
+    "edges": [
+      {
+        "from": "E2",
+        "to": "E1",
+        "relation": "特征"
+      },
+      {
+        "from": "E1",
+        "to": "E4",
+        "relation": "反解"
+      },
+      {
+        "from": "E1",
+        "to": "E5",
+        "relation": "组级"
+      },
+      {
+        "from": "E1",
+        "to": "E6",
+        "relation": "外推"
+      },
+      {
+        "from": "E4",
+        "to": "O2",
+        "relation": "目标"
+      },
+      {
+        "from": "E5",
+        "to": "O3",
+        "relation": "目标"
+      }
+    ]
+  },
+  "modeling_trace": "从附件一出发：先做特征工程（最近距离、会员密度、竞争强度），用逻辑回归建立完成概率模型并诊断未完成原因；随后以利润最大化为目标由一阶条件导出新定价；Q3 用密度聚类识别聚集区并建立打包组定价；Q4 将模型外推到附件三并模拟完成率，最后以训练-测试、灵敏度与极限行为验证。"
+}

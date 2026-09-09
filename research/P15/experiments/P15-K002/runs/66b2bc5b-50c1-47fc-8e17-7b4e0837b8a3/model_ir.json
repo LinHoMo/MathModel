@@ -1,0 +1,764 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-66b2bc5b",
+  "model_family": {
+    "primary": "pde",
+    "secondary": [
+      "finite_difference",
+      "inverse_problem",
+      "numerical_optimization"
+    ],
+    "description": "以偏微分方程定解问题为核心的建模框架：多层热传导的控制方程、边界与界面条件构成完整定解问题，解析近似与数值离散配合求解，反演与优化作为校准和设计层。",
+    "candidates": [
+      {
+        "family": "pde",
+        "rationale": "温度场演化的物理规律就是抛物型偏微分方程，定解问题的提法（方程+边界+界面+初值）完整刻画问题，故选为主模型族。"
+      },
+      {
+        "family": "finite_difference",
+        "rationale": "定解问题的数值实现需要差分格式，是求解层而非模型层，列为辅助。"
+      },
+      {
+        "family": "inverse_problem",
+        "rationale": "换热系数等不可直接测量参数需由温度测量数据反演，列为校准层。"
+      },
+      {
+        "family": "numerical_optimization",
+        "rationale": "层厚设计是在正问题求解器之上的优化，列为设计层。"
+      },
+      {
+        "family": "heat_transfer",
+        "rationale": "热传导是物理领域描述，偏微分方程是其数学形式，二者等价，不单列。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2018_A",
+    "sub_question_id": "Q1,Q2,Q3",
+    "problem_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "问题归结为一维半无限与有限区间混合的层状热传导定解问题，侧向热流忽略。",
+      "type": "simplification",
+      "rationale": "服装面内尺度远大于厚度，一维假设误差在 1% 量级。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "各层物性参数分段常数，不随温度变化。",
+      "type": "mechanism",
+      "rationale": "附件按常数给出物性，温度依赖效应在 20~80°C 范围内有限。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "皮肤侧为第一类（等温）边界 37°C，外表面为第三类（对流）边界。",
+      "type": "mechanism",
+      "rationale": "题面设定假人体温恒定，对流边界刻画环境换热，系数反演确定。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "层间理想接触，温度与热流在界面连续。",
+      "type": "mechanism",
+      "rationale": "接触热阻并入反演参数吸收，避免额外自由度。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "初始温度场均匀等于环境温度。",
+      "type": "projection",
+      "rationale": "实验前充分热平衡，初始条件为常数。"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "空气层（IV 层）按纯导热处理，忽略自然对流与辐射。",
+      "type": "simplification",
+      "rationale": "空气层较薄时自然对流弱，等效导热系数吸收对流贡献。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "温度分布",
+      "symbol": "u(x,t)",
+      "definition": "服装层内温度分布函数",
+      "unit": "°C",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "厚度方向坐标",
+      "symbol": "x",
+      "definition": "距外表面的距离",
+      "unit": "mm",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "时间变量",
+      "symbol": "t",
+      "definition": "实验计时",
+      "unit": "分钟",
+      "type": "constant",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "物性参数",
+      "symbol": "\\{(\\lambda_i,\\rho_i,c_{p,i})\\}",
+      "definition": "各层导热系数、密度与比热",
+      "unit": "混合",
+      "type": "parameter",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "层厚向量",
+      "symbol": "\\mathbf{d} = (d_1,d_2,d_3,d_4)",
+      "definition": "四层厚度",
+      "unit": "mm",
+      "type": "parameter",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "皮肤侧温度",
+      "symbol": "u_s(t)",
+      "definition": "x=L 处温度（皮肤外侧）",
+      "unit": "°C",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V7",
+      "name": "换热系数",
+      "symbol": "h",
+      "definition": "外表面对流换热系数",
+      "unit": "W/(m²·K)",
+      "type": "parameter",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V8",
+      "name": "等效热阻",
+      "symbol": "R_{th}",
+      "definition": "服装总热阻 Σ d_i/λ_i",
+      "unit": "m²·K/W",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V9",
+      "name": "II 层厚度",
+      "symbol": "d_2",
+      "definition": "第 II 层厚度（Q2 决策量）",
+      "unit": "mm",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "V10",
+      "name": "IV 层厚度",
+      "symbol": "d_4",
+      "definition": "空气层厚度（Q3 决策量）",
+      "unit": "mm",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V11",
+      "name": "超标时长",
+      "symbol": "\\tau_{44}",
+      "definition": "u_s(t)>44°C 的累计时长",
+      "unit": "分钟",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V12",
+      "name": "温升速率",
+      "symbol": "\\dot{u}_s(t)",
+      "definition": "皮肤侧温度的时变速率",
+      "unit": "°C/分钟",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "环境温度",
+      "symbol": "T_a",
+      "value": "75 / 65 / 80",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "初始 II 层厚度",
+      "symbol": "d_2^0",
+      "value": "6",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "初始 IV 层厚度",
+      "symbol": "d_4^0",
+      "value": "5",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "实验时长",
+      "symbol": "t_f",
+      "value": "90 / 60 / 30",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "体内温度",
+      "symbol": "T_b",
+      "value": "37",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "安全上限",
+      "symbol": "T_{47}",
+      "value": "47",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "超标时限",
+      "symbol": "\\tau_{lim}",
+      "value": "5",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "附件 1 物性",
+      "symbol": "\\{(\\lambda_i,\\rho_i,c_{p,i})\\}",
+      "value": "按附件 1 表格",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "附件 2 测量",
+      "symbol": "\\{u_s^{obs}(t)\\}",
+      "value": "按附件 2 时间序列",
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "estimate",
+      "expression": "\\min_{h} \\|u_s(t;h) - u_s^{obs}(t)\\|_2^2，反演换热系数使定解问题解匹配测量",
+      "variables_refs": [
+        "V6",
+        "V7"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "find",
+      "expression": "\\min d_2 \\ s.t.\\ u_s(60) \\le 47,\\ \\tau_{44} \\le 5，求满足约束的最小 II 层厚度",
+      "variables_refs": [
+        "V9",
+        "V11"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "find",
+      "expression": "\\min (d_2 + d_4) \\ s.t.\\ u_s(30) \\le 47,\\ \\tau_{44} \\le 5，双变量最小总厚",
+      "variables_refs": [
+        "V9",
+        "V10",
+        "V11"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "CT1",
+      "type": "bound",
+      "expression": "u_s(t_f) \\le 47",
+      "variables_refs": [
+        "V6"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "CT2",
+      "type": "bound",
+      "expression": "\\tau_{44} \\le 5",
+      "variables_refs": [
+        "V11"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "CT3",
+      "type": "positivity",
+      "expression": "d_2, d_4 > 0",
+      "variables_refs": [
+        "V9",
+        "V10"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "CT4",
+      "type": "interface",
+      "expression": "u|_{x_i^-}=u|_{x_i^+}，\\lambda_i u_x|_{x_i^-}=\\lambda_{i+1}u_x|_{x_i^+}",
+      "variables_refs": [
+        "V1",
+        "V4"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "CT5",
+      "type": "initial",
+      "expression": "u(x,0)=T_a",
+      "variables_refs": [
+        "V1"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "多层传热是分段常系数抛物型方程的定解问题，热流由温度梯度驱动，皮肤温升由总热阻与热容共同决定。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "第三类边界刻画环境对流换热，参数反演使正问题解与附件测量一致，反演残差衡量模型完备性。",
+      "related_equations": [
+        "E3",
+        "E4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "稳态热阻分析给出厚度设计的解析估计：总热阻 R_th 与皮肤稳态温升近似成反比，作为搜索初值与合理性判据。",
+      "related_equations": [
+        "E5",
+        "E6"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\rho_i c_{p,i}\\frac{\\partial u}{\\partial t} = \\frac{\\partial}{\\partial x}\\left(\\lambda_i \\frac{\\partial u}{\\partial x}\\right),\\quad x\\in(x_{i-1},x_i)",
+      "type": "微分",
+      "variables_refs": [
+        "V1",
+        "V4"
+      ],
+      "derivation_trace": "热力学第一定律在连续介质上的局部形式，物性分段常数。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "u(x_i^-,t)=u(x_i^+,t),\\quad \\lambda_i u_x(x_i^-,t)=\\lambda_{i+1}u_x(x_i^+,t)",
+      "type": "代数",
+      "variables_refs": [
+        "V1",
+        "V4"
+      ],
+      "derivation_trace": "界面无热阻时温度与热流连续。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\lambda_1 u_x(0,t) = h(u(0,t)-T_a)",
+      "type": "微分",
+      "variables_refs": [
+        "V1",
+        "V7"
+      ],
+      "derivation_trace": "外表面第三类边界条件。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "u(L,t)=T_b=37",
+      "type": "代数",
+      "variables_refs": [
+        "V1"
+      ],
+      "derivation_trace": "皮肤等温边界。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "R_{th} = \\sum_i \\frac{d_i}{\\lambda_i} + \\frac{1}{h}",
+      "type": "代数",
+      "variables_refs": [
+        "V4",
+        "V5",
+        "V7",
+        "V8"
+      ],
+      "derivation_trace": "串联热阻叠加，稳态时 u_s(\\infty) = T_b + (T_a-T_b)/(1+h R_{th}/(\\sum d_i/\\lambda_i))。",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E6",
+      "latex": "\\tau_{44} = \\int_0^{t_f} \\mathbb{1}[u_s(t)>44]dt",
+      "type": "代数",
+      "variables_refs": [
+        "V6",
+        "V11"
+      ],
+      "derivation_trace": "超标时间定义。",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E5",
+      "type": "稳态近似"
+    },
+    {
+      "from": "E3",
+      "to": "E5",
+      "type": "边界"
+    },
+    {
+      "from": "E1",
+      "to": "O1",
+      "type": "derives"
+    },
+    {
+      "from": "E5",
+      "to": "O2",
+      "type": "derives"
+    },
+    {
+      "from": "E6",
+      "to": "O3",
+      "type": "derives"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "定解问题数值求解：界面调和平均 + Crank-Nicolson 隐式推进",
+      "implementation_ref": "pde_solver.py",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "method": "换热系数反演：网格初值 + Levenberg-Marquardt 最小二乘",
+      "implementation_ref": "h_inversion.py",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S3",
+      "method": "稳态热阻解析估计初值 + 二分精确搜索 d_2",
+      "implementation_ref": "d2_search.py",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S4",
+      "method": "热阻等值线 + 双变量网格精化求 (d_2,d_4)",
+      "implementation_ref": "d2d4_search.py",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "反演验证",
+      "inputs": {
+        "工况": "75°C/6mm/5mm/90min"
+      },
+      "expected_outputs": {
+        "拟合曲线": "u_s(t) 与测量对比残差"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "一维搜索",
+      "inputs": {
+        "工况": "65°C/IV=5.5mm/60min"
+      },
+      "expected_outputs": {
+        "d_2 下限": "可行区间与临界值"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "二维搜索",
+      "inputs": {
+        "工况": "80°C/30min"
+      },
+      "expected_outputs": {
+        "可行前沿": "(d_2,d_4) 最小总厚组合"
+      },
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "单层均匀介质情形与误差函数解析解对比",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "limit",
+      "method": "总热阻趋于零时 u_s 应逼近环境温度；热阻趋于无穷时 u_s 逼近 37°C",
+      "targets_refs": [
+        "O2",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "sensitivity",
+      "method": "物性参数 ±10% 扰动对最优厚度与峰值温度的影响",
+      "targets_refs": [
+        "O2",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V4",
+      "type": "convergence",
+      "method": "空间网格 2 倍加密后 u_s 变化小于 0.05°C",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V5",
+      "type": "uncertainty",
+      "method": "反演参数协方差传播到皮肤温度的不确定带估计",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "text": "反演换热系数后的定解问题解能复现附件 2 温度序列，残差主要集中在前 10 分钟，提示初始热平衡假设的轻微偏差。",
+      "type": "实证结论",
+      "evidence_refs": [
+        "X1",
+        "V1",
+        "V4"
+      ],
+      "model_refs": [
+        "M1",
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "CL2",
+      "text": "65°C 工况下存在临界 II 层厚度，热阻解析估计与数值搜索结果偏差小于 15%。",
+      "type": "机制性结论",
+      "evidence_refs": [
+        "X2",
+        "V2",
+        "V3"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "CL3",
+      "text": "80°C 工况下 II 与 IV 层厚度沿可行前沿呈替代关系，空气层因低导热而效率更高。",
+      "type": "机制性结论",
+      "evidence_refs": [
+        "X3",
+        "V3"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "定解问题"
+      },
+      {
+        "id": "M2",
+        "label": "参数反演"
+      },
+      {
+        "id": "M3",
+        "label": "热阻设计与搜索"
+      },
+      {
+        "id": "E1",
+        "label": "控制方程"
+      },
+      {
+        "id": "E2",
+        "label": "界面条件"
+      },
+      {
+        "id": "E3",
+        "label": "对流边界"
+      },
+      {
+        "id": "E4",
+        "label": "等温边界"
+      },
+      {
+        "id": "E5",
+        "label": "串联热阻"
+      },
+      {
+        "id": "E6",
+        "label": "超标时长"
+      }
+    ],
+    "edges": [
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "驱动"
+      },
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "界面"
+      },
+      {
+        "from": "E1",
+        "to": "E3",
+        "relation": "边界"
+      },
+      {
+        "from": "E1",
+        "to": "E4",
+        "relation": "边界"
+      },
+      {
+        "from": "M2",
+        "to": "E3",
+        "relation": "校准"
+      },
+      {
+        "from": "E1",
+        "to": "E5",
+        "relation": "稳态近似"
+      },
+      {
+        "from": "M3",
+        "to": "E5",
+        "relation": "驱动"
+      }
+    ]
+  },
+  "modeling_trace": "从物理机理出发，将服装传热提炼为分段常系数抛物型方程的定解问题，边界与界面条件由题面与传热学常识确定。候选族在偏微分方程、有限差分、逆问题与热传导之间权衡：偏微分方程定解问题作为模型主干，有限差分作为数值实现，逆问题处理换热系数校准，热阻分析为厚度设计提供解析初值。物性参数来自附件 1，测量序列来自附件 2。"
+}

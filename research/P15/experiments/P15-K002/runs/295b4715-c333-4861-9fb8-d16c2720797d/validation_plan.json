@@ -1,0 +1,121 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "移动时间趋于 0：RGV 运输不再是瓶颈，产量上限由 CNC 加工率 8/p 决定。",
+      "parameter": "d_1,d_2,d_3",
+      "limit": "d → 0",
+      "expected_behavior": "产量收敛于 ⌊T_s·m/p⌋，利用率趋近 1"
+    },
+    {
+      "test_id": "LT2",
+      "description": "加工时间趋于 0：CNC 不再是瓶颈，产量上限由 RGV 服务周期决定。",
+      "parameter": "p",
+      "limit": "p → 0",
+      "expected_behavior": "产量收敛于 RGV 周期上限 ⌊T_s/(τ+τ_c)⌋"
+    },
+    {
+      "test_id": "LT3",
+      "description": "故障概率趋于 0：随机仿真应收敛到确定性无故障产量。",
+      "parameter": "q",
+      "limit": "q → 0",
+      "expected_behavior": "E[Y] → Y_deterministic，置信区间收缩"
+    },
+    {
+      "test_id": "LT4",
+      "description": "故障概率趋于 1：系统瘫痪，产量应趋近 0。",
+      "parameter": "q",
+      "limit": "q → 1",
+      "expected_behavior": "E[Y] → 0，CNC 利用率趋近 0"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "故障仿真用 5 组随机数初始化各跑 R=200 次，报告期望产量与置信区间的均值±标准差，检验抽样稳定性。"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P2",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P7",
+      "range": "0.5%~2%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "故障概率 1% 的统计口径（按台·分钟还是按物料）",
+      "interpretations": [
+        "每台 CNC 每个加工分钟独立以 1% 概率故障",
+        "每个班次每台 CNC 以 1% 概率故障一次"
+      ],
+      "adopted": "加工分钟独立伯努利抽样（A4）",
+      "justification": "题面称“加工过程中可能发生故障，概率约为 1%”，按加工时间度量最贴近“加工中故障”语义；按班次口径会显著低估故障频率"
+    },
+    {
+      "source": "两道工序第二道能否与第一道同机",
+      "interpretations": [
+        "必须异机",
+        "允许同机"
+      ],
+      "adopted": "必须异机（A3）",
+      "justification": "题面明确“分别由两台不同的 CNC 依次加工完成”"
+    },
+    {
+      "source": "产量统计口径（加工完成 vs 完成+清洗）",
+      "interpretations": [
+        "以加工完成计数",
+        "以完成并清洗完毕计数"
+      ],
+      "adopted": "完成全部工序并清洗完毕（A5）",
+      "justification": "RGV 作业链包含上下料与清洗，物料离开系统才算产出，与结果表要求一致"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V5",
+      "status": "hypothesis"
+    }
+  ]
+}

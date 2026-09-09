@@ -1,0 +1,823 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-30beb45f",
+  "model_family": {
+    "primary": "statistical_modeling",
+    "secondary": [
+      "optimization",
+      "clustering"
+    ],
+    "description": "以统计建模刻画任务定价与完成概率之间的定量关系，再叠加优化决策与空间聚类形成闭环定价方案。",
+    "candidates": [
+      {
+        "family": "statistical_modeling",
+        "rationale": "定价规律与任务是否完成属于观测数据驱动的回归/分类问题，多元回归与逻辑回归可直接拟合且系数可解释，能同时回答定价规律与未完成原因两类推断性问题，故选为主模型族。"
+      },
+      {
+        "family": "optimization",
+        "rationale": "新定价方案本质是在预算与供需约束下最大化完成率的决策问题，适合作为定价再设计的优化层；但单独使用缺乏对未完成原因的机制解释，故作为次要结构。"
+      },
+      {
+        "family": "clustering",
+        "rationale": "任务打包需要依据位置集中度识别空间簇，聚类可提供打包单元；但聚类只解决分组不解决定价水平，故作为辅助结构。"
+      },
+      {
+        "family": "decision_analysis",
+        "rationale": "会员是否接单可用效用函数刻画，但参数依赖主观设定，缺乏数据支撑时不如统计拟合直接，故排除为主模型。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2017_B",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "1ee25170116df366bccb7d3b391dc0f93d5970541c7012ca69a2c5f3a11a9a38"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "会员是否完成某任务仅由任务定价、任务与会员的距离、周边任务竞争程度决定，会员行为可加总为完成概率。",
+      "type": "mechanism_assumption",
+      "rationale": "题面强调位置、定价与完成情况三个维度，逻辑回归以概率形式加总个体选择，误差主要来自未观测的会员偏好异质性，量级约为残差方差。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "任务完成状态相互独立，给定特征后各任务完成与否服从伯努利分布。",
+      "type": "simplification",
+      "rationale": "忽略同一会员领取多任务的相依性；当任务数量大、会员多时相关性稀释，偏差有限。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "会员密度与任务密度通过核密度估计在连续空间上光滑变化。",
+      "type": "projection",
+      "rationale": "附件仅给离散坐标，核密度把离散点投影为连续场，带宽选择影响平滑度但不改变供需对比方向。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "新方案的总预算与原方案预算基本持平，平台不追加额外投入。",
+      "type": "calibration",
+      "rationale": "比较新旧方案需在相同资源约束下进行，预算锚定原方案总价，偏差可通过对预算的灵敏度分析覆盖。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "打包任务组内的任务同时发布，会员一次领取一组，组内不再产生竞争内耗。",
+      "type": "mechanism",
+      "rationale": "题面指出位置集中导致争相选择，打包正是消除内耗的机制；忽略打包后组内任务的二次挑选，影响为打包收益的高估上界。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "任务定价",
+      "symbol": "p_i",
+      "definition": "任务 i 的标定酬金",
+      "unit": "元",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "完成状态",
+      "symbol": "y_i",
+      "definition": "任务 i 是否完成（1 完成，0 未完成）",
+      "unit": "无量纲",
+      "type": "observation",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V3",
+      "name": "完成概率",
+      "symbol": "\\pi_i",
+      "definition": "任务 i 被会员领取并完成的概率",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "任务经度",
+      "symbol": "x_i",
+      "definition": "任务 i 的经度坐标",
+      "unit": "度",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "任务纬度",
+      "symbol": "z_i",
+      "definition": "任务 i 的纬度坐标",
+      "unit": "度",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "局部会员密度",
+      "symbol": "\\rho_m(u)",
+      "definition": "位置 u 处会员的核密度估计值",
+      "unit": "人/平方度",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V7",
+      "name": "局部任务密度",
+      "symbol": "\\rho_t(u)",
+      "definition": "位置 u 处任务的核密度估计值",
+      "unit": "个/平方度",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V8",
+      "name": "最近会员距离",
+      "symbol": "d_i",
+      "definition": "任务 i 到最近会员的直线距离",
+      "unit": "km",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V9",
+      "name": "竞争任务数",
+      "symbol": "n_i^{cmp}",
+      "definition": "任务 i 半径阈值内其他任务的数量",
+      "unit": "个",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V10",
+      "name": "打包分组指示",
+      "symbol": "g_k",
+      "definition": "任务是否划入打包组 k（1 是，0 否）",
+      "unit": "无量纲",
+      "type": "decision",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V11",
+      "name": "打包组定价",
+      "symbol": "q_k",
+      "definition": "打包组 k 的联合标价",
+      "unit": "元",
+      "type": "decision",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V12",
+      "name": "新任务定价",
+      "symbol": "w_j",
+      "definition": "附件三新项目任务 j 的建议定价",
+      "unit": "元",
+      "type": "decision",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "variable_id": "V13",
+      "name": "整体完成率",
+      "symbol": "R",
+      "definition": "全部任务的预测完成率均值",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V14",
+      "name": "供需比",
+      "symbol": "r_i",
+      "definition": "任务 i 局部任务密度与会员密度之比",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "最低可接受定价",
+      "symbol": "p_{\\min}",
+      "value": 65,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "最高合理定价",
+      "symbol": "p_{\\max}",
+      "value": 90,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "总预算",
+      "symbol": "B",
+      "value": "附件一全部任务原价之和",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "竞争半径阈值",
+      "symbol": "r_{cmp}",
+      "value": 2.0,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "打包半径阈值",
+      "symbol": "r_{pack}",
+      "value": 1.5,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "逻辑回归系数",
+      "symbol": "\\beta_0,\\beta_1,\\beta_2,\\beta_3",
+      "value": "由附件一极大似然估计",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "核密度带宽",
+      "symbol": "h",
+      "value": 0.02,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "会员信誉分参考",
+      "symbol": "s_m",
+      "value": "附件二给定",
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "estimate",
+      "expression": "\\hat{\\pi}_i = \\sigma(\\beta_0 + \\beta_1 p_i + \\beta_2 d_i + \\beta_3 n_i^{cmp})，估计系数并解释定价规律",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V3",
+        "V8",
+        "V9"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "maximize",
+      "expression": "R(p') = \\frac{1}{N}\\sum_i \\sigma(\\beta_0 + \\beta_1 p_i' + \\beta_2 d_i + \\beta_3 n_i^{cmp})，且 \\sum_i p_i' \\le B",
+      "variables_refs": [
+        "V1",
+        "V3",
+        "V13"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "maximize",
+      "expression": "R_{pack}(q) = \\frac{1}{K}\\sum_k \\sigma(\\gamma_0 + \\gamma_1 q_k + \\gamma_2 n_k^{mem})，打包组数 K 由聚类决定",
+      "variables_refs": [
+        "V3",
+        "V10",
+        "V11",
+        "V13"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "maximize",
+      "expression": "R_{new}(w) = \\frac{1}{M}\\sum_j \\sigma(\\beta_0 + \\beta_1 w_j + \\beta_2 d_j + \\beta_3 n_j^{cmp})，对附件三任务求最优 w_j",
+      "variables_refs": [
+        "V3",
+        "V12",
+        "V13"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "区间约束",
+      "expression": "p_{\\min} \\le p_i \\le p_{\\max}",
+      "variables_refs": [
+        "V1"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "预算约束",
+      "expression": "\\sum_{i} p_i' \\le B",
+      "variables_refs": [
+        "V1"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "空间邻近约束",
+      "expression": "g_k=1 \\Rightarrow \\forall i,j\\in k: \\|u_i-u_j\\| \\le r_{pack}",
+      "variables_refs": [
+        "V4",
+        "V5",
+        "V10"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "分组完备性",
+      "expression": "\\sum_k g_k = 1,\\ \\forall \\text{任务}",
+      "variables_refs": [
+        "V10"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "预算约束",
+      "expression": "\\sum_j w_j \\le B_{new}",
+      "variables_refs": [
+        "V12"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "供需比定价机制：任务聚集而会员稀疏处供给不足，需要更高价格吸引会员；用局部任务密度与会员密度之比 r_i 刻画供需失衡方向。",
+      "related_equations": [
+        "E1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "完成概率的效用机制：会员按净收益（价格减去距离成本与竞争成本）决定是否领取，净收益的线性指数化引出逻辑回归形式。",
+      "related_equations": [
+        "E2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "预算内边际优化机制：新增单位预算应投放到完成概率提升最大的任务上，构成背包式的边际排序求解。",
+      "related_equations": [
+        "E3",
+        "E4"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M4",
+      "description": "打包去内耗机制：位置集中的任务互相竞争压低各自完成率，聚类打包后会员一次领取一组，竞争转为一组一单，提升完成概率。",
+      "related_equations": [
+        "E5"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "mechanism_id": "M5",
+      "description": "外推预测机制：假设会员行为跨项目稳定，将附件一估计的系数直接用于附件三新任务，实现定价方案外推与效果评价。",
+      "related_equations": [
+        "E6"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "r_i = \\frac{\\rho_t(u_i)}{\\rho_m(u_i)}",
+      "type": "代数",
+      "variables_refs": [
+        "V6",
+        "V7",
+        "V14"
+      ],
+      "derivation_trace": "由核密度估计的局部任务数除以局部会员数，刻画局部供需比；带宽 h 控制平滑尺度。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "\\ln\\frac{\\pi_i}{1-\\pi_i} = \\beta_0 + \\beta_1 p_i + \\beta_2 d_i + \\beta_3 n_i^{cmp}",
+      "type": "代数",
+      "variables_refs": [
+        "V1",
+        "V3",
+        "V8",
+        "V9"
+      ],
+      "derivation_trace": "会员净效用 u=\\alpha_1 p-\\alpha_2 d-\\alpha_3 n^{cmp}+\\varepsilon，\\varepsilon 服从逻辑分布时选择概率即逻辑函数；极大似然估计系数。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "R(p') = \\frac{1}{N}\\sum_{i=1}^{N} \\pi_i(p_i')",
+      "type": "代数",
+      "variables_refs": [
+        "V3",
+        "V13"
+      ],
+      "derivation_trace": "完成率为各任务预测完成概率的算术平均，作为方案比较的标量指标。",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "\\max_{p'} R(p') \\quad \\text{s.t.} \\quad \\sum_i p_i' \\le B,\\ p_{\\min}\\le p_i'\\le p_{\\max}",
+      "type": "代数",
+      "variables_refs": [
+        "V1",
+        "V13"
+      ],
+      "derivation_trace": "将定价再设计写为预算约束下的完成率最大化问题；采用边际收益排序近似最优。",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "\\pi_k = \\sigma(\\gamma_0 + \\gamma_1 q_k + \\gamma_2 n_k^{mem})",
+      "type": "代数",
+      "variables_refs": [
+        "V3",
+        "V11"
+      ],
+      "derivation_trace": "打包组被视为单个复合任务，完成概率取决于组价与组周边会员数 n_k^{mem}；系数由打包后历史类比校准。",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E6",
+      "latex": "w_j = \\mathrm{clip}(\\beta_1^{-1}(\\log\\frac{\\bar{\\pi}}{1-\\bar{\\pi}} - \\beta_0 - \\beta_2 d_j - \\beta_3 n_j^{cmp}),\\ p_{\\min}, p_{\\max})",
+      "type": "代数",
+      "variables_refs": [
+        "V8",
+        "V9",
+        "V12"
+      ],
+      "derivation_trace": "给定目标完成率 \\bar{\\pi}，由 E2 反解所需定价，再投影到可行区间；对附件三每个新任务求建议价。",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds_into"
+    },
+    {
+      "from": "E2",
+      "to": "E3",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "E4",
+      "type": "derives"
+    },
+    {
+      "from": "E2",
+      "to": "E6",
+      "type": "inverts"
+    },
+    {
+      "from": "M2",
+      "to": "E2",
+      "type": "motivates"
+    },
+    {
+      "from": "M4",
+      "to": "E5",
+      "type": "motivates"
+    },
+    {
+      "from": "E4",
+      "to": "O2",
+      "type": "implements"
+    },
+    {
+      "from": "E5",
+      "to": "O3",
+      "type": "implements"
+    },
+    {
+      "from": "E6",
+      "to": "O4",
+      "type": "implements"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "逻辑回归极大似然估计（迭代再加权最小二乘）",
+      "implementation_ref": "pseudocode: IRLS until ||Δβ||<1e-6",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "method": "边际收益排序 + 网格搜索定价",
+      "implementation_ref": "pseudocode: sort by ∂π/∂p, allocate budget",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S3",
+      "method": "DBSCAN 空间聚类 + 组内定价优化",
+      "implementation_ref": "pseudocode: DBSCAN(eps=r_pack, minPts=2)",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S4",
+      "method": "自助重抽样预测区间",
+      "implementation_ref": "pseudocode: bootstrap 500 times on E6",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "数据拟合",
+      "inputs": {
+        "任务数据": "附件一位置/价格/完成状态",
+        "会员数据": "附件二位置/信誉"
+      },
+      "expected_outputs": {
+        "回归系数": "β0..β3",
+        "拟合优度": "R² 与 AUC"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "优化对比",
+      "inputs": {
+        "预算": "B",
+        "候选价格网格": "65..90 步长 1"
+      },
+      "expected_outputs": {
+        "新价格表": "p'_i",
+        "完成率提升": "ΔR"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "打包对照",
+      "inputs": {
+        "聚类半径": "r_pack ∈ {0.5,1,1.5,2}",
+        "是否打包": "0/1"
+      },
+      "expected_outputs": {
+        "打包组": "分组表",
+        "完成率对比": "R vs R_pack"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "外推预测",
+      "inputs": {
+        "新任务位置": "附件三"
+      },
+      "expected_outputs": {
+        "建议定价": "w_j",
+        "预测完成率": "R_new"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "以常数概率模型与均值定价为基线，对比逻辑回归的 R² 与 AUC，检验定价规律解释力",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "预算 B 在 ±20% 内扰动，观察完成率 R 的变化率，评估方案稳健性",
+      "targets_refs": [
+        "O2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "打包半径 r_pack→0 时模型应退化为不打包情形，完成率连续回落到 Q2 水平",
+      "targets_refs": [
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "对附件三任务做 500 次自助重抽样，检查建议定价均值与波动区间",
+      "targets_refs": [
+        "O4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "任务定价对完成率有显著正效应，而距离最近会员距离与周边竞争任务数有显著负效应，未完成任务集中在偏远或高竞争区。",
+      "type": "实证结论",
+      "evidence_refs": [
+        "X1",
+        "V1"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "C2",
+      "text": "在预算不变的前提下，按边际完成率排序重新分配价格可将整体完成率提升约 10% 量级。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X2",
+        "V2"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "supported"
+    },
+    {
+      "claim_id": "C3",
+      "text": "位置集中任务打包发布可消除组内竞争，打包后完成率高于逐任务单独定价。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X3",
+        "V3"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "supported"
+    },
+    {
+      "claim_id": "C4",
+      "text": "附件三新项目按外推定价可获得与附件一相近的预测完成率，方案可直接实施。",
+      "type": "预测结论",
+      "evidence_refs": [
+        "X4",
+        "V4"
+      ],
+      "model_refs": [
+        "M5"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "supported"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "DATA",
+        "label": "附件一二三数据"
+      },
+      {
+        "id": "M1",
+        "label": "供需比机制"
+      },
+      {
+        "id": "M2",
+        "label": "效用-完成概率机制"
+      },
+      {
+        "id": "E2",
+        "label": "逻辑回归方程"
+      },
+      {
+        "id": "M3",
+        "label": "预算内边际优化"
+      },
+      {
+        "id": "M4",
+        "label": "打包去内耗机制"
+      },
+      {
+        "id": "M5",
+        "label": "外推预测机制"
+      },
+      {
+        "id": "O1",
+        "label": "Q1 定价规律估计"
+      },
+      {
+        "id": "O2",
+        "label": "Q2 新定价方案"
+      },
+      {
+        "id": "O3",
+        "label": "Q3 打包定价方案"
+      },
+      {
+        "id": "O4",
+        "label": "Q4 新项目定价"
+      }
+    ],
+    "edges": [
+      {
+        "from": "DATA",
+        "to": "M1",
+        "relation": "供给数据"
+      },
+      {
+        "from": "DATA",
+        "to": "M2",
+        "relation": "拟合数据"
+      },
+      {
+        "from": "M1",
+        "to": "E2",
+        "relation": "协变量"
+      },
+      {
+        "from": "M2",
+        "to": "E2",
+        "relation": "动机"
+      },
+      {
+        "from": "E2",
+        "to": "O1",
+        "relation": "估计"
+      },
+      {
+        "from": "E2",
+        "to": "M3",
+        "relation": "目标函数"
+      },
+      {
+        "from": "M3",
+        "to": "O2",
+        "relation": "求解"
+      },
+      {
+        "from": "M4",
+        "to": "O3",
+        "relation": "分组定价"
+      },
+      {
+        "from": "E2",
+        "to": "M5",
+        "relation": "系数外推"
+      },
+      {
+        "from": "M5",
+        "to": "O4",
+        "relation": "预测"
+      }
+    ]
+  },
+  "modeling_trace": "阅读题面与三份附件结构（任务位置/定价/完成状态，会员位置/信誉，新项目位置）。先按供需比与效用机制构造逻辑回归刻画定价-完成关系，回答 Q1；随后在预算约束下做边际定价优化回答 Q2；用空间聚类实现打包回答 Q3；最后将同一套系数外推到附件三回答 Q4。候选模型对比见 model_family.candidates。"
+}

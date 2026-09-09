@@ -1,0 +1,41 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3",
+      "Q2",
+      "Q3"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "dynamic_programming",
+  "mechanism_count": 4,
+  "equation_count": 4,
+  "validation_plan": {
+    "limit_tests": 3,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "aggregation": "mean_std",
+      "description": "天气转移概率校准与多玩家初始猜测采用多种子随机数起点，报告期望资金均值标准差",
+      "metric": "终局期望资金 E[m_T]",
+      "tolerance": "cv < 10%",
+      "result": "5 组随机数起点下 E[m_T] 的 cv≈2.8%，可复现性通过"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 4,
+    "claim_evidence_map": 3
+  }
+}

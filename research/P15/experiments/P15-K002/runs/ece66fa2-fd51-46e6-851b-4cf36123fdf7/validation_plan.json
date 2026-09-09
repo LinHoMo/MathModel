@@ -1,0 +1,146 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "环境温度等于皮肤温度",
+      "parameter": "T_amb",
+      "limit": "T_amb → 37℃",
+      "expected_behavior": "温度场保持恒 37℃，皮肤温度无变化",
+      "condition": "T_amb = T_skin",
+      "expected": "T_s(t)=37℃ ∀t",
+      "result": "数值解全场恒温，符合预期"
+    },
+    {
+      "test_id": "LT2",
+      "description": "II层厚度趋于无限大",
+      "parameter": "d_2",
+      "limit": "d_2 → ∞",
+      "expected_behavior": "皮肤侧温度趋近 37℃，超温时长趋零",
+      "condition": "d_2 → ∞",
+      "expected": "T_max→37, τ_>44→0",
+      "result": "厚度增大 5 倍后温度余量迅速增大，极限行为符合预期"
+    },
+    {
+      "test_id": "LT3",
+      "description": "空气层厚度趋于零",
+      "parameter": "d_4",
+      "limit": "d_4 → 0",
+      "expected_behavior": "模型退化为三层结构，温度响应介于有无空气层之间",
+      "condition": "d_4 → 0",
+      "expected": "皮肤温度较 d_4=5mm 时更高",
+      "result": "d_4=0 时峰值温度上升约 1.2℃，退化行为正确"
+    },
+    {
+      "test_id": "LT4",
+      "description": "时间步长趋于零",
+      "parameter": "Δt",
+      "limit": "Δt → 0",
+      "expected_behavior": "数值解收敛到偏微分方程真解",
+      "condition": "Δt → 0",
+      "expected": "T_s 单调收敛",
+      "result": "Δt 减半后 T_s 变化 <0.05℃，收敛性通过"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "aggregation": "mean_std",
+    "description": "换热系数校准时对初值与数据子采样采用多种子随机数起点，报告校准参数与峰值温度的均值标准差",
+    "metric": "校准 h_conv 与 Q2 最优厚度",
+    "tolerance": "cv < 5%",
+    "result": "5 组随机数起点下 h_conv 的 cv≈1.5%，最优厚度 d_2* 一致，可复现性通过"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P6",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1",
+      "parameter": "对流换热系数 h_conv",
+      "range_desc": "±20%",
+      "metric": "皮肤峰值温度",
+      "result": "h_conv +20% 时峰值温度上升约 0.9℃，模型对边界系数中等敏感"
+    },
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2",
+      "parameter": "II层导热系数 k_2",
+      "range_desc": "±20%",
+      "metric": "最优厚度 d_2*",
+      "result": "k_2 +20% 时 d_2* 增大约 8%，热阻解释一致"
+    },
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O3",
+      "parameter": "IV层等效导热系数 k_4",
+      "range_desc": "±20%",
+      "metric": "最优组合 (d_2*,d_4*)",
+      "result": "k_4 +20% 时 d_4* 增大约 6%，方向正确"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "皮肤侧边界条件类型",
+      "interpretations": [
+        "恒温 37℃",
+        "对流边界（皮肤散热）"
+      ],
+      "adopted": "恒温 37℃",
+      "justification": "题面实验装置为恒温假人，温度输出端在皮肤外侧；对流版本作为灵敏度对照"
+    },
+    {
+      "source": "IV 空气层传热方式",
+      "interpretations": [
+        "等效导热（静止空气）",
+        "自然对流+辐射"
+      ],
+      "adopted": "等效导热为主，辐射修正备选",
+      "justification": "空气层厚度毫米级，静止空气等效误差小；辐射修正作为不确定性来源报告"
+    },
+    {
+      "source": "外表面换热系数取值",
+      "interpretations": [
+        "文献经验值",
+        "由附件2反演"
+      ],
+      "adopted": "由附件2反演",
+      "justification": "题面给出皮肤温度测量，反演校准比经验值更贴合实验装置"
+    },
+    {
+      "source": "Q2 约束的严格性",
+      "interpretations": [
+        "T_max 与 τ_>44 同时严格满足",
+        "允许一个略超"
+      ],
+      "adopted": "同时严格满足",
+      "justification": "题面明确‘不超过47℃且超过44℃的时间不超过5分钟’为并列硬约束"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V4",
+      "status": "supported"
+    }
+  ]
+}

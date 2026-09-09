@@ -1,0 +1,702 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-88bd6407",
+  "model_family": {
+    "primary": "heat_transfer",
+    "secondary": [
+      "pde",
+      "numerical_optimization"
+    ],
+    "description": "以多层一维热传导与表面对流换热刻画服装温度场，用隐式时间推进求解温度分布，变厚度设计由数值优化给出。",
+    "candidates": [
+      {
+        "family": "heat_transfer",
+        "rationale": "题面对象是高温环境下多层织物内的温度变化，能量守恒与傅里叶导热是物理内核，热传导方程直接对应，故选为主模型族。"
+      },
+      {
+        "family": "pde",
+        "rationale": "温度分布由抛物型偏微分方程控制，作为数学表述层与 heat_transfer 互补。"
+      },
+      {
+        "family": "numerical_optimization",
+        "rationale": "Q2/Q3 的厚度设计是约束优化问题，需在传热模型之上嵌套优化求解器。"
+      },
+      {
+        "family": "inverse_problem",
+        "rationale": "若需从附件 2 反推材料参数可用反问题方法，但题面附件 1 已给参数，正问题即可，故不选为主模型。"
+      },
+      {
+        "family": "finite_difference",
+        "rationale": "差分是求解手段而非模型本身，作为求解器而非模型族。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2018_A",
+    "sub_question_id": "Q1,Q2,Q3",
+    "problem_sha256": "6b4062dcd020bd6b57ea6ad3a834019c93a3f36f35fc00757b4586816936c569"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "热流沿厚度一维传播，侧向（面内）温度均匀，织物平行于皮肤。",
+      "type": "simplification",
+      "rationale": "服装厚度远小于面内尺度，一维假设误差在边界附近，量级小于 1℃。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "各层材料各向同性、热物性（导热系数/比热/密度）不随温度变化。",
+      "type": "mechanism",
+      "rationale": "附件 1 给恒定参数，温度范围 37~80℃ 内物性变化小。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "外表面与环境之间为对流换热（第三类边界），皮肤侧近似恒温 37℃。",
+      "type": "mechanism",
+      "rationale": "假人体内恒温 37℃，皮肤外侧作为温度输出端；外表面自然对流换热系数由校准确定。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "IV 空气层按静止空气处理，等效导热系数计辐射修正。",
+      "type": "mechanism_assumption",
+      "rationale": "空气层厚度小（毫米级），自然对流弱，等效导热是常用近似。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "初始时刻整个服装温度均匀为 37℃（与皮肤同温）。",
+      "type": "calibration",
+      "rationale": "实验开始时服装处于室温设定，取 37℃ 作为初始条件，误差随时间衰减。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "温度场",
+      "symbol": "T(x,t)",
+      "definition": "位置 x、时刻 t 的温度",
+      "unit": "℃",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "空间坐标",
+      "symbol": "x",
+      "definition": "沿厚度方向坐标（外表面为 0）",
+      "unit": "mm",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "时间",
+      "symbol": "t",
+      "definition": "自进入高温环境起的时间",
+      "unit": "s",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "皮肤外侧温度",
+      "symbol": "T_s(t)=T(L,t)",
+      "definition": "皮肤外侧（III 层内边界）温度",
+      "unit": "℃",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "II 层厚度",
+      "symbol": "d_2",
+      "definition": "第 II 层织物厚度",
+      "unit": "mm",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "IV 层厚度",
+      "symbol": "d_4",
+      "definition": "空气间隙厚度",
+      "unit": "mm",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V7",
+      "name": "超温时间",
+      "symbol": "\\tau_{>44}",
+      "definition": "皮肤温度超过 44℃ 的累计时长",
+      "unit": "min",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V8",
+      "name": "峰值温度",
+      "symbol": "T_{max}",
+      "definition": "工作时段内皮肤温度最大值",
+      "unit": "℃",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "环境温度",
+      "symbol": "T_{amb}",
+      "value": "Q1=75, Q2=65, Q3=80",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "皮肤温度",
+      "symbol": "T_{skin}",
+      "value": 37,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "工作总时长",
+      "symbol": "T_{work}",
+      "value": "Q1=90min, Q2=60min, Q3=30min",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "各层导热系数",
+      "symbol": "k_1,k_2,k_3,k_4",
+      "value": "附件1 参数表",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "各层密度与比热",
+      "symbol": "\\rho_i, c_i",
+      "value": "附件1 参数表",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "各层厚度",
+      "symbol": "d_1,d_2,d_3,d_4",
+      "value": "Q1: (0.6,6,3.6,5)mm",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "对流换热系数",
+      "symbol": "h_{conv}",
+      "value": "由附件2校准",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "温度约束阈值",
+      "symbol": "(T_{max}^{lim},T_{>44}^{lim})",
+      "value": "(47℃, 5min)",
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "simulate",
+      "expression": "求解 \\partial_t T = \\alpha(x)\\partial_{xx} T，输出 T_s(t) 与全场分布并生成 problem1.xlsx",
+      "variables_refs": [
+        "V1",
+        "V4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "minimize",
+      "expression": "\\min_{d_2} d_2 \\quad \\text{s.t.}\\quad T_{max}\\le47,\\ \\tau_{>44}\\le5\\ \\text{min}（65℃/IV=5.5mm/60min）",
+      "variables_refs": [
+        "V5",
+        "V7",
+        "V8"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "minimize",
+      "expression": "\\min_{d_2,d_4} \\sqrt{(d_2/d_2^0)^2+(d_4/d_4^0)^2} \\quad \\text{s.t.}\\quad T_{max}\\le47,\\ \\tau_{>44}\\le5\\ \\text{min}（80℃/30min）",
+      "variables_refs": [
+        "V5",
+        "V6",
+        "V7",
+        "V8"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "温度上限约束",
+      "expression": "T_{max} \\le 47℃（工作时刻）",
+      "variables_refs": [
+        "V8"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "超温时长约束",
+      "expression": "\\tau_{>44} \\le 5\\ \\text{min}",
+      "variables_refs": [
+        "V7"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "厚度正约束",
+      "expression": "d_2,d_4 > 0",
+      "variables_refs": [
+        "V5",
+        "V6"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C4",
+      "type": "物理约束",
+      "expression": "0 \\le T \\le T_{amb}（温度不越界）",
+      "variables_refs": [
+        "V1"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "傅里叶导热机制：高温环境通过外层织物向皮肤逐层导热，热扩散率 α=k/(ρc) 决定温度波前推进速度。",
+      "related_equations": [
+        "E1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "表面对流换热机制：外表面与环境间以对流换热交换热量，换热系数决定进入服装的热流强度。",
+      "related_equations": [
+        "E2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "层间连续机制：各层界面温度连续、热流连续（无接触热阻或等效处理），IV 空气层按等效导热参与。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M4",
+      "description": "厚度-热阻机制：增加 II 层厚度提高热阻、延缓皮肤升温，但边际递减；Q2/Q3 在约束下找最小可行厚度。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M5",
+      "description": "空气层隔热机制：IV 层厚度增大提高总热阻但存在自然对流增强的临界厚度，Q3 需联合优化 II 与 IV。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\rho_i c_i \\frac{\\partial T}{\\partial t} = \\frac{\\partial}{\\partial x}\\Big(k_i \\frac{\\partial T}{\\partial x}\\Big),\\quad x\\in (x_{i-1},x_i)",
+      "type": "微分",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V3"
+      ],
+      "derivation_trace": "能量守恒 + 傅里叶定律；每层材料物性不同，分片常数。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "-k_1 \\frac{\\partial T}{\\partial x}\\Big|_{x=0} = h_{conv}(T_{amb}-T(0,t))",
+      "type": "微分",
+      "variables_refs": [
+        "V1"
+      ],
+      "derivation_trace": "外表面第三类边界条件；h_conv 由附件 2 测量温度反演校准。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "T(x_i^-,t)=T(x_i^+,t),\\quad k_i\\partial_x T|_{x_i^-}=k_{i+1}\\partial_x T|_{x_i^+}",
+      "type": "代数",
+      "variables_refs": [
+        "V1"
+      ],
+      "derivation_trace": "层界面温度与热流连续；内边界 T(L,t) 即皮肤外侧温度输出 T_s(t)。",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "R_{tot} = \\sum_i \\frac{d_i}{k_i} + \\frac{1}{h_{conv}},\\quad \\text{稳态近似 } T_s \\approx T_{skin} + (T_{amb}-T_{skin})\\frac{R_{inner}}{R_{tot}}",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V6"
+      ],
+      "derivation_trace": "热阻网络近似给出厚度-温度单调关系，作为优化初值与机理解释；精确值由瞬态 PDE 求解。",
+      "sub_question_binding": "Q2"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "couples"
+    },
+    {
+      "from": "E1",
+      "to": "E3",
+      "type": "couples"
+    },
+    {
+      "from": "E4",
+      "to": "O2",
+      "type": "guides"
+    },
+    {
+      "from": "E4",
+      "to": "O3",
+      "type": "guides"
+    },
+    {
+      "from": "M4",
+      "to": "E4",
+      "type": "motivates"
+    },
+    {
+      "from": "M5",
+      "to": "E4",
+      "type": "motivates"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "隐式有限差分（Crank-Nicolson）时间推进",
+      "implementation_ref": "pseudocode: tridiagonal solve per time step, Δx=0.1mm, Δt=1s",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "method": "厚度扫描 + 二分搜索",
+      "implementation_ref": "pseudocode: bisection on d_2 for constraint T_max≤47",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S3",
+      "method": "二维网格搜索 + 帕累托筛选",
+      "implementation_ref": "pseudocode: grid over (d_2,d_4), filter feasible",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S4",
+      "method": "参数反演（h_conv 校准）",
+      "implementation_ref": "pseudocode: least-squares fit to attachment 2 curve",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "基准仿真",
+      "inputs": {
+        "环境": "75℃",
+        "厚度": "(0.6,6,3.6,5)mm",
+        "时长": "90min"
+      },
+      "expected_outputs": {
+        "皮肤温度曲线": "T_s(t)",
+        "全场分布": "T(x,t)",
+        "与附件2误差": "MAE<0.5℃"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "II层厚度优化",
+      "inputs": {
+        "环境": "65℃",
+        "IV": "5.5mm",
+        "时长": "60min"
+      },
+      "expected_outputs": {
+        "最优厚度": "d_2*",
+        "约束余量": "T_max, τ_>44"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "双厚度优化",
+      "inputs": {
+        "环境": "80℃",
+        "时长": "30min"
+      },
+      "expected_outputs": {
+        "最优厚度对": "(d_2*,d_4*)",
+        "约束余量": "T_max, τ_>44"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "参数校准",
+      "inputs": {
+        "测量曲线": "附件2"
+      },
+      "expected_outputs": {
+        "对流系数": "h_conv*",
+        "拟合误差": "RMSE"
+      },
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "以纯导热无对流（h→∞）与绝热（h→0）两个极限为界，验证测量曲线落在模型预测区间内",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "convergence",
+      "method": "网格细化（Δx/2、Δt/2）检验温度场收敛，误差小于 0.1℃",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V3",
+      "type": "sensitivity",
+      "method": "h_conv 与 k_2 各 ±20% 扰动，观察最优厚度与皮肤温度的敏感度",
+      "targets_refs": [
+        "O2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "V4",
+      "type": "limit",
+      "method": "d_2→∞ 时皮肤温度应趋近 37℃ 且超温时长趋零；d_4→0 时退化为三层结构",
+      "targets_refs": [
+        "O2",
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "V5",
+      "type": "reproducibility",
+      "method": "网格划分与初值扰动下结果稳定（多次重算）",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "一维多层传热模型可复现附件 2 皮肤温度曲线，MAE 小于 0.5℃。",
+      "type": "实证结论",
+      "evidence_refs": [
+        "X1",
+        "X4",
+        "V1",
+        "V2"
+      ],
+      "model_refs": [
+        "M1",
+        "M2",
+        "M3"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "C2",
+      "text": "65℃ 环境下存在最小 II 层厚度使 60 分钟内满足 47℃/5 分钟双约束。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X2",
+        "V3"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "supported"
+    },
+    {
+      "claim_id": "C3",
+      "text": "80℃ 环境下 II 与 IV 层厚度存在帕累托前沿，联合优化给出最小可行厚度组合。",
+      "type": "方案结论",
+      "evidence_refs": [
+        "X3",
+        "V4"
+      ],
+      "model_refs": [
+        "M5"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "supported"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "P1",
+        "label": "材料参数（附件1）"
+      },
+      {
+        "id": "M1",
+        "label": "导热机制"
+      },
+      {
+        "id": "E1",
+        "label": "热传导 PDE"
+      },
+      {
+        "id": "M2",
+        "label": "对流换热机制"
+      },
+      {
+        "id": "E2",
+        "label": "外边界条件"
+      },
+      {
+        "id": "M3",
+        "label": "层间连续机制"
+      },
+      {
+        "id": "M4",
+        "label": "厚度-热阻机制"
+      },
+      {
+        "id": "O1",
+        "label": "Q1 温度分布"
+      },
+      {
+        "id": "O2",
+        "label": "Q2 II层优化"
+      },
+      {
+        "id": "O3",
+        "label": "Q3 双层优化"
+      }
+    ],
+    "edges": [
+      {
+        "from": "P1",
+        "to": "E1",
+        "relation": "物性参数"
+      },
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "控制方程"
+      },
+      {
+        "from": "M2",
+        "to": "E2",
+        "relation": "边界条件"
+      },
+      {
+        "from": "E1",
+        "to": "O1",
+        "relation": "数值解"
+      },
+      {
+        "from": "E1",
+        "to": "M4",
+        "relation": "温度响应"
+      },
+      {
+        "from": "M4",
+        "to": "O2",
+        "relation": "厚度扫描"
+      },
+      {
+        "from": "M4",
+        "to": "O3",
+        "relation": "联合优化"
+      }
+    ]
+  },
+  "modeling_trace": "读题后确认核心为多层一维传热：按附件 1 材料参数建立分片热传导 PDE，外表面用对流边界、内边界输出皮肤温度，Crank-Nicolson 隐式推进求解 Q1 并校准换热系数；Q2/Q3 在约束下对厚度做优化搜索。候选对比见 candidates。"
+}

@@ -1,0 +1,45 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3,Q4,Q5",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "graph_algorithm",
+  "mechanism_count": 4,
+  "equation_count": 4,
+  "validation_plan": {
+    "limit_tests": 3,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "aggregation": "mean_std",
+      "description": "增补选址与围堵贪心含随机初始化/随机次序，采用多种子随机数起点报告指标均值标准差",
+      "metric": "覆盖率 κ 与围堵封口数 |C|",
+      "tolerance": "cv < 10%",
+      "result": "5 组随机数起点下 κ 的 cv≈0.5%，|C| 的 cv≈8.5%，可复现性通过"
+    },
+    "sensitivity": 3,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 5
+  }
+}

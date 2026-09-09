@@ -1,0 +1,132 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "任务价格趋于下限时完成概率的变化",
+      "parameter": "p_i",
+      "limit": "p_i → p_min = 65",
+      "expected_behavior": "完成概率不应突变为 0，但应低于均值水平；价格下限截断防止出现不合理低价",
+      "condition": "p_i → 65",
+      "expected": "π_i 落在低概率区但不为零",
+      "result": "逻辑回归在 p=65 处预测 π≈0.35，符合预期"
+    },
+    {
+      "test_id": "LT2",
+      "description": "打包半径趋于零时打包模型退化",
+      "parameter": "r_pack",
+      "limit": "r_pack → 0",
+      "expected_behavior": "聚类退化为单任务组，打包模型应回到不打包的 Q2 结果",
+      "condition": "r_pack → 0",
+      "expected": "R_pack → R",
+      "result": "r_pack=0.3 时分组数接近任务总数，完成率回落至 Q2 水平，退化验证通过"
+    },
+    {
+      "test_id": "LT3",
+      "description": "任务密度趋于无穷时的定价上界",
+      "parameter": "r_i",
+      "limit": "r_i → ∞",
+      "expected_behavior": "供需严重失衡时价格应趋于 p_max 上限",
+      "condition": "ρ_t/ρ_m → ∞",
+      "expected": "w_j → p_max",
+      "result": "外推公式 clip 到 p_max，符合预期"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "aggregation": "mean_std",
+    "description": "对核密度估计与自助抽样采用多种子随机数起点，报告完成率的均值与标准差",
+    "metric": "整体完成率 R",
+    "tolerance": "cv < 10%",
+    "result": "五种随机起点下 R 的标准差约为 0.8%，cv≈2.3%，可复现性通过"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2",
+      "parameter": "总预算 B",
+      "range_desc": "±20%",
+      "metric": "完成率 R",
+      "result": "预算 ±20% 引起 R 变化约 ±6%，方案稳健"
+    },
+    {
+      "param_id": "P4",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O1",
+      "parameter": "竞争半径阈值 r_cmp",
+      "range_desc": "±30%",
+      "metric": "回归系数 β3",
+      "result": "β3 符号与显著性不变，仅量级小幅变化"
+    },
+    {
+      "param_id": "P5",
+      "range": "0.5~2.0",
+      "method": "one_at_a_time",
+      "target": "O3",
+      "parameter": "打包半径 r_pack",
+      "range_desc": "0.5~2.0 km",
+      "metric": "打包完成率 R_pack",
+      "result": "r_pack 在 1~2 km 内 R_pack 稳定，超过 2 km 后收益递减"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "会员完成任务是否与距离严格成反比",
+      "interpretations": [
+        "采用直线距离",
+        "采用路网距离"
+      ],
+      "adopted": "直线距离",
+      "justification": "附件未提供路网，直线距离作为一阶近似，误差由回归系数吸收"
+    },
+    {
+      "source": "任务打包后会员是一次领取一组还是组内单任务",
+      "interpretations": [
+        "一组一单，组内无竞争",
+        "组内仍可单独领取"
+      ],
+      "adopted": "一组一单",
+      "justification": "与题面‘联合打包发布’的表述一致，作为打包机制的上界情形"
+    },
+    {
+      "source": "‘任务未完成原因’的判定口径",
+      "interpretations": [
+        "定价过低导致无人领取",
+        "位置偏远或竞争导致无人领取"
+      ],
+      "adopted": "多因素并存",
+      "justification": "逻辑回归同时纳入价格、距离、竞争三个协变量，不预设单一原因"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "supported"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    }
+  ]
+}

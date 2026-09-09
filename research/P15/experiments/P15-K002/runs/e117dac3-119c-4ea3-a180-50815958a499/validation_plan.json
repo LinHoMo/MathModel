@@ -1,0 +1,114 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "板宽趋于0时无碰撞约束退化为空，p_min应趋于0且t_end趋于无穷",
+      "parameter": "板宽w",
+      "limit": "w -> 0",
+      "expected_behavior": "p_min -> 0，终止时刻 -> ∞"
+    },
+    {
+      "test_id": "LT2",
+      "description": "调头圆半径趋于无穷时龙头永远无法到达边界，p_min问题无可行解",
+      "parameter": "调头圆半径R_T",
+      "limit": "R_T -> ∞",
+      "expected_behavior": "可行域为空，优化报告不可行"
+    },
+    {
+      "test_id": "LT3",
+      "description": "速度上限趋于无穷时v_head^max应趋于无穷且无约束激活",
+      "parameter": "速度上限v_max",
+      "limit": "v_max -> ∞",
+      "expected_behavior": "v_head^max -> ∞，无约束激活"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "多起点初始化与数值微分步长在不同配置下重复优化，报告最优值均值与标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P3",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P8",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O4"
+    },
+    {
+      "param_id": "P10",
+      "range": "采样密度×2",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "初始极角θ_A未给出",
+      "interpretations": [
+        "θ_A=32π",
+        "第16圈内任意位置"
+      ],
+      "adopted": "θ_A=32π，初始相位平移不影响相对运动学",
+      "justification": "题面图4仅示意，取圈起点避免引入额外自由度"
+    },
+    {
+      "source": "碰撞判据未明确定义",
+      "interpretations": [
+        "中心距<板宽",
+        "法向投影间距<板宽",
+        "把手距离判据"
+      ],
+      "adopted": "最小间距<板宽（含几何投影）",
+      "justification": "矩形刚片干涉的最直接判据，采样离散化实现"
+    },
+    {
+      "source": "调头圆弧切点是否固定",
+      "interpretations": [
+        "切点固定",
+        "切点自由优化"
+      ],
+      "adopted": "切点自由优化",
+      "justification": "题面问'能否调整圆弧'，切点自由是调整空间的一部分"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    },
+    {
+      "claim": "C5",
+      "evidence_ref": "X5",
+      "status": "supported"
+    }
+  ]
+}

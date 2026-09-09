@@ -1,0 +1,692 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-436d76e2",
+  "model_family": {
+    "primary": "decision_analysis",
+    "secondary": [
+      "queueing_theory",
+      "optimization"
+    ],
+    "description": "以个体决策分析（期望收益、多准则、阈值与情景树）统一司机选择、数据驱动的方案与公平规则设计，排队论提供等待与吞吐的输入量。",
+    "candidates": [
+      {
+        "family": "decision_analysis（期望收益与多准则框架）",
+        "rationale": "司机排队/空返、短途优先规则本质是决策与机制设计问题，决策树与多准则框架可统一 Q1/Q2/Q4，选为最终模型。"
+      },
+      {
+        "family": "queueing_theory（等待与吞吐输入）",
+        "rationale": "为决策提供 W_q、服务率等关键输入量，作为输入层。"
+      },
+      {
+        "family": "optimization（设施设计）",
+        "rationale": "Q3 上车点配置为约束优化，作为设施设计层。"
+      },
+      {
+        "family": "simulation（情景评估）",
+        "rationale": "评估决策方案在随机情景下的稳健性，作为验证层。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2019_C",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "4fc950a9a22510431b26b0406c4e354dec0c18c75f97c4fe8087d439795e5ad2"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "司机按期望收益最大化决策，面临排队等待与空返两条备选路径。",
+      "type": "projection",
+      "rationale": "决策分析标准假设。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "等待时间、空返成本、车费收入为可估计的随机量，以分布进入决策。",
+      "type": "mechanism",
+      "rationale": "随机决策需分布信息。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "机场管理方目标为乘客服务效率与司机收益公平的加权。",
+      "type": "projection",
+      "rationale": "多准则决策设定。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "短途再返司机获优先权后重新进入队列。",
+      "type": "mechanism",
+      "rationale": "题面方案。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "可达数据仅支持参数化估计，模型以区间形式给出结论。",
+      "type": "simplification",
+      "rationale": "数据不完全下的稳健决策。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "备选方案",
+      "symbol": "A = {queue, empty}",
+      "definition": "司机可选行动集合",
+      "unit": "",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "期望收益",
+      "symbol": "E[u | A]",
+      "definition": "各方案期望净收益",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "等待时间",
+      "symbol": "W_q",
+      "definition": "排队等待时间（随机量）",
+      "unit": "min",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "决策阈值",
+      "symbol": "tau",
+      "definition": "切换排队/空返的等待时间阈值",
+      "unit": "min",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "上车点数",
+      "symbol": "n_p",
+      "definition": "乘车区配置的上车点数量",
+      "unit": "个",
+      "type": "decision",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V6",
+      "name": "乘车效率",
+      "symbol": "eta",
+      "definition": "单位时间载客离开车辆数",
+      "unit": "辆/h",
+      "type": "derived",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V7",
+      "name": "优先规则参数",
+      "symbol": "rho",
+      "definition": "短途再返优先权重",
+      "unit": "",
+      "type": "decision",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "variable_id": "V8",
+      "name": "公平指数",
+      "symbol": "I",
+      "definition": "长短途收益分配公平度量",
+      "unit": "",
+      "type": "derived",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "车费分布",
+      "symbol": "r ~ dist",
+      "value": "按机场数据",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "等待时间分布",
+      "symbol": "W_q ~ dist",
+      "value": "按时段估计",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "空返里程",
+      "symbol": "r_e",
+      "value": "按机场",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "油耗成本",
+      "symbol": "c_f",
+      "value": "元/km",
+      "source": "文献"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "时间成本",
+      "symbol": "c_t",
+      "value": "元/min",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "车道长度",
+      "symbol": "D_lane",
+      "value": "按机场",
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "安全间距",
+      "symbol": "l_s",
+      "value": "车长+间隙",
+      "source": "文献"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "需求到达率",
+      "symbol": "lambda_p",
+      "value": "按航班数据",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "效率-公平权重",
+      "symbol": "omega",
+      "value": 0.5,
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "maximize",
+      "expression": "max over A in {queue, empty} of E[u|A] via threshold tau",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "estimate",
+      "expression": "estimate segment-specific choice plan from airport data with interval conclusions",
+      "variables_refs": [
+        "V4",
+        "V3"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "maximize",
+      "expression": "max omega*eta + (1-omega)*service quality over n_p",
+      "variables_refs": [
+        "V5",
+        "V6"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "minimize",
+      "expression": "min |I - 0.5| over rho with long-trip payoff floor",
+      "variables_refs": [
+        "V7",
+        "V8",
+        "V2"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "capacity",
+      "expression": "n_p <= floor(D_lane / l_s)",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "安全规范",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "stability",
+      "expression": "lambda_p < n_p * mu",
+      "variables_refs": [
+        "V6",
+        "V5"
+      ],
+      "source": "排队论",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "payoff_floor",
+      "expression": "long-trip E[u] >= 0 under priority rule",
+      "variables_refs": [
+        "V2"
+      ],
+      "source": "公平性",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "rule_bounds",
+      "expression": "rho in [0, 1)",
+      "variables_refs": [
+        "V7"
+      ],
+      "source": "机制设计",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "quality",
+      "expression": "expected passenger wait <= service standard",
+      "variables_refs": [
+        "V3"
+      ],
+      "source": "机场要求",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "决策树/期望收益比较：排队与空返两分支以概率与收益加权，比较得阈值策略。",
+      "related_equations": [
+        "E2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "多准则设计：效率与安全、服务质量以权重合成，设施配置为有界优化。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "机制设计：优先规则改变收益分配，以公平指数为准则选参数。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\mathbb{E}[u|\\text{queue}] = \\bar r - c_t\\mathbb{E}[W_q], \\quad \\mathbb{E}[u|\\text{empty}] = \\bar r - c_f r_e - \\epsilon",
+      "type": "代数",
+      "variables_refs": [
+        "V2",
+        "V3",
+        "V1"
+      ],
+      "derivation_trace": "两分支期望收益",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "\\tau^* = c_f r_e / c_t;\\quad A = \\text{queue} \\iff \\mathbb{E}[W_q] \\le \\tau^*",
+      "type": "代数",
+      "variables_refs": [
+        "V4",
+        "V3"
+      ],
+      "derivation_trace": "阈值决策规则",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\max_{n_p} \\; \\omega\\,\\eta(n_p) - (1-\\omega)\\,c_{wait}(n_p), \\quad \\text{s.t. } n_p \\le \\lfloor D_{lane}/l_s\\rfloor",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V6"
+      ],
+      "derivation_trace": "效率-服务多准则设施设计",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "I = u_{long}/(u_{long}+u_{short});\\quad \\min_\\rho |I-0.5|",
+      "type": "代数",
+      "variables_refs": [
+        "V8",
+        "V7"
+      ],
+      "derivation_trace": "公平准则与优先参数选择",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "O1",
+      "type": "solves"
+    },
+    {
+      "from": "E2",
+      "to": "O2",
+      "type": "solves"
+    },
+    {
+      "from": "E3",
+      "to": "O3",
+      "type": "solves"
+    },
+    {
+      "from": "E4",
+      "to": "O4",
+      "type": "solves"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "决策树评估（期望收益）",
+      "implementation_ref": "概率加权递归",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "有界枚举 + 多准则打分",
+      "implementation_ref": "n_p 枚举 + 加权评分",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S3",
+      "method": "情景仿真评估规则稳健性",
+      "implementation_ref": "多 seed 情景集",
+      "sub_question_binding": [
+        "Q2",
+        "Q4"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "decision_tree",
+      "inputs": {
+        "costs": "c_f, c_t",
+        "r_e": "km"
+      },
+      "expected_outputs": {
+        "tau": "阈值",
+        "choice": "策略"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "data_driven_plan",
+      "inputs": {
+        "flight": "航班到港数据"
+      },
+      "expected_outputs": {
+        "segments": "分时段方案",
+        "intervals": "区间结论"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "multi_criteria_design",
+      "inputs": {
+        "D_lane": "m",
+        "l_s": "m",
+        "omega": 0.5
+      },
+      "expected_outputs": {
+        "n_p": "最优上车点数",
+        "eta": "效率"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "priority_design",
+      "inputs": {
+        "rho": "[0,0.8]"
+      },
+      "expected_outputs": {
+        "I": "公平指数",
+        "plan": "优先规则"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "单时段确定性特例与手算一致",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "c_f, c_t, lambda_p 各 ±20% 对阈值与方案影响",
+      "targets_refs": [
+        "O1",
+        "O2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "lambda_p->0 全排队；lambda_p->c mu 全空返",
+      "targets_refs": [
+        "O1",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "情景仿真多 seed 结果稳定",
+      "targets_refs": [
+        "O2",
+        "O4"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "validation_id": "V5",
+      "type": "uncertainty",
+      "method": "参数区间下阈值与公平指数给出区间结论",
+      "targets_refs": [
+        "O2",
+        "O4"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q4"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "司机存在阈值型最优策略，等待时间低于阈值时排队更优。",
+      "type": "decision_claim",
+      "evidence_refs": [
+        "X1",
+        "V1"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "数据驱动方案可分时段给出，结论对参数敏感并需区间表述。",
+      "type": "empirical_claim",
+      "evidence_refs": [
+        "X2",
+        "V2",
+        "V5"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "存在兼顾效率与服务的最优上车点配置。",
+      "type": "design_claim",
+      "evidence_refs": [
+        "X3",
+        "V3"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "短途优先权重可调至长短途收益均衡且不损害长途司机。",
+      "type": "fairness_claim",
+      "evidence_refs": [
+        "X4",
+        "V4",
+        "V5"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "期望收益决策"
+      },
+      {
+        "id": "M2",
+        "label": "多准则设计"
+      },
+      {
+        "id": "M3",
+        "label": "机制设计"
+      },
+      {
+        "id": "E2",
+        "label": "阈值规则"
+      },
+      {
+        "id": "E3",
+        "label": "设施优化"
+      },
+      {
+        "id": "E4",
+        "label": "公平准则"
+      },
+      {
+        "id": "O4",
+        "label": "均衡目标"
+      }
+    ],
+    "edges": [
+      {
+        "from": "M1",
+        "to": "E2",
+        "relation": "instantiates"
+      },
+      {
+        "from": "M2",
+        "to": "E3",
+        "relation": "instantiates"
+      },
+      {
+        "from": "M3",
+        "to": "E4",
+        "relation": "instantiates"
+      },
+      {
+        "from": "E2",
+        "to": "O1",
+        "relation": "solves"
+      },
+      {
+        "from": "E4",
+        "to": "O4",
+        "relation": "solves"
+      }
+    ]
+  },
+  "modeling_trace": "从司机个体决策出发建立期望收益与阈值框架；数据不完全下以区间结论稳健表达；设施与规则设计归为多准则优化与机制设计；用情景仿真检验规则稳健性。"
+}

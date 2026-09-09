@@ -1,0 +1,104 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "预算趋于无穷时完成率应趋于饱和上限（受会员容量约束）",
+      "parameter": "C_0",
+      "limit": "C_0 -> infinity",
+      "expected_behavior": "R 单调上升并收敛到会员容量决定的上限"
+    },
+    {
+      "test_id": "LT2",
+      "description": "会员密度趋于 0 的任务完成率应趋于 0，定价再高也无人接",
+      "parameter": "rho_i",
+      "limit": "rho_i -> 0",
+      "expected_behavior": "P_i -> 0，优化器对该任务不分配预算"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "bootstrap 重采样附件一数据估计参数并重跑优化，完成率取均值±标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P3",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P6",
+      "range": "0.75–0.95",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "未完成原因的主导因素",
+      "interpretations": [
+        "价格过低主导",
+        "位置偏远主导",
+        "会员密度不足主导",
+        "多因素联合"
+      ],
+      "adopted": "多因素联合（logit 同时纳入价格、密度、距离）",
+      "justification": "单因素模型无法解释附件一全部变异，联合模型拟合优度更高"
+    },
+    {
+      "source": "任务打包的粒度",
+      "interpretations": [
+        "按固定半径聚类",
+        "按会员覆盖范围聚类",
+        "按任务数等分"
+      ],
+      "adopted": "按固定半径 1km 聚类",
+      "justification": "位置集中以空间邻近为定义，半径灵敏度单独检验"
+    },
+    {
+      "source": "预算约束口径",
+      "interpretations": [
+        "与原方案总成本相同",
+        "允许上浮一定比例"
+      ],
+      "adopted": "与原方案总成本相同（成本中性）",
+      "justification": "便于公平对比新旧方案完成率"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "unresolved"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V4",
+      "status": "supported"
+    }
+  ]
+}

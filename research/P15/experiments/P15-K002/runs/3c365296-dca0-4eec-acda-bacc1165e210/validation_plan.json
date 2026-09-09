@@ -1,0 +1,111 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "当风化程度趋于0时，复原预测应退化为未风化点观测值本身，即复原残差趋于0",
+      "parameter": "风化程度指标d",
+      "limit": "d -> 0",
+      "expected_behavior": "预测值收敛到未风化点成分，模型偏差趋于0"
+    },
+    {
+      "test_id": "LT2",
+      "description": "当累加和取边界85%或105%时，样品仍应被判定为有效，超出边界即无效",
+      "parameter": "累加和S",
+      "limit": "S=85 与 S=105 边界",
+      "expected_behavior": "边界处判定连续：85与105被接受，84.9与105.1被拒绝"
+    },
+    {
+      "test_id": "LT3",
+      "description": "当训练类别完全分离（铅钡类PbO远高于高钾类）时，判别器应达到零错分",
+      "parameter": "类别分离度",
+      "limit": "类间距 -> 无穷",
+      "expected_behavior": "错分率单调下降并趋于0"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "多次重采样训练并取均值与标准差，检验交叉验证误差与复原误差的稳定性"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P3",
+      "range": "±50%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P1",
+      "range": "±2个百分点",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P4",
+      "range": "0.4-0.6",
+      "method": "one_at_a_time",
+      "target": "O2"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "空白成分表示未检测到该成分",
+      "interpretations": [
+        "视为真实零含量",
+        "视为低于检出限的缺失值",
+        "视为数据记录缺失"
+      ],
+      "adopted": "低于检出限的缺失值，并以填充标志作为附加特征",
+      "justification": "检测空白通常表示低于检出限而非零，保留缺失标志可避免扭曲相关结构并保留判别信息"
+    },
+    {
+      "source": "成分累加和非100%的原因",
+      "interpretations": [
+        "检测随机误差",
+        "系统偏差（仪器标定）",
+        "未检测成分的存在"
+      ],
+      "adopted": "以题面给定的85%-105%区间统一判有效，不做系统性误差修正",
+      "justification": "题面明确定义有效区间，额外修正缺乏标定依据，可能引入主观偏差"
+    },
+    {
+      "source": "风化点与未风化点的配对关系",
+      "interpretations": [
+        "同一文物成对严格匹配",
+        "仅统计上同分布",
+        "无配对信息"
+      ],
+      "adopted": "同一文物成对匹配作为回归训练目标，无配对时用类别内统计代理",
+      "justification": "成对匹配可消除文物间配方差异，是复原映射最直接的监督信号"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "unresolved"
+    }
+  ]
+}

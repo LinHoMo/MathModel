@@ -1,0 +1,771 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-e117dac3",
+  "model_family": {
+    "primary": "numerical_optimization",
+    "secondary": [
+      "kinematics"
+    ],
+    "description": "以数值优化为主线：最小螺距、最短调头曲线、最大龙头速度分别化为带几何约束的单目标优化问题，运动学作为状态方程约束，用序列二次规划与一维搜索求解。",
+    "candidates": [
+      {
+        "family": "numerical_optimization",
+        "rationale": "Q3（最小螺距）、Q4（最短调头）、Q5（最大速度）都是显式优化问题，统一为约束优化便于求解与敏感性分析。"
+      },
+      {
+        "family": "pure_geometric_spiral",
+        "rationale": "几何闭式可提供初值与可行域分析，但含约束的最值仍需数值优化，作为预处理器。"
+      },
+      {
+        "family": "kinematics",
+        "rationale": "运动学给出状态方程，作为优化问题中的等式约束与目标函数载体。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2024_A",
+    "sub_question_id": "Q1,Q2,Q3,Q4,Q5",
+    "problem_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "板凳链为刚性铰接链，位形由链端位置与板长约束唯一确定，运动学状态可由一维链端弧长参数化。",
+      "type": "mechanism",
+      "rationale": "刚链自由度与链端位置一一对应，优化变量可压缩到低维。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "无碰撞约束以离散采样点上的板凳间距下限表达，采样充分密以保证约束代表性。",
+      "type": "simplification",
+      "rationale": "连续干涉约束离散化为有限不等式组，采样密度由收敛性检验确定。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "优化目标与约束对决策变量（螺距、圆弧半径、龙头速度）连续可微，可用梯度类算法。",
+      "type": "simplification",
+      "rationale": "几何量与弧长对参数连续，数值微分可用。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "调头曲线族限定为两段相切圆弧（R1=2R2），与两端螺线相切，切点为自由变量。",
+      "type": "mechanism",
+      "rationale": "题面限定曲线族，自由变量为半径与切点位置。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "全局最优通过多起点初始化与可行域网格扫描保障，避免局部最优陷阱。",
+      "type": "simplification",
+      "rationale": "非凸约束优化需多起点策略，网格扫描提供全局视角。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "决策变量集",
+      "symbol": "u",
+      "definition": "优化决策：螺距p、圆弧半径(R1,R2)、切点角、龙头速度v0",
+      "unit": "混合",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q3",
+        "Q4",
+        "Q5"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "状态轨迹",
+      "symbol": "z(t)",
+      "definition": "全链把手位置速度状态",
+      "unit": "m, m/s",
+      "type": "state",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "目标函数",
+      "symbol": "J(u)",
+      "definition": "当前子问题的目标（螺距/弧长/速度上限倒数）",
+      "unit": "混合",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q3",
+        "Q4",
+        "Q5"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "约束残差",
+      "symbol": "c(u)",
+      "definition": "不等式与等式约束向量",
+      "unit": "混合",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "终止时刻",
+      "symbol": "t_{end}",
+      "definition": "盘入终止时刻",
+      "unit": "s",
+      "type": "derived",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V6",
+      "name": "最小间距",
+      "symbol": "d_{min}(t)",
+      "definition": "全链最小板凳间距",
+      "unit": "m",
+      "type": "derived",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V7",
+      "name": "速度放大系数",
+      "symbol": "\\kappa_i",
+      "definition": "把手速率与龙头速率之比",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "龙头板长",
+      "symbol": "L_0",
+      "value": 3.41,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "龙身龙尾板长",
+      "symbol": "L_1",
+      "value": 2.2,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "板宽",
+      "symbol": "w",
+      "value": 0.3,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "节数",
+      "symbol": "N",
+      "value": 223,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "龙头速度",
+      "symbol": "v_0",
+      "value": 1.0,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "初始圈数",
+      "symbol": "n_0",
+      "value": 16,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "调头圆半径",
+      "symbol": "R_T",
+      "value": 4.5,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "半径比",
+      "symbol": "\\lambda",
+      "value": 2.0,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "速度上限",
+      "symbol": "v_{max}",
+      "value": 2.0,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P10",
+      "name": "约束采样密度",
+      "symbol": "n_{samp}",
+      "value": 200,
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "simulate",
+      "expression": "z(t_k) \\ \\forall t_k \\in [0,300]",
+      "variables_refs": [
+        "V2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "find",
+      "expression": "t_{end} = \\sup\\{t: d_{min}(t) \\ge w\\}",
+      "variables_refs": [
+        "V5",
+        "V6"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "minimize",
+      "expression": "\\min_p p \\ \\text{s.t. } \\|H_1\\| = R_T, \\ d_{min} \\ge w",
+      "variables_refs": [
+        "V1",
+        "V3",
+        "V4"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "minimize",
+      "expression": "\\min_{R_2,\\text{切点}} s_T \\ \\text{s.t. 相切约束}",
+      "variables_refs": [
+        "V1",
+        "V3",
+        "V4"
+      ],
+      "sub_question_binding": "Q4"
+    },
+    {
+      "objective_id": "O5",
+      "type": "maximize",
+      "expression": "\\max_{v_0} v_0 \\ \\text{s.t. } v_0 \\kappa_i \\le 2 \\ \\forall i",
+      "variables_refs": [
+        "V1",
+        "V3",
+        "V7"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "链长约束",
+      "expression": "\\|H_{i+1}-H_i\\| = L_i",
+      "variables_refs": [
+        "V2"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "螺线方程",
+      "expression": "H_1 \\in \\text{螺线}(p)",
+      "variables_refs": [
+        "V2",
+        "V1"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q1",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "无碰撞",
+      "expression": "d_{min}(t) \\ge w \\ \\forall t",
+      "variables_refs": [
+        "V6"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C4",
+      "type": "调头边界",
+      "expression": "\\|H_1(t_{调头})\\| = R_T",
+      "variables_refs": [
+        "V2"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "相切约束",
+      "expression": "R_1 = 2R_2, \\ \\text{圆弧-圆弧及圆弧-螺线相切}",
+      "variables_refs": [
+        "V1"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "constraint_id": "C6",
+      "type": "速度上限",
+      "expression": "\\max_i \\|\\dot{H}_i\\| \\le 2",
+      "variables_refs": [
+        "V7"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "运动学状态由链端驱动唯一确定，优化只需在低维决策空间搜索，约束（无碰撞、相切）由状态方程隐式满足。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "最小螺距与最短调头都是约束最值问题，序列二次规划处理等式相切约束与不等式间隙约束。",
+      "related_equations": [
+        "E3",
+        "E4"
+      ],
+      "sub_question_binding": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "最大龙头速度是线性缩放问题：速度场与龙头速度成正比，最优解在放大系数最大处取等式约束。",
+      "related_equations": [
+        "E5"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "\\dot{z} = f(z, u), \\quad z(0) = z_0",
+      "type": "微分",
+      "variables_refs": [
+        "V2",
+        "V1"
+      ],
+      "derivation_trace": "链式运动学状态方程：链端匀速驱动，铰接约束传递",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "c_{gap}(u) = w - \\min_{i,j} d_{ij}(z(u)) \\le 0",
+      "type": "代数",
+      "variables_refs": [
+        "V4",
+        "V6"
+      ],
+      "derivation_trace": "无碰撞不等式约束的优化形式",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "\\min_p p \\quad \\text{s.t. } c_{gap}(p) \\le 0, \\ \\|H_1(p)\\| = R_T",
+      "type": "代数",
+      "variables_refs": [
+        "V1",
+        "V3",
+        "V4"
+      ],
+      "derivation_trace": "最小螺距优化问题，边界条件为龙头到调头圆",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "\\min_{R_2, \\psi} R_2(\\lambda\\alpha_1 + \\alpha_2) \\quad \\text{s.t. 相切代数方程组}",
+      "type": "代数",
+      "variables_refs": [
+        "V1",
+        "V3"
+      ],
+      "derivation_trace": "调头弧长优化，相切条件为等式约束",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "v_{head}^{max} = \\frac{2}{\\max_{i,s}\\kappa_i(s)}",
+      "type": "代数",
+      "variables_refs": [
+        "V7",
+        "V1"
+      ],
+      "derivation_trace": "速度线性缩放：约束在最大放大系数处收紧",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "E3",
+      "type": "constrains"
+    },
+    {
+      "from": "E1",
+      "to": "E4",
+      "type": "feeds"
+    },
+    {
+      "from": "E1",
+      "to": "E5",
+      "type": "feeds"
+    },
+    {
+      "from": "E3",
+      "to": "O3",
+      "type": "implements"
+    },
+    {
+      "from": "E4",
+      "to": "O4",
+      "type": "implements"
+    },
+    {
+      "from": "E5",
+      "to": "O5",
+      "type": "implements"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "序列二次规划（SQP）",
+      "implementation_ref": "数值雅可比，BFGS拟牛顿更新",
+      "sub_question_binding": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "一维搜索+网格扫描",
+      "implementation_ref": "黄金分割与可行域网格结合",
+      "sub_question_binding": [
+        "Q3",
+        "Q5"
+      ]
+    },
+    {
+      "solver_id": "S3",
+      "method": "多起点策略",
+      "implementation_ref": "网格起点+SQP精化",
+      "sub_question_binding": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "solver_id": "S4",
+      "method": "时间步进仿真",
+      "implementation_ref": "RK4积分+碰撞检测",
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "仿真实验",
+      "inputs": {
+        "螺距": 0.55
+      },
+      "expected_outputs": {
+        "输出": "轨迹",
+        "评价": "约束残差"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "终止搜索",
+      "inputs": {
+        "判据": "d_min<w"
+      },
+      "expected_outputs": {
+        "输出": "t_end",
+        "评价": "二分收敛"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "螺距优化",
+      "inputs": {
+        "多起点": "20个"
+      },
+      "expected_outputs": {
+        "输出": "p_min",
+        "评价": "全局性（多起点一致）"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "调头优化",
+      "inputs": {
+        "半径比": 2
+      },
+      "expected_outputs": {
+        "输出": "最短s_T",
+        "评价": "KKT残差"
+      },
+      "sub_question_binding": "Q4"
+    },
+    {
+      "experiment_id": "X5",
+      "type": "速度上限",
+      "inputs": {
+        "路径": "优化路径"
+      },
+      "expected_outputs": {
+        "输出": "v_head^max",
+        "评价": "约束激活验证"
+      },
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "无碰撞且螺距无穷大时验证优化退化为直线链解析解",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "convergence",
+      "method": "约束采样密度倍增验证最优值收敛",
+      "targets_refs": [
+        "O3",
+        "O4"
+      ],
+      "sub_question_binding": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "sensitivity",
+      "method": "板宽±10%观察p_min与s_T变化率",
+      "targets_refs": [
+        "O3",
+        "O4"
+      ],
+      "sub_question_binding": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "不同数值微分步长重复优化，最优值一致",
+      "targets_refs": [
+        "O3",
+        "O4"
+      ],
+      "sub_question_binding": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "validation_id": "V5",
+      "type": "limit",
+      "method": "速度上限趋于无穷时v_head^max趋于无穷（无约束激活）",
+      "targets_refs": [
+        "O5"
+      ],
+      "sub_question_binding": "Q5"
+    },
+    {
+      "validation_id": "V6",
+      "type": "uncertainty",
+      "method": "半径比±10%考察s_T与v_head^max区间",
+      "targets_refs": [
+        "O4",
+        "O5"
+      ],
+      "sub_question_binding": [
+        "Q4",
+        "Q5"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "优化驱动的仿真轨迹满足链长与螺线约束至数值精度，多起点搜索给出全局一致的p_min。",
+      "type": "机制结论",
+      "evidence_refs": [
+        "X1",
+        "X3",
+        "V2"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "终止时刻唯一且由间隙约束首次激活确定，对板宽扰动连续依赖。",
+      "type": "机制结论",
+      "evidence_refs": [
+        "X2",
+        "V3"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "最小螺距优化在多起点下收敛到同一全局解，位于无碰撞与到达边界的交集处。",
+      "type": "结论",
+      "evidence_refs": [
+        "X3",
+        "V2",
+        "V3"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "相切约束下的调头弧长优化满足KKT条件，得到比原始配置更短的路径。",
+      "type": "机制结论",
+      "evidence_refs": [
+        "X4",
+        "V2",
+        "V4"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C5",
+      "text": "最大龙头速度由放大系数最大处约束激活决定，优化结果对数值设置稳健。",
+      "type": "机制结论",
+      "evidence_refs": [
+        "X5",
+        "V5",
+        "V6"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q5",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "E1",
+        "label": "状态方程"
+      },
+      {
+        "id": "E2",
+        "label": "间隙约束"
+      },
+      {
+        "id": "E3",
+        "label": "螺距优化"
+      },
+      {
+        "id": "E4",
+        "label": "调头优化"
+      },
+      {
+        "id": "E5",
+        "label": "速度上限"
+      }
+    ],
+    "edges": [
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "生成"
+      },
+      {
+        "from": "E2",
+        "to": "E3",
+        "relation": "约束"
+      },
+      {
+        "from": "E1",
+        "to": "E4",
+        "relation": "供给"
+      },
+      {
+        "from": "E1",
+        "to": "E5",
+        "relation": "供给"
+      }
+    ]
+  },
+  "modeling_trace": "将 Q3/Q4/Q5 识别为显式约束优化问题，Q1/Q2 为状态仿真，统一建立'低维决策+状态方程+约束函数'的优化框架。运动学由链端驱动确定，无碰撞与相切化为约束，用 SQP 加多起点求解。对比纯几何闭式（难处理复合约束）与运动学（无优化结构）后选定数值优化主线。全局性由多起点一致性与采样收敛双重保障。"
+}

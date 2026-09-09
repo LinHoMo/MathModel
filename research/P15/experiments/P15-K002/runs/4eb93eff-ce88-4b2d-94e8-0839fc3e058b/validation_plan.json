@@ -1,0 +1,101 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "故障概率趋于0时MDP策略应收敛到无故障最优策略",
+      "parameter": "故障概率 q",
+      "limit": "q -> 0",
+      "expected_behavior": "值函数与策略与确定性MDP一致，期望产量连续收敛"
+    },
+    {
+      "test_id": "LT2",
+      "description": "班次时长趋于无穷时平均产量应趋于稳态生产率",
+      "parameter": "班次时长 H",
+      "limit": "H -> inf",
+      "expected_behavior": "N/H趋于由瓶颈CNC与RGV服务能力决定的常数"
+    },
+    {
+      "test_id": "LT3",
+      "description": "清洗时间趋于0时两道工序衔接延迟消失",
+      "parameter": "清洗时间 w",
+      "limit": "w -> 0",
+      "expected_behavior": "二工序可紧接一工序，产量趋近无清洗上界"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "故障发生与排除时长抽样依赖随机数序列，多种子运行报告期望产量均值与标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P7",
+      "range": "±50%（0.5%-1.5%）",
+      "method": "one_at_a_time",
+      "target": "O4"
+    },
+    {
+      "param_id": "P8",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O4"
+    },
+    {
+      "param_id": "P1",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "故障发生后未完成物料的处理时点",
+      "interpretations": [
+        "故障发生时在制物料立即报废",
+        "故障排除后物料报废",
+        "物料由RGV取回报废"
+      ],
+      "adopted": "故障发生时在制物料立即报废",
+      "justification": "题面说明故障时未完成物料报废，以故障发生时刻为报废时点最直接"
+    },
+    {
+      "source": "移动时间是否包含上下料时间",
+      "interpretations": [
+        "移动与上下料分开计时",
+        "移动时间含机械臂操作",
+        "上下料并行于移动"
+      ],
+      "adopted": "移动与上下料分开计时",
+      "justification": "题面表1分别给出移动与上下料时间，按顺序相加最符合参数定义"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V2",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X1",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    }
+  ]
+}

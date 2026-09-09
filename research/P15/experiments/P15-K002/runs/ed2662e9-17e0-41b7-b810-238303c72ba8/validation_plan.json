@@ -1,0 +1,106 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "平台数趋于节点数时最大出警时间应趋于0",
+      "parameter": "平台数 n_p",
+      "limit": "n_p -> |V|",
+      "expected_behavior": "每个节点自带平台，T_max趋于0，覆盖比率100%"
+    },
+    {
+      "test_id": "LT2",
+      "description": "覆盖半径趋于无穷时所有节点覆盖",
+      "parameter": "覆盖半径 r",
+      "limit": "r -> inf",
+      "expected_behavior": "覆盖比率趋于1，管辖映射退化为最近平台"
+    },
+    {
+      "test_id": "LT3",
+      "description": "接警延迟趋于0时围堵圈可更小",
+      "parameter": "接警延迟 delta",
+      "limit": "delta -> 0",
+      "expected_behavior": "嫌疑犯可达集扩张前即被截断，最小割规模减小"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "选址贪心的初始点与交换顺序引入随机性，多种子运行报告T_max与覆盖指标的稳定性"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P2",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P8",
+      "range": "边权±10%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "嫌疑犯逃跑路径的设定",
+      "interpretations": [
+        "沿最短路逃向任意外圈节点",
+        "只沿主干道逃",
+        "随机游走"
+      ],
+      "adopted": "沿最短路逃向任意外圈节点",
+      "justification": "最坏情形分析，围堵圈需覆盖全部最短外逃路径"
+    },
+    {
+      "source": "接警到出警的延迟是否计3分钟",
+      "interpretations": [
+        "延迟3分钟计入围堵时限",
+        "延迟不计入",
+        "延迟为0"
+      ],
+      "adopted": "延迟3分钟计入围堵时限",
+      "justification": "题面明确案发3分钟后接到报警，围堵必须晚于此时刻启动"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C5",
+      "evidence_ref": "V5",
+      "status": "hypothesis"
+    }
+  ]
+}

@@ -6,8 +6,20 @@
   "seed": 46,
   "batch": "batch5",
   "block_role": "main",
-  "status": "PENDING",
+  "status": "REGISTERED",
   "created_at": "2026-09-09T02:13:14Z",
   "bundle_sha256": "39f977dd82ab1bffe6eecef51a2b858ae2bf64d3c6a96febac1c0b9a07860736",
-  "statement_sha256": "f00ef29490cc2ef0ca87d7bf17b598ecae98021e8049addfa222649bee410152"
+  "statement_sha256": "f00ef29490cc2ef0ca87d7bf17b598ecae98021e8049addfa222649bee410152",
+  "updated_at": "2026-09-09T03:13:59Z",
+  "generator": {
+    "agent_identity": "doubao",
+    "model_version": "doubao-1.5-pro",
+    "provider": "doubao"
+  },
+  "cost": {
+    "prompt_tokens": null,
+    "completion_tokens": null,
+    "latency_seconds": 120.0
+  },
+  "coverage": null
 }

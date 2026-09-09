@@ -1,0 +1,105 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "需求到达率趋于 0 时等待趋 0，司机应全部选择排队",
+      "parameter": "lambda_p",
+      "limit": "lambda_p -> 0",
+      "expected_behavior": "E[W_q] -> 0，阈值策略退化为全排队"
+    },
+    {
+      "test_id": "LT2",
+      "description": "需求到达率趋于服务容量时等待发散，司机应全部选择空返",
+      "parameter": "lambda_p",
+      "limit": "lambda_p -> n_p*mu",
+      "expected_behavior": "E[W_q] -> inf，阈值策略退化为全空返"
+    },
+    {
+      "test_id": "LT3",
+      "description": "上车点数趋于车道容量上界时效率达最大，超过上界非法",
+      "parameter": "n_p",
+      "limit": "n_p = floor(D_lane/l_s)",
+      "expected_behavior": "eta 达最大且约束仍满足"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "分时段方案与优先规则的收益分布用多种子情景仿真评估，报告均值±标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P5",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P8",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "司机收益口径",
+      "interpretations": [
+        "仅计车费-油耗",
+        "计车费-油耗-时间成本",
+        "含空返接单不确定性罚项"
+      ],
+      "adopted": "车费-油耗-时间成本-不确定性罚项",
+      "justification": "覆盖决策主要成本项，不确定性以 epsilon 罚项近似"
+    },
+    {
+      "source": "乘车效率定义",
+      "interpretations": [
+        "吞吐量（辆/h）",
+        "乘客平均等待倒数的加权"
+      ],
+      "adopted": "吞吐量为主、等待为约束",
+      "justification": "题面'总乘车效率最高'以载客离开速率衡量最直接，等待作为服务约束"
+    },
+    {
+      "source": "短途优先权实现方式",
+      "interpretations": [
+        "队列插队",
+        "单独短途队列",
+        "权重化服务率"
+      ],
+      "adopted": "权重化服务率",
+      "justification": "可解析刻画且参数连续可调，便于找均衡点"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "supported"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V5",
+      "status": "unresolved"
+    }
+  ]
+}

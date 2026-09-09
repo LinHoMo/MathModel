@@ -1,0 +1,111 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "当簇数K趋近样本数n时，每个样品自成簇，复原应退化为恒等映射且误差不增大",
+      "parameter": "簇数K",
+      "limit": "K -> n",
+      "expected_behavior": "复原误差有界且趋于逐点误差"
+    },
+    {
+      "test_id": "LT2",
+      "description": "当标准化尺度趋于0时，距离度量退化为纯含量差，验证聚类对尺度选择的敏感性边界",
+      "parameter": "标准化尺度s_x",
+      "limit": "s_x -> 0",
+      "expected_behavior": "聚类结果趋向未标准化结果"
+    },
+    {
+      "test_id": "LT3",
+      "description": "当累加和恰为85或105时样品应判定有效，紧邻边界外判定无效",
+      "parameter": "累加和S",
+      "limit": "S=85, S=105",
+      "expected_behavior": "边界处判定连续无跳变"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "KMeans多起点与Bootstrap重采样，报告簇结构ARI与复原误差的均值标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P2",
+      "range": "K=2..6",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P6",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P4",
+      "range": "欧氏/曼哈顿",
+      "method": "one_at_a_time",
+      "target": "O1"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "亚类划分的化学成分选择标准",
+      "interpretations": [
+        "用全部成分划分",
+        "只用主导成分划分",
+        "按方差贡献自动选择成分"
+      ],
+      "adopted": "标准化后按全部成分聚类，再以主导成分解释簇",
+      "justification": "题面要求'选择合适的化学成分'，先数据驱动分组再以载荷/均值差解释选择依据，兼顾开放性与可解释性"
+    },
+    {
+      "source": "风化复原的基准定义",
+      "interpretations": [
+        "未风化点直接作基准",
+        "簇原型作基准",
+        "类别均值作基准"
+      ],
+      "adopted": "簇原型作基准并做收缩修正",
+      "justification": "簇原型结合了同类同亚类信息，比类别均值更细粒度，比单点更稳健"
+    },
+    {
+      "source": "空白成分的编码",
+      "interpretations": [
+        "零",
+        "缺失",
+        "低检出限"
+      ],
+      "adopted": "成对删除，原型取非缺失均值",
+      "justification": "避免零值扭曲距离，保留最多有效信息"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "unresolved"
+    }
+  ]
+}

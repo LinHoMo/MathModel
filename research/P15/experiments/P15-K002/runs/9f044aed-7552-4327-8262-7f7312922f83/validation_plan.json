@@ -1,0 +1,114 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "螺距趋于无穷时曲线退化为直线，曲率趋于0，速度放大系数应趋于1",
+      "parameter": "螺距p",
+      "limit": "p -> ∞",
+      "expected_behavior": "曲率κ->0，速度比κ_i->1，龙头速度上限->2m/s"
+    },
+    {
+      "test_id": "LT2",
+      "description": "板宽趋于0时无碰撞条件恒满足，终止时刻应趋于无穷",
+      "parameter": "板宽w",
+      "limit": "w -> 0",
+      "expected_behavior": "终止时刻趋于无穷，p_min趋于0"
+    },
+    {
+      "test_id": "LT3",
+      "description": "调头圆弧半径比趋于1时两段圆弧等半径，验证弧长最短解连续过渡",
+      "parameter": "半径比λ",
+      "limit": "λ -> 1",
+      "expected_behavior": "最优调头路径连续依赖λ，弧长单调变化"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "数值积分容差与求根初值在不同配置下重复运行，报告位置速度序列与终止时刻的均值标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P3",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P9",
+      "range": "±10%",
+      "method": "one_at_a_time",
+      "target": "O4"
+    },
+    {
+      "param_id": "P7",
+      "range": "±5%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "龙头初始位置在第16圈A点但未给出极角起点",
+      "interpretations": [
+        "θ_A=32π（整圈起点）",
+        "A点位于第16圈任意位置"
+      ],
+      "adopted": "θ_A=32π并注明偏移影响",
+      "justification": "题面未给A点具体位置，取圈起点为基准，初始相位仅平移整条曲线不改变相对运动学"
+    },
+    {
+      "source": "碰撞判据未明确给出",
+      "interpretations": [
+        "把手间距判据",
+        "板凳几何干涉判据（法向间距<板宽）",
+        "中心距判据"
+      ],
+      "adopted": "法向间距<板宽",
+      "justification": "板凳是宽0.3m的矩形刚片，几何干涉的物理判据是法向投影间距，比把手间距更本质"
+    },
+    {
+      "source": "调头圆弧的相切点位置未给出",
+      "interpretations": [
+        "固定切点",
+        "切点随半径优化"
+      ],
+      "adopted": "切点随半径优化，作为自由变量",
+      "justification": "题面问能否调整圆弧使曲线变短，切点自由是'调整'的含义"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "X2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "supported"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "X4",
+      "status": "supported"
+    },
+    {
+      "claim": "C5",
+      "evidence_ref": "X5",
+      "status": "supported"
+    }
+  ]
+}

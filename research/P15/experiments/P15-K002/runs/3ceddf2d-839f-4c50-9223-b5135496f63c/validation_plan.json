@@ -1,0 +1,101 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "价格上限趋于无穷时完成概率应趋于1",
+      "parameter": "价格上限 p_max",
+      "limit": "p_max -> inf",
+      "expected_behavior": "所有任务完成率趋于1，目标函数趋于任务总数"
+    },
+    {
+      "test_id": "LT2",
+      "description": "预算趋于0时最优定价退化为统一最低价",
+      "parameter": "总预算 B",
+      "limit": "B -> 0",
+      "expected_behavior": "价格全部压至 p_min，完成率退化为基线"
+    },
+    {
+      "test_id": "LT3",
+      "description": "会员密度趋于0的极限区域任务即使高价也难完成",
+      "parameter": "会员密度 rho_j",
+      "limit": "rho_j -> 0",
+      "expected_behavior": "完成概率趋于 sigmoid(theta_0 + theta_p p_max)，受密度项主导"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "聚类初始化与参数自助抽样引入随机性，多种子运行报告完成率均值与标准差"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P2",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P5",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "预算约束是否存在于题面",
+      "interpretations": [
+        "平台总预算固定，需在任务间分配",
+        "无预算约束，仅受单任务成本上限",
+        "预算按项目总酬金线性外推"
+      ],
+      "adopted": "平台总预算固定，需在任务间分配",
+      "justification": "定价方案必须在平台成本约束内设计，固定预算使优化问题适定"
+    },
+    {
+      "source": "打包折扣的承担方",
+      "interpretations": [
+        "平台承担折扣损失",
+        "组内任务单价不变仅共享流量",
+        "折扣由会员接单意愿体现"
+      ],
+      "adopted": "平台承担折扣损失",
+      "justification": "打包价低于单价之和，折扣成本由平台承担以换取更高完成率"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V1",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "X3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V5",
+      "status": "hypothesis"
+    }
+  ]
+}

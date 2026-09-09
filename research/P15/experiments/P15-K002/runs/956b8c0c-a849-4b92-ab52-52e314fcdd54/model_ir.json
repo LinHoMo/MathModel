@@ -1,0 +1,683 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-956b8c0c",
+  "model_family": {
+    "primary": "regression_analysis",
+    "secondary": [
+      "statistical_classification"
+    ],
+    "description": "以回归分析为主线：风化复原用多元回归直接估计风化前成分，类型判别用逻辑回归输出类别概率，关联分析用偏回归系数刻画成分间关系。",
+    "candidates": [
+      {
+        "family": "regression_analysis",
+        "rationale": "各子问题都可转化为回归任务：风化前成分是连续响应，类别归属是概率回归，关联关系可用偏回归刻画，统一框架便于误差传递。"
+      },
+      {
+        "family": "pca",
+        "rationale": "主成分可降维但无法直接给出风化前成分的预测值与类别概率，作为辅助诊断工具而非主线。"
+      },
+      {
+        "family": "supervised_learning",
+        "rationale": "通用监督学习器在小样本高相关成分数据上易过拟合，且可解释性弱于显式回归结构，故不选为主线。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2022_C",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "ec5e098f9dbe858e50280a7366faeb6cc0d2e7db1fd21e8fc7b3de7d85ad1709"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "有效数据定义为成分累加和落在85%至105%之间，建模时以有效样品为样本总体。",
+      "type": "calibration",
+      "rationale": "题面直接给定有效区间，作为样本筛选的统一口径。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "风化前成分含量可由风化点成分、风化程度与玻璃类型经回归函数映射得到，且映射在类别内近似同质。",
+      "type": "mechanism_assumption",
+      "rationale": "风化是系统性的元素迁移，回归映射可捕捉迁移的方向与幅度；类别内同质假设使样本量足够估计。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "未风化点成分作为风化前成分的观测代理，其与真实配方之间的差异为独立同分布噪声。",
+      "type": "projection",
+      "rationale": "未风化区域元素交换极少，代理误差远小于风化造成的偏移，量级约1-2个百分点。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "类别归属概率与判别成分满足逻辑斯蒂形式，即类别边界在成分空间中是光滑超平面。",
+      "type": "simplification",
+      "rationale": "逻辑回归对线性可分边界拟合稳健，且输出概率便于敏感性分析。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "成分缺失源于低于检出限，回归中采用类别内成分均值插补，并对插补引入的不确定性做区间传播。",
+      "type": "simplification",
+      "rationale": "均值插补保持样本规模，区间传播避免高估回归精度。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "风化标记",
+      "symbol": "W_i",
+      "definition": "第i件文物是否风化，取值0/1",
+      "unit": "类别",
+      "type": "observation",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V2",
+      "name": "玻璃类型",
+      "symbol": "T_i",
+      "definition": "高钾玻璃或铅钡玻璃的类别编码",
+      "unit": "类别",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "纹饰与颜色",
+      "symbol": "(D_i, C_i)",
+      "definition": "纹饰类型与颜色类型联合编码",
+      "unit": "类别",
+      "type": "observation",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V4",
+      "name": "成分含量",
+      "symbol": "x_{ij}",
+      "definition": "第i采样点第j种成分的百分比含量",
+      "unit": "%",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "累加和",
+      "symbol": "S_i",
+      "definition": "第i采样点成分比例之和",
+      "unit": "%",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V6",
+      "name": "风化前成分估计",
+      "symbol": "\\hat{x}_{ij}",
+      "definition": "回归模型给出的风化前成分预测值",
+      "unit": "%",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V7",
+      "name": "类别概率",
+      "symbol": "p_i",
+      "definition": "第i样品属于铅钡玻璃的估计概率",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "variable_id": "V8",
+      "name": "亚类指示",
+      "symbol": "Z_{ik}",
+      "definition": "第i样品是否属于第k个亚类",
+      "unit": "类别",
+      "type": "derived",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V9",
+      "name": "偏回归系数",
+      "symbol": "\\theta_{ab}",
+      "definition": "成分a对成分b回归后的残差相关性度量",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": "Q4"
+    },
+    {
+      "variable_id": "V10",
+      "name": "风化程度得分",
+      "symbol": "d_i",
+      "definition": "由风化层占比与成分漂移主方向合成的连续指标",
+      "unit": "无量纲",
+      "type": "derived",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "有效区间",
+      "symbol": "[L_{lo}, L_{hi}]",
+      "value": "[85, 105]",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "插补阈值",
+      "symbol": "\\epsilon_{det}",
+      "value": 1.0,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "逻辑回归正则强度",
+      "symbol": "C_{reg}",
+      "value": 1.0,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "亚类划分分位点",
+      "symbol": "q_{sub}",
+      "value": "0.5中位数分界",
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "判别概率阈值",
+      "symbol": "p_{th}",
+      "value": 0.5,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "回归置信水平",
+      "symbol": "1-\\alpha",
+      "value": 0.95,
+      "source": "文献"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "铅钡识别成分基线",
+      "symbol": "\\mu_{PbO}",
+      "value": "按铅钡类样本均值校准",
+      "source": "校准"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "estimate",
+      "expression": "\\min_{\\beta} \\sum_{i}(x_{ij}^{未风化} - \\beta_0 - \\beta_1 d_i - \\beta_2 T_i - \\beta_3^\\top z_i)^2",
+      "variables_refs": [
+        "V6",
+        "V4",
+        "V10",
+        "V2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "estimate",
+      "expression": "\\min_{w} \\sum_i \\left[ -y_i \\log \\sigma(w^\\top x_i) - (1-y_i) \\log(1-\\sigma(w^\\top x_i)) \\right]",
+      "variables_refs": [
+        "V7",
+        "V2",
+        "V4"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "minimize",
+      "expression": "\\min \\sum_{i \\in \\text{未知}} \\mathbb{1}[\\hat{T}_i \\ne T_i^{\\text{真}}]",
+      "variables_refs": [
+        "V7",
+        "V4"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "estimate",
+      "expression": "\\hat{\\theta}_{ab} = \\text{corr}(r_a, r_b),\\quad r_a = x_a - \\hat{x}_a(X_{\\setminus a})",
+      "variables_refs": [
+        "V9",
+        "V4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "数据有效性",
+      "expression": "85 \\le S_i \\le 105",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "constraint_id": "C2",
+      "type": "成分范围",
+      "expression": "0 \\le x_{ij} \\le 100",
+      "variables_refs": [
+        "V4"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "概率归一",
+      "expression": "0 \\le p_i \\le 1",
+      "variables_refs": [
+        "V7"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C4",
+      "type": "亚类互斥",
+      "expression": "\\sum_k Z_{ik} = 1",
+      "variables_refs": [
+        "V8"
+      ],
+      "source": "模型假设",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "复原归一",
+      "expression": "\\sum_j \\hat{x}_{ij} = 100",
+      "variables_refs": [
+        "V6"
+      ],
+      "source": "成分性",
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "风化造成成分系统性漂移，漂移量与风化程度及玻璃类型相关，回归函数可同时建模均值结构与协变量效应，适合风化前成分复原。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "玻璃类型由助熔剂配方决定，判别成分与类别概率之间呈光滑单调关系，逻辑回归给出可校准的概率输出并支持亚类划分。",
+      "related_equations": [
+        "E3",
+        "E4"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "成分间关联源于配方共变，偏回归残差相关性可剔除共同驱动成分的干扰，揭示净关联结构及其类别差异。",
+      "related_equations": [
+        "E5"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "S_i = \\sum_j x_{ij}, \\quad \\delta_i = \\mathbb{1}[85 \\le S_i \\le 105]",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V4"
+      ],
+      "derivation_trace": "成分性定义与题面有效区间",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E2",
+      "latex": "\\hat{x}_{ij} = \\beta_{0j} + \\beta_{1j} d_i + \\beta_{2j} T_i + \\sum_{k \\ne j} \\beta_{kj} x_{ik}",
+      "type": "代数",
+      "variables_refs": [
+        "V6",
+        "V4",
+        "V10",
+        "V2"
+      ],
+      "derivation_trace": "多元回归：以未风化点成分作响应，风化程度、类型与其他成分为协变量；系数用最小二乘估计并做归一化修正",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "p_i = \\sigma(w^{\\top} x_i + w_0) = \\frac{1}{1 + e^{-(w^{\\top} x_i + w_0)}}",
+      "type": "代数",
+      "variables_refs": [
+        "V7",
+        "V4"
+      ],
+      "derivation_trace": "逻辑回归模型，极大似然估计权重",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "equation_id": "E4",
+      "latex": "Z_{ik} = \\mathbb{1}[p_i \\in \\text{分位区间}_k], \\quad k=1,2",
+      "type": "逻辑",
+      "variables_refs": [
+        "V8",
+        "V7"
+      ],
+      "derivation_trace": "类别内按判别概率分位划分亚类，保证亚类可解释且有最小规模",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "r_a = x_a - \\hat{x}_a(X_{\\setminus a}), \\quad \\hat{\\theta}_{ab} = \\text{corr}(r_a, r_b)",
+      "type": "代数",
+      "variables_refs": [
+        "V9",
+        "V4"
+      ],
+      "derivation_trace": "偏相关定义：先剔除其余成分的线性影响再计算残差相关",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "O1",
+      "type": "implements"
+    },
+    {
+      "from": "E3",
+      "to": "E4",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "O3",
+      "type": "implements"
+    },
+    {
+      "from": "E5",
+      "to": "O4",
+      "type": "implements"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "最小二乘正规方程与广义逆",
+      "implementation_ref": "矩阵分解求解，含共线性诊断",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "solver_id": "S2",
+      "method": "逻辑回归牛顿-拉弗森迭代",
+      "implementation_ref": "带L2正则的IRLS",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "solver_id": "S3",
+      "method": "偏相关递推回归",
+      "implementation_ref": "逐成分回归取残差后计算相关",
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "复原回归实验",
+      "inputs": {
+        "数据": "成对风化/未风化点",
+        "方法": "E2多元回归"
+      },
+      "expected_outputs": {
+        "输出": "复原成分与置信区间",
+        "评价": "留一法预测误差"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "概率分位实验",
+      "inputs": {
+        "数据": "两类玻璃样本",
+        "方法": "E3+E4"
+      },
+      "expected_outputs": {
+        "输出": "亚类成员与分位阈值",
+        "评价": "类内方差下降幅度"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "鉴别实验",
+      "inputs": {
+        "数据": "表单3成分",
+        "方法": "E3模型"
+      },
+      "expected_outputs": {
+        "输出": "类别概率与标签",
+        "评价": "交叉验证错分率"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "净关联实验",
+      "inputs": {
+        "数据": "两类成分",
+        "方法": "E5偏相关"
+      },
+      "expected_outputs": {
+        "输出": "偏相关矩阵与差异",
+        "评价": "类别间差异显著性"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "与均值填充复原基线比较，要求回归复原误差至少下降20%",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "对正则强度C在0.1-10间扰动，观察类别概率排序稳定性",
+      "targets_refs": [
+        "O2",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "reproducibility",
+      "method": "Bootstrap重采样100次重估回归系数，报告系数变异系数",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V4",
+      "type": "convergence",
+      "method": "检查逻辑回归IRLS迭代收敛且目标函数单调下降",
+      "targets_refs": [
+        "O3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "validation_id": "V5",
+      "type": "uncertainty",
+      "method": "对不同插补方案比较偏相关估计的差异区间",
+      "targets_refs": [
+        "O4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "风化组与未风化组的成分均值差异显著，其中K2O、CaO等易迁移成分差异最大，复原模型可将其还原至与未风化点同量级。",
+      "type": "统计结论",
+      "evidence_refs": [
+        "X1",
+        "V1"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "按判别概率分位可将两类玻璃各划分为两个亚类，亚类边界随正则强度扰动保持稳定。",
+      "type": "统计结论",
+      "evidence_refs": [
+        "X2",
+        "V2"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "逻辑回归对表单3样品的鉴别结果错分率低且迭代收敛，结果可复现。",
+      "type": "预测结论",
+      "evidence_refs": [
+        "X3",
+        "V4"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "剔除共同成分影响后，铅钡玻璃中PbO与BaO仍保持净正相关，而高钾玻璃中该净关联不显著，两类关联结构差异明显。",
+      "type": "统计结论",
+      "evidence_refs": [
+        "X4",
+        "V5"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "V4",
+        "label": "成分观测"
+      },
+      {
+        "id": "E1",
+        "label": "有效性筛选"
+      },
+      {
+        "id": "E2",
+        "label": "风化复原多元回归"
+      },
+      {
+        "id": "E3",
+        "label": "逻辑回归判别"
+      },
+      {
+        "id": "E4",
+        "label": "概率分位亚类"
+      },
+      {
+        "id": "E5",
+        "label": "偏相关分析"
+      }
+    ],
+    "edges": [
+      {
+        "from": "V4",
+        "to": "E1",
+        "relation": "输入"
+      },
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "样本筛选"
+      },
+      {
+        "from": "V4",
+        "to": "E3",
+        "relation": "输入"
+      },
+      {
+        "from": "E3",
+        "to": "E4",
+        "relation": "概率供给"
+      },
+      {
+        "from": "V4",
+        "to": "E5",
+        "relation": "输入"
+      }
+    ]
+  },
+  "modeling_trace": "将题目四个子问题统一到回归框架：风化复原为多元回归估计，类型规律与亚类划分为概率回归与分位划分，未知鉴别为概率预测，关联分析为偏相关回归。对比了主成分与通用监督学习候选，因可解释性与小样本稳健性选择回归主线。所有系数采用交叉验证与Bootstrap评估不确定性。"
+}

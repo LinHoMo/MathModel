@@ -1,0 +1,761 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-ed2662e9",
+  "model_family": {
+    "primary": "graph_algorithm",
+    "secondary": [
+      "optimization"
+    ],
+    "description": "将城市路网抽象为带权无向图，以最短路树、二分图匹配、图上选址与时间扩展图分别处理管辖、封锁、增点与围堵问题。",
+    "candidates": [
+      {
+        "family": "graph_algorithm",
+        "rationale": "路网天然是图，响应时间即图上最短路，围堵即时间扩展图上的拦截；图算法直击结构，作为主结构。"
+      },
+      {
+        "family": "optimization",
+        "rationale": "指派与选址可在图上建模为0-1优化；作为图算法的决策层。"
+      },
+      {
+        "family": "decision_analysis",
+        "rationale": "合理性评价需多指标，但无交互偏好；辅助视角。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2011_B",
+    "sub_question_id": "Q1,Q2,Q3,Q4,Q5",
+    "problem_sha256": "85dd446264bab8f212a936bc1ee5ffeddecf8495ffafa6f759b42236052ab441"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "路网为连通带权无向图，边权为行驶时间，车速60km/h即1km/min。",
+      "type": "simplification",
+      "rationale": "题面给出车速；无向对称假设忽略单行道，边权以距离/速度换算。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "3分钟出警时限对应图上3km半径覆盖球。",
+      "type": "calibration",
+      "rationale": "60km/h换算；覆盖球内节点视为满足时限。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "一个平台警力最多封锁一个路口，封锁指派为图上的匹配约束。",
+      "type": "mechanism",
+      "rationale": "题面明确；转化为二分图匹配结构。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "嫌疑犯与警车同速沿最短路逃窜，围堵等价于时间扩展图上警力先到达割点。",
+      "type": "mechanism_assumption",
+      "rationale": "等速假设使追捕转化为到达时间比较，时间扩展图刻画动态。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "节点案发权重近似均匀，工作量以管辖节点集规模度量。",
+      "type": "projection",
+      "rationale": "无案发率数据；负载代理影响增点均衡的方向性。"
+    },
+    {
+      "assumption_id": "A6",
+      "text": "新增平台可在任意非平台节点设置，候选集为全部路口。",
+      "type": "simplification",
+      "rationale": "题面未限制；离散候选近似连续选址。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "最短路距离",
+      "symbol": "d_{ij}",
+      "definition": "节点i到j的图上最短路长度",
+      "unit": "km",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4",
+        "Q5"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "管辖映射",
+      "symbol": "\\phi(j)",
+      "definition": "节点j被指派的平台节点",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V3",
+      "name": "覆盖球",
+      "symbol": "\\mathcal{B}_r(p)",
+      "definition": "平台p的3km覆盖球内节点集",
+      "unit": "-",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "封锁匹配",
+      "symbol": "\\mathcal{M}",
+      "definition": "平台-要道的二分图匹配",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V5",
+      "name": "封锁到达时刻",
+      "symbol": "C_k",
+      "definition": "要道k被封锁时刻",
+      "unit": "min",
+      "type": "derived",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "variable_id": "V6",
+      "name": "新增平台集",
+      "symbol": "\\mathcal{Z}",
+      "definition": "新增平台节点集合",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V7",
+      "name": "嫌疑犯可达集",
+      "symbol": "\\mathcal{P}_{P,t}",
+      "definition": "嫌疑犯从P出发t时刻可达节点集",
+      "unit": "-",
+      "type": "derived",
+      "sub_question_binding": "Q5"
+    },
+    {
+      "variable_id": "V8",
+      "name": "围堵割集",
+      "symbol": "\\mathcal{U}",
+      "definition": "时间扩展图上的拦截节点集",
+      "unit": "-",
+      "type": "decision",
+      "sub_question_binding": "Q5"
+    },
+    {
+      "variable_id": "V9",
+      "name": "最大出警时间",
+      "symbol": "T_{max}",
+      "definition": "所有节点的管辖距离最大值",
+      "unit": "min",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q3",
+        "Q4"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "车速",
+      "symbol": "v",
+      "value": 60,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "出警时限",
+      "symbol": "T_3",
+      "value": 3,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "A区平台数",
+      "symbol": "n_p",
+      "value": 20,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "封锁要道数",
+      "symbol": "n_r",
+      "value": 13,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "增点数量范围",
+      "symbol": "n_a",
+      "value": "[2,5]",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "接警延迟",
+      "symbol": "\\delta",
+      "value": 3,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "P点编号",
+      "symbol": "p_0",
+      "value": 32,
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "图结构",
+      "symbol": "G=(V,E,w)",
+      "value": "附件2给定",
+      "source": "题目"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "minimize",
+      "expression": "min T_{max} = \\max_j d_{\\phi(j),j}，约束 d_{\\phi(j),j} \\le 3",
+      "variables_refs": [
+        "V1",
+        "V2",
+        "V9"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "minimize",
+      "expression": "min \\max_{k \\in \\mathcal{M}} C_k（瓶颈匹配）",
+      "variables_refs": [
+        "V4",
+        "V5"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "minimize",
+      "expression": "min (T_{max}, \\text{负载方差}) 图上选址多目标",
+      "variables_refs": [
+        "V3",
+        "V6",
+        "V9"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "estimate",
+      "expression": "估计全城覆盖比率、平均出警时间与连通性指标",
+      "variables_refs": [
+        "V1",
+        "V3",
+        "V9"
+      ],
+      "sub_question_binding": "Q4"
+    },
+    {
+      "objective_id": "O5",
+      "type": "minimize",
+      "expression": "min |\\mathcal{U}| 使 \\mathcal{U} 切断 \\mathcal{P}_{P,t} 的全部外逃路径",
+      "variables_refs": [
+        "V7",
+        "V8"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "coverage",
+      "expression": "每个节点至少被一个平台覆盖球包含",
+      "variables_refs": [
+        "V3"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q1",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "matching",
+      "expression": "\\mathcal{M} 为匹配：每平台至多封锁一要道，每要道恰被一平台封锁",
+      "variables_refs": [
+        "V4"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C3",
+      "type": "budget",
+      "expression": "2 \\le |\\mathcal{Z}| \\le 5",
+      "variables_refs": [
+        "V6"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "constraint_id": "C4",
+      "type": "deadline",
+      "expression": "C_k \\le C^*（封锁完成时限）",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "constraint_id": "C5",
+      "type": "interception",
+      "expression": "\\forall k \\in \\mathcal{U}: 警力到达 \\le 嫌疑犯到达 + \\delta",
+      "variables_refs": [
+        "V8"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "覆盖问题以图上最短路为度量：每个节点划归最近平台，3km覆盖球检验时限，形成图上分区。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "封锁为二分图瓶颈匹配：平台与要道构成二分图，边权为到达时间，阈值二分加匹配检验求最小最大封锁时刻。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "增点为图上选址：新增平台改变覆盖球并减小最短路半径，多目标权衡。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "mechanism_id": "M4",
+      "description": "围堵为时间扩展图上的动态拦截：嫌疑犯可达集随时间扩张，选择警力先到的割点闭合包围圈。",
+      "related_equations": [
+        "E5",
+        "E6"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "d_{ij} = \\text{Dijkstra/Floyd}(G, i, j)",
+      "type": "代数",
+      "variables_refs": [
+        "V1"
+      ],
+      "derivation_trace": "全源最短路",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4",
+        "Q5"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "\\phi(j) = \\arg\\min_{p \\in \\mathcal{P}} d_{pj}, \\; \\text{若} \\min_p d_{pj} \\le 3",
+      "type": "逻辑",
+      "variables_refs": [
+        "V1",
+        "V2"
+      ],
+      "derivation_trace": "最近平台划分与时限检验",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "equation_id": "E3",
+      "latex": "C^* = \\min\\{c: \\text{边权} \\le c \\text{的子图存在完美匹配覆盖13要道}\\}",
+      "type": "逻辑",
+      "variables_refs": [
+        "V4",
+        "V5"
+      ],
+      "derivation_trace": "瓶颈匹配的阈值二分",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "\\min_{\\mathcal{Z},|\\mathcal{Z}|\\in[2,5]} \\max_j \\min_{p \\in \\mathcal{P} \\cup \\mathcal{Z}} d_{pj}",
+      "type": "逻辑",
+      "variables_refs": [
+        "V6",
+        "V9"
+      ],
+      "derivation_trace": "图上选址最小化最大距离",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E5",
+      "latex": "\\mathcal{P}_{P,t} = \\{j: d_{Pj} \\le t\\}",
+      "type": "代数",
+      "variables_refs": [
+        "V7"
+      ],
+      "derivation_trace": "嫌疑犯t时刻可达集",
+      "sub_question_binding": "Q5"
+    },
+    {
+      "equation_id": "E6",
+      "latex": "\\mathcal{U} = \\min\\text{-割}(\\mathcal{P}_{P,t}, \\text{外逃口}), \\; \\text{且} \\forall k \\in \\mathcal{U}: \\min_i t_{ik} \\le t + \\delta",
+      "type": "逻辑",
+      "variables_refs": [
+        "V8"
+      ],
+      "derivation_trace": "时间可行的最小割围堵",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds"
+    },
+    {
+      "from": "E1",
+      "to": "E3",
+      "type": "feeds"
+    },
+    {
+      "from": "E1",
+      "to": "E5",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "O1",
+      "type": "derives"
+    },
+    {
+      "from": "E3",
+      "to": "O2",
+      "type": "derives"
+    },
+    {
+      "from": "E6",
+      "to": "O5",
+      "type": "derives"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "Floyd-Warshall全源最短路",
+      "implementation_ref": "O(N^3)，N约几百节点可承受",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q5"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "匈牙利算法+阈值二分",
+      "implementation_ref": "瓶颈匹配：对候选阈值二分并跑匹配，O(N^3 log N)",
+      "sub_question_binding": "Q2"
+    },
+    {
+      "solver_id": "S3",
+      "method": "贪心加局部交换选址",
+      "implementation_ref": "先按覆盖缺口选点，再交换优化",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "solver_id": "S4",
+      "method": "时间扩展图最小割",
+      "implementation_ref": "以可达集为源侧，外逃口为汇侧求最小割并检验时间可行",
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "覆盖回放",
+      "inputs": {
+        "区": "A",
+        "平台": 20,
+        "半径": "3km"
+      },
+      "expected_outputs": {
+        "未覆盖节点": "尽量少，T_max最小"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "匹配回放",
+      "inputs": {
+        "要道": 13,
+        "平台": 20
+      },
+      "expected_outputs": {
+        "最晚封锁": "最小化"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "选址枚举",
+      "inputs": {
+        "增点": "2-5"
+      },
+      "expected_outputs": {
+        "最优增点": "覆盖缺口处"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "全城指标",
+      "inputs": {
+        "六区": "全部六区"
+      },
+      "expected_outputs": {
+        "覆盖与负载指标": "定位不合理区"
+      },
+      "sub_question_binding": "Q4"
+    },
+    {
+      "experiment_id": "X5",
+      "type": "围堵仿真",
+      "inputs": {
+        "案发点": "节点32",
+        "延迟": "3min"
+      },
+      "expected_outputs": {
+        "最小割围堵圈": "闭合且时间可行"
+      },
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "与最邻近贪心分区对比T_max",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "边权±10%扰动，覆盖划分与封锁匹配稳定性",
+      "targets_refs": [
+        "O1",
+        "O2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "平台数趋于节点数时T_max趋于0；半径趋于无穷时覆盖全部",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "确定性图算法重复运行结果一致",
+      "targets_refs": [
+        "O2",
+        "O5"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q5"
+      ]
+    },
+    {
+      "validation_id": "V5",
+      "type": "reproducibility",
+      "method": "围堵圈以嫌疑犯逃出时间仿真检验有效性",
+      "targets_refs": [
+        "O5"
+      ],
+      "sub_question_binding": "Q5"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "A区图上覆盖可做到绝大多数节点3km内可达，T_max由边界节点决定。",
+      "type": "可达性论断",
+      "evidence_refs": [
+        "X1",
+        "V1",
+        "V2"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "supported"
+    },
+    {
+      "claim_id": "C2",
+      "text": "瓶颈匹配给出13条要道封锁的最小最晚时刻，且匹配在阈值区间内唯一稳定。",
+      "type": "封锁论断",
+      "evidence_refs": [
+        "X2",
+        "V2",
+        "V4"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "在覆盖缺口处增点可同时降低T_max与负载方差，增点3个后边际收益递减。",
+      "type": "选址论断",
+      "evidence_refs": [
+        "X3",
+        "V3"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "全市六区中边缘区覆盖比率低于中心区，现有方案存在结构性不合理。",
+      "type": "合理性论断",
+      "evidence_refs": [
+        "X4"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C5",
+      "text": "时间扩展图最小割围堵可在嫌疑犯逃出前闭合，所需平台数少于全区警力。",
+      "type": "围堵论断",
+      "evidence_refs": [
+        "X5",
+        "V5"
+      ],
+      "model_refs": [
+        "M4"
+      ],
+      "sub_question_binding": "Q5",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "图上覆盖机理"
+      },
+      {
+        "id": "M2",
+        "label": "瓶颈匹配机理"
+      },
+      {
+        "id": "M3",
+        "label": "图上选址机理"
+      },
+      {
+        "id": "M4",
+        "label": "时间扩展图围堵机理"
+      },
+      {
+        "id": "E1",
+        "label": "全源最短路"
+      },
+      {
+        "id": "E6",
+        "label": "最小割围堵"
+      },
+      {
+        "id": "O1",
+        "label": "覆盖目标"
+      },
+      {
+        "id": "O5",
+        "label": "围堵目标"
+      }
+    ],
+    "edges": [
+      {
+        "from": "M1",
+        "to": "E2",
+        "relation": "驱动"
+      },
+      {
+        "from": "M2",
+        "to": "E3",
+        "relation": "驱动"
+      },
+      {
+        "from": "M4",
+        "to": "E6",
+        "relation": "驱动"
+      },
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "供数"
+      },
+      {
+        "from": "E1",
+        "to": "E6",
+        "relation": "供数"
+      },
+      {
+        "from": "E2",
+        "to": "O1",
+        "relation": "导出"
+      }
+    ]
+  },
+  "modeling_trace": "将路网读为带权图，全源最短路提供全部距离度量；Q1以最近平台划分加3km覆盖球检验，Q2以瓶颈匹配（阈值二分+匈牙利）求最晚封锁时刻最小化，Q3以图上选址均衡T_max与负载，Q4以覆盖与连通指标审计全市方案，Q5以时间扩展图的可达集与最小割构造围堵圈；全程保持图算法主线，优化仅作为决策层。"
+}

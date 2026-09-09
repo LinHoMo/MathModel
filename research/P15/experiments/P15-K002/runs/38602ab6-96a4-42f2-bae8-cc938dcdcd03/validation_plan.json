@@ -1,0 +1,122 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "定价趋于 0：完成概率应趋于 0，利润趋于 0。",
+      "parameter": "p_i",
+      "limit": "p_i → 0",
+      "expected_behavior": "π_i → σ(β₀+β_d d_i+…) ≈ 0，Π → 0"
+    },
+    {
+      "test_id": "LT2",
+      "description": "定价趋于无穷：完成率趋于 1，但单件利润为负，总利润趋于负无穷。",
+      "parameter": "p_i",
+      "limit": "p_i → ∞",
+      "expected_behavior": "π_i → 1，Π → -∞，最优定价必在有限区间内"
+    },
+    {
+      "test_id": "LT3",
+      "description": "最近会员距离趋于无穷：任务不可达，完成率应趋于 0。",
+      "parameter": "d_i",
+      "limit": "d_i → ∞",
+      "expected_behavior": "π_i → 0，即使高价也无法完成，该任务应从方案中剔除"
+    },
+    {
+      "test_id": "LT4",
+      "description": "打包规模上限趋于无穷：打包退化为全区统一打包的极限情形。",
+      "parameter": "K_max",
+      "limit": "K_max → ∞",
+      "expected_behavior": "打包组仅由距离阈值界定，组数减少、组规模增大"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "aggregation": "mean_std",
+    "description": "训练-测试划分与蒙特卡洛评价采用 5 组随机初始化，报告利润与完成率的均值±标准差。"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P2",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O1"
+    },
+    {
+      "param_id": "P3",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O2"
+    },
+    {
+      "param_id": "P5",
+      "range": "±30%",
+      "method": "one_at_a_time",
+      "target": "O3"
+    },
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O4"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "平台收益结构未给定（任务预算、平台抽成）",
+      "interpretations": [
+        "利润=预算−定价",
+        "利润=定价×抽成比例"
+      ],
+      "adopted": "利润=预算−定价（A2）",
+      "justification": "平台标价即支出，预算收益为平台从需求方获得的固定收入；该结构最贴近“定价”字面语义，且抽成结构会在灵敏度中检验"
+    },
+    {
+      "source": "“位置比较集中”的打包判据未量化",
+      "interpretations": [
+        "按两两距离阈值",
+        "按网格区域划分",
+        "按聚类算法自动发现"
+      ],
+      "adopted": "DBSCAN 聚类自动发现 + 组内两两距离阈值约束（A4）",
+      "justification": "聚类自动适应不同聚集尺度，距离阈值约束保证“位置集中”的语义一致"
+    },
+    {
+      "source": "附件三无完成标签，如何评价方案",
+      "interpretations": [
+        "用附件一模型预测完成率",
+        "仅凭位置特征经验定价"
+      ],
+      "adopted": "外推模型预测 + 蒙特卡洛模拟区间（A5）",
+      "justification": "同一平台同一业务类型，外推是唯一可量化路径；区间报告显式承认外推不确定性"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "V1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V3",
+      "status": "hypothesis"
+    },
+    {
+      "claim": "C4",
+      "evidence_ref": "V4",
+      "status": "hypothesis"
+    }
+  ]
+}

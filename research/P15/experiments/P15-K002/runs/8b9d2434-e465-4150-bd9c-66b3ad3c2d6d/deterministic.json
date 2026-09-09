@@ -1,0 +1,38 @@
+{
+  "coverage": {
+    "expected": [
+      "Q1",
+      "Q2",
+      "Q3"
+    ],
+    "covered": [
+      "Q1",
+      "Q1,Q2,Q3",
+      "Q2",
+      "Q3"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "model_family_primary": "markov_decision_process",
+  "mechanism_count": 3,
+  "equation_count": 6,
+  "validation_plan": {
+    "limit_tests": 4,
+    "multi_seed": {
+      "n_runs": 5,
+      "seeds": [
+        42,
+        123,
+        456,
+        789,
+        1024
+      ],
+      "aggregation": "mean_std",
+      "description": "对 Q2/Q3 的随机模拟与均衡迭代，采用 5 组随机数初始化分别运行，报告期望资金与均衡资金的均值±标准差，检验算法稳定性。"
+    },
+    "sensitivity": 4,
+    "ambiguity_handling": 3,
+    "claim_evidence_map": 4
+  }
+}

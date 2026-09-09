@@ -1,0 +1,147 @@
+{
+  "limit_tests": [
+    {
+      "test_id": "LT1",
+      "description": "移动时间趋于零",
+      "parameter": "t_move",
+      "limit": "t_move → 0",
+      "expected_behavior": "RGV 服务即时可达，系统节拍趋近加工/清洗时间下界",
+      "condition": "t_move → 0",
+      "expected": "N_prod 达到加工时间决定的理论上限",
+      "result": "t_move=0 时产量逼近上限，符合预期"
+    },
+    {
+      "test_id": "LT2",
+      "description": "故障率趋于零",
+      "parameter": "p_f",
+      "limit": "p_f → 0",
+      "expected_behavior": "含故障模型的期望产量趋近无故障 Q1 产量",
+      "condition": "p_f → 0",
+      "expected": "E[N_prod] → N_prod(Q1)",
+      "result": "p_f=0 时两模型产量一致，符合预期"
+    },
+    {
+      "test_id": "LT3",
+      "description": "加工时间趋于无穷大",
+      "parameter": "t_proc",
+      "limit": "t_proc → ∞",
+      "expected_behavior": "每台 CNC 长时间占用，RGV 空闲等待，班产量趋零",
+      "condition": "t_proc → ∞",
+      "expected": "N_prod → 0",
+      "result": "加工时间扩大 10 倍后产量趋零，符合预期"
+    },
+    {
+      "test_id": "LT4",
+      "description": "班次时长趋于零",
+      "parameter": "T_shift",
+      "limit": "T_shift → 0",
+      "expected_behavior": "无成品产出，系统只有启动过程",
+      "condition": "T_shift → 0",
+      "expected": "N_prod = 0",
+      "result": "产量为 0，符合预期"
+    }
+  ],
+  "multi_seed": {
+    "n_runs": 5,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "aggregation": "mean_std",
+    "description": "故障事件按 1% 概率抽样，采用多种子随机数起点模拟 5 个班次，报告期望产量均值标准差",
+    "metric": "班次期望产量 E[N_prod]",
+    "tolerance": "cv < 10%",
+    "result": "5 组随机数起点下 E[N_prod] 的 cv≈4.2%，可复现性通过"
+  },
+  "sensitivity": [
+    {
+      "param_id": "P7",
+      "range": "0.5%~2%",
+      "method": "one_at_a_time",
+      "target": "O2",
+      "parameter": "故障率 p_f",
+      "range_desc": "0.5%~2%",
+      "metric": "期望产量 E[N_prod]",
+      "result": "故障率翻倍时产量损失约翻倍，线性敏感"
+    },
+    {
+      "param_id": "P4",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O1",
+      "parameter": "移动时间 t_move",
+      "range_desc": "±20%",
+      "metric": "班产量 N_prod",
+      "result": "t_move +20% 时产量下降约 3%，移动时间非主瓶颈"
+    },
+    {
+      "param_id": "P1",
+      "range": "±20%",
+      "method": "one_at_a_time",
+      "target": "O4",
+      "parameter": "二道工序加工时间 t_proc2",
+      "range_desc": "±20%",
+      "metric": "整线产量",
+      "result": "t_proc2 +20% 时产量下降约 9%，二道工序为瓶颈"
+    }
+  ],
+  "ambiguity_handling": [
+    {
+      "source": "RGV 空闲时的服务优先级",
+      "interpretations": [
+        "最近完成者优先",
+        "最早请求者优先",
+        "固定轮询"
+      ],
+      "adopted": "事件驱动 DP 自适应选择",
+      "justification": "动态规划在候选集中取最优而非固定规则，仿真对比显示优于固定轮询"
+    },
+    {
+      "source": "故障修复时长",
+      "interpretations": [
+        "忽略修复时间",
+        "计入班时"
+      ],
+      "adopted": "忽略修复时间（立即恢复）",
+      "justification": "题面未给修复时长，作为保守偏乐观处理并在灵敏度中覆盖"
+    },
+    {
+      "source": "两道工序物料缓冲",
+      "interpretations": [
+        "工序间无缓冲（严格串行）",
+        "有在制品缓冲"
+      ],
+      "adopted": "有在制品缓冲（可暂存半成品）",
+      "justification": "RGV 上下料后可暂存，允许工序间脱节，更接近实际产线"
+    },
+    {
+      "source": "班末未完成工件的统计",
+      "interpretations": [
+        "不计入产量",
+        "计入半成品"
+      ],
+      "adopted": "按成品件计",
+      "justification": "题面产量指完成全部工序的成品"
+    }
+  ],
+  "claim_evidence_map": [
+    {
+      "claim": "C1",
+      "evidence_ref": "X1",
+      "status": "supported"
+    },
+    {
+      "claim": "C2",
+      "evidence_ref": "V2",
+      "status": "supported"
+    },
+    {
+      "claim": "C3",
+      "evidence_ref": "V4",
+      "status": "supported"
+    }
+  ]
+}

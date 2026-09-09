@@ -1,0 +1,718 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-56dc8907",
+  "model_family": {
+    "primary": "statistical_modeling",
+    "secondary": [
+      "optimization"
+    ],
+    "description": "以 logistic 回归与空间密度统计挖掘定价规律，再以优化框架设计新定价方案并回测。",
+    "candidates": [
+      {
+        "family": "statistical_modeling（logistic 回归 + 核密度）",
+        "rationale": "附件一提供任务-完成二元标签，logistic 回归天然匹配，可解释定价规律，选为最终模型。"
+      },
+      {
+        "family": "optimization（整数规划定价）",
+        "rationale": "可保证预算下完成率最优，但需将非线性完成率线性化，作为 Q2 的优化层。"
+      },
+      {
+        "family": "decision_analysis（效用函数定价）",
+        "rationale": "需会员效用先验，数据不足，排除。"
+      },
+      {
+        "family": "clustering（密度分层定价）",
+        "rationale": "只按密度分层忽略价格弹性，无法解释 Q1 未完成原因，排除。"
+      }
+    ]
+  },
+  "problem_binding": {
+    "problem_id": "2017_B",
+    "sub_question_id": "Q1,Q2,Q3,Q4",
+    "problem_sha256": "1ee25170116df366bccb7d3b391dc0f93d5970541c7012ca69a2c5f3a11a9a38"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A1",
+      "text": "接单概率随任务-会员距离衰减，超过阈值半径 r_0 不接单。",
+      "type": "mechanism",
+      "rationale": "众包接单的典型空间行为。"
+    },
+    {
+      "assumption_id": "A2",
+      "text": "任务完成概率 = 1-(1-q)^n，n 为半径内加权活跃会员数。",
+      "type": "mechanism",
+      "rationale": "独立接单的泊松近似。"
+    },
+    {
+      "assumption_id": "A3",
+      "text": "接单率与价格呈 logistic 关系。",
+      "type": "calibration",
+      "rationale": "经济行为 S 型假设，由附件一拟合。"
+    },
+    {
+      "assumption_id": "A4",
+      "text": "信誉只影响选择顺序与配额，不影响单位接单意愿。",
+      "type": "simplification",
+      "rationale": "题面规则如此。"
+    },
+    {
+      "assumption_id": "A5",
+      "text": "打包任务按成员价格之和乘折扣系数发布，一次领取。",
+      "type": "projection",
+      "rationale": "打包机制的简化抽象。"
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V1",
+      "name": "任务定价",
+      "symbol": "p_i",
+      "definition": "第 i 个任务的标价",
+      "unit": "元",
+      "type": "decision",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V2",
+      "name": "完成状态",
+      "symbol": "y_i",
+      "definition": "任务 i 是否完成",
+      "unit": "",
+      "type": "observation",
+      "sub_question_binding": "Q1"
+    },
+    {
+      "variable_id": "V3",
+      "name": "会员密度",
+      "symbol": "rho(x)",
+      "definition": "位置 x 处的会员密度",
+      "unit": "人/km^2",
+      "type": "observation",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V4",
+      "name": "最小距离",
+      "symbol": "d_i_min",
+      "definition": "任务 i 到最近会员聚集区距离",
+      "unit": "km",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V5",
+      "name": "接单概率",
+      "symbol": "q_i",
+      "definition": "单会员对任务 i 的接单概率",
+      "unit": "",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V6",
+      "name": "完成概率",
+      "symbol": "P_i",
+      "definition": "任务 i 被至少一名会员完成的概率",
+      "unit": "",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V7",
+      "name": "任务簇",
+      "symbol": "G_k",
+      "definition": "打包的任务组",
+      "unit": "",
+      "type": "derived",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "variable_id": "V8",
+      "name": "完成率",
+      "symbol": "R",
+      "definition": "完成任务占比",
+      "unit": "%",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "variable_id": "V9",
+      "name": "总成本",
+      "symbol": "C",
+      "definition": "平台支付总成本",
+      "unit": "元",
+      "type": "derived",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "P1",
+      "name": "接单率截距",
+      "symbol": "beta_0",
+      "value": -4.2,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P2",
+      "name": "价格斜率",
+      "symbol": "beta_1",
+      "value": 0.06,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P3",
+      "name": "距离惩罚系数",
+      "symbol": "beta_2",
+      "value": 0.35,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P4",
+      "name": "接单阈值半径",
+      "symbol": "r_0",
+      "value": 3,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P5",
+      "name": "基准价",
+      "symbol": "p_0",
+      "value": 68,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P6",
+      "name": "密度修正指数",
+      "symbol": "alpha",
+      "value": 0.5,
+      "source": "校准"
+    },
+    {
+      "parameter_id": "P7",
+      "name": "打包折扣系数",
+      "symbol": "gamma",
+      "value": 0.85,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P8",
+      "name": "聚类半径",
+      "symbol": "r_c",
+      "value": 1,
+      "source": "假设"
+    },
+    {
+      "parameter_id": "P9",
+      "name": "会员配额",
+      "symbol": "L_j",
+      "value": "附件二",
+      "source": "题目"
+    },
+    {
+      "parameter_id": "P10",
+      "name": "预算上限",
+      "symbol": "C_0",
+      "value": "按原方案总成本",
+      "source": "假设"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "O1",
+      "type": "estimate",
+      "expression": "minimize deviance of logistic fit of y_i on p_i, rho_i, d_i_min",
+      "variables_refs": [
+        "V2",
+        "V1",
+        "V3",
+        "V4"
+      ],
+      "sub_question_binding": "Q1"
+    },
+    {
+      "objective_id": "O2",
+      "type": "maximize",
+      "expression": "max R = mean_i P_i subject to C <= C_0",
+      "variables_refs": [
+        "V6",
+        "V8",
+        "V9"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "objective_id": "O3",
+      "type": "maximize",
+      "expression": "max R_bundle with p_{G_k} = gamma * sum p_i",
+      "variables_refs": [
+        "V7",
+        "V8",
+        "V9"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "objective_id": "O4",
+      "type": "estimate",
+      "expression": "predict prices, R, C for attachment-3 tasks",
+      "variables_refs": [
+        "V1",
+        "V8",
+        "V9"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C1",
+      "type": "budget",
+      "expression": "C = sum_i p_i <= C_0",
+      "variables_refs": [
+        "V9"
+      ],
+      "source": "现实可行性",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C2",
+      "type": "price_floor",
+      "expression": "p_i >= p_min > 0",
+      "variables_refs": [
+        "V1"
+      ],
+      "source": "现实可行性",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C3",
+      "type": "quota",
+      "expression": "allocated tasks to member j <= L_j",
+      "variables_refs": [
+        "V5"
+      ],
+      "source": "题面",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "constraint_id": "C4",
+      "type": "probability",
+      "expression": "0 <= q_i, P_i <= 1",
+      "variables_refs": [
+        "V5",
+        "V6"
+      ],
+      "source": "物理限制",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "constraint_id": "C5",
+      "type": "bundle",
+      "expression": "tasks in same cluster G_k released as one bundle",
+      "variables_refs": [
+        "V7"
+      ],
+      "source": "题面",
+      "sub_question_binding": "Q3"
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "M1",
+      "description": "定价-供给弹性机制：价格上升提高接单意愿，距离与低密度削弱意愿，联合解释完成率差异。",
+      "related_equations": [
+        "E1",
+        "E2"
+      ],
+      "sub_question_binding": [
+        "Q1",
+        "Q2"
+      ]
+    },
+    {
+      "mechanism_id": "M2",
+      "description": "打包通过规模经济提升偏远任务吸引力，改变完成率分布。",
+      "related_equations": [
+        "E3"
+      ],
+      "sub_question_binding": "Q3"
+    },
+    {
+      "mechanism_id": "M3",
+      "description": "新项目定价由拟合规律外推，完成率预测由空间信息驱动。",
+      "related_equations": [
+        "E4"
+      ],
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E1",
+      "latex": "q_i(p_i) = \\frac{1}{1+\\exp(-(\\beta_0 + \\beta_1 p_i - \\beta_2 d_i^{min}))}",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V1",
+        "V4"
+      ],
+      "derivation_trace": "logistic 回归拟合附件一",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E2",
+      "latex": "P_i = 1 - (1-q_i)^{n_i}, \\quad n_i = \\lfloor \\sum_{j: d_{ij} \\le r_0} w_j L_j \\rfloor",
+      "type": "代数",
+      "variables_refs": [
+        "V5",
+        "V6",
+        "V3"
+      ],
+      "derivation_trace": "半径内独立会员的完成概率",
+      "sub_question_binding": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    {
+      "equation_id": "E3",
+      "latex": "p_{G_k} = \\gamma \\sum_{i \\in G_k} p_i^{new}",
+      "type": "代数",
+      "variables_refs": [
+        "V7",
+        "V1"
+      ],
+      "derivation_trace": "打包定价：成员价格之和乘折扣",
+      "sub_question_binding": "Q3"
+    },
+    {
+      "equation_id": "E4",
+      "latex": "p_i^{new} = p_0 + \\alpha \\ln(\\bar{\\rho}/\\rho_i) - \\beta_2 d_i^{min} + \\delta_i",
+      "type": "代数",
+      "variables_refs": [
+        "V1",
+        "V3",
+        "V4"
+      ],
+      "derivation_trace": "密度与距离修正的定价公式",
+      "sub_question_binding": [
+        "Q2",
+        "Q4"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "E1",
+      "to": "E2",
+      "type": "feeds"
+    },
+    {
+      "from": "E2",
+      "to": "O2",
+      "type": "evaluates"
+    },
+    {
+      "from": "E4",
+      "to": "E1",
+      "type": "prices_in"
+    },
+    {
+      "from": "E3",
+      "to": "O3",
+      "type": "evaluates"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S1",
+      "method": "logistic 回归（IRLS）+ 核密度估计",
+      "implementation_ref": "sklearn/statsmodels 拟合，KDE 估计会员密度",
+      "sub_question_binding": [
+        "Q1",
+        "Q2",
+        "Q4"
+      ]
+    },
+    {
+      "solver_id": "S2",
+      "method": "梯度上升 + 投影（预算约束）",
+      "implementation_ref": "对 p_i 做投影梯度优化 R",
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "X1",
+      "type": "regression_fit",
+      "inputs": {
+        "features": [
+          "p",
+          "rho",
+          "d_min"
+        ],
+        "target": "y"
+      },
+      "expected_outputs": {
+        "beta": "系数与显著性"
+      },
+      "sub_question_binding": "Q1"
+    },
+    {
+      "experiment_id": "X2",
+      "type": "backtest",
+      "inputs": {
+        "new_prices": "attachment1",
+        "budget": "C_0"
+      },
+      "expected_outputs": {
+        "R_new": "完成率",
+        "C_new": "成本"
+      },
+      "sub_question_binding": "Q2"
+    },
+    {
+      "experiment_id": "X3",
+      "type": "bundle_experiment",
+      "inputs": {
+        "r_c": 1,
+        "gamma": 0.85
+      },
+      "expected_outputs": {
+        "R_bundle": "打包完成率"
+      },
+      "sub_question_binding": "Q3"
+    },
+    {
+      "experiment_id": "X4",
+      "type": "forecast",
+      "inputs": {
+        "tasks": "attachment3 locations"
+      },
+      "expected_outputs": {
+        "prices": "定价表",
+        "R_hat": "预测完成率"
+      },
+      "sub_question_binding": "Q4"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "V1",
+      "type": "reproducibility",
+      "method": "新方案 vs 原方案完成率与成本对比（附件一回测）",
+      "targets_refs": [
+        "O2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "V2",
+      "type": "sensitivity",
+      "method": "beta_1, alpha, gamma 各 ±20% 观察 R, C 变化",
+      "targets_refs": [
+        "O2",
+        "O3"
+      ],
+      "sub_question_binding": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "validation_id": "V3",
+      "type": "limit",
+      "method": "p_i->inf 时 R->1；rho->0 时 R->0",
+      "targets_refs": [
+        "O2"
+      ],
+      "sub_question_binding": "Q2"
+    },
+    {
+      "validation_id": "V4",
+      "type": "reproducibility",
+      "method": "bootstrap 重采样 5 种子，CV<5%",
+      "targets_refs": [
+        "O4"
+      ],
+      "sub_question_binding": "Q4"
+    },
+    {
+      "validation_id": "V5",
+      "type": "convergence",
+      "method": "80/20 训练测试交叉验证回归稳定",
+      "targets_refs": [
+        "O1"
+      ],
+      "sub_question_binding": "Q1"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "附件一未完成主要由低价格、低会员密度与偏远位置共同导致，回归系数显著。",
+      "type": "explanatory_claim",
+      "evidence_refs": [
+        "X1",
+        "V5"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q1",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C2",
+      "text": "密度-距离修正定价方案在原预算内提升完成率。",
+      "type": "improvement_claim",
+      "evidence_refs": [
+        "X2",
+        "V1"
+      ],
+      "model_refs": [
+        "M1"
+      ],
+      "sub_question_binding": "Q2",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C3",
+      "text": "打包发布提升偏远任务完成率，但可能降低热门任务单人接单弹性。",
+      "type": "structural_claim",
+      "evidence_refs": [
+        "X3",
+        "V2"
+      ],
+      "model_refs": [
+        "M2"
+      ],
+      "sub_question_binding": "Q3",
+      "status": "hypothesis"
+    },
+    {
+      "claim_id": "C4",
+      "text": "附件三新项目定价可外推预测，完成率与成本估计稳定。",
+      "type": "forecast_claim",
+      "evidence_refs": [
+        "X4",
+        "V4"
+      ],
+      "model_refs": [
+        "M3"
+      ],
+      "sub_question_binding": "Q4",
+      "status": "hypothesis"
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      {
+        "id": "M1",
+        "label": "价格弹性机理"
+      },
+      {
+        "id": "E1",
+        "label": "logistic 接单率"
+      },
+      {
+        "id": "E2",
+        "label": "完成概率"
+      },
+      {
+        "id": "E4",
+        "label": "定价公式"
+      },
+      {
+        "id": "O2",
+        "label": "Q2 优化"
+      },
+      {
+        "id": "O4",
+        "label": "Q4 预测"
+      }
+    ],
+    "edges": [
+      {
+        "from": "M1",
+        "to": "E1",
+        "relation": "instantiates"
+      },
+      {
+        "from": "E1",
+        "to": "E2",
+        "relation": "feeds"
+      },
+      {
+        "from": "E4",
+        "to": "E1",
+        "relation": "prices_in"
+      },
+      {
+        "from": "E2",
+        "to": "O2",
+        "relation": "evaluates"
+      },
+      {
+        "from": "E4",
+        "to": "O4",
+        "relation": "predicts"
+      }
+    ]
+  },
+  "modeling_trace": "先对附件一做探索性统计：任务完成与价格、会员密度、距离的关系；对比博弈定价与整数规划后选择 logistic 回归 + 空间密度修正；Q2/Q3 用投影梯度优化，Q4 外推新项目。"
+}
