@@ -42,6 +42,11 @@ WAITING = "waiting_approval"
 
 
 class WorkflowEngine:
+    # 反馈环无进展保护（audit P0：禁止"无限自旋冒充工作"）。同一 (node, on_fail
+    # 目标) 连续回退达此阈值仍无进展 → 转 blocked 并如实记录原因，由人工/外部
+    # 恢复（unblock），而不是 200 次死循环后抛 EngineError。
+    MAX_ROLLBACK_CYCLES = 3
+
     def __init__(self, dag: WorkflowDAG, executor, state=None, validators=None,
                  on_success=None):
         """
@@ -68,6 +73,7 @@ class WorkflowEngine:
         self.waiting: set[str] = set()
         self.log: list[dict] = []               # 执行日志（审计用）
         self.failures: dict[str, str] = {}      # node -> last failure reason
+        self.rollback_cycles: dict[tuple[str, str], int] = {}  # (node, target)->回退次数
 
     # ------------------------------------------------------------ 记录
 
@@ -104,7 +110,12 @@ class WorkflowEngine:
         }
 
     def is_finished(self) -> bool:
-        return not self.ready() and not self.waiting
+        """全部节点完成（无 ready / 无 waiting / 无 blocked）。
+
+        blocked 计入未完成：反馈环耗尽阻塞 ≠ 完成，人工 unblock 后
+        恢复运行（audit FIX-1.5 失败语义）。
+        """
+        return not self.ready() and not self.waiting and not self.blocked
 
     # ------------------------------------------------------------ 执行
 
@@ -146,6 +157,7 @@ class WorkflowEngine:
             else:
                 self.completed.add(node_id)
                 self.failures.pop(node_id, None)
+                self._clear_rollback_cycles_for(node_id)
                 self._record(node_id, PASS, result.reason)
                 if self.on_success:
                     try:
@@ -227,6 +239,20 @@ class WorkflowEngine:
             return   # 留在 pending，等待重跑
         # 重试耗尽 → 反馈环或阻塞
         if node.on_fail and node.on_fail != node.id:
+            key = (node.id, node.on_fail)
+            cycles = self.rollback_cycles.get(key, 0) + 1
+            self.rollback_cycles[key] = cycles
+            if cycles >= self.MAX_ROLLBACK_CYCLES:
+                # 同一回路连续回退仍无进展：如实转 blocked（禁止无限自旋）。
+                # 恢复路径：unblock 后可从 on_fail 目标重新推进；若外部已补足
+                # 前置事实（真实 MODEL_IR / 代码 / 数值），再次执行即可 PASS。
+                self.blocked[node.id] = (
+                    f"feedback loop no progress: {cycles} 次回退 {node.on_fail} "
+                    f"仍失败（{reason[:160]}）。请检查前置事实是否完备："
+                    f"默认路径需注入真实 MODEL_IR + 代码（external_model_irs/"
+                    f"external_code），或由外部补齐执行证据后 unblock。")
+                self._record(node.id, BLOCKED, f"feedback loop no progress: {reason}")
+                return
             self._record(node.id, FAIL, f"exhausted retries → rollback to {node.on_fail}")
             self.rollback_to(node.on_fail)
         else:
@@ -303,6 +329,30 @@ class WorkflowEngine:
         self._record(f"@{question_id}", "reset_question",
                      f"Q-specific rerun ({len(affected)} nodes)")
         return affected
+
+    def _clear_rollback_cycles_for(self, node_id: str,
+                                   both_sides: bool = False) -> None:
+        """节点成功后作废其作为失败方的回退循环计数（计数只随进展清零）。
+
+        both_sides=False（PASS 场景）：只清 k[0]==node_id（该失败方成功，
+        循环作废）；**不清 k[1]**——否则 on_fail 目标（如 a）每次重置后
+        PASS 会把 (b, a) 计数清掉，收敛阈值永远达不到（audit P0 死循环回归）。
+        both_sides=True（unblock 场景）：外部恢复，两侧计数一并作废。
+        """
+        if not self.rollback_cycles:
+            return
+        for key in [k for k in self.rollback_cycles
+                    if k[0] == node_id
+                    or (both_sides and k[1] == node_id)]:
+            self.rollback_cycles.pop(key, None)
+
+    def unblock(self, node_id: str, reason: str = "manually unblocked") -> None:
+        if node_id not in self.blocked:
+            raise EngineError(f"节点不在阻塞列表: {node_id}")
+        del self.blocked[node_id]
+        self.retries.pop(node_id, None)
+        self._clear_rollback_cycles_for(node_id, both_sides=True)
+        self._record(node_id, "unblocked", reason)
 
     def _other_questions(self, question_id: str) -> set[str]:
         qids = set()

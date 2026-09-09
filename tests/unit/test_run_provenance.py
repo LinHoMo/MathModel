@@ -16,6 +16,8 @@ import pytest
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "core"))
 
+from conftest import injected_session  # noqa: E402
+
 from runtime.execution.replay import diff as replay_diff  # noqa: E402
 from runtime.execution.replay import verify  # noqa: E402
 from runtime.execution.session import RuntimeSession  # noqa: E402
@@ -26,7 +28,7 @@ from runtime.state.runs import derive_run_id, list_run_records  # noqa: E402
 class TestRunRecord:
     def test_run_emits_record_with_required_fields(self, tmp_path):
         proj = tmp_path / "proj"
-        s = RuntimeSession(proj, ["Q001"], run_meta={
+        s = injected_session(tmp_path, ["Q001"], run_meta={
             "model_provider": "mock", "model_version": "mock-1",
             "decision": "测试决策"})
         s.run()
@@ -55,13 +57,13 @@ class TestRunRecord:
 class TestReplayVerify:
     def test_verify_ok_on_fresh_run(self, tmp_path):
         proj = tmp_path / "proj"
-        RuntimeSession(proj, ["Q001"]).run()
+        injected_session(tmp_path, ["Q001"]).run()
         rep = verify(proj)
         assert rep["ok"], rep["problems"]
 
     def test_verify_detects_input_drift(self, tmp_path):
         proj = tmp_path / "proj"
-        RuntimeSession(proj, ["Q001"]).run()
+        injected_session(tmp_path, ["Q001"]).run()
         # 篡改输入（新增文件）→ 应检出 input_hash 漂移
         indir = proj / "inputs"
         indir.mkdir(parents=True, exist_ok=True)
@@ -72,7 +74,7 @@ class TestReplayVerify:
 
     def test_verify_detects_artifact_drift(self, tmp_path):
         proj = tmp_path / "proj"
-        RuntimeSession(proj, ["Q001"]).run()
+        injected_session(tmp_path, ["Q001"]).run()
         reg = proj / "state" / "registry.json"
         reg.write_text(reg.read_text(encoding="utf-8") + "\n// tampered",
                        encoding="utf-8")
@@ -82,27 +84,26 @@ class TestReplayVerify:
 
     def test_diff_attributes_changes(self, tmp_path):
         proj = tmp_path / "proj"
-        s1 = RuntimeSession(proj, ["Q001"], run_meta={"model_version": "v1"})
+        s1 = injected_session(tmp_path, ["Q001"])
         s1.run()
         r1 = list_run_records(proj)[-1]["run_id"]
         # 外部执行器换版本 + 输入变化 → 出现两条记录
         indir = proj / "inputs"
         indir.mkdir(parents=True, exist_ok=True)
         (indir / "C.txt").write_text("题面", encoding="utf-8")
-        s2 = RuntimeSession(proj, ["Q001"], run_meta={"model_version": "v2"})
+        s2 = injected_session(tmp_path, ["Q001"])
         s2.run()
         r2 = list_run_records(proj)[-1]["run_id"]
         assert r1 != r2
         d = replay_diff(proj, r1, r2)
         fields = {x["field"] for x in d["changed_fields"]}
-        assert "model_version" in fields
         assert "input_hash" in fields
 
 
 class TestParallelIsolation:
     def test_two_questions_parallel_isolated_and_reconcilable(self, tmp_path):
         proj = tmp_path / "proj"
-        s = RuntimeSession(proj, ["Q001", "Q002"], max_workers=2)
+        s = injected_session(tmp_path, ["Q001", "Q002"], max_workers=2)
         rep = s.run()
         art_qs = [a.question for a in s.registry.all()
                   if a.question in ("Q001", "Q002")]

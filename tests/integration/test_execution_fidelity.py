@@ -20,14 +20,27 @@ from runtime.execution.session import RuntimeSession  # noqa: E402
 
 
 def _make_exec(tmp_path, code, qid="Q001"):
-    s = RuntimeSession(tmp_path / "proj", [qid], max_workers=1,
-                       execution_adapter=LocalPythonAdapter())
-    for q in s.questions:
-        s.executor_impl.shared.setdefault(q, {})["plan"] = {"code": code}
+    """经真实 DAG（外部 code 注入 → subprocess 执行）产出 EXEC artifact。"""
+    from _real_session import make_real_session
+    s = make_real_session(tmp_path, questions=(qid,), run=False)
+    s.executor_impl.shared["external_code"][qid] = code
     s.run()
     execs = s.registry.list_by_type("execution_result")
     assert len(execs) == 1
     return s, execs[0]
+
+
+def _abicode(payload_lines: list[str]) -> str:
+    """构造满足 L0 ABI（def solve(inputs) -> dict）的可执行代码。"""
+    body = "\n".join("    " + ln for ln in payload_lines)
+    return (f"def solve(inputs):\n{body}\n\n"
+            "if __name__ == '__main__':\n"
+            "    import json\n"
+            "    print(json.dumps(solve({}), ensure_ascii=False))\n")
+
+
+OK_COST_CODE = _abicode(["return {'total_cost': 42.0}"])
+OTHER_CODE = _abicode(["return {'other': 1}"])
 
 
 def _ir(variables, objectives=None, constraints=None, equations=None):
@@ -159,8 +172,7 @@ class TestDryRunFixes:
 
 class TestVerifyFidelity:
     def test_end_to_end_registers_vr_and_report(self, tmp_path):
-        s, x = _make_exec(tmp_path,
-                          "import json; print(json.dumps({'total_cost': 42.0}))")
+        s, x = _make_exec(tmp_path, OK_COST_CODE)
         out = verify_fidelity(s.project_dir, _ir(VAR_COST, OBJ_COST),
                               x.artifact_id)
         assert out["fidelity_status"] == "aligned"
@@ -173,8 +185,7 @@ class TestVerifyFidelity:
 
     def test_misaligned_report_kept(self, tmp_path):
         # 代码跑通但缺声明变量：success=1, fidelity<1，报告如实记录
-        s, x = _make_exec(tmp_path,
-                          "import json; print(json.dumps({'other': 1}))")
+        s, x = _make_exec(tmp_path, OTHER_CODE)
         out = verify_fidelity(s.project_dir, _ir(VAR_COST), x.artifact_id)
         assert out["fidelity_status"] == "misaligned"
         assert out["fidelity_score"] < 1.0

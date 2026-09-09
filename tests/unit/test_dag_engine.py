@@ -141,14 +141,55 @@ class TestRetriesAndFeedback:
         assert "a" not in eng.completed
         assert "b" not in eng.retries   # 重置时清零
 
+    def test_feedback_loop_converges_to_blocked(self):
+        """audit P0（反馈环收敛）：同一回路连续回退无进展 → blocked，禁止死循环。
+
+        回归场景：b 永远 FAIL（on_fail="a"），a 重置后重跑仍 PASS，
+        b 再 FAIL → 若引擎不收敛将无限回退；收敛后第 3 轮回退即 blocked。
+        """
+        from runtime.execution.wave_executor import WaveExecutor
+
+        class AlwaysFailB:
+            def __call__(self, node_id, context):
+                return NodeResult(FAIL if node_id == "b" else PASS)
+
+        dag = make_dag()
+        we = WaveExecutor(dag, AlwaysFailB())
+        report = we.run()          # 不得抛 EngineError（旧行为 200 次死循环）
+        assert "b" in we.engine.blocked
+        assert "feedback loop no progress" in we.engine.blocked["b"]
+        assert we.engine.rollback_cycles[("b", "a")] >= WorkflowEngine.MAX_ROLLBACK_CYCLES
+        # 恢复路径：外部补足前置事实后 unblock，可重新推进
+        we.engine.unblock("b")
+        assert "b" not in we.engine.blocked
+
+    def test_rollback_cycles_cleared_on_unblock(self):
+        """unblock（外部恢复）清相关回退计数：补足事实后可重新获得回退预算。
+
+        反馈环内部 rollback_to→reset_to **不得**清计数（否则收敛阈值永远
+        达不到——audit P0 死循环回归的根因，由收敛测试覆盖）。
+        """
+        from runtime.execution.wave_executor import WaveExecutor
+
+        class AlwaysFailB:
+            def __call__(self, node_id, context):
+                return NodeResult(FAIL if node_id == "b" else PASS)
+
+        dag = make_dag()
+        we = WaveExecutor(dag, AlwaysFailB())
+        we.run()
+        assert ("b", "a") in we.engine.rollback_cycles
+        assert "b" in we.engine.blocked
+        we.engine.unblock("b")
+        assert ("b", "a") not in we.engine.rollback_cycles
+
     def test_blocked_when_no_on_fail(self):
         dag = make_dag()
         dag.nodes["b"].on_fail = None
         ex = ScriptedExecutor({"b": [FAIL, FAIL, FAIL]})
         eng = WorkflowEngine(dag, ex)
         eng.step("a")
-        for _ in range(3):
-            result = eng.step("b")   # 3 轮失败（max_retries=3）
+        for _ in range(3):            result = eng.step("b")   # 3 轮失败（max_retries=3）
         assert eng.blocked.get("b")
         assert eng.ready() == []           # 无可执行节点
         # 恢复

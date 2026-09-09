@@ -25,8 +25,13 @@ def healthy(tmp_path):
     reg.project = "test"
     reg.create("question", title="Q1", activate=True)
     reg.create("experiment", title="exp", question="Q001", activate=True)
+    exec_art = reg.create(
+        "execution_result", title="exec", question="Q001", activate=True,
+        data={"status": "success", "outputs": {"y": 3.0, "x": 1.0},
+              "code_hash": "a" * 64, "duration_ms": 10, "returncode": 0})
     reg.create("result", title="result", question="Q001", activate=True,
-               tags=["sensitivity", "baseline"])
+               tags=["sensitivity", "baseline"],
+               data={"execution_ref": exec_art.artifact_id})
     reg.create("claim", title="claim", question="Q001", activate=True,
                data={"statement": "主张成立"})
     reg.create("paper_section", title="结果分析", activate=True)

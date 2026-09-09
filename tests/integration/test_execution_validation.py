@@ -24,17 +24,28 @@ from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
 
 
 def _make_exec(tmp_path, code, qid="Q001"):
-    s = RuntimeSession(tmp_path / "proj", [qid], max_workers=1,
-                       execution_adapter=LocalPythonAdapter())
-    for q in s.questions:
-        s.executor_impl.shared.setdefault(q, {})["plan"] = {"code": code}
+    """经真实 DAG（外部 code 注入 → subprocess 执行）产出 EXEC artifact。"""
+    from _real_session import make_real_session
+    s = make_real_session(tmp_path, questions=(qid,), run=False)
+    s.executor_impl.shared["external_code"][qid] = code
     s.run()
     execs = s.registry.list_by_type("execution_result")
     assert len(execs) == 1
     return s, execs[0]
 
 
-OK_CODE = "import json; print(json.dumps({'total_cost': 42.0, 'n': 5}))"
+def _abicode(payload_lines: list[str]) -> str:
+    """构造满足 L0 ABI（def solve(inputs) -> dict）的可执行代码。"""
+    body = "\n".join("    " + ln for ln in payload_lines)
+    return (f"def solve(inputs):\n{body}\n\n"
+            "if __name__ == '__main__':\n"
+            "    import json\n"
+            "    print(json.dumps(solve({}), ensure_ascii=False))\n")
+
+
+OK_CODE = _abicode(["return {'total_cost': 42.0, 'n': 5}"])
+NEG_CODE = _abicode(["return {'total_cost': -1}"])
+BOOM_CODE = _abicode(["raise ValueError('boom')"])
 
 
 class TestRunChecks:
@@ -85,11 +96,13 @@ class TestValidateExecution:
         assert vr.verification_id.startswith("VR")
         assert vr.evidence_refs == [x.artifact_id]
         # registry 有 VR（重载磁盘真源，session 内存态不感知外部写入）
+        # 注意：DAG model_validation 节点已按注入 validation_spec 真实产 VR001，
+        # 手动 validate_execution 产 VR002——双重验证均为真实产物，都需落盘。
         from runtime.artifacts.registry import ArtifactRegistry
         reg2 = ArtifactRegistry(s.project_dir / "state" / "registry.json")
         reg2.load()
         vrs = reg2.list_by_type("verification_result")
-        assert [v.artifact_id for v in vrs] == [vr.verification_id]
+        assert any(v.artifact_id == vr.verification_id for v in vrs)
         # graph 有 verified_by 边
         g = EvidenceGraph(s.registry, s.project_dir / "state" / "evidence_graph.json")
         g.load()
@@ -97,7 +110,7 @@ class TestValidateExecution:
         assert (x.artifact_id, "verified_by", vr.verification_id) in edges
 
     def test_failed_vr_with_specific_check(self, tmp_path):
-        s, x = _make_exec(tmp_path, "import json; print(json.dumps({'total_cost': -1}))")
+        s, x = _make_exec(tmp_path, NEG_CODE)
         assert x.data["status"] == "success"
         vr = validate_execution(
             s.project_dir, x.artifact_id,
@@ -107,7 +120,7 @@ class TestValidateExecution:
         assert vr.checks[0]["passed"] is False
 
     def test_failed_execution_yields_invalid_vr(self, tmp_path):
-        s, x = _make_exec(tmp_path, "raise ValueError('boom')")
+        s, x = _make_exec(tmp_path, BOOM_CODE)
         assert x.data["status"] == "failed"
         vr = validate_execution(
             s.project_dir, x.artifact_id,

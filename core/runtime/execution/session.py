@@ -48,7 +48,11 @@ class RuntimeSession:
                  features: dict | None = None, knowledge_root=None,
                  max_workers: int = 1, min_coverage: float = 0.6,
                  run_meta: dict | None = None,
-                 execution_adapter=None):
+                 execution_adapter=None,
+                 external_model_irs: dict | None = None,
+                 external_code: dict | None = None,
+                 validation_specs: dict | None = None,
+                 external_candidates: dict | None = None):
         self.project_dir = Path(project_dir)
         self.project_dir.mkdir(parents=True, exist_ok=True)
         if not questions:
@@ -73,7 +77,11 @@ class RuntimeSession:
             self.registry, self.graph, state=self.state,
             decisions=self.decisions, knowledge_root=knowledge_root,
             features=features, min_coverage=min_coverage,
-            execution_adapter=execution_adapter)
+            execution_adapter=execution_adapter,
+            external_model_irs=external_model_irs,
+            external_code=external_code,
+            validation_specs=validation_specs,
+            external_candidates=external_candidates)
         # 预登记 Question Artifact（分配的 ID Q001… 依序即 questions 标签）
         existing = [a.artifact_id for a in self.registry.list_by_type("question")]
         for q in self.questions:
@@ -230,8 +238,26 @@ class RuntimeSession:
             affected = self.engine.reset_to("evidence_build")
         elif t == "paper_section":
             affected = self.engine.reset_to("paper_projection")
+        elif t in ("result", "execution_result", "verification_result"):
+            # 执行/验证产物失效 → 从 model_execution 开始重跑
+            # （R 由 execute_code 真实执行产生；reset_question 只重置
+            #   @qid 节点，model_execution 是全局节点，必须显式 reset）
+            qid = art.question or ""
+            # FIX-1.5：旧实验链随执行产物失效退役（E/R/C/F superseded，
+            # 审计保留）——否则旧 experiment 仍 active 指向死 result，
+            # evidence_gate E4 误报"实验无 produces 结果"（audit P0-08）
+            if qid and hasattr(self.executor_impl, "_supersede_question_chain"):
+                try:
+                    self.executor_impl._supersede_question_chain(
+                        qid, "invalidate:" + reason[:40])
+                except Exception:
+                    pass
+            if "model_execution" in self.engine.dag.nodes:
+                affected = self.engine.reset_to("model_execution")
+            else:
+                affected = self.engine.reset_question(qid)
         else:
-            # dataset / experiment / result / figure 等 → 按所属 Question 局部重跑
+            # dataset / experiment / figure 等 → 按所属 Question 局部重跑
             qid = art.question or next(
                 (a.question for a in self.registry.all()
                  if a.artifact_id == artifact_id), None)

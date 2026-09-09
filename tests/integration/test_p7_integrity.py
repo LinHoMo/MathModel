@@ -27,9 +27,92 @@ from runtime.execution.session import RuntimeSession  # noqa: E402
 from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
 
 
+def _mir(qid, model_id):
+    return {
+        "ir_version": "1.0", "model_id": model_id,
+        "model_family": {"primary": "linear_regression", "description": "d",
+                         "candidates": [{"family": "linear_regression", "rationale": "r"}]},
+        "problem_binding": {"problem_id": "demo", "sub_question_id": qid,
+                            "problem_sha256": "a" * 64},
+        "assumptions": [{"assumption_id": "A1", "type": "simplification",
+                         "statement": "s"}],
+        "variables": [{"variable_id": "V1", "type": "decision", "symbol": "y",
+                       "domain": "real", "description": "d"}],
+        "parameters": [{"parameter_id": "P1", "symbol": "slope", "value": 2.0,
+                        "source": "假设", "description": "d"},
+                       {"parameter_id": "P2", "symbol": "intercept", "value": 1.0,
+                        "source": "假设", "description": "d"}],
+        "objectives": [{"objective_id": "O1", "type": "estimate",
+                        "expression": "y", "sub_question_binding": qid}],
+        "constraints": [{"constraint_id": "C1", "expression": "y > -100",
+                         "sub_question_binding": qid}],
+        "mechanisms": [{"mechanism_id": "M1", "type": "mechanism_assumption",
+                        "description": "d", "sub_question_binding": qid}],
+        "equations": [{"equation_id": "E1",
+                       "expression": "y = slope*x + intercept"}],
+        "dependencies": [{"dependency_id": "D1", "kind": "data", "target": "x"}],
+        "solvers": [{"solver_id": "S1", "family": "closed_form",
+                     "backend": "python", "method": "evaluate"}],
+        "experiments": [{"experiment_id": "X1", "type": "simulation",
+                         "sub_question_binding": qid}],
+        "validations": [{"validation_id": "VAL1", "type": "sensitivity",
+                         "sub_question_binding": qid}],
+        "claims": [{"claim_id": "CL1", "type": "comparative",
+                    "sub_question_binding": qid}],
+        "model_graph": {"nodes": [], "edges": []},
+        "modeling_trace": [{"step": "construct", "note": "test injection"}],
+    }
+
+
+_CODE = """\
+import json
+import os
+
+def solve(inputs):
+    x = float(inputs.get("x", 0.0))
+    slope = float(inputs.get("slope", 2.0))
+    intercept = float(inputs.get("intercept", 1.0))
+    return {"y": slope * x + intercept, "x": x}
+
+if __name__ == "__main__":
+    _in = {}
+    if os.path.exists("input.json"):
+        with open("input.json", encoding="utf-8") as _f:
+            _in = json.load(_f)
+    print(json.dumps(solve(_in), ensure_ascii=False))
+"""
+
+
+def _validation_spec() -> dict:
+    return {"checks": [
+        {"name": "y_field_exists", "kind": "output_field_exists", "path": "y"},
+        {"name": "y_numeric", "kind": "output_numeric", "path": "y"},
+        {"name": "y_in_range", "kind": "output_range", "path": "y",
+         "min": -1000, "max": 1000},
+    ]}
+
+
 def _new(tmp_path, questions=("Q001", "Q002"), max_workers=1):
-    return RuntimeSession(tmp_path / "proj", list(questions),
-                          max_workers=max_workers)
+    s = RuntimeSession(tmp_path / "proj", list(questions),
+                       max_workers=max_workers)
+    # 注入外部 Model Constructor 产物（FIX-1.5：默认路径无注入时
+    # do_model_construction 不产 MODEL_IR，新门禁下必须 FAIL——P7 测试
+    # 测运行时完整性，需真实执行闭环）
+    for q in questions:
+        qid = f"Q{questions.index(q) + 1:03d}"
+        s.executor_impl.shared["external_model_irs"] = {
+            **s.executor_impl.shared.get("external_model_irs", {}),
+            qid: _mir(qid, f"M-{qid}"),
+        }
+        s.executor_impl.shared["external_code"] = {
+            **s.executor_impl.shared.get("external_code", {}),
+            qid: _CODE,
+        }
+        s.executor_impl.shared["validation_specs"] = {
+            **s.executor_impl.shared.get("validation_specs", {}),
+            qid: _validation_spec(),
+        }
+    return s
 
 
 def _snapshot(session):

@@ -19,14 +19,24 @@ from validators.evidence import evidence_gate as eg
 
 @pytest.fixture
 def setup(tmp_path):
-    """完整健康链: E001 produces R001 → supports C001，含 sensitivity tag。"""
+    """完整健康链: EXEC001 produces R001 → supports C001，含真实执行事实。
+
+    audit FIX-1.3（E9）：claim 支撑链必须包含真实成功执行——fixture 需带
+    execution_result（success + 非空 outputs + code_hash），否则 E9 判 FAIL。
+    """
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.project = "test"
     reg.create("question", title="Q1", activate=True)
     reg.create("model", title="model", question="Q001", activate=True)
     reg.create("experiment", title="exp", question="Q001", activate=True)
+    reg.create("execution_result", title="exec", question="Q001",
+               activate=True,
+               data={"status": "success", "outputs": {"y": 1.0},
+                     "code_hash": "a" * 64, "returncode": 0,
+                     "duration_ms": 10, "execution_id": "EXEC001"})
     reg.create("result", title="result", question="Q001", activate=True,
-               tags=["sensitivity", "baseline"])
+               tags=["sensitivity", "baseline"],
+               data={"execution_ref": "EXEC001", "outputs": {"y": 1.0}})
     reg.create("claim", title="claim", question="Q001", activate=True)
 
     g = EvidenceGraph(reg, path=tmp_path / "graph.json")
@@ -34,6 +44,7 @@ def setup(tmp_path):
         ("Q001", "solved_by", "M001"),
         ("M001", "validated_by", "E001"),
         ("E001", "produces", "R001"),
+        ("EXEC001", "produces", "R001"),
         ("R001", "supports", "C001"),
     ]:
         g.add_relation(f, r, t)

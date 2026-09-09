@@ -21,12 +21,17 @@ from runtime.execution.replay import replay_execution  # noqa: E402
 from runtime.execution.session import RuntimeSession  # noqa: E402
 
 
-def _make_exec(tmp_path, code="import json; print(json.dumps({'v': 42}))"):
-    """通过真实 runtime 产出一个 execution_result artifact。"""
-    s = RuntimeSession(tmp_path / "proj", ["Q001"], max_workers=1,
-                       execution_adapter=LocalPythonAdapter())
-    for qid in s.questions:
-        s.executor_impl.shared.setdefault(qid, {})["plan"] = {"code": code}
+def _make_exec(tmp_path, code=None, qid="Q001"):
+    """经真实 DAG（外部 code 注入 → subprocess 执行）产出 EXEC artifact。"""
+    from _real_session import make_real_session
+    if code is None:
+        code = ("def solve(inputs):\n"
+                "    return {'v': 42}\n\n"
+                "if __name__ == '__main__':\n"
+                "    import json\n"
+                "    print(json.dumps(solve({}), ensure_ascii=False))\n")
+    s = make_real_session(tmp_path, questions=(qid,), run=False)
+    s.executor_impl.shared["external_code"][qid] = code
     s.run()
     execs = s.registry.list_by_type("execution_result")
     assert len(execs) == 1
@@ -44,8 +49,13 @@ class TestReplayExecution:
 
     def test_replay_code_change_detected(self, tmp_path):
         s, x = _make_exec(tmp_path)
+        override = ("def solve(inputs):\n"
+                    "    return {'v': 99}\n\n"
+                    "if __name__ == '__main__':\n"
+                    "    import json\n"
+                    "    print(json.dumps(solve({}), ensure_ascii=False))\n")
         rep = replay_execution(s.project_dir, x.artifact_id,
-                               code_override="import json; print(json.dumps({'v': 99}))")
+                               code_override=override)
         assert rep["ok"] is False
         dims = {d["dim"] for d in rep["deviation"]}
         assert "code_hash" in dims
@@ -66,12 +76,22 @@ class TestReplayExecution:
         assert rep["ok"] is False
         assert "未存 code 本体" in rep["problems"][0]
         # 提供 code_override 后可用
-        rep2 = replay_execution(s.project_dir, x.artifact_id,
-                                code_override="import json; print(json.dumps({'v': 42}))")
+        rep2 = replay_execution(
+            s.project_dir, x.artifact_id,
+            code_override=("def solve(inputs):\n"
+                           "    return {'v': 42}\n\n"
+                           "if __name__ == '__main__':\n"
+                           "    import json\n"
+                           "    print(json.dumps(solve({}), ensure_ascii=False))\n"))
         assert rep2["ok"] is True
 
     def test_replay_failed_original(self, tmp_path):
-        s, x = _make_exec(tmp_path, code="raise ValueError('boom')")
+        boom = ("def solve(inputs):\n"
+                "    raise ValueError('boom')\n\n"
+                "if __name__ == '__main__':\n"
+                "    import json\n"
+                "    print(json.dumps(solve({}), ensure_ascii=False))\n")
+        s, x = _make_exec(tmp_path, code=boom)
         assert x.data["status"] == "failed"
         rep = replay_execution(s.project_dir, x.artifact_id)
         assert rep["ok"] is True   # 失败也是可重放状态（复现失败=一致）

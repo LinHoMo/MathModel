@@ -16,6 +16,7 @@ import pytest
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "core"))
 
+from conftest import injected_resume  # noqa: E402
 from runtime.decisions.log import DecisionLog  # noqa: E402
 from runtime.execution.session import RuntimeSession  # noqa: E402
 from runtime.knowledge.packs import load_competition_packs  # noqa: E402
@@ -32,11 +33,10 @@ def _rq(decisions=None, pack=None):
                            decisions=decisions, pack=pack)
 
 
-def _session(tmp_path, questions=("Q001",), run=True, name="proj"):
-    s = RuntimeSession(tmp_path / name, list(questions))
-    if run:
-        s.run()
-    return s
+def _session(tmp_path, questions=("Q001",), run=True, name="proj", **kw):
+    from _real_session import make_real_session
+    return make_real_session(tmp_path, questions=questions, run=run,
+                             name=name, **kw)
 
 
 def _snapshot(s):
@@ -57,10 +57,10 @@ def _snapshot(s):
 class TestFourSemantics:
     def test_R4_rerun_creates_new_lineage(self, tmp_path):
         s = _session(tmp_path)
-        old = {a.artifact_id for a in s.registry.list_by_type("experiment")}
+        old = {a.artifact_id for a in s.registry.list_by_type("result")}
         s.rerun("experiment@Q001")
         s.run()
-        new = {a.artifact_id for a in s.registry.list_by_type("experiment")}
+        new = {a.artifact_id for a in s.registry.list_by_type("result")}
         assert new - old, "rerun 必须产生新 Artifact"
         for aid in old:
             assert s.registry.get(aid).status == "superseded"
@@ -68,7 +68,7 @@ class TestFourSemantics:
     def test_R5_resume_preserves_lineage(self, tmp_path):
         s = _session(tmp_path)
         before = _snapshot(s)
-        s2 = RuntimeSession(s.project_dir, ["Q001"])
+        s2 = injected_resume(s, ["Q001"])
         s2.resume()
         assert _snapshot(s2)["artifacts"] == before["artifacts"]
         assert _snapshot(s2)["relations"] == before["relations"]
@@ -88,9 +88,10 @@ class TestFourSemantics:
         s.executor_impl.do_assumption_check = flaky
         s.run()
         assert calls["n"] >= 2, "瞬时故障应触发引擎 retry"
-        experiments = s.registry.list_by_type("experiment")
-        assert len(experiments) == 1, \
-            "retry 不得复制实验链（应为恰好一条 E001）"
+        results = [a for a in s.registry.list_by_type("result")
+                   if a.status not in ("superseded", "invalidated")]
+        assert len(results) == 1, \
+            "retry 不得复制执行链（应为恰好一条活跃 R）"
 
     def test_R7_recompute_vs_rerun_distinct(self, tmp_path):
         # recompute: invalidated
@@ -282,7 +283,7 @@ class TestCrashPoints:
             s.engine.step(nid)
         s.checkpoint()
         s.engine.save_progress(s.project_dir / "state" / "engine_progress.json")
-        s2 = RuntimeSession(s.project_dir, ["Q001"])
+        s2 = injected_resume(s, ["Q001"])
         s2.resume()
         ref_snap = _snapshot(ref)
         got_snap = _snapshot(s2)
@@ -305,7 +306,7 @@ class TestCrashPoints:
             s.engine.step(nid)
         ids_before = {a.artifact_id for a in s.registry.all()}
         s.checkpoint()
-        s2 = RuntimeSession(s.project_dir, ["Q001"])
+        s2 = injected_resume(s, ["Q001"])
         s2.resume()
         ids_after = {a.artifact_id for a in s2.registry.all()}
         new_unknown = ids_after - ids_before

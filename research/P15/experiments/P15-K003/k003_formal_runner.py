@@ -58,6 +58,21 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _load_exec_data(project_dir, exec_id):
+    """FIX-1.6：从 Artifact Registry 读 EXEC 真实字段（execution substrate
+    产物；registry 是唯一真源）。读不到返回 None（调用方如实标 invalid）。"""
+    from runtime.artifacts.registry import ArtifactRegistry
+    try:
+        reg = ArtifactRegistry(Path(project_dir) / "state" / "registry.json")
+        reg.load()
+        art = reg.get(exec_id)
+        if art is None:
+            return None
+        return dict(art.data or {})
+    except Exception:
+        return None
+
+
 def write_json(path: Path, obj) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -722,37 +737,65 @@ def generate_and_run(problem_id: str, arm: str, seed: int) -> dict:
             model_id=model_id,
             output_mapping=output_mapping,
         )
-        exec_status = pipe_result.get("exec_status", "unknown")
-        fidelity_status = pipe_result.get("fidelity_status", "unknown")
+        exec_status = pipe_result.get("exec_status")
+        fidelity_status = pipe_result.get("fidelity_status")
         fidelity_score = pipe_result.get("fidelity_score")
         code_id = pipe_result.get("code_id", "")
         exec_id = pipe_result.get("exec_id", "")
 
-        # 写 execution_result
-        execution_result = {
-            "model_id": model_id,
-            "status": exec_status,
-            "returncode": pipe_result.get("returncode", 0),
-            "outputs": pipe_result.get("outputs", {}),
-            "stdout_tail": pipe_result.get("stdout_tail", ""),
-            "stderr": pipe_result.get("stderr", ""),
-            "duration_ms": pipe_result.get("duration_ms", 0),
-            "code_hash": pipe_result.get("code_hash", ""),
-            "environment_hash": pipe_result.get("environment_hash", ""),
-            "code_id": code_id,
-            "exec_id": exec_id,
-            "executed_at": utc_now_iso(),
-        }
+        # FIX-1.6（audit P0-03）：execution_result 只从 registry 读 EXEC 真实
+        # 字段（run_code_pipeline 只返回 7 个 key，不返回 returncode/outputs/
+        # duration/code_hash 等；旧写法 pipe_result.get(...) 全部落到默认值
+        # 0/""/{}，构成"半真半假"产物）。registry 读不到 → status="invalid"
+        # 并注明原因（空壳守卫），绝不写默认数值冒充真实。
+        exec_data = _load_exec_data(FORMAL_DIR, exec_id)
+        if exec_data is None:
+            exec_status = "invalid"
+            execution_result = {
+                "model_id": model_id,
+                "status": "invalid",
+                "error": f"registry 无 execution_result {exec_id}（无法生成真实产物）",
+                "code_id": code_id,
+                "exec_id": exec_id,
+                "executed_at": utc_now_iso(),
+            }
+        else:
+            execution_result = {
+                "model_id": model_id,
+                "status": exec_data.get("status", "unknown"),
+                "returncode": exec_data.get("returncode"),
+                "outputs": exec_data.get("outputs", {}),
+                "stdout_tail": (exec_data.get("stdout") or "")[-2000:],
+                "stderr": exec_data.get("stderr", ""),
+                "duration_ms": exec_data.get("duration_ms"),
+                "code_hash": exec_data.get("code_hash", ""),
+                "environment_hash": exec_data.get("environment_hash", ""),
+                "code_id": code_id,
+                "exec_id": exec_id,
+                "executed_at": utc_now_iso(),
+            }
         write_json(run_dir / "execution_result.json", execution_result)
 
-        # 写 fidelity_report
+        # FIX-1.6：fidelity checks/passed/total 从 verify_fidelity 报告文件读
+        # （run_code_pipeline 的 fidelity_report 是 report 路径，非内联字段）。
+        fid_checks, fid_passed, fid_total = [], 0, 0
+        fid_report_path = pipe_result.get("fidelity_report")
+        if fid_report_path:
+            try:
+                fid_data = json.loads(
+                    Path(fid_report_path).read_text(encoding="utf-8"))
+                fid_checks = fid_data.get("checks", [])
+                fid_passed = fid_data.get("passed", 0)
+                fid_total = fid_data.get("total", 0)
+            except Exception:
+                pass  # 报告缺失时保持空壳并如实记录 status（见 fidelity_report）
         fidelity_report = {
             "execution_id": exec_id,
             "fidelity_status": fidelity_status,
             "fidelity_score": fidelity_score,
-            "checks": pipe_result.get("fidelity_checks", []),
-            "passed": pipe_result.get("fidelity_passed", 0),
-            "total": pipe_result.get("fidelity_total", 0),
+            "checks": fid_checks,
+            "passed": fid_passed,
+            "total": fid_total,
             "evaluated_at": utc_now_iso(),
         }
         write_json(run_dir / "fidelity_report.json", fidelity_report)

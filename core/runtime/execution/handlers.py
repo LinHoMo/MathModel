@@ -71,7 +71,11 @@ class DefaultNodeExecutor:
     def __init__(self, registry, graph, state=None, decisions=None,
                  knowledge_root: str | Path | None = None,
                  features: dict | None = None, min_coverage: float = 0.6,
-                 execution_adapter=None):
+                 execution_adapter=None,
+                 external_model_irs: dict | None = None,
+                 external_code: dict | None = None,
+                 validation_specs: dict | None = None,
+                 external_candidates: dict | None = None):
         self.registry = registry
         self.graph = graph
         self.state = state
@@ -97,6 +101,16 @@ class DefaultNodeExecutor:
         self.candidate_arena = CandidateArena(self.retriever, _pack)
         # 跨节点共享（session 级）：qid -> {"model": aid, "plan": ..., ...}
         self.shared: dict = {}
+        # 外部 Model Constructor 注入（LLM-free 边界：runtime 只登记/校验/
+        # 执行/验证，构造由外部 Agent 完成——audit FIX-1.5 后为公开注入点）
+        if external_model_irs:
+            self.shared["external_model_irs"] = dict(external_model_irs)
+        if external_code:
+            self.shared["external_code"] = dict(external_code)
+        if validation_specs:
+            self.shared["validation_specs"] = dict(validation_specs)
+        if external_candidates:
+            self.shared["external_candidates"] = dict(external_candidates)
         # P7 Rerun 语义：显式重跑的节点强制新建谱系（旧产物 superseded 审计保留）
         self.force_new_lineage: set[str] = set()
 
@@ -113,10 +127,28 @@ class DefaultNodeExecutor:
         return [a.artifact_id for a in self.registry.list_by_type("model")
                 if a.question == qid and a.status not in _TERMINAL]
 
-    def _results_of(self, qid: str) -> list[str]:
-        """该问题的活跃 result（P7：Registry 派生，崩溃/resume 后仍可重建）。"""
-        return [a.artifact_id for a in self.registry.list_by_type("result")
-                if a.question == qid and a.status not in _TERMINAL]
+    def _results_of(self, qid: str, include_failed: bool = True) -> list[str]:
+        """该问题的活跃 result（P7：Registry 派生，崩溃/resume 后仍可重建）。
+
+        include_failed=False 时排除由失败执行（EXEC status ∈ failed/timeout/
+        invalid，或 exit_code != 0）产生的 result——claim 构建/批判等下游
+        默认不得引用失败产物（audit FIX-1.2：执行失败必须真实传播）。
+        """
+        out: list[str] = []
+        for a in self.registry.list_by_type("result"):
+            if a.question != qid or a.status in _TERMINAL:
+                continue
+            if not include_failed:
+                ref = (a.data or {}).get("execution_ref")
+                if ref and self.registry.exists(ref):
+                    xdata = self.registry.get(ref).data or {}
+                    if xdata.get("status") in ("failed", "timeout", "invalid"):
+                        continue
+                    if (xdata.get("status") == "success"
+                            and (a.data or {}).get("exit_code") not in (0, None)):
+                        continue
+            out.append(a.artifact_id)
+        return out
 
     def _claim_of(self, qid: str) -> str:
         """该问题的活跃 claim（无则空串）。"""
@@ -252,11 +284,15 @@ class DefaultNodeExecutor:
         return mirs[-1] if mirs else None
 
     def _exec_workdir(self) -> str:
-        """执行工作目录：shared["_workdir"] 优先（演示/测试可落盘到项目内），否则系统临时目录。"""
+        """执行工作目录：shared["_workdir"] 优先（演示/测试可落盘到项目内），
+        否则每次执行创建独立临时目录——避免多 session/多测试共享系统 tempdir
+        时 input.json 互相覆盖导致执行错乱（audit FIX-1.2 并发安全）。"""
+        wd = self.shared.get("_workdir")
+        if wd:
+            Path(wd).mkdir(parents=True, exist_ok=True)
+            return str(wd)
         import tempfile
-        wd = self.shared.get("_workdir") or tempfile.gettempdir()
-        Path(wd).mkdir(parents=True, exist_ok=True)
-        return str(wd)
+        return tempfile.mkdtemp(prefix="mathmodel_exec_")
 
     def _code_for_mir(self, qid: str, mir_id: str) -> str | None:
         """P1-M3：按候选 model_id 匹配注入代码（external_candidates 内嵌 code）。"""
@@ -350,6 +386,17 @@ class DefaultNodeExecutor:
                 if c is not None and c.type == "code" and c.question == qid \
                         and c.status not in _TERMINAL:
                     return c.artifact_id
+        # P0-E plan 通道（既有注入接口）：shared[q]["plan"]["code"] 或 plan
+        # artifact 的 data.code。统一执行入口必须消费全部既有注入通道，
+        # 否则 plan 注入的会话（外部 executor 回填路径）静默失去执行。
+        plan = (self.shared.get(qid) or {}).get("plan") or {}
+        code = plan.get("code")
+        if not code:
+            pa = self._plan_artifact_for(qid, mir_id)
+            if pa is not None:
+                code = (pa.data or {}).get("code")
+        if code:
+            return self._register_code(qid, mir_id, code, "model_execution")
         return None
 
     def _active_exec_of_mir(self, qid: str, mir_id: str) -> str | None:
@@ -393,7 +440,16 @@ class DefaultNodeExecutor:
                 rid = self._result_of_exec(qid, existing)
                 if rid:
                     out.append((existing, rid))
-                continue
+                    continue
+                # EXEC 活跃但其 result 已失效/缺失（如 result 被 invalidate 后
+                # 重跑）：退役旧 EXEC（否则 _active_exec_of_mir 幂等复用永远
+                # 命中死链，反馈环死循环），再重新执行产出新 EXEC + 新 R
+                try:
+                    self.registry.supersede(
+                        existing, reason="result chain invalidated; re-executing",
+                        by=node_id)
+                except Exception:
+                    pass
             code = (self.registry.get(code_id).data or {}).get("code", "")
             if not code:
                 raise HandlerError(f"{code_id}: code artifact 无 code 本体")
@@ -523,13 +579,30 @@ class DefaultNodeExecutor:
                           outputs={"artifacts": [], "evidence": ev})
 
     def do_model_execution(self, node_id: str) -> NodeResult:
-        """C7 DAG 节点：真 subprocess 执行各问题可执行代码 → EXEC + R。"""
+        """C7 DAG 节点：真 subprocess 执行各问题可执行代码 → EXEC + R。
+
+        执行失败必须真实传播（audit FIX-1.2 / P0-08）：任一 EXEC status ∈
+        {failed, timeout, invalid} 时节点 FAIL（含首个失败的 stderr 尾部），
+        触发 on_fail 反馈环；无执行发生（无候选代码）视为 N/A 不判 FAIL，
+        避免无模型问题被阻断。
+        """
         ev = []
         n = 0
+        failures: list[str] = []
         for qid in self._question_ids():
             for xid, rid in self.execute_code(qid, node_id):
+                xdata = self.registry.get(xid).data or {}
+                xstatus = xdata.get("status")
                 ev.append({"from": xid, "relation": "produces", "to": rid})
                 n += 1
+                if xstatus in ("failed", "timeout", "invalid"):
+                    tail = str(xdata.get("stderr", ""))[-300:]
+                    failures.append(f"{qid}/{xid}: {xstatus} — {tail}")
+        if failures:
+            return NodeResult(
+                FAIL,
+                f"执行 {n} 个模型：{len(failures)} 个失败（{failures[0][:220]}）",
+                outputs={"artifacts": [], "evidence": ev, "failures": failures})
         return NodeResult(PASS, f"执行 {n} 个模型（真实 subprocess）",
                           outputs={"artifacts": [], "evidence": ev})
 
@@ -1039,9 +1112,29 @@ class DefaultNodeExecutor:
             e_art = None
             for x in self.graph.relations:
                 if x["relation"] == "produces" and x["to"] == r:
-                    e_art = self.registry.get(x["from"])
-                    break
-            if plan_art and e_art is not None and not e_art.data.get("plan_ref"):
+                    cand = self.registry.get(x["from"])
+                    if cand is not None and cand.type == "experiment":
+                        e_art = cand
+                        break
+            if e_art is None:
+                # FIX-1.5：复用分支也确保实验记录存在（真实执行链下
+                # EXEC produces R 而实验节点可能未登记 E——下游断言
+                # experiment artifact 的存在性 + 模型→实验谱系边）
+                e_art = self.registry.create(
+                    "experiment", title=f"{qid} 实验", question=qid,
+                    depends_on=[mid] if mid else [],
+                    data={"card_id": self._card_id_of(qid, mid),
+                          "plan_ref": plan_art.artifact_id
+                          if plan_art else "",
+                          "plan_entry": "", "hypothesis_ref": ""},
+                    activate=True, created_by=node_id)
+                self.graph.add_relation(e_art.artifact_id, "produces", r)
+                if mid:
+                    self.graph.add_relation(mid, "validated_by", e_art.artifact_id)
+                    self.graph.add_relation(e_art.artifact_id, "tests", mid)
+            if plan_art and (not e_art.data.get("plan_ref")
+                             or not e_art.data.get("plan_entry")
+                             or not e_art.data.get("hypothesis_ref")):
                 entries = plan.get("entries") or [{}]
                 e_art.data.update({
                     "plan_ref": plan_art.artifact_id,
@@ -1049,8 +1142,20 @@ class DefaultNodeExecutor:
                     "hypothesis_ref": entries[0].get("hypothesis", "")})
             f = next((a.artifact_id for a in self.registry.list_by_type("figure")
                       if a.question == qid
-                      and a.status not in _TERMINAL), r)
+                      and a.status not in _TERMINAL), None)
+            if f is None:
+                # FIX-1.5：复用分支确保 figure 存在（论文 FactCheck P4 需要
+                # 活跃 Figure Artifact，不得 fallback 到 r 冒充图）
+                f_art = self.registry.create(
+                    "figure", title=f"{qid} 结果图", question=qid,
+                    depends_on=[r], activate=True, created_by=node_id)
+                f = f_art.artifact_id
+                self.graph.add_relation(r, "visualized_by", f)
             self._clear_revalidation_marks(qid, node_id)   # 复验存活链
+            if self.state:
+                # 复用链同样推进状态机（真实执行下 model_execution 已产出
+                # result；问题须进入 experimenting → validated 晋级链）
+                self._advance_question(qid, "experimenting")
             return NodeResult(PASS, f"{qid}: 复用既有实验链",
                               outputs={"artifacts": [], "evidence": [
                                   {"from": r, "relation": "visualized_by", "to": f}]})
@@ -1065,6 +1170,7 @@ class DefaultNodeExecutor:
         tags = [t for t, key in (("sensitivity", "sensitivity"),
                                  ("baseline", "baseline_comparison"))
                 if plan.get(key)]
+        # 新实验记录（谱系节点：rerun/recompute 产生新 E，旧链 superseded）
         e = self.registry.create("experiment", title=f"{qid} 实验",
                                  question=qid, depends_on=[mid],
                                  data={"card_id": self._card_id_of(qid, mid),
@@ -1075,32 +1181,38 @@ class DefaultNodeExecutor:
                                        "hypothesis_ref": (entries[0] or {})
                                        .get("hypothesis", "")},
                                  activate=True, created_by=node_id)
-        r = self.registry.create("result", title=f"{qid} 结果",
-                                 question=qid, depends_on=[e.artifact_id],
-                                 data={"card_id": self._card_id_of(qid, mid),
-                                       "status": "not_executed",
-                                       "note": "确定性 runtime 不执行数值计算；真实结果须由外部 executor 经 register_external_artifact 回填后翻为 executed"},
-                                 tags=tags,
-                                 activate=True, created_by=node_id)
-        f = self.registry.create("figure", title=f"{qid} 结果图",
-                                 question=qid, depends_on=[r.artifact_id],
-                                 activate=True, created_by=node_id)
+        # FIX-1.5（audit P0-05/08）：实验节点必须消费真实执行链。
+        # 重建执行（external_code → subprocess → EXEC → result）；
+        # 无真实 result 时不得创建 not_executed 占位链冒充完成。
+        try:
+            self.execute_code(qid, node_id)
+        except HandlerError:
+            pass   # 无注入代码：execute_code 返回 []，下面对话判定
+        rebuilt = self._results_of(qid, include_failed=False)
+        if not rebuilt:
+            return NodeResult(
+                FAIL,
+                f"{qid}: 无真实执行 result（外部 Model Constructor 未注入 "
+                "代码/模型或执行失败），实验链不可用——不创建占位结果",
+                outputs={"artifacts": [], "evidence": []})
+        r = rebuilt[-1]
+        r_art = self.registry.get(r)
+        if tags and not r_art.tags:
+            r_art.tags = tags
+        f = next((a.artifact_id for a in self.registry.list_by_type("figure")
+                  if a.question == qid and a.status not in _TERMINAL), r)
         ev = [
             {"from": mid, "relation": "validated_by", "to": e.artifact_id},
             {"from": e.artifact_id, "relation": "tests", "to": mid},
-            {"from": e.artifact_id, "relation": "produces", "to": r.artifact_id},
-            {"from": r.artifact_id, "relation": "visualized_by", "to": f.artifact_id},
+            {"from": e.artifact_id, "relation": "produces", "to": r},
+            {"from": r, "relation": "visualized_by", "to": f},
         ]
-        info.setdefault("results", []).append(r.artifact_id)
+        info.setdefault("results", []).append(r)
         info["results"] = self._results_of(qid)   # 以 Registry 为准
         self._clear_revalidation_marks(qid, node_id)   # 重建即复验通过
-        # P0-E：真实执行集成——adapter 可用且可执行代码可得时，
-        # 执行并登记 execution_result（EXEC 一等 artifact），result.status
-        # 只来自真实执行状态；否则保持 not_executed（外部 executor 回填）。
-        self._maybe_execute_experiment(qid, mid, r.artifact_id, plan, node_id)
         if self.state:
             self._advance_question(qid, "experimenting")
-        return NodeResult(PASS, f"{qid}: 实验/结果/图已登记",
+        return NodeResult(PASS, f"{qid}: 实验链重建（真实执行）",
                           outputs={"artifacts": [], "evidence": ev})
 
     def _maybe_execute_experiment(self, qid: str, mid: str,
@@ -1187,7 +1299,7 @@ class DefaultNodeExecutor:
 
     def do_experiment_critique(self, node_id: str) -> NodeResult:
         qid = self._question_of(node_id)
-        results = self._results_of(qid)
+        results = self._results_of(qid, include_failed=False)
         if not results:
             return NodeResult(FAIL, f"{qid}: 实验无有效结果产出，批判不通过")
         for rid in results:
@@ -1197,13 +1309,21 @@ class DefaultNodeExecutor:
         return NodeResult(PASS, f"{qid}: 实验批判通过")
 
     def do_evidence_build(self, node_id: str) -> NodeResult:
-        """证据构建：每问题 result → claim（supports）。"""
+        """证据构建：每问题 result → claim（supports）。
+
+        审计 FIX-1.4 / P0-06：占位 claim（"{qid} 结论"）不得获得 supports
+        边。有真实执行数值时用 synthesize_claim 确定性合成 statement
+        （LLM-free）；无任何数值事实时保留 placeholder 但不加 supports 边，
+        由 evidence_gate 的数值真实性检查（E9）判 FAIL 走反馈环。
+        """
+        from runtime.execution.claim_synthesis import synthesize_claim
         ev = []
         n = 0
+        n_placeholder = 0
         for qid in self._question_ids():
-            results = self._results_of(qid)
+            results = self._results_of(qid, include_failed=False)
             if not results:
-                return NodeResult(FAIL, f"{qid}: 无 result，证据链断裂")
+                return NodeResult(FAIL, f"{qid}: 无有效 result（失败/未执行被排除），证据链断裂")
             claim_id = self.shared.get(qid, {}).get("claim") or self._claim_of(qid)
             if node_id in self.force_new_lineage and claim_id                     and self.registry.get(claim_id).status not in _TERMINAL:
                 self.shared.pop(qid, None)
@@ -1216,22 +1336,48 @@ class DefaultNodeExecutor:
                     pass
             if claim_id and self.registry.get(claim_id).status not in _TERMINAL:
                 continue    # 幂等：有效 claim 已登记（终态则重建）
+            # 取最近一个有效 result 及其 EXEC/VR 证据
+            r_id = results[-1]
+            r_art = self.registry.get(r_id)
+            exec_id = (r_art.data or {}).get("execution_ref") or ""
+            exec_art = self.registry.get(exec_id) if exec_id and self.registry.exists(exec_id) else None
+            vr_art = None
+            if exec_id:
+                for a in self.registry.list_by_type("verification_result"):
+                    if a.question != qid or a.status in _TERMINAL:
+                        continue
+                    if any(x["from"] == exec_id and x["relation"] == "verified_by"
+                           and x["to"] == a.artifact_id for x in self.graph.relations):
+                        vr_art = a
+                        break
+            statement = synthesize_claim(qid, r_art, exec_art, vr_art)
+            placeholder = not statement
             c = self.registry.create("claim", title=f"{qid} 结论",
                                      question=qid,
-                                     depends_on=[results[-1]],
-                                     data={"statement": f"{qid} 结论",
+                                     depends_on=[r_id] if not placeholder else [],
+                                     data={"statement": statement or f"{qid} 结论",
                                            "claim_type": "comparative",
-                                           "experiment_refs": [results[-1]],
+                                           "experiment_refs": [r_id] if not placeholder else [],
                                            "literature_refs": [],
-                                           "execution_status": "not_executed",
-                                           "placeholder": True},
+                                           "execution_status":
+                                               (exec_art.data or {}).get("status")
+                                               if exec_art is not None else "not_executed",
+                                           "placeholder": placeholder},
                                      activate=True, created_by=node_id)
-            ev.append({"from": results[-1], "relation": "supports",
-                       "to": c.artifact_id})
+            if not placeholder:
+                ev.append({"from": r_id, "relation": "supports",
+                           "to": c.artifact_id})
+                n += 1
+            else:
+                n_placeholder += 1
             self.shared.setdefault(qid, {})["claim"] = c.artifact_id
             self.shared[qid]["results"] = results
-            n += 1
-        return NodeResult(PASS, f"{n} 条结论已登记",
+        msg = f"{n} 条真实结论已登记"
+        if n_placeholder:
+            msg += f"；{n_placeholder} 条占位（无数值事实，未加 supports 边）"
+        if n == 0 and n_placeholder > 0:
+            return NodeResult(FAIL, msg + " —— 无任何真实数值支撑的结论")
+        return NodeResult(PASS, msg,
                           outputs={"artifacts": [], "evidence": ev})
 
     def do_evidence_gate(self, node_id: str) -> NodeResult:

@@ -7,6 +7,7 @@ dependency / validation / relations / lifecycle / invalidation。
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
@@ -85,6 +86,69 @@ class Artifact:
             problems.append("Artifact 不能依赖/派生自自身")
         if self.question == self.artifact_id:
             problems.append("question 不能指向自身")
+        problems += self._validate_type_data()
+        return problems
+
+    # ------------------------------------------------------ 类型级 data 门禁
+
+    _EXEC_STATUSES = ("success", "failed", "timeout", "invalid", "not_executed")
+
+    def _validate_type_data(self) -> list[str]:
+        """按 artifact 类型校验 data 字段（fail-closed 写入门禁）。
+
+        核心原则（audit FIX-1.1 / SYSTEM VERDICT）：ExecutionResult 等事实字段
+        只能由 execution substrate 产生；Agent 直接构造的空壳（outputs={} /
+        code_hash="" / duration_ms=0 / 假 status）必须在登记时被拒绝。
+        data 缺失或非 dict 时按类型差异处理：execution_result 强制 data，
+        其余类型暂不校验（后续 Batch 按需扩展）。
+        """
+        problems: list[str] = []
+        if self.type == "execution_result":
+            problems += self._validate_execution_result_data()
+        return problems
+
+    def _validate_execution_result_data(self) -> list[str]:
+        problems: list[str] = []
+        data = self.data
+        if not isinstance(data, dict):
+            return [f"execution_result data 必须为 dict，实际 {type(data).__name__}"]
+        status = data.get("status")
+        if status not in self._EXEC_STATUSES:
+            problems.append(f"status 非法: {status!r}（应为 {self._EXEC_STATUSES} 之一）")
+        # 类型检查（仅对存在的字段）
+        for key in ("execution_id", "model_id", "stdout", "stderr"):
+            v = data.get(key)
+            if v is not None and not isinstance(v, str):
+                problems.append(f"{key} 必须为 str: {v!r}")
+        if "inputs" in data and not isinstance(data["inputs"], dict):
+            problems.append(f"inputs 必须为 dict: {data['inputs']!r}")
+        if "outputs" in data and not isinstance(data["outputs"], dict):
+            problems.append(f"outputs 必须为 dict: {data['outputs']!r}")
+        dur = data.get("duration_ms")
+        if dur is not None:
+            if not isinstance(dur, (int, float)) or isinstance(dur, bool) or dur < 0:
+                problems.append(f"duration_ms 必须为非负数: {dur!r}")
+        rc = data.get("returncode")
+        if rc is not None and (not isinstance(rc, int) or isinstance(rc, bool)):
+            problems.append(f"returncode 必须为 int 或 null: {rc!r}")
+        # success 必须携带真实执行事实
+        if status == "success":
+            ch = data.get("code_hash")
+            if not (isinstance(ch, str) and len(ch) >= 16):
+                problems.append(f"success 但 code_hash 缺失/过短: {ch!r}")
+            out = data.get("outputs")
+            if not (isinstance(out, dict) and len(out) > 0):
+                problems.append(f"success 但 outputs 为空: {out!r}")
+            if rc not in (0, None):
+                problems.append(f"success 但 returncode={rc!r}（必须为 0 或 null）")
+            # code 本体与 code_hash 一致性（P0-E4 起 code 同源写入）
+            code = data.get("code")
+            if (isinstance(code, str) and code
+                    and isinstance(ch, str) and ch):
+                calc = hashlib.sha256(code.encode("utf-8")).hexdigest()
+                if calc != ch and calc[:16] != ch:
+                    problems.append(
+                        f"code_hash 与 code 本体不一致: 存储 {ch[:16]}… 实际 {calc[:16]}…")
         return problems
 
     # ------------------------------------------------------------- 生命周期

@@ -28,11 +28,10 @@ def _rq(decisions=None, pack=None):
                            decisions=decisions, pack=pack)
 
 
-def _session(tmp_path, questions=("Q001", "Q002"), run=True):
-    s = RuntimeSession(tmp_path / "proj", list(questions))
-    if run:
-        s.run()
-    return s
+def _session(tmp_path, questions=("Q001", "Q002"), run=True, **kw):
+    from _real_session import make_real_session
+    return make_real_session(tmp_path, questions=questions, run=run,
+                             **kw)
 
 
 def _has(report, dim, check_id=None, subject=None):

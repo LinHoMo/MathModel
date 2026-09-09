@@ -23,11 +23,10 @@ from runtime.writing.paragraphs import question_dependencies  # noqa: E402
 TERMINAL = ("invalidated", "superseded", "deprecated")
 
 
-def _session(tmp_path, questions=("Q001", "Q002"), run=True, name="proj"):
-    s = RuntimeSession(tmp_path / name, list(questions))
-    if run:
-        s.run()
-    return s
+def _session(tmp_path, questions=("Q001", "Q002"), run=True, name="proj", **kw):
+    from _real_session import make_real_session
+    return make_real_session(tmp_path, questions=questions, run=run,
+                             name=name, **kw)
 
 
 # ============================================================

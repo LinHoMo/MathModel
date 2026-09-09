@@ -19,11 +19,10 @@ from runtime.writing.narrative_ir import (  # noqa: E402
     derive_conclusion)
 
 
-def _session(tmp_path, questions=("Q001", "Q002"), run=True):
-    s = RuntimeSession(tmp_path / "proj", list(questions))
-    if run:
-        s.run()
-    return s
+def _session(tmp_path, questions=("Q001", "Q002"), run=True, **kw):
+    from _real_session import make_real_session
+    return make_real_session(tmp_path, questions=questions, run=run,
+                             **kw)
 
 
 class TestNarrativeIR:

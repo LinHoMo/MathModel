@@ -16,8 +16,30 @@ from runtime.execution.session import RuntimeSession  # noqa: E402
 
 
 def _project(tmp_path, name="p-mi"):
-    """2 问题管线 + 一组 agent 登记的实验/结果/声明。"""
-    s = RuntimeSession(tmp_path / name, ["Q001", "Q002"])
+    """2 问题管线 + 一组 agent 登记的实验/结果/声明。
+
+    FIX-1.5：注入真实外部 Model Constructor 产物（MODEL_IR + code +
+    validation_spec）走真实执行闭环——Measurement Integrity 统计的
+    是真实产物结构，不是空跑结构。
+    """
+    from conftest import mir, CODE, validation_spec
+    from runtime.execution.adapters import LocalPythonAdapter
+    s = RuntimeSession(tmp_path / name, ["Q001", "Q002"],
+                       execution_adapter=LocalPythonAdapter())
+    for i, q in enumerate(["Q001", "Q002"]):
+        qid = f"Q{i + 1:03d}"
+        s.executor_impl.shared["external_model_irs"] = {
+            **s.executor_impl.shared.get("external_model_irs", {}),
+            qid: mir(qid, f"M-{qid}"),
+        }
+        s.executor_impl.shared["external_code"] = {
+            **s.executor_impl.shared.get("external_code", {}),
+            qid: CODE,
+        }
+        s.executor_impl.shared["validation_specs"] = {
+            **s.executor_impl.shared.get("validation_specs", {}),
+            qid: validation_spec(),
+        }
     s.run()
     exp = s.registry.create("experiment", title="agent 实验", question="Q001",
                             data={"runs": 5}, created_by="agent-test",
@@ -40,11 +62,21 @@ def test_integrity_keeps_numerator_denominator(tmp_path):
     em = importlib.import_module("e2e_metrics")
     report = em.compute_e2e_metrics(_project(tmp_path))
     mi = report["measurement_integrity"]
+    # 数值 = 真实 DAG 产物计数（audit FIX-1.5 后 DAG 注入真实外部
+    # 产物执行，实验/声明由执行链真实产生）：
+    #   experiment: 2（DAG 每问题 1 实验节点）+ 1（agent）= 3
+    #   claim: 2（DAG 合成 claim）+ 1（agent）= 3
+    #   paper_section: 10（论文投影节点产生）+ 0（agent）= 10
+    # 机制不变量：numerator = created_by 为 agent 的产物数。
     assert mi["experiment_realization"]["numerator"] == 1
-    assert mi["experiment_realization"]["denominator"] == 3   # E001/E002 + agent
+    assert mi["experiment_realization"]["denominator"] == 3   # 2×DAG + agent
     assert mi["experiment_realization"]["value"] == 33.3
     assert mi["validation_realization"]["numerator"] == 1
     assert mi["validation_realization"]["denominator"] == 3
+    assert mi["validation_realization"]["value"] == 33.3
+    assert mi["writing_realization"]["numerator"] == 0
+    assert mi["writing_realization"]["denominator"] == 10
+    assert mi["writing_realization"]["value"] == 0.0
     assert "criterion" in mi and "v1" in mi["criterion"]
 
 

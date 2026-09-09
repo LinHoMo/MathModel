@@ -181,6 +181,11 @@ def run_numeric_validation(outputs: dict, spec: dict,
                            execution_status: str = "success") -> dict:
     """基于真实数值判 FAIL（P1-VS-001 C8，ValidationResult 四字段）。
 
+    通用路径（audit FIX-5.2 前置）：spec 提供 "checks"（run_check 支持的类型：
+    output_field_exists / output_numeric / output_range / output_equals /
+    output_key_exists）时，走通用确定性检查集——不绑定任何特定题目。
+    其余保持 2024_A 硬编码路径（P1-VS-001 向后兼容）。
+
     检查（全部确定性，零 LLM）：
       1. constraint_violation_max —— outputs["pair_distances"][t][i] 与
          spec.constraints[].reference 之差的绝对最大值（pair_index 0=头板，
@@ -203,6 +208,48 @@ def run_numeric_validation(outputs: dict, spec: dict,
                         "passed": False,
                         "detail": f"execution status={execution_status}，"
                                   "无输出可验证（铁律：不得 passed）"}],
+        }
+
+    # FIX-1.2/audit D-010：通用检查集路径（docstring 承诺但此前未实现）。
+    # spec["checks"]（run_check 支持类型）存在时优先走确定性通用检查集，
+    # 不再硬编码 2024_A 的 pair_distances/head_speeds 字段。
+    checks_spec = spec.get("checks") or []
+    if checks_spec:
+        cstatus, results = run_checks(
+            {"status": execution_status, "outputs": outputs}, checks_spec)
+        n_pass = sum(1 for r in results if r.get("passed"))
+        return {
+            "execution_valid": True, "mathematical_valid": cstatus == "passed",
+            "empirical_valid": cstatus == "passed",
+            "robustness": 1.0 if cstatus == "passed" else 0.0,
+            "constraint_violation_max": 0.0,
+            "objective_value": None,
+            "objective_sane": cstatus == "passed",
+            "variable_domain_violation": False,
+            "status": cstatus, "checks": results,
+            "detail": f"通用检查集: {n_pass}/{len(results)} 通过",
+        }
+
+    # ---- 通用检查集（不绑定具体题目；spec.checks 由外部验证规格注入）
+    if spec.get("checks"):
+        status, checks = run_checks(
+            {"status": execution_status, "outputs": outputs},
+            spec["checks"])
+        passed = status == "passed"
+        return {
+            "execution_valid": execution_status == "success",
+            "mathematical_valid": passed,
+            "empirical_valid": passed,
+            "robustness": 1.0 if passed else 0.0,
+            "constraint_violation_max": None,
+            "objective_value": None,
+            "objective_sane": passed,
+            "variable_domain_violation": not any(
+                not c["passed"] for c in checks if c["kind"] == "domain"),
+            "status": status,
+            "detail": (f"通用检查: {sum(1 for c in checks if c['passed'])}/"
+                       f"{len(checks)} 通过"),
+            "checks": checks,
         }
 
     checks: list[dict] = []
@@ -240,11 +287,15 @@ def run_numeric_validation(outputs: dict, spec: dict,
     objective_value = (sum(speeds) / len(speeds)) if speeds else None
     objective_sane = (objective_value is not None and exp is not None
                       and abs(objective_value - exp) <= otol)
+    # FIX-1.2：执行失败/无输出时 objective_value=None，detail 不得格式化 None
+    measured_desc = (f"{objective_value:.6g} m/s" if objective_value is not None
+                     else "N/A（无输出）")
+    exp_desc = (f"{exp}" if exp is not None else "N/A")
     checks.append({"name": obj.get("name", "objective_sanity"),
                    "kind": "objective", "passed": objective_sane,
                    "expected": exp, "measured": objective_value,
-                   "detail": (f"mean head speed={objective_value:.6g} m/s"
-                              f"（期望 {exp}±{otol}）")})
+                   "detail": (f"mean head speed={measured_desc}"
+                              f"（期望 {exp_desc}±{otol}）")})
 
     dom = spec.get("domain") or {}
     dmin, dmax = dom.get("min"), dom.get("max")
@@ -286,8 +337,9 @@ def run_numeric_validation(outputs: dict, spec: dict,
         "variable_domain_violation": variable_domain_violation,
         "status": status, "checks": checks,
         "detail": (f"constraint_violation_max={constraint_violation_max:.6g}，"
-                   f"objective={objective_value:.6g}，"
-                   f"domain_ok={domain_ok}"),
+                   f"objective="
+                   + (f"{objective_value:.6g}" if objective_value is not None else "N/A")
+                   + f"，domain_ok={domain_ok}"),
     }
 
 

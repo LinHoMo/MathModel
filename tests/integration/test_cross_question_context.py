@@ -20,11 +20,10 @@ from runtime.synthesis.context import (  # noqa: E402
 from runtime.writing.findings import Finding  # noqa: E402
 
 
-def _session(tmp_path, questions=("Q001", "Q002"), run=True, name="proj"):
-    s = RuntimeSession(tmp_path / name, list(questions))
-    if run:
-        s.run()
-    return s
+def _session(tmp_path, questions=("Q001", "Q002"), run=True, name="proj", **kw):
+    from _real_session import make_real_session
+    return make_real_session(tmp_path, questions=questions, run=run,
+                             name=name, **kw)
 
 
 def _linked_pair(tmp_path, dep_type="evidential", name="proj"):

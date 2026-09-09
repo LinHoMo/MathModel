@@ -11,6 +11,8 @@
     E6  证据链含 draft 状态                    → weak（证据未过验证）
     E7  claim 覆盖率 < min_coverage            → weak
     E8  无灵敏度/基线对比证据（tags 检索）     → weak
+    E9  数值真实性：claim 支撑链中无真实执行   → fail（audit FIX-1.3 / P0-07；
+        声称有结论但 EXEC 非 success 或 outputs 为空 = 数值证据缺失）
 
 verdict: 任一 fail → FAIL；否则任一 weak → WEAK；否则 PASS。
 """
@@ -171,6 +173,40 @@ def evaluate(registry, graph, min_coverage: float = DEFAULT_MIN_COVERAGE) -> Gat
         findings.append(Finding(
             "E8", WEAK,
             "无灵敏度/基线对比证据（artifact tags 中无 sensitivity/baseline）"))
+
+
+    # E9: 数值真实性——claim 支撑链必须包含真实成功执行（audit FIX-1.3 / P0-07）
+    # 对每个活跃 claim：沿 supports 边的 from（result）→ execution_ref/EXEC
+    # → EXEC data.status == "success" 且 outputs 非空才视为有真实数值支撑。
+    # 占位 claim（无 supports 边）已在 E2 判 fail；这里抓"有边但底下没跑过"。
+    no_numeric: list[str] = []
+    for c in claims:
+        supported_by = [e["from"] for e in graph.relations
+                        if e["relation"] == "supports" and e["to"] == c]
+        if not supported_by:
+            continue
+        for rid in supported_by:
+            if rid not in registry.artifacts:
+                no_numeric.append(c + "<-" + rid + "(缺失)")
+                continue
+            rdata = registry.artifacts[rid].data or {}
+            exec_ref = rdata.get("execution_ref") or ""
+            if not exec_ref or exec_ref not in registry.artifacts:
+                no_numeric.append(c + "<-" + rid + "(无 execution_ref)")
+                continue
+            xdata = registry.artifacts[exec_ref].data or {}
+            xstatus = xdata.get("status")
+            outputs = xdata.get("outputs")
+            if xstatus != "success" or not isinstance(outputs, dict) or not outputs:
+                no_numeric.append(
+                    c + "<-" + rid + "<-" + exec_ref
+                    + "(status=" + str(xstatus) + ", outputs="
+                    + ("非空" if outputs else "空") + ")")
+    if no_numeric:
+        findings.append(Finding(
+            "E9", FAIL,
+            "claim 支撑链无真实执行数值（执行未发生/失败/输出为空）",
+            sorted(no_numeric)))
 
     if any(f.severity == FAIL for f in findings):
         verdict = FAIL_VERDICT

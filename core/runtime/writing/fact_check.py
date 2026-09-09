@@ -168,14 +168,14 @@ class PaperFactChecker:
 
         # P1 claim coverage：每个活跃 claim 必须出现在论文中
         for c in active_claims:
-            if self._claim_text(c) not in tex:
+            if not self._claim_in_tex(c, tex):
                 findings.append(PaperFinding(
                     "P1", "fail", "FAIL", c.artifact_id,
                     "活跃 claim 未进入论文（claim coverage 缺口）",
                     [c.artifact_id]))
         # P2 evidence coverage：论文中的 claim 必须有证据
         for c in active_claims:
-            if self._claim_text(c) in tex:
+            if self._claim_in_tex(c, tex):
                 has_support = any(r["relation"] == "supports"
                                   and r["to"] == c.artifact_id
                                   for r in self.graph.relations)
@@ -185,9 +185,12 @@ class PaperFactChecker:
                         "论文中的 claim 无实验证据支撑（UNSUPPORTED）",
                         [c.artifact_id]))
         # P3 number provenance：论文数字必须能追溯到 Registry（data/tags/title）
+        # 子串包含匹配：数字 "7" 应命中 registry 中 "7.0"/"y=7" 等文本（精确
+        # 集合相等会误报 UNSUPPORTED——占位 claim 时代无数字未暴露，合成
+        # claim 带真实数值后修正，audit FIX-1.4 连锁）。
         registry_corpus = self._registry_corpus()
         for num in facts["numbers"]:
-            if num not in registry_corpus:
+            if not any(num in item for item in registry_corpus):
                 findings.append(PaperFinding(
                     "P3", "fail", "FAIL", num,
                     f"论文数字 {num} 在 Registry 中无来源（UNSUPPORTED）"))
@@ -246,7 +249,7 @@ class PaperFactChecker:
                     "（literature ≠ own experiment）", [c.artifact_id]))
         # P11 dead claim leakage
         for c in terminal_claims:
-            if self._claim_text(c) in tex:
+            if self._claim_in_tex(c, tex):
                 findings.append(PaperFinding(
                     "P11", "fail", "FAIL", c.artifact_id,
                     "死主张（invalidated/superseded）泄漏进论文",
@@ -272,6 +275,16 @@ class PaperFactChecker:
     @staticmethod
     def _claim_text(c) -> str:
         return (c.data.get("statement") or c.title or "").strip()
+
+    @staticmethod
+    def _claim_in_tex(c, tex: str) -> bool:
+        """claim 是否已进入论文：statement 或 title 任一命中即算
+        （论文可引用完整主张，也可只引用主张标题——audit FIX-1.5）。"""
+        stmt = (c.data.get("statement") or "").strip()
+        if stmt and stmt in tex:
+            return True
+        title = (c.title or "").strip()
+        return bool(title and title in tex)
 
     def _registry_corpus(self) -> set[str]:
         """Registry 全部可作为合法数字来源的文本（data 值 + title + tags）。"""
