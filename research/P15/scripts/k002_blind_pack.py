@@ -129,7 +129,7 @@ def build_pack(sid: str, precheck: bool) -> tuple:
 
 > 评估者须知：请只依据下面「题面」与「模型产物」评分。
 > 本样本不含任何分组信息，也**不要**推测其分组。
-> 评分标准：`research/P15/capability/MODEL_CONSTRUCTION_RUBRIC.md`（v1.0）
+> 评分标准：`research/P15/capability/MODEL_CONSTRUCTION_RUBRIC.md`（v1.1）
 
 ## 题面
 
@@ -226,7 +226,7 @@ def main(argv=None) -> int:
             "submission_id": sid,
             "evaluator": {"model": "", "type": "independent_llm",
                           "version": "", "timestamp": ""},
-            "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.0",
+            "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
             "dimensions": {d: {"score": None, "evidence": ""} for d in DIMS},
             "vector": {},
             "failure_modes": [],
