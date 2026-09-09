@@ -153,16 +153,21 @@ class DefaultNodeExecutor:
         """
         return dict(self.shared.get("external_model_irs") or {})
 
-    def construct_model_ir(self, qid: str) -> str | None:
-        """把外部 MODEL_IR dict 登记为 model_ir Artifact，并写 instantiates 边。
+    def _external_candidates(self, qid: str) -> list[dict]:
+        """P1-M3：外部注入的候选列表（shared["external_candidates"][qid]）。
 
-        返回 MIR artifact_id；无外部注入时返回 None（保持原路径）。
-        外部 dict 未通过 MODEL_IR 契约校验时抛 HandlerError（fail-closed）。
-        幂等：同问题已有同 model_id 的活跃 MIR 时直接复用，不重复登记。
+        每个元素 = {"model_ir": {MODEL_IR dict}, "code": "str"（可选）}。
+        一个 problem 支持 ≥2 候选，各自独立 artifact 链 MIR-i→CODE-i→EXEC-i→R-i→VR-i，
+        不依赖单一活跃 model_ir 全局状态。无注入返回 []。
         """
-        external = self._external_model_irs().get(qid)
-        if not external:
-            return None
+        return list((self.shared.get("external_candidates") or {}).get(qid) or [])
+
+    def _register_mir(self, qid: str, external: dict,
+                      created_by: str = "do_model_construction") -> str:
+        """把单个外部 MODEL_IR dict 登记为 model_ir Artifact + instantiates 边。
+
+        P1-M3：多候选复用（每候选一次调用）；幂等（同问题同 model_id 复用）。
+        """
         models = self._models_of(qid)
         if not models:
             raise HandlerError(
@@ -191,7 +196,7 @@ class DefaultNodeExecutor:
             depends_on=[mid],
             data=data,
             activate=True,
-            created_by="do_model_construction")
+            created_by=created_by)
         self.graph.add_relation(art.artifact_id, "instantiates", mid)
         if rev_of:
             target = self.registry.get(rev_of)
@@ -199,6 +204,32 @@ class DefaultNodeExecutor:
                 self.graph.add_relation(art.artifact_id, "revision_of", rev_of)
                 self.graph.add_relation(rev_of, "supersedes", art.artifact_id)
         return art.artifact_id
+
+    def construct_model_ir(self, qid: str) -> str | None:
+        """把单个外部 MODEL_IR dict（shared["external_model_irs"]）登记为 model_ir。
+
+        返回 MIR artifact_id；无外部注入时返回 None（保持原路径，向后兼容）。
+        """
+        external = self._external_model_irs().get(qid)
+        if not external:
+            return None
+        return self._register_mir(qid, external)
+
+    def construct_candidate_mirs(self, qid: str) -> list[str]:
+        """P1-M3：把 external_candidates 的每个候选 MODEL_IR 登记为独立 MIR。
+
+        返回本问题登记的全部候选 MIR id（幂等：已登记的同 model_id 复用）。
+        """
+        cands = self._external_candidates(qid)
+        if not cands:
+            return []
+        out = []
+        for i, c in enumerate(cands, 1):
+            mir_dict = c.get("model_ir") or {}
+            if not mir_dict:
+                raise HandlerError(f"{qid}: 候选 #{i} 缺 model_ir dict")
+            out.append(self._register_mir(qid, mir_dict))
+        return out
 
     # ------------------------------------------------------------ P1-VS-001 可执行模型闭环（C6/C7/C8）
 
@@ -210,10 +241,14 @@ class DefaultNodeExecutor:
         """外部注入的数值验证规格（shared["validation_specs"][qid]）。"""
         return (self.shared.get("validation_specs") or {}).get(qid)
 
-    def _active_mir_of(self, qid: str) -> str | None:
-        """该问题活跃的 model_ir（终态不计入）。"""
-        mirs = [a.artifact_id for a in self.registry.list_by_type("model_ir")
+    def _active_mirs(self, qid: str) -> list[str]:
+        """该问题全部活跃 model_ir（P1-M3：多候选各自独立，不取"最后一个"）。"""
+        return [a.artifact_id for a in self.registry.list_by_type("model_ir")
                 if a.question == qid and a.status not in _TERMINAL]
+
+    def _active_mir_of(self, qid: str) -> str | None:
+        """该问题活跃的 model_ir（终态不计入）；兼容旧单候选路径。"""
+        mirs = self._active_mirs(qid)
         return mirs[-1] if mirs else None
 
     def _exec_workdir(self) -> str:
@@ -223,18 +258,17 @@ class DefaultNodeExecutor:
         Path(wd).mkdir(parents=True, exist_ok=True)
         return str(wd)
 
-    def generate_code(self, qid: str, node_id: str = "code_generation") -> str | None:
-        """C6：登记 code Artifact 并写 model_ir -implemented_by-> code 边。
+    def _code_for_mir(self, qid: str, mir_id: str) -> str | None:
+        """P1-M3：按候选 model_id 匹配注入代码（external_candidates 内嵌 code）。"""
+        model_id = (self.registry.get(mir_id).data or {}).get("model_id")
+        for c in self._external_candidates(qid):
+            if (c.get("model_ir") or {}).get("model_id") == model_id:
+                return c.get("code") or None
+        return None
 
-        固定 ABI（L0 契约）：code 必须含 `def solve(inputs) -> outputs`。
-        无外部注入返回 None（no-op，向后兼容）。幂等：同问题同 code_hash 复用。
-        """
-        code = self._external_code(qid)
-        if not code:
-            return None
-        mir_id = self._active_mir_of(qid)
-        if not mir_id:
-            raise HandlerError(f"{qid}: 注入代码但无活跃 model_ir，无法写 implemented_by 边")
+    def _register_code(self, qid: str, mir_id: str, code: str,
+                       node_id: str) -> str:
+        """L0 ABI 校验 + 登记 code Artifact（幂等：同 hash 复用）+ implemented_by 边。"""
         if "def solve(inputs)" not in code:
             raise HandlerError(
                 f"{qid}: code 不满足固定 ABI（必须含 def solve(inputs) -> outputs）")
@@ -242,7 +276,7 @@ class DefaultNodeExecutor:
         for a in self.registry.list_by_type("code"):
             if a.question == qid and a.status not in _TERMINAL \
                     and a.data.get("code_hash") == code_hash:
-                # 幂等复用：确保当前活跃 MIR → 该 code 的 implemented_by 边存在
+                # 幂等复用：确保当前 MIR → 该 code 的 implemented_by 边存在
                 if not any(r["from"] == mir_id and r["relation"] == "implemented_by"
                            and r["to"] == a.artifact_id
                            for r in self.graph.relations):
@@ -257,6 +291,30 @@ class DefaultNodeExecutor:
         self.graph.add_relation(mir_id, "implemented_by", art.artifact_id)
         return art.artifact_id
 
+    def generate_code(self, qid: str, node_id: str = "code_generation") -> list[str]:
+        """C6/P1-M3：为每个候选 MIR 登记可执行 code + implemented_by 边。
+
+        候选模式：external_candidates 的每个 dict 内嵌 code（按 model_id 匹配）；
+        单候选模式：external_code[qid] 应用到唯一活跃 MIR（VS-001 向后兼容）。
+        无注入返回 []（no-op）。固定 ABI（L0 契约）：def solve(inputs) -> outputs。
+        """
+        cands = self._external_candidates(qid)
+        out: list[str] = []
+        if cands:
+            for mir_id in self._active_mirs(qid):
+                code = self._code_for_mir(qid, mir_id)
+                if code:
+                    out.append(self._register_code(qid, mir_id, code, node_id))
+            return out
+        code = self._external_code(qid)
+        if not code:
+            return out
+        mir_id = self._active_mir_of(qid)
+        if not mir_id:
+            raise HandlerError(f"{qid}: 注入代码但无活跃 model_ir，无法写 implemented_by 边")
+        out.append(self._register_code(qid, mir_id, code, node_id))
+        return out
+
     def _execution_inputs(self, mir_art) -> dict | None:
         """从 model_ir.parameters 派生执行输入（input.json 内容，固定 ABI）。"""
         if mir_art is None:
@@ -269,80 +327,119 @@ class DefaultNodeExecutor:
         out["times"] = [0, 60, 120, 180, 240, 300]
         return out
 
-    def execute_code(self, qid: str, node_id: str = "model_execution"):
-        """C7：code → LocalPythonAdapter 真 subprocess → execution_result + result。
+    def _active_codes(self, qid: str) -> list[str]:
+        """该问题全部活跃 code（P1-M3：每候选一个，各自独立执行）。"""
+        return [a.artifact_id for a in self.registry.list_by_type("code")
+                if a.question == qid and a.status not in _TERMINAL]
 
-        返回 (exec_id, result_id)；无活跃 code 时返回 (None, None)。
-        status 只能来自真实 subprocess 退出码（禁止硬编码）。
+    def _mir_implementing(self, qid: str, code_id: str) -> str | None:
+        """找到 implemented_by 该 code 的活跃 MIR（多候选下不能取"最后一个"）。"""
+        for r in self.graph.relations:
+            if r["relation"] == "implemented_by" and r["to"] == code_id:
+                cand = self.registry.get(r["from"])
+                if cand is not None and cand.type == "model_ir" \
+                        and cand.question == qid and cand.status not in _TERMINAL:
+                    return cand.artifact_id
+        return None
+
+    def _active_exec_of(self, qid: str, code_id: str) -> str | None:
+        """该 code 已有的活跃 EXEC（幂等复用，P1-M3 多候选重入安全）。"""
+        for a in self.registry.list_by_type("execution_result"):
+            if a.question == qid and a.status not in _TERMINAL:
+                if any(r["from"] == code_id and r["relation"] == "executed_by"
+                       and r["to"] == a.artifact_id for r in self.graph.relations):
+                    return a.artifact_id
+        return None
+
+    def _result_of_exec(self, qid: str, exec_id: str) -> str | None:
+        """该 EXEC 已产出的活跃 result（produces 边）。"""
+        for a in self.registry.list_by_type("result"):
+            if a.question == qid and a.status not in _TERMINAL:
+                if any(r["from"] == exec_id and r["relation"] == "produces"
+                       and r["to"] == a.artifact_id for r in self.graph.relations):
+                    return a.artifact_id
+        return None
+
+    def execute_code(self, qid: str, node_id: str = "model_execution") -> list[tuple[str, str]]:
+        """C7/P1-M3：每个活跃 code → LocalPythonAdapter 真 subprocess → EXEC + R。
+
+        返回 [(exec_id, result_id), ...]（每候选一个，独立 ID 链互不覆盖）；
+        无活跃 code 时返回 []。status 只能来自真实 subprocess 退出码（禁止硬编码）。
         接线：input.json → run_model.py → output.json（固定 ABI）；
-        边：code -executed_by-> EXEC、EXEC -produces-> R。
+        边：code -executed_by-> EXEC、EXEC -produces-> R。幂等：已执行 code 复用 EXEC。
         """
-        codes = [a.artifact_id for a in self.registry.list_by_type("code")
-                 if a.question == qid and a.status not in _TERMINAL]
-        if not codes:
-            return (None, None)
-        code_id = codes[-1]
-        code = (self.registry.get(code_id).data or {}).get("code", "")
-        if not code:
-            raise HandlerError(f"{code_id}: code artifact 无 code 本体")
-        mir_id = self._active_mir_of(qid)
-        mir_art = self.registry.get(mir_id) if mir_id else None
-        inputs = self._execution_inputs(mir_art)
-        if inputs is None:
-            raise HandlerError(f"{qid}: 无法从 model_ir 派生执行输入")
-        from runtime.execution.adapters import ExecutionPlan, ExecutionResultData
-        adapter = self.execution_adapter
-        if adapter is None:
-            from runtime.execution.adapters import LocalPythonAdapter
-            adapter = LocalPythonAdapter()
-        wd = self._exec_workdir()
-        try:
-            # input.json 落盘（固定 ABI：input.json → run_model.py → output.json）
-            Path(wd, "input.json").write_text(
-                json.dumps(inputs, ensure_ascii=False, indent=2), encoding="utf-8")
-            xplan = ExecutionPlan(model_id=mir_id or qid, code=code,
-                                  inputs=inputs, workdir=wd)
-            xr = adapter.execute(xplan)
-        except Exception as exc:
-            xr = ExecutionResultData(
-                execution_id="", model_id=mir_id or qid, status="invalid",
-                stderr=f"adapter error: {exc}",
-                provenance={"reason": "adapter_exception"})
-        xr.code = code
-        xart = self.registry.create(
-            "execution_result",
-            title=f"{code_id} 执行结果",
-            question=qid, depends_on=[code_id],
-            data=xr.to_dict(),
-            activate=True, created_by=node_id)
-        self.graph.add_relation(code_id, "executed_by", xart.artifact_id)
-        # result artifact（真实 outputs）+ EXEC -produces-> R 边
-        r = self.registry.create(
-            "result", title=f"{qid} 模型执行结果",
-            question=qid, depends_on=[xart.artifact_id],
-            data={"status": "computed", "execution_ref": xart.artifact_id,
-                  "value": xr.outputs, "outputs": xr.outputs,
-                  "exit_code": xr.returncode,
-                  "note": "真实数值来自 model_execution 子进程执行"},
-            activate=True, created_by=node_id)
-        self.graph.add_relation(xart.artifact_id, "produces", r.artifact_id)
-        return (xart.artifact_id, r.artifact_id)
+        out: list[tuple[str, str]] = []
+        for code_id in self._active_codes(qid):
+            existing = self._active_exec_of(qid, code_id)
+            if existing:
+                rid = self._result_of_exec(qid, existing)
+                if rid:
+                    out.append((existing, rid))
+                continue
+            code = (self.registry.get(code_id).data or {}).get("code", "")
+            if not code:
+                raise HandlerError(f"{code_id}: code artifact 无 code 本体")
+            mir_id = self._mir_implementing(qid, code_id) or self._active_mir_of(qid)
+            mir_art = self.registry.get(mir_id) if mir_id else None
+            inputs = self._execution_inputs(mir_art)
+            if inputs is None:
+                raise HandlerError(f"{qid}: 无法从 model_ir 派生执行输入")
+            from runtime.execution.adapters import ExecutionPlan, ExecutionResultData
+            adapter = self.execution_adapter
+            if adapter is None:
+                from runtime.execution.adapters import LocalPythonAdapter
+                adapter = LocalPythonAdapter()
+            wd = self._exec_workdir()
+            try:
+                # input.json 落盘（固定 ABI：input.json → run_model.py → output.json）
+                Path(wd, "input.json").write_text(
+                    json.dumps(inputs, ensure_ascii=False, indent=2), encoding="utf-8")
+                xplan = ExecutionPlan(model_id=mir_id or qid, code=code,
+                                      inputs=inputs, workdir=wd)
+                xr = adapter.execute(xplan)
+            except Exception as exc:
+                xr = ExecutionResultData(
+                    execution_id="", model_id=mir_id or qid, status="invalid",
+                    stderr=f"adapter error: {exc}",
+                    provenance={"reason": "adapter_exception"})
+            xr.code = code
+            xart = self.registry.create(
+                "execution_result",
+                title=f"{code_id} 执行结果",
+                question=qid, depends_on=[code_id],
+                data=xr.to_dict(),
+                activate=True, created_by=node_id)
+            self.graph.add_relation(code_id, "executed_by", xart.artifact_id)
+            # result artifact（真实 outputs）+ EXEC -produces-> R 边
+            r = self.registry.create(
+                "result", title=f"{qid} 模型执行结果",
+                question=qid, depends_on=[xart.artifact_id],
+                data={"status": "computed", "execution_ref": xart.artifact_id,
+                      "value": xr.outputs, "outputs": xr.outputs,
+                      "exit_code": xr.returncode,
+                      "note": "真实数值来自 model_execution 子进程执行"},
+                activate=True, created_by=node_id)
+            self.graph.add_relation(xart.artifact_id, "produces", r.artifact_id)
+            out.append((xart.artifact_id, r.artifact_id))
+        return out
 
-    def validate_execution(self, qid: str, node_id: str = "model_validation") -> str | None:
-        """C8：基于真实数值判 FAIL——constraint_violation / objective_sanity /
-        variable_domain → VerificationResult（ValidationResult 四字段）。
+    def _active_execs(self, qid: str) -> list[str]:
+        """该问题全部活跃 EXEC（P1-M3：每候选一个）。"""
+        return [a.artifact_id for a in self.registry.list_by_type("execution_result")
+                if a.question == qid and a.status not in _TERMINAL]
 
-        返回 VR artifact_id；无活跃 EXEC 或未注入验证规格时返回 None。
-        判 FAIL 不依赖 evidence_gate（它只查边不查数值）。
-        """
-        execs = [a.artifact_id for a in self.registry.list_by_type("execution_result")
-                 if a.question == qid and a.status not in _TERMINAL]
-        if not execs:
-            return None
-        spec = self._validation_spec(qid)
-        if not spec:
-            return None
-        exec_id = execs[-1]
+    def _active_vr_of(self, qid: str, exec_id: str) -> str | None:
+        """该 EXEC 已有的活跃 VR（幂等复用）。"""
+        for a in self.registry.list_by_type("verification_result"):
+            if a.question == qid and a.status not in _TERMINAL:
+                if any(r["from"] == exec_id and r["relation"] == "verified_by"
+                       and r["to"] == a.artifact_id for r in self.graph.relations):
+                    return a.artifact_id
+        return None
+
+    def _register_vr(self, qid: str, exec_id: str, spec: dict,
+                     node_id: str) -> str:
+        """基于真实数值运行验证并登记 VR artifact（verified_by 边）。"""
         xart = self.registry.get(exec_id)
         xdata = dict(xart.data or {})
         from runtime.execution.validation import _now, run_numeric_validation
@@ -374,16 +471,36 @@ class DefaultNodeExecutor:
         self.graph.add_relation(exec_id, "verified_by", vr.artifact_id)
         return vr.artifact_id
 
+    def validate_execution(self, qid: str, node_id: str = "model_validation") -> list[str]:
+        """C8/P1-M3：对每个活跃 EXEC 基于真实数值判 FAIL → VR artifact。
+
+        返回本问题全部 VR id（每候选一个，独立验证互不覆盖）；无活跃 EXEC
+        或未注入验证规格时返回 []。判 FAIL 不依赖 evidence_gate（它只查边不查数值）。
+        """
+        execs = self._active_execs(qid)
+        if not execs:
+            return []
+        spec = self._validation_spec(qid)
+        if not spec:
+            return []
+        out = []
+        for exec_id in execs:
+            existing = self._active_vr_of(qid, exec_id)
+            if existing:
+                out.append(existing)
+                continue
+            out.append(self._register_vr(qid, exec_id, spec, node_id))
+        return out
+
     def do_code_generation(self, node_id: str) -> NodeResult:
         """C6 DAG 节点：为各问题登记可执行 code + implemented_by 边。"""
         ev = []
         n = 0
         for qid in self._question_ids():
-            cid = self.generate_code(qid, node_id)
-            if cid:
-                mir_id = self._active_mir_of(qid)
-                if mir_id:
-                    ev.append({"from": mir_id, "relation": "implemented_by", "to": cid})
+            for cid in self.generate_code(qid, node_id):
+                ev.append({"from": self._mir_implementing(qid, cid)
+                           or self._active_mir_of(qid) or "",
+                           "relation": "implemented_by", "to": cid})
                 n += 1
         return NodeResult(PASS, f"生成 {n} 个可执行代码",
                           outputs={"artifacts": [], "evidence": ev})
@@ -393,32 +510,218 @@ class DefaultNodeExecutor:
         ev = []
         n = 0
         for qid in self._question_ids():
-            xid, rid = self.execute_code(qid, node_id)
-            if xid:
+            for xid, rid in self.execute_code(qid, node_id):
                 ev.append({"from": xid, "relation": "produces", "to": rid})
                 n += 1
         return NodeResult(PASS, f"执行 {n} 个模型（真实 subprocess）",
                           outputs={"artifacts": [], "evidence": ev})
 
     def do_model_validation(self, node_id: str) -> NodeResult:
-        """C8 DAG 节点：基于真实数值验证各问题执行结果 → VR（四字段）。"""
+        """C8/P1-M3 DAG 节点：基于真实数值验证各问题执行结果 → VR（四字段）。
+
+        判定：无任何候选通过且至少一个失败 → FAIL（无可存活候选）；
+        至少一个通过 → PASS（存活候选存在，最终选型交给 model_selection_decision）。
+        VS-001 单候选语义保持：唯一候选 FAIL → 本节点 FAIL。
+        """
         ev = []
         n_pass = 0
         n_fail = 0
         for qid in self._question_ids():
-            vr_id = self.validate_execution(qid, node_id)
-            if not vr_id:
-                continue
-            vr = self.registry.get(vr_id)
-            status = (vr.data or {}).get("status")
-            xid = (vr.data or {}).get("execution_id")
-            ev.append({"from": xid, "relation": "verified_by", "to": vr_id})
-            if status == "passed":
-                n_pass += 1
-            else:
-                n_fail += 1
+            for vr_id in self.validate_execution(qid, node_id):
+                vr = self.registry.get(vr_id)
+                status = (vr.data or {}).get("status")
+                xid = (vr.data or {}).get("execution_id")
+                ev.append({"from": xid, "relation": "verified_by", "to": vr_id})
+                if status == "passed":
+                    n_pass += 1
+                else:
+                    n_fail += 1
         msg = f"数值验证: {n_pass} 通过 / {n_fail} 未通过"
-        return NodeResult(PASS if n_fail == 0 else FAIL, msg,
+        if n_fail > 0 and n_pass == 0:
+            return NodeResult(FAIL, msg + "（无存活候选）",
+                              outputs={"artifacts": [], "evidence": ev})
+        return NodeResult(PASS, msg,
+                          outputs={"artifacts": [], "evidence": ev})
+
+    # ------------------------------------------------------------ P1-M3 候选竞技场（Evidence-based Selection）
+
+    SELECTION_CRITERIA = [
+        "mathematical_valid", "constraint_violation_max",
+        "execution_valid", "variable_domain_violation", "empirical_valid",
+    ]
+
+    def _candidate_vr_table(self, qid: str) -> dict[str, dict]:
+        """P1-M3：候选 MIR → 其 VR 证据映射（沿 MIR→CODE→EXEC→VR 链）。
+
+        返回 {mir_id: {"vr_id": ..., "metrics": {VR 字段}}}；
+        无 VR 证据的候选（执行未发生/未验证）以 metrics=None 计入（排最后）。
+        """
+        table: dict[str, dict] = {}
+        for mir_id in self._active_mirs(qid):
+            table.setdefault(mir_id, {"vr_id": None, "metrics": None})
+        # 沿链归位：VR → EXEC → CODE → MIR
+        for r in self.graph.relations:
+            if r["relation"] != "verified_by":
+                continue
+            vr = self.registry.get(r["to"])
+            if vr is None or vr.question != qid or vr.type != "verification_result":
+                continue
+            exec_id = r["from"]
+            code_id = next((e["from"] for e in self.graph.relations
+                            if e["relation"] == "executed_by"
+                            and e["to"] == exec_id), None)
+            mir_id = next((e["from"] for e in self.graph.relations
+                           if e["relation"] == "implemented_by"
+                           and e["to"] == code_id), None) if code_id else None
+            if mir_id and mir_id in table:
+                table[mir_id] = {"vr_id": r["to"],
+                                 "metrics": dict(vr.data or {})}
+        return table
+
+    @staticmethod
+    def _rank_candidates(table: dict[str, dict]) -> list[str]:
+        """机械排序（禁 LLM 打分/禁取第一个）：mathematical_valid 优先 →
+        constraint_violation_max 升序 → execution_valid → 域合规 → empirical_valid
+        → model_id 字典序（确定性 tie-break）。无证据候选恒排最后。"""
+
+        def key(item: tuple[str, dict]) -> tuple:
+            mir_id, info = item
+            m = info.get("metrics") or {}
+            if m is None:
+                return (2, 0.0, 1, 1, 1, mir_id)
+            return (0 if m.get("mathematical_valid") else 1,
+                    float(m.get("constraint_violation_max") or 0.0),
+                    0 if m.get("execution_valid") else 1,
+                    0 if (m.get("variable_domain_violation") or 0) == 0 else 1,
+                    0 if m.get("empirical_valid") else 1,
+                    mir_id)
+
+        return [mir_id for mir_id, _ in
+                sorted(table.items(), key=key)]
+
+    def _decision_confidence(self, ranked: list[str],
+                             table: dict[str, dict]) -> float:
+        """确定性置信度（非 LLM）：最优存活且次优不可存活 → 0.95；
+        最优存活但次优也存活 → 0.8；最优不可存活 → 0.25；无证据 → 0.0。"""
+        if not ranked:
+            return 0.0
+        best = (table.get(ranked[0]) or {}).get("metrics") or {}
+        if not best:
+            return 0.0
+        best_math = bool(best.get("mathematical_valid"))
+        if not best_math:
+            return 0.25
+        if len(ranked) == 1:
+            return 0.7
+        second = (table.get(ranked[1]) or {}).get("metrics") or {}
+        second_math = bool(second.get("mathematical_valid")) if second else False
+        if not second_math:
+            return 0.95
+        best_cv = float(best.get("constraint_violation_max") or 0.0)
+        second_cv = float(second.get("constraint_violation_max") or 0.0)
+        return 0.8 if second_cv - best_cv > 1e-9 else 0.6
+
+    def do_model_selection_decision(self, node_id: str) -> NodeResult:
+        """P1-M3：基于候选真实数值验证结果（VR 机械指标）选型。
+
+        产出 decision artifact（alternatives/criteria/evidence_ids/chosen/
+        confidence/reasoning）并写 decision -selects-> model 边（首次真正写入）。
+        无 VR 证据时如实声明 chosen=UNSELECTED + confidence=0（不假装选型）。
+        """
+        ev = []
+        n = 0
+        for qid in self._question_ids():
+            cands = self._external_candidates(qid)
+            if not cands:
+                continue      # 非候选模式：无 VR 选型语义（legacy 竞技场已选）
+            table = self._candidate_vr_table(qid)
+            if not table:
+                continue
+            ranked = self._rank_candidates(table)
+            best_mir = ranked[0]
+            best_info = table[best_mir]
+            models = self._models_of(qid)
+            mid = models[-1] if models else None
+            evidence_ids = [info["vr_id"] for info in table.values()
+                            if info.get("vr_id")]
+            alternatives = [
+                {"model_ir": mir_id,
+                 "vr": (info.get("vr_id") or None),
+                 "mathematical_valid": bool((info.get("metrics") or {})
+                                            .get("mathematical_valid")),
+                 "constraint_violation_max": (info.get("metrics") or {})
+                                             .get("constraint_violation_max"),
+                 "execution_valid": bool((info.get("metrics") or {})
+                                         .get("execution_valid"))}
+                for mir_id, info in sorted(table.items())]
+            if not evidence_ids or not best_info.get("vr_id"):
+                chosen, confidence = "UNSELECTED", 0.0
+                reasoning = "no execution evidence available"
+            else:
+                chosen = best_mir
+                confidence = self._decision_confidence(ranked, table)
+                bm = best_info["metrics"]
+                parts = [f"chosen={chosen} because "
+                         f"{best_info['vr_id']}.mathematical_valid="
+                         f"{bool(bm.get('mathematical_valid'))}"]
+                for alt in ranked[1:]:
+                    ai = table[alt]
+                    if not ai.get("vr_id"):
+                        continue
+                    am = ai["metrics"]
+                    parts.append(
+                        f"{alt}({ai['vr_id']}.constraint_violation_max="
+                        f"{float(am.get('constraint_violation_max') or 0.0)}) "
+                        f"worse than {best_info['vr_id']}."
+                        f"constraint_violation_max="
+                        f"{float(bm.get('constraint_violation_max') or 0.0)})")
+                reasoning = "; ".join(parts)
+            ddata = {
+                "kind": "candidate_selection",
+                "question": qid,
+                "chosen": chosen,
+                "alternatives": alternatives,
+                "criteria": list(self.SELECTION_CRITERIA),
+                "evidence_ids": evidence_ids,
+                "confidence": confidence,
+                "reasoning": reasoning,
+                "ranked": ranked,
+                "candidate_vr": {k: v.get("vr_id") for k, v in table.items()},
+            }
+            d = self.registry.create(
+                "decision", title=f"{qid} 候选竞技场选型（evidence-based）",
+                question=qid, payload=[chosen], data=ddata,
+                depends_on=[mid] if mid else [],
+                activate=True, created_by=node_id)
+            if mid:
+                self.graph.add_relation(d.artifact_id, "selects", mid)
+                ev.append({"from": d.artifact_id, "relation": "selects", "to": mid})
+            info = self.shared.setdefault(qid, {})
+            info["chosen_candidate"] = chosen
+            info["selection_decision"] = d.artifact_id
+            info["selection_evidence"] = evidence_ids
+            # DecisionLog 审计镜像（双存储最小方案；失败不阻断 Registry 主链路）
+            if self.decisions is not None:
+                try:
+                    self.decisions.add(
+                        question=f"{qid} 候选竞技场选型",
+                        chosen=chosen, reversible=True,
+                        alternatives=[
+                            f"{a['model_ir']}"
+                            f"{'（VR=' + str(a['vr']) + '）' if a['vr'] else '（无证据）'}"
+                            for a in alternatives],
+                        criteria=list(self.SELECTION_CRITERIA),
+                        reasoning=reasoning,
+                        confidence=confidence,
+                        created_by=node_id,
+                        evidence_ids=evidence_ids)
+                except Exception:
+                    pass    # 审计镜像尽力而为
+            n += 1
+        if n == 0:
+            return NodeResult(PASS, "无候选竞技场问题（跳过）",
+                              outputs={"artifacts": [], "evidence": ev})
+        return NodeResult(PASS, f"{n} 个问题完成 evidence-based 选型",
                           outputs={"artifacts": [], "evidence": ev})
 
     def _advance_question(self, qid: str, target: str) -> None:
@@ -488,10 +791,44 @@ class DefaultNodeExecutor:
                                    "context": {"literature": payload}})
 
     def do_model_selection(self, node_id: str) -> NodeResult:
-        """方法竞技场：每问题选型 → model artifact + solved_by 证据。"""
+        """方法竞技场：每问题选型 → model artifact + solved_by 证据。
+
+        P1-M3 候选模式（external_candidates 注入）：登记候选竞技场容器 model
+        artifact（shortlist=候选 model_id），不执行竞技场假选型（消除 recs[0]
+        硬编码；真正选型由 model_selection_decision 基于 VR 数值完成）。
+        无候选注入时走原竞技场路径（方法族预选，向后兼容）。
+        """
         ev = []
         count = 0
         for qid in self._question_ids():
+            cands = self._external_candidates(qid)
+            if cands:
+                # 候选竞技场模式：仅登记容器模型，chosen 由 VR 证据决定（M3-2）
+                models = self._models_of(qid)
+                mid = models[-1] if models else ""
+                if not mid:
+                    cand_ids = [c["model_ir"].get("model_id") for c in cands
+                                if c.get("model_ir")]
+                    m = self.registry.create(
+                        "model", title=f"{qid} 候选竞技场容器",
+                        question=qid, depends_on=[qid],
+                        data={"card_id": "candidate_competition",
+                              "family": "",
+                              "shortlist": cand_ids,
+                              "competition": True,
+                              "selection_status": "pending_evidence"},
+                        activate=True, created_by=node_id)
+                    mid = m.artifact_id
+                ev.append({"from": qid, "relation": "solved_by", "to": mid})
+                info = self.shared.setdefault(qid, {})
+                info["model"] = mid
+                info["card_id"] = "candidate_competition"
+                info["shortlist"] = [c["model_ir"].get("model_id")
+                                     for c in cands if c.get("model_ir")]
+                if self.state:
+                    self._advance_question(qid, "modeled")
+                count += 1
+                continue
             qf = features_for(self.features, qid)
             outcome = self.arena.select(qid, qf, created_by=node_id)
             card = outcome.chosen_card
@@ -562,10 +899,13 @@ class DefaultNodeExecutor:
                         depends_on=[mid], activate=True, created_by=node_id)
                     ev.append({"from": mid, "relation": "assumes", "to": a.artifact_id})
                     n_assumed += 1
-            # P1-VS-001 C5：外部 MODEL_IR → model_ir Artifact + instantiates 边
-            # （construct_model_ir 内部按 model_id 幂等，不依赖假设幂等标记）
-            mir_id = self.construct_model_ir(qid)
-            if mir_id:
+            # P1-VS-001 C5 / P1-M3：外部 MODEL_IR（单个或候选列表）→ model_ir
+            # Artifact + instantiates 边（_register_mir 按 model_id 幂等）
+            mir_ids = self.construct_candidate_mirs(qid)
+            if not mir_ids:
+                mir_id = self.construct_model_ir(qid)
+                mir_ids = [mir_id] if mir_id else []
+            for mir_id in mir_ids:
                 ev.append({"from": mir_id, "relation": "instantiates", "to": mid})
                 n_mir += 1
         msg = f"登记 {n_assumed} 条假设"
