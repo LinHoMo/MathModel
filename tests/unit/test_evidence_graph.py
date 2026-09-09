@@ -57,10 +57,12 @@ def setup(tmp_path):
 
 
 class TestRelations:
-    def test_all_15_relation_types_defined(self):
-        assert len(RELATION_TYPES) == 15
+    def test_all_16_relation_types_defined(self):
+        assert len(RELATION_TYPES) == 16
         # P0-E：executed_by（result → execution_result）
         assert RELATION_TYPES["executed_by"] == ({"result"}, {"execution_result"})
+        # P0-E5：verified_by（execution_result → verification_result）
+        assert RELATION_TYPES["verified_by"] == ({"execution_result"}, {"verification_result"})
 
     def test_relation_added(self, setup):
         _, g = setup

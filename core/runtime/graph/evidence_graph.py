@@ -46,6 +46,7 @@ RELATION_TYPES: dict[str, tuple] = {
     "based_on":       ({"decision"}, None),
     "derived_from":   (None, None),
     "executed_by":    ({"result"}, {"execution_result"}),
+    "verified_by":    ({"execution_result"}, {"verification_result"}),
 }
 
 STRONG_RELATIONS = frozenset({
@@ -78,6 +79,8 @@ _PROPAGATION: dict[str, tuple] = {
     "selects":        (None, None),        # 决策死了，被选模型不受影响
     "based_on":       (None, "reval"),     # 证据死了，基于它的决策需复查
     "derived_from":   ("reval", "reval"),  # 通用派生：一律弱传播
+    "executed_by":    (None, None),        # 结果死了，执行记录不受影响
+    "verified_by":    ("kill", None),      # 执行结果死了，其验证产物作废
 }
 
 

@@ -8,6 +8,7 @@ ID 格式: <TYPE><NNN>，项目内唯一、终身稳定、永不复用。
     E=experiment R=result F=figure T=table C=claim D=decision
     N=narrative S=paper_section DELIV=deliverable
     EXEC=execution_result（P0-E：真实执行产物，一等 artifact）
+    VR=verification_result（P0-E5：对执行结果的确定性验证产物）
 """
 
 from __future__ import annotations
@@ -32,13 +33,14 @@ ARTIFACT_TYPES: dict[str, str] = {
     "paper_section": "S",
     "deliverable": "DELIV",
     "execution_result": "EXEC",
+    "verification_result": "VR",
 }
 
 # 反查：前缀 → 类型
 PREFIX_TO_TYPE: dict[str, str] = {v: k for k, v in ARTIFACT_TYPES.items()}
 
 # ID 正则：前缀 + 1-6 位数字（三位零填充为规范形态，宽松接受 1-6 位）
-_ID_RE = re.compile(r"^(P|Q|M|A|DATA|CODE|E|R|F|T|C|D|N|S|DELIV|EXEC)(\d{1,6})$")
+_ID_RE = re.compile(r"^(P|Q|M|A|DATA|CODE|E|R|F|T|C|D|N|S|DELIV|EXEC|VR)(\d{1,6})$")
 
 
 class IDFormatError(ValueError):
