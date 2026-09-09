@@ -284,10 +284,12 @@ class TestFeedbackAndLifecycle:
                 a.data["baseline_comparison"] = []
         rep2 = rq.evaluate(s.registry, s.graph)
         recorded = rq.record_blockers(rep2)
-        if rep2.blockers:
-            assert recorded
-            kinds = [d.question_type for d in recorded]
-            assert all(k == "quality" for k in kinds)
+        # audit Batch8：禁止 if blockers 平凡通过——前置必须真实构造出 blocker
+        assert rep2.blockers, ("前置失败：baseline_comparison 置空未产生 blocker，"
+                               "本测试失效应 FAIL 而非假绿")
+        assert recorded
+        kinds = [d.question_type for d in recorded]
+        assert all(k == "quality" for k in kinds)
 
     def test_q14_pack_changes_priority_not_verdict(self, tmp_path):
         """Q-14 / P9-13：Pack 改变处置优先级，绝不把 FAIL 改成 PASS。"""

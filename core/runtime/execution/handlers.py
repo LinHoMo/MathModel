@@ -249,8 +249,12 @@ class DefaultNodeExecutor:
         if rev_of:
             target = self.registry.get(rev_of)
             if target is not None and target.type == "model_ir":
+                # audit Batch7 P2：本处只登记 revision_of 谱系边；
+                # supersedes 边 + 旧模型状态迁移由修订收口唯一负责
+                # （vs001_driver.finalize_revision：registry.supersede(M1,
+                # replacement=M2) + graph.add_relation(M2, supersedes, M1)）
+                # ——单一真源，避免双路径重复加边（GraphError）。
                 self.graph.add_relation(art.artifact_id, "revision_of", rev_of)
-                self.graph.add_relation(rev_of, "supersedes", art.artifact_id)
         return art.artifact_id
 
     def construct_model_ir(self, qid: str) -> str | None:

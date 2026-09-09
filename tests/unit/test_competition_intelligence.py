@@ -135,6 +135,9 @@ class TestConstraintScenarios:
                                                   top_k=10)
         for rec in bare:
             if rec.card.family in (ci_cumcm.pack.high_risk_methods or []):
+                # audit Batch8：样本未覆盖 high_risk 方法 → 前置 FAIL，不平凡通过
+                assert rec.card.family in (ci_cumcm.pack.high_risk_methods or []), \
+                    "前置：bare 推荐中必须命中 high_risk 样本"
                 assert scores_with.get(rec.card.card_id, 0) \
                     < rec.score, "high_risk 方法在 pack 下必须降权且可解释"
                 hit = [r for r in with_pack

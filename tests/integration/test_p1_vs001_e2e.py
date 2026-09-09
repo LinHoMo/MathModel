@@ -231,7 +231,7 @@ class TestP1VS001E2E:
         assert ("EXEC001", "produces", "R001") in rels
         assert ("EXEC001", "verified_by", "VR001") in rels
         assert ("MIR002", "revision_of", "MIR001") in rels
-        assert ("MIR001", "supersedes", "MIR002") in rels
+        assert ("MIR002", "supersedes", "MIR001") in rels  # FIX-6.3：新取代旧
         assert ("MIR002", "implemented_by", "CODE002") in rels
         assert ("CODE002", "executed_by", "EXEC002") in rels
         assert ("EXEC002", "produces", "R002") in rels

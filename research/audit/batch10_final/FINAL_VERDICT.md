@@ -64,8 +64,8 @@
 | F1 | Generator 不能伪造 execution result | ✅ REAL | execution_writer.py 唯一写入路径（Batch 4）+ registry schema 门禁 + status 枚举 |
 | F2 | Agent 不能伪造 evidence | ✅ REAL | supports 边必须指向真实 EXEC outputs（claim_synthesis）；占位 claim 禁 supports |
 | F3 | Agent 不能伪造 fidelity | ✅ REAL | execution_result schema 校验 + E9 gate（边级 exec_ref 优先） |
-| F4 | Organizer claims 独立验证 | ⏳ 待 Batch 7/8 独立复审回报 | o_00019F2qcEG 运行中 |
-| F5 | 无 fake placeholders | ✅ REAL | "{qid} 结论" 占位禁 supports（handlers 1522+）；problem_repr legacy_fallback 已移除 |
+| F4 | Organizer claims 独立验证 | ✅ REAL | Batch 7/8 独立复审（o_00019F2qcEG）：loop reviewer 全证据链复核 REAL（M1 FAIL 为真实数值违反 0.275>1e-6、execution status 仅来自真实 subprocess、replay 真实重跑比对）；test auditor 20 测试追踪+反作弊扫描无异常（详见 TEST_TRUST_SCORE） |
+| F5 | 无 fake placeholders | ✅ REAL | "{qid} 结论" 占位禁 supports（handlers 1522+）；problem_repr legacy_fallback 已移除；Batch 7 P2 复核确认无占位冒充 |
 | F6 | 无 hidden fallback | ✅ REAL | legacy_fallback 全清除（治理 commit）；derive_checks 不自动回退（FIX-5.2） |
 | F7 | 无 legacy 兼容掩盖迁移 | ✅ REAL | production 区术语零残留（terminology check）；legacy 仅 V2 项目导入工具（state.py），不参与 runtime 核心链 |
 
@@ -87,7 +87,7 @@
 | H2 | integration tests | ✅ | 298 passed（tests/integration） |
 | H3 | failure tests | ✅ | test_ir_code_mapping（断裂抛错）、test_revision_loop（不可诊断拒绝）、execution failure 传播 |
 | H4 | E2E test | ✅ | vs001 8 测试（闭环+replay+lineage） |
-| H5 | independent audit | ⏳ 待 Batch 7/8 | o_00019F2qcEG |
+| H5 | independent audit | ✅ REAL | Batch 7/8（o_00019F2qcEG）：loop reviewer VERDICT.md（REAL + 2 P2 已修复）；test auditor TEST_TRUST_SCORE.md（20 测试追踪、零空测试/零 mock/零异常吞掉） |
 | H6 | full regression | ✅ | 966/4/0（每批必跑，本次治理后复跑） |
 
 ## 二、10 问题终审回答
@@ -174,7 +174,11 @@ LOOP STATUS          : REAL（最小闭环）—— 跨题泛化与能力增益�
 
 ## 四、遗留与下一步
 
-- ⏳ Batch 7/8 独立复审（o_00019F2qcEG）——回报后回填 F4/H5 判定与 TEST_TRUST_SCORE；
+- ✅ Batch 7/8 独立复审已回报：loop reviewer REAL + 2 P2（supersedes 方向矛盾、
+  死代码重复分支）**已修复并回归通过**；test auditor TEST_TRUST_SCORE 见
+  `../batch8_test_trust/TEST_TRUST_SCORE.md`；
+- ✅ 三大治理待办已完成（见 `research/P15/analysis/`）：
+  - Candidate Arena 固化 benchmark（`benchmark/arena/arena_runner.py` + 全池报告 + 6 集成测试）
+  - Knowledge-guided 正式化（`core/runtime/modeling/knowledge_guided.py` + 契约 + 8 单测）
+  - Capability Validation Δscore（`capability_delta.py` + 报告 + 3 测试）
 - K003 66 runs 生成 → 盲评 → 配对分析 → CLOSED（K003 报告 + 三实验对比 + P16 决策）；
-- 项目治理后续：候选竞技场固化 benchmark、Knowledge-guided 正式化、Capability
-  Validation（Δscore 八项指标）——按 STATUS.md「待用户拍板」三项推进。

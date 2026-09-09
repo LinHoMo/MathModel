@@ -260,28 +260,6 @@ def run_numeric_validation(outputs: dict, spec: dict,
             "detail": f"通用检查集: {n_pass}/{len(results)} 通过",
         }
 
-    # ---- 通用检查集（不绑定具体题目；spec.checks 由外部验证规格注入）
-    if spec.get("checks"):
-        status, checks = run_checks(
-            {"status": execution_status, "outputs": outputs},
-            spec["checks"])
-        passed = status == "passed"
-        return {
-            "execution_valid": execution_status == "success",
-            "mathematical_valid": passed,
-            "empirical_valid": passed,
-            "robustness": 1.0 if passed else 0.0,
-            "constraint_violation_max": None,
-            "objective_value": None,
-            "objective_sane": passed,
-            "variable_domain_violation": not any(
-                not c["passed"] for c in checks if c["kind"] == "domain"),
-            "status": status,
-            "detail": (f"通用检查: {sum(1 for c in checks if c['passed'])}/"
-                       f"{len(checks)} 通过"),
-            "checks": checks,
-        }
-
     checks: list[dict] = []
     pair_distances = outputs.get("pair_distances") or {}
     constraints = spec.get("constraints") or []
