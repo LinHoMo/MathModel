@@ -242,7 +242,12 @@ class DefaultNodeExecutor:
         for a in self.registry.list_by_type("code"):
             if a.question == qid and a.status not in _TERMINAL \
                     and a.data.get("code_hash") == code_hash:
-                return a.artifact_id    # 幂等
+                # 幂等复用：确保当前活跃 MIR → 该 code 的 implemented_by 边存在
+                if not any(r["from"] == mir_id and r["relation"] == "implemented_by"
+                           and r["to"] == a.artifact_id
+                           for r in self.graph.relations):
+                    self.graph.add_relation(mir_id, "implemented_by", a.artifact_id)
+                return a.artifact_id
         art = self.registry.create(
             "code", title=f"{mir_id} 可执行实现",
             question=qid, depends_on=[mir_id],

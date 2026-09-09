@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -202,6 +203,13 @@ def replay_execution(project_dir: str | Path, exec_id: str,
               else dict(data.get("inputs") or {}),
         timeout_seconds=timeout_seconds or data.get("timeout_seconds") or 30,
     )
+    # P1-VS-001 C10：重建固定 ABI 执行环境（input.json → run_model.py），
+    # 使按 input.json 读入的执行可被忠实重放（否则 replay 会因缺 input.json 失败）。
+    import tempfile
+    workdir = Path(tempfile.mkdtemp(prefix="vs001_replay_"))
+    (workdir / "input.json").write_text(
+        json.dumps(plan.inputs, ensure_ascii=False), encoding="utf-8")
+    plan.workdir = str(workdir)
     try:
         rep = adapter.execute(plan)
     except Exception as exc:  # noqa: BLE001 —— adapter 自身异常要如实暴露
