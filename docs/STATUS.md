@@ -38,7 +38,7 @@ Construction 行为？"。
 | P15.0/P15.1 | CUMCM Benchmark Freeze + B0 Alignment Baseline | ✅ | `8751c45`（tag `p15.0-benchmark-freeze`）/ `af1bbd5`（tag `p15.1-b0-baseline`） |
 | **P15-K001** | 2×2×rep 预注册（Knowledge × Case + Sham），55 runs，盲评 + DATA FREEZE + 配对分析 | ✅ CLOSED | Δ_K=+2.14 CI[+0.00,+6.41] → **negative result**；`de15d96` |
 | **P15-K002** | Model Representation Efficacy（F/S/S+V 三臂），rubric v1.1 测量校准 + 预检区分度验证 + 五 Gate | 🔒 **FROZEN**（38 文件哈希锁定） | `0cf4d5f` |
-| **P1** | Model Construction Loop：Gap Audit（11 环节）→ P1 计划 v2（C1–C10）→ VS-001 垂直切片 | 🔄 进行中 | `554e4ff`/`1534fa5` |
+| **P1** | Model Construction Loop：Gap Audit（11 环节）→ P1 计划 v2（C1–C10）→ **VS-001 垂直切片 7/7 PASS（M1 FAIL → M2 PASS 闭环，2019_C M/M/c）** | 🔄 C1 ✅ + VS-001 ✅，C6–C10 待续 | `554e4ff`/`1534fa5`/`23dfe7a` |
 
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-09）
 
@@ -64,12 +64,11 @@ Construction 行为？"。
 ## 下一步
 
 ```text
-P1（Model Construction Loop，进行中）：
-  C1 MODEL_IR 升入 core ✅（1534fa5）→ C5 Method→Instantiation → C6 Code 节点
-  → C7 Execution 接线 → C8 Validation L0-L2 → C9 门禁硬化 → C10 e2e 闭环测试
-  → VS-001 验收（M1 → FAIL → M2 → PASS，replay 可重现）
+P1（Model Construction Loop）：
+  C1 MODEL_IR 升入 core ✅（1534fa5）→ VS-001 闭环 ✅（23dfe7a，7/7）
+  → C6 Code 节点 → C7 Execution 接线 → C8 Validation L0-L2 → C9 门禁硬化 → C10 e2e（与 K002 并行）
 
-K002 正式实验（P1 闭环打通后执行）：
+K002 正式实验（VS-001 已提供产物管线前提）：
   run_order 生成 → 108 runs（主检验 45 + 泛化 15，F/S/S+V）→ 盲评（rubric v1.1）
   → 配对分析（Representation Effect）→ 决策门
 
