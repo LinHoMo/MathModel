@@ -18,7 +18,7 @@
 
 1. `ir_version`：固定为 "1.0"；
 2. `model_id`：本次模型唯一标识（建议 `M-<submission_id 前 8 位>`）；
-3. `model_family`：`{"primary": "...", "secondary": [...]}`，primary 用受控词表（见下方"建模结构词表"），不要自造命名空间；
+3. `model_family`：`{"primary": "...", "secondary": [...], "candidates": [{"family": "...", "rationale": "选择/排除依据"}]}`（`candidates` 记录候选模型对比：≥2 个候选 + 各自选择/排除依据，是机理选择的质量证据；无对比写空数组），primary 用受控词表（见下方"建模结构词表"），不要自造命名空间；
 4. `problem_binding`：`{"problem_id": "{{PROBLEM_ID}}", "sub_question_id": "...", "problem_sha256": "<题面哈希>"}`，其中 `sub_question_id` 必须覆盖本题全部子问题（每个子问题至少被一个 objective/claim/validation 引用）；`problem_sha256` 必须与题面绑定一致（由系统登记时校验）；
 5. `assumptions`：数组，每条含 `assumption_id`、`text`、`type`（projection/calibration/mechanism/simplification）、`rationale`（合理性说明）；
 6. `variables`：数组，每条含 `variable_id`、`name`、`symbol`、`definition`、`unit`、`type`（state/decision/observation/constant）、`sub_question_binding`；

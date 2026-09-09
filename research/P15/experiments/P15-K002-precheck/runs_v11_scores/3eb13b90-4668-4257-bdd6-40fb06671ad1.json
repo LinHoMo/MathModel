@@ -1,0 +1,42 @@
+{
+  "submission_id": "3eb13b90-4668-4257-bdd6-40fb06671ad1",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "rubric": "v1.1"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "题面 8 条游戏规则全部参数化：基础消耗 c_0/f_0、基准价格 p_w/p_f、基础收益 g、负重上限 L、每箱质量 ρ_w/ρ_f、截止天数 T、天气倍率 α、行动倍率 β、退回率 r=0.5、村庄倍率 λ_v=2/4，无遗漏（parameters 22 项，source 均标'题目'）"},
+    "L1.2": {"score": 2, "evidence": "隐式条件显式化并给出推导依据：马尔可夫性 A-03、当日结算顺序 A-04（对应题注2 口径）、Q3 玩家同质 A-05、未来天气概率认知 A-06"},
+    "L1.3": {"score": 2, "evidence": "交付要求识别：EXP-01/02 expected_outputs 明确'与 Result.xlsx 对照'（文件格式）；C-05 截止时限 T、C-10 结算口径（精度/口径）；A-04 rationale 显式引用题目注2 的剩余量定义"},
+    "L1.4": {"score": 2, "evidence": "歧义点标注+处理方案：天气先验分布未给定（A-06 假设由历史统计校准 π_w，source=校准）；多人信息结构（A-07 区分离线协调/在线博弈）；附件参数值未给出（parameters 标注'由附件关卡参数确定'）"},
+    "L1.5": {"score": 2, "evidence": "model_family primary=dynamic_programming，secondary=[optimization, game_theory, markov_decision_process]，与 2020_B 的 DP/MDP/博弈结构一致；Q1 确定性 DP、Q2 部分可观测 MDP、Q3 博弈，分问建模正确"},
+    "L2.1": {"score": 2, "evidence": "28 个变量声明，区分 state(R_t,W_t,F_t,M_t,s_t,V_t)/decision(a_t,buyw_t,buyf_t,mine_t,abar)/observation(w_t,k_t,J_t,t_a)/constant(t,i,j)，覆盖 key_variables（资源水平/天气/位置/行动）；Q3 多人变量 R_i,W_i,F_i,M_i,a_i 单独声明"},
+    "L2.2": {"score": 2, "evidence": "24 个参数全部声明且每个带 source（题目/校准）与取值：消耗/价格/收益/负重/退回率/村庄倍率/天气倍率/行动倍率/多人倍率 β_k=2k、g_i=g/k；π_w 标注'由历史统计校准'，来源类型正确"},
+    "L2.3": {"score": 2, "evidence": "7 条假设显式声明并分类（simplification/mechanism/projection/calibration），每条附 rationale：A-01 连续化+取整、A-02 天气乘性倍率、A-06 天气先验校准锚，合理且可检验"},
+    "L2.4": {"score": 2, "evidence": "OBJ-01 J=M_T+r(p_w W_T+p_f F_T) 与题目'保留尽可能多资金'一致；Q2 期望最大化、Q3 求和/纳什均衡分别对应；三角一致性：目标量由资金流转机制（EQ-03）直接产生，负重/时限约束不使目标平凡（可行解存在且非恒等）"},
+    "L2.5": {"score": 2, "evidence": "10 条约束覆盖 key_constraints：负重 C-01、资源非负/耗尽失败 C-02、邻接移动 C-03、沙暴停留 C-04、截止时限 C-05、购买规则 C-06、Q3(1) 行动锁定 C-07、同行消耗 2k C-08、同矿/同村规则 C-09、结算顺序 C-10；方向均正确"},
+    "L2.6": {"score": 2, "evidence": "E1+E2+E3 满足（见 l26_four_elements）；E4 不满足：无 ≥2 候选机理家族对比与选择依据，SOL-04 MILP 仅作验证工具而非机理候选对比"},
+    "L2.7": {"score": 2, "evidence": "16 个方程结构完整：状态转移 EQ-01/02/03、可行性/拓扑/天气/终止 EQ-04..09、DP 递推含终止条件 V_{T+1}=J（EQ-10/11）；方程符号集（β,α,c_0,f_0,g,p_w,p_f,ρ_w,ρ_f,L,r,λ,k,n,π）⊆ variables/parameters 声明集，符号一致"},
+    "L3.1": {"score": 2, "evidence": "求解策略与模型类型匹配：Q1 确定性 DP（记忆化/值迭代）、Q2 滚动时域 RHC、Q3 IP/SA + 迭代最佳响应，MILP 线性化重构交叉验证，口径一致"},
+    "L3.2": {"score": 1, "evidence": "SOL-01..04 引用 code/*.py（'预检规划实现'），但 experiments 仅有 inputs/expected_outputs，无执行日志/exit code/actual results，无法确认完整运行产出"},
+    "L3.3": {"score": 0, "evidence": "无 solvers[].convergence 字段、无数值结果或残差记录，收敛性不可查"},
+    "L3.4": {"score": 1, "evidence": "VAL-05 声明固定种子 42 多次运行逐位一致，但无 multi_seed 方差/replay match 数据字段，仅种子固定部分支撑"},
+    "L3.5": {"score": 0, "evidence": "无结果数值产出（EXP 均为 expected_outputs），物理合理性无法判定"},
+    "L4.1": {"score": 2, "evidence": "VAL-01 与官方 Result.xlsx 参考数值逐项核对、VAL-02 与公开参考解答收益区间对照——官方/文献基准合理"},
+    "L4.2": {"score": 2, "evidence": "VAL-03 对敏感参数（α_hot、p_w、p_f、g）±20% 扰动，检查最优策略与目标资金弹性，扰动对象为敏感参数"},
+    "L4.3": {"score": 2, "evidence": "两类极限/边界检验：VAL-04 极端参数（负重趋紧/连续沙暴/资金极小）+ VAL-06 退化情形（n=1 还原单人模型），且与主张关联（CLM-04 退化自洽性，status=validated）"},
+    "L4.4": {"score": 2, "evidence": "验证覆盖核心主张：VAL-01/02 验证最优性、VAL-03 灵敏度、VAL-04/06 极限与退化，对应 evaluation_targets（决策最优性/随机性处理/结构自洽）"},
+    "L4.5": {"score": 1, "evidence": "CLM-01..04 均带 evidence_refs，但 CLM-01/02/03 status=proposed（计划验证未完成，属 unresolved），仅 CLM-04 validated"}
+  },
+  "l26_four_elements": {
+    "E1_mechanism_problem": {"pass": true, "note": "DP/MDP 家族与穿越沙漠序贯决策问题的物理/现实一致，Q3 博弈结构对应多人规则"},
+    "E2_mechanism_equations": {"pass": true, "note": "EQ-10/EQ-11 递推由状态转移方程（EQ-01/02/03）导出，机理 MECH-03/04 与方程一一对应，无脱节"},
+    "E3_mechanism_objectives_constraints": {"pass": true, "note": "目标（终点资金）由资金流转机制支撑；机理隐含关键限制（负重、时限、沙暴停留、耗尽失败）均已在约束中形式化"},
+    "E4_candidate_comparison": {"pass": false, "note": "无 ≥2 候选机理家族对比与选择依据；MILP（SOL-04）仅作 DP 交叉验证工具，非机理候选对比"}
+  },
+  "layer_totals": {
+    "L1": {"score": 10, "max": 9, "note": "L1.4 判据满分 2 与权重列 1 不一致（rubric 文本内部不一致），score 为维度判据得分之和"},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 4, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  },
+  "notes": "2020_B 穿越沙漠结构化 MODEL_IR，建模质量高：状态/参数/约束/方程体系完备，目标-机制-约束三角一致，符号一致性机械可查。L2.6 缺机理家族候选对比（E4 不满足，2/3 分）。L3 弱因产物为规划阶段（无执行/收敛/复现数据字段），L4 验证设计完整但主张多为 proposed。"
+}

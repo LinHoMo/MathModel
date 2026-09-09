@@ -1,0 +1,42 @@
+{
+  "submission_id": "815ef6d1-3b8f-4a18-b7f8-a88b17fc695a",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "rubric": "v1.1"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "§1.1 完整提取：四层结构（I/II/III+IV 空气层）、Q1(75°C/II=6mm/IV=5mm/90min/附件1/附件2)、Q2(65°C/IV=5.5mm/60min/47°C/44°C/5min)、Q3(80°C/30min)，全部数值无遗漏"},
+    "L1.2": {"score": 2, "evidence": "§1.2 七项隐式条件：热流守恒、界面温度连续、皮肤侧 Dirichlet 37°C（假人恒温）、环境侧对流、初始温度需校准、一维性、温度单调上升趋于稳态，均含推导"},
+    "L1.3": {"score": 2, "evidence": "交付要求明确：'计算温度分布，生成 Excel 文件 problem1.xlsx'（§1.1 Q1）；§9.2 温度输出保留 2 位小数写入 problem1.xlsx（精度规范）"},
+    "L1.4": {"score": 2, "evidence": "D1-D9 九项歧义逐条标注+采纳解释+理由：测量位置、空气层传热机理（Ra 数论证）、皮肤边界类型（Dirichlet vs 对流）、初始温度校准、最优厚度定义（成本代理）、换热系数、超温计量、接触热阻、L_4 可行域"},
+    "L1.5": {"score": 2, "evidence": "§1.4 判定：Q1 一维多层非稳态热传导正问题（PDE 初边值）、Q2/Q3 PDE 约束优化（参数扫描+约束筛选），与 2018_A 范式一致"},
+    "L2.1": {"score": 2, "evidence": "12 变量覆盖 key_variables：温度场 T_j、皮肤温度 T_skin、热流密度 q、峰值 T_max、超温时长 τ>44、II/IV 层厚度（decision）、界面坐标 X_j、实测温度，类型区分 state/observation/decision/constant"},
+    "L2.2": {"score": 2, "evidence": "25 参数全部带来源与取值：T_env 三场景、L_1/L_3 附件、ρ_j/c_j/k_j 附件（含典型值）、h_out 附件/校准、T_0 数据校准、T_lim/T_thr/τ_max/t_work 题面、Δx/Δt 假设、w_2/w_4 假设、R_cloth/R_conv 解析量、seed"},
+    "L2.3": {"score": 2, "evidence": "A1-A12 显式分类（simplification/mechanism/projection/calibration）附合理性：一维化、恒物性、理想接触、空气层纯导热（Ra 小论证）、Dirichlet 皮肤边界、对流外边界、初始温度校准、无内热源、无相变、测量噪声、厚度成本代理、稳态极限存在"},
+    "L2.4": {"score": 2, "evidence": "目标与题目一致：Q1 校准最小二乘（min Σ(T_model-ĉT_k)²）+输出 problem1.xlsx、Q2 min L_2 s.t. 峰值 47°C+超温 5min、Q3 min w_2L_2+w_4L_4（Pareto 可调）；三角一致性：目标量由 PDE 机制产生，约束不使目标平凡"},
+    "L2.5": {"score": 2, "evidence": "C1-C11 完备方向正确：PDE 方程、界面温度/热流连续（C2/C3）、皮肤 Dirichlet（C4）、环境 Robin（C5）、初始条件（C6）、峰值约束（C7）、超温时长积分（C8）、厚度可行域（C9）、物理范围（C10）、时长（C11）"},
+    "L2.6": {"score": 3, "evidence": "四要素全满足（见 l26_four_elements）：机理正确+候选对比充分（§7 对比 PDE-FD vs 集总 RC vs 解析解 vs 2D/3D FEM，含优缺点与选用结论）"},
+    "L2.7": {"score": 2, "evidence": "E1-E10 结构完整：层内 PDE（E1）+界面连续（E2）+外边界第三类（E3）+内边界第一类（E4）+初始条件（E5）+输出（E6）+超温积分（E7）+CN 离散含稳定性分析（E8）+优化问题（E9/E10）；符号集 ⊆ §3/§4 声明集，文末声明自洽"},
+    "L3.1": {"score": 2, "evidence": "求解策略匹配：CN 隐式 FD（无条件稳定，von Neumann 分析|G|≤1）+Thomas 追赶法、Q2/Q3 参数扫描+约束筛选（维度≤2 确定性全局）、校准用黄金分割/网格搜索，口径一致"},
+    "L3.2": {"score": 1, "evidence": "§9.1 详述实现与复杂度（N_x~100-200、N_t~5400、毫秒级），但无实际执行日志/exit code/结果文件，可运行性未证实"},
+    "L3.3": {"score": 0, "evidence": "§9.3 基线 1 稳态解析对照（预期<1%）与网格加密检验均为计划，无实际收敛数据"},
+    "L3.4": {"score": 1, "evidence": "§9.2 声明 seed=42、多 seed {42,2018,12345}、均值±标准差，但无实际方差/replay 数据"},
+    "L3.5": {"score": 0, "evidence": "§9.4 为结果预期（稳态 60-70°C、L_2 数 mm 量级、超温约束通常更紧），无实际数值"},
+    "L4.1": {"score": 2, "evidence": "四类基线：串联热阻稳态解析解（应<1%）、半无限体解析近似（早期曲线）、附件2 实测 RMSE（预期<1-2°C）、最优解回代可行性——基线选择合理"},
+    "L4.2": {"score": 2, "evidence": "对 k_2,k_4,h_out,T_0,Δx,Δt ±10% 扰动，识别主导参数（h_out 与 k_2），扰动对象为敏感参数"},
+    "L4.3": {"score": 2, "evidence": "六类极限/边界检验且与主张关联：L_2→∞（完全隔热 τ>44=0）、L_2→0（约束破坏无可行解）、h_out→∞（一/三类边界极限）、k_j→∞（温度均匀）、t→∞（稳态对照）、T_env=37°C（平凡极限）"},
+    "L4.4": {"score": 2, "evidence": "验证覆盖核心主张：Q1 校准残差（复现实测）、Q2/Q3 最优解回代约束满足、稳态/极限对照、灵敏度，与 evaluation_targets 对应"},
+    "L4.5": {"score": 1, "evidence": "叙述式无显式 claim/evidence 结构，主张（校准残差预期、最优厚度量级等）为预期/计划，未与实际证据关联"}
+  },
+  "l26_four_elements": {
+    "E1_mechanism_problem": {"pass": true, "note": "傅里叶导热+能量守恒→抛物 PDE 与高温防护服装物理一致，四层结构对应题面"},
+    "E2_mechanism_equations": {"pass": true, "note": "E1 由能量守恒+傅里叶定律导出；E2-E5 界面/边界/初值与机理对应；E8 CN 离散由 E1 推导，含稳定性分析"},
+    "E3_mechanism_objectives_constraints": {"pass": true, "note": "目标量（温度场/最优厚度）由 PDE 机制产生；机理隐含限制（界面连续、物理温度范围、稳态极限）已进约束 C2/C3/C10"},
+    "E4_candidate_comparison": {"pass": true, "note": "§7 候选对比表：一维 PDE(CN-FD) vs 集总 RC vs 解析解（Green 函数） vs 2D/3D FEM，各带优缺点与'选用/弃用'结论，对比维度（精度/复杂度/边界刻画）合理"}
+  },
+  "layer_totals": {
+    "L1": {"score": 10, "max": 9, "note": "L1.4 判据满分 2 与权重列 1 不一致，score 为维度判据得分之和"},
+    "L2": {"score": 15, "max": 15},
+    "L3": {"score": 4, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  },
+  "notes": "2018_A 高温作业专用服装叙述式 model_doc：机理四要素全满足（候选对比含 PDE/集总/解析/FEM 四候选），L2 满分。极限/边界检验六类且与主张关联（L4.3=2）。L3 弱因规划阶段无执行证据。"
+}

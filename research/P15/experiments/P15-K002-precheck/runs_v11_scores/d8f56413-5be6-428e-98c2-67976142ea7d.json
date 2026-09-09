@@ -1,0 +1,42 @@
+{
+  "submission_id": "d8f56413-5be6-428e-98c2-67976142ea7d",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "rubric": "v1.1"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "五问完整绑定：Q1 管辖分配（3 分钟响应）、Q2 13 要道全封锁、Q3 增设 2~5 平台、Q4 全市六区评估、Q5 P(32) 围堵；参数 v_p=60/R_max=3/t_delay=3/n_A=20/n_E=13/k_min=2/k_max=5 全部提取"},
+    "L1.2": {"score": 2, "evidence": "A1-A6 覆盖隐式条件：路网图抽象（无向加权图+匀速最短路）、一平台一警力、需求权重以节点度近似、嫌疑犯车速假设、静态最短路（忽略拥堵）、增设候选点离散化"},
+    "L1.3": {"score": 2, "evidence": "交付要求识别：五问交付对象完整——管辖分配方案（Q1）、全封锁调度方案（Q2）、增设平台推荐方案（Q3）、六区评估+调整方案（Q4）、最佳围堵方案（Q5）"},
+    "L1.4": {"score": 1, "evidence": "无显式歧义标注列表；需求权重（A3）、嫌疑犯车速（A4）通过假设间接处理，未作为'歧义点'显式标注"},
+    "L1.5": {"score": 2, "evidence": "model_family primary=optimization，secondary=[graph_algorithm, decision_analysis]，与 2011_B 图论+优化（最短路/瓶颈指派/选址/围堵）结构一致"},
+    "L2.1": {"score": 2, "evidence": "16 变量类型区分：观测（边权/工作量/响应/封锁/围堵时间/覆盖率/需求权重）、决策（x_ij/y_ik/z_i）、状态（t_ij）、常量（n_p），覆盖 key_variables"},
+    "L2.2": {"score": 2, "evidence": "10 参数全部带来源与取值：v_p=60/R_max=3/t_delay=3/n_A=20/n_E=13/k_min=2/k_max=5 题面、v_s0=60 假设（敏感性扫描）、α=β=0.5 假设"},
+    "L2.3": {"score": 2, "evidence": "A1-A6 分类（simplification/mechanism/calibration/projection）附 rationale：图抽象、警力配备、需求权重近似、嫌疑犯车速同速保守假设、静态调度、候选点离散化"},
+    "L2.4": {"score": 2, "evidence": "五问目标与题目一致：Q1 min T_max s.t.≤3min、Q2 min T_block（瓶颈指派）、Q3 min αT_max+βmaxW_i（多目标选址）、Q4 estimate 覆盖率/均衡度/响应分布、Q5 min T_int s.t. 先到条件；三角一致性：目标量由图机制产生，约束不使目标平凡"},
+    "L2.5": {"score": 2, "evidence": "C1-C6 方向正确：每节点恰一平台、每出口恰一平台且一平台至多一路口、增设 2~5、3 分钟响应、围堵先到条件、工作量/权重非负"},
+    "L2.6": {"score": 2, "evidence": "E1+E2+E3 满足（见 l26_four_elements）；E4 不满足：无 ≥2 候选机理对比（SOL1-4 为求解算法，非机理候选）"},
+    "L2.7": {"score": 2, "evidence": "EQ1-EQ13 结构完整：全源最短路（EQ1）、最近分配（EQ2）、响应/约束/工作量/均衡/瓶颈指派/选址/覆盖/围堵先到条件（EQ11-13）；方程符号集（L_ab,v_p,R_max,v_s,t_delay,α,β,k_min,k_max,n_p,r_j）⊆ 声明集，符号一致"},
+    "L3.1": {"score": 2, "evidence": "求解策略匹配：Floyd-Warshall/Dijkstra 堆优化、瓶颈指派（二分答案+匹配判定/匈牙利）、贪心+局部搜索选址、围堵枚举/仿真，与图优化模型口径一致"},
+    "L3.2": {"score": 1, "evidence": "SOL1-4 引用 code/*.py（预检规划实现），无执行日志/exit code/actual results"},
+    "L3.3": {"score": 0, "evidence": "无 convergence 字段、无数值结果"},
+    "L3.4": {"score": 1, "evidence": "VAL4 声明确定性算法重复一致+局部搜索随机重启稳定，但无实际运行数据"},
+    "L3.5": {"score": 0, "evidence": "无结果数值产出（EXP 均为 expected_outputs），合理性无法判定"},
+    "L4.1": {"score": 2, "evidence": "VAL1 管辖结果与题述 3 分钟标准对比（覆盖率/超时节点统计），对照口径合理"},
+    "L4.2": {"score": 1, "evidence": "VAL2 仅对嫌疑犯车速 v_s{40,60,80} 扫描，需求权重 r_j、目标权重 α/β 等其余敏感参数未扰动，覆盖不全"},
+    "L4.3": {"score": 2, "evidence": "VAL3 三类极限/边界检验且与主张关联：平台数→全覆盖（T_max→0）、r_j 均匀（G→1）、撤除平台（覆盖率单调下降）"},
+    "L4.4": {"score": 2, "evidence": "验证覆盖五问：VAL1→Q1、VAL2→Q5、VAL3→Q4、VAL4→Q2/Q3，与 evaluation_targets 对应"},
+    "L4.5": {"score": 1, "evidence": "CL1-CL5 均带 evidence_refs 且 status=validated，但 EXP 仅有 expected_outputs 无实际结果，validated 标注缺乏实测支撑"}
+  },
+  "l26_four_elements": {
+    "E1_mechanism_problem": {"pass": true, "note": "图论机制（最短路/瓶颈指派/选址/动态围堵）与交巡警服务平台问题的物理现实一致"},
+    "E2_mechanism_equations": {"pass": true, "note": "EQ1 最短路由图论定义导出、EQ8 瓶颈指派由封锁机制导出、EQ11-13 围堵先到条件由追赶机制导出，机理-方程一一对应"},
+    "E3_mechanism_objectives_constraints": {"pass": true, "note": "目标量（响应时间/封锁时间/围堵时间/均衡度）由图机制产生；机理隐含关键限制（一平台一警力、3 分钟、先到条件）已进约束"},
+    "E4_candidate_comparison": {"pass": false, "note": "无 ≥2 候选机理家族对比与选择依据；SOL1-SOL4（最短路/指派/选址/枚举）为求解算法而非机理候选对比"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 4, "max": 9},
+    "L4": {"score": 8, "max": 9}
+  },
+  "notes": "2011_B 交巡警平台结构化 MODEL_IR：五问覆盖完整（管辖/封锁/选址/评估/围堵），图机制+方程符号一致。主要缺陷：无显式歧义标注（L1.4=1）、灵敏度仅覆盖车速（L4.2=1）、claim 标 validated 但无实测数据（L4.5=1）。L2.6 缺机理候选对比（E4 不满足）。"
+}

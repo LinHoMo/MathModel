@@ -38,7 +38,7 @@
 | L2.3 假设合理性 | `assumptions[]`（每条含合理性说明） |
 | L2.4 目标正确性 | `objectives[]`（type/expression/variables_refs） |
 | L2.5 约束完备性 | `constraints[]`（constraint_id/type/expression/variables_refs/source） |
-| L2.6 机理正确性 | `mechanisms[]` + `model_family`（受控词表）+ **E4 候选对比**：`model_family.secondary`（候选家族）+ `modeling_trace`（选择动作） | v1.1 四要素：E1 机理-题面 / E2 机理-方程 / E3 机理-目标约束 / E4 候选对比（≥2 候选 + 依据） |
+| L2.6 机理正确性 | `mechanisms[]` + `model_family`（受控词表）+ **E4 候选对比**：`model_family.candidates`（v1.1 新增字段：≥2 候选 + rationale）+ `modeling_trace`（选择动作） | v1.1 四要素：E1 机理-题面 / E2 机理-方程 / E3 机理-目标约束 / E4 候选对比（≥2 候选 + 依据）。预检 v1.1 重评实测：E4 是唯一有区分度要素（6/12 pass），S 臂无 candidates 字段系统性失分 → 模板已加字段 |
 | L2.7 方程结构完整性 | `equations[]`（latex/type/边界初始条件声明）+ 变量/参数符号交叉核验 | v1.1：方程符号集 ⊆ variables∪parameters |
 
 ### L3 Solving（产物来源：执行级 artifacts + MODEL_IR.solvers）

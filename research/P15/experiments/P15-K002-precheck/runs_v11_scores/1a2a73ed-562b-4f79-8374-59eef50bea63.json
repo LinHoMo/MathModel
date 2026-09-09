@@ -1,0 +1,42 @@
+{
+  "submission_id": "1a2a73ed-562b-4f79-8374-59eef50bea63",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "rubric": "v1.1"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "四问完整绑定（Q1 定价规律+归因、Q2 新方案+比较、Q3 打包+影响、Q4 附件三定价+评价）；附件一/二/三作为输入；变量覆盖价格/密度/竞争/信誉/打包要素"},
+    "L1.2": {"score": 2, "evidence": "A1-A6 覆盖隐式条件：欧氏距离简化、logistic 完成概率（价格对数边际递减）、信誉优先+配额配发的需求强度近似、会员独立（无博弈）、打包空间邻近、预算约束"},
+    "L1.3": {"score": 2, "evidence": "交付要求识别：OBJ_Q1 estimate 规律+归因、OBJ_Q2 新定价方案并与原方案比较、OBJ_Q3 打包影响评估、OBJ_Q4 附件三最优定价+实施效果评价"},
+    "L1.4": {"score": 1, "evidence": "无显式歧义标注列表；logistic 形式（A2）、配额机制（A3）、打包规则（A5）通过假设间接处理，未作为'歧义点'标注"},
+    "L1.5": {"score": 2, "evidence": "model_family primary=optimization，secondary=[statistical_modeling, clustering, decision_analysis]，与 2017_B 定价优化+统计建模+聚类打包结构一致"},
+    "L2.1": {"score": 2, "evidence": "22 变量类型区分：观测（完成标志/位置/信誉/配额/距离/密度/竞争/期望完成/预算使用）、决策（p_j/p_j^*/z_jk/P_k^b）、状态（P_j/P_k^c），覆盖 key_variables"},
+    "L2.2": {"score": 2, "evidence": "13 参数带来源：β 系数/α 截距/R=3.0 校准、B/p_min/p_max 由原方案设定、τ=0.85/γ=0.1/r_c=2.0 假设、λ 校准导出——取值或校准锚均声明"},
+    "L2.3": {"score": 2, "evidence": "A1-A6 分类（simplification/calibration/mechanism/projection）附 rationale：欧氏距离、logistic+对数价格、需求强度近似、独立均衡概率、空间打包、预算边界"},
+    "L2.4": {"score": 2, "evidence": "四问目标与题目一致：OBJ_Q1 estimate 校准+归因、OBJ_Q2 max ΣP_j s.t. Σp_j≤B（预算制）、OBJ_Q3 max ΣP_k^c（包级完成）、OBJ_Q4 estimate p_j^*+cov；三角一致性：目标量由 logistic 机制产生，预算/定价界/打包约束不使目标平凡"},
+    "L2.5": {"score": 2, "evidence": "C1-C5 方向正确：定价上下界、预算、打包归属（恰好一个包允许单件）、包内距离≤r_c、概率域；会员配额经 A3 需求强度近似承载"},
+    "L2.6": {"score": 2, "evidence": "E1+E2+E3 满足（见 l26_four_elements）；E4 不满足：无 ≥2 候选机理对比（SOL1-4 为求解手段，非机理候选）"},
+    "L2.7": {"score": 1, "evidence": "EQ1-EQ13 结构基本完整（距离/密度/Logit/期望/预算/KKT/打包/预测/覆盖率），但 EQ7 引用拉格朗日乘子 μ 未在 variables/parameters 声明（p_lambda 为弹性系数 λ_j 非 μ），违反符号一致性"},
+    "L3.1": {"score": 2, "evidence": "求解策略匹配：logistic MLE（L2 正则 5 折 CV）、拉格朗日+网格搜索、K-means/DBSCAN 聚类、蒙特卡洛仿真，与统计/优化模型口径一致"},
+    "L3.2": {"score": 1, "evidence": "SOL1-4 引用 code/*.py（预检规划实现），无执行日志/exit code/actual results"},
+    "L3.3": {"score": 0, "evidence": "无 convergence 字段、无数值结果；VAL4 的 AUC 标准差<0.02 为计划判据"},
+    "L3.4": {"score": 1, "evidence": "VAL4 声明 5 折 CV AUC 标准差<0.02、MC 1000 次稳定，但无实际数据"},
+    "L3.5": {"score": 0, "evidence": "无结果数值产出（EXP 均为 expected_outputs），合理性无法判定"},
+    "L4.1": {"score": 2, "evidence": "VAL1 校准模型回测附件一原方案完成率（偏差<5pp），原方案为合理对照基线"},
+    "L4.2": {"score": 1, "evidence": "VAL2 预算 B 与价格弹性扫描、EXP3 r_c{1,2,3}×γ{0,0.1,0.2} 扫描覆盖预算/聚类/折扣参数，但核心校准系数（β_p 等）未扰动，覆盖不全"},
+    "L4.3": {"score": 2, "evidence": "VAL3 三类极限/边界检验且与主张关联：p_j→∞（P_j→1）、ρ_j→0（P_j→逻辑下界）、γ→1（打包退化为原模型）"},
+    "L4.4": {"score": 2, "evidence": "验证覆盖四问：VAL1→Q1 回测、VAL2→Q2 最优性、VAL3→Q3 极限、VAL4→Q4 稳定性，与 evaluation_targets 对应"},
+    "L4.5": {"score": 1, "evidence": "CL1-CL4 均带 evidence_refs 且 status=validated，但 EXP 仅有 expected_outputs 无实际结果，validated 标注缺乏实测支撑"}
+  },
+  "l26_four_elements": {
+    "E1_mechanism_problem": {"pass": true, "note": "logistic 需求响应+预算约束定价优化与拍照众包定价问题的现实一致"},
+    "E2_mechanism_equations": {"pass": true, "note": "EQ4 logistic 由二分类校准导出、EQ7/8 KKT 由预算约束最优性导出、EQ9/10 包定价/包概率由打包机制（A5）导出，机理-方程对应"},
+    "E3_mechanism_objectives_constraints": {"pass": true, "note": "目标量（期望完成数/完成率）由 logistic 机制产生；机理隐含关键限制（预算、定价界、打包邻接）已进约束 C1-C5"},
+    "E4_candidate_comparison": {"pass": false, "note": "无 ≥2 候选机理家族对比与选择依据；SOL1-SOL4（回归/优化/聚类/MC）为求解手段而非机理候选对比"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9},
+    "L2": {"score": 13, "max": 15},
+    "L3": {"score": 4, "max": 9},
+    "L4": {"score": 8, "max": 9}
+  },
+  "notes": "2017_B 拍照赚钱结构化 MODEL_IR：logistic 需求+预算优化体系完整，方程符号总体一致。主要缺陷：EQ7 拉格朗日乘子 μ 未声明（L2.7=1）、无显式歧义标注（L1.4=1）、灵敏度未覆盖校准系数（L4.2=1）、claim 标 validated 但无实测数据（L4.5=1）。L2.6 缺机理候选对比（E4 不满足）。"
+}

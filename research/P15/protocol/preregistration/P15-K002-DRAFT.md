@@ -1,8 +1,7 @@
 # P15-K002 — Model Representation Efficacy
-## 预注册（Preregistration）DRAFT v0.6（6 题定案 + 五 Gate 三 PASS 一冻结）
+## 预注册（Preregistration）DRAFT v0.7（6 题定案 + 五 Gate 全 PASS + rubric v1.1）
 
-> **状态：`DRAFT`（v0.5 已锁 Measurement Gate；v0.6 完成 Input Authenticity 新增 3 题、
-> 五 Gate 中 G1/G3/G4/G5 已 PASS/冻结，G2 待 PREREGISTERED 前执行）**
+> **状态：`DRAFT`（v0.5 已锁 Measurement Gate；v0.6 完成 Input Authenticity 新增 3 题、五 Gate 中 G1/G3/G4/G5 已 PASS/冻结；v0.7 完成 G2 PASS（κ=0.879）+ 区分度预检（0/6 零区分度）+ rubric v1.1 测量校准 + MODEL_IR candidates 字段）**
 > **科学定位**：K001（Knowledge 文本注入）已得 negative result；本实验检验**下一个杠杆：强制的结构化 Model Representation（输出契约）本身是否提升外部 Agent 的 Model Construction Quality——且现在是"从模型构造到可执行模型"的过程质量**。
 > **上游**：P15-K001 ✅（Δ_K=+2.14 CI[+0.00,+6.41] negative；Sham 11/11 正确拒绝；adapted 58%）｜ KNOWLEDGE_BASE_QUALITY_BASELINE（仅 3/19 卡为完整建模知识）｜ **三仓库审计**（CROSS_REPO_AUDIT.md：BZD/MMA 无因果证据；LHM 六风险确认）｜ **战略裁决**（THREE_LAYER_ARCHITECTURE.md v3：Model Lifecycle 核心；五级正确性 L0–L4；三状态分离铁律；Fidelity 指标）｜ **P0-E ✅**（commit ad917d2：ExecutionAdapter + execution_result 一等 artifact + executed_by 绑定；P0-E4 Replay ✅ 本轮）
 
@@ -162,12 +161,13 @@ K001 按题分解发现 2019_C 全臂恒定同分（零区分度），实际有�
 
 ## 4. 测量
 
-### 4.1 主终点（L3/L4 终点裁决版 + v0.5 执行级终点）
-- **MCQ_primary（主）** = **L2 + L3 + L4 composite**（MODEL_CONSTRUCTION_RUBRIC v1.0，标准化到 /100）：
-  - L2 结构完备（L2.1/2.2/2.4/2.5/2.6(权重3)/2.7）——与 K001 **完全一致**，保证跨实验可比；
-  - L3 求解层（L3.1–L3.5：可执行性/稳定性/可复现性/合理性）——锚 L3.4（K001 无一 2 分弱环）；
-  - L4 验证层（L4.1–L4.5：基线/敏感性/极限检验/不确定性/主张证据）——锚 L4.3（K001 唯一 0 分弱环）。
+### 4.1 主终点（L3/L4 终点裁决版 + v0.5 执行级终点 + v0.7 rubric v1.1）
+- **MCQ_primary（主）** = **L2 + L3 + L4 composite**（MODEL_CONSTRUCTION_RUBRIC **v1.1**，标准化到 /100）：
+  - L2 结构完备（L2.1/2.2/2.4/2.5/2.6(权重3)/2.7）——与 K001 **维度集一致、判据粒度升级**（v1.1：L2.6 四要素 E1–E4 / L2.4 三角一致性 / L2.7 符号一致性；数值不可与 K001 直接合并，方向可比）；L2.6 E4 候选对比由 `model_family.candidates[]` 机械支撑（v0.7 新增字段）；
+  - L3 求解层（L3.1–L3.5：可执行性/稳定性/可复现性/合理性）——锚 L3.4（K001 无一 2 分弱环）；v1.1 §0.4 格式中立（结构化产物字段齐全即满分，不因未叙述扣分）；
+  - L4 验证层（L4.1–L4.5：基线/敏感性/极限检验/不确定性/主张证据）——锚 L4.3（v1.1：≥2 类极限检验 + 结果-主张关联）。
   - **论文/写作质量不是本实验终点**（治理声明：writing 永不作为 capability 主终点；"better writing ≠ better modeling"）。
+  - **v0.7 说明**：预检 v1.0 时 L2 全维度满分零区分度（天花板），v1.1 校准后重评恢复区分度（L2 分布 6×15/4×14/2×13，E4 为唯一区分要素）——K002 全程用 v1.1，不再与 v1.0 数值合并。
 - **VAL_primary（次主）** = L4 composite（/10×100）单列——检验"验证行为字段化"是否提升（S+V vs S）。
 - **执行级终点（v0.5 新增，P0-E 使能）**——回答"从模型构造到可执行模型"的过程质量：
   - `execution_success_rate`：可执行产物中真实执行 status=success 的比例（**execution_result 一等 artifact 的 status，非 LLM 声称**）；
@@ -261,7 +261,7 @@ S+V 臂在 MODEL_IR 之外强制输出 `validation_plan`，直接锚定 L4.3/L3.
 | # | Gate | 问题 | 验证方式 | 通过标准 | 状态 |
 |---|---|---|---|---|---|
 | G1 | **Construct validity** | L3/L4 终点是否真的测 Model Construction？ | 26 个评分维度逐一映射产物字段 | 每个评分维度至少 1 个产物字段可支撑（映射表冻结） | ✅ PASS（映射表 v1 冻结） |
-| G2 | **Instrument validity** | evaluator 是否真的按 rubric 测？ | 5 份样例 × 3 独立 evaluator 一致性（κ） | κ ≥ 0.6 或分歧可归因 | ⏳ 待 PREREGISTERED 前执行 |
+| G2 | **Instrument validity** | evaluator 是否真的按 rubric 测？ | 5 份样例 × 3 独立 evaluator 一致性（κ） | κ ≥ 0.6 或分歧可归因 | ✅ PASS（2026-09-09 预检：维度级 Cohen κ=0.879，18/22 维 κ=1.0；分歧可归因于评估者 B 尺度偏移 + 天花板伪影；评估协议带黄金样例校准 + 离群检测） |
 | G3 | **Vocabulary validity** | ontology 是否统一？ | `catalog/model_families.yaml` 单一词表 + 解析回归测试（K001 错位对全部锁定） | 三源解析到 canonical；命名层唯一；共享机制不参与族判别 | ✅ PASS（25 测试） |
 | G4 | **Execution validity** | 需要 execution 的终点是否由真实执行支撑？ | dry-run 5 场景 + execution_result 六态 | L3/L4 评分项绑定真实数值（无占位） | ✅ PASS（K002_DRYRUN_REPORT） |
 | G5 | **Statistical validity** | block 数是否足够？ | Monte Carlo 功效模拟（200k）+ 区分度预检 | 检出 ≥3.0 效应（80%）；预检剔除无区分度题 | ✅ PASS（k002_power.py，诚实声明见 GATES） |

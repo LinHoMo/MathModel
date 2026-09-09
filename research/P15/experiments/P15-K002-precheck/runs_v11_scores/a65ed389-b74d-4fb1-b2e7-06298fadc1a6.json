@@ -1,0 +1,42 @@
+{
+  "submission_id": "a65ed389-b74d-4fb1-b2e7-06298fadc1a6",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "rubric": "v1.1"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "四问显式条件完整：Q1 司机排队/放空两方案决策、Q2 收集真实机场数据、Q3 双车道+上车点+总乘车效率、Q4 短途优先权+收益均衡；参数 λ_t/λ_p/μ/r_km/D̄/C_empty/K/n_lane=2 全部提取"},
+    "L1.2": {"score": 2, "evidence": "隐式条件识别：泊松到达/指数服务（A-01）、理性风险中性司机（A-02）、收益线性于里程（A-03）、服务强度稳定条件 ρ<1（C-02）、乘客-出租车双边队列结构（MECH-02）"},
+    "L1.3": {"score": 2, "evidence": "交付要求识别：Q1 决策模型+策略（OBJ-01）、Q2 数据方案+合理性/依赖分析（OBJ-02）、Q3 上车点设置方案（OBJ-03）、Q4 优先安排方案（OBJ-04），四问交付对象完整（2019_C 无文件格式交付）"},
+    "L1.4": {"score": 2, "evidence": "歧义标注+处理：模型参数由所收集机场数据校准（A-06）、短途阈值 D_short 假设取值、优先权强度 α 设计变量扫描 0..1、分批放行量 K 由管理规则确定"},
+    "L1.5": {"score": 2, "evidence": "model_family primary=queueing_theory，secondary=[decision_analysis, optimization, simulation, game_theory]，与 2019_C 排队/决策/优化/仿真结构一致"},
+    "L2.1": {"score": 2, "evidence": "16 变量覆盖 key_variables：蓄车池/乘车区队长 N_q/N_p、等待时间 W、载客/放空收益、司机净收益 U、服务强度 ρ、平均队长 L_q、吞吐 eff、上车点数 m、优先权折扣 ΔW，类型区分 state/decision/observation/constant"},
+    "L2.2": {"score": 2, "evidence": "11 参数全部带 source（校准/文献/题目/假设）与取值：λ_t/λ_p/μ/D̄ 数据校准、c_w 文献、r_km/C_empty 题目、D_short/K/α 假设、n_lane 题目"},
+    "L2.3": {"score": 2, "evidence": "A-01..A-07 分类+rationale：泊松/指数假设（可检验）、理性司机、收益线性化、并行服务台、优先权等待折扣、数据校准、忽略个体异质"},
+    "L2.4": {"score": 2, "evidence": "四问目标与题目一致：OBJ-01 最大化司机期望净收益（阈值策略）、OBJ-02 数据驱动估计、OBJ-03 最大化乘车效率 eff=m·μ、OBJ-04 最小化收益不均衡 Σ(U_i−Ū)²；三角一致性：目标量由排队/收益机制产生，稳定性/容量/吞吐约束不使目标平凡"},
+    "L2.5": {"score": 2, "evidence": "约束完备方向正确：决策二值 C-01、排队稳定 ρ<1 C-02、m≤2 C-03、非负 C-04、吞吐保持 C-05、短途收益不降 C-06；排队平衡（EQ-09 守恒）与司机理性（EQ-03）均形式化"},
+    "L2.6": {"score": 2, "evidence": "E1+E2+E3 满足（见 l26_four_elements）；E4 不满足：无 ≥2 候选机理对比（M/M/c 解析与仿真是互补求解手段，非机理家族候选对比）"},
+    "L2.7": {"score": 2, "evidence": "EQ-01..EQ-12 结构完整：决策指标（EQ-01/02/03）、Little 定律（EQ-04）、服务强度（EQ-05/06）、收益（EQ-07）、吞吐（EQ-08）、乘客守恒含初始队长 N_p(0)（EQ-09）、优先权规则（EQ-11/12）；符号集 ⊆ variables/parameters 声明集"},
+    "L3.1": {"score": 2, "evidence": "求解策略匹配：M/M/c 解析公式+阈值方程二分求根、MLE/矩估计校准、离散事件仿真（m=1/2×K∈{3,5,8}）、α∈[0,1] 网格扫描，与排队模型类型及口径一致"},
+    "L3.2": {"score": 1, "evidence": "SOL-01..04 引用 code/*.py（预检规划实现），无执行日志/exit code/actual results"},
+    "L3.3": {"score": 0, "evidence": "无 solvers[].convergence 字段、无数值结果/仿真输出数据"},
+    "L3.4": {"score": 1, "evidence": "VAL-05 声明固定种子 42 仿真多次一致、统计量置信区间，但无实际方差/replay 数据"},
+    "L3.5": {"score": 0, "evidence": "无结果数值产出，合理性无法判定"},
+    "L4.1": {"score": 2, "evidence": "对照基线：VAL-01 高峰/平峰常识对照（阈值策略 sanity check）、VAL-02 实际机场运营数据检验排队时长与收益分布——含数据基线"},
+    "L4.2": {"score": 2, "evidence": "EXP-05/VAL-03 对 λ_p、λ_t、μ、r_km ±20% 扰动（到达率/服务率/收益率为直接影响决策的敏感参数），报告依赖强度"},
+    "L4.3": {"score": 2, "evidence": "VAL-04 两类极限：ρ→1（极端参数，队长发散）与 ρ→0（退化情形，无排队），且与排队论模型行为主张关联"},
+    "L4.4": {"score": 2, "evidence": "验证覆盖核心主张：阈值策略（CLM-01）、数据方案稳健性（CLM-02）、m=2 吞吐最优（CLM-03）、优先权帕累托区间（CLM-04），与 evaluation_targets 对应"},
+    "L4.5": {"score": 1, "evidence": "CLM-01..04 均带 evidence_refs 但全部 status=proposed，主张未与已判定证据关联"}
+  },
+  "l26_four_elements": {
+    "E1_mechanism_problem": {"pass": true, "note": "排队论（M/M/c）+司机理性决策比较与机场出租车排队/选择问题的物理现实一致"},
+    "E2_mechanism_equations": {"pass": true, "note": "EQ-04/05/06 由排队论导出（Little 定律、服务强度），EQ-01/02/03 决策比较对应 MECH-01，EQ-09 守恒方程对应 MECH-03，机理-方程一一对应"},
+    "E3_mechanism_objectives_constraints": {"pass": true, "note": "目标量（收益/吞吐/方差）由排队与收益机制产生；机理隐含关键限制（稳定性 ρ<1、m≤2、吞吐保持）已进约束"},
+    "E4_candidate_comparison": {"pass": false, "note": "无 ≥2 候选机理家族对比与选择依据；M/M/c 解析与离散事件仿真为互补求解手段，非机理候选对比"}
+  },
+  "layer_totals": {
+    "L1": {"score": 10, "max": 9, "note": "L1.4 判据满分 2 与权重列 1 不一致，score 为维度判据得分之和"},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 4, "max": 9},
+    "L4": {"score": 9, "max": 9}
+  },
+  "notes": "2019_C 机场出租车结构化 MODEL_IR：排队网络+决策阈值+优先权均衡四问覆盖完整，目标-机制-约束三角一致，符号一致性机械可查。L2.6 缺机理候选对比（E4 不满足，2/3 分）。L3 弱因规划阶段无执行数据。"
+}

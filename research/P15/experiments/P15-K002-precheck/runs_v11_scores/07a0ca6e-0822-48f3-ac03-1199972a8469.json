@@ -1,0 +1,42 @@
+{
+  "submission_id": "07a0ca6e-0822-48f3-ac03-1199972a8469",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "rubric": "v1.1"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "三问场景参数完整提取：Q1(75°C/II=6mm/IV=5mm/90min)、Q2(65°C/IV=5.5mm/60min)、Q3(80°C/30min)，约束数值 47°C/44°C/5min，四层结构（I/II/III/IV）与附件1/2 数据源；parameters 中 T_env/τ/T_lim/T_0/t_lim 分场景取值"},
+    "L1.2": {"score": 2, "evidence": "隐式条件显式化：一维简化（A-01 边缘效应忽略）、恒物性+理想接触（A-02）、对流 Robin 边界（A-03）、初始均匀 37°C（A-04）、h_1/h_2 未给出需校准（A-05），均附推导依据"},
+    "L1.3": {"score": 2, "evidence": "交付要求完整：OBJ-01 明确'输出温度分布文件 problem1.xlsx'；Q2/Q3 输出最优厚度及温度曲线（EXP-02/03 expected_outputs）"},
+    "L1.4": {"score": 2, "evidence": "歧义标注+处理：h_1/h_2 题目未给出→A-05 用附件2 实测反演校准（EQ-13）；厚度可行域→C-03 工艺范围；网格步长→p_dx/p_dt 由收敛性实验确定"},
+    "L1.5": {"score": 2, "evidence": "model_family primary=pde，secondary=[heat_transfer, finite_difference, numerical_optimization, inverse_problem]，与 2018_A 多层织物瞬态热传导问题一致；Q1 正问题/Q2Q3 约束优化/参数反演分问正确"},
+    "L2.1": {"score": 2, "evidence": "变量覆盖 key_variables：温度场 T(x,t)、皮肤温度 T_skin、II/IV 层厚度（decision）、超温时长 t_ex、网格索引、实测温度序列；类型区分 state/decision/observation/constant"},
+    "L2.2": {"score": 2, "evidence": "26 参数全部带 source（题目/校准/假设）与取值：k_i/ρ_i/c_i/d_i（附件1）、h_1/h_2（校准）、T_env/T_body/τ/T_lim/T_0/t_lim（题目）、Δx/Δt/r_i（校准）、w_2/w_4（假设）、L/Ω_i/x_m（导出）"},
+    "L2.3": {"score": 2, "evidence": "A-01..A-07 显式分类（simplification/mechanism/projection/calibration）附 rationale：一维化、恒物性、理想接触、Robin 边界、初始均匀、连续厚度、测量点映射，合理可检验"},
+    "L2.4": {"score": 2, "evidence": "目标与题目一致：Q1 正问题估计温度分布（生成 problem1.xlsx）、Q2 最小化 d_2 满足双约束、Q3 最小化 w_2 d_2+w_4 d_4；三角一致性：目标量（温度/最优厚度）由 PDE 机制产生，约束不使目标平凡"},
+    "L2.5": {"score": 2, "evidence": "约束完备方向正确：C-01 结束温度≤47°C、C-02 超温时长 t_ex=∫1[T_skin>T_0]ds≤5min、C-03 设计可行域、C-04 FD 稳定性 r_i≤1/2、C-05 温度场物理合理；界面连续 EQ-04 与边界条件均形式化"},
+    "L2.6": {"score": 2, "evidence": "E1+E2+E3 满足（见 l26_four_elements）；E4 不满足：无 ≥2 候选机理对比（显式/隐式 FD 属数值格式选择，非机理家族对比）"},
+    "L2.7": {"score": 2, "evidence": "EQ-01..EQ-13 结构完整：PDE 控制方程+外/内 Robin 边界（EQ-02/03）+层间界面连续（EQ-04）+初始条件 T(x,0)=37（EQ-05）+离散格式+观测+约束+目标+反演；符号集（k,ρ,c,h,T_env,T_body,Δx,Δt,d_i,τ,T_lim,T_0,t_lim,w,r_i）⊆ 声明集"},
+    "L3.1": {"score": 2, "evidence": "求解策略匹配：显式 FD（C-04 稳定约束）或 Crank-Nicolson+Thomas 追赶法、优化用网格搜索+二分/SLSQP、反演用 Gauss-Newton/LM，与 PDE 模型及参数口径一致"},
+    "L3.2": {"score": 1, "evidence": "SOL-01..03 引用 code/*.py（预检规划实现），但无执行日志/exit code/actual results，可运行性未证实"},
+    "L3.3": {"score": 0, "evidence": "EXP-04 为网格加密收敛实验设计，但无实际收敛数据/残差/网格无关性结果字段"},
+    "L3.4": {"score": 1, "evidence": "VAL-04 声明固定种子 42 逐位一致+显式/隐式互校，但无实际方差/replay 数据，属验证计划"},
+    "L3.5": {"score": 0, "evidence": "无结果数值产出，物理合理性无法判定"},
+    "L4.1": {"score": 2, "evidence": "VAL-01 模型预测 vs 附件2 实测温度序列（RMSE/最大偏差）——实测数据基线合理；VAL-05 最优解回代正问题验证约束成立"},
+    "L4.2": {"score": 2, "evidence": "EXP-05/VAL-03 对 k_i,h_1,h_2,ρ_i,c_i ±10% 扰动（导热/换热系数为直接影响温度的敏感参数），报告敏感度排序与最优厚度稳健性"},
+    "L4.3": {"score": 1, "evidence": "VAL-02 含长时间极限趋近环境温度与极薄/极厚厚度两类边界检验，但结果未与具体模型主张（CLM-01..04）明确关联，仅标'物理一致性'"},
+    "L4.4": {"score": 2, "evidence": "验证覆盖核心主张：Q1 复现实测（CLM-01）、Q2/Q3 最优解约束满足（CLM-02/03）、数值收敛性（CLM-04），与 evaluation_targets（温度场精度/反演/设计优化）对应"},
+    "L4.5": {"score": 1, "evidence": "CLM-01..04 均带 evidence_refs 但全部 status=proposed（计划验证未完成），主张未与已判定证据关联"}
+  },
+  "l26_four_elements": {
+    "E1_mechanism_problem": {"pass": true, "note": "PDE 热传导（Fourier 定律）与多层高温防护服装的物理一致，四层结构与界面条件对应题面"},
+    "E2_mechanism_equations": {"pass": true, "note": "EQ-01 由 Fourier 定律与能量守恒导出；EQ-02/03/04 对流边界与界面连续条件由 MECH-02 对应；无机理名-方程脱节"},
+    "E3_mechanism_objectives_constraints": {"pass": true, "note": "目标量（皮肤温度/最优厚度）由热传导机制直接产生；机理隐含限制（界面连续、稳定性、物理温度范围）已进约束 C-04/C-05"},
+    "E4_candidate_comparison": {"pass": false, "note": "无 ≥2 候选机理家族对比与选择依据；显式/隐式 FD 与网格/二分/SLSQP 为数值求解方法选择，非机理候选对比"}
+  },
+  "layer_totals": {
+    "L1": {"score": 10, "max": 9, "note": "L1.4 判据满分 2 与权重列 1 不一致，score 为维度判据得分之和"},
+    "L2": {"score": 14, "max": 15},
+    "L3": {"score": 4, "max": 9},
+    "L4": {"score": 8, "max": 9}
+  },
+  "notes": "2018_A 高温作业专用服装结构化 MODEL_IR：PDE+边界/界面/初值体系完整，正问题-反演-优化链条清晰，符号一致性可机械核验。L2.6 缺机理候选对比（E4 不满足，2/3 分）。L4.3 极限检验两类但未与主张关联（1/2 分）。L3 弱因规划阶段无执行数据。"
+}

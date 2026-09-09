@@ -1,0 +1,42 @@
+{
+  "submission_id": "28df6ec4-ce4a-4bbd-8241-330b01a9e71f",
+  "evaluator": {"model": "doubao-pro", "type": "independent_llm", "rubric": "v1.1"},
+  "rubric_version": "MODEL_CONSTRUCTION_RUBRIC-v1.1",
+  "dimensions": {
+    "L1.1": {"score": 2, "evidence": "系统结构（8 CNC/1 RGV/上下料传送带/清洗槽）、三情形（一工序/两工序/故障 1%+10~20min）、任务 1/2、班次 28800s、附件 2 三工作表均提取；表 1 参数以组 1 值进入参数表"},
+    "L1.2": {"score": 2, "evidence": "A1-A6 覆盖隐式条件：移动时间仅由距离决定、CNC 单件加工不可中断、供给充足、故障独立+均匀修复、初始位置自由度、两道工序 RGV 负责搬运与清洗"},
+    "L1.3": {"score": 2, "evidence": "交付要求识别：OBJ_Q4/EXP4/CL4 三处明确'输出附件2 三个工作表要求的调度策略与作业效率、结果可直接填入附件2 的三个工作表'"},
+    "L1.4": {"score": 1, "evidence": "无显式歧义标注列表；故障语义（A4 每周期 Bernoulli+均匀修复）、初始位置（A5）、两道工序清洗（A6）通过假设间接处理，但未作为'歧义点'显式标注"},
+    "L1.5": {"score": 2, "evidence": "model_family primary=optimization，secondary=[simulation, dynamic_programming]，与 2018_B 调度优化（产量最大化/周期最小化）结构一致"},
+    "L2.1": {"score": 2, "evidence": "34 变量类型区分：状态（RGV 位置/CNC 状态/故障/修复时长/到达-就绪-离开时刻）、决策（调度 a_{t,i}）、观测（移动/服务时间/产量/效率/可用度）、常量（n_F/n_S），覆盖 key_variables"},
+    "L2.2": {"score": 1, "evidence": "14 参数均 source=题目，但仅给出组 1 取值（v_1=20/v_2=33/v_3=46/t_p1=560 等），组 2/组 3 三组数值未在参数表声明——Q4 三组实例化所需参数不完整"},
+    "L2.3": {"score": 2, "evidence": "A1-A6 分类（simplification/mechanism/projection/calibration）附 rationale：移动离散常量、单件加工、供给充足上界视角、故障均匀分布（最小信息量）、初始位置自由度、两工序搬运机制"},
+    "L2.4": {"score": 2, "evidence": "四问目标与题目一致：OBJ_Q1 max W=8⌊D/T_cyc⌋（最小化轮服务时间）、OBJ_Q2 max min(W_F,W_S)、OBJ_Q3 max W_exp 且 min L、OBJ_Q4 estimate 三组并填表；三角一致性：目标由循环机制产生，约束不使目标平凡"},
+    "L2.5": {"score": 2, "evidence": "C1-C7 方向正确：RGV 互斥（C1）、CNC 单件（C2）、到达不早于就绪（C3）、服务时间守恒（C4）、两工序物料流转守恒（C5）、修复区间（C6）、班次时长（C7）；清洗绑定成品由 delta_i 变量承载"},
+    "L2.6": {"score": 2, "evidence": "E1+E2+E3 满足（见 l26_four_elements）；E4 不满足：无 ≥2 候选机理对比（仿真/DP 为求解手段，非机理候选）"},
+    "L2.7": {"score": 2, "evidence": "EQ1-EQ15 结构完整：定义（移动查表）/平衡（服务时间）/聚合（均值）/机制（循环周期 EQ5、可用度 EQ13）/吞吐（EQ6/EQ11/EQ14）/损失（EQ15）/效率（EQ8）；方程符号集（v_1..v_3,t_p1,t_p2a,t_p2b,t_ld,t_w,τ_min,τ_max,p_f,D,t_pi）⊆ 声明集"},
+    "L3.1": {"score": 2, "evidence": "求解策略匹配：事件驱动仿真+贪心派单（SOL1）、DP 最小化轮服务时间（SOL2）、解析公式填表（SOL3），与循环周期/可用度模型口径一致"},
+    "L3.2": {"score": 1, "evidence": "SOL1-3 引用 code/*.py（预检规划实现），无执行日志/exit code/actual results"},
+    "L3.3": {"score": 0, "evidence": "无 convergence 字段、无数值结果；EXP2 的 5 次重复 CV<0.10 为预期输出而非实测"},
+    "L3.4": {"score": 1, "evidence": "EXP2/VAL4 声明固定 seed=42 重复 5 次 CV<0.10，但无实际方差/replay 数据"},
+    "L3.5": {"score": 0, "evidence": "无结果数值产出（EXP 均为 expected_outputs），合理性无法判定"},
+    "L4.1": {"score": 2, "evidence": "VAL1 与理论上界 W_max=8⌊D/(t_p1+T_sbar)⌋ 比较且要求差距<5%，上界基线合理"},
+    "L4.2": {"score": 1, "evidence": "EXP3/VAL2 仅对故障概率 p_f∈{0,0.005,0.01,0.02} 扫描，移动/加工/清洗时间等其余敏感参数未扰动，覆盖不全"},
+    "L4.3": {"score": 2, "evidence": "VAL3 三类极限/边界检验且与主张关联：t_p1→∞（W→0）、移动/清洗→0（W→8⌊D/t_ld⌋）、两道工序瓶颈切换点验证"},
+    "L4.4": {"score": 2, "evidence": "验证覆盖四问：VAL1→Q1 产量上界、VAL2→Q3 故障敏感性、VAL3→Q2 瓶颈、VAL4→Q4 可复现，与 evaluation_targets 对应"},
+    "L4.5": {"score": 1, "evidence": "CL1-CL4 均带 evidence_refs 且 status=validated，但 EXP 仅有 expected_outputs 无实际结果数据，validated 标注缺乏实测支撑（证据-主张对应存疑）"}
+  },
+  "l26_four_elements": {
+    "E1_mechanism_problem": {"pass": true, "note": "循环服务机制（轮询周期）+可用度折损是 RGV 调度问题的合理解析抽象，与 2018_B 物理一致"},
+    "E2_mechanism_equations": {"pass": true, "note": "EQ5/EQ9/EQ10 循环周期由轮服务与加工周期导出，EQ13 可用度由 MTBF/MTTR 导出，EQ14/15 期望产量/报废由可用度机制导出，机理-方程对应"},
+    "E3_mechanism_objectives_constraints": {"pass": true, "note": "目标量（班次产量/效率）由循环机制产生；机理隐含限制（RGV 互斥、CNC 单件、班次截止）已进约束 C1/C2/C7"},
+    "E4_candidate_comparison": {"pass": false, "note": "无 ≥2 候选机理家族对比与选择依据；SOL1/SOL2（仿真/DP）为求解手段而非机理候选对比"}
+  },
+  "layer_totals": {
+    "L1": {"score": 9, "max": 9},
+    "L2": {"score": 13, "max": 15},
+    "L3": {"score": 4, "max": 9},
+    "L4": {"score": 8, "max": 9}
+  },
+  "notes": "2018_B 智能 RGV 结构化 MODEL_IR：循环服务+可用度解析体系（与 de8a774b 的事件驱动范式不同），方程符号一致。主要缺陷：参数表仅含组 1 取值（L2.2=1）、无显式歧义标注（L1.4=1）、灵敏度仅覆盖 p_f（L4.2=1）、claim 标 validated 但无实测数据（L4.5=1）。L2.6 缺机理候选对比（E4 不满足）。"
+}

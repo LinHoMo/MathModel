@@ -99,13 +99,14 @@ L4 Validation（输入：L3 输出 + 验证设计）
 - **证据要求**：problem_analysis artifact 中的 deliverables 列表 vs CUMCM-Bench required_deliverables
 - **关联 FM**：FM-PA-003（交付要求误解）
 
-### L1.4 歧义点标注
+### L1.4 歧义点标注（v1.1：两档制，消除判据-权重不一致）
 
-- **0 分**：题面有歧义但未标注
-- **1 分**：标注了歧义但未给出处理方案
-- **2 分**：标注了歧义并给出了合理的假设/处理方案
-- **通过标准**：≥ 0 分（非关键维度，无题面歧义时默认 2 分）
-- **证据要求**：problem_analysis artifact 中的 ambiguities 列表
+v1.0 判据含 2 分档但权重=1，导致 L1 总分可溢出（预检实测 L1=10/9）。v1.1 改为两档制：
+
+- **0 分**：题面有歧义但未标注（或标注了歧义但无任何处理方案）
+- **1 分**：标注了歧义并给出合理的假设/处理方案；无题面歧义时默认满分 1 分
+- **通过标准**：≥ 0 分（非关键维度）
+- **证据要求**：problem_analysis artifact 中的 ambiguities 列表 + 处理方案
 - **关联 FM**：无直接 FM（歧义处理是 Assumption Construction 的前置）
 
 ### L1.5 问题类型判定
