@@ -41,12 +41,14 @@ Construction 行为？"。
 | **P1** | Model Construction Loop：Gap Audit（11 环节）→ P1 计划 v2（C1–C10）→ **VS-001 垂直切片 7/7 PASS（2024_A，M1 FAIL → M2 PASS 闭环 + Replay）** → **M3 候选竞技场（evidence-based 选型，D002 selects 边真写入）** → **M4 知识引导（BZD 试点卡 5 张 + 义务映射）** | ✅ **全部完成**（C1–C10 + M3/M4） | 报告 `analysis/P1_{VS001,M3,M4}_REPORT.md` |
 | **P15-K003** | Model Representation Efficacy under Executed Construction（F/S/SV 三臂，构造+执行一体化）：五 Gate 全 PASS（G1 映射 v1.2 / G2 κ=0.712 / G3 词表 / G4 exec 1.00 / G5 功效）→ **FROZEN**（36 文件冻结，root `94b14d4f`） | 🔒 **FROZEN**（正式 66 runs 生成中） | DRAFT/GATES `protocol/preregistration/P15-K003-*.md`；`46c6a4f` |
 | **audit 修复（Batch 1–6）** | 证据级全系统审计：P0×12/P1×18/P2×14 修复循环。执行真实化（EXEC 只由 substrate 写、失败真实传播、占位 claim 禁 supports）、选型证据化（无证据不选型）、契约统一（schema 迁 core + register 真 jsonschema 实例校验）、L2 数学检查、**Batch 6 Revision Loop**（机械诊断 diagnosis + 修订草案 + supersede 方向统一 + M1/M2 机械比较 accept 决策） | ✅ 全绿 | 计划 `research/audit/IMPLEMENTATION_PLAN.md`；Batch 6 提交见 git log |
+| **audit Batch 7–10** | 独立复审：E2E loop reviewer **REAL 判定**（M1 FAIL=真实数值违反 0.275>1e-6、execution status 仅来自真实 subprocess、replay 真实重跑）+ TEST_TRUST_SCORE=**80/100**（无 P0 作弊，零 mock，核心集成层真实执行）+ 实验体系审计 + 终审 18 项验收（F4/H5 回填 REAL）。P2×2 已修复（supersedes 方向单一真源、死代码分支删除） | ✅ 完成 | `research/audit/batch7_e2e_review/VERDICT.md`、`batch8_test_trust/TEST_TRUST_SCORE.md`、`batch10_final/FINAL_VERDICT.md` |
+| **治理三大待办** | **Candidate Arena 固化 benchmark**（全池 8 题 44 候选机械选型 + 6 集成测试）→ **Knowledge-guided 正式化**（`core/runtime/modeling/knowledge_guided.py` 机械映射 BZD 5 卡 + 契约 v1.0 + 8 单测）→ **Capability Validation Δscore**（八项指标 + P1 执行级指标双口径，诚实局限声明） | ✅ 完成 | `benchmark/arena/`、`protocol/KNOWLEDGE_GUIDED_CONSTRUCTION.md`、`analysis/CAPABILITY_DELTA_REPORT.md` |
 
-## 当前数字（机器实测，Python 3.12.10，截至 2026-09-09）
+## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **966 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **983 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **58 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |
@@ -68,7 +70,7 @@ Construction 行为？"。
 ## 下一步
 
 ```text
-已完成（2026-09-09）：
+已完成（2026-09-10）：
   audit Batch 1–6：证据级修复循环全绿
     Batch 1  执行真实化（EXEC 只由 substrate 写 / 失败真实传播 / 占位 claim 禁 supports）
     Batch 2  选型证据化（无证据不选型 / UNSELECTED 如实推进）
@@ -84,17 +86,16 @@ Construction 行为？"。
   K002 正式实验：契约统一（40 文件冻结）→ 108/108 生成 → 3 evaluator 盲评（κ=0.4345）
     → 配对分析 → 状态机 CLOSED（RQ1 NEGATIVE，不进 P15.2）
   K003 预注册：五 Gate 全 PASS（G2 κ=0.712、G4 exec 1.00）→ FROZEN（36 文件冻结）
+  audit Batch 7–10：独立复审 REAL + TEST_TRUST_SCORE 80/100（无 P0 作弊）+ P2×2 修复
+    + 实验体系审计 + 终审 18 项验收 F4/H5 回填 REAL
+  治理三大待办（2026-09-10）：
+    ① Candidate Arena 固化 benchmark（全池 8 题 44 候选机械选型，6 集成测试）
+    ② Knowledge-guided 正式化（core 机械映射模块 + BZD 5 卡 + 契约 v1.0，8 单测）
+    ③ Capability Validation Δscore（八项指标 + P1 执行级指标双口径报告）
 
 进行中（MainAgent）：
-  ① audit Batch 7–10：E2E 独立复审 → 测试可信度（TEST_TRUST_SCORE）→ 实验体系审计 → 终审（18 项验收 + 10 问题报告）
-  ② 项目治理：历史债务 / 命名残留 / 引用路径 / 旧文档（README/STATUS 对齐最新规范）逐项清理
-  ③ K003 正式实验：66 runs 生成 → 独立盲评（3 evaluator）→ 配对分析 → P15-K003-REPORT.md → 状态机 CLOSED
-  ④ 生成完成后：与 K001/K002 三实验对比表、P16 决策正式落定
-
-待用户拍板：
-  ① Candidate Arena 落地为正式 benchmark 能力（M3 已演示 evidence-based 选型，需固化测试）
-  ② Knowledge-guided Construction 正式化（M4 已演示义务映射，BZD 知识按候选/假设/义务接入）
-  ③ Capability Validation：以 Δscore（八项指标）度量 P1 改造带来的能力变化
+  ① K003 正式实验：66 runs 已生成 → 独立盲评（3 evaluator）→ 配对分析 → P15-K003-REPORT.md → 状态机 CLOSED
+  ② 生成完成后：与 K001/K002 三实验对比表、P16 决策正式落定
 ```
 
 ## 风险与待办
