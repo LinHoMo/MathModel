@@ -151,14 +151,25 @@ class TestP1VS001E2E:
         mir2 = [m for m in mirs if m != mir1][0]
         m2_data = session.registry.get(mir2).data
         assert m2_data["model_id"] == "M2024A-Q1-v2"
-        # M1 未被覆盖：原 artifact 仍在、状态仍 active、数据不变
+        # M1 未被覆盖：原 artifact 仍在、数据不变；状态 → superseded（FIX-6.3）
         assert session.registry.get(mir1) is not None
         assert session.registry.get(mir1).data == m1_snapshot
-        assert session.registry.get(mir1).status == "active"
-        # 谱系边：MIR2 -revision_of-> MIR1、MIR1 -supersedes-> MIR2
+        assert session.registry.get(mir1).status == "superseded"
+        assert session.registry.get(mir1).invalidation["invalidated_by"] == mir2
+        # 谱系边：MIR2 -revision_of-> MIR1、MIR2 -supersedes-> MIR1（新取代旧）
         rels = relation_pairs(session)
         assert (mir2, "revision_of", mir1) in rels
-        assert (mir1, "supersedes", mir2) in rels
+        assert (mir2, "supersedes", mir1) in rels
+        # FIX-6.1/6.4：失败诊断 + 修订接受决策（机械证据）已登记
+        diags = artifact_ids(session, "diagnosis")
+        assert len(diags) == 1
+        assert (mir1, "diagnosed_by", diags[0]) in rels
+        decs = [a for a in session.registry.list_by_type("decision")
+                if (a.data or {}).get("kind") == "revision_acceptance"]
+        assert len(decs) == 1
+        assert decs[0].data["recommendation"] in ("accept", "keep")
+        assert decs[0].data["chosen"] == mir2
+        assert (decs[0].artifact_id, "selects", mir2) in rels
         # M2 有自己的执行链（CODE2 → EXEC2 → R2）
         assert len(artifact_ids(session, "code")) == 2
         assert len(artifact_ids(session, "execution_result")) == 2

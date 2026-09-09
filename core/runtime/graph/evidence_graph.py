@@ -43,7 +43,7 @@ RELATION_TYPES: dict[str, tuple] = {
     "visualized_by":  ({"result"}, {"figure", "table"}),
     "supports":       ({"result"}, {"claim"}),
     "appears_in":     ({"claim"}, {"paper_section"}),
-    "selects":        ({"decision"}, {"model"}),
+    "selects":        ({"decision"}, {"model", "model_ir"}),
     "based_on":       ({"decision"}, None),
     "derived_from":   (None, None),
     "executed_by":    ({"result", "code"}, {"execution_result"}),  # P1-VS-001 C7: code/result 被真实执行
@@ -54,6 +54,10 @@ RELATION_TYPES: dict[str, tuple] = {
     "evaluated_by":   ({"model", "model_ir"}, {"experiment", "execution_result",
                                                "verification_result"}),
     "selected_from":  ({"model", "model_ir"}, {"model", "model_ir"}),
+    # audit FIX-6.1（P2-04）：失败诊断边（M1 → 诊断 artifact）
+    "diagnosed_by":   ({"model", "model_ir", "code"}, {"diagnosis"}),
+    # audit FIX-6.3/6.4（P2-08）：修订证据链（决策 → 修订模型；诊断支撑决策）
+    "revises":        ({"decision", "diagnosis"}, {"model", "model_ir"}),
 }
 
 STRONG_RELATIONS = frozenset({

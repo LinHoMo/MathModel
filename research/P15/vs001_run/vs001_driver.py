@@ -96,7 +96,8 @@ def run_m1(session, workdir):
 
 def run_m2(session, mir1_id: str, workdir):
     """M2 闭环（修订）：注入 M2（revision_of=MIR1）+C2 → 重置 model_construction
-    下游 → 步进修订环 → 返回 (session, results)。M1 不被覆盖。
+    下游 → 步进修订环 → 修订收口（diagnosis/supersede/comparison）→
+    返回 (session, results)。M1 数据不被覆盖，状态 → superseded。
 
     断言：修订环全部 PASS（含 model_validation）。
     """
@@ -108,7 +109,73 @@ def run_m2(session, mir1_id: str, workdir):
     for nid, r in results.items():
         assert r.status == "pass", f"M2 修订环 {nid} 未通过: {r.status}"
     session.checkpoint()
+    finalize_revision(session, mir1_id, m2["model_id"])
+    session.checkpoint()
     return session, results
+
+
+def finalize_revision(session, mir1_id: str, mir2_model_id: str):
+    """修订收口（audit Batch 6，LLM-free 确定性）：
+
+    FIX-6.1  failure diagnosis：从 M1 的 VR 机械归因 → diagnosis artifact
+             + (M1, diagnosed_by, DIAG) 边
+    FIX-6.3  supersede 方向统一：registry.supersede(M1, replacement=M2)
+             （M1 状态 → superseded，数据不覆盖）+ (M2, supersedes, M1) 边
+    FIX-6.4  M1/M2 比较：compare_models（VR 机械证据）→ revision_acceptance
+             decision（accept/reject + reasoning + selects 边）
+    不编造新数值；diagnosis/comparison 全部来自机械证据。
+    """
+    from runtime.modeling.diagnosis import diagnose_failure
+    from runtime.modeling.comparison import compare_models, _resolve_vr_for_model
+
+    reg, graph = session.registry, session.graph
+    mir2 = None
+    for m in reg.list_by_type("model_ir"):
+        if (m.data or {}).get("model_id") == mir2_model_id:
+            mir2 = m.artifact_id
+    if mir2 is None:
+        return
+    # FIX-6.1：M1 失败诊断（VR 机械证据）
+    vr1 = _resolve_vr_for_model(reg, mir1_id)
+    if vr1 is not None and not vr1.get("valid"):
+        vrs = [a for a in reg.list_by_type("verification_result")
+               if (a.data or {}).get("status") == "failed"
+               and a.question == "Q001"]
+        if vrs:
+            diag = diagnose_failure(reg, mir1_id, vrs[-1].artifact_id)
+            d = reg.create(
+                "diagnosis", title=f"失败诊断 {mir1_id}",
+                question="Q001", depends_on=[mir1_id],
+                data=diag.to_dict(), activate=True,
+                created_by="runtime.modeling.diagnosis")
+            graph.add_relation(mir1_id, "diagnosed_by", d.artifact_id)
+    # FIX-6.3：supersede（新取代旧；M1 数据保留，状态 → superseded）
+    reg.supersede(mir1_id, reason="M2 修订通过验证，取代 M1",
+                  replacement=mir2, by="runtime.revision")
+    graph.add_relation(mir2, "supersedes", mir1_id)
+    # FIX-6.4：M1/M2 比较 → accept/reject 决策
+    cmp = compare_models(reg, mir1_id, mir2)
+    ddata = {
+        "kind": "revision_acceptance",
+        "chosen": cmp["better_model"] or "NONE",
+        "alternatives": [mir1_id, mir2],
+        "criteria": ["mathematical_valid", "checks_passed",
+                     "constraint_violation_max", "robustness"],
+        "evidence_ids": cmp.get("evidence_refs") or [],
+        "confidence": 1.0 if cmp["recommendation"] != "pending" else 0.0,
+        "reasoning": cmp["reasoning"],
+        "recommendation": cmp["recommendation"],
+        "deltas": cmp["deltas"],
+    }
+    dec = reg.create(
+        "decision", title=f"修订接受决策 {mir1_id} → {mir2_model_id}",
+        question="Q001", payload=[cmp["better_model"]] if cmp[
+            "better_model"] else [],
+        data=ddata, depends_on=[mir1_id, mir2],
+        activate=True, created_by="runtime.revision")
+    if cmp["better_model"] and cmp["better_model"] != "NONE":
+        graph.add_relation(dec.artifact_id, "selects", cmp["better_model"])
+    return cmp
 
 
 def artifact_ids(session, atype: str, question: str = "Q001") -> list[str]:
