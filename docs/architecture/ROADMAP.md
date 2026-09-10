@@ -105,6 +105,13 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ### P0-4: 清理 Dead Code
 
+> ✅ **DONE 2026-09-10**（commit `6466490`）：
+> - handlers.py：删除 `_maybe_execute_experiment`（-2066 bytes，无调用者；P0-E 已由 do_model_execution.execute_code 路径取代）
+> - engine.py：删除第一个 `unblock` 定义（被增强版覆盖，含 rollback cycles 清理）
+> - comparison.py：`_vr_metrics` 删除无效循环（for 内仅 continue）
+> - codegen.py 独立路径保留：K003/K002/arena/vs001 研究 runner 消费，定位为研究工具链；生产 DAG 走 handlers
+> - 验收：全量 1009 passed / 4 skipped（零回归）；validate 58/0；catalog OK
+
 **目标**：删除确认的死代码
 
 **为什么做**：4 个 modeling 模块在生产路径中零调用（诊断已确认），
