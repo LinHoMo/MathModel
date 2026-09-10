@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mathmodel.harness/model-ir/1.0",
-  "title": "MODEL_IR — Executable Model Specification Contract (template-aligned)",
-  "description": "与 P15-K002 S/SV 模板 18 字段承诺精确对齐的可执行契约（2026-09-09 重建）。顶层 required = 模板 18 字段；嵌套约束 = 模板承诺字段与词表（中文 enum 与模板一致）；模板未承诺的深层结构不约束（additionalProperties: true）。历史：旧版契约从未被产物满足（K001 55/55、K002 预检 6/6 违反，159–403 错误/份），register 从不校验——本重建使 jsonschema 校验成为真实可执行的门槛。 修订：validations.type enum 增加 constraint/consistency（约束满足/一致性验证，2024_A VS-001 真实类型）。audit FIX-5.4。",
+  "$id": "https://mathmodel.org/schemas/model_ir-v1.0.json",
+  "title": "Model IR v1.0 — MathModel Model Representation Specification",
+  "description": "Machine-readable schema for MathModel Model IR / Model Graph. Covers problem binding, assumptions, variables, parameters, objectives, constraints, mechanisms, equations, dependencies, solvers, experiments, validations, claims, model graph, and modeling trace.",
   "type": "object",
   "required": [
     "ir_version",
@@ -21,24 +21,17 @@
     "experiments",
     "validations",
     "claims",
-    "model_graph",
-    "modeling_trace"
+    "model_graph"
   ],
   "properties": {
-    "code_mapping": {
-      "type": "object",
-      "description": "audit FIX-2.3：equation_id → code section/symbol 映射（可选）",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
     "ir_version": {
-      "const": "1.0",
-      "description": "固定 '1.0'"
+      "type": "string",
+      "const": "1.0"
     },
     "model_id": {
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "description": "Model instance unique identifier"
     },
     "model_family": {
       "type": "object",
@@ -49,41 +42,18 @@
       "properties": {
         "primary": {
           "type": "string",
-          "minLength": 1,
-          "description": "受控词表（模板『建模结构词表』）；out_of_catalog 不自动判错"
+          "description": "Primary model family, e.g. multibody_dynamics, optimization, ode, statistical, geometric, kinematic, pde, state_space, discrete_recurrence, other"
         },
         "secondary": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "default": []
         },
         "description": {
           "type": "string",
           "minLength": 1
-        },
-        "candidates": {
-          "type": "array",
-          "description": "候选模型对比（E4 评分承载）：≥2 个候选 + 各自选择/排除依据",
-          "items": {
-            "type": "object",
-            "required": [
-              "family",
-              "rationale"
-            ],
-            "properties": {
-              "family": {
-                "type": "string",
-                "minLength": 1
-              },
-              "rationale": {
-                "type": "string",
-                "minLength": 1
-              }
-            },
-            "additionalProperties": true
-          },
-          "default": []
         }
       },
       "additionalProperties": true
@@ -107,6 +77,12 @@
         "problem_sha256": {
           "type": "string",
           "pattern": "^[0-9a-f]{64}$"
+        },
+        "problem_card_ref": {
+          "type": "string"
+        },
+        "competition_format": {
+          "type": "string"
         }
       },
       "additionalProperties": true
@@ -114,660 +90,2771 @@
     "assumptions": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "假设（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "assumption_id",
-          "text",
-          "type",
-          "rationale"
-        ],
-        "properties": {
-          "assumption_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "text": {
-            "type": "string",
-            "minLength": 1
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "projection",
-              "calibration",
-              "mechanism",
-              "simplification",
-              "mechanism_assumption"
-            ]
-          },
-          "rationale": {
-            "type": "string",
-            "minLength": 1
-          }
-        }
-      }
+        "$ref": "#/$defs/assumption"
+      },
+      "$comment": "数组可空（FIX-2.1 契约分层：骨架 MIR 允许空数组，不可执行性由 modeling_trace construction_status 承担）"
     },
     "variables": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "变量（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "variable_id",
-          "name",
-          "symbol",
-          "definition",
-          "unit",
-          "type",
-          "sub_question_binding"
-        ],
-        "properties": {
-          "variable_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "symbol": {
-            "type": "string",
-            "minLength": 1
-          },
-          "definition": {
-            "type": "string",
-            "minLength": 1
-          },
-          "unit": {
-            "type": "string",
-            "default": ""
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "state",
-              "decision",
-              "observation",
-              "constant",
-              "derived",
-              "parameter"
-            ]
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          }
-        }
-      }
+        "$ref": "#/$defs/variable"
+      },
+      "$comment": "数组可空（FIX-2.1 契约分层：骨架 MIR 允许空数组，不可执行性由 modeling_trace construction_status 承担）"
     },
     "parameters": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "参数（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "parameter_id",
-          "name",
-          "symbol",
-          "value",
-          "source"
-        ],
-        "properties": {
-          "parameter_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "symbol": {
-            "type": "string",
-            "minLength": 1
-          },
-          "value": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "source": {
-            "type": "string",
-            "enum": [
-              "题目",
-              "校准",
-              "文献",
-              "假设",
-              "推导",
-              "derived",
-              "problem_given",
-              "computed",
-              "test_fixture"
-            ]
-          }
-        }
-      }
+        "$ref": "#/$defs/parameter"
+      },
+      "$comment": "数组可空（FIX-2.1 契约分层：骨架 MIR 允许空数组，不可执行性由 modeling_trace construction_status 承担）"
     },
     "objectives": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "目标（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "objective_id",
-          "type",
-          "expression",
-          "variables_refs",
-          "sub_question_binding"
-        ],
-        "properties": {
-          "objective_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "minimize",
-              "maximize",
-              "estimate",
-              "satisfy",
-              "simulate",
-              "find",
-              "compute",
-              "predict",
-              "classify",
-              "optimize"
-            ]
-          },
-          "expression": {
-            "type": "string",
-            "minLength": 1
-          },
-          "variables_refs": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "default": []
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          }
-        }
-      }
+        "$ref": "#/$defs/objective"
+      },
+      "$comment": "数组可空（FIX-2.1 契约分层：骨架 MIR 允许空数组，不可执行性由 modeling_trace construction_status 承担）"
     },
     "constraints": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "约束（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "constraint_id",
-          "type",
-          "expression",
-          "variables_refs",
-          "source",
-          "sub_question_binding"
-        ],
-        "properties": {
-          "constraint_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "type": {
-            "type": "string",
-            "minLength": 1
-          },
-          "expression": {
-            "type": "string",
-            "minLength": 1
-          },
-          "variables_refs": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "default": []
-          },
-          "source": {
-            "type": "string",
-            "minLength": 1
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          }
-        }
-      }
+        "$ref": "#/$defs/constraint"
+      },
+      "$comment": "数组可空（FIX-2.1 契约分层：骨架 MIR 允许空数组，不可执行性由 modeling_trace construction_status 承担）"
     },
     "mechanisms": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "机理（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "mechanism_id",
-          "description",
-          "related_equations",
-          "sub_question_binding"
-        ],
-        "properties": {
-          "mechanism_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "description": {
-            "type": "string",
-            "minLength": 1
-          },
-          "related_equations": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "default": []
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          }
-        }
-      }
+        "$ref": "#/$defs/mechanism"
+      },
+      "$comment": "数组可空（FIX-2.1 契约分层：骨架 MIR 允许空数组，不可执行性由 modeling_trace construction_status 承担）"
     },
     "equations": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "方程（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "equation_id",
-          "latex",
-          "type",
-          "variables_refs",
-          "derivation_trace",
-          "sub_question_binding"
-        ],
-        "properties": {
-          "equation_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "latex": {
-            "type": "string",
-            "minLength": 1
-          },
-          "type": {
-            "type": "string",
-            "minLength": 1
-          },
-          "variables_refs": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "default": []
-          },
-          "derivation_trace": {
-            "type": "array",
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              ]
-            }
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          }
-        }
-      }
+        "$ref": "#/$defs/equation"
+      },
+      "$comment": "数组可空（FIX-2.1 契约分层：骨架 MIR 允许空数组，不可执行性由 modeling_trace construction_status 承担）"
     },
     "dependencies": {
       "type": "array",
       "items": {
-        "type": "object",
-        "additionalProperties": true
+        "$ref": "#/$defs/dependency"
       }
     },
     "solvers": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "求解器（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "solver_id",
-          "method",
-          "implementation_ref",
-          "sub_question_binding"
-        ],
-        "properties": {
-          "solver_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "method": {
-            "type": "string",
-            "minLength": 1
-          },
-          "implementation_ref": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          }
-        }
+        "$ref": "#/$defs/solver"
       }
     },
     "experiments": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "实验（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "experiment_id",
-          "type",
-          "inputs",
-          "expected_outputs",
-          "sub_question_binding"
-        ],
-        "properties": {
-          "experiment_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "type": {
-            "type": "string",
-            "minLength": 1
-          },
-          "inputs": {
-            "anyOf": [
-              {
-                "type": "object",
-                "additionalProperties": true
-              },
-              {
-                "type": "array",
-                "items": {}
-              }
-            ]
-          },
-          "expected_outputs": {
-            "type": "array",
-            "items": {}
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          }
-        }
+        "$ref": "#/$defs/experiment"
       }
     },
     "validations": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "验证（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "validation_id",
-          "type",
-          "method",
-          "targets_refs",
-          "sub_question_binding"
-        ],
-        "properties": {
-          "validation_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "baseline",
-              "sensitivity",
-              "limit",
-              "reproducibility",
-              "convergence",
-              "uncertainty",
-              "constraint",
-              "consistency",
-              "constraint_check",
-              "consistency_check"
-            ]
-          },
-          "method": {
-            "type": "string",
-            "minLength": 1
-          },
-          "targets_refs": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "default": []
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          }
-        }
+        "$ref": "#/$defs/validation"
       }
     },
     "claims": {
       "type": "array",
       "items": {
-        "type": "object",
-        "description": "结论（模板承诺字段，additionalProperties 开放）",
-        "additionalProperties": true,
-        "required": [
-          "claim_id",
-          "text",
-          "type",
-          "evidence_refs",
-          "model_refs",
-          "sub_question_binding",
-          "status"
-        ],
-        "properties": {
-          "claim_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "text": {
-            "type": "string",
-            "minLength": 1
-          },
-          "type": {
-            "type": "string",
-            "minLength": 1
-          },
-          "evidence_refs": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "default": []
-          },
-          "model_refs": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "default": []
-          },
-          "sub_question_binding": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          },
-          "status": {
-            "type": "string",
-            "minLength": 1
-          }
-        }
-      }
+        "$ref": "#/$defs/claim"
+      },
+      "$comment": "数组可空（FIX-2.1 契约分层：骨架 MIR 允许空数组，不可执行性由 modeling_trace construction_status 承担）"
     },
     "model_graph": {
-      "description": "模型结构图（节点-边描述，宽松承载）",
+      "$ref": "#/$defs/model_graph"
+    },
+    "modeling_trace": {
+      "description": "建模过程溯源（契约分层宽松承载）：array=步骤溯源 （[{step,note},...]）；object=结构化溯源（K002 模板形态，模板承诺字段见 $defs.modeling_trace，register 层强制）。",
       "anyOf": [
-        {
-          "type": "object",
-          "additionalProperties": true
-        },
         {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": true
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
         }
       ]
     },
-    "modeling_trace": {
-      "description": "建模过程简要溯源（宽松承载）",
-      "anyOf": [
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": true
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": true
-        },
-        {
-          "type": "string"
-        }
-      ]
+    "code_mapping": {
+      "type": "object",
+      "description": "MODEL_IR→Code 映射（P1-4 契约；可选，历史产物由 migrate_legacy_format 补默认 {}）",
+      "additionalProperties": true
     }
   },
-  "additionalProperties": true
+  "additionalProperties": true,
+  "$defs": {
+    "assumption": {
+      "type": "object",
+      "required": [
+        "assumption_id",
+        "text"
+      ],
+      "properties": {
+        "assumption_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "source": {
+          "description": "【模板词表（register 层强制）：problem_explicit / reasonable_simplification / domain_knowledge / derived】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "anchors_to_problem": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "description": "【模板词表（register 层强制）：projection / calibration_anchor / mechanism_assumption / simplification】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rationale": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['assumption_id', 'text']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "variable": {
+      "type": "object",
+      "required": [
+        "variable_id",
+        "name",
+        "symbol",
+        "definition",
+        "unit",
+        "type",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "variable_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "symbol": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "definition": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dimension": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "type": "string",
+          "description": "【模板词表（register 层强制）：continuous / discrete / derived / constant / state / decision / input / index】",
+          "minLength": 1
+        },
+        "value_range": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "index_domain": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['variable_id', 'name', 'symbol', 'definition', 'unit', 'type', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "parameter": {
+      "type": "object",
+      "required": [
+        "parameter_id",
+        "name",
+        "symbol",
+        "value",
+        "source"
+      ],
+      "properties": {
+        "parameter_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "symbol": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "definition": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": ""
+        },
+        "source": {
+          "description": "【模板词表（register 层强制）：problem_given / experimental / assumed / fitted / derived】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['parameter_id', 'name', 'symbol', 'value', 'source']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "objective": {
+      "type": "object",
+      "required": [
+        "objective_id",
+        "type",
+        "expression",
+        "variables_refs",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "objective_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "description": "【模板词表（register 层强制）：minimize / maximize / find / satisfy / simulate / estimand】",
+          "minLength": 1
+        },
+        "expression": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": ""
+        },
+        "variables_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "clarity_score": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['objective_id', 'type', 'expression', 'variables_refs', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "constraint": {
+      "type": "object",
+      "required": [
+        "constraint_id",
+        "type",
+        "expression",
+        "variables_refs",
+        "source",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "constraint_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "description": "【模板词表（register 层强制）：equality / inequality / boundary / initial / logical】",
+          "minLength": 1
+        },
+        "expression": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": ""
+        },
+        "variables_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parameters_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source": {
+          "description": "【模板词表（register 层强制）：problem / physical_law / assumption_derived / geometric】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['constraint_id', 'type', 'expression', 'variables_refs', 'source', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "mechanism": {
+      "type": "object",
+      "required": [
+        "mechanism_id",
+        "description",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "mechanism_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "name": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "type": {
+          "description": "【模板词表（register 层强制）：physical / geometric / statistical / optimization / dynamical / other】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "governing_principle": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "variables_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assumptions_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "related_equations": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['mechanism_id', 'description', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "equation": {
+      "type": "object",
+      "required": [
+        "equation_id",
+        "latex",
+        "type",
+        "variables_refs",
+        "derivation_trace",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "equation_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "latex": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "description": "【模板词表（register 层强制）：constitutive / balance / definition / derived / boundary / initial】",
+          "minLength": 1
+        },
+        "variables_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parameters_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mechanism_ref": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "derivation_trace": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['equation_id', 'latex', 'type', 'variables_refs', 'derivation_trace', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "dependency": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "dependency_id": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "from_type": {
+          "description": "【模板词表（register 层强制）：variable / parameter / assumption / mechanism / equation / constraint / objective】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "from_id": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to_type": {
+          "description": "【模板词表（register 层强制）：variable / parameter / assumption / mechanism / equation / constraint / objective】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to_id": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "description": "【模板词表（register 层强制）：feeds / derives / governs / defines / constrains / uses】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：dependency 不强制（旧 core 无 required）；字段模板承诺（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "solver": {
+      "type": "object",
+      "required": [
+        "solver_id",
+        "method",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "solver_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "name": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "description": "【模板词表（register 层强制）：analytical / numerical / optimization / simulation / other】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "method": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "parameters": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "convergence_criteria": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "implementation_ref": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "equations_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['solver_id', 'method', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "experiment": {
+      "type": "object",
+      "required": [
+        "experiment_id",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "experiment_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "method": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parameters": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inputs_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "outputs": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "results": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "run_metadata": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "solver_ref": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inputs": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_outputs": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['experiment_id', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "validation_id",
+        "type",
+        "method",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "validation_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "description": "【模板词表（register 层强制）：baseline / sensitivity / robustness / uncertainty / counterfactual / failure_case / convergence】",
+          "minLength": 1
+        },
+        "method": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "results": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pass_fail": {
+          "description": "【模板词表（register 层强制）：pass / fail / inconclusive】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "targets_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['validation_id', 'type', 'method', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "claim_id",
+        "text",
+        "type",
+        "evidence_refs",
+        "sub_question_binding"
+      ],
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "description": "",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "description": "【模板词表（register 层强制）：result / interpretation / recommendation】",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "experiment_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "validation_refs": {
+          "description": "",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sub_question_binding": {
+          "description": "子问题绑定（契约 BINDING）：单个 string 或 string 数组",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "description": "【模板词表（register 层强制）：supported / refuted / unresolved】",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：required=['claim_id', 'text', 'type', 'evidence_refs', 'sub_question_binding']（旧 core∩0.8 公共核心）；模板承诺字段标 x-template-promise（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "model_graph": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "graph_version": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nodes": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "edges": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": "契约分层：model_graph 不强制（空图/无图合法）；graph_version/nodes/edges 模板承诺（register 层强制） | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    },
+    "modeling_trace": {
+      "type": "object",
+      "required": [
+        "trace_version",
+        "generated_at",
+        "agent_identity",
+        "input_sha256"
+      ],
+      "properties": {
+        "trace_version": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "generated_at": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_identity": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_version": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "input_sha256": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "prompt_version": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "skill_version": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "commit_hash": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "node_events": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "generation_order": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "version_history": {
+          "description": "",
+          "x-template-promise": true,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "object"
+                ]
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "$comment": " | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
+    }
+  },
+  "x_superseded_by": "core/schemas/v3/model/model_ir.schema.json",
+  "x_superseded_note": "2026-09-09 治理：MODEL_IR 契约唯一真源已迁移至 core/schemas/v3/model/（P1 C1）。本文件保留仅作历史参考与向后引用；K002 register/freeze 均以 core 版为准。",
+  "$comment": "P1-4 唯一真源（2026-09-10）：由 research/P15/model_representation/model_ir.schema.json（K002 预检校准版 v0.8）收敛而来；全仓仅此一份。"
 }

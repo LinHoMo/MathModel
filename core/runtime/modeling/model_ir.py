@@ -142,6 +142,23 @@ class ModelIR:
         return out
 
 
+def migrate_legacy_format(legacy: dict) -> dict:
+    """P1-4：旧格式 → 当前契约格式（幂等，不修改输入）。
+
+    差异（core/schemas/v3/model/model_ir.schema.json 为唯一真源）：
+    - 历史 research 产物（K001/K002/K003 预检与正式 run、vs001 演示基线）
+      无 code_mapping 字段 → 补默认 {}（该字段非 required）。
+    其余 18 个 required 顶层字段在 core 与历史产物间一致，无需迁移。
+
+    注意：词表/嵌套结构的差异属于内容级差异，无法机械迁移；冻结产物
+    （K001/K002/K003）标记 legacy 不回溯（见 LEGACY_MODEL_IR.md）。
+    新产物必须直接符合 core schema。
+    """
+    out = dict(legacy or {})
+    out.setdefault("code_mapping", {})
+    return out
+
+
 class ModelIRBuilder:
     """从 dict 构造 ModelIR（校验 required 字段，缺则抛 ModelIRError）。"""
 

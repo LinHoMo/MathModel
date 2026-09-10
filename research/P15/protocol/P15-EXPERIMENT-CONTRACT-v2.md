@@ -77,7 +77,7 @@
 | 哈希绑定 | `problem_binding.problem_sha256 == manifest.statement_sha256` | 1（作废） |
 | 覆盖度 | `model_ir.problem_binding.sub_question_id` 覆盖全部子问题（缺任一 → COVERAGE_FAIL，不进主终点，单独报告） | 2 |
 | 验证计划（SV） | 5 强制字段全部满足（缺 → 作废） | 1 |
-| **MODEL_IR schema（2026-09-10 契约统一，CONTRACT_DRIFT_K003）** | 实验 run 的 model_ir 必须通过 `research/P15/model_representation/model_ir.schema.json`（Draft 202012 jsonschema 全量校验）：model_family.description 必填、problem_binding 用 sub_question_id（禁止 sub_questions 旧形态）、problem_sha256 必填真实冻结题面 hash（**禁止 `"pending"` 占位**）、dependencies 非空、validations[].method 必填 | 1（拒绝登记） |
+| **MODEL_IR schema（2026-09-10 契约统一，CONTRACT_DRIFT_K003）** | 实验 run 的 model_ir 必须通过 `core/schemas/v3/model/model_ir.schema.json（P1-4 唯一真源）`（Draft 202012 jsonschema 全量校验）：model_family.description 必填、problem_binding 用 sub_question_id（禁止 sub_questions 旧形态）、problem_sha256 必填真实冻结题面 hash（**禁止 `"pending"` 占位**）、dependencies 非空、validations[].method 必填 | 1（拒绝登记） |
 | 通过 | 全部满足 | 0（REGISTERED） |
 
 > **CONTRACT_DRIFT 历史事实**：K003 正式 44 份 model_ir 仅 8 份合规（36 份缺

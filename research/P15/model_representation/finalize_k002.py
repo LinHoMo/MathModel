@@ -14,7 +14,7 @@ import sys
 ROOT = "."
 
 # 1) research 旧版标 SUPERSEDED
-p = "research/P15/model_representation/model_ir.schema.json"
+p = "core/schemas/v3/model/model_ir.schema.json"  # P1-4 唯一真源
 s = json.load(io.open(p, encoding="utf-8"))
 s["x_superseded_by"] = "core/schemas/v3/model/model_ir.schema.json"
 s["x_superseded_note"] = (

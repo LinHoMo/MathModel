@@ -256,6 +256,17 @@ def _m2_dict() -> dict:
 M1_DICT = _m1_dict()
 M2_DICT = _m2_dict()
 
+# MODEL_IR 契约 v1.0（2026-09-10）：全部 fixture 产物迁移到
+# core/schemas/v3/model/model_ir.schema.json（唯一真源）规范。
+# 迁移是数据适配（词表/minItems/model_graph 结构化），语义不变；
+# 迁移后必须通过 jsonschema 全量校验（tests 断言）。
+from mir_compat import migrate_model_ir  # noqa: E402
+
+M1_DICT = migrate_model_ir(M1_DICT)
+M2_DICT = migrate_model_ir(M2_DICT)
+M1_DICT["model_id"] = "M2024A-Q1-v1"
+M2_DICT["model_id"] = "M2024A-Q1-v2"
+
 
 # ---------------------------------------------------------------- 可执行代码（固定 ABI）
 

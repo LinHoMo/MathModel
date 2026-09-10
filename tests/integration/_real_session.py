@@ -53,7 +53,7 @@ if __name__ == "__main__":
 '''
 
 
-def _minimal_mir(qid: str) -> dict:
+def _minimal_mir_raw(qid: str) -> dict:
     """最小但真实的三层 MODEL_IR（L1 semantic / L2 mathematical / L3 computational）。
 
     所有数组节非空、id 字段齐备（validate_model_ir 全过 + model_ir.schema.json
@@ -213,3 +213,14 @@ def make_real_session(tmp_path, questions=("Q001", "Q002"), run=True,
     if run:
         s.run()
     return s
+
+
+def _minimal_mir(qid: str) -> dict:
+    """MODEL_IR 契约 v1.0 迁移（唯一真源 core/schemas/v3/model/model_ir.schema.json）。"""
+    try:
+        from mir_compat import migrate_model_ir
+    except ImportError:
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "research" / "P15" / "vs001_run"))
+        from mir_compat import migrate_model_ir
+    return migrate_model_ir(_minimal_mir_raw(qid))

@@ -4,7 +4,7 @@
 import json
 from jsonschema import Draft202012Validator
 
-SCHEMA_PATH = r"C:\Users\Lin\Desktop\Programs\MathModel\research\P15\model_representation\model_ir.schema.json"
+SCHEMA_PATH = r"C:\Users\Lin\Desktop\Programs\MathModel\core\schemas\v3\model\model_ir.schema.json"  # P1-4 唯一真源
 INSTANCE_PATH = r"C:\Users\Lin\Desktop\Programs\MathModel\research\P15\model_representation\example_2024_A.json"
 
 with open(SCHEMA_PATH, "r", encoding="utf-8") as f:

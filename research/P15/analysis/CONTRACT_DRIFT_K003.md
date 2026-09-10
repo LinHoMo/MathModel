@@ -5,7 +5,7 @@
 
 ## 1. 事实（机器实测）
 
-- **runtime MODEL_IR schema**：`research/P15/model_representation/model_ir.schema.json`
+- **runtime MODEL_IR schema**：`core/schemas/v3/model/model_ir.schema.json（P1-4 唯一真源）`
   （v1.0 契约重建版，K002 起为模板对齐契约）：
   - 顶层 required 18 字段（含 model_graph；K002 register 侧为 18 含 modeling_trace——两版并存见 §4）
   - `model_family` required=[primary, description]
