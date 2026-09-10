@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "mathmodel:v3/run/run_record.schema.json",
+  "$id": "modeling_harness:v3/run/run_record.schema.json",
   "title": "V3 Run Record（Observability + Deterministic Replay 载体）",
   "description": "System Hardening P3：每次运行的完整溯源。内容真源为 state/runs/<run_id>.json；所有哈希为 sha256 前 16 或全 64 均可（保持项目内一致）；model_*/token_cost 由外部 executor 填写，runtime 零 LLM 调用时允许为 null。",
   "type": "object",

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "v3/knowledge/failure.schema.json",
+  "$id": "modeling_harness:v3/knowledge/failure.schema.json",
   "title": "Failure Memory（失败记忆）",
   "description": "结构化失败记忆：failure_id / problem_context / method / failure_mode / symptom / root_cause / detection / fix / avoidance。来源：_negative/ 案例 + pitfalls/ 数值边界蒸馏。",
   "type": "object",

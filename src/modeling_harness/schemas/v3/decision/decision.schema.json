@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "v3/decision/decision.schema.json",
+  "$id": "modeling_harness:v3/decision/decision.schema.json",
   "title": "Decision Log（V3 决策日志）",
   "description": "参与未来决策的连续决策记忆（非历史日志）。升级自 V2 decision_log.schema.json：新增 reversible / invalidated_by / consequences / criteria / evidence_ids。 修订：required=元数据+kind；业务字段按 kind 可选（candidate_selection 含 chosen/alternatives/criteria；literature_search 含 recommendations）。audit FIX-5.4。",
   "type": "object",
@@ -17,7 +17,7 @@
   "properties": {
     "decision_id": {
       "type": "string",
-      "pattern": "^D\\d{1,6}$"
+      "pattern": "^MH-DECISION-\\d{1,6}$|^D\\d{1,6}$"
     },
     "question": {
       "type": "string",

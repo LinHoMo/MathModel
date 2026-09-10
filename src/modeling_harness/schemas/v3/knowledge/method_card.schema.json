@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "v3/knowledge/method_card.schema.json",
+  "$id": "modeling_harness:v3/knowledge/method_card.schema.json",
   "title": "Method Card（方法卡）",
   "description": "方法卡 = 建模知识约束/先验/验证（Constraint / Prior / Validation），不是答案库。提供使用前提、风险、验证方式和反模式，不指定“必须使用”。检索输出候选方法 + 适用条件 + 风险 + 验证方式 + 历史失败案例。LLM 可自由提出 catalog 外的新方法；Evidence = Adjudication，实验和证据才决定模型是否成立。",
   "type": "object",

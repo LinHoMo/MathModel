@@ -1,25 +1,50 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "v3/evidence/graph.schema.json",
+  "$id": "modeling_harness:v3/evidence/graph.schema.json",
   "title": "V3 Evidence Graph",
   "description": "Artifact 之间的 typed relation 集合。节点 = Stable ID（必须已在 Registry 注册）。",
   "type": "object",
-  "required": ["graph_schema_version", "graph_version", "relations"],
+  "required": [
+    "graph_schema_version",
+    "graph_version",
+    "relations"
+  ],
   "properties": {
-    "graph_schema_version": { "const": 3 },
-    "graph_version": { "type": "integer", "minimum": 0 },
-    "project": { "type": "string" },
-    "updated_at": { "type": "string" },
+    "graph_schema_version": {
+      "const": 3
+    },
+    "graph_version": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "project": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
     "relations": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["from", "relation", "to"],
+        "required": [
+          "from",
+          "relation",
+          "to"
+        ],
         "properties": {
-          "from": { "$ref": "#/definitions/artifact_id" },
-          "relation": { "$ref": "#/definitions/relation_type" },
-          "to": { "$ref": "#/definitions/artifact_id" },
-          "at": { "type": "string" }
+          "from": {
+            "$ref": "#/definitions/artifact_id"
+          },
+          "relation": {
+            "$ref": "#/definitions/relation_type"
+          },
+          "to": {
+            "$ref": "#/definitions/artifact_id"
+          },
+          "at": {
+            "type": "string"
+          }
         },
         "additionalProperties": false
       }
@@ -28,13 +53,24 @@
   "definitions": {
     "artifact_id": {
       "type": "string",
-      "pattern": "^(P|Q|M|A|DATA|CODE|E|R|F|T|C|D|N|S|DELIV)[0-9]{1,6}$"
+      "pattern": "^MH-[A-Z][A-Z_]*-\\d{1,6}$|^(P|Q|M|A|DATA|CODE|E|R|F|T|C|D|N|S|DELIV)[0-9]{1,6}$"
     },
     "relation_type": {
       "enum": [
-        "motivates", "solved_by", "assumes", "implemented_by", "validated_by",
-        "tests", "uses", "produces", "visualized_by", "supports",
-        "appears_in", "selects", "based_on", "derived_from"
+        "motivates",
+        "solved_by",
+        "assumes",
+        "implemented_by",
+        "validated_by",
+        "tests",
+        "uses",
+        "produces",
+        "visualized_by",
+        "supports",
+        "appears_in",
+        "selects",
+        "based_on",
+        "derived_from"
       ]
     }
   }
