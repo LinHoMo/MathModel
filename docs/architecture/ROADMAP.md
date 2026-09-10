@@ -390,6 +390,19 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ### P3-2: 确定性指标替代盲评
 
+> ✅ **DONE 2026-09-10**（commit `8681041`）：
+> `core/runtime/evaluation/deterministic_metrics.py`（LLM-free）：
+> - `claim_evidence_coverage(graph)`：Evidence Graph 机械遍历——每个 claim
+>   是否被真实证据终端支撑（supports 边 + execution_result 带
+>   execution_token / verification_result 带数值 / result 带 outputs），
+>   缺失如实报告，绝不默认通过（The Agent Is Not The State）。
+> - `baseline_comparison(outputs_a, outputs_b, keys, tolerance)`：纯数值
+>   确定性比较（相对差异/tie/different/incomparable，缺失 key 列出）。
+> 验收 7/7（真实证据 supported / 假证据 unsupported / 空图 / tie /
+> different / incomparable / 逐位确定性）。L1.3 subprocess 真实执行
+> 已有（P0-3），故 ≥3 个维度已有确定性替代（L1.3/L4.1/L4.5）。
+
+
 **目标**：用确定性检查替代部分盲评维度
 
 **为什么做**：κ 值持续低于 0.6，盲评工具不可靠

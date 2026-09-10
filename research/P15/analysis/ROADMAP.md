@@ -180,6 +180,14 @@
 
 ### P1-4：MODEL_IR 契约漂移修复
 
+> ✅ **DONE 2026-09-10**（本轮 commit）：core schema = 0.8 校准版 + 契约分层
+> （数组元素 required=旧core∩0.8 公共核心；模板承诺字段标 x-template-promise、
+> register 层强制；词表 enum 入模板承诺层；sub_question_binding 统一
+> string|array；model_graph/modeling_trace 宽松承载）；research 副本已删
+> （唯一真源）；`migrate_legacy_format()` + `LEGACY_MODEL_IR.md`；
+> K001/K002/K003 冻结基线 revision v1.1 重冻；验收 6/6 + contract_gate 5/5
+> + skeleton 3/3；全量 1067/4、validate 58/0、三 freeze PASS。
+
 | 项 | 内容 |
 |---|---|
 | **目标** | model_ir schema 收敛到唯一真源（core/schemas/v3）；research 侧改为引用；统一 runtime 与 research 的 MODEL_IR 格式 |

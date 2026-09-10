@@ -62,7 +62,7 @@ Construction 行为？"。
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **1054 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **1067 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **58 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |
@@ -107,7 +107,10 @@ Construction 行为？"。
     ② Knowledge-guided 正式化（core 机械映射模块 + BZD 5 卡 + 契约 v1.0，8 单测）
     ③ Capability Validation Δscore（八项指标 + P1 执行级指标双口径报告）
 
-进行中（MainAgent）：
+进行中（MainAgent）：| **P1-4（契约唯一真源）** | MODEL_IR schema 唯一真源收敛：core/schemas/v3/model/model_ir.schema.json = 0.8 校准版 + 契约分层（数组元素 required=旧core∩0.8 公共核心；模板承诺字段标 x-template-promise、register 层强制；词表 enum 入模板承诺层；sub_question_binding 统一 string\|array；model_graph/modeling_trace 宽松承载）；research 副本已删；migrate_legacy_format + LEGACY_MODEL_IR.md；K001/K002/K003 冻结基线 revision v1.1 重冻 | ✅ 完成 | 本轮（1067/4） |
+| **P3-2（确定性指标）** | claim_evidence_coverage 机械遍历 + baseline_comparison 纯数值判定（tie/different/incomparable），无 LLM 调用；vs001 fixture 迁移到 core schema 唯一真源（mir_compat） | ✅ 完成 | 本轮（并行收口） |
+
+
   ① K003 正式实验：66 runs → 独立盲评（3 evaluator，198 评分 + 对拍一致）→ 配对分析 → P15-K003-REPORT.md → 状态机 CLOSED ✅（已完成）
   ② 战略级终审（Organizer `o_0001kxvAFGc`）：8 审计域（A-H）+ 交叉验证 + 三轮自我反驳 → 6/7 决策文档已落盘
      （STRATEGIC_VERDICT / ARCHITECTURE_FINAL / CONSTRUCTOR_INTEGRATION_PLAN / AGENT_AUTHORITY_MODEL /
