@@ -1208,7 +1208,7 @@ def check_model_doc(project_path):
 def check_catalog_yaml(project_path):
     """L1: catalog 视图一致性（V3：v3 视图 roles/nodes/validators）"""
     content = None
-    for p in ("catalog/v3.yaml", "catalog.yaml"):
+    for p in ("catalog/v3.yaml", "catalog/catalog.yaml"):
         fp = project_path / p
         if fp.exists():
             content = fp.read_text(encoding="utf-8", errors="ignore")

@@ -144,7 +144,7 @@ Modeling-Harness/
 │   ├── domains/  adapters/  profiles/
 │   ├── skills/  knowledge/  env/  templates/  utils/
 ├── scripts/                         # 一次性运维/迁移脚本（migrate_legacy_projects.py）
-├── catalog.yaml + catalog/          # 双视图元数据索引（单一真源；model_families.yaml 已 frozen）
+├── catalog/                         # 双视图元数据索引（单一真源；catalog.yaml 为聚合入口；model_families.yaml 已 frozen）
 ├── research/                        # 研究实验（P15：K001/K002/P1；bench 运行）——带实验专属脚本
 ├── projects/                        # 用户运行实例（仅 new_project.py 创建）
 ├── docs/                            # 架构与状态文档（architecture/ 为真源，STATUS.md 为状态唯一真源）

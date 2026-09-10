@@ -38,7 +38,7 @@ no backward compatibility with V2.
 | `src/modeling_harness/workflows/` | DAG 模板（stages/）+ WorkflowComposer |
 | `src/modeling_harness/roles/` | 4 角色：analyst / modeler / experimenter / critic |
 | `src/modeling_harness/validators/` | 门禁：evidence-gate / research-quality / model-critic / assumption-checker |
-| `catalog/` | 元数据双视图单一真源（v3.yaml / protocol_tools.yaml / external_skills.yaml / model_families.yaml；根级 catalog.yaml 为聚合入口） |
+| `catalog/` | 元数据双视图单一真源（catalog.yaml 聚合入口 / v3.yaml / protocol_tools.yaml / external_skills.yaml / model_families.yaml） |
 | `docs/` | 文档区（入口见 docs/README.md） |
 | `docs/decisions/` | 架构决策记录（ADR） |
 | `prompts/` | Agent 角色提示词与任务卡模板 |
@@ -56,7 +56,7 @@ no backward compatibility with V2.
 | `src/modeling_harness/workflows/` | DAG templates (stages/) + WorkflowComposer |
 | `src/modeling_harness/roles/` | 4 roles: analyst / modeler / experimenter / critic |
 | `src/modeling_harness/validators/` | Gates: evidence-gate / research-quality / model-critic / assumption-checker |
-| `catalog/` | Metadata dual-view single truth (v3.yaml / protocol_tools.yaml / external_skills.yaml / model_families.yaml; root catalog.yaml is the aggregate entry) |
+| `catalog/` | Metadata dual-view single truth (catalog.yaml aggregate entry / v3.yaml / protocol_tools.yaml / external_skills.yaml / model_families.yaml) |
 | `docs/` | Docs area (entry: docs/README.md) |
 | `docs/decisions/` | Architecture Decision Records (ADR) |
 | `prompts/` | Agent role prompts and task-card template |

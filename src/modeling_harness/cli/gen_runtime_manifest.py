@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent.parent
-CATALOG_PATH = ROOT / "catalog.yaml"
+CATALOG_PATH = ROOT / "catalog" / "catalog.yaml"
 OPENAI_PATH = ROOT / "src" / "modeling_harness" / "runtime" / "adapters" / "openai.yaml"
 
 

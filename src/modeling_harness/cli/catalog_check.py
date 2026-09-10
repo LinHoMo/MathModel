@@ -32,7 +32,7 @@ sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli"))
 for _cat in ("runtime", "validation", "evaluation", "knowledge", "devtools", "rendering"):
     sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli" / _cat))
 
-CATALOG_PATH = ROOT / "catalog.yaml"
+CATALOG_PATH = ROOT / "catalog" / "catalog.yaml"
 ROLES_DIR = ROOT / "src" / "modeling_harness" / "roles"
 WORKFLOWS_DIR = ROOT / "src" / "modeling_harness" / "workflows"
 

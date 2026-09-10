@@ -241,7 +241,7 @@ Modeling-Harness/
 │   ├── architecture/           # Active contracts only (pruned)
 │   ├── decisions/              # ADRs
 │   └── integration/            # Compatibility docs
-├── catalog.yaml                # Single source of truth
+├── catalog/                    # Metadata single source of truth (catalog.yaml entry)
 └── pyproject.toml              # Minimal, zero-dep
 ```
 
