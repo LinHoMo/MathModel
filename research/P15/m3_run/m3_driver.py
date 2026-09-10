@@ -23,6 +23,7 @@ if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from m3_fixtures import CANDIDATES, VALIDATION_SPEC  # noqa: E402
+from vs001_fixtures import OUTPUT_MAPPING  # noqa: E402
 
 from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
 from runtime.execution.session import RuntimeSession  # noqa: E402
@@ -54,6 +55,9 @@ def inject_candidates(session, candidates=None, workdir=None):
     shared = session.executor_impl.shared
     shared["external_candidates"] = {"Q001": candidates or CANDIDATES}
     shared["validation_specs"] = {"Q001": VALIDATION_SPEC}
+    # P0-1 契约：候选 MODEL_IR 声明的向量变量（x_i/y_i→positions）在代码
+    # 输出中为嵌套结构，外部 Constructor 显式声明翻译表（同 vs001_driver）
+    shared["output_mappings"] = {"Q001": OUTPUT_MAPPING}
     if workdir is not None:
         shared["_workdir"] = str(workdir)
     return shared
