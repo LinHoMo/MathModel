@@ -2,6 +2,21 @@
 
 本文件记录 MathModel Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
+## 2026-09-10 — Agent Protocol v1.0 冻结（非版本条目）
+
+### 变更
+- **AGENTS.md 冻结为 v1.0**：完成七处修正（六要素任务卡 / 去硬编码数字 / §5 机器校验约束 /
+  §7 CI 门禁 / §7.1 文档更新纪律）。冻结后修改 AGENTS.md 须走 ADR（docs/decisions/）
+  且不得破坏 validate.py 章节校验。
+- **阶段五 V2 残留收口**：顶层 9 个 V2 schema 归档 `core/schemas/legacy/`；
+  `core/knowledge/paper-cases` → `cases`（T-CONF-004）；删除 `sample_paper_project`
+  （T-CONF-005）；P15 **保留主树**（T-CONF-001，撤销移出决策）；
+  修复 CAPABILITY_ROADMAP 断裂引用 ×3（e2e_metrics/benchmark/catalog_check）。
+- **版本收口**：`pyproject.toml` version 1.0.0 → 3.2.2（T-CONF-002）；新增 `docs/RELEASE.md`。
+
+### 测试
+- 四件套全绿：validate 45/0/0、catalog OK、terminology OK、pytest 595 passed。
+
 ## v3.2.2（2026-09-10，V2 论文链/历史债务彻底清除）
 
 ### 变更
