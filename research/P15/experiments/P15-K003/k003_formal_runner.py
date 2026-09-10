@@ -46,6 +46,27 @@ PRIMARY_SEEDS = [42, 43, 44]
 GEN_SEEDS = [42, 43]
 
 
+def _assert_mir_schema(model_ir: dict, *, run_id: str = "") -> None:
+    """CONTRACT DRIFT 治理（2026-09-10）：register schema gate。
+
+    实验 run 的 MODEL_IR 必须通过 runtime MODEL_IR schema（Draft 202012）。
+    历史 36/44 不合规事实见 research/P15/analysis/CONTRACT_DRIFT_K003.md；
+    本 gate 只拦未来生成，不回溯修改已生成 run。
+    """
+    import jsonschema as _js
+    schema = json.loads(
+        (Path(__file__).resolve().parents[3]
+         / "research" / "P15" / "model_representation"
+         / "model_ir.schema.json").read_text(encoding="utf-8"))
+    validator = _js.Draft202012Validator(schema)
+    errors = sorted(validator.iter_errors(model_ir), key=lambda e: list(e.path))
+    if errors:
+        head = "; ".join(f"{'/'.join(map(str, e.path))}: {e.message}"
+                         for e in errors[:3])
+        raise ValueError(f"run {run_id} MODEL_IR 不合 runtime schema: {head}"
+                         f"（共 {len(errors)} 错误；契约见 CONTRACT_DRIFT_K003.md）")
+
+
 def sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
@@ -727,8 +748,10 @@ def generate_and_run(problem_id: str, arm: str, seed: int) -> dict:
     if arm == "F":
         (run_dir / "model_doc.md").write_text(model_doc, encoding="utf-8")
     elif arm == "S":
+        _assert_mir_schema(model_ir, run_id=run_dir.name)
         write_json(run_dir / "model_ir.json", model_ir)
     elif arm == "SV":
+        _assert_mir_schema(model_ir, run_id=run_dir.name)
         write_json(run_dir / "model_ir.json", model_ir)
         write_json(run_dir / "validation_plan.json", validation_plan)
 
