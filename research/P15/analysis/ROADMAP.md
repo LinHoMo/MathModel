@@ -326,6 +326,18 @@
 | **是否需要迁移** | 否 |
 | **预计依赖** | P1-2（Revision 接入主 DAG）、P2-1（L6 判定） |
 
+### P3-3b：Paper Projection 真实化（E2E 打通） ✅ 已完成（559930e/f1eeefc）
+
+| 项 | 内容 |
+|---|---|
+| **目标** | paper 链从死代码变为真实闭环：Projection 统一消费 ScientificNarrative IR（6 节规范大纲），handlers 三节点（research_direction/paper_projection/paper_sections）全部走 IR |
+| **为什么做** | 旧 PaperProjection 消费已废弃的 Narrative(.questions/.arcs)，paper 链从未真正跑通（占位符式假闭环） |
+| **修复内容** | ① PaperProjection 重写：SECTION_ORDER 6 节（discussion 并入结论）、models→{model,question,assumptions}（assumes 边机械派生）、dead claim 排除并记 dead_claims_excluded（registry 终态+死证据传递闭包）、灵敏度章节 evidence=tags 含 sensitivity/baseline 的 active result、figures 经 supports 证据链 visualized_by 机械派生；② narrative_critic/judge_critic N1/UNKNOWN 判定兼容新旧协议（getattr arcs/sections）；③ do_research_direction 产 IR 入 shared[narrative]/narrative_ir |
+| **测试** | test_writing_layer（6 节顺序/models 假设/灵敏度/死 claim 排除/pending placement）、test_judge_critic、test_narrative_critic、test_p7_integrity、test_red_team 全部升级 IR 契约；e2e_metrics writing denominator 12（DAG 实际节点）；full_run 全节点通过 |
+| **验收标准** | 全量回归全绿；Projection 不再接触 .questions/.arcs；无任何旧 Narrative 注入路径 |
+| **是否改变 API** | 是（project 消费 IR；旧 Narrative 仅 director 测试保留） |
+| **是否影响旧实验** | 否（K001-K004 冻结基线不触碰） |
+
 ### P3-3：Pi Adapter + 沙箱边界
 
 | 项 | 内容 |
