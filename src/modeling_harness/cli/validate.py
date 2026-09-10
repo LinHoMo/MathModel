@@ -749,6 +749,79 @@ def check_numeric_traceability(project_path):
     return True, f"数值追溯比例={ratio:.1%}(≥{min_ratio:.0%})"
 
 
+# 参数 source 的批准词表（自由字符串 → 受控词表）。
+_PARAM_SOURCE_VOCAB = frozenset({
+    "problem_given", "derived", "convention",
+    "assumption_derived", "reasoning", "calibration",
+})
+
+
+def check_parameter_provenance(project_path):
+    """L4: 参数来源门禁——声称 problem_given 的参数必须能在题面原文找到。
+
+    堵住输入侧最经典的诚信漏洞：把建模者自选的常数标成「题面给定」，
+    使结论显得不可协商。
+
+      * 每个 parameter 必须有 source，且取值在批准词表内；
+      * source == "problem_given" 的数值参数，其值须在 inputs/problem.txt 中可匹配，
+        仅允许 ×10^k 的单位换算（k ∈ [-9, 9]，覆盖 cm↔m、科学计数法等）。
+        若该值需经 ÷2 等其他推导得到，应如实标注为 derived。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "无活跃项目实例（跳过）"
+    checked = 0
+    problems = []
+    for pdir in live:
+        mir = pdir / "model_ir.json"
+        if not mir.exists():
+            continue
+        try:
+            data = json.loads(mir.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        params = data.get("parameters") or []
+        if not params:
+            continue
+        pnums = []
+        ptxt = pdir / "inputs" / "problem.txt"
+        if ptxt.exists():
+            try:
+                content = ptxt.read_text(encoding="utf-8")
+                pnums = [float(m) for m in re.findall(r"\d+\.?\d*", content) if m]
+            except OSError:
+                pnums = []
+        for par in params:
+            pid = par.get("parameter_id", "?")
+            src = par.get("source")
+            checked += 1
+            if not src:
+                problems.append(f"{pdir.name}:{pid} 缺 source")
+                continue
+            if src not in _PARAM_SOURCE_VOCAB:
+                problems.append(f"{pdir.name}:{pid} source='{src}' 不在批准词表")
+                continue
+            if src != "problem_given":
+                continue
+            val = par.get("value")
+            if isinstance(val, bool) or not isinstance(val, (int, float)):
+                continue  # 非数值（如区间 "10–16"）不做值匹配
+            if not pnums:
+                problems.append(f"{pdir.name}:{pid} 难以核验（题面无数字或缺失）")
+                continue
+            v = float(val)
+            hit = any(
+                abs(v - p * (10.0 ** k)) <= max(abs(v), 1e-12) * 1e-6
+                for p in pnums for k in range(-9, 10)
+            )
+            if not hit:
+                problems.append(
+                    f"{pdir.name}:{pid} value={val} 未在题面找到（若需推导请标 derived）")
+    if problems:
+        return False, "; ".join(problems[:5])
+    return True, f"参数来源检查通过（{checked} 个参数）"
+
+
 def check_physics_model(project_path):
     """L4: 物理模型检查（V3：模型描述文档坐标系/几何判据/解析验证等）。"""
     live = _live_project_dirs(project_path)
@@ -1205,6 +1278,7 @@ def validate_project(project_path):
         ("L4", "一致性校验", lambda: check_consistency_checker(project_path)),
         ("L4", "物理模型", lambda: check_physics_model(project_path)),
         ("L4", "数值追溯", lambda: check_numeric_traceability(project_path)),
+        ("L4", "参数来源", lambda: check_parameter_provenance(project_path)),
 
         # L5: 信任域隔离检查
         ("L5", "信任域定义", lambda: check_trust_domain(project_path)),
