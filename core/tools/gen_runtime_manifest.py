@@ -210,7 +210,7 @@ def generate_openai_yaml(catalog):
     timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds") + "Z"
     lines = [
         "# OpenAI Agents SDK 兼容配置",
-        "# 用于在 OpenAI Agents SDK 中加载 MathModelSkills 技能",
+        "# 用于在 OpenAI Agents SDK 中加载 Modeling-Harness 技能",
         "# *** 本文件由 core/tools/gen_runtime_manifest.py 自动生成 ***",
         "# *** 请勿手工编辑 —— 以 catalog/v3.yaml 为单一真源 ***",
         f"# 最近生成时间: {timestamp}",

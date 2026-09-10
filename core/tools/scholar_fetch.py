@@ -24,7 +24,7 @@ SEMANTIC_SCHOLAR_API = "https://api.semanticscholar.org/graph/v1/paper/search"
 SEMANTIC_SCHOLAR_FIELDS = "title,authors,year,externalIds,url,abstract,venue"
 
 REQUEST_HEADERS = {
-    "User-Agent": "MathModel/1.0 (academic research assistant)",
+    "User-Agent": "Modeling-Harness/1.0 (academic research assistant)",
     "Accept": "application/json",
 }
 

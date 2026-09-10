@@ -209,7 +209,7 @@ Knowledge 不管:
 ## 5. 最终目录结构
 
 ```
-MathModel/
+Modeling-Harness/
 ├── core/
 │   ├── env/                    # 配置 + loader
 │   ├── runtime/                # V3 认知工作流引擎

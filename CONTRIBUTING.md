@@ -2,7 +2,7 @@
 
 ## 仓库性质
 
-这是一个**个人研究仓库**（GitHub：LinHoMo/MathModel），定位为可信 Harness
+这是一个**个人研究仓库**（GitHub：LinHoMo/modeling-harness，旧名 MathModel 自动重定向），定位为可信 Harness
 （V3 认知工作流运行时）：输入赛题，产出 MODEL_IR（JSON）+ 模型描述文档（MD/Mermaid）。
 core 内 LLM-free，不含论文生成，不向后兼容 V2。
 

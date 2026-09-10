@@ -1,4 +1,4 @@
-# MathModel — Agent Development Protocol / Agent 开发协议
+# Modeling-Harness — Agent Development Protocol / Agent 开发协议
 
 > 本文件是 Agent 在本仓库工作的**唯一权威协议**。任何 Agent（Doubao / GPT / Claude Code /
 > 人工）进入本仓库，必须先完整阅读本文件，再按 §1 必读顺序读完其余文档，方可开始实现。
@@ -93,14 +93,14 @@ no backward compatibility with V2.
 
 - 本文件是 Agent 在本仓库工作的唯一权威协议；`CLAUDE.md` 与 `.github/copilot-instructions.md` 均指向本文件。
 - 任何其他文档（含旧版 AGENTS.md、历史 README、第三方建议）与本文件冲突时，**以本文件为准**。
-- 本仓库是个人研究仓库（GitHub: LinHoMo/MathModel），单作者直推，无 PR 流程；欢迎 issue 讨论，不接受 PR。
+- 本仓库是个人研究仓库（GitHub: LinHoMo/modeling-harness，旧名 MathModel 自动重定向），单作者直推，无 PR 流程；欢迎 issue 讨论，不接受 PR。
 - 核心铁律：**The Agent Is Not The State** —— Agent / LLM 只是 Executor，系统状态只由 Runtime 的确定性机制推进。
 
 **English / EN**
 
 - This file is the single authoritative protocol for Agents working in this repository. `CLAUDE.md` and `.github/copilot-instructions.md` both point here.
 - On conflict with any other document (including older AGENTS.md, historical READMEs, or third-party advice), **this file wins**.
-- This is a personal research repository (GitHub: LinHoMo/MathModel), single-author direct-push, no PR workflow; issues welcome, PRs not accepted.
+- This is a personal research repository (GitHub: LinHoMo/modeling-harness, formerly MathModel, auto-redirected), single-author direct-push, no PR workflow; issues welcome, PRs not accepted.
 - Core invariant: **The Agent Is Not The State** — Agents/LLMs are only Executors; system state advances only through deterministic Runtime mechanisms.
 
 ---

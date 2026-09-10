@@ -168,7 +168,7 @@ def main():
         check_project(r, args.project)
 
     print("=" * 62)
-    print("MathModel 环境预检")
+    print("Modeling-Harness 环境预检")
     print("=" * 62)
     for name, detail in r.ok:
         print(f"  [OK]   {name}" + (f" - {detail}" if detail else ""))

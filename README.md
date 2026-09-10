@@ -1,4 +1,7 @@
-# MathModel — Scientific / Mathematical Modeling Harness
+# Modeling-Harness — 建模执行框架
+
+**面向数模竞赛与科研的可信建模执行与验证框架**
+（A verification-centered modeling harness for competitions and research）
 
 **面向数学模型构建与验证的可信 Harness（Verification-centered
 Modeling Research Harness）。** 把一道赛题（或一个研究问题）变成一条可追溯、
@@ -13,7 +16,7 @@ Problem → Model Construction → Model Artifact → Execution → Validation
 > **Source of truth = Artifact Registry + Evidence Graph + Research State。**
 > Agent / LLM 只是 **Executor**——GPT / Claude / DeepSeek / MathModelAgent /
 > 人工建模者都可以作为可插拔执行器接入，不反过来定义系统
-> （**The Agent Is Not The State**）。
+> （**The Agent Is Not The State. The Harness Is The State.**）。
 
 核心组件：Artifact Registry（稳定 ID + 生命周期）· Typed Evidence Graph（23 种
 关系 + 失效传播 + Revision lineage）· Workflow DAG（15 节点，反馈环，Per-Question
@@ -131,7 +134,7 @@ py -3.12 -m pytest tests -q                            # 单元/集成/端到端
 ## 目录结构
 
 ```
-MathModel/
+Modeling-Harness/
 ├── core/                            # 引擎（唯一可复用资产，架构冻结）
 │   ├── runtime/                     # V3 认知运行时：artifacts / state / graph / execution / modeling / knowledge
 │   ├── roles/  workflows/           # 4 角色（analyst/modeler/experimenter/critic）/ DAG（YAML 定义）
@@ -198,6 +201,13 @@ py -3.12 research/P15/scripts/k002_freeze.py --check     # K002 冻结漂移校�
 ```
 
 > Windows 本机：`py` 默认解释器（3.14/3.13）安装损坏，请用 `py -3.12 ...`。
+
+## 从 MathModel 迁移
+
+本项目原品牌名为 **MathModel**，现已更名 **Modeling-Harness**（中文名：建模执行框架）。
+旧品牌仅保留在 `MIGRATION.md`、CHANGELOG 历史记录与外部专名（如 MathModelAgent）中；
+GitHub 旧仓库 `LinHoMo/MathModel` 自动重定向到 `LinHoMo/modeling-harness`。
+完整映射表、兼容时间表与回滚方式见 [MIGRATION.md](MIGRATION.md)。
 
 ## 许可与边界
 

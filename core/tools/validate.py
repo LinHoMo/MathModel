@@ -1,5 +1,5 @@
 """
-MathModelSkills 验证脚本 - 六层防御体系
+Modeling-Harness 验证脚本 - 六层防御体系
 用于验证项目结构和产物完整性
 """
 import os
@@ -991,7 +991,7 @@ def validate_project(project_path):
     project_path = Path(project_path)
     
     print("=" * 60)
-    print("MathModelSkills 六层防御验证")
+    print("Modeling-Harness 六层防御验证")
     print("=" * 60)
     
     all_checks = [

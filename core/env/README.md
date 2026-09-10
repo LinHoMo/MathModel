@@ -1,6 +1,6 @@
 # env —— 环境变量配置层
 
-`core/env/` 是 MathModelSkills 项目根目录下的**用户可调环境变量配置层**，让用户在不修改 skill 逻辑的前提下调整交付规格与运行阈值。它是 UTG 多 Agent 架构演进的第一步落地：各 agent 不再硬编码阈值，而是统一通过 `core/env/loader.py` 读取本目录的 `config.yaml`。
+`core/env/` 是 Modeling-Harness 项目根目录下的**用户可调环境变量配置层**，让用户在不修改 skill 逻辑的前提下调整交付规格与运行阈值。它是 UTG 多 Agent 架构演进的第一步落地：各 agent 不再硬编码阈值，而是统一通过 `core/env/loader.py` 读取本目录的 `config.yaml`。
 
 ## 目录内容
 

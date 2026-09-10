@@ -2,14 +2,14 @@
 > Version: v1.1 | Status: Frozen | Updated: 2026-09-08
 
 > 生效日期：2026-09-08 ｜ 状态：**ARCHITECTURE FROZEN**（架构已冻结，变更需走 RFC）
-> 适用范围：MathModel Harness 全系统（V3 runtime + V2 legacy 兼容层 + benchmark + evaluation）
+> 适用范围：Modeling-Harness 全系统（V3 runtime + V2 legacy 兼容层 + benchmark + evaluation）
 > 核心命题：方法卡 = Constraint / Prior / Validation，**不是答案库**。
 > 核心哲学（v1.1 增补）：
 > **The LLM constructs models. Knowledge constrains and informs construction. Evidence decides whether the construction survives.**
 
 ## 1. 文档定位
 
-本文档锁定 Modeling Knowledge（方法卡体系）在 MathModel Harness 中的**角色定位与治理边界**。
+本文档锁定 Modeling Knowledge（方法卡体系）在 Modeling-Harness 中的**角色定位与治理边界**。
 自生效之日起，任何对三层模型定位、方法卡语义、benchmark 评估字段的解释均以本文档为准；
 与本文档冲突的既有表述（如 `core_methods` 作为评估字段、`reference_method` 匹配评分）
 视为历史遗留，按第 8 节历史更正记录逐步迁移。
