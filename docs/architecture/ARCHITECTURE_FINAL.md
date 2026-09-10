@@ -34,7 +34,7 @@
 │  │  15 nodes: problem_analysis → model_selection →        │  │
 │  │  model_construction → code_generation →                │  │
 │  │  model_execution → model_validation → evidence_build → │  │
-│  │  evidence_gate → ... → paper_projection                │  │
+│  │  evidence_gate → ...（paper_projection 已随 v3.2.2 删除）│
 │  └──────────────────────────┬────────────────────────────┘  │
 │                             │                                │
 │  ┌──────────────────────────▼────────────────────────────┐  │
@@ -229,7 +229,7 @@ MathModel/
 │   ├── knowledge/              # Method Cards + Failure Memory + Patterns
 │   ├── schemas/                # JSON Schemas (consolidated)
 │   ├── skills/                 # Critics + Syslab
-│   ├── templates/              # LaTeX + Figures
+│   ├── templates/              # （LaTeX 模板已随 v3.2.2 删除）
 │   ├── tools/                  # CLI Tools (cleaned)
 │   ├── legacy/                 # V2 Compatibility (frozen)
 │   └── evaluation/             # Scoring + Benchmark (fixed ghost dirs)

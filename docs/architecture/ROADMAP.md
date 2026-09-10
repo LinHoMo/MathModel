@@ -446,6 +446,8 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ### P3-3: Paper Quality End-to-End Test
 
+> ⚠️ 已随 v3.2.2 论文链删除：项目定位不含论文生成（LaTeX/PDF），本节不再执行。
+
 **目标**：完整 pipeline 在真实竞赛题上的表现
 
 **为什么做**：所有 P15 实验都是组件级，没有测试端到端
@@ -465,7 +467,7 @@ Engine 的 validator hook 机制从未在生产中使用。
 - 论文包含 ≥ 6 figures, ≥ 4 tables, ≥ 15 equations, ≥ 10 references
 - 无 placeholder / AI 痕迹
 
-**预计依赖**：需要 LaTeX 编译环境
+**预计依赖**：~~需要 LaTeX 编译环境~~（LaTeX 论文链已随 v3.2.2 删除，本节不再执行）
 
 ---
 
@@ -490,6 +492,6 @@ P3-1 (E2B) + P3-2 (Deterministic Metrics) + P3-3 (E2E Test)
 ```powershell
 # 每项完成后必须运行：
 py -3.12 -m pytest tests -q                    # 全绿
-py -3.12 core/tools/validate.py                # 58 通过
+py -3.12 core/tools/validate.py                # 45 通过
 py -3.12 core/tools/catalog_check.py --check   # OK
 ```

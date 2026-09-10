@@ -13,7 +13,7 @@
 | 概念 | 曾并存的称呼（废止） | Canonical |
 |---|---|---|
 | 模型 | `MODEL_SPEC.md` / `MODEL_ARTIFACT` / V3 Model Artifact / `ResearchState.models` / model_output / formal_model | **Model** |
-| 论文 | `PAPER_SPEC` / Paper Projection / `paper/main.pdf` / Writer output | **PaperProjection** |
+| ~~论文~~ | ~~`PAPER_SPEC` / Paper Projection / `paper/main.pdf` / Writer output~~ | ~~PaperProjection~~（已随论文链删除，见下行） |
 | 证据 | Evidence Graph / experiment result / validator report | **Evidence** |
 
 ## 2. 12 个规范实体与 Schema 归户
@@ -23,7 +23,7 @@
 | Problem | problem | 无独立 schema（inputs/ 原始题面为真源） | `question_spec.schema.json` |
 | Question | question | 无独立 schema（DAG per_question + Research State questions 维度） | `question_spec.schema.json`、V2 `q_states` |
 | Model | model | M artifact；内容在 payload 文件 | `model_spec.schema.json`、`model_artifact.schema.json`、`model_dag.schema.json`、`MODEL_SPEC.md` |
-| Artifact | —（统一契约本体，15 子类型） | `v3/artifact/artifact.schema.json` + `registry.schema.json` | V2 各契约文件 |
+| Artifact | —（统一契约本体，14 子类型；`paper_section` 已随论文链删除） | `v3/artifact/artifact.schema.json` + `registry.schema.json` | V2 各契约文件 |
 | Experiment | experiment | E artifact | （V2 CODE_DELIVERABLES 契约已随论文链删除） |
 | Result | result | R artifact | `figures/all_results.json`（legacy 数值出口） |
 | Evidence | —（graph 为主体） | `v3/evidence/graph.schema.json` | `literature_evidence.schema.json` |
@@ -42,8 +42,8 @@
 | `bench_result.schema.json` | evaluation 层 | 评测资产，非 domain 实体；能力测量口径见 BASELINE_REPORT |
 | `bench_rubric.schema.json` | evaluation 层 | 同上（评委 rubric） |
 | `checkpoint.schema.json` | Run（legacy 会话快照） | session checkpoint 的 legacy 视图，P2 后由事件投影取代 |
-| `citation.schema.json` | PaperProjection（子结构） | 论文投影的引用子结构，validators/paper 消费 |
-| `model_paper_map.schema.json` | Model → PaperProjection 传输映射 | P13-3D 传输研究的映射表；canonical 视角是 M→deliverable 的 appears_in 边投影 |
+| ~~`citation.schema.json`~~ | ~~PaperProjection（子结构）~~ | 已随 v3.2.2 论文链删除（文件不再存在） |
+| ~~`model_paper_map.schema.json`~~ | ~~Model → PaperProjection 传输映射~~ | 已随 v3.2.2 论文链删除（文件不再存在） |
 | `score_card.schema.json` | evaluation 层 | 五维评分链输出 |
 
 ## 3. 视图规则

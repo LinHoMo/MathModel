@@ -41,7 +41,7 @@
 | 验证完成 | **NO** | YES | 只来自 VR artifact |
 | 证据充分 | **NO** | YES | 只来自 Evidence Gate E1-E9 |
 | 模型验证通过 | **NO** | YES | 只从 supports edge 自动推导 |
-| 论文投影完成 | 间接 | YES | paper_projection 节点 PASS |
+| ~~论文投影完成~~ | — | — | `paper_projection` 节点已随 v3.2.2 论文链删除，不再适用 |
 
 ### 1.3 间接写入通道
 

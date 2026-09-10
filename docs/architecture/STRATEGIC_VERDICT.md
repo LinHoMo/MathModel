@@ -31,7 +31,7 @@ LinHoMo Runtime (不可替换)
     ↓ Execution Substrate (真实 subprocess)
     ↓ Fidelity Layer (L2: MODEL_IR ↔ Code)
     ↓ Evidence Graph (provenance chain)
-    ↓ Validation Gates (57 项 + Evidence Gate)
+    ↓ Validation Gates (45 项 + Evidence Gate)
     ↓ Model Lifecycle State Machine
     ↓ Revision Engine (failure → diagnosis → draft → re-execution)
 ```
@@ -77,7 +77,7 @@ LinHoMo Runtime (不可替换)
 | Reference Constructor | 最小参考 Constructor，用于 benchmark baseline |
 | Knowledge Card System | 方法卡体系（已有 24 张，可扩展） |
 | Experiment Planner | 实验规划器 |
-| Paper Templates | LaTeX 模板（标准格式） |
+| ~~Paper Templates~~ | ~~LaTeX 模板（标准格式）~~（已随 v3.2.2 论文链删除） |
 | E2E Metrics | 八项能力指标 |
 
 ### EXTERNAL（应该复用外部）
@@ -87,7 +87,7 @@ LinHoMo Runtime (不可替换)
 | Sandboxed Code Execution | E2B / OpenAI Containers / Docker |
 | Multi-LLM Provider Routing | litellm 或类似 |
 | Web Search | Tavily / Perplexity |
-| Paper Formatting | 标准 LaTeX 模板 |
+| ~~Paper Formatting~~ | ~~标准 LaTeX 模板~~（已随 v3.2.2 论文链删除） |
 | Desktop App UX | 参考 MathModelAgent 架构 |
 
 ### FORBIDDEN（绝对不做）
@@ -302,7 +302,7 @@ LinHoMo 提供：Artifact Registry + Evidence + Validation + Lifecycle。
 - 不依赖特定 Agent/LLM 的模型生命周期管理
 - 真实执行闭环（status 只来自 subprocess）
 - 可追溯的 Evidence Graph
-- 机械验证（57 项 + E1-E9 Evidence Gate）
+- 机械验证（45 项 + E1-E9 Evidence Gate）
 - 确定性 Replay/Reconcile
 - Model Lineage（M1 → FAIL → M2 → PASS → revision_of）
 - 结构化 MODEL_IR（独有：没有任何外部系统有等价物）

@@ -1,26 +1,23 @@
-# Research Directory
+# Research Directory / 研究目录
 
 > 本目录存放研究实验与审计报告，**不被 core/runtime 消费**。
 > 所有 research 产物遵循 `research→core 无直接 import` 铁律。
 
-## 目录结构
+## 目录总览
 
 | 目录 | 性质 | 说明 |
 |---|---|---|
-| `P13-3D/` | 历史证据 | P13 首轮实验（negative but informative） |
-| `P13-3D-R2/` | 历史证据 | P13 复现实验（冻结 output） |
-| `P13-3D-R3/` | 历史证据 | P13 真实 Writer 对照实验 |
-| `P14/` | 历史证据 | P14 pilot PASS（21/21 replay match） |
-| `P15/` | **当前活跃** | Competition Model Construction Program |
-| `bench-m4-2000c/` | 基准 | M4 基准运行（regression test 引用） |
-| `bench-m4-2000c-p131-b/c/` | 历史 | P13-1 变体 |
-| `bench-m4-2000c-p132-a/b/c/` | 历史 | P13-2 变体 |
-| `bench-p132-2023c/` | 历史 | P13-2 2023C 题 |
-| `RC-SMOKE/` | 历史证据 | RC-S1/S3 PASS 证据 |
-| `REPOSITORY_AUDIT/` | 审计 | 仓库审计系列文档 |
+| `ENGINEERING/` | 工程验证 | v3.1.0 架构验证闭环（G6 Replay / G7 Reconcile / G8 Failure Propagation）的正式结果与证据归档：`ARCHITECTURE_VALIDATION_CLOSE.md`（关闭报告）、`DEBT_REGISTER.md`（已观测架构债务登记）、`evidence/`（验证脚本与 gates 归档） |
+| `P15/` | 当前活跃 | Competition Model Construction Program：以 CUMCM 真题为输入的能力训练 + 可控评测基准。K001 / K002 / K003 已 CLOSED，K004 进行中。**入口见 [P15/README.md](P15/README.md)** |
+
+> **独立研究仓库**：P15 实验数据与报告计划迁移至独立研究仓库，迁移完成后本文件将回填仓库地址（待阶段五确认）。
 
 ## 铁律
 
 - **research→core 无直接 import**：research/ 下的脚本不得 import core/ 模块
 - **research 产物不回流 core/**：研究产物留在 research/，不迁入 core/
-- **历史证据不删除**：P13/P14/RC-SMOKE 等实验产物具有科研证据价值，禁止删除
+- **历史证据不删除**：实验产物（含 negative 结果、原始数据、落盘 registry/evidence graph）具有科研证据价值，禁止删除；**迁移 ≠ 删除**——迁往独立仓库时必须完整保留数据、谱系与报告，主仓库仅移除引用并指向新地址
+
+## 历史目录说明
+
+早期实验目录（P13 系列 / P14 / bench-m4 系列 / RC-SMOKE / REPOSITORY_AUDIT 等）已随 v3.2.2「V2 残留彻底清除」从主树移除，其相关状态与结论以 `docs/STATUS.md` 为准；本仓库当前保留的全部实验数据位于 `research/P15/`。

@@ -6,7 +6,7 @@
 
 | 文件 | 作用 |
 | --- | --- |
-| `config.yaml` | 五组可调参数（含默认值与中文注释），用户直接编辑此文件即可调整规格 |
+| `config.yaml` | 六组可调参数（含默认值与中文注释），用户直接编辑此文件即可调整规格 |
 | `loader.py` | 零外部依赖的加载器，提供 `load_config()` / `get(key)` 接口，缺失时回退默认值 |
 | `README.md` | 本说明文档 |
 
@@ -37,15 +37,14 @@ from core.env.loader import load_config, get
 
 # 方式一：一次性拿到完整 config dict
 cfg = load_config()
-print(cfg["paper"]["min_pages"])        # 17（软目标；国赛官方硬上限 20 页，见 official.body_max_pages）
+print(cfg["modeling"]["assumption_score_threshold"])  # 6.0
 print(cfg["code"]["random_seed"])       # 42
 print(cfg["runtime"]["strict_mode"])    # True
 
 # 方式二：按点号路径读取单个值（推荐，agent 内部使用）
-get("paper.min_pages")                  # 17（软目标；国赛官方硬上限 20 页）
 get("code.random_seed")                 # 42
 get("modeling.assumption_score_threshold")  # 6.0
-get("runtime.template")                 # "cumcm-zh"
+get("runtime.strict_mode")              # True
 
 # key 不存在时返回 default（不抛异常）
 get("not.exist.key", default="fallback")  # "fallback"
