@@ -11,6 +11,9 @@
 
 ### P0-1：orchestrator 注入通道
 
+> ✅ **DONE 2026-09-10**（commit `d04feb1`）：`--constructor-dir` 从 `<project>/constructor/` 加载外部 Constructor 产物（MIR+code+specs），默认 `--execute` 20/20 节点跑通、EXEC rc=0、VR 如实传播；验收 `test_orchestrator_injection.py` 5/5；全量 1026/4。
+
+
 | 项 | 内容 |
 |---|---|
 | **目标** | orchestrator 支持从项目目录加载外部 Constructor 产物（MODEL_IR + code + validation_specs），使默认 `--execute` 能跑通完整链路 |
@@ -27,6 +30,9 @@
 
 ### P0-2：Engine validators 挂载
 
+> ✅ **DONE 2026-09-10**（commit `fcee52e` + `ec39c83`）：`core/runtime/execution/validators.py`（evidence_consistency_validator）挂载到 WorkflowEngine 与 WaveExecutor；PASS 节点声明的 artifacts/evidence 必须真实存在于 registry；验收 5/5。
+
+
 | 项 | 内容 |
 |---|---|
 | **目标** | session 构造 engine 时传入 validators，使 catalog/v3.yaml 声明的 6 个 gate 真实执行 |
@@ -42,6 +48,9 @@
 | **预计依赖** | 无 |
 
 ### P0-3：ExecutionResult 来源鉴别
+
+> ✅ **DONE 2026-09-10**（commit f8f21f1）：`execution_auth.py` 进程级 HMAC （issue_token/verify_token，常数时间比较）；adapter 签发 `execution_token`；`registry.create` 对 success EXEC 强制来源鉴别（无 token / HMAC 不匹配拒绝），历史/测试桩显式 `legacy_unverified=true` 豁免（不回溯）；读取路径不校验，尊重已存在事实。验收 `test_execution_authenticity.py` 5/5（真实通过/伪造拒绝/坏 token 拒绝/legacy 豁免/正反例）；全量 1026/4；validate 58/0；catalog/terminology OK；三 freeze 全 PASS。
+
 
 | 项 | 内容 |
 |---|---|
@@ -91,6 +100,9 @@
 
 ### P0-6：K003 残余直写路径删除
 
+> ✅ **DONE 2026-09-10**（commit `46d9f49`）：`k003_formal_runner.py` 直写 execution_result.json fallback 删除，改独立 error log；结构测试覆盖 `.write_text(`变体；grep 全仓 execution_result.json 写入点仅 execution_writer。
+
+
 | 项 | 内容 |
 |---|---|
 | **目标** | 删除 k003_formal_runner.py:829 的 fallback 直写 execution_result.json；结构测试覆盖 .write_text( 变体 |
@@ -111,6 +123,9 @@
 
 ### P1-1：Fidelity 门接入主路径
 
+> ✅ **DONE 2026-09-10**（commit `2e6662a` + `f0a4bba` + `80741df`）：`do_model_execution` 对成功 EXEC 跑 `_fidelity_of`（misaligned→FAIL），`verify_fidelity` 生产 DAG 内 `register_vr=False`（防 C8 幂等复用跳过真实数值验证），容器/向量输出 F5 如实 skipped；验收 `test_fidelity_integration.py` 5/5。
+
+
 | 项 | 内容 |
 |---|---|
 | **目标** | code_generation 后自动跑 fidelity check，misaligned → FAIL |
@@ -127,6 +142,9 @@
 
 ### P1-2：Revision Loop 接入主 DAG
 
+> ⏳ **PARTIAL 2026-09-10**（commit `311a863` + `123f287` + `d358171`）：`do_model_validation` FAIL 时 `_diagnose_and_draft`（沿 `verified_by` 边机械诊断 → diagnosis artifact + diagnosed_by 边；`build_revision_draft` 生成 M2 草案入 shared 供外部 Constructor 消费；modeling_trace object 契约对齐）。**未完成**：re_execute 节点自动重跑与 M2→PASS 闭环仍由 vs001_driver 独立驱动，未接入 V3 主 DAG。
+
+
 | 项 | 内容 |
 |---|---|
 | **目标** | model_validation FAIL → diagnose_failure → revision_draft → new_model_version → re-execution，形成自动 M1→M2 闭环 |
@@ -142,6 +160,9 @@
 | **预计依赖** | P0-1, P0-4, P1-1 |
 
 ### P1-3：Constructor Protocol 层
+
+> ✅ **DONE 2026-09-10**（commit `b52cf7b` + `5e78137`）：`core/runtime/constructors/{protocol,registry}.py`——ConstructionBundle + ConstructorAdapter ABC + capability C0-C5 + ConstructorRegistry；验收 5/5。
+
 
 | 项 | 内容 |
 |---|---|
@@ -174,6 +195,9 @@
 | **预计依赖** | 无 |
 
 ### P1-5：死代码清理（第一批）
+
+> ✅ **DONE 2026-09-10**（commit `6466490` + `95a5cb3`）：删除确认的死模块/死循环/`_maybe_execute_experiment` 等；删除后全量 pytest + validate 全绿。
+
 
 | 项 | 内容 |
 |---|---|
