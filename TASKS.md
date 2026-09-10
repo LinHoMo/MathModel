@@ -17,9 +17,9 @@
 | T-P3-01 | K005 模板 + K004 protocol 整理（K004 实验已存在于 P15/k004） | P3 | protocol/ 下模板存在；含 6 节 | — |
 | T-P3-02 | 新实验方向决策（K 系列 vs Constructor 集成实证） | P3 | 决策记录进 TASKS.md | T-CONF-003 |
 | T-CONF-003 | 待确认：K004 已有实验与报告——继续补 K005，还是转向 Constructor 集成实证 | — | 裁定后执行 T-P3-01/02 | 用户 |
-| T-CONF-006 | 终审 P1-2：`domains/` 包零引用（CANONICAL_ENTITIES/canonical_name/entity_schema 无消费者）——接入消费者还是标注预定义 | — | 裁定后执行 | 用户 |
-| T-CONF-007 | 终审 P2-1：发行名 `modeling-harness-skills`（pyproject.toml:6）是否改为 `modeling-harness`（需确认 PyPI 可用性） | — | 裁定后执行 | 用户 |
-| T-CONF-008 | 终审 T-CONF-NEW-3：`MATHMODEL_AGENT_API` 是否算外部专名保留（终审建议保留，代码未读取） | — | 裁定后登记 | 用户 |
+| T-CONF-006 | 裁定：`domains/` 标注预定义冻结（README + docstring 声明接入条件），不删除不接入 | 2026-09-10（用户裁定，随 profiles commit） | | |
+| T-CONF-007 | 裁定：发行名改为 `modeling-harness`（PyPI 未占用，实测 pip index 无匹配） | pyproject.toml:6（随 profiles commit） | | |
+| T-CONF-008 | 裁定：`MATHMODEL_AGENT_API` 保留（外部专名，docstring 提及、代码未读取） | 2026-09-10（用户裁定） | | |
 
 ## Done / 已完成
 

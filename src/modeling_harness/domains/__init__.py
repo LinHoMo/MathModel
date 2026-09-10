@@ -7,6 +7,8 @@
 已有 V2 schema 全部视为 legacy 投影（见 docs/architecture/CANONICAL_DOMAIN.md）。
 
 纯定义层：零行为、零第三方依赖。runtime / validators / 文档均可安全 import。
+状态（T-CONF-006 裁定，2026-09-10）：契约层冻结，v1.0 不接入消费者；
+接入条件见 domains/README.md（需要 canonical entity 校验时再从此 import）。
 """
 
 from __future__ import annotations
