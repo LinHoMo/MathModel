@@ -8,17 +8,14 @@
 
 | ID | Task | Agent | Status | Acceptance |
 |----|------|-------|--------|------------|
-| — | 阶段六（版本收口 P2）待启动；前置：T-CONF-002（pyproject version） | MainAgent | 待确认 | 阶段五已交付，等待用户裁定后进入 |
+| — | 阶段七（新实验模板 P3）待启动；前置：T-CONF-003（K004 已存在，方向确认） | MainAgent | 待确认 | 阶段六已交付，等待用户裁定后进入 |
 
 ## Todo / 待办
 
 | ID | Task | Priority | Acceptance | Blocked By |
 |----|------|----------|------------|------------|
-| T-P2-04 | pyproject version 同步（1.0.0 → 3.2.2？） | P2 | 若改：与 tag v3.2.2 一致 | T-CONF-002 |
-| T-P2-05 | 发布流程文档 docs/RELEASE.md | P2 | 含版本号/tag/release notes/CI 四节 | — |
 | T-P3-01 | K005 模板 + K004 protocol 整理（K004 实验已存在于 P15/k004） | P3 | protocol/ 下模板存在；含 6 节 | — |
 | T-P3-02 | 新实验方向决策（K 系列 vs Constructor 集成实证） | P3 | 决策记录进 TASKS.md | T-CONF-003 |
-| T-CONF-002 | 待确认：pyproject version 是否改为 3.2.2 | — | 裁定后执行 T-P2-04 | 用户 |
 | T-CONF-003 | 待确认：K004 已有实验与报告——继续补 K005，还是转向 Constructor 集成实证 | — | 裁定后执行 T-P3-01/02 | 用户 |
 
 ## Done / 已完成
@@ -57,3 +54,7 @@
 | T-CONF-005 | 裁定：VS001 两份报告保留，不删除不合并 | 阶段一裁定（无 commit） | 2026-09-10 |
 | T-CONF-001 | 裁定：P15 **保留在主树**（撤销移出决策；K001–K004 为 Constructor 实验证据） | 用户裁定 + `ae8ca2a` | 2026-09-10 |
 | T-CONF-004 | 裁定：paper-cases 更名 cases 保留（建模知识，非论文产物） | `514bb17` | 2026-09-10 |
+| T-P2-04 | pyproject version 1.0.0 → 3.2.2（T-CONF-002 裁定：改） | `528b277` | 2026-09-10 |
+| T-P2-05 | 发布流程文档 docs/RELEASE.md（4 节） | `531dd22` | 2026-09-10 |
+| T-P2-10 | AGENTS.md 冻结 v1.0 + CHANGELOG 记录 | `7d03bfc` | 2026-09-10 |
+| T-CONF-002 | 裁定：pyproject version 改为 3.2.2（与 tag 一致） | `528b277` | 2026-09-10 |
