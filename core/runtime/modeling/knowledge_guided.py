@@ -126,10 +126,25 @@ def _with_contract_ids(oblig: dict, prefix: str) -> dict:
         v = dict(v)
         v.setdefault("validation_id", f"{prefix}VAL{i:02d}")
         v.setdefault("status", "required")
+        # MODEL_IR 契约：validation 必须可执行（method 描述确定性检查；
+        # 义务文本即方法说明，不编造数值/结果）
+        v.setdefault("type", "constraint")
+        v.setdefault("method",
+                     v.get("obligation") or "deterministic_check")
+        v.setdefault("targets_refs", [])
+        v.setdefault("sub_question_binding", ["Q1"])
         out["validations"][i - 1] = v
     for i, a in enumerate(out.get("assumptions", []), 1):
         a = dict(a)
         a.setdefault("assumption_id", f"{prefix}ASM{i:02d}")
+        # MODEL_IR 契约：assumption 需 text/rationale（来自义务文本）
+        if not a.get("text"):
+            a["text"] = a.get("assumption") or a.get("statement") or ""
+        a.setdefault("type", "simplification")
+        if not a.get("rationale"):
+            sc = a.get("source_card")
+            a["rationale"] = (
+                f"来自知识卡 {sc}" if sc else (a.get("text") or ""))
         out["assumptions"][i - 1] = a
     return out
 
@@ -173,6 +188,14 @@ def apply_knowledge_obligations(model_ir: dict, cards,
          "risks": mir.get("risks", []),
          "dependencies": []},
         {k: v for k, v in oblig.items() if k != "claim_obligations"})
+    # merge 后对全部义务（含建模者原有声明）统一补 MODEL_IR 契约字段
+    # （幂等 setdefault；不覆盖已有值，不编造数值）
+    merged["validations"] = _with_contract_ids(
+        {"validations": merged["validations"], "assumptions": []},
+        prefix="KG")["validations"]
+    merged["assumptions"] = _with_contract_ids(
+        {"validations": [], "assumptions": merged["assumptions"]},
+        prefix="KG")["assumptions"]
     mir["validations"] = merged["validations"]
     mir["assumptions"] = merged["assumptions"]
     mir["risks"] = merged["risks"]
