@@ -215,7 +215,7 @@ def generate_openai_yaml(catalog):
         "# *** 请勿手工编辑 —— 以 catalog/v3.yaml 为单一真源 ***",
         f"# 最近生成时间: {timestamp}",
         "",
-        'name: "mathmodeling-skills"',
+        'name: "modeling-harness-skills"',
         'version: "3.0.0"',
         'description: "数学建模认知工作流运行时（V3）"',
         "",

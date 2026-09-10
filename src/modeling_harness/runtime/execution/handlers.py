@@ -417,7 +417,7 @@ class DefaultNodeExecutor:
             Path(wd).mkdir(parents=True, exist_ok=True)
             return str(wd)
         import tempfile
-        return tempfile.mkdtemp(prefix="mathmodel_exec_")
+        return tempfile.mkdtemp(prefix="mh_exec_")
 
     def _code_for_mir(self, qid: str, mir_id: str) -> str | None:
         """P1-M3：按候选 model_id 匹配注入代码（external_candidates 内嵌 code）。"""
