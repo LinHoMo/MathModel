@@ -8,6 +8,7 @@
 
 | ID | Task | Agent | Status | Acceptance |
 |----|------|-------|--------|------------|
+| T-HANDOFF-01 | 编写交接文档：`projects/cumcm2026a/HANDOFF.md`、`projects/cumcm2026b/HANDOFF.md`（实例级）+ `docs/HANDOFF.md`（跨题 harness 层：门禁口径/本轮修复/优化 backlog）；`docs/README.md` 登记；`.rivet/` 入 `.gitignore` | MainAgent | 待回填 commit | 三份文档存在且过四件套（validate 45/0/0、catalog 双检 OK、pytest 600 passed） |
 | — | 阶段七（新实验模板 P3）待启动；前置：T-CONF-003（K004 已存在，方向确认） | MainAgent | 待确认 | 阶段六已交付，等待用户裁定后进入 |
 
 ## Todo / 待办

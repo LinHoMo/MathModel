@@ -111,6 +111,7 @@ Construction 行为？"。
     projects/cumcm2026b（干扰源交会定位 + 同心环覆盖清除）✅ 四件套 + state
     反向修复 harness 4 处（Mermaid 闭合误判 / README 内部路径泄漏 ×3）
     知识沉淀：方法卡 3 + 失败卡 5 + playbook 2（A/B 各 1）
+    交接文档：`docs/HANDOFF.md`（跨题门禁/修复/backlog）+ `projects/cumcm2026a/HANDOFF.md`、`projects/cumcm2026b/HANDOFF.md`；`.rivet/` 入 `.gitignore`
 
 进行中（MainAgent）：无 —— ROADMAP 全项已处理完毕
 待办：
