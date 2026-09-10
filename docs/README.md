@@ -27,7 +27,7 @@
 | [RUN_PROVENANCE.md](architecture/RUN_PROVENANCE.md) | 运行溯源与确定性重放（Hardening P3，replay 引擎） |
 | [MODELING_KNOWLEDGE_GOVERNANCE.md](architecture/MODELING_KNOWLEDGE_GOVERNANCE.md) | Modeling Knowledge 治理规范（方法卡 = Constraint/Prior/Validation） |
 | MODEL_CONSTRUCTION_GAP.md | 模型构造差距分析（ANALYSIS COMPLETE） |
-| MODEL_QUALITY_CRITERIA.md | 模型质量与创新性的可操作判据（DRAFT，待评审） |
+| MODEL_QUALITY_CRITERIA.md | 模型质量判据（FROZEN：合格线 G1–G3 Gate + 排序线 R1–R2 Rank） |
 | [CONSTRUCTOR_INTEGRATION_PLAN.md](architecture/CONSTRUCTOR_INTEGRATION_PLAN.md) | 外部 Constructor 集成方案（DESIGN FROZEN） |
 | [EXPERIMENT_STRATEGY.md](architecture/EXPERIMENT_STRATEGY.md) | 实验策略（DESIGN FROZEN） |
 | [EXPRESSION_CONTRACT.md](architecture/EXPRESSION_CONTRACT.md) | 表达层契约（P11 冻结，expression.py 代码真源） |
