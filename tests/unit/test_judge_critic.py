@@ -46,7 +46,8 @@ def healthy(tmp_path):
 
 
 def build(reg, g):
-    nar = ResearchDirector(reg, g).build()
+    from runtime.writing.narrative_ir import build_narrative_ir
+    nar = build_narrative_ir(reg, g)
     outline = PaperProjection(reg, g).project(nar)
     ev = eg.evaluate(reg, g)
     return nar, outline, ev
@@ -74,8 +75,9 @@ class TestVerdicts:
     def test_unknown_empty_narrative(self, healthy):
         reg, g = healthy
         from runtime.writing import Narrative
+        from runtime.writing.narrative_ir import build_narrative_ir
         outline = PaperProjection(reg, g).project(
-            ResearchDirector(reg, g).build())
+            build_narrative_ir(reg, g))
         report = JudgeCritic().evaluate(Narrative(), outline,
                                         eg.evaluate(reg, g))
         assert report.verdict == "UNKNOWN"

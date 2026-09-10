@@ -146,6 +146,60 @@ def run_check(kind: str, outputs: dict, spec: dict) -> dict:
         return {"name": name, "kind": kind, "passed": hit is not None,
                 "detail": detail, "resolved_key": hit}
 
+    if kind == "objective_finite":
+        # P2-1 F7：目标值有限（递归扫描输出数值，发现 NaN/Inf → fail）。
+        # 无数值输出 → 如实 unverifiable 语义：pass=False（有声明就该有
+        # 数值，不能以"没输出"冒充"有限"）。
+        bad = []
+        for p, v in _iter_numeric(outputs):
+            if v != v or v in (float("inf"), float("-inf")):
+                bad.append((p, v))
+        return {"name": name, "kind": kind, "passed": not bad,
+                "detail": (f"输出数值全部有限（{len(list(_iter_numeric(outputs)))} 个）"
+                           if not bad else
+                           f"发现非有限值: {', '.join(f'{p}={v!r}' for p, v in bad[:3])}")}
+
+    if kind == "constraint_satisfaction":
+        # P2-1 F6：约束数值满足——对 MODEL_IR 中带显式可执行断言
+        # （constraint.check = {path, op, value}）的约束做真值校验；
+        # 无显式断言的约束如实跳过（复杂表达式不强行机械解析，不误判）。
+        constraints = spec.get("constraints") or []
+        judged = 0
+        failed = []
+        for c in constraints:
+            ck = (c or {}).get("check")
+            if not isinstance(ck, dict):
+                continue
+            cpath = ck.get("path")
+            cval = _get_path(outputs, cpath)
+            cnum = _num(cval)
+            if cnum is None:
+                failed.append(f"{cpath} 非数值")
+                judged += 1
+                continue
+            op = ck.get("op", "<=")
+            rhs = ck.get("value")
+            try:
+                rhs = float(rhs)
+            except (TypeError, ValueError):
+                failed.append(f"{cpath} 断言 rhs 非数值")
+                judged += 1
+                continue
+            ok = {"<=": cnum <= rhs, ">=": cnum >= rhs,
+                  "==": abs(cnum - rhs) < 1e-12,
+                  "<": cnum < rhs, ">": cnum > rhs}.get(op)
+            judged += 1
+            if ok is not True:
+                failed.append(f"{cpath}={cnum:g} 不满足 {op}{rhs:g}")
+        if judged == 0:
+            return {"name": name, "kind": kind, "passed": True,
+                    "detail": "无带显式 check 断言的约束（可机械判定项 0，不误判）"}
+        return {"name": name, "kind": kind, "passed": not failed,
+                "detail": (f"可机械判定约束 {judged} 条全部满足"
+                           if not failed else
+                           f"{judged} 条中 {len(failed)} 条不满足: "
+                           + "; ".join(failed[:4]))}
+
     return {"name": name, "kind": kind, "passed": False,
             "detail": f"未知检查类型 {kind!r}"}
 
@@ -349,6 +403,171 @@ def run_numeric_validation(outputs: dict, spec: dict,
                    + (f"{objective_value:.6g}" if objective_value is not None else "N/A")
                    + f"，domain_ok={domain_ok}"),
     }
+
+
+# ------------------------------------------------------------ P2-1 L6：Ground-Truth 断言判定
+
+def _iter_numeric(outputs, path: str = ""):
+    """递归产出 (path, value)：数值叶子（int/float，非 bool）。"""
+    if isinstance(outputs, dict):
+        for k, v in outputs.items():
+            yield from _iter_numeric(v, f"{path}.{k}" if path else str(k))
+    elif isinstance(outputs, (list, tuple)):
+        for i, v in enumerate(outputs):
+            yield from _iter_numeric(v, f"{path}[{i}]")
+    elif isinstance(outputs, (int, float)) and not isinstance(outputs, bool):
+        yield path, float(outputs)
+
+
+def validate_against_gt(execution_result: dict,
+                        gt_assertions: dict | None) -> dict:
+    """P2-1 L6：可执行 ground-truth 断言判定（机械、LLM-free）。
+
+    execution_result 应为合并了数值验证字段的真实执行产物：
+      {status, outputs, constraint_violation_max, objective_value,
+       objective_sane, ...}（arena 由 run_numeric_validation 产物合并）。
+
+    gt_assertions = {"version", "source", "checks": [{
+        "name", "kind", "source", 以及 kind 专属参数}]}
+      kind:
+        constraint_violation_max —— execution_result.constraint_violation_max
+                                      vs {"op": "<=", "value": 0}
+        objective_sane           —— objective_value 有限非 NaN（或
+                                      execution_result.objective_sane is True）；
+                                      模型无标量目标输出 → skipped（不计入分母，
+                                      不误伤无目标输出的合法模型）
+        output_nonnegative       —— 递归扫描 outputs 数值全部 ≥ 0；带
+                                      {"paths": [候选名列表]} 时只查这些路径
+                                      （由 MODEL_IR 声明的非负变量派生）
+        output_range             —— {"path": "a.b" 或 "*" 全量,
+                                      "min": .., "max": ..} 数值落入区间
+
+    铁律：无断言 → unverifiable（l6_score=None，不编造分数）；
+    判定失败必须来自真实数值，禁止硬编码 PASS；无法判定的断言
+    如实 skipped（不计入分母，不误伤）。
+    """
+    checks = (gt_assertions or {}).get("checks") or []
+    if not checks:
+        return {
+            "status": "unverifiable", "l6_score": None,
+            "passed": 0, "total": 0,
+            "checks": [{"name": "__no_gt_assertions__", "passed": False,
+                        "detail": "无 ground-truth 断言（不编造分数）"}],
+            "assertion_version": (gt_assertions or {}).get("version"),
+        }
+    if execution_result.get("status") != "success":
+        return {
+            "status": "invalid", "l6_score": None,
+            "passed": 0, "total": len(checks),
+            "checks": [{"name": c.get("name", "?"), "passed": False,
+                        "detail": "execution 非 success，无输出可做 L6 判定",
+                        "source": c.get("source")} for c in checks],
+            "assertion_version": (gt_assertions or {}).get("version"),
+        }
+    outputs = execution_result.get("outputs") or {}
+    results: list[dict] = []
+    for c in checks:
+        kind = c.get("kind")
+        name = c.get("name") or kind
+        src = c.get("source") or ""
+        if kind == "constraint_violation_max":
+            cvm = execution_result.get("constraint_violation_max")
+            if cvm is None:
+                results.append({"name": name, "passed": False,
+                                "detail": "执行产物缺 constraint_violation_max",
+                                "source": src})
+                continue
+            value = float(c.get("value", 0.0))
+            passed = cvm <= value if c.get("op", "<=") == "<=" else cvm >= value
+            results.append({"name": name, "passed": bool(passed),
+                            "detail": f"cvm={cvm:.6g} vs {c.get('op', '<=')}{value:g}",
+                            "source": src})
+        elif kind == "objective_sane":
+            obj = execution_result.get("objective_value")
+            sane = execution_result.get("objective_sane")
+            if sane is True:
+                results.append({"name": name, "passed": True,
+                                "detail": "objective_value 有限且合理",
+                                "source": src})
+            elif obj is None:
+                # 模型无标量目标输出：不可判定 → skipped（不计入分母，
+                # 不误伤无目标输出的合法模型，如实披露）
+                results.append({"name": name, "passed": None,
+                                "skipped": True,
+                                "detail": "无 objective_value，该断言不可判定（skipped）",
+                                "source": src})
+            else:
+                passed = isinstance(obj, (int, float)) and obj == obj \
+                    and abs(obj) != float("inf")
+                results.append({"name": name, "passed": bool(passed),
+                                "detail": f"objective_value={obj!r}",
+                                "source": src})
+        elif kind == "output_nonnegative":
+            paths = c.get("paths")
+            if paths:
+                # 只检查指定路径（MODEL_IR 声明的非负变量输出）
+                neg = []
+                scanned = 0
+                for cand in paths:
+                    hit = resolve_output_key(outputs, cand)
+                    if hit is None:
+                        continue
+                    for p, v in _iter_numeric(_get_path(outputs, hit)):
+                        scanned += 1
+                        if v < 0:
+                            neg.append((f"{hit}.{p}", v))
+                if scanned == 0:
+                    results.append({"name": name, "passed": None,
+                                    "skipped": True,
+                                    "detail": f"指定路径 {paths} 无可判定数值输出（skipped）",
+                                    "source": src})
+                    continue
+                results.append({"name": name, "passed": not neg,
+                                "detail": (f"非负输出（扫描 {scanned} 个数值，"
+                                           "发现负值: "
+                                           + ", ".join(f"{p}={v:g}" for p, v in neg[:3])
+                                           + ("…" if len(neg) > 3 else ""))
+                                           if neg else f"扫描 {scanned} 个数值全部 ≥ 0",
+                                "source": src})
+            else:
+                neg = [(p, v) for p, v in _iter_numeric(outputs) if v < 0]
+                results.append({"name": name, "passed": not neg,
+                                "detail": (f"非负输出（发现 {len(neg)} 个负值: "
+                                           + ", ".join(f"{p}={v:g}" for p, v in neg[:3])
+                                           + ("…" if len(neg) > 3 else ""))
+                                           if neg else "全部输出数值 ≥ 0",
+                                "source": src})
+        elif kind == "output_range":
+            lo, hi = c.get("min"), c.get("max")
+            path = c.get("path") or "*"
+            if path == "*":
+                vals = list(_iter_numeric(outputs))
+            else:
+                vals = [v for p, v in _iter_numeric(outputs) if p == path]
+            bad = [(p, v) for p, v in vals
+                   if (lo is not None and v < lo) or (hi is not None and v > hi)]
+            results.append({"name": name, "passed": not bad,
+                            "detail": (f"{path} ∈ [{lo}, {hi}]："
+                                       + ("全部落入区间"
+                                          if not bad else
+                                          "越界: " + ", ".join(
+                                              f"{p}={v:g}" for p, v in bad[:3])))
+                            if vals else f"{path} 无数值输出可判定",
+                            "source": src})
+        else:
+            results.append({"name": name, "passed": False,
+                            "detail": f"未知断言类型: {kind}",
+                            "source": src})
+    judged = [r for r in results if r.get("passed") is not None]
+    n_pass = sum(1 for r in judged if r["passed"])
+    total = len(judged)
+    score = round(n_pass / total, 4) if total else None
+    status = "passed" if total and n_pass == total else "failed"
+    return {"status": status, "l6_score": score,
+            "passed": n_pass, "total": total,
+            "skipped": sum(1 for r in results if r.get("skipped")),
+            "checks": results,
+            "assertion_version": (gt_assertions or {}).get("version")}
 
 
 # ------------------------------------------------------------ registration

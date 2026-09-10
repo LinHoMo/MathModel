@@ -189,8 +189,8 @@ class TestEvidenceDecision:
         st = s.state.data["state"]["evidence"]
         # 3) Projection：死 claim 不进入章节（R12 前置验证）
         from runtime.writing.projection import PaperProjection
-        from runtime.writing.director import ResearchDirector
-        nar = ResearchDirector(s.registry, s.graph).build()
+        from runtime.writing.narrative_ir import build_narrative_ir
+        nar = build_narrative_ir(s.registry, s.graph)
         outline = PaperProjection(s.registry, s.graph).project(nar)
         placed = set()
         for sec in outline["sections"]:
@@ -409,9 +409,9 @@ class TestR12Projection:
                  if a.question == "Q001")
         s.invalidate(r.artifact_id, reason="勘误")
         s.run()
-        from runtime.writing.director import ResearchDirector
+        from runtime.writing.narrative_ir import build_narrative_ir
         from runtime.writing.projection import PaperProjection
-        nar = ResearchDirector(s.registry, s.graph).build()
+        nar = build_narrative_ir(s.registry, s.graph)
         outline = PaperProjection(s.registry, s.graph).project(nar)
         terminal = {a.artifact_id for a in s.registry.list_by_type("claim")
                     if a.status in TERMINAL}

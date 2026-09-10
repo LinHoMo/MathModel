@@ -160,7 +160,8 @@ class TestEndToEnd:
         """真实 registry/graph → director → projection → critic 全链。"""
         from runtime.artifacts.registry import ArtifactRegistry
         from runtime.graph.evidence_graph import EvidenceGraph
-        from runtime.writing import PaperProjection, ResearchDirector
+        from runtime.writing import PaperProjection
+        from runtime.writing.narrative_ir import build_narrative_ir
 
         reg = ArtifactRegistry(tmp_path / "registry.json")
         reg.project = "t"
@@ -175,7 +176,7 @@ class TestEndToEnd:
             g.add_relation(f, r, t)
         reg.invalidate("R001", "勘误")
 
-        nar = ResearchDirector(reg, g).build()
+        nar = build_narrative_ir(reg, g)
         outline = PaperProjection(reg, g).project(nar)
         report = NarrativeCritic().evaluate(nar, outline)
         assert report.verdict == "FAIL"

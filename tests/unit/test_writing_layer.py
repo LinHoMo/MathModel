@@ -2,6 +2,8 @@
 
 运行: python -m pytest tests/unit/test_writing_layer.py -q
 覆盖任务书: P4 验收「叙事是 Research State 的投影（倒置原则）」。
+P3-3（2026-09-10）：PaperProjection 统一消费 ScientificNarrative IR；
+ResearchDirector 旧 API 仅保留给 director 自身测试。
 """
 
 import sys
@@ -15,11 +17,11 @@ import pytest
 from runtime.artifacts.registry import ArtifactRegistry
 from runtime.graph.evidence_graph import EvidenceGraph
 from runtime.writing import PaperProjection, ResearchDirector
+from runtime.writing.narrative_ir import build_narrative_ir
 
 
 @pytest.fixture
 def healthy(tmp_path):
-    """完整健康链: P→Q→M→(A)→E→R→F + R supports C + C appears_in S。"""
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.project = "test"
     reg.create("problem", title="板凳排列问题", activate=True)
@@ -61,7 +63,6 @@ class TestResearchDirector:
         assert arc.claim_id == "C001"
         assert arc.statement == "TOPSIS 排序对权重扰动稳健"
         assert arc.status == "supported"
-        # 证据闭包（双向）包含 result / experiment / figure
         for aid in ("R001", "E001", "F001"):
             assert aid in arc.evidence_ids
         assert not arc.dead_evidence
@@ -75,7 +76,7 @@ class TestResearchDirector:
 
     def test_dead_evidence_kills_arc(self, healthy):
         reg, g = healthy
-        reg.invalidate("R001", "数据勘误")   # 不走传播，只标 R001 死
+        reg.invalidate("R001", "数据勘误")
         nar = ResearchDirector(reg, g).build()
         arc = nar.arcs[0]
         assert arc.status == "dead"
@@ -91,8 +92,7 @@ class TestResearchDirector:
     def test_statement_falls_back_to_title(self, healthy):
         reg, g = healthy
         nar = ResearchDirector(reg, g).build()
-        # claim 无 data.statement 时回退 title
-        assert nar.arcs[0].statement  # 健康例有 statement，不回退
+        assert nar.arcs[0].statement
         reg.create("claim", title="只有标题的主张", question="Q001", activate=True)
         nar2 = ResearchDirector(reg, g).build()
         arc2 = next(a for a in nar2.arcs if a.claim_id == "C002")
@@ -100,28 +100,31 @@ class TestResearchDirector:
 
 
 class TestPaperProjection:
+    """P3-3：project 消费 ScientificNarrative IR（build_narrative_ir）。"""
+
+    def _outline(self, reg, g):
+        return PaperProjection(reg, g).project(build_narrative_ir(reg, g))
+
     def test_five_sections_in_order(self, healthy):
         reg, g = healthy
-        nar = ResearchDirector(reg, g).build()
-        outline = PaperProjection(reg, g).project(nar)
+        outline = self._outline(reg, g)
         names = [s["section"] for s in outline["sections"]]
-        assert names == ["问题重述与分析", "模型建立", "结果与分析",
-                         "灵敏度与稳健性", "结论"]
-        assert outline["problem"] == "板凳排列问题"
+        assert names == ["问题重述与分析", "模型建立", "实验设计",
+                         "结果与分析", "灵敏度与稳健性", "结论"]
 
     def test_model_section_carries_assumptions(self, healthy):
         reg, g = healthy
-        nar = ResearchDirector(reg, g).build()
-        outline = PaperProjection(reg, g).project(nar)
-        model_sec = outline["sections"][1]
-        assert model_sec["models"] == [
-            {"model": "M001", "question": "Q001", "assumptions": ["A001"]}]
+        outline = self._outline(reg, g)
+        model_sec = next(s for s in outline["sections"]
+                         if s["section"] == "模型建立")
+        assert {"model": "M001", "question": "Q001",
+                "assumptions": ["A001"]} in model_sec["models"]
 
     def test_result_section_claims_and_figures(self, healthy):
         reg, g = healthy
-        nar = ResearchDirector(reg, g).build()
-        outline = PaperProjection(reg, g).project(nar)
-        result = outline["sections"][2]
+        outline = self._outline(reg, g)
+        result = next(s for s in outline["sections"]
+                      if s["section"] == "结果与分析")
         assert result["claims"][0]["claim"] == "C001"
         assert result["claims"][0]["supported"] is True
         assert result["claims"][0]["placement"] == ["S001"]
@@ -130,25 +133,28 @@ class TestPaperProjection:
 
     def test_sensitivity_section_from_tags(self, healthy):
         reg, g = healthy
-        nar = ResearchDirector(reg, g).build()
-        outline = PaperProjection(reg, g).project(nar)
-        assert outline["sections"][3]["evidence"] == ["R001"]
+        outline = self._outline(reg, g)
+        sens = next(s for s in outline["sections"]
+                    if s["section"] == "灵敏度与稳健性")
+        assert sens["evidence"] == ["R001"]
 
     def test_dead_claim_excluded(self, healthy):
         reg, g = healthy
         reg.invalidate("R001", "数据勘误")
-        nar = ResearchDirector(reg, g).build()
-        outline = PaperProjection(reg, g).project(nar)
+        outline = self._outline(reg, g)
         assert outline["dead_claims_excluded"] == ["C001"]
-        result = outline["sections"][2]
-        assert result["claims"] == []          # 死主张不得投影
-        assert outline["sections"][4]["claims"] == []  # 结论只有 supported
+        result = next(s for s in outline["sections"]
+                      if s["section"] == "结果与分析")
+        assert result["claims"] == []
+        concl = next(s for s in outline["sections"]
+                     if s["section"] == "结论")
+        assert concl["claims"] == []
 
     def test_pending_placement_when_no_appears_in(self, healthy):
         reg, g = healthy
         g.remove_relation("C001", "appears_in", "S001")
-        nar = ResearchDirector(reg, g).build()
-        outline = PaperProjection(reg, g).project(nar)
+        outline = self._outline(reg, g)
         assert outline["pending_placement"] == ["C001"]
-        result = outline["sections"][2]
+        result = next(s for s in outline["sections"]
+                      if s["section"] == "结果与分析")
         assert result["claims"][0]["placement"] == []

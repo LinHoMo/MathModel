@@ -110,4 +110,4 @@ def test_arena_evidence_is_mechanical(report):
     for p in report["problems"]:
         for b in p["decision"]["basis"]:
             assert any(k in b for k in (
-                "exec_status", "valid", "cvm", "fidelity", "无候选"))
+                "exec_status", "valid", "cvm", "fidelity", "l6", "无候选"))

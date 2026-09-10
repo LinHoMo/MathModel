@@ -1,7 +1,13 @@
 {
   "problem_id": "2011_B",
   "title": "交巡警服务平台的设置与调度",
-  "sub_questions": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+  "sub_questions": [
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q4",
+    "Q5"
+  ],
   "methods": [
     "shortest_path",
     "assignment_problem",
@@ -19,5 +25,28 @@
     "assignment_model",
     "integer_programming",
     "greedy_heuristic"
-  ]
+  ],
+  "l6_assertions": {
+    "version": "1.0",
+    "source": "mathematical_necessity + problem_statement 客观边界（非答案数值）",
+    "checks": [
+      {
+        "name": "feasibility",
+        "kind": "constraint_violation_max",
+        "op": "<=",
+        "value": 0,
+        "source": "mathematical_necessity"
+      },
+      {
+        "name": "objective_finite",
+        "kind": "objective_sane",
+        "source": "mathematical_necessity"
+      },
+      {
+        "name": "outputs_nonnegative",
+        "kind": "output_nonnegative",
+        "source": "problem_statement (物理量非负)"
+      }
+    ]
+  }
 }

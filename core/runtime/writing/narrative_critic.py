@@ -48,16 +48,24 @@ class NarrativeReport:
 class NarrativeCritic:
     def evaluate(self, narrative, outline) -> NarrativeReport:
         findings: list[NFinding] = []
+        arcs = getattr(narrative, "arcs", None)
+        sections = getattr(narrative, "sections", None)
+        ir_has_claims = (any(s.claims for s in sections)
+                         if sections is not None else False)
 
-        # N1
-        if not narrative.arcs:
+        # N1（以 narrative 自身为准，空叙事不得被大纲伪装）
+        if arcs is None:
+            if not ir_has_claims:
+                return NarrativeReport("FAIL", [NFinding(
+                    "N1", SEV_FAIL, "无任何 claim：没有故事可讲")])
+        elif not arcs:
             return NarrativeReport("FAIL", [NFinding(
                 "N1", SEV_FAIL, "无任何 claim：没有故事可讲")])
 
         # N2: 死主张未从叙事剔除 —— 判定口径是"仍被投影"：
         # director 保留死弧供审计（dead_arcs 可见），但投影必须排除它；
         # 死主张出现在结果章节 = 剔除失败（弱证据强叙事）
-        dead = [a.claim_id for a in narrative.dead_arcs]
+        dead = [a.claim_id for a in getattr(narrative, "dead_arcs", [])]
         if dead:
             result_section = next(
                 (s for s in outline.get("sections", [])

@@ -75,7 +75,7 @@ def test_integrity_keeps_numerator_denominator(tmp_path):
     assert mi["validation_realization"]["denominator"] == 3
     assert mi["validation_realization"]["value"] == 33.3
     assert mi["writing_realization"]["numerator"] == 0
-    assert mi["writing_realization"]["denominator"] == 10
+    assert mi["writing_realization"]["denominator"] == 12  # DAG writing 节点计数
     assert mi["writing_realization"]["value"] == 0.0
     assert "criterion" in mi and "v1" in mi["criterion"]
 

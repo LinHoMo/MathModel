@@ -43,6 +43,7 @@ from runtime.execution.codegen import run_code_pipeline  # noqa: E402
 from runtime.execution.validation import (  # noqa: E402
     derive_checks_from_mir,
     run_numeric_validation,
+    validate_against_gt,
 )
 
 DEFAULT_POOL = _REPO / "research" / "P15" / "experiments" / "P15-K003" / "runs"
@@ -94,6 +95,48 @@ def load_pool(pool_root: Path) -> dict[str, list[dict]]:
         }
         pool.setdefault(pid, []).append(cand)
     return pool, skipped
+
+
+def _nonneg_variable_names(mir: dict) -> list[str]:
+    """从 MODEL_IR 声明提取非负变量输出名（用于 L6
+    output_nonnegative 的 paths 派生）：
+
+    domain.lower >= 0 或状态/决策/观测变量且无负下界声明。
+    保守原则：只对明确非负的变量下断言，不误伤
+    合法可负值（回归系数/坐标/收益差等）。
+    """
+    out: list[str] = []
+    for v in mir.get("variables") or []:
+        dom = v.get("domain") or {}
+        lower = None
+        if isinstance(dom, dict):
+            lower = dom.get("lower")
+        if lower is not None and lower >= 0:
+            sym = v.get("symbol") or v.get("name")
+            if sym:
+                out.append(sym)
+        elif v.get("type") in ("state", "decision", "observation", "constant"):
+            sym = v.get("symbol") or v.get("name")
+            if sym and not (isinstance(lower, (int, float)) and lower < 0):
+                out.append(sym)
+    return out
+
+
+def _with_derived_paths(gt_assertions: dict | None, cand: dict) -> dict | None:
+    """为 output_nonnegative 断言派生 paths（从 MODEL_IR 非负变量）。"""
+    if not gt_assertions:
+        return None
+    g = dict(gt_assertions)
+    g["checks"] = []
+    for c in gt_assertions.get("checks") or []:
+        c = dict(c)
+        if c.get("kind") == "output_nonnegative" and not c.get("paths"):
+            paths = _nonneg_variable_names(cand.get("model_ir") or {})
+            if not paths:
+                continue  # 无非负声明变量：该断言不可派生，不判输
+            c["paths"] = paths
+        g["checks"].append(c)
+    return g
 
 
 def build_spec(cand: dict) -> dict:
@@ -154,6 +197,7 @@ def select_by_evidence(rows: list[dict]) -> dict:
     pool = valid if valid else alive
     pool = sorted(pool, key=lambda r: (
         0 if r.get("valid") is True else 1,
+        0 if (r.get("l6_status") or "unverifiable") == "passed" else 1,
         r.get("constraint_violation_max") if r.get("constraint_violation_max")
         is not None else float("inf"),
         -(r.get("fidelity_score") or 0.0),
@@ -162,6 +206,7 @@ def select_by_evidence(rows: list[dict]) -> dict:
     basis = [
         f"exec_status={best['exec_status']}",
         f"valid={best.get('valid')}",
+        f"l6={best.get('l6_status')}",
         f"cvm={best.get('constraint_violation_max')}",
         f"fidelity={best.get('fidelity_score')}",
     ]
@@ -193,13 +238,14 @@ def render_markdown(report: dict) -> str:
     ]
     for p in report["problems"]:
         lines += [f"### {p['problem_id']}", ""]
-        lines += ["| 候选 | 臂 | exec_status | valid | cvm | fidelity | 选型 |",
-                  "|---|---|---|---|---|---|---|"]
+        lines += ["| 候选 | 臂 | exec_status | valid | cvm | l6 | fidelity | 选型 |",
+                  "|---|---|---|---|---|---|---|---|"]
         for c in p["candidates"]:
             sel = "✓" if c["model_id"] == p["decision"].get("chosen") else ""
             lines.append(f"| {c['run_id'][:8]} | {c['arm']} | "
                          f"{c['exec_status']} | {c['valid']} | "
                          f"{c['constraint_violation_max']} | "
+                         f"{c.get('l6_status')} | "
                          f"{c['fidelity_score']} | {sel} |")
         d = p["decision"]
         lines += ["", "**决策**："
@@ -213,8 +259,10 @@ def render_markdown(report: dict) -> str:
         "- `valid` = 通用确定性检查（FIX-5.2：MODEL_IR 声明变量/目标键出现在真实",
         "  执行输出 + output_mapping 输出键解析）——**结构级检查，不是数值正确性**；",
         "- `cvm`（constraint_violation_max）与 `fidelity_score` 为机械判定（VR/",
-        "  fidelity 管线）；本 benchmark 不绑定题目特制参考值（无 ground-truth",
-        "  数值对照），数值正确性验证属于 K003 盲评与题卡 gt 的职责；",
+        "  fidelity 管线）；",
+        "- `l6` = ground-truth 断言判定（`problem_cards/*/gt.json#l6_assertions`：",
+        "  feasibility / objective_finite / 输出非负等数学必然与题面客观边界，",
+        "  非答案数值）；无断言 → `unverifiable`（不编造分数）；",
         "- 选型决策只基于上表机械证据，无证据不选型（UNSELECTED 如实报告）。",
         "",
     ]
@@ -233,11 +281,20 @@ def run_arena(pool_root: Path, workdir: Path,
         "pool": str(pool_root),
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "skipped_runs": skipped,
+        "l6_assertions": "problem_cards/*/gt.json#l6_assertions（v1.0，"
+                         "mathematical_necessity + problem_statement 客观边界）",
         "problems": [],
         "summary": {"problems": 0, "candidates": 0,
                     "selected": 0, "unselected": 0},
     }
     for pid, candidates in sorted(pool.items()):
+        # P2-1 L6：加载该题的 ground-truth 断言（无断言 → unverifiable）
+        gt_path = _REPO / "research" / "P15" / "benchmark" / "problem_cards" \
+            / pid / "gt.json"
+        gt_assertions = None
+        if gt_path.exists():
+            gt_assertions = (json.loads(gt_path.read_text(encoding="utf-8"))
+                             .get("l6_assertions"))
         rows = []
         for cand in candidates:
             row = run_candidate(cand, workdir)
@@ -252,6 +309,17 @@ def run_arena(pool_root: Path, workdir: Path,
                                 "constraint_violation_max"),
                             "status": vd.get("status"),
                             "checks": vd.get("checks")})
+                # P2-1 L6：ground-truth 断言判定（机械；无断言如实 unverifiable）
+                l6 = validate_against_gt(
+                    {"status": row["exec_status"], "outputs": outputs,
+                     "constraint_violation_max": vd.get(
+                         "constraint_violation_max"),
+                     "objective_value": vd.get("objective_value"),
+                     "objective_sane": vd.get("objective_sane")},
+                    _with_derived_paths(gt_assertions, cand))
+                row.update({"l6_status": l6.get("status"),
+                            "l6_score": l6.get("l6_score"),
+                            "l6_checks": l6.get("checks")})
             rows.append(row)
         decision = select_by_evidence(rows)
         report["problems"].append({"problem_id": pid, "candidates": rows,

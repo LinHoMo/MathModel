@@ -1,6 +1,6 @@
 # 项目状态
 
-> 更新：2026-09-09（audit Batch 6：Revision Loop 真实化）。治理见
+> 更新：2026-09-10（P2-1：L6 数值正确性机械判定层）。治理见
 > `docs/architecture/THREE_LAYER_ARCHITECTURE.md`，硬化总纲见
 > `docs/architecture/HARDENING_PROGRAM.md`。
 > **本文件是状态数字的唯一出处：所有数字来自机器命令实测并绑定 commit hash，
@@ -40,7 +40,8 @@ Construction 行为？"。
 | **P15-K002** | Model Representation Efficacy（F/S/S+V 三臂）：契约统一（schema 迁 core、register 真 jsonschema、40 文件冻结）→ 108/108 生成 → 3 evaluator 盲评（锚定澄清，κ=0.4345）→ 配对分析 | ✅ **CLOSED** | RQ1 S−F(MCQ) Δ=−4.85 CI[−7.98,−2.22] **NEGATIVE**（不进 P15.2）；SV−F(VAL) +4.81 **POSITIVE**；报告 `analysis/reports/P15-K002-REPORT.md` |
 | **P1** | Model Construction Loop：Gap Audit（11 环节）→ P1 计划 v2（C1–C10）→ **VS-001 垂直切片 7/7 PASS（2024_A，M1 FAIL → M2 PASS 闭环 + Replay）** → **M3 候选竞技场（evidence-based 选型，D002 selects 边真写入）** → **M4 知识引导（BZD 试点卡 5 张 + 义务映射）** | ✅ **全部完成**（C1–C10 + M3/M4） | 报告 `analysis/P1_{VS001,M3,M4}_REPORT.md` |
 | **P0-3 完整收口** | ExecutionResult 来源鉴别 execution_token（HMAC 签名/校验，进程级 secret）：LocalPythonAdapter 真实执行后签发，registry.create 强制校验（success EXEC 必须带有效 token 或 legacy_unverified 声明）；Agent/Handler 无 secret 无法伪造 EXEC | ✔ 完成 | `f8f21f1` |
-| **P1-1** | Constructor Adapter Protocol：ConstructionBundle（MODEL_IR+code+output_mapping+validation_spec+revision_of）+ ConstructorAdapter ABC + capability C0-C5 + ConstructorRegistry/apply_bundle（外部 Constructor 统一接入） | ✔ 完成 | 见 git log |
+| **P1-1** | Constructor Adapter Protocol：ConstructionBundle（MODEL_IR+code+output_mapping+validation_spec+revision_of）+ ConstructorAdapter ABC + capability C0-C5 + ConstructorRegistry/apply_bundle（外部 Constructor 统一接入） | ✔ 完成
+| **P2-1** | L6 数值正确性机械判定层：`validate_against_gt`（feasibility/objective_sane/output_nonnegative/output_range，无断言 unverifiable、不可判定 skipped）+ 8/8 题 `gt.json#l6_assertions` v1.0（数学必然 + 题面客观边界）+ fidelity 升级 F6 约束数值满足 / F7 目标值有限 + arena 接入 L6（全池 44 候选零误伤，报告 l6 列与选型排序） | ✔ 完成 | 见 git log |
 | **P1-2** | Knowledge Guided Construction 接入生产路径：_register_mir 应用 apply_knowledge_obligations（默认关闭，source_card 溯源，不覆盖声明）；义务对齐 MODEL_IR 契约 | ✔ 完成 | 见 git log |
 | **P1-3** | Model Comparison 接入生产路径：revision 链自动 compare_models → decision artifact + compared_with/based_on 边 | ✔ 完成 | 见 git log |
 | **P1-4** | 硬编码经验常数 Provenance：confidence 全标注 advisory 不参与判定；integrity_gate 政策阈值声明来源 | ✔ 完成 | 见 git log |

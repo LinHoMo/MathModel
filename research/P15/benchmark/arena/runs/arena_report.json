@@ -1,7 +1,7 @@
 {
   "mode": "arena_benchmark",
   "pool": "C:\\Users\\Lin\\Desktop\\Programs\\MathModel\\research\\P15\\experiments\\P15-K003\\runs",
-  "generated_at": "2026-09-09T23:49:49+00:00",
+  "generated_at": "2026-09-10T03:40:19+00:00",
   "skipped_runs": [
     {
       "run_id": "15a2ee8ecda8",
@@ -92,6 +92,7 @@
       "reason": "F 臂无 model_ir"
     }
   ],
+  "l6_assertions": "problem_cards/*/gt.json#l6_assertions（v1.0，mathematical_necessity + problem_statement 客观边界）",
   "problems": [
     {
       "problem_id": "2011_B",
@@ -102,7 +103,7 @@
           "model_id": "M-2011B-GRAPH",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC031",
+          "execution_id": "EXEC131",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -136,6 +137,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -145,7 +162,7 @@
           "model_id": "M-2011B-GRAPH",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC032",
+          "execution_id": "EXEC132",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -179,6 +196,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -188,7 +221,7 @@
           "model_id": "M-2011B-GRAPH",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC033",
+          "execution_id": "EXEC133",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -222,6 +255,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -231,7 +280,7 @@
           "model_id": "M-2011B-GRAPH",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC034",
+          "execution_id": "EXEC134",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -265,6 +314,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -274,7 +339,7 @@
           "model_id": "M-2011B-GRAPH",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC035",
+          "execution_id": "EXEC135",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -309,6 +374,22 @@
               "passed": true,
               "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
+            }
           ]
         },
         {
@@ -317,7 +398,7 @@
           "model_id": "M-2011B-GRAPH",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC036",
+          "execution_id": "EXEC136",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -351,6 +432,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 blockade_schedule=[{'exit_node': 0, 'platform': 0, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 4, 'platform': 4, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 9, 'platform': 9, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 14, 'platform': 14, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 19, 'platform': 19, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 1, 'platform': 1, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 6, 'platform': 6, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 11, 'platform': 11, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 16, 'platform': 16, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 3, 'platform': 3, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 8, 'platform': 8, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 13, 'platform': 13, 'distance_km': 0, 'arrival_min': 0.0}, {'exit_node': 18, 'platform': 18, 'distance_km': 0, 'arrival_min': 0.0}]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         }
@@ -361,16 +458,17 @@
         "basis": [
           "exec_status=success",
           "valid=True",
+          "l6=passed",
           "cvm=0.0",
           "fidelity=1.0"
         ],
         "evidence": [
-          "EXEC031",
-          "EXEC032",
-          "EXEC033",
-          "EXEC034",
-          "EXEC035",
-          "EXEC036"
+          "EXEC131",
+          "EXEC132",
+          "EXEC133",
+          "EXEC134",
+          "EXEC135",
+          "EXEC136"
         ]
       }
     },
@@ -382,8 +480,8 @@
           "arm": "SV",
           "model_id": "M-2017B-LOGIT",
           "exec_status": "success",
-          "fidelity_score": 0.8235,
-          "execution_id": "EXEC037",
+          "fidelity_score": 0.8889,
+          "execution_id": "EXEC137",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -423,6 +521,23 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_expected_profit=36.76"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -431,8 +546,8 @@
           "arm": "S",
           "model_id": "M-2017B-LOGIT",
           "exec_status": "success",
-          "fidelity_score": 0.8235,
-          "execution_id": "EXEC038",
+          "fidelity_score": 0.8889,
+          "execution_id": "EXEC138",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -472,6 +587,23 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_expected_profit=11.31"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -480,8 +612,8 @@
           "arm": "S",
           "model_id": "M-2017B-LOGIT",
           "exec_status": "success",
-          "fidelity_score": 0.8235,
-          "execution_id": "EXEC039",
+          "fidelity_score": 0.8889,
+          "execution_id": "EXEC139",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -521,6 +653,23 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_expected_profit=23.36"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -529,8 +678,8 @@
           "arm": "SV",
           "model_id": "M-2017B-LOGIT",
           "exec_status": "success",
-          "fidelity_score": 0.8235,
-          "execution_id": "EXEC040",
+          "fidelity_score": 0.8889,
+          "execution_id": "EXEC140",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -571,6 +720,23 @@
               "passed": true,
               "detail": "存在 optimal_expected_profit=23.36"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            }
           ]
         },
         {
@@ -578,8 +744,8 @@
           "arm": "SV",
           "model_id": "M-2017B-LOGIT",
           "exec_status": "success",
-          "fidelity_score": 0.8235,
-          "execution_id": "EXEC041",
+          "fidelity_score": 0.8889,
+          "execution_id": "EXEC141",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -620,6 +786,23 @@
               "passed": true,
               "detail": "存在 optimal_expected_profit=11.31"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            }
           ]
         },
         {
@@ -627,8 +810,8 @@
           "arm": "S",
           "model_id": "M-2017B-LOGIT",
           "exec_status": "success",
-          "fidelity_score": 0.8235,
-          "execution_id": "EXEC042",
+          "fidelity_score": 0.8889,
+          "execution_id": "EXEC142",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -668,6 +851,23 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_expected_profit=36.76"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         }
@@ -678,17 +878,18 @@
         "basis": [
           "exec_status=success",
           "valid=False",
+          "l6=passed",
           "cvm=0.0",
-          "fidelity=0.8235",
+          "fidelity=0.8889",
           "（无候选通过数值验证，在存活候选中选择约束违反最小者——如实标注降级选型）"
         ],
         "evidence": [
-          "EXEC037",
-          "EXEC038",
-          "EXEC039",
-          "EXEC040",
-          "EXEC041",
-          "EXEC042"
+          "EXEC137",
+          "EXEC138",
+          "EXEC139",
+          "EXEC140",
+          "EXEC141",
+          "EXEC142"
         ]
       }
     },
@@ -700,8 +901,8 @@
           "arm": "SV",
           "model_id": "M-2018A-PDE",
           "exec_status": "success",
-          "fidelity_score": 0.9091,
-          "execution_id": "EXEC043",
+          "fidelity_score": 0.9231,
+          "execution_id": "EXEC143",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -729,6 +930,23 @@
               "kind": "output_field_exists",
               "passed": false,
               "detail": "缺失字段 'x'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -737,8 +955,8 @@
           "arm": "SV",
           "model_id": "M-2018A-PDE",
           "exec_status": "success",
-          "fidelity_score": 0.9091,
-          "execution_id": "EXEC044",
+          "fidelity_score": 0.9231,
+          "execution_id": "EXEC144",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -766,6 +984,23 @@
               "kind": "output_field_exists",
               "passed": false,
               "detail": "缺失字段 'x'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -774,8 +1009,8 @@
           "arm": "SV",
           "model_id": "M-2018A-PDE",
           "exec_status": "success",
-          "fidelity_score": 0.9091,
-          "execution_id": "EXEC045",
+          "fidelity_score": 0.9231,
+          "execution_id": "EXEC145",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -803,6 +1038,23 @@
               "kind": "output_field_exists",
               "passed": false,
               "detail": "缺失字段 'x'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -811,8 +1063,8 @@
           "arm": "S",
           "model_id": "M-2018A-PDE",
           "exec_status": "success",
-          "fidelity_score": 0.9091,
-          "execution_id": "EXEC046",
+          "fidelity_score": 0.9231,
+          "execution_id": "EXEC146",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -840,6 +1092,23 @@
               "kind": "output_field_exists",
               "passed": false,
               "detail": "缺失字段 'x'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -848,8 +1117,8 @@
           "arm": "S",
           "model_id": "M-2018A-PDE",
           "exec_status": "success",
-          "fidelity_score": 0.9091,
-          "execution_id": "EXEC047",
+          "fidelity_score": 0.9231,
+          "execution_id": "EXEC147",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -878,6 +1147,23 @@
               "passed": false,
               "detail": "缺失字段 'x'"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            }
           ]
         },
         {
@@ -885,8 +1171,8 @@
           "arm": "S",
           "model_id": "M-2018A-PDE",
           "exec_status": "success",
-          "fidelity_score": 0.9091,
-          "execution_id": "EXEC048",
+          "fidelity_score": 0.9231,
+          "execution_id": "EXEC148",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -914,6 +1200,23 @@
               "kind": "output_field_exists",
               "passed": false,
               "detail": "缺失字段 'x'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
             }
           ]
         }
@@ -924,17 +1227,18 @@
         "basis": [
           "exec_status=success",
           "valid=False",
+          "l6=passed",
           "cvm=0.0",
-          "fidelity=0.9091",
+          "fidelity=0.9231",
           "（无候选通过数值验证，在存活候选中选择约束违反最小者——如实标注降级选型）"
         ],
         "evidence": [
-          "EXEC043",
-          "EXEC044",
-          "EXEC045",
-          "EXEC046",
-          "EXEC047",
-          "EXEC048"
+          "EXEC143",
+          "EXEC144",
+          "EXEC145",
+          "EXEC146",
+          "EXEC147",
+          "EXEC148"
         ]
       }
     },
@@ -947,7 +1251,7 @@
           "model_id": "M-2018B-DES",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC049",
+          "execution_id": "EXEC149",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -981,6 +1285,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -990,7 +1310,7 @@
           "model_id": "M-2018B-DES",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC050",
+          "execution_id": "EXEC150",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1024,6 +1344,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1033,7 +1369,7 @@
           "model_id": "M-2018B-DES",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC051",
+          "execution_id": "EXEC151",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1067,6 +1403,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1076,7 +1428,7 @@
           "model_id": "M-2018B-DES",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC052",
+          "execution_id": "EXEC152",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1110,6 +1462,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1119,7 +1487,7 @@
           "model_id": "M-2018B-DES",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC053",
+          "execution_id": "EXEC153",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1154,6 +1522,22 @@
               "passed": true,
               "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
+            }
           ]
         },
         {
@@ -1162,7 +1546,7 @@
           "model_id": "M-2018B-DES",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC054",
+          "execution_id": "EXEC154",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1196,6 +1580,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 cnc_utilization=[0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028, 0.6028]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         }
@@ -1206,16 +1606,17 @@
         "basis": [
           "exec_status=success",
           "valid=True",
+          "l6=passed",
           "cvm=0.0",
           "fidelity=1.0"
         ],
         "evidence": [
-          "EXEC049",
-          "EXEC050",
-          "EXEC051",
-          "EXEC052",
-          "EXEC053",
-          "EXEC054"
+          "EXEC149",
+          "EXEC150",
+          "EXEC151",
+          "EXEC152",
+          "EXEC153",
+          "EXEC154"
         ]
       }
     },
@@ -1228,7 +1629,7 @@
           "model_id": "M-2019C-QUEUE",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC055",
+          "execution_id": "EXEC155",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1268,6 +1669,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_decision='queue'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1277,7 +1694,7 @@
           "model_id": "M-2019C-QUEUE",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC056",
+          "execution_id": "EXEC156",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1317,6 +1734,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_decision='queue'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1326,7 +1759,7 @@
           "model_id": "M-2019C-QUEUE",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC057",
+          "execution_id": "EXEC157",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1366,6 +1799,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_decision='queue'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1375,7 +1824,7 @@
           "model_id": "M-2019C-QUEUE",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC058",
+          "execution_id": "EXEC158",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1415,6 +1864,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_decision='queue'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1424,7 +1889,7 @@
           "model_id": "M-2019C-QUEUE",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC059",
+          "execution_id": "EXEC159",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1465,6 +1930,22 @@
               "passed": true,
               "detail": "存在 optimal_decision='queue'"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
+            }
           ]
         },
         {
@@ -1473,7 +1954,7 @@
           "model_id": "M-2019C-QUEUE",
           "exec_status": "success",
           "fidelity_score": 1.0,
-          "execution_id": "EXEC060",
+          "execution_id": "EXEC160",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1513,6 +1994,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_decision='queue'"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         }
@@ -1523,16 +2020,17 @@
         "basis": [
           "exec_status=success",
           "valid=True",
+          "l6=passed",
           "cvm=0.0",
           "fidelity=1.0"
         ],
         "evidence": [
-          "EXEC055",
-          "EXEC056",
-          "EXEC057",
-          "EXEC058",
-          "EXEC059",
-          "EXEC060"
+          "EXEC155",
+          "EXEC156",
+          "EXEC157",
+          "EXEC158",
+          "EXEC159",
+          "EXEC160"
         ]
       }
     },
@@ -1544,8 +2042,8 @@
           "arm": "S",
           "model_id": "M-2020B-DP",
           "exec_status": "success",
-          "fidelity_score": 0.9286,
-          "execution_id": "EXEC061",
+          "fidelity_score": 0.9375,
+          "execution_id": "EXEC161",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1579,6 +2077,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_path=[]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1587,8 +2101,8 @@
           "arm": "SV",
           "model_id": "M-2020B-DP",
           "exec_status": "success",
-          "fidelity_score": 0.9286,
-          "execution_id": "EXEC062",
+          "fidelity_score": 0.9375,
+          "execution_id": "EXEC162",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1622,6 +2136,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_path=[]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1630,8 +2160,8 @@
           "arm": "S",
           "model_id": "M-2020B-DP",
           "exec_status": "success",
-          "fidelity_score": 0.9286,
-          "execution_id": "EXEC063",
+          "fidelity_score": 0.9375,
+          "execution_id": "EXEC163",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1665,6 +2195,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_path=[]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1673,8 +2219,8 @@
           "arm": "SV",
           "model_id": "M-2020B-DP",
           "exec_status": "success",
-          "fidelity_score": 0.9286,
-          "execution_id": "EXEC064",
+          "fidelity_score": 0.9375,
+          "execution_id": "EXEC164",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1708,6 +2254,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_path=[]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         },
@@ -1716,8 +2278,8 @@
           "arm": "SV",
           "model_id": "M-2020B-DP",
           "exec_status": "success",
-          "fidelity_score": 0.9286,
-          "execution_id": "EXEC065",
+          "fidelity_score": 0.9375,
+          "execution_id": "EXEC165",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1752,6 +2314,22 @@
               "passed": true,
               "detail": "存在 optimal_path=[]"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
+            }
           ]
         },
         {
@@ -1759,8 +2337,8 @@
           "arm": "S",
           "model_id": "M-2020B-DP",
           "exec_status": "success",
-          "fidelity_score": 0.9286,
-          "execution_id": "EXEC066",
+          "fidelity_score": 0.9375,
+          "execution_id": "EXEC166",
           "valid": true,
           "constraint_violation_max": 0.0,
           "status": "passed",
@@ -1794,6 +2372,22 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 optimal_path=[]"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": true,
+              "detail": "objective_value 有限且合理",
+              "source": "mathematical_necessity"
             }
           ]
         }
@@ -1804,16 +2398,17 @@
         "basis": [
           "exec_status=success",
           "valid=True",
+          "l6=passed",
           "cvm=0.0",
-          "fidelity=0.9286"
+          "fidelity=0.9375"
         ],
         "evidence": [
-          "EXEC061",
-          "EXEC062",
-          "EXEC063",
-          "EXEC064",
-          "EXEC065",
-          "EXEC066"
+          "EXEC161",
+          "EXEC162",
+          "EXEC163",
+          "EXEC164",
+          "EXEC165",
+          "EXEC166"
         ]
       }
     },
@@ -1825,8 +2420,8 @@
           "arm": "S",
           "model_id": "M-2022C-stats",
           "exec_status": "success",
-          "fidelity_score": 0.2,
-          "execution_id": "EXEC067",
+          "fidelity_score": 0.2941,
+          "execution_id": "EXEC167",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -1878,6 +2473,30 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 classification_boundary=-0.008"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "outputs_nonnegative",
+              "passed": null,
+              "skipped": true,
+              "detail": "指定路径 ['SiO2', 'K2O', 'PbO', 'y'] 无可判定数值输出（skipped）",
+              "source": "problem_statement (物理量非负)"
             }
           ]
         },
@@ -1886,8 +2505,8 @@
           "arm": "SV",
           "model_id": "M-2022C-stats",
           "exec_status": "success",
-          "fidelity_score": 0.2,
-          "execution_id": "EXEC068",
+          "fidelity_score": 0.2941,
+          "execution_id": "EXEC168",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -1939,6 +2558,30 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 classification_boundary=-0.008"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "outputs_nonnegative",
+              "passed": null,
+              "skipped": true,
+              "detail": "指定路径 ['SiO2', 'K2O', 'PbO', 'y'] 无可判定数值输出（skipped）",
+              "source": "problem_statement (物理量非负)"
             }
           ]
         },
@@ -1947,8 +2590,8 @@
           "arm": "S",
           "model_id": "M-2022C-stats",
           "exec_status": "success",
-          "fidelity_score": 0.2,
-          "execution_id": "EXEC069",
+          "fidelity_score": 0.2941,
+          "execution_id": "EXEC169",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -2001,6 +2644,30 @@
               "passed": true,
               "detail": "存在 classification_boundary=-0.008"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "outputs_nonnegative",
+              "passed": null,
+              "skipped": true,
+              "detail": "指定路径 ['SiO2', 'K2O', 'PbO', 'y'] 无可判定数值输出（skipped）",
+              "source": "problem_statement (物理量非负)"
+            }
           ]
         },
         {
@@ -2008,8 +2675,8 @@
           "arm": "SV",
           "model_id": "M-2022C-stats",
           "exec_status": "success",
-          "fidelity_score": 0.2,
-          "execution_id": "EXEC070",
+          "fidelity_score": 0.2941,
+          "execution_id": "EXEC170",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -2061,6 +2728,30 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 classification_boundary=-0.008"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "outputs_nonnegative",
+              "passed": null,
+              "skipped": true,
+              "detail": "指定路径 ['SiO2', 'K2O', 'PbO', 'y'] 无可判定数值输出（skipped）",
+              "source": "problem_statement (物理量非负)"
             }
           ]
         }
@@ -2071,15 +2762,16 @@
         "basis": [
           "exec_status=success",
           "valid=False",
+          "l6=passed",
           "cvm=0.0",
-          "fidelity=0.2",
+          "fidelity=0.2941",
           "（无候选通过数值验证，在存活候选中选择约束违反最小者——如实标注降级选型）"
         ],
         "evidence": [
-          "EXEC067",
-          "EXEC068",
-          "EXEC069",
-          "EXEC070"
+          "EXEC167",
+          "EXEC168",
+          "EXEC169",
+          "EXEC170"
         ]
       }
     },
@@ -2091,8 +2783,8 @@
           "arm": "SV",
           "model_id": "M-2024A-kinematics",
           "exec_status": "success",
-          "fidelity_score": 0.2,
-          "execution_id": "EXEC071",
+          "fidelity_score": 0.2727,
+          "execution_id": "EXEC171",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -2150,6 +2842,30 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 max_head_speed_q5=0.666667"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "outputs_nonnegative",
+              "passed": null,
+              "skipped": true,
+              "detail": "指定路径 ['theta', '(x_i, y_i)'] 无可判定数值输出（skipped）",
+              "source": "problem_statement (物理量非负)"
             }
           ]
         },
@@ -2158,8 +2874,8 @@
           "arm": "SV",
           "model_id": "M-2024A-kinematics",
           "exec_status": "success",
-          "fidelity_score": 0.2,
-          "execution_id": "EXEC072",
+          "fidelity_score": 0.2727,
+          "execution_id": "EXEC172",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -2217,6 +2933,30 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 max_head_speed_q5=0.666667"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "outputs_nonnegative",
+              "passed": null,
+              "skipped": true,
+              "detail": "指定路径 ['theta', '(x_i, y_i)'] 无可判定数值输出（skipped）",
+              "source": "problem_statement (物理量非负)"
             }
           ]
         },
@@ -2225,8 +2965,8 @@
           "arm": "S",
           "model_id": "M-2024A-kinematics",
           "exec_status": "success",
-          "fidelity_score": 0.2,
-          "execution_id": "EXEC073",
+          "fidelity_score": 0.2727,
+          "execution_id": "EXEC173",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -2285,6 +3025,30 @@
               "passed": true,
               "detail": "存在 max_head_speed_q5=0.666667"
             }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "outputs_nonnegative",
+              "passed": null,
+              "skipped": true,
+              "detail": "指定路径 ['theta', '(x_i, y_i)'] 无可判定数值输出（skipped）",
+              "source": "problem_statement (物理量非负)"
+            }
           ]
         },
         {
@@ -2292,8 +3056,8 @@
           "arm": "S",
           "model_id": "M-2024A-kinematics",
           "exec_status": "success",
-          "fidelity_score": 0.2,
-          "execution_id": "EXEC074",
+          "fidelity_score": 0.2727,
+          "execution_id": "EXEC174",
           "valid": false,
           "constraint_violation_max": 0.0,
           "status": "failed",
@@ -2351,6 +3115,30 @@
               "kind": "output_field_exists",
               "passed": true,
               "detail": "存在 max_head_speed_q5=0.666667"
+            }
+          ],
+          "l6_status": "passed",
+          "l6_score": 1.0,
+          "l6_checks": [
+            {
+              "name": "feasibility",
+              "passed": true,
+              "detail": "cvm=0 vs <=0",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "objective_finite",
+              "passed": null,
+              "skipped": true,
+              "detail": "无 objective_value，该断言不可判定（skipped）",
+              "source": "mathematical_necessity"
+            },
+            {
+              "name": "outputs_nonnegative",
+              "passed": null,
+              "skipped": true,
+              "detail": "指定路径 ['theta', '(x_i, y_i)'] 无可判定数值输出（skipped）",
+              "source": "problem_statement (物理量非负)"
             }
           ]
         }
@@ -2361,15 +3149,16 @@
         "basis": [
           "exec_status=success",
           "valid=False",
+          "l6=passed",
           "cvm=0.0",
-          "fidelity=0.2",
+          "fidelity=0.2727",
           "（无候选通过数值验证，在存活候选中选择约束违反最小者——如实标注降级选型）"
         ],
         "evidence": [
-          "EXEC071",
-          "EXEC072",
-          "EXEC073",
-          "EXEC074"
+          "EXEC171",
+          "EXEC172",
+          "EXEC173",
+          "EXEC174"
         ]
       }
     }

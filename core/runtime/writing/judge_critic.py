@@ -72,10 +72,17 @@ class JudgeCritic:
             return JudgeReport(FAIL, risks, evidence_report.coverage)
 
         # ---- UNKNOWN 判定（信息不足，不得瞎判）
-        if not narrative.arcs or not outline.get("sections"):
-            return JudgeReport(UNKNOWN, risks, narrative.coverage)
+        arcs = getattr(narrative, "arcs", None)
+        sections = getattr(narrative, "sections", None)
+        has_claims = (bool(arcs) if arcs is not None
+                      else any(s.claims for s in sections)
+                      if sections is not None else False)
+        if not has_claims or not outline.get("sections"):
+            return JudgeReport(UNKNOWN, risks,
+                               getattr(narrative, "coverage", {}))
         if evidence_report is None:
-            return JudgeReport(UNKNOWN, risks, narrative.coverage)
+            return JudgeReport(UNKNOWN, risks,
+                               getattr(narrative, "coverage", {}))
 
         # ---- 聚合证据门禁发现
         for f in evidence_report.findings:

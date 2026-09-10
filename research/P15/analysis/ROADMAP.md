@@ -237,6 +237,7 @@
 | **测试** | `tests/unit/test_l6_validation.py`：① 正确数值 → PASS；② 错误数值 → FAIL；③ 无 GT 断言 → unverifiable（不编造分数） |
 | **验收标准** | 8/8 题有可执行 GT 断言；fidelity 对同题不同构造有区分度；L6 判定接入 arena 报告 |
 | **是否改变 API** | 是：validation.py 增加 L6 判定 |
+| **状态** | ✅ 已完成（2026-09-10）：`validate_against_gt` 落地（feasibility/objective_sane/output_nonnegative/output_range，无断言 unverifiable、无法判定 skipped 不误伤）；8/8 题 `gt.json#l6_assertions` v1.0（数学必然 + 题面客观边界，非答案数值）；fidelity 升级 F6 约束数值满足（带显式 check 断言时判定、无断言不误判）+ F7 目标值有限；arena 接入 L6（output_nonnegative 由 MODEL_IR 声明派生 paths，全池 44 候选 8/8 题零误伤全 passed，报告加 l6 列与选型排序）；`tests/unit/test_l6_validation.py` 12 用例；2019_C 收益差/2018_A 温度键异构等误伤在实现期即修复 |
 | **是否影响旧实验** | 否 |
 | **是否需要迁移** | 否 |
 | **预计依赖** | P1-1（fidelity 接入） |
