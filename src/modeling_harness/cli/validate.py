@@ -419,15 +419,33 @@ def check_figure_refs(project_path):
 
 
 def check_question_spec_schema(project_path):
-    """L1.1: 检查 question_spec.schema.json 存在且有效（V2 schema 已退役，归档于 schemas/legacy/）"""
-    schema_path = project_path / "src" / "modeling_harness" / "schemas" / "legacy" / "question_spec.schema.json"
-    if not schema_path.exists():
-        return False, "question_spec.schema.json不存在"
-    try:
-        json.loads(schema_path.read_text(encoding="utf-8"))
-        return True, "question_spec.schema.json有效"
-    except json.JSONDecodeError as e:
-        return False, f"JSON格式错误: {e}"
+    """L1.1: 检查活跃项目的输入规约（V3：inputs/question_spec.json 或 problem.txt）。
+
+    question_spec.json 必须为有效 JSON 且顶层为 object（与
+    runtime/modeling/problem_repr.py 的解析契约一致）；两者皆缺 → 失败。
+    V2 归档 schema（schemas/retired/question_spec.schema.json）不参与校验。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "无活跃项目（库模式，跳过）"
+    checked = 0
+    for p in sorted(live, key=lambda d: d.name):
+        spec = p / "inputs" / "question_spec.json"
+        txt = p / "inputs" / "problem.txt"
+        if spec.exists():
+            try:
+                raw = json.loads(spec.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError) as e:
+                return False, f"{p.name}/inputs/question_spec.json 无法解析: {e}"
+            if not isinstance(raw, dict):
+                return False, f"{p.name}/inputs/question_spec.json 顶层必须是 object"
+            checked += 1
+        elif txt.exists():
+            checked += 1
+        else:
+            return False, (f"{p.name} 缺少输入规约"
+                           f"（inputs/question_spec.json 或 inputs/problem.txt）")
+    return True, f"输入规约检查通过（{checked} 个活跃项目）"
 
 
 def check_symbol_registry(project_path):
