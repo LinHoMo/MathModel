@@ -26,7 +26,8 @@
 | [STATE_TRUTH.md](architecture/STATE_TRUTH.md) | 状态单一真源决策表（Hardening P2，reconcile 对账） |
 | [RUN_PROVENANCE.md](architecture/RUN_PROVENANCE.md) | 运行溯源与确定性重放（Hardening P3，replay 引擎） |
 | [MODELING_KNOWLEDGE_GOVERNANCE.md](architecture/MODELING_KNOWLEDGE_GOVERNANCE.md) | Modeling Knowledge 治理规范（方法卡 = Constraint/Prior/Validation） |
-| [MODEL_CONSTRUCTION_GAP.md](architecture/MODEL_CONSTRUCTION_GAP.md) | 模型构造差距分析（ANALYSIS COMPLETE） |
+| MODEL_CONSTRUCTION_GAP.md | 模型构造差距分析（ANALYSIS COMPLETE） |
+| MODEL_QUALITY_CRITERIA.md | 模型质量与创新性的可操作判据（DRAFT，待评审） |
 | [CONSTRUCTOR_INTEGRATION_PLAN.md](architecture/CONSTRUCTOR_INTEGRATION_PLAN.md) | 外部 Constructor 集成方案（DESIGN FROZEN） |
 | [EXPERIMENT_STRATEGY.md](architecture/EXPERIMENT_STRATEGY.md) | 实验策略（DESIGN FROZEN） |
 | [EXPRESSION_CONTRACT.md](architecture/EXPRESSION_CONTRACT.md) | 表达层契约（P11 冻结，expression.py 代码真源） |
@@ -57,6 +58,7 @@
 | [BENCHMARK.md](BENCHMARK.md) | 国赛复盘基准（CUMCM Bench）设计 |
 | [METRICS.md](METRICS.md) | 项目度量单一真源（由 `src/modeling_harness/cli/metrics.py --write` 自动生成） |
 | [HANDOFF.md](HANDOFF.md) | 跨题交接：四件套门禁口径、本轮修复清单、优化 backlog（给下一个 Agent） |
+| [PROJECTS_FEEDBACK_AUDIT.md](PROJECTS_FEEDBACK_AUDIT.md) | 实例反馈审计与闭环：三实例缺陷清单 + harness 侧修复 + 实测对照 + 未闭合项 |
 | [STATUS.md](STATUS.md) | 项目状态与机器实测数字（状态真源） |
 | [ONTOLOGY_TERMINOLOGY.md](ONTOLOGY_TERMINOLOGY.md) | 术语与本体权威定义 |
 | [../CHANGELOG.md](../CHANGELOG.md) | 版本变更日志 |
