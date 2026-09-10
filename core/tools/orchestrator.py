@@ -56,7 +56,9 @@ def _run(cmd: list[str], cwd: Optional[Path] = None, env: Optional[dict] = None)
 
 
 def _skill_path(hand: str, agent: str) -> Path:
-    return ROOT / "core" / hand.capitalize() / "agents" / agent / "SKILL.md"
+    # P2-4：V2 兼容层路径修正（core/<Hand>/agents -> core/legacy/hands/<Hand>/agents）
+    return ROOT / "core" / "legacy" / "hands" / hand.capitalize() / "agents" \
+        / agent / "SKILL.md"
 
 
 def _parse_skill(skill_path: Path) -> dict:

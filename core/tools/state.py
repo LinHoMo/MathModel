@@ -374,7 +374,7 @@ def cmd_status(project, args):
     print(f"项目: {st.get('project')}   进度: {done}/{len(PIPELINE)}")
     if done < len(PIPELINE):
         print(f"下一步: {cur.get('hand')}/{cur.get('agent')} (stage {cur.get('stage')})")
-        print(f"  读:   {str(cur.get('hand','')).capitalize()}/agents/{cur.get('agent')}/SKILL.md")
+        print(f"  读:   core/legacy/hands/{cur.get('hand','').capitalize()}/agents/{cur.get('agent')}/SKILL.md")
         print(f"  门禁: python core/tools/gate.py {st.get('project')} {cur.get('hand')} {cur.get('agent')}")
     else:
         print("全部完成")

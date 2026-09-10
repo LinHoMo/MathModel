@@ -289,6 +289,7 @@
 | **是否影响旧实验** | 否 |
 | **是否需要迁移** | 否 |
 | **预计依赖** | 无 |
+| **状态** | ✅ 已完成（2026-09-10）：`_skill_path` 修正为 `core/legacy/hands/<Hand>/agents/<agent>/SKILL.md`（orchestrator.py:58-59）、state.py:377 提示路径同步修正；四手 29 agent SKILL 路径全部可解析；`tests/unit/test_legacy_paths.py` 2 用例（路径指向 + 四手全解析） |
 
 ---
 
@@ -325,6 +326,7 @@
 | **是否影响旧实验** | 否 |
 | **是否需要迁移** | 否 |
 | **预计依赖** | P1-2（Revision 接入主 DAG）、P2-1（L6 判定） |
+| **状态** | ✅ 已完成（2026-09-10）：**P15-K004** 预注册 + runner（`research/P15/scripts/k004_runner.py`）+ 18 单元全量执行。Δ_L6=+1.0000 CI[+1.0000,+1.0000] H1 SUPPORTED；M1 失败真实性 18/18、M2 通过 18/18、Replay 18/18、修正轮数均值 1.0。报告 `research/P15/experiments/P15-K004/K004_REPORT.md`。范围如实披露：单题模板（2019_C M/M/c），测 Revision 执行/验证层；Revision 提议层（Agent 发现新错误）列 K004 v2 |
 
 ### P3-3b：Paper Projection 真实化（E2E 打通） ✅ 已完成（559930e/f1eeefc）
 
