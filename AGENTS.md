@@ -33,11 +33,11 @@ no backward compatibility with V2.
 
 | 目录/文件 | 说明 |
 |---|---|
-| `core/` | 引擎本体（LLM-free）：runtime / roles / workflows / validators / schemas / tools / skills / knowledge / env |
-| `core/tools/` | CLI 工具：validate.py / catalog_check.py / new_project.py / doctor.py 等 |
-| `core/workflows/` | DAG 模板（stages/）+ WorkflowComposer |
-| `core/roles/` | 4 角色：analyst / modeler / experimenter / critic |
-| `core/validators/` | 门禁：evidence-gate / research-quality / model-critic / assumption-checker |
+| `src/modeling_harness/` | 引擎本体（LLM-free）：runtime / roles / workflows / validators / schemas / cli / skills / knowledge / env |
+| `src/modeling_harness/cli/` | CLI：mh 统一入口 + validate.py / catalog_check.py / new_project.py / doctor.py 等 |
+| `src/modeling_harness/workflows/` | DAG 模板（stages/）+ WorkflowComposer |
+| `src/modeling_harness/roles/` | 4 角色：analyst / modeler / experimenter / critic |
+| `src/modeling_harness/validators/` | 门禁：evidence-gate / research-quality / model-critic / assumption-checker |
 | `catalog/` | 元数据双视图单一真源（catalog.yaml / v3.yaml / protocol_tools.yaml） |
 | `docs/` | 文档区（入口见 docs/README.md） |
 | `docs/decisions/` | 架构决策记录（ADR） |
@@ -51,11 +51,11 @@ no backward compatibility with V2.
 
 | Path | Description |
 |---|---|
-| `core/` | Engine (LLM-free): runtime / roles / workflows / validators / schemas / tools / skills / knowledge / env |
-| `core/tools/` | CLI tools: validate.py / catalog_check.py / new_project.py / doctor.py etc. |
-| `core/workflows/` | DAG templates (stages/) + WorkflowComposer |
-| `core/roles/` | 4 roles: analyst / modeler / experimenter / critic |
-| `core/validators/` | Gates: evidence-gate / research-quality / model-critic / assumption-checker |
+| `src/modeling_harness/` | Engine (LLM-free): runtime / roles / workflows / validators / schemas / cli / skills / knowledge / env |
+| `src/modeling_harness/cli/` | CLI: mh entry + validate.py / catalog_check.py / new_project.py / doctor.py etc. |
+| `src/modeling_harness/workflows/` | DAG templates (stages/) + WorkflowComposer |
+| `src/modeling_harness/roles/` | 4 roles: analyst / modeler / experimenter / critic |
+| `src/modeling_harness/validators/` | Gates: evidence-gate / research-quality / model-critic / assumption-checker |
 | `catalog/` | Metadata dual-view single truth (catalog.yaml / v3.yaml / protocol_tools.yaml) |
 | `docs/` | Docs area (entry: docs/README.md) |
 | `docs/decisions/` | Architecture Decision Records (ADR) |
@@ -222,8 +222,8 @@ A task card is the smallest unit of work; all six elements are mandatory (templa
 **中文 / ZH**
 
 - 禁止新增 core 运行时第三方依赖（零依赖是定位红利）/ No new runtime third-party deps (zero-dep is a positioning advantage).
-- 禁止修改 `core/schemas/v3/` 下的 canonical schema / No edits to canonical schemas under `core/schemas/v3/`.
-- 禁止修改 `core/runtime/` 下的业务逻辑代码（文档/配置/基线任务除外）/ No edits to business logic under `core/runtime/` (except doc/config/baseline tasks).
+- 禁止修改 `src/modeling_harness/schemas/v3/` 下的 canonical schema / No edits to canonical schemas under `src/modeling_harness/schemas/v3/`.
+- 禁止修改 `src/modeling_harness/runtime/` 下的业务逻辑代码（文档/配置/基线任务除外）/ No edits to business logic under `src/modeling_harness/runtime/` (except doc/config/baseline tasks).
 - 禁止伪造 ExecutionResult 或任何验证产物 / No forged ExecutionResult or any verification artifact.
 - 禁止修改测试语义来通过测试 / No test-semantics tampering to pass tests.
 - 禁止越界修改任务卡未指定文件 / No out-of-scope edits beyond the task card.
@@ -234,8 +234,8 @@ A task card is the smallest unit of work; all six elements are mandatory (templa
 **English / EN**
 
 - No new runtime third-party dependencies (zero-dep is the positioning advantage).
-- No edits to canonical schemas under `core/schemas/v3/`.
-- No edits to business logic under `core/runtime/` (except documentation/config/baseline tasks).
+- No edits to canonical schemas under `src/modeling_harness/schemas/v3/`.
+- No edits to business logic under `src/modeling_harness/runtime/` (except documentation/config/baseline tasks).
 - No forged ExecutionResult or any other verification artifact.
 - No test-semantics tampering to make tests pass.
 - No out-of-scope edits beyond what the task card specifies.
@@ -250,13 +250,13 @@ A task card is the smallest unit of work; all six elements are mandatory (templa
 
 **中文 / ZH**
 
-- core **零第三方运行时依赖**（定位红利，不可破坏）：core 的 import 只能来自标准库与 core 自身。
+- harness **零第三方运行时依赖**（定位红利，不可破坏）：`src/modeling_harness/` 的 import 只能来自标准库与包自身。
 - Python：`>= 3.8`（声明），实测 `3.12`。
 - 本机（Windows）必须用 `py -3.12`——默认 `py` 指向 3.14/3.13 且安装损坏。
 
 **English / EN**
 
-- core has **zero third-party runtime dependencies** (positioning advantage, must not be broken): imports in core may only come from the standard library and core itself.
+- The harness has **zero third-party runtime dependencies** (positioning advantage, must not be broken): imports under `src/modeling_harness/` may only come from the standard library and the package itself.
 - Python: `>= 3.8` (declared), `3.12` (verified).
 - On this Windows machine always use `py -3.12` — the default `py` points to a broken 3.14/3.13 install.
 
@@ -297,9 +297,9 @@ A task card is the smallest unit of work; all six elements are mandatory (templa
 任何改动（文档、配置、代码、研究）完成后，必须通过**四件套**：
 
 ```powershell
-py -3.12 core/tools/validate.py                     # 项目级校验（基线见 docs/STATUS.md）
-py -3.12 core/tools/catalog_check.py --check        # catalog 双视图三方一致
-py -3.12 core/tools/catalog_check.py --check-terminology  # 术语零残留
+py -3.12 src/modeling_harness/cli/validate.py                     # 项目级校验（基线见 docs/STATUS.md）
+py -3.12 src/modeling_harness/cli/catalog_check.py --check        # catalog 双视图三方一致
+py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology  # 术语零残留
 py -3.12 -m pytest tests -q                         # 基线测试（数字以 docs/STATUS.md 实测为准）
 ```
 
@@ -312,9 +312,9 @@ py -3.12 -m pytest tests -q                         # 基线测试（数字以 d
 After any change (docs, config, code, research), the **four-gate** must pass:
 
 ```powershell
-py -3.12 core/tools/validate.py                     # project-level checks (baseline: docs/STATUS.md)
-py -3.12 core/tools/catalog_check.py --check        # catalog dual-view consistency
-py -3.12 core/tools/catalog_check.py --check-terminology  # zero stale terminology
+py -3.12 src/modeling_harness/cli/validate.py                     # project-level checks (baseline: docs/STATUS.md)
+py -3.12 src/modeling_harness/cli/catalog_check.py --check        # catalog dual-view consistency
+py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology  # zero stale terminology
 py -3.12 -m pytest tests -q                         # baseline tests (numbers per docs/STATUS.md)
 ```
 

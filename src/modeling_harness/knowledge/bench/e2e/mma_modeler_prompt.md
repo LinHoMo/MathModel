@@ -1,6 +1,6 @@
 # MathModelAgent Modeler Prompt（P13-3C MMA 臂操作化，逐字存档）
 
-> 来源: jihe520/MathModelAgent @ main, backend/app/core/prompts/modeler.py
+> 来源: jihe520/MathModelAgent @ main, backend/app/src/modeling_harness/prompts/modeler.py
 > 获取: 2026-09-06 · 操作化: 同一 LLM 忠实执行该 system prompt（不跑其 Coder/Writer 栈），
 > 输出按其单层 JSON 规范，再机械映射到 MODEL_ARTIFACT v1（映射规则见 P13_3C_REPORT）。
 

@@ -18,7 +18,7 @@ outputs:
 - **门禁**: 本 skill 即门禁——输出 PASS 或 FAIL，FAIL 时引擎按 on_fail 回退 model_construction
 - **输入**: Model artifacts（M###）+ 选型决策（D###）+ 问题特征
 - **核心动作**: 五维批判（见 Procedure），任何一维 FAIL 即整体 FAIL
-- **工具**: `python core/tools/knowledge.py show <card_id>`（方法卡）、`failures <card_id>`（失败记忆）
+- **工具**: `python src/modeling_harness/cli/knowledge.py show <card_id>`（方法卡）、`failures <card_id>`（失败记忆）
 
 ---
 
@@ -42,8 +42,8 @@ V2 assumption-validator 只查假设四维评分；V3 model-critic 前移到 mod
 ### Step 2: 五维批判
 
 1. **假设合理性**（承 V2 assumption-validator）: 每条假设有 necessity；简化假设不改变问题本质；关键假设标注敏感性影响。
-2. **方法-问题匹配**: 检索 `python core/tools/knowledge.py show <选型 card_id>`，逐条比对 good_for 是否真的覆盖本问题特征；requires 是否满足（数据/规模/前提）。
-3. **失败记忆比对**: `python core/tools/knowledge.py failures <card_id>`，逐条检查当前建模是否已落入历史失败模式（symptom 比对）。
+2. **方法-问题匹配**: 检索 `python src/modeling_harness/cli/knowledge.py show <选型 card_id>`，逐条比对 good_for 是否真的覆盖本问题特征；requires 是否满足（数据/规模/前提）。
+3. **失败记忆比对**: `python src/modeling_harness/cli/knowledge.py failures <card_id>`，逐条检查当前建模是否已落入历史失败模式（symptom 比对）。
 4. **可解性**: 模型在时限内可计算（规模估计）；参数可辨识（有数据支撑或有文献先验）。
 5. **复杂度必要性**: 若选型比 alternatives 中落选者更复杂，必须有明确理由（决策 reasoning）——否则"简单方法够用"优先。
 

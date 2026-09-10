@@ -1,7 +1,7 @@
 # 方法选型决策树（METHOD-DECISION-TREE）
 
 > 供 method-matcher（L2）使用的**结构化选型路径**：先按特征分支收敛到方法族，再在族内对比候选。
-> 机器可读版本：`core/knowledge/methodology/METHOD-DECISION-TREE.json`。
+> 机器可读版本：`src/modeling_harness/knowledge/methodology/METHOD-DECISION-TREE.json`。
 > 本文件解决「拍脑袋选模型」：选型必须走完决策树并在产物中记录路径（`decision_path`）。
 
 ## 使用流程（method-matcher 执行）

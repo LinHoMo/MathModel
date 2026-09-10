@@ -17,8 +17,8 @@ MathModelAgent / 人工均可插拔，The Agent Is Not The State）。**
 
 资产归位三层，自 2026-09-07 起**架构冻结**（不再接受架构革命）：
 
-- **Harness 引擎**（`core/`：runtime / roles / workflows / validators / schemas）——唯一可复用资产；
-- **Research Runtime**（`core/runtime/`）——冻结（架构冻结，治理例外经
+- **Harness 引擎**（`src/modeling_harness/`：runtime / roles / workflows / validators / schemas）——唯一可复用资产；
+- **Research Runtime**（`src/modeling_harness/runtime/`）——冻结（架构冻结，治理例外经
   `docs/architecture/RUNTIME_CONTRACTS.md` 授权）；
 - **Guardrails**（validators + gates）——冻结（同受契约授权）。
 
@@ -57,12 +57,12 @@ Construction 行为？"。
 | **P15-K003** | Model Representation Efficacy under Executed Construction（F/S/SV 三臂，构造+执行一体化）：五 Gate 全 PASS（G1 映射 v1.2 / G2 κ=0.712 / G3 词表 / G4 exec 1.00 / G5 功效）→ FROZEN（36 文件冻结，root `94b14d4f`）→ 66/66 真实 subprocess 执行（rc=0，含 hash/provenance）→ 3 evaluator 独立盲评（66 匿名 bundle，198 评分文件 + 对拍一致）→ 配对分析（bootstrap 10000，主检验 18 blocks） | ✅ **CLOSED** | 主终点 S−F(MCQ)=+3.76 CI[+2.13,+5.44] **POSITIVE**；SV−F(VAL)=+39.92 CI[+37.24,+42.60] **POSITIVE**；L4 为唯一正效应来源（S−F +1.58, SV−F +3.59）、L2 显著负（−0.41/−0.50）→ **"验证义务+执行闭环 > 表示格式"实证**；κ=0.260（<0.6，如实披露）；报告 `analysis/reports/P15-K003-REPORT.md` |
 | **audit 修复（Batch 1–6）** | 证据级全系统审计：P0×12/P1×18/P2×14 修复循环。执行真实化（EXEC 只由 substrate 写、失败真实传播、占位 claim 禁 supports）、选型证据化（无证据不选型）、契约统一（schema 迁 core + register 真 jsonschema 实例校验）、L2 数学检查、**Batch 6 Revision Loop**（机械诊断 diagnosis + 修订草案 + supersede 方向统一 + M1/M2 机械比较 accept 决策） | ✅ 全绿 | 计划 `research/audit/IMPLEMENTATION_PLAN.md`；Batch 6 提交见 git log |
 | **audit Batch 7–10** | 独立复审：E2E loop reviewer **REAL 判定**（M1 FAIL=真实数值违反 0.275>1e-6、execution status 仅来自真实 subprocess、replay 真实重跑）+ TEST_TRUST_SCORE=**80/100**（无 P0 作弊，零 mock，核心集成层真实执行）+ 实验体系审计 + 终审 18 项验收（F4/H5 回填 REAL）。P2×2 已修复（supersedes 方向单一真源、死代码分支删除） | ✅ 完成 | `research/audit/batch7_e2e_review/VERDICT.md`、`batch8_test_trust/TEST_TRUST_SCORE.md`、`batch10_final/FINAL_VERDICT.md` |
-| **治理三大待办** | **Candidate Arena 固化 benchmark**（全池 8 题 44 候选机械选型 + 6 集成测试）→ **Knowledge-guided 正式化**（`core/runtime/modeling/knowledge_guided.py` 机械映射 BZD 5 卡 + 契约 v1.0 + 8 单测）→ **Capability Validation Δscore**（八项指标 + P1 执行级指标双口径，诚实局限声明） | ✅ 完成 | `benchmark/arena/`、`protocol/KNOWLEDGE_GUIDED_CONSTRUCTION.md`、`analysis/CAPABILITY_DELTA_REPORT.md` |
-| **P2-4 修复** | V2 兼容层路径真迁移：`orchestrator.py _skill_path` → `core/legacy/hands/<Hand>/agents/<agent>/SKILL.md`（四手 29 agent 全解析）+ `state.py` 提示同步 + `tests/unit/test_legacy_paths.py`（2 用例） | ✔ 完成 | 本轮 |
+| **治理三大待办** | **Candidate Arena 固化 benchmark**（全池 8 题 44 候选机械选型 + 6 集成测试）→ **Knowledge-guided 正式化**（`src/modeling_harness/runtime/modeling/knowledge_guided.py` 机械映射 BZD 5 卡 + 契约 v1.0 + 8 单测）→ **Capability Validation Δscore**（八项指标 + P1 执行级指标双口径，诚实局限声明） | ✅ 完成 | `benchmark/arena/`、`protocol/KNOWLEDGE_GUIDED_CONSTRUCTION.md`、`analysis/CAPABILITY_DELTA_REPORT.md` |
+| **P2-4 修复** | V2 兼容层路径真迁移：`orchestrator.py _skill_path` → `src/modeling_harness/legacy/hands/<Hand>/agents/<agent>/SKILL.md`（四手 29 agent 全解析）+ `state.py` 提示同步 + `tests/unit/test_legacy_paths.py`（2 用例） | ✔ 完成 | 本轮 |
 | **P3-2（K004）** | L5 Revision 度量实验：预注册（18 单元 = 6 变体 × 3 种子，M/M/c 模板 + 错误注入 service_rate→ρ>1→L6 FAIL，修订→PASS）+ 真实 subprocess runner + 配对差分 bootstrap CI。**Δ_L6=+1.0000 CI[+1.0000,+1.0000] H1 SUPPORTED**；M1 失败真实性 18/18、M2 通过 18/18、Replay 18/18、修正轮数均值 1.0；报告 `experiments/P15-K004/K004_REPORT.md`（范围如实：单题模板、测 Revision 执行/验证层） | ✅ 完成 | 本轮 |
-| **P2-2/P3-3** | 外部 Constructor 适配器：`core/runtime/constructors/adapters/`——`MathModelAgentAdapter`（MMA 产物目录加载，未配置抛 ConstructorNotConfigured 禁伪造）、`PiAdapter`（同目录模式）、`ReferenceConstructor`（内置最小参考）；`tests/unit/test_constructor_adapters.py` 7 用例；边界：Worker/External Solver/Baseline，不触碰 Runtime 信任核心 | ✅ 完成 | 本轮 |
+| **P2-2/P3-3** | 外部 Constructor 适配器：`src/modeling_harness/runtime/constructors/adapters/`——`MathModelAgentAdapter`（MMA 产物目录加载，未配置抛 ConstructorNotConfigured 禁伪造）、`PiAdapter`（同目录模式）、`ReferenceConstructor`（内置最小参考）；`tests/unit/test_constructor_adapters.py` 7 用例；边界：Worker/External Solver/Baseline，不触碰 Runtime 信任核心 | ✅ 完成 | 本轮 |
 | **P3-1（K005）** | Constructor×Runtime 2×2 析因 benchmark：预注册协议（C1 裸 Doubao × C2 MMA × R0/R1，6 题 × 5 rep = 120 runs，配对差分 + bootstrap CI + 析因分解）+ runner 框架（`benchmark/constructor_independent/runner.py`，消费 adapter 产物目录）。**正式 runs 数据收集 BLOCKED（如实）**——需外部 Constructor 会话逐题生成，禁止伪造/回填 | ✅ 框架+预注册（数据待外部收集） | 本轮 |
-| **P3-4** | BZD 知识导入：试点 5 卡（M4 已落地，Prior 知识 + source_type/confidence/status 标注）；经验常数禁令验证（core/ 零引用 6.81% 等）。**目录重组：评估后暂缓**（顶层大迁移 import 回归风险 > 收益，改渐进式：constructors/adapters 已落地、dead code 已清） | ✅ 知识部分（重组暂缓） | 本轮 |
+| **P3-4** | BZD 知识导入：试点 5 卡（M4 已落地，Prior 知识 + source_type/confidence/status 标注）；经验常数禁令验证（src/modeling_harness/ 零引用 6.81% 等）。**目录重组：评估后暂缓**（顶层大迁移 import 回归风险 > 收益，改渐进式：constructors/adapters 已落地、dead code 已清） | ✅ 知识部分（重组暂缓） | 本轮 |
 | **v3.2.2 V2 残留彻底清除** | 删除论文链工具 9 个 + validate_project.py + LaTeX 模板 27 + 竞赛 profile 9 + V2 schema 4 + syslab 技能 101 + 旧实例 8 + docs 25+6（diagrams）+ harness-compat；env 全面 V3 化（schema 六组、loader 无 profile、config 无 paper）；new_project 重写纯 V3 布局（inputs/state/artifacts/model）；知识/文档引用全部对齐 | ✅ 595 passed，validate 45/0/0，catalog OK | 本轮 |
 
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
@@ -70,9 +70,9 @@ Construction 行为？"。
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
 | 单元/集成/端到端测试 | **595 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
-| 项目级校验 | **45 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
-| catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
-| 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |
+| 项目级校验 | **45 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
+| catalog 三方一致 | **OK** | `py -3.12 src/modeling_harness/cli/catalog_check.py --check` |
+| 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology` |
 | K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |
 | K002 冻结校验 | **PASS（40 文件）** | `py -3.12 research/P15/scripts/k002_freeze.py --check` |
 | K003 冻结校验 | **PASS（36 文件，revision v1.1：8 题 gt.json 新增 `l6_assertions` 键，P2-1 治理变更，新 root `347f4534`；已评分数据不受影响）** | `py -3.12 research/P15/scripts/k003_freeze.py --check` |

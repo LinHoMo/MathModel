@@ -17,7 +17,7 @@
 
 | 层 | 位置 | 说明 |
 |---|---|---|
-| 引擎（Harness） | `core/` | 唯一可复用资产：runtime / roles / workflows / validators / schemas / tools / skills / knowledge / env |
+| 引擎（Harness） | `src/modeling_harness/` | 唯一可复用资产：runtime / roles / workflows / validators / schemas / tools / skills / knowledge / env |
 | 研究 | `research/` | 研究实验与基准测试（P15 等） |
 | 实例 | `projects/` | 仅 `new_project.py` 创建的用户运行实例 |
 
@@ -30,7 +30,7 @@ candidate generation、code generation、reasoning）由外部 Agent 在 harness
 
 ### 1. 角色分离
 
-4 角色（`core/roles/`，V3 唯一）：
+4 角色（`src/modeling_harness/roles/`，V3 唯一）：
 
 - analyst —— 问题理解 / 特征提取
 - modeler —— 模型构造 / MODEL_IR 生成
@@ -50,7 +50,7 @@ Role 是 capability composition；节点引用 capability，由 runtime executor
 
 ### 3. 知识库分层共享
 
-`core/knowledge/`（方法论 / 方法卡 / 陷阱记忆）+ `catalog.yaml`（双视图单一真源）。
+`src/modeling_harness/knowledge/`（方法论 / 方法卡 / 陷阱记忆）+ `catalog.yaml`（双视图单一真源）。
 知识卡 = Constraint / Prior，不是答案库。
 
 ## 数据流
@@ -76,16 +76,16 @@ failed / timeout / invalid）只能来自真实执行；`Execution success ≠ M
 
 ## 验证机制
 
-`core/tools/validate.py` —— 项目级 45 项校验（V3 schema / MODEL_IR / 模型描述文档 /
+`src/modeling_harness/cli/validate.py` —— 项目级 45 项校验（V3 schema / MODEL_IR / 模型描述文档 /
 角色 / 知识库 / 数值追溯 / 哈希链 / env 配置等）。
 
-`core/tools/catalog_check.py --check` —— catalog 双视图三方一致。
-`core/tools/doctor.py` —— 环境预检。
+`src/modeling_harness/cli/catalog_check.py --check` —— catalog 双视图三方一致。
+`src/modeling_harness/cli/doctor.py` —— 环境预检。
 
 ## 修改后必做
 
 ```bash
-python core/tools/validate.py                          # 45 项校验
-python core/tools/catalog_check.py --check             # 双视图一致
+python src/modeling_harness/cli/validate.py                          # 45 项校验
+python src/modeling_harness/cli/catalog_check.py --check             # 双视图一致
 python -m pytest tests -q                              # 基线测试
 ```

@@ -9,7 +9,7 @@
 本目录收录历年 CUMCM（高教社杯 / 全国大学生数学建模竞赛）真题的**结构化索引**，为以下两类 agent 提供检索依据：
 
 - **type-classifier（题型识别）**：当拿到一道新赛题时，先按（a）赛题背景、（b）变量性质、（c）目标数量四个维度判断其题型（A/B/C/D/E），再从本目录检索**近似的历史赛题**，用「历史题型 + 方法方向」交叉印证分类结果，避免误判。
-- **method-matcher（方法匹配）**：分类确定后，从近似历史赛题的方法方向出发，到 `core/knowledge/methodology/` 挑选候选模型，形成 ≥2 个候选模型以供对比。
+- **method-matcher（方法匹配）**：分类确定后，从近似历史赛题的方法方向出发，到 `src/modeling_harness/knowledge/methodology/` 挑选候选模型，形成 ≥2 个候选模型以供对比。
 
 ---
 
@@ -33,7 +33,7 @@
 1. **按题型检出**：`INDEX.md` 按年份分节、每题标注「题型」列，按 A/B/C/D/E 过滤即可得到该类历史赛题集合。
 2. **按关键词检出**：将新赛题的核心名词（如「定日镜」「热传导」「无人机编队」「信贷」）与「核心关键词」列做语义/字面匹配，取出相近题目。
 3. **按难度参考**：「难度」列辅助判断选题工作量，不作为分类依据。
-4. **辅助选型**：命中近似题后，读取该题的「方法方向」，再到 `core/knowledge/methodology/` 中定位对应方法文档（如 `ode-pde`、`dynamic-programming`、`machine-learning`、`multi-objective` 等），据此构建候选模型列表供 method-matcher 对比。
+4. **辅助选型**：命中近似题后，读取该题的「方法方向」，再到 `src/modeling_harness/knowledge/methodology/` 中定位对应方法文档（如 `ode-pde`、`dynamic-programming`、`machine-learning`、`multi-objective` 等），据此构建候选模型列表供 method-matcher 对比。
 
 **检出示例**：新赛题「镜场聚光效率优化」→ 关键词「定日镜」→ 命中 2023 A 定日镜场 → 方法方向「几何建模 + 数值优化 + 仿真」→ 候选：几何分析、数值优化、monte-carlo。
 
@@ -54,7 +54,7 @@
 
 ## 五、题型分类口径（A/B/C/D/E）
 
-与本库 `core/knowledge/methodology/method-trends-2010-2025.md` 一致：
+与本库 `src/modeling_harness/knowledge/methodology/method-trends-2010-2025.md` 一致：
 
 | 题型 | 特征 | 首选方法组合 |
 |---|---|---|

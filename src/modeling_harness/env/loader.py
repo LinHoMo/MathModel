@@ -1,4 +1,4 @@
-"""core/env/loader.py —— 参数配置层加载器（单一真源 + 三层合并 + 官方锁定）。
+"""src/modeling_harness/env/loader.py —— 参数配置层加载器（单一真源 + 三层合并 + 官方锁定）。
 
 分层语义：
     OFFICIAL  官方硬约束（来自组委会规范条文），config.yaml 的 overrides **不可覆盖**
@@ -266,7 +266,7 @@ _META_CACHE = None
 
 
 def available_profiles():
-    """列出 core/env/profiles/ 下可用的竞赛 profile 名（不含扩展名）。"""
+    """列出 src/modeling_harness/env/profiles/ 下可用的竞赛 profile 名（不含扩展名）。"""
     if not os.path.isdir(_PROFILES_DIR):
         return []
     return sorted(
@@ -296,7 +296,7 @@ def _load_all():
     rejected = []      # [(path, 想改的值, 保留的值)]  被 OFFICIAL 锁定拒绝的覆盖
     profile_meta = {}
 
-    # 1) 竞赛 profile 差量（可选；core/env/profiles/ 已随 V2 论文规格移除，
+    # 1) 竞赛 profile 差量（可选；src/modeling_harness/env/profiles/ 已随 V2 论文规格移除，
     #    未来建模规则 profile 可在此注册）
     if profile_name:
         prof_path = os.path.join(_PROFILES_DIR, profile_name + ".yaml")
@@ -371,7 +371,7 @@ def require(key):
     v = get(key, sentinel)
     if v is sentinel:
         raise EnvConfigError(
-            "必需参数缺失：%s（请在 core/env/schema.yaml 中定义）" % key)
+            "必需参数缺失：%s（请在 src/modeling_harness/env/schema.yaml 中定义）" % key)
     return v
 
 
@@ -437,7 +437,7 @@ def _reload():
 
 if __name__ == "__main__":
     print("=" * 66)
-    print("core/env/loader.py 调试输出")
+    print("src/modeling_harness/env/loader.py 调试输出")
     print("schema :", _SCHEMA_PATH, os.path.isfile(_SCHEMA_PATH))
     print("config :", _CONFIG_PATH, os.path.isfile(_CONFIG_PATH))
     print("可用 profile:", ", ".join(available_profiles()))

@@ -1,7 +1,7 @@
 # Expression Contract — P11 契约文档
 > Version: v1.0 | Status: Frozen | Updated: 2026-09-10
 
-> 代码真源：`core/runtime/writing/expression.py`（边界/校准/失败语义）、
+> 代码真源：`src/modeling_harness/runtime/writing/expression.py`（边界/校准/失败语义）、
 > `paragraphs.py`（ParagraphPlan/ArgumentUnit/Renderer）、`patterns.py`、
 > `redundancy.py`。与 P7/P9/P10 契约同级；冲突时以更早契约为准。
 

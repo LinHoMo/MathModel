@@ -2,7 +2,7 @@
 > Version: v1.0 | Status: Frozen | Updated: 2026-09-05
 
 > **本文件是 V3 Runtime 的语义契约真源。** 任何 handlers / gate / critic / tool
-> 的行为与本文件冲突时，以本文件 + `core/runtime/contracts.py`（代码真源）为准。
+> 的行为与本文件冲突时，以本文件 + `src/modeling_harness/runtime/contracts.py`（代码真源）为准。
 > 修改契约必须同时改：本文档、`contracts.py`、`lifecycle.py`、对应测试。
 
 范围约束（P7 任务书）：**NO new agents / NO new top-level directories /
@@ -31,8 +31,8 @@ Agent / LLM / Handler / Tool                          ← 永远不是事实来�
 
 ## 2. Artifact Lifecycle Contract
 
-权威状态机：`core/runtime/artifacts/lifecycle.py`（fail-closed，未列出转换一律拒绝）。
-语义谓词代码真源：`core/runtime/contracts.py`。
+权威状态机：`src/modeling_harness/runtime/artifacts/lifecycle.py`（fail-closed，未列出转换一律拒绝）。
+语义谓词代码真源：`src/modeling_harness/runtime/contracts.py`。
 
 | 状态         | 可复用 | 可进证据图     | 可支撑 Claim | 可进论文投影 | 审计保留 |
 |--------------|--------|----------------|--------------|--------------|----------|

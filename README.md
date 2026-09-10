@@ -18,7 +18,7 @@ Problem → Model Construction → Model Artifact → Execution → Validation
 > 人工建模者都可以作为可插拔执行器接入，不反过来定义系统
 > （**The Agent Is Not The State. The Harness Is The State.**）。
 
-核心组件：Artifact Registry（稳定 ID + 生命周期）· Typed Evidence Graph（23 种
+核心组件：Artifact Registry（稳定 ID + 生命周期）· Typed Evidence Graph（24 种
 关系 + 失效传播 + Revision lineage）· Workflow DAG（15 节点，反馈环，Per-Question
 展开）· Wave Execution（波次并行）· Research Quality（七维质量层）· Runtime
 Contract（冻结语义）· Deterministic Replay（重放审计）。
@@ -91,8 +91,8 @@ P1-VS-001 已首次跑通完整闭环：M1（缺陷模型）→ 真实执行 →
 
 | 层 | 位置 | 生命周期 |
 |---|---|---|
-| product（引擎） | `core/` | 长期维护，架构已冻结（P0–P6 授权例外） |
-| benchmark（能力测量） | `core/tools/`（benchmark.py / e2e_metrics.py） | 长期；能力进步以 Δscore 度量 |
+| product（引擎） | `src/modeling_harness/` | 长期维护，src-layout 单一包 |
+| benchmark（能力测量） | `src/modeling_harness/cli/`（benchmark.py / e2e_metrics.py） | 长期；能力进步以 Δscore 度量 |
 | research（研究实验） | `research/` | 实验生命周期（P15：K001/K002/P1） |
 | instance（用户实例） | `projects/` | 仅 `new_project.py` 创建的运行实例 |
 
@@ -120,12 +120,12 @@ P1-VS-001 已首次跑通完整闭环：M1（缺陷模型）→ 真实执行 →
 
 ```bash
 # Windows 本机统一用 py -3.12（系统默认 py 3.14/3.13 安装损坏）
-py -3.12 core/tools/new_project.py my-problem          # 创建 V3 workspace（projects/my-problem）
-py -3.12 core/tools/doctor.py --project my-problem     # 环境/工具链预检
+py -3.12 -m modeling_harness new-project my-problem    # 创建 V3 workspace（projects/my-problem）
+mh doctor --project my-problem                         # 环境/工具链预检（等价 python -m modeling_harness）
 
 # 验证产物完整性（交付前必跑）
-py -3.12 core/tools/validate.py                        # 项目级 45 项校验
-py -3.12 core/tools/catalog_check.py --check           # 双视图三方一致性
+mh validate                                            # 项目级校验
+mh catalog-check --check                               # 双视图三方一致性
 py -3.12 -m pytest tests -q                            # 单元/集成/端到端（以 STATUS.md 实测为准）
 ```
 
@@ -135,13 +135,15 @@ py -3.12 -m pytest tests -q                            # 单元/集成/端到端
 
 ```
 Modeling-Harness/
-├── core/                            # 引擎（唯一可复用资产，架构冻结）
-│   ├── runtime/                     # V3 认知运行时：artifacts / state / graph / execution / modeling / knowledge
+├── src/modeling_harness/            # 引擎（唯一可复用资产，src-layout，LLM-free 零运行时依赖）
+│   ├── cli/                         # 统一入口 mh（main.py）+ 各子命令（validate/catalog/doctor/new-project/…）
+│   ├── runtime/                     # V3 认知运行时：artifacts / state / graph / execution / modeling / decisions
 │   ├── roles/  workflows/           # 4 角色（analyst/modeler/experimenter/critic）/ DAG（YAML 定义）
 │   ├── validators/                  # evidence / quality / modules（L1–L6 门禁）
-│   ├── schemas/                     # v3/ 六域 canonical schema
-│   ├── evaluation/  tools/          # 评分链 / benchmark / 能力指标 / runtime 工具
-│   ├── skills/  knowledge/  env/  templates/  adapters/
+│   ├── schemas/                     # v3/ 七域 canonical schema（modeling_harness:v3 命名空间）
+│   ├── domains/  adapters/  profiles/
+│   ├── skills/  knowledge/  env/  templates/  utils/
+├── scripts/                         # 一次性运维/迁移脚本（migrate_legacy_projects.py）
 ├── catalog.yaml + catalog/          # 双视图元数据索引（单一真源；model_families.yaml 已 frozen）
 ├── research/                        # 研究实验（P15：K001/K002/P1；bench 运行）——带实验专属脚本
 ├── projects/                        # 用户运行实例（仅 new_project.py 创建）
@@ -149,7 +151,7 @@ Modeling-Harness/
 ├── tests/                           # unit / integration / e2e / regression（含 P1 闭环测试）
 ├── examples/                        # 少量可运行示例
 ├── AGENTS.md                        # agent 活动入口（唯一权威协议）
-└── pyproject.toml                   # pytest marker 注册等工程配置
+└── pyproject.toml                   # src-layout 打包 + [project.scripts] mh + pytest marker
 ```
 
 ---
@@ -166,7 +168,7 @@ STATUS.md 当前口径为准。**
 2. **状态可对账**：Event Log → Projection → status.json，禁止多个状态真源并存
 3. **可重放可审计**：每次运行留 RunRecord（版本/哈希/模型/输入），可 deterministic replay
 4. **可验证**：阈值集中在 env，判定交给脚本，不靠人工自觉
-5. **引擎与实例分离**：`core/` 是唯一可复用引擎，`projects/<项目>/` 是校验下的运行实例
+5. **引擎与实例分离**：`src/modeling_harness/` 是唯一可复用引擎，`projects/<项目>/` 是校验下的运行实例
 6. **The Agent Is Not The State**：Agent/LLM/Handler 永远不是事实来源
 7. **infra 不冒充 capability**：任何新 schema/contract/validator 必须回答
    "它改变了哪个可测量的 Model Construction 行为？"——答不出不得包装成能力提升
@@ -185,14 +187,15 @@ STATUS.md 当前口径为准。**
 ## 命令速查
 
 ```text
-# V3 运行时
-py -3.12 core/tools/validate.py                          # 项目级 45 项校验
-py -3.12 core/tools/catalog_check.py --check             # catalog 三方一致
-py -3.12 core/tools/catalog_check.py --check-terminology # 术语零残留
-py -3.12 core/tools/doctor.py --project <项目>           # 环境/工具链预检
-py -3.12 core/tools/replay.py <项目> [<run_id> [diff <run_id>]]   # 重放 / 差异归因
-py -3.12 core/tools/knowledge.py recommend --types <题型>        # 方法卡检索
-py -3.12 core/tools/benchmark.py bench {list,run,score,report}
+# V3 运行时（统一入口 mh；或 python -m modeling_harness <cmd>）
+mh validate                                         # 项目级校验
+mh catalog-check --check                            # catalog 三方一致
+mh catalog-check --check-terminology                # 术语零残留
+mh doctor --project <项目>                          # 环境/工具链预检
+mh replay <项目> [<run_id> [diff <run_id>]]         # 重放 / 差异归因
+mh knowledge recommend --types <题型>               # 方法卡检索
+mh benchmark bench {list,run,score,report}
+mh --version                                        # 版本与品牌
 
 # P15 研究工具链（协议/冻结/状态机/盲评）
 py -3.12 research/P15/scripts/k001_state.py show         # K001 状态机

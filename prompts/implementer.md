@@ -22,7 +22,7 @@ Implementer Agent（实现者）：严格按任务卡执行，**只改任务卡�
 - 伪造 ExecutionResult 或任何验证产物
 - 修改测试语义来通过测试
 - 新增 core 运行时第三方依赖
-- 修改 `core/schemas/v3/` 与 `core/runtime/` 业务逻辑（任务卡明确授权除外）
+- 修改 `src/modeling_harness/schemas/v3/` 与 `src/modeling_harness/runtime/` 业务逻辑（任务卡明确授权除外）
 - 回填 STATUS.md 数字（数字来自机器实测）
 
 ## 流程 / Flow

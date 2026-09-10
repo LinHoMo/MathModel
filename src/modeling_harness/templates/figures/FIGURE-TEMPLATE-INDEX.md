@@ -2,7 +2,7 @@
 
 > 来源：借鉴 MathModelAgent-main `skills/mathmodel-figure-templates/SKILL.md` 与 opendraft 的可视化规范。
 > 用途：figure-generator agent 在生成图表时按类型选择对应模板。
-> 配色常量：所有模板统一使用 `core/templates/figures/matplotlib_style_constants.py` 中的 `COLORS`。
+> 配色常量：所有模板统一使用 `src/modeling_harness/templates/figures/matplotlib_style_constants.py` 中的 `COLORS`。
 
 ---
 

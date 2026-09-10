@@ -1,6 +1,6 @@
 # 负样本库 `_negative`
 
-> 反模式库的落地示例：把 `core/knowledge/pitfalls/antipatterns.md` 里的抽象扣分点，
+> 反模式库的落地示例：把 `src/modeling_harness/knowledge/pitfalls/antipatterns.md` 里的抽象扣分点，
 > 还原成一条条**具体的失败现场**，供 Reviewer 手在评审时对照命中。
 
 ## 一、用途
@@ -14,7 +14,7 @@
 
 一句话：**`antipatterns.md` 告诉你"有哪些扣分点"，`_negative/` 告诉你"这个扣分点落到纸面上是什么样、该怎么改"。**
 
-## 二、与 `core/knowledge/pitfalls/antipatterns.md` 的关系
+## 二、与 `src/modeling_harness/knowledge/pitfalls/antipatterns.md` 的关系
 
 | | `pitfalls/antipatterns.md` | `_negative/`（本目录） |
 |---|---|---|

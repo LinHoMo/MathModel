@@ -25,7 +25,7 @@
 **不做的风险**：真执行+假模型无法检测（代码跑通但不实现声明的模型）
 
 **具体改动**：
-- `core/runtime/execution/handlers.py` `do_model_execution` 方法
+- `src/modeling_harness/runtime/execution/handlers.py` `do_model_execution` 方法
 - 在 `execute_code` 后调用 `verify_fidelity`
 - Fidelity misaligned → FAIL
 
@@ -57,8 +57,8 @@
 **不做的风险**：失败后无法机械归因，只能靠人工或 LLM 猜测
 
 **具体改动**：
-- `core/runtime/execution/handlers.py` 在 validation FAIL 时调用 `diagnose_failure`
-- `core/runtime/modeling/revision.py` `build_revision_draft` 生成 M2 草案
+- `src/modeling_harness/runtime/execution/handlers.py` 在 validation FAIL 时调用 `diagnose_failure`
+- `src/modeling_harness/runtime/modeling/revision.py` `build_revision_draft` 生成 M2 草案
 - 将诊断和草案传递给外部 Constructor
 
 **测试**：
@@ -77,7 +77,7 @@
 ### P0-3: 修复 Engine Validators 未使用问题
 
 > ✅ **DONE 2026-09-10**（方案 B，commit `validators.py`）：
-> - 新增 `core/runtime/execution/validators.py`：`evidence_consistency_validator`——PASS 节点机械复核 outputs.artifacts/evidence 真实存在于 registry（防 handler 谎报产物/证据；registry.get 缺失抛异常时安全判定）
+> - 新增 `src/modeling_harness/runtime/execution/validators.py`：`evidence_consistency_validator`——PASS 节点机械复核 outputs.artifacts/evidence 真实存在于 registry（防 handler 谎报产物/证据；registry.get 缺失抛异常时安全判定）
 > - `session.py`：同一 validators 注册到 WorkflowEngine 与 WaveExecutor（self.engine 最终指向 waves.engine，避免覆盖丢失）
 > - 验收：`test_validator_integration.py` 5/5（注册覆盖/假 artifact 否决/假 evidence 端点否决/合法不误杀/全闭环绿）；全量 1009 passed / 4 skipped；validate 58/0；catalog OK
 
@@ -142,10 +142,10 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ### P1-1: Constructor Adapter Protocol
 
-> ✅ **DONE 2026-09-10**（commit 见 STATUS）：`core/runtime/constructors/` （protocol.py ConstructionBundle/ConstructorAdapter/C0-C5 + registry.py ConstructorRegistry/apply_bundle）；验收 5/5（序列化往返/能力分级/ABC/mock 全闭环/无事实写权限）。
+> ✅ **DONE 2026-09-10**（commit 见 STATUS）：`src/modeling_harness/runtime/constructors/` （protocol.py ConstructionBundle/ConstructorAdapter/C0-C5 + registry.py ConstructorRegistry/apply_bundle）；验收 5/5（序列化往返/能力分级/ABC/mock 全闭环/无事实写权限）。
 
 
-**目标**：设计并实现 `core/runtime/constructors/protocol.py`
+**目标**：设计并实现 `src/modeling_harness/runtime/constructors/protocol.py`
 
 **为什么做**：支持外部 Constructor（MathModelAgent/Claude Code）通过统一
 协议接入 LinHoMo Runtime。
@@ -153,9 +153,9 @@ Engine 的 validator hook 机制从未在生产中使用。
 **不做的风险**：无法标准化外部 Agent 集成
 
 **具体改动**：
-- 新建 `core/runtime/constructors/__init__.py`
-- 新建 `core/runtime/constructors/protocol.py`（ConstructionBundle + ConstructorAdapter）
-- 新建 `core/runtime/constructors/registry.py`（Adapter 注册）
+- 新建 `src/modeling_harness/runtime/constructors/__init__.py`
+- 新建 `src/modeling_harness/runtime/constructors/protocol.py`（ConstructionBundle + ConstructorAdapter）
+- 新建 `src/modeling_harness/runtime/constructors/registry.py`（Adapter 注册）
 - 在 handlers.py 中增加 ConstructorAdapter 接入点
 
 **测试**：
@@ -374,7 +374,7 @@ Engine 的 validator hook 机制从未在生产中使用。
 ### P3-1: E2B Execution Backend
 
 > ✅ **DONE 2026-09-10**（commit `P3-1 e2b`）：
-> `core/runtime/execution/e2b_adapter.py`：
+> `src/modeling_harness/runtime/execution/e2b_adapter.py`：
 > - `E2BAdapter(ExecutionAdapter)`：E2B 云端沙箱执行（可选后端）。
 >   available() 探测 E2B_API_KEY + e2b SDK；execute 上传 code 到沙箱
 >   /tmp 运行，输出解析与 LocalPythonAdapter 完全一致（stdout 最后
@@ -393,7 +393,7 @@ Engine 的 validator hook 机制从未在生产中使用。
 **不做的风险**：安全限制
 
 **具体改动**：
-- `core/runtime/execution/adapters.py` 新增 `E2BAdapter`
+- `src/modeling_harness/runtime/execution/adapters.py` 新增 `E2BAdapter`
 - 实现 `ExecutionAdapter` 接口
 
 **测试**：
@@ -411,7 +411,7 @@ Engine 的 validator hook 机制从未在生产中使用。
 ### P3-2: 确定性指标替代盲评
 
 > ✅ **DONE 2026-09-10**（commit `8681041`）：
-> `core/runtime/evaluation/deterministic_metrics.py`（LLM-free）：
+> `src/modeling_harness/runtime/evaluation/deterministic_metrics.py`（LLM-free）：
 > - `claim_evidence_coverage(graph)`：Evidence Graph 机械遍历——每个 claim
 >   是否被真实证据终端支撑（supports 边 + execution_result 带
 >   execution_token / verification_result 带数值 / result 带 outputs），
@@ -493,6 +493,6 @@ P3-1 (E2B) + P3-2 (Deterministic Metrics) + P3-3 (E2E Test)
 ```powershell
 # 每项完成后必须运行：
 py -3.12 -m pytest tests -q                    # 全绿
-py -3.12 core/tools/validate.py                # 45 通过
-py -3.12 core/tools/catalog_check.py --check   # OK
+py -3.12 src/modeling_harness/cli/validate.py                # 45 通过
+py -3.12 src/modeling_harness/cli/catalog_check.py --check   # OK
 ```

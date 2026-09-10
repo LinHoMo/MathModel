@@ -31,7 +31,7 @@ ATTRIBUTION = {
     "input_hash": "题目输入（inputs/）变化",
     "workflow_version": "工作流定义（roles/workflows YAML）变化",
     "prompt_hash": "角色/工作流指令文件变化",
-    "skill_version": "技能指令包（core/skills）变化",
+    "skill_version": "技能指令包（src/modeling_harness/skills）变化",
     "tool_version": "工具链版本（catalog/git）变化",
     "artifact_hash": "Registry 产物内容不同（结果/模型变化）",
     "evidence_hash": "证据图内容不同",

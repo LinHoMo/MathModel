@@ -34,7 +34,7 @@ REQUIRED_TOOLS = [
 REQUIRED_DIRS = [
     ("src/modeling_harness/knowledge/methodology", "方法论知识库"),
     ("src/modeling_harness/validators/modules", "验证模块"),
-    ("core/env", "配置层"),
+    ("src/modeling_harness/env", "配置层"),
     ("src/modeling_harness/schemas", "结构化输出 Schema"),
     ("src/modeling_harness/workflows/stages", "DAG stage 模板"),
     ("src/modeling_harness/roles", "角色定义"),
@@ -80,7 +80,7 @@ def check_dirs(r):
 
 
 def check_agent_count(r):
-    """V3：core/roles 4 角色定义齐全（analyst/modeler/experimenter/critic）。"""
+    """V3：src/modeling_harness/roles 4 角色定义齐全（analyst/modeler/experimenter/critic）。"""
     roles_dir = ROOT / "src" / "modeling_harness" / "roles"
     if not roles_dir.is_dir():
         r.block_("src/modeling_harness/roles", "目录缺失")

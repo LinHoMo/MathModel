@@ -1,15 +1,15 @@
 # Modeling-Harness —— agent 元数据索引
 # V3 Cognitive Workflow Runtime（15 节点 DAG + 5 角色 + 6 validator）
-# 一致性由 core/tools/catalog_check.py --check 强制。
+# 一致性由 src/modeling_harness/tools/catalog_check.py --check 强制。
 # 所有路径用正斜杠，相对于项目根目录。
 
 schema_version: 5
 runtime: agent-native
 
 env:
-  path: core/env
-  config: core/env/config.yaml
-  loader: core/env/loader.py
+  path: src/modeling_harness/env
+  config: src/modeling_harness/env/config.yaml
+  loader: src/modeling_harness/env/loader.py
   params:
     - code
     - modeling

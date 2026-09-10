@@ -16,7 +16,7 @@ core 内 LLM-free，不含论文生成，不向后兼容 V2。
 
 ### 运行时零依赖（定位红利）
 
-`core/` 运行时**零第三方依赖**：core 的 import 只能来自标准库与 core 自身。
+`src/modeling_harness/` 运行时**零第三方依赖**：core 的 import 只能来自标准库与 core 自身。
 新增任何第三方运行时依赖都会被拒绝（见 `docs/decisions/ADR-0004`）。
 
 ### 测试环境依赖（与运行时区分）
@@ -42,9 +42,9 @@ py -3.12 -m pytest tests -q          # 全量测试（基线：595 passed）
 ## 如何跑三件套校验（每阶段/每次提交前必跑）
 
 ```powershell
-py -3.12 core/tools/validate.py                # 项目级 45 项校验
-py -3.12 core/tools/catalog_check.py --check   # catalog 双视图三方一致
-py -3.12 core/tools/catalog_check.py --check-terminology  # 术语一致性
+py -3.12 src/modeling_harness/cli/validate.py                # 项目级 45 项校验
+py -3.12 src/modeling_harness/cli/catalog_check.py --check   # catalog 双视图三方一致
+py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology  # 术语一致性
 py -3.12 -m pytest tests -q                    # 基线测试
 ```
 
@@ -60,8 +60,8 @@ py -3.12 -m pytest tests -q                    # 基线测试
 
 ## 行为约束（详见 AGENTS.md）
 
-- 禁止修改 `core/schemas/v3/` 下的 canonical schema
-- 禁止修改 `core/runtime/` 下的业务逻辑代码（文档/配置/基线任务除外）
+- 禁止修改 `src/modeling_harness/schemas/v3/` 下的 canonical schema
+- 禁止修改 `src/modeling_harness/runtime/` 下的业务逻辑代码（文档/配置/基线任务除外）
 - 禁止伪造 ExecutionResult 或回填 STATUS.md 数字
 - 允许"同类事实修正"，但须在汇报中单列范围外修正清单并附证据
 

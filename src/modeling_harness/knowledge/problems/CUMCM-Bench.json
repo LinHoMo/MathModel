@@ -20,7 +20,7 @@
     ],
     "topics_per_year": 3,
     "total_problems": 32,
-    "source": "core/knowledge/problems/INDEX.md + CUMCM-EXAMINER-TRACKER.md",
+    "source": "src/modeling_harness/knowledge/problems/INDEX.md + CUMCM-EXAMINER-TRACKER.md",
     "distillation_date": "2026-09-03"
   },
   "problems": [
@@ -972,7 +972,7 @@
       "paper_case_ref": [
         "A-topic 多篇"
       ],
-      "scoring_criteria_ref": "core/knowledge/review/scoring-criteria.md 第三章",
+      "scoring_criteria_ref": "src/modeling_harness/knowledge/review/scoring-criteria.md 第三章",
       "examiner_hint": "几何建模 + 数值优化 + 仿真，注意遮挡与阴影分析",
       "historical_core_methods": [
         "geometric_modeling",
@@ -1055,7 +1055,7 @@
         "定价与补货割裂建模（ARIMA+线性回归 低分）"
       ],
       "family": "数据+评价+决策",
-      "scoring_criteria_ref": "core/knowledge/review/scoring-criteria.md 第六章",
+      "scoring_criteria_ref": "src/modeling_harness/knowledge/review/scoring-criteria.md 第六章",
       "examiner_review_key_quote": "数据建模须融合机理分析；复用模型算法须结合场景二次改造",
       "priority_award_features": [
         "问一并考虑时间效应和分布类型",
@@ -1103,7 +1103,7 @@
         "摘要未独立成页（扣分项）"
       ],
       "family": "几何运动",
-      "scoring_criteria_ref": "core/knowledge/review/scoring-criteria.md 第五章",
+      "scoring_criteria_ref": "src/modeling_harness/knowledge/review/scoring-criteria.md 第五章",
       "reference_results": {
         "q1_300s_head_pos": "(4.4203, 2.3204)",
         "q2_collision_time": "412.4738s",
@@ -1263,7 +1263,7 @@
         "启发式算法未说明理由扣 2-3 分"
       ],
       "family": "定日镜/聚光（光学遮蔽）",
-      "scoring_criteria_ref": "core/knowledge/review/scoring-criteria.md 第二章",
+      "scoring_criteria_ref": "src/modeling_harness/knowledge/review/scoring-criteria.md 第二章",
       "scoring_breakdown": {
         "abstract_writing": 10,
         "q1": 25,
@@ -1323,7 +1323,7 @@
         "未做可靠性分析（用估计值反算对比原始数据）扣 10 分"
       ],
       "family": "光学-反演",
-      "scoring_criteria_ref": "core/knowledge/review/scoring-criteria.md 第三章",
+      "scoring_criteria_ref": "src/modeling_harness/knowledge/review/scoring-criteria.md 第三章",
       "scoring_breakdown": {
         "abstract_writing": 10,
         "q1": 25,
@@ -1378,7 +1378,7 @@
         "[0,1]比例数据直接线性回归效果不理想（应Logit变换）"
       ],
       "family": "数据+评价+决策",
-      "scoring_criteria_ref": "core/knowledge/review/scoring-criteria.md 第四章",
+      "scoring_criteria_ref": "src/modeling_harness/knowledge/review/scoring-criteria.md 第四章",
       "scoring_breakdown": {
         "abstract_writing": 10,
         "q1": 30,

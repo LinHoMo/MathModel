@@ -73,7 +73,7 @@ def workflow_version() -> str:
 
 
 def skill_version() -> str:
-    """技能指令包版本 = core/skills 组合哈希。"""
+    """技能指令包版本 = src/modeling_harness/skills 组合哈希。"""
     return hash_globs(SKILL_DIRS, REPO)
 
 

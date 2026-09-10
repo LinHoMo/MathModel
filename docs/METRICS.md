@@ -1,8 +1,8 @@
 # 项目度量（单一真源 · 脚本自动生成）
 
-> **本文件由 `core/tools/metrics.py --write` 自动生成，禁止手改。**
+> **本文件由 `src/modeling_harness/cli/metrics.py --write` 自动生成，禁止手改。**
 > 最近扫描时间: `2026-09-07T10:31:14+00:00Z`
-> 生成脚本: `core/tools/metrics.py`
+> 生成脚本: `src/modeling_harness/cli/metrics.py`
 > commit: `5a6b051b9`
 
 ---

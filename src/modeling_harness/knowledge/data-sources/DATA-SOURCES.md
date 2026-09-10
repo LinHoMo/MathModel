@@ -96,7 +96,7 @@
 | ICM E | 环境与气候 + Global Forest Watch + Our World in Data |
 | ICM F | World Bank + OECD + UN Comtrade + 联合国数据 |
 
-> 题名与题面以 `core/knowledge/problems/MCM-ICM.md` 已核实表为准（1995–2025）。
+> 题名与题面以 `src/modeling_harness/knowledge/problems/MCM-ICM.md` 已核实表为准（1995–2025）。
 
 ## 与产物的衔接
 

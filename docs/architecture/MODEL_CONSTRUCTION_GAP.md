@@ -160,14 +160,14 @@ Problem → Problem Repr → Candidates → Selection → MODEL_IR
 
 | 简写 | 真实路径 | 核对结果 |
 |---|---|---|
-| handlers.py | core/runtime/execution/handlers.py（1737 行） | L817/837/843/876/1423 全部吻合 |
-| engine.py | core/runtime/execution/engine.py（417 行） | L96/281/349 吻合（L281/L349 重复 unblock 属实） |
-| session.py | core/runtime/execution/session.py（298 行） | L96 吻合 |
-| idelity.py | core/runtime/execution/fidelity.py（227 行） | 存在 |
-| codegen.py | core/runtime/execution/codegen.py | 存在 |
-| integrity_gate.py | core/validators/modules/integrity_gate.py（428 行） | L118/161/172/255/345 全部吻合 |
-| indings.py | core/runtime/writing/findings.py（212 行） | L121/147/157 吻合 |
-| selection.py | core/runtime/modeling/selection.py（141 行） | L60/80/108/120 吻合（chosen=recs[0] 属实） |
-| comparison.py | core/runtime/modeling/comparison.py | L22 吻合 |
+| handlers.py | src/modeling_harness/runtime/execution/handlers.py（1737 行） | L817/837/843/876/1423 全部吻合 |
+| engine.py | src/modeling_harness/runtime/execution/engine.py（417 行） | L96/281/349 吻合（L281/L349 重复 unblock 属实） |
+| session.py | src/modeling_harness/runtime/execution/session.py（298 行） | L96 吻合 |
+| idelity.py | src/modeling_harness/runtime/execution/fidelity.py（227 行） | 存在 |
+| codegen.py | src/modeling_harness/runtime/execution/codegen.py | 存在 |
+| integrity_gate.py | src/modeling_harness/validators/modules/integrity_gate.py（428 行） | L118/161/172/255/345 全部吻合 |
+| indings.py | src/modeling_harness/runtime/writing/findings.py（212 行） | L121/147/157 吻合 |
+| selection.py | src/modeling_harness/runtime/modeling/selection.py（141 行） | L60/80/108/120 吻合（chosen=recs[0] 属实） |
+| comparison.py | src/modeling_harness/runtime/modeling/comparison.py | L22 吻合 |
 | knowledge_guided.py / diagnosis.py / 
-evision.py / candidates.py / model_ir.py | core/runtime/modeling/ | 存在（生产零调用见正文） |
+evision.py / candidates.py / model_ir.py | src/modeling_harness/runtime/modeling/ | 存在（生产零调用见正文） |

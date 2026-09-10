@@ -12,7 +12,7 @@ Reviewer Agent（审查者）：**只读 diff**，检查越界、伪造、数字
 
 ## 输出 / Output
 
-- 越界检查：是否触碰任务卡未指定文件 / 冻结物（core/schemas/v3、core/runtime 业务逻辑）
+- 越界检查：是否触碰任务卡未指定文件 / 冻结物（src/modeling_harness/schemas/v3、src/modeling_harness/runtime 业务逻辑）
 - 伪造检查：数字是否有机器实测来源；是否回填 STATUS.md；是否有占位符
 - 依赖检查：是否新增运行时依赖；测试依赖改动是否同步 CI
 - 一致性检查：术语是否符合 ONTOLOGY_TERMINOLOGY；文档引用是否断裂

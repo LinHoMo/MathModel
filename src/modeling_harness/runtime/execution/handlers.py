@@ -11,7 +11,7 @@
         metrics:   dict        节点指标（latency_ms 等，审计用）
 
 本实现是**确定性认知管线**（零 LLM）：文献检索/方法竞技场/实验规划器/研究叙事/
-论文投影/批判器全部复用 core/runtime 下的真实模块，产出可追溯到
+论文投影/批判器全部复用 src/modeling_harness/runtime 下的真实模块，产出可追溯到
 Artifact Registry + Evidence Graph 的研究状态。LLM 节点后续按同一协议接入。
 
 失败即 FAIL（fail-closed）：缺模型 / 缺假设 / 证据门禁不过 / 判审不 PASS，

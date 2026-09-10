@@ -1,6 +1,6 @@
-# core/schemas — Schema 目录说明
+# src/modeling_harness/schemas — Schema 目录说明
 
-> **`core/schemas/v3/` 是唯一 canonical schema**（不可修改，见 AGENTS.md §5）。
+> **`src/modeling_harness/schemas/v3/` 是唯一 canonical schema**（不可修改，见 AGENTS.md §5）。
 > 本目录其余内容均为历史/衍生，不做运行时真源。
 
 ## 目录结构

@@ -12,7 +12,7 @@
 ## 文件布局
 
 ```
-core/knowledge/bench/cumcm/            # rubric JSON 文件（每题一个）
+src/modeling_harness/knowledge/bench/cumcm/            # rubric JSON 文件（每题一个）
   GENERIC-RUBRIC.json                  # 跨题通用结构（备用参考）
   rubric_2024a.json                    # 官方评分细则
   rubric_2025a.json
@@ -20,11 +20,11 @@ core/knowledge/bench/cumcm/            # rubric JSON 文件（每题一个）
   rubric_2021a.json                    # 评委评阅概述提炼
   ...
 
-core/schemas/
+src/modeling_harness/schemas/
   bench_rubric.schema.json             # rubric 文件结构
   bench_result.schema.json             # 响应文件结构
 
-core/tools/
+src/modeling_harness/cli/
   benchmark.py                         # 含 bench list/run/score/report + 原有 pipeline/library
 ```
 
@@ -40,20 +40,20 @@ core/tools/
 
 ### 1. 列出当前可用 rubric
 ```bash
-python core/tools/benchmark.py bench list
-python core/tools/benchmark.py bench list --json   # 机器可读
+python src/modeling_harness/cli/benchmark.py bench list
+python src/modeling_harness/cli/benchmark.py bench list --json   # 机器可读
 ```
 
 ### 2. 生成 agent 评分模板（不调用 LLM）
 ```bash
-python core/tools/benchmark.py bench run --rubric core/knowledge/bench/cumcm/rubric_2024a.json
+python src/modeling_harness/cli/benchmark.py bench run --rubric src/modeling_harness/knowledge/bench/cumcm/rubric_2024a.json
 ```
 输出步骤提示并写 `projects/_bench_<年><题>/bench_response_template.json`。Agent runtime 按提示读 SKILL.md 主观打分后写 `bench_response.json`。
 
 ### 3. 重算校验打分 JSON
 ```bash
-python core/tools/benchmark.py bench score \
-    --rubric core/knowledge/bench/cumcm/rubric_2024a.json \
+python src/modeling_harness/cli/benchmark.py bench score \
+    --rubric src/modeling_harness/knowledge/bench/cumcm/rubric_2024a.json \
     --response projects/<项目>/bench_response.json
 ```
 脚本自动校验：
@@ -65,8 +65,8 @@ EXIT 0 = 通过，EXIT 1 = 维度越界或总分不一致。
 
 ### 4. 生成可读报告
 ```bash
-python core/tools/benchmark.py bench report \
-    --rubric core/knowledge/bench/cumcm/rubric_2024a.json \
+python src/modeling_harness/cli/benchmark.py bench report \
+    --rubric src/modeling_harness/knowledge/bench/cumcm/rubric_2024a.json \
     --response projects/<项目>/bench_response.json
 ```
 

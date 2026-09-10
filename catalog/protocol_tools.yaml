@@ -3,43 +3,43 @@
 # 执行协议工具（跨 runtime 通用，零第三方依赖）
 tools:
   validate:
-    path: core/tools/validate.py
+    path: src/modeling_harness/cli/validate.py
     description: 项目级 45 项校验
     commands:
-      - "python core/tools/validate.py <项目>"
+      - "python src/modeling_harness/cli/validate.py <项目>"
   catalog_check:
-    path: core/tools/catalog_check.py
+    path: src/modeling_harness/cli/catalog_check.py
     description: catalog 三方一致性检查
     commands:
-      - "python core/tools/catalog_check.py --check"
+      - "python src/modeling_harness/cli/catalog_check.py --check"
   new_project:
-    path: core/tools/new_project.py
+    path: src/modeling_harness/cli/new_project.py
     description: 新项目脚手架，创建标准目录结构并导入赛题文件
     commands:
-      - "python core/tools/new_project.py <项目名> --competition cumcm --problem <赛题文件>"
+      - "python src/modeling_harness/cli/new_project.py <项目名> --competition cumcm --problem <赛题文件>"
   doctor:
-    path: core/tools/doctor.py
+    path: src/modeling_harness/cli/doctor.py
     description: 环境预检（工具链 / 竞赛包 / 项目结构），开工前暴露问题
     commands:
-      - "python core/tools/doctor.py"
+      - "python src/modeling_harness/cli/doctor.py"
   benchmark:
-    path: core/tools/benchmark.py
+    path: src/modeling_harness/cli/benchmark.py
     description: 引擎演练与题库健康检查
     commands:
-      - "python core/tools/benchmark.py pipeline --competition cumcm"
-      - "python core/tools/benchmark.py library"
+      - "python src/modeling_harness/cli/benchmark.py pipeline --competition cumcm"
+      - "python src/modeling_harness/cli/benchmark.py library"
   knowledge:
-    path: core/tools/knowledge.py
+    path: src/modeling_harness/cli/knowledge.py
     description: 方法卡检索
     commands:
-      - "python core/tools/knowledge.py recommend --types <题型>"
+      - "python src/modeling_harness/cli/knowledge.py recommend --types <题型>"
   diagram_gen:
-    path: core/tools/diagram_gen.py
+    path: src/modeling_harness/cli/diagram_gen.py
     description: 科学图表生成
     commands:
-      - "python core/tools/diagram_gen.py flowchart --nodes 'A,B' --edges 'A->B' -o fig.svg"
+      - "python src/modeling_harness/cli/diagram_gen.py flowchart --nodes 'A,B' --edges 'A->B' -o fig.svg"
   scholar_fetch:
-    path: core/tools/scholar_fetch.py
+    path: src/modeling_harness/cli/scholar_fetch.py
     description: 学术文献检索
     commands:
-      - "python core/tools/scholar_fetch.py bibtex <关键词>"
+      - "python src/modeling_harness/cli/scholar_fetch.py bibtex <关键词>"

@@ -1,4 +1,4 @@
-# core/tools — CLI 工具导航
+# src/modeling_harness/tools — CLI 工具导航
 
 > 全部零第三方依赖，Windows 下用 `py -3.12` 运行。CI 仅使用带 ⚙ 标记的工具。
 
@@ -6,7 +6,7 @@
 
 | 工具 | 一句话说明 | 最小调用 | CI |
 |---|---|---|---|
-| `validate.py` | 项目级 45 项校验（registry/graph/state 对账） | `py -3.12 core/tools/validate.py [<项目>]` | ⚙ |
+| `validate.py` | 项目级 45 项校验（registry/graph/state 对账） | `py -3.12 src/modeling_harness/cli/validate.py [<项目>]` | ⚙ |
 | `catalog_check.py` | catalog 双视图一致性 + 术语 lint | `--check` / `--check-terminology` | ⚙ |
 | `benchmark.py` | 引擎演练 / 题库健康 / 国赛复盘基准 | `--competition <赛题>` | |
 | `new_project.py` | 新项目脚手架（创建目录并导入赛题） | `<项目名>` | |

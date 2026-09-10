@@ -1,4 +1,4 @@
-# core/knowledge — 知识库导航
+# src/modeling_harness/knowledge — 知识库导航
 
 > 治理规则真源：`docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md`。
 > 核心哲学：**方法卡 = Constraint / Prior / Validation，不是答案库**。
@@ -27,7 +27,7 @@
 ## 检索入口
 
 ```powershell
-py -3.12 core/tools/knowledge.py recommend --types evaluation,ranking
+py -3.12 src/modeling_harness/cli/knowledge.py recommend --types evaluation,ranking
 # 可选：--no-data（无题给数据）/ --sample small|medium|large / --timeseries
 ```
 

@@ -1,8 +1,8 @@
 # STATE_TRUTH —— 状态单一真源决策表（System Hardening P2）
 > Version: v1.0 | Status: Active | Updated: 2026-09-07
 
-> 建立：2026-09-07 ｜ 代码真源：`core/runtime/state/reconcile.py`（对账器）
-> CLI：`python core/tools/validate.py <项目>`（registry/graph/state 对账）
+> 建立：2026-09-07 ｜ 代码真源：`src/modeling_harness/runtime/state/reconcile.py`（对账器）
+> CLI：`python src/modeling_harness/cli/validate.py <项目>`（registry/graph/state 对账）
 > 原则：回答「系统当前到底是什么状态」**只能有一个答案**。
 
 ## 1. 真源分层（谁是真源、谁是投影）

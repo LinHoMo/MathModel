@@ -1,12 +1,12 @@
 # Modeling-Harness 用户配置（V3）
 #
-# 参数的定义、默认值与分层，见 core/env/schema.yaml —— 唯一真源
+# 参数的定义、默认值与分层，见 src/modeling_harness/env/schema.yaml —— 唯一真源
 #
 # 本文件只做一件事：
 #   overrides 覆盖 TUNABLE / DERIVED 参数（OFFICIAL 层不可覆盖）
 #
 # 改完想知道有没有生效，运行：
-#   python core/tools/env_doctor.py
+#   python src/modeling_harness/cli/env_doctor.py
 
 overrides:
   # 示例：取消下面两行注释即可覆盖建模参数

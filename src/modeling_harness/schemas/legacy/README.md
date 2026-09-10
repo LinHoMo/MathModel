@@ -1,7 +1,7 @@
-# core/schemas/legacy — V2 Schema 归档
+# src/modeling_harness/schemas/legacy — V2 Schema 归档
 
 > 本目录存放 V2 时代的 schema，**仅供历史审计，不做运行时真源**。
-> 阶段五（2026-09-10）扫描确认：全仓无任何路径形式引用（`core/schemas/<name>.schema.json` 非 v3 零命中），故从顶层移入本目录。
+> 阶段五（2026-09-10）扫描确认：全仓无任何路径形式引用（`src/modeling_harness/schemas/<name>.schema.json` 非 v3 零命中），故从顶层移入本目录。
 
 ## 归档清单（9）
 

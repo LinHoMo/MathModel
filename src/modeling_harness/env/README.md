@@ -1,6 +1,6 @@
 # env —— 环境变量配置层
 
-`core/env/` 是 Modeling-Harness 项目根目录下的**用户可调环境变量配置层**，让用户在不修改 skill 逻辑的前提下调整交付规格与运行阈值。它是 UTG 多 Agent 架构演进的第一步落地：各 agent 不再硬编码阈值，而是统一通过 `core/env/loader.py` 读取本目录的 `config.yaml`。
+`src/modeling_harness/env/` 是 Modeling-Harness 项目根目录下的**用户可调环境变量配置层**，让用户在不修改 skill 逻辑的前提下调整交付规格与运行阈值。它是 UTG 多 Agent 架构演进的第一步落地：各 agent 不再硬编码阈值，而是统一通过 `src/modeling_harness/env/loader.py` 读取本目录的 `config.yaml`。
 
 ## 目录内容
 
@@ -12,7 +12,7 @@
 
 ## 参数组（V3）
 
-> ⚠️ 本 README 仅作可读镜像，**非单一真源**。真值以 `core/env/schema.yaml`（参数定义与分层）为准。
+> ⚠️ 本 README 仅作可读镜像，**非单一真源**。真值以 `src/modeling_harness/env/schema.yaml`（参数定义与分层）为准。
 > 论文规格参数（paper / official / deliverables）已随 V2 移除。
 
 | 组 | 内容 |
@@ -32,7 +32,7 @@
 `loader.py` 零外部依赖（仅用 Python 标准库，内置极简 YAML 解析器，不依赖 PyYAML），可直接 `import` 使用：
 
 ```python
-# 假设从项目根目录运行，或已把 core/env/ 加入 sys.path
+# 假设从项目根目录运行，或已把 src/modeling_harness/env/ 加入 sys.path
 from core.env.loader import load_config, get
 
 # 方式一：一次性拿到完整 config dict
@@ -74,7 +74,7 @@ Programmer 的 `code-implementer` 生成代码时使用新种子，`result-verif
 
 ## 缺失回退机制
 
-- 若 `core/env/config.yaml` **不存在**：`load_config()` 返回 `loader.py` 内置的 `DEFAULT_CONFIG`（四组默认值与本文件表格一致），并向 stderr 打印警告，**不阻塞流程**。
+- 若 `src/modeling_harness/env/config.yaml` **不存在**：`load_config()` 返回 `loader.py` 内置的 `DEFAULT_CONFIG`（四组默认值与本文件表格一致），并向 stderr 打印警告，**不阻塞流程**。
 - 若 `config.yaml` **某字段缺失**：仅该字段回退默认值，其余字段按文件读取（通过递归合并实现）。
 - 若 `config.yaml` **解析失败**（格式错误）：整体回退 `DEFAULT_CONFIG` 并打印警告，不抛异常。
 

@@ -2854,7 +2854,7 @@
       "$comment": " | 契约分层最终：非核心字段宽松承载，义务见 x-template-promise（register 层强制）"
     }
   },
-  "x_superseded_by": "core/schemas/v3/model/model_ir.schema.json",
-  "x_superseded_note": "2026-09-09 治理：MODEL_IR 契约唯一真源已迁移至 core/schemas/v3/model/（P1 C1）。本文件保留仅作历史参考与向后引用；K002 register/freeze 均以 core 版为准。",
+  "x_superseded_by": "src/modeling_harness/schemas/v3/model/model_ir.schema.json",
+  "x_superseded_note": "2026-09-09 治理：MODEL_IR 契约唯一真源已迁移至 src/modeling_harness/schemas/v3/model/（P1 C1）。本文件保留仅作历史参考与向后引用；K002 register/freeze 均以 core 版为准。",
   "$comment": "P1-4 唯一真源（2026-09-10）：由 research/P15/model_representation/model_ir.schema.json（K002 预检校准版 v0.8）收敛而来；全仓仅此一份。"
 }

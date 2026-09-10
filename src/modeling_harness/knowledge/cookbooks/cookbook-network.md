@@ -40,7 +40,7 @@
 | **特征向量/PageRank** | 邻居重要性加权 | 网页排名/关键节点/影响力传播 | `centrality_pagerank.py` |
 | **Katz/Alpha 中心性** | 路径衰减加权 | 带衰减的影响力 | `centrality_katz.py` |
 | **聚类系数** | 邻居间连接紧密度 | 社团/小世界/结构洞 | `clustering_coeff.py` |
-| **K-core/K-truss** | 核心分解/稠密子图 | 核心团体/鲁棒性 | `kcore_template.py` |
+| **K-src/modeling_harness/K-truss** | 核心分解/稠密子图 | 核心团体/鲁棒性 | `kcore_template.py` |
 
 ---
 

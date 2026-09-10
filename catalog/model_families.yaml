@@ -1,7 +1,7 @@
 # catalog/model_families.yaml — 单一受控词表 v1.0
 #
 # 用途（P0 工程项②，三仓库审计 R6/RQ5 修复）：
-#   合并 model_ir.schema.json 建议词 + core/knowledge/methods/cards/*.yaml family
+#   合并 model_ir.schema.json 建议词 + src/modeling_harness/knowledge/methods/cards/*.yaml family
 #   + benchmark gt.json allowed_model_families + K001 生成侧实际命名词，
 #   成为 K002 及以后所有实验的 model_family 判定源（single source of truth）。
 #

@@ -18,7 +18,7 @@ outputs:
 - **定位**: evidence_gate 的前哨——gate 管"证据结构完整"，本 critic 管"实验本身做得对不对"
 - **输入**: 实验/结果 artifacts + 实验计划（required_checks/preflight_guards）
 - **核心动作**: 五维批判（见 Procedure），FAIL 即整体 FAIL
-- **工具**: `python core/tools/knowledge.py failures <card_id>`（失败记忆 watchlist）
+- **工具**: `python src/modeling_harness/cli/knowledge.py failures <card_id>`（失败记忆 watchlist）
 
 ---
 

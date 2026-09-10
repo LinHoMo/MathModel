@@ -1,10 +1,10 @@
 # RUN_PROVENANCE —— 运行溯源与确定性重放（System Hardening P3）
 > Version: v1.0 | Status: Active | Updated: 2026-09-07
 
-> 建立：2026-09-07 ｜ 代码：`core/runtime/state/runs.py`（记录器）、
-> `core/runtime/execution/replay.py`（重放引擎）
-> CLI：`python core/tools/replay.py <项目> [verify|list|diff <A> <B>]`
-> schema：`core/schemas/v3/run/run_record.schema.json`
+> 建立：2026-09-07 ｜ 代码：`src/modeling_harness/runtime/state/runs.py`（记录器）、
+> `src/modeling_harness/runtime/execution/replay.py`（重放引擎）
+> CLI：`python src/modeling_harness/cli/replay.py <项目> [verify|list|diff <A> <B>]`
+> schema：`src/modeling_harness/schemas/v3/run/run_record.schema.json`
 
 ## 1. 回答什么问题
 
@@ -23,7 +23,7 @@ Model/Executor → Input → 产物哈希 → 引擎统计），`replay verify` 
 | run_id | sha1(project|questions|workflow_version|input_hash)[:12]，幂等派生 | 同配置同输入重跑 = 同一 run |
 | parent_run_id | 上一次 run 的 run_id（rerun/resume 链） | — |
 | workflow_version / prompt_hash | roles/workflows YAML 组合哈希 | 工作流/角色指令变了 |
-| skill_version | core/skills 组合哈希 | 技能指令包变了 |
+| skill_version | src/modeling_harness/skills 组合哈希 | 技能指令包变了 |
 | tool_version | `catalog-v<ver>@<git头9位>` | 工具链版本 |
 | input_hash | inputs/ 组合哈希（空输入 = `<empty-inputs>` 标记哈希） | 题目输入变了 |
 | artifact_hash / evidence_hash / decision_log_hash | checkpoint 后落盘文件哈希 | 产物/证据/决策变了 |

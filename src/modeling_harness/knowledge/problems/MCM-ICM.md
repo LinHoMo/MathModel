@@ -19,7 +19,7 @@
 
 1. **Summary Sheet 优先**：评审先读一页摘要，问题复述 + 结论 + 方法一段话讲清；摘要质量对奖项影响极大。
 2. **开放题面**：问题常为多问开放式（"build a model to ..."），需自行定义成功指标与假设。
-3. **数据自备**：C 题给数据文件，其余常需外部数据——引用 `core/knowledge/data-sources/DATA-SOURCES.md` 中的权威源，正文标注来源与访问日期。
+3. **数据自备**：C 题给数据文件，其余常需外部数据——引用 `src/modeling_harness/knowledge/data-sources/DATA-SOURCES.md` 中的权威源，正文标注来源与访问日期。
 4. **英文写作 + pdfLaTeX**：术语一致性与语法由 consistency-checker 覆盖；长度上限约 25 页（含附录，依当年规则）。
 5. **奖项口径**：Successful Submission / Honorable Mention / Meritorious / Finalist / Outstanding。
 

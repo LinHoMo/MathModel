@@ -1,6 +1,6 @@
-# core/runtime — V3 Runtime 子域导航
+# src/modeling_harness/runtime — V3 Runtime 子域导航
 
-> 语义契约真源：`docs/architecture/RUNTIME_CONTRACTS.md`（与 `core/runtime/contracts.py` 代码真源对齐）。
+> 语义契约真源：`docs/architecture/RUNTIME_CONTRACTS.md`（与 `src/modeling_harness/runtime/contracts.py` 代码真源对齐）。
 > 状态真源：`docs/architecture/STATE_TRUTH.md`；本目录按子域组织，各子域职责如下。
 
 ## 子域 / Subdomains
@@ -22,5 +22,5 @@
 
 ## 边界
 
-- `core/runtime/` 业务逻辑**冻结**（ADR-0001）：普通任务不得修改，改动须经契约授权。
+- `src/modeling_harness/runtime/` 业务逻辑**冻结**（ADR-0001）：普通任务不得修改，改动须经契约授权。
 - 状态只由确定性机制推进（ADR-0003）：Agent / LLM 只是 Executor。

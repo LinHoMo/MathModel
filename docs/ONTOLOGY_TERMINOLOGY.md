@@ -81,7 +81,7 @@ Current Model → Experiment → Evidence → Validation → survive / reject
 - e2e_metrics 输出 JSON 键 `method_selection`（历史 e2e_metrics_report.json 兼容）
 - manifest node_id `method_selection`（B0 历史 manifest 数据契约）
 - 方法卡 YAML `family` 字段名（中性词；语义 = Modeling Structure）
-- 目录 `core/knowledge/methods/cards/`（路径契约，语义 = Knowledge Unit 库）
+- 目录 `src/modeling_harness/knowledge/methods/cards/`（路径契约，语义 = Knowledge Unit 库）
 
 ---
 
@@ -89,7 +89,7 @@ Current Model → Experiment → Evidence → Validation → survive / reject
 
 | 区域 | 旧术语允许？ | 说明 |
 |---|---|---|
-| **production**（`core/`、`AGENTS.md`、`docs/architecture/` 现行文档、`docs/ONTOLOGY_TERMINOLOGY.md`） | ❌ 零残留 | schema / benchmark / evaluator / governance / CLI 必须用 canonical terms |
+| **production**（`src/modeling_harness/`、`AGENTS.md`、`docs/architecture/` 现行文档、`docs/ONTOLOGY_TERMINOLOGY.md`） | ❌ 零残留 | schema / benchmark / evaluator / governance / CLI 必须用 canonical terms |
 | **research history**（`research/` 已产出报告、`projects/*-b0/` 历史观测、`b0_manifests/`、`runs/`） | ✅ 允许 | 历史数据与观测记录不可改写（可追溯性优先） |
 | **migration / history 文档**（本文件、MODELING_KNOWLEDGE_GOVERNANCE 历史更正记录、docs/decisions） | ✅ 允许 | 新旧映射本身需要旧词 |
 | **代码运行时兼容层** | ✅ 允许（须注释 `# legacy compat`） | 读取历史 manifest / report 的键名 |
@@ -97,7 +97,7 @@ Current Model → Experiment → Evidence → Validation → survive / reject
 门禁命令：
 
 ```powershell
-py -3.12 core/tools/catalog_check.py --check-terminology
+py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology
 ```
 
 扫描范围 = production；失败即不通过交付门禁。research / history / migration 排除。
@@ -131,7 +131,7 @@ py -3.12 core/tools/catalog_check.py --check-terminology
 9. failure modes — 失败模式（链接 Failure Memory）
 10. composition — 可组合结构
 
-> 现阶段文件格式仍为 `core/knowledge/methods/cards/mc-*.yaml`（路径契约），
+> 现阶段文件格式仍为 `src/modeling_harness/knowledge/methods/cards/mc-*.yaml`（路径契约），
 > 但语义上它们是 Model Construction Knowledge Unit；后续如有 RFC 批准，可迁移为 `mck-*` 命名。
 
 ---

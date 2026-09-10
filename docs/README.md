@@ -55,7 +55,7 @@
 |---|---|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | 现行 V3 架构总览（问题输入 → MODEL_IR + 模型描述文档） |
 | [BENCHMARK.md](BENCHMARK.md) | 国赛复盘基准（CUMCM Bench）设计 |
-| [METRICS.md](METRICS.md) | 项目度量单一真源（由 `core/tools/metrics.py --write` 自动生成） |
+| [METRICS.md](METRICS.md) | 项目度量单一真源（由 `src/modeling_harness/cli/metrics.py --write` 自动生成） |
 | [STATUS.md](STATUS.md) | 项目状态与机器实测数字（状态真源） |
 | [ONTOLOGY_TERMINOLOGY.md](ONTOLOGY_TERMINOLOGY.md) | 术语与本体权威定义 |
 | [../CHANGELOG.md](../CHANGELOG.md) | 版本变更日志 |

@@ -56,7 +56,7 @@
 24. **正文使用 itemize / enumerate 列表**——最典型的 AI 痕迹。
 25. **以图表做主语开头**——"图3展示了…"，应改用括号旁注（图3）。
 26. **使用禁用词**——"具有重要的理论意义和实践价值""深入探讨"等，
-    完整词表见 `core/Writer/knowledge/writing/forbidden-words.md`。
+    完整词表见 `src/modeling_harness/Writer/knowledge/writing/forbidden-words.md`。
 27. **摘要无具体数值**，或摘要出现正文中没有的数字。
 28. **参考文献少于 10 篇，或含捏造条目**。
 29. **正文残留占位符**（TODO / 待补充）或内部文件名
