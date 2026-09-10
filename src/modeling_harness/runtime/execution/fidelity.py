@@ -20,7 +20,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .validation import run_checks, run_check, resolve_output_key, _get_path
+from .validation import run_check, resolve_output_key, _get_path
 
 FIDELITY_ENGINE = "execution.fidelity"
 

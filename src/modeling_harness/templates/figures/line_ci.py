@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from modeling_harness.templates.figures.matplotlib_style_constants import (
-    COLORS, PALETTE, FIG_SINGLE, RC_PARAMS, apply_style,
+    COLORS, FIG_SINGLE, apply_style,
 )
 
 apply_style()

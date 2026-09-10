@@ -426,7 +426,7 @@ def e2e_run(problem_id: str, project: str, questions: list[str],
         report["steps"]["prepare"] = f"FAIL: {exc}"
         return report
 
-    proj_dir = _find_project(project)
+    proj_dir = ROOT / "projects" / project
     if features:
         _save_json(proj_dir / "work" / "e2e_profile.json", features)
     try:
@@ -456,10 +456,10 @@ def e2e_run(problem_id: str, project: str, questions: list[str],
         return report
 
     report["next_steps"] = [
-        f"1. agent 真实解题（题面 inputs/problem.md，数据 inputs/data/）："
-        f"分解/方法/建模/实验/结果 → 按 V3 产物登记",
-        f"2. 写金标准 work/e2e_gt.json（sub_questions/methods）+ 评分响应 "
-        f"work/e2e_response.json",
+        "1. agent 真实解题（题面 inputs/problem.md，数据 inputs/data/）："
+        "分解/方法/建模/实验/结果 → 按 V3 产物登记",
+        "2. 写金标准 work/e2e_gt.json（sub_questions/methods）+ 评分响应 "
+        "work/e2e_response.json",
         f"3. 重算: python src/modeling_harness/cli/benchmark.py e2e metrics --project "
         f"{project} --gt work/e2e_gt.json --response work/e2e_response.json",
         f"4. 报告: python src/modeling_harness/cli/benchmark.py e2e report --project {project}",

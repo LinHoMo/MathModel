@@ -26,7 +26,6 @@ from __future__ import annotations
 import json
 from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass, field
-from typing import Any
 
 CAPABILITY_LEVELS = ("C0", "C1", "C2", "C3", "C4", "C5")
 

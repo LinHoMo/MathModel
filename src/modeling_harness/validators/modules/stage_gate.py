@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 
 
 class GateStatus(Enum):
@@ -74,7 +74,7 @@ class StageGateController:
                 continue
             try:
                 passed = check_fn()
-            except Exception as exc:
+            except Exception:
                 passed = False
             gate.checks.append(
                 GateCheck(

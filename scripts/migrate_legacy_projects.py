@@ -40,7 +40,7 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
 from modeling_harness.runtime.artifacts.ids import (  # noqa: E402
-    ARTIFACT_TYPES, IDFormatError, parse_id,
+    IDFormatError, parse_id,
 )
 
 

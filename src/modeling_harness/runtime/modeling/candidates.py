@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from ..knowledge.cards import Pattern
+from ..knowledge.cards import MethodCard, Pattern
 from ..knowledge.packs import CompetitionPack
 from ..knowledge.retriever import KnowledgeRetriever, Recommendation
 

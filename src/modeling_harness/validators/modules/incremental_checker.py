@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Tuple
 
 
 @dataclass
@@ -85,7 +85,7 @@ class IncrementalChecker:
             for validator_name, validator_fn in self._validators:
                 try:
                     passed = validator_fn(region)
-                except Exception as exc:
+                except Exception:
                     passed = False
                 result = ValidationResult(
                     region=region,

@@ -27,8 +27,10 @@ OPENAI_PATH = ROOT / "src" / "modeling_harness" / "runtime" / "adapters" / "open
 def _strip_comment(line):
     in_s = in_d = False
     for i, ch in enumerate(line):
-        if ch == "'" and not in_d: in_s = not in_s
-        elif ch == '"' and not in_s: in_d = not in_d
+        if ch == "'" and not in_d:
+            in_s = not in_s
+        elif ch == '"' and not in_s:
+            in_d = not in_d
         elif ch == "#" and not in_s and not in_d:
             if i == 0 or line[i - 1] in (" ", "\t"):
                 return line[:i]
@@ -147,13 +149,20 @@ def _coerce_scalar(s):
     s = s.strip()
     if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
         return s[1:-1]
-    if s.lower() in ("true", "yes", "on"): return True
-    if s.lower() in ("false", "no", "off"): return False
-    if s.lower() in ("null", "none", "~", ""): return None
-    try: return int(s)
-    except ValueError: pass
-    try: return float(s)
-    except ValueError: pass
+    if s.lower() in ("true", "yes", "on"):
+        return True
+    if s.lower() in ("false", "no", "off"):
+        return False
+    if s.lower() in ("null", "none", "~", ""):
+        return None
+    try:
+        return int(s)
+    except ValueError:
+        pass
+    try:
+        return float(s)
+    except ValueError:
+        pass
     return s
 
 

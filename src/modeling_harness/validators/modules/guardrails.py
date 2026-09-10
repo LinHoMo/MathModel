@@ -3,9 +3,6 @@ L5: Runtime Guardrails - 运行时护栏
 在LLM输出时实时拦截问题，而非事后检查
 """
 import re
-import json
-from pathlib import Path
-from typing import Optional
 
 
 # === 禁用词列表（与 validate.py 同步）===
@@ -69,17 +66,17 @@ class GuardrailResult:
 
 class Guardrails:
     """L5: 运行时护栏引擎"""
-    
+
     def __init__(self):
         self.results = []
-    
+
     def check_forbidden_words(self, text: str) -> GuardrailResult:
         """检查禁用词"""
         found = []
         for word in FORBIDDEN_WORDS:
             if word in text:
                 found.append(word)
-        
+
         if found:
             return GuardrailResult(
                 "forbidden_words", False,
@@ -87,7 +84,7 @@ class Guardrails:
                 "error"
             )
         return GuardrailResult("forbidden_words", True)
-    
+
     def check_placeholders(self, text: str) -> GuardrailResult:
         """检查占位符"""
         found = []
@@ -95,7 +92,7 @@ class Guardrails:
             matches = re.findall(pattern, text, re.IGNORECASE)
             if matches:
                 found.extend(matches)
-        
+
         if found:
             return GuardrailResult(
                 "placeholders", False,
@@ -103,7 +100,7 @@ class Guardrails:
                 "error"
             )
         return GuardrailResult("placeholders", True)
-    
+
     def check_internal_paths(self, text: str) -> GuardrailResult:
         """检查内部文件路径"""
         found = []
@@ -111,7 +108,7 @@ class Guardrails:
             matches = re.findall(pattern, text)
             if matches:
                 found.extend(matches)
-        
+
         if found:
             return GuardrailResult(
                 "internal_paths", False,
@@ -119,7 +116,7 @@ class Guardrails:
                 "warning"
             )
         return GuardrailResult("internal_paths", True)
-    
+
     def check_ai_traces(self, text: str) -> GuardrailResult:
         """检查AI痕迹"""
         found = []
@@ -127,7 +124,7 @@ class Guardrails:
             matches = re.findall(pattern, text, re.IGNORECASE)
             if matches:
                 found.extend(matches)
-        
+
         if found:
             return GuardrailResult(
                 "ai_traces", False,
@@ -135,7 +132,7 @@ class Guardrails:
                 "error"
             )
         return GuardrailResult("ai_traces", True)
-    
+
     def check_numeric_reasonableness(self, data: dict, expected_ranges: dict) -> GuardrailResult:
         """检查数值合理性"""
         issues = []
@@ -145,7 +142,7 @@ class Guardrails:
                 if isinstance(val, (int, float)):
                     if val < lo or val > hi:
                         issues.append(f"{key}={val} 不在范围[{lo},{hi}]")
-        
+
         if issues:
             return GuardrailResult(
                 "numeric_reasonableness", False,
@@ -153,16 +150,16 @@ class Guardrails:
                 "warning"
             )
         return GuardrailResult("numeric_reasonableness", True)
-    
+
     def check_citation_integrity(self, text: str, bib_keys: list) -> GuardrailResult:
         """检查引用完整性"""
         cite_pattern = r"\\cite[tp]?\{([^}]+)\}"
         cites = re.findall(cite_pattern, text)
-        
+
         all_keys = []
         for c in cites:
             all_keys.extend([k.strip() for k in c.split(",")])
-        
+
         missing = [k for k in all_keys if k not in bib_keys]
         if missing:
             return GuardrailResult(
@@ -171,12 +168,12 @@ class Guardrails:
                 "error"
             )
         return GuardrailResult("citation_integrity", True)
-    
+
     def check_figure_refs(self, text: str, figure_files: list) -> GuardrailResult:
         """检查图表引用"""
         include_pattern = r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}"
         refs = re.findall(include_pattern, text)
-        
+
         missing = [r for r in refs if r not in figure_files]
         if missing:
             return GuardrailResult(
@@ -185,7 +182,7 @@ class Guardrails:
                 "error"
             )
         return GuardrailResult("figure_refs", True)
-    
+
     def check_itemize_in_body(self, text: str) -> GuardrailResult:
         """检查正文是否包含 \begin{itemize} 或 \begin{enumerate}"""
         found_itemize = []
@@ -193,7 +190,7 @@ class Guardrails:
             found_itemize.append("itemize")
         if re.search(r'\\begin\{enumerate\}', text):
             found_itemize.append("enumerate")
-        
+
         if found_itemize:
             return GuardrailResult(
                 "itemize_in_body", False,
@@ -201,7 +198,7 @@ class Guardrails:
                 "error"
             )
         return GuardrailResult("itemize_in_body", True)
-    
+
     def check_chinese_numbered_list(self, text: str) -> GuardrailResult:
         """检查正文是否出现全角中文分点式（（1）（2）/（一）（二）/①②③）。
 
@@ -217,7 +214,7 @@ class Guardrails:
                 "warning"
             )
         return GuardrailResult("chinese_numbered_list", True)
-    
+
     def check_figure_as_subject(self, text: str) -> GuardrailResult:
         """检查图表主语句式（≥3次返回 FAIL）"""
         patterns = [
@@ -230,7 +227,7 @@ class Guardrails:
         for pat in patterns:
             matches = re.findall(pat, text)
             count += len(matches)
-        
+
         if count >= 3:
             return GuardrailResult(
                 "figure_as_subject", False,
@@ -238,10 +235,10 @@ class Guardrails:
                 "error"
             )
         return GuardrailResult("figure_as_subject", True)
-    
+
     def check_consecutive_same_openings(self, text: str) -> GuardrailResult:
         """检查连续段落相同句式开头"""
-        lines = [l.strip() for l in text.split('\n') if l.strip() and not l.strip().startswith('%')]
+        lines = [ln.strip() for ln in text.split('\n') if ln.strip() and not ln.strip().startswith('%')]
         openings = []
         for line in lines:
             # 提取前4个中文字符或前2个英文单词作为开头
@@ -252,12 +249,12 @@ class Guardrails:
                 eng_match = re.match(r'([A-Za-z]+(?:\s+[A-Za-z]+)?)', line)
                 if eng_match:
                     openings.append(eng_match.group(1))
-        
+
         consecutive_count = 0
         for i in range(1, len(openings)):
             if openings[i] == openings[i-1]:
                 consecutive_count += 1
-        
+
         if consecutive_count >= 2:
             return GuardrailResult(
                 "consecutive_same_openings", False,
@@ -265,23 +262,23 @@ class Guardrails:
                 "warning"
             )
         return GuardrailResult("consecutive_same_openings", True)
-    
+
     def validate_output(self, text: str, context: dict = None) -> list:
         """运行所有护栏检查"""
         self.results = []
-        
+
         # 基础检查
         self.results.append(self.check_forbidden_words(text))
         self.results.append(self.check_placeholders(text))
         self.results.append(self.check_internal_paths(text))
         self.results.append(self.check_ai_traces(text))
-        
+
         # 结构化 AI 痕迹检测
         self.results.append(self.check_itemize_in_body(text))
         self.results.append(self.check_chinese_numbered_list(text))
         self.results.append(self.check_figure_as_subject(text))
         self.results.append(self.check_consecutive_same_openings(text))
-        
+
         # 上下文检查
         if context:
             if "bib_keys" in context:
@@ -292,12 +289,12 @@ class Guardrails:
                 self.results.append(self.check_numeric_reasonableness(
                     context.get("numeric_data", {}), context["expected_ranges"]
                 ))
-        
+
         return self.results
-    
+
     def has_errors(self) -> bool:
         return any(not r.passed and r.severity == "error" for r in self.results)
-    
+
     def summary(self) -> dict:
         return {
             "total": len(self.results),

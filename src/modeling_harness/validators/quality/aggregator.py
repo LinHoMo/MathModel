@@ -18,8 +18,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from .contract import (FAIL, PASS, QUALITY_STATUSES, UNKNOWN, WEAK,
-                       QualityDimensionReport, QualityFinding, QualityReport)
+from .contract import (QualityDimensionReport, QualityFinding, QualityReport)
 from .evaluators import (claim_quality, decision_quality, evidence_quality,
                          experiment_quality, innovation_quality,
                          model_quality, problem_quality,

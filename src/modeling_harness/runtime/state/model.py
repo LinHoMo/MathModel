@@ -307,7 +307,7 @@ class ProjectState:
             "workflow": {
                 "completed": len(self.data["workflow"]["completed_nodes"]),
                 "blocked": list(self.data["workflow"]["blocked_nodes"]),
-    
+
             },
             "phase": self.data["run"].get("phase"),
         }

@@ -17,7 +17,7 @@ from pathlib import Path
 from .artifact import Artifact, ContractError, utcnow
 from .ids import (ARTIFACT_TYPES, IDFormatError, format_id,
                   id_matches_type, is_valid_id)
-from .lifecycle import LifecycleError, assert_transition, is_terminal
+from .lifecycle import LifecycleError, is_terminal
 
 REGISTRY_VERSION = 3
 
@@ -495,7 +495,6 @@ class ArtifactRegistry:
             if art.question and art.question not in self.artifacts:
                 problems.append(f"{aid} 悬空 question 引用: {art.question}")
             # 计数器一致性
-            expected = sum(1 for a in self.artifacts.values() if a.type == art.type)
         for atype, prefix in ARTIFACT_TYPES.items():
             n = sum(1 for a in self.artifacts.values() if a.type == atype)
             if self.counters.get(atype, 0) < n:

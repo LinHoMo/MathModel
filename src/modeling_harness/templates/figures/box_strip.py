@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from modeling_harness.templates.figures.matplotlib_style_constants import (
-    COLORS, PALETTE, FIG_SINGLE, RC_PARAMS, apply_style,
+    COLORS, FIG_SINGLE, apply_style,
 )
 
 apply_style()
@@ -37,7 +37,7 @@ def plot_box_strip(
     fig, ax = plt.subplots(figsize=FIG_SINGLE)
 
     # 箱线图
-    bp = ax.boxplot(
+    ax.boxplot(
         values, labels=labels, patch_artist=True,
         boxprops=dict(facecolor=COLORS["light"], color=COLORS["primary"]),
         medianprops=dict(color=COLORS["primary"], lw=2),

@@ -13,9 +13,7 @@
 
 from __future__ import annotations
 
-from ..evidence.evidence_gate import evaluate as gate_evaluate
-from .contract import (FAIL, PASS, UNKNOWN, WEAK, QualityDimensionReport,
-                       QualityFinding, QualityReport)
+from .contract import (FAIL, PASS, UNKNOWN, WEAK, QualityFinding)
 
 
 def _finding(dim, severity, subject_type, subject_id, reason, *,
@@ -65,7 +63,6 @@ def problem_quality(registry, graph) -> list[QualityFinding]:
                                 artifact_refs=[q.artifact_id], check_id="P-Q1",
                                 recommended_action="recompute"))
         st = registry.get(q.artifact_id).status
-        state_q = None
         if st == "draft":
             out.append(_finding("problem", "weak", "question", q.artifact_id,
                                 "问题仍处 draft，未被研究流程激活",

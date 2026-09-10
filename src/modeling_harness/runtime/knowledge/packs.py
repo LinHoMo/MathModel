@@ -15,7 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .cards import CardError, _opt_level, _require_str, _require_str_list
+from .cards import CardError, _require_str, _require_str_list
 
 PACK_ID_RE_PREFIX = "cp-"
 

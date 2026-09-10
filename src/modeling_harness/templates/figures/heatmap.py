@@ -8,9 +8,8 @@
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 from modeling_harness.templates.figures.matplotlib_style_constants import (
-    COLORS, PALETTE, FIG_SQUARE, RC_PARAMS, apply_style,
+    FIG_SQUARE, apply_style,
 )
 
 apply_style()

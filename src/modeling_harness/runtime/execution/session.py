@@ -35,7 +35,7 @@ from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph  # noqa:
 from modeling_harness.runtime.state.model import ProjectState  # noqa: E402
 
 from .handlers import DefaultNodeExecutor  # noqa: E402
-from modeling_harness.runtime.modeling.problem_repr import ProblemRepresentationError, load_problem_representation
+from modeling_harness.runtime.modeling.problem_repr import load_problem_representation  # noqa: E402
 
 
 class SessionError(RuntimeError):

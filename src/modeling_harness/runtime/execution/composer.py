@@ -14,8 +14,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .dag import DAGError, Node, WorkflowDAG
-from .yamlio import YamlSyntaxError, load_file, loads
+from .dag import Node, WorkflowDAG
+from .yamlio import load_file
 
 
 class ComposeError(ValueError):

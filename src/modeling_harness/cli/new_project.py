@@ -148,7 +148,7 @@ def main(argv=None) -> int:
         print(f"     - {proj_dir.name}/{sub}/")
     for src in args.problem:
         print(f"[OK] 赛题已导入: inputs/{Path(src).name}")
-    print(f"[OK] 交接文档模板: model/README.md")
+    print("[OK] 交接文档模板: model/README.md")
     print()
     print(NEXT_STEPS.format(name=args.project))
     return 0

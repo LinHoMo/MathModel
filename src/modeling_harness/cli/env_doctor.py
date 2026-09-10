@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli"))
 
 
 from modeling_harness.env.loader import get as env_get, load_config  # noqa: E402
-from pathlib import Path as _Path
+from pathlib import Path as _Path  # noqa: E402
 CONFIG_PATH = _Path(__file__).resolve().parent.parent / "env" / "config.yaml"
 
 _OK = "✅"
@@ -81,7 +81,7 @@ def check_sections() -> list[dict]:
 def check_types() -> list[dict]:
     results = []
     try:
-        load_env()
+        load_config()
     except Exception:
         return results
 

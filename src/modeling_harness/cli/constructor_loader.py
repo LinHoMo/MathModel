@@ -12,7 +12,6 @@ validation_specs），使默认 `orchestrator --execute` 能跑通完整链路�
 缺省 constructor_dir = <project>/constructor/。目录不存在 → 返回空 bundle，
 行为与现状一致（无 external 注入，model_construction 如实 BLOCKED）。
 """
-import io
 import json
 from pathlib import Path
 

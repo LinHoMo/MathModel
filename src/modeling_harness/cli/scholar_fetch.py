@@ -13,12 +13,10 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-import textwrap
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any
 
 SEMANTIC_SCHOLAR_API = "https://api.semanticscholar.org/graph/v1/paper/search"
 SEMANTIC_SCHOLAR_FIELDS = "title,authors,year,externalIds,url,abstract,venue"
@@ -78,8 +76,6 @@ def _format_bibtex_entry(paper: dict) -> str:
     if url:
         lines.append(f"  url       = {{{url}}},")
     if abstract:
-        wrapped = textwrap.fill(abstract, width=72, initial_indent="  ",
-                                subsequent_indent="    ")
         lines.append(f"  abstract  = {{{abstract}}},")
     lines.append("}")
     return "\n".join(lines)

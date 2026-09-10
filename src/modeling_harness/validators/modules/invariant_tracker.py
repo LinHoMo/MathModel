@@ -69,7 +69,7 @@ class InvariantTracker:
         if check_fn is not None:
             try:
                 status = InvariantStatus.OK if check_fn(before, after) else InvariantStatus.VIOLATED
-            except Exception as exc:
+            except Exception:
                 status = InvariantStatus.UNKNOWN
         else:
             status = InvariantStatus.UNKNOWN

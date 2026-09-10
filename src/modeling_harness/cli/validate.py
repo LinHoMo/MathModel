@@ -2,7 +2,6 @@
 Modeling-Harness 验证脚本 - 六层防御体系
 用于验证项目结构和产物完整性
 """
-import os
 import re
 import json
 import sys
@@ -152,13 +151,13 @@ def check_schema_exists(project_path):
     schemas_dir = project_path / "src" / "modeling_harness" / "schemas"
     if not schemas_dir.exists():
         return False, "schemas/目录不存在"
-    
+
     required = ["v3/model/model_ir.schema.json", "v3/artifact/artifact.schema.json",
                 "v3/evidence/graph.schema.json", "v3/decision/decision.schema.json"]
     missing = [f for f in required if not (schemas_dir / f).exists()]
     if missing:
         return False, f"缺失Schema文件: {', '.join(missing)}"
-    
+
     return True, "Schema文件完整"
 
 
@@ -166,13 +165,13 @@ def check_schemas_valid(project_path):
     """L1.2: 检查JSON Schema是否为有效JSON"""
     schemas_dir = project_path / "src" / "modeling_harness" / "schemas"
     errors = []
-    
+
     for f in schemas_dir.glob("*.json"):
         try:
             json.loads(f.read_text(encoding="utf-8"))
         except json.JSONDecodeError as e:
             errors.append(f"{f.name}: JSON格式错误 - {e}")
-    
+
     if errors:
         return False, "; ".join(errors)
     return True, "所有Schema文件格式正确"
@@ -187,27 +186,27 @@ def check_forbidden_words_in_dir(project_path, dirs_to_check=None):
     if dirs_to_check is None:
         # 只检查用户项目文件和输出文件，排除knowledge/目录
         dirs_to_check = ["projects"]
-    
+
     # 排除的文件（这些文件定义禁用词、解释规则或包含使用示例，必然包含禁用词）
     exclude_files = {
         "forbidden-words.md", "rules.md", "SKILL.md", "guidelines.md",
         "transition-phrases.md", "writing-patterns.md",  # 包含禁用词作为反面示例
         "telescope-optics.md", "interpolation-fitting.md"  # 方法论中的禁用词引用
     }
-    
+
     exclude_dirs = USER_CONTENT_EXCLUDE_DIRS
     found_words = {}
     for dir_name in dirs_to_check:
         dir_path = project_path / dir_name
         if not dir_path.exists():
             continue
-        
+
         for md_file in dir_path.rglob("*.md"):
             if md_file.name in exclude_files:
                 continue
             if any(ed in md_file.parts for ed in exclude_dirs):
                 continue
-            
+
             try:
                 content = md_file.read_text(encoding="utf-8")
                 file_hits = []
@@ -226,9 +225,9 @@ def check_forbidden_words_in_dir(project_path, dirs_to_check=None):
                         if w not in found_words:
                             found_words[w] = []
                         found_words[w].append(str(rel_path))
-            except:
+            except Exception:
                 pass
-    
+
     if found_words:
         msg = "; ".join([f"'{w}' in {', '.join(files[:2])}" for w, files in found_words.items()])
         return False, f"发现禁用词: {msg}"
@@ -241,17 +240,17 @@ def check_placeholders_in_dir(project_path):
     projects_dir = project_path / "projects"
     if not projects_dir.exists():
         return True, "无projects目录（跳过）"
-    
+
     # 排除的文件模式
     exclude_dirs = USER_CONTENT_EXCLUDE_DIRS
-    
+
     found = {}
-    
+
     for md_file in projects_dir.rglob("*.md"):
         # 跳过 knowledge/template/output/inputs/_scratch 等目录
         if any(ed in md_file.parts for ed in exclude_dirs):
             continue
-        
+
         try:
             content = md_file.read_text(encoding="utf-8")
             for pattern in PLACEHOLDER_PATTERNS:
@@ -262,9 +261,9 @@ def check_placeholders_in_dir(project_path):
                         if m not in found:
                             found[m] = []
                         found[m].append(str(rel_path))
-        except:
+        except Exception:
             pass
-    
+
     if found:
         msg = "; ".join([f"'{w}' in {', '.join(files[:2])}" for w, files in found.items()])
         return False, f"发现占位符: {msg}"
@@ -277,17 +276,17 @@ def check_ai_traces_in_dir(project_path):
     projects_dir = project_path / "projects"
     if not projects_dir.exists():
         return True, "无projects目录（跳过）"
-    
+
     # 排除的目录
     exclude_dirs = USER_CONTENT_EXCLUDE_DIRS
-    
+
     found = {}
-    
+
     for md_file in projects_dir.rglob("*.md"):
         # 跳过 knowledge/template/output/inputs/_scratch 等目录
         if any(ed in md_file.parts for ed in exclude_dirs):
             continue
-        
+
         try:
             content = md_file.read_text(encoding="utf-8")
             for pattern in AI_TRACE_PATTERNS:
@@ -298,9 +297,9 @@ def check_ai_traces_in_dir(project_path):
                         if m not in found:
                             found[m] = []
                         found[m].append(str(rel_path))
-        except:
+        except Exception:
             pass
-    
+
     if found:
         msg = "; ".join([f"'{w}' in {', '.join(files[:2])}" for w, files in found.items()])
         return False, f"发现AI痕迹: {msg}"
@@ -308,32 +307,42 @@ def check_ai_traces_in_dir(project_path):
 
 
 def check_internal_paths(project_path):
-    """L5.4: 检查内部路径"""
+    """L5.4: 检查交付物内部路径泄漏（只扫 projects/ 用户交付物，与 L5.1 一致）。
+
+    仓库治理文档（AGENTS.md / CHANGELOG.md 等）必然引用源码路径，不属于交付
+    泄漏；projects/ 交付文档中的内部路径（/tmp/、__pycache__、code/*.py 等）
+    仍会被拦截。
+    """
     found = {}
     exclude_dirs = USER_CONTENT_EXCLUDE_DIRS
-    
-    for md_file in iter_repo(project_path, "*.md"):
+    proj_root = project_path / "projects"
+    if not proj_root.exists():
+        return True, "无 projects 目录（跳过）"
+
+    for md_file in proj_root.rglob("*.md"):
+        if md_file.parent == proj_root:
+            continue  # projects/ 目录说明文档（README.md），非项目交付物
         if any(ed in md_file.parts for ed in exclude_dirs):
+            continue
+        if _is_research_scan_path(md_file):
             continue
         try:
             content = md_file.read_text(encoding="utf-8")
             for pattern in INTERNAL_PATH_PATTERNS:
                 matches = re.findall(pattern, content)
                 if matches:
-                    rel_path = tex_file.relative_to(project_path)
+                    rel_path = md_file.relative_to(project_path)
                     for m in set(matches):
                         if m not in found:
                             found[m] = []
                         found[m].append(str(rel_path))
-        except:
+        except Exception:
             pass
-    
+
     if found:
         msg = "; ".join([f"'{w}' in {', '.join(files[:2])}" for w, files in list(found.items())[:3]])
         return False, f"发现内部路径: {msg}"
     return True, "无内部路径"
-
-
 # ======================================================================
 # L3: 过程验证检查
 # ======================================================================
@@ -808,7 +817,7 @@ def check_results_ledger(project_path):
     results_files = list(iter_repo(project_path, "all_results.json"))
     if not results_files:
         return False, "未找到all_results.json"
-    
+
     for rf in results_files:
         try:
             data = json.loads(rf.read_text(encoding="utf-8"))
@@ -818,7 +827,7 @@ def check_results_ledger(project_path):
                 return False, f"{rf.name}格式错误"
         except json.JSONDecodeError:
             return False, f"{rf.name} JSON解析失败"
-    
+
     return True, "结果文件有效"
 
 
@@ -828,16 +837,16 @@ def check_random_seed(project_path):
         return True, "跳过：无活跃项目实例"
     code_files = list(iter_repo(project_path, "*.py"))
     found_seed = False
-    
+
     for py_file in code_files[:10]:
         try:
             content = py_file.read_text(encoding="utf-8")
             if "seed" in content.lower() and ("42" in content or "random" in content.lower()):
                 found_seed = True
                 break
-        except:
+        except Exception:
             pass
-    
+
     if found_seed:
         return True, "发现随机种子设置"
     return False, "未设置随机种子"
@@ -860,14 +869,14 @@ def check_python_syntax(project_path):
     """L6.9: 检查Python语法"""
     code_files = list(iter_repo(project_path, "*.py"))
     errors = []
-    
+
     for py_file in code_files:
         try:
             content = py_file.read_text(encoding="utf-8")
             compile(content, str(py_file), "exec")
         except SyntaxError as e:
             errors.append(f"{py_file.name}: 行{e.lineno} - {e.msg}")
-    
+
     if errors:
         return False, f"Python语法错误: {'; '.join(errors[:3])}"
     return True, "Python语法正确"
@@ -1007,66 +1016,66 @@ def check_env_config_fields(project_path):
 def validate_project(project_path):
     """运行所有验证检查"""
     project_path = Path(project_path)
-    
+
     print("=" * 60)
     print("Modeling-Harness 六层防御验证")
     print("=" * 60)
-    
+
     all_checks = [
         # L1: 结构化输出
         ("L1", "Schema目录", lambda: check_schema_exists(project_path)),
         ("L1", "Schema格式", lambda: check_schemas_valid(project_path)),
-        
+
         # L3: 过程验证
         ("L3", "必要产物", lambda: check_required_artifacts(project_path)),
         ("L3", "知识库完整性", lambda: check_knowledge_completeness(project_path)),
         ("L3", "laws非空", lambda: check_laws_not_empty(project_path)),
-        
+
         # L5: 运行时护栏
         ("L5", "禁用词", lambda: check_forbidden_words_in_dir(project_path)),
         ("L5", "占位符", lambda: check_placeholders_in_dir(project_path)),
         ("L5", "AI痕迹", lambda: check_ai_traces_in_dir(project_path)),
         ("L5", "内部路径", lambda: check_internal_paths(project_path)),
-        
+
         # L6: 事后验证
         ("L6", "目录结构", lambda: check_directory_structure(project_path)),
         ("L6", "Python语法", lambda: check_python_syntax(project_path)),
         ("L6", "结果文件", lambda: check_results_ledger(project_path)),
         ("L6", "随机种子", lambda: check_random_seed(project_path)),
         ("L6", "图表引用", lambda: check_figure_refs(project_path)),
-        
+
         # L1: 输入规约检查
         ("L1", "输入规约Schema", lambda: check_question_spec_schema(project_path)),
         ("L1", "符号注册表", lambda: check_symbol_registry(project_path)),
         ("L1", "假设验证器", lambda: check_assumption_validator(project_path)),
-        
+
         # L2: 文法制导检查
         ("L2", "类型系统", lambda: check_type_system(project_path)),
         ("L2", "公式检查器", lambda: check_formula_checker(project_path)),
         ("L2", "输出验证器", lambda: check_output_validator(project_path)),
-        
+
         # L3: 不变式编译检查
         ("L3", "不变式跟踪", lambda: check_invariant_tracker(project_path)),
         ("L3", "契约校验", lambda: check_contract_checker(project_path)),
         ("L3", "阶段门禁", lambda: check_stage_gate(project_path)),
-        
+
         # L4: 符号验证检查
         ("L4", "符号验证器", lambda: check_symbolic_verifier(project_path)),
         ("L4", "异构模型", lambda: check_cross_model_checker(project_path)),
         ("L4", "一致性校验", lambda: check_consistency_checker(project_path)),
         ("L4", "物理模型", lambda: check_physics_model(project_path)),
         ("L4", "数值追溯", lambda: check_numeric_traceability(project_path)),
-        
+
         # L5: 信任域隔离检查
         ("L5", "信任域定义", lambda: check_trust_domain(project_path)),
         ("L5", "权限守卫", lambda: check_permission_guard(project_path)),
         ("L5", "增量校验", lambda: check_incremental_checker(project_path)),
-        
+
         # L6: 全链路审计检查
         ("L6", "哈希追溯链", lambda: check_hash_chain(project_path)),
         ("L6", "错误归因", lambda: check_error_attribution(project_path)),
         ("L6", "规则迭代", lambda: check_rule_iterator(project_path)),
-        
+
         # L6: 综合质量检查
         ("L6", "validator模块冒烟", lambda: check_validator_modules_importable(project_path)),
         ("L6", "文档完整性", lambda: check_documentation_completeness(project_path)),
@@ -1085,7 +1094,7 @@ def validate_project(project_path):
         # L6: Checkpoint 格式检查
         ("L6", "checkpoint格式", lambda: check_checkpoint_format(project_path)),
     ]
-    
+
     # WARN 级检查：不通过只记警告、不阻塞交付。
     # 对应 P2 增强性门禁（此前被当作硬失败，导致
     # "0 警告" 与失败列表里出现 WARN 项自相矛盾）。
@@ -1229,20 +1238,20 @@ def check_checkpoint_format(project_path):
     checkpoint_path = project_path / "output" / "checkpoint.json"
     if not checkpoint_path.exists():
         return True, "无 checkpoint.json（跳过）"
-    
+
     try:
         data = json.loads(checkpoint_path.read_text(encoding="utf-8"))
-        
+
         # 检查必填字段
         required_fields = ["version", "hand", "stage", "timestamp", "output_hash"]
         missing = [f for f in required_fields if f not in data]
         if missing:
             return False, f"checkpoint.json 缺少必填字段: {', '.join(missing)}"
-        
+
         # 检查 hand 值
         if data["hand"] not in ["analyst", "modeler", "experimenter", "critic"]:
             return False, f"checkpoint.json hand 值无效: {data['hand']}"
-        
+
         # 检查 completed_agents 格式
         if "completed_agents" in data:
             for agent in data["completed_agents"]:
@@ -1250,7 +1259,7 @@ def check_checkpoint_format(project_path):
                 agent_missing = [f for f in agent_required if f not in agent]
                 if agent_missing:
                     return False, f"completed_agents 中某 agent 缺少字段: {', '.join(agent_missing)}"
-        
+
         return True, "checkpoint.json 格式正确"
     except Exception as e:
         return False, f"checkpoint.json 解析失败: {str(e)}"

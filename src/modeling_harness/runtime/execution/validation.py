@@ -19,7 +19,6 @@ model_status=correct。本模块提供第一扇门（Execution → Validation）
 from __future__ import annotations
 
 import json
-import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any

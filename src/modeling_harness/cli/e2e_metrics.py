@@ -220,7 +220,6 @@ def _model_structural_check(models: list) -> dict:
 def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
              loaded: dict) -> dict:
     reg = loaded["registry"]
-    graph = loaded["graph"]
     st = loaded["state"].data["state"]
     decisions = loaded["decisions"]
 

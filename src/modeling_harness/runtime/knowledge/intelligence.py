@@ -17,7 +17,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .cards import FailureMemory, MethodCard, Pattern
+from .cards import FailureMemory, Pattern
 from .packs import CompetitionPack, detect_knowledge_conflicts, \
     load_competition_packs
 from .retriever import KnowledgeRetriever, Recommendation

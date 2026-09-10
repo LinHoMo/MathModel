@@ -76,7 +76,6 @@ def _map_changes(mir_data: dict, diagnosis: dict) -> list[dict]:
     changes: list[dict] = []
     params = {p.get("symbol") or p.get("parameter_id"): p
               for p in mir_data.get("parameters") or []}
-    cons = {c.get("constraint_id"): c for c in mir_data.get("constraints") or []}
     for comp in diagnosis.get("failed_components") or []:
         if comp.startswith("constraint_violation"):
             changes.append({
