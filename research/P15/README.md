@@ -37,6 +37,7 @@
 | `scripts/` | 实验驱动脚本（k00x_*.py：预注册 / 盲打包 / 冻结 / 状态 / 泄漏扫描） |
 | `reports/` | 基线报告（B0 baseline / measurement recovery / attribution） |
 | `k004/`、`vs001_run/`、`m3_run/`、`m4_run/`、`dryrun/`、`knowledge_calibration/`、`measurement_recovery/`、`model_representation/` | 各专项实验/校准/测量的工作目录（运行器 + 落盘产物） |
+| `constructor_integration/` | **Constructor 集成实证（T-CONF-003）**：外部 Agent 产物目录（`mma_out/`）→ MathModelAgentAdapter → ConstructionBundle → apply_bundle → 引擎主链真实执行，最小闭环证据（`run_demo.py`） |
 
 ## 4. 报告索引（规范路径）
 

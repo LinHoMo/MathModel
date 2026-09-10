@@ -1,0 +1,222 @@
+{
+  "ir_version": "1.0",
+  "model_id": "M-2024A-Q001-CONSTRUCTOR-V1",
+  "model_family": {
+    "primary": "algebraic_linear",
+    "secondary": [],
+    "description": "2024A 简化校准模型（外部 Constructor 注入，harness 承载）"
+  },
+  "problem_binding": {
+    "problem_id": "2024A",
+    "sub_question_id": "Q001",
+    "problem_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A001",
+      "text": "输入参数 a/x/b 在允许域内且为有限实数",
+      "type": "simplification",
+      "rationale": "demo 夹具保证输入基",
+      "source": "constructor-demo",
+      "confidence": 0.9,
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "variable_id": "V001",
+      "name": "y",
+      "symbol": "y",
+      "definition": "模型输出（线性组合）",
+      "unit": "-",
+      "type": "state",
+      "value_range": {
+        "min": 0.0,
+        "max": 1000000.0
+      },
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "parameter_id": "PARM001",
+      "name": "a",
+      "symbol": "a",
+      "value": 2.0,
+      "unit": "-",
+      "source": "constructor-demo"
+    },
+    {
+      "parameter_id": "PARM002",
+      "name": "x",
+      "symbol": "x",
+      "value": 3.0,
+      "unit": "-",
+      "source": "constructor-demo"
+    },
+    {
+      "parameter_id": "PARM003",
+      "name": "b",
+      "symbol": "b",
+      "value": 1.0,
+      "unit": "-",
+      "source": "constructor-demo"
+    }
+  ],
+  "objectives": [
+    {
+      "objective_id": "OBJ001",
+      "type": "compute",
+      "expression": "y = a*x + b",
+      "variables_refs": [
+        "V001"
+      ],
+      "parameters_refs": [
+        "PARM001",
+        "PARM002",
+        "PARM003"
+      ],
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "C001",
+      "type": "range",
+      "expression": "y >= 0",
+      "variables_refs": [
+        "V001"
+      ],
+      "source": "constructor-demo",
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "mechanism_id": "MECH001",
+      "name": "linear_mapping",
+      "description": "输入到输出的线性映射（affine）",
+      "related_equations": [
+        "E001"
+      ],
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "equations": [
+    {
+      "equation_id": "E001",
+      "latex": "y = ax + b",
+      "type": "constitutive",
+      "variables_refs": [
+        "V001"
+      ],
+      "parameters_refs": [
+        "PARM001",
+        "PARM002",
+        "PARM003"
+      ],
+      "mechanism_ref": "MECH001",
+      "derivation_trace": [
+        "mechanism MECH001"
+      ],
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_id": "DEP001",
+      "kind": "parameter_binding",
+      "source": "PARM001/PARM002/PARM003",
+      "target": "E001"
+    }
+  ],
+  "solvers": [
+    {
+      "solver_id": "S001",
+      "name": "直接代入求解",
+      "type": "direct",
+      "method": "algebraic substitution",
+      "implementation_ref": "CODE-Q001",
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_id": "EXP001",
+      "description": "基准输入求解 y = 2*3 + 1 = 7",
+      "type": "simulation",
+      "inputs": {
+        "a": 2.0,
+        "x": 3.0,
+        "b": 1.0
+      },
+      "expected_outputs": [
+        "y"
+      ],
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "VAL001",
+      "type": "constraint_check",
+      "spec": "outputs.y == 7.0",
+      "status": "required",
+      "method": "deterministic_check",
+      "targets_refs": [
+        "OBJ001"
+      ],
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CLM001",
+      "text": "模型输出 y = a*x + b",
+      "type": "descriptive",
+      "evidence_refs": [
+        "EXP001"
+      ],
+      "model_refs": [
+        "M-2024A-Q001-CONSTRUCTOR-V1"
+      ],
+      "status": "candidate",
+      "sub_question_binding": [
+        "Q001"
+      ]
+    }
+  ],
+  "model_graph": {
+    "nodes": [
+      "V001",
+      "E001"
+    ],
+    "edges": [
+      "E001->V001"
+    ]
+  },
+  "modeling_trace": [
+    {
+      "step": "linear_model",
+      "note": "constructor-demo 模型"
+    }
+  ]
+}

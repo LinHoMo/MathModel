@@ -1,0 +1,38 @@
+{
+  "constraint_tolerance": 1e-09,
+  "checks": [
+    {
+      "name": "y_output_exists",
+      "kind": "output_field_exists",
+      "path": "y"
+    },
+    {
+      "name": "y_is_numeric",
+      "kind": "output_numeric",
+      "path": "y"
+    },
+    {
+      "name": "y_equals_7",
+      "kind": "output_equals",
+      "path": "y",
+      "expect": 7.0,
+      "tolerance": 1e-09
+    },
+    {
+      "name": "y_in_domain",
+      "kind": "output_range",
+      "path": "y",
+      "min": 0.0,
+      "max": 1000000.0
+    }
+  ],
+  "objective": {
+    "name": "y",
+    "expect": 7.0,
+    "tolerance": 1e-09
+  },
+  "domain": {
+    "min": 0.0,
+    "max": 1000000.0
+  }
+}
