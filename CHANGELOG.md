@@ -1,6 +1,25 @@
 # Changelog
 
-本文件记录 MathModel Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
+本文件记录 Modeling-Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
+
+## 2026-09-10 — Brand migration: MathModel → Modeling-Harness
+
+### 变更
+- **品牌全面替换**：MathModel → **Modeling-Harness**（中文名：建模执行框架，中文副标题
+  "面向数模竞赛与科研的可信建模执行与验证框架"，英文副标题 "A verification-centered
+  modeling harness for competitions and research"）。README 标题与目录树、catalog.yaml、
+  CLAUDE.md、.github/copilot-instructions.md、CONTRIBUTING.md、AGENTS.md 标题与 GitHub URL、
+  V3.1_ARCHITECTURE.md 标题、MODELING_KNOWLEDGE_GOVERNANCE.md、core/env 注释、
+  validate.py / doctor.py / scholar_fetch.py 输出字符串全部更新。
+- **技术层命名**：pyproject 发行名 `mathmodel-skills` → `modeling-harness-skills`。
+- **兼容策略**：旧品牌仅允许出现在 MIGRATION.md、本文件历史记录、外部专名（MathModelAgent）、
+  外部项目引用（zhanwen/MathModel、jihe520/MathModelAgent 等）、research/ 与 projects/ 历史数据中；
+  GitHub 旧仓库名由 GitHub 自动重定向。
+- **新增 MIGRATION.md**：旧名/新名映射表、三层迁移策略、兼容时间表、回滚方式。
+
+### 验证
+- 四件套全绿（validate 45/0/0、catalog OK、terminology OK、pytest 595 passed）。
+
 
 ## 2026-09-10 — Agent Protocol v1.0 冻结（非版本条目）
 
