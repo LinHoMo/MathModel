@@ -835,10 +835,94 @@ class DefaultNodeExecutor:
                     n_fail += 1
         msg = f"数值验证: {n_pass} 通过 / {n_fail} 未通过"
         if n_fail > 0 and n_pass == 0:
-            return NodeResult(FAIL, msg + "（无存活候选）",
-                              outputs={"artifacts": [], "evidence": ev})
+            # P0-2：无存活候选 → 机械失败归因 + 修订草案（LLM-free，
+            # 供外部 Model Constructor 消费；诊断注册为 diagnosis artifact）
+            pkgs = []
+            for q in self._question_ids():
+                pkgs += self._diagnose_and_draft(q, node_id)
+            if pkgs:
+                msg += "（无存活候选，已生成诊断与修订草案）"
+            return NodeResult(
+                FAIL, msg,
+                outputs={"artifacts": [p["diagnosis_id"] for p in pkgs],
+                         "evidence": ev, "revision_packages": len(pkgs)})
         return NodeResult(PASS, msg,
                           outputs={"artifacts": [], "evidence": ev})
+
+
+    # ------------------------------------------------------------ P0-2 Failure Diagnosis → Revision Draft
+
+    def _diagnose_and_draft(self, qid: str, node_id: str) -> list[dict]:
+        """P0-2：对每个 failed VR 机械诊断并生成修订草案。
+
+        沿 verified_by 边定位失败候选（VR→EXEC→model_id→MIR）：
+        1. diagnose_failure（registry + VR 机械证据）→ 注册 diagnosis
+           artifact + (MIR, diagnosed_by, DIAG) 边；幂等——已有
+           diagnosed_by 边的 MIR 跳过（M2 修订环重跑不重复诊断）；
+        2. build_revision_draft（M1 结构继承 + changed_components + 溯源）
+           → 放入 shared["revision_packages"][qid]，供外部 Model
+           Constructor 读取后注入 M2（草案是 Constructor 输入，不注册
+           为 MIR——不是系统事实）。
+
+        返回本次生成的诊断包列表（{diagnosis_id, mir_id, root_cause, ...}）。
+        """
+        from runtime.modeling.diagnosis import diagnose_failure
+        from runtime.modeling.revision import build_revision_draft
+
+        reg = self.registry
+        packages: list[dict] = []
+        for rel in list(self.graph.relations):
+            if rel["relation"] != "verified_by":
+                continue
+            vr = reg.get(rel["to"])
+            if vr is None or vr.question != qid \
+                    or vr.type != "verification_result":
+                continue
+            vdata = vr.data or {}
+            if vdata.get("status") != "failed":
+                continue
+            xart = reg.get(rel["from"])
+            if xart is None:
+                continue
+            model_id = (xart.data or {}).get("model_id")
+            if not model_id:
+                continue
+            mir_art = None
+            for m in reg.list_by_type("model_ir"):
+                if (m.data or {}).get("model_id") == model_id:
+                    mir_art = m
+                    break
+            if mir_art is None:
+                continue
+            # 幂等：已有 diagnosed_by 边（本 DAG 或历史修订）跳过
+            if any(g["from"] == mir_art.artifact_id
+                   and g["relation"] == "diagnosed_by"
+                   for g in self.graph.relations):
+                continue
+            diag = diagnose_failure(reg, mir_art.artifact_id,
+                                    vr.artifact_id)
+            d = reg.create(
+                "diagnosis", title=f"失败诊断 {mir_art.artifact_id}",
+                question=qid, depends_on=[mir_art.artifact_id],
+                data=diag.to_dict(), activate=True, created_by=node_id)
+            self.graph.add_relation(mir_art.artifact_id, "diagnosed_by",
+                                    d.artifact_id)
+            draft = build_revision_draft(
+                dict(mir_art.data or {}), diag.to_dict(),
+                new_model_id=f"{model_id}-REV1")
+            packages.append({
+                "diagnosis_id": d.artifact_id,
+                "mir_artifact_id": mir_art.artifact_id,
+                "mir_id": model_id,
+                "root_cause": diag.root_cause,
+                "failed_components": diag.failed_components,
+                "suggested_fixes": diag.suggested_fixes,
+                "draft": draft,
+            })
+        if packages:
+            self.shared.setdefault("revision_packages", {})
+            self.shared["revision_packages"][qid] = packages
+        return packages
 
     # ------------------------------------------------------------ P1-M3 候选竞技场（Evidence-based Selection）
 

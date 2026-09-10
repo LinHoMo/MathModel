@@ -138,20 +138,26 @@ def finalize_revision(session, mir1_id: str, mir2_model_id: str):
             mir2 = m.artifact_id
     if mir2 is None:
         return
-    # FIX-6.1：M1 失败诊断（VR 机械证据）
+    # FIX-6.1：M1 失败诊断（VR 机械证据）——P0-2 起诊断已在 DAG 内
+    # （model_validation FAIL 时）生成；此处仅当尚无 diagnosed_by 边时
+    # 才补建（防重复 DIAG）。诊断内容同一（diagnose_failure 确定性）。
     vr1 = _resolve_vr_for_model(reg, mir1_id)
     if vr1 is not None and not vr1.get("valid"):
-        vrs = [a for a in reg.list_by_type("verification_result")
-               if (a.data or {}).get("status") == "failed"
-               and a.question == "Q001"]
-        if vrs:
-            diag = diagnose_failure(reg, mir1_id, vrs[-1].artifact_id)
-            d = reg.create(
-                "diagnosis", title=f"失败诊断 {mir1_id}",
-                question="Q001", depends_on=[mir1_id],
-                data=diag.to_dict(), activate=True,
-                created_by="runtime.modeling.diagnosis")
-            graph.add_relation(mir1_id, "diagnosed_by", d.artifact_id)
+        existing = [g for g in graph.relations
+                    if g["from"] == mir1_id
+                    and g["relation"] == "diagnosed_by"]
+        if not existing:
+            vrs = [a for a in reg.list_by_type("verification_result")
+                   if (a.data or {}).get("status") == "failed"
+                   and a.question == "Q001"]
+            if vrs:
+                diag = diagnose_failure(reg, mir1_id, vrs[-1].artifact_id)
+                d = reg.create(
+                    "diagnosis", title=f"失败诊断 {mir1_id}",
+                    question="Q001", depends_on=[mir1_id],
+                    data=diag.to_dict(), activate=True,
+                    created_by="runtime.modeling.diagnosis")
+                graph.add_relation(mir1_id, "diagnosed_by", d.artifact_id)
     # FIX-6.3：supersede（新取代旧；M1 数据保留，状态 → superseded）
     reg.supersede(mir1_id, reason="M2 修订通过验证，取代 M1",
                   replacement=mir2, by="runtime.revision")
