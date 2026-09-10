@@ -882,11 +882,68 @@ class DefaultNodeExecutor:
                 FAIL, msg,
                 outputs={"artifacts": [p["diagnosis_id"] for p in pkgs],
                          "evidence": ev, "revision_packages": len(pkgs)})
+        # P1-3：验证通过后若存在修订谱系（M2 revision_of M1），
+        # 自动机械比较 M1/M2（compare_models，VR 证据）→ decision artifact
+        cmps = []
+        for q in self._question_ids():
+            cmps += self._compare_revision_chain(q, node_id)
+        if cmps:
+            msg += f"（修订比较: {len(cmps)} 对）"
         return NodeResult(PASS, msg,
-                          outputs={"artifacts": [], "evidence": ev})
+                          outputs={"artifacts": [c["decision_id"]
+                                                  for c in cmps],
+                                   "evidence": ev})
 
 
     # ------------------------------------------------------------ P0-2 Failure Diagnosis → Revision Draft
+
+    def _compare_revision_chain(self, qid: str, node_id: str) -> list[dict]:
+        """P1-3：沿 graph revision_of 边比较 M1/M2（VR 机械证据）。
+
+        对每对 (M2 revision_of M1)：compare_models → 注册 decision
+        artifact + compared_with/supported_by 边。幂等：同对模型
+        已有活跃 comparison decision 则跳过。
+        """
+        from runtime.modeling.comparison import compare_models
+        reg = self.registry
+        out: list[dict] = []
+        pairs = [r for r in self.graph.relations
+                 if r["relation"] == "revision_of"
+                 and reg.get(r["from"]) is not None
+                 and reg.get(r["to"]) is not None
+                 and reg.get(r["from"]).question == qid]
+        for rel in pairs:
+            m2_id, m1_id = rel["from"], rel["to"]
+            # 幂等：同对已有活跃 decision 跳过
+            if any(d.data.get("comparison_pair") == [m2_id, m1_id]
+                   for d in reg.list_by_type("decision")
+                   if d.question == qid and d.status not in _TERMINAL):
+                continue
+            cmp = compare_models(reg, m1_id, m2_id)
+            if cmp.get("recommendation") == "pending":
+                continue  # 证据缺失不制造决策
+            art = reg.create(
+                "decision",
+                title=f"修订比较 {m1_id} vs {m2_id}",
+                question=qid,
+                depends_on=[m2_id],
+                data={
+                    "decision_type": "model_comparison",
+                    "comparison_pair": [m2_id, m1_id],
+                    "better_model": cmp["better_model"],
+                    "recommendation": cmp["recommendation"],
+                    "reasoning": cmp["reasoning"],
+                    "deltas": cmp["deltas"],
+                    "advisory": True,
+                },
+                activate=True, created_by=node_id)
+            self.graph.add_relation(m2_id, "compared_with", m1_id)
+            self.graph.add_relation(art.artifact_id,
+                                    "supported_by", m2_id)
+            out.append({"decision_id": art.artifact_id,
+                       "better_model": cmp["better_model"],
+                       "recommendation": cmp["recommendation"]})
+        return out
 
     def _diagnose_and_draft(self, qid: str, node_id: str) -> list[dict]:
         """P0-2：对每个 failed VR 机械诊断并生成修订草案。
