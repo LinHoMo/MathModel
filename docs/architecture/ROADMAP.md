@@ -264,7 +264,13 @@ Engine 的 validator hook 机制从未在生产中使用。
 > 变量对齐，fidelity 可测）；`research/P15/k004/mma_adapter.py`（MathModelAgent
 > Adapter 契约，未装配抛 ConstructorError 不静默降级）；验收 5/5
 > （bundle 合规+往返 / apply_bundle+DAG 真实执行闭环 / registry /
-> mma 清晰报错 / 预注册判定规则）。剩余：64 runs 生成 + 盲评 + 统计（P2-1b）。
+> mma 清晰报错 / 预注册判定规则）。
+>
+> ✅ **ref constructor baseline（2026-09-10）**：`run_k004.py` + `analyze_k004.py`
+> + `reports/P15-K004-REPORT.md`。ref × 2 RT × 8 题 × 2 seeds = 32 runs
+> 全部完成：exec success 16/16，val pass 16/16。ref 为确定性模板（C3），
+> +RT 总是通过——**需要 gen/lin/mma 才能测量 Runtime 增益**。
+> 剩余：gen/lin/mma 构造器（需 LLM API）+ 64 runs 完整矩阵 + 盲评 + 统计（P2-1c）。
 
 ### P2-1: Constructor-Independent Benchmark
 
