@@ -53,10 +53,13 @@ class TestEnvLoader:
     """core/env/loader.py 接口测试"""
 
     def test_load_config_returns_nonempty_dict(self, env_loader):
-        """load_config() 返回非空 dict"""
+        """load_config() 返回非空 dict 且含核心配置组"""
         cfg = env_loader.load_config()
         assert isinstance(cfg, dict)
         assert len(cfg) > 0
+        # audit Batch8：强化——关键配置组必须存在（否则 load_config 无意义）
+        for group in ("paper", "code", "modeling", "review", "runtime"):
+            assert group in cfg, f"配置组 {group} 缺失"
 
     def test_load_config_has_four_groups(self, env_loader):
         """load_config() 返回的 dict 含四组 key"""

@@ -94,5 +94,9 @@ class TestLocalPythonAdapter:
 
     def test_status_never_defaulted(self):
         # 执行必须产生真实状态；plan 不执行时不能凭空 success
-        r = self._run("raise SystemExit(0) if False else print('ok')")
-        assert r.status in ("success", "failed", "timeout", "invalid")
+        # audit Batch8：原代码 `raise SystemExit(0) if False else print('ok')`
+        # 是语法错误（raise 不能用于条件表达式）→ 恒 failed → 原断言恒真掩盖坏测试；
+        # 现改为合法代码，验证真实执行内容（success + stdout 输出）
+        r = self._run("print('ok')")
+        assert r.status == "success", f"真实执行应 success，实际 {r.status}"
+        assert "ok" in (r.stdout or ""), f"stdout 应含真实输出，实际 {r.stdout!r}"

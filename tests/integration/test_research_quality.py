@@ -164,7 +164,10 @@ class TestAdversarial:
         model_findings = rep.dimensions["model"].findings
         dead_models = [a for a in s.registry.list_by_type("model")
                        if a.status == "superseded"]
-        assert dead_models or model_findings
+        # audit Batch8：原断言双条件其一（可能平凡通过）——强化为
+        # 前置（superseded 必须存在）+ 质量层必须真实发现
+        assert dead_models, "前置：模型必须处于 superseded 状态"
+        assert model_findings, "Quality 层必须发现 superseded 模型（D4 规则）"
 
     def test_C_experiment_without_baseline_fails_quality(self, tmp_path):
         """C：实验成功但无 baseline → Research Quality ≠ PASS。"""
