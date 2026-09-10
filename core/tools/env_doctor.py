@@ -19,8 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT / "core" / "tools"))
-for _cat in ("runtime", "validation", "evaluation", "knowledge", "devtools", "rendering"):
-    sys.path.insert(0, str(ROOT / "core" / "tools" / _cat))
+
 
 from env.loader import get as env_get, load_config  # noqa: E402
 from pathlib import Path as _Path
@@ -32,8 +31,6 @@ _FAIL = "❌"
 _FIX = "🔧"
 
 REQUIRED_SECTIONS = {
-    "paper": {"min_pages": int, "min_words": int, "min_figures": int,
-              "min_tables": int, "min_equations": int, "min_references": int},
     "code": {"random_seed": int, "multi_run_count": int, "cv_threshold": float,
              "max_fix_rounds": int, "sensitivity_range": float},
     "modeling": {"min_candidate_models": int, "assumption_score_threshold": float},
@@ -110,9 +107,6 @@ def check_values() -> list[dict]:
         return results
 
     validators = [
-        ("paper.min_pages", lambda v: v >= 10, "应 ≥ 10"),
-        ("paper.min_words", lambda v: v >= 5000, "应 ≥ 5000"),
-        ("paper.min_figures", lambda v: v >= 1, "应 ≥ 1"),
         ("code.random_seed", lambda v: v == 42, "应为 42"),
         ("code.cv_threshold", lambda v: 0.01 <= v <= 0.5, "应在 0.01-0.5"),
         ("modeling.assumption_score_threshold", lambda v: 1 <= v <= 10, "应在 1-10"),

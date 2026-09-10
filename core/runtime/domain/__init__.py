@@ -43,7 +43,7 @@ CANONICAL_ENTITIES: dict[str, dict] = {
     "Experiment": {
         "schema": None,
         "v3_subtype": "experiment",
-        "legacy_projections": ["code_deliverables.schema.json（CODE/E artifacts 的 legacy 载体）", "CODE_DELIVERABLES.md"],
+        "legacy_projections": ["（V2 CODE_DELIVERABLES 契约已随论文链删除）"],
     },
     "Result": {
         "schema": None,
@@ -53,7 +53,7 @@ CANONICAL_ENTITIES: dict[str, dict] = {
     "Evidence": {
         "schema": "evidence/graph.schema.json",
         "v3_subtype": None,  # graph 为主体；单条 evidence 是边 + 被引 artifact
-        "legacy_projections": ["literature_evidence.schema.json（文献证据子集）"],
+        "legacy_projections": ["（V2 文献证据 schema 已随论文链删除）"],
     },
     "Claim": {
         "schema": None,

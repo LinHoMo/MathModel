@@ -6,7 +6,7 @@
     TUNABLE   经验软目标（无官方规定），用户可自由调整
 
 合并优先级（后者覆盖前者）：
-    schema.yaml 的 value  <  profiles/<竞赛>.yaml  <  config.yaml 的 overrides
+    schema.yaml 的 value  <  config.yaml 的 overrides
 
 设计原则：
     1. 零外部依赖：仅用标准库，自带极简 YAML 解析器（支持多级缩进、行内列表）。
@@ -23,7 +23,7 @@
     require(key) -> Any                   缺失即抛 EnvConfigError
     layer_of(key) -> str                  返回 OFFICIAL / DERIVED / TUNABLE
     doctor_report() -> dict               参数生效值 + 来源 + 一致性问题（供 env_doctor.py）
-    available_profiles() -> list          可用竞赛 profile 名
+
 """
 
 import os
@@ -253,54 +253,7 @@ def _merge_into(base, override, layers, prefix="", strict_official=True,
 def _check_consistency(cfg):
     """合并后检查参数是否自相矛盾，返回问题描述列表。"""
     issues = []
-    p = cfg.get("paper", {}) or {}
-
-    def num(*keys):
-        vals = [p.get(k) for k in keys]
-        return vals if all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in vals) else None
-
-    got = num("max_pages", "min_pages")
-    if got:
-        mx, mn = got
-        if mn > mx:
-            issues.append("paper.min_pages(%s) > paper.max_pages(%s)：此组合永远无法达标" % (mn, mx))
-
-    got = num("max_pages", "page_fill_ratio", "min_pages")
-    if got:
-        mx, fill, mn = got
-        floor = mx * fill
-        if mn > floor:
-            issues.append(
-                "paper.min_pages(%s) > max_pages x page_fill_ratio(%.1f)：页数下限高于填充率闸门，无法达标"
-                % (mn, floor))
-
-    got = num("min_words", "max_words")
-    if got:
-        mnw, mxw = got
-        if mnw > mxw:
-            issues.append("paper.min_words(%s) > paper.max_words(%s)" % (mnw, mxw))
-
-    got = num("max_words", "chars_per_page", "max_pages")
-    if got:
-        mxw, cpp, mxp = got
-        need_pages = mxw / cpp if cpp else 0
-        if need_pages > mxp:
-            issues.append(
-                "paper.max_words(%s) 需要约 %.1f 页，超过 paper.max_pages(%s)：字数上限会撑爆页数"
-                % (mxw, need_pages, mxp))
-
-    got = num("abstract_min_words", "abstract_max_words")
-    if got:
-        a, b = got
-        if a > b:
-            issues.append("paper.abstract_min_words(%s) > abstract_max_words(%s)" % (a, b))
-
-    got = num("pdf_min_bytes", "pdf_max_bytes")
-    if got:
-        a, b = got
-        if a > b:
-            issues.append("paper.pdf_min_bytes(%s) > pdf_max_bytes(%s)" % (a, b))
-
+    # V3 定位下建模相关一致性检查在此扩展；论文规格参数已随 V2 移除。
     return issues
 
 
@@ -337,23 +290,25 @@ def _load_all():
 
     # 用户配置
     user_cfg = _read_yaml(_CONFIG_PATH) if os.path.isfile(_CONFIG_PATH) else {}
-    profile_name = user_cfg.get("profile") or "cumcm-2025"
+    profile_name = user_cfg.get("profile") or ""
 
     applied = []       # [(path, value, source)]  成功应用的覆盖
     rejected = []      # [(path, 想改的值, 保留的值)]  被 OFFICIAL 锁定拒绝的覆盖
     profile_meta = {}
 
-    # 1) 竞赛 profile 差量（profile 代表的是该赛事的官方规则本身，允许声明 OFFICIAL 值）
-    prof_path = os.path.join(_PROFILES_DIR, profile_name + ".yaml")
-    if os.path.isfile(prof_path):
-        prof = _read_yaml(prof_path)
-        prof.pop("inherits", None)
-        profile_meta = prof.pop("meta", {}) or {}
-        _merge_into(values, prof, layers, strict_official=False, track=applied,
-                    source="profile:" + profile_name, rejected=rejected)
-    else:
-        sys.stderr.write(
-            "[env/loader] 警告：profile 文件不存在 %s，仅使用 schema.yaml 默认值。\n" % prof_path)
+    # 1) 竞赛 profile 差量（可选；core/env/profiles/ 已随 V2 论文规格移除，
+    #    未来建模规则 profile 可在此注册）
+    if profile_name:
+        prof_path = os.path.join(_PROFILES_DIR, profile_name + ".yaml")
+        if os.path.isfile(prof_path):
+            prof = _read_yaml(prof_path)
+            prof.pop("inherits", None)
+            profile_meta = prof.pop("meta", {}) or {}
+            _merge_into(values, prof, layers, strict_official=False, track=applied,
+                        source="profile:" + profile_name, rejected=rejected)
+        else:
+            sys.stderr.write(
+                "[env/loader] 警告：profile 文件不存在 %s，仅使用 schema.yaml 默认值。\n" % prof_path)
 
     # 2) 用户 overrides（严格：OFFICIAL 层拒绝覆盖）
     ov = user_cfg.get("overrides") or {}
@@ -416,7 +371,7 @@ def require(key):
     v = get(key, sentinel)
     if v is sentinel:
         raise EnvConfigError(
-            "必需参数缺失：%s（请在 core/env/schema.yaml 中定义，或检查 profile 是否覆盖）" % key)
+            "必需参数缺失：%s（请在 core/env/schema.yaml 中定义）" % key)
     return v
 
 

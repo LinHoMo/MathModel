@@ -10,7 +10,7 @@ import importlib.util
 from pathlib import Path
 
 
-# === 禁用词列表（统一扩充词表，两处必须同步：本文件与 validate_project.py）===
+# === 禁用词列表（统一扩充词表）===
 FORBIDDEN_WORDS = [
     # 现有 19 词
     "赋能", "抓手", "闭环", "颗粒度", "底层逻辑", "打法", "对齐",
@@ -26,12 +26,12 @@ FORBIDDEN_WORDS = [
     "It is worth noting that", "Importantly,", "Notably,",
 ]
 
-# === 禁用词正则模式（两处必须同步：本文件与 validate_project.py）===
+# === 禁用词正则模式 ===
 FORBIDDEN_WORD_REGEXES = [
     r"随着.{0,12}的快速发展",
 ]
 
-# === 占位符模式（两处必须同步：本文件与 validate_project.py）===
+# === 占位符模式 ===
 PLACEHOLDER_PATTERNS = [
     r"TODO", r"FIXME", r"TBD", r"__XXX__",
     r"\[待补\]", r"\[TBD\]", r"示例数据", r"模板数据",
@@ -39,7 +39,7 @@ PLACEHOLDER_PATTERNS = [
     r"待补充", r"待续写", r"这里补", r"待完善",
 ]
 
-# === 内部路径模式（两处必须同步：本文件与 validate_project.py）===
+# === 内部路径模式 ===
 INTERNAL_PATH_PATTERNS = [
     r"\.py\b", r"\.ipynb\b", r"code/\w+\.py",
     r"/tmp/", r"__pycache__", r"\.pytest_cache",
@@ -192,7 +192,6 @@ def check_forbidden_words_in_dir(project_path, dirs_to_check=None):
     exclude_files = {
         "forbidden-words.md", "rules.md", "SKILL.md", "guidelines.md",
         "transition-phrases.md", "writing-patterns.md",  # 包含禁用词作为反面示例
-        "game-strategy.md", "paper-logic-framework.md",  # 领域知识中的禁用词引用
         "telescope-optics.md", "interpolation-fitting.md"  # 方法论中的禁用词引用
     }
     
@@ -961,9 +960,10 @@ def check_env_config_fields(project_path):
         return False, "load_config() 返回非 dict"
 
     expected = {
-        "code": ["random_seed", "multi_run_count"],
+        "code": ["random_seed", "multi_run_count", "solver_timeout_small"],
         "modeling": ["min_candidate_models", "assumption_score_threshold"],
-        "runtime": ["language", "template", "strict_mode"],
+        "review": ["max_rounds", "pass_score"],
+        "runtime": ["language", "strict_mode", "numeric_tolerance_rel"],
     }
     missing = []
     for group, fields in expected.items():

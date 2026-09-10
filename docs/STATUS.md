@@ -63,12 +63,13 @@ Construction 行为？"。
 | **P2-2/P3-3** | 外部 Constructor 适配器：`core/runtime/constructors/adapters/`——`MathModelAgentAdapter`（MMA 产物目录加载，未配置抛 ConstructorNotConfigured 禁伪造）、`PiAdapter`（同目录模式）、`ReferenceConstructor`（内置最小参考）；`tests/unit/test_constructor_adapters.py` 7 用例；边界：Worker/External Solver/Baseline，不触碰 Runtime 信任核心 | ✅ 完成 | 本轮 |
 | **P3-1（K005）** | Constructor×Runtime 2×2 析因 benchmark：预注册协议（C1 裸 Doubao × C2 MMA × R0/R1，6 题 × 5 rep = 120 runs，配对差分 + bootstrap CI + 析因分解）+ runner 框架（`benchmark/constructor_independent/runner.py`，消费 adapter 产物目录）。**正式 runs 数据收集 BLOCKED（如实）**——需外部 Constructor 会话逐题生成，禁止伪造/回填 | ✅ 框架+预注册（数据待外部收集） | 本轮 |
 | **P3-4** | BZD 知识导入：试点 5 卡（M4 已落地，Prior 知识 + source_type/confidence/status 标注）；经验常数禁令验证（core/ 零引用 6.81% 等）。**目录重组：评估后暂缓**（顶层大迁移 import 回归风险 > 收益，改渐进式：constructors/adapters 已落地、dead code 已清） | ✅ 知识部分（重组暂缓） | 本轮 |
+| **v3.2.2 V2 残留彻底清除** | 删除论文链工具 9 个 + validate_project.py + LaTeX 模板 27 + 竞赛 profile 9 + V2 schema 4 + syslab 技能 101 + 旧实例 8 + docs 25+6（diagrams）+ harness-compat；env 全面 V3 化（schema 六组、loader 无 profile、config 无 paper）；new_project 重写纯 V3 布局（inputs/state/artifacts/model）；知识/文档引用全部对齐 | ✅ 595 passed，validate 45/0/0，catalog OK | 本轮 |
 
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **610 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **595 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **45 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |

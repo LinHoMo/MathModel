@@ -2,6 +2,34 @@
 
 本文件记录 MathModel Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
+## v3.2.2（2026-09-10，V2 论文链/历史债务彻底清除）
+
+### 变更
+- **删除论文链工具链（9 个）**：tex_to_docx / docx_post_processor / writing_check /
+  citation_check / text_cleanup / distill_empirical / render_ai_usage /
+  check_matlab_env / bench_mmbench；补删 validate_project.py（V2 论文校验器）。
+- **删除 V2 资产**：core/templates/latex（27 LaTeX 模板）、core/env/profiles（9 竞赛
+  论文规格 profile）、core/schemas 4 个 V2 json（paper_spec/code_deliverables/
+  literature_evidence/citation）、core/skills/syslab（10 子技能 101 文件，未接入死资产）、
+  8 个旧项目实例（rcs1-2024a/v3-real-2024a/g7/g8 test）、docs/architecture 25 份历史报告、
+  docs/architecture/diagrams（6 个 V2 图）、docs/integration/harness-compat.md（V2 兼容约定）。
+- **env 全面 V3 化**：schema.yaml 删 official/deliverables 块（六组：code/modeling/review/
+  runtime/checkpoint/cloud_sandbox）、loader.py 默认 profile 置空且 paper 一致性检查全删、
+  config.yaml 重写为纯 overrides、env_doctor.py 去 paper 校验。
+- **new_project.py 重写**：纯 V3 布局（inputs/state/state/runs/artifacts/{data,code,results}/model），
+  产出 MODEL_IR JSON + 模型描述 MD；删除 time_budget/handoff 等 V2 模板。
+- **引用对齐**：benchmark.py 去 bench_mmbench 调用与 help；catalog_check 去 REPOSITORY_AUDIT；
+  doctor.py 去 render_ai_usage；gen_runtime_manifest 去 empirical；domain legacy 注记更新；
+  validate.py env 字段清单/禁用词注释更新；knowledge/workflows 文档引用去 latex/profiles。
+
+### 测试
+- pytest **595 passed / 0 skipped / 0 failed**（删除 test_validate_project/test_tex_to_docx_quick 等，
+  重写 test_env/test_doctor 对齐 V3）；validate.py **45/0/0**；catalog_check --check / --check-terminology OK。
+
+### 定位
+- 彻底删除而非废弃标记：V2 论文链、旧研究、LaTeX 链、四手残留全部移除；
+  全仓仅保留 V3 定位（问题输入 → MODEL_IR JSON + 模型描述 MD/Mermaid）。
+
 ## v3.2.1（2026-09-10，移除流程级人工审批）
 
 ### 变更

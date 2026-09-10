@@ -1,18 +1,14 @@
-# MathModelSkills 用户配置（瘦身版）
+# MathModelSkills 用户配置（V3）
 #
 # 参数的定义、默认值与分层，见 core/env/schema.yaml —— 唯一真源
-# 各竞赛的差量覆盖，见 core/env/profiles/<竞赛>.yaml
 #
-# 本文件只做两件事：
-#   1. profile   选择使用哪个竞赛参数包
-#   2. overrides 覆盖 TUNABLE / DERIVED 参数（OFFICIAL 层不可覆盖）
+# 本文件只做一件事：
+#   overrides 覆盖 TUNABLE / DERIVED 参数（OFFICIAL 层不可覆盖）
 #
 # 改完想知道有没有生效，运行：
 #   python core/tools/env_doctor.py
 
-profile: cumcm-2025
-
 overrides:
-  # 示例：只想把图数提到 8，取消下面两行注释即可
-  # 模型文档规格（MODEL_IR + MD，无 LaTeX/PDF）:
-  #   min_figures: 8
+  # 示例：取消下面两行注释即可覆盖建模参数
+  # modeling:
+  #   min_candidate_models: 3

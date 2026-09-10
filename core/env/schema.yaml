@@ -24,136 +24,6 @@ schema_version: 3
 # 官方硬约束（国赛 2025 规范 + AI 工具使用规定 2025 试行）
 # 来源：https://www.cmathc.org.cn/mcm/tz/303.html
 # ---------------------------------------------------------------------------
-official:
-  body_max_pages:
-    value: 20
-    layer: OFFICIAL
-    type: int
-    source: 第四条：正文尽量控制在20页以内
-  appendix_pages_unlimited:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第四条：附录页数不限
-  no_toc:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第四条：不要目录
-  abstract_single_page:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第三条：摘要内容（含标题和关键词）不能超过一页
-  abstract_no_english:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第三条：无需翻译成英文
-  pagination_start_page:
-    value: 3
-    layer: OFFICIAL
-    type: int
-    source: 第三条：从第三页开始编写页码
-  pagination_position:
-    value: footer_center
-    layer: OFFICIAL
-    type: str
-    source: 第三条：页码位于页脚中部，阿拉伯数字从1开始
-  margin_cm:
-    value: 2.5
-    layer: OFFICIAL
-    type: float
-    source: 第一条：上下左右各留出至少2.5厘米
-  no_header:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第六条：论文不能有页眉
-  electronic_format:
-    value: [pdf, docx]
-    layer: OFFICIAL
-    type: list
-    source: 第十条：文件格式只能为PDF或者Word格式之一
-  electronic_max_bytes:
-    value: 20971520
-    layer: OFFICIAL
-    type: int
-    source: 第十条：参赛论文电子版文件大小不超过20MB
-  electronic_no_compress:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第十条：参赛论文电子版文件不要压缩
-  electronic_no_commitment_page:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第十条：承诺书和编号专用页不要放在电子版论文中
-  support_format:
-    value: [zip, rar]
-    layer: OFFICIAL
-    type: list
-    source: 第十一条：使用WinRAR压缩为一个文件（后缀RAR或ZIP）
-  support_max_bytes:
-    value: 20971520
-    layer: OFFICIAL
-    type: int
-    source: 第十一条：支撑材料大小不超过20MB
-  support_must_include_source:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第五条+第十一条：附录与支撑材料须含建模所用全部可运行源程序
-  support_must_include_filelist:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第十一条：支撑材料的文件列表应放入论文附录
-  citation_inline_required:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 第七条：引用必须在正文引用处予以标注
-  citation_style:
-    value: gbt7714-numerical
-    layer: OFFICIAL
-    type: str
-    source: 第七条：按科技论文规范列出参考文献
-  ai_disclosure_in_body:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: AI工具使用规定2025试行：在正文相应位置进行标注
-  ai_disclosure_in_references:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: AI工具使用规定2025试行：在参考文献中列出所用AI工具
-  ai_support_pdf_name:
-    value: AI工具使用详情
-    layer: OFFICIAL
-    type: str
-    source: AI工具使用规定2025试行：支撑材料须含该PDF，文件名固定
-  ai_support_pdf_format:
-    value: pdf
-    layer: OFFICIAL
-    type: str
-    source: AI工具使用规定2025试行：以PDF格式提交
-  ai_exclude_from_appendix:
-    value: true
-    layer: OFFICIAL
-    type: bool
-    source: 附录参与查重，AI内容相似度高会抬高查重率，禁止放入附录
-  anonymity_scope:
-    value: [摘要页, 正文, 附录, 支撑材料]
-    layer: OFFICIAL
-    type: list
-    source: 第六条+第十一条：任何地方都不能有参赛者身份和学校信息
-
-# ---------------------------------------------------------------------------
-# 代码规格
-# ---------------------------------------------------------------------------
 code:
   random_seed:
     value: 42
@@ -210,16 +80,11 @@ code:
     layer: TUNABLE
     type: int
     source: 经验值：main.py 最少字节
-  min_deliverables_bytes:
-    value: 1024
-    layer: TUNABLE
-    type: int
-    source: 经验值：CODE_DELIVERABLES 最少字节
   target_platform:
     value: python
     layer: TUNABLE
     type: str
-    source: 主线代码平台：python/matlab/beitian/syslab
+    source: 主线代码平台：python（V3 执行层 local_python）
 
 # ---------------------------------------------------------------------------
 # 建模规格
@@ -329,11 +194,6 @@ runtime:
     layer: TUNABLE
     type: str
     source: 语言 zh/en
-  template:
-    value: cumcm-zh
-    layer: TUNABLE
-    type: str
-    source: 论文模板标识
   strict_mode:
     value: true
     layer: TUNABLE
@@ -401,14 +261,3 @@ cloud_sandbox:
 # ---------------------------------------------------------------------------
 # 交付物命名
 # ---------------------------------------------------------------------------
-deliverables:
-  support_name:
-    value: 支撑材料
-    layer: TUNABLE
-    type: str
-    source: 支撑材料压缩包文件名
-  ai_report_name:
-    value: AI工具使用详情
-    layer: OFFICIAL
-    type: str
-    source: AI工具使用规定2025试行：支撑材料中的AI使用详情PDF文件名固定为此

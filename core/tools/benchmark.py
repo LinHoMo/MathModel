@@ -60,8 +60,7 @@ def pipeline_report(competition: str, problem: str | None = None,
 
         py = sys.executable
         for step, cmd in (
-            ("doctor", [py, "core/tools/doctor.py",
-                        "--project", proj, "--competition", competition]),
+            ("doctor", [py, "core/tools/doctor.py", "--project", proj]),
             ("validate", [py, "core/tools/validate.py", proj]),
         ):
             try:
@@ -537,7 +536,7 @@ def main(argv=None) -> int:
     p_e2e = sub.add_parser("e2e", help="端到端能力基线（run/metrics/report）")
     e2e_sub = p_e2e.add_subparsers(dest="e2e_cmd", required=True)
     p_er = e2e_sub.add_parser("run", help="导入真题 → V3 管线 → 指标落盘")
-    p_er.add_argument("--problem", required=True, help="MMBench 题目 ID，如 2000_C")
+    p_er.add_argument("--problem", required=True, help="题目 ID，如 2000_C")
     p_er.add_argument("--project", required=True, help="项目名（小写字母开头）")
     p_er.add_argument("--questions", required=True,
                       help="问题分解（逗号分隔，如 Q001,Q002,Q003）")

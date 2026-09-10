@@ -206,7 +206,7 @@ TERMINOLOGY_ALLOWED_PATHS = {
 }
 # 允许旧术语的例外目录片段（research history / 历史报告）
 TERMINOLOGY_ALLOWED_DIR_PARTS = {
-    "research", "REPOSITORY_AUDIT", "knowledge_calibration", "measurement_recovery",
+    "research", "knowledge_calibration", "measurement_recovery",
     "reports", "projects", "legacy", "bench-m4", "archives", "ENGINEERING", "handoff",
 }
 

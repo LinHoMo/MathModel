@@ -270,7 +270,7 @@ class LocalPythonAdapter(ExecutionAdapter):
 
 
 def get_adapter(name: str = "local_python", **kwargs) -> ExecutionAdapter:
-    """adapter 工厂（当前仅 local_python；未来 e2b/docker/syslab 在此注册）。"""
+    """adapter 工厂（当前仅 local_python；未来 e2b/docker 等在此注册）。"""
     if name == "local_python":
         return LocalPythonAdapter(python=kwargs.get("python"))
     raise ExecutionError(f"未知执行后端: {name!r}（当前仅 local_python）")

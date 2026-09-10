@@ -12,7 +12,7 @@
 | `antipatterns.md`（本文件） | 通用反模式，跨竞赛适用 | 30 |
 | `numeric-edge-cases.md` | 数值边界 bug 库（真踩过的坑） | 11 |
 | `TYPE-ANTIPATTERNS-CHECKLIST.md` | 题型防错速查（按 A/B/C/D/E 分类，编码阶段逐题型自检） | ~50 |
-| `../templates/latex/<comp>/antipatterns.md` | 各竞赛专属扣分点 | 20–34 |
+| `../pitfalls/antipatterns.md`（本文件各竞赛章节） | 各竞赛专属扣分点 | 20–34 |
 
 ---
 
@@ -67,10 +67,10 @@
 
 ## 各竞赛专属
 
-- CUMCM：`core/templates/latex/cumcm/antipatterns.md`（34 条，含合规类）
-- MCM/ICM：`core/templates/latex/mcm/antipatterns.md`（20 条，含英文写作类）
-- 电工杯：`core/templates/latex/diangong/antipatterns.md`（12 条，工程导向）
-- 华为杯（研究生）：`core/templates/latex/huawei/antipatterns.md`（12 条，创新性与论证深度导向）
+- CUMCM：`antipatterns.md` 国赛章节（34 条，含合规类）
+- MCM/ICM：`antipatterns.md` 美赛章节（20 条，含英文写作类）
+- 电工杯：`antipatterns.md` 电工章节（12 条，工程导向）
+- 华为杯（研究生）：`antipatterns.md` 华为章节（12 条，创新性与论证深度导向）
 
 ## 使用规则
 

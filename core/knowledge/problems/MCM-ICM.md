@@ -2,7 +2,7 @@
 
 > 补充 `INDEX.md`（CUMCM 真题）之外的美赛维度，支撑多元化赛事需求。
 > 题名真实性原则（同 W5）：**仅收录多方可核实的题名**；无法核实的以「（待核实）」标注，禁止臆造。
-> 美赛模板见 `core/templates/latex/mcm/`（pdfLaTeX、英文、Letter 纸）。
+> 产出为模型描述 MD/Mermaid（V3 定位），不生成 LaTeX 论文。
 
 ## 美赛结构
 

@@ -26,7 +26,6 @@ core/schemas/
 
 core/tools/
   benchmark.py                         # 含 bench list/run/score/report + 原有 pipeline/library
-  bench_mmbench.py                     # MMBench 外部题库适配器（111 题）
 ```
 
 ## rubric 来源标记
@@ -36,7 +35,6 @@ core/tools/
 | `official_rubric` | 官方评分细则/出题人评阅综述原件 | 2023C, 2024A, 2025A, 2025B, 2025C |
 | `judge_insights` | 评委评阅概述 + 常见扣分点提炼 | 2021ABCDE, 2022ABCE, 2023ABDE, 2024BDE |
 | `inferred` | 题目已确认但 PDF 待补全 | 2025D |
-| `mmbench_import` | 从 LLM-MM-Agent MMBench 临时导入（待官方 rubric 覆盖） | — |
 
 ## 命令速查
 
@@ -81,17 +79,6 @@ python core/tools/benchmark.py bench report \
 | `weakness_report.json` | reviewer weakness-hunter | 反模式缺陷扫描 |
 
 bench 不替代 aggregate_scores：aggregate_scores 是"评我们的流程产出质量"，bench 是"如果这份论文交上真实国赛，按官方细则能拿几分"。
-
-## MMBench 外部题库
-
-```bash
-python core/tools/bench_mmbench.py path               # 打印 MMBench 根路径
-python core/tools/bench_mmbench.py list [--json]       # 列出 111 题
-python core/tools/bench_mmbench.py export --year 2024 --topic A --out core/knowledge/bench/imported
-```
-
-`export` 生成通用结构 rubric（source=mmbench_import），待官方 rubric 覆盖。
-MMBench 根默认 `<项目根>/../_mm_analysis/LLM-MM-Agent/MMBench`，可由 `MMBENCH_ROOT` 环境变量覆盖。
 
 ## 验收标准
 

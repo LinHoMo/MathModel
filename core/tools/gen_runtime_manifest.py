@@ -250,7 +250,6 @@ def generate_openai_yaml(catalog):
         '  methodology: "core/knowledge/methodology/"',
         '  cookbooks: "core/knowledge/cookbooks/"',
         '  playbooks: "core/knowledge/playbooks/"',
-        '  empirical: "core/knowledge/empirical/"',
         '  validation: "core/validators/modules/"',
         "",
         "validation_scripts:",

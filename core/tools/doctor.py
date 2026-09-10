@@ -4,9 +4,8 @@
 
 解决的问题
 ----------
-此前 LaTeX 工具链、Python 依赖、竞赛模板是否齐备，
-要一直跑到 writer/final-validator 才会暴露——
-那时整条流水线的时间已经花掉了。
+V3 是 LLM-free harness：工具链、schema、知识库、运行时组件是否齐备，
+在开工前一次性暴露，而不是等到执行中途才炸。
 
 用法
 ----
@@ -24,14 +23,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT / "core" / "tools"))
-for _cat in ("runtime", "validation", "evaluation", "knowledge", "devtools", "rendering"):
-    sys.path.insert(0, str(ROOT / "core" / "tools" / _cat))
 
 REQUIRED_TOOLS = [
     ("validate.py", "项目级校验"),
     ("catalog_check.py", "catalog 一致性检查"),
     ("new_project.py", "新项目脚手架"),
-    ("render_ai_usage.py", "AI 使用披露生成器"),
     ("doctor.py", "环境预检（本文件）"),
 ]
 

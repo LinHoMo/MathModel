@@ -26,11 +26,11 @@ def _fake_root(tmp_path):
 
 def test_check_tools_blocks_on_missing(tmp_path, monkeypatch):
     root = _fake_root(tmp_path)
-    (root / "core" / "tools" / "render_ai_usage.py").unlink()
+    (root / "core" / "tools" / "validate.py").unlink()
     monkeypatch.setattr(doctor, "ROOT", root)
     r = doctor.Result()
     doctor.check_tools(r)
-    assert any(name == "core/tools/render_ai_usage.py" for name, _ in r.block)
+    assert any(name == "core/tools/validate.py" for name, _ in r.block)
 
 
 def test_agent_count_ok(tmp_path, monkeypatch):

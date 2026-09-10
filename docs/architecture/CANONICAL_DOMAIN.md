@@ -24,12 +24,12 @@
 | Question | question | 无独立 schema（DAG per_question + Research State questions 维度） | `question_spec.schema.json`、V2 `q_states` |
 | Model | model | M artifact；内容在 payload 文件 | `model_spec.schema.json`、`model_artifact.schema.json`、`model_dag.schema.json`、`MODEL_SPEC.md` |
 | Artifact | —（统一契约本体，15 子类型） | `v3/artifact/artifact.schema.json` + `registry.schema.json` | V2 各契约文件 |
-| Experiment | experiment | E artifact | `code_deliverables.schema.json`、`CODE_DELIVERABLES.md` |
+| Experiment | experiment | E artifact | （V2 CODE_DELIVERABLES 契约已随论文链删除） |
 | Result | result | R artifact | `figures/all_results.json`（legacy 数值出口） |
 | Evidence | —（graph 为主体） | `v3/evidence/graph.schema.json` | `literature_evidence.schema.json` |
 | Claim | claim | C artifact（P10 Finding Graph 前身研究） | 无 |
 | Decision | decision | `v3/decision/decision.schema.json` | `decision_log.schema.json`（已升级扩展） |
-| PaperProjection | deliverable（+ narrative / paper_section） | deliverable artifact | `paper_spec.schema.json`、`PAPER_SPEC.md`、`paper/main.tex/pdf` |
+| PaperProjection | （V2 论文投影，已随论文链删除） | — | 不适用 |
 | Failure | —（知识层，非 artifact） | `v3/knowledge/failure.schema.json` | `pitfalls/` + `_negative/` markdown |
 | Run | —（运行记录层，P3 创建） | `v3/run/run_record.schema.json`（预注册） | `reproducibility.schema.json`、`state/status.json` 的 run 段 |
 

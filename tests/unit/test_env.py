@@ -1,8 +1,8 @@
 """
-env 配置层测试
+env 配置层测试（V3）
 
 测试 core/env/config.yaml / core/env/loader.py / core/env/README.md 三件套结构、
-loader 接口（load_config / get）与四组配置字段完整性。
+loader 接口（load_config / get）与配置组字段完整性。
 
 用 importlib 动态加载 core/env/loader.py，避免包路径 / PYTHONPATH 依赖。
 测试从项目根目录运行（pytest 根目录为项目根）。
@@ -48,6 +48,10 @@ class TestEnvStructure:
         """core/env/README.md 存在"""
         assert os.path.exists("core/env/README.md")
 
+    def test_profiles_dir_removed(self):
+        """V2 论文规格 profiles 目录已移除（新定位无竞赛论文规格）"""
+        assert not os.path.isdir("core/env/profiles")
+
 
 class TestEnvLoader:
     """core/env/loader.py 接口测试"""
@@ -57,23 +61,22 @@ class TestEnvLoader:
         cfg = env_loader.load_config()
         assert isinstance(cfg, dict)
         assert len(cfg) > 0
-        # audit Batch8：强化——关键配置组必须存在（否则 load_config 无意义）
-        for group in ("paper", "code", "modeling", "review", "runtime"):
+        for group in ("code", "modeling", "review", "runtime"):
             assert group in cfg, f"配置组 {group} 缺失"
 
-    def test_load_config_has_four_groups(self, env_loader):
-        """load_config() 返回的 dict 含四组 key"""
+    def test_no_paper_group(self, env_loader):
+        """论文规格组已随 V2 移除"""
         cfg = env_loader.load_config()
-        for group in ("paper", "code", "modeling", "runtime"):
-            assert group in cfg, f"缺少配置组: {group}"
-
-    def test_get_paper_min_pages(self, env_loader):
-        """get('paper.min_pages') 返回 17（国赛 2025 官方硬上限 20 页，17 为经验软目标）"""
-        assert env_loader.get("paper.min_pages") == 17
+        assert "paper" not in cfg, "paper 组不应存在（V2 论文规格已删除）"
+        assert "official" not in cfg, "official 组不应存在（V2 论文规格已删除）"
 
     def test_get_code_random_seed(self, env_loader):
         """get('code.random_seed') 返回 42"""
         assert env_loader.get("code.random_seed") == 42
+
+    def test_get_modeling_threshold(self, env_loader):
+        """get('modeling.assumption_score_threshold') 可读"""
+        assert env_loader.get("modeling.assumption_score_threshold") is not None
 
     def test_get_missing_with_default(self, env_loader):
         """get('not.exist', default='fb') 返回 'fb'"""
@@ -90,38 +93,37 @@ class TestEnvLoader:
 
 
 class TestEnvConfig:
-    """env 配置四组字段完整性测试"""
-
-    def test_paper_fields(self, env_loader):
-        """paper 组含 6 个字段"""
-        cfg = env_loader.load_config()
-        paper = cfg["paper"]
-        for field in ("min_pages", "min_words", "min_figures",
-                      "min_tables", "min_equations", "min_references"):
-            assert field in paper, f"paper 缺字段: {field}"
+    """env 配置组字段完整性测试"""
 
     def test_code_fields(self, env_loader):
-        """code 组含 2 个字段"""
+        """code 组含核心执行字段"""
         cfg = env_loader.load_config()
         code = cfg["code"]
-        for field in ("random_seed", "multi_run_count"):
+        for field in ("random_seed", "multi_run_count", "solver_timeout_small"):
             assert field in code, f"code 缺字段: {field}"
 
     def test_modeling_fields(self, env_loader):
-        """modeling 组含 2 个字段"""
+        """modeling 组含建模规格字段"""
         cfg = env_loader.load_config()
         modeling = cfg["modeling"]
         for field in ("min_candidate_models", "assumption_score_threshold"):
             assert field in modeling, f"modeling 缺字段: {field}"
 
+    def test_review_fields(self, env_loader):
+        """review 组含评审字段"""
+        cfg = env_loader.load_config()
+        review = cfg["review"]
+        for field in ("max_rounds", "pass_score"):
+            assert field in review, f"review 缺字段: {field}"
+
     def test_runtime_fields(self, env_loader):
-        """runtime 组含 3 个字段"""
+        """runtime 组含语言与容差字段"""
         cfg = env_loader.load_config()
         runtime = cfg["runtime"]
-        for field in ("language", "template", "strict_mode"):
+        for field in ("language", "strict_mode", "numeric_tolerance_rel"):
             assert field in runtime, f"runtime 缺字段: {field}"
 
-    def test_all_four_groups_present(self, env_loader):
-        """四组配置组齐全"""
+    def test_all_core_groups_present(self, env_loader):
+        """核心配置组齐全"""
         cfg = env_loader.load_config()
-        assert set(cfg.keys()) >= {"paper", "code", "modeling", "runtime"}
+        assert set(cfg.keys()) >= {"code", "modeling", "review", "runtime"}

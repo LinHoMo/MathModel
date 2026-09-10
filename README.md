@@ -89,7 +89,7 @@ P1-VS-001 已首次跑通完整闭环：M1（缺陷模型）→ 真实执行 →
 | 层 | 位置 | 生命周期 |
 |---|---|---|
 | product（引擎） | `core/` | 长期维护，架构已冻结（P0–P6 授权例外） |
-| benchmark（能力测量） | `core/tools/`（benchmark.py / e2e_metrics.py / bench_mmbench.py） | 长期；语料在仓库外（`MMBENCH_ROOT`）；能力进步以 Δscore 度量 |
+| benchmark（能力测量） | `core/tools/`（benchmark.py / e2e_metrics.py） | 长期；能力进步以 Δscore 度量 |
 | research（研究实验） | `research/` | 实验生命周期（P15：K001/K002/P1） |
 | instance（用户实例） | `projects/` | 仅 `new_project.py` 创建的运行实例 |
 
