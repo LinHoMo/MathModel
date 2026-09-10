@@ -9,6 +9,13 @@
 
 ### P0-1: 集成 Fidelity Layer 到生产 DAG
 
+> ✅ **DONE 2026-09-10**（commit `2e6662a` + `80741df`）：
+> - handlers `do_model_execution` 对成功 EXEC 调 `verify_fidelity`，misaligned → 节点 FAIL，失败名前 5 个进 reason
+> - `verify_fidelity` 生产 DAG 内 `register_vr=False`（只写报告，不注册 VR/verified_by——防 C8 `_active_vr_of` 幂等复用跳过真实数值验证）
+> - `check_fidelity` 容器/向量输出（positions 数组）F5 范围检查如实跳过（skipped），只对可机械判定的标量下结论
+> - `_register_code` 记录 `output_mapping` 契约，`execute_code` 透传 EXEC provenance（对齐 codegen 契约）
+> - 验收：`test_fidelity_integration.py` 5/5 + VS-001 e2e 8/8；全量 994 passed / 4 skipped；validate 58/0；catalog OK
+
 **目标**：L2 Fidelity（MODEL_IR↔Code）在生产路径中执行
 
 **为什么做**：Fidelity 是 LinHoMo 独有指标，已实现但未接入。当前生产路径
