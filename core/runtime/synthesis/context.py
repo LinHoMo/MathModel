@@ -38,7 +38,45 @@ from itertools import combinations
 from runtime.state.dependencies import DEPENDENCY_TYPES, PARTICIPATION
 from runtime.state.dependencies import dependency_records
 from runtime.state.relations import cross_relations
-from runtime.writing.findings import Finding, FindingGraph
+
+
+@dataclass
+class Finding:
+    """最小 Finding 表示（跨问题 synthesis 用）。"""
+    finding_id: str
+    type: str            # e.g. "conclusion", "extension", "comparison"
+    status: str          # "PASS" | "WEAK" | "FAIL" | "UNKNOWN"
+    statement: str
+    supported_by: list[str] = field(default_factory=list)
+    question: str = ""
+    provenance: dict = field(default_factory=dict)
+
+
+class FindingGraph:
+    """从 Registry + EvidenceGraph 构建 finding 图（简化版）。"""
+
+    def __init__(self, registry, graph):
+        self.findings: list[Finding] = []
+        for a in registry.list_by_type("finding"):
+            self.findings.append(Finding(
+                finding_id=a.artifact_id,
+                type=a.payload[0] if a.payload else "unknown",
+                status=a.status,
+                statement=a.title,
+                supported_by=[r.to_id for r in graph.in_edges(a.artifact_id)
+                              if r.relation == "supported_by"],
+                question=a.question or "",
+                provenance=a.provenance or {},
+            ))
+
+    def by_question(self, qid: str) -> list[Finding]:
+        return [f for f in self.findings if f.question == qid]
+
+    def validated(self) -> list[Finding]:
+        return [f for f in self.findings if f.status in ("PASS", "WEAK")]
+
+    def as_dict(self) -> dict:
+        return {"findings": [f.finding_id for f in self.findings]}
 
 # 参与 synthesis 的依赖类型（由 P12-1 冻结参与矩阵派生，不在本层另立名单）
 SYNTHESIS_DEPENDENCY_TYPES = tuple(
@@ -78,7 +116,7 @@ class CrossQuestionContext:
             "cross_relations", "conclusions", "hypotheses")}
 
     def to_context_block(self) -> str:
-        """渲染 markdown 上下文块（四手执行会话直接消费）。"""
+        """渲染 markdown 上下文块（V3 执行会话直接消费）。"""
         sv = self.state_version
         lines = [
             "## 跨问题综合上下文（P12-3-lite · 派生式）",

@@ -19,118 +19,6 @@
 
 schema_version: 3
 
-# ---------------------------------------------------------------------------
-# 论文规格
-# ---------------------------------------------------------------------------
-paper:
-  max_pages:
-    value: 20
-    layer: OFFICIAL
-    type: int
-    range: [10, 40]
-    source: 2025规范第四条：正文尽量控制在20页以内（附录页数不限）
-  min_pages:
-    value: 17
-    layer: TUNABLE
-    type: int
-    range: [8, 39]
-    source: 经验值：20页上限留3页余量给图表与参考文献
-  min_words:
-    value: 13000
-    layer: DERIVED
-    type: int
-    range: [3000, 40000]
-    source: 派生：目标17页 x 800字/页，取整13000
-  max_words:
-    value: 16000
-    layer: DERIVED
-    type: int
-    range: [5000, 50000]
-    source: 派生：20页 x 800字/页，超出将突破页数上限
-  min_figures:
-    value: 6
-    layer: TUNABLE
-    type: int
-    range: [0, 30]
-    source: 经验值：3-4个子问题每问1-2图 + 灵敏度1图
-  min_tables:
-    value: 4
-    layer: TUNABLE
-    type: int
-    range: [0, 20]
-    source: 经验值：符号说明表 + 各问结果表 + 对比表
-  min_equations:
-    value: 15
-    layer: TUNABLE
-    type: int
-    range: [0, 60]
-    source: 经验值：主模型逐式编号
-  min_references:
-    value: 10
-    layer: TUNABLE
-    type: int
-    range: [0, 60]
-    source: 经验值：官方无数量规定
-  abstract_min_words:
-    value: 400
-    layer: TUNABLE
-    type: int
-    range: [100, 900]
-    source: 经验值，同时受 abstract_single_page 硬约束
-  abstract_max_words:
-    value: 600
-    layer: TUNABLE
-    type: int
-    range: [200, 1000]
-    source: 经验值，同时受 abstract_single_page 硬约束
-  chars_per_page:
-    value: 800
-    layer: TUNABLE
-    type: int
-    range: [300, 1500]
-    source: 派生系数：每页中文字数基准
-  page_fill_ratio:
-    value: 0.85
-    layer: DERIVED
-    type: float
-    range: [0.5, 1.0]
-    source: 派生：目标17页 / 上限20页
-  pdf_min_bytes:
-    value: 102400
-    layer: TUNABLE
-    type: int
-    range: [0, 20971520]
-    source: 经验值：PDF下限100KB，过小说明未渲染图
-  pdf_max_bytes:
-    value: 20971520
-    layer: OFFICIAL
-    type: int
-    range: [1048576, 20971520]
-    source: 2025规范第十条：电子版文件大小不超过20MB
-  recent_ref_ratio:
-    value: 0.3
-    layer: TUNABLE
-    type: float
-    range: [0.0, 1.0]
-    source: 经验值：原设0.6过严导致长期WARN，放宽至0.3
-  figure_min_width:
-    value: 0.85
-    layer: TUNABLE
-    type: float
-    range: [0.5, 1.0]
-    source: 经验值：图宽下限（单位 textwidth）
-  table_max_rows_inline:
-    value: 12
-    layer: TUNABLE
-    type: int
-    range: [5, 30]
-    source: 经验值：正文表格最大行数，超过转附录
-  table_longtable_threshold:
-    value: 15
-    layer: TUNABLE
-    type: int
-    range: [5, 40]
-    source: 经验值：结果表转 longtable 的行数阈值
 
 # ---------------------------------------------------------------------------
 # 官方硬约束（国赛 2025 规范 + AI 工具使用规定 2025 试行）
@@ -472,21 +360,6 @@ runtime:
     layer: TUNABLE
     type: str
     source: 能力分层：standard / lite
-  compile_pdf:
-    value: auto
-    layer: TUNABLE
-    type: str
-    source: PDF编译策略：auto / always / never
-  latex_engine:
-    value: xelatex
-    layer: TUNABLE
-    type: str
-    source: LaTeX 引擎
-  deliver_docx:
-    value: never
-    layer: TUNABLE
-    type: str
-    source: DOCX 交付策略：never / auto / always
 
 # ---------------------------------------------------------------------------
 # 断点与沙箱
@@ -526,39 +399,9 @@ cloud_sandbox:
     source: 云端不可用时回退策略
 
 # ---------------------------------------------------------------------------
-# 模板工程配置（由竞赛 profile 覆盖）
-# ---------------------------------------------------------------------------
-template:
-  dir:
-    value: core/templates/latex/cumcm/
-    layer: TUNABLE
-    type: str
-    source: LaTeX 模板目录
-  cls:
-    value: cumcmthesis.cls
-    layer: TUNABLE
-    type: str
-    source: 文档类文件
-  engine:
-    value: xelatex
-    layer: TUNABLE
-    type: str
-    source: 编译引擎
-  compile_chain:
-    value: [xelatex, bibtex, xelatex, xelatex]
-    layer: TUNABLE
-    type: list
-    source: 完整编译链，单跑一次引擎会导致交叉引用与参考文献缺失
-
-# ---------------------------------------------------------------------------
 # 交付物命名
 # ---------------------------------------------------------------------------
 deliverables:
-  paper_name:
-    value: 参赛论文
-    layer: TUNABLE
-    type: str
-    source: 参赛论文文件名
   support_name:
     value: 支撑材料
     layer: TUNABLE

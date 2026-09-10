@@ -123,8 +123,8 @@ class TestDimensions:
         assert state.dimension("problem")["status"] == "complete"
 
     def test_set_dimension_fields(self, state):
-        state.set_dimension("paper", "in_progress", sections_written=3, sections_total=8)
-        assert state.dimension("paper")["sections_written"] == 3
+        state.set_dimension("models", "in_progress", candidates=3, selected=1)
+        assert state.dimension("models")["candidates"] == 3
 
     def test_unknown_dimension(self, state):
         with pytest.raises(StateError):

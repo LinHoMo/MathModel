@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-ABOUTME: 从 catalog.yaml 单一真源生成 core/runtime/adapters/openai.yaml（Codex 运行时入口）
+ABOUTME: 从 catalog/v3.yaml 单一真源生成 core/runtime/adapters/openai.yaml（V3 运行时入口）
 ABOUTME: --check 模式检测漂移，供 doctor.py 调用
 
 用法：
     python core/tools/gen_runtime_manifest.py            # 生成/覆盖 core/runtime/adapters/openai.yaml
     python core/tools/gen_runtime_manifest.py --check    # 漂移检测，drift 即 EXIT 1
-    python core/tools/gen_runtime_manifest.py --verify   # 校验 29 agent/8 reviewer 等
+    python core/tools/gen_runtime_manifest.py --verify   # 校验 V3 角色/validator/工具路径
 """
 
 import argparse
@@ -203,128 +203,63 @@ def _agent_entry(a):
 
 
 def generate_openai_yaml(catalog):
-    hands_raw = catalog.get("hands", [])
-    # build lookup by stage_order / name
-    by_name = {h["name"]: h for h in hands_raw}
+    """V3：从 catalog/v3.yaml 视图生成 OpenAI Agents SDK 兼容配置。
 
+    产出：MODEL_IR(JSON) + 模型描述文档(MD/Mermaid)；无论文生成、无 V2 兼容。
+    """
     timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds") + "Z"
-    header_lines = [
+    lines = [
         "# OpenAI Agents SDK 兼容配置",
         "# 用于在 OpenAI Agents SDK 中加载 MathModelSkills 技能",
         "# *** 本文件由 core/tools/gen_runtime_manifest.py 自动生成 ***",
-        "# *** 请勿手工编辑 —— 以 catalog.yaml 为单一真源 ***",
+        "# *** 请勿手工编辑 —— 以 catalog/v3.yaml 为单一真源 ***",
         f"# 最近生成时间: {timestamp}",
         "",
-        f"# {len(hands_raw)} 手 {sum(len(h.get('agents', [])) for h in hands_raw)} agent（自动生成）",
         'name: "mathmodeling-skills"',
-        'version: "2.0.0"',
-        'description: "数学建模竞赛全流程 AI 技能包"',
+        'version: "3.0.0"',
+        'description: "数学建模认知工作流运行时（V3）"',
         "",
         'instructions_file: "AGENTS.md"',
         "",
         "tools:",
-    ]
-
-    # tools block (static, preserve)
-    tools_block = [
-        ('state_init', '初始化/恢复项目状态', 'python core/tools/state.py {project} init'),
-        ('state_status', '查看当前执行进度', 'python core/tools/state.py {project} status'),
-        ('state_advance', '推进到下一步', 'python core/tools/state.py {project} advance {hand} {agent} --output {output}'),
-        ('gate_check', '运行单步/全链路门禁', 'python core/tools/gate.py {project} {hand} {agent}'),
-        ('validate_project', '项目级完整性校验', 'python core/tools/validate_project.py {project}'),
-    ]
-
-    tool_lines = []
-    for name, desc, fn in tools_block:
-        tool_lines += [
-            f'  - name: "{name}"',
-            f'    description: "{desc}"',
-            f'    function: "{fn}"',
-            '',
-        ]
-
-    tail_lines = [
-        "# 环境配置",
+        '  - name: "validate"',
+        '    description: "项目级完整性校验"',
+        '    function: "python core/tools/validate.py {project}"',
+        "",
+        '  - name: "catalog_check"',
+        '    description: "catalog 三方一致性检查"',
+        '    function: "python core/tools/catalog_check.py --check"',
+        "",
+        '  - name: "new_project"',
+        '    description: "创建新项目脚手架"',
+        '    function: "python core/tools/new_project.py {project_name} --competition {competition}"',
+        "",
+        '  - name: "knowledge"',
+        '    description: "方法卡检索"',
+        '    function: "python core/tools/knowledge.py recommend --types {types}"',
+        "",
+        '  - name: "doctor"',
+        '    description: "环境预检"',
+        '    function: "python core/tools/doctor.py"',
+        "",
         "env:",
         '  config_file: "core/env/config.yaml"',
         '  loader: "core/env/loader.py"',
         "",
-        "# 友好模式配置",
-        "friendly_mode:",
-        "  enabled: true",
-        '  description: "关键决策以编号选项呈现，用户输入数字即可推进"',
-        '  fallback_prompt: "让我决定 (推荐 X)"',
-        "",
-        "# 执行流水线定义",
-        "pipeline:",
-    ]
-
-    agent_block_lines = []
-    for h in sorted(hands_raw, key=lambda x: x.get("stage_order", 0)):
-        h_name = h["name"]
-        h_desc = h.get("description", "")
-        agents = h.get("agents", [])
-        agent_block_lines += [
-            f'  - hand: "{h_name}"',
-            f'    description: "{h_desc}"',
-            "    agents:",
-        ]
-        for a in agents:
-            e = _agent_entry(a)
-            agent_block_lines += [
-                f'      - name: "{e["name"]}"',
-                f'        stage: {e["stage"]}',
-                f'        utg_layer: "{e["utg_layer"]}"',
-                f'        description: "{e["description"]}"',
-                f'        artifact: "{e["artifact"]}"',
-                "",
-            ]
-
-    footer = [
-        "",
-        "# 契约文件（手间接口）",
-        "contracts:",
-        '  modeler_output: "output/MODEL_SPEC.md"',
-        '  programmer_output: "output/CODE_DELIVERABLES.md"',
-        '  writer_output: "output/PAPER_SPEC.md"',
-        "",
-        "# 知识库引用",
         "knowledge_base:",
         '  methodology: "core/knowledge/methodology/"',
         '  cookbooks: "core/knowledge/cookbooks/"',
         '  playbooks: "core/knowledge/playbooks/"',
-        '  paper_cases: "core/knowledge/paper-cases/"',
         '  empirical: "core/knowledge/empirical/"',
         '  validation: "core/validators/modules/"',
-        '  writing: "core/legacy/hands/Writer/knowledge/writing/"',
-        '  templates: "core/legacy/hands/Writer/knowledge/templates/"',
         "",
-        "# 验证脚本",
         "validation_scripts:",
-        '  gate: "core/tools/gate.py"',
-        '  score: "core/tools/score_artifact.py"',
-        '  freeze: "core/tools/freeze_numbers.py"',
         '  validate: "core/tools/validate.py"',
         '  doctor: "core/tools/doctor.py"',
-        '  retrospect: "core/tools/retrospect.py"',
-        '  render_ai_usage: "core/tools/render_ai_usage.py"',
-        '  manifest: "core/tools/gen_runtime_manifest.py"',
+        "",
     ]
+    return "\n".join(lines)
 
-    all_lines = (
-        header_lines + [""] + tool_lines + tail_lines
-        + agent_block_lines + footer
-    )
-
-    out = "\n".join(all_lines)
-    if not out.endswith("\n"):
-        out += "\n"
-    return out
-
-
-# ---------------------------------------------------------------------------
-# --check: 漂移检测
-# ---------------------------------------------------------------------------
 
 def check_drift(generated_text):
     if not OPENAI_PATH.exists():
@@ -356,33 +291,22 @@ def check_drift(generated_text):
 # ---------------------------------------------------------------------------
 
 def verify(catalog):
+    """V3 一致性校验：角色/validator/核心工具路径存在。"""
     errors = []
-    hands = catalog.get("hands", [])
-    total_agents = sum(len(h.get("agents", [])) for h in hands)
-    if total_agents != 29:
-        errors.append(f"agent 总数应为 29，实际 {total_agents}")
-
-    reviewer = next((h for h in hands if h["name"] == "reviewer"), None)
-    if not reviewer:
-        errors.append("reviewer 手缺失")
-    else:
-        r_agents = reviewer.get("agents", [])
-        names = {a["name"] for a in r_agents}
-        if "judge-scorer" in names:
-            errors.append("reviewer 包含不存在的 'judge-scorer'（应是 5 个 scorer-*）")
-        expected_scorers = {"scorer-academic", "scorer-engineering", "scorer-judge", "scorer-reader", "scorer-adversarial"}
-        missing = expected_scorers - names
-        if missing:
-            errors.append(f"reviewer 缺少 scorer: {missing}")
-        if len(r_agents) != 8:
-            errors.append(f"reviewer 应有 8 个 agent，实际 {len(r_agents)}")
-
-    # 校验每个 agent path 在文件系统存在
-    for h in hands:
-        for a in h.get("agents", []):
-            p = a.get("path", "")
-            if p and not (ROOT / p).exists():
-                errors.append(f"agent 路径不存在: {p}")
+    v3 = catalog.get("v3", {}) or {}
+    for role in v3.get("roles", []):
+        p = role.get("path", "")
+        if p and not (ROOT / p).exists():
+            errors.append(f"角色路径不存在: {p}")
+    for val in v3.get("validators", []):
+        p = val.get("path", "")
+        if p and not (ROOT / p).exists():
+            errors.append(f"validator 路径不存在: {p}")
+    for tool in ("validate.py", "catalog_check.py", "new_project.py",
+                 "knowledge.py", "doctor.py", "benchmark.py",
+                 "diagram_gen.py", "scholar_fetch.py"):
+        if not (ROOT / "core" / "tools" / tool).exists():
+            errors.append(f"工具缺失: core/tools/{tool}")
     return errors
 
 
@@ -419,10 +343,10 @@ def main():
     # 写文件
     OPENAI_PATH.parent.mkdir(parents=True, exist_ok=True)
     OPENAI_PATH.write_text(generated, encoding="utf-8")
-    hands = catalog.get("hands", [])
-    total = sum(len(h.get("agents", [])) for h in hands)
-    total_hands = len(hands)
-    print(f"[gen] core/runtime/adapters/openai.yaml 已生成：{total_hands} 手 {total} agent")
+    v3 = catalog.get("v3", {}) or {}
+    n_roles = len(v3.get("roles", []))
+    n_nodes = len(v3.get("nodes", []))
+    print(f"[gen] core/runtime/adapters/openai.yaml 已生成：V3 {n_roles} 角色 {n_nodes} 节点")
     return 0
 
 

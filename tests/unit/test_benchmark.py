@@ -60,8 +60,8 @@ def test_pipeline_report_cleanup(fake_root, monkeypatch):
     monkeypatch.setattr(benchmark, "_run", lambda cmd, cwd: (0, "ok"))
     rep = benchmark.pipeline_report("cumcm")
     assert rep["steps"]["scaffold"] == "PASS"
-    assert rep["steps"]["state_init"] == "PASS"
     assert rep["steps"]["doctor"] == "PASS"
+    assert rep["steps"]["validate"] == "PASS"
     assert rep["cleaned"] is True
     assert list((fake_root / "projects").iterdir()) == []
 
@@ -77,8 +77,8 @@ def test_pipeline_report_keep(fake_root, monkeypatch):
 def test_pipeline_report_failure_recorded(fake_root, monkeypatch):
     monkeypatch.setattr(benchmark, "_run", lambda cmd, cwd: (2, "boom"))
     rep = benchmark.pipeline_report("cumcm")
-    assert rep["steps"]["state_init"].startswith("FAIL")
-    assert "state_init_detail" in rep["steps"]
+    assert rep["steps"]["doctor"].startswith("FAIL")
+    assert "doctor_detail" in rep["steps"]
     assert rep["cleaned"] is True
 
 

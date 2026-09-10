@@ -11,7 +11,6 @@
 | **适用场景** | 目标函数与约束均为线性；决策变量连续/整数/混合；规模中等（变量<1000，约束<500） |
 | **核心公式** | min $c^T x$ s.t. $Ax \le b, x \ge 0, x_i \in \mathbb{Z}$ |
 | **求解器** | `pulp` (CBC), `ortools` (SCIP/GLOP), `gurobi`/`cplex` (商业), `scipy.optimize.linprog` |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/optimization/lp_template.py` |
 | **参数敏感性** | 影子价格（对偶变量）指示约束松紧；基变量退化需防循环 |
 | **常见坑** | 1) 大M法数值不稳 → 用指示约束/分段线性<br>2) 对称性导致分支定界慢 → 加对称性打破约束<br>3) 整数可行域为空 → 软约束惩罚+松弛变量 |
 | **验证清单** | ✅ 可行解存在 ✅ 对偶间隙=0 (LP) / <1% (MILP) ✅ 约束回代满足 ✅ 多种子稳定 |
@@ -26,7 +25,6 @@
 | **适用场景** | 目标/约束非线性但可微；连续变量；局部最优可接受或凸问题 |
 | **核心公式** | min $f(x)$ s.t. $g_i(x) \le 0, h_j(x) = 0$ |
 | **求解器** | `scipy.optimize.minimize` (SLSQP/trust-constr), `ipopt` (via `cyipopt`), `casadi` |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/optimization/nlp_template.py` |
 | **参数敏感性** | 初始点对局部最优影响大 → 多起点；梯度精度影响收敛 → 用自动微分 |
 | **常见坑** | 1) 非凸多局部最优 → 全局搜索/多起点<br>2) 约束资格不满足 (KKT 失效) → 正则化/松弛<br>3) 尺度差异大 → 变量归一化 |
 | **验证清单** | ✅ KKT 条件满足 ✅ 多起点收敛同值 ✅ 约束满足 ✅ 二阶充分条件 |
@@ -40,7 +38,6 @@
 |------|------|
 | **适用场景** | 多个冲突目标（成本/时间/风险/排放）；需给出 Pareto 前沿供决策者权衡 |
 | **核心方法** | ε-约束法、加权和法、Tchebycheff、正规边界交叉 (NBI)、NSGA-II/III、MOEA/D |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/optimization/moo_nsga2.py`, `moo_epsilon.py` |
 | **关键指标** | HV (超体积)、IGD (倒代际距离)、Spread (分布均匀性) |
 | **常见坑** | 1) 目标量纲/量级差异 → 归一化<br>2) Pareto 前沿断裂/稀疏 → 增加种群/迭代/引入参考点<br>3) 决策者偏好未量化 → 事后交互式选择/膝点识别 |
 | **验证清单** | ✅ 非支配排序正确 ✅ HV 收敛稳定 ✅ 前沿覆盖目标空间 ✅ 膝点/极值点识别 |
@@ -68,7 +65,6 @@
 |------|------|
 | **适用场景** | 多阶段决策、最优子结构、无后效性；库存/调度/路径/资源分配 |
 | **核心公式** | $V_t(s) = \max_a \{ r(s,a) + \gamma \mathbb{E}[V_{t+1}(s')] \}$ |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/optimization/dp_template.py`, `mdp_template.py` |
 | **维度灾难** | 状态空间 >10^6 → 近似 DP / 强化学习 / 状态聚合 |
 | **常见坑** | 1) 状态定义冗余 → 精简状态<br>2) 转移概率未知 → 模型免强化学习 (Q-learning/DQN)<br>3) 连续状态/动作 → 离散化/函数逼近 |
 | **验证清单** | ✅ Bellman 方程残差小 ✅ 策略收敛 ✅ 与贪心/启发式基线对比 |
@@ -87,26 +83,6 @@
 **常见坑**：不确定性集过保守 → 调整 $\Gamma$/置信度；场景树爆炸 → 场景缩减/采样平均近似 (SAA)。
 
 ---
-
-## 7. 代码模板目录映射
-
-```
-core/legacy/hands/Programmer/knowledge/code-templates/optimization/
-├── lp_template.py           # LP/MILP (pulp/ortools)
-├── nlp_template.py          # NLP (scipy/ipopt)
-├── moo_nsga2.py             # NSGA-II (platypus/pymoo)
-├── moo_epsilon.py           # ε-约束法
-├── ga_template.py           # 遗传算法
-├── pso_template.py          # 粒子群
-├── sa_template.py           # 模拟退火
-├── aco_template.py          # 蚁群
-├── de_template.py           # 差分进化
-├── dp_template.py           # 动态规划
-├── mdp_template.py          # 马尔可夫决策
-├── robust_template.py       # 鲁棒优化
-├── stochastic_2stage.py     # 两阶段随机规划
-└── chance_constrained.py    # 机会约束
-```
 
 ---
 

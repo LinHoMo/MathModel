@@ -60,7 +60,6 @@ official:
 runtime:
   language: zh
   template: cumcm-zh
-  latex_engine: xelatex
 
 template:
   dir: core/templates/latex/cumcm/
@@ -69,6 +68,5 @@ template:
   compile_chain: [xelatex, bibtex, xelatex, xelatex]
 
 deliverables:
-  paper_name: 参赛论文
   support_name: 支撑材料
   ai_report_name: AI工具使用详情

@@ -33,26 +33,6 @@
 
 **边界条件处理**：Dirichlet(本质/自然)、Neumann(自然/本质)、Robin、周期、对称/反对称
 
-**代码模板目录**：
-```
-core/legacy/hands/Programmer/knowledge/code-templates/mechanistic/
-├── ode_rk_template.py
-├── ode_multistep.py
-├── ode_spectral.py
-├── ode_events.py
-├── pde_heat_fd.py
-├── pde_heat_fe.py
-├── pde_wave_fv.py
-├── pde_transport.py
-├── pde_poisson_fd.py
-├── pde_poisson_fe.py
-├── pde_ns_fv.py
-├── fem_elasticity.py          # 固体力学 FEM
-├── fem_heat.py                # 热传导 FEM
-├── inverse_problem.py         # 参数反演 (伴随法/梯度下降)
-└── sensitivity_adjoint.py     # 伴随灵敏度
-```
-
 ---
 
 ## 3. 固体力学 / 结构分析 (FEM)

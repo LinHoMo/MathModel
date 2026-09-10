@@ -6,7 +6,7 @@
 
 1. **状态外置**：所有执行进度、决策历史、中间产物路径写入文件系统（`state/status.json`、`state/decision_log.json`），不依赖模型上下文记忆。
 2. **契约优先**：DAG 节点之间仅通过 Artifact Registry + Evidence Graph 交互，不共享内部状态。
-3. **门禁脚本化**：Self-Check 由 Python 脚本（`gate.py`、`score_artifact.py`、`validate.py`）判定，不依赖模型自评。
+3. **门禁脚本化**：Self-Check 由 Python 脚本（`validate.py`）判定，不依赖模型自评。
 4. **入口统一**：任何运行时进入项目根目录，读取 `AGENTS.md` 即可开始执行。
 
 ## 状态文件规范
@@ -65,18 +65,18 @@
 
 ### `work/STATE.md`（可读镜像，供人工/agent 快速查看）
 
-由 `state.py` 自动渲染，格式见 `state.py:render_md()`。
+由 `validate.py` / runtime 渲染。
 
 ## 执行协议（五步循环）
 
 所有 harness 统一遵循：
 
 ```
-1. 读状态    python core/tools/state.py <项目> status
+1. 读状态    python core/tools/validate.py <项目>
 2. 读指令    读 STATE.md 指出的 core/<Hand>/agents/<agent>/SKILL.md
 3. 执行      按 SKILL.md Procedure 做，产物写到指定路径
 4. 跑门禁    python core/tools/gate.py <项目> <hand> <agent>
-5. 推进      PASS → python core/tools/state.py <项目> advance <hand> <agent> --output <产物路径>
+5. 推进      PASS → 按 core/roles/*.yaml 与 core/skills/ 推进下一节点
              FAIL → 按 SKILL.md ## Iteration 修正后重跑，最多 3 轮
 ```
 
@@ -99,7 +99,7 @@
    输入数字 (1-4)：
    ```
 3. **兜底选项**：每个问题必须提供 "让我决定 (推荐 X)"，X 为推荐项编号
-4. **记录决策**：每次选择后调用 `python core/tools/state.py <项目> decision-add ...` 写入 `decision_log.json`
+4. **记录决策**：每次选择后调用 通过 runtime decision API 写入 Decision Artifact
 5. **专家模式**：用户输入 `expert` 或设置 `--expert-mode` 时，跳过问答，直接按推荐执行并记录
 
 ### 实现要求
@@ -188,7 +188,7 @@ export MATHMODEL_COMPILE_PDF=auto
 1. **单步失败**：在本手内回退到对应 agent，不向下游推进
 2. **3轮仍失败**：按 SKILL.md `## Iteration` 回退到上游手
 3. **跨 harness 继续**：新 harness 读取 `state.json` + `decision_log.json` 即可无缝续跑
-4. **产物不一致**：运行 `python core/tools/state.py <项目> sync` 从文件系统反推进度
+4. **产物不一致**：运行 `python core/tools/validate.py <项目>` 反推并校验一致性
 
 ## 版本兼容
 

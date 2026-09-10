@@ -42,7 +42,7 @@ RELATION_TYPES: dict[str, tuple] = {
     "produces":       ({"experiment", "execution_result"}, {"result"}),  # P1-VS-001 C7: EXEC 也产出 result
     "visualized_by":  ({"result"}, {"figure", "table"}),
     "supports":       ({"result"}, {"claim"}),
-    "appears_in":     ({"claim"}, {"paper_section"}),
+    "appears_in":     ({"claim"}, {"deliverable"}),
     "selects":        ({"decision"}, {"model", "model_ir"}),
     "based_on":       ({"decision"}, None),
     "derived_from":   (None, None),
@@ -89,7 +89,7 @@ _PROPAGATION: dict[str, tuple] = {
     "produces":       ("kill", None),      # 实验死了，其产出结果判死
     "visualized_by":  ("kill", None),      # 结果死了，其图表判死
     "supports":       ("kill", None),      # 结果死了，其支撑的 claim 受影响
-    "appears_in":     ("reval", None),     # claim 死了，出现的章节只需复查
+    "appears_in":     ("reval", None),     # claim 死了，出现的文档只需复查
     "selects":        (None, None),        # 决策死了，被选模型不受影响
     "based_on":       (None, "reval"),     # 证据死了，基于它的决策需复查
     "derived_from":   ("reval", "reval"),  # 通用派生：一律弱传播

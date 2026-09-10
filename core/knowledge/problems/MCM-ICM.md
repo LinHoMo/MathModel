@@ -201,5 +201,5 @@
 
 ## 复盘联动
 
-美赛结束同样跑 `python core/tools/retrospect.py <项目>` 生成复盘报告，
+美赛结束后按 V3 流程执行 validate/catalog_check 收口项目证据，
 经验归档路径与 CUMCM 一致（`_negative/` 与 `pitfalls/`）。

@@ -65,11 +65,6 @@ CANONICAL_ENTITIES: dict[str, dict] = {
         "v3_subtype": "decision",
         "legacy_projections": ["decision_log.schema.json（V2，已升级有 reversible/invalidated_by 等）"],
     },
-    "PaperProjection": {
-        "schema": None,  # deliverable artifact + narrative/paper_section 子类型
-        "v3_subtype": "deliverable",
-        "legacy_projections": ["PAPER_SPEC.md", "paper_spec.schema.json", "paper/main.tex + main.pdf（交付投影）"],
-    },
     "Failure": {
         "schema": "knowledge/failure.schema.json",
         "v3_subtype": None,  # 知识层实体，非 artifact
@@ -86,9 +81,6 @@ CANONICAL_ENTITIES: dict[str, dict] = {
 ENTIT_ALIASES: dict[str, str] = {
     "model_spec": "Model", "MODEL_SPEC": "Model", "model_artifact": "Model",
     "model_output": "Model", "formal_model": "Model", "model_card": "Model",
-    "paper_spec": "PaperProjection", "PAPER_SPEC": "PaperProjection",
-    "paper_projection": "PaperProjection", "final_paper": "PaperProjection",
-    "writer_output": "PaperProjection",
     "experiment_result": "Result", "all_results": "Result",
     "validator_report": "Evidence", "evidence_graph": "Evidence",
     "experiment_evidence": "Evidence",

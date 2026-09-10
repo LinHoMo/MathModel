@@ -13,7 +13,7 @@
 对账口径（只读，永不静默）：
   * 用当前磁盘上的 registry + graph 重新派生一份「理想投影」，与落盘的
     status.json 逐项比较，任何不同都列为 problem，并给出字段级 diff。
-  * workflow / run / review / narrative / paper 等会话自有字段不参与比较
+  * workflow / run / review 等会话自有字段不参与比较
     （它们不由内容派生，属引擎职责），在 STATE_TRUTH.md 有决策表登记。
 
 模式：v3（state/status.json）/ legacy（仅 work/state.json）/ empty。

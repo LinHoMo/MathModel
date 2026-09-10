@@ -1,26 +1,26 @@
 # 项目状态
 
-> 更新：2026-09-10（P2-1：L6 数值正确性机械判定层）。治理见
-> `docs/architecture/THREE_LAYER_ARCHITECTURE.md`，硬化总纲见
-> `docs/architecture/HARDENING_PROGRAM.md`。
+> 更新：2026-09-10（V2 彻底清除：历史文档/旧研究/LaTeX 链/四手残留删除，
+> 全仓采用 V3 新定位）。架构见 `docs/architecture/V3.1_ARCHITECTURE.md`。
 > **本文件是状态数字的唯一出处：所有数字来自机器命令实测并绑定 commit hash，
 > 禁止人工转述其他来源的数字。**
 
 ## 当前定位
 
-**Scientific / Mathematical Modeling Harness**：面向数学模型构建、验证与
-模型—论文传输的可信 Harness。给一道赛题（或研究问题）→ Model Construction →
-Model Artifact → Execution → Validation → Evidence Graph → Revision →
-Research State → 论文投影。**Source of truth = Artifact Registry + Evidence
-Graph + Research State；Agent / LLM 只是 Executor（GPT / Claude / DeepSeek /
+**Scientific / Mathematical Modeling Harness**：面向数学模型构建与验证的
+可信 Harness。给一道赛题（或研究问题）→ Model Construction → Model Artifact →
+Execution → Validation → Evidence Graph → Revision → Research State →
+**MODEL_IR（JSON）+ 模型描述文档（MD/Mermaid）**。不包含论文生成（LaTeX/PDF）、
+不向后兼容 V2。**Source of truth = Artifact Registry + Evidence Graph +
+Research State；Agent / LLM 只是 Executor（GPT / Claude / DeepSeek /
 MathModelAgent / 人工均可插拔，The Agent Is Not The State）。**
 
 资产归位三层，自 2026-09-07 起**架构冻结**（不再接受架构革命）：
 
-- **Agent Brain**（角色指令 + 知识层）——研发主战场；
-- **Research Runtime**（`core/runtime/`）——冻结（System Hardening 例外经
-  `HARDENING_PROGRAM.md` P0–P3 授权）；
-- **Guardrails**（validators + gates + 评分链）——冻结（同受硬化计划授权）。
+- **Harness 引擎**（`core/`：runtime / roles / workflows / validators / schemas）——唯一可复用资产；
+- **Research Runtime**（`core/runtime/`）——冻结（架构冻结，治理例外经
+  `docs/architecture/RUNTIME_CONTRACTS.md` 授权）；
+- **Guardrails**（validators + gates）——冻结（同受契约授权）。
 
 能力进步以基线 Δscore 度量（八项指标，`bench e2e`），不以"新增契约/测试数量"度量。
 **infra 不冒充 capability**：新基础设施必须回答"它改变了哪个可测量的 Model
@@ -68,8 +68,8 @@ Construction 行为？"。
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **1103 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
-| 项目级校验 | **58 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
+| 单元/集成/端到端测试 | **612 passed / 1 skipped / 0 failed（skip 已分类）** | `py -3.12 -m pytest tests -q` |
+| 项目级校验 | **45 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |
 | K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |

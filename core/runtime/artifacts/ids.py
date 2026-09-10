@@ -6,7 +6,7 @@ ID 格式: <TYPE><NNN>，项目内唯一、终身稳定、永不复用。
 前缀表（与 docs/architecture/V3.1_ARCHITECTURE.md §1.11 一致）:
     P=problem Q=question M=model A=assumption DATA=dataset CODE=code
     E=experiment R=result F=figure T=table C=claim D=decision
-    N=narrative S=paper_section DELIV=deliverable
+    DELIV=deliverable
     EXEC=execution_result（P0-E：真实执行产物，一等 artifact）
     VR=verification_result（P0-E5：对执行结果的确定性验证产物）
 """
@@ -29,8 +29,6 @@ ARTIFACT_TYPES: dict[str, str] = {
     "table": "T",
     "claim": "C",
     "decision": "D",
-    "narrative": "N",
-    "paper_section": "S",
     "deliverable": "DELIV",
     "execution_result": "EXEC",
     "verification_result": "VR",
@@ -42,7 +40,7 @@ ARTIFACT_TYPES: dict[str, str] = {
 PREFIX_TO_TYPE: dict[str, str] = {v: k for k, v in ARTIFACT_TYPES.items()}
 
 # ID 正则：前缀 + 1-6 位数字（三位零填充为规范形态，宽松接受 1-6 位）
-_ID_RE = re.compile(r"^(P|Q|MIR|M|A|DATA|CODE|E|R|F|T|C|D|N|S|DELIV|EXEC|VR|DIAG)(\d{1,6})$")
+_ID_RE = re.compile(r"^(P|Q|MIR|M|A|DATA|CODE|E|R|F|T|C|D|DELIV|EXEC|VR|DIAG)(\d{1,6})$")
 
 
 class IDFormatError(ValueError):

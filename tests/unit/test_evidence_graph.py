@@ -36,7 +36,7 @@ def setup(tmp_path):
     reg.create("result", title="result", question="Q001", activate=True)
     reg.create("figure", title="figure", activate=True)
     reg.create("claim", title="claim", question="Q001", activate=True)
-    reg.create("paper_section", title="section", activate=True)
+    reg.create("deliverable", title="doc", activate=True)
 
     g = EvidenceGraph(reg, path=tmp_path / "evidence_graph.json")
     edges = [
@@ -49,7 +49,7 @@ def setup(tmp_path):
         ("E001", "produces", "R001"),
         ("R001", "visualized_by", "F001"),
         ("R001", "supports", "C001"),
-        ("C001", "appears_in", "S001"),
+        ("C001", "appears_in", "DELIV001"),
     ]
     for f, r, t in edges:
         g.add_relation(f, r, t)
@@ -130,16 +130,16 @@ class TestRelations:
 class TestTraversal:
     def test_downstream_of_dataset(self, setup):
         _, g = setup
-        # DATA001 的传播下游: E001 → R001 → {F001, C001} → S001
+        # DATA001 的传播下游: E001 → R001 → {F001, C001} → DELIV001
         # （CODE001 经 M001 -implemented_by-> 挂在模型下，不随数据死）
         ds = g.downstream("DATA001")
-        assert ds == {"E001", "R001", "F001", "C001", "S001"}
+        assert ds == {"E001", "R001", "F001", "C001", "DELIV001"}
 
-    def test_upstream_of_section(self, setup):
+    def test_upstream_of_doc(self, setup):
         _, g = setup
-        # S001 的传播上游: C001 ← R001 ← E001 ← {M001, DATA001} ← Q001 ← P001
+        # DELIV001 的传播上游: C001 ← R001 ← E001 ← {M001, DATA001} ← Q001 ← P001
         # A001 经 assumes 反向（reval 档）也是上游（假设死 → 模型需复查）
-        ups = g.upstream("S001")
+        ups = g.upstream("DELIV001")
         assert ups == {"C001", "R001", "E001", "M001", "DATA001", "Q001",
                        "P001", "A001"}
         # F001（图表是结果下游）不在上游
@@ -180,7 +180,7 @@ class TestInvalidation:
         assert "E001" in report["requires_revalidation"]
         assert "E001" not in report["invalidated"]
         # 下游沿 reval 来源继续传播 reval
-        for aid in ("R001", "F001", "C001", "S001"):
+        for aid in ("R001", "F001", "C001", "DELIV001"):
             assert aid in report["requires_revalidation"], aid
         # 无关 Artifact 不受影响
         assert "Q002" in report["unaffected"]
@@ -188,7 +188,7 @@ class TestInvalidation:
         # Registry contract 已写回
         assert reg.get("E001").status != "invalidated"
         assert reg.get("E001").invalidation["status"] == "requires_revalidation"
-        assert reg.get("S001").invalidation["invalidated_by"] == "DATA001"
+        assert reg.get("DELIV001").invalidation["invalidated_by"] == "DATA001"
 
     def test_canonical_linear_chain(self, tmp_path):
         """任务书 §7 典型链: DATA → E → R → C → S（单支撑链，全链判死）。"""
@@ -199,24 +199,24 @@ class TestInvalidation:
         reg.create("experiment", title="E017", question="Q001", activate=True)
         reg.create("result", title="R021", question="Q001", activate=True)
         reg.create("claim", title="C008", question="Q001", activate=True)
-        reg.create("paper_section", title="S004", activate=True)
+        reg.create("deliverable", title="DELIV001", activate=True)
         g = EvidenceGraph(reg, path=tmp_path / "g.json")
         g.add_relation("E001", "uses", "DATA001")
         g.add_relation("E001", "produces", "R001")
         g.add_relation("R001", "supports", "C001")
-        g.add_relation("C001", "appears_in", "S001")
+        g.add_relation("C001", "appears_in", "DELIV001")
 
         report = g.invalidate("DATA001", reason="数据源勘误")
         # kill 边 + 单支撑全死 → 判死（报告按 ID 排序输出）
         assert report["invalidated"] == ["C001", "DATA001", "E001", "R001"]
         # appears_in 是 reval 边 → 章节只需复查
-        assert report["requires_revalidation"] == ["S001"]
+        assert report["requires_revalidation"] == ["DELIV001"]
         # Registry 写回
         assert reg.get("E001").status == "invalidated"
         assert reg.get("R001").status == "invalidated"
         assert reg.get("C001").status == "invalidated"
-        assert reg.get("S001").status != "invalidated"
-        assert reg.get("S001").invalidation["status"] == "requires_revalidation"
+        assert reg.get("DELIV001").status != "invalidated"
+        assert reg.get("DELIV001").invalidation["status"] == "requires_revalidation"
 
     def test_root_marked_invalidated(self, setup):
         reg, g = setup
@@ -271,10 +271,10 @@ class TestInvalidation:
 
     def test_terminal_artifacts_skipped(self, setup):
         reg, g = setup
-        reg.deprecate("S001", reason="章节废弃")
+        reg.deprecate("DELIV001", reason="章节废弃")
         report = g.invalidate("DATA001", reason="x")
-        assert "S001" not in report["requires_revalidation"]
-        assert "S001" not in report["invalidated"]
+        assert "DELIV001" not in report["requires_revalidation"]
+        assert "DELIV001" not in report["invalidated"]
 
 
 class TestCoverage:

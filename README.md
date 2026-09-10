@@ -1,12 +1,13 @@
 # MathModel — Scientific / Mathematical Modeling Harness
 
-**面向数学模型构建、验证与模型—论文传输的可信 Harness（Verification-centered
+**面向数学模型构建与验证的可信 Harness（Verification-centered
 Modeling Research Harness）。** 把一道赛题（或一个研究问题）变成一条可追溯、
-可失效传播、可重放、可审计的研究证据链；论文是这条链的**投影**而非终点。
+可失效传播、可重放、可审计的建模证据链；产出为 **MODEL_IR（JSON）+ 模型描述
+文档（MD/Mermaid）**，不包含论文生成（LaTeX/PDF），不向后兼容 V2。
 
 ```text
 Problem → Model Construction → Model Artifact → Execution → Validation
-        → Evidence Graph → Revision → Research State → Paper Projection
+        → Evidence Graph → Revision → Research State → Model Documentation
 ```
 
 > **Source of truth = Artifact Registry + Evidence Graph + Research State。**
@@ -20,15 +21,11 @@ Problem → Model Construction → Model Artifact → Execution → Validation
 Contract（冻结语义）· Deterministic Replay（重放审计）。
 
 > 架构真源：[docs/architecture/V3.1_ARCHITECTURE.md](docs/architecture/V3.1_ARCHITECTURE.md)
-> ｜ 运行时契约：[RUNTIME_CONTRACTS.md](docs/architecture/RUNTIME_CONTRACTS.md)
-> ｜ 硬化计划：[HARDENING_PROGRAM.md](docs/architecture/HARDENING_PROGRAM.md)
-> ｜ 三层架构：[THREE_LAYER_ARCHITECTURE.md](docs/architecture/THREE_LAYER_ARCHITECTURE.md)
 > ｜ 状态真源：[docs/STATUS.md](docs/STATUS.md)（机器实测数字 + commit hash，唯一口径）
-> ｜ 治理：[MODELING_KNOWLEDGE_GOVERNANCE.md](docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md)
 
 **当前版本**：V3.1（架构已冻结，P0–P6 硬化收口）｜ 研究阶段：**P15**
 （K001 已 CLOSED · **K002 正式实验已 CLOSED**（RQ1 S−F(MCQ)=−4.85 CI[−7.98,−2.22] NEGATIVE，不进 P15.2）· **P1 Model Construction Loop 三里程碑完成**（VS-001 闭环 7/7 + M3 候选竞技场 + M4 知识引导））。
-**技术选型**：LaTeX（单一主线，竞赛差异用 template pack 表达）。
+**技术选型**：MODEL_IR（JSON Schema）+ Markdown/Mermaid 模型描述文档（无 LaTeX/PDF 产出）。
 
 > P15 实验报告：K001 → `research/P15/analysis/reports/P15-K001-REPORT.md` ｜
 > K002 → `research/P15/analysis/reports/P15-K002-REPORT.md` ｜
@@ -67,7 +64,7 @@ Registry（稳定 ID + 生命周期），依赖进 Evidence Graph（上游变化
          Skills             Tools            Executors
       modeling skill       solver          GPT / Claude /
       verification         parser          MathModelAgent /
-      paper mapping        validator       Human（可插拔）
+      validation           validator       Human（可插拔）
 ```
 
 ### 模型生命周期（核心对象）
@@ -77,7 +74,7 @@ Model Construction 不是"生成一段模型描述"，而是一条完整生命�
 ```
 Problem → Question → Model Candidates → Selection Decision → MODEL_IR
        → Implementation → Execution → Validation → Evidence
-       → Model Evaluation → Revision → Model Rev.2 → … → Paper Projection
+       → Model Evaluation → Revision → Model Rev.2 → … → Model Documentation
 ```
 
 `MODEL_IR` 是**三层可执行模型规格**（Semantic → Mathematical → Computational），
@@ -121,11 +118,10 @@ P1-VS-001 已首次跑通完整闭环：M1（缺陷模型）→ 真实执行 →
 ```bash
 # Windows 本机统一用 py -3.12（系统默认 py 3.14/3.13 安装损坏）
 py -3.12 core/tools/new_project.py my-problem          # 创建 V3 workspace（projects/my-problem）
-py -3.12 core/tools/orchestrator.py my-problem         # V3 DAG 干跑计划
-py -3.12 core/tools/orchestrator.py my-problem --execute   # 真实执行（登记 Artifact/Evidence/State）
+py -3.12 core/tools/doctor.py --project my-problem     # 环境/工具链预检
 
 # 验证产物完整性（交付前必跑）
-py -3.12 core/tools/validate.py                        # 项目级 58 项校验
+py -3.12 core/tools/validate.py                        # 项目级 45 项校验
 py -3.12 core/tools/catalog_check.py --check           # 双视图三方一致性
 py -3.12 -m pytest tests -q                            # 单元/集成/端到端（以 STATUS.md 实测为准）
 ```
@@ -138,7 +134,7 @@ py -3.12 -m pytest tests -q                            # 单元/集成/端到端
 MathModel/
 ├── core/                            # 引擎（唯一可复用资产，架构冻结）
 │   ├── runtime/                     # V3 认知运行时：artifacts / state / graph / execution / modeling / knowledge
-│   ├── roles/  workflows/           # 5 角色 / Workflow DAG（YAML 定义）
+│   ├── roles/  workflows/           # 4 角色（analyst/modeler/experimenter/critic）/ DAG（YAML 定义）
 │   ├── validators/                  # evidence / quality / modules（L1–L6 门禁）
 │   ├── schemas/                     # v3/ 六域 canonical schema
 │   ├── evaluation/  tools/          # 评分链 / benchmark / 能力指标 / runtime 工具
@@ -163,7 +159,7 @@ STATUS.md 当前口径为准。**
 
 ## 设计原则与治理红线
 
-1. **Artifact 是真源**：所有下游表示（Evidence / Experiment / Paper / Evaluation）都是投影
+1. **Artifact 是真源**：所有下游表示（Evidence / Experiment / Model Documentation / Evaluation）都是投影
 2. **状态可对账**：Event Log → Projection → status.json，禁止多个状态真源并存
 3. **可重放可审计**：每次运行留 RunRecord（版本/哈希/模型/输入），可 deterministic replay
 4. **可验证**：阈值集中在 env，判定交给脚本，不靠人工自觉
@@ -187,13 +183,12 @@ STATUS.md 当前口径为准。**
 
 ```text
 # V3 运行时
-py -3.12 core/tools/orchestrator.py <项目> [--execute]   # DAG 干跑 / 真实执行
-py -3.12 core/tools/validate.py                          # 项目级 58 项校验
+py -3.12 core/tools/validate.py                          # 项目级 45 项校验
 py -3.12 core/tools/catalog_check.py --check             # catalog 三方一致
 py -3.12 core/tools/catalog_check.py --check-terminology # 术语零残留
+py -3.12 core/tools/doctor.py --project <项目>           # 环境/工具链预检
 py -3.12 core/tools/replay.py <项目> [<run_id> [diff <run_id>]]   # 重放 / 差异归因
 py -3.12 core/tools/knowledge.py recommend --types <题型>        # 方法卡检索
-py -3.12 core/tools/score_compute.py <项目>              # 自动化 5 维评分卡
 py -3.12 core/tools/benchmark.py bench {list,run,score,report}
 
 # P15 研究工具链（协议/冻结/状态机/盲评）

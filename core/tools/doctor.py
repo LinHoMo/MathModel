@@ -12,14 +12,12 @@
 ----
     python core/tools/doctor.py                      # 检查仓库本体
     python core/tools/doctor.py --project cumcm2024a # 额外检查指定项目
-    python core/tools/doctor.py --competition cumcm  # 按竞赛检查所需模板与引擎
     python core/tools/doctor.py --skip-tools         # 跳过外部工具链检查
 
 退出码：0 = 全部就绪或仅有建议项；1 = 存在阻塞项。
 """
 
 import argparse
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -29,37 +27,21 @@ sys.path.insert(0, str(ROOT / "core" / "tools"))
 for _cat in ("runtime", "validation", "evaluation", "knowledge", "devtools", "rendering"):
     sys.path.insert(0, str(ROOT / "core" / "tools" / _cat))
 
-# 各竞赛所需的 LaTeX 引擎（沿用 handsomeZR 验证过的分配）
-ENGINE_BY_COMPETITION = {
-    "cumcm": "xelatex",
-    "huawei": "xelatex",
-    "diangong": "xelatex",
-    "huashu": "xelatex",
-    "mcm": "pdflatex",
-    # 以下为 baseline 竞赛包（规则待官方核对，引擎按中文默认 xelatex）
-    "apmcm": "xelatex",
-    "mathorcup": "xelatex",
-    "renzhengbei": "xelatex",
-    "shuweibei": "xelatex",
-}
-
 REQUIRED_TOOLS = [
-    ("state.py", "执行状态管理"),
-    ("gate.py", "门禁判定"),
-    ("gatelib.py", "门禁公共库"),
+    ("validate.py", "项目级校验"),
+    ("catalog_check.py", "catalog 一致性检查"),
+    ("new_project.py", "新项目脚手架"),
     ("render_ai_usage.py", "AI 使用披露生成器"),
     ("doctor.py", "环境预检（本文件）"),
 ]
 
 REQUIRED_DIRS = [
-    ("core/legacy/hands/Modeler/agents", "建模手 8 个 agent"),
-    ("core/legacy/hands/Programmer/agents", "编程手 6 个 agent"),
-    ("core/legacy/hands/Writer/agents", "撰写手 7 个 agent"),
-    ("core/legacy/hands/Reviewer/agents", "评审手 8 个 agent"),
     ("core/knowledge/methodology", "方法论知识库"),
     ("core/validators/modules", "验证模块"),
     ("core/env", "配置层"),
     ("core/schemas", "结构化输出 Schema"),
+    ("core/workflows/stages", "DAG stage 模板"),
+    ("core/roles", "角色定义"),
 ]
 
 
@@ -102,21 +84,23 @@ def check_dirs(r):
 
 
 def check_agent_count(r):
-    expect = {"Modeler": 8, "Programmer": 6, "Writer": 7, "Reviewer": 8}
-    for hand, n in expect.items():
-        d = ROOT / "core" / hand / "agents"
-        if not d.is_dir():
-            continue
-        actual = len([x for x in d.iterdir() if x.is_dir()])
-        ok = actual == n
-        r.add(ok, f"{hand} agent 数", f"{actual}（期望 {n}）")
-        if not ok:
-            r.block_(f"{hand} agent 数", f"{actual} != {n}")
+    """V3：core/roles 4 角色定义齐全（analyst/modeler/experimenter/critic）。"""
+    roles_dir = ROOT / "core" / "roles"
+    if not roles_dir.is_dir():
+        r.block_("core/roles", "目录缺失")
+        return
+    files = sorted(roles_dir.glob("*.yaml"))
+    names = {f.stem for f in files}
+    expected = {"analyst", "modeler", "experimenter", "critic"}
+    missing = sorted(expected - names)
+    ok = not missing
+    r.add(ok, "V3 角色定义", "齐全" if ok else f"缺失 {missing}")
+    if not ok:
+        r.block_("V3 角色定义", f"缺失 {missing}")
 
 
 def check_catalog_v3(r):
     """catalog.yaml v5 双视图一致性（roles/DAG/validators 三方对齐）。"""
-    import subprocess
     script = ROOT / "core" / "tools" / "catalog_check.py"
     try:
         proc = subprocess.run(
@@ -134,60 +118,28 @@ def check_catalog_v3(r):
         r.block_("catalog v5 双视图", detail)
 
 
-def check_latex(r, competition, skip):
-    if skip:
-        r.add(True, "LaTeX 工具链", "已跳过（--skip-tools）")
-        return
-    engine = ENGINE_BY_COMPETITION.get(competition, "xelatex")
-    found = shutil.which(engine)
-    if found:
-        r.add(True, f"LaTeX 引擎 {engine}", found)
-    else:
-        r.add(False, f"LaTeX 引擎 {engine}",
-              "未找到。论文将无法编译 PDF。"
-              "env.runtime.compile_pdf=auto 时会降级为仅交付 .tex")
-    # bibtex 用于参考文献
-    bib = shutil.which("bibtex")
-    r.add(bool(bib), "bibtex", bib or "未找到（参考文献将无法正常渲染）")
-    # latexmk 可简化多次编译
-    lmk = shutil.which("latexmk")
-    r.add(bool(lmk), "latexmk", lmk or "未找到（可用 engine 手动跑多遍）")
-
-
-def check_competition_pack(r, competition):
-    if not competition:
-        return
-    pack = ROOT / "core" / "templates" / "latex" / competition
-    if pack.is_dir():
-        r.add(True, f"竞赛包 {competition}", str(pack))
-    else:
-        r.add(False, f"竞赛包 {competition}",
-              f"templates/latex/{competition}/ 不存在，将回退到默认模板")
-
-
 def check_project(r, project):
-    import state as S
-    base = S.project_dir(project)
+    from pathlib import Path
+    base = Path("projects") / project
     if not base.exists():
         r.block_(f"项目 {project}", "目录不存在")
         return
     r.add(True, f"项目 {project}", str(base))
 
     for sub, desc in [("inputs", "赛题与原始数据"),
-                      ("work", "中间产物与状态"),
-                      ("output", "三手产物契约")]:
+                      ("state", "Registry + Evidence Graph"),
+                      ("output", "模型产出")]:
         ok = (base / sub).is_dir()
         r.add(ok, f"{project}/{sub}", desc if ok else "缺失")
 
-    st = S.load(project)
-    if st is None:
-        r.add(False, "执行状态",
-              f"无 state.json，运行: python core/tools/state.py {project} init")
-    else:
-        done = len(st.get("completed", []))
-        r.add(True, "执行状态", f"{done}/{len(S.PIPELINE)} 步已完成")
+    # 检查 state 目录下的关键文件
+    state_dir = base / "state"
+    if state_dir.is_dir():
+        for fname in ["registry.json", "evidence_graph.json"]:
+            ok = (state_dir / fname).exists()
+            r.add(ok, f"{project}/state/{fname}", "存在" if ok else "缺失")
 
-    # 原始数据只读检查（P2-12）
+    # 原始数据只读检查
     inputs = base / "inputs"
     if inputs.is_dir():
         writable = [f.name for f in inputs.iterdir()
@@ -206,8 +158,6 @@ def _is_writable(p):
 def main():
     ap = argparse.ArgumentParser(description="环境预检")
     ap.add_argument("--project", help="额外检查指定项目")
-    ap.add_argument("--competition", choices=list(ENGINE_BY_COMPETITION),
-                    help="按竞赛检查模板与引擎")
     ap.add_argument("--skip-tools", action="store_true",
                     help="跳过外部工具链检查")
     args = ap.parse_args()
@@ -218,13 +168,11 @@ def main():
     check_dirs(r)
     check_agent_count(r)
     check_catalog_v3(r)
-    check_latex(r, args.competition, args.skip_tools)
-    check_competition_pack(r, args.competition)
     if args.project:
         check_project(r, args.project)
 
     print("=" * 62)
-    print("MathModelSkills 环境预检")
+    print("MathModel 环境预检")
     print("=" * 62)
     for name, detail in r.ok:
         print(f"  [OK]   {name}" + (f" - {detail}" if detail else ""))

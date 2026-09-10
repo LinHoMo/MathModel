@@ -19,29 +19,6 @@
 
 **效应量**：Cohen's d / η² / r / Cliff's delta —— **必须报告**，不仅看 p 值
 
-**代码模板目录**：
-```
-core/legacy/hands/Programmer/knowledge/code-templates/statistical/
-├── ttest_template.py
-├── ztest_template.py
-├── chisq_template.py
-├── ftest_template.py
-├── wilcoxon_template.py
-├── mannwhitney_template.py
-├── kruskal_template.py
-├── ks_template.py
-├── anova_template.py
-├── ancova_template.py
-├── regression_diagnostics.py
-├── causal_inference.py
-├── bayesian_template.py
-├── bootstrap_template.py
-├── monte_carlo_template.py
-├── survival_template.py
-├── meta_analysis.py
-└── power_analysis.py
-```
-
 ---
 
 ## 2. 方差分析 (ANOVA) / 协方差分析 (ANCOVA)

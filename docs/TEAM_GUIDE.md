@@ -7,7 +7,7 @@
 ### 1.1 五角色映射（V3 DAG）
 
 > ⚠️ 以下角色映射为 V3 五角色结构（`catalog/v3.yaml` + `core/roles/*.yaml`）。
-> V2 四手 29 agent 线性流水线已降级为 legacy 兼容层（`core/legacy/hands/`）。
+> V2 四手 29 agent 线性流水线已删除（不向后兼容）；现行 V3 为 4 角色（analyst/modeler/experimenter/critic）。
 
 | 角色 | 对应 V3 Role | 主要职责 | 技能要求 |
 |---|---|---|---|
@@ -56,7 +56,7 @@
 ### 2.3 里程碑检查点
 
 ```
-M1: 选题完成（Day 1 前 2h）→ python core/tools/state.py <项目> status
+M1: 选题完成（Day 1 前 2h）→ python core/tools/validate.py <项目>
 M2: 模型 1 建立（Day 1 结束）→ MODEL_SPEC.md 至少覆盖第 1 问
 M3: 代码初版可运行（Day 2 上午）→ main.py 输出第 1 问结果
 M4: 论文初稿完成（Day 2 结束）→ paper/main.tex 所有章节有内容
@@ -76,7 +76,7 @@ pip install -r requirements.txt
 python core/tools/new_project.py <项目名> --competition cumcm --problem <赛题文件>
 
 # 初始化状态
-python core/tools/state.py <项目> init
+python core/tools/new_project.py <项目>（无则创建）
 ```
 
 ### 3.2 协作模式
@@ -157,16 +157,16 @@ consistency-checker 发现不一致 →
 
 ```bash
 # 生成回顾报告
-python core/tools/retrospect.py <项目>
+python core/tools/validate.py <项目>
 
 # 扫描到反思银行
-python core/tools/reflection_bank.py scan
+python core/tools/catalog_check.py --check
 
 # 查看统计
-python core/tools/reflection_bank.py stats
+python core/tools/validate.py
 
 # 搜索特定经验
-python core/tools/reflection_bank.py search "超时"
+python core/tools/knowledge.py recommend --types <题型>
 ```
 
 三人一起填写 RETROSPECTIVE.md 的「经验沉淀」小节，把可复用教训归档到知识库。

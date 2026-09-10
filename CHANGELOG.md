@@ -2,6 +2,35 @@
 
 本文件记录 MathModel Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
+## v3.2.0（2026-09-10，V2 彻底清除 + V3 新定位固化）
+
+### V2 彻底删除（不向后兼容）
+
+- **历史文档删除**：14 个过渡期过程文档（V3_ARCHITECTURE_PLAN / V3_BASELINE_AUDIT /
+  V3_FINAL_AUDIT / V3_MIGRATION_MAP / V3_IMPLEMENTATION_REPORT / IMPROVEMENT_PLAN /
+  RELEASE_CANDIDATE / COMPETITION_INTELLIGENCE_AUDIT / CROSS_QUESTION_SYNTHESIS_CONTRACT /
+  COMPATIBILITY_POLICY / HARDENING_PROGRAM / CAPABILITY_ROADMAP_P13_P17 /
+  RESEARCH_QUALITY_AUDIT / refactor-plan-v2）删除。
+- **旧研究目录删除**：P13-3D / P13-3D-R2 / P13-3D-R3 / P14 / RC-SMOKE / audit /
+  bench-m4-2000c 系列 / bench-p132-2023c（研究历史数据，仅保留 P15 现行实验）。
+- **LaTeX 链彻底移除**：`env/schema.yaml` 删除 paper 规格块（20 字段）、
+  compile_pdf / latex_engine / deliver_docx、LaTeX template 块、paper_name；
+  profiles 同步清理；`doctor.py` 删除 check_latex / check_competition_pack /
+  ENGINE_BY_COMPETITION；`test_doctor.py` 删除 V2 引擎映射与竞赛包测试。
+- **ARCHITECTURE.md 重写**：V2 四手架构描述 → V3 现行架构（4 角色 / MODEL_IR+MD 产出 /
+  Artifact Registry + Evidence Graph + DAG）。
+- **README/AGENTS/STATUS/TEAM_GUIDE/STATE_TRUTH/RUN_PROVENANCE/harness-compat/V3.1**：
+  统一更新为新定位（45 项校验、4 角色、无 LaTeX/论文、无 V2 兼容层）。
+
+### 验证
+
+- `validate.py`：**45 通过 / 0 失败 / 0 警告**
+- `catalog_check --check` / `--check-terminology`：**OK**
+- `doctor.py`：**就绪 17 / 警告 0 / 阻塞 0**
+- `pytest`：**612 passed / 1 skipped**
+
+
+
 ## v3.1.1（2026-09-08，仓库清理 + P15 研究基础设施 + core/tools 统一）
 
 ### core/tools 统一（4 commits，`7f29443`…`9199f03`，non-regression 774/11）

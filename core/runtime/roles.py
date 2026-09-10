@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .execution.yamlio import YamlSyntaxError, load_file
 
-ROLE_IDS = ("analyst", "modeler", "experimenter", "critic", "writer")
+ROLE_IDS = ("analyst", "modeler", "experimenter", "critic")
 
 
 class RoleError(ValueError):

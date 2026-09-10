@@ -32,8 +32,7 @@ class TestStableIDs:
         for aid, typ in [("P001", "problem"), ("Q012", "question"), ("M003", "model"),
                          ("DATA007", "dataset"), ("CODE021", "code"), ("E009", "experiment"),
                          ("R002", "result"), ("F001", "figure"), ("T004", "table"),
-                         ("C008", "claim"), ("D001", "decision"), ("N002", "narrative"),
-                         ("S004", "paper_section"), ("DELIV001", "deliverable")]:
+                         ("C008", "claim"), ("D001", "decision"), ("DELIV001", "deliverable")]:
             assert is_valid_id(aid)
             assert id_type(aid) == typ
             assert id_matches_type(aid, typ)

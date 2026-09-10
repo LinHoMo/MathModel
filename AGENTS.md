@@ -35,7 +35,7 @@
 1. 读状态    python core/tools/validate.py <项目>    # 项目级校验
 2. 看计划    python core/tools/catalog_check.py      # 一致性检查
 3. 执行      按 core/roles/*.yaml 与 core/skills/ 指令执行
-4. 验证      python core/tools/validate.py            # 58 项校验
+4. 验证      python core/tools/validate.py            # 45 项校验
 ```
 
 ### 命令速查
@@ -43,10 +43,9 @@
 | 命令 | 作用 |
 |---|---|
 | `python core/tools/new_project.py <项目名>` | 创建新项目脚手架 |
-| `python core/tools/validate.py` | 项目级 58 项校验 |
+| `python core/tools/validate.py` | 项目级 45 项校验 |
 | `python core/tools/catalog_check.py --check` | catalog 三方一致性 |
 | `python core/tools/knowledge.py recommend --types <题型>` | 方法卡检索 |
-| `python core/tools/score_compute.py <项目>` | 自动化评分卡 |
 | `python core/tools/diagram_gen.py flowchart --nodes "A,B" --edges "A->B" -o fig.svg` | 科学图表生成 |
 | `python core/tools/scholar_fetch.py bibtex <关键词>` | 学术文献检索 |
 
@@ -60,7 +59,7 @@
 ## 修改后必做
 
 ```bash
-python core/tools/validate.py                         # 58 项校验
+python core/tools/validate.py                         # 45 项校验
 python core/tools/catalog_check.py --check            # 双视图一致
 python -m pytest tests -q                             # 基线测试
 ```

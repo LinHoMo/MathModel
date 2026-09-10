@@ -25,7 +25,7 @@ ACTIVE_STATUSES = frozenset({"draft", "active", "validated", "published"})
 
 # 生命周期语义表（P7 冻结，变更须改此处 + lifecycle.py + RUNTIME_CONTRACTS.md）:
 #
-#   状态         | 可复用 | 可进证据图 | 可支撑 Claim | 可进论文投影 | 审计保留
+#   状态         | 可复用 | 可进证据图 | 可支撑 Claim | 可进模型描述文档 | 审计保留
 #   draft        |  否    |    边可挂   |      否      |     否       |    是
 #   active       |  是    |    是      |      是      |     是       |    是
 #   validated    |  是    |    是      |      是      |     是       |    是
@@ -50,10 +50,6 @@ def can_support_claim(status: str) -> bool:
     """该状态的产物能否作为 claim 的支撑证据。"""
     return status in {"active", "validated", "published"}
 
-
-def can_enter_paper(status: str) -> bool:
-    """该状态的产物能否进入论文投影（narrative / outline / section）。"""
-    return status in {"active", "validated", "published"}
 
 
 def requires_reuse_check(fn):

@@ -47,9 +47,9 @@ from runtime.state.model import ProjectState  # noqa: E402
 
 ROBUSTNESS_TAGS = {"sensitivity", "baseline", "multi_run"}
 
-# env paper 组默认阈值（缺失回退；与 core/env/config.yaml 保持一致）
-_PAPER_DEFAULTS = {"min_figures": 6, "min_tables": 4,
-                   "min_equations": 15, "min_references": 10}
+# 产出物（新定位）：MODEL_IR JSON 必需结构键 + 模型描述文档（MD/Mermaid）
+_MODEL_IR_CORE_KEYS = ("objectives", "constraints", "variables",
+                       "assumptions", "solvers")
 
 
 def _load_project(project_dir: Path) -> dict:
@@ -406,14 +406,14 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
 
     # 5 validation reliability：证据质量（claim 支撑率 + 论文/引用侧如存在）
     val_components = [v for v in (support_ratio,) if v is not None]
-    paper = project_dir / "paper" / "main.tex"
-    if paper.exists():
-        val_components.append(1.0)   # 存在论文占位；一致性由 consistency_checker 另行验证
+    mir = project_dir / "model_ir.json"
+    if mir.exists():
+        val_components.append(1.0)   # 存在 MODEL_IR 产出；一致性由 consistency_checker 另行验证
     val_value = round(100.0 * sum(val_components) / len(val_components), 1) \
         if val_components else None
     val_detail = {"claims_supported": claims_supported,
                   "claims_total": claims_total,
-                  "paper_present": paper.exists()}
+                  "model_ir_present": mir.exists()}
 
     # 6 innovation：声明的创新（pattern 引用）中有实验支撑的比例
     pat_refs = [ref.get("id", "") for d in decisions.decisions.values()
@@ -430,23 +430,31 @@ def _metrics(project_dir: Path, gt: dict | None, response: dict | None,
         innov_value = 0.0
     innov_detail = {"declared_patterns": len(pat_refs)}
 
-    # 7 writing completeness：结构完整率（无 main.tex → n/a）
+    # 7 model documentation：产出物完整性（MODEL_IR JSON + 模型描述文档 MD/Mermaid）
     wc_value = None
-    wc_detail: dict = {"main_tex": paper.exists()}
-    if paper.exists():
-        tex = paper.read_text(encoding="utf-8", errors="ignore")
-        bib = project_dir / "paper" / "references.bib"
-        counts = {
-            "figures": len(re.findall(r"\\includegraphics", tex)),
-            "tables": len(re.findall(r"\\begin\{table", tex)),
-            "equations": len(re.findall(r"\\begin\{equation", tex)),
-            "references": len(re.findall(r"^@\w+", bib.read_text(encoding="utf-8"),
-                                         flags=re.M)) if bib.exists() else 0,
-        }
-        ratios = [min(1.0, counts[k] / _PAPER_DEFAULTS["min_" + k])
-                  for k in counts]
-        wc_value = round(100.0 * sum(ratios) / len(ratios), 1)
-        wc_detail.update(counts)
+    wc_detail: dict = {"model_ir": False, "model_doc": False, "mermaid": False}
+    mir = project_dir / "model_ir.json"
+    if mir.exists():
+        try:
+            mir_data = json.loads(mir.read_text(encoding="utf-8"))
+            present = [k for k in _MODEL_IR_CORE_KEYS
+                       if mir_data.get(k) not in (None, [], "")]
+            wc_detail["model_ir"] = True
+            wc_detail["model_ir_core_keys"] = present
+        except Exception:
+            wc_detail["model_ir_parse_error"] = True
+    mdocs = sorted(project_dir.glob("*.md"))
+    if mdocs:
+        wc_detail["model_doc"] = True
+        wc_detail["model_doc_files"] = [d.name for d in mdocs]
+        if any("```mermaid" in d.read_text(encoding="utf-8", errors="ignore")
+               for d in mdocs):
+            wc_detail["mermaid"] = True
+    parts = [1.0 if wc_detail["model_ir"] else 0.0,
+             1.0 if wc_detail["model_doc"] else 0.0,
+             1.0 if wc_detail["mermaid"] else 0.0]
+    if wc_detail["model_ir"] or wc_detail["model_doc"]:
+        wc_value = round(100.0 * sum(parts) / len(parts), 1)
 
     # 8 end-to-end：rubric 总分（response 缺失 → n/a）
     total = response.get("total") or {}
@@ -502,7 +510,7 @@ def _measurement_integrity(registry) -> dict:
         "criterion": "created_by startswith 'agent'（provenance-based, v1）",
         "experiment_realization": ratio("experiment"),
         "validation_realization": ratio("claim"),
-        "writing_realization": ratio("paper_section"),
+        "deliverable_realization": ratio("deliverable"),
         "overall_real_artifact": {"numerator": agent_created,
                                   "denominator": total,
                                   "value": round(100.0 * agent_created / total, 1)
@@ -575,7 +583,7 @@ def render_report(metrics_report: dict, problem_meta: dict | None = None) -> str
         lines.append("| 量 | 值 | 分子 / 分母 |")
         lines.append("|---|---|---|")
         for k in ("experiment_realization", "validation_realization",
-                  "writing_realization", "overall_real_artifact"):
+                  "deliverable_realization", "overall_real_artifact"):
             v = mi[k]
             val = "n/a" if v["value"] is None else f"{v['value']}%"
             lines.append(f"| {k} | {val} | {v['numerator']} / {v['denominator']} |")

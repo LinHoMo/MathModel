@@ -60,10 +60,9 @@ def pipeline_report(competition: str, problem: str | None = None,
 
         py = sys.executable
         for step, cmd in (
-            ("state_init", [py, "core/tools/state.py", proj, "init"]),
-            ("state_status", [py, "core/tools/state.py", proj, "status"]),
             ("doctor", [py, "core/tools/doctor.py",
                         "--project", proj, "--competition", competition]),
+            ("validate", [py, "core/tools/validate.py", proj]),
         ):
             try:
                 rc, out = _run(cmd, ROOT)

@@ -102,47 +102,6 @@
 
 ---
 
-## 9. 代码模板目录映射
-
-```
-core/legacy/hands/Programmer/knowledge/code-templates/clustering/
-├── kmeans_template.py
-├── kmedoids_template.py
-├── kmodes_template.py
-├── minibatch_kmeans.py
-├── hierarchical_ward.py
-├── hierarchical_linkage.py
-├── hierarchical_divisive.py
-├── dbscan_template.py
-├── hdbscan_template.py
-├── optics_template.py
-├── denclue_template.py
-├── gmm_template.py
-├── dp_gmm_template.py
-├── hmm_clustering.py
-├── spectral_ncut.py
-├── community_louvain.py
-├── community_leiden.py
-├── community_infomap.py
-├── community_lpa.py
-├── community_cpm.py
-├── sbm_template.py
-├── grid_clustering.py
-├── subspace_clustering.py
-├── projection_clustering.py
-├── clustering_internal.py
-├── clustering_external.py
-├── clustering_stability.py
-├── clustering_viz.py
-├── anomaly_lof.py
-├── anomaly_knn.py
-├── anomaly_isolation_forest.py
-├── anomaly_cluster_based.py
-├── anomaly_reconstruction.py
-├── anomaly_ocsvm.py
-└── anomaly_svdd.py
-```
-
 ---
 
 ## 10. 选型决策树 (聚类类)

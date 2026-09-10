@@ -45,7 +45,6 @@ official:
 runtime:
   language: en
   template: mcm-en
-  latex_engine: pdflatex
 
 template:
   dir: core/templates/latex/mcm/
@@ -53,6 +52,5 @@ template:
   compile_chain: [pdflatex, bibtex, pdflatex, pdflatex]
 
 deliverables:
-  paper_name: Solution Paper
   support_name: Supporting Materials
   ai_report_name: AI Use Report

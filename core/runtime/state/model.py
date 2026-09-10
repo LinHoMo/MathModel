@@ -3,8 +3,8 @@
 设计（与 docs/architecture/V3.1_ARCHITECTURE.md §1.2 一致）:
     * State 是**派生视图**，不是内容仓库——研究内容在 Artifact payload，
       State 只存状态与聚合视图。
-    * 维度: problem / questions / models / experiments / evidence / narrative /
-      paper / review / workflow / run。
+    * 维度: problem / questions / models / experiments / evidence /
+      review / workflow / run。
     * 29-step 线性编号退役为 legacy（core/runtime/legacy 负责映射）。
     * Question 是一等执行单元（Per-Qi）：独立状态机 + 依赖声明。
 
@@ -86,9 +86,6 @@ class ProjectState:
                 "experiments": {"status": "pending", "by_question": {}},
                 "evidence": {"status": "pending", "graph_version": 0,
                              "claims_supported": 0, "claims_total": 0},
-                "narrative": {"status": "pending"},
-                "paper": {"status": "pending", "sections_written": 0,
-                          "sections_total": 0},
                 "review": {"status": "pending", "rounds_completed": 0,
                            "verdict": None},
             },

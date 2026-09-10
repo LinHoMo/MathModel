@@ -13,7 +13,6 @@
 | **判断矩阵** | 1-9 尺度法，`a_ij * a_ji = 1`，`a_ii = 1` |
 | **权重提取** | 几何平均法 / 特征向量法 (主特征向量归一化) |
 | **一致性指标** | `CI = (λ_max - n) / (n - 1)`，`CR = CI / RI`，RI 表查表 |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/evaluation/ahp_template.py` |
 | **常见坑** | 1) CR≥0.1 → 重新打分/调整矩阵<br>2) 指标过多 → 分组/聚类简化<br>3) 主观性强 → 结合熵权/专家加权平均 |
 | **验证清单** | ✅ 所有矩阵 CR<0.1 ✅ 权重和=1 ✅ 总序一致性检验通过 ✅ 敏感性分析(权重±20%排序不变) |
 | **文献支撑示例** | [1] CUMCM2022E 国一：水资源承载力 AHP+熵权组合<br>[2] MCM2021E F奖：灾害恢复力 AHP+模糊综合 |
@@ -27,7 +26,6 @@
 | **适用场景** | 客观赋权、数据驱动、指标间差异度大、无专家经验/主观偏好 |
 | **核心原理** | 信息熵越小(变异系数大) → 信息量越大 → 权重越大 |
 | **计算步骤** | 1) 正向化/无量纲化 2) 计算比重 `p_ij` 3) 计算熵值 `e_j` 4) 计算差异系数 `g_j = 1 - e_j` 5) 归一化得权重 `w_j = g_j / Σg_j` |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/evaluation/entropy_template.py` |
 | **常见坑** | 1) 零值/负值 → 平移/极小值替代<br>2) 极端值影响 → 截尾/鲁棒标准化<br>3) 权重过于均匀 → 检查指标相关性/冗余 |
 | **验证清单** | ✅ 权重非负且和=1 ✅ 熵值∈[0,1] ✅ 高变异指标权重大 ✅ 与主观权重对比合理 |
 | **文献支撑示例** | [1] CUMCM2024C 国二：企业数字化评价 熵权+TOPSIS<br>[2] 电工杯2023：供电可靠性 熵权法 |
@@ -41,7 +39,6 @@
 | **适用场景** | 方案排序、正/负理想解可定义、指标有明确优劣方向 |
 | **核心步骤** | 1) 标准化 2) 加权标准化 3) 确定正理想解 `A+` / 负理想解 `A-` 4) 计算欧氏距离 `D+`, `D-` 5) 计算相对亲和度 `C = D- / (D+ + D-)` 6) 按 `C` 降序排序 |
 | **改进版** | 向量标准化/向量距离/灰色关联-TOPSIS/模糊 TOPSIS |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/evaluation/topsis_template.py` |
 | **常见坑** | 1) 正/负理想解定义反 → 仔细区分极大/极小/中间型指标<br>2) 距离度量敏感 → 尝试曼哈顿/切比雪夫/马氏距离<br>3) 权重主观 → 结合 AHP/熵权/博弈论组合赋权 |
 | **验证清单** | ✅ `C_i ∈ [0,1]` ✅ 排序稳健(权重扰动±10%前3名不变) ✅ 正/负理想解合理 ✅ 对比基线法(如 RS/加权和) |
 | **文献支撑示例** | [1] CUMCM2021E 国一：绿色供应链 TOPSIS+熵权<br>[2] MCM2020E O奖：可持续城市 TOPSIS+AHP |
@@ -55,7 +52,6 @@
 | **适用场景** | 指标边界模糊、定性定量混合、专家打分为隶属度、多等级评价 |
 | **核心步骤** | 1) 确定因子集/评价集 2) 单因子评价矩阵 `R` (隶属度) 3) 权重向量 `W` (AHP/熵权/专家) 4) 模糊合成 `B = W ∘ R` (加权平均/最大最小/加权几何平均) 5) 最大隶属度原则/加权平均分法定等级 |
 | **隶属度函数** | 三角/梯形/高斯/半梯形，按指标性质选 |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/evaluation/fuzzy_template.py` |
 | **常见坑** | 1) 隶属度函数主观 → 专家德尔菲法/数据驱动拟合<br>2) 合成算子选错 → 定性用 `max-min`，定量用 `加权平均`，混合用 `加权几何平均`<br>3) 评价等级划分不均 → 语言变量标度一致性 |
 | **验证清单** | ✅ 隶属度∈[0,1] ✅ 每行和=1 ✅ 合成结果合理 ✅ 对比多算子结果一致 |
 | **文献支撑示例** | [1] CUMCM2020E 国二：生态安全 模糊+AHP<br>[2] 华为杯2022：用户体验 模糊综合 |
@@ -69,7 +65,6 @@
 | **适用场景** | 样本少、信息不全、动态过程、多指标关联度分析、无需严格分布假设 |
 | **核心步骤** | 1) 无量纲化(初值/均值/极大极小) 2) 计算绝对差 3) 找最大/最小差 4) 计算关联系数 `ξ = (min+ρ*max) / (Δ+ρ*max)` (ρ=0.5) 5) 关联度 `γ = mean(ξ)` 6) 排序 |
 | **分辨系数** | ρ∈[0,1]，通常 0.5；ρ↓ 分辨力↑ |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/evaluation/gra_template.py` |
 | **常见坑** | 1) 参比序列选错 → 必须是理想/目标序列<br>2) 无量纲化不当 → 指标性质匹配<br>3) 关联度过接近 → 减小 ρ/增加指标区分度 |
 | **验证清单** | ✅ 关联度∈[0,1] ✅ 排序符合领域认知 ✅ ρ 敏感性测试(0.3/0.5/0.7) |
 | **文献支撑示例** | [1] CUMCM2019C 国一：水质评价 GRA+熵权<br>[2] 电工杯2020：变压器状态 GRA |
@@ -83,7 +78,6 @@
 | **适用场景** | 多投入多产出、决策单元(DMU)同类可比、相对效率评价、无需显式权重 |
 | **模型** | CCR (CRS, 常数规模报酬)、BCC (VRS, 可变规模报酬)、Additive/Super-efficiency/三阶段 DEA |
 | **效率分解** | 技术效率 = 纯技术效率 × 规模效率；规模收益递增/不变/递减 |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/evaluation/dea_template.py` (基于 `pyDEA` / `pulp` 实现) |
 | **常见坑** | 1) DMU数<3×(投入+产出) → 增加DMU/减少指标<br>2) 零值/负值 → 平移/替代<br>3) 非极有效 DEA 面 → 超效率/三阶段 DEA 剔除环境/随机噪声 |
 | **验证清单** | ✅ 效率∈[0,1] (CCR) / [0,1] (BCC) ✅ 有效 DMU 判定正确 ✅ 冗余/不足分析合理 ✅ 敏感性(剔除指标/DMU) |
 | **文献支撑示例** | [1] CUMCM2023E 国一：医院效率 DEA+窗口分析<br>[2] MCM2019E F奖：银行效率 Super-efficiency DEA |
@@ -98,26 +92,9 @@
 | **博弈论组合 (纳什均衡)** | 寻找最优组合系数使各权重向量"博弈"达成一致 | 多源权重冲突、最小化偏差 |
 | **最小二乘/最小相对熵** | 最小化组合权重与各单一权重的距离/散度 | 数学严谨、可解释 |
 
-**代码模板**：`core/legacy/hands/Programmer/knowledge/code-templates/evaluation/combined_weighting.py`
+**代码模板**：（模板随 V2 归档，见 research/ 实验代码）
 
 ---
-
-## 8. 代码模板目录映射
-
-```
-core/legacy/hands/Programmer/knowledge/code-templates/evaluation/
-├── ahp_template.py
-├── entropy_template.py
-├── topsis_template.py
-├── fuzzy_template.py
-├── gra_template.py
-├── dea_template.py
-├── combined_weighting.py
-├── vikor_template.py          # VIKOR (妥协方案法)
-├── promethee_template.py      # PROMETHEE (优序关系)
-├── electre_template.py        # ELECTRE (淘汰选择)
-└── sensitivity_weights.py     # 权重敏感性分析通用
-```
 
 ---
 

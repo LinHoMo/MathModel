@@ -11,7 +11,6 @@
 | **适用场景** | 表格数据、特征工程丰富、非线性强、解释性要求中等；回归/分类/排序 |
 | **核心优势** | 开箱即用强、处理缺失值自带、特征重要性直观、并行训练快 |
 | **关键超参数** | `n_estimators`(100-2000), `max_depth`(3-12), `learning_rate`(0.01-0.3), `subsample`(0.6-1.0), `colsample_bytree`(0.6-1.0), `reg_alpha/lambda`(L1/L2) |
-| **代码模板** | `core/legacy/hands/Programmer/knowledge/code-templates/ml/xgboost_template.py`, `lgbm_template.py`, `rf_template.py` |
 | **调优策略** | Optuna/BayesSearchCV → 先调学习率+树数 → 再调深度+正则 → 最后调采样 |
 | **常见坑** | 1) 过拟合 → 降深度/增正则/早停<br>2) 类别不平衡 → `scale_pos_weight`/分层采样/阈值调整<br>3) 类别特征 → CatBoost 原生/Target Encoding/One-hot<br>4) 时间序列泄露 → 严格时间序列 CV (Expanding/Sliding Window) |
 | **验证清单** | ✅ CV 分数稳定 (CV≤5%) ✅ 训练/验证差距小 ✅ 特征重要性合理 ✅ 残差无模式 ✅ SHAP 解释自洽 |
@@ -88,38 +87,6 @@
 | **校准** | Platt Scaling, Isotonic Regression, Temperature Scaling | `calibration.py` |
 
 ---
-
-## 7. 代码模板目录映射
-
-```
-core/legacy/hands/Programmer/knowledge/code-templates/ml/
-├── xgboost_template.py
-├── lgbm_template.py
-├── rf_template.py
-├── mlp_template.py
-├── cnn1d_template.py
-├── lstm_template.py
-├── gru_template.py
-├── transformer_template.py
-├── tft_template.py
-├── svm_template.py
-├── knn_template.py
-├── linear_template.py
-├── kmeans_template.py
-├── dbscan_template.py
-├── gmm_template.py
-├── hierarchical_template.py
-├── spectral_template.py
-├── pca_template.py
-├── tsne_template.py
-├── umap_template.py
-├── autoencoder_template.py
-├── target_encoding.py
-├── shap_analysis.py
-├── local_explain.py
-├── prediction_interval.py
-└── calibration.py
-```
 
 ---
 

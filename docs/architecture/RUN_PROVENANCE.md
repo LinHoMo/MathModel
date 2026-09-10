@@ -36,7 +36,7 @@ Model/Executor → Input → 产物哈希 → 引擎统计），`replay verify` 
 ## 3. 确定性重放（verify）
 
 `replay.py verify` 只依赖磁盘与配置，重算：input/workflow/skill/tool 哈希 +
-产物三哈希 + `state.py reconcile` 状态对账。判定：
+产物三哈希 + `validate.py` 状态对账。判定：
 
 ```text
 OK   = 全部确定性字段与记录一致 且 状态对账一致

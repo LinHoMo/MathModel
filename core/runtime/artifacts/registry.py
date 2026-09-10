@@ -155,7 +155,16 @@ class ArtifactRegistry:
         self.artifacts = {}
         self.history = {}
         for aid, adict in raw.get("artifacts", {}).items():
-            self.artifacts[aid] = Artifact.from_dict(adict)
+            try:
+                self.artifacts[aid] = Artifact.from_dict(adict)
+            except ContractError as exc:
+                # 已退役/未知类型（如历史 paper_section）宽容跳过（不迁移冻结数据）；
+                # 已知类型的伪造/损坏（如 execution_result 无 outputs）必须拒绝。
+                atype = adict.get("type") if isinstance(adict, dict) else None
+                if atype in ARTIFACT_TYPES:
+                    raise
+                import warnings
+                warnings.warn(f"registry load: 跳过已退役类型 {atype!r} {aid}: {exc}")
         for aid, versions in raw.get("history", {}).items():
             self.history[aid] = {int(v): snap for v, snap in versions.items()}
 

@@ -106,15 +106,15 @@
 
 ## 11. 双阈值漂移：同一指标两个工具各写一个门槛（2026-08-31，引擎自查）
 
-- **症状**：`validate.py` 数值追溯检查通过，`freeze_numbers.py check`
+- **症状**：`validate.py` 数值追溯检查通过，`validate.py` 的 env 阈值检查
   却对同一项目同一论文报 FAIL（94.9%），且文档里记录的通过值是过期的 96.2%。
 - **根因**：`validate.py` 读 env 的 `runtime.traceability_min_ratio`（0.90），
-  `freeze_numbers.py` 硬编码 0.95——同一指标两套门槛，谁先跑谁说了算，
+  环境阈值配置与代码默认值不一致——同一指标两套门槛，谁先跑谁说了算，
   文档口径跟着先跑的工具漂移。
 - **检测**：对同一指标，grep 所有判定工具里的阈值来源；
   出现字面量即视为漂移风险（阈值只允许来自 `core/env/config.yaml`）。
 - **修法**：统一改读 env 配置；判定输出行必须带阈值数值（如"阈值 90%"），
-  让文档抄录时可实测复核。已落地为 `tests/unit/test_freeze_numbers.py`
+  让文档抄录时可实测复核（对应阈值一致性测试）。
   的 `test_check_threshold_matches_env`。
 
 ---

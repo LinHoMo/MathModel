@@ -227,7 +227,6 @@ class RuntimeSession:
             model/assumption  → reset_to("model_selection")（重选型并重跑下游）
             experiment/result/figure/question 级实验产物 → reset_question(qid)
             claim             → reset_to("evidence_build")
-            paper_section     → reset_to("paper_projection")
         """
         report = self.graph.invalidate(artifact_id, reason=reason)
         # 传播完成后剪除触及终态产物的死边（否则 E3 永远 FAIL，健康链无法重建）
@@ -254,8 +253,6 @@ class RuntimeSession:
             affected = self.engine.reset_to("model_selection")
         elif t == "claim":
             affected = self.engine.reset_to("evidence_build")
-        elif t == "paper_section":
-            affected = self.engine.reset_to("paper_projection")
         elif t in ("result", "execution_result", "verification_result"):
             # 执行/验证产物失效 → 从 model_execution 开始重跑
             # （R 由 execute_code 真实执行产生；reset_question 只重置

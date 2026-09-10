@@ -9,7 +9,7 @@ ABOUTME: --check 模式零漂移即 EXIT 0，供 CI 与 doctor.py 消费
     2. v3.roles        == core/roles/*.yaml 实际文件（数量 + 名称 + 路径）
     3. v3.nodes        == 组合 DAG 模板节点（WorkflowComposer.compose()），
                           逐节点比对 role / validator / per_question / stage
-    4. v3.validators   == DAG 中绑定的 validator ∪ judge 内部聚合的 narrative-critic，
+    4. v3.validators   == DAG 中绑定的 validator 集合，
                           每个条目 path 指向真实文件
     5. hands legacy 视图未被 v3 追加破坏（agent 总数 29 不变）
 
@@ -36,9 +36,8 @@ CATALOG_PATH = ROOT / "catalog.yaml"
 ROLES_DIR = ROOT / "core" / "roles"
 WORKFLOWS_DIR = ROOT / "core" / "workflows"
 
-EXPECTED_ROLES = {"analyst", "modeler", "experimenter", "critic", "writer"}
-# judge-critic 在 DAG 有绑定；narrative-critic 由 judge 内部聚合（DAG 无绑定节点）
-EXTRA_VALIDATORS = {"narrative-critic"}
+EXPECTED_ROLES = {"analyst", "modeler", "experimenter", "critic"}
+EXTRA_VALIDATORS = set()
 
 
 # ---------------------------------------------------------------- YAML 解析
@@ -82,18 +81,6 @@ def check_schema(catalog: dict) -> list[str]:
         problems.append("缺少 v3 视图节（schema_version 5 必须携带 v3）")
     return problems
 
-
-def check_legacy_view_intact(catalog: dict) -> list[str]:
-    """v3 追加不得破坏 hands legacy 视图。"""
-    problems = []
-    hands = catalog.get("hands", [])
-    total = sum(len(h.get("agents", [])) for h in hands)
-    if total != 29:
-        problems.append(f"legacy hands agent 总数应为 29，实际 {total}")
-    names = {h.get("name") for h in hands}
-    if names != {"modeler", "programmer", "writer", "reviewer"}:
-        problems.append(f"legacy hands 名称异常: {sorted(names)}")
-    return problems
 
 
 def check_roles(v3: dict) -> list[str]:
@@ -172,7 +159,7 @@ def check_validators(v3: dict) -> list[str]:
     if not validators:
         return ["v3.validators 为空"]
 
-    # DAG 中绑定的 validator 集合 + judge 内部聚合的 narrative-critic
+    # DAG 中绑定的 validator 集合
     try:
         dag = _compose_template_dag()
         bound = {n.validator for n in dag.nodes.values() if n.validator}
@@ -279,7 +266,6 @@ def run_all() -> list[str]:
     catalog = load_catalog()
     problems = []
     problems += check_schema(catalog)
-    problems += check_legacy_view_intact(catalog)
     v3 = catalog.get("v3")
     if isinstance(v3, dict):
         problems += check_roles(v3)
@@ -322,7 +308,7 @@ def main() -> int:
                 print(f"  - {p}")
         else:
             print("[catalog-check] OK — v3 双视图与 roles/DAG/validators 三方一致"
-                  "，legacy 29 agent 视图完整")
+                  "")
 
     return 1 if problems else 0
 

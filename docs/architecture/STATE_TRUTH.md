@@ -1,7 +1,7 @@
 # STATE_TRUTH —— 状态单一真源决策表（System Hardening P2）
 
 > 建立：2026-09-07 ｜ 代码真源：`core/runtime/state/reconcile.py`（对账器）
-> CLI：`python core/tools/state.py <项目> reconcile`
+> CLI：`python core/tools/validate.py <项目>`（registry/graph/state 对账）
 > 原则：回答「系统当前到底是什么状态」**只能有一个答案**。
 
 ## 1. 真源分层（谁是真源、谁是投影）
@@ -32,7 +32,7 @@ Resume Truth（断点续跑真源，原子写）
 | `decision_log.json` | 内容真源 | 决策记录 API | knowledge 运营、评审 | 不可从投影重建 | 以 log 为准 |
 | `status.json` | 流程投影 | **仅** `ProjectState.refresh_from` 派生后 save | 人类/agent 读状态、调度、reconcile | **永远可重建**：`refresh_from(registry, graph)` 重新派生 | 投影跟随内容；不一致时重建投影，禁止手改投影 |
 | `engine_progress.json` | 续跑真源 | `WorkflowEngine.save_progress`（原子写） | `resume()` 断点续跑 | 丢失 = 重跑 DAG（功能不坏，成本高） | 与 workflow 投影矛盾时以 progress 为准（reconcile 报差异） |
-| `work/state.json`（V2） | legacy 状态 | `state.py` legacy 命令 | legacy 29 步协议 | 由产物反推（`state.py init`） | legacy 模式无多维投影，`state.py sync` 单文件自检 |
+| `work/state.json`（V2） | legacy 状态 | `validate.py` 对账 | legacy 29 步协议 | 由产物反推（`validate.py`） | legacy 模式无多维投影，`state.py sync` 单文件自检 |
 | 运行时内存 | 会话态 | RuntimeSession | 执行中 | 永远以磁盘为准 | 磁盘是跨进程真源；每次操作后 checkpoint |
 
 ## 3. 现状审计结论（P2 摸底）
@@ -45,7 +45,7 @@ Resume Truth（断点续跑真源，原子写）
   目标场景，恢复口径 = `resume()`/`checkpoint()` 重新派生投影（见
   `tests/unit/test_crash_consistency.py` 故障注入证明）。
 - 历史遗留：`legacy` 记录四套旧状态文件（checkpoint.json / audit_log.json /
-  audit_chain.json / final_audit_log.json）只读保留、不算真源（state.py 已接管，
+  audit_chain.json / final_audit_log.json）只读保留、不算真源（validate.py 已接管，
   其哈希只用于追溯）。
 
 ## 4. 对账器契约（reconcile.py）

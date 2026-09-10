@@ -20,7 +20,7 @@ ROLES_ROOT = REPO / "core" / "roles"
 class TestRoleLibrary:
     def test_five_roles_load(self):
         roles = load_roles(ROLES_ROOT)
-        assert set(roles) == {"analyst", "modeler", "experimenter", "critic", "writer"}
+        assert set(roles) == {"analyst", "modeler", "experimenter", "critic"}
 
     def test_capabilities_non_empty(self):
         for r in load_roles(ROLES_ROOT).values():
@@ -79,8 +79,8 @@ class TestDagRoleValidation:
     def test_node_outside_executes_detected(self):
         from runtime.execution.dag import Node, WorkflowDAG
         roles = load_roles(ROLES_ROOT)
-        # writer role 不执行 model_selection
+        # analyst role 不执行 model_selection（v3 中由 modeler 执行）
         dag = WorkflowDAG(nodes={
-            "model_selection": Node("model_selection", role="writer")})
+            "model_selection": Node("model_selection", role="analyst")})
         problems = validate_dag_roles(dag, roles)
         assert any("executes" in p for p in problems)
