@@ -74,7 +74,7 @@ Construction 行为？"。
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |
 | K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |
 | K002 冻结校验 | **PASS（40 文件）** | `py -3.12 research/P15/scripts/k002_freeze.py --check` |
-| K003 冻结校验 | **PASS（36 文件）** | `py -3.12 research/P15/scripts/k003_freeze.py --check` |
+| K003 冻结校验 | **PASS（36 文件，revision v1.1：8 题 gt.json 新增 `l6_assertions` 键，P2-1 治理变更，新 root `347f4534`；已评分数据不受影响）** | `py -3.12 research/P15/scripts/k003_freeze.py --check` |
 
 说明：
 
