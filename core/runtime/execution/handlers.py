@@ -221,6 +221,12 @@ class DefaultNodeExecutor:
             raise HandlerError(
                 f"{qid}: 注入外部 MODEL_IR 但无已选模型，无法写 instantiates 边")
         mid = models[-1]
+        # P1-2：知识引导（可选实验条件，默认关闭）——
+        # shared["knowledge_guide"][qid] = [card_ids] 时，登记前把知识
+        # 卡义务嵌入 MODEL_IR（merge + source_card 溯源 + knowledge_refs；
+        # 不覆盖建模者声明，不代建模——knowledge 是 Constraint/Prior，
+        # 最终由执行/验证裁决）。
+        external = self._apply_knowledge_guide(qid, external)
         try:
             mir = ModelIRBuilder.from_dict(external)
         except ModelIRError as e:
@@ -256,6 +262,26 @@ class DefaultNodeExecutor:
                 # ——单一真源，避免双路径重复加边（GraphError）。
                 self.graph.add_relation(art.artifact_id, "revision_of", rev_of)
         return art.artifact_id
+
+    def _apply_knowledge_guide(self, qid: str, external: dict) -> dict:
+        """P1-2：知识引导义务嵌入（shared["knowledge_guide"][qid]）。
+
+        返回增强后的 MODEL_IR dict；未配置或卡不可达时原样返回（
+        默认关闭——知识引导是实验条件，不约束普通建模路径）。
+        """
+        guide = (self.shared.get("knowledge_guide") or {}).get(qid) or []
+        if not guide:
+            return external
+        cards = [self.retriever.cards[cid] for cid in guide
+                 if cid in self.retriever.cards]
+        if not cards:
+            return external
+        from runtime.modeling.knowledge_guided import apply_knowledge_obligations
+        out = apply_knowledge_obligations(
+            external, cards,
+            model_id=external.get("model_id"))
+        out["_knowledge_guided"] = {"card_ids": [c.card_id for c in cards]}
+        return out
 
     def construct_model_ir(self, qid: str) -> str | None:
         """把单个外部 MODEL_IR dict（shared["external_model_irs"]）登记为 model_ir。
