@@ -23,20 +23,51 @@ def build_revision_draft(mir_data: dict, diagnosis: dict,
     - 继承 M1 全部字段（外部注入者在此基础上修订）
     - changed_components：从诊断 failed_components 映射到 M1 结构组件
       （parameter / constraint / equation / variable / solver / code）
-    - modeling_trace 追加 revision 步骤（来源 = 诊断，可审计）
+    - modeling_trace 按 MODEL_IR 契约（object：trace_version /
+      generation_order / version_history）追加修订记录——generation_order 增加
+      revision_draft 步骤，version_history 增加 M2 版本条目（来源 = 诊断，
+      可审计）
     - 不修改任何数值——无伪造 new value
     """
     draft = dict(mir_data)
     draft["model_id"] = new_model_id
-    trace = list(draft.get("modeling_trace") or [])
-    trace.append({
-        "step": "revision_draft",
-        "note": f"从 {mir_data.get('model_id')} 修订（diagnosis="
-                f"{diagnosis.get('diagnosis_id')}）",
-        "changed_components": _map_changes(mir_data, diagnosis),
-        "at": _now(),
-    })
+    changed = _map_changes(mir_data, diagnosis)
+    trace = draft.get("modeling_trace")
+    if isinstance(trace, dict):
+        # MODEL_IR 契约形态（schema modeling_trace object）：按子结构追加
+        trace = dict(trace)
+        gen_order = [dict(e) for e in (trace.get("generation_order") or [])]
+        gen_order.append({
+            "node_id": "revision_draft",
+            "order_index": len(gen_order),
+            "timestamp": _now(),
+        })
+        trace["generation_order"] = gen_order
+        hist = [dict(e) for e in (trace.get("version_history") or [])]
+        hist.append({
+            "version_number": len(hist) + 1,
+            "commit_hash": new_model_id,
+            "changed_nodes": [c.get("component") for c in changed
+                              if c.get("component")],
+            "change_summary": f"revision_draft from "
+                              f"{mir_data.get('model_id')} "
+                              f"(diagnosis={diagnosis.get('diagnosis_id')})",
+            "timestamp": _now(),
+        })
+        trace["version_history"] = hist
+    else:
+        # 历史字符串列表形态（外部 Constructor 旧产物）：保持兼容可读，
+        # 追加 revision 步骤条目（以 dict 记录，不破坏旧元素）
+        trace = list(trace or [])
+        trace.append({
+            "step": "revision_draft",
+            "note": f"从 {mir_data.get('model_id')} 修订（diagnosis="
+                    f"{diagnosis.get('diagnosis_id')}）",
+            "changed_components": changed,
+            "at": _now(),
+        })
     draft["modeling_trace"] = trace
+    draft["changed_components"] = changed
     return draft
 
 
