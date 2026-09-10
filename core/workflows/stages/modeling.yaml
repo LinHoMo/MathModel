@@ -45,7 +45,7 @@ nodes:
   model_validation:
     type: validation
     role: experimenter
-    description: P1-VS-001 C8: 基于真实数值验证执行结果（constraint/objective/domain），产出 VR artifacts
+    description: P1-VS-001 C8: 基于真实数值验证执行结果（constraint/objective/domain），产出 VR artifacts；FAIL 时自动诊断 + 修订闭环（P1-2，外部注入修订包时）
     depends_on: [model_execution]
     outputs: [state/registry.json]
   model_selection_decision:

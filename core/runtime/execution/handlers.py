@@ -76,7 +76,8 @@ class DefaultNodeExecutor:
                  external_model_irs: dict | None = None,
                  external_code: dict | None = None,
                  validation_specs: dict | None = None,
-                 external_candidates: dict | None = None):
+                 external_candidates: dict | None = None,
+                 revision_bundles: dict | None = None):
         self.registry = registry
         self.graph = graph
         self.state = state
@@ -112,6 +113,11 @@ class DefaultNodeExecutor:
             self.shared["validation_specs"] = dict(validation_specs)
         if external_candidates:
             self.shared["external_candidates"] = dict(external_candidates)
+        if revision_bundles:
+            # P1-2：外部 Model Constructor 消费 revision_draft 后注入的修订包
+            # shared["revision_bundles"][qid] = {"model_ir": M2_MIR_dict,
+            #                                    "code": "M2 代码（可选）"}
+            self.shared["revision_bundles"] = dict(revision_bundles)
         # P7 Rerun 语义：显式重跑的节点强制新建谱系（旧产物 superseded 审计保留）
         self.force_new_lineage: set[str] = set()
 
@@ -923,12 +929,36 @@ class DefaultNodeExecutor:
             pkgs = []
             for q in self._question_ids():
                 pkgs += self._diagnose_and_draft(q, node_id)
-            if pkgs:
-                msg += "（无存活候选，已生成诊断与修订草案）"
+            # P1-2：自动修订闭环（节点内）——外部 Constructor 已注入
+            # revision_bundles 时，注册 M2（revision_of/supersedes 谱系边
+            # 由 runtime 生成）+ 收口 M1 + 重跑 M2 执行/验证，一次节点执行
+            # 内完成 M1→FAIL→M2→PASS。无修订注入 → FAIL 如实等待外部；
+            # M2 重跑仍有失败 → FAIL 如实传播（不假装闭环完成）。
+            auto = self._auto_revision(node_id)
+            if auto["blocked"]:
+                return NodeResult(
+                    FAIL,
+                    msg + "（无存活候选，已生成诊断与修订草案；外部 Model "
+                    "Constructor 可消费 revision_draft 并注入 "
+                    "revision_bundles 后重跑）",
+                    outputs={"artifacts": [p["diagnosis_id"] for p in pkgs],
+                             "evidence": ev,
+                             "revision_packages": len(pkgs),
+                             "revision_blocked": auto["blocked"]})
+            if auto["failed"]:
+                return NodeResult(
+                    FAIL,
+                    msg + f"（修订 M2 重跑仍有失败: {', '.join(auto['failed'])}）",
+                    outputs={"artifacts": [p["diagnosis_id"] for p in pkgs]
+                             + auto["mir_ids"],
+                             "evidence": ev, "revision_failed": auto["failed"]})
             return NodeResult(
-                FAIL, msg,
-                outputs={"artifacts": [p["diagnosis_id"] for p in pkgs],
-                         "evidence": ev, "revision_packages": len(pkgs)})
+                PASS,
+                msg + (f"（自动修订闭环: {auto['revised']} 个 M2 注册并重跑通过，"
+                       "revision_of/supersedes 边由 runtime 生成）"),
+                outputs={"artifacts": [p["diagnosis_id"] for p in pkgs]
+                         + auto["mir_ids"],
+                         "evidence": ev, "revised": auto["revised"]})
         # P1-3：验证通过后若存在修订谱系（M2 revision_of M1），
         # 自动机械比较 M1/M2（compare_models，VR 证据）→ decision artifact
         cmps = []
@@ -940,6 +970,207 @@ class DefaultNodeExecutor:
                           outputs={"artifacts": [c["decision_id"]
                                                   for c in cmps],
                                    "evidence": ev})
+
+    # ------------------------------------------------------------ P1-2 Revision Loop（V3 主 DAG）
+
+    def _failing_questions(self) -> list[str]:
+        """有 FAIL 状态活跃 VR 的问题（P1-2 修订触发条件）。"""
+        out: list[str] = []
+        for q in self._question_ids():
+            for a in self.registry.list_by_type("verification_result"):
+                if a.question == q and a.status not in _TERMINAL:
+                    if (a.data or {}).get("status") in ("failed", "fail"):
+                        out.append(q)
+                        break
+        return out
+
+    def _auto_revision(self, node_id: str) -> dict:
+        """P1-2 自动修订闭环（LLM-free 边界，节点内一次执行完成）。
+
+        对每个有 FAIL VR 的问题：若外部已注入 revision_bundles[qid]
+        （{"model_ir": M2_MIR, "code": M2 代码可选}）→
+        1. 注册 M2 MIR（revision_of 谱系边由 runtime 生成）
+        2. 注册 M2 代码（implemented_by 边）
+        3. 收口 M1（supersede + supersedes 边，M2 成为唯一活跃）
+        4. 重跑 M2 执行 + 验证 → M2 独立 EXEC/R/VR 谱系
+
+        返回 {"revised": n, "mir_ids": [...], "failed": [q], "blocked": [q]}。
+        无修订注入 → blocked（如实等待外部，禁止假装修订完成）；
+        M2 重跑仍有失败 → failed（如实传播，不假装闭环完成）。
+        """
+        failing = self._failing_questions()
+        bundles = self.shared.get("revision_bundles") or {}
+        out: dict = {"revised": 0, "mir_ids": [], "failed": [], "blocked": []}
+        for q in failing:
+            b = bundles.get(q)
+            m1 = self._active_mir_of(q)
+            if not b or m1 is None:
+                out["blocked"].append(q)
+                continue
+            if isinstance(b, dict) and isinstance(b.get("model_ir"), dict):
+                mir_data = dict(b["model_ir"])
+            elif isinstance(b, dict):
+                mir_data = dict(b)
+            else:
+                out["blocked"].append(q)
+                continue
+            mir_data.setdefault("revision_of", m1)
+            code = b.get("code") if isinstance(b, dict) else None
+            try:
+                mir_id = self._register_mir(q, mir_data, created_by=node_id)
+                if code:
+                    self._register_code(q, mir_id, code, node_id)
+            except HandlerError:
+                out["blocked"].append(q)
+                continue
+            # 修订收口：M1 → superseded（re_execute 只重跑 M2）。
+            # 谱系边由 runtime 生成（非手工 add_relation）——ROADMAP P1-2 验收。
+            try:
+                self.registry.supersede(
+                    m1, replacement=mir_id,
+                    reason=f"revised by {node_id}", by=node_id)
+            except Exception:
+                pass
+            try:
+                self.graph.add_relation(mir_id, "supersedes", m1)
+            except Exception:
+                pass
+            out["mir_ids"].append(mir_id)
+            # 重跑 M2：执行 + 验证（M1 已收口，_active_mirs 只含 M2）。
+            # 验证统计只看 M2 的 VR（M1 遗留 EXEC 的 FAIL VR 保留谱系但
+            # 不参与修订判定——M1 已 superseded，其失败不代表 M2 失败）。
+            try:
+                self.execute_code(q, node_id)
+                self.validate_execution(q, node_id)
+            except HandlerError:
+                out["failed"].append(q)
+                continue
+            bad = [v for v in self._vr_ids_of_mir(q, mir_id)
+                   if (self.registry.get(v).data or {}).get("status") != "passed"]
+            if bad:
+                out["failed"].append(q)
+            else:
+                out["revised"] += 1
+        return out
+
+    def _vr_ids_of_mir(self, qid: str, mir_id: str) -> list[str]:
+        """该 MIR 的执行（EXEC.model_id == mir_id）产出的 VR id 列表。"""
+        out: list[str] = []
+        for xa in self.registry.list_by_type("execution_result"):
+            if xa.question != qid:
+                continue
+            if (xa.data or {}).get("model_id") != mir_id:
+                continue
+            for r in self.graph.relations:
+                if r["relation"] == "verified_by" \
+                        and r["from"] == xa.artifact_id:
+                    to = self.registry.get(r["to"])
+                    if to is not None and to.type == "verification_result":
+                        out.append(r["to"])
+        return out
+
+    def do_model_revision(self, node_id: str) -> NodeResult:
+        """P1-2：model_validation FAIL 后的修订收口（LLM-free 边界）。
+
+        - 无验证失败 → PASS no-op（验证链最终节点语义保持）。
+        - 有验证失败 + 外部修订 bundle（shared["revision_bundles"][qid]）→
+          注册 M2 MIR（revision_of 谱系边由 runtime 生成）+ 代码，并收口
+          M1（supersede + supersedes 边，M2 成为唯一活跃）→ PASS。
+        - 有验证失败但无 bundle → BLOCKED（draft 已由 do_model_validation
+          生成，等待外部 Model Constructor 注入修订后 unblock；禁止假装
+          修订完成）。
+        """
+        failing = self._failing_questions()
+        if not failing:
+            return NodeResult(PASS, "无验证失败，无需修订",
+                              outputs={"artifacts": [], "evidence": []})
+        bundles = self.shared.get("revision_bundles") or {}
+        registered: list[str] = []
+        missing: list[str] = []
+        for q in failing:
+            b = bundles.get(q)
+            if not b:
+                missing.append(q)
+                continue
+            m1 = self._active_mir_of(q)
+            if m1 is None:
+                missing.append(q)
+                continue
+            if isinstance(b, dict) and isinstance(b.get("model_ir"), dict):
+                mir_data = dict(b["model_ir"])
+            elif isinstance(b, dict):
+                mir_data = dict(b)
+            else:
+                missing.append(q)
+                continue
+            mir_data.setdefault("revision_of", m1)
+            code = b.get("code") if isinstance(b, dict) else None
+            mir_id = self._register_mir(q, mir_data, created_by=node_id)
+            if code:
+                self._register_code(q, mir_id, code, node_id)
+            # 修订收口：M1 → superseded（M2 成为唯一活跃，re_execute 只重跑 M2）。
+            # 谱系边由 runtime 生成（非手工 add_relation）——ROADMAP P1-2 验收。
+            try:
+                self.registry.supersede(
+                    m1, replacement=mir_id,
+                    reason=f"revised by {node_id}", by=node_id)
+            except Exception:
+                pass
+            try:
+                self.graph.add_relation(mir_id, "supersedes", m1)
+            except Exception:
+                pass
+            registered.append(mir_id)
+        if missing:
+            return NodeResult(
+                BLOCKED,
+                "验证失败待修订（外部 Model Constructor 消费 revision_draft "
+                f"后注入 revision_bundles 再 unblock）: {', '.join(missing)}",
+                outputs={"artifacts": registered, "evidence": []})
+        return NodeResult(
+            PASS,
+            f"已注册 {len(registered)} 个修订模型（M2）并收口 M1（supersedes 边由 runtime 生成）",
+            outputs={"artifacts": registered, "evidence": []})
+
+    def do_model_re_execute(self, node_id: str) -> NodeResult:
+        """P1-2：对修订模型（M2，唯一活跃）重跑执行 + 验证。
+
+        无修订模型 → PASS no-op（验证链最终节点语义保持）；有 → 复用
+        execute_code / validate_execution 对 M2 产出独立 EXEC/R/VR；任一
+        失败如实 FAIL（修订未成功，不假装闭环完成）。
+        """
+        m2s = [a for a in self.registry.list_by_type("model_ir")
+               if a.data and a.data.get("revision_of")
+               and a.status not in _TERMINAL]
+        if not m2s:
+            return NodeResult(PASS, "无修订模型待重跑",
+                              outputs={"artifacts": [], "evidence": []})
+        ev: list[dict] = []
+        vrs: list[str] = []
+        n_fail = 0
+        for art in m2s:
+            q = art.question
+            for xid, rid in self.execute_code(q, node_id):
+                ev.append({"from": xid, "relation": "produces", "to": rid})
+                xdata = self.registry.get(xid).data or {}
+                if xdata.get("status") in ("failed", "timeout", "invalid",
+                                           "not_executed"):
+                    n_fail += 1
+            self.validate_execution(q, node_id)
+            # 只统计该修订 MIR 的 VR（M1 遗留 EXEC 的 FAIL VR 不参与判定）
+            for vr_id in self._vr_ids_of_mir(q, art.artifact_id):
+                vrs.append(vr_id)
+                if (self.registry.get(vr_id).data or {}).get("status") != "passed":
+                    n_fail += 1
+        if n_fail:
+            return NodeResult(
+                FAIL,
+                f"修订模型重跑: {n_fail} 项未通过（M2 修订未闭环）",
+                outputs={"artifacts": vrs, "evidence": ev})
+        return NodeResult(
+            PASS,
+            f"修订模型重跑通过（{len(m2s)} 个 M2，EXEC→R→VR 独立谱系）",
+            outputs={"artifacts": vrs, "evidence": ev})
 
 
     # ------------------------------------------------------------ P0-2 Failure Diagnosis → Revision Draft

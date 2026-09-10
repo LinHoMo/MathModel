@@ -53,7 +53,8 @@ class RuntimeSession:
                  external_model_irs: dict | None = None,
                  external_code: dict | None = None,
                  validation_specs: dict | None = None,
-                 external_candidates: dict | None = None):
+                 external_candidates: dict | None = None,
+                 revision_bundles: dict | None = None):
         self.project_dir = Path(project_dir)
         self.project_dir.mkdir(parents=True, exist_ok=True)
         if not questions:
@@ -85,7 +86,8 @@ class RuntimeSession:
             external_model_irs=external_model_irs,
             external_code=external_code,
             validation_specs=validation_specs,
-            external_candidates=external_candidates)
+            external_candidates=external_candidates,
+            revision_bundles=revision_bundles)
         # 预登记 Question Artifact（分配的 ID Q001… 依序即 questions 标签）
         existing = [a.artifact_id for a in self.registry.list_by_type("question")]
         for q in self.questions:

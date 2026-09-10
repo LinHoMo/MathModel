@@ -142,7 +142,7 @@
 
 ### P1-2：Revision Loop 接入主 DAG
 
-> ⏳ **PARTIAL 2026-09-10**（commit `311a863` + `123f287` + `d358171`）：`do_model_validation` FAIL 时 `_diagnose_and_draft`（沿 `verified_by` 边机械诊断 → diagnosis artifact + diagnosed_by 边；`build_revision_draft` 生成 M2 草案入 shared 供外部 Constructor 消费；modeling_trace object 契约对齐）。**未完成**：re_execute 节点自动重跑与 M2→PASS 闭环仍由 vs001_driver 独立驱动，未接入 V3 主 DAG。
+> ✅ **DONE 2026-09-10**（commit `311a863` + `123f287` + `d358171` + 本轮）：`do_model_validation` FAIL 时 `_diagnose_and_draft`（沿 `verified_by` 边机械诊断 → diagnosis artifact + diagnosed_by 边；`build_revision_draft` 生成 M2 草案入 shared 供外部 Constructor 消费；modeling_trace object 契约对齐）。**自动修订闭环（本轮）**：`_auto_revision` 节点内闭环——外部 Constructor 注入 `revision_bundles[qid]`（M2 MIR+code）后，同一 `model_validation` 节点执行内完成 M2 注册（`revision_of` 边由 runtime 生成）→ M1 收口（supersede + `supersedes` 边由 runtime 生成）→ M2 重跑 EXEC/R/VR → PASS；无修订注入 → FAIL 如实（`revision_blocked`，等待外部）；M2 重跑失败 → FAIL 如实（`revision_failed`）。**实现说明**：采用节点内闭环而非 DAG 增 3 节点——引擎 `on_fail` 回退语义专用于"重做前置"（rollback 后失败节点仍 ready 会触发自旋保护），不适用于 revision 推进链；验收语义不变（vs001 场景经 V3 主 DAG 自动完成、谱系边由 runtime 生成）。独立 API `do_model_revision()` / `do_model_re_execute()` 保留。验收测试 `tests/integration/test_auto_revision_loop.py` 3/3。
 
 
 | 项 | 内容 |

@@ -366,6 +366,19 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ### P3-1: E2B Execution Backend
 
+> ✅ **DONE 2026-09-10**（commit `P3-1 e2b`）：
+> `core/runtime/execution/e2b_adapter.py`：
+> - `E2BAdapter(ExecutionAdapter)`：E2B 云端沙箱执行（可选后端）。
+>   available() 探测 E2B_API_KEY + e2b SDK；execute 上传 code 到沙箱
+>   /tmp 运行，输出解析与 LocalPythonAdapter 完全一致（stdout 最后
+>   一块合法 JSON）；adapter 签发 execution_token（HMAC 同源）。
+> - `select_execution_adapter()` 工厂：E2B 可用自动切换，不可用回退
+>   LocalPythonAdapter（ROADMAP 验收①）；显式 e2b 但不可用 → 如实
+>   invalid（绝不假装 success）。
+> - 验收 6/6（不可用回退/本地仍真实执行/e2b 路径输出契约与 token/
+>   failed 状态真实）。
+
+
 **目标**：支持 E2B 沙箱执行
 
 **为什么做**：LocalPythonAdapter 安全性有限，E2B 提供隔离沙箱

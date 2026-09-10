@@ -108,7 +108,9 @@ Construction 行为？"。
     ③ Capability Validation Δscore（八项指标 + P1 执行级指标双口径报告）
 
 进行中（MainAgent）：| **P1-4（契约唯一真源）** | MODEL_IR schema 唯一真源收敛：core/schemas/v3/model/model_ir.schema.json = 0.8 校准版 + 契约分层（数组元素 required=旧core∩0.8 公共核心；模板承诺字段标 x-template-promise、register 层强制；词表 enum 入模板承诺层；sub_question_binding 统一 string\|array；model_graph/modeling_trace 宽松承载）；research 副本已删；migrate_legacy_format + LEGACY_MODEL_IR.md；K001/K002/K003 冻结基线 revision v1.1 重冻 | ✅ 完成 | 本轮（1067/4） |
+| **P3-1（E2B Backend）** | `core/runtime/execution/e2b_adapter.py`：E2BAdapter（available 探测/沙箱执行/token 签发）+ select_execution_adapter 工厂（可用自动切换、不可用回退 Local） | ✅ 完成 | 本轮 |
 | **P3-2（确定性指标）** | claim_evidence_coverage 机械遍历 + baseline_comparison 纯数值判定（tie/different/incomparable），无 LLM 调用；vs001 fixture 迁移到 core schema 唯一真源（mir_compat） | ✅ 完成 | 本轮（并行收口） |
+| **P1-2（Revision Loop 自动闭环）** | `_auto_revision` 节点内闭环：外部注入 revision_bundles 后同一 model_validation 节点执行内完成 M2 注册（revision_of 边 runtime 生成）→ M1 收口（supersede + supersedes 边 runtime 生成）→ M2 重跑 EXEC/R/VR → PASS；无注入 FAIL 如实（revision_blocked）、M2 失败 FAIL 如实（revision_failed）；独立 API do_model_revision/do_model_re_execute；验收 test_auto_revision_loop 3/3 | ✅ 完成 | 本轮（1076/4） |
 
 
   ① K003 正式实验：66 runs → 独立盲评（3 evaluator，198 评分 + 对拍一致）→ 配对分析 → P15-K003-REPORT.md → 状态机 CLOSED ✅（已完成）
