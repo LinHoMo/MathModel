@@ -17,6 +17,9 @@
 | T-P3-01 | K005 模板 + K004 protocol 整理（K004 实验已存在于 P15/k004） | P3 | protocol/ 下模板存在；含 6 节 | — |
 | T-P3-02 | 新实验方向决策（K 系列 vs Constructor 集成实证） | P3 | 决策记录进 TASKS.md | T-CONF-003 |
 | T-CONF-003 | 待确认：K004 已有实验与报告——继续补 K005，还是转向 Constructor 集成实证 | — | 裁定后执行 T-P3-01/02 | 用户 |
+| T-CONF-006 | 终审 P1-2：`domains/` 包零引用（CANONICAL_ENTITIES/canonical_name/entity_schema 无消费者）——接入消费者还是标注预定义 | — | 裁定后执行 | 用户 |
+| T-CONF-007 | 终审 P2-1：发行名 `modeling-harness-skills`（pyproject.toml:6）是否改为 `modeling-harness`（需确认 PyPI 可用性） | — | 裁定后执行 | 用户 |
+| T-CONF-008 | 终审 T-CONF-NEW-3：`MATHMODEL_AGENT_API` 是否算外部专名保留（终审建议保留，代码未读取） | — | 裁定后登记 | 用户 |
 
 ## Done / 已完成
 
@@ -24,6 +27,7 @@
 |----|------|--------|------|
 | T-REBUILD-01 | 技术层重构（src/ layout、modeling_harness 包、mh CLI、MH_* env、.mh/ 配置、MH- ID、modeling_harness.* schema、迁移脚本） | `1b5e2e7`+`e4add47`+`65be4d8`+`ef2afe8`+`8838fda`+`1cebd09`+`68e90be`+`6ee233c`+`bdaddbc`+`9913a2b`+`86e087e`+`b684856`+`6408f35`+`63f5ddc`+`40d1989`+`1b58fee`+`062c357` | 2026-09-10 |
 | T-REBUILD-02 | 终审整改：L1.1 校验真实输入规约（44/1 修复）；schemas/legacy → retired 归档更名；domains/ adapters/ 上提顶层（ADR-0006）；迁移垃圾清理（build/、__pycache__、.pytest_cache、worktree 残留、一次性脚本） | `40d1989`+`1b58fee`+`062c357`（垃圾清理不入库） | 2026-09-10 |
+| T-REBUILD-03 | 独立只读终审闭环：CI lint 门禁实跑修复（448 ruff + 4 F821 + L5.4 真实化，validate 假绿→45/0 真绿，CI run 34464939588 ✓）；终审遗留修复（P1-3 schema 品牌残留、P2-2 ids docstring、P2-4 AGENTS catalog 行）；CI 二跑 34465503822 验证 | `fdd6213`+`84d71cd` | 2026-09-10 |
 | T-BRAND-01 | 品牌迁移 MathModel → Modeling-Harness（品牌层替换 + 发行名 + MIGRATION.md + CHANGELOG 条目 + GitHub 改名/description/topics） | `9809047`+`6663d02`+`550f9ef`；GitHub 已改名 | 2026-09-10 |
 | T-P0-01 | 重写 research/README.md（仅 ENGINEERING/ 与 P15/） | `d3c4f83` | 2026-09-10 |
 | T-P0-02 | 创建 research/P15/README.md（K 系列状态+实验地图+报告索引） | `d3c4f83` | 2026-09-10 |
