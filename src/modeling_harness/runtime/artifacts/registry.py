@@ -15,7 +15,8 @@ import tempfile
 from pathlib import Path
 
 from .artifact import Artifact, ContractError, utcnow
-from .ids import ARTIFACT_TYPES, IDFormatError, format_id, is_valid_id
+from .ids import (ARTIFACT_TYPES, IDFormatError, format_id,
+                  id_matches_type, is_valid_id)
 from .lifecycle import LifecycleError, assert_transition, is_terminal
 
 REGISTRY_VERSION = 3
@@ -196,11 +197,11 @@ class ArtifactRegistry:
         if artifact_type not in ARTIFACT_TYPES:
             raise IDFormatError(f"未知 artifact 类型: {artifact_type!r}")
         n = self.counters.get(artifact_type, 0) + 1
-        candidate = format_id(ARTIFACT_TYPES[artifact_type], n)
+        candidate = format_id(artifact_type, n)
         # 防御：ID 永不复用（即使人为删除过）
         while candidate in self.artifacts:
             n += 1
-            candidate = format_id(ARTIFACT_TYPES[artifact_type], n)
+            candidate = format_id(artifact_type, n)
         return candidate
 
     # ---------------------------------------------------------------- 创建
@@ -208,21 +209,35 @@ class ArtifactRegistry:
     def create(self, artifact_type: str, *, title: str = "", payload=None,
                created_by: str = "", question: str = "", depends_on=None,
                parent=None, provenance=None, data=None, tags=None,
-               activate: bool = False) -> Artifact:
-        """登记新 Artifact（状态 draft；activate=True 直接进入 active）。"""
+               activate: bool = False, artifact_id: str | None = None,
+               ) -> Artifact:
+        """登记新 Artifact（状态 draft；activate=True 直接进入 active）。
+
+        artifact_id 显式指定时跳过自动分配（用于题目 ID / 迁移 / 测试桩）；
+        默认走 next_id 生成 MH-<TYPE>-<NNNN>。
+        """
         with self._lock:
             return self._create_locked(artifact_type, title=title,
                                        payload=payload,
                                        created_by=created_by, question=question,
                                        depends_on=depends_on, parent=parent,
                                        provenance=provenance, data=data,
-                                       tags=tags, activate=activate)
+                                       tags=tags, activate=activate,
+                                       artifact_id=artifact_id)
 
     def _create_locked(self, artifact_type, *, title="", payload=None,
                        created_by="", question="", depends_on=None,
                        parent=None, provenance=None, data=None, tags=None,
-                       activate=False) -> Artifact:
-        aid = self.next_id(artifact_type)
+                       activate=False, artifact_id=None) -> Artifact:
+        aid = artifact_id or self.next_id(artifact_type)
+        if artifact_id is not None:
+            if not is_valid_id(artifact_id):
+                raise IDFormatError(f"非法 Artifact ID: {artifact_id!r}")
+            if not id_matches_type(artifact_id, artifact_type):
+                raise IDFormatError(
+                    f"Artifact ID {artifact_id!r} 与类型 {artifact_type!r} 不匹配")
+            if aid in self.artifacts:
+                raise RegistryError(f"Artifact ID 已存在: {aid!r}")
         rdata = dict(data or {})
         if artifact_type in ("decision", "execution_result"):
             # 契约统一：元数据由 registry 注入（标识符/时间/创建者/状态），

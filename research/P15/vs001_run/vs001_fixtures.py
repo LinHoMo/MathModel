@@ -134,7 +134,7 @@ _BASE = {
         {"solver_id": "S001", "name": "刚体链递推数值仿真器", "type": "simulation",
          "method": "Euler 积分（dt=0.01）求解 theta(t) + 刚体链几何递推",
          "parameters": {"dt": 0.01, "output_interval": 1.0},
-         "implementation_ref": "CODE001",
+         "implementation_ref": "MH-CODE-0001",
          "equations_refs": ["E001", "E002", "E003"],
          "sub_question_binding": ["Q1"]},
     ],
@@ -248,7 +248,7 @@ def _m2_dict() -> dict:
     # FIX-3.1（audit P1-03/P1-09）：M2 是 revision 后的新模型，其 solver 的
     # implementation_ref 必须指向 M2 自己的实现（C2_CODE → CODE002），
     # 而不是继承 M1 的 CODE001——MIR→Code 映射必须随 revision 更新。
-    d["solvers"] = [dict(s, implementation_ref="CODE002")
+    d["solvers"] = [dict(s, implementation_ref="MH-CODE-0002")
                     for s in d.get("solvers") or []]
     return d
 

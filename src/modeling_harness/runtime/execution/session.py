@@ -92,7 +92,7 @@ class RuntimeSession:
         existing = [a.artifact_id for a in self.registry.list_by_type("question")]
         for q in self.questions:
             if q not in existing:
-                self.registry.create("question", title=q,
+                self.registry.create("question", title=q, artifact_id=q,
                                      activate=True, created_by="session")
             self.state.ensure_question(q)
         # P0-3：启用 engine validator hook——PASS 节点过一致性复核

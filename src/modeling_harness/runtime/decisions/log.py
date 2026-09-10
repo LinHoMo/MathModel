@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 DECISIONS_VERSION = 3
-DECISION_ID_RE = re.compile(r"^D\d{1,6}$")
+DECISION_ID_RE = re.compile(r"^(?:MH-DECISION-\d{1,6}|D\d{1,6})$")
 
 
 class DecisionLogError(ValueError):
@@ -138,7 +138,8 @@ class DecisionLog:
                 raise DecisionLogError(f"decision_id 重复: {dec.decision_id}")
             self.decisions[dec.decision_id] = dec
         self._counter = max(
-            (int(d.decision_id[1:]) for d in self.decisions.values()),
+            (int(re.search(r"(\d{1,6})$", d.decision_id).group(1))
+             for d in self.decisions.values()),
             default=0)
 
     def save(self) -> None:
@@ -162,9 +163,9 @@ class DecisionLog:
 
     def next_id(self) -> str:
         n = self._counter + 1
-        while f"D{n:03d}" in self.decisions:
+        while f"MH-DECISION-{n:04d}" in self.decisions:
             n += 1
-        return f"D{n:03d}"
+        return f"MH-DECISION-{n:04d}"
 
     def add(self, question: str, chosen: str, alternatives: list[str],
             criteria: list[str], reasoning: str, confidence: float,
@@ -216,7 +217,8 @@ class DecisionLog:
         if dec.decision_id in self.decisions:
             raise DecisionLogError(f"decision_id 已存在: {dec.decision_id}")
         self.decisions[dec.decision_id] = dec
-        self._counter = max(self._counter, int(dec.decision_id[1:]))
+        self._counter = max(
+            self._counter, int(re.search(r"(\d{1,6})$", dec.decision_id).group(1)))
         return dec
 
     def invalidate(self, decision_id: str, invalidated_by: str,
@@ -227,7 +229,7 @@ class DecisionLog:
             raise DecisionLogError(f"决策不存在: {decision_id}")
         if dec.status != "active":
             raise DecisionLogError(f"决策已是 {dec.status}，不可再推翻: {decision_id}")
-        if re.match(r"^D\d{1,6}$", invalidated_by) and \
+        if DECISION_ID_RE.match(invalidated_by) and \
                 invalidated_by not in self.decisions:
             raise DecisionLogError(f"invalidated_by 指向不存在的决策: {invalidated_by}")
         if not reason.strip():

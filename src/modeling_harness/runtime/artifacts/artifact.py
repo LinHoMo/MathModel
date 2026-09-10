@@ -12,7 +12,8 @@ import json
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 
-from .ids import ARTIFACT_TYPES, IDFormatError, id_matches_type, is_valid_id
+from .ids import (ARTIFACT_TYPES, IDFormatError, id_matches_type,
+                  id_type, is_valid_id)
 from .lifecycle import STATES, LifecycleError, assert_transition
 
 CONTRACT_VERSION = "3.1"
@@ -80,8 +81,14 @@ class Artifact:
                 problems.append(f"依赖/父引用非法: {ref!r}")
         if self.question and not is_valid_id(self.question):
             problems.append(f"question 引用非法: {self.question!r}")
-        if self.question and not self.question.startswith("Q"):
-            problems.append(f"question 必须是 Q 类型 ID: {self.question!r}")
+        if self.question:
+            try:
+                q_type = id_type(self.question)
+            except IDFormatError:
+                q_type = ""
+            if q_type != "question":
+                problems.append(
+                    f"question 必须是 question 类型 ID: {self.question!r}")
         if self.artifact_id in self.depends_on or self.artifact_id in self.parent:
             problems.append("Artifact 不能依赖/派生自自身")
         if self.question == self.artifact_id:
