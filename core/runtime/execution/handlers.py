@@ -2127,14 +2127,16 @@ class DefaultNodeExecutor:
                               "unknowns": len(report.unknowns)}})
 
     def do_research_direction(self, node_id: str) -> NodeResult:
-        """研究叙事：从 claims 闭包构建 story arcs。"""
-        narrative = ResearchDirector(self.registry, self.graph).build()
-        self.shared["narrative"] = narrative
-        if not narrative.arcs:
+        """研究叙事：Registry+Graph → ScientificNarrative IR（P3-3 统一）。"""
+        from runtime.writing.narrative_ir import build_narrative_ir
+        ir = build_narrative_ir(self.registry, self.graph)
+        self.shared["narrative"] = ir
+        self.shared["narrative_ir"] = ir.as_dict()
+        n_claims = sum(len(s.claims) for s in ir.sections)
+        if n_claims == 0:
             return NodeResult(FAIL, "无任何 claim，无法构建研究叙事")
-        return NodeResult(PASS, f"{len(narrative.arcs)} 条故事线",
-                          outputs={"metrics": {
-                              "supported": len(narrative.supported_arcs)}})
+        return NodeResult(PASS, f"{n_claims} 个主张 · {len(ir.sections)} 个章节",
+                          outputs={"metrics": {"claims": n_claims}})
 
     def do_paper_projection(self, node_id: str) -> NodeResult:
         """论文投影：narrative → 大纲（纯函数，每次重算以收敛 pending_placement）。"""
@@ -2193,7 +2195,8 @@ class DefaultNodeExecutor:
         if ev:
             # claim 归属已落地 → 立即刷新 outline（pending_placement 收敛）
             self.shared["outline"] = PaperProjection(
-                self.registry, self.graph).project(narrative)
+                self.registry, self.graph).project(
+                    self.shared.get("narrative"))
         return NodeResult(PASS, f"{qid}: 新建 {n} 个章节",
                           outputs={"artifacts": [], "evidence": ev})
 
