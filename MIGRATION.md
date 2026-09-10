@@ -59,8 +59,10 @@ validate.py / doctor.py / scholar_fetch.py 输出字符串 —— 全部替换�
 ### 历史层：不改写，只加注
 
 - CHANGELOG 旧条目、旧 release notes、旧 issue/PR 引用、git 历史不改。
-- `research/`（实验报告、冻结规格、manifests）与 `projects/`（运行实例、run records）
-  保持原样——它们是历史证据，改即伪造。
+- `research/`（实验报告、冻结规格、manifests）保持原样——它们是历史证据，改即伪造。
+- `projects/`（运行实例、run records）：旧 V3 Stable ID（Q001/M001/EXEC001 等）已于
+  技术重构时通过 `scripts/migrate_legacy_projects.py --apply` 一次性迁移为
+  `MH-<type>-<seq>` 格式（见 §4）；迁移前版本可从 `pre-tech-rebuild` tag 恢复。
 - 外部专名（MathModelAgent、zhanwen/MathModel、jihe520/MathModelAgent、
   LLM-MM-Agent/MM-Bench 等）保持原样，它们是第三方项目名。
 - 已发表论文中的旧名不改。
@@ -71,8 +73,8 @@ validate.py / doctor.py / scholar_fetch.py 输出字符串 —— 全部替换�
 |---|---|
 | 文档读者 | 旧链接 `LinHoMo/MathModel` 由 GitHub 自动重定向到 `LinHoMo/modeling-harness` |
 | 代码/工具 | 技术重构后统一使用 `mh` CLI、`MH_*` 环境变量、`.mh/` 配置目录、`MH-` Artifact ID |
-| 旧实例 | 技术重构提供一次性迁移脚本 `scripts/migrate_legacy_projects.py`（--dry-run 支持） |
-| 历史数据 | 不改写；运行时不读旧兼容入口 |
+| 旧实例 | 一次性迁移脚本 `scripts/migrate_legacy_projects.py` 已执行 `--apply`：projects/ 下 18+ 个历史项目的旧 V3 Stable ID 全部改写为 `MH-<type>-<seq>`；`--dry-run` 仍可用作复核 |
+| 历史数据 | 已迁移为 MH- 格式；运行时不读旧兼容入口 |
 
 ## 5. 兼容时间表
 
@@ -80,6 +82,7 @@ validate.py / doctor.py / scholar_fetch.py 输出字符串 —— 全部替换�
 |---|---|
 | 2026-09-10（品牌迁移） | 品牌全面替换；旧品牌仅存于 MIGRATION.md / CHANGELOG 历史 / 外部专名 / 历史数据 |
 | 2026-09-10（技术重构） | 技术层按最优结构重建，**不保留** mathmodel shim / alias / deprecated 路径；运行时不再兼容旧入口 |
+| 2026-09-10（旧实例迁移） | `migrate_legacy_projects.py --apply` 已执行：projects/ 历史数据统一为 MH- 格式 |
 
 ## 6. 回滚方式
 

@@ -2,6 +2,32 @@
 
 本文件记录 Modeling-Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
+## 2026-09-10 — Tech rebuild: optimal structure and naming, no backward compatibility
+
+### 变更
+- **src/ layout**：`core/` 整体 `git mv` 至 `src/modeling_harness/`（165 文件，保留历史）；
+  `core/tools/` → `src/modeling_harness/cli/`；import、路径字面量、ROOT 推导全部重写。
+- **统一 CLI `mh`**：新增 `src/modeling_harness/cli/main.py`（14 子命令：validate /
+  catalog-check / terminology / doctor / new-project / replay / knowledge / benchmark /
+  e2e-metrics / env-doctor / manifest / cloud-sandbox / diagram / scholar）；
+  `python -m modeling_harness` 等价；`mh --version` → "mh 3.2.2 — Modeling-Harness 建模执行框架"。
+- **utils 层**：`utils/paths.py` 读 `MH_CONFIG_DIR`（默认 `<home>/.mh/`）与 `utils/logging.py`。
+- **Schema 命名空间**：13 个 v3 schema `$id/$ref` 统一 `mathmodel:v3/...` →
+  `modeling_harness:v3/...`；`https://mathmodel.org/schemas/` → `https://modeling-harness.org/schemas/`。
+- **Artifact ID 统一 MH-**：`ids.py` 重写——新生成 `MH-<TYPE>-<NNNN>`（类型全名，0-填充 4 位），
+  旧 V3 Stable ID（Q001/M001/EXEC001 等）仅解析读取不生成；question 类型保留显式旧语义 ID
+  （Q001/Q002）作为唯一例外；registry.create 支持 `artifact_id=` 显式注入。
+- **旧实例迁移**：新增 `scripts/migrate_legacy_projects.py`（--dry-run 默认 / --apply），
+  projects/ 下 18+ 个历史项目已执行 `--apply`，旧 ID 全部改写为 MH- 格式。
+- **兼容层**：不保留任何 shim / alias / deprecated 路径 / 旧环境变量 / 旧配置目录。
+- 品牌技术残留清理：`mathmodel_exec_` → `mh_exec_` 等 4 处。
+
+### 验证
+- 四件套全绿：validate 45/0/0、catalog OK、terminology OK、pytest **595 passed / 0 failed**；
+  `gen_runtime_manifest --check` 无漂移。
+- 说明：品牌迁移条目中"四件套全绿"当时为基线 44/1（question_spec 路径问题是基线既有，
+  已在本轮修复为 45/0）。
+
 ## 2026-09-10 — Brand migration: MathModel → Modeling-Harness
 
 ### 变更
