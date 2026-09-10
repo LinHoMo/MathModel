@@ -141,6 +141,9 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ### P1-1: Constructor Adapter Protocol
 
+> ✅ **DONE 2026-09-10**（commit 见 STATUS）：`core/runtime/constructors/` （protocol.py ConstructionBundle/ConstructorAdapter/C0-C5 + registry.py ConstructorRegistry/apply_bundle）；验收 5/5（序列化往返/能力分级/ABC/mock 全闭环/无事实写权限）。
+
+
 **目标**：设计并实现 `core/runtime/constructors/protocol.py`
 
 **为什么做**：支持外部 Constructor（MathModelAgent/Claude Code）通过统一
@@ -169,6 +172,9 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ### P1-2: 接入 Knowledge Guided Construction
 
+> ✅ **DONE 2026-09-10**：handlers._register_mir 接入 apply_knowledge_obligations（shared[knowledge_guide] 配置，默认关闭；merge + source_card 溯源 + knowledge_refs，不覆盖建模者声明）；knowledge_guided 义务对齐 MODEL_IR 契约（method/targets_refs/sub_question_binding/text/rationale）；验收 4/4 + M4 7/7。
+
+
 **目标**：将 knowledge_guided.py 接入 candidate generation
 
 **为什么做**：knowledge_guided.py 实现了 v2 版本的义务映射
@@ -194,6 +200,9 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ### P1-3: 接入 Model Comparison
 
+> ✅ **DONE 2026-09-10**：do_model_validation PASS 分支沿 revision_of 边自动 compare_models（VR 机械证据）→ decision artifact + compared_with/based_on 边（evidence_graph 新增 compared_with 弱边）；幂等 + 证据缺失不制造决策；验收 3/3。
+
+
 **目标**：将 comparison.py 接入 model selection
 
 **为什么做**：M1/M2 比较目前靠盲评。comparison.py 可以从 VR 指标
@@ -217,6 +226,9 @@ Engine 的 validator hook 机制从未在生产中使用。
 ---
 
 ### P1-4: 标注硬编码经验常数的 Provenance
+
+> ✅ **DONE 2026-09-10**：_decision_confidence docstring 声明 advisory（不参与 PASS/FAIL）；findings/selection confidence 标注 advisory；integrity_gate 声明政策阈值来源（env/评审政策，非经验外推）；验收 5/5 + 29 单测无回归。
+
 
 **目标**：所有确定性评分中的经验常数要么标注来源，要么移除
 

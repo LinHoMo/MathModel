@@ -39,6 +39,11 @@ Construction 行为？"。
 | **P15-K001** | 2×2×rep 预注册（Knowledge × Case + Sham），55 runs，盲评 + DATA FREEZE + 配对分析 | ✅ CLOSED | Δ_K=+2.14 CI[+0.00,+6.41] → **negative result**；`de15d96` |
 | **P15-K002** | Model Representation Efficacy（F/S/S+V 三臂）：契约统一（schema 迁 core、register 真 jsonschema、40 文件冻结）→ 108/108 生成 → 3 evaluator 盲评（锚定澄清，κ=0.4345）→ 配对分析 | ✅ **CLOSED** | RQ1 S−F(MCQ) Δ=−4.85 CI[−7.98,−2.22] **NEGATIVE**（不进 P15.2）；SV−F(VAL) +4.81 **POSITIVE**；报告 `analysis/reports/P15-K002-REPORT.md` |
 | **P1** | Model Construction Loop：Gap Audit（11 环节）→ P1 计划 v2（C1–C10）→ **VS-001 垂直切片 7/7 PASS（2024_A，M1 FAIL → M2 PASS 闭环 + Replay）** → **M3 候选竞技场（evidence-based 选型，D002 selects 边真写入）** → **M4 知识引导（BZD 试点卡 5 张 + 义务映射）** | ✅ **全部完成**（C1–C10 + M3/M4） | 报告 `analysis/P1_{VS001,M3,M4}_REPORT.md` |
+| **P0-3 完整收口** | ExecutionResult 来源鉴别 execution_token（HMAC 签名/校验，进程级 secret）：LocalPythonAdapter 真实执行后签发，registry.create 强制校验（success EXEC 必须带有效 token 或 legacy_unverified 声明）；Agent/Handler 无 secret 无法伪造 EXEC | ✔ 完成 | `f8f21f1` |
+| **P1-1** | Constructor Adapter Protocol：ConstructionBundle（MODEL_IR+code+output_mapping+validation_spec+revision_of）+ ConstructorAdapter ABC + capability C0-C5 + ConstructorRegistry/apply_bundle（外部 Constructor 统一接入） | ✔ 完成 | 见 git log |
+| **P1-2** | Knowledge Guided Construction 接入生产路径：_register_mir 应用 apply_knowledge_obligations（默认关闭，source_card 溯源，不覆盖声明）；义务对齐 MODEL_IR 契约 | ✔ 完成 | 见 git log |
+| **P1-3** | Model Comparison 接入生产路径：revision 链自动 compare_models → decision artifact + compared_with/based_on 边 | ✔ 完成 | 见 git log |
+| **P1-4** | 硬编码经验常数 Provenance：confidence 全标注 advisory 不参与判定；integrity_gate 政策阈值声明来源 | ✔ 完成 | 见 git log |
 | **P0-4 修复** | 清理 Dead Code：删除 `_maybe_execute_experiment`（无调用者）/ engine 重复 unblock / comparison 无效循环；codegen 独立路径定位为研究工具链 （K003/K002/arena 消费） | ✔ 完成 | `6466490` |
 | **P0-3 修复** | 启用 Engine Validator Hook（方案 B）：evidence_consistency_validator——PASS 节点 outputs.artifacts/evidence 必须真实存在于 registry（handler 不能自己说完成）；WorkflowEngine 与 WaveExecutor 同注全 NODE_TYPES | ✔ 完成 | `validators.py` |
 | **P0-2 修复** | Failure Diagnosis 接入生产 DAG（validation FAIL 无存活候选 → diagnose_failure 注册 diagnosis + diagnosed_by 边 + build_revision_draft 生成 M2 草案供外部 Constructor；finalize_revision 去重防双 DIAG） | ✔ 完成 | `311a863` |
