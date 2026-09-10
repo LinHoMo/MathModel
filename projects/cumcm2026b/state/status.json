@@ -6,19 +6,35 @@
       "status": "complete"
     },
     "questions": {
-      "Q1": {
+      "Q2": {
         "status": "validated",
         "models": [],
         "experiments": [
-          "MH-EXPERIMENT-0001"
+          "MH-EXPERIMENT-0002"
         ],
         "claims": [
-          "MH-CLAIM-0001"
+          "MH-CLAIM-0002"
         ],
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T15:47:23+00:00"
+        "last_updated": "2026-09-10T16:09:31+00:00"
+      },
+      "Q3": {
+        "status": "validated",
+        "models": [],
+        "experiments": [
+          "MH-EXPERIMENT-0003"
+        ],
+        "claims": [
+          "MH-CLAIM-0003",
+          "MH-CLAIM-0005",
+          "MH-CLAIM-0006"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-10T16:09:31+00:00"
       },
       "Q4": {
         "status": "validated",
@@ -32,36 +48,21 @@
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T15:47:23+00:00"
+        "last_updated": "2026-09-10T16:09:31+00:00"
       },
-      "Q3": {
+      "Q1": {
         "status": "validated",
         "models": [],
         "experiments": [
-          "MH-EXPERIMENT-0003"
+          "MH-EXPERIMENT-0001"
         ],
         "claims": [
-          "MH-CLAIM-0003",
-          "MH-CLAIM-0005"
+          "MH-CLAIM-0001"
         ],
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T15:47:23+00:00"
-      },
-      "Q2": {
-        "status": "validated",
-        "models": [],
-        "experiments": [
-          "MH-EXPERIMENT-0002"
-        ],
-        "claims": [
-          "MH-CLAIM-0002"
-        ],
-        "dependencies": [],
-        "retry_count": 0,
-        "failure_reason": null,
-        "last_updated": "2026-09-10T15:47:23+00:00"
+        "last_updated": "2026-09-10T16:09:31+00:00"
       }
     },
     "models": {
@@ -93,8 +94,8 @@
     "evidence": {
       "status": "pending",
       "graph_version": 1,
-      "claims_supported": 5,
-      "claims_total": 5,
+      "claims_supported": 6,
+      "claims_total": 6,
       "coverage_ratio": 1.0,
       "coverage_validation": {
         "n_samples": 20000,
@@ -127,14 +128,14 @@
       {
         "node": "",
         "note": "本实例由项目内确定性脚本构建（未走 RuntimeSession 引擎），workflow 节点不虚报；内容真源为 registry + evidence_graph。",
-        "at": "2026-09-10T15:47:23+00:00"
+        "at": "2026-09-10T16:09:31+00:00"
       }
     ]
   },
   "run": {
     "phase": "delivered",
-    "started_at": "2026-09-10T15:47:23+00:00",
-    "updated_at": "2026-09-10T15:47:23+00:00"
+    "started_at": "2026-09-10T16:09:31+00:00",
+    "updated_at": "2026-09-10T16:09:31+00:00"
   },
   "limitations": [
     "本地模拟器按附录规则重建，与官方评测机可能存在实现差异",

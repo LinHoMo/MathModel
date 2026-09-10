@@ -2,7 +2,7 @@
   "graph_schema_version": 3,
   "graph_version": 1,
   "project": "cumcm2026b",
-  "updated_at": "2026-09-10T15:47:23Z",
+  "updated_at": "2026-09-10T16:09:31Z",
   "relations": [
     {
       "from": "MH-PROBLEM-0001",
@@ -176,6 +176,12 @@
     {
       "from": "MH-RESULT-0003",
       "to": "MH-CLAIM-0005",
+      "relation": "supports",
+      "sub_question": "Q3"
+    },
+    {
+      "from": "MH-RESULT-0003",
+      "to": "MH-CLAIM-0006",
       "relation": "supports",
       "sub_question": "Q3"
     },

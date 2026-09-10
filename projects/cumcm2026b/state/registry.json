@@ -1,10 +1,10 @@
 {
   "registry_version": 3,
   "project": "cumcm2026b",
-  "updated_at": "2026-09-10T15:47:23Z",
+  "updated_at": "2026-09-10T16:09:31Z",
   "counters": {
     "assumption": 1,
-    "claim": 5,
+    "claim": 6,
     "code": 1,
     "deliverable": 1,
     "experiment": 4,
@@ -23,8 +23,8 @@
       "status": "active",
       "title": "2026_B 无线电干扰源定位清除",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "statement": "inputs/problem.txt",
         "sha256": "e06fba6e85e6617bef938c4a10fd854e56819cbbb9d54ee14af0092f83c79917",
@@ -44,8 +44,8 @@
       "status": "active",
       "title": "Q1 computational_geometry",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "id": "Q1",
         "type": "computational_geometry",
@@ -60,8 +60,8 @@
       "status": "active",
       "title": "Q2 geometry_optimization",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "id": "Q2",
         "type": "geometry_optimization",
@@ -76,8 +76,8 @@
       "status": "active",
       "title": "Q3 coverage_control",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "id": "Q3",
         "type": "coverage_control",
@@ -92,8 +92,8 @@
       "status": "active",
       "title": "Q4 coverage_control_blindzone",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "id": "Q4",
         "type": "coverage_control_blindzone",
@@ -108,8 +108,8 @@
       "status": "validated",
       "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "model_ir": "model_ir.json",
         "model_doc": "model.md",
@@ -131,7 +131,7 @@
           "E08",
           "E09"
         ],
-        "sha256": "1a2e8a8bf5e862dc07069719d13b349e8fb0af9354e02198c718d75985c31ab7"
+        "sha256": "7fc8e0f2eb1381b8e15d699d797aac1eb13a01d5f88b6459f85699a742ad4537"
       }
     },
     "MH-MODEL_IR-0001": {
@@ -142,11 +142,11 @@
       "status": "active",
       "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "path": "model_ir.json",
-        "sha256": "1a2e8a8bf5e862dc07069719d13b349e8fb0af9354e02198c718d75985c31ab7"
+        "sha256": "7fc8e0f2eb1381b8e15d699d797aac1eb13a01d5f88b6459f85699a742ad4537"
       },
       "data": {
         "ir_version": "1.0",
@@ -288,6 +288,32 @@
             "text": "定位采用“交会定位 + beam-safe 归航”双机制：交会给出估计点用于远距离跳转，归航沿当前示向度逐步逼近（沿指向源的射线移动不会脱离波束），对定向源天然稳健；清除时机由模拟器在距离 ≤20 m 时触发。",
             "anchors_to_problem": "附录 2(8)「≤20 m 光学精确定位（3 s）+ 激光清除（2 s）」",
             "rationale": "纯交会跳点在定向源盲区会失联，归航可保证收敛；两者结合兼顾效率与鲁棒。"
+          },
+          {
+            "assumption_id": "A09",
+            "type": "problem_statement",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "真实模拟器协议（附件2）：4 条 HTTP+JSON 指令 /enter、/measure、/clear、/exit；请求顶层含 arena_id=\"default\"、robot_id、request_id，/measure 与 /clear 另含 position:{x,y} 与 channel；响应含 accepted、real_timestamp_ms、virtual_time_s，/measure 返回 measure_result∈{no_signal,near,direction} 与 svd_deg（仅 direction），/clear 返回 clear_result∈{success,no_target_in_range}。",
+            "anchors_to_problem": "B 题附件2《模拟器通信接口说明及编程指南》",
+            "rationale": "本地模型版（solve_b）使用的自有字段与真实协议不同；真实构建须逐字节对齐请求/响应契约。"
+          },
+          {
+            "assumption_id": "A10",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "真实模拟器**只返回示向度 svd_deg，不返回信号强度**；故定位不得依赖 d_est=rel·r_rec 估距，改用纯示向度交会 + 越界检测归航（示向度反转判越界、失联回退最近可测点）。虚拟时间由服务端计算（移动 |Δp|/5 s；/measure 检测 5 s 且频道变化时 +1 s 切换；/clear 未发现 3 s、成功 5 s）。",
+            "anchors_to_problem": "附件2 表6（/measure 响应字段）/ 第4节虚拟时间计算方法",
+            "rationale": "信号强度不在响应契约中，若沿用本地模型版的强度估距会与真实 API 不符；示向度是唯一可用观测量。"
           }
         ],
         "variables": [
@@ -1247,6 +1273,23 @@
               "Q4"
             ],
             "implementation_ref": "artifacts/code 求解脚本（Simulator / run_trials）"
+          },
+          {
+            "solver_id": "S06",
+            "name": "真实协议客户端 + 本地 Mock",
+            "type": "http_protocol",
+            "method": "SimulatorHTTP 按附件2 契约收发 4 条指令（arena_id/position/measure_result/svd_deg/clear_result），时间由服务端计算；策略用纯示向度交会 + 越界检测归航（回退最近可测点处理定向盲区）；MockSimulatorServer 逐条复现协议与虚拟时间模型（含 1 s 频道切换）",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "implementation_ref": "artifacts/code simulator_http.py + solve_b_http.py",
+            "equations_refs": [
+              "E07",
+              "E08",
+              "E09"
+            ],
+            "convergence_criteria": "protocol_mock 演练各 5 组均 f_clear=1.0"
           }
         ],
         "experiments": [
@@ -1362,6 +1405,41 @@
             },
             "run_metadata": {
               "code": "artifacts/code 求解脚本 main（Q4）"
+            }
+          },
+          {
+            "experiment_id": "EXP05",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "method": "真实协议演练：SimulatorHTTP 按附件2 契约（arena_id/position/measure_result/svd_deg/clear_result）连接规范忠实 Mock，纯示向度交会 + 越界检测归航策略，各 5 组（seed 42..46）",
+            "inputs_refs": [
+              "inputs/problem.txt",
+              "inputs/附件/附件2.docx"
+            ],
+            "solver_ref": "S06",
+            "parameters": {
+              "n_trials": 5,
+              "seed0": 42,
+              "protocol": "HTTP+JSON 附件2"
+            },
+            "outputs": [
+              "artifacts/results/resultB_http_mock.json"
+            ],
+            "results": {
+              "q3_mean_cleared_fraction": 1.0,
+              "q3_min_cleared_fraction": 1.0,
+              "q3_mean_total_time_s": 12918.0913438,
+              "q3_mean_locate_clear_time_s": 8269.473329085386,
+              "q4_mean_cleared_fraction": 1.0,
+              "q4_min_cleared_fraction": 1.0,
+              "q4_mean_total_time_s": 22592.9079194,
+              "q4_mean_locate_clear_time_s": 17514.367811378976
+            },
+            "run_metadata": {
+              "code": "artifacts/code solve_b_http.py（本地 Mock）",
+              "scope": "未接官方评测机"
             }
           }
         ],
@@ -1551,6 +1629,23 @@
             "validation_refs": [
               "V01"
             ]
+          },
+          {
+            "claim_id": "CL06",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "真实协议构建：客户端按附件2 契约（arena_id=\"default\"、position:{x,y}、measure_result、svd_deg、clear_result）与规范忠实 Mock 通信，时间由服务端计算。因真实 API 不返回信号强度，定位改用纯示向度交会 + 越界检测归航；定向盲区以“失联回退最近可测点”处理。协议演练各 5 组（seed 42..46）：Q3 全向清除比例均值=最小值=1.0000（平均虚拟总时间 12918.09 s、定位清除 8269.47 s）；Q4 混合清除比例均值=最小值=1.0000（平均虚拟总时间 22592.91 s、定位清除 17514.37 s）。**范围如实：本地 Mock 验证，未接官方评测机**。",
+            "evidence_refs": [
+              "artifacts/results/resultB_http_mock.json"
+            ],
+            "experiment_refs": [
+              "EXP05"
+            ],
+            "validation_refs": []
           }
         ],
         "model_graph": {
@@ -1564,7 +1659,7 @@
             },
             {
               "id": "A",
-              "label": "assumptions A01-A08",
+              "label": "assumptions A01-A10",
               "type": "assumption"
             },
             {
@@ -1624,12 +1719,12 @@
             },
             {
               "id": "SV",
-              "label": "solvers S01-S05",
+              "label": "solvers S01-S06",
               "type": "solver"
             },
             {
               "id": "EX",
-              "label": "experiments EXP01-EXP04",
+              "label": "experiments EXP01-EXP05",
               "type": "experiment"
             },
             {
@@ -1639,7 +1734,7 @@
             },
             {
               "id": "CL",
-              "label": "claims CL01-CL05",
+              "label": "claims CL01-CL06",
               "type": "claim"
             }
           ],
@@ -1756,8 +1851,8 @@
       "status": "active",
       "title": "模型假设 A01-A08",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "items": [
           {
@@ -1815,6 +1910,20 @@
             "source": "reasoning",
             "confidence": 0.9,
             "text": "定位采用“交会定位 + beam-safe 归航”双机制：交会给出估计点用于远距离跳转，归航沿当前示向度逐步逼近（沿指向源的射线移动不会脱离波束），对定向源天然稳健；清除时机由模拟器在距离 ≤20 m 时触发。"
+          },
+          {
+            "id": "A09",
+            "type": "problem_statement",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "text": "真实模拟器协议（附件2）：4 条 HTTP+JSON 指令 /enter、/measure、/clear、/exit；请求顶层含 arena_id=\"default\"、robot_id、request_id，/measure 与 /clear 另含 position:{x,y} 与 channel；响应含 accepted、real_timestamp_ms、virtual_time_s，/measure 返回 measure_result∈{no_signal,near,direction} 与 svd_deg（仅 direction），/clear 返回 clear_result∈{success,no_target_in_range}。"
+          },
+          {
+            "id": "A10",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "text": "真实模拟器**只返回示向度 svd_deg，不返回信号强度**；故定位不得依赖 d_est=rel·r_rec 估距，改用纯示向度交会 + 越界检测归航（示向度反转判越界、失联回退最近可测点）。虚拟时间由服务端计算（移动 |Δp|/5 s；/measure 检测 5 s 且频道变化时 +1 s 切换；/clear 未发现 3 s、成功 5 s）。"
           }
         ]
       }
@@ -1827,8 +1936,8 @@
       "status": "active",
       "title": "solve_b.py",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "path": "artifacts/code/solve_b.py",
         "sha256": "de33dcafce9ab59d84ec2d8ecb65b629c6aa84801f0a3319355e53ddacc876bf",
@@ -1843,8 +1952,8 @@
       "status": "validated",
       "title": "Q1 交会定位区域直径与「直径圆覆盖」判定（含锐角反例）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "sub_question": "Q1",
         "solver": "S01-S05",
@@ -1866,11 +1975,11 @@
       "status": "validated",
       "title": "Q1 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "path": "all_results.json",
-        "sha256": "69d9e53e0b6e82745f095cf336b96472cd0e9bb857fc39624c0242a630a3717e",
+        "sha256": "7634825bf02d54bf39abae54205695231c7ae6350888c29c2b7b404cff80aee8",
         "values": {
           "A 正交交会（φ≈90°）": {
             "n_vertices": 4,
@@ -1917,8 +2026,8 @@
       "status": "validated",
       "title": "Q2 第二检测点最优集与候选区域（垂线解析 + 网格一致）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "sub_question": "Q2",
         "solver": "S01-S05",
@@ -1940,11 +2049,11 @@
       "status": "validated",
       "title": "Q2 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "path": "all_results.json",
-        "sha256": "69d9e53e0b6e82745f095cf336b96472cd0e9bb857fc39624c0242a630a3717e",
+        "sha256": "7634825bf02d54bf39abae54205695231c7ae6350888c29c2b7b404cff80aee8",
         "values": {
           "n_grid": 442,
           "grid_best": [
@@ -2020,8 +2129,8 @@
       "status": "validated",
       "title": "Q3 全向源 30 组演练：搜索-定位-清除统计",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "sub_question": "Q3",
         "solver": "S01-S05",
@@ -2048,8 +2157,8 @@
       "status": "validated",
       "title": "Q3 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "path": "artifacts/results/resultB.xlsx",
         "sha256": "2cec9b936c8c528f5dadc4fe0b98db39d3ecf13993c4b5858c62c62989931393",
@@ -2075,8 +2184,8 @@
       "status": "validated",
       "title": "Q4 混合全向+定向源 30 组演练：盲区补扫与清除统计",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "sub_question": "Q4",
         "solver": "S01-S05",
@@ -2103,8 +2212,8 @@
       "status": "validated",
       "title": "Q4 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "path": "artifacts/results/resultB.xlsx",
         "sha256": "2cec9b936c8c528f5dadc4fe0b98db39d3ecf13993c4b5858c62c62989931393",
@@ -2130,8 +2239,8 @@
       "status": "active",
       "title": "CL01（Q1）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得（正交交会算例直径 104.762 m、钝角交会 169.514 m、三站交会 85.896 m）。“以直径为直径的圆”不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；锐角三角形反例（直径 10.0 m，最小包围圆半径 5.0833 m > 直径圆半径 5.0 m）即为反例。保证覆盖应改用最小包围圆。",
         "status": "supported",
@@ -2150,8 +2259,8 @@
       "status": "active",
       "title": "CL02（Q2）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "text": "Q2：最优第二检测点位于过估计源 G_est 且垂直于 S1→G_est 的直线上（该直线即 Thales 圆在 G_est 处的切线，其上任意点交会角恒为 90.00°）；候选区域为以 G_est 为中心、交会角 φ ∈ [60°,120°] 且 |P−G_est| ≤ r_rec 的扇形环域。沿该垂线偏移越小，定位区域越小（偏移 300→1500 m 对应直径 43.19→67.08 m），但偏移过小会缩短有效基线、放大示向度误差相关，故推荐偏移取 d_est 的对称配置。",
         "status": "supported",
@@ -2170,8 +2279,8 @@
       "status": "active",
       "title": "CL03（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "text": "Q3：全向源情景（30 组随机实例）清除比例均值 = 最小值 = 1.0000（全清除）；平均总任务时间 7150.10 s（约 1.99 h），平均每源 592.997 s，平均定位清除时间 5297.03 s。策略为“同心环 {450,1350} m 覆盖扫描 → 逐频道交会定位 + beam-safe 归航 → 20 m 内光学/激光清除”，覆盖完备性由 R/(2k)=450 m ≪ r_rec,min=1000 m 保证。",
         "status": "supported",
@@ -2191,8 +2300,8 @@
       "status": "active",
       "title": "CL04（Q4）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "text": "Q4：混合全向+定向情景（30 组，40% 定向）清除比例均值 = 最小值 = 1.0000；平均总任务时间 15088.79 s（约 4.19 h），平均每源 1254.68 s。相对 Q3 时间增加约 111%，主因是定向源须从波束外侧补扫（额外环 {1200,1799} m）且归航在盲区需回退。",
         "status": "supported",
@@ -2212,8 +2321,8 @@
       "status": "active",
       "title": "CL05（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "text": "覆盖路径的完备性由几何而非经验保证：把圆域按半径分层后，k 条同心环使“任意点到最近检测环”的最大距离恰为 R/(2k)。全向取 k=2 即 450 m（R/(2k) 远小于 r_rec,min=1000 m）；定向源因“波束外侧可见”约束，须在 {450,1350} 之外追加外侧环才完备，含定向情景的漏检率实测为 0.00025（全向为 0.0000）。",
         "status": "supported",
@@ -2221,6 +2330,24 @@
         "validation_refs": [
           "V01"
         ]
+      },
+      "question": "Q3"
+    },
+    "MH-CLAIM-0006": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0006",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL06（Q3）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
+      "payload": {
+        "text": "真实协议构建：客户端按附件2 契约（arena_id=\"default\"、position:{x,y}、measure_result、svd_deg、clear_result）与规范忠实 Mock 通信，时间由服务端计算。因真实 API 不返回信号强度，定位改用纯示向度交会 + 越界检测归航；定向盲区以“失联回退最近可测点”处理。协议演练各 5 组（seed 42..46）：Q3 全向清除比例均值=最小值=1.0000（平均虚拟总时间 12918.09 s、定位清除 8269.47 s）；Q4 混合清除比例均值=最小值=1.0000（平均虚拟总时间 22592.91 s、定位清除 17514.37 s）。**范围如实：本地 Mock 验证，未接官方评测机**。",
+        "status": "supported",
+        "type": "result",
+        "validation_refs": []
       },
       "question": "Q3"
     },
@@ -2232,8 +2359,8 @@
       "status": "active",
       "title": "模型描述文档（含 Mermaid）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:47:23Z",
-      "updated_at": "2026-09-10T15:47:23Z",
+      "created_at": "2026-09-10T16:09:31Z",
+      "updated_at": "2026-09-10T16:09:31Z",
       "payload": {
         "path": "model.md",
         "sha256": "d8393e4d9c5710fb1cbf07df92e13a09bb0995e33d1ca3505062a5a1c713431c"

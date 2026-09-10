@@ -75,3 +75,4 @@
 | T-INST-04 | 赛题材料归位：A/B 题 PDF + 附件（A 题附件1/2/3 xlsx、B 题附件1/2 docx）复制入各自 `inputs/`，作为唯一输入真源留痕 | 目录实测 | 本轮 |
 | T-INST-05 | A 题 v1.1 精细适配：附件1 实测温湿度（241 行）插值驱动边界替代指数趋近+阶跃；附件2 实测半径（145 行）驱动问题4 移动边界，产出实测/守恒双解对照。Q3 57.1722 h、Q4 实测 52.3111 h vs Landau 64.5667 h；收敛+敏感性实测入台账 | solve_a v1.1 实跑，validate 46/0/0 | 本轮 |
 | T-FB-02 | harness 数值追溯改进：`check_numeric_traceability` 增补题面输入为合法溯源目标（结果→all_results.json、题面常数→inputs/problem.txt），消除物理常数误报（升级边界条件不再误压低追溯比例）；`tests/unit/test_numeric_traceability.py` 3 单测锁定语义 | 631 passed，validate 46/0/0 | 本轮 |
+| T-INST-06 | B 题真实模拟器协议构建（v1.2）：按《B 题附件2·模拟器通信接口说明》实现 `SimulatorHTTP`（4 指令 / arena_id / position / measure_result / svd_deg / clear_result，时间服务端计算）+ 规范忠实 `MockSimulatorServer`；策略适配真实 API（**不返回信号强度** → 纯示向度交会 + 越界检测归航，失联回退最近可测点处理定向盲区）。Mock 演练各 5 组：Q3/Q4 清除比例均 1.0000（Q3 虚拟 12918.09 s / Q4 22592.91 s）。**未接官方评测机**（需 GUI 登录） | 端到端 Mock 验证，validate 46/0/0 | 本轮 |

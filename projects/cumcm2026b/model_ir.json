@@ -113,6 +113,26 @@
       "text": "定位采用“交会定位 + beam-safe 归航”双机制：交会给出估计点用于远距离跳转，归航沿当前示向度逐步逼近（沿指向源的射线移动不会脱离波束），对定向源天然稳健；清除时机由模拟器在距离 ≤20 m 时触发。",
       "anchors_to_problem": "附录 2(8)「≤20 m 光学精确定位（3 s）+ 激光清除（2 s）」",
       "rationale": "纯交会跳点在定向源盲区会失联，归航可保证收敛；两者结合兼顾效率与鲁棒。"
+    },
+    {
+      "assumption_id": "A09",
+      "type": "problem_statement",
+      "source": "problem_explicit",
+      "confidence": 1.0,
+      "sub_question_binding": ["Q3", "Q4"],
+      "text": "真实模拟器协议（附件2）：4 条 HTTP+JSON 指令 /enter、/measure、/clear、/exit；请求顶层含 arena_id=\"default\"、robot_id、request_id，/measure 与 /clear 另含 position:{x,y} 与 channel；响应含 accepted、real_timestamp_ms、virtual_time_s，/measure 返回 measure_result∈{no_signal,near,direction} 与 svd_deg（仅 direction），/clear 返回 clear_result∈{success,no_target_in_range}。",
+      "anchors_to_problem": "B 题附件2《模拟器通信接口说明及编程指南》",
+      "rationale": "本地模型版（solve_b）使用的自有字段与真实协议不同；真实构建须逐字节对齐请求/响应契约。"
+    },
+    {
+      "assumption_id": "A10",
+      "type": "mechanism_assumption",
+      "source": "problem_explicit",
+      "confidence": 1.0,
+      "sub_question_binding": ["Q3", "Q4"],
+      "text": "真实模拟器**只返回示向度 svd_deg，不返回信号强度**；故定位不得依赖 d_est=rel·r_rec 估距，改用纯示向度交会 + 越界检测归航（示向度反转判越界、失联回退最近可测点）。虚拟时间由服务端计算（移动 |Δp|/5 s；/measure 检测 5 s 且频道变化时 +1 s 切换；/clear 未发现 3 s、成功 5 s）。",
+      "anchors_to_problem": "附件2 表6（/measure 响应字段）/ 第4节虚拟时间计算方法",
+      "rationale": "信号强度不在响应契约中，若沿用本地模型版的强度估距会与真实 API 不符；示向度是唯一可用观测量。"
     }
   ],
   "variables": [
@@ -201,7 +221,8 @@
     {"solver_id": "S02", "name": "第二检测点优化", "type": "geometry", "method": "解析最优（Thales 切线）+ 极坐标候选网格（主判据 |φ−90°|、次判据定位区域直径）", "sub_question_binding": ["Q2"], "implementation_ref": "artifacts/code 求解脚本（perpendicular_second_point / candidate_second_point_region）", "equations_refs": ["E05", "E06"]},
     {"solver_id": "S03", "name": "覆盖路径生成", "type": "path_planning", "method": "同心环 + 弧长等分检测点；全向 k=2 环，含定向追加 2 环", "sub_question_binding": ["Q3", "Q4"], "implementation_ref": "artifacts/code 求解脚本（coverage_detection_points / ring_detection_points）", "equations_refs": ["E07"]},
     {"solver_id": "S04", "name": "交会-归航定位清除", "type": "control", "method": "两观测交会跳转 → 沿示向度归航（步长 d_est，钳制 15–500 m）→ 20 m 内光学/激光清除；失联时补正交第二点或局部再捕获", "sub_question_binding": ["Q3", "Q4"], "implementation_ref": "artifacts/code 求解脚本（engage / _homing / local_hunt）", "equations_refs": ["E08", "E09"], "convergence_criteria": "归航步长收缩比 ≤0.25，实测每组实例均达 f_clear = 1"},
-    {"solver_id": "S05", "name": "蒙特卡洛演练", "type": "simulation", "method": "30 组随机实例（seed 42..71），统计清除比例、总时间、定位清除时间；逐实例记录路径长度与检测次数", "sub_question_binding": ["Q3", "Q4"], "implementation_ref": "artifacts/code 求解脚本（Simulator / run_trials）"}
+    {"solver_id": "S05", "name": "蒙特卡洛演练", "type": "simulation", "method": "30 组随机实例（seed 42..71），统计清除比例、总时间、定位清除时间；逐实例记录路径长度与检测次数", "sub_question_binding": ["Q3", "Q4"], "implementation_ref": "artifacts/code 求解脚本（Simulator / run_trials）"},
+    {"solver_id": "S06", "name": "真实协议客户端 + 本地 Mock", "type": "http_protocol", "method": "SimulatorHTTP 按附件2 契约收发 4 条指令（arena_id/position/measure_result/svd_deg/clear_result），时间由服务端计算；策略用纯示向度交会 + 越界检测归航（回退最近可测点处理定向盲区）；MockSimulatorServer 逐条复现协议与虚拟时间模型（含 1 s 频道切换）", "sub_question_binding": ["Q3", "Q4"], "implementation_ref": "artifacts/code simulator_http.py + solve_b_http.py", "equations_refs": ["E07", "E08", "E09"], "convergence_criteria": "protocol_mock 演练各 5 组均 f_clear=1.0"}
   ],
   "experiments": [
     {
@@ -247,6 +268,17 @@
       "outputs": ["artifacts/results/resultB.xlsx"],
       "results": {"mean_cleared_fraction": 1.0, "min_cleared_fraction": 1.0, "all_cleared": true, "mean_total_time_s": 15088.792585960995, "mean_locate_clear_time_s": 12814.711618397412},
       "run_metadata": {"code": "artifacts/code 求解脚本 main（Q4）"}
+    },
+    {
+      "experiment_id": "EXP05",
+      "sub_question_binding": ["Q3", "Q4"],
+      "method": "真实协议演练：SimulatorHTTP 按附件2 契约（arena_id/position/measure_result/svd_deg/clear_result）连接规范忠实 Mock，纯示向度交会 + 越界检测归航策略，各 5 组（seed 42..46）",
+      "inputs_refs": ["inputs/problem.txt", "inputs/附件/附件2.docx"],
+      "solver_ref": "S06",
+      "parameters": {"n_trials": 5, "seed0": 42, "protocol": "HTTP+JSON 附件2"},
+      "outputs": ["artifacts/results/resultB_http_mock.json"],
+      "results": {"q3_mean_cleared_fraction": 1.0, "q3_min_cleared_fraction": 1.0, "q3_mean_total_time_s": 12918.0913438, "q3_mean_locate_clear_time_s": 8269.473329085386, "q4_mean_cleared_fraction": 1.0, "q4_min_cleared_fraction": 1.0, "q4_mean_total_time_s": 22592.9079194, "q4_mean_locate_clear_time_s": 17514.367811378976},
+      "run_metadata": {"code": "artifacts/code solve_b_http.py（本地 Mock）", "scope": "未接官方评测机"}
     }
   ],
   "validations": [
@@ -261,14 +293,15 @@
     {"claim_id": "CL02", "type": "result", "status": "supported", "sub_question_binding": ["Q2"], "text": "Q2：最优第二检测点位于过估计源 G_est 且垂直于 S1→G_est 的直线上（该直线即 Thales 圆在 G_est 处的切线，其上任意点交会角恒为 90.00°）；候选区域为以 G_est 为中心、交会角 φ ∈ [60°,120°] 且 |P−G_est| ≤ r_rec 的扇形环域。沿该垂线偏移越小，定位区域越小（偏移 300→1500 m 对应直径 43.19→67.08 m），但偏移过小会缩短有效基线、放大示向度误差相关，故推荐偏移取 d_est 的对称配置。", "evidence_refs": [], "experiment_refs": ["EXP02"], "validation_refs": ["V03"]},
     {"claim_id": "CL03", "type": "result", "status": "supported", "sub_question_binding": ["Q3"], "text": "Q3：全向源情景（30 组随机实例）清除比例均值 = 最小值 = 1.0000（全清除）；平均总任务时间 7150.10 s（约 1.99 h），平均每源 592.997 s，平均定位清除时间 5297.03 s。策略为“同心环 {450,1350} m 覆盖扫描 → 逐频道交会定位 + beam-safe 归航 → 20 m 内光学/激光清除”，覆盖完备性由 R/(2k)=450 m ≪ r_rec,min=1000 m 保证。", "evidence_refs": ["artifacts/results/resultB.xlsx"], "experiment_refs": ["EXP03"], "validation_refs": ["V01", "V04"]},
     {"claim_id": "CL04", "type": "result", "status": "supported", "sub_question_binding": ["Q4"], "text": "Q4：混合全向+定向情景（30 组，40% 定向）清除比例均值 = 最小值 = 1.0000；平均总任务时间 15088.79 s（约 4.19 h），平均每源 1254.68 s。相对 Q3 时间增加约 111%，主因是定向源须从波束外侧补扫（额外环 {1200,1799} m）且归航在盲区需回退。", "evidence_refs": ["artifacts/results/resultB.xlsx"], "experiment_refs": ["EXP04"], "validation_refs": ["V01", "V04"]},
-    {"claim_id": "CL05", "type": "interpretation", "status": "supported", "sub_question_binding": ["Q3", "Q4"], "text": "覆盖路径的完备性由几何而非经验保证：把圆域按半径分层后，k 条同心环使“任意点到最近检测环”的最大距离恰为 R/(2k)。全向取 k=2 即 450 m（R/(2k) 远小于 r_rec,min=1000 m）；定向源因“波束外侧可见”约束，须在 {450,1350} 之外追加外侧环才完备，含定向情景的漏检率实测为 0.00025（全向为 0.0000）。", "evidence_refs": ["artifacts/results/resultB.xlsx"], "validation_refs": ["V01"]}
+    {"claim_id": "CL05", "type": "interpretation", "status": "supported", "sub_question_binding": ["Q3", "Q4"], "text": "覆盖路径的完备性由几何而非经验保证：把圆域按半径分层后，k 条同心环使“任意点到最近检测环”的最大距离恰为 R/(2k)。全向取 k=2 即 450 m（R/(2k) 远小于 r_rec,min=1000 m）；定向源因“波束外侧可见”约束，须在 {450,1350} 之外追加外侧环才完备，含定向情景的漏检率实测为 0.00025（全向为 0.0000）。", "evidence_refs": ["artifacts/results/resultB.xlsx"], "validation_refs": ["V01"]},
+    {"claim_id": "CL06", "type": "result", "status": "supported", "sub_question_binding": ["Q3", "Q4"], "text": "真实协议构建：客户端按附件2 契约（arena_id=\"default\"、position:{x,y}、measure_result、svd_deg、clear_result）与规范忠实 Mock 通信，时间由服务端计算。因真实 API 不返回信号强度，定位改用纯示向度交会 + 越界检测归航；定向盲区以“失联回退最近可测点”处理。协议演练各 5 组（seed 42..46）：Q3 全向清除比例均值=最小值=1.0000（平均虚拟总时间 12918.09 s、定位清除 8269.47 s）；Q4 混合清除比例均值=最小值=1.0000（平均虚拟总时间 22592.91 s、定位清除 17514.37 s）。**范围如实：本地 Mock 验证，未接官方评测机**。", "evidence_refs": ["artifacts/results/resultB_http_mock.json"], "experiment_refs": ["EXP05"], "validation_refs": []}
   ],
   "model_graph": {
     "graph_version": 1,
     "description": "MODEL_IR 概念图：问题 → 假设/参数 → 机理/方程 → 求解器 → 实验 → 验证 → 主张",
     "nodes": [
       {"id": "Q", "label": "problem 2026_B (Q1..Q4)", "type": "problem"},
-      {"id": "A", "label": "assumptions A01-A08", "type": "assumption"},
+      {"id": "A", "label": "assumptions A01-A10", "type": "assumption"},
       {"id": "P", "label": "parameters P01-P17", "type": "parameter"},
       {"id": "V", "label": "variables V01-V13", "type": "variable"},
       {"id": "ME01", "label": "楔形交会定位", "type": "mechanism"},
@@ -280,10 +313,10 @@
       {"id": "EQ", "label": "equations E01-E09", "type": "equation"},
       {"id": "CT", "label": "constraints C01-C08", "type": "constraint"},
       {"id": "OB", "label": "objectives O01-O04", "type": "objective"},
-      {"id": "SV", "label": "solvers S01-S05", "type": "solver"},
-      {"id": "EX", "label": "experiments EXP01-EXP04", "type": "experiment"},
+      {"id": "SV", "label": "solvers S01-S06", "type": "solver"},
+      {"id": "EX", "label": "experiments EXP01-EXP05", "type": "experiment"},
       {"id": "VA", "label": "validations V01-V05", "type": "validation"},
-      {"id": "CL", "label": "claims CL01-CL05", "type": "claim"}
+      {"id": "CL", "label": "claims CL01-CL06", "type": "claim"}
     ],
     "edges": [
       {"from": "Q", "to": "A", "relation": "bound_by"},
