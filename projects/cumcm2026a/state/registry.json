@@ -1,16 +1,17 @@
 {
   "registry_version": 3,
   "project": "cumcm2026a",
-  "updated_at": "2026-09-10T13:16:23Z",
+  "updated_at": "2026-09-10T15:58:33Z",
   "counters": {
     "assumption": 1,
     "claim": 5,
     "code": 1,
+    "deliverable": 1,
     "experiment": 4,
     "model": 1,
-    "narrative": 1,
+    "model_ir": 1,
     "problem": 1,
-    "question": 1,
+    "question": 4,
     "result": 4
   },
   "artifacts": {
@@ -22,8 +23,8 @@
       "status": "active",
       "title": "2026_A 药材烘干",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "statement": "inputs/problem.txt",
         "sha256": "f44fad8e0dadcf0d18e901a49ee7d49891c439055570c0b1043fae8837c172b9",
@@ -35,39 +36,68 @@
         ]
       }
     },
-    "MH-QUESTION-0001": {
+    "Q1": {
       "schema_version": "3.1",
-      "artifact_id": "MH-QUESTION-0001",
+      "artifact_id": "Q1",
       "type": "question",
       "version": 1,
       "status": "active",
-      "title": "2026_A 子问题分解（Q1-Q4）",
+      "title": "Q1 forward_simulation",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
-        "sub_questions": [
-          {
-            "id": "Q1",
-            "type": "forward_simulation",
-            "text": "预热平衡阶段（1800 s 内）：建立药材温度与水分浓度变化规律的模型，给出指定时刻/位置结果并输出完整网格结果"
-          },
-          {
-            "id": "Q2",
-            "type": "forward_simulation_two_stage",
-            "text": "整个烘干过程（2–3 天）：预热平衡 + 恒温干燥两阶段参数不同，统一采用附录 3 经验公式建模"
-          },
-          {
-            "id": "Q3",
-            "type": "inverse_time",
-            "text": "给定烘干要求（各处含水率 < 0.15 kg/kg）：确定所需烘干时长"
-          },
-          {
-            "id": "Q4",
-            "type": "moving_boundary_inverse",
-            "text": "考虑失水引起的尺寸收缩（附录 4）：确定烘干时长，并给出移动边界下的含水率分布"
-          }
-        ]
+        "id": "Q1",
+        "type": "forward_simulation",
+        "text": "预热平衡阶段（1800 s 内）：建立药材温度与水分浓度变化规律的模型，给出指定时刻/位置结果并输出完整网格结果"
+      }
+    },
+    "Q2": {
+      "schema_version": "3.1",
+      "artifact_id": "Q2",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q2 forward_simulation_two_stage",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
+      "payload": {
+        "id": "Q2",
+        "type": "forward_simulation_two_stage",
+        "text": "整个烘干过程（2–3 天）：预热平衡 + 恒温干燥两阶段参数不同，统一采用附录 3 经验公式建模"
+      }
+    },
+    "Q3": {
+      "schema_version": "3.1",
+      "artifact_id": "Q3",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q3 inverse_time",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
+      "payload": {
+        "id": "Q3",
+        "type": "inverse_time",
+        "text": "给定烘干要求（各处含水率 < 0.15 kg/kg）：确定所需烘干时长"
+      }
+    },
+    "Q4": {
+      "schema_version": "3.1",
+      "artifact_id": "Q4",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q4 moving_boundary_inverse",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
+      "payload": {
+        "id": "Q4",
+        "type": "moving_boundary_inverse",
+        "text": "考虑失水引起的尺寸收缩（附录 4）：确定烘干时长，并给出移动边界下的含水率分布"
       }
     },
     "MH-MODEL-0001": {
@@ -75,11 +105,11 @@
       "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "圆柱形药材热风烘干的径向耦合传热-传质 PDE 模型（含移动边界）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "model_ir": "model_ir.json",
         "model_doc": "model.md",
@@ -100,7 +130,1639 @@
           "E07",
           "E08"
         ],
-        "sha256": "85ff988b5a45f7441449dad5acb48f5dd9e53ef992b87ad9976b55576b2d552f"
+        "sha256": "251650a0b77bde911c3a34d4712065a08fd7616c52b65c0571914ed09de6ca60"
+      }
+    },
+    "MH-MODEL_IR-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-MODEL_IR-0001",
+      "type": "model_ir",
+      "version": 1,
+      "status": "active",
+      "title": "圆柱形药材热风烘干的径向耦合传热-传质 PDE 模型（含移动边界）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
+      "payload": {
+        "path": "model_ir.json",
+        "sha256": "251650a0b77bde911c3a34d4712065a08fd7616c52b65c0571914ed09de6ca60"
+      },
+      "data": {
+        "ir_version": "1.0",
+        "model_id": "M-CUMCM2026A",
+        "title": "圆柱形药材热风烘干的径向耦合传热-传质 PDE 模型（含移动边界）",
+        "model_family": {
+          "primary": "pde",
+          "secondary": [
+            "heat_transfer",
+            "mass_transfer",
+            "moving_boundary",
+            "finite_difference"
+          ],
+          "description": "把长径比 12.5 的圆柱形药材视为无限长圆柱，在柱坐标下只保留径向（一维）自由度，建立温度 T(r,t) 与干基含水率 C(r,t) 的耦合抛物型 PDE 组：热传导（含随 C、T 变化的表观热导率与体积热容）+ 水分扩散（扩散系数 D(C,T) 呈强非线性指数型）。表面对流换热/传质为 Robin 边界，中心为轴对称。问题 1–3 为固定域，问题 4 因失水收缩引入移动边界 r=R(t)，经 Landau 变换 ξ=r/R(t) 映射到固定计算域，R(t) 由干物质质量守恒闭合。数值上采用向后 Euler 隐式 + 三对角（Thomas/带状）求解，系数按上一时步半隐式滞后。"
+        },
+        "problem_binding": {
+          "problem_id": "2026_A",
+          "sub_question_id": "Q1..Q4",
+          "problem_sha256": "f44fad8e0dadcf0d18e901a49ee7d49891c439055570c0b1043fae8837c172b9",
+          "competition_format": "cumcm",
+          "allowed_modeling_structures": [
+            "pde",
+            "heat_transfer",
+            "mass_transfer",
+            "moving_boundary",
+            "finite_difference",
+            "effective_property_correlation"
+          ],
+          "sub_questions": {
+            "Q1": "预热平衡阶段（1800 s 内）：建立药材温度与水分浓度变化规律的模型，给出指定时刻/位置结果并输出完整网格结果",
+            "Q2": "整个烘干过程（2–3 天）：预热平衡 + 恒温干燥两阶段参数不同，统一采用附录 3 经验公式建模",
+            "Q3": "给定烘干要求（各处含水率 < 0.15 kg/kg）：确定所需烘干时长",
+            "Q4": "考虑失水引起的尺寸收缩（附录 4）：确定烘干时长，并给出移动边界下的含水率分布"
+          }
+        },
+        "assumptions": [
+          {
+            "assumption_id": "A01",
+            "type": "projection",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "药材为圆柱形（长 25 cm、半径 2 cm），长径比 12.5 ⇒ 轴向梯度可忽略，仅考虑径向一维（1D 轴对称）传热传质。",
+            "anchors_to_problem": "题面「形状大致呈圆柱形，长为 25 cm，半径为 2 cm」",
+            "rationale": "轴向与径向时间尺度比为 (L/R)² ≈ 156，轴向在远小于 1 s 内即均温；本题关心的 1800 s–8 天尺度上轴向已平衡，故 1D 径向是合理降维。"
+          },
+          {
+            "assumption_id": "A02",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "表面与烘房空气之间为对流换热 / 对流传质（Robin 条件），换热系数 h 与传质系数 h_m 取附录 2 给定值（h 只用于 Q1，因附录 2 给出；Q2–Q4 温度按恒温干燥设定）。",
+            "anchors_to_problem": "题面附录 2（相关参数）",
+            "rationale": "题面给定 h；边界通量与表面-空气势差成正比是标准对流边界。"
+          },
+          {
+            "assumption_id": "A03",
+            "type": "calibration_anchor",
+            "source": "reasonable_simplification",
+            "confidence": 0.85,
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "烘房空气湿度 C_air(t) 取两段阶跃：预热段 0.15 kg/kg，恒温干燥段 0.05 kg/kg；烘房温度按指数趋近恒温值 T_target（时间常数 450 s）。Q1 的 C_air 取 0.10 kg/kg 恒定常数。[v1.0 基线；v1.1 已被 A09 替代，仅保留作对照]",
+            "anchors_to_problem": "题面「预热平衡与恒温干燥阶段的参数有所不同」及附件 1 的温度/水分曲线形态",
+            "rationale": "附件 1 给出烘房温度/湿度随时间变化；指数趋近 450 s 与附件 1 的上升段形态一致。边界空气湿度只影响表面通量的势差，属可标定量。v1.1 已由 A09（附件1 实测数据插值）替代。"
+          },
+          {
+            "assumption_id": "A04",
+            "type": "calibration_anchor",
+            "source": "assumption_derived",
+            "confidence": 0.8,
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "恒温干燥目标温度取 T_target = 50 °C（中药材低温热风干燥的典型工艺温度），与题面「烘干一般持续 2–3 天」自洽。[v1.1 注：数据驱动边界（A09）取代了 T_target 的直接作用；T_target 仅出现在对照敏感性测试中（V03b）]",
+            "anchors_to_problem": "题面问题 2「烘干过程一般持续 2-3 天」",
+            "rationale": "烘干时长对温度高度敏感（实测 45/50/55/60 °C 分别给出 69.18/58.09/49.40/42.50 h），能落在题面 2–3 天窗口（48–72 h）的温度区间约为 44–55 °C；50 °C 是该区间内中药材热风干燥的常见工艺取值，故作为代表值。该选择已在敏感性验证 V03 中量化。"
+          },
+          {
+            "assumption_id": "A05",
+            "type": "simplification",
+            "source": "reasonable_simplification",
+            "confidence": 0.9,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "物性随 (C,T) 变化时，在隐式格式中取其上一时步的值（半隐式滞后），使每个时间步的离散方程仍为线性三对角系统。",
+            "anchors_to_problem": "题面附录 2/3/4 给出的物性经验公式",
+            "rationale": "全隐式会引入非线性迭代；滞后处理误差为 O(Δt)，在 Δt ≤ 20 s 时相对时间尺度（10⁵ s）可忽略，已由时间步收敛实验验证。"
+          },
+          {
+            "assumption_id": "A06",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "text": "烘干收缩为各向同性：药材保持圆柱形，半径按 R(t) 均匀收缩，长度方向不变（干物质总量守恒）。",
+            "anchors_to_problem": "题面问题 4「药材会因水分流失发生尺寸变化」+ 附件 2（半径随时间变化）",
+            "rationale": "附件 2 直接给出半径-时间数据；保持圆柱形是最自然的一致假设，且干物质守恒给出 R(t) 的封闭关系。"
+          },
+          {
+            "assumption_id": "A07",
+            "type": "simplification",
+            "source": "reasonable_simplification",
+            "confidence": 0.9,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "忽略水分迁移引起的对流通量（Darcy 渗流）、忽略温度对相变/汽化潜热的显式耦合，热与质通过物性 D(C,T) 单向耦合（温度影响扩散系数，水分通过热容影响温度）。",
+            "rationale": "题面附录未给出渗透率或汽化潜热数据，采用附录给定的经验物性已足以复现量级；该简化在热风低温干燥（≤60 °C）下误差可控。"
+          },
+          {
+            "assumption_id": "A08",
+            "type": "verification_invariant",
+            "source": "assumption_derived",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "烘干判据：药材各处（含中心 r=0）含水率同时低于 0.15 kg/kg；因中心扩散路径最长，等价于中心含水率 C(0,t) < 0.15。",
+            "anchors_to_problem": "题面问题 3「药材各处的水分浓度应低于 0.15 kg/kg」",
+            "rationale": "在单调径向剖面下中心为极值点，故监测中心即得充分必要判据，用于确定烘干时长。"
+          },
+          {
+            "assumption_id": "A09",
+            "type": "problem_statement",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "边界条件由附件 1 实测烘房温湿度序列插值驱动（0–14400 s，241 行），>14400 s 持末值外推（T≈50.2°C，C≈0.050 kg/kg）；替代原指数趋近+阶跃近似。",
+            "anchors_to_problem": "附件1「烘干初期各时间点烘房的温度和水分浓度」",
+            "rationale": "附件1 提供 241 行实际烘房温湿度数据，线性插值可精确复现题面给定边界条件，消除近似误差。末值外推是唯一无额外假设的处理方案。"
+          },
+          {
+            "assumption_id": "A10",
+            "type": "problem_statement",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "text": "问题4 移动边界半径可由附件2 实测药材半径序列插值（0–259200 s，145 行）直接驱动，替代 Landau 干物质质量守恒自算；两者并列为对照实验。",
+            "anchors_to_problem": "附件2「烘干过程中各时间点药材的半径」",
+            "rationale": "附件2 提供 145 行实测半径数据（2.000→1.198 cm），直接插值消除 Landau 变换中干物质守恒闭合的模型假设误差。为保留可复现性，同步产出 Landau 自算对照结果。"
+          }
+        ],
+        "variables": [
+          {
+            "variable_id": "V01",
+            "name": "温度场",
+            "symbol": "T(r,t)",
+            "definition": "药材内部温度",
+            "unit": "°C",
+            "type": "state",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "index_domain": "r ∈ [0, R(t)]"
+          },
+          {
+            "variable_id": "V02",
+            "name": "干基含水率场",
+            "symbol": "C(r,t)",
+            "definition": "单位干物质所含水分质量（干基）",
+            "unit": "kg·kg⁻¹",
+            "type": "state",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "index_domain": "r ∈ [0, R(t)]"
+          },
+          {
+            "variable_id": "V03",
+            "name": "半径（移动边界）",
+            "symbol": "R(t)",
+            "definition": "随失水收缩的药材外半径；固定域问题取 R=R₀",
+            "unit": "m",
+            "type": "state",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V04",
+            "name": "烘房温度",
+            "symbol": "T_air(t)",
+            "definition": "表面换热的环境温度（已知输入，非待求）",
+            "unit": "°C",
+            "type": "exogenous",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V05",
+            "name": "烘房空气湿度",
+            "symbol": "C_air(t)",
+            "definition": "表面传质的环境水分浓度（已知输入）",
+            "unit": "kg·kg⁻¹",
+            "type": "exogenous",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V06",
+            "name": "平均含水率",
+            "symbol": "C̄(t)",
+            "definition": "C̄ = (2/R²)∫₀ᴿ C r dr，用于质量守恒闭合移动边界",
+            "unit": "kg·kg⁻¹",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V07",
+            "name": "烘干时长",
+            "symbol": "t_dry",
+            "definition": "首次满足 max_r C(r,t) < 0.15 的时刻",
+            "unit": "s（论文以 h 给出）",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V08",
+            "name": "径向坐标（固定域）",
+            "symbol": "ξ",
+            "definition": "Landau 变换后的归一化径向坐标 ξ = r/R(t) ∈ [0,1]",
+            "unit": "-",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V09",
+            "name": "表观体积热容",
+            "symbol": "ρ(C)c_p(C)",
+            "definition": "随含水率变化的体积热容（附录经验式）",
+            "unit": "J·m⁻³·K⁻¹",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V10",
+            "name": "有效热导率 / 扩散系数",
+            "symbol": "k(C), D(C,T)",
+            "definition": "附录 2/3/4 给出的有效热导率与水分扩散系数经验式",
+            "unit": "W·m⁻¹·K⁻¹；m²·s⁻¹",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "parameter_id": "P01",
+            "name": "初始半径",
+            "symbol": "R₀",
+            "value": 0.02,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P02",
+            "name": "长度",
+            "symbol": "L",
+            "value": 0.25,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P03",
+            "name": "初始温度",
+            "symbol": "T₀",
+            "value": 28.0,
+            "unit": "°C",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P04",
+            "name": "初始干基含水率",
+            "symbol": "C₀",
+            "value": 2.55,
+            "unit": "kg·kg⁻¹",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P05",
+            "name": "对流换热系数",
+            "symbol": "h",
+            "value": 25.0,
+            "unit": "W·m⁻²·K⁻¹",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P06",
+            "name": "对流传质系数",
+            "symbol": "h_m",
+            "value": 8e-07,
+            "unit": "m·s⁻¹",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P07",
+            "name": "烘干含水率阈值",
+            "symbol": "C_th",
+            "value": 0.15,
+            "unit": "kg·kg⁻¹",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P08",
+            "name": "恒温干燥目标温度",
+            "symbol": "T_target",
+            "value": 50.0,
+            "unit": "°C",
+            "source": "assumption_derived",
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "definition": "由题面 2–3 天时长窗口反标定（见 A04 与敏感性验证 V03）"
+          },
+          {
+            "parameter_id": "P09",
+            "name": "径向网格数",
+            "symbol": "N_r",
+            "value": 1280,
+            "unit": "-",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "definition": "Δr = R₀/N_r = 0.0015625 cm；由空间收敛验证 V01 确定（N=320 偏高约 1.2%，N=1280 已收敛）"
+          },
+          {
+            "parameter_id": "P10",
+            "name": "时间步长",
+            "symbol": "Δt",
+            "value": 1.0,
+            "unit": "s",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ],
+            "definition": "Q1/Q2 取 1 s；Q3/Q4 取 10 s（由时间步收敛验证 V02 支撑）"
+          },
+          {
+            "parameter_id": "P11",
+            "name": "随机种子",
+            "symbol": "seed",
+            "value": 42,
+            "unit": "-",
+            "source": "convention",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "definition": "本模型为确定性数值求解，无随机性；种子固定为 42 以满足仓库铁律"
+          },
+          {
+            "parameter_id": "P12",
+            "name": "烘房温度趋近时间常数",
+            "symbol": "τ_air",
+            "value": 450.0,
+            "unit": "s",
+            "source": "assumption_derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "definition": "T_air(t)=T₀+(T_target−T₀)(1−e^{−t/τ_air})，与附件 1 上升段形态一致"
+          }
+        ],
+        "objectives": [
+          {
+            "objective_id": "O01",
+            "type": "simulate",
+            "expression": "{T(r_i,t_j), C(r_i,t_j)}, t_j=0,1,...,1800 s; r_i=0,0.1,...,2.0 cm",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "description": "复现预热平衡阶段温度/含水率演化，输出完整网格结果并给出 7 个指定时刻 × 5 个指定半径的表格值"
+          },
+          {
+            "objective_id": "O02",
+            "type": "simulate",
+            "expression": "{T, C} over 0–3 h（附带头 3 h 的 0.5 h 采样），并外推至全程 2–3 天",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "description": "建立含两阶段参数切换的全程模型，输出 0.5 h 间隔的表格值"
+          },
+          {
+            "objective_id": "O03",
+            "type": "find",
+            "expression": "t_dry = inf{ t : max_r C(r,t) < 0.15 }",
+            "variables_refs": [
+              "V02",
+              "V07"
+            ],
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "description": "在固定半径下确定满足烘干要求的时长"
+          },
+          {
+            "objective_id": "O04",
+            "type": "find",
+            "expression": "t_dry = inf{ t : max_ξ C(ξ,t) < 0.15 }，其中 R(t) 由干物质守恒确定",
+            "variables_refs": [
+              "V02",
+              "V03",
+              "V06",
+              "V07",
+              "V08"
+            ],
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "description": "在移动边界（收缩）下确定烘干时长与最终半径"
+          }
+        ],
+        "constraints": [
+          {
+            "constraint_id": "C01",
+            "type": "equality",
+            "expression": "ρ(C)c_p(C) ∂T/∂t = (1/r) ∂/∂r ( r k(C) ∂T/∂r )",
+            "variables_refs": [
+              "V01",
+              "V09",
+              "V10"
+            ],
+            "source": "physics",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "径向瞬态热传导（控制方程）"
+          },
+          {
+            "constraint_id": "C02",
+            "type": "equality",
+            "expression": "∂C/∂t = (1/r) ∂/∂r ( r D(C,T) ∂C/∂r )",
+            "variables_refs": [
+              "V02",
+              "V10"
+            ],
+            "source": "physics",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "径向水分扩散（控制方程，D 强非线性）"
+          },
+          {
+            "constraint_id": "C03",
+            "type": "boundary",
+            "expression": "−k ∂T/∂r|_{r=R} = h (T − T_air(t));  −D ∂C/∂r|_{r=R} = h_m (C − C_air(t))",
+            "variables_refs": [
+              "V01",
+              "V02",
+              "V04",
+              "V05"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "表面 Robin 对流边界（换热/传质）"
+          },
+          {
+            "constraint_id": "C04",
+            "type": "boundary",
+            "expression": "∂T/∂r|_{r=0} = 0;  ∂C/∂r|_{r=0} = 0",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "source": "physics",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "中心轴对称（自然边界）"
+          },
+          {
+            "constraint_id": "C05",
+            "type": "initial",
+            "expression": "T(r,0)=28 °C;  C(r,0)=2.55 kg/kg;  R(0)=0.02 m",
+            "variables_refs": [
+              "V01",
+              "V02",
+              "V03"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "constraint_id": "C06",
+            "type": "equality",
+            "expression": "R(t) = R₀ √[ (ρ(C₀)/(1+C₀)) · (1+C̄)/(ρ(C̄)) ]（干物质质量守恒）",
+            "variables_refs": [
+              "V03",
+              "V06"
+            ],
+            "source": "physics",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "description": "移动边界闭合方程：单位长度干物质量守恒决定 R(t)"
+          }
+        ],
+        "mechanisms": [
+          {
+            "mechanism_id": "ME01",
+            "name": "径向一维耦合传热传质",
+            "type": "diffusion",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "温度场与含水量场在柱坐标下耦合演化：热传导由表面对流驱动升温；水分由 Fick 扩散 + 表面对流传质排出。二者通过物性 (ρ,c_p,k,D) 双向影响。",
+            "governing_principle": "抛物型 PDE + Fick 定律 + Fourier 定律",
+            "variables_refs": [
+              "V01",
+              "V02",
+              "V09",
+              "V10"
+            ],
+            "assumptions_refs": [
+              "A01",
+              "A02",
+              "A07"
+            ],
+            "related_equations": [
+              "E01",
+              "E02",
+              "E03",
+              "E04"
+            ]
+          },
+          {
+            "mechanism_id": "ME02",
+            "name": "强非线性水分扩散",
+            "type": "diffusion",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "扩散系数 D 随含水率指数衰减、随温度 Arrhenius 增长（附录 3/4）。低含水率时 D 急剧下降，在表面形成“干壳”低扩散层，使中心-表面剖面出现陡峭梯度；这是烘干时间对空间网格敏感的根本原因。",
+            "governing_principle": "指数型本构 D(C,T) = D₀ exp(−a/C) exp(−E/(RT))",
+            "variables_refs": [
+              "V10"
+            ],
+            "related_equations": [
+              "E05"
+            ]
+          },
+          {
+            "mechanism_id": "ME03",
+            "name": "两阶段工艺参数切换",
+            "type": "driving",
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "预热平衡段（高湿 0.15、升温）→ 恒温干燥段（低湿 0.05、恒温 50 °C）。切换发生在 1800 s；阶段切换同时改变物性关联式版本（附录 2 → 附录 3/4）。",
+            "governing_principle": "分段时变边界与分段物性",
+            "variables_refs": [
+              "V04",
+              "V05"
+            ],
+            "related_equations": [
+              "E06"
+            ]
+          },
+          {
+            "mechanism_id": "ME04",
+            "name": "Landau 变换处理移动边界",
+            "type": "coordinate_transform",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "description": "令 ξ=r/R(t) 将收缩域 [0,R(t)] 映射到固定域 [0,1]，引入附加对流项 −(ξ Ṙ/R)∂C/∂ξ（对 T 同理）。R(t) 由干物质守恒与当前平均含水率 C̄ 联立更新，构成对 R 的隐式方程。",
+            "governing_principle": "坐标变换 + 质量守恒闭合",
+            "variables_refs": [
+              "V03",
+              "V06",
+              "V08"
+            ],
+            "assumptions_refs": [
+              "A06"
+            ],
+            "related_equations": [
+              "E07"
+            ]
+          },
+          {
+            "mechanism_id": "ME05",
+            "name": "半隐式线性化与三对角求解",
+            "type": "numerical",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "物性取上一时步值 ⇒ 每步为变系数线性抛物方程；向后 Euler 离散后系数矩阵三对角，用 Thomas 算法（或 scipy 带状求解器）O(N) 求解；表面 Robin 条件用 ghost 节点消元，与内部/中心节点统一格式。",
+            "governing_principle": "向后 Euler 无条件稳定 + 三对角线性代数",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "assumptions_refs": [
+              "A05"
+            ],
+            "related_equations": [
+              "E08"
+            ]
+          }
+        ],
+        "equations": [
+          {
+            "equation_id": "E01",
+            "latex": "\\rho(C)c_p(C)\\,\\frac{\\partial T}{\\partial t}=\\frac{1}{r}\\frac{\\partial}{\\partial r}\\left(r\\,k(C)\\frac{\\partial T}{\\partial r}\\right)",
+            "type": "governing",
+            "variables_refs": [
+              "V01",
+              "V09",
+              "V10"
+            ],
+            "derivation_trace": "柱坐标能量守恒 + Fourier 定律，轴对称 ⇒ 无 ∂/∂θ 项；长径比 12.5 ⇒ 无 ∂/∂z 项。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E02",
+            "latex": "\\frac{\\partial C}{\\partial t}=\\frac{1}{r}\\frac{\\partial}{\\partial r}\\left(r\\,D(C,T)\\frac{\\partial C}{\\partial r}\\right)",
+            "type": "governing",
+            "variables_refs": [
+              "V02",
+              "V10"
+            ],
+            "derivation_trace": "干基含水率守恒 + Fick 定律；干物质骨架固定 ⇒ 以 C 为守恒量的形式最简。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E03",
+            "latex": "-k\\frac{\\partial T}{\\partial r}\\Big|_{r=R}=h\\,(T-T_{air}),\\qquad -D\\frac{\\partial C}{\\partial r}\\Big|_{r=R}=h_m\\,(C-C_{air})",
+            "type": "boundary_condition",
+            "variables_refs": [
+              "V01",
+              "V02",
+              "V04",
+              "V05"
+            ],
+            "derivation_trace": "表面能量/质量通量 = 对流交换；由附录 2 给定 h、h_m。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E04",
+            "latex": "\\frac{\\partial T}{\\partial r}\\Big|_{r=0}=0,\\qquad \\frac{\\partial C}{\\partial r}\\Big|_{r=0}=0",
+            "type": "boundary_condition",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "derivation_trace": "柱坐标下 r=0 处无奇异的自然边界条件（轴对称）。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E05",
+            "latex": "D(C,T)=2.4\\times10^{-3}\\,e^{-0.45/C}\\,e^{-3850/T}\\ \\ (\\text{附录3});\\qquad D(C)=7\\times10^{-9}\\,e^{-0.89/C}\\ \\ (\\text{附录2})",
+            "type": "constitutive",
+            "variables_refs": [
+              "V10"
+            ],
+            "derivation_trace": "题面附录 2/3 给出的水分扩散系数经验式；Q4 采用附录 4 的对应版本。C→0 时对 C 取下限 1e-6 防指数溢出。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E06",
+            "latex": "T_{air}(t)=T_0+(T_{target}-T_0)\\left(1-e^{-t/\\tau_{air}}\\right),\\quad C_{air}(t)=\\begin{cases}0.15,&t<1800\\ \\mathrm{s}\\\\ 0.05,&t\\ge1800\\ \\mathrm{s}\\end{cases}",
+            "type": "constitutive",
+            "variables_refs": [
+              "V04",
+              "V05"
+            ],
+            "derivation_trace": "按附件 1 的两段工艺标定；τ_air=450 s 由上升段形态拟合。",
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E07",
+            "latex": "\\xi=\\frac{r}{R(t)},\\qquad R(t)=R_0\\sqrt{\\frac{\\rho(C_0)}{1+C_0}\\cdot\\frac{1+\\bar C}{\\rho(\\bar C)}}",
+            "type": "transformation",
+            "variables_refs": [
+              "V03",
+              "V06",
+              "V08"
+            ],
+            "derivation_trace": "Landau 变换把移动域映到固定域；R 的闭合式由「单位长度干物质量恒定」得到：ρ_eff(C₀)R₀²/(1+C₀) = ρ_eff(C̄)R²/(1+C̄)。",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E08",
+            "latex": "\\frac{u_i^{n+1}-u_i^{n}}{\\Delta t}=\\frac{1}{r_i\\Delta r^2}\\Big[\\alpha_{i+1/2}r_{i+1/2}(u_{i+1}^{n+1}-u_i^{n+1})-\\alpha_{i-1/2}r_{i-1/2}(u_i^{n+1}-u_{i-1}^{n+1})\\Big]",
+            "type": "discretization",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "derivation_trace": "有限体积/有限差分；系数 α（=k 或 D）取 n 时步 ⇒ 线性三对角；中心节点用 L'Hôpital 极限 2α(u₁−u₀)/(Δr²)；表面用 ghost 节点消去 Robin 导数项。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          }
+        ],
+        "dependencies": [
+          {
+            "dependency_id": "D01",
+            "from_type": "assumption",
+            "from_id": "A01",
+            "to_type": "equation",
+            "to_id": "E01",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D02",
+            "from_type": "assumption",
+            "from_id": "A02",
+            "to_type": "equation",
+            "to_id": "E03",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D03",
+            "from_type": "equation",
+            "from_id": "E01",
+            "to_type": "equation",
+            "to_id": "E08",
+            "relation": "feeds",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D04",
+            "from_type": "equation",
+            "from_id": "E02",
+            "to_type": "equation",
+            "to_id": "E08",
+            "relation": "feeds",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D05",
+            "from_type": "mechanism",
+            "from_id": "ME04",
+            "to_type": "equation",
+            "to_id": "E07",
+            "relation": "governs",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D06",
+            "from_type": "equation",
+            "from_id": "E07",
+            "to_type": "objective",
+            "to_id": "O04",
+            "relation": "governs",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D07",
+            "from_type": "equation",
+            "from_id": "E05",
+            "to_type": "mechanism",
+            "to_id": "ME02",
+            "relation": "defines",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D08",
+            "from_type": "parameter",
+            "from_id": "P08",
+            "to_type": "assumption",
+            "to_id": "A04",
+            "relation": "constrains",
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          }
+        ],
+        "solvers": [
+          {
+            "solver_id": "S01",
+            "name": "径向隐式扩散求解器",
+            "type": "numerical",
+            "method": "向后 Euler 隐式 + 三对角 Thomas（节点少时）/ scipy 带状求解（向量化）",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "implementation_ref": "artifacts/code 求解脚本（函数 _implicit_step / solve）",
+            "equations_refs": [
+              "E08"
+            ],
+            "convergence_criteria": "Δt=20/10/5 s 与 Δr 加密下烘干时长差异 <1%（验证 V01、V02）"
+          },
+          {
+            "solver_id": "S02",
+            "name": "移动边界联立求解",
+            "type": "numerical",
+            "method": "每时步先由 C̄ 更新 R，再对 ξ 域求解 E01/E02 的变换形式（附加对流项）",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "implementation_ref": "artifacts/code 求解脚本（solve(moving=True)）",
+            "equations_refs": [
+              "E07"
+            ],
+            "convergence_criteria": "R(t) 单调不增；干物质守恒相对误差 <1e-6"
+          },
+          {
+            "solver_id": "S03",
+            "name": "烘干时长定位",
+            "type": "numerical",
+            "method": "逐时步监测中心含水率 C(0,t)，首次低于 0.15 即停并线性内插到阈值时刻",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "equations_refs": [
+              "E02"
+            ],
+            "convergence_criteria": "内插时间误差 ≤ Δt"
+          }
+        ],
+        "experiments": [
+          {
+            "experiment_id": "EXP01",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "method": "预热平衡阶段 1800 s（v1.1 数据驱动边界：附件1 实测 T_air/C_air 插值），Δt=1 s，N_r=1280，附录 2 常物性 + D(C)",
+            "inputs_refs": [
+              "inputs/problem.txt",
+              "inputs/附件/附件1.xlsx"
+            ],
+            "solver_ref": "S01",
+            "parameters": {
+              "t_end_s": 1800,
+              "dt_s": 1,
+              "N_r": 1280,
+              "mode": 1,
+              "boundary": "附件1 实测数据插值"
+            },
+            "outputs": [
+              "artifacts/results/result1.xlsx"
+            ],
+            "results": {
+              "final_surface_T_C": 36.78626829640114,
+              "final_center_T_C": 33.576544703252566,
+              "final_surface_C": 1.510054162412943,
+              "final_center_C": 2.549992138344313
+            },
+            "run_metadata": {
+              "code": "artifacts/code solve_a.py v1.1",
+              "solver_version": "1.1"
+            }
+          },
+          {
+            "experiment_id": "EXP02",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "method": "全程 3 h（v1.1 数据驱动边界：附件1 实测插值 + 附录 3 变物性），Δt=1 s，N_r=1280",
+            "inputs_refs": [
+              "inputs/problem.txt",
+              "inputs/附件/附件1.xlsx"
+            ],
+            "solver_ref": "S01",
+            "parameters": {
+              "t_end_s": 10800,
+              "dt_s": 1,
+              "N_r": 1280,
+              "mode": 2,
+              "boundary": "附件1 实测数据插值"
+            },
+            "outputs": [
+              "artifacts/results/result2.xlsx"
+            ],
+            "results": {
+              "final_surface_T_C": 49.966402490173635,
+              "final_center_T_C": 49.84944678856475,
+              "final_surface_C": 1.0080712145415696,
+              "final_center_C": 1.7661830135992458
+            },
+            "run_metadata": {
+              "code": "artifacts/code solve_a.py v1.1",
+              "solver_version": "1.1"
+            }
+          },
+          {
+            "experiment_id": "EXP03",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "method": "固定半径全程烘干至中心含水率 <0.15（v1.1 数据驱动边界：附件1 插值 >14400s 持末值），Δt=10 s，N_r=1280，附录 3 变物性",
+            "inputs_refs": [
+              "inputs/problem.txt",
+              "inputs/附件/附件1.xlsx"
+            ],
+            "solver_ref": "S03",
+            "parameters": {
+              "t_end_s": 691200,
+              "dt_s": 10,
+              "N_r": 1280,
+              "mode": 3,
+              "C_stop": 0.15,
+              "boundary": "附件1 实测数据插值（>14400s 持末值外推）"
+            },
+            "outputs": [
+              "artifacts/results/result3.xlsx"
+            ],
+            "results": {
+              "drying_time_h": 57.172222222222224,
+              "final_center_C": 0.14999988750328933,
+              "final_surface_C": 0.05208619821307536,
+              "final_center_T_C": 50.16500000000816
+            },
+            "run_metadata": {
+              "code": "artifacts/code solve_a.py v1.1",
+              "solver_version": "1.1"
+            }
+          },
+          {
+            "experiment_id": "EXP04",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "method": "移动边界（附件2 实测半径插值驱动 R(t)）全程烘干至中心含水率 <0.15，Δt=10 s，N_r=1280，附录 4 变物性",
+            "inputs_refs": [
+              "inputs/problem.txt",
+              "inputs/附件/附件1.xlsx",
+              "inputs/附件/附件2.xlsx"
+            ],
+            "solver_ref": "S02",
+            "parameters": {
+              "t_end_s": 691200,
+              "dt_s": 10,
+              "N_r": 1280,
+              "mode": 4,
+              "C_stop": 0.15,
+              "R_source": "附件2 实测半径插值（>259200s 持末值）"
+            },
+            "outputs": [
+              "artifacts/results/result4.xlsx"
+            ],
+            "results": {
+              "drying_time_h": 52.31111111111111,
+              "final_radius_cm": 1.2,
+              "final_radius_m": 0.012,
+              "final_center_C": 0.14999598685738585,
+              "final_surface_C": 0.05237384221679416
+            },
+            "run_metadata": {
+              "code": "artifacts/code solve_a.py v1.1",
+              "solver_version": "1.1"
+            }
+          },
+          {
+            "experiment_id": "EXP04b",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "method": "问题4 对照基线：移动边界（Landau 干物质质量守恒自算 R(t)）+ 附件1 数据驱动边界，附录 4 变物性",
+            "inputs_refs": [
+              "inputs/problem.txt",
+              "inputs/附件/附件1.xlsx"
+            ],
+            "solver_ref": "S02",
+            "parameters": {
+              "t_end_s": 691200,
+              "dt_s": 10,
+              "N_r": 1280,
+              "mode": 4,
+              "C_stop": 0.15,
+              "R_source": "Landau 干物质质量守恒自算"
+            },
+            "outputs": [
+              "artifacts/results/result4.xlsx"
+            ],
+            "results": {
+              "drying_time_h": 64.56666666666666,
+              "final_radius_cm": 1.2721197996366713,
+              "final_radius_m": 0.012721197996366713,
+              "final_center_C": 0.14999642466447477,
+              "final_surface_C": 0.05230443387064745
+            },
+            "run_metadata": {
+              "code": "artifacts/code solve_a.py v1.1",
+              "solver_version": "1.1"
+            }
+          }
+        ],
+        "validations": [
+          {
+            "validation_id": "V01",
+            "type": "convergence",
+            "method": "径向网格加密：N_r = 160 / 320 / 640（另加 1280 / 2560 外推），比较烘干时长与终态场",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "targets_refs": [
+              "E08",
+              "P09"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "spatial_convergence": [
+                {
+                  "N": 160,
+                  "dry_h": 63.5167
+                },
+                {
+                  "N": 320,
+                  "dry_h": 57.8667
+                },
+                {
+                  "N": 640,
+                  "dry_h": 57.25
+                },
+                {
+                  "N": 1280,
+                  "dry_h": 57.1778
+                },
+                {
+                  "N": 2560,
+                  "dry_h": 57.1667
+                }
+              ],
+              "note": "v1.1 数据驱动边界。N=160 严重欠分辨；N=1280/2560 差 0.0111 h（0.02%）已收敛；最终取 N_r=1280"
+            }
+          },
+          {
+            "validation_id": "V02",
+            "type": "convergence",
+            "method": "时间步加密：Δt = 20 / 10 / 5 s（N_r=320），比较烘干时长",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "targets_refs": [
+              "E08",
+              "P10"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "temporal_convergence": [
+                {
+                  "dt": 20.0,
+                  "dry_h": 57.8667
+                },
+                {
+                  "dt": 10.0,
+                  "dry_h": 57.8639
+                },
+                {
+                  "dt": 5.0,
+                  "dry_h": 57.8625
+                }
+              ],
+              "note": "v1.1 数据驱动边界。Δt≤10 s 差异 <0.003%，故 Q3/Q4 取 Δt=10 s"
+            }
+          },
+          {
+            "validation_id": "V03",
+            "type": "sensitivity",
+            "method": "恒温干燥温度敏感性（v1.1：温度侧用参数化 default_T_air + 湿度侧数据驱动 data_C_air）：T_target = 45 / 50 / 55 / 60 °C 下的烘干时长（N_r=320）",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "targets_refs": [
+              "A04",
+              "P08"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "temperature_sensitivity": [
+                {
+                  "T_target": 45.0,
+                  "dry_h": 69.2222
+                },
+                {
+                  "T_target": 50.0,
+                  "dry_h": 58.1
+                },
+                {
+                  "T_target": 55.0,
+                  "dry_h": 49.3889
+                },
+                {
+                  "T_target": 60.0,
+                  "dry_h": 42.4778
+                }
+              ],
+              "note": "v1.1：温度侧用参数化指数趋近（default_T_air），湿度侧用附件1 实测数据。满足 2–3 天（48–72 h）窗口的温度约 44–55 °C；50 °C 为区间内代表值"
+            }
+          },
+          {
+            "validation_id": "V04",
+            "type": "invariant",
+            "method": "质量守恒：固定域下总水量变化 = 表面对流通量积分；移动边界下干物质总质量恒定",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "targets_refs": [
+              "E02",
+              "E07"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "note": "数值上由逐时步通量累计与场差分对比校验"
+            }
+          },
+          {
+            "validation_id": "V05",
+            "type": "sanity",
+            "method": "物理合理性：温度单调升温趋近 T_air；含水率单调下降；中心含水率始终不低于表面含水率（单调剖面）",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "targets_refs": [
+              "E01",
+              "E02"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "note": "终态实测：Q1 表面 C=1.540964 < 中心 C=2.549992，剖面单调，符合扩散方向"
+            }
+          }
+        ],
+        "claims": [
+          {
+            "claim_id": "CL01",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "text": "Q1（v1.1 数据驱动）：1800 s 内预热平衡阶段，表面温度升至 36.7863 °C、中心温度 33.5765 °C；表面含水率降至 1.5101 kg/kg，中心含水率几乎不变（2.5500 kg/kg）。注意：数据驱动边界下 Q1 末温（36.79 °C）显著低于原 v1.0 指数趋近近似（44.59 °C）——因附件1 实测升温比指数拟合更缓慢。",
+            "evidence_refs": [
+              "artifacts/results/result1.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP01"
+            ],
+            "validation_refs": [
+              "V05"
+            ]
+          },
+          {
+            "claim_id": "CL02",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "text": "Q2（v1.1 数据驱动）：3 h 时全柱基本达到恒温（表面 49.9664 °C、中心 49.8494 °C），表面含水率降至 1.0081、中心降至 1.7662 kg/kg；中心-表面含水率差随干燥推进持续扩大，说明内部扩散成为控制步骤。",
+            "evidence_refs": [
+              "artifacts/results/result2.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP02"
+            ],
+            "validation_refs": [
+              "V05"
+            ]
+          },
+          {
+            "claim_id": "CL03",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "text": "Q3（v1.1 数据驱动边界，附件1 插值+持末值外推）：满足“各处含水率 <0.15 kg/kg”的烘干时长为 57.1722 h（约 2.38 天），与 v1.0 指数近似（57.4222 h）仅差 0.25 h——说明指数趋近对 Q3 终点影响甚微（因烘干主期在恒温段，边界差异已在预热段均衡）。中心含水率 0.1500、表面含水率 0.0521 kg/kg。网格收敛：N_r=160/320/640/1280/2560 对应 63.5167/57.8667/57.2500/57.1778/57.1667 h，N=1280 与 N=2560 差 0.0111 h（0.02%）已收敛。",
+            "evidence_refs": [
+              "artifacts/results/result3.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP03"
+            ],
+            "validation_refs": [
+              "V01",
+              "V02",
+              "V03"
+            ]
+          },
+          {
+            "claim_id": "CL04",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "text": "Q4（v1.1 数据驱动，附件2 实测半径）：附件2 实测半径驱动的移动边界烘干时长为 52.3111 h（约 2.18 天），比 Q3 固定半径（57.1722 h）短 4.86 h（约 -8.5%），也比 Landau 干物质守恒自算对照（64.5667 h）短 12.26 h。原因是附件2 实测半径收缩至 1.200 cm 比 Landau 自算（1.272 cm）更剧烈——收缩缩小了扩散路径从而加速烘干。对照基线（Landau 自算 + 数据驱动边界）的 64.57 h 与原 v1.0（64.78 h）近乎一致，说明湿度边界精度对 Q4 影响在 0.2 h 内。",
+            "evidence_refs": [
+              "artifacts/results/result4.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP04",
+              "EXP04b"
+            ],
+            "validation_refs": [
+              "V01",
+              "V04"
+            ]
+          },
+          {
+            "claim_id": "CL05",
+            "type": "interpretation",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "全程控制步骤由“表面对流”转为“内部扩散”：Q1 阶段表面含水率下降而中心几乎不动（v1.1 表面 1.510 vs 中心 2.550）；Q2–Q3 阶段中心-表面差值单调扩大（Q2 末 0.758、Q3 末 0.098 但中心已接近阈值）。这解释了为何不能按表面含水率判断烘干终点，必须以中心（最慢点）为准（见 A08）。Q4 附件2 实测半径驱动的结果（52.31 h）显著快于 Landau 自算（64.57 h），说明题面提供的实测收缩数据比质量守恒模型更快——这是对原模型的关键实证校准。",
+            "evidence_refs": [
+              "artifacts/results/result1.xlsx",
+              "artifacts/results/result2.xlsx",
+              "artifacts/results/result3.xlsx"
+            ],
+            "validation_refs": [
+              "V05"
+            ]
+          }
+        ],
+        "model_graph": {
+          "graph_version": 1,
+          "description": "MODEL_IR 概念图：问题 → 假设/参数 → 机理/方程 → 求解器 → 实验 → 验证 → 主张",
+          "nodes": [
+            {
+              "id": "Q",
+              "label": "problem 2026_A (Q1..Q4)",
+              "type": "problem"
+            },
+            {
+              "id": "A",
+              "label": "assumptions A01-A08",
+              "type": "assumption"
+            },
+            {
+              "id": "P",
+              "label": "parameters P01-P12",
+              "type": "parameter"
+            },
+            {
+              "id": "V",
+              "label": "variables V01-V10",
+              "type": "variable"
+            },
+            {
+              "id": "ME01",
+              "label": "径向一维耦合传热传质",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME02",
+              "label": "强非线性水分扩散",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME03",
+              "label": "两阶段工艺参数切换",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME04",
+              "label": "Landau 变换移动边界",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME05",
+              "label": "半隐式三对角求解",
+              "type": "mechanism"
+            },
+            {
+              "id": "EQ",
+              "label": "equations E01-E08",
+              "type": "equation"
+            },
+            {
+              "id": "CT",
+              "label": "constraints C01-C06",
+              "type": "constraint"
+            },
+            {
+              "id": "OB",
+              "label": "objectives O01-O04",
+              "type": "objective"
+            },
+            {
+              "id": "SV",
+              "label": "solvers S01-S03",
+              "type": "solver"
+            },
+            {
+              "id": "EX",
+              "label": "experiments EXP01-EXP04",
+              "type": "experiment"
+            },
+            {
+              "id": "VA",
+              "label": "validations V01-V05",
+              "type": "validation"
+            },
+            {
+              "id": "CL",
+              "label": "claims CL01-CL05",
+              "type": "claim"
+            }
+          ],
+          "edges": [
+            {
+              "from": "Q",
+              "to": "A",
+              "relation": "bound_by"
+            },
+            {
+              "from": "Q",
+              "to": "P",
+              "relation": "bound_by"
+            },
+            {
+              "from": "A",
+              "to": "V",
+              "relation": "defines"
+            },
+            {
+              "from": "V",
+              "to": "ME01",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "V",
+              "to": "ME02",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "V",
+              "to": "ME03",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "V",
+              "to": "ME04",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "ME01",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "ME02",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "ME03",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "ME04",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "EQ",
+              "to": "CT",
+              "relation": "constrained_by"
+            },
+            {
+              "from": "CT",
+              "to": "OB",
+              "relation": "shapes"
+            },
+            {
+              "from": "OB",
+              "to": "SV",
+              "relation": "solved_by"
+            },
+            {
+              "from": "SV",
+              "to": "EX",
+              "relation": "executed_in"
+            },
+            {
+              "from": "EX",
+              "to": "VA",
+              "relation": "verified_by"
+            },
+            {
+              "from": "VA",
+              "to": "CL",
+              "relation": "supports"
+            }
+          ]
+        }
       }
     },
     "MH-ASSUMPTION-0001": {
@@ -111,8 +1773,8 @@
       "status": "active",
       "title": "模型假设 A01-A08",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "items": [
           {
@@ -134,14 +1796,14 @@
             "type": "calibration_anchor",
             "source": "reasonable_simplification",
             "confidence": 0.85,
-            "text": "烘房空气湿度 C_air(t) 取两段阶跃：预热段 0.15 kg/kg，恒温干燥段 0.05 kg/kg；烘房温度按指数趋近恒温值 T_target（时间常数 450 s）。Q1 的 C_air 取 0.10 kg/kg 恒定常数。"
+            "text": "烘房空气湿度 C_air(t) 取两段阶跃：预热段 0.15 kg/kg，恒温干燥段 0.05 kg/kg；烘房温度按指数趋近恒温值 T_target（时间常数 450 s）。Q1 的 C_air 取 0.10 kg/kg 恒定常数。[v1.0 基线；v1.1 已被 A09 替代，仅保留作对照]"
           },
           {
             "id": "A04",
             "type": "calibration_anchor",
             "source": "assumption_derived",
             "confidence": 0.8,
-            "text": "恒温干燥目标温度取 T_target = 50 °C（中药材低温热风干燥的典型工艺温度），与题面「烘干一般持续 2–3 天」自洽。"
+            "text": "恒温干燥目标温度取 T_target = 50 °C（中药材低温热风干燥的典型工艺温度），与题面「烘干一般持续 2–3 天」自洽。[v1.1 注：数据驱动边界（A09）取代了 T_target 的直接作用；T_target 仅出现在对照敏感性测试中（V03b）]"
           },
           {
             "id": "A05",
@@ -170,6 +1832,20 @@
             "source": "assumption_derived",
             "confidence": 1.0,
             "text": "烘干判据：药材各处（含中心 r=0）含水率同时低于 0.15 kg/kg；因中心扩散路径最长，等价于中心含水率 C(0,t) < 0.15。"
+          },
+          {
+            "id": "A09",
+            "type": "problem_statement",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "text": "边界条件由附件 1 实测烘房温湿度序列插值驱动（0–14400 s，241 行），>14400 s 持末值外推（T≈50.2°C，C≈0.050 kg/kg）；替代原指数趋近+阶跃近似。"
+          },
+          {
+            "id": "A10",
+            "type": "problem_statement",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "text": "问题4 移动边界半径可由附件2 实测药材半径序列插值（0–259200 s，145 行）直接驱动，替代 Landau 干物质质量守恒自算；两者并列为对照实验。"
           }
         ]
       }
@@ -182,11 +1858,11 @@
       "status": "active",
       "title": "solve_a.py",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "path": "artifacts/code/solve_a.py",
-        "sha256": "c21e1dc85b565f586e78842dae50f82e9427d5255a5fbb42f9787a8b7827e61f",
+        "sha256": "2024cff69213b49ad96c4951c92f90ce73463d657cb417a1b44acddb33efc554",
         "note": "径向耦合传热传质隐式求解 + 移动边界 + 验证套件"
       }
     },
@@ -195,16 +1871,17 @@
       "artifact_id": "MH-EXPERIMENT-0001",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q1 预热平衡阶段（1800 s，附录 2 常物性）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "sub_question": "Q1",
         "solver": "S01/S02/S03",
         "code_ref": "MH-CODE-0001",
         "key_outputs": [
+          "boundary_source",
           "final_center_C",
           "final_center_T_C",
           "final_radius_m",
@@ -213,47 +1890,51 @@
           "final_time_s",
           "label"
         ]
-      }
+      },
+      "question": "Q1"
     },
     "MH-RESULT-0001": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0001",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q1 结果（result1.xlsx）",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "path": "artifacts/results/result1.xlsx",
-        "sha256": "d8c49f257ac156a00910d096cfe73366d6e7cbf566143f9007c6d3e566fbcead",
+        "sha256": "1e96c1077c62907347eb335efe1ddc2f96c75dd8200826b45402f95f5386e566",
         "values": {
           "label": "problem1",
           "final_time_s": 1800.0,
-          "final_surface_T_C": 44.58696852049056,
-          "final_center_T_C": 40.71056715294522,
-          "final_surface_C": 1.5409642733530742,
-          "final_center_C": 2.549992376364589,
-          "final_radius_m": 0.02
+          "final_surface_T_C": 36.78626829640114,
+          "final_center_T_C": 33.576544703252566,
+          "final_surface_C": 1.510054162412943,
+          "final_center_C": 2.549992138344313,
+          "final_radius_m": 0.02,
+          "boundary_source": "附件1 实测数据插值"
         }
-      }
+      },
+      "question": "Q1"
     },
     "MH-EXPERIMENT-0002": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0002",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q2 全程烘干前 3 h（两阶段参数，附录 3 变物性）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "sub_question": "Q2",
         "solver": "S01/S02/S03",
         "code_ref": "MH-CODE-0001",
         "key_outputs": [
+          "boundary_source",
           "final_center_C",
           "final_center_T_C",
           "final_radius_m",
@@ -262,47 +1943,51 @@
           "final_time_s",
           "label"
         ]
-      }
+      },
+      "question": "Q2"
     },
     "MH-RESULT-0002": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0002",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q2 结果（result2.xlsx）",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "path": "artifacts/results/result2.xlsx",
-        "sha256": "34c665fc6bf661918eedea918c518cf2a2972b2f4f78edf98b80a86aacbe9c2b",
+        "sha256": "854753d3ae262d06b51d28c0babe8849630caee4145dc53c286b52751557c130",
         "values": {
           "label": "problem2",
           "final_time_s": 10800.0,
-          "final_surface_T_C": 49.98250383130152,
-          "final_center_T_C": 49.97038498287125,
-          "final_surface_C": 1.0013837251651074,
-          "final_center_C": 1.7396858752692204,
-          "final_radius_m": 0.02
+          "final_surface_T_C": 49.966402490173635,
+          "final_center_T_C": 49.84944678856475,
+          "final_surface_C": 1.0080712145415696,
+          "final_center_C": 1.7661830135992458,
+          "final_radius_m": 0.02,
+          "boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
         }
-      }
+      },
+      "question": "Q2"
     },
     "MH-EXPERIMENT-0003": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0003",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q3 固定半径烘干至中心含水率 < 0.15（求时长）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "sub_question": "Q3",
         "solver": "S01/S02/S03",
         "code_ref": "MH-CODE-0001",
         "key_outputs": [
+          "boundary_source",
           "drying_time_h",
           "final_center_C",
           "final_center_T_C",
@@ -312,48 +1997,52 @@
           "final_time_s",
           "label"
         ]
-      }
+      },
+      "question": "Q3"
     },
     "MH-RESULT-0003": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0003",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q3 结果（result3.xlsx）",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "path": "artifacts/results/result3.xlsx",
-        "sha256": "e7a3ca121300e90b5b99915f2cf2020df1d67006c9adc5e8f55563b3b21533b6",
+        "sha256": "3a6d872dbaaacffbaed442810526ed6b82a7a603fb8e57027e94cc39972f3755",
         "values": {
           "label": "problem3",
-          "final_time_s": 206720.0,
-          "final_surface_T_C": 49.999999999995914,
-          "final_center_T_C": 49.999999999988425,
-          "final_surface_C": 0.05221723192397079,
-          "final_center_C": 0.14999981798681666,
+          "final_time_s": 205820.0,
+          "final_surface_T_C": 50.165000000001484,
+          "final_center_T_C": 50.16500000000816,
+          "final_surface_C": 0.05208619821307536,
+          "final_center_C": 0.14999988750328933,
           "final_radius_m": 0.02,
-          "drying_time_h": 57.422222222222224
+          "drying_time_h": 57.172222222222224,
+          "boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
         }
-      }
+      },
+      "question": "Q3"
     },
     "MH-EXPERIMENT-0004": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0004",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q4 移动边界（失水收缩）烘干至中心含水率 < 0.15",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "sub_question": "Q4",
         "solver": "S01/S02/S03",
         "code_ref": "MH-CODE-0001",
         "key_outputs": [
+          "boundary_source",
           "drying_time_h",
           "final_center_C",
           "final_center_T_C",
@@ -362,35 +2051,40 @@
           "final_surface_C",
           "final_surface_T_C",
           "final_time_s",
-          "label"
+          "label",
+          "radius_source"
         ]
-      }
+      },
+      "question": "Q4"
     },
     "MH-RESULT-0004": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0004",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q4 结果（result4.xlsx）",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "path": "artifacts/results/result4.xlsx",
-        "sha256": "0cc0bbb538848c7b514df06570e601a1b3a9ed0fbd66567290e853a9a2492487",
+        "sha256": "50e6a3e16e5d31edbef68d200806eb66fd069f04c37b2605ac249f7e670278a0",
         "values": {
           "label": "problem4",
-          "final_time_s": 233210.0,
-          "final_surface_T_C": 49.99885483990766,
-          "final_center_T_C": 49.998849344558415,
-          "final_surface_C": 0.05243092990387775,
-          "final_center_C": 0.1499974570092847,
-          "final_radius_m": 0.012721227069072335,
-          "drying_time_h": 64.78055555555555,
-          "final_radius_cm": 1.2721227069072334
+          "final_time_s": 188320.0,
+          "final_surface_T_C": 50.1650000000137,
+          "final_center_T_C": 50.16500000001799,
+          "final_surface_C": 0.05237384221679416,
+          "final_center_C": 0.14999598685738585,
+          "final_radius_m": 0.012,
+          "drying_time_h": 52.31111111111111,
+          "final_radius_cm": 1.2,
+          "radius_source": "附件2 实测半径",
+          "boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
         }
-      }
+      },
+      "question": "Q4"
     },
     "MH-CLAIM-0001": {
       "schema_version": "3.1",
@@ -400,16 +2094,17 @@
       "status": "active",
       "title": "CL01（Q1）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
-        "text": "Q1：1800 s 内预热平衡阶段，表面温度升至 44.586969 °C、中心温度 40.710567 °C；表面含水率降至 1.540964 kg/kg，中心含水率几乎不变（2.549992 kg/kg）。原因是预热段表面升温快、传质驱动力小，水分尚未形成显著梯度。",
+        "text": "Q1（v1.1 数据驱动）：1800 s 内预热平衡阶段，表面温度升至 36.7863 °C、中心温度 33.5765 °C；表面含水率降至 1.5101 kg/kg，中心含水率几乎不变（2.5500 kg/kg）。注意：数据驱动边界下 Q1 末温（36.79 °C）显著低于原 v1.0 指数趋近近似（44.59 °C）——因附件1 实测升温比指数拟合更缓慢。",
         "status": "supported",
         "type": "result",
         "validation_refs": [
           "V05"
         ]
-      }
+      },
+      "question": "Q1"
     },
     "MH-CLAIM-0002": {
       "schema_version": "3.1",
@@ -419,16 +2114,17 @@
       "status": "active",
       "title": "CL02（Q2）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
-        "text": "Q2：3 h 时全柱基本达到恒温（表面 49.982504 °C、中心 49.970385 °C），表面含水率降至 1.001384、中心降至 1.739686 kg/kg；中心-表面含水率差随干燥推进持续扩大，说明内部扩散成为控制步骤。",
+        "text": "Q2（v1.1 数据驱动）：3 h 时全柱基本达到恒温（表面 49.9664 °C、中心 49.8494 °C），表面含水率降至 1.0081、中心降至 1.7662 kg/kg；中心-表面含水率差随干燥推进持续扩大，说明内部扩散成为控制步骤。",
         "status": "supported",
         "type": "result",
         "validation_refs": [
           "V05"
         ]
-      }
+      },
+      "question": "Q2"
     },
     "MH-CLAIM-0003": {
       "schema_version": "3.1",
@@ -438,10 +2134,10 @@
       "status": "active",
       "title": "CL03（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
-        "text": "Q3：在固定半径、恒温 50 °C 下，满足“各处含水率 <0.15 kg/kg”的烘干时长为 57.4222 h（约 2.39 天），落在题面给出的 2–3 天窗口内；此时中心含水率 0.1499998、表面含水率 0.0522172 kg/kg。网格收敛实验：N_r=160/320/640/1280/2560 对应 63.5222/58.0944/57.5000/57.4278/57.4167 h，N=1280 与外推收敛值（≈57.42 h）差异 <0.02%。",
+        "text": "Q3（v1.1 数据驱动边界，附件1 插值+持末值外推）：满足“各处含水率 <0.15 kg/kg”的烘干时长为 57.1722 h（约 2.38 天），与 v1.0 指数近似（57.4222 h）仅差 0.25 h——说明指数趋近对 Q3 终点影响甚微（因烘干主期在恒温段，边界差异已在预热段均衡）。中心含水率 0.1500、表面含水率 0.0521 kg/kg。网格收敛：N_r=160/320/640/1280/2560 对应 63.5167/57.8667/57.2500/57.1778/57.1667 h，N=1280 与 N=2560 差 0.0111 h（0.02%）已收敛。",
         "status": "supported",
         "type": "result",
         "validation_refs": [
@@ -449,7 +2145,8 @@
           "V02",
           "V03"
         ]
-      }
+      },
+      "question": "Q3"
     },
     "MH-CLAIM-0004": {
       "schema_version": "3.1",
@@ -459,17 +2156,18 @@
       "status": "active",
       "title": "CL04（Q4）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
-        "text": "Q4：考虑失水收缩（移动边界）后，烘干时长为 64.7806 h（约 2.70 天），比固定半径情形长 7.36 h（约 +12.8%）。原因是半径收缩使水分扩散路径在后期变短（有利），但同时也减小了表面积与干物质基准变化（不利），净效应为时间略增；药材最终半径由 2.0000 cm 收缩至 1.2721 cm（截面积收缩约 59.5%）。",
+        "text": "Q4（v1.1 数据驱动，附件2 实测半径）：附件2 实测半径驱动的移动边界烘干时长为 52.3111 h（约 2.18 天），比 Q3 固定半径（57.1722 h）短 4.86 h（约 -8.5%），也比 Landau 干物质守恒自算对照（64.5667 h）短 12.26 h。原因是附件2 实测半径收缩至 1.200 cm 比 Landau 自算（1.272 cm）更剧烈——收缩缩小了扩散路径从而加速烘干。对照基线（Landau 自算 + 数据驱动边界）的 64.57 h 与原 v1.0（64.78 h）近乎一致，说明湿度边界精度对 Q4 影响在 0.2 h 内。",
         "status": "supported",
         "type": "result",
         "validation_refs": [
           "V01",
           "V04"
         ]
-      }
+      },
+      "question": "Q4"
     },
     "MH-CLAIM-0005": {
       "schema_version": "3.1",
@@ -479,30 +2177,31 @@
       "status": "active",
       "title": "CL05（Q1）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
-        "text": "全程控制步骤由“表面对流”转为“内部扩散”：Q1 阶段表面含水率下降而中心几乎不动；Q2–Q3 阶段中心-表面差值单调扩大（Q2 末 0.738、Q3 末 0.098 但中心已接近阈值）。这解释了为何不能按表面含水率判断烘干终点，必须以中心（最慢点）为准（见 A08）。",
+        "text": "全程控制步骤由“表面对流”转为“内部扩散”：Q1 阶段表面含水率下降而中心几乎不动（v1.1 表面 1.510 vs 中心 2.550）；Q2–Q3 阶段中心-表面差值单调扩大（Q2 末 0.758、Q3 末 0.098 但中心已接近阈值）。这解释了为何不能按表面含水率判断烘干终点，必须以中心（最慢点）为准（见 A08）。Q4 附件2 实测半径驱动的结果（52.31 h）显著快于 Landau 自算（64.57 h），说明题面提供的实测收缩数据比质量守恒模型更快——这是对原模型的关键实证校准。",
         "status": "supported",
         "type": "interpretation",
         "validation_refs": [
           "V05"
         ]
-      }
+      },
+      "question": "Q1"
     },
-    "MH-NARRATIVE-0001": {
+    "MH-DELIVERABLE-0001": {
       "schema_version": "3.1",
-      "artifact_id": "MH-NARRATIVE-0001",
-      "type": "narrative",
+      "artifact_id": "MH-DELIVERABLE-0001",
+      "type": "deliverable",
       "version": 1,
       "status": "active",
       "title": "模型描述文档（含 Mermaid）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:23Z",
-      "updated_at": "2026-09-10T13:16:23Z",
+      "created_at": "2026-09-10T15:58:33Z",
+      "updated_at": "2026-09-10T15:58:33Z",
       "payload": {
         "path": "model.md",
-        "sha256": "d2b08d6ecb5c0dba830aaddf4a327524dfa0258e3349c84f2b37592840af6f55"
+        "sha256": "b6b04d6185809755974851aa02dab563c08fe488cb970685f48e2371b34b1c8a"
       }
     }
   }

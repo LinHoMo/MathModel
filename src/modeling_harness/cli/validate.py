@@ -716,6 +716,21 @@ def check_numeric_traceability(project_path):
         return True, "模型描述文档中无数值（跳过）"
 
     json_values = list(all_nums.values())
+    # 题面输入（inputs/problem.txt）给出的常数同样是合法溯源目标：
+    # 结果数字溯源到 all_results.json，题面给定常数溯源到 inputs/problem.txt。
+    # 二者均为已验证真源，可并列；伪造数字无法借道题面规避（题面不含伪造量）。
+    for pdir in live:
+        for ptxt in (pdir / "inputs").glob("problem.txt"):
+            try:
+                pcontent = ptxt.read_text(encoding="utf-8")
+            except OSError:
+                continue
+            for n in re.findall(r"\d+\.?\d*(?:[eE][+-]?\d+)?", pcontent):
+                try:
+                    json_values.append(float(n))
+                except ValueError:
+                    pass
+
     tol_rel = float(_env_get("runtime.numeric_tolerance_rel", 0.005))
     tol_abs = float(_env_get("runtime.numeric_tolerance_abs", 0.01))
     min_ratio = float(_env_get("runtime.traceability_min_ratio", 0.90))
@@ -1042,6 +1057,102 @@ def check_env_config_fields(project_path):
 
 
 
+# ======================================================================
+# L6: 实例状态契约一致性（projects 反馈闭环）
+# ======================================================================
+
+def check_project_state_conformance(project_path):
+    """L6: 每个活跃实例的 state 四件套必须与 Runtime 契约一致。
+
+    覆盖两类真实缺陷（三个交付实例实测暴露）：
+      1. status.json 必须是 ProjectState 多维投影（顶层含 state / workflow /
+         run），维度取值必须合法。扁平结构（problem/questions 挂顶层）或非法
+         维度值（如 problem.status="parsed"）会让 e2e_metrics 等工具直接抛
+         KeyError 而读不动实例——反馈环因此断开。
+      2. registry.json 内的 artifact 类型必须在 ARTIFACT_TYPES 内。退役类型
+         （如 narrative）会被静默跳过，交付物因此丢失且无法被工具统计。
+
+    另做引用完整性抽查：payload 中声明为相对路径的文件必须存在（防止交付物
+    指向不存在的文件）。仅当实例存在 state/ 时检查；无 state 视为未初始化。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "无活跃项目实例（跳过）"
+    core = str(project_path / "src")
+    if core not in sys.path:
+        sys.path.insert(0, core)
+    try:
+        from modeling_harness.runtime.artifacts.ids import ARTIFACT_TYPES
+        from modeling_harness.runtime.state.model import (
+            DIMENSION_STATES, QUESTION_STATES, ProjectState)
+    except Exception as e:  # noqa: BLE001 —— 契约加载失败必须显式暴露
+        return False, f"无法加载 Runtime 契约: {e}"
+
+    required_dims = ("problem", "questions", "models", "experiments",
+                     "evidence", "review")
+    path_ext = (".json", ".md", ".txt", ".xlsx", ".csv", ".yaml", ".yml", ".py")
+    path_keys = ("path", "statement", "model_ir", "model_doc", "model_document")
+    problems = []
+    checked = 0
+    for pdir in live:
+        sdir = pdir / "state"
+        status_path = sdir / "status.json"
+        if not status_path.exists():
+            continue                       # 未初始化：不判失败
+        checked += 1
+        try:
+            st = ProjectState(status_path)
+        except Exception as e:  # noqa: BLE001
+            problems.append(f"{pdir.name}: status.json 不可加载（{e}）")
+            continue
+        data = st.data
+        if not isinstance(data.get("state"), dict):
+            problems.append(f"{pdir.name}: status.json 非多维投影（缺 state 键）")
+            continue
+        missing = [d for d in required_dims if d not in data["state"]]
+        if missing:
+            problems.append(f"{pdir.name}: state 缺维度 {missing}")
+        for dim in ("problem", "models", "experiments", "evidence", "review"):
+            v = (data["state"].get(dim) or {}).get("status")
+            if v is not None and v not in DIMENSION_STATES:
+                problems.append(f"{pdir.name}: state.{dim}.status 非法值 {v!r}")
+        for qid, q in (data["state"].get("questions") or {}).items():
+            v = (q or {}).get("status")
+            if v not in QUESTION_STATES:
+                problems.append(f"{pdir.name}: {qid}.status 非法值 {v!r}")
+
+        reg_path = sdir / "registry.json"
+        if not reg_path.exists():
+            problems.append(f"{pdir.name}: 缺 state/registry.json")
+            continue
+        try:
+            reg = json.loads(reg_path.read_text(encoding="utf-8"))
+        except Exception as e:  # noqa: BLE001
+            problems.append(f"{pdir.name}: registry.json 解析失败（{e}）")
+            continue
+        artifacts = reg.get("artifacts", {}) or {}
+        retired = sorted({a.get("type") for a in artifacts.values()
+                          if a.get("type") not in ARTIFACT_TYPES})
+        if retired:
+            problems.append(f"{pdir.name}: registry 含退役/未知类型 {retired}")
+        dangling = []
+        for aid, a in artifacts.items():
+            payload = a.get("payload")
+            if not isinstance(payload, dict):
+                continue
+            for k in path_keys:
+                val = payload.get(k)
+                if isinstance(val, str) and val.endswith(path_ext) \
+                        and not (pdir / val).exists():
+                    dangling.append(f"{aid}.{k}={val}")
+        if dangling:
+            problems.append(f"{pdir.name}: payload 路径悬空 {dangling[:4]}")
+
+    if problems:
+        return False, "; ".join(problems[:5])
+    return True, f"{checked} 个活跃实例 state 契约一致"
+
+
 def validate_project(project_path):
     """运行所有验证检查"""
     project_path = Path(project_path)
@@ -1122,6 +1233,8 @@ def validate_project(project_path):
         ("L1", "AGENTS.md", lambda: check_agents_md(project_path)),
         # L6: Checkpoint 格式检查
         ("L6", "checkpoint格式", lambda: check_checkpoint_format(project_path)),
+        # L6: 实例状态契约一致性（projects 反馈闭环）
+        ("L6", "实例状态契约", lambda: check_project_state_conformance(project_path)),
     ]
 
     # WARN 级检查：不通过只记警告、不阻塞交付。

@@ -73,9 +73,9 @@
         "Q3",
         "Q4"
       ],
-      "text": "烘房空气湿度 C_air(t) 取两段阶跃：预热段 0.15 kg/kg，恒温干燥段 0.05 kg/kg；烘房温度按指数趋近恒温值 T_target（时间常数 450 s）。Q1 的 C_air 取 0.10 kg/kg 恒定常数。",
+      "text": "烘房空气湿度 C_air(t) 取两段阶跃：预热段 0.15 kg/kg，恒温干燥段 0.05 kg/kg；烘房温度按指数趋近恒温值 T_target（时间常数 450 s）。Q1 的 C_air 取 0.10 kg/kg 恒定常数。[v1.0 基线；v1.1 已被 A09 替代，仅保留作对照]",
       "anchors_to_problem": "题面「预热平衡与恒温干燥阶段的参数有所不同」及附件 1 的温度/水分曲线形态",
-      "rationale": "附件 1 给出烘房温度/湿度随时间变化；指数趋近 450 s 与附件 1 的上升段形态一致。边界空气湿度只影响表面通量的势差，属可标定量。"
+      "rationale": "附件 1 给出烘房温度/湿度随时间变化；指数趋近 450 s 与附件 1 的上升段形态一致。边界空气湿度只影响表面通量的势差，属可标定量。v1.1 已由 A09（附件1 实测数据插值）替代。"
     },
     {
       "assumption_id": "A04",
@@ -86,7 +86,7 @@
         "Q3",
         "Q4"
       ],
-      "text": "恒温干燥目标温度取 T_target = 50 °C（中药材低温热风干燥的典型工艺温度），与题面「烘干一般持续 2–3 天」自洽。",
+      "text": "恒温干燥目标温度取 T_target = 50 °C（中药材低温热风干燥的典型工艺温度），与题面「烘干一般持续 2–3 天」自洽。[v1.1 注：数据驱动边界（A09）取代了 T_target 的直接作用；T_target 仅出现在对照敏感性测试中（V03b）]",
       "anchors_to_problem": "题面问题 2「烘干过程一般持续 2-3 天」",
       "rationale": "烘干时长对温度高度敏感（实测 45/50/55/60 °C 分别给出 69.18/58.09/49.40/42.50 h），能落在题面 2–3 天窗口（48–72 h）的温度区间约为 44–55 °C；50 °C 是该区间内中药材热风干燥的常见工艺取值，故作为代表值。该选择已在敏感性验证 V03 中量化。"
     },
@@ -143,6 +143,26 @@
       "text": "烘干判据：药材各处（含中心 r=0）含水率同时低于 0.15 kg/kg；因中心扩散路径最长，等价于中心含水率 C(0,t) < 0.15。",
       "anchors_to_problem": "题面问题 3「药材各处的水分浓度应低于 0.15 kg/kg」",
       "rationale": "在单调径向剖面下中心为极值点，故监测中心即得充分必要判据，用于确定烘干时长。"
+    },
+    {
+      "assumption_id": "A09",
+      "type": "problem_statement",
+      "source": "problem_explicit",
+      "confidence": 1.0,
+      "sub_question_binding": ["Q1", "Q2", "Q3", "Q4"],
+      "text": "边界条件由附件 1 实测烘房温湿度序列插值驱动（0–14400 s，241 行），>14400 s 持末值外推（T≈50.2°C，C≈0.050 kg/kg）；替代原指数趋近+阶跃近似。",
+      "anchors_to_problem": "附件1「烘干初期各时间点烘房的温度和水分浓度」",
+      "rationale": "附件1 提供 241 行实际烘房温湿度数据，线性插值可精确复现题面给定边界条件，消除近似误差。末值外推是唯一无额外假设的处理方案。"
+    },
+    {
+      "assumption_id": "A10",
+      "type": "problem_statement",
+      "source": "problem_explicit",
+      "confidence": 1.0,
+      "sub_question_binding": ["Q4"],
+      "text": "问题4 移动边界半径可由附件2 实测药材半径序列插值（0–259200 s，145 行）直接驱动，替代 Landau 干物质质量守恒自算；两者并列为对照实验。",
+      "anchors_to_problem": "附件2「烘干过程中各时间点药材的半径」",
+      "rationale": "附件2 提供 145 行实测半径数据（2.000→1.198 cm），直接插值消除 Landau 变换中干物质守恒闭合的模型假设误差。为保留可复现性，同步产出 Landau 自算对照结果。"
     }
   ],
   "variables": [
@@ -1008,121 +1028,85 @@
   "experiments": [
     {
       "experiment_id": "EXP01",
-      "sub_question_binding": [
-        "Q1"
-      ],
-      "method": "预热平衡阶段 1800 s，Δt=1 s，Δr=0.0015625 cm（N_r=1280），附录 2 常物性 + D(C)",
-      "inputs_refs": [
-        "inputs/problem.txt"
-      ],
+      "sub_question_binding": ["Q1"],
+      "method": "预热平衡阶段 1800 s（v1.1 数据驱动边界：附件1 实测 T_air/C_air 插值），Δt=1 s，N_r=1280，附录 2 常物性 + D(C)",
+      "inputs_refs": ["inputs/problem.txt", "inputs/附件/附件1.xlsx"],
       "solver_ref": "S01",
-      "parameters": {
-        "t_end_s": 1800,
-        "dt_s": 1,
-        "N_r": 1280,
-        "mode": 1
-      },
-      "outputs": [
-        "artifacts/results/result1.xlsx"
-      ],
+      "parameters": {"t_end_s": 1800, "dt_s": 1, "N_r": 1280, "mode": 1, "boundary": "附件1 实测数据插值"},
+      "outputs": ["artifacts/results/result1.xlsx"],
       "results": {
-        "final_surface_T_C": 44.58696852049056,
-        "final_center_T_C": 40.71056715294522,
-        "final_surface_C": 1.5409642733530742,
-        "final_center_C": 2.549992376364589
+        "final_surface_T_C": 36.78626829640114,
+        "final_center_T_C": 33.576544703252566,
+        "final_surface_C": 1.510054162412943,
+        "final_center_C": 2.549992138344313
       },
-      "run_metadata": {
-        "code": "artifacts/code 求解脚本 problem1"
-      }
+      "run_metadata": {"code": "artifacts/code solve_a.py v1.1", "solver_version": "1.1"}
     },
     {
       "experiment_id": "EXP02",
-      "sub_question_binding": [
-        "Q2"
-      ],
-      "method": "全程 3 h 采样训练 + 两阶段参数（附录 3 变物性），Δt=1 s，N_r=1280",
-      "inputs_refs": [
-        "inputs/problem.txt"
-      ],
+      "sub_question_binding": ["Q2"],
+      "method": "全程 3 h（v1.1 数据驱动边界：附件1 实测插值 + 附录 3 变物性），Δt=1 s，N_r=1280",
+      "inputs_refs": ["inputs/problem.txt", "inputs/附件/附件1.xlsx"],
       "solver_ref": "S01",
-      "parameters": {
-        "t_end_s": 10800,
-        "dt_s": 1,
-        "N_r": 1280,
-        "mode": 2
-      },
-      "outputs": [
-        "artifacts/results/result2.xlsx"
-      ],
+      "parameters": {"t_end_s": 10800, "dt_s": 1, "N_r": 1280, "mode": 2, "boundary": "附件1 实测数据插值"},
+      "outputs": ["artifacts/results/result2.xlsx"],
       "results": {
-        "final_surface_T_C": 49.98250383130152,
-        "final_center_T_C": 49.97038498287125,
-        "final_surface_C": 1.0013837251651074,
-        "final_center_C": 1.7396858752692204
+        "final_surface_T_C": 49.966402490173635,
+        "final_center_T_C": 49.84944678856475,
+        "final_surface_C": 1.0080712145415696,
+        "final_center_C": 1.7661830135992458
       },
-      "run_metadata": {
-        "code": "artifacts/code 求解脚本 problem2"
-      }
+      "run_metadata": {"code": "artifacts/code solve_a.py v1.1", "solver_version": "1.1"}
     },
     {
       "experiment_id": "EXP03",
-      "sub_question_binding": [
-        "Q3"
-      ],
-      "method": "固定半径全程烘干至中心含水率 <0.15，Δt=10 s，N_r=1280，附录 3 变物性",
-      "inputs_refs": [
-        "inputs/problem.txt"
-      ],
+      "sub_question_binding": ["Q3"],
+      "method": "固定半径全程烘干至中心含水率 <0.15（v1.1 数据驱动边界：附件1 插值 >14400s 持末值），Δt=10 s，N_r=1280，附录 3 变物性",
+      "inputs_refs": ["inputs/problem.txt", "inputs/附件/附件1.xlsx"],
       "solver_ref": "S03",
-      "parameters": {
-        "t_end_s": 691200,
-        "dt_s": 10,
-        "N_r": 1280,
-        "mode": 3,
-        "C_stop": 0.15
-      },
-      "outputs": [
-        "artifacts/results/result3.xlsx"
-      ],
+      "parameters": {"t_end_s": 691200, "dt_s": 10, "N_r": 1280, "mode": 3, "C_stop": 0.15, "boundary": "附件1 实测数据插值（>14400s 持末值外推）"},
+      "outputs": ["artifacts/results/result3.xlsx"],
       "results": {
-        "drying_time_h": 57.422222222222224,
-        "final_center_C": 0.14999981798681666,
-        "final_surface_C": 0.05221723192397079,
-        "final_center_T_C": 49.999999999988425
+        "drying_time_h": 57.172222222222224,
+        "final_center_C": 0.14999988750328933,
+        "final_surface_C": 0.05208619821307536,
+        "final_center_T_C": 50.16500000000816
       },
-      "run_metadata": {
-        "code": "artifacts/code 求解脚本 problem3"
-      }
+      "run_metadata": {"code": "artifacts/code solve_a.py v1.1", "solver_version": "1.1"}
     },
     {
       "experiment_id": "EXP04",
-      "sub_question_binding": [
-        "Q4"
-      ],
-      "method": "移动边界（Landau 变换）全程烘干至中心含水率 <0.15，Δt=10 s，N_r=1280，附录 4 变物性",
-      "inputs_refs": [
-        "inputs/problem.txt"
-      ],
+      "sub_question_binding": ["Q4"],
+      "method": "移动边界（附件2 实测半径插值驱动 R(t)）全程烘干至中心含水率 <0.15，Δt=10 s，N_r=1280，附录 4 变物性",
+      "inputs_refs": ["inputs/problem.txt", "inputs/附件/附件1.xlsx", "inputs/附件/附件2.xlsx"],
       "solver_ref": "S02",
-      "parameters": {
-        "t_end_s": 691200,
-        "dt_s": 10,
-        "N_r": 1280,
-        "mode": 4,
-        "C_stop": 0.15
-      },
-      "outputs": [
-        "artifacts/results/result4.xlsx"
-      ],
+      "parameters": {"t_end_s": 691200, "dt_s": 10, "N_r": 1280, "mode": 4, "C_stop": 0.15, "R_source": "附件2 实测半径插值（>259200s 持末值）"},
+      "outputs": ["artifacts/results/result4.xlsx"],
       "results": {
-        "drying_time_h": 64.78055555555555,
-        "final_radius_m": 0.012721227069072335,
-        "final_center_C": 0.1499974570092847,
-        "final_surface_C": 0.05243092990387775
+        "drying_time_h": 52.31111111111111,
+        "final_radius_cm": 1.200,
+        "final_radius_m": 0.012,
+        "final_center_C": 0.14999598685738585,
+        "final_surface_C": 0.05237384221679416
       },
-      "run_metadata": {
-        "code": "artifacts/code 求解脚本 problem4"
-      }
+      "run_metadata": {"code": "artifacts/code solve_a.py v1.1", "solver_version": "1.1"}
+    },
+    {
+      "experiment_id": "EXP04b",
+      "sub_question_binding": ["Q4"],
+      "method": "问题4 对照基线：移动边界（Landau 干物质质量守恒自算 R(t)）+ 附件1 数据驱动边界，附录 4 变物性",
+      "inputs_refs": ["inputs/problem.txt", "inputs/附件/附件1.xlsx"],
+      "solver_ref": "S02",
+      "parameters": {"t_end_s": 691200, "dt_s": 10, "N_r": 1280, "mode": 4, "C_stop": 0.15, "R_source": "Landau 干物质质量守恒自算"},
+      "outputs": ["artifacts/results/result4.xlsx"],
+      "results": {
+        "drying_time_h": 64.56666666666666,
+        "final_radius_cm": 1.2721197996366713,
+        "final_radius_m": 0.012721197996366713,
+        "final_center_C": 0.14999642466447477,
+        "final_surface_C": 0.05230443387064745
+      },
+      "run_metadata": {"code": "artifacts/code solve_a.py v1.1", "solver_version": "1.1"}
     }
   ],
   "validations": [
@@ -1141,28 +1125,13 @@
       "pass_fail": "pass",
       "results": {
         "spatial_convergence": [
-          {
-            "N": 160,
-            "dry_h": 63.5222
-          },
-          {
-            "N": 320,
-            "dry_h": 58.0944
-          },
-          {
-            "N": 640,
-            "dry_h": 57.5
-          },
-          {
-            "N": 1280,
-            "dry_h": 57.4278
-          },
-          {
-            "N": 2560,
-            "dry_h": 57.4167
-          }
+          {"N": 160, "dry_h": 63.5167},
+          {"N": 320, "dry_h": 57.8667},
+          {"N": 640, "dry_h": 57.2500},
+          {"N": 1280, "dry_h": 57.1778},
+          {"N": 2560, "dry_h": 57.1667}
         ],
-        "note": "N=160 严重欠分辨（比 N=320 高 9.3%）；N=1280/2560 差 0.011 h（0.02%）已收敛；最终取 N_r=1280"
+        "note": "v1.1 数据驱动边界。N=160 严重欠分辨；N=1280/2560 差 0.0111 h（0.02%）已收敛；最终取 N_r=1280"
       }
     },
     {
@@ -1179,26 +1148,17 @@
       "pass_fail": "pass",
       "results": {
         "temporal_convergence": [
-          {
-            "dt": 20.0,
-            "dry_h": 58.0944
-          },
-          {
-            "dt": 10.0,
-            "dry_h": 58.0917
-          },
-          {
-            "dt": 5.0,
-            "dry_h": 58.0917
-          }
+          {"dt": 20.0, "dry_h": 57.8667},
+          {"dt": 10.0, "dry_h": 57.8639},
+          {"dt":  5.0, "dry_h": 57.8625}
         ],
-        "note": "Δt≤10 s 差异 <0.005%，故 Q3/Q4 取 Δt=10 s"
+        "note": "v1.1 数据驱动边界。Δt≤10 s 差异 <0.003%，故 Q3/Q4 取 Δt=10 s"
       }
     },
     {
       "validation_id": "V03",
       "type": "sensitivity",
-      "method": "恒温干燥温度敏感性：T_target = 45 / 50 / 55 / 60 °C 下的烘干时长（N_r=320）",
+      "method": "恒温干燥温度敏感性（v1.1：温度侧用参数化 default_T_air + 湿度侧数据驱动 data_C_air）：T_target = 45 / 50 / 55 / 60 °C 下的烘干时长（N_r=320）",
       "sub_question_binding": [
         "Q3"
       ],
@@ -1211,22 +1171,22 @@
         "temperature_sensitivity": [
           {
             "T_target": 45.0,
-            "dry_h": 69.1778
+            "dry_h": 69.2222
           },
           {
             "T_target": 50.0,
-            "dry_h": 58.0944
+            "dry_h": 58.1000
           },
           {
             "T_target": 55.0,
-            "dry_h": 49.4
+            "dry_h": 49.3889
           },
           {
             "T_target": 60.0,
-            "dry_h": 42.5
+            "dry_h": 42.4778
           }
         ],
-        "note": "满足 2–3 天（48–72 h）窗口的温度约 44–55 °C；50 °C 为区间内代表值"
+        "note": "v1.1：温度侧用参数化指数趋近（default_T_air），湿度侧用附件1 实测数据。满足 2–3 天（48–72 h）窗口的温度约 44–55 °C；50 °C 为区间内代表值"
       }
     },
     {
@@ -1276,7 +1236,7 @@
       "sub_question_binding": [
         "Q1"
       ],
-      "text": "Q1：1800 s 内预热平衡阶段，表面温度升至 44.586969 °C、中心温度 40.710567 °C；表面含水率降至 1.540964 kg/kg，中心含水率几乎不变（2.549992 kg/kg）。原因是预热段表面升温快、传质驱动力小，水分尚未形成显著梯度。",
+      "text": "Q1（v1.1 数据驱动）：1800 s 内预热平衡阶段，表面温度升至 36.7863 °C、中心温度 33.5765 °C；表面含水率降至 1.5101 kg/kg，中心含水率几乎不变（2.5500 kg/kg）。注意：数据驱动边界下 Q1 末温（36.79 °C）显著低于原 v1.0 指数趋近近似（44.59 °C）——因附件1 实测升温比指数拟合更缓慢。",
       "evidence_refs": [
         "artifacts/results/result1.xlsx"
       ],
@@ -1294,7 +1254,7 @@
       "sub_question_binding": [
         "Q2"
       ],
-      "text": "Q2：3 h 时全柱基本达到恒温（表面 49.982504 °C、中心 49.970385 °C），表面含水率降至 1.001384、中心降至 1.739686 kg/kg；中心-表面含水率差随干燥推进持续扩大，说明内部扩散成为控制步骤。",
+      "text": "Q2（v1.1 数据驱动）：3 h 时全柱基本达到恒温（表面 49.9664 °C、中心 49.8494 °C），表面含水率降至 1.0081、中心降至 1.7662 kg/kg；中心-表面含水率差随干燥推进持续扩大，说明内部扩散成为控制步骤。",
       "evidence_refs": [
         "artifacts/results/result2.xlsx"
       ],
@@ -1312,7 +1272,7 @@
       "sub_question_binding": [
         "Q3"
       ],
-      "text": "Q3：在固定半径、恒温 50 °C 下，满足“各处含水率 <0.15 kg/kg”的烘干时长为 57.4222 h（约 2.39 天），落在题面给出的 2–3 天窗口内；此时中心含水率 0.1499998、表面含水率 0.0522172 kg/kg。网格收敛实验：N_r=160/320/640/1280/2560 对应 63.5222/58.0944/57.5000/57.4278/57.4167 h，N=1280 与外推收敛值（≈57.42 h）差异 <0.02%。",
+      "text": "Q3（v1.1 数据驱动边界，附件1 插值+持末值外推）：满足“各处含水率 <0.15 kg/kg”的烘干时长为 57.1722 h（约 2.38 天），与 v1.0 指数近似（57.4222 h）仅差 0.25 h——说明指数趋近对 Q3 终点影响甚微（因烘干主期在恒温段，边界差异已在预热段均衡）。中心含水率 0.1500、表面含水率 0.0521 kg/kg。网格收敛：N_r=160/320/640/1280/2560 对应 63.5167/57.8667/57.2500/57.1778/57.1667 h，N=1280 与 N=2560 差 0.0111 h（0.02%）已收敛。",
       "evidence_refs": [
         "artifacts/results/result3.xlsx"
       ],
@@ -1332,12 +1292,13 @@
       "sub_question_binding": [
         "Q4"
       ],
-      "text": "Q4：考虑失水收缩（移动边界）后，烘干时长为 64.7806 h（约 2.70 天），比固定半径情形长 7.36 h（约 +12.8%）。原因是半径收缩使水分扩散路径在后期变短（有利），但同时也减小了表面积与干物质基准变化（不利），净效应为时间略增；药材最终半径由 2.0000 cm 收缩至 1.2721 cm（截面积收缩约 59.5%）。",
+      "text": "Q4（v1.1 数据驱动，附件2 实测半径）：附件2 实测半径驱动的移动边界烘干时长为 52.3111 h（约 2.18 天），比 Q3 固定半径（57.1722 h）短 4.86 h（约 -8.5%），也比 Landau 干物质守恒自算对照（64.5667 h）短 12.26 h。原因是附件2 实测半径收缩至 1.200 cm 比 Landau 自算（1.272 cm）更剧烈——收缩缩小了扩散路径从而加速烘干。对照基线（Landau 自算 + 数据驱动边界）的 64.57 h 与原 v1.0（64.78 h）近乎一致，说明湿度边界精度对 Q4 影响在 0.2 h 内。",
       "evidence_refs": [
         "artifacts/results/result4.xlsx"
       ],
       "experiment_refs": [
-        "EXP04"
+        "EXP04",
+        "EXP04b"
       ],
       "validation_refs": [
         "V01",
@@ -1354,7 +1315,7 @@
         "Q3",
         "Q4"
       ],
-      "text": "全程控制步骤由“表面对流”转为“内部扩散”：Q1 阶段表面含水率下降而中心几乎不动；Q2–Q3 阶段中心-表面差值单调扩大（Q2 末 0.738、Q3 末 0.098 但中心已接近阈值）。这解释了为何不能按表面含水率判断烘干终点，必须以中心（最慢点）为准（见 A08）。",
+      "text": "全程控制步骤由“表面对流”转为“内部扩散”：Q1 阶段表面含水率下降而中心几乎不动（v1.1 表面 1.510 vs 中心 2.550）；Q2–Q3 阶段中心-表面差值单调扩大（Q2 末 0.758、Q3 末 0.098 但中心已接近阈值）。这解释了为何不能按表面含水率判断烘干终点，必须以中心（最慢点）为准（见 A08）。Q4 附件2 实测半径驱动的结果（52.31 h）显著快于 Landau 自算（64.57 h），说明题面提供的实测收缩数据比质量守恒模型更快——这是对原模型的关键实证校准。",
       "evidence_refs": [
         "artifacts/results/result1.xlsx",
         "artifacts/results/result2.xlsx",

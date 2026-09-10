@@ -2,17 +2,53 @@
   "graph_schema_version": 3,
   "graph_version": 1,
   "project": "cumcm2026a",
-  "updated_at": "2026-09-10T13:16:23Z",
+  "updated_at": "2026-09-10T15:58:33Z",
   "relations": [
     {
       "from": "MH-PROBLEM-0001",
-      "to": "MH-QUESTION-0001",
+      "to": "Q1",
       "relation": "motivates"
     },
     {
-      "from": "MH-QUESTION-0001",
+      "from": "MH-PROBLEM-0001",
+      "to": "Q2",
+      "relation": "motivates"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "to": "Q3",
+      "relation": "motivates"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "to": "Q4",
+      "relation": "motivates"
+    },
+    {
+      "from": "Q1",
       "to": "MH-MODEL-0001",
       "relation": "solved_by"
+    },
+    {
+      "from": "Q2",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by"
+    },
+    {
+      "from": "Q3",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by"
+    },
+    {
+      "from": "Q4",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-MODEL_IR-0001",
+      "relation": "derived_from",
+      "note": "MODEL_IR 是 model 的契约形态"
     },
     {
       "from": "MH-MODEL-0001",
@@ -145,7 +181,7 @@
     },
     {
       "from": "MH-MODEL-0001",
-      "to": "MH-NARRATIVE-0001",
+      "to": "MH-DELIVERABLE-0001",
       "relation": "derived_from",
       "note": "模型描述是 MODEL_IR 的人类可读投影"
     }

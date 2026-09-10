@@ -1,7 +1,10 @@
 # 项目状态
 
 > 更新：2026-09-10（V2 彻底清除：历史文档/旧研究/LaTeX 链/四手残留删除，
-> 全仓采用 V3 新定位）。架构见 `docs/architecture/V3.1_ARCHITECTURE.md`。
+> 全仓采用 V3 新定位；**P15-K002 → P1 全程闭环 → 实例反馈审计**：ADR-0008
+> 问题理解层 + 实例状态契约门禁 + 投影写出唯一入口；cumcm2024a/2026a/2026b
+> 三实例可读、可对账、可度量，分解覆盖 20.0→100.0）。架构见
+> `docs/architecture/V3.1_ARCHITECTURE.md`。
 > **本文件是状态数字的唯一出处：所有数字来自机器命令实测并绑定 commit hash，
 > 禁止人工转述其他来源的数字。**
 
@@ -65,13 +68,15 @@ Construction 行为？"。
 | **P3-4** | BZD 知识导入：试点 5 卡（M4 已落地，Prior 知识 + source_type/confidence/status 标注）；经验常数禁令验证（src/modeling_harness/ 零引用 6.81% 等）。**目录重组：2026-09-10 执行完成**——`domains/`（Canonical Domain Model 由 runtime/domain 上提）与 `adapters/`（外部 Constructor 适配器由 constructors/adapters 上提）落地顶层；`runtime/execution/adapters/`（执行适配器，不同语义）保留原址；见 ADR-0006 | ✅ 完成 | 本轮 |
 | **v3.2.2 V2 残留彻底清除** | 删除论文链工具 9 个 + validate_project.py + LaTeX 模板 27 + 竞赛 profile 9 + V2 schema 4 + syslab 技能 101 + 旧实例 8 + docs 25+6（diagrams）+ harness-compat；env 全面 V3 化（schema 六组、loader 无 profile、config 无 paper）；new_project 重写纯 V3 布局（inputs/state/artifacts/model）；知识/文档引用全部对齐 | ✅ 600 passed，validate 45/0/0，catalog OK | 本轮 |
 | **2026 A/B 全问建模交付** | 用 harness 完成 CUMCM 2026 A 题（药材烘干：径向耦合传热传质 PDE + Landau 移动边界）与 B 题（干扰源交会定位 + 同心环覆盖清除）全问建模：各产出 `model_ir.json` + `model.md` + `all_results.json` + `result*.xlsx` + `state/`（registry/evidence_graph/decision_log/status）；A 题烘干时长 Q3 57.4222 h / Q4 64.7806 h（含收缩，终半径 1.2721 cm）；B 题 30 组演练清除比例 1.0000（Q3 7150.10 s / Q4 15088.79 s），覆盖漏检率全向 0.0000 / 含定向 0.00025；**反向修复 harness 4 处**（validate.py Mermaid 闭合误判、new_project.py README 内部路径泄漏、两题 README 路径泄漏）；新增知识卡 3 张 + 失败卡 5 条 + playbook 2 篇 | ✅ 600 passed，validate 45/0/0，catalog OK，术语 OK | 本轮 |
+| **实例反馈闭环（ADR-0008）** | 三个交付实例可读、可对账、可度量：registry 子问题由 1/1/1 → 5/4/4（每问独立 artifact），`MH-MODEL_IR-0001` 内联 MODEL_IR 契约字段，narrative → deliverable，payload 路径全解析，状态投影由 `ProjectState.refresh_from` 派生（唯一入口，`scripts/state_projection.py`）。**前置**：ADR-0008 问题理解层（题面 → 子问题 + 类型 + 检索特征确定性派生，移除 _LEGACY 硬编码）。**新增 harness 门禁**「实例状态契约」（validate 46/0/0，覆盖扁平投影 / 非法维度值 / 退役类型 / 路径悬空）；**schema 对齐**（narrative/paper 从必填降为历史容忍维度）。**修复前后**：2024_A 分解覆盖 20.0→100.0，模型结构检查 legacy_pointer→PASS，三实例 reconcile ok=True。报告 `docs/PROJECTS_FEEDBACK_AUDIT.md`；仍如实登记未闭合项（方法结构对齐词表缺口 / 2026 真值卡缺失） | ✅ 628 passed，validate 46/0/0，catalog OK，术语 OK | 本轮 |
+| **2026_A 精细适配 + harness 溯源改进** | ① 原始赛题材料（A/B 题 PDF + 附件）归位 `inputs/`；② **A 题 v1.1 数据驱动边界**：附件1 实测温湿度序列（241 行，0–14400 s 插值）替代指数趋近+阶跃近似，附件2 实测半径（145 行，2.000→1.198 cm）替代 Landau 自算，产出实测/守恒双解对照。**数值**：Q1 末表面 36.7863 °C（v1.0 44.59），Q3 烘干 57.1722 h（v1.0 57.4222，差 0.25），Q4 附件2 驱动 52.3111 h vs Landau 64.5667 h（差 12.26 h，终半径 1.200 vs 1.2721 cm）；空间/时间收敛 + 温度敏感性（参数化 T_air）实测入台账。③ **harness 溯源改进**：`check_numeric_traceability` 增加题面输入 `inputs/problem.txt` 为合法溯源目标（结果→台账、题面常数→题面），消除物理常数误报（物理常数不再压低追溯比例），附 3 单测锁定语义 | ✅ 631 passed，validate 46/0/0，catalog OK，术语 OK | 本轮 |
 
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **600 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
-| 项目级校验 | **45 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
+| 单元/集成/端到端测试 | **631 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
+| 项目级校验 | **46 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 src/modeling_harness/cli/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology` |
 | K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |

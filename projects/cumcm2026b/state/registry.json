@@ -1,16 +1,17 @@
 {
   "registry_version": 3,
   "project": "cumcm2026b",
-  "updated_at": "2026-09-10T13:16:24Z",
+  "updated_at": "2026-09-10T15:47:23Z",
   "counters": {
     "assumption": 1,
     "claim": 5,
     "code": 1,
+    "deliverable": 1,
     "experiment": 4,
     "model": 1,
-    "narrative": 1,
+    "model_ir": 1,
     "problem": 1,
-    "question": 1,
+    "question": 4,
     "result": 4
   },
   "artifacts": {
@@ -22,8 +23,8 @@
       "status": "active",
       "title": "2026_B 无线电干扰源定位清除",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "statement": "inputs/problem.txt",
         "sha256": "e06fba6e85e6617bef938c4a10fd854e56819cbbb9d54ee14af0092f83c79917",
@@ -35,39 +36,68 @@
         ]
       }
     },
-    "MH-QUESTION-0001": {
+    "Q1": {
       "schema_version": "3.1",
-      "artifact_id": "MH-QUESTION-0001",
+      "artifact_id": "Q1",
       "type": "question",
       "version": 1,
       "status": "active",
-      "title": "2026_B 子问题分解（Q1-Q4）",
+      "title": "Q1 computational_geometry",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
-        "sub_questions": [
-          {
-            "id": "Q1",
-            "type": "computational_geometry",
-            "text": "给定若干检测点坐标与对应示向度，给出交会定位区域（多边形）直径的计算算法；判定以该直径为直径的圆能否覆盖定位区域"
-          },
-          {
-            "id": "Q2",
-            "type": "geometry_optimization",
-            "text": "已知某全向源在一个检测点的示向度，给出第二个检测点的选择策略与候选区域，以获得较好定位效果"
-          },
-          {
-            "id": "Q3",
-            "type": "coverage_control",
-            "text": "全向干扰源 10–16 个（个数未知）：制定机器狗自动搜索-定位-清除策略与算法，并用模拟器演练统计清除比例与平均定位清除时间"
-          },
-          {
-            "id": "Q4",
-            "type": "coverage_control_blindzone",
-            "text": "混合全向 + 定向干扰源：给出检测与清除策略与算法，并通过模拟器演练检验有效性"
-          }
-        ]
+        "id": "Q1",
+        "type": "computational_geometry",
+        "text": "给定若干检测点坐标与对应示向度，给出交会定位区域（多边形）直径的计算算法；判定以该直径为直径的圆能否覆盖定位区域"
+      }
+    },
+    "Q2": {
+      "schema_version": "3.1",
+      "artifact_id": "Q2",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q2 geometry_optimization",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
+      "payload": {
+        "id": "Q2",
+        "type": "geometry_optimization",
+        "text": "已知某全向源在一个检测点的示向度，给出第二个检测点的选择策略与候选区域，以获得较好定位效果"
+      }
+    },
+    "Q3": {
+      "schema_version": "3.1",
+      "artifact_id": "Q3",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q3 coverage_control",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
+      "payload": {
+        "id": "Q3",
+        "type": "coverage_control",
+        "text": "全向干扰源 10–16 个（个数未知）：制定机器狗自动搜索-定位-清除策略与算法，并用模拟器演练统计清除比例与平均定位清除时间"
+      }
+    },
+    "Q4": {
+      "schema_version": "3.1",
+      "artifact_id": "Q4",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q4 coverage_control_blindzone",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
+      "payload": {
+        "id": "Q4",
+        "type": "coverage_control_blindzone",
+        "text": "混合全向 + 定向干扰源：给出检测与清除策略与算法，并通过模拟器演练检验有效性"
       }
     },
     "MH-MODEL-0001": {
@@ -75,11 +105,11 @@
       "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "model_ir": "model_ir.json",
         "model_doc": "model.md",
@@ -104,6 +134,1620 @@
         "sha256": "1a2e8a8bf5e862dc07069719d13b349e8fb0af9354e02198c718d75985c31ab7"
       }
     },
+    "MH-MODEL_IR-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-MODEL_IR-0001",
+      "type": "model_ir",
+      "version": 1,
+      "status": "active",
+      "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
+      "payload": {
+        "path": "model_ir.json",
+        "sha256": "1a2e8a8bf5e862dc07069719d13b349e8fb0af9354e02198c718d75985c31ab7"
+      },
+      "data": {
+        "ir_version": "1.0",
+        "model_id": "M-CUMCM2026B",
+        "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
+        "model_family": {
+          "primary": "geometric",
+          "secondary": [
+            "computational_geometry",
+            "greedy_optimization",
+            "discrete_event_simulation",
+            "coverage_path_planning"
+          ],
+          "description": "把“测向-交会定位”抽象为几何问题：每条示向度带 ±1° 误差 ⇒ 一条楔形（射线角域），多站楔形交集为凸多边形定位区域；问题 1 求该区域直径并判定“以直径为直径的圆是否覆盖区域”（Thales 定理给出充要条件）；问题 2 以求交会角 ≈90°（GDOP 最优）为判据给出第二检测点的解析最优集（过估计源的垂线，即 Thales 圆切线）与候选区域；问题 3/4 把机器狗的搜索-定位-清除过程建成离散事件模拟，搜索采用同心环覆盖路径（几何可证完备），定位采用交会 + beam-safe 归航，清除按光学/激光时耗计价，用 30 组随机实例做蒙特卡洛演练。"
+        },
+        "problem_binding": {
+          "problem_id": "2026_B",
+          "sub_question_id": "Q1..Q4",
+          "problem_sha256": "e06fba6e85e6617bef938c4a10fd854e56819cbbb9d54ee14af0092f83c79917",
+          "competition_format": "cumcm",
+          "allowed_modeling_structures": [
+            "computational_geometry",
+            "convex_polygon_clipping",
+            "diameter_and_min_enclosing_circle",
+            "geometric_dilution_of_precision",
+            "coverage_path_planning",
+            "greedy_nearest_neighbor",
+            "discrete_event_simulation"
+          ],
+          "sub_questions": {
+            "Q1": "给定若干检测点坐标与对应示向度，给出交会定位区域（多边形）直径的计算算法；判定以该直径为直径的圆能否覆盖定位区域",
+            "Q2": "已知某全向源在一个检测点的示向度，给出第二个检测点的选择策略与候选区域，以获得较好定位效果",
+            "Q3": "全向干扰源 10–16 个（个数未知）：制定机器狗自动搜索-定位-清除策略与算法，并用模拟器演练统计清除比例与平均定位清除时间",
+            "Q4": "混合全向 + 定向干扰源：给出检测与清除策略与算法，并通过模拟器演练检验有效性"
+          }
+        },
+        "assumptions": [
+          {
+            "assumption_id": "A01",
+            "type": "problem_statement",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "示向度含全局误差，落在 [−1°,1°] 内；故一条示向度对应一个夹角 2° 的楔形角域（射线 ±1°）。",
+            "anchors_to_problem": "附录 2(1)「示向度含误差，全局在 [−1°,1°] 内」",
+            "rationale": "误差界给出确定性楔形（非概率分布），使定位区域为确切凸多边形而非置信椭圆。"
+          },
+          {
+            "assumption_id": "A02",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "text": "有效接收半径 1000–1500 m，信号在覆盖角内均匀辐射，场强仅随距离衰减；距离过近（≤5 m）时信号过强无法测向，可直接光学清除。",
+            "anchors_to_problem": "附录 1(4)、附录 2(2)(9)",
+            "rationale": "以相对强度 d/r_rec 作为可观测量用于估距；r_rec 属源属性，机器狗不可先知，只能由强度反推。"
+          },
+          {
+            "assumption_id": "A03",
+            "type": "simplification",
+            "source": "reasonable_simplification",
+            "confidence": 0.9,
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "本地模拟器复现附录 1/2 规则：每源频道互异、信号互不影响、定向源覆盖角为定向方向两侧各 90°；检测点须静止（切换频道+调天线+稳定读数合计 5 s），机器狗直线移动 5 m/s。",
+            "anchors_to_problem": "附录 1(1)(2)(3)、附录 2(4)(5)(6)(8)",
+            "rationale": "官方正式测试通过 HTTP+JSON 与模拟器交互；本地等价模拟器用于策略开发与统计演练，规则逐条对齐附录。"
+          },
+          {
+            "assumption_id": "A04",
+            "type": "measurement_model",
+            "source": "assumption_derived",
+            "confidence": 0.9,
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "机器狗只能使用可观测量（示向度 + 信号相对强度）决策；真实源坐标仅由模拟器内部用于判定“是否进入 20 m 光学作用距离”，策略代码不含任何真值导向。",
+            "anchors_to_problem": "题面要求“自动定位并清除”，机器狗仅装备测向机/光学仪",
+            "rationale": "避免以真值导航造成的“伪优”结果；这是策略可信度的前提（对应仓库铁律：不得伪造置信）。"
+          },
+          {
+            "assumption_id": "A05",
+            "type": "coverage_guarantee",
+            "source": "assumption_derived",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "text": "全向源覆盖完备性：圆域 R=1800 m、r_rec ≥ 1000 m 时，取同心环路径半径 {450,1350} m，则圆域内任意点到最近环的径向距离 ≤ 450 m ≪ 1000 m，故任意全向源必被扫到。",
+            "anchors_to_problem": "目标区域为半径 1800 m 圆域；接收半径 ≥1000 m",
+            "rationale": "对圆域覆盖，k 条同心环按 R(2i−1)/(2k) 布置时最大最近距离为 R/(2k)=450 m；这是可证的完备性，而非经验取值。"
+          },
+          {
+            "assumption_id": "A06",
+            "type": "coverage_guarantee",
+            "source": "assumption_derived",
+            "confidence": 0.98,
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "text": "定向源覆盖：定向源仅在波束（半平面）内侧可测向，朝外定向源只能从外侧接近。除 {450,1350} 外增加环 {1200,1799} m 形成全 360° 外侧覆盖；数值验证（各 2×10⁴ 随机源）全向漏检率 0.0000、含定向漏检率 0.00025（仅剩贴边界极薄环带）。",
+            "anchors_to_problem": "附录 1(3)「定向方向两侧各 90°」",
+            "rationale": "单一半径环无法同时覆盖“朝外定向”与“朝内/切向”两类朝向，多环互补是必要条件；漏检率由蒙特卡洛给出而非断言为零。"
+          },
+          {
+            "assumption_id": "A07",
+            "type": "modeling_choice",
+            "source": "reasoning",
+            "confidence": 0.9,
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "text": "以交会角 φ 作为定位质量判据（GDOP ∝ 1/sin φ，φ=90° 最优）；在估计源 G_est 处交会角恒 90° 的点集为过 G_est 且垂直于 S1→G_est 的直线（Thales 圆在 G_est 处的切线）。",
+            "anchors_to_problem": "问题 2「以获得关于该干扰源较好的定位效果」",
+            "rationale": "两条射线定距误差在垂直于视线的方向传播，误差圆半径正比于 1/sin φ；φ=90° 使 GDOP 最小。"
+          },
+          {
+            "assumption_id": "A08",
+            "type": "design_choice",
+            "source": "reasoning",
+            "confidence": 0.9,
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "定位采用“交会定位 + beam-safe 归航”双机制：交会给出估计点用于远距离跳转，归航沿当前示向度逐步逼近（沿指向源的射线移动不会脱离波束），对定向源天然稳健；清除时机由模拟器在距离 ≤20 m 时触发。",
+            "anchors_to_problem": "附录 2(8)「≤20 m 光学精确定位（3 s）+ 激光清除（2 s）」",
+            "rationale": "纯交会跳点在定向源盲区会失联，归航可保证收敛；两者结合兼顾效率与鲁棒。"
+          }
+        ],
+        "variables": [
+          {
+            "variable_id": "V01",
+            "name": "定位区域",
+            "symbol": "Ω",
+            "definition": "各示向度楔形在平面上的交集（凸多边形）",
+            "unit": "-",
+            "type": "state",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "variable_id": "V02",
+            "name": "定位区域直径",
+            "symbol": "D_Ω",
+            "definition": "Ω 内任意两点距离的最大值（凸包直径）",
+            "unit": "m",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "variable_id": "V03",
+            "name": "最小包围圆半径",
+            "symbol": "r_MEC",
+            "definition": "包含 Ω 的最小圆半径（Welzl 算法）",
+            "unit": "m",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q1"
+            ]
+          },
+          {
+            "variable_id": "V04",
+            "name": "交会角",
+            "symbol": "φ",
+            "definition": "两示向度在交点处的夹角（= 两方位向之夹角）",
+            "unit": "°",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "variable_id": "V05",
+            "name": "第二检测点",
+            "symbol": "P₂",
+            "definition": "为改善定位而增设的检测点坐标",
+            "unit": "m",
+            "type": "decision",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "variable_id": "V06",
+            "name": "候选区域",
+            "symbol": "𝔻",
+            "definition": "满足 φ ∈ [φ_min,180−φ_min] 且 |P−G_est| ≤ r_rec 的可行点集",
+            "unit": "-",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "variable_id": "V07",
+            "name": "机器狗位置",
+            "symbol": "x(t)",
+            "definition": "机器狗在目标区域内的平面坐标",
+            "unit": "m",
+            "type": "state",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V08",
+            "name": "示向度观测",
+            "symbol": "b_i",
+            "definition": "在检测点 i 处对某频道测得的方位角（含 ≤1° 误差）",
+            "unit": "°",
+            "type": "measurement",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V09",
+            "name": "信号相对强度",
+            "symbol": "rel",
+            "definition": "rel = d/r_rec ∈ [0,1]，用于反推源距离（r_rec 未知，取名义值 1250 m）",
+            "unit": "-",
+            "type": "measurement",
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V10",
+            "name": "作战时间",
+            "symbol": "τ",
+            "definition": "任务累计耗时（含移动、检测、光学定位与激光清除）",
+            "unit": "s",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V11",
+            "name": "源的频道与覆盖类型",
+            "symbol": "ch_s, kind_s",
+            "definition": "源占用的频道与全向/定向属性（真值仅模拟器内部持有）",
+            "unit": "-",
+            "type": "latent",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V12",
+            "name": "清除比例",
+            "symbol": "f_clear",
+            "definition": "被清除源数 / 源总数",
+            "unit": "-",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V13",
+            "name": "定位清除时间",
+            "symbol": "τ_lc",
+            "definition": "某源首次被探测到其被清除之间的时长",
+            "unit": "s",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "parameter_id": "P01",
+            "name": "目标区域半径",
+            "symbol": "R",
+            "value": 1800.0,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P02",
+            "name": "示向度误差界",
+            "symbol": "ε",
+            "value": 1.0,
+            "unit": "°",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P03",
+            "name": "有效接收半径下界",
+            "symbol": "r_rec,min",
+            "value": 1000.0,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P04",
+            "name": "有效接收半径上界",
+            "symbol": "r_rec,max",
+            "value": 1500.0,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P05",
+            "name": "频道总数",
+            "symbol": "N_ch",
+            "value": 20,
+            "unit": "个",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P06",
+            "name": "源数量范围",
+            "symbol": "n_src",
+            "value": "10–16",
+            "unit": "个",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P07",
+            "name": "单次检测耗时",
+            "symbol": "t_det",
+            "value": 5.0,
+            "unit": "s",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "definition": "附录 2(5)：切换频道 + 调天线 + 稳定读数合计 5 s"
+          },
+          {
+            "parameter_id": "P08",
+            "name": "光学精确定位耗时",
+            "symbol": "t_optic",
+            "value": 3.0,
+            "unit": "s",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P09",
+            "name": "激光清除耗时",
+            "symbol": "t_laser",
+            "value": 2.0,
+            "unit": "s",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P10",
+            "name": "机器狗速度",
+            "symbol": "v",
+            "value": 5.0,
+            "unit": "m·s⁻¹",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P11",
+            "name": "光学作用距离",
+            "symbol": "d_optic",
+            "value": 20.0,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P12",
+            "name": "过强信号距离",
+            "symbol": "d_direct",
+            "value": 5.0,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P13",
+            "name": "覆盖环半径（全向）",
+            "symbol": "ρ_ring",
+            "value": "450, 1350",
+            "unit": "m",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "definition": "R(2i−1)/(2k)，k=2 ⇒ 最大最近距离 R/4 = 450 m"
+          },
+          {
+            "parameter_id": "P14",
+            "name": "覆盖环半径（含定向）",
+            "symbol": "ρ_ring,dir",
+            "value": "450, 1350, 1200, 1799",
+            "unit": "m",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P15",
+            "name": "检测点弧长间隔",
+            "symbol": "Δs",
+            "value": 500.0,
+            "unit": "m",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P16",
+            "name": "随机种子",
+            "symbol": "seed",
+            "value": 42,
+            "unit": "-",
+            "source": "convention",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "definition": "演练 30 组实例，种子 42..71 连续取值"
+          },
+          {
+            "parameter_id": "P17",
+            "name": "名义接收半径",
+            "symbol": "r_rec,nom",
+            "value": 1250.0,
+            "unit": "m",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "definition": "由强度估距：d_est = rel · r_rec,nom"
+          }
+        ],
+        "objectives": [
+          {
+            "objective_id": "O01",
+            "type": "compute",
+            "expression": "D_Ω = max_{p,q∈Ω} |p−q|；covers = 1[Ω ⊆ Circle(AB, |AB|/2)]",
+            "variables_refs": [
+              "V01",
+              "V02",
+              "V03"
+            ],
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "description": "给出定位区域直径算法与“直径为直径的圆覆盖”判定"
+          },
+          {
+            "objective_id": "O02",
+            "type": "optimize",
+            "expression": "P₂* = argmax_P sin φ(P) s.t. P ∈ 𝔻",
+            "variables_refs": [
+              "V04",
+              "V05",
+              "V06"
+            ],
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "description": "给出第二检测点选择策略与候选区域"
+          },
+          {
+            "objective_id": "O03",
+            "type": "minimize",
+            "expression": "min 道程 s.t. f_clear = 1",
+            "variables_refs": [
+              "V07",
+              "V10",
+              "V12"
+            ],
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "description": "全向源下最小化总任务时间，同时保证全部清除"
+          },
+          {
+            "objective_id": "O04",
+            "type": "minimize",
+            "expression": "min 道程 s.t. f_clear = 1（含定向源波束约束）",
+            "variables_refs": [
+              "V07",
+              "V10",
+              "V12"
+            ],
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "description": "混合源下的策略与算法，保证全部清除"
+          }
+        ],
+        "constraints": [
+          {
+            "constraint_id": "C01",
+            "type": "geometric",
+            "expression": "Ω = ∩_i W_i, W_i = {P : arg(P−S_i) ∈ [b_i−ε, b_i+ε]}",
+            "variables_refs": [
+              "V01",
+              "V08"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ],
+            "description": "定位区域为楔形交集"
+          },
+          {
+            "constraint_id": "C02",
+            "type": "geometric",
+            "expression": "φ = arccos( (v₁·v₂)/(|v₁||v₂|) ) ∈ [0,180°]",
+            "variables_refs": [
+              "V04"
+            ],
+            "source": "geometric",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ],
+            "description": "交会角定义（vᵢ 为自站指向源的射线方向）"
+          },
+          {
+            "constraint_id": "C03",
+            "type": "geometric",
+            "expression": "P₂ ∈ 𝔻 ⟺ φ(P₂) ≥ φ_min 且 |P₂ − G_est| ≤ r_rec",
+            "variables_refs": [
+              "V05",
+              "V06"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "constraint_id": "C04",
+            "type": "inequality",
+            "expression": "|p − S_i| ≤ r_rec ⇒ 该检测点可获得示向度",
+            "variables_refs": [
+              "V08"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "constraint_id": "C05",
+            "type": "logical",
+            "expression": "定向源：仅当检测点落在定向方向 ±90° 内才可测向",
+            "variables_refs": [
+              "V08",
+              "V11"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "constraint_id": "C06",
+            "type": "inequality",
+            "expression": "检测时机器狗必须静止（检测间隔 = 移动时间 + 5 s 检测）",
+            "variables_refs": [
+              "V07",
+              "V10"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "constraint_id": "C07",
+            "type": "goal",
+            "expression": "f_clear = 1（所有源必须被清除）",
+            "variables_refs": [
+              "V12"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "constraint_id": "C08",
+            "type": "measurement",
+            "expression": "决策仅依赖 (V08, V09)，不得使用 V11 真值",
+            "variables_refs": [
+              "V08",
+              "V09",
+              "V11"
+            ],
+            "source": "assumption_derived",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "description": "策略不得使用真值导航"
+          }
+        ],
+        "mechanisms": [
+          {
+            "mechanism_id": "ME01",
+            "name": "楔形交会定位",
+            "type": "geometric",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "description": "每条示向度 ±ε 定义一条楔形；多站楔形交集为凸多边形（Sutherland–Hodgman 半平面裁剪）。顶点数随站数增加而增加，但始终凸。",
+            "governing_principle": "凸集交 + 半平面裁剪",
+            "variables_refs": [
+              "V01"
+            ],
+            "related_equations": [
+              "E01",
+              "E02"
+            ]
+          },
+          {
+            "mechanism_id": "ME02",
+            "name": "直径与最小包围圆",
+            "type": "geometric",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "description": "凸多边形直径由凸包上最远点对给出；最小包围圆由 Welzl 随机增量给出。“直径圆覆盖”由 Thales 定理判定：非直径端点顶点对直径端点张角须 ≥90°。",
+            "governing_principle": "旋转卡壳/凸包 + Welzl + Thales 定理",
+            "variables_refs": [
+              "V02",
+              "V03"
+            ],
+            "related_equations": [
+              "E03",
+              "E04"
+            ]
+          },
+          {
+            "mechanism_id": "ME03",
+            "name": "GDOP 与第二点最优集",
+            "type": "geometric",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "description": "定位误差 ∝ 1/sin φ；φ=90° 最优。以估计源 G_est 为顶点，所有使其交会角为 90° 的点构成过 G_est 且垂直于 S1G_est 的直线（Thales 圆切线）。",
+            "governing_principle": "Thales 定理 + 几何精度衰减因子",
+            "variables_refs": [
+              "V04",
+              "V05",
+              "V06"
+            ],
+            "related_equations": [
+              "E05",
+              "E06"
+            ]
+          },
+          {
+            "mechanism_id": "ME04",
+            "name": "同心环覆盖搜索",
+            "type": "path_planning",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "description": "圆域 R、探测半径 r_rec ≥ R/(2k) 时，k 条同心环（半径 R(2i−1)/(2k)）即构成完备覆盖。全向取 k=2；含定向源时另加环以覆盖朝外定向源的外侧可见区。",
+            "governing_principle": "覆盖半径最优环布置",
+            "variables_refs": [
+              "V07"
+            ],
+            "related_equations": [
+              "E07"
+            ]
+          },
+          {
+            "mechanism_id": "ME05",
+            "name": "交会 - 归航双机制定位",
+            "type": "control",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "description": "远距离用两观测交会求估计点跳转；近距离沿当前示向度按 d_est=rel·r_rec,nom 步进逼近（beam-safe）。归航在定向源盲区可回退到已知可测观测点后重新逼近。",
+            "governing_principle": "交会定位 + 视线归航的收敛性",
+            "variables_refs": [
+              "V07",
+              "V08",
+              "V09"
+            ],
+            "related_equations": [
+              "E08",
+              "E09"
+            ]
+          },
+          {
+            "mechanism_id": "ME06",
+            "name": "离散事件时间计价",
+            "type": "simulation",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "description": "全部耗时按时序累加：移动 t=|Δx|/v；检测每次 5 s；光学定位 3 s；激光清除 2 s。清除比例与“定位清除时间 = 清除时刻 − 首测时刻”为两项统计量。",
+            "governing_principle": "离散事件仿真 + 蒙特卡洛统计",
+            "variables_refs": [
+              "V10",
+              "V12",
+              "V13"
+            ]
+          }
+        ],
+        "equations": [
+          {
+            "equation_id": "E01",
+            "latex": "W_i=\\big\\{P:\\ \\arg(P-S_i)\\in[b_i-\\varepsilon,\\,b_i+\\varepsilon]\\big\\},\\qquad \\Omega=\\bigcap_i W_i",
+            "type": "definition",
+            "variables_refs": [
+              "V01",
+              "V08"
+            ],
+            "derivation_trace": "示向度误差界给出确定性角域；半平面表示 a·x+b·y ≥ c / ≤ c，由叉积定向判定。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "equation_id": "E02",
+            "latex": "\\Omega \\leftarrow \\mathrm{clip}(\\Omega,\\,a,b,c,\\text{sense})",
+            "type": "algorithm",
+            "variables_refs": [
+              "V01"
+            ],
+            "derivation_trace": "Sutherland–Hodgman 逐半平面裁剪凸多边形；复杂度 O(mn)，m=站数、n=顶点数。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "equation_id": "E03",
+            "latex": "D_\\Omega=\\max_{(p,q)\\in \\Omega\\times\\Omega}|p-q|",
+            "type": "objective",
+            "variables_refs": [
+              "V02"
+            ],
+            "derivation_trace": "凸集上最远点对必在顶点（凸包）上取得，故枚举凸包顶点 O(h²)（等价旋转卡壳）。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "equation_id": "E04",
+            "latex": "\\Omega\\subseteq \\mathcal{C}(A,B)\\ \\Longleftrightarrow\\ \\angle APB\\ge 90^\\circ,\\ \\forall P\\in \\mathrm{vert}(\\Omega)\\setminus\\{A,B\\}",
+            "type": "criterion",
+            "variables_refs": [
+              "V02",
+              "V03"
+            ],
+            "derivation_trace": "Thales 定理：P 在以 AB 为直径的圆内 ⟺ ∠APB ≥ 90°。故“直径为直径的圆覆盖区域”不普遍成立，反例为锐角三角形；保证覆盖须用最小包围圆。",
+            "sub_question_binding": [
+              "Q1"
+            ]
+          },
+          {
+            "equation_id": "E05",
+            "latex": "\\sigma_P \\propto \\frac{1}{\\sin\\varphi},\\qquad \\varphi \\to 90^\\circ\\ \\Rightarrow\\ \\mathrm{GDOP}_{min}",
+            "type": "criterion",
+            "variables_refs": [
+              "V04"
+            ],
+            "derivation_trace": "两条方位线各自的角度误差 δ 传播到位置误差约为 d·δ/sin φ。",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "equation_id": "E06",
+            "latex": "P_2^* = G_{est} + t\\,\\mathbf{n}_\\perp,\\quad \\mathbf{n}_\\perp \\perp (G_{est}-S_1)",
+            "type": "derivation",
+            "variables_refs": [
+              "V05"
+            ],
+            "derivation_trace": "使 ∠S₁G_estP₂=90° 的点集即 Thales 圆（直径 S₁G_est）在 G_est 处的切线，亦即过 G_est 且垂直于 S₁G_est 的直线。",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "equation_id": "E07",
+            "latex": "\\rho_i=\\frac{R(2i-1)}{2k},\\quad i=1..k\\ \\Rightarrow\\ \\max_{\\rho\\in[0,R]}\\min_i|\\rho-\\rho_i|=\\frac{R}{2k}",
+            "type": "criterion",
+            "variables_refs": [
+              "V07"
+            ],
+            "derivation_trace": "把圆域按半径分层，k 条最优环把最大最近距离最小化到 R/(2k)；k=2（R=1800）⇒ 450 m < r_rec,min=1000 m。",
+            "sub_question_binding": [
+              "Q3"
+            ]
+          },
+          {
+            "equation_id": "E08",
+            "latex": "G=\\mathrm{cross}(P_1,b_1;P_2,b_2),\\quad P_1+t_1\\mathbf{u}(b_1)=P_2+t_2\\mathbf{u}(b_2),\\ t_i\\ge 0",
+            "type": "algorithm",
+            "variables_refs": [
+              "V07",
+              "V08"
+            ],
+            "derivation_trace": "两条示向度射线求交（2×2 线性系统）；行列式退化或 t<0 时判为不可用，退回归航。",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E09",
+            "latex": "x_{n+1}=x_n+\\mathrm{clip}(rel_n\\cdot r_{rec,nom},\\,15,500)\\cdot\\mathbf{u}(b(x_n)),\\quad \\|x_n-x_S\\|\\to 0",
+            "type": "iterative",
+            "variables_refs": [
+              "V07"
+            ],
+            "derivation_trace": "沿当前示向度步进；步长用相对强度估距（d_est=rel·r_rec,nom）。当 r_rec < r_rec,nom 时步长略大于真实距离，形成比值 <0.25 的阻尼振荡，几何收敛。",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          }
+        ],
+        "dependencies": [
+          {
+            "dependency_id": "D01",
+            "from_type": "assumption",
+            "from_id": "A01",
+            "to_type": "equation",
+            "to_id": "E01",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q1"
+            ]
+          },
+          {
+            "dependency_id": "D02",
+            "from_type": "equation",
+            "from_id": "E01",
+            "to_type": "equation",
+            "to_id": "E02",
+            "relation": "feeds",
+            "sub_question_binding": [
+              "Q1"
+            ]
+          },
+          {
+            "dependency_id": "D03",
+            "from_type": "equation",
+            "from_id": "E03",
+            "to_type": "equation",
+            "to_id": "E04",
+            "relation": "feeds",
+            "sub_question_binding": [
+              "Q1"
+            ]
+          },
+          {
+            "dependency_id": "D04",
+            "from_type": "assumption",
+            "from_id": "A07",
+            "to_type": "equation",
+            "to_id": "E05",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "dependency_id": "D05",
+            "from_type": "equation",
+            "from_id": "E05",
+            "to_type": "equation",
+            "to_id": "E06",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "dependency_id": "D06",
+            "from_type": "assumption",
+            "from_id": "A05",
+            "to_type": "equation",
+            "to_id": "E07",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q3"
+            ]
+          },
+          {
+            "dependency_id": "D07",
+            "from_type": "assumption",
+            "from_id": "A06",
+            "to_type": "mechanism",
+            "to_id": "ME04",
+            "relation": "constrains",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D08",
+            "from_type": "assumption",
+            "from_id": "A08",
+            "to_type": "equation",
+            "to_id": "E09",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D09",
+            "from_type": "assumption",
+            "from_id": "A04",
+            "to_type": "constraint",
+            "to_id": "C08",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D10",
+            "from_type": "equation",
+            "from_id": "E06",
+            "to_type": "objective",
+            "to_id": "O02",
+            "relation": "governs",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          }
+        ],
+        "solvers": [
+          {
+            "solver_id": "S01",
+            "name": "楔形裁剪与凸多边形直径",
+            "type": "computational_geometry",
+            "method": "Sutherland–Hodgman 裁剪 + 凸包 + O(h²) 最远点对；最小包围圆用 Welzl 随机增量",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ],
+            "implementation_ref": "artifacts/code 求解脚本（location_region / polygon_diameter / min_enclosing_circle）",
+            "equations_refs": [
+              "E02",
+              "E03",
+              "E04"
+            ]
+          },
+          {
+            "solver_id": "S02",
+            "name": "第二检测点优化",
+            "type": "geometry",
+            "method": "解析最优（Thales 切线）+ 极坐标候选网格（主判据 |φ−90°|、次判据定位区域直径）",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "implementation_ref": "artifacts/code 求解脚本（perpendicular_second_point / candidate_second_point_region）",
+            "equations_refs": [
+              "E05",
+              "E06"
+            ]
+          },
+          {
+            "solver_id": "S03",
+            "name": "覆盖路径生成",
+            "type": "path_planning",
+            "method": "同心环 + 弧长等分检测点；全向 k=2 环，含定向追加 2 环",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "implementation_ref": "artifacts/code 求解脚本（coverage_detection_points / ring_detection_points）",
+            "equations_refs": [
+              "E07"
+            ]
+          },
+          {
+            "solver_id": "S04",
+            "name": "交会-归航定位清除",
+            "type": "control",
+            "method": "两观测交会跳转 → 沿示向度归航（步长 d_est，钳制 15–500 m）→ 20 m 内光学/激光清除；失联时补正交第二点或局部再捕获",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "implementation_ref": "artifacts/code 求解脚本（engage / _homing / local_hunt）",
+            "equations_refs": [
+              "E08",
+              "E09"
+            ],
+            "convergence_criteria": "归航步长收缩比 ≤0.25，实测每组实例均达 f_clear = 1"
+          },
+          {
+            "solver_id": "S05",
+            "name": "蒙特卡洛演练",
+            "type": "simulation",
+            "method": "30 组随机实例（seed 42..71），统计清除比例、总时间、定位清除时间；逐实例记录路径长度与检测次数",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "implementation_ref": "artifacts/code 求解脚本（Simulator / run_trials）"
+          }
+        ],
+        "experiments": [
+          {
+            "experiment_id": "EXP01",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "method": "构造正交/钝角/三站交会三组算例，计算定位区域直径与直径圆覆盖性，并给出锐角三角形反例",
+            "inputs_refs": [
+              "inputs/problem.txt"
+            ],
+            "solver_ref": "S01",
+            "parameters": {
+              "eps_deg": 1.0
+            },
+            "outputs": [],
+            "results": {
+              "caseA_diameter_m": 104.762,
+              "caseA_covers": true,
+              "caseB_diameter_m": 169.514,
+              "caseC_diameter_m": 85.896,
+              "counterexample_diameter_m": 10.0,
+              "counterexample_covers": false
+            },
+            "run_metadata": {
+              "code": "artifacts/code 求解脚本 problem1"
+            }
+          },
+          {
+            "experiment_id": "EXP02",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "method": "以 S1=(−500,0)、θ1=20°、d_est=1200 m 为例，给出候选区域、解析最优点与偏移-精度权衡",
+            "inputs_refs": [
+              "inputs/problem.txt"
+            ],
+            "solver_ref": "S02",
+            "parameters": {
+              "S1": "(-500,0)",
+              "theta1_deg": 20.0,
+              "d_est_m": 1200.0,
+              "phi_min_deg": 60.0
+            },
+            "outputs": [],
+            "results": {
+              "n_grid": 442,
+              "grid_best_phi_deg": 90.0,
+              "perp_recommend": [
+                217.2,
+                1538.1
+              ]
+            },
+            "run_metadata": {
+              "code": "artifacts/code 求解脚本 problem2"
+            }
+          },
+          {
+            "experiment_id": "EXP03",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "method": "全向源演练 30 组：均匀随机布点（10–16 个）、频道随机互异、r_rec ∈ [1000,1500] m",
+            "inputs_refs": [
+              "inputs/problem.txt"
+            ],
+            "solver_ref": "S04",
+            "parameters": {
+              "n_trials": 30,
+              "seed0": 42,
+              "kind_mix": false
+            },
+            "outputs": [
+              "artifacts/results/resultB.xlsx"
+            ],
+            "results": {
+              "mean_cleared_fraction": 1.0,
+              "min_cleared_fraction": 1.0,
+              "all_cleared": true,
+              "mean_total_time_s": 7150.102657652295,
+              "mean_locate_clear_time_s": 5297.03485129539
+            },
+            "run_metadata": {
+              "code": "artifacts/code 求解脚本 main（Q3）"
+            }
+          },
+          {
+            "experiment_id": "EXP04",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "method": "混合源演练 30 组：40% 概率为定向源（定向方向随机），其余同 Q3",
+            "inputs_refs": [
+              "inputs/problem.txt"
+            ],
+            "solver_ref": "S04",
+            "parameters": {
+              "n_trials": 30,
+              "seed0": 42,
+              "kind_mix": true,
+              "dir_frac": 0.4
+            },
+            "outputs": [
+              "artifacts/results/resultB.xlsx"
+            ],
+            "results": {
+              "mean_cleared_fraction": 1.0,
+              "min_cleared_fraction": 1.0,
+              "all_cleared": true,
+              "mean_total_time_s": 15088.792585960995,
+              "mean_locate_clear_time_s": 12814.711618397412
+            },
+            "run_metadata": {
+              "code": "artifacts/code 求解脚本 main（Q4）"
+            }
+          }
+        ],
+        "validations": [
+          {
+            "validation_id": "V01",
+            "type": "convergence",
+            "method": "覆盖完备性蒙特卡洛：各 2×10⁴ 随机源（任意朝向），检验是否被覆盖路径的检测点发现",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "targets_refs": [
+              "E07"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "n_samples": 20000,
+              "omni_miss_ratio": 0.0,
+              "dir_miss_ratio": 0.00025
+            }
+          },
+          {
+            "validation_id": "V02",
+            "type": "counterfactual",
+            "method": "反例构造：锐角三角形（对最长边张角 79.6°<90°）验证“直径圆覆盖”不普遍成立",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "targets_refs": [
+              "E04"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "diameter_m": 10.0,
+              "diam_circle_r_m": 5.0,
+              "mec_r_m": 5.0833,
+              "covers": false
+            }
+          },
+          {
+            "validation_id": "V03",
+            "type": "optimality_check",
+            "method": "网格最优与解析最优一致性：垂线上任意偏移均给出 φ=90.00°",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "targets_refs": [
+              "E06"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "phi_by_offset_deg": [
+                90.0,
+                90.0,
+                90.0,
+                90.0,
+                90.0
+              ],
+              "region_diameter_m": [
+                43.19,
+                46.85,
+                52.38,
+                59.26,
+                67.08
+              ]
+            }
+          },
+          {
+            "validation_id": "V04",
+            "type": "robustness",
+            "method": "清除完备性：30 组实例逐一检查 f_clear = 1（Q3/Q4 最小值均为 1.0）",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "targets_refs": [
+              "C07"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "q3_min_cleared_fraction": 1.0,
+              "q4_min_cleared_fraction": 1.0
+            }
+          },
+          {
+            "validation_id": "V05",
+            "type": "sanity",
+            "method": "物理一致性：距离 >0 才可测向；≤20 m 才可清除；雷达图（定向）盲区内不可测向——模拟器逐条断言",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "targets_refs": [
+              "C04",
+              "C05"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "note": "定向源盲区行为由 C1/C2 阶段实测触发并成功回退（Q4 全清除佐证）"
+            }
+          }
+        ],
+        "claims": [
+          {
+            "claim_id": "CL01",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得（正交交会算例直径 104.762 m、钝角交会 169.514 m、三站交会 85.896 m）。“以直径为直径的圆”不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；锐角三角形反例（直径 10.0 m，最小包围圆半径 5.0833 m > 直径圆半径 5.0 m）即为反例。保证覆盖应改用最小包围圆。",
+            "evidence_refs": [],
+            "experiment_refs": [
+              "EXP01"
+            ],
+            "validation_refs": [
+              "V02"
+            ]
+          },
+          {
+            "claim_id": "CL02",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "text": "Q2：最优第二检测点位于过估计源 G_est 且垂直于 S1→G_est 的直线上（该直线即 Thales 圆在 G_est 处的切线，其上任意点交会角恒为 90.00°）；候选区域为以 G_est 为中心、交会角 φ ∈ [60°,120°] 且 |P−G_est| ≤ r_rec 的扇形环域。沿该垂线偏移越小，定位区域越小（偏移 300→1500 m 对应直径 43.19→67.08 m），但偏移过小会缩短有效基线、放大示向度误差相关，故推荐偏移取 d_est 的对称配置。",
+            "evidence_refs": [],
+            "experiment_refs": [
+              "EXP02"
+            ],
+            "validation_refs": [
+              "V03"
+            ]
+          },
+          {
+            "claim_id": "CL03",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "text": "Q3：全向源情景（30 组随机实例）清除比例均值 = 最小值 = 1.0000（全清除）；平均总任务时间 7150.10 s（约 1.99 h），平均每源 592.997 s，平均定位清除时间 5297.03 s。策略为“同心环 {450,1350} m 覆盖扫描 → 逐频道交会定位 + beam-safe 归航 → 20 m 内光学/激光清除”，覆盖完备性由 R/(2k)=450 m ≪ r_rec,min=1000 m 保证。",
+            "evidence_refs": [
+              "artifacts/results/resultB.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP03"
+            ],
+            "validation_refs": [
+              "V01",
+              "V04"
+            ]
+          },
+          {
+            "claim_id": "CL04",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "text": "Q4：混合全向+定向情景（30 组，40% 定向）清除比例均值 = 最小值 = 1.0000；平均总任务时间 15088.79 s（约 4.19 h），平均每源 1254.68 s。相对 Q3 时间增加约 111%，主因是定向源须从波束外侧补扫（额外环 {1200,1799} m）且归航在盲区需回退。",
+            "evidence_refs": [
+              "artifacts/results/resultB.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP04"
+            ],
+            "validation_refs": [
+              "V01",
+              "V04"
+            ]
+          },
+          {
+            "claim_id": "CL05",
+            "type": "interpretation",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q3",
+              "Q4"
+            ],
+            "text": "覆盖路径的完备性由几何而非经验保证：把圆域按半径分层后，k 条同心环使“任意点到最近检测环”的最大距离恰为 R/(2k)。全向取 k=2 即 450 m（R/(2k) 远小于 r_rec,min=1000 m）；定向源因“波束外侧可见”约束，须在 {450,1350} 之外追加外侧环才完备，含定向情景的漏检率实测为 0.00025（全向为 0.0000）。",
+            "evidence_refs": [
+              "artifacts/results/resultB.xlsx"
+            ],
+            "validation_refs": [
+              "V01"
+            ]
+          }
+        ],
+        "model_graph": {
+          "graph_version": 1,
+          "description": "MODEL_IR 概念图：问题 → 假设/参数 → 机理/方程 → 求解器 → 实验 → 验证 → 主张",
+          "nodes": [
+            {
+              "id": "Q",
+              "label": "problem 2026_B (Q1..Q4)",
+              "type": "problem"
+            },
+            {
+              "id": "A",
+              "label": "assumptions A01-A08",
+              "type": "assumption"
+            },
+            {
+              "id": "P",
+              "label": "parameters P01-P17",
+              "type": "parameter"
+            },
+            {
+              "id": "V",
+              "label": "variables V01-V13",
+              "type": "variable"
+            },
+            {
+              "id": "ME01",
+              "label": "楔形交会定位",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME02",
+              "label": "直径与最小包围圆",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME03",
+              "label": "GDOP 与第二点最优集",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME04",
+              "label": "同心环覆盖搜索",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME05",
+              "label": "交会-归航双机制定位",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME06",
+              "label": "离散事件时间计价",
+              "type": "mechanism"
+            },
+            {
+              "id": "EQ",
+              "label": "equations E01-E09",
+              "type": "equation"
+            },
+            {
+              "id": "CT",
+              "label": "constraints C01-C08",
+              "type": "constraint"
+            },
+            {
+              "id": "OB",
+              "label": "objectives O01-O04",
+              "type": "objective"
+            },
+            {
+              "id": "SV",
+              "label": "solvers S01-S05",
+              "type": "solver"
+            },
+            {
+              "id": "EX",
+              "label": "experiments EXP01-EXP04",
+              "type": "experiment"
+            },
+            {
+              "id": "VA",
+              "label": "validations V01-V05",
+              "type": "validation"
+            },
+            {
+              "id": "CL",
+              "label": "claims CL01-CL05",
+              "type": "claim"
+            }
+          ],
+          "edges": [
+            {
+              "from": "Q",
+              "to": "A",
+              "relation": "bound_by"
+            },
+            {
+              "from": "Q",
+              "to": "P",
+              "relation": "bound_by"
+            },
+            {
+              "from": "A",
+              "to": "V",
+              "relation": "defines"
+            },
+            {
+              "from": "V",
+              "to": "ME01",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "V",
+              "to": "ME02",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "V",
+              "to": "ME03",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "V",
+              "to": "ME04",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "V",
+              "to": "ME05",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "V",
+              "to": "ME06",
+              "relation": "instantiated_in"
+            },
+            {
+              "from": "ME01",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "ME02",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "ME03",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "ME04",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "ME05",
+              "to": "EQ",
+              "relation": "formalized_by"
+            },
+            {
+              "from": "EQ",
+              "to": "CT",
+              "relation": "constrained_by"
+            },
+            {
+              "from": "CT",
+              "to": "OB",
+              "relation": "shapes"
+            },
+            {
+              "from": "OB",
+              "to": "SV",
+              "relation": "solved_by"
+            },
+            {
+              "from": "SV",
+              "to": "EX",
+              "relation": "executed_in"
+            },
+            {
+              "from": "EX",
+              "to": "VA",
+              "relation": "verified_by"
+            },
+            {
+              "from": "VA",
+              "to": "CL",
+              "relation": "supports"
+            }
+          ]
+        }
+      }
+    },
     "MH-ASSUMPTION-0001": {
       "schema_version": "3.1",
       "artifact_id": "MH-ASSUMPTION-0001",
@@ -112,8 +1756,8 @@
       "status": "active",
       "title": "模型假设 A01-A08",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "items": [
           {
@@ -183,8 +1827,8 @@
       "status": "active",
       "title": "solve_b.py",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "path": "artifacts/code/solve_b.py",
         "sha256": "de33dcafce9ab59d84ec2d8ecb65b629c6aa84801f0a3319355e53ddacc876bf",
@@ -196,11 +1840,11 @@
       "artifact_id": "MH-EXPERIMENT-0001",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q1 交会定位区域直径与「直径圆覆盖」判定（含锐角反例）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "sub_question": "Q1",
         "solver": "S01-S05",
@@ -211,18 +1855,19 @@
           "C 三站交会",
           "反例(锐角三角形)"
         ]
-      }
+      },
+      "question": "Q1"
     },
     "MH-RESULT-0001": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0001",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q1 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "path": "all_results.json",
         "sha256": "69d9e53e0b6e82745f095cf336b96472cd0e9bb857fc39624c0242a630a3717e",
@@ -261,18 +1906,19 @@
             "covers": false
           }
         }
-      }
+      },
+      "question": "Q1"
     },
     "MH-EXPERIMENT-0002": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0002",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q2 第二检测点最优集与候选区域（垂线解析 + 网格一致）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "sub_question": "Q2",
         "solver": "S01-S05",
@@ -283,18 +1929,19 @@
           "perp_recommend",
           "tradeoff"
         ]
-      }
+      },
+      "question": "Q2"
     },
     "MH-RESULT-0002": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0002",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q2 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "path": "all_results.json",
         "sha256": "69d9e53e0b6e82745f095cf336b96472cd0e9bb857fc39624c0242a630a3717e",
@@ -362,18 +2009,19 @@
             }
           ]
         }
-      }
+      },
+      "question": "Q2"
     },
     "MH-EXPERIMENT-0003": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0003",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q3 全向源 30 组演练：搜索-定位-清除统计",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "sub_question": "Q3",
         "solver": "S01-S05",
@@ -389,18 +2037,19 @@
           "std_locate_clear_time_s",
           "std_total_time_s"
         ]
-      }
+      },
+      "question": "Q3"
     },
     "MH-RESULT-0003": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0003",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q3 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "path": "artifacts/results/resultB.xlsx",
         "sha256": "2cec9b936c8c528f5dadc4fe0b98db39d3ecf13993c4b5858c62c62989931393",
@@ -415,18 +2064,19 @@
           "std_locate_clear_time_s": 328.5562796016187,
           "mean_time_per_source_s": 592.9971188407916
         }
-      }
+      },
+      "question": "Q3"
     },
     "MH-EXPERIMENT-0004": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0004",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q4 混合全向+定向源 30 组演练：盲区补扫与清除统计",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "sub_question": "Q4",
         "solver": "S01-S05",
@@ -442,18 +2092,19 @@
           "std_locate_clear_time_s",
           "std_total_time_s"
         ]
-      }
+      },
+      "question": "Q4"
     },
     "MH-RESULT-0004": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0004",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "Q4 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "path": "artifacts/results/resultB.xlsx",
         "sha256": "2cec9b936c8c528f5dadc4fe0b98db39d3ecf13993c4b5858c62c62989931393",
@@ -468,7 +2119,8 @@
           "std_locate_clear_time_s": 552.2236694665594,
           "mean_time_per_source_s": 1254.6756037594876
         }
-      }
+      },
+      "question": "Q4"
     },
     "MH-CLAIM-0001": {
       "schema_version": "3.1",
@@ -478,8 +2130,8 @@
       "status": "active",
       "title": "CL01（Q1）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得（正交交会算例直径 104.762 m、钝角交会 169.514 m、三站交会 85.896 m）。“以直径为直径的圆”不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；锐角三角形反例（直径 10.0 m，最小包围圆半径 5.0833 m > 直径圆半径 5.0 m）即为反例。保证覆盖应改用最小包围圆。",
         "status": "supported",
@@ -487,7 +2139,8 @@
         "validation_refs": [
           "V02"
         ]
-      }
+      },
+      "question": "Q1"
     },
     "MH-CLAIM-0002": {
       "schema_version": "3.1",
@@ -497,8 +2150,8 @@
       "status": "active",
       "title": "CL02（Q2）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "text": "Q2：最优第二检测点位于过估计源 G_est 且垂直于 S1→G_est 的直线上（该直线即 Thales 圆在 G_est 处的切线，其上任意点交会角恒为 90.00°）；候选区域为以 G_est 为中心、交会角 φ ∈ [60°,120°] 且 |P−G_est| ≤ r_rec 的扇形环域。沿该垂线偏移越小，定位区域越小（偏移 300→1500 m 对应直径 43.19→67.08 m），但偏移过小会缩短有效基线、放大示向度误差相关，故推荐偏移取 d_est 的对称配置。",
         "status": "supported",
@@ -506,7 +2159,8 @@
         "validation_refs": [
           "V03"
         ]
-      }
+      },
+      "question": "Q2"
     },
     "MH-CLAIM-0003": {
       "schema_version": "3.1",
@@ -516,8 +2170,8 @@
       "status": "active",
       "title": "CL03（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "text": "Q3：全向源情景（30 组随机实例）清除比例均值 = 最小值 = 1.0000（全清除）；平均总任务时间 7150.10 s（约 1.99 h），平均每源 592.997 s，平均定位清除时间 5297.03 s。策略为“同心环 {450,1350} m 覆盖扫描 → 逐频道交会定位 + beam-safe 归航 → 20 m 内光学/激光清除”，覆盖完备性由 R/(2k)=450 m ≪ r_rec,min=1000 m 保证。",
         "status": "supported",
@@ -526,7 +2180,8 @@
           "V01",
           "V04"
         ]
-      }
+      },
+      "question": "Q3"
     },
     "MH-CLAIM-0004": {
       "schema_version": "3.1",
@@ -536,8 +2191,8 @@
       "status": "active",
       "title": "CL04（Q4）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "text": "Q4：混合全向+定向情景（30 组，40% 定向）清除比例均值 = 最小值 = 1.0000；平均总任务时间 15088.79 s（约 4.19 h），平均每源 1254.68 s。相对 Q3 时间增加约 111%，主因是定向源须从波束外侧补扫（额外环 {1200,1799} m）且归航在盲区需回退。",
         "status": "supported",
@@ -546,7 +2201,8 @@
           "V01",
           "V04"
         ]
-      }
+      },
+      "question": "Q4"
     },
     "MH-CLAIM-0005": {
       "schema_version": "3.1",
@@ -556,8 +2212,8 @@
       "status": "active",
       "title": "CL05（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "text": "覆盖路径的完备性由几何而非经验保证：把圆域按半径分层后，k 条同心环使“任意点到最近检测环”的最大距离恰为 R/(2k)。全向取 k=2 即 450 m（R/(2k) 远小于 r_rec,min=1000 m）；定向源因“波束外侧可见”约束，须在 {450,1350} 之外追加外侧环才完备，含定向情景的漏检率实测为 0.00025（全向为 0.0000）。",
         "status": "supported",
@@ -565,18 +2221,19 @@
         "validation_refs": [
           "V01"
         ]
-      }
+      },
+      "question": "Q3"
     },
-    "MH-NARRATIVE-0001": {
+    "MH-DELIVERABLE-0001": {
       "schema_version": "3.1",
-      "artifact_id": "MH-NARRATIVE-0001",
-      "type": "narrative",
+      "artifact_id": "MH-DELIVERABLE-0001",
+      "type": "deliverable",
       "version": 1,
       "status": "active",
       "title": "模型描述文档（含 Mermaid）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T13:16:24Z",
-      "updated_at": "2026-09-10T13:16:24Z",
+      "created_at": "2026-09-10T15:47:23Z",
+      "updated_at": "2026-09-10T15:47:23Z",
       "payload": {
         "path": "model.md",
         "sha256": "d8393e4d9c5710fb1cbf07df92e13a09bb0995e33d1ca3505062a5a1c713431c"

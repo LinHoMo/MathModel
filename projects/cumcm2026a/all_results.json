@@ -2,101 +2,153 @@
   "schema_version": 3,
   "problem": "CUMCM2026A",
   "random_seed": 42,
+  "solver_version": "1.1",
+  "boundary_source": "附件1 实测温湿度插值 + 附件2 实测半径（问题4）",
+  "annex1_data_range_s": [
+    0.0,
+    14400.0
+  ],
+  "annex2_data_range_s": [
+    0.0,
+    259200.0
+  ],
+  "derived_facts": {
+    "annex1_rows": 241,
+    "annex2_rows": 145,
+    "annex1_t_start_s": 0.0,
+    "annex1_t_end_s": 14400.0,
+    "annex2_t_start_s": 0.0,
+    "annex2_t_end_s": 259200.0,
+    "annex2_r_start_cm": 2.0,
+    "annex2_r_end_cm": 1.198,
+    "q4_annex2_vs_landau_delta_h": 12.255555555555553,
+    "q4_annex2_vs_q3_delta_h": 4.861111111111114,
+    "q4_annex2_vs_q3_pct": 8.502575065591298,
+    "q3_v10_vs_v11_delta_h": 0.2499997777777736
+  },
   "summary": {
     "problem1": {
       "label": "problem1",
       "final_time_s": 1800.0,
-      "final_surface_T_C": 44.58696852049056,
-      "final_center_T_C": 40.71056715294522,
-      "final_surface_C": 1.5409642733530742,
-      "final_center_C": 2.549992376364589,
-      "final_radius_m": 0.02
+      "final_surface_T_C": 36.78626829640114,
+      "final_center_T_C": 33.576544703252566,
+      "final_surface_C": 1.510054162412943,
+      "final_center_C": 2.549992138344313,
+      "final_radius_m": 0.02,
+      "boundary_source": "附件1 实测数据插值"
     },
     "problem2": {
       "label": "problem2",
       "final_time_s": 10800.0,
-      "final_surface_T_C": 49.98250383130152,
-      "final_center_T_C": 49.97038498287125,
-      "final_surface_C": 1.0013837251651074,
-      "final_center_C": 1.7396858752692204,
-      "final_radius_m": 0.02
+      "final_surface_T_C": 49.966402490173635,
+      "final_center_T_C": 49.84944678856475,
+      "final_surface_C": 1.0080712145415696,
+      "final_center_C": 1.7661830135992458,
+      "final_radius_m": 0.02,
+      "boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
     },
     "problem3": {
       "label": "problem3",
-      "final_time_s": 206720.0,
-      "final_surface_T_C": 49.999999999995914,
-      "final_center_T_C": 49.999999999988425,
-      "final_surface_C": 0.05221723192397079,
-      "final_center_C": 0.14999981798681666,
+      "final_time_s": 205820.0,
+      "final_surface_T_C": 50.165000000001484,
+      "final_center_T_C": 50.16500000000816,
+      "final_surface_C": 0.05208619821307536,
+      "final_center_C": 0.14999988750328933,
       "final_radius_m": 0.02,
-      "drying_time_h": 57.422222222222224
+      "drying_time_h": 57.172222222222224,
+      "boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
     },
     "problem4": {
       "label": "problem4",
-      "final_time_s": 233210.0,
-      "final_surface_T_C": 49.99885483990766,
-      "final_center_T_C": 49.998849344558415,
-      "final_surface_C": 0.05243092990387775,
-      "final_center_C": 0.1499974570092847,
-      "final_radius_m": 0.012721227069072335,
-      "drying_time_h": 64.78055555555555,
-      "final_radius_cm": 1.2721227069072334
+      "final_time_s": 188320.0,
+      "final_surface_T_C": 50.1650000000137,
+      "final_center_T_C": 50.16500000001799,
+      "final_surface_C": 0.05237384221679416,
+      "final_center_C": 0.14999598685738585,
+      "final_radius_m": 0.012,
+      "drying_time_h": 52.31111111111111,
+      "final_radius_cm": 1.2,
+      "radius_source": "附件2 实测半径",
+      "boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
+    },
+    "problem4_baseline": {
+      "label": "problem4",
+      "final_time_s": 232440.0,
+      "final_surface_T_C": 50.163844049244545,
+      "final_center_T_C": 50.163838468396015,
+      "final_surface_C": 0.05230443387064745,
+      "final_center_C": 0.14999642466447477,
+      "final_radius_m": 0.012721197996366713,
+      "drying_time_h": 64.56666666666666,
+      "final_radius_cm": 1.2721197996366713,
+      "radius_source": "Landau 质量守恒",
+      "boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
     }
   },
   "validations": {
     "spatial_convergence": [
       {
         "N": 160,
-        "dry_h": 63.522222222222226
+        "dry_h": 63.516666666666666
       },
       {
         "N": 320,
-        "dry_h": 58.09444444444444
+        "dry_h": 57.86666666666667
       },
       {
         "N": 640,
-        "dry_h": 57.5
+        "dry_h": 57.25
       },
       {
         "N": 1280,
-        "dry_h": 57.42777777777778
+        "dry_h": 57.17777777777778
       },
       {
         "N": 2560,
-        "dry_h": 57.416666666666664
+        "dry_h": 57.166666666666664
       }
     ],
     "temporal_convergence": [
       {
         "dt": 20.0,
-        "dry_h": 58.09444444444444
+        "dry_h": 57.86666666666667
       },
       {
         "dt": 10.0,
-        "dry_h": 58.09166666666667
+        "dry_h": 57.86388888888889
       },
       {
         "dt": 5.0,
-        "dry_h": 58.09166666666667
+        "dry_h": 57.8625
       }
     ],
     "temperature_sensitivity": [
       {
         "T_target": 45.0,
-        "dry_h": 69.17777777777778
+        "dry_h": 69.22222222222223,
+        "T_air_source": "参数化指数趋近",
+        "C_air_source": "附件1 实测数据"
       },
       {
         "T_target": 50.0,
-        "dry_h": 58.09444444444444
+        "dry_h": 58.1,
+        "T_air_source": "参数化指数趋近",
+        "C_air_source": "附件1 实测数据"
       },
       {
         "T_target": 55.0,
-        "dry_h": 49.4
+        "dry_h": 49.388888888888886,
+        "T_air_source": "参数化指数趋近",
+        "C_air_source": "附件1 实测数据"
       },
       {
         "T_target": 60.0,
-        "dry_h": 42.5
+        "dry_h": 42.477777777777774,
+        "T_air_source": "参数化指数趋近",
+        "C_air_source": "附件1 实测数据"
       }
-    ]
+    ],
+    "temp_sensitivity_note": "温度侧用参数化指数趋近（default_T_air），湿度侧用附件1 实测数据",
+    "convergence_boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
   }
 }
