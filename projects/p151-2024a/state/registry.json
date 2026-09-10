@@ -15,13 +15,13 @@
     "paper_section": 5
   },
   "artifacts": {
-    "A001": {
+    "MH-ASSUMPTION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "A001",
+      "artifact_id": "MH-ASSUMPTION-0001",
       "type": "assumption",
       "version": 1,
       "status": "active",
-      "title": "M001 假设1: 距离度量对量纲与权重极端敏感，权重拍脑袋则结论不可信",
+      "title": "MH-MODEL-0001 假设1: 距离度量对量纲与权重极端敏感，权重拍脑袋则结论不可信",
       "question": "",
       "created_by": "model_construction",
       "created_at": "2026-09-08T00:35:58+00:00",
@@ -29,13 +29,13 @@
       "payload": [],
       "parent": [],
       "depends_on": [
-        "M001"
+        "MH-MODEL-0001"
       ],
       "relations": [
         {
-          "from": "M001",
+          "from": "MH-MODEL-0001",
           "relation": "assumes",
-          "to": "A001",
+          "to": "MH-ASSUMPTION-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -65,13 +65,13 @@
       "tags": [],
       "data": {}
     },
-    "A002": {
+    "MH-ASSUMPTION-0002": {
       "schema_version": "3.1",
-      "artifact_id": "A002",
+      "artifact_id": "MH-ASSUMPTION-0002",
       "type": "assumption",
       "version": 1,
       "status": "active",
-      "title": "M001 假设2: 只能排序不能论证\"最优唯一性\"；贴近度差小时排序不稳定",
+      "title": "MH-MODEL-0001 假设2: 只能排序不能论证\"最优唯一性\"；贴近度差小时排序不稳定",
       "question": "",
       "created_by": "model_construction",
       "created_at": "2026-09-08T00:35:58+00:00",
@@ -79,13 +79,13 @@
       "payload": [],
       "parent": [],
       "depends_on": [
-        "M001"
+        "MH-MODEL-0001"
       ],
       "relations": [
         {
-          "from": "M001",
+          "from": "MH-MODEL-0001",
           "relation": "assumes",
-          "to": "A002",
+          "to": "MH-ASSUMPTION-0002",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -115,33 +115,33 @@
       "tags": [],
       "data": {}
     },
-    "C001": {
+    "MH-CLAIM-0001": {
       "schema_version": "3.1",
-      "artifact_id": "C001",
+      "artifact_id": "MH-CLAIM-0001",
       "type": "claim",
       "version": 1,
       "status": "active",
-      "title": "Q001 结论",
-      "question": "Q001",
+      "title": "MH-QUESTION-0001 结论",
+      "question": "MH-QUESTION-0001",
       "created_by": "evidence_build",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [],
       "parent": [],
       "depends_on": [
-        "R001"
+        "MH-RESULT-0001"
       ],
       "relations": [
         {
-          "from": "C001",
+          "from": "MH-CLAIM-0001",
           "relation": "appears_in",
           "to": "S003",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "R001",
+          "from": "MH-RESULT-0001",
           "relation": "supports",
-          "to": "C001",
+          "to": "MH-CLAIM-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -170,17 +170,17 @@
       "invalidation": {},
       "tags": [],
       "data": {
-        "statement": "Q001 结论",
+        "statement": "MH-QUESTION-0001 结论",
         "claim_type": "comparative",
         "experiment_refs": [
-          "R001"
+          "MH-RESULT-0001"
         ],
         "literature_refs": []
       }
     },
-    "D001": {
+    "MH-DECISION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "D001",
+      "artifact_id": "MH-DECISION-0001",
       "type": "decision",
       "version": 1,
       "status": "active",
@@ -196,13 +196,13 @@
       ],
       "parent": [],
       "depends_on": [
-        "P001"
+        "MH-PROBLEM-0001"
       ],
       "relations": [
         {
-          "from": "D001",
+          "from": "MH-DECISION-0001",
           "relation": "based_on",
-          "to": "P001",
+          "to": "MH-PROBLEM-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -256,13 +256,13 @@
         ]
       }
     },
-    "D002": {
+    "MH-DECISION-0002": {
       "schema_version": "3.1",
-      "artifact_id": "D002",
+      "artifact_id": "MH-DECISION-0002",
       "type": "decision",
       "version": 1,
       "status": "active",
-      "title": "Q001 实验计划",
+      "title": "MH-QUESTION-0001 实验计划",
       "question": "",
       "created_by": "experiment_design",
       "created_at": "2026-09-08T00:35:58+00:00",
@@ -273,13 +273,13 @@
       ],
       "parent": [],
       "depends_on": [
-        "M001"
+        "MH-MODEL-0001"
       ],
       "relations": [
         {
-          "from": "D002",
+          "from": "MH-DECISION-0002",
           "relation": "based_on",
-          "to": "M001",
+          "to": "MH-MODEL-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -308,7 +308,7 @@
       "invalidation": {},
       "tags": [],
       "data": {
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "methods": [
           "mc-topsis",
           "mc-ahp"
@@ -354,7 +354,7 @@
         ],
         "entries": [
           {
-            "experiment_id": "E-Q001-01",
+            "experiment_id": "E-MH-QUESTION-0001-01",
             "purpose": "方法学对照：主方法必须战胜朴素基线才有意义",
             "hypothesis": "TOPSIS 逼近理想解排序 优于朴素基线",
             "method": "同口径基线对比实验",
@@ -381,7 +381,7 @@
             "expected_information_gain": 0.9
           },
           {
-            "experiment_id": "E-Q001-02",
+            "experiment_id": "E-MH-QUESTION-0001-02",
             "purpose": "方法卡最低证据要求: baseline_comparison",
             "hypothesis": "TOPSIS 逼近理想解排序 在 baseline_comparison 上可复现且达标",
             "method": "baseline_comparison",
@@ -405,7 +405,7 @@
             "expected_information_gain": 0.7
           },
           {
-            "experiment_id": "E-Q001-03",
+            "experiment_id": "E-MH-QUESTION-0001-03",
             "purpose": "方法卡推荐增强证据: weight_sensitivity_analysis",
             "hypothesis": "weight_sensitivity_analysis 提升结论稳健性",
             "method": "weight_sensitivity_analysis",
@@ -426,7 +426,7 @@
             "expected_information_gain": 0.4
           },
           {
-            "experiment_id": "E-Q001-04",
+            "experiment_id": "E-MH-QUESTION-0001-04",
             "purpose": "方法卡推荐增强证据: ranking_stability_check",
             "hypothesis": "ranking_stability_check 提升结论稳健性",
             "method": "ranking_stability_check",
@@ -447,7 +447,7 @@
             "expected_information_gain": 0.4
           },
           {
-            "experiment_id": "E-Q001-05",
+            "experiment_id": "E-MH-QUESTION-0001-05",
             "purpose": "消融对照: 组合方法 mc-ahp 的边际贡献",
             "hypothesis": "组合优于单一主方法",
             "method": "仅用 mc-ahp 同口径对照",
@@ -468,7 +468,7 @@
             "expected_information_gain": 0.5
           },
           {
-            "experiment_id": "E-Q001-06",
+            "experiment_id": "E-MH-QUESTION-0001-06",
             "purpose": "候选方案要求: baseline_comparison",
             "hypothesis": "baseline_comparison 验证通过",
             "method": "baseline_comparison",
@@ -489,7 +489,7 @@
             "expected_information_gain": 0.5
           },
           {
-            "experiment_id": "E-Q001-07",
+            "experiment_id": "E-MH-QUESTION-0001-07",
             "purpose": "候选方案要求: recommended: weight_sensitivity_analysis",
             "hypothesis": "recommended: weight_sensitivity_analysis 验证通过",
             "method": "recommended: weight_sensitivity_analysis",
@@ -510,7 +510,7 @@
             "expected_information_gain": 0.5
           },
           {
-            "experiment_id": "E-Q001-08",
+            "experiment_id": "E-MH-QUESTION-0001-08",
             "purpose": "候选方案要求: recommended: ranking_stability_check",
             "hypothesis": "recommended: ranking_stability_check 验证通过",
             "method": "recommended: ranking_stability_check",
@@ -533,39 +533,39 @@
         ]
       }
     },
-    "E001": {
+    "MH-EXPERIMENT-0001": {
       "schema_version": "3.1",
-      "artifact_id": "E001",
+      "artifact_id": "MH-EXPERIMENT-0001",
       "type": "experiment",
       "version": 1,
       "status": "active",
-      "title": "Q001 实验",
-      "question": "Q001",
-      "created_by": "experiment@Q001",
+      "title": "MH-QUESTION-0001 实验",
+      "question": "MH-QUESTION-0001",
+      "created_by": "experiment@MH-QUESTION-0001",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [],
       "parent": [],
       "depends_on": [
-        "M001"
+        "MH-MODEL-0001"
       ],
       "relations": [
         {
-          "from": "E001",
+          "from": "MH-EXPERIMENT-0001",
           "relation": "tests",
-          "to": "M001",
+          "to": "MH-MODEL-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "E001",
+          "from": "MH-EXPERIMENT-0001",
           "relation": "produces",
-          "to": "R001",
+          "to": "MH-RESULT-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "M001",
+          "from": "MH-MODEL-0001",
           "relation": "validated_by",
-          "to": "E001",
+          "to": "MH-EXPERIMENT-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -580,14 +580,14 @@
           "from": null,
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "experiment@Q001",
+          "by": "experiment@MH-QUESTION-0001",
           "reason": "created"
         },
         {
           "from": "draft",
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "experiment@Q001",
+          "by": "experiment@MH-QUESTION-0001",
           "reason": "registered with payload"
         }
       ],
@@ -595,32 +595,32 @@
       "tags": [],
       "data": {
         "card_id": "mc-topsis",
-        "plan_ref": "D002",
-        "plan_entry": "E-Q001-01",
+        "plan_ref": "MH-DECISION-0002",
+        "plan_entry": "E-MH-QUESTION-0001-01",
         "hypothesis_ref": "TOPSIS 逼近理想解排序 优于朴素基线"
       }
     },
-    "F001": {
+    "MH-FIGURE-0001": {
       "schema_version": "3.1",
-      "artifact_id": "F001",
+      "artifact_id": "MH-FIGURE-0001",
       "type": "figure",
       "version": 1,
       "status": "active",
-      "title": "Q001 结果图",
-      "question": "Q001",
-      "created_by": "experiment@Q001",
+      "title": "MH-QUESTION-0001 结果图",
+      "question": "MH-QUESTION-0001",
+      "created_by": "experiment@MH-QUESTION-0001",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [],
       "parent": [],
       "depends_on": [
-        "R001"
+        "MH-RESULT-0001"
       ],
       "relations": [
         {
-          "from": "R001",
+          "from": "MH-RESULT-0001",
           "relation": "visualized_by",
-          "to": "F001",
+          "to": "MH-FIGURE-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -635,14 +635,14 @@
           "from": null,
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "experiment@Q001",
+          "by": "experiment@MH-QUESTION-0001",
           "reason": "created"
         },
         {
           "from": "draft",
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "experiment@Q001",
+          "by": "experiment@MH-QUESTION-0001",
           "reason": "registered with payload"
         }
       ],
@@ -650,57 +650,57 @@
       "tags": [],
       "data": {}
     },
-    "M001": {
+    "MH-MODEL-0001": {
       "schema_version": "3.1",
-      "artifact_id": "M001",
+      "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
       "status": "active",
       "title": "TOPSIS 逼近理想解排序",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "model_selection",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [],
       "parent": [],
       "depends_on": [
-        "Q001"
+        "MH-QUESTION-0001"
       ],
       "relations": [
         {
-          "from": "M001",
+          "from": "MH-MODEL-0001",
           "relation": "assumes",
-          "to": "A001",
+          "to": "MH-ASSUMPTION-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "M001",
+          "from": "MH-MODEL-0001",
           "relation": "assumes",
-          "to": "A002",
+          "to": "MH-ASSUMPTION-0002",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "M001",
+          "from": "MH-MODEL-0001",
           "relation": "validated_by",
-          "to": "E001",
+          "to": "MH-EXPERIMENT-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "Q001",
+          "from": "MH-QUESTION-0001",
           "relation": "solved_by",
-          "to": "M001",
+          "to": "MH-MODEL-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "D002",
+          "from": "MH-DECISION-0002",
           "relation": "based_on",
-          "to": "M001",
+          "to": "MH-MODEL-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "E001",
+          "from": "MH-EXPERIMENT-0001",
           "relation": "tests",
-          "to": "M001",
+          "to": "MH-MODEL-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -738,9 +738,9 @@
         ]
       }
     },
-    "P001": {
+    "MH-PROBLEM-0001": {
       "schema_version": "3.1",
-      "artifact_id": "P001",
+      "artifact_id": "MH-PROBLEM-0001",
       "type": "problem",
       "version": 1,
       "status": "active",
@@ -754,15 +754,15 @@
       "depends_on": [],
       "relations": [
         {
-          "from": "P001",
+          "from": "MH-PROBLEM-0001",
           "relation": "motivates",
-          "to": "Q001",
+          "to": "MH-QUESTION-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "D001",
+          "from": "MH-DECISION-0001",
           "relation": "based_on",
-          "to": "P001",
+          "to": "MH-PROBLEM-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -792,13 +792,13 @@
       "tags": [],
       "data": {}
     },
-    "Q001": {
+    "MH-QUESTION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "Q001",
+      "artifact_id": "MH-QUESTION-0001",
       "type": "question",
       "version": 1,
       "status": "active",
-      "title": "Q001",
+      "title": "MH-QUESTION-0001",
       "question": "",
       "created_by": "session",
       "created_at": "2026-09-08T00:35:58+00:00",
@@ -808,15 +808,15 @@
       "depends_on": [],
       "relations": [
         {
-          "from": "Q001",
+          "from": "MH-QUESTION-0001",
           "relation": "solved_by",
-          "to": "M001",
+          "to": "MH-MODEL-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "P001",
+          "from": "MH-PROBLEM-0001",
           "relation": "motivates",
-          "to": "Q001",
+          "to": "MH-QUESTION-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -846,39 +846,39 @@
       "tags": [],
       "data": {}
     },
-    "R001": {
+    "MH-RESULT-0001": {
       "schema_version": "3.1",
-      "artifact_id": "R001",
+      "artifact_id": "MH-RESULT-0001",
       "type": "result",
       "version": 1,
       "status": "active",
-      "title": "Q001 结果",
-      "question": "Q001",
-      "created_by": "experiment@Q001",
+      "title": "MH-QUESTION-0001 结果",
+      "question": "MH-QUESTION-0001",
+      "created_by": "experiment@MH-QUESTION-0001",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [],
       "parent": [],
       "depends_on": [
-        "E001"
+        "MH-EXPERIMENT-0001"
       ],
       "relations": [
         {
-          "from": "R001",
+          "from": "MH-RESULT-0001",
           "relation": "visualized_by",
-          "to": "F001",
+          "to": "MH-FIGURE-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "R001",
+          "from": "MH-RESULT-0001",
           "relation": "supports",
-          "to": "C001",
+          "to": "MH-CLAIM-0001",
           "at": "2026-09-08T00:35:58+00:00"
         },
         {
-          "from": "E001",
+          "from": "MH-EXPERIMENT-0001",
           "relation": "produces",
-          "to": "R001",
+          "to": "MH-RESULT-0001",
           "at": "2026-09-08T00:35:58+00:00"
         }
       ],
@@ -893,14 +893,14 @@
           "from": null,
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "experiment@Q001",
+          "by": "experiment@MH-QUESTION-0001",
           "reason": "created"
         },
         {
           "from": "draft",
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "experiment@Q001",
+          "by": "experiment@MH-QUESTION-0001",
           "reason": "registered with payload"
         }
       ],
@@ -919,9 +919,9 @@
       "type": "paper_section",
       "version": 1,
       "status": "active",
-      "title": "Q001 · 问题重述与分析",
-      "question": "Q001",
-      "created_by": "paper_sections@Q001",
+      "title": "MH-QUESTION-0001 · 问题重述与分析",
+      "question": "MH-QUESTION-0001",
+      "created_by": "paper_sections@MH-QUESTION-0001",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [
@@ -941,14 +941,14 @@
           "from": null,
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "created"
         },
         {
           "from": "draft",
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "registered with payload"
         }
       ],
@@ -962,9 +962,9 @@
       "type": "paper_section",
       "version": 1,
       "status": "active",
-      "title": "Q001 · 模型建立",
-      "question": "Q001",
-      "created_by": "paper_sections@Q001",
+      "title": "MH-QUESTION-0001 · 模型建立",
+      "question": "MH-QUESTION-0001",
+      "created_by": "paper_sections@MH-QUESTION-0001",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [
@@ -984,14 +984,14 @@
           "from": null,
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "created"
         },
         {
           "from": "draft",
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "registered with payload"
         }
       ],
@@ -1005,9 +1005,9 @@
       "type": "paper_section",
       "version": 1,
       "status": "active",
-      "title": "Q001 · 结果与分析",
-      "question": "Q001",
-      "created_by": "paper_sections@Q001",
+      "title": "MH-QUESTION-0001 · 结果与分析",
+      "question": "MH-QUESTION-0001",
+      "created_by": "paper_sections@MH-QUESTION-0001",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [
@@ -1017,7 +1017,7 @@
       "depends_on": [],
       "relations": [
         {
-          "from": "C001",
+          "from": "MH-CLAIM-0001",
           "relation": "appears_in",
           "to": "S003",
           "at": "2026-09-08T00:35:58+00:00"
@@ -1034,14 +1034,14 @@
           "from": null,
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "created"
         },
         {
           "from": "draft",
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "registered with payload"
         }
       ],
@@ -1055,9 +1055,9 @@
       "type": "paper_section",
       "version": 1,
       "status": "active",
-      "title": "Q001 · 灵敏度与稳健性",
-      "question": "Q001",
-      "created_by": "paper_sections@Q001",
+      "title": "MH-QUESTION-0001 · 灵敏度与稳健性",
+      "question": "MH-QUESTION-0001",
+      "created_by": "paper_sections@MH-QUESTION-0001",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [
@@ -1077,14 +1077,14 @@
           "from": null,
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "created"
         },
         {
           "from": "draft",
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "registered with payload"
         }
       ],
@@ -1098,9 +1098,9 @@
       "type": "paper_section",
       "version": 1,
       "status": "active",
-      "title": "Q001 · 结论",
-      "question": "Q001",
-      "created_by": "paper_sections@Q001",
+      "title": "MH-QUESTION-0001 · 结论",
+      "question": "MH-QUESTION-0001",
+      "created_by": "paper_sections@MH-QUESTION-0001",
       "created_at": "2026-09-08T00:35:58+00:00",
       "updated_at": "2026-09-08T00:35:58+00:00",
       "payload": [
@@ -1120,14 +1120,14 @@
           "from": null,
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "created"
         },
         {
           "from": "draft",
           "to": "active",
           "at": "2026-09-08T00:35:58+00:00",
-          "by": "paper_sections@Q001",
+          "by": "paper_sections@MH-QUESTION-0001",
           "reason": "registered with payload"
         }
       ],

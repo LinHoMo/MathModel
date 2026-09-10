@@ -8,9 +8,9 @@
     "decision": 3
   },
   "artifacts": {
-    "Q001": {
+    "MH-QUESTION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "Q001",
+      "artifact_id": "MH-QUESTION-0001",
       "type": "question",
       "version": 1,
       "status": "active",
@@ -21,7 +21,7 @@
       "updated_at": "2026-09-08T09:11:31Z",
       "payload": {
         "title": "机场出租车问题理解与子问题分解",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "problem_type": "排队随机服务系统+司机决策+上车点布局优化+优先权机制设计综合问题",
         "sub_questions": [
           {
@@ -222,20 +222,20 @@
       "tags": [],
       "data": {}
     },
-    "M001": {
+    "MH-MODEL-0001": {
       "schema_version": "3.1",
-      "artifact_id": "M001",
+      "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
       "status": "active",
       "title": "基于排队论(M/M/c)的机场出租车司机决策与系统优化模型",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "model_construction",
       "created_at": "2026-09-08T09:11:36Z",
       "updated_at": "2026-09-08T09:11:36Z",
       "payload": {
         "title": "基于排队论(M/M/c)的机场出租车司机决策与系统优化模型",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "model_type": "排队论(M/M/c+优先权排队)-期望收益决策-整数规划混合模型",
         "model_family": [
           "queuing_theory",
@@ -525,12 +525,12 @@
           ]
         },
         "depends_on": [
-          "Q001"
+          "MH-QUESTION-0001"
         ]
       },
       "parent": [],
       "depends_on": [
-        "Q001"
+        "MH-QUESTION-0001"
       ],
       "relations": [],
       "provenance": {
@@ -599,20 +599,20 @@
         ]
       }
     },
-    "D001": {
+    "MH-DECISION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "D001",
+      "artifact_id": "MH-DECISION-0001",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "求解方法选择：以排队论(mc-queuing-theory)为主卡的混合方法体系",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "method_selection",
       "created_at": "2026-09-08T09:11:44Z",
       "updated_at": "2026-09-08T09:11:44Z",
       "payload": {
         "title": "求解方法选择：以排队论(mc-queuing-theory)为主卡的混合方法体系",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "decision": "选择mc-queuing-theory为主卡(family=queuing_theory)，构建以M/M/c排队论为核心机理的混合方法体系：Q1用排队论解析+期望收益决策，Q2用真实数据校准+敏感性分析，Q3用排队容量规划+遗传算法优化上车点布局，Q4用非抢占优先权排队+蒙特卡洛仿真验证收益均衡。mc-ga和mc-monte-carlo为辅助卡。",
         "alternatives": [
           {
@@ -763,12 +763,12 @@
         },
         "confidence": 0.92,
         "depends_on": [
-          "M001"
+          "MH-MODEL-0001"
         ]
       },
       "parent": [],
       "depends_on": [
-        "M001"
+        "MH-MODEL-0001"
       ],
       "relations": [],
       "provenance": {
@@ -810,20 +810,20 @@
       "tags": [],
       "data": {}
     },
-    "D002": {
+    "MH-DECISION-0002": {
       "schema_version": "3.1",
-      "artifact_id": "D002",
+      "artifact_id": "MH-DECISION-0002",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "分问题求解策略与算法流程(排队论为主)",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "solving_strategy",
       "created_at": "2026-09-08T09:11:52Z",
       "updated_at": "2026-09-08T09:11:52Z",
       "payload": {
         "title": "分问题求解策略与算法流程(排队论为主)",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "decision": "按Q1->Q2->Q3->Q4顺序求解，以M/M/c排队论解析为核心：Q1建立排队等待+期望收益决策阈值模型，Q2用真实数据校准排队参数并输出方案，Q3用排队容量规划(Erlang C确定最优服务台数c)+遗传算法优化上车点位置，Q4设计非抢占优先权排队系数并蒙特卡洛仿真验证收益均衡",
         "alternatives": [
           {
@@ -936,12 +936,12 @@
           "warm_up_period": "删除前10%仿真数据作为瞬态warm-up"
         },
         "depends_on": [
-          "D001"
+          "MH-DECISION-0001"
         ]
       },
       "parent": [],
       "depends_on": [
-        "D001"
+        "MH-DECISION-0001"
       ],
       "relations": [],
       "provenance": {
@@ -983,20 +983,20 @@
       "tags": [],
       "data": {}
     },
-    "D003": {
+    "MH-DECISION-0003": {
       "schema_version": "3.1",
-      "artifact_id": "D003",
+      "artifact_id": "MH-DECISION-0003",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "排队论模型验证与灵敏度分析计划",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "validation_plan",
       "created_at": "2026-09-08T09:11:59Z",
       "updated_at": "2026-09-08T09:11:59Z",
       "payload": {
         "title": "排队论模型验证与灵敏度分析计划",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "decision": "采用排队论专属验证+解析-仿真交叉验证+多参数灵敏度分析+极端场景鲁棒性测试的五层验证体系，核心是Little定律验证和分布拟合检验(排队论卡validation节要求)",
         "alternatives": [
           {
@@ -1202,12 +1202,12 @@
           "全模型在极端场景下输出合理，rho>=1时正确识别系统不稳定，鲁棒性可接受"
         ],
         "depends_on": [
-          "D002"
+          "MH-DECISION-0002"
         ]
       },
       "parent": [],
       "depends_on": [
-        "D002"
+        "MH-DECISION-0002"
       ],
       "relations": [],
       "provenance": {

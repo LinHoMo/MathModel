@@ -5,73 +5,73 @@
   "updated_at": "2026-09-08T00:35:58+00:00",
   "relations": [
     {
-      "from": "P001",
+      "from": "MH-PROBLEM-0001",
       "relation": "motivates",
-      "to": "Q001",
+      "to": "MH-QUESTION-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "D001",
+      "from": "MH-DECISION-0001",
       "relation": "based_on",
-      "to": "P001",
+      "to": "MH-PROBLEM-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "Q001",
+      "from": "MH-QUESTION-0001",
       "relation": "solved_by",
-      "to": "M001",
+      "to": "MH-MODEL-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "M001",
+      "from": "MH-MODEL-0001",
       "relation": "assumes",
-      "to": "A001",
+      "to": "MH-ASSUMPTION-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "M001",
+      "from": "MH-MODEL-0001",
       "relation": "assumes",
-      "to": "A002",
+      "to": "MH-ASSUMPTION-0002",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "D002",
+      "from": "MH-DECISION-0002",
       "relation": "based_on",
-      "to": "M001",
+      "to": "MH-MODEL-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "M001",
+      "from": "MH-MODEL-0001",
       "relation": "validated_by",
-      "to": "E001",
+      "to": "MH-EXPERIMENT-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "E001",
+      "from": "MH-EXPERIMENT-0001",
       "relation": "tests",
-      "to": "M001",
+      "to": "MH-MODEL-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "E001",
+      "from": "MH-EXPERIMENT-0001",
       "relation": "produces",
-      "to": "R001",
+      "to": "MH-RESULT-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "R001",
+      "from": "MH-RESULT-0001",
       "relation": "visualized_by",
-      "to": "F001",
+      "to": "MH-FIGURE-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "R001",
+      "from": "MH-RESULT-0001",
       "relation": "supports",
-      "to": "C001",
+      "to": "MH-CLAIM-0001",
       "at": "2026-09-08T00:35:58+00:00"
     },
     {
-      "from": "C001",
+      "from": "MH-CLAIM-0001",
       "relation": "appears_in",
       "to": "S003",
       "at": "2026-09-08T00:35:58+00:00"

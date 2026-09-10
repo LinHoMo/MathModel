@@ -8,9 +8,9 @@
     "decision": 3
   },
   "artifacts": {
-    "Q001": {
+    "MH-QUESTION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "Q001",
+      "artifact_id": "MH-QUESTION-0001",
       "type": "question",
       "version": 1,
       "status": "active",
@@ -160,14 +160,14 @@
       "tags": [],
       "data": {}
     },
-    "M001": {
+    "MH-MODEL-0001": {
       "schema_version": "3.1",
-      "artifact_id": "M001",
+      "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
       "status": "active",
       "title": "板凳龙多体刚体链运动学模型",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "model_construction",
       "created_at": "2026-09-08T06:34:20Z",
       "updated_at": "2026-09-08T06:34:20Z",
@@ -476,14 +476,14 @@
         ]
       }
     },
-    "D001": {
+    "MH-DECISION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "D001",
+      "artifact_id": "MH-DECISION-0001",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "method_selection output",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "method_selection",
       "created_at": "2026-09-08T06:34:20Z",
       "updated_at": "2026-09-08T06:34:20Z",
@@ -548,14 +548,14 @@
       "tags": [],
       "data": {}
     },
-    "D002": {
+    "MH-DECISION-0002": {
       "schema_version": "3.1",
-      "artifact_id": "D002",
+      "artifact_id": "MH-DECISION-0002",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "solving_strategy output",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "solving_strategy",
       "created_at": "2026-09-08T06:34:20Z",
       "updated_at": "2026-09-08T06:34:20Z",
@@ -621,14 +621,14 @@
       "tags": [],
       "data": {}
     },
-    "D003": {
+    "MH-DECISION-0003": {
       "schema_version": "3.1",
-      "artifact_id": "D003",
+      "artifact_id": "MH-DECISION-0003",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "validation_plan output",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "validation_plan",
       "created_at": "2026-09-08T06:34:20Z",
       "updated_at": "2026-09-08T06:34:20Z",

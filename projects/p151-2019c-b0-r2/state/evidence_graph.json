@@ -5,27 +5,27 @@
   "updated_at": "2026-09-08T09:11:59Z",
   "relations": [
     {
-      "from": "M001",
+      "from": "MH-MODEL-0001",
       "relation": "based_on",
-      "to": "Q001",
+      "to": "MH-QUESTION-0001",
       "at": "2026-09-08T09:11:36Z"
     },
     {
-      "from": "D001",
+      "from": "MH-DECISION-0001",
       "relation": "based_on",
-      "to": "M001",
+      "to": "MH-MODEL-0001",
       "at": "2026-09-08T09:11:44Z"
     },
     {
-      "from": "D002",
+      "from": "MH-DECISION-0002",
       "relation": "based_on",
-      "to": "D001",
+      "to": "MH-DECISION-0001",
       "at": "2026-09-08T09:11:52Z"
     },
     {
-      "from": "D003",
+      "from": "MH-DECISION-0003",
       "relation": "based_on",
-      "to": "D002",
+      "to": "MH-DECISION-0002",
       "at": "2026-09-08T09:11:59Z"
     }
   ]

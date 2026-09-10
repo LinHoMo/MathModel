@@ -8,9 +8,9 @@
     "decision": 3
   },
   "artifacts": {
-    "Q001": {
+    "MH-QUESTION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "Q001",
+      "artifact_id": "MH-QUESTION-0001",
       "type": "question",
       "version": 1,
       "status": "active",
@@ -123,14 +123,14 @@
       "tags": [],
       "data": {}
     },
-    "M001": {
+    "MH-MODEL-0001": {
       "schema_version": "3.1",
-      "artifact_id": "M001",
+      "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
       "status": "active",
       "title": "穿越沙漠 — 多阶段资源优化与博弈模型",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "model_construction",
       "created_at": "2026-09-08T06:39:14Z",
       "updated_at": "2026-09-08T06:39:14Z",
@@ -370,14 +370,14 @@
         ]
       }
     },
-    "D001": {
+    "MH-DECISION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "D001",
+      "artifact_id": "MH-DECISION-0001",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "求解方法选择 — 遗传算法为主，蒙特卡洛模拟为辅",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "method_selection",
       "created_at": "2026-09-08T06:39:14Z",
       "updated_at": "2026-09-08T06:39:14Z",
@@ -430,12 +430,12 @@
         ],
         "confidence": 0.72,
         "depends_on": [
-          "M001"
+          "MH-MODEL-0001"
         ]
       },
       "parent": [],
       "depends_on": [
-        "M001"
+        "MH-MODEL-0001"
       ],
       "relations": [],
       "provenance": {
@@ -477,14 +477,14 @@
       "tags": [],
       "data": {}
     },
-    "D002": {
+    "MH-DECISION-0002": {
       "schema_version": "3.1",
-      "artifact_id": "D002",
+      "artifact_id": "MH-DECISION-0002",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "求解策略 — 分阶段混合求解框架",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "solving_strategy",
       "created_at": "2026-09-08T06:39:14Z",
       "updated_at": "2026-09-08T06:39:14Z",
@@ -512,14 +512,14 @@
         "algorithm": "Q1: 染色体编码=每日行动序列(a_0,...,a_T)，适应度=终点剩余资金，选择=锦标赛，交叉=单点，变异=行动替换；Q2: 状态=(位置,水,食物,资金,当日天气)，值迭代Bellman备份，蒙特卡洛1000次模拟评估策略期望收益；Q3.1: 枚举/GA搜索各玩家预定义策略组合，检验纳什均衡（无玩家可单方面偏离获益）；Q3.2: 在线策略迭代，每玩家根据当日天气和他人昨日行动更新策略，多智能体模拟至收敛。",
         "feasibility": "Q1可行（GA种群500，迭代200代）；Q2可行（状态空间约10^6，值迭代可收敛）；Q3.1可行（n较小，策略空间可枚举或GA搜索）；Q3.2可行（在线模拟，无需全状态空间）。主要风险是Q2/Q3的状态空间裁剪和天气转移概率估计。",
         "depends_on": [
-          "M001",
-          "D001"
+          "MH-MODEL-0001",
+          "MH-DECISION-0001"
         ]
       },
       "parent": [],
       "depends_on": [
-        "M001",
-        "D001"
+        "MH-MODEL-0001",
+        "MH-DECISION-0001"
       ],
       "relations": [],
       "provenance": {
@@ -561,14 +561,14 @@
       "tags": [],
       "data": {}
     },
-    "D003": {
+    "MH-DECISION-0003": {
       "schema_version": "3.1",
-      "artifact_id": "D003",
+      "artifact_id": "MH-DECISION-0003",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "验证计划 — 多维验证与灵敏度分析",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "validation_plan",
       "created_at": "2026-09-08T06:39:14Z",
       "updated_at": "2026-09-08T06:39:14Z",
@@ -623,16 +623,16 @@
         ],
         "confidence": 0.78,
         "depends_on": [
-          "M001",
-          "D001",
-          "D002"
+          "MH-MODEL-0001",
+          "MH-DECISION-0001",
+          "MH-DECISION-0002"
         ]
       },
       "parent": [],
       "depends_on": [
-        "M001",
-        "D001",
-        "D002"
+        "MH-MODEL-0001",
+        "MH-DECISION-0001",
+        "MH-DECISION-0002"
       ],
       "relations": [],
       "provenance": {

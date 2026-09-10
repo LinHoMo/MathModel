@@ -8,9 +8,9 @@
     "decision": 3
   },
   "artifacts": {
-    "Q001": {
+    "MH-QUESTION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "Q001",
+      "artifact_id": "MH-QUESTION-0001",
       "type": "question",
       "version": 1,
       "status": "active",
@@ -124,21 +124,21 @@
       "tags": [],
       "data": {}
     },
-    "M001": {
+    "MH-MODEL-0001": {
       "schema_version": "3.1",
-      "artifact_id": "M001",
+      "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
       "status": "active",
       "title": "基于PCA降维的古代玻璃成分统计分类模型",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "model_selection",
       "created_at": "2026-09-08T09:10:58Z",
       "updated_at": "2026-09-08T09:10:58Z",
       "payload": {
         "title": "基于PCA降维的古代玻璃成分统计分类模型",
         "model_type": "pca_dimensionality_reduction_with_classification",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "assumptions": [
           "成分比例累加和在85%-105%之间的数据视为有效，超出范围予以剔除",
           "未检测到的成分（空白）按0处理，代表该成分含量低于检测限",
@@ -326,14 +326,14 @@
         ]
       }
     },
-    "D001": {
+    "MH-DECISION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "D001",
+      "artifact_id": "MH-DECISION-0001",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "方法卡选择决策 — 选定mc-pca为主方法卡",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "method_selection",
       "created_at": "2026-09-08T09:10:58Z",
       "updated_at": "2026-09-08T09:10:58Z",
@@ -386,14 +386,14 @@
           "small_sample_medium → PCA缓解维度灾难"
         ],
         "depends_on": [
-          "Q001",
-          "M001"
+          "MH-QUESTION-0001",
+          "MH-MODEL-0001"
         ]
       },
       "parent": [],
       "depends_on": [
-        "Q001",
-        "M001"
+        "MH-QUESTION-0001",
+        "MH-MODEL-0001"
       ],
       "relations": [],
       "provenance": {
@@ -435,14 +435,14 @@
       "tags": [],
       "data": {}
     },
-    "D002": {
+    "MH-DECISION-0002": {
       "schema_version": "3.1",
-      "artifact_id": "D002",
+      "artifact_id": "MH-DECISION-0002",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "求解策略与算法执行方案 — PCA驱动的四问流水线",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "solving_strategy",
       "created_at": "2026-09-08T09:10:58Z",
       "updated_at": "2026-09-08T09:10:58Z",
@@ -536,16 +536,16 @@
           ]
         },
         "depends_on": [
-          "Q001",
-          "M001",
-          "D001"
+          "MH-QUESTION-0001",
+          "MH-MODEL-0001",
+          "MH-DECISION-0001"
         ]
       },
       "parent": [],
       "depends_on": [
-        "Q001",
-        "M001",
-        "D001"
+        "MH-QUESTION-0001",
+        "MH-MODEL-0001",
+        "MH-DECISION-0001"
       ],
       "relations": [],
       "provenance": {
@@ -587,14 +587,14 @@
       "tags": [],
       "data": {}
     },
-    "D003": {
+    "MH-DECISION-0003": {
       "schema_version": "3.1",
-      "artifact_id": "D003",
+      "artifact_id": "MH-DECISION-0003",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "验证计划与敏感性分析方案 — PCA建模全链路验证",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "validation_plan",
       "created_at": "2026-09-08T09:10:59Z",
       "updated_at": "2026-09-08T09:10:59Z",
@@ -696,18 +696,18 @@
           }
         ],
         "depends_on": [
-          "Q001",
-          "M001",
-          "D001",
-          "D002"
+          "MH-QUESTION-0001",
+          "MH-MODEL-0001",
+          "MH-DECISION-0001",
+          "MH-DECISION-0002"
         ]
       },
       "parent": [],
       "depends_on": [
-        "Q001",
-        "M001",
-        "D001",
-        "D002"
+        "MH-QUESTION-0001",
+        "MH-MODEL-0001",
+        "MH-DECISION-0001",
+        "MH-DECISION-0002"
       ],
       "relations": [],
       "provenance": {

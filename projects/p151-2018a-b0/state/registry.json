@@ -8,9 +8,9 @@
     "decision": 3
   },
   "artifacts": {
-    "Q001": {
+    "MH-QUESTION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "Q001",
+      "artifact_id": "MH-QUESTION-0001",
       "type": "question",
       "version": 1,
       "status": "active",
@@ -21,7 +21,7 @@
       "updated_at": "2026-09-08T06:33:14Z",
       "payload": {
         "title": "高温作业专用服装设计 — 问题理解与分解",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "problem_type": "transient_heat_conduction_pde_with_optimization",
         "sub_questions": [
           {
@@ -173,20 +173,20 @@
       ],
       "data": {}
     },
-    "M001": {
+    "MH-MODEL-0001": {
       "schema_version": "3.1",
-      "artifact_id": "M001",
+      "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
       "status": "active",
       "title": "四层非稳态热传导PDE模型构建",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "model_construction",
       "created_at": "2026-09-08T06:33:14Z",
       "updated_at": "2026-09-08T06:33:14Z",
       "payload": {
         "title": "四层非稳态热传导PDE模型构建",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "model_type": "one_dimensional_transient_heat_conduction_pde",
         "model_family": "pde",
         "assumptions": [
@@ -326,7 +326,7 @@
           ]
         },
         "depends_on": [
-          "Q001"
+          "MH-QUESTION-0001"
         ],
         "tags": [
           "pde",
@@ -338,7 +338,7 @@
       },
       "parent": [],
       "depends_on": [
-        "Q001"
+        "MH-QUESTION-0001"
       ],
       "relations": [],
       "provenance": {
@@ -404,20 +404,20 @@
         ]
       }
     },
-    "D001": {
+    "MH-DECISION-0001": {
       "schema_version": "3.1",
-      "artifact_id": "D001",
+      "artifact_id": "MH-DECISION-0001",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "求解方法选择：有限差分法 + 数值优化",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "method_selection",
       "created_at": "2026-09-08T06:33:14Z",
       "updated_at": "2026-09-08T06:33:14Z",
       "payload": {
         "title": "求解方法选择：有限差分法 + 数值优化",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "decision": "采用隐式有限差分法（Crank-Nicolson格式）离散PDE，结合遗传算法/模式搜索进行层厚优化，并用最小二乘法反演对流换热系数",
         "alternatives": [
           {
@@ -483,7 +483,7 @@
         ],
         "confidence": 0.85,
         "depends_on": [
-          "M001"
+          "MH-MODEL-0001"
         ],
         "tags": [
           "finite_difference",
@@ -495,7 +495,7 @@
       },
       "parent": [],
       "depends_on": [
-        "M001"
+        "MH-MODEL-0001"
       ],
       "relations": [],
       "provenance": {
@@ -543,20 +543,20 @@
       ],
       "data": {}
     },
-    "D002": {
+    "MH-DECISION-0002": {
       "schema_version": "3.1",
-      "artifact_id": "D002",
+      "artifact_id": "MH-DECISION-0002",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "求解策略：三阶段流水线（反演→正问题→优化）",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "solving_strategy",
       "created_at": "2026-09-08T06:33:14Z",
       "updated_at": "2026-09-08T06:33:14Z",
       "payload": {
         "title": "求解策略：三阶段流水线（反演→正问题→优化）",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "decision": "分三阶段求解：(1)参数反演——用附件2实测数据最小二乘拟合对流换热系数h；(2)正问题求解——Crank-Nicolson有限差分计算温度场；(3)约束优化——GA/模式搜索搜索最优层厚",
         "alternatives": [
           {
@@ -627,7 +627,7 @@
           ]
         },
         "depends_on": [
-          "D001"
+          "MH-DECISION-0001"
         ],
         "tags": [
           "crank_nicolson",
@@ -639,7 +639,7 @@
       },
       "parent": [],
       "depends_on": [
-        "D001"
+        "MH-DECISION-0001"
       ],
       "relations": [],
       "provenance": {
@@ -687,20 +687,20 @@
       ],
       "data": {}
     },
-    "D003": {
+    "MH-DECISION-0003": {
       "schema_version": "3.1",
-      "artifact_id": "D003",
+      "artifact_id": "MH-DECISION-0003",
       "type": "decision",
       "version": 1,
       "status": "active",
       "title": "验证计划：数值收敛性 + 参数敏感性 + 约束鲁棒性",
-      "question": "Q001",
+      "question": "MH-QUESTION-0001",
       "created_by": "validation_plan",
       "created_at": "2026-09-08T06:33:14Z",
       "updated_at": "2026-09-08T06:33:14Z",
       "payload": {
         "title": "验证计划：数值收敛性 + 参数敏感性 + 约束鲁棒性",
-        "question": "Q001",
+        "question": "MH-QUESTION-0001",
         "decision": "采用三级验证体系：(1)数值验证——网格/时间步收敛性检验与守恒律检查；(2)数据验证——Q1仿真结果与附件2实测数据对比；(3)优化验证——最优解附近约束敏感性分析与鲁棒性检验",
         "alternatives": [
           {
@@ -792,7 +792,7 @@
           }
         ],
         "depends_on": [
-          "D002"
+          "MH-DECISION-0002"
         ],
         "tags": [
           "validation",
@@ -804,7 +804,7 @@
       },
       "parent": [],
       "depends_on": [
-        "D002"
+        "MH-DECISION-0002"
       ],
       "relations": [],
       "provenance": {
