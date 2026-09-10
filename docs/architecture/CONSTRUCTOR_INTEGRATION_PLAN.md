@@ -1,4 +1,5 @@
 # CONSTRUCTOR_INTEGRATION_PLAN — 外部 Constructor 集成方案
+> Version: v1.0 | Status: Frozen | Updated: 2026-09-10
 
 > 日期：2026-09-10 ｜ 状态：**DESIGN FROZEN**
 

@@ -1,4 +1,5 @@
 # Canonical Domain Model —— 概念与 Schema 的唯一真源
+> Version: v1.0 | Status: Frozen | Updated: 2026-09-07
 
 > 建立：2026-09-07（System Hardening P1 / Contract Freeze）
 > 代码真源：`core/runtime/domain/__init__.py`（纯定义层，零行为）

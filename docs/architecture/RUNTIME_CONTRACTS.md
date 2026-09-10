@@ -1,4 +1,5 @@
 # Runtime Contracts — P7 契约冻结（v1.0，2026-09-05）
+> Version: v1.0 | Status: Frozen | Updated: 2026-09-05
 
 > **本文件是 V3 Runtime 的语义契约真源。** 任何 handlers / gate / critic / tool
 > 的行为与本文件冲突时，以本文件 + `core/runtime/contracts.py`（代码真源）为准。

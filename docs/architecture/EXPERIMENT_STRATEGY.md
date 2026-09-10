@@ -1,4 +1,5 @@
 # EXPERIMENT_STRATEGY — 实验策略
+> Version: v1.0 | Status: Frozen | Updated: 2026-09-10
 
 > 日期：2026-09-10 ｜ 状态：**DESIGN FROZEN**
 

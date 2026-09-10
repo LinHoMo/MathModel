@@ -1,4 +1,5 @@
 # MODELING_KNOWLEDGE_GOVERNANCE — Modeling Knowledge 治理规范（方向锁定 v1.1）
+> Version: v1.1 | Status: Frozen | Updated: 2026-09-08
 
 > 生效日期：2026-09-08 ｜ 状态：**ARCHITECTURE FROZEN**（架构已冻结，变更需走 RFC）
 > 适用范围：MathModel Harness 全系统（V3 runtime + V2 legacy 兼容层 + benchmark + evaluation）

@@ -1,4 +1,5 @@
 # RUN_PROVENANCE —— 运行溯源与确定性重放（System Hardening P3）
+> Version: v1.0 | Status: Active | Updated: 2026-09-07
 
 > 建立：2026-09-07 ｜ 代码：`core/runtime/state/runs.py`（记录器）、
 > `core/runtime/execution/replay.py`（重放引擎）

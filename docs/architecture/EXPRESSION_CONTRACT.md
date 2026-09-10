@@ -1,4 +1,5 @@
 # Expression Contract — P11 契约文档
+> Version: v1.0 | Status: Frozen | Updated: 2026-09-10
 
 > 代码真源：`core/runtime/writing/expression.py`（边界/校准/失败语义）、
 > `paragraphs.py`（ParagraphPlan/ArgumentUnit/Renderer）、`patterns.py`、

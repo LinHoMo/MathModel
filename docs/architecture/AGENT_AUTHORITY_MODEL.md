@@ -1,4 +1,5 @@
 # AGENT_AUTHORITY_MODEL — Agent 权限矩阵
+> Version: v1.0 | Status: Frozen | Updated: 2026-09-10
 
 > 日期：2026-09-10 ｜ 状态：**DESIGN FROZEN**
 > 核心原则：**Agent Claim ≠ System Fact**
