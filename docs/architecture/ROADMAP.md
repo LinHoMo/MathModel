@@ -329,6 +329,15 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ---
 
+> ✅ **DONE 2026-09-10**（commit `dc8dca1`+`bb10f6b`）：
+> 检索命中率判别（检索失败 vs 知识无用）——8 题 ground-truth 卡 hit@3
+> 修复前 62.5%（5/8）→ 修复后 **87.5%（7/8，全 rank=1）**。修复 2 处
+> 检索缺陷：mc-ols 补 `regression`（题目标签与卡词表错位）；mc-kmeans
+> 补 `small`（聚类适用小样本，原标注过滤整卡）。2024_A 未命中=卡池
+> 覆盖缺口（无运动学/ODE 卡，P1 工程项）。判定：检索基本可靠 →
+> K001 negative 非检索失败 → 指向效用/剂量/测量维度（与 ATTRIBUTION
+> 一致）。P2-3 实验（直接注入 vs 检索后注入，18 runs）见 P2-3b。
+
 ### P2-3: Knowledge Efficacy v2
 
 **目标**：验证知识卡在改进检索后是否有效
