@@ -16,6 +16,11 @@
 
 schema_version: 1.0
 frozen: true             # K002 FROZEN 于 2026-09-09（此后任何词表修改须走修订流程）
+# 修订记录：
+#   r1 (2026-09-11) — CUMCM 2026 A/B 结构对齐。新增 numerical_pde 的 mechanism
+#     mass_transfer/moving_boundary 与 method effective_property_correlation；
+#     新增 family computational_geometry 与 coverage_path_planning（均附 Architecture Gate 复核）。
+#     动因：实例结构解析覆盖率 10/19=52.6% → 19/19=100%（工具 src/modeling_harness/cli/structure_coverage.py）。
 
 canonical_families:
   # ---- 决策 / 序贯结构 ----
@@ -39,8 +44,10 @@ canonical_families:
   - id: numerical_pde
     aliases: [pde, pde_transient_heat_conduction, heat_transfer, transient_heat_transfer,
               finite_difference, finite_element, finite_volume]
-    mechanism: [conservation_law, spatial_temporal_field, diffusion, boundary_condition]
-    methods: [finite_difference_method, finite_element_method, finite_volume_method, method_of_lines]
+    mechanism: [conservation_law, spatial_temporal_field, diffusion, boundary_condition,
+                mass_transfer, moving_boundary]
+    methods: [finite_difference_method, finite_element_method, finite_volume_method, method_of_lines,
+              effective_property_correlation]
     solvers: [fdm_solver, fem_solver, fvm_solver]
     cards: [mc-numerical-pde]
     source: [schema, cards, gt, k001_actual]
@@ -181,6 +188,32 @@ canonical_families:
     solvers: [numpy, statsmodels]
     cards: []
     source: [cards]
+
+  # ---- 计算几何（2026-09-11 修订：CUMCM 2026 B 结构对齐）----
+  # Architecture Gate 复核：定义清晰（平面几何运算）/ 层级明确（Family，methods 为具体算法）/
+  # 跨来源支持（2026 B 实例 + 经典建模结构）/ 可映射真实题（CUMCM 2026 B）/ 与 kinematic_geometry
+  # 不重叠（后者为轨迹/运动几何，前者为静态平面几何运算）。
+  - id: computational_geometry
+    aliases: [computational_geometry, planar_geometry, polygon_geometry]
+    mechanism: [convex_polygon_clipping, diameter_and_min_enclosing_circle,
+                geometric_dilution_of_precision, half_plane_intersection, triangulation]
+    methods: [sutherland_hodgman, convex_hull, welzl_min_enclosing_circle,
+              rotating_calipers, ray_intersection]
+    solvers: [custom_geometry, shapely]
+    cards: []
+    source: [gt, k001_actual]
+
+  # ---- 覆盖路径规划（2026-09-11 修订：CUMCM 2026 B 结构对齐）----
+  # Architecture Gate 复核：定义清晰（在几何域上规划完备覆盖路径）/ 层级明确（Family）/
+  # 跨来源支持（2026 B 实例）/ 可映射真实题（CUMCM 2026 B Q3/Q4）/ 与 optimization 不重叠
+  # （后者为通用目标优化，前者为覆盖完备性几何问题）。
+  - id: coverage_path_planning
+    aliases: [coverage_path_planning, area_coverage, search_path_planning]
+    mechanism: [geometric_coverage_completeness, path_planning, sensor_footprint]
+    methods: [concentric_ring_scan, spiral_scan, boustrophedon, greedy_nearest_neighbor]
+    solvers: [custom_path_planner]
+    cards: []
+    source: [gt]
 
 # 预留：other / out_of_catalog 语义
 # - 任何 canonical_families 之外的名词 → model_family.primary="out_of_catalog"，
