@@ -1,0 +1,370 @@
+{
+  "registry_version": 3,
+  "project": "ref_RT_2011_B_s137",
+  "updated_at": "2026-09-10T04:32:33+00:00",
+  "counters": {
+    "question": 1,
+    "problem": 1,
+    "decision": 1,
+    "model": 1,
+    "assumption": 3
+  },
+  "artifacts": {
+    "A001": {
+      "schema_version": "3.1",
+      "artifact_id": "A001",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M001 假设1: 所选方法的前提条件成立（数据规模/类型/独立性）",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T04:32:33+00:00",
+      "updated_at": "2026-09-10T04:32:33+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A002": {
+      "schema_version": "3.1",
+      "artifact_id": "A002",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M001 假设1: 所选方法的前提条件成立（数据规模/类型/独立性）",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T04:32:33+00:00",
+      "updated_at": "2026-09-10T04:32:33+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "A003": {
+      "schema_version": "3.1",
+      "artifact_id": "A003",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "M001 假设1: 所选方法的前提条件成立（数据规模/类型/独立性）",
+      "question": "",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T04:32:33+00:00",
+      "updated_at": "2026-09-10T04:32:33+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "M001"
+      ],
+      "relations": [],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "model_construction",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "model_construction",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    },
+    "D001": {
+      "schema_version": "3.1",
+      "artifact_id": "D001",
+      "type": "decision",
+      "version": 1,
+      "status": "active",
+      "title": "文献检索与证据提取",
+      "question": "",
+      "created_by": "literature_search",
+      "created_at": "2026-09-10T04:32:33+00:00",
+      "updated_at": "2026-09-10T04:32:33+00:00",
+      "payload": [
+        "mc-topsis",
+        "mc-ahp",
+        "mc-pca"
+      ],
+      "parent": [],
+      "depends_on": [
+        "P001"
+      ],
+      "relations": [
+        {
+          "from": "D001",
+          "relation": "based_on",
+          "to": "P001",
+          "at": "2026-09-10T04:32:33+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "literature_search",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "literature_search",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "kind": "literature_search",
+        "recommendations": [
+          {
+            "card_id": "mc-topsis",
+            "score": 76,
+            "matched": [
+              "问题类型命中: evaluation"
+            ]
+          },
+          {
+            "card_id": "mc-ahp",
+            "score": 73,
+            "matched": [
+              "问题类型命中: evaluation"
+            ]
+          },
+          {
+            "card_id": "mc-pca",
+            "score": 63,
+            "matched": [
+              "问题类型命中: evaluation"
+            ]
+          }
+        ],
+        "decision_id": "D001",
+        "question": "",
+        "created_by": "literature_search",
+        "created_at": "2026-09-10T04:32:33+00:00",
+        "status": "active",
+        "reversible": false
+      }
+    },
+    "M001": {
+      "schema_version": "3.1",
+      "artifact_id": "M001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "UNSELECTED",
+      "question": "Q001",
+      "created_by": "model_selection",
+      "created_at": "2026-09-10T04:32:33+00:00",
+      "updated_at": "2026-09-10T04:32:33+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [
+        "Q001"
+      ],
+      "relations": [
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-10T04:32:33+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "model_selection",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "model_selection",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "card_id": "UNSELECTED",
+        "family": "",
+        "selection_status": "pending_evidence",
+        "shortlist": [
+          "mc-topsis",
+          "mc-ahp",
+          "mc-pca"
+        ]
+      }
+    },
+    "P001": {
+      "schema_version": "3.1",
+      "artifact_id": "P001",
+      "type": "problem",
+      "version": 1,
+      "status": "active",
+      "title": "赛题",
+      "question": "",
+      "created_by": "problem_analysis",
+      "created_at": "2026-09-10T04:32:33+00:00",
+      "updated_at": "2026-09-10T04:32:33+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-10T04:32:33+00:00"
+        },
+        {
+          "from": "D001",
+          "relation": "based_on",
+          "to": "P001",
+          "at": "2026-09-10T04:32:33+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "problem_analysis",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "problem_analysis",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {
+        "source": "none"
+      }
+    },
+    "Q001": {
+      "schema_version": "3.1",
+      "artifact_id": "Q001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "2011_B",
+      "question": "",
+      "created_by": "session",
+      "created_at": "2026-09-10T04:32:33+00:00",
+      "updated_at": "2026-09-10T04:32:33+00:00",
+      "payload": [],
+      "parent": [],
+      "depends_on": [],
+      "relations": [
+        {
+          "from": "Q001",
+          "relation": "solved_by",
+          "to": "M001",
+          "at": "2026-09-10T04:32:33+00:00"
+        },
+        {
+          "from": "P001",
+          "relation": "motivates",
+          "to": "Q001",
+          "at": "2026-09-10T04:32:33+00:00"
+        }
+      ],
+      "provenance": {},
+      "validation": {},
+      "lifecycle_history": [
+        {
+          "from": null,
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "session",
+          "reason": "created"
+        },
+        {
+          "from": "draft",
+          "to": "active",
+          "at": "2026-09-10T04:32:33+00:00",
+          "by": "session",
+          "reason": "registered with payload"
+        }
+      ],
+      "invalidation": {},
+      "tags": [],
+      "data": {}
+    }
+  },
+  "history": {}
+}
