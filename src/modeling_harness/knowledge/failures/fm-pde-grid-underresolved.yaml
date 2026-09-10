@@ -1,0 +1,20 @@
+failure_id: fm-pde-grid-underresolved
+title: 网格欠分辨导致假收敛，关键输出系统性偏高
+problem_context: 变物性扩散系数在低含水率段急剧下降，表面形成薄「干壳」层，粗网格无法解析
+method: 移动边界热质耦合 PDE / 数值 PDE
+modeling_structure: numerical_pde
+failure_mode: numerical
+symptom: 粗网格结果比收敛值偏高约 1%；两档加密结果差异很小，看似已收敛
+root_cause: 「干壳」层厚度远小于网格间距时，界面通量被平均掉；误差随网格单调减小但平台很晚出现
+detection: 做 ≥4 档空间网格加密（如 N、2N、4N、8N），检查相邻档相对差是否 < 1%；并检查是否真的出现平台
+detection_signal: N 与 2N 差 < 1% 但 8N 又明显下降 —— 典型假收敛平台
+fix: 加密到相邻档差 < 0.1%（或改用非均匀/自适应网格在表面加密）
+avoidance: 把网格收敛作为交付前置条件；报告收敛序列而不是单一网格结果
+applies_to: [mc-moving-boundary-pde]
+source: 2026_A 药材烘干（网格 N=160/320/640/1280/2560）建模实录
+severity: high
+recovery:
+  - 打印完整收敛序列表并给出取用档位的理由
+  - 用外推值（Richardson）核对取用档位的偏差
+version: 1
+status: active

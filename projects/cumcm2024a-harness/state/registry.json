@@ -1,0 +1,597 @@
+{
+  "registry_version": 3,
+  "project": "cumcm2024a-harness",
+  "updated_at": "2026-09-10T12:54:23Z",
+  "counters": {
+    "assumption": 1,
+    "claim": 8,
+    "code": 10,
+    "experiment": 5,
+    "model": 1,
+    "narrative": 1,
+    "problem": 1,
+    "question": 1,
+    "result": 5
+  },
+  "artifacts": {
+    "MH-PROBLEM-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-PROBLEM-0001",
+      "type": "problem",
+      "version": 1,
+      "status": "active",
+      "title": "2024_A 板凳龙闹元宵",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "statement": "inputs/cumcm2024A.txt",
+        "sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+        "sub_questions": [
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5"
+        ],
+        "gt_card": "research/P15/benchmark/problem_cards/2024_A/gt.json"
+      }
+    },
+    "MH-QUESTION-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-QUESTION-0001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "2024_A 子问题分解（Q1-Q5）",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "sub_questions": [
+          {
+            "id": "Q1",
+            "type": "forward_simulation",
+            "text": "螺距 0.55 m 顺时针盘入，0~300 s 每秒全队位置速度"
+          },
+          {
+            "id": "Q2",
+            "type": "collision_detection",
+            "text": "盘入终止时刻（板凳首次碰撞）"
+          },
+          {
+            "id": "Q3",
+            "type": "geometric_optimization",
+            "text": "最小螺距使龙头能盘入到调头空间边界"
+          },
+          {
+            "id": "Q4",
+            "type": "curve_design_and_simulation",
+            "text": "S 形调头曲线（R1=2R2）与 −100~100 s 仿真；能否调短"
+          },
+          {
+            "id": "Q5",
+            "type": "velocity_constrained_optimization",
+            "text": "龙头最大行进速度使各把手速度 ≤ 2 m/s"
+          }
+        ]
+      }
+    },
+    "MH-MODEL-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-MODEL-0001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "刚性链-曲线约束运动学模型（MODEL_IR M001）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "model_ir": "model_ir.json",
+        "model_document": "model.md",
+        "model_family": "kinematic",
+        "structure": "geometric_motion / kinematics",
+        "key_choice": "弦长约束 |P_k − P_{k+1}| = L_k（非弧长等分）"
+      }
+    },
+    "MH-CODE-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0001",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：dragon_core.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/dragon_core.py"
+      }
+    },
+    "MH-CODE-0002": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0002",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：turnaround.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/turnaround.py"
+      }
+    },
+    "MH-CODE-0003": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0003",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：q1_solve.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/q1_solve.py"
+      }
+    },
+    "MH-CODE-0004": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0004",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：q2_solve.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/q2_solve.py"
+      }
+    },
+    "MH-CODE-0005": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0005",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：q3_solve.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/q3_solve.py"
+      }
+    },
+    "MH-CODE-0006": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0006",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：q4_solve.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/q4_solve.py"
+      }
+    },
+    "MH-CODE-0007": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0007",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：q5_solve.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/q5_solve.py"
+      }
+    },
+    "MH-CODE-0008": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0008",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：results_io.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/results_io.py"
+      }
+    },
+    "MH-CODE-0009": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0009",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：build_model_ir.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/build_model_ir.py"
+      }
+    },
+    "MH-CODE-0010": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0010",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "实现：init_state.py",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/code/init_state.py"
+      }
+    },
+    "MH-EXPERIMENT-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0001",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "EXP01：问题 1 数值实验",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "sub_question": "Q1",
+        "solver_code": "artifacts/code/q1_solve.py",
+        "deterministic": true,
+        "random_seed": null,
+        "note": "确定性几何/求根计算，无随机性，故无需多种子"
+      }
+    },
+    "MH-RESULT-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0001",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "result1.xlsx",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/results/result1.xlsx",
+        "sheets": [
+          "all_handles",
+          "key_points",
+          "meta"
+        ]
+      }
+    },
+    "MH-EXPERIMENT-0002": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0002",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "EXP02：问题 2 数值实验",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "sub_question": "Q2",
+        "solver_code": "artifacts/code/q2_solve.py",
+        "deterministic": true,
+        "random_seed": null,
+        "note": "确定性几何/求根计算，无随机性，故无需多种子"
+      }
+    },
+    "MH-RESULT-0002": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0002",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "result2.xlsx",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/results/result2.xlsx",
+        "sheets": [
+          "all_handles",
+          "key_points",
+          "meta"
+        ]
+      }
+    },
+    "MH-EXPERIMENT-0003": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0003",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "EXP03：问题 3 数值实验",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "sub_question": "Q3",
+        "solver_code": "artifacts/code/q3_solve.py",
+        "deterministic": true,
+        "random_seed": null,
+        "note": "确定性几何/求根计算，无随机性，故无需多种子"
+      }
+    },
+    "MH-RESULT-0003": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0003",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "result3.xlsx",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/results/result3.xlsx",
+        "sheets": [
+          "Sheet1",
+          "meta"
+        ]
+      }
+    },
+    "MH-EXPERIMENT-0004": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0004",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "EXP04：问题 4 数值实验",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "sub_question": "Q4",
+        "solver_code": "artifacts/code/q4_solve.py",
+        "deterministic": true,
+        "random_seed": null,
+        "note": "确定性几何/求根计算，无随机性，故无需多种子"
+      }
+    },
+    "MH-RESULT-0004": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0004",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "result4.xlsx",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/results/result4.xlsx",
+        "sheets": [
+          "all_handles",
+          "key_points",
+          "meta"
+        ]
+      }
+    },
+    "MH-EXPERIMENT-0005": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0005",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "EXP05：问题 5 数值实验",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "sub_question": "Q5",
+        "solver_code": "artifacts/code/q5_solve.py",
+        "deterministic": true,
+        "random_seed": null,
+        "note": "确定性几何/求根计算，无随机性，故无需多种子"
+      }
+    },
+    "MH-RESULT-0005": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0005",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "result5.xlsx",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "artifacts/results/result5.xlsx",
+        "sheets": [
+          "Sheet1",
+          "meta"
+        ]
+      }
+    },
+    "MH-CLAIM-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0001",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL01",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "text": "Q1 位置速度已给出；连杆弦长残差 ≤ 3.3e-13 m",
+        "sub_question": "Q1",
+        "source": "MODEL_IR claims"
+      }
+    },
+    "MH-CLAIM-0002": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0002",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL02",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "text": "把手速率不恒等于龙头速率：t=300 s 龙尾 0.996478 m/s（弦长 vs 弧长模型的差异）",
+        "sub_question": "Q1",
+        "source": "MODEL_IR claims"
+      }
+    },
+    "MH-CLAIM-0003": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0003",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL03",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "text": "Q2 盘入终止时刻 t* = 397.7836 s（临界板对 = 龙头板/第 10 条板）",
+        "sub_question": "Q2",
+        "source": "MODEL_IR claims"
+      }
+    },
+    "MH-CLAIM-0004": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0004",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL04",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "text": "最小板距随时间非单调振荡（离散多边形相位效应），须细扫定位",
+        "sub_question": "Q2",
+        "source": "MODEL_IR claims"
+      }
+    },
+    "MH-CLAIM-0005": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0005",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL05",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "text": "Q3 最小螺距见 result3.xlsx（与起始盘入位置无关的结构性结论）",
+        "sub_question": "Q3",
+        "source": "MODEL_IR claims"
+      }
+    },
+    "MH-CLAIM-0006": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0006",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL06",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "text": "Q4 R1=3.005418 m, R2=1.502709 m, ψ=173.118°, L=13.621245 m，曲线全在调头空间内",
+        "sub_question": "Q4",
+        "source": "MODEL_IR claims"
+      }
+    },
+    "MH-CLAIM-0007": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0007",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL07",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "text": "调头曲线长度对半径分配为不变量 ⇒ 不能靠调整圆弧缩短",
+        "sub_question": "Q4",
+        "source": "MODEL_IR claims"
+      }
+    },
+    "MH-CLAIM-0008": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0008",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL08",
+      "created_by": "evidence_build",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "text": "Q5 龙头最大速度 v_max = 2 / max|dσ_k/dσ_0|，见 result5.xlsx",
+        "sub_question": "Q5",
+        "source": "MODEL_IR claims"
+      }
+    },
+    "MH-ASSUMPTION-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-ASSUMPTION-0001",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "A01-A10 建模假设集",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "ids": [
+          "A01",
+          "A02",
+          "A03",
+          "A04",
+          "A05",
+          "A06",
+          "A07",
+          "A08",
+          "A09",
+          "A10"
+        ],
+        "source": "model/model_ir.json#assumptions",
+        "critical": [
+          "A01 弦长约束",
+          "A04 把手共路径（Q2-Q5 外推）",
+          "A05 碰撞判据（胶囊保守近似）",
+          "A10 最小可跟随曲率半径 1.43 m"
+        ]
+      }
+    },
+    "MH-NARRATIVE-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-NARRATIVE-0001",
+      "type": "narrative",
+      "version": 1,
+      "status": "active",
+      "title": "模型描述文档 model.md",
+      "created_by": "model_documentation",
+      "created_at": "2026-09-10T12:54:23Z",
+      "updated_at": "2026-09-10T12:54:23Z",
+      "payload": {
+        "path": "model/model.md",
+        "format": "markdown + mermaid"
+      }
+    }
+  }
+}

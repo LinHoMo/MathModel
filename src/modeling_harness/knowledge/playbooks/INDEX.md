@@ -1,12 +1,14 @@
 # Playbook 索引（端到端例题）
 
 > 每个 Playbook 覆盖「拆题 → 建模 → 代码 → 验证 → 论文」全流程，可直接作为竞赛参考模板。
-> 共 12 篇：国赛 9 篇（A/B/C/D/E 五题型覆盖）+ 美赛 3 篇（A 连续 / B 离散 / C 数据）。
+> 共 14 篇：国赛 11 篇（A/B/C/D/E 五题型覆盖）+ 美赛 3 篇（A 连续 / B 离散 / C 数据）。
 
 ## 国赛（CUMCM）
 
 | 文档 | 年份/题号 | 题型 | 核心方法 | 关键词 |
 |---|---|---|---|---|
+| [playbook-2026B-emitter-localization.md](playbook-2026B-emitter-localization.md) | 2026 B | 几何/仿真 | 楔形交会+最小包围圆+同心环覆盖 | 测向定位、搜索清除、覆盖完备性 |
+| [playbook-2026A-herb-drying.md](playbook-2026A-herb-drying.md) | 2026 A | 机理/PDE | 隐式有限差分+移动边界+网格收敛 | 传热传质、失水收缩、烘干时长 |
 | [playbook-2024A-bench-dragon.md](playbook-2024A-bench-dragon.md) | 2024 A | 机理/运动学 | 多体递推+悬链线+微分几何 | 板凳龙、螺旋运动、调头 |
 | [playbook-2023B-production.md](playbook-2023B-production.md) | 2023 B | 组合优化 | 0-1 整数规划+GA+仿真 | 生产决策、调度、资源分配 |
 | [playbook-2023C-ml-prediction.md](playbook-2023C-ml-prediction.md) | 2023 C | 数据分析/预测 | XGBoost+LSTM+特征工程 | 机器学习、时序预测、分类 |

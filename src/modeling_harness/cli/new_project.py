@@ -46,11 +46,13 @@ KNOWN_COMPETITIONS = (
 
 NEXT_STEPS = """\
 下一步（按 AGENTS.md 执行协议）:
-  1. python src/modeling_harness/cli/validate.py {name}
-  2. python src/modeling_harness/cli/catalog_check.py --check
-  3. 沿 src/modeling_harness/roles/*.yaml 与 src/modeling_harness/skills/ 指令建模，产出写入 model/
-     - MODEL_IR: model/model_ir.json
-     - 描述文档: model/model.md（可含 Mermaid 图）
+  1. 将赛题原文保存为 inputs/problem.txt（或 inputs/question_spec.json）
+  2. python src/modeling_harness/cli/validate.py {name}
+  3. python src/modeling_harness/cli/catalog_check.py --check
+  4. 沿 src/modeling_harness/roles/*.yaml 与 src/modeling_harness/skills/ 指令建模，产出写入项目根：
+     - MODEL_IR: model_ir.json（顶层，与 validate.py/e2e_metrics.py 契约一致）
+     - 描述文档: model.md（顶层，可含 Mermaid 图）
+     - 数值结果: all_results.json（顶层，供数值追溯校验）
 """
 
 
@@ -77,24 +79,27 @@ def _write_handoff(proj_dir: Path, competition: str) -> None:
 - **竞赛**: {competition if competition else "（未指定）"}
 - **状态**: 待建模
 
-## 产出物索引
+## 产出物索引（均位于项目根目录）
 
-| 产物 | 路径 | 状态 |
+| 产物 | 位置 | 状态 |
 |------|------|------|
-| 赛题 | `inputs/` | 已导入 |
-| MODEL_IR | `model/model_ir.json` | 待生成 |
-| 模型描述 | `model/model.md` | 待生成 |
+| 赛题原文 | `inputs/problem.txt` | 待导入 |
+| 模型表示（MODEL_IR） | `model_ir.json` | 待生成 |
+| 模型描述文档 | `model.md`（含 Mermaid） | 待生成 |
+| 数值结果台账 | 结果 JSON（项目根） | 待生成 |
 | 执行证据 | `artifacts/results/` | 待生成 |
 | 运行状态 | `state/` | 待初始化 |
 
-## 文件索引（V3）
+## 目录索引（V3）
 
 | 目录 | 说明 |
 |------|------|
 | `inputs/` | 赛题原文（唯一输入） |
-| `state/` | runtime 状态（status.json + runs/） |
-| `artifacts/` | Artifact Registry 落盘区 |
-| `model/` | 建模产出：MODEL_IR JSON + 描述文档 |
+| `state/` | runtime 状态 |
+| `artifacts/` | Artifact Registry 落盘区（code/results） |
+| `model/` | 交接文档与附加说明 |
+
+> 交付物统一位于**项目根目录**，与 V3 校验契约一致（不在 `model/` 子目录）。
 """
     target.write_text(content.lstrip(), encoding="utf-8")
 

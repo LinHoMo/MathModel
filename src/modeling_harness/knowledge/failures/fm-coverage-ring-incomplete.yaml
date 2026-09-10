@@ -1,0 +1,20 @@
+failure_id: fm-coverage-ring-incomplete
+title: 覆盖路径不完备（单环/螺旋），大半径区域漏检而指标看似正常
+problem_context: 圆域内随机布点的目标，载体沿单条螺旋或单环路径搜索，作用半径有限
+method: 同心环覆盖搜索
+modeling_structure: coverage_path_planning
+failure_mode: consistency
+symptom: 多数实例清除比例 1.0，但少数实例稳定漏掉大半径处的目标；漏检率未被统计
+root_cause: 螺旋路径在相邻圈之间留下大于作用半径的空隙；单环路径则完全无法覆盖半径差超过作用半径的区域
+detection: 对最大半径处的采样点计算「到路径的最近距离」，与作用半径比较；做 ≥1e4 个随机源的蒙特卡洛漏检率统计
+detection_signal: 存在圆形或环形的「未清扫带」；漏检率 > 0 且集中在半径极大/极小处
+fix: 改用同心环路径，环半径取 R(2i−1)/(2k)，使最大最近距离 R/(2k) 严格小于作用半径；环上按弧长等分采样
+avoidance: 用几何界（R/(2k) ≤ 作用半径）先证明完备性再谈效率；报告漏检率及其样本量
+applies_to: [mc-coverage-search]
+source: 2026_B 无线电干扰源定位清除（问题 3）建模实录
+severity: high
+recovery:
+  - 输出覆盖半径与作用半径的对照，确认严格小于
+  - 蒙特卡洛漏检率报告样本量与随机种子
+version: 1
+status: active

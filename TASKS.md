@@ -65,3 +65,8 @@
 | T-P2-05 | 发布流程文档 docs/RELEASE.md（4 节） | `531dd22` | 2026-09-10 |
 | T-P2-10 | AGENTS.md 冻结 v1.0 + CHANGELOG 记录 | `7d03bfc` | 2026-09-10 |
 | T-CONF-002 | 裁定：pyproject version 改为 3.2.2（与 tag 一致） | `528b277` | 2026-09-10 |
+| T-INST-01 | `projects/cumcm2024a-harness` 2024_A 全问建模交付（弦长约束刚性链模型；Q1–Q5 真实执行；model_ir.json + model.md + all_results.json + state 五件套；独立复核碰撞判定一致到 1e-6） | 待提交 | 2026-09-10 |
+| T-INST-02 | `projects/cumcm2026a` 2026_A 药材烘干全问建模交付（径向耦合传热传质 PDE + Landau 移动边界；Q1/Q2 过程场、Q3 57.4222 h、Q4 64.7806 h 终半径 1.2721 cm；空间/时间收敛 + 温度敏感性实测入台账；四件套 + state） | 待提交 | 2026-09-10 |
+| T-INST-03 | `projects/cumcm2026b` 2026_B 干扰源定位清除全问建模交付（楔形交会凸多边形 + 最小包围圆 + Thales 覆盖判据 + GDOP 第二点 + 同心环覆盖 + 交会-归航清除；30 组演练清除比例 1.0000，Q3 7150.10 s / Q4 15088.79 s；覆盖漏检率 0.0000 / 0.00025；四件套 + state） | 待提交 | 2026-09-10 |
+| T-FB-01 | 反馈修复 harness：validate.py 图表引用改逐行围栏状态机（原 `content.count` 比较会把任何合法 Mermaid 块误判为未闭合）；`new_project.py` README 模板与两题 `model/README.md` 去内部路径泄漏（L5.4） | 待提交 | 2026-09-10 |
+| T-FF-01 | 前馈沉淀知识：方法卡 `mc-moving-boundary-pde` / `mc-bearing-triangulation` / `mc-coverage-search`（24→27）+ 失败卡 5 条（17→22）+ playbook 2026A/2026B（12→14）；`knowledge/README.md`、`playbooks/INDEX.md` 规模数字同步 | 待提交 | 2026-09-10 |

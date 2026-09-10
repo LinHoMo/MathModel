@@ -1,0 +1,107 @@
+{
+  "schema_version": 3,
+  "project": "cumcm2024a-harness",
+  "updated_at": "2026-09-10T12:54:23Z",
+  "decisions": [
+    {
+      "decision_id": "MH-DECISION-0001",
+      "question": "相邻把手的约束取弦长还是弧长？",
+      "chosen": "弦长约束 |P_k − P_{k+1}| = L_k（L_0=2.86, L_b=1.65）",
+      "alternatives": [
+        "弧长等分近似（相邻把手弧长间距恒为 L）"
+      ],
+      "criteria": [
+        "题面刚性板几何必然性",
+        "是否与已知极限情形一致"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0001",
+        "MH-RESULT-0004"
+      ],
+      "reasoning": "同一刚板上两孔中心距固定是几何必然；弧长等分会抹掉把手速率差于龙头的效应（t=300 s 龙尾 0.996478 vs 恒 1），而该差异经 h=1/0.5/0.25 s 三档差分确认为真实物理。",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0002",
+      "question": "Q2 终止时刻如何定位？",
+      "chosen": "1 s 粗扫 + 0.05 s 细扫 + 二分至 1e-4 s，并用相邻帧位移 = v·Δt 做连续性校验",
+      "alternatives": [
+        "假设 d_min(t) 单调后直接二分"
+      ],
+      "criteria": [
+        "离散多边形相位效应使 d_min 非单调"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0002"
+      ],
+      "reasoning": "链是内接于螺线的离散多边形，板体相对相位周期性变化 ⇒ d_min 振荡，单调二分会给出错误时刻；细扫后邻域曲线光滑单调，且位移校验证明无求根跳支。",
+      "confidence": 0.9,
+      "reversible": true,
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T12:54:23Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0003",
+      "question": "Q3 的龙头起始位置如何设定？",
+      "chosen": "不设起始位置：利用「构型只由（螺距, 龙头弧长）决定」的结构性事实，在龙头半径 {4.5,5,6,8,11,15,20} m 上取最小间隙",
+      "alternatives": [
+        "沿用 Q1 的第 16 圈起点",
+        "指定某个外圈起点"
+      ],
+      "criteria": [
+        "结论对起始位置的鲁棒性"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0003"
+      ],
+      "reasoning": "整链构型与盘入历史无关；越往内曲率越大 ⇒ 最危险构型在 r=4.5 m。两种解读（从远处盘入 / 从第 16 圈盘入）给出同一临界构型，结论鲁棒。",
+      "confidence": 0.9,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0004",
+      "question": "Q4「能否调短调头曲线」如何回答？",
+      "chosen": "先证明端点固定时 L=(R1+R2)ψ 与半径分配无关（数值用 6 种分配验证），再以「圆内完整调头路径」为公平指标比较切点滑动方案",
+      "alternatives": [
+        "只做数值搜索最短两段弧"
+      ],
+      "criteria": [
+        "不变量的可证明性",
+        "比较口径的公平性"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0004"
+      ],
+      "reasoning": "裸数值搜索会退化为「一段圆弧 + 一段近直线」（R2 ~ 10^3 m），形式上更短但已非 S 形；且把出螺线在圆内的那一段计入后，圆内总长由 13.62 m 增至 ≥ 18.70 m。",
+      "confidence": 0.85,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0005",
+      "question": "Q5 是否需要对龙头速度做搜索？",
+      "chosen": "不需要：v_max = v_lim / max_{k,t} |dσ_k/dσ_0|，一次几何扫描即可",
+      "alternatives": [
+        "对 v_head 做二分/黄金分割搜索"
+      ],
+      "criteria": [
+        "约束的线性性",
+        "计算成本"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0005"
+      ],
+      "reasoning": "构型只依赖龙头位置，速率比 r_k 与 v_head 无关 ⇒ 约束关于 v_head 线性。注意峰值尖锐（1 s 网格会漏），用 0.5/0.1/0.05 s 三档确认收敛。",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T12:54:23Z"
+    }
+  ]
+}

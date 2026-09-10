@@ -1,0 +1,115 @@
+{
+  "schema_version": 3,
+  "project": "cumcm2024a-harness",
+  "updated_at": "2026-09-10T12:54:23Z",
+  "problem": {
+    "status": "parsed",
+    "artifact": "MH-PROBLEM-0001"
+  },
+  "questions": {
+    "Q1": {
+      "status": "validated",
+      "models": [
+        "MH-MODEL-0001"
+      ],
+      "experiments": [
+        "MH-EXPERIMENT-0001"
+      ],
+      "results": [
+        "MH-RESULT-0001"
+      ],
+      "claims": [
+        "MH-CLAIM-0001",
+        "MH-CLAIM-0002"
+      ]
+    },
+    "Q2": {
+      "status": "validated",
+      "models": [
+        "MH-MODEL-0001"
+      ],
+      "experiments": [
+        "MH-EXPERIMENT-0002"
+      ],
+      "results": [
+        "MH-RESULT-0002"
+      ],
+      "claims": [
+        "MH-CLAIM-0003",
+        "MH-CLAIM-0004"
+      ]
+    },
+    "Q3": {
+      "status": "validated",
+      "models": [
+        "MH-MODEL-0001"
+      ],
+      "experiments": [
+        "MH-EXPERIMENT-0003"
+      ],
+      "results": [
+        "MH-RESULT-0003"
+      ],
+      "claims": [
+        "MH-CLAIM-0005"
+      ]
+    },
+    "Q4": {
+      "status": "validated",
+      "models": [
+        "MH-MODEL-0001"
+      ],
+      "experiments": [
+        "MH-EXPERIMENT-0004"
+      ],
+      "results": [
+        "MH-RESULT-0004"
+      ],
+      "claims": [
+        "MH-CLAIM-0006",
+        "MH-CLAIM-0007"
+      ]
+    },
+    "Q5": {
+      "status": "validated",
+      "models": [
+        "MH-MODEL-0001"
+      ],
+      "experiments": [
+        "MH-EXPERIMENT-0005"
+      ],
+      "results": [
+        "MH-RESULT-0005"
+      ],
+      "claims": [
+        "MH-CLAIM-0008"
+      ]
+    }
+  },
+  "evidence": {
+    "graph_version": 1,
+    "claims_supported": 8,
+    "claims_total": 8,
+    "coverage": 1.0
+  },
+  "artifacts": {
+    "total": 33,
+    "by_type": {
+      "assumption": 1,
+      "claim": 8,
+      "code": 10,
+      "experiment": 5,
+      "model": 1,
+      "narrative": 1,
+      "problem": 1,
+      "question": 1,
+      "result": 5
+    }
+  },
+  "limitations": [
+    "A04：Q2-Q5 沿用「全部把手位于龙头走过的路径上」，未建模拖曳链的横向偏离",
+    "A05：碰撞用胶囊近似矩形，判定偏保守（略早报碰撞）",
+    "Q3 敏感性未在论文级网格上复算；结论依赖构型-历史无关性",
+    "未做官方标准答案比对（不允许凭记忆伪造 GT）"
+  ]
+}

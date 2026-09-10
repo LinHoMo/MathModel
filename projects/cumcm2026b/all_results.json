@@ -1,0 +1,168 @@
+{
+  "schema_version": 3,
+  "problem": "CUMCM2026B",
+  "random_seed": 42,
+  "model": "交会定位 + 覆盖搜索 + 逐源清除（本地模拟器演练）",
+  "time_constants": {
+    "detect": 5.0,
+    "optic": 3.0,
+    "laser": 2.0,
+    "speed_mps": 5.0
+  },
+  "constants": {
+    "R_AREA": 1800.0,
+    "EPS_BEARING": 1.0,
+    "R_REC_MIN": 1000.0,
+    "R_REC_MAX": 1500.0,
+    "N_CHANNEL": 20,
+    "cover_radii_omni": [
+      450.0,
+      1350.0
+    ],
+    "cover_radii_dir": [
+      450.0,
+      1350.0,
+      1200.0,
+      1799.0
+    ],
+    "cover_step": 500.0
+  },
+  "summary": {
+    "problem1": {
+      "A 正交交会（φ≈90°）": {
+        "n_vertices": 4,
+        "crossing_angle_deg": 90.0,
+        "diameter_m": 104.76230847500005,
+        "area_m2": 5484.2277587674325,
+        "diam_circle_r_m": 52.38115423750003,
+        "mec_r_m": 52.38115423750003,
+        "covers": true
+      },
+      "B 钝角交会（φ≈142°）": {
+        "n_vertices": 4,
+        "crossing_angle_deg": 141.85602405520532,
+        "diameter_m": 169.51386469862481,
+        "area_m2": 4790.391022278403,
+        "diam_circle_r_m": 84.75693234931241,
+        "mec_r_m": 84.75693234931241,
+        "covers": true
+      },
+      "C 三站交会": {
+        "n_vertices": 6,
+        "crossing_angle_deg": 102.68038349181984,
+        "diameter_m": 85.89566865099982,
+        "area_m2": 3242.024964502547,
+        "diam_circle_r_m": 42.94783432549991,
+        "mec_r_m": 42.94783432549991,
+        "covers": true
+      },
+      "反例(锐角三角形)": {
+        "diameter_m": 10.0,
+        "diam_circle_r_m": 5.0,
+        "mec_r_m": 5.083333333333333,
+        "covers": false
+      }
+    },
+    "problem2": {
+      "n_grid": 442,
+      "grid_best": [
+        525.0251019453895,
+        692.3319582265749,
+        90.0
+      ],
+      "perp_recommend": [
+        217.20697295228757,
+        1538.0553169338925
+      ],
+      "tradeoff": [
+        {
+          "offset_m": 300.0,
+          "S2": [
+            525.0251019453895,
+            692.3319582265749
+          ],
+          "phi_deg": 90.0,
+          "region_diameter_m": 43.194606342456076,
+          "region_area_m2": 438.7382207013725
+        },
+        {
+          "offset_m": 600.0,
+          "S2": [
+            422.41905894768877,
+            974.2397444623475
+          ],
+          "phi_deg": 90.0,
+          "region_diameter_m": 46.8511286458281,
+          "region_area_m2": 877.4764414027595
+        },
+        {
+          "offset_m": 900.0,
+          "S2": [
+            319.8130159499882,
+            1256.1475306981201
+          ],
+          "phi_deg": 90.0,
+          "region_diameter_m": 52.38115423732962,
+          "region_area_m2": 1316.2146621041466
+        },
+        {
+          "offset_m": 1200.0,
+          "S2": [
+            217.20697295228757,
+            1538.0553169338925
+          ],
+          "phi_deg": 90.0,
+          "region_diameter_m": 59.2625109881508,
+          "region_area_m2": 1754.9528828054608
+        },
+        {
+          "offset_m": 1500.0,
+          "S2": [
+            114.60092995458695,
+            1819.9631031696651
+          ],
+          "phi_deg": 90.0,
+          "region_diameter_m": 67.0806076563507,
+          "region_area_m2": 2193.691103506877
+        }
+      ]
+    },
+    "problem3": {
+      "n_trials": 30,
+      "mean_cleared_fraction": 1.0,
+      "min_cleared_fraction": 1.0,
+      "all_cleared": true,
+      "mean_total_time_s": 7150.102657652295,
+      "std_total_time_s": 308.8863952352974,
+      "mean_locate_clear_time_s": 5297.03485129539,
+      "std_locate_clear_time_s": 328.5562796016187,
+      "mean_time_per_source_s": 592.9971188407916
+    },
+    "problem4": {
+      "n_trials": 30,
+      "mean_cleared_fraction": 1.0,
+      "min_cleared_fraction": 1.0,
+      "all_cleared": true,
+      "mean_total_time_s": 15088.792585960995,
+      "std_total_time_s": 305.5297207105713,
+      "mean_locate_clear_time_s": 12814.711618397412,
+      "std_locate_clear_time_s": 552.2236694665594,
+      "mean_time_per_source_s": 1254.6756037594876
+    }
+  },
+  "validations": {
+    "n_samples": 20000,
+    "omni_miss_ratio": 0.0,
+    "dir_miss_ratio": 0.00025,
+    "omni_cover_radii": [
+      450.0,
+      1350.0
+    ],
+    "dir_cover_radii": [
+      450.0,
+      1350.0,
+      1200.0,
+      1799.0
+    ]
+  }
+}

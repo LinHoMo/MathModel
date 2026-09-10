@@ -1,0 +1,586 @@
+{
+  "registry_version": 3,
+  "project": "cumcm2026b",
+  "updated_at": "2026-09-10T13:16:24Z",
+  "counters": {
+    "assumption": 1,
+    "claim": 5,
+    "code": 1,
+    "experiment": 4,
+    "model": 1,
+    "narrative": 1,
+    "problem": 1,
+    "question": 1,
+    "result": 4
+  },
+  "artifacts": {
+    "MH-PROBLEM-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-PROBLEM-0001",
+      "type": "problem",
+      "version": 1,
+      "status": "active",
+      "title": "2026_B 无线电干扰源定位清除",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "statement": "inputs/problem.txt",
+        "sha256": "e06fba6e85e6617bef938c4a10fd854e56819cbbb9d54ee14af0092f83c79917",
+        "sub_questions": [
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4"
+        ]
+      }
+    },
+    "MH-QUESTION-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-QUESTION-0001",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "2026_B 子问题分解（Q1-Q4）",
+      "created_by": "problem_understanding",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "sub_questions": [
+          {
+            "id": "Q1",
+            "type": "computational_geometry",
+            "text": "给定若干检测点坐标与对应示向度，给出交会定位区域（多边形）直径的计算算法；判定以该直径为直径的圆能否覆盖定位区域"
+          },
+          {
+            "id": "Q2",
+            "type": "geometry_optimization",
+            "text": "已知某全向源在一个检测点的示向度，给出第二个检测点的选择策略与候选区域，以获得较好定位效果"
+          },
+          {
+            "id": "Q3",
+            "type": "coverage_control",
+            "text": "全向干扰源 10–16 个（个数未知）：制定机器狗自动搜索-定位-清除策略与算法，并用模拟器演练统计清除比例与平均定位清除时间"
+          },
+          {
+            "id": "Q4",
+            "type": "coverage_control_blindzone",
+            "text": "混合全向 + 定向干扰源：给出检测与清除策略与算法，并通过模拟器演练检验有效性"
+          }
+        ]
+      }
+    },
+    "MH-MODEL-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-MODEL-0001",
+      "type": "model",
+      "version": 1,
+      "status": "active",
+      "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "model_ir": "model_ir.json",
+        "model_doc": "model.md",
+        "model_family": "geometric",
+        "secondary": [
+          "computational_geometry",
+          "greedy_optimization",
+          "discrete_event_simulation",
+          "coverage_path_planning"
+        ],
+        "equations": [
+          "E01",
+          "E02",
+          "E03",
+          "E04",
+          "E05",
+          "E06",
+          "E07",
+          "E08",
+          "E09"
+        ],
+        "sha256": "1a2e8a8bf5e862dc07069719d13b349e8fb0af9354e02198c718d75985c31ab7"
+      }
+    },
+    "MH-ASSUMPTION-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-ASSUMPTION-0001",
+      "type": "assumption",
+      "version": 1,
+      "status": "active",
+      "title": "模型假设 A01-A08",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "items": [
+          {
+            "id": "A01",
+            "type": "problem_statement",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "text": "示向度含全局误差，落在 [−1°,1°] 内；故一条示向度对应一个夹角 2° 的楔形角域（射线 ±1°）。"
+          },
+          {
+            "id": "A02",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "text": "有效接收半径 1000–1500 m，信号在覆盖角内均匀辐射，场强仅随距离衰减；距离过近（≤5 m）时信号过强无法测向，可直接光学清除。"
+          },
+          {
+            "id": "A03",
+            "type": "simplification",
+            "source": "reasonable_simplification",
+            "confidence": 0.9,
+            "text": "本地模拟器复现附录 1/2 规则：每源频道互异、信号互不影响、定向源覆盖角为定向方向两侧各 90°；检测点须静止（切换频道+调天线+稳定读数合计 5 s），机器狗直线移动 5 m/s。"
+          },
+          {
+            "id": "A04",
+            "type": "measurement_model",
+            "source": "assumption_derived",
+            "confidence": 0.9,
+            "text": "机器狗只能使用可观测量（示向度 + 信号相对强度）决策；真实源坐标仅由模拟器内部用于判定“是否进入 20 m 光学作用距离”，策略代码不含任何真值导向。"
+          },
+          {
+            "id": "A05",
+            "type": "coverage_guarantee",
+            "source": "assumption_derived",
+            "confidence": 1.0,
+            "text": "全向源覆盖完备性：圆域 R=1800 m、r_rec ≥ 1000 m 时，取同心环路径半径 {450,1350} m，则圆域内任意点到最近环的径向距离 ≤ 450 m ≪ 1000 m，故任意全向源必被扫到。"
+          },
+          {
+            "id": "A06",
+            "type": "coverage_guarantee",
+            "source": "assumption_derived",
+            "confidence": 0.98,
+            "text": "定向源覆盖：定向源仅在波束（半平面）内侧可测向，朝外定向源只能从外侧接近。除 {450,1350} 外增加环 {1200,1799} m 形成全 360° 外侧覆盖；数值验证（各 2×10⁴ 随机源）全向漏检率 0.0000、含定向漏检率 0.00025（仅剩贴边界极薄环带）。"
+          },
+          {
+            "id": "A07",
+            "type": "modeling_choice",
+            "source": "reasoning",
+            "confidence": 0.9,
+            "text": "以交会角 φ 作为定位质量判据（GDOP ∝ 1/sin φ，φ=90° 最优）；在估计源 G_est 处交会角恒 90° 的点集为过 G_est 且垂直于 S1→G_est 的直线（Thales 圆在 G_est 处的切线）。"
+          },
+          {
+            "id": "A08",
+            "type": "design_choice",
+            "source": "reasoning",
+            "confidence": 0.9,
+            "text": "定位采用“交会定位 + beam-safe 归航”双机制：交会给出估计点用于远距离跳转，归航沿当前示向度逐步逼近（沿指向源的射线移动不会脱离波束），对定向源天然稳健；清除时机由模拟器在距离 ≤20 m 时触发。"
+          }
+        ]
+      }
+    },
+    "MH-CODE-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CODE-0001",
+      "type": "code",
+      "version": 1,
+      "status": "active",
+      "title": "solve_b.py",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "path": "artifacts/code/solve_b.py",
+        "sha256": "de33dcafce9ab59d84ec2d8ecb65b629c6aa84801f0a3319355e53ddacc876bf",
+        "note": "楔形交会定位 + 同心环覆盖 + 交会-归航清除 + 30 组演练与覆盖蒙特卡洛"
+      }
+    },
+    "MH-EXPERIMENT-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0001",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q1 交会定位区域直径与「直径圆覆盖」判定（含锐角反例）",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "sub_question": "Q1",
+        "solver": "S01-S05",
+        "code_ref": "MH-CODE-0001",
+        "key_outputs": [
+          "A 正交交会（φ≈90°）",
+          "B 钝角交会（φ≈142°）",
+          "C 三站交会",
+          "反例(锐角三角形)"
+        ]
+      }
+    },
+    "MH-RESULT-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0001",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q1 结果",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "path": "all_results.json",
+        "sha256": "69d9e53e0b6e82745f095cf336b96472cd0e9bb857fc39624c0242a630a3717e",
+        "values": {
+          "A 正交交会（φ≈90°）": {
+            "n_vertices": 4,
+            "crossing_angle_deg": 90.0,
+            "diameter_m": 104.76230847500005,
+            "area_m2": 5484.2277587674325,
+            "diam_circle_r_m": 52.38115423750003,
+            "mec_r_m": 52.38115423750003,
+            "covers": true
+          },
+          "B 钝角交会（φ≈142°）": {
+            "n_vertices": 4,
+            "crossing_angle_deg": 141.85602405520532,
+            "diameter_m": 169.51386469862481,
+            "area_m2": 4790.391022278403,
+            "diam_circle_r_m": 84.75693234931241,
+            "mec_r_m": 84.75693234931241,
+            "covers": true
+          },
+          "C 三站交会": {
+            "n_vertices": 6,
+            "crossing_angle_deg": 102.68038349181984,
+            "diameter_m": 85.89566865099982,
+            "area_m2": 3242.024964502547,
+            "diam_circle_r_m": 42.94783432549991,
+            "mec_r_m": 42.94783432549991,
+            "covers": true
+          },
+          "反例(锐角三角形)": {
+            "diameter_m": 10.0,
+            "diam_circle_r_m": 5.0,
+            "mec_r_m": 5.083333333333333,
+            "covers": false
+          }
+        }
+      }
+    },
+    "MH-EXPERIMENT-0002": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0002",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q2 第二检测点最优集与候选区域（垂线解析 + 网格一致）",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "sub_question": "Q2",
+        "solver": "S01-S05",
+        "code_ref": "MH-CODE-0001",
+        "key_outputs": [
+          "grid_best",
+          "n_grid",
+          "perp_recommend",
+          "tradeoff"
+        ]
+      }
+    },
+    "MH-RESULT-0002": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0002",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q2 结果",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "path": "all_results.json",
+        "sha256": "69d9e53e0b6e82745f095cf336b96472cd0e9bb857fc39624c0242a630a3717e",
+        "values": {
+          "n_grid": 442,
+          "grid_best": [
+            525.0251019453895,
+            692.3319582265749,
+            90.0
+          ],
+          "perp_recommend": [
+            217.20697295228757,
+            1538.0553169338925
+          ],
+          "tradeoff": [
+            {
+              "offset_m": 300.0,
+              "S2": [
+                525.0251019453895,
+                692.3319582265749
+              ],
+              "phi_deg": 90.0,
+              "region_diameter_m": 43.194606342456076,
+              "region_area_m2": 438.7382207013725
+            },
+            {
+              "offset_m": 600.0,
+              "S2": [
+                422.41905894768877,
+                974.2397444623475
+              ],
+              "phi_deg": 90.0,
+              "region_diameter_m": 46.8511286458281,
+              "region_area_m2": 877.4764414027595
+            },
+            {
+              "offset_m": 900.0,
+              "S2": [
+                319.8130159499882,
+                1256.1475306981201
+              ],
+              "phi_deg": 90.0,
+              "region_diameter_m": 52.38115423732962,
+              "region_area_m2": 1316.2146621041466
+            },
+            {
+              "offset_m": 1200.0,
+              "S2": [
+                217.20697295228757,
+                1538.0553169338925
+              ],
+              "phi_deg": 90.0,
+              "region_diameter_m": 59.2625109881508,
+              "region_area_m2": 1754.9528828054608
+            },
+            {
+              "offset_m": 1500.0,
+              "S2": [
+                114.60092995458695,
+                1819.9631031696651
+              ],
+              "phi_deg": 90.0,
+              "region_diameter_m": 67.0806076563507,
+              "region_area_m2": 2193.691103506877
+            }
+          ]
+        }
+      }
+    },
+    "MH-EXPERIMENT-0003": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0003",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q3 全向源 30 组演练：搜索-定位-清除统计",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "sub_question": "Q3",
+        "solver": "S01-S05",
+        "code_ref": "MH-CODE-0001",
+        "key_outputs": [
+          "all_cleared",
+          "mean_cleared_fraction",
+          "mean_locate_clear_time_s",
+          "mean_time_per_source_s",
+          "mean_total_time_s",
+          "min_cleared_fraction",
+          "n_trials",
+          "std_locate_clear_time_s",
+          "std_total_time_s"
+        ]
+      }
+    },
+    "MH-RESULT-0003": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0003",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q3 结果",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "path": "artifacts/results/resultB.xlsx",
+        "sha256": "2cec9b936c8c528f5dadc4fe0b98db39d3ecf13993c4b5858c62c62989931393",
+        "values": {
+          "n_trials": 30,
+          "mean_cleared_fraction": 1.0,
+          "min_cleared_fraction": 1.0,
+          "all_cleared": true,
+          "mean_total_time_s": 7150.102657652295,
+          "std_total_time_s": 308.8863952352974,
+          "mean_locate_clear_time_s": 5297.03485129539,
+          "std_locate_clear_time_s": 328.5562796016187,
+          "mean_time_per_source_s": 592.9971188407916
+        }
+      }
+    },
+    "MH-EXPERIMENT-0004": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-EXPERIMENT-0004",
+      "type": "experiment",
+      "version": 1,
+      "status": "active",
+      "title": "Q4 混合全向+定向源 30 组演练：盲区补扫与清除统计",
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "sub_question": "Q4",
+        "solver": "S01-S05",
+        "code_ref": "MH-CODE-0001",
+        "key_outputs": [
+          "all_cleared",
+          "mean_cleared_fraction",
+          "mean_locate_clear_time_s",
+          "mean_time_per_source_s",
+          "mean_total_time_s",
+          "min_cleared_fraction",
+          "n_trials",
+          "std_locate_clear_time_s",
+          "std_total_time_s"
+        ]
+      }
+    },
+    "MH-RESULT-0004": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-RESULT-0004",
+      "type": "result",
+      "version": 1,
+      "status": "active",
+      "title": "Q4 结果",
+      "created_by": "experiment_execution",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "path": "artifacts/results/resultB.xlsx",
+        "sha256": "2cec9b936c8c528f5dadc4fe0b98db39d3ecf13993c4b5858c62c62989931393",
+        "values": {
+          "n_trials": 30,
+          "mean_cleared_fraction": 1.0,
+          "min_cleared_fraction": 1.0,
+          "all_cleared": true,
+          "mean_total_time_s": 15088.792585960995,
+          "std_total_time_s": 305.5297207105713,
+          "mean_locate_clear_time_s": 12814.711618397412,
+          "std_locate_clear_time_s": 552.2236694665594,
+          "mean_time_per_source_s": 1254.6756037594876
+        }
+      }
+    },
+    "MH-CLAIM-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0001",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL01（Q1）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得（正交交会算例直径 104.762 m、钝角交会 169.514 m、三站交会 85.896 m）。“以直径为直径的圆”不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；锐角三角形反例（直径 10.0 m，最小包围圆半径 5.0833 m > 直径圆半径 5.0 m）即为反例。保证覆盖应改用最小包围圆。",
+        "status": "supported",
+        "type": "result",
+        "validation_refs": [
+          "V02"
+        ]
+      }
+    },
+    "MH-CLAIM-0002": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0002",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL02（Q2）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "text": "Q2：最优第二检测点位于过估计源 G_est 且垂直于 S1→G_est 的直线上（该直线即 Thales 圆在 G_est 处的切线，其上任意点交会角恒为 90.00°）；候选区域为以 G_est 为中心、交会角 φ ∈ [60°,120°] 且 |P−G_est| ≤ r_rec 的扇形环域。沿该垂线偏移越小，定位区域越小（偏移 300→1500 m 对应直径 43.19→67.08 m），但偏移过小会缩短有效基线、放大示向度误差相关，故推荐偏移取 d_est 的对称配置。",
+        "status": "supported",
+        "type": "result",
+        "validation_refs": [
+          "V03"
+        ]
+      }
+    },
+    "MH-CLAIM-0003": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0003",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL03（Q3）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "text": "Q3：全向源情景（30 组随机实例）清除比例均值 = 最小值 = 1.0000（全清除）；平均总任务时间 7150.10 s（约 1.99 h），平均每源 592.997 s，平均定位清除时间 5297.03 s。策略为“同心环 {450,1350} m 覆盖扫描 → 逐频道交会定位 + beam-safe 归航 → 20 m 内光学/激光清除”，覆盖完备性由 R/(2k)=450 m ≪ r_rec,min=1000 m 保证。",
+        "status": "supported",
+        "type": "result",
+        "validation_refs": [
+          "V01",
+          "V04"
+        ]
+      }
+    },
+    "MH-CLAIM-0004": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0004",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL04（Q4）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "text": "Q4：混合全向+定向情景（30 组，40% 定向）清除比例均值 = 最小值 = 1.0000；平均总任务时间 15088.79 s（约 4.19 h），平均每源 1254.68 s。相对 Q3 时间增加约 111%，主因是定向源须从波束外侧补扫（额外环 {1200,1799} m）且归航在盲区需回退。",
+        "status": "supported",
+        "type": "result",
+        "validation_refs": [
+          "V01",
+          "V04"
+        ]
+      }
+    },
+    "MH-CLAIM-0005": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-CLAIM-0005",
+      "type": "claim",
+      "version": 1,
+      "status": "active",
+      "title": "CL05（Q3）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "text": "覆盖路径的完备性由几何而非经验保证：把圆域按半径分层后，k 条同心环使“任意点到最近检测环”的最大距离恰为 R/(2k)。全向取 k=2 即 450 m（R/(2k) 远小于 r_rec,min=1000 m）；定向源因“波束外侧可见”约束，须在 {450,1350} 之外追加外侧环才完备，含定向情景的漏检率实测为 0.00025（全向为 0.0000）。",
+        "status": "supported",
+        "type": "interpretation",
+        "validation_refs": [
+          "V01"
+        ]
+      }
+    },
+    "MH-NARRATIVE-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-NARRATIVE-0001",
+      "type": "narrative",
+      "version": 1,
+      "status": "active",
+      "title": "模型描述文档（含 Mermaid）",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z",
+      "updated_at": "2026-09-10T13:16:24Z",
+      "payload": {
+        "path": "model.md",
+        "sha256": "d8393e4d9c5710fb1cbf07df92e13a09bb0995e33d1ca3505062a5a1c713431c"
+      }
+    }
+  }
+}

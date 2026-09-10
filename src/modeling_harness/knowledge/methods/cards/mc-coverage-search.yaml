@@ -1,0 +1,67 @@
+# 同心环覆盖搜索与逐源清除 — 覆盖完备性/闭视野策略建模知识卡
+# 定位：Model Construction Knowledge（约束/先验/验证），不是算法说明书。
+# 核心机理：圆域分层 ⇒ 同心环使「任意点到最近环」的最大距离恰为 R/(2k)，覆盖性由几何保证。
+card_id: mc-coverage-search
+name: 同心环覆盖搜索与逐源清除策略
+family: coverage_path_planning
+version: 1
+problem_types: [coverage_path_planning, search_and_clear, discrete_event_simulation]
+good_for:
+  - 区域内未知数量目标的搜索—发现—处置：移动载体带有限作用半径（2026_B 问题 3/4）
+  - 需要「覆盖完备性有几何保证」而非经验参数的巡逻/扫测任务
+  - 传感器具有方向性（波束/视场角）导致盲区，需要补扫路径的情形
+  - 以时间为代价指标的任务规划（移动 + 驻留检测 + 处置）
+structure_signals:
+  - 目标区域是圆或规则区域，且给出了作用半径（探测/接收距离）
+  - 目标数量未知、位置随机，但给出数量区间
+  - 传感器有方向性与盲区（只在某些朝向下可见）
+  - 问项要求「清除比例」与「平均用时」两类统计量
+problem_structures: [coverage_optimization, search, discrete_event, path_planning]
+modeling_patterns: [radius_layering, nearest_ring_bound, blind_zone_backoff]
+mathematical_forms: [geometry, optimization, probability]
+mechanism:
+  - 分层覆盖：半径 R 的圆用 k 条同心环 ρ_i = R(2i−1)/(2k)，最大最近距离 = R/(2k)
+  - 完备性条件：R/(2k) ≤ 作用半径 ⇒ 任意目标必被某条环扫到（充分，且为最优分层）
+  - 方向性盲区：波束外侧不可见 ⇒ 单一环集不完备，需追加外侧环补扫
+  - 双机制定位：远距离交会跳转 + 近距离沿视线归航（沿指向目标的射线移动不脱离波束）
+  - 时间计价：移动 + 每次检测驻留 + 处置时耗，全部按时序累加
+  - 可观测量约束：决策只能用示向度与相对强度，不得用真值导航
+formulations:
+  - 覆盖半径：max_ρ min_i |ρ − ρ_i| = R/(2k)，ρ_i = R(2i−1)/(2k)
+  - 环上采样：按弧长间隔 Δs 等分布点，点数 n_i ≈ 2πρ_i/Δs
+  - 归航：x_{n+1} = x_n + clip(d_est, lo, hi)·u(b(x_n))，d_est = rel·r_nom
+  - 统计量：f_clear = 已清除/总数；τ_lc = 清除时刻 − 首测时刻
+solvers:
+  - 同心环 + 弧长等分生成检测点（几何完备）
+  - 两观测交会求估计点（射线求交）→ 沿示向度归航（beam-safe）
+  - 离散事件仿真 + 蒙特卡洛（多实例统计清除比例与用时）
+requires:
+  - 覆盖半径可估（探测/接收距离有下界）
+  - 区域内目标位置与朝向可视为随机（用于蒙特卡洛评估漏检率）
+  - 归航可观测：能持续测得指向目标的方位（存在可测点）
+  - 处置（清除）有一个确定的作用距离与耗时
+risks:
+  - 单环或螺旋路径在大半径处出现空洞：最大最近距离超过作用半径 ⇒ 漏检而看似正常
+  - 方向性目标：只用一层环时「朝外定向」目标只能从外侧接近，漏检率显著
+  - 用真值坐标导航 ⇒ 指标虚高，策略不可实施
+  - 停机判据用「未处置频道」而非「整环零发现」，空频道导致空跑
+  - 漏检率只报 0 而不给样本量与随机源，无法复核
+validation:
+  - 覆盖完备性蒙特卡洛：各 1e4–1e5 个随机位置（含随机朝向），统计漏检率（报样本量）
+  - 几何界核对：核对 R/(2k) 与最小接收半径的大小关系（须严格小于）
+  - 清除完备性：逐实例检查 f_clear = 1，报告最小值而非仅均值
+  - 可观测量合规：静态检查策略代码不含真值坐标/频道读取
+  - 多次重跑：报告均值与标准差（多实例、固定种子）
+  - 盲区回退验证：确认定向目标失联时能回退到可测观测点并重新逼近
+often_combined_with: [mc-bearing-triangulation, mc-monte-carlo]
+anti_patterns:
+  - 用「螺旋覆盖」代替分层环，且不做漏检率核算
+  - 用真值坐标做导引，然后在论文里声称「自主定位」
+  - 只报平均清除比例 1.0，不报最小实例值与样本量
+  - 把作用半径当覆盖半径直接当路径间距（未除以 2k）
+known_failures: [fm-coverage-ring-incomplete, fm-truth-navigation]
+reference: methodology/simulation.md
+status: active
+confidence: 0.9
+source_type: competition_archive
+source_refs: [2026_B 无线电干扰源定位清除（机器狗覆盖清除策略）建模实录]

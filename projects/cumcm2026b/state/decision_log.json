@@ -1,0 +1,135 @@
+{
+  "schema_version": 3,
+  "project": "cumcm2026b",
+  "updated_at": "2026-09-10T13:16:24Z",
+  "decisions": [
+    {
+      "decision_id": "MH-DECISION-0001",
+      "question": "示向度误差如何转化为定位区域？",
+      "chosen": "按区间界 ±1° 构造楔形角域，多站楔形交集为凸多边形",
+      "alternatives": [
+        "高斯分布 + 置信椭圆",
+        "最小二乘点估计 + 协方差"
+      ],
+      "criteria": [
+        "与题面「误差全局在 [−1°,1°] 内」的一致性",
+        "能否给出直径这一几何量"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0001"
+      ],
+      "reasoning": "题面给的是区间界而非分布，楔形交集给出确切凸多边形，才能定义并计算「定位区域直径」；椭圆与题面提法不匹配。",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0002",
+      "question": "「以直径为直径的圆」是否总能覆盖定位区域？",
+      "chosen": "不成立，须用 Thales 判据逐顶点校验；保证覆盖应改用最小包围圆",
+      "alternatives": [
+        "直接断言成立",
+        "抽样检验覆盖"
+      ],
+      "criteria": [
+        "是否可给出充要条件",
+        "是否有反例"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0001"
+      ],
+      "reasoning": "Thales 定理给出充要条件（其余顶点对直径端点张角 ≥90°）；构造锐角三角形反例：直径 10.0 m 时直径圆半径 5.0 m < 最小包围圆半径 5.0833 m，覆盖不成立。",
+      "confidence": 0.9,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0003",
+      "question": "第二检测点如何选取？",
+      "chosen": "取过估计源且垂直于首站视线的直线（Thales 圆切线），沿垂线偏移取值",
+      "alternatives": [
+        "在网格上穷举最大交会角",
+        "沿圆周均匀布点"
+      ],
+      "criteria": [
+        "GDOP 最优性",
+        "解析解与网格解是否一致"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0002"
+      ],
+      "reasoning": "定位误差 ∝ 1/sin φ，φ=90° 最优；使交会角恒为 90° 的点集是过 G_est 的垂线。442 点极坐标网格搜索得到的最优交会角亦为 90.000°，与解析式一致。",
+      "confidence": 0.9,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0004",
+      "question": "覆盖搜索路径用螺旋还是同心环？",
+      "chosen": "同心环，环半径 R(2i−1)/(2k)，全向取 k=2（450, 1350 m）",
+      "alternatives": [
+        "单条螺旋路径",
+        "单环路径",
+        "网格扫描"
+      ],
+      "criteria": [
+        "覆盖完备性是否可证明",
+        "路径总长"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0003"
+      ],
+      "reasoning": "同心环使任意点到最近环的最大距离为 R/(2k)=450 m，严格小于最小接收半径 1000 m，故完备性由几何保证；螺旋路径在大半径处空隙超过接收半径，实测漏检无法归零。",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T13:16:24Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0005",
+      "question": "定向源盲区如何处理？",
+      "chosen": "在 {450,1350} 之外追加外侧环 {1200,1799} m，并用 beam-safe 归航 + 可测点回退",
+      "alternatives": [
+        "只调整环半径",
+        "对定向源单独派发搜索"
+      ],
+      "criteria": [
+        "含定向情景漏检率",
+        "30 组实例清除比例"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0004"
+      ],
+      "reasoning": "定向源仅在波束内侧可测向，朝外者只能从外侧接近；追加外侧环后 20000 随机源漏检率降至 0.00025，30 组实例清除比例最小值 1.0000。",
+      "confidence": 0.9,
+      "reversible": true,
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T13:16:24Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0006",
+      "question": "策略是否允许使用真实源坐标？",
+      "chosen": "不允许：决策仅依赖示向度与信号相对强度，真值只用于模拟器内部判定",
+      "alternatives": [
+        "用真值导航并声明为「上界」",
+        "用真值做兜底"
+      ],
+      "criteria": [
+        "方案是否可实施",
+        "指标是否可信"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0003",
+        "MH-RESULT-0004"
+      ],
+      "reasoning": "机器狗只装备测向与光学设备，无法获知真值；用真值导航得到的清除比例与用时不可复现，属伪优解。该约束写入 MODEL_IR 的 C08。",
+      "confidence": 1.0,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:24Z"
+    }
+  ]
+}

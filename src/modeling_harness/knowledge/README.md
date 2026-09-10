@@ -7,11 +7,11 @@
 
 | 目录 | 内容 | 规模（实测） |
 |---|---|---|
-| `methods/cards/` | 方法卡（mc-*.yaml） | 24 |
+| `methods/cards/` | 方法卡（mc-*.yaml） | 27 |
 | `methodology/` | 方法论条目 | 54 |
-| `failures/` | 失败模式库 | 17 |
+| `failures/` | 失败模式库 | 22 |
 | `cookbooks/` | 操作手册 | 8 |
-| `playbooks/` | 战术剧本 | 13 |
+| `playbooks/` | 战术剧本 | 14 |
 | `patterns/` | 模式 | 6 |
 | `pitfalls/` | 易错点 | 4 |
 | `problems/` | 问题档案 | 5 |

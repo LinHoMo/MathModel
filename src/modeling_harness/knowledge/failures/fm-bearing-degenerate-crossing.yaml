@@ -1,0 +1,20 @@
+failure_id: fm-bearing-degenerate-crossing
+title: 交会几何退化（钝角/近共线）仍输出看似有效的定位区域
+problem_context: 两站示向度夹角接近 180°（或接近 0°），两条射线几乎平行，楔形交集发散
+method: 测向交会定位几何
+modeling_structure: bearing_localization
+failure_mode: wrong-usage
+symptom: 定位区域直径异常大甚至无界，却被当作有效结果参与后续覆盖/搜索规划
+root_cause: 误差传播放大因子 1/sin φ 在 φ→0° 或 φ→180° 时爆炸；退化情形必须单独判别而不是照常裁剪求直径
+detection: 计算交会角 φ 与定位区域直径的比值；对 |φ−90°| > 40° 的算例逐个人工核查区域是否有界
+detection_signal: 区域直径远大于站点间距（倍数级），或裁剪结果顶点数骤减
+fix: 对退化解标注「不可用/需补站」；用最小包围圆给出不确定度上界；必要时增加第三站
+avoidance: 布站阶段以 GDOP 为约束（φ 尽量接近 90°）；报告中同时给出交会角与区域直径两个量
+applies_to: [mc-bearing-triangulation]
+source: 2026_B 无线电干扰源定位清除（问题 1/2）建模实录
+severity: high
+recovery:
+  - 对每类交会形态给出交会角与直径的对照表
+  - 构造钝角与近共线反例，明确标注其不可用
+version: 1
+status: active

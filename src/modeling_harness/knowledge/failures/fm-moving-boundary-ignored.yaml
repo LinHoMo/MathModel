@@ -1,0 +1,20 @@
+failure_id: fm-moving-boundary-ignored
+title: 收缩/移动边界被忽略，用固定域解充当答案
+problem_context: 物料烘干过程尺寸随失水收缩（题面给出半径-时间数据），解法仍按初始半径固定域求解
+method: 移动边界热质耦合 PDE
+modeling_structure: moving_boundary_pde
+failure_mode: wrong-method
+symptom: 最终尺寸无法给出；烘干时长与分布与真值方向不定地偏离；论文中「收缩」只出现在文字里
+root_cause: 域边界 R(t) 本身是待求量，必须由守恒量（干物质质量）隐式闭合；忽略它等于换了问题
+detection: 检查控制方程的求解域是否随时间更新；检查是否存在 R(t) 的闭合关系与逐步更新语句
+detection_signal: 代码中 R 为常数；结果里没有任何半径/尺寸随时间的输出
+fix: 引入坐标变换 ξ = r/R(t) 把移动域映到固定域，补上附加对流项 −ξ(Ṙ/R)∂u/∂ξ；R 由干物质守恒逐步更新
+avoidance: 建模阶段先回答「域边界是给定还是待求」；待求则必须写出闭合关系，并与固定域解做对照量化偏移
+applies_to: [mc-moving-boundary-pde]
+source: 2026_A 药材烘干（问题 4）建模实录
+severity: high
+recovery:
+  - 用固定域解与移动域解并排对照，报告两者偏差
+  - 逐步核查干物质守恒残差 < 1e-6
+version: 1
+status: active

@@ -1,0 +1,102 @@
+{
+  "schema_version": 3,
+  "problem": "CUMCM2026A",
+  "random_seed": 42,
+  "summary": {
+    "problem1": {
+      "label": "problem1",
+      "final_time_s": 1800.0,
+      "final_surface_T_C": 44.58696852049056,
+      "final_center_T_C": 40.71056715294522,
+      "final_surface_C": 1.5409642733530742,
+      "final_center_C": 2.549992376364589,
+      "final_radius_m": 0.02
+    },
+    "problem2": {
+      "label": "problem2",
+      "final_time_s": 10800.0,
+      "final_surface_T_C": 49.98250383130152,
+      "final_center_T_C": 49.97038498287125,
+      "final_surface_C": 1.0013837251651074,
+      "final_center_C": 1.7396858752692204,
+      "final_radius_m": 0.02
+    },
+    "problem3": {
+      "label": "problem3",
+      "final_time_s": 206720.0,
+      "final_surface_T_C": 49.999999999995914,
+      "final_center_T_C": 49.999999999988425,
+      "final_surface_C": 0.05221723192397079,
+      "final_center_C": 0.14999981798681666,
+      "final_radius_m": 0.02,
+      "drying_time_h": 57.422222222222224
+    },
+    "problem4": {
+      "label": "problem4",
+      "final_time_s": 233210.0,
+      "final_surface_T_C": 49.99885483990766,
+      "final_center_T_C": 49.998849344558415,
+      "final_surface_C": 0.05243092990387775,
+      "final_center_C": 0.1499974570092847,
+      "final_radius_m": 0.012721227069072335,
+      "drying_time_h": 64.78055555555555,
+      "final_radius_cm": 1.2721227069072334
+    }
+  },
+  "validations": {
+    "spatial_convergence": [
+      {
+        "N": 160,
+        "dry_h": 63.522222222222226
+      },
+      {
+        "N": 320,
+        "dry_h": 58.09444444444444
+      },
+      {
+        "N": 640,
+        "dry_h": 57.5
+      },
+      {
+        "N": 1280,
+        "dry_h": 57.42777777777778
+      },
+      {
+        "N": 2560,
+        "dry_h": 57.416666666666664
+      }
+    ],
+    "temporal_convergence": [
+      {
+        "dt": 20.0,
+        "dry_h": 58.09444444444444
+      },
+      {
+        "dt": 10.0,
+        "dry_h": 58.09166666666667
+      },
+      {
+        "dt": 5.0,
+        "dry_h": 58.09166666666667
+      }
+    ],
+    "temperature_sensitivity": [
+      {
+        "T_target": 45.0,
+        "dry_h": 69.17777777777778
+      },
+      {
+        "T_target": 50.0,
+        "dry_h": 58.09444444444444
+      },
+      {
+        "T_target": 55.0,
+        "dry_h": 49.4
+      },
+      {
+        "T_target": 60.0,
+        "dry_h": 42.5
+      }
+    ]
+  }
+}

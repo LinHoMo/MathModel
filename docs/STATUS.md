@@ -63,13 +63,14 @@ Construction 行为？"。
 | **P2-2/P3-3** | 外部 Constructor 适配器：`src/modeling_harness/adapters/`——`MathModelAgentAdapter`（MMA 产物目录加载，未配置抛 ConstructorNotConfigured 禁伪造）、`PiAdapter`（同目录模式）、`ReferenceConstructor`（内置最小参考）；`tests/unit/test_constructor_adapters.py` 7 用例；边界：Worker/External Solver/Baseline，不触碰 Runtime 信任核心 | ✅ 完成 | 本轮 |
 | **P3-1（K005）** | Constructor×Runtime 2×2 析因 benchmark：预注册协议（C1 裸 Doubao × C2 MMA × R0/R1，6 题 × 5 rep = 120 runs，配对差分 + bootstrap CI + 析因分解）+ runner 框架（`benchmark/constructor_independent/runner.py`，消费 adapter 产物目录）。**正式 runs 数据收集 BLOCKED（如实）**——需外部 Constructor 会话逐题生成，禁止伪造/回填 | ✅ 框架+预注册（数据待外部收集） | 本轮 |
 | **P3-4** | BZD 知识导入：试点 5 卡（M4 已落地，Prior 知识 + source_type/confidence/status 标注）；经验常数禁令验证（src/modeling_harness/ 零引用 6.81% 等）。**目录重组：2026-09-10 执行完成**——`domains/`（Canonical Domain Model 由 runtime/domain 上提）与 `adapters/`（外部 Constructor 适配器由 constructors/adapters 上提）落地顶层；`runtime/execution/adapters/`（执行适配器，不同语义）保留原址；见 ADR-0006 | ✅ 完成 | 本轮 |
-| **v3.2.2 V2 残留彻底清除** | 删除论文链工具 9 个 + validate_project.py + LaTeX 模板 27 + 竞赛 profile 9 + V2 schema 4 + syslab 技能 101 + 旧实例 8 + docs 25+6（diagrams）+ harness-compat；env 全面 V3 化（schema 六组、loader 无 profile、config 无 paper）；new_project 重写纯 V3 布局（inputs/state/artifacts/model）；知识/文档引用全部对齐 | ✅ 595 passed，validate 45/0/0，catalog OK | 本轮 |
+| **v3.2.2 V2 残留彻底清除** | 删除论文链工具 9 个 + validate_project.py + LaTeX 模板 27 + 竞赛 profile 9 + V2 schema 4 + syslab 技能 101 + 旧实例 8 + docs 25+6（diagrams）+ harness-compat；env 全面 V3 化（schema 六组、loader 无 profile、config 无 paper）；new_project 重写纯 V3 布局（inputs/state/artifacts/model）；知识/文档引用全部对齐 | ✅ 600 passed，validate 45/0/0，catalog OK | 本轮 |
+| **2026 A/B 全问建模交付** | 用 harness 完成 CUMCM 2026 A 题（药材烘干：径向耦合传热传质 PDE + Landau 移动边界）与 B 题（干扰源交会定位 + 同心环覆盖清除）全问建模：各产出 `model_ir.json` + `model.md` + `all_results.json` + `result*.xlsx` + `state/`（registry/evidence_graph/decision_log/status）；A 题烘干时长 Q3 57.4222 h / Q4 64.7806 h（含收缩，终半径 1.2721 cm）；B 题 30 组演练清除比例 1.0000（Q3 7150.10 s / Q4 15088.79 s），覆盖漏检率全向 0.0000 / 含定向 0.00025；**反向修复 harness 4 处**（validate.py Mermaid 闭合误判、new_project.py README 内部路径泄漏、两题 README 路径泄漏）；新增知识卡 3 张 + 失败卡 5 条 + playbook 2 篇 | ✅ 600 passed，validate 45/0/0，catalog OK，术语 OK | 本轮 |
 
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **595 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **600 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **45 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 src/modeling_harness/cli/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology` |
@@ -105,6 +106,11 @@ Construction 行为？"。
     P3-1 ✅ K005 2×2 析因 benchmark 框架+预注册（120 runs 设计；正式数据收集 BLOCKED 待外部 Constructor）
     P3-2 ✅ K004 L5 Revision 度量（Δ_L6=+1.0 CI[1,1] H1 SUPPORTED）
     P3-3 ✅ Pi Adapter；P3-3b ✅ paper chain 统一（并行会话）；P3-4 ✅ BZD 知识（目录重组渐进式暂缓）
+  2026 A/B 全问建模交付（2026-09-10）：
+    projects/cumcm2026a（药材烘干：径向耦合 PDE + Landau 移动边界）✅ 四件套 + state
+    projects/cumcm2026b（干扰源交会定位 + 同心环覆盖清除）✅ 四件套 + state
+    反向修复 harness 4 处（Mermaid 闭合误判 / README 内部路径泄漏 ×3）
+    知识沉淀：方法卡 3 + 失败卡 5 + playbook 2（A/B 各 1）
 
 进行中（MainAgent）：无 —— ROADMAP 全项已处理完毕
 待办：

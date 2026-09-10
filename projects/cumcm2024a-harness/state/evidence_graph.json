@@ -1,0 +1,200 @@
+{
+  "graph_schema_version": 3,
+  "graph_version": 1,
+  "project": "cumcm2024a-harness",
+  "updated_at": "2026-09-10T12:54:23Z",
+  "relations": [
+    {
+      "from": "MH-PROBLEM-0001",
+      "to": "MH-QUESTION-0001",
+      "relation": "motivates"
+    },
+    {
+      "from": "MH-QUESTION-0001",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by",
+      "note": "整链构型由龙头弧长坐标唯一确定"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-ASSUMPTION-0001",
+      "relation": "assumes"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-CODE-0001",
+      "relation": "implemented_by",
+      "note": "路径/递推/碰撞核心"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-CODE-0002",
+      "relation": "implemented_by",
+      "note": "调头曲线解析与最短化"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0001",
+      "relation": "validated_by",
+      "sub_question": "Q1"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q1"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "to": "MH-CODE-0003",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "to": "MH-RESULT-0001",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0002",
+      "relation": "validated_by",
+      "sub_question": "Q2"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q2"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "to": "MH-CODE-0004",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "to": "MH-RESULT-0002",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0003",
+      "relation": "validated_by",
+      "sub_question": "Q3"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q3"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "to": "MH-CODE-0005",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "to": "MH-RESULT-0003",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0004",
+      "relation": "validated_by",
+      "sub_question": "Q4"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q4"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "to": "MH-CODE-0006",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "to": "MH-RESULT-0004",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0005",
+      "relation": "validated_by",
+      "sub_question": "Q5"
+    },
+    {
+      "from": "MH-EXPERIMENT-0005",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q5"
+    },
+    {
+      "from": "MH-EXPERIMENT-0005",
+      "to": "MH-CODE-0007",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0005",
+      "to": "MH-RESULT-0005",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-RESULT-0001",
+      "to": "MH-CLAIM-0001",
+      "relation": "supports",
+      "sub_question": "Q1"
+    },
+    {
+      "from": "MH-RESULT-0001",
+      "to": "MH-CLAIM-0002",
+      "relation": "supports",
+      "sub_question": "Q1"
+    },
+    {
+      "from": "MH-RESULT-0002",
+      "to": "MH-CLAIM-0003",
+      "relation": "supports",
+      "sub_question": "Q2"
+    },
+    {
+      "from": "MH-RESULT-0002",
+      "to": "MH-CLAIM-0004",
+      "relation": "supports",
+      "sub_question": "Q2"
+    },
+    {
+      "from": "MH-RESULT-0003",
+      "to": "MH-CLAIM-0005",
+      "relation": "supports",
+      "sub_question": "Q3"
+    },
+    {
+      "from": "MH-RESULT-0004",
+      "to": "MH-CLAIM-0006",
+      "relation": "supports",
+      "sub_question": "Q4"
+    },
+    {
+      "from": "MH-RESULT-0004",
+      "to": "MH-CLAIM-0007",
+      "relation": "supports",
+      "sub_question": "Q4"
+    },
+    {
+      "from": "MH-RESULT-0005",
+      "to": "MH-CLAIM-0008",
+      "relation": "supports",
+      "sub_question": "Q5"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-NARRATIVE-0001",
+      "relation": "derived_from",
+      "note": "模型描述是 MODEL_IR 的人类可读投影"
+    }
+  ]
+}

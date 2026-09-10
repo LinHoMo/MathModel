@@ -414,9 +414,14 @@ def check_figure_refs(project_path):
                 content = d.read_text(encoding="utf-8")
             except Exception:
                 continue
-            # Mermaid 块必须闭合
-            if content.count("```mermaid") != content.count("```"):
-                problems.append(f"{pdir.name}/{d.name}: Mermaid 代码块未闭合")
+            # 代码围栏必须成对闭合：逐行计数（"```mermaid" 本身含 "```" 子串，
+            # 用 content.count 比较会把任何合法 Mermaid 块误判为未闭合）。
+            fence_open = False
+            for line in content.splitlines():
+                if line.lstrip().startswith("```"):
+                    fence_open = not fence_open
+            if fence_open:
+                problems.append(f"{pdir.name}/{d.name}: 代码围栏未闭合（Mermaid/代码块）")
             # 图片引用必须指向存在的本地文件
             for m in re.finditer(r"!\[([^\]]*)\]\(([^)]+)\)", content):
                 src = m.group(2).split("#")[0].strip()
@@ -811,45 +816,69 @@ def check_test_coverage(project_path):
 
 
 def check_results_ledger(project_path):
-    """L6.7: 检查结果文件"""
-    if not _live_project_dirs(project_path):
-        return True, "跳过：无活跃项目实例"
-    results_files = list(iter_repo(project_path, "all_results.json"))
-    if not results_files:
-        return False, "未找到all_results.json"
+    """L6.7: 检查结果文件（项目级：每个活跃项目应有 all_results.json）。
 
-    for rf in results_files:
+    修复：原实现用 iter_repo 全仓找 all_results.json，只要有任意一个即通过，
+    无法反映「每个交付项目都需有结果台账」。改为逐项目校验。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "跳过：无活跃项目实例"
+
+    problems = []
+    checked = 0
+    for pdir in live:
+        rf = pdir / "all_results.json"
+        if not rf.exists():
+            problems.append(f"{pdir.name}: all_results.json 缺失")
+            continue
+        checked += 1
         try:
             data = json.loads(rf.read_text(encoding="utf-8"))
-            if not data:
-                return False, f"{rf.name}为空"
-            if not isinstance(data, dict):
-                return False, f"{rf.name}格式错误"
         except json.JSONDecodeError:
-            return False, f"{rf.name} JSON解析失败"
+            problems.append(f"{pdir.name}: all_results.json JSON 解析失败")
+            continue
+        if not data or not isinstance(data, dict):
+            problems.append(f"{pdir.name}: all_results.json 为空或非 object")
 
-    return True, "结果文件有效"
+    if problems:
+        return False, "; ".join(problems[:5])
+    return True, f"结果台账有效（{checked} 个活跃项目）"
 
 
 def check_random_seed(project_path):
-    """L6.8: 检查随机种子"""
-    if not _live_project_dirs(project_path):
-        return True, "跳过：无活跃项目实例"
-    code_files = list(iter_repo(project_path, "*.py"))
-    found_seed = False
+    """L6.8: 检查随机种子（扫描活跃项目交付代码 artifacts/code/*.py，非全仓）。
 
-    for py_file in code_files[:10]:
+    修复：原实现对 iter_repo(project_path, "*.py") 取前 10 个文件，rglob 顺序下
+    命中 build/ 等无关源码，导致「未设置随机种子」假失败。改为只扫活跃项目的
+    交付代码，检验交付物是否固定随机种子（铁律：随机种子固定为 42）。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "跳过：无活跃项目实例"
+
+    code_files = []
+    for pdir in live:
+        code_files.extend(sorted(pdir.glob("artifacts/code/*.py")))
+        code_files.extend(sorted(pdir.glob("*.py")))
+    if not code_files:
+        return True, "无交付代码（跳过随机种子检查）"
+
+    found_seed = False
+    seeded_file = ""
+    for py_file in code_files:
         try:
             content = py_file.read_text(encoding="utf-8")
             if "seed" in content.lower() and ("42" in content or "random" in content.lower()):
                 found_seed = True
+                seeded_file = py_file.name
                 break
         except Exception:
             pass
 
     if found_seed:
-        return True, "发现随机种子设置"
-    return False, "未设置随机种子"
+        return True, f"随机种子已设置（{seeded_file}）"
+    return False, "交付代码未固定随机种子（须 seed=42）"
 
 
 def check_directory_structure(project_path):

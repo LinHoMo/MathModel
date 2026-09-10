@@ -1,0 +1,20 @@
+failure_id: fm-truth-navigation
+title: 策略使用真值坐标导航，指标虚高且不可实施
+problem_context: 仿真中把目标的真实坐标读进策略用于导引（或做兜底），清除比例与用时因此显著变好
+method: 同心环覆盖搜索 / 交会-归航策略
+modeling_structure: coverage_path_planning
+failure_mode: no-evidence
+symptom: 清除比例接近 100% 且用时很短，但策略在真实观测条件下无法复现（换一组随机源即失效）
+root_cause: 载体实际只装备测向与光学设备，无法获知真值坐标；用真值等于把答案写进算法
+detection: 静态检查策略函数是否读取真值对象（源坐标、频道真值）；把真值字段替换成哨兵值重跑，看是否仍能完成
+detection_signal: 策略代码中出现「真值变量」与决策条件直接比较
+fix: 所有决策改为使用可观测量（示向度 + 相对强度）；真值仅保留在模拟器内部做「是否进入作用距离」判定
+avoidance: 建模阶段就把「可观测量清单」写进约束；交付前做真值封锁重跑（truth-blind rerun）
+applies_to: [mc-coverage-search]
+source: 2026_B 无线电干扰源定位清除（问题 3/4）建模实录
+severity: high
+recovery:
+  - 用真值封锁重跑并对比两组指标，如实报告差异
+  - 在局限中声明哪些量是观测量、哪些是仅模拟器持有的潜伏量
+version: 1
+status: active

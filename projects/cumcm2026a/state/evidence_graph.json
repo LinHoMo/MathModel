@@ -1,0 +1,153 @@
+{
+  "graph_schema_version": 3,
+  "graph_version": 1,
+  "project": "cumcm2026a",
+  "updated_at": "2026-09-10T13:16:23Z",
+  "relations": [
+    {
+      "from": "MH-PROBLEM-0001",
+      "to": "MH-QUESTION-0001",
+      "relation": "motivates"
+    },
+    {
+      "from": "MH-QUESTION-0001",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-ASSUMPTION-0001",
+      "relation": "assumes"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-CODE-0001",
+      "relation": "implemented_by",
+      "note": "径向耦合传热传质隐式求解 + 移动边界 + 验证套件"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0001",
+      "relation": "validated_by",
+      "sub_question": "Q1"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q1"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "to": "MH-CODE-0001",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "to": "MH-RESULT-0001",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0002",
+      "relation": "validated_by",
+      "sub_question": "Q2"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q2"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "to": "MH-CODE-0001",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "to": "MH-RESULT-0002",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0003",
+      "relation": "validated_by",
+      "sub_question": "Q3"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q3"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "to": "MH-CODE-0001",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "to": "MH-RESULT-0003",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-EXPERIMENT-0004",
+      "relation": "validated_by",
+      "sub_question": "Q4"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "to": "MH-MODEL-0001",
+      "relation": "tests",
+      "sub_question": "Q4"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "to": "MH-CODE-0001",
+      "relation": "uses"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "to": "MH-RESULT-0004",
+      "relation": "produces"
+    },
+    {
+      "from": "MH-RESULT-0001",
+      "to": "MH-CLAIM-0001",
+      "relation": "supports",
+      "sub_question": "Q1"
+    },
+    {
+      "from": "MH-RESULT-0002",
+      "to": "MH-CLAIM-0002",
+      "relation": "supports",
+      "sub_question": "Q2"
+    },
+    {
+      "from": "MH-RESULT-0003",
+      "to": "MH-CLAIM-0003",
+      "relation": "supports",
+      "sub_question": "Q3"
+    },
+    {
+      "from": "MH-RESULT-0004",
+      "to": "MH-CLAIM-0004",
+      "relation": "supports",
+      "sub_question": "Q4"
+    },
+    {
+      "from": "MH-RESULT-0001",
+      "to": "MH-CLAIM-0005",
+      "relation": "supports",
+      "sub_question": "Q1"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-NARRATIVE-0001",
+      "relation": "derived_from",
+      "note": "模型描述是 MODEL_IR 的人类可读投影"
+    }
+  ]
+}

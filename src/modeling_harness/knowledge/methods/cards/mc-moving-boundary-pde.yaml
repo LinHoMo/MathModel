@@ -1,0 +1,71 @@
+# 移动边界热质耦合 PDE — 收缩域/变物性建模知识卡
+# 定位：Model Construction Knowledge（约束/先验/验证），不是算法说明书。
+# 核心机理：收缩域上的守恒律 + 坐标变换（Landau）+ 域边界由守恒量隐式闭合。
+card_id: mc-moving-boundary-pde
+name: 移动边界热质耦合 PDE（收缩域）
+family: moving_boundary_pde
+version: 1
+problem_types: [moving_boundary, drying_shrinkage, free_boundary]
+match:
+  requires_data: false
+  time_series: true
+  handles_uncertainty: false
+good_for:
+  - 干燥/脱水/煅烧过程：物料失水收缩，半径或体积随时间单调减小（2026_A 药材烘干）
+  - 相变/凝固/融化（Stefan 问题）：界面位置未知且随能量平衡推进
+  - 生物组织、食品、药品的传热传质耦合：物性随含水率强烈变化
+  - 任何「域边界本身是待求量」的抛物型问题
+structure_signals:
+  - 题面给出几何尺寸（半径/长度）随时间变化的数据或规律
+  - 存在守恒量（干物质质量 / 总焓）可用于闭合移动边界
+  - 物性关联式中出现含水率（或另一状态量）的强非线性指数项
+  - 题面要求「给出最终尺寸 + 最终分布」而非仅时间
+problem_structures: [moving_boundary, diffusion/heat_transfer, shrinkage]
+modeling_patterns: [conservation_law, spatial_temporal_field, coordinate_transform]
+mathematical_forms: [PDE, differential_equation]
+mechanism:
+  - 移动边界来源：域边界位置 R(t) 不是给定数据，而是由内部守恒律（干物质质量守恒）闭合
+  - 坐标变换消除移动性：ξ=r/R(t) 把 [0,R(t)] 映到固定域 [0,1]，代价是出现附加对流项
+  - 附加对流项：−(ξ Ṙ/R) ∂u/∂ξ，符号由收缩方向决定，不可漏写
+  - 变物性耦合：温度经 Arrhenius 因子进入扩散系数，含水率进入热容与热导率
+formulations:
+  - 固定域：ρ(C)c_p(C) ∂T/∂t = (1/r) ∂/∂r (r k(C) ∂T/∂r)
+  - 质量场：∂C/∂t = (1/r) ∂/∂r (r D(C,T) ∂C/∂r)
+  - 网格变换后（ξ 域）多出 −ξ(Ṙ/R) ∂C/∂ξ 项
+  - 边界闭合（圆柱、各向同性收缩）：ρ_eff(C₀)R₀²/(1+C₀) = ρ_eff(C̄)R²/(1+C̄)
+  - Robin 边界：−k ∂T/∂r = h(T−T_air)，−D ∂C/∂r = h_m(C−C_air)
+solvers:
+  - 向后 Euler 隐式 + 三对角（Thomas）或带状求解，系数按上一时步滞后（半隐式）
+  - 每时步两步：先由平均含水率更新 R，再在 ξ 域解一个线性系统
+  - 表面「干壳」层薄 ⇒ 均匀网格需在量化前做网格收敛扫描
+requires:
+  - 移动边界的闭合关系可写（存在守恒量：干物质质量 / 总焓 / 相变潜热）
+  - 收缩模式可假定（各向同性径向收缩 / 仅界面推进），否则需要额外的形变本构
+  - 物性关联式（k、D、ρ、c_p）可从题面附录或文献获得
+  - 固定域与移动域之间的一一映射存在（R(t) > 0 且单调）
+risks:
+  - 忽略收缩：把 R 当常数会让最终尺寸与时间都偏（实操中方向不定，需实测量化）
+  - 坐标变换漏写附加对流项 −ξ(Ṙ/R)∂u/∂ξ（最典型错误）
+  - 半径更新与场更新顺序颠倒或同一步混用 ⇒ 守恒量漂移
+  - 干物质基准（1+C）漏掉 ⇒ R(t) 闭合式错误
+  - 表面「干壳」层薄于网格间距 ⇒ 结果系统性偏高，且粗网格看似收敛
+  - 用全场最大含水率判据而不核查中心是否为极值点
+validation:
+  - 网格收敛：空间 N 加密 4–8 倍，关键输出（烘干时长）变化 <1%
+  - 时间步收敛：Δt 减半，输出变化 <0.1%
+  - 干物质守恒：逐步累计的干物质总量相对误差 <1e-6
+  - 单调性：R(t) 单调不增；温度趋近环境值；含水率单调下降
+  - 与固定域解对照：交代收缩带来的偏移量级（解释净效应方向）
+  - 判据点核查：确认中心含水率是全场极值（单调剖面），再用单点判据
+often_combined_with: [mc-numerical-pde, mc-monte-carlo]
+anti_patterns:
+  - 直接把固定半径的 PDE 结果当作收缩情形的答案
+  - 只改扩散系数而完全忽略域边界变化
+  - 用「半径减小 ⇒ 路径变短 ⇒ 时间必然减少」的直觉代替计算
+  - 网格收敛只做 2 档（看不出粗网格假收敛平台）
+known_failures: [fm-moving-boundary-ignored, fm-pde-grid-underresolved, fm-pde-boundary-wrong]
+reference: methodology/numerical-methods.md
+status: active
+confidence: 0.9
+source_type: competition_archive
+source_refs: [2026_A 药材烘干（收缩移动边界）建模实录]

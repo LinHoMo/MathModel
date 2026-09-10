@@ -1,0 +1,115 @@
+{
+  "schema_version": 3,
+  "project": "cumcm2026a",
+  "updated_at": "2026-09-10T13:16:23Z",
+  "decisions": [
+    {
+      "decision_id": "MH-DECISION-0001",
+      "question": "是否保留轴向自由度？",
+      "chosen": "只保留径向一维（轴对称柱坐标）",
+      "alternatives": [
+        "径向 + 轴向二维 PDE",
+        "三维有限元"
+      ],
+      "criteria": [
+        "轴向/径向扩散时间尺度比",
+        "题面给定几何与可计算性"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0001"
+      ],
+      "reasoning": "长径比使 (L/R0)^2 = 156，轴向在远小于一秒内均温；本题关心的尺度为 1800 s 至数天，轴向已平衡。",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:23Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0002",
+      "question": "烘干终点的判据取全场还是中心？",
+      "chosen": "取中心 r=0 的单点判据 t_dry = inf{t: C(0,t) < 0.15}",
+      "alternatives": [
+        "全场逐点扫描同时达标",
+        "取表面含水率"
+      ],
+      "criteria": [
+        "剖面单调性",
+        "是否等价于题面「各处 < 0.15」"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0001",
+        "MH-RESULT-0003"
+      ],
+      "reasoning": "径向单调剖面下中心为极值点，故中心达标 ⟺ 全场达标；取表面会大幅低估时长（终态表面 0.0522 vs 中心 0.1500）。",
+      "confidence": 0.95,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:23Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0003",
+      "question": "径向网格与时间步取多少？",
+      "chosen": "N_r = 1280（Δr = 0.0015625 cm），Δt = 10 s",
+      "alternatives": [
+        "N_r = 320",
+        "N_r = 640",
+        "自适应网格"
+      ],
+      "criteria": [
+        "网格/时间步收敛序列",
+        "表面「干壳」层分辨率"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0003"
+      ],
+      "reasoning": "实测 N=160/320/640/1280/2560 给出 63.5222/58.0944/57.5000/57.4278/57.4167 h；N=320 偏高约 1.2%，N=1280 与 2560 差 0.02%。Δt ≤ 10 s 后时间离散误差 < 0.005%。",
+      "confidence": 0.9,
+      "reversible": true,
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T13:16:23Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0004",
+      "question": "恒温干燥目标温度如何确定？",
+      "chosen": "T_target = 50 °C，并作为待标定参数在敏感性验证中量化",
+      "alternatives": [
+        "取 45 / 55 / 60 °C",
+        "由附件 1 曲线逐点拟合"
+      ],
+      "criteria": [
+        "是否落在题面「2-3 天」窗口",
+        "中药材低温热风干燥常见工艺"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0003"
+      ],
+      "reasoning": "实测 45/50/55/60 °C 分别给出 69.1778/58.0944/49.4/42.5 h；落入 48-72 h 窗口的区间约 44-55 °C，50 °C 取为该区间代表值。该取值不是题面给定，故在局限中显式声明。",
+      "confidence": 0.8,
+      "reversible": true,
+      "created_by": "experiment_design",
+      "created_at": "2026-09-10T13:16:23Z"
+    },
+    {
+      "decision_id": "MH-DECISION-0005",
+      "question": "失水收缩对烘干时长是净正还是净负效应？",
+      "chosen": "净负（时长增加）：固定域 57.4222 h → 移动域 64.7806 h",
+      "alternatives": [
+        "直觉判断半径减小 ⇒ 时间减少",
+        "忽略收缩"
+      ],
+      "criteria": [
+        "两解对照",
+        "干物质守恒闭合是否正确"
+      ],
+      "evidence_ids": [
+        "MH-RESULT-0003",
+        "MH-RESULT-0004"
+      ],
+      "reasoning": "半径收缩缩短了后期扩散路径（有利），但表面积减小且含水率阈值对应的绝对水量下降更慢（不利），净效应为 +7.36 h；不凭直觉结论，以两解对照为准。",
+      "confidence": 0.85,
+      "reversible": true,
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T13:16:23Z"
+    }
+  ]
+}

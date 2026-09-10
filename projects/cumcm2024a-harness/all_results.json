@@ -1,0 +1,287 @@
+{
+  "project": "cumcm2024a-harness",
+  "problem_id": "2024_A",
+  "year": 2024,
+  "model_id": "M001",
+  "model_family": "kinematic",
+  "deterministic": true,
+  "random_seed": null,
+  "parameters": {
+    "n_boards": 223,
+    "n_handles": 224,
+    "head_board_len_m": 3.41,
+    "body_board_len_m": 2.2,
+    "board_width_m": 0.3,
+    "hole_to_edge_m": 0.275,
+    "hole_diameter_m": 0.055,
+    "link_head_m": 2.86,
+    "link_body_m": 1.65,
+    "chain_len_m": 369.16,
+    "pitch_q1_m": 0.55,
+    "pitch_q4_m": 1.7,
+    "v_head_given_ms": 1.0,
+    "initial_turn": 16,
+    "turnaround_radius_m": 4.5,
+    "turnaround_diameter_m": 9.0,
+    "handle_speed_limit_ms": 2.0,
+    "min_followable_radius_m": 1.43
+  },
+  "Q1": {
+    "t_end_s": 300,
+    "rows": 67424,
+    "max_link_error_m": 3.292921491038214e-13,
+    "max_speed_dev_from_head_ms": 0.003522463086780947,
+    "tail_speed_at_300s_ms": 0.996478,
+    "head_x_at_0s_m": 8.8,
+    "head_y_at_0s_m": 0.0,
+    "diff_steps_s": [
+      1.0,
+      0.5,
+      0.25
+    ],
+    "tail_speed_by_h_ms": [
+      0.99647745,
+      0.99647752,
+      0.99647753,
+      0.99647754
+    ]
+  },
+  "Q2": {
+    "t_star_s": 397.7836425781336,
+    "min_board_distance_m": 0.2999999030403438,
+    "collision_threshold_m": 0.3,
+    "coarse_step_s": 1.0,
+    "fine_step_s": 0.05,
+    "continuity_check_max_move_m": 0.04999963853823751,
+    "max_handle_speed_ms": 0.9999999786116139,
+    "critical_pair": "0-10",
+    "critical_board_pairs": [
+      10,
+      11,
+      12,
+      13,
+      7,
+      4
+    ],
+    "min_distance_curve": [
+      {
+        "t_s": 380.0,
+        "min_d_m": 0.33447
+      },
+      {
+        "t_s": 390.0,
+        "min_d_m": 0.31517
+      },
+      {
+        "t_s": 396.0,
+        "min_d_m": 0.32632
+      },
+      {
+        "t_s": 397.75,
+        "min_d_m": 0.300346
+      },
+      {
+        "t_s": 397.8,
+        "min_d_m": 0.299836
+      },
+      {
+        "t_s": 420.0,
+        "min_d_m": 0.21524
+      },
+      {
+        "t_s": 432.0,
+        "min_d_m": 0.09462
+      }
+    ]
+  },
+  "Q3": {
+    "p_min_m": 0.4442599296569825,
+    "p_min_cm": 44.42599296569825,
+    "clearance_at_pmin_m": 0.3000013385439924,
+    "turnaround_radius_m": 4.5,
+    "clearance_by_head_radius_m": [
+      {
+        "head_radius_m": 4.5,
+        "min_d_m": 0.300001
+      },
+      {
+        "head_radius_m": 5.0,
+        "min_d_m": 0.329322
+      },
+      {
+        "head_radius_m": 6.0,
+        "min_d_m": 0.328381
+      },
+      {
+        "head_radius_m": 8.0,
+        "min_d_m": 0.35048
+      },
+      {
+        "head_radius_m": 11.0,
+        "min_d_m": 0.384804
+      },
+      {
+        "head_radius_m": 15.0,
+        "min_d_m": 0.403535
+      },
+      {
+        "head_radius_m": 20.0,
+        "min_d_m": 0.412262
+      }
+    ],
+    "head_radius_scan_m": [
+      4.5,
+      5.0,
+      6.0,
+      8.0,
+      11.0,
+      15.0,
+      20.0
+    ]
+  },
+  "Q4": {
+    "pitch_m": 1.7,
+    "R_turn_m": 4.5,
+    "R1_m": 3.005417667789033,
+    "R2_m": 1.502708833894516,
+    "psi_rad": 3.021486841980652,
+    "psi_deg": 173.1184438998028,
+    "S_len_m": 13.62124490682111,
+    "J_x_m": 0.9039519545688828,
+    "J_y_m": 1.197025840920354,
+    "J_radius_m": 1.5,
+    "curve_r_min_m": 1.494611479820058,
+    "curve_r_max_m": 4.5,
+    "endpoint_err_m": 8.005932084973442e-15,
+    "path_len_m": 766.6079160674269,
+    "sigma_A_m": 599.5814636891921,
+    "speed_min_ms": 0.5404290533334503,
+    "speed_max_ms": 1.422194675680703,
+    "max_link_error_m": 2.917666108714911e-13,
+    "invariance_ratios": [
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      5.0,
+      10.0
+    ],
+    "invariance_R1_m": [
+      2.254063,
+      2.704876,
+      3.005418,
+      3.381095,
+      3.756772,
+      4.098297
+    ],
+    "invariance_R2_m": [
+      2.254063,
+      1.803251,
+      1.502709,
+      1.127032,
+      0.751354,
+      0.40983
+    ],
+    "invariance_L_m": [
+      13.621245,
+      13.621245,
+      13.621245,
+      13.621245,
+      13.621245,
+      13.621245
+    ],
+    "slide_B_best_in_circle_total_m": 18.6994,
+    "slide_B_best_S_len_m": 3.1764,
+    "radius_margin_m": 0.0727088338945161
+  },
+  "Q5": {
+    "v_max_ms": 1.24701107279573,
+    "v_limit_ms": 2.0,
+    "max_speed_ratio": 1.603834996842579,
+    "min_speed_ratio": 0.540005,
+    "argmax_t_s": 14.49999999999349,
+    "argmax_handle": 3,
+    "time_step_s": 0.1,
+    "h_arc_m": 0.001,
+    "grid_convergence": [
+      1.603835,
+      1.603835,
+      1.603835
+    ],
+    "grid_steps_s": [
+      0.5,
+      0.1,
+      0.05
+    ],
+    "peak_neighborhood": [
+      1.31938,
+      1.38737,
+      1.4884,
+      1.58798,
+      1.60383,
+      1.57428,
+      1.51549,
+      1.44249,
+      1.36709
+    ]
+  },
+  "environment": {
+    "python_version": 3.12,
+    "numpy": 2.5,
+    "scipy": 1.18,
+    "pandas": 3.0,
+    "os": "win32",
+    "deterministic": true
+  },
+  "process": {
+    "model_ir_required_fields": 18,
+    "relation_types_available": 14,
+    "capsule_radius_m": 0.15,
+    "traceability_threshold_pct": 90.0,
+    "traceability_ratio_pct": 100.0,
+    "brute_sample_points_per_board": 800,
+    "random_pair_samples": 200,
+    "old_grid_impl_seconds": 32.0,
+    "new_newton_impl_seconds": 4.7,
+    "registry_artifacts": 33,
+    "evidence_relations": 34,
+    "claims_total": 8,
+    "decisions_total": 5
+  },
+  "verification": {
+    "t0_core_m": 0.465961,
+    "t0_dense_sample_m": 0.465961,
+    "t397_core_m": 0.3,
+    "t397_dense_sample_m": 0.300002,
+    "t420_core_m": 0.215236,
+    "t420_dense_sample_m": 0.21524,
+    "agreement_m": 1e-06
+  },
+  "performance": {
+    "march_seconds_per_301_frames": 4.7,
+    "solver_runtime_s": {
+      "q1": 35.0,
+      "q2": 85.0,
+      "q3": 420.0,
+      "q4": 40.0,
+      "q5": 85.0
+    },
+    "frames_q1": 301,
+    "frames_q2_fine": 1652,
+    "links": 223
+  },
+  "artifacts": {
+    "model_ir": "model_ir.json",
+    "model_doc": "model.md",
+    "results": [
+      "artifacts/results/result1.xlsx",
+      "artifacts/results/result2.xlsx",
+      "artifacts/results/result3.xlsx",
+      "artifacts/results/result4.xlsx",
+      "artifacts/results/result5.xlsx"
+    ],
+    "registry": "state/registry.json",
+    "evidence_graph": "state/evidence_graph.json",
+    "decision_log": "state/decision_log.json"
+  }
+}

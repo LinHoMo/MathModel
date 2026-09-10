@@ -1,0 +1,67 @@
+# 测向交会定位几何 — 楔形交集/直径圆/最优基线建模知识卡
+# 定位：Model Construction Knowledge（约束/先验/验证），不是算法说明书。
+# 核心机理：区间误差（非分布）⇒ 角域楔形 ⇒ 凸集交 ⇒ 直径/最小包围圆是两种不同的不确定性度量。
+card_id: mc-bearing-triangulation
+name: 测向交会定位几何（楔形交集与定位区域度量）
+family: computational_geometry
+version: 1
+problem_types: [bearing_localization, wedge_intersection, geometric_inference]
+good_for:
+  - 多站测向（DF）交会定位：给定观测点坐标与示向度，求目标可能区域（2026_B 问题 1）
+  - 误差为区间界（±ε）而非概率分布时的确定性定位区域刻画
+  - 需要判断「用直径作圆能否覆盖不确定区域」的覆盖类问题
+  - 观测点布站优化：只考虑几何精度衰减因子（GDOP）的第二站选址
+structure_signals:
+  - 题面给出「示向度误差全局在 [−ε, +ε] 内」一类的区间界表述
+  - 同时给出多个观测点坐标与各自测得的方位角
+  - 问项要求「定位区域的直径」「能否被某圆覆盖」等区域度量
+  - 问项要求「下一个测点放哪里能定位更好」——典型 GDOP 问题
+problem_structures: [localization, geometric_gauge, convex_region]
+modeling_patterns: [distance, half_plane_intersection, error_propagation]
+mathematical_forms: [linear_algebra, optimization, statistics]
+mechanism:
+  - 区间误差 → 楔形角域：每条示向度带 ±ε 张角，是一条射线被加宽为角度扇形（等价两条半平面）
+  - 凸集交封闭：若干楔形（凸）的交仍是凸多边形，顶点数随站点数增加但有界
+  - 直径 ≠ 覆盖半径：凸集直径是最大顶点对距离；最小包围圆半径可大于直径之半（钝角/锐角三角形）
+  - Thales 判据：P 在以 AB 为直径的圆内 ⟺ ∠APB ≥ 90°，给出「直径圆覆盖」的充要条件
+  - GDOP：位置误差 ∝ d·δ/sin φ，φ=90° 最优 ⇒ 最优第二点集是过估计点的垂线（Thales 圆切线）
+formulations:
+  - 楔形：W_i = {P : arg(P−S_i) ∈ [b_i−ε, b_i+ε]}，半平面形式 a·x ≤ c
+  - 定位区域：Ω = ∩_i W_i（Sutherland–Hodgman 逐半平面裁剪）
+  - 直径：D_Ω = max_{(p,q)∈Ω×Ω} |p−q|（凸包顶点枚举或旋转卡壳）
+  - 覆盖判据：Ω ⊆ C(A,B) ⟺ ∠APB ≥ 90°，∀P ∈ vert(Ω)\{A,B}
+  - 精度：σ_P ∝ 1/sin φ；P₂* = G_est + t·n⊥，n⊥ ⊥ (G_est − S₁)
+solvers:
+  - 半平面裁剪（Sutherland–Hodgman）+ 凸包 + O(h²) 最远点对
+  - 最小包围圆：Welzl 随机增量（期望 O(n)）
+  - 交会解算：两条射线求交的 2×2 线性系统，判退化（行列式近零 / t < 0）
+  - 第二点搜索：解析垂线 + 极坐标候选网格交叉验证
+requires:
+  - 误差为区间界而非分布（若是分布，应改用置信椭圆而非楔形交集）
+  - 观测点坐标与示向度可配对；站点数 ≥ 2
+  - 各站误差独立同界（相关性未建模时须在局限中声明）
+  - 定位区域非空（楔形确实相交）；空交集须作为「不可定位」如实报告
+risks:
+  - 钝角交会时两条射线几何发散，楔形扩大产生巨大甚至无界区域，「有效」误判
+  - 以「直径圆」代替最小包围圆，得到偏小的不确定度
+  - 近共线布站（φ→0°）使 GDOP 爆炸，却被当作定位成功
+  - 射线求交未判 t ≥ 0，出现「背向解」落在源的反侧
+  - 对误差做过强假设（正态 + 独立），但题面只给了区间界
+validation:
+  - 退化检测：构造近共线/钝角算例，检查区域是否发散并如实标注
+  - 反例构造：给出一个锐角三角形使「直径圆覆盖」不成立，证明该判据不是恒真
+  - 解析与网格一致性：最优第二点由解析式与极坐标网格搜索两路给出，结论须一致
+  - 覆盖性核查：若声称覆盖，须逐顶点验证张角 ≥ 90°（不抽样、不外推）
+  - 交会角单调性：沿推荐线偏移时定位区域直径随偏移单调变化
+often_combined_with: [mc-coverage-search, mc-monte-carlo]
+anti_patterns:
+  - 把区间误差当正态分布，直接给 3σ 椭圆
+  - 宣称「直径圆总能覆盖定位区域」而不给判据与反例
+  - 站点近共线仍输出一个看似精确的点估计
+  - 只报区域直径、不报最小包围圆，掩盖钝角情形的不确定度
+known_failures: [fm-bearing-degenerate-crossing]
+reference: methodology/signal-processing-nlp.md
+status: active
+confidence: 0.9
+source_type: competition_archive
+source_refs: [2026_B 无线电干扰源定位清除（交会定位几何）建模实录]
