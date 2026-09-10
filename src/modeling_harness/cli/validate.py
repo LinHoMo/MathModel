@@ -1208,13 +1208,14 @@ def check_model_doc(project_path):
 def check_catalog_yaml(project_path):
     """L1: catalog 视图一致性（V3：v3 视图 roles/nodes/validators）"""
     content = None
-    for p in ("catalog/v3.yaml", "catalog/catalog.yaml"):
+    for p in ("src/modeling_harness/catalog/v3.yaml",
+                   "src/modeling_harness/catalog/catalog.yaml"):
         fp = project_path / p
         if fp.exists():
             content = fp.read_text(encoding="utf-8", errors="ignore")
             break
     if content is None:
-        return False, "catalog/v3.yaml 缺失"
+        return False, "src/modeling_harness/catalog/v3.yaml 缺失"
     for key in ("roles:", "nodes:", "validators:"):
         if not re.search(rf"^[ ]+{key}[ ]*(#.*)?$", content, re.MULTILINE):
             return False, f"catalog v3 节缺少 {key.rstrip(':')}"

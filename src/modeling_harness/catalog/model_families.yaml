@@ -2,7 +2,7 @@
 #
 # 用途（P0 工程项②，三仓库审计 R6/RQ5 修复）：
 #   合并 model_ir.schema.json 建议词 + src/modeling_harness/knowledge/methods/cards/*.yaml family
-#   + benchmark gt.json allowed_model_families + K001 生成侧实际命名词，
+#   + benchmark gt.json allowed_modeling_structures（评分依据，多解原则）+ K001 生成侧实际命名词，
 #   成为 K002 及以后所有实验的 model_family 判定源（single source of truth）。
 #
 # 治理（docs/architecture/THREE_LAYER_ARCHITECTURE.md v2 §2.3：ontology 与字符串分离）：

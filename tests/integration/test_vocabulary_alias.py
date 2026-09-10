@@ -17,7 +17,7 @@ sys.path.insert(0, str(REPO / "src"))
 import pytest
 import yaml
 
-FAMILIES_YAML = REPO / "catalog" / "model_families.yaml"
+FAMILIES_YAML = REPO / "src" / "modeling_harness" / "catalog" / "model_families.yaml"
 
 
 @pytest.fixture(scope="module")

@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent.parent
-CATALOG_PATH = ROOT / "catalog" / "catalog.yaml"
+CATALOG_PATH = ROOT / "src" / "modeling_harness" / "catalog" / "catalog.yaml"
 OPENAI_PATH = ROOT / "src" / "modeling_harness" / "runtime" / "adapters" / "openai.yaml"
 
 
@@ -166,7 +166,7 @@ def _coerce_scalar(s):
     return s
 
 
-REGISTRY_DIR = ROOT / "catalog"
+REGISTRY_DIR = ROOT / "src" / "modeling_harness" / "catalog"
 # registry 文件名 -> 合并进主 catalog 的键名（protocol_tools.yaml 历史键名为 tools）
 REGISTRY_FILES = {"v3": "v3", "external_skills": "external_skills",
                   "protocol_tools": "tools"}
@@ -221,7 +221,7 @@ def generate_openai_yaml(catalog):
         "# OpenAI Agents SDK 兼容配置",
         "# 用于在 OpenAI Agents SDK 中加载 Modeling-Harness 技能",
         "# *** 本文件由 src/modeling_harness/cli/gen_runtime_manifest.py 自动生成 ***",
-        "# *** 请勿手工编辑 —— 以 catalog/v3.yaml 为单一真源 ***",
+        "# *** 请勿手工编辑 —— 以 src/modeling_harness/catalog/v3.yaml 为单一真源 ***",
         f"# 最近生成时间: {timestamp}",
         "",
         'name: "modeling-harness-skills"',

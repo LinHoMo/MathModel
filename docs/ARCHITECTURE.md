@@ -50,7 +50,7 @@ Role 是 capability composition；节点引用 capability，由 runtime executor
 
 ### 3. 知识库分层共享
 
-`src/modeling_harness/knowledge/`（方法论 / 方法卡 / 陷阱记忆）+ `catalog/catalog.yaml`（双视图单一真源）。
+`src/modeling_harness/knowledge/`（方法论 / 方法卡 / 陷阱记忆）+ `src/modeling_harness/catalog/catalog.yaml`（双视图单一真源）。
 知识卡 = Constraint / Prior，不是答案库。
 
 ## 数据流
