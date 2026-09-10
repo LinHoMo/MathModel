@@ -149,7 +149,6 @@ Modeling-Harness/
 ├── projects/                        # 用户运行实例（仅 new_project.py 创建）
 ├── docs/                            # 架构与状态文档（architecture/ 为真源，STATUS.md 为状态唯一真源）
 ├── tests/                           # unit / integration / e2e / regression（含 P1 闭环测试）
-├── examples/                        # 少量可运行示例
 ├── AGENTS.md                        # agent 活动入口（唯一权威协议）
 └── pyproject.toml                   # src-layout 打包 + [project.scripts] mh + pytest marker
 ```
