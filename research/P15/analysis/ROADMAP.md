@@ -311,6 +311,7 @@
 | **是否影响旧实验** | 否 |
 | **是否需要迁移** | 否 |
 | **预计依赖** | P0 全部 + P1-3 + P2-1 + P2-2 |
+| **状态** | ✅ 框架+预注册完成（2026-09-10）：**P15-K005** 预注册协议（2×2 析因 C1/C2 × R0/R1，6 题 × 5 rep = 120 runs，配对差分 + bootstrap CI + 析因分解）+ runner 框架（`research/P15/benchmark/constructor_independent/runner.py`，消费 P2-2 adapter 产物目录）。**正式 runs 数据收集：BLOCKED（如实）**——需外部 Constructor（裸 Doubao/MathModelAgent）会话逐题生成 120 个真实建模产物，禁止伪造/回填；数据就绪后按协议执行出报告 |
 
 ### P3-2：L5 Revision 端到端度量实验
 
