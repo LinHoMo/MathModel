@@ -372,6 +372,7 @@
 | **是否影响旧实验** | 是（import 路径变更，需同步更新） |
 | **是否需要迁移** | 是（大规模目录迁移，需分阶段） |
 | **预计依赖** | P1-5（死代码清理后再重组） |
+| **状态** | ✅ 知识部分完成（2026-09-10）：BZD 试点 5 卡（M4 已落地：model-fit/validation-obligations/failure-modes/judging-criteria/sensitivity）为 Prior 知识资产，`source_type=BZD` + `confidence` + `status` 标注；经验常数禁令验证通过（core/ 零引用 6.81%/award_probability 等，score_compute 不消费 BZD 经验常数）。**目录重组：评估后暂缓**（渐进式）——ARCHITECTURE_FINAL §4 推荐顶层大迁移（runtime/guardrails/brain/cli/benchmark）的全量 import 迁移回归风险 > 目录清晰度即时收益；改为渐进式（本批已完成：constructors/adapters 落地=推荐目录雏形、dead code 清理=P1-5、knowledge 资产归位）；待未来版本冻结点再执行顶层迁移 |
 
 ---
 
