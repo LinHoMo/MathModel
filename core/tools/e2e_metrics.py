@@ -3,7 +3,7 @@
 """e2e_metrics.py — 八项能力指标的可计算实现（Capability Baseline，P13.0）。
 
 确定性、零 LLM、零第三方依赖。指标定义（唯一真源）:
-    docs/architecture/CAPABILITY_ROADMAP_P13_P17.md §1
+    本文件 docstring（历史路线图文档已随 v3.2.2 归档删除，见 CHANGELOG）
 
 输入:
     project_dir   V3 项目目录（state/{registry,evidence_graph,status,decision_log}.json）

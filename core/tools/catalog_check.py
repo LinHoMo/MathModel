@@ -201,8 +201,6 @@ FORBIDDEN_TERMS = [
 TERMINOLOGY_ALLOWED_PATHS = {
     "docs/ONTOLOGY_TERMINOLOGY.md",          # 映射表本身需要旧词
     "docs/architecture/MODELING_KNOWLEDGE_GOVERNANCE.md",  # §8 历史更正记录
-    "docs/architecture/COMPETITION_INTELLIGENCE_AUDIT.md",  # 历史审计快照
-    "docs/architecture/CAPABILITY_ROADMAP_P13_P17.md",     # 历史路线图
 }
 # 允许旧术语的例外目录片段（research history / 历史报告）
 TERMINOLOGY_ALLOWED_DIR_PARTS = {
