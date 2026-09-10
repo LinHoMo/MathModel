@@ -123,6 +123,8 @@ def test_blind_id_unlinkable():
     assert len(a) == 12
     assert a != b, "uuid4 必须唯一（同参数两次生成不同 ID）"
     assert all(c in "0123456789abcdef" for c in a)
-    # 不可逆：ID 中不得包含可反推的明文片段
-    for needle in ("2020_B", "A", "42", "seed"):
+    # 不可逆：uuid4 无任何入参编码（结构保证，非内容抽查——hex 数字串
+    # 含 "42" 等序列概率 ~12%，出现不代表可反推；入参语义只在 hash 摘要）。
+    # 检查：ID 与入参的编码独立性（同一入参两次生成不同 ID 已在上方断言）。
+    for needle in ("2020_B", "seed"):   # 下划线/小写词绝不会出现在 uuid4 hex
         assert needle not in a
