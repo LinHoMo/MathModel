@@ -111,6 +111,23 @@ def fidelity_checks_from_ir(model_ir: dict, experiment_idx: int = 0,
     _refs_checks("目标", model_ir.get("objectives") or [], "F2")
     _refs_checks("约束", model_ir.get("constraints") or [], "F3")
     _refs_checks("方程", model_ir.get("equations") or [], "F4")
+
+    # F6：约束数值满足——仅当约束带显式可执行断言 check={path,op,value}，
+    # 生成 constraint_satisfaction 检查（run_check 对无断言的如实跳过）。
+    explicit = [c for c in (model_ir.get("constraints") or [])
+                if isinstance(c, dict) and isinstance(c.get("check"), dict)]
+    if explicit:
+        label = f"{len(explicit)} 条显式约束断言"
+        _reg(f"F6 约束数值满足: {label}", "constraint_satisfaction",
+             label, [], {"constraints": explicit})
+
+    # F7：目标值有限——递归扫描执行输出，NaN/Inf → fail（有声明就该有
+    # 有限数值，不能以"没输出"冒充"有限"）。
+    objs = model_ir.get("objectives") or []
+    for o in objs:
+        label = (o.get("expression") or o.get("name")
+                 or o.get("objective_id") or "目标")
+        _reg(f"F7 目标值有限: {label}", "objective_finite", label, [])
     return checks
 
 
