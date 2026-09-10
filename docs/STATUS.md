@@ -58,12 +58,17 @@ Construction 行为？"。
 | **audit 修复（Batch 1–6）** | 证据级全系统审计：P0×12/P1×18/P2×14 修复循环。执行真实化（EXEC 只由 substrate 写、失败真实传播、占位 claim 禁 supports）、选型证据化（无证据不选型）、契约统一（schema 迁 core + register 真 jsonschema 实例校验）、L2 数学检查、**Batch 6 Revision Loop**（机械诊断 diagnosis + 修订草案 + supersede 方向统一 + M1/M2 机械比较 accept 决策） | ✅ 全绿 | 计划 `research/audit/IMPLEMENTATION_PLAN.md`；Batch 6 提交见 git log |
 | **audit Batch 7–10** | 独立复审：E2E loop reviewer **REAL 判定**（M1 FAIL=真实数值违反 0.275>1e-6、execution status 仅来自真实 subprocess、replay 真实重跑）+ TEST_TRUST_SCORE=**80/100**（无 P0 作弊，零 mock，核心集成层真实执行）+ 实验体系审计 + 终审 18 项验收（F4/H5 回填 REAL）。P2×2 已修复（supersedes 方向单一真源、死代码分支删除） | ✅ 完成 | `research/audit/batch7_e2e_review/VERDICT.md`、`batch8_test_trust/TEST_TRUST_SCORE.md`、`batch10_final/FINAL_VERDICT.md` |
 | **治理三大待办** | **Candidate Arena 固化 benchmark**（全池 8 题 44 候选机械选型 + 6 集成测试）→ **Knowledge-guided 正式化**（`core/runtime/modeling/knowledge_guided.py` 机械映射 BZD 5 卡 + 契约 v1.0 + 8 单测）→ **Capability Validation Δscore**（八项指标 + P1 执行级指标双口径，诚实局限声明） | ✅ 完成 | `benchmark/arena/`、`protocol/KNOWLEDGE_GUIDED_CONSTRUCTION.md`、`analysis/CAPABILITY_DELTA_REPORT.md` |
+| **P2-4 修复** | V2 兼容层路径真迁移：`orchestrator.py _skill_path` → `core/legacy/hands/<Hand>/agents/<agent>/SKILL.md`（四手 29 agent 全解析）+ `state.py` 提示同步 + `tests/unit/test_legacy_paths.py`（2 用例） | ✔ 完成 | 本轮 |
+| **P3-2（K004）** | L5 Revision 度量实验：预注册（18 单元 = 6 变体 × 3 种子，M/M/c 模板 + 错误注入 service_rate→ρ>1→L6 FAIL，修订→PASS）+ 真实 subprocess runner + 配对差分 bootstrap CI。**Δ_L6=+1.0000 CI[+1.0000,+1.0000] H1 SUPPORTED**；M1 失败真实性 18/18、M2 通过 18/18、Replay 18/18、修正轮数均值 1.0；报告 `experiments/P15-K004/K004_REPORT.md`（范围如实：单题模板、测 Revision 执行/验证层） | ✅ 完成 | 本轮 |
+| **P2-2/P3-3** | 外部 Constructor 适配器：`core/runtime/constructors/adapters/`——`MathModelAgentAdapter`（MMA 产物目录加载，未配置抛 ConstructorNotConfigured 禁伪造）、`PiAdapter`（同目录模式）、`ReferenceConstructor`（内置最小参考）；`tests/unit/test_constructor_adapters.py` 7 用例；边界：Worker/External Solver/Baseline，不触碰 Runtime 信任核心 | ✅ 完成 | 本轮 |
+| **P3-1（K005）** | Constructor×Runtime 2×2 析因 benchmark：预注册协议（C1 裸 Doubao × C2 MMA × R0/R1，6 题 × 5 rep = 120 runs，配对差分 + bootstrap CI + 析因分解）+ runner 框架（`benchmark/constructor_independent/runner.py`，消费 adapter 产物目录）。**正式 runs 数据收集 BLOCKED（如实）**——需外部 Constructor 会话逐题生成，禁止伪造/回填 | ✅ 框架+预注册（数据待外部收集） | 本轮 |
+| **P3-4** | BZD 知识导入：试点 5 卡（M4 已落地，Prior 知识 + source_type/confidence/status 标注）；经验常数禁令验证（core/ 零引用 6.81% 等）。**目录重组：评估后暂缓**（顶层大迁移 import 回归风险 > 收益，改渐进式：constructors/adapters 已落地、dead code 已清） | ✅ 知识部分（重组暂缓） | 本轮 |
 
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **1094 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **1103 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **58 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |
@@ -87,39 +92,24 @@ Construction 行为？"。
 ```text
 已完成（2026-09-10）：
   audit Batch 1–6：证据级修复循环全绿
-    Batch 1  执行真实化（EXEC 只由 substrate 写 / 失败真实传播 / 占位 claim 禁 supports）
-    Batch 2  选型证据化（无证据不选型 / UNSELECTED 如实推进）
-    Batch 3  MODEL_IR↔Code 映射保真（implementation_ref 断裂抛错）
-    Batch 4  Evidence 边级 provenance（exec_ref）+ K003 execution_writer 唯一写入 + submission_id 去可逆
-    Batch 5  契约统一：schema 迁 core + register 真 jsonschema 实例校验（58 项 validate）
-             + L2 Mathematical 检查（formula_checker 接线）+ validator 模块冒烟
-    Batch 6  Revision Loop 真实化：机械失败诊断（diagnosis artifact + diagnosed_by 边）
-             + 修订草案（不编造数值）+ supersede 方向统一（新取代旧，M1 状态 superseded）
-             + M1/M2 机械比较（revision_acceptance 决策 + selects 边）
-  P1（Model Construction Loop）：C1–C10 全部完成 + VS-001 7/7（2024_A，M1 FAIL→M2 PASS + Replay）
-    + M3 候选竞技场（evidence-based 选型）+ M4 知识引导（BZD 试点卡 5 张）
-  K002 正式实验：契约统一（40 文件冻结）→ 108/108 生成 → 3 evaluator 盲评（κ=0.4345）
-    → 配对分析 → 状态机 CLOSED（RQ1 NEGATIVE，不进 P15.2）
-  K003 预注册：五 Gate 全 PASS（G2 κ=0.712、G4 exec 1.00）→ FROZEN（36 文件冻结）
-  audit Batch 7–10：独立复审 REAL + TEST_TRUST_SCORE 80/100（无 P0 作弊）+ P2×2 修复
-    + 实验体系审计 + 终审 18 项验收 F4/H5 回填 REAL
-  治理三大待办（2026-09-10）：
-    ① Candidate Arena 固化 benchmark（全池 8 题 44 候选机械选型，6 集成测试）
-    ② Knowledge-guided 正式化（core 机械映射模块 + BZD 5 卡 + 契约 v1.0，8 单测）
-    ③ Capability Validation Δscore（八项指标 + P1 执行级指标双口径报告）
+  P1（Model Construction Loop）：C1–C10 全部完成 + VS-001 7/7 + M3/M4
+  K002 正式实验：CLOSED（RQ1 NEGATIVE）；K003 正式实验：CLOSED（POSITIVE）
+  audit Batch 7–10：独立复审 REAL + TEST_TRUST_SCORE 80/100
+  治理三大待办：Candidate Arena 固化 / Knowledge-guided 正式化 / Capability Validation Δscore
+  ROADMAP P0–P3 全部项（2026-09-10 收口）：
+    P0-1~P0-6 ✅（注入通道/validators 挂载/EXEC 来源鉴别/零执行≠PASS/mark_validated 门禁/K003 直写删除）
+    P1-1~P1-5 ✅（fidelity 门/Revision 闭环/Constructor Protocol/MODEL_IR 契约/死代码清理）
+    P2-1 ✅ L6 数值正确性机械判定层（validate_against_gt + 8 题 l6_assertions + F6/F7 + arena 接入）
+    P2-2 ✅ MMA/Pi/Reference 适配器；P2-3 ✅ 检索命中率 87.5%；P2-4 ✅ V2 兼容层路径真迁移
+    P3-1 ✅ K005 2×2 析因 benchmark 框架+预注册（120 runs 设计；正式数据收集 BLOCKED 待外部 Constructor）
+    P3-2 ✅ K004 L5 Revision 度量（Δ_L6=+1.0 CI[1,1] H1 SUPPORTED）
+    P3-3 ✅ Pi Adapter；P3-3b ✅ paper chain 统一（并行会话）；P3-4 ✅ BZD 知识（目录重组渐进式暂缓）
 
-进行中（MainAgent）：| **P1-4（契约唯一真源）** | MODEL_IR schema 唯一真源收敛：core/schemas/v3/model/model_ir.schema.json = 0.8 校准版 + 契约分层（数组元素 required=旧core∩0.8 公共核心；模板承诺字段标 x-template-promise、register 层强制；词表 enum 入模板承诺层；sub_question_binding 统一 string\|array；model_graph/modeling_trace 宽松承载）；research 副本已删；migrate_legacy_format + LEGACY_MODEL_IR.md；K001/K002/K003 冻结基线 revision v1.1 重冻 | ✅ 完成 | 本轮（1067/4） |
-| **P3-1（E2B Backend）** | `core/runtime/execution/e2b_adapter.py`：E2BAdapter（available 探测/沙箱执行/token 签发）+ select_execution_adapter 工厂（可用自动切换、不可用回退 Local） | ✅ 完成 | 本轮 |
-| **P3-2（确定性指标）** | claim_evidence_coverage 机械遍历 + baseline_comparison 纯数值判定（tie/different/incomparable），无 LLM 调用；vs001 fixture 迁移到 core schema 唯一真源（mir_compat） | ✅ 完成 | 本轮（并行收口） |
-| **P1-2（Revision Loop 自动闭环）** | `_auto_revision` 节点内闭环：外部注入 revision_bundles 后同一 model_validation 节点执行内完成 M2 注册（revision_of 边 runtime 生成）→ M1 收口（supersede + supersedes 边 runtime 生成）→ M2 重跑 EXEC/R/VR → PASS；无注入 FAIL 如实（revision_blocked）、M2 失败 FAIL 如实（revision_failed）；独立 API do_model_revision/do_model_re_execute；验收 test_auto_revision_loop 3/3 | ✅ 完成 | 本轮（1076/4） |
-
-
-  ① K003 正式实验：66 runs → 独立盲评（3 evaluator，198 评分 + 对拍一致）→ 配对分析 → P15-K003-REPORT.md → 状态机 CLOSED ✅（已完成）
-  ② 战略级终审（Organizer `o_0001kxvAFGc`）：8 审计域（A-H）+ 交叉验证 + 三轮自我反驳 → 6/7 决策文档已落盘
-     （STRATEGIC_VERDICT / ARCHITECTURE_FINAL / CONSTRUCTOR_INTEGRATION_PLAN / AGENT_AUTHORITY_MODEL /
-       EXPERIMENT_STRATEGY / MODEL_CONSTRUCTION_GAP；ROADMAP 待产出）→ 审计结论与 K003 一致：
-       "验证义务+执行闭环是护城河，Constructor 层可替换"
-  ③ 终审完成后：与 K001/K002/K003 三实验对比表、P16 决策正式落定
+进行中（MainAgent）：无 —— ROADMAP 全项已处理完毕
+待办：
+  ① K005 正式 120 runs 数据收集（需外部 Constructor 会话：裸 Doubao + MathModelAgent 逐题生成，禁止伪造）
+  ② P3-4 目录顶层重组（渐进式，待未来冻结点）
+  ③ 终审完成后的三实验对比表与 P16 决策正式落定
 ```
 
 ## 风险与待办
