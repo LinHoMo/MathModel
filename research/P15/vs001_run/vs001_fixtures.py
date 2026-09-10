@@ -355,6 +355,7 @@ def solve(inputs):
         "head_speeds": head_speeds,
         "head_theta": {{str(int(T)): theta_at[T] for T in times}},
         "pair_distances": pair_distances,
+        "R_spiral": {{str(int(T)): R_A - b * theta_at[T] for T in times}},
         "diagnostics": {{"solver": "euler+spiral_chord_bisection",
                         "euler_dt": 0.01, "handles": N,
                         "ell_head": ell_head, "ell_body": ell_body}},
@@ -419,6 +420,18 @@ def _enrich_schema_required(d: dict) -> dict:
 
 M1_DICT = _enrich_schema_required(M1_DICT)
 M2_DICT = _enrich_schema_required(M2_DICT)
+
+# P0-1 契约：MODEL_IR 声明变量 → 代码输出 key 的显式翻译表（可审计）。
+# x_i/y_i 为向量输出（positions[].points 数组），theta→head_theta、
+# R_spiral→R_spiral、v_i→head_speeds（dict 按时间索引）。fidelity 据此做
+# 结构映射校验；容器输出（positions）只做 key 存在性判定，范围校验跳过。
+OUTPUT_MAPPING = {
+    "x_i": "positions",
+    "y_i": "positions",
+    "theta": "head_theta",
+    "R_spiral": "R_spiral",
+    "v_i": "head_speeds",
+}
 
 VALIDATION_SPEC = {
     "constraint_tolerance": 1e-6,

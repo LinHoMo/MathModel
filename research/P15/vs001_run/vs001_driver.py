@@ -24,7 +24,9 @@ if str(REPO / "core") not in sys.path:
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from vs001_fixtures import C1_CODE, C2_CODE, M1_DICT, M2_DICT, VALIDATION_SPEC  # noqa: E402
+from vs001_fixtures import (  # noqa: E402
+    C1_CODE, C2_CODE, M1_DICT, M2_DICT, OUTPUT_MAPPING, VALIDATION_SPEC,
+)
 
 from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
 from runtime.execution.session import RuntimeSession  # noqa: E402
@@ -66,6 +68,7 @@ def inject(session, mir_dict, code, workdir):
     shared["external_model_irs"] = {"Q001": mir_dict}
     shared["external_code"] = {"Q001": code}
     shared["validation_specs"] = {"Q001": VALIDATION_SPEC}
+    shared["output_mappings"] = {"Q001": OUTPUT_MAPPING}
     shared["_workdir"] = str(workdir)
 
 

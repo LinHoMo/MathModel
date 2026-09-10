@@ -397,13 +397,28 @@ class DefaultNodeExecutor:
                 return c.get("code") or None
         return None
 
+    def _output_mapping_for(self, qid: str) -> dict:
+        """外部 Constructor 声明的变量→输出 key 映射（shared["output_mappings"]）。
+
+        P0-1 契约：MODEL_IR 声明的变量（x_i/y_i 等）在代码输出中可能以
+        容器/向量形式存在（如 positions 数组）。output_mapping 是外部
+        Constructor 交付 code 时显式声明的翻译表（同 codegen.py 契约），
+        fidelity 据此做结构映射校验；未声明返回 {}（如实按字面名匹配）。
+        """
+        return dict((self.shared.get("output_mappings") or {}).get(qid) or {})
+
     def _register_code(self, qid: str, mir_id: str, code: str,
                        node_id: str) -> str:
-        """L0 ABI 校验 + 登记 code Artifact（幂等：同 hash 复用）+ implemented_by 边。"""
+        """L0 ABI 校验 + 登记 code Artifact（幂等：同 hash 复用）+ implemented_by 边。
+
+        data 契约（对齐 codegen.register_code）：code / code_hash / abi /
+        model_id / output_mapping（声明名→输出 key，可审计）。
+        """
         if "def solve(inputs)" not in code:
             raise HandlerError(
                 f"{qid}: code 不满足固定 ABI（必须含 def solve(inputs) -> outputs）")
         code_hash = hashlib.sha256(code.encode("utf-8")).hexdigest()
+        mapping = self._output_mapping_for(qid)
         for a in self.registry.list_by_type("code"):
             if a.question == qid and a.status not in _TERMINAL \
                     and a.data.get("code_hash") == code_hash:
@@ -418,7 +433,8 @@ class DefaultNodeExecutor:
             question=qid, depends_on=[mir_id],
             data={"code": code, "code_hash": code_hash,
                   "abi": "def solve(inputs) -> outputs",
-                  "model_id": mir_id},
+                  "model_id": mir_id,
+                  "output_mapping": mapping},
             activate=True, created_by=node_id)
         self.graph.add_relation(mir_id, "implemented_by", art.artifact_id)
         return art.artifact_id
@@ -623,6 +639,13 @@ class DefaultNodeExecutor:
                     stderr=f"adapter error: {exc}",
                     provenance={"reason": "adapter_exception"})
             xr.code = code
+            # P0-1：output_mapping 透传进 EXEC provenance——fidelity 校验时
+            # 无需再次显式传入（对齐 codegen.execute_code 契约）
+            _prov = dict(xr.provenance or {})
+            _mapping = (self.registry.get(code_id).data or {}).get("output_mapping")
+            if _mapping:
+                _prov["output_mapping"] = _mapping
+            xr.provenance = _prov
             xart = self.registry.create(
                 "execution_result",
                 title=f"{code_id} 执行结果",
@@ -745,13 +768,50 @@ class DefaultNodeExecutor:
                 if xstatus in ("failed", "timeout", "invalid"):
                     tail = str(xdata.get("stderr", ""))[-300:]
                     failures.append(f"{qid}/{xid}: {xstatus} — {tail}")
+                    continue
+                # P0-1：执行成功后再做 fidelity（只写报告不注册 VR）
+                if xstatus == "success":
+                    fid = self._fidelity_of(qid, xid)
+                    if fid is not None and fid.get("fidelity_status") == "misaligned":
+                        bad = [c for c in fid.get("checks") or [] if not c.get("passed")]
+                        names = "; ".join(str(c.get("name", "?")) for c in bad[:5])
+                        failures.append(
+                            f"{qid}/{xid}: fidelity misaligned "
+                            f"(score={fid.get('fidelity_score')}) — {names}")
         if failures:
             return NodeResult(
                 FAIL,
                 f"执行 {n} 个模型：{len(failures)} 个失败（{failures[0][:220]}）",
                 outputs={"artifacts": [], "evidence": ev, "failures": failures})
-        return NodeResult(PASS, f"执行 {n} 个模型（真实 subprocess）",
+        return NodeResult(PASS, f"执行 {n} 个模型（真实 subprocess + fidelity）",
                           outputs={"artifacts": [], "evidence": ev})
+
+    def _fidelity_of(self, qid: str, exec_id: str) -> dict | None:
+        """P0-1：对成功 EXEC 跑 MODEL_IR↔Code fidelity（不注册 VR，只写报告）。
+
+        从 EXEC.data.model_id 反查对应 MIR；找不到 MIR/无 registry 路径时返回
+        None（如实不判，不编造 aligned）。项目根目录从 registry 路径推导
+        （<project>/state/registry.json → 父父级）。output_mapping 回退读取
+        EXEC provenance（_register_code 已存 CODE artifact 并由 execute_code
+        透传）。
+        """
+        xart = self.registry.get(exec_id)
+        if xart is None:
+            return None
+        mir_id = (xart.data or {}).get("model_id")
+        if not mir_id:
+            return None
+        mir_art = self.registry.get(mir_id)
+        if mir_art is None:
+            return None
+        reg_path = getattr(self.registry, "path", None)
+        if reg_path is None:
+            return None
+        project_dir = Path(reg_path).parent.parent
+        from runtime.execution.fidelity import verify_fidelity
+        return verify_fidelity(project_dir, dict(mir_art.data or {}),
+                               exec_id, register_vr=False,
+                               registry=self.registry)
 
     def do_model_validation(self, node_id: str) -> NodeResult:
         """C8/P1-M3 DAG 节点：基于真实数值验证各问题执行结果 → VR（四字段）。

@@ -20,7 +20,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .validation import run_checks, run_check, resolve_output_key
+from .validation import run_checks, run_check, resolve_output_key, _get_path
 
 FIDELITY_ENGINE = "execution.fidelity"
 
@@ -144,34 +144,63 @@ def check_fidelity(model_ir: dict, execution_data: dict,
     # output_key_exists 的 range 检查需要 path 指向解析后的 key：
     # 先做一次 key 解析，把 F5 的 path 回填到实际 key
     results = []
+    skipped: list[dict] = []
+    outputs = execution_data.get("outputs") or {}
     for c in checks:
         if c["kind"] == "output_range" and not c.get("path"):
-            hit = resolve_output_key(execution_data.get("outputs") or {},
-                                     *(c.get("names") or []))
+            hit = resolve_output_key(outputs, *(c.get("names") or []))
             c = {**c, "path": hit or ""}
-        results.append(run_check(c["kind"], execution_data.get("outputs") or {}, c))
+        # P0-1 边界：F5 范围检查要求输出为标量（数值）。当声明变量是向量/结构
+        # 输出（如 positions 列表：变量 x_i/y_i 存在于嵌套结构中）时，无法做
+        # 顶层标量范围判定 → 该项如实跳过（skipped，不计入分母，不误判
+        # misaligned）。铁律：fidelity 是结构映射校验——只对能机械判定的项
+        # 下结论；key 缺失则由 F1（output_key_exists）负责判定，F5 不重复判。
+        if c["kind"] == "output_range" and c.get("path"):
+            val = _get_path(outputs, c["path"])
+            if val is None or isinstance(val, (list, dict, tuple)):
+                skipped.append({**c, "passed": None,
+                                "detail": (f"{c['path']} 为容器/缺失输出，"
+                                           "F5 标量范围不可判定，跳过")})
+                continue
+        results.append(run_check(c["kind"], outputs, c))
     passed = sum(1 for r in results if r["passed"])
-    score = round(passed / len(results), 4) if results else None
+    total = len(results)
+    score = round(passed / total, 4) if total else None
     status = "aligned" if score == 1.0 else "misaligned"
     return {"status": status, "fidelity_score": score,
-            "passed": passed, "total": len(results), "checks": results}
+            "passed": passed, "total": total, "checks": results,
+            "skipped": skipped}
 
 
 def verify_fidelity(project_dir: str | Path, model_ir: dict, exec_id: str,
                     experiment_idx: int = 0,
-                    output_mapping: dict | None = None) -> dict:
+                    output_mapping: dict | None = None,
+                    register_vr: bool = True,
+                    registry: Any | None = None) -> dict:
     """端到端：从 registry 取 execution_result，做 fidelity 检查，
     注册 VR（provenance 标 execution.fidelity）+ 写 fidelity 报告文件。
 
+    register_vr=False（P0-1 生产 DAG 接入）：只做检查 + 写报告文件，**不注册
+    verification_result / verified_by 边**——避免 fidelity VR 被 C8
+    do_model_validation 的 _active_vr_of 幂等复用而跳过真实数值验证
+    （fidelity 是结构映射检查，不是数值验证）。
+
+    registry（可选）：生产 DAG 内调用时传入内存 registry（避免从磁盘重读——
+    step 阶段 registry 尚未 checkpoint）；None 时从 project_dir 磁盘加载
+    （CLI 独立路径兼容）。
+
     返回 {verification_id, fidelity_status, fidelity_score, passed, total,
-          checks, report_path}。
+          checks, skipped, report_path}。
     """
     from runtime.artifacts.registry import ArtifactRegistry
     from runtime.execution.validation import validate_execution
 
     project_dir = Path(project_dir)
-    reg = ArtifactRegistry(project_dir / "state" / "registry.json")
-    reg.load()
+    if registry is None:
+        reg = ArtifactRegistry(project_dir / "state" / "registry.json")
+        reg.load()
+    else:
+        reg = registry
     art = reg.get(exec_id)
     if art is None:
         raise ValueError(f"execution_result 不存在: {exec_id}")
@@ -184,33 +213,38 @@ def verify_fidelity(project_dir: str | Path, model_ir: dict, exec_id: str,
 
     fid = check_fidelity(model_ir, exec_data, experiment_idx, output_mapping)
     checks = fid["checks"]
-    # 复用 VR 框架注册验证产物
-    vr = validate_execution(project_dir, exec_id, checks,
-                            provenance={"engine": FIDELITY_ENGINE,
-                                        "experiment_idx": experiment_idx,
-                                        "fidelity_status": fid["status"],
-                                        "output_mapping": output_mapping})
+    verification_id = ""
+    if register_vr:
+        # 复用 VR 框架注册验证产物
+        vr = validate_execution(project_dir, exec_id, checks,
+                                provenance={"engine": FIDELITY_ENGINE,
+                                            "experiment_idx": experiment_idx,
+                                            "fidelity_status": fid["status"],
+                                            "output_mapping": output_mapping})
+        verification_id = vr.verification_id
     # fidelity 报告文件（与 execution 同目录系，K002 测量层直接消费）
     rep_dir = project_dir / "state" / "fidelity"
     rep_dir.mkdir(parents=True, exist_ok=True)
     rep_path = rep_dir / f"{exec_id}.json"
     report = {
         "execution_id": exec_id,
-        "verification_id": vr.verification_id,
+        "verification_id": verification_id,
         "fidelity_status": fid["status"],
         "fidelity_score": fid["fidelity_score"],
         "passed": fid["passed"],
         "total": fid["total"],
         "checks": fid["checks"],
+        "skipped": fid.get("skipped") or [],
         "engine": FIDELITY_ENGINE,
     }
     rep_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8")
-    return {"verification_id": vr.verification_id,
+    return {"verification_id": verification_id,
             "fidelity_status": fid["status"],
             "fidelity_score": report["fidelity_score"],
             "passed": fid["passed"], "total": fid["total"],
-            "checks": fid["checks"], "report_path": str(rep_path)}
+            "checks": fid["checks"], "skipped": fid.get("skipped") or [],
+            "report_path": str(rep_path)}
 
 
 def main(argv: list[str] | None = None) -> int:
