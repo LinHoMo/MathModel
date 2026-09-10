@@ -137,6 +137,8 @@ py -3.12 -m pytest tests -q                            # 单元/集成/端到端
 Modeling-Harness/
 ├── src/modeling_harness/            # 引擎（唯一可复用资产，src-layout，LLM-free 零运行时依赖）
 │   ├── cli/                         # 统一入口 mh（main.py）+ 各子命令（validate/catalog/doctor/new-project/…）
+│   ├── catalog/                     # 元数据双视图单一真源（catalog.yaml 聚合入口；model_families.yaml 已 frozen）
+│   ├── profiles/                    # 场景 Profile：competition/（cumcm、mcm）+ research/（general）
 │   ├── runtime/                     # V3 认知运行时：artifacts / state / graph / execution / modeling / decisions
 │   ├── roles/  workflows/           # 4 角色（analyst/modeler/experimenter/critic）/ DAG（YAML 定义）
 │   ├── validators/                  # evidence / quality / modules（L1–L6 门禁）
@@ -144,7 +146,6 @@ Modeling-Harness/
 │   ├── domains/  adapters/  profiles/
 │   ├── skills/  knowledge/  env/  templates/  utils/
 ├── scripts/                         # 一次性运维/迁移脚本（migrate_legacy_projects.py）
-├── catalog/                         # 双视图元数据索引（单一真源；catalog.yaml 为聚合入口；model_families.yaml 已 frozen）
 ├── research/                        # 研究实验（P15：K001/K002/P1；bench 运行）——带实验专属脚本
 ├── projects/                        # 用户运行实例（仅 new_project.py 创建）
 ├── docs/                            # 架构与状态文档（architecture/ 为真源，STATUS.md 为状态唯一真源）

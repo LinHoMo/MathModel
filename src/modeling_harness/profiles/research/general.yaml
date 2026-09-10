@@ -1,0 +1,10 @@
+# general.yaml — 科研通用 profile（research）
+# 定位：科研场景（论文/报告/复现）的建模工作流覆盖层。
+# 与竞赛 profile 的差异：无赛事参数约束，强调迭代式建模、严格证据门禁与
+# 可归档的模型文档产出；具体实验/测量参数由 env/schema.yaml 与项目 state 承载。
+# 覆盖：当前不调整 base 4 阶段（问题分析 → 建模 → 实验 → 证据，科研流程同构）；
+#       扩展点见 profiles/README.md（如 insert_after 迭代修订 stage、add_nodes 归档节点）。
+schema_version: 3
+kind: research
+name: general
+description: 科研通用 profile（V3）：迭代式建模 + 严格证据门禁 + 可归档模型文档；无赛事参数约束。

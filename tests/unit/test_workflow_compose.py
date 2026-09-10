@@ -151,3 +151,34 @@ class TestComposer:
         for f in sorted(WF.rglob("*.yaml")):
             data = loads(f.read_text(encoding="utf-8"))
             assert isinstance(data, dict), f
+
+
+class TestProfiles:
+    """profiles/ 两套场景（competition / research）加载与组合。"""
+
+    def test_available_profiles(self):
+        from modeling_harness.profiles import AVAILABLE_PROFILES
+        assert set(AVAILABLE_PROFILES["competition"]) >= {"cumcm", "mcm"}
+        assert "general" in AVAILABLE_PROFILES["research"]
+
+    def test_load_research(self):
+        comp = WorkflowComposer(WF)
+        prof = comp.load_research("general")
+        assert prof["kind"] == "research"
+        assert prof["schema_version"] == 3
+
+    def test_compose_research(self):
+        comp = WorkflowComposer(WF)
+        dag = comp.compose_research("general")
+        assert dag.validate() == []
+
+    def test_compose_research_matches_base_nodes(self):
+        comp = WorkflowComposer(WF)
+        dag = comp.compose_research("general")
+        for nid in ("problem_analysis", "model_construction", "evidence_gate"):
+            assert nid in dag.nodes, nid
+
+    def test_missing_research_profile_raises(self):
+        comp = WorkflowComposer(WF)
+        with pytest.raises(ValueError):
+            comp.load_research("no-such-profile")

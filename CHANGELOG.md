@@ -2,6 +2,24 @@
 
 本文件记录 Modeling-Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
+## 2026-09-10 — Profiles package (competition / research) + T-CONF closures
+
+### 变更
+- **profiles/ 两套场景（ADR-0007）**：新建 `src/modeling_harness/profiles/` 包
+  （仅标准库依赖；注册与寻址 `profile_path` / `AVAILABLE_PROFILES`）。
+  competition profile（cumcm / mcm）自 `workflows/competition/` 迁入；
+  新增科研 profile `research/general.yaml`；`composer.py` 接入
+  `load_research` / `compose_research`（对外契约不变，异常仍为 ComposeError）。
+- **发行名（T-CONF-007 裁定）**：`modeling-harness-skills` → `modeling-harness`
+  （PyPI 实测未占用）。
+- **domains/ 冻结（T-CONF-006 裁定）**：标注预定义契约层（README + docstring
+  声明接入条件），不删除不接入。
+- **MATHMODEL_AGENT_API 保留（T-CONF-008 裁定）**：外部专名，docstring 提及。
+
+### 验证
+- composer 测试 23 passed（新增 TestProfiles 5 项）；
+- 四件套：validate / catalog / terminology / pytest 全绿（数字以 docs/STATUS.md 实测为准）。
+
 ## 2026-09-10 — Post-rebuild hardening: real input check, retired archive, top-level domains/adapters
 
 ### 变更

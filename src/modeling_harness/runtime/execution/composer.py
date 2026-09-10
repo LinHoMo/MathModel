@@ -17,6 +17,8 @@ from pathlib import Path
 from .dag import Node, WorkflowDAG
 from .yamlio import load_file
 
+from modeling_harness.profiles import ProfileError, profile_path
+
 
 class ComposeError(ValueError):
     """Workflow 组合非法。"""
@@ -49,29 +51,38 @@ class WorkflowComposer:
         return stage
 
     def load_competition(self, competition: str) -> dict:
-        path = self.dir / "competition" / f"{competition}.yaml"
-        if not path.exists():
-            raise ComposeError(f"competition profile 不存在: {path}")
-        return load_file(path)
+        """加载赛事 profile（profiles/competition/<name>.yaml，单一真源）。"""
+        try:
+            return load_file(profile_path("competition", competition))
+        except ProfileError as exc:
+            raise ComposeError(str(exc)) from exc
+
+    def load_research(self, research: str) -> dict:
+        """加载科研 profile（profiles/research/<name>.yaml，单一真源）。"""
+        try:
+            return load_file(profile_path("research", research))
+        except ProfileError as exc:
+            raise ComposeError(str(exc)) from exc
 
     # ------------------------------------------------------------ 组合
 
-    def compose(self, competition: str | None = None) -> WorkflowDAG:
-        """组合模板 DAG（未展开 Question；展开用 dag.expand_questions）。"""
+    def _compose(self, profile: dict, label: str) -> WorkflowDAG:
+        """组合模板 DAG（未展开 Question；展开用 dag.expand_questions）。
+
+        profile 为场景覆盖层（competition / research），可调整 stage 列表
+        （remove_stages / insert_after）与节点（add_nodes / remove_nodes）。
+        """
         base = self.load_base()
         stages = list(base["stages"])
 
-        profile: dict = {}
-        if competition:
-            profile = self.load_competition(competition)
-            # profile 可调整 stage 列表（insert / remove）
-            for remove in profile.get("remove_stages", []):
-                if remove in stages:
-                    stages.remove(remove)
-            for ins in profile.get("insert_after", []):
-                after, name = ins.get("after"), ins.get("stage")
-                if name and after in stages:
-                    stages.insert(stages.index(after) + 1, name)
+        # profile 可调整 stage 列表（insert / remove）
+        for remove in profile.get("remove_stages", []):
+            if remove in stages:
+                stages.remove(remove)
+        for ins in profile.get("insert_after", []):
+            after, name = ins.get("after"), ins.get("stage")
+            if name and after in stages:
+                stages.insert(stages.index(after) + 1, name)
 
         dag = WorkflowDAG(
             name=base.get("name", "base"),
@@ -92,14 +103,14 @@ class WorkflowComposer:
             else:
                 prev_stage_last = []
 
-        # 赛事覆盖: 追加 / 移除节点
+        # profile 覆盖: 追加 / 移除节点
         for node_id, fields in (profile.get("add_nodes") or {}).items():
             if node_id in dag.nodes:
-                raise ComposeError(f"赛事 profile 追加了已存在节点: {node_id}")
+                raise ComposeError(f"{label} profile 追加了已存在节点: {node_id}")
             dag.add_node(Node(node_id, **fields))
         for node_id in (profile.get("remove_nodes") or []):
             if node_id not in dag.nodes:
-                raise ComposeError(f"赛事 profile 移除了不存在的节点: {node_id}")
+                raise ComposeError(f"{label} profile 移除了不存在的节点: {node_id}")
             del dag.nodes[node_id]
             # 清理悬空依赖
             for nid, node in dag.nodes.items():
@@ -111,6 +122,16 @@ class WorkflowComposer:
         if problems:
             raise ComposeError(f"组合后的 DAG 非法: {'; '.join(problems)}")
         return dag
+
+    def compose(self, competition: str | None = None) -> WorkflowDAG:
+        """组合赛事场景 DAG：base + competition profile（未展开 Question）。"""
+        profile = self.load_competition(competition) if competition else {}
+        return self._compose(profile, "赛事")
+
+    def compose_research(self, research: str | None = None) -> WorkflowDAG:
+        """组合科研场景 DAG：base + research profile（未展开 Question）。"""
+        profile = self.load_research(research) if research else {}
+        return self._compose(profile, "科研")
 
     def _merge_stage(self, dag: WorkflowDAG, stage: dict, stage_name: str,
                      cross_deps: list[str]) -> None:
