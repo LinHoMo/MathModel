@@ -1,0 +1,142 @@
+{
+ "analysis": "P2-3 retrieval hit-rate（检索失败 vs 知识无用 判别）",
+ "n_problems": 8,
+ "hit@3": 7,
+ "hit@5": 7,
+ "hit@10": 7,
+ "rows": [
+  {
+   "problem": "2011_B",
+   "ground_truth_card": "mc-dp",
+   "top10": [
+    [
+     "mc-dp",
+     63
+    ]
+   ],
+   "gt_rank": 1,
+   "hit@3": true,
+   "hit@5": true,
+   "hit@10": true
+  },
+  {
+   "problem": "2017_B",
+   "ground_truth_card": "mc-ols",
+   "top10": [
+    [
+     "mc-ols",
+     59
+    ],
+    [
+     "mc-nsga2",
+     56
+    ]
+   ],
+   "gt_rank": 1,
+   "hit@3": true,
+   "hit@5": true,
+   "hit@10": true
+  },
+  {
+   "problem": "2018_A",
+   "ground_truth_card": "mc-numerical-pde",
+   "top10": [
+    [
+     "mc-numerical-pde",
+     59
+    ],
+    [
+     "mc-nsga2",
+     56
+    ]
+   ],
+   "gt_rank": 1,
+   "hit@3": true,
+   "hit@5": true,
+   "hit@10": true
+  },
+  {
+   "problem": "2018_B",
+   "ground_truth_card": "mc-dp",
+   "top10": [
+    [
+     "mc-dp",
+     56
+    ]
+   ],
+   "gt_rank": 1,
+   "hit@3": true,
+   "hit@5": true,
+   "hit@10": true
+  },
+  {
+   "problem": "2019_C",
+   "ground_truth_card": "mc-queuing-theory",
+   "top10": [
+    [
+     "mc-queuing-theory",
+     62
+    ]
+   ],
+   "gt_rank": 1,
+   "hit@3": true,
+   "hit@5": true,
+   "hit@10": true
+  },
+  {
+   "problem": "2020_B",
+   "ground_truth_card": "mc-dp",
+   "top10": [
+    [
+     "mc-dp",
+     62
+    ]
+   ],
+   "gt_rank": 1,
+   "hit@3": true,
+   "hit@5": true,
+   "hit@10": true
+  },
+  {
+   "problem": "2022_C",
+   "ground_truth_card": "mc-kmeans",
+   "top10": [
+    [
+     "mc-kmeans",
+     69
+    ]
+   ],
+   "gt_rank": 1,
+   "hit@3": true,
+   "hit@5": true,
+   "hit@10": true
+  },
+  {
+   "problem": "2024_A",
+   "ground_truth_card": "mc-numerical-pde",
+   "top10": [
+    [
+     "mc-nsga2",
+     58
+    ],
+    [
+     "mc-ga",
+     55
+    ],
+    [
+     "mc-pso",
+     55
+    ],
+    [
+     "mc-sa",
+     55
+    ]
+   ],
+   "gt_rank": null,
+   "hit@3": false,
+   "hit@5": false,
+   "hit@10": false
+  }
+ ],
+ "verdict": "hit@3>=75%：检索基本可靠 → K001 negative 不是「检索失败」→ 指向知识效用/剂量/测量维度（与 K001 ATTRIBUTION 一致）"
+}

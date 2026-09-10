@@ -49,7 +49,10 @@ outputs:
 
 ### Step 4: 登记后果
 
-- PASS: E/R artifacts `mark_validated("experiment-critic", report)`；灵敏度/基线结果打 tags（sensitivity/baseline，供 evidence_gate E8 检查）。
+- PASS: 把评审结论写入 `<project>/reviews/experiment-critic-<artifact>.md`
+  （含通过/失败理由与证据引用）；灵敏度/基线结果打 tags
+  （sensitivity/baseline，供 evidence_gate E8 检查）。Agent 无权直接
+  标记 validated，由 runtime 验证管线登记（The Agent Is Not The State）。
 - FAIL: 需要补实验 → 按反馈环回 experiment（Qi）；选型问题 → invalidate 决策回 model_selection。
 
 ## Self-Check

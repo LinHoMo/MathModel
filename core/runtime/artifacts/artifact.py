@@ -170,7 +170,12 @@ class Artifact:
 
     def mark_validated(self, validator: str, report: dict | None = None,
                        by: str = "") -> "Artifact":
-        """active → validated，并记录验证证据。"""
+        """active → validated，并记录验证证据。
+
+        仅供 Runtime 验证管线内部调用（registry.mark_validated 已做调用方
+        白名单门禁，P0-5）。外部 Agent 无权直接标记 validated——Agent 只能
+        提交 review report，由 runtime 验证管线登记。
+        """
         self.transition("validated", by=by or validator,
                         reason=f"validated by {validator}")
         self.validation = {

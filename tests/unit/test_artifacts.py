@@ -205,7 +205,7 @@ class TestRegistry:
         reg = ArtifactRegistry(path)
         reg.create("question", title="Q1", activate=True)
         m = reg.create("model", title="M", question="Q001", activate=True)
-        reg.mark_validated(m.artifact_id, "model-critic")
+        m.mark_validated("model-critic")
         reg.save()
         reg2 = ArtifactRegistry(path)
         assert len(reg2) == 2
@@ -215,7 +215,7 @@ class TestRegistry:
     def test_versioning_snapshots_and_reset(self, reg):
         reg.create("question", title="Q1", activate=True)
         m = reg.create("model", title="v1 内容", payload=["work/m_v1.md"], activate=True)
-        reg.mark_validated(m.artifact_id, "model-critic")
+        m.mark_validated("model-critic")
         # 内容更新 → v2，状态重置 draft，v1 快照进 history
         m2 = reg.update(m.artifact_id, payload=["work/m_v2.md"], title="v2 内容")
         assert m2.version == 2

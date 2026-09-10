@@ -8,6 +8,7 @@ Artifact contract 的 relations 字段维护 graph 同步过来的只读视图�
 
 from __future__ import annotations
 
+import inspect
 import json
 import os
 import tempfile
@@ -18,6 +19,32 @@ from .ids import ARTIFACT_TYPES, IDFormatError, format_id, is_valid_id
 from .lifecycle import LifecycleError, assert_transition, is_terminal
 
 REGISTRY_VERSION = 3
+
+# P0-5（终审 ROADMAP）：mark_validated 调用方白名单——仅 Runtime 验证
+# 管线可标记 validated。判定依据=调用栈中第一个非本模块帧的真实文件路径
+# （不信任任何显式传入的 caller 参数，防 Agent 伪装）。
+VALIDATION_CALLER_ALLOWED_SUBSTR = (
+    "core/runtime/execution/validators.py",
+    "core/runtime/execution/handlers.py",
+)
+
+
+def _caller_path() -> str | None:
+    """调用栈中第一个非本模块（registry/artifact）帧的规范化文件路径。"""
+    frame = inspect.currentframe()
+    try:
+        frame = frame.f_back if frame else None
+        while frame:
+            fname = frame.f_code.co_filename or ""
+            norm = os.path.normpath(fname).replace("\\", "/")
+            if ("core/runtime/artifacts/registry.py" in norm
+                    or "core/runtime/artifacts/artifact.py" in norm):
+                frame = frame.f_back
+                continue
+            return norm
+        return None
+    finally:
+        del frame
 
 
 class RegistryError(ValueError):
@@ -281,7 +308,30 @@ class ArtifactRegistry:
         return self.transition(artifact_id, "active", by=by, reason="activated")
 
     def mark_validated(self, artifact_id: str, validator: str,
-                       report: dict | None = None) -> Artifact:
+                       report: dict | None = None, *,
+                       run_record: dict | None = None) -> Artifact:
+        """active → validated（P0-5 门禁）。
+
+        仅允许 Runtime 验证管线（core/runtime/execution/validators.py、
+        handlers.py）调用——Agent/外部代码调 → PermissionError。
+        run_record 必填且须含 run_id 或 hash（验证器运行记录，防伪造
+        验证证据）；validator 键须与实参一致。
+        """
+        if not isinstance(run_record, dict) or not run_record:
+            raise RegistryError(
+                "mark_validated 必须携带 run_record（验证器运行记录："
+                "run_id 或 hash），The Agent Is Not The State")
+        if not (run_record.get("run_id") or run_record.get("hash")):
+            raise RegistryError(
+                "run_record 必须含 run_id 或 hash（验证证据可追溯）")
+        if run_record.get("validator", validator) != validator:
+            raise RegistryError("run_record.validator 与实参 validator 不一致")
+        caller = _caller_path() or ""
+        if not any(ok in caller for ok in VALIDATION_CALLER_ALLOWED_SUBSTR):
+            raise PermissionError(
+                "mark_validated 仅限 Runtime 验证管线调用；Agent 请提交 "
+                "review report 到 <project>/reviews/，由 runtime 登记 "
+                "validated 状态")
         art = self.get(artifact_id)
         art.mark_validated(validator, report)
         self._dirty = True

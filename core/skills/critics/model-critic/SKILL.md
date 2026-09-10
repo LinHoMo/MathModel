@@ -60,7 +60,9 @@ revision_direction: （FAIL 时给 model_construction 的修正方向，可执�
 
 ### Step 4: 登记后果
 
-- PASS: 对 model artifacts 执行 `mark_validated("model-critic", report)`。
+- PASS: 把评审结论写入 `<project>/reviews/model-critic-<artifact>.md`
+  （含通过/失败理由与证据引用）；Agent 无权直接标记 validated，由
+  runtime 验证管线登记 validated 状态（The Agent Is Not The State）。
 - FAIL: 若决策层面问题（选型错了），在 Decision Log `invalidate(D###, ...)` 并说明；建模层面问题则只在批判报告中指出。
 
 ## Self-Check

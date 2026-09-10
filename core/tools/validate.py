@@ -81,6 +81,10 @@ def _is_research_scan_path(p: Path) -> bool:
     for idx, part in enumerate(parts):
         if part == "research":
             return True
+        if part == "tests":
+            # 测试夹具（tests/fixtures/*）不是交付项目实例，排除出论文
+            # 交付校验（全量 pytest 会生成 sample_paper_project 等残留）
+            return True
         if part == "projects" and idx + 1 < len(parts):
             nxt = parts[idx + 1]
             if nxt.startswith(RESEARCH_PROJECT_PREFIXES):

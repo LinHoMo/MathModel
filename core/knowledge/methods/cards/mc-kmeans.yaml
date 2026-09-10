@@ -6,7 +6,7 @@ version: 1
 problem_types: [clustering, classification]
 match:
   requires_data: true
-  sample_size: [medium, large]
+  sample_size: [small, medium, large]
   time_series: false
   multi_objective: false
   handles_uncertainty: false
