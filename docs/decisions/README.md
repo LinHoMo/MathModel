@@ -13,6 +13,11 @@
 | [ADR-0003](ADR-0003-artifact-registry-as-truth.md) | Artifact Registry 作为真源 | Accepted |
 | [ADR-0004](ADR-0004-no-third-party-deps.md) | 运行时零依赖（区分测试依赖） | Accepted |
 | [ADR-0005](ADR-0005-v3-no-backward-compat.md) | V3 不向后兼容 V2 | Accepted |
+| [ADR-0006](ADR-0006-structure-top-level-placement.md) | 顶层结构归位（domains / adapters / retired） | Accepted |
+| [ADR-0007](ADR-0007-profiles-package.md) | profiles 包 | Accepted |
+| [ADR-0008](ADR-0008-problem-understanding-layer.md) | 问题理解层归属与 runtime 修改授权 | Accepted |
+| [ADR-0009](ADR-0009-integration-inside-existing-nodes.md) | 机制在既有节点内集成而非新增 DAG 节点 | Accepted |
+| [ADR-0010](ADR-0010-model-families-revision-r1.md) | model_families 词表修订 r1（CUMCM 2026 结构对齐） | Accepted |
 
 ## 规则
 
