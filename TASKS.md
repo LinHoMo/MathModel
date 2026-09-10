@@ -8,23 +8,18 @@
 
 | ID | Task | Agent | Status | Acceptance |
 |----|------|-------|--------|------------|
-| — | 阶段五（仓库瘦身 P2）待启动；前置：T-CONF-001 | MainAgent | 待确认 | 阶段四已交付，等待用户裁定后进入 |
+| — | 阶段六（版本收口 P2）待启动；前置：T-CONF-002（pyproject version） | MainAgent | 待确认 | 阶段五已交付，等待用户裁定后进入 |
 
 ## Todo / 待办
 
 | ID | Task | Priority | Acceptance | Blocked By |
 |----|------|----------|------------|------------|
-| T-P2-01 | research/P15 移出主树（迁移 ≠ 删除） | P2 | 主仓不含 research/P15；research/README 含新地址 | T-CONF-001 |
-| T-P2-02 | 顶层 V2 schema 归档（legacy/） | P2 | core/schemas/README 明确 v3/ 唯一 canonical | — |
-| T-P2-03 | 空目录与 V2 词清理（paper-cases→cases） | P2 | git status 干净；pytest 通过 | T-CONF-004 |
-| T-P2-04 | pyproject version 同步 | P2 | 若改：与 tag v3.2.2 一致 | T-CONF-002 |
+| T-P2-04 | pyproject version 同步（1.0.0 → 3.2.2？） | P2 | 若改：与 tag v3.2.2 一致 | T-CONF-002 |
 | T-P2-05 | 发布流程文档 docs/RELEASE.md | P2 | 含版本号/tag/release notes/CI 四节 | — |
-| T-P3-01 | K004/K005 实验模板 | P3 | protocol/ 下 2 个模板存在；含 6 节 | — |
-| T-P3-02 | 新实验方向决策（K 系列 vs Constructor 集成） | P3 | 决策记录进 TASKS.md | T-CONF-003 |
-| T-CONF-001 | 待确认：research/P15 独立仓库地址 | — | 地址回填 research/README.md 与 TASKS.md | 用户 |
+| T-P3-01 | K005 模板 + K004 protocol 整理（K004 实验已存在于 P15/k004） | P3 | protocol/ 下模板存在；含 6 节 | — |
+| T-P3-02 | 新实验方向决策（K 系列 vs Constructor 集成实证） | P3 | 决策记录进 TASKS.md | T-CONF-003 |
 | T-CONF-002 | 待确认：pyproject version 是否改为 3.2.2 | — | 裁定后执行 T-P2-04 | 用户 |
-| T-CONF-003 | 待确认：K004/K005 具体研究问题 | — | 裁定后执行 T-P3-01/02 | 用户 |
-| T-CONF-004 | 待确认：paper-cases 更名是否影响外部引用 | — | 引用扫描后裁定 | 用户 |
+| T-CONF-003 | 待确认：K004 已有实验与报告——继续补 K005，还是转向 Constructor 集成实证 | — | 裁定后执行 T-P3-01/02 | 用户 |
 
 ## Done / 已完成
 
@@ -54,4 +49,11 @@
 | T-P1-12 | catalog/README.md（21 行，双视图） | `71a0310` | 2026-09-10 |
 | T-P1-13 | tests/README.md（20 行，分层+夹具） | `71a0310` | 2026-09-10 |
 | T-P1-14 | 14 份 architecture 文档补版本头（Version/Status/Updated） | `71a0310` | 2026-09-10 |
+| T-P2-06 | AGENTS.md 七处修正（六要素/去硬编码/CI 门禁/§5 禁令/§7.1 文档纪律） | `117aecb` | 2026-09-10 |
+| T-P2-07 | 代码内断裂引用修复（e2e_metrics/benchmark/catalog_check） | `0eddf45` | 2026-09-10 |
+| T-P2-08 | 顶层 9 个 V2 schema 归档 legacy/ + 双 README | `596e756` | 2026-09-10 |
+| T-P2-09 | fixture 处置：删 sample_paper_project，保留 sample_incomplete + README | `fdfa2ec` | 2026-09-10 |
+| T-P2-03 | paper-cases → cases 更名（T-CONF-004 裁定：更名保留，117 文件） | `514bb17` | 2026-09-10 |
 | T-CONF-005 | 裁定：VS001 两份报告保留，不删除不合并 | 阶段一裁定（无 commit） | 2026-09-10 |
+| T-CONF-001 | 裁定：P15 **保留在主树**（撤销移出决策；K001–K004 为 Constructor 实验证据） | 用户裁定 + `ae8ca2a` | 2026-09-10 |
+| T-CONF-004 | 裁定：paper-cases 更名 cases 保留（建模知识，非论文产物） | `514bb17` | 2026-09-10 |
