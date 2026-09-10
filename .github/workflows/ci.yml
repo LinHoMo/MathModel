@@ -12,7 +12,8 @@ jobs:
           python-version: '3.12'
       - run: pip install ruff pytest pyyaml jsonschema
       - run: sudo apt-get update && sudo apt-get install -y ripgrep
-      - run: python core/tools/validate.py
-      - run: python core/tools/catalog_check.py --check
-      - run: python core/tools/catalog_check.py --check-terminology
+      - run: python src/modeling_harness/cli/validate.py
+      - run: python src/modeling_harness/cli/catalog_check.py --check
+      - run: python src/modeling_harness/cli/catalog_check.py --check-terminology
+      - run: ruff check src/modeling_harness scripts
       - run: python -m pytest tests -q
