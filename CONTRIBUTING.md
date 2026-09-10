@@ -13,7 +13,25 @@ core 内 LLM-free，不含论文生成，不向后兼容 V2。
 ## 本地环境
 
 - Python：`3.12`（仓库根目录 `.python-version` 已固定，Windows 下用 `py -3.12`）
-- 运行时依赖：**零第三方依赖**（不新增任何第三方运行时依赖是硬约束）
+
+### 运行时零依赖（定位红利）
+
+`core/` 运行时**零第三方依赖**：core 的 import 只能来自标准库与 core 自身。
+新增任何第三方运行时依赖都会被拒绝（见 `docs/decisions/ADR-0004`）。
+
+### 测试环境依赖（与运行时区分）
+
+测试环境依赖以下包（CI 已验证，见 `.github/workflows/ci.yml`）：
+
+| 依赖 | 用途 |
+|---|---|
+| `pytest` | 测试运行器 |
+| `pyyaml` | `test_vocabulary_alias.py` 解析 `catalog/model_families.yaml` |
+| `jsonschema` | schema 实例校验类测试（`test_contract_gate.py` 等） |
+| `ripgrep`（rg） | `test_repo_grep_only_whitelisted` 全仓扫描 |
+| `ruff` | lint |
+
+本地缺依赖时**以 CI 为准**，不以本地残留为准；新增测试依赖必须同步修改 CI 配置。
 
 ## 如何跑测试
 
