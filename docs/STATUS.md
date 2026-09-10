@@ -72,12 +72,13 @@ Construction 行为？"。
 | **2026_A 精细适配 + harness 溯源改进** | ① 原始赛题材料（A/B 题 PDF + 附件）归位 `inputs/`；② **A 题 v1.1 数据驱动边界**：附件1 实测温湿度序列（241 行，0–14400 s 插值）替代指数趋近+阶跃近似，附件2 实测半径（145 行，2.000→1.198 cm）替代 Landau 自算，产出实测/守恒双解对照。**数值**：Q1 末表面 36.7863 °C（v1.0 44.59），Q3 烘干 57.1722 h（v1.0 57.4222，差 0.25），Q4 附件2 驱动 52.3111 h vs Landau 64.5667 h（差 12.26 h，终半径 1.200 vs 1.2721 cm）；空间/时间收敛 + 温度敏感性（参数化 T_air）实测入台账。③ **harness 溯源改进**：`check_numeric_traceability` 增加题面输入 `inputs/problem.txt` 为合法溯源目标（结果→台账、题面常数→题面），消除物理常数误报（物理常数不再压低追溯比例），附 3 单测锁定语义 | ✅ 631 passed，validate 46/0/0，catalog OK，术语 OK | 本轮 |
 | **2026_B 真实模拟器协议构建** | 按《B 题附件2·模拟器通信接口说明及编程指南》构建协议忠实客户端（`SimulatorHTTP`：4 指令、`arena_id`/`position`/`measure_result`/`svd_deg`/`clear_result`，虚拟时间服务端计算）+ 规范忠实本地 Mock（含 1 s 频道切换耗时）。**关键**：真实 API 不返回信号强度 → 策略弃用强度估距，改为纯示向度交会 + 越界检测归航（失联回退最近可测点处理定向盲区）。Mock 演练各 5 组（seed 42..46）：Q3/Q4 清除比例均 1.0000（Q3 虚拟 12918.09 s / 定位清除 8269.47 s；Q4 22592.91 s / 17514.37 s）。**未接官方评测机**（GUI 登录 + 联网 + 测试窗口），如实声明 | ✅ 631 passed，validate 46/0/0，catalog OK，术语 OK | 本轮 |
 | **参数来源门禁（治理加固）** | 新增 L4 门禁 `check_parameter_provenance`：声称 `problem_given` 的**数值参数**，其值必须能在 `inputs/problem.txt` 原文匹配（仅允许 ×10^k 单位换算，k∈[-9,9]）；需经 ÷2 等推导得到的值应标 `derived`。堵住输入侧诚信漏洞（把自建常数标成题面给定）。首跑即揪出 `cumcm2024a:P15`（调头空间半径 4.5 m 实为直径 9 m 的 ÷2 推导，已改标 `derived` 并补 definition）；参数 `source` 词表受控化（6 项）。附 `tests/unit/test_parameter_provenance.py` 5 单测锁定语义 | ✅ 636 passed，validate 47/0/0，catalog OK，术语 OK | 本轮 |
+| **模型质量判据（标准层）+ G3 校准参数门禁** | 判据升 FROZEN（`docs/architecture/MODEL_QUALITY_CRITERIA.md`）：合格线 Gate G1 数值溯源 / G2 参数来源 / **G3 校准参数**（新增）+ 排序线 Rank R1/R2（无真值，标"不可算"不阻塞）。**G3**：`source ∉ {problem_given, derived, convention}` 的数值参数须 (a) `calibration_anchor_ref` 指向 `calibration_anchor` 假设，(b) 台账含 `calibration_sensitivity[pid]`（varied 轴≥2）。TDD 6 单测；**真实数据 RED**：上线即拦 `cumcm2026a:P08/P12`。**实例合规**：A 题 P08→A04、P12→A03 补锚定；`solve_a` 时间常数参数化 + τ 扫描（300/450/600 s → 58.0944/58.1000/58.1111 h）产出 `calibration_sensitivity`。**反向验收**：移除 P08 锚定 → validate FAIL 指名 → 字节级还原后 48/0/0 | ✅ 642 passed，validate 48/0/0，catalog OK，术语 OK | 本轮 |
 
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **636 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
-| 项目级校验 | **47 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
+| 单元/集成/端到端测试 | **642 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
+| 项目级校验 | **48 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 src/modeling_harness/cli/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology` |
 | K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |
