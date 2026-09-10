@@ -278,13 +278,6 @@ class WorkflowEngine:
             self.state.workflow_approve(node_id)
         self._record(node_id, "approved", "human approval granted")
 
-    def unblock(self, node_id: str, reason: str = "manually unblocked") -> None:
-        if node_id not in self.blocked:
-            raise EngineError(f"节点不在阻塞列表: {node_id}")
-        del self.blocked[node_id]
-        self.retries.pop(node_id, None)
-        self._record(node_id, "unblocked", reason)
-
     def reset_to(self, node_id: str) -> set[str]:
         """partial rerun: 重置 node 及其全部下游（其他分支不动）。"""
         if node_id not in self.dag.nodes:

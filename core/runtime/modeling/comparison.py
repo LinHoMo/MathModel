@@ -17,12 +17,8 @@ def _now() -> str:
 
 def _vr_metrics(registry, mir_id: str) -> dict | None:
     """取模型最新活跃 VR 指标；无 VR 返回 None（证据缺失不比较）。"""
-    vrs = [a for a in registry.list_by_type("verification_result")
-           if a.question and not a.status == "superseded"]
-    for vr in vrs:
-        d = vr.data or {}
-        if d.get("execution_id"):
-            continue  # VR 由 execution_id 关联，需按模型反查
+    # P0-4：删除无效循环（for 内仅 continue，无任何逻辑）——
+    # VR 由 execution_id 关联，需按模型反查（_resolve_vr_for_model）
     # 反向关联：VR.data 不含 model_id 时，通过 verified_by 无法反查；
     # 用 execution → implemented_by → model 谱系解析模型绑定。
     return _resolve_vr_for_model(registry, mir_id)

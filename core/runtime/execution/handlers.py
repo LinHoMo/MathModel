@@ -398,14 +398,24 @@ class DefaultNodeExecutor:
         return None
 
     def _output_mapping_for(self, qid: str) -> dict:
-        """外部 Constructor 声明的变量→输出 key 映射（shared["output_mappings"]）。
+        """外部 Constructor 声明的变量→输出 key 映射。
 
         P0-1 契约：MODEL_IR 声明的变量（x_i/y_i 等）在代码输出中可能以
         容器/向量形式存在（如 positions 数组）。output_mapping 是外部
         Constructor 交付 code 时显式声明的翻译表（同 codegen.py 契约），
         fidelity 据此做结构映射校验；未声明返回 {}（如实按字面名匹配）。
+
+        承载位（统一）：优先 shared["output_mappings"][qid]（vs001_driver
+        注入路径），回退 validation_specs[qid].output_mapping（orchestrator
+        注入通道路径——specs.json 是外部 Constructor 交付 validation 义务的
+        标准位置）。
         """
-        return dict((self.shared.get("output_mappings") or {}).get(qid) or {})
+        m = (self.shared.get("output_mappings") or {}).get(qid)
+        if not m:
+            spec = (self.shared.get("validation_specs") or {}).get(qid) or {}
+            if isinstance(spec, dict):
+                m = spec.get("output_mapping")
+        return dict(m or {})
 
     def _register_code(self, qid: str, mir_id: str, code: str,
                        node_id: str) -> str:
@@ -1567,56 +1577,6 @@ class DefaultNodeExecutor:
             self._advance_question(qid, "experimenting")
         return NodeResult(PASS, f"{qid}: 实验链重建（真实执行）",
                           outputs={"artifacts": [], "evidence": ev})
-
-    def _maybe_execute_experiment(self, qid: str, mid: str,
-                                 result_id: str, plan: dict,
-                                 by_node: str) -> None:
-        """P0-E：真实执行集成。
-
-        条件（全部满足才执行）：
-          1. execution_adapter 可用；
-          2. 计划/外部提供可执行 code（plan.data.code 或 info.plan.code）。
-        执行后：
-          - 创建 execution_result artifact（EXEC，一等）；
-          - result.data.status 翻为真实执行状态（success/failed/timeout/invalid）；
-          - result.data.execution_ref 指向 EXEC artifact。
-        不满足条件时静默返回（result 保持 not_executed，外部 executor 回填路径不变）。
-        """
-        if self.execution_adapter is None:
-            return
-        code = None
-        for cand in (plan or {}):
-            if cand == "code":
-                code = plan["code"]
-        if not code:
-            return
-        from runtime.execution.adapters import ExecutionPlan
-        try:
-            xplan = ExecutionPlan(model_id=mid, code=code,
-                                  inputs={"question": qid})
-            xr = self.execution_adapter.execute(xplan)
-        except Exception as exc:
-            # adapter 异常不应中断 V3 管线：登记 invalid 并继续
-            from runtime.execution.adapters import ExecutionResultData
-            xr = ExecutionResultData(
-                execution_id="", model_id=mid, status="invalid",
-                stderr=f"adapter error: {exc}",
-                provenance={"reason": "adapter_exception"})
-        xart = self.registry.create(
-            "execution_result",
-            title=f"{qid} 执行结果",
-            question=qid, depends_on=[result_id],
-            data=xr.to_dict(),
-            activate=True, created_by=by_node)
-        r_art = self.registry.get(result_id)
-        r_art.data = dict(r_art.data or {})
-        r_art.data["status"] = xr.status
-        r_art.data["execution_ref"] = xart.artifact_id
-        if xr.status == "success":
-            r_art.data["value"] = xr.outputs
-        # 证据图：execution_result 产自 experiment 链上的 result
-        self.graph.add_relation(
-            result_id, "executed_by", xart.artifact_id)
 
     def _clear_revalidation_marks(self, qid: str, by_node: str) -> None:
         """P9.5 红队修复（E6 死循环）：链重建/复验即复验通过——
