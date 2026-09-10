@@ -358,7 +358,9 @@ class TestJPaperProjection:
             else:
                 assert arc.claim_id in active_claims
         from runtime.writing.projection import PaperProjection
-        outline = PaperProjection(s.registry, s.graph).project(nar)
+        from runtime.writing.narrative_ir import build_narrative_ir
+        outline = PaperProjection(s.registry, s.graph).project(
+            build_narrative_ir(s.registry, s.graph))
         placed = set()
         for sec in outline["sections"]:
             for c in sec.get("claims", []):
