@@ -83,7 +83,7 @@ def _is_research_scan_path(p: Path) -> bool:
             return True
         if part == "tests":
             # 测试夹具（tests/fixtures/*）不是交付项目实例，排除出论文
-            # 交付校验（全量 pytest 会生成 sample_paper_project 等残留）
+            # 交付校验（全量 pytest 会在 tests/fixtures/ 生成样例项目残留）
             return True
         if part == "projects" and idx + 1 < len(parts):
             nxt = parts[idx + 1]

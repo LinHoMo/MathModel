@@ -19,7 +19,7 @@
 - `tests/fixtures/projects/`：标准项目夹具。
 - `tests/fixtures/scaffolds/`：脚手架快照。
 - `tests/fixtures/sample_incomplete_project/`：不完整项目（校验负例）。
-- `tests/fixtures/sample_paper_project/`：**历史 fixture**（V2 论文链时代遗留，保留供引用）。
+- 历史 `sample_paper_project/` 已删除（T-CONF-005，V2 论文链残留，零引用）。
 
 ## 铁律
 
