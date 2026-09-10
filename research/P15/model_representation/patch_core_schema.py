@@ -3,7 +3,7 @@
 """patch_core_schema.py — core MODEL_IR schema 词表完备化（多行 enum 块替换）"""
 import io
 
-p = "core/schemas/v3/model/model_ir.schema.json"
+p = "src/modeling_harness/schemas/v3/model/model_ir.schema.json"
 t = io.open(p, encoding="utf-8").read()
 
 blocks = [

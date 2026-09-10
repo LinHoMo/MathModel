@@ -14,7 +14,7 @@
     * validate_model_ir(model_ir) -> list[str] —— 结构校验，返回问题清单
       （空列表 = 通过）
 
-required 字段 = core/schemas/v3/model/model_ir.schema.json 顶层 required
+required 字段 = src/modeling_harness/schemas/v3/model/model_ir.schema.json 顶层 required
 （18 字段，与 P15-K002 模板 18 字段承诺对齐）：
     ir_version / model_id / model_family / problem_binding / assumptions /
     variables / parameters / objectives / constraints / mechanisms /
@@ -29,7 +29,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-# 与 core/schemas/v3/model/model_ir.schema.json 顶层 required 一一对应
+# 与 src/modeling_harness/schemas/v3/model/model_ir.schema.json 顶层 required 一一对应
 MODEL_IR_REQUIRED_FIELDS: tuple[str, ...] = (
     "ir_version",
     "model_id",
@@ -145,7 +145,7 @@ class ModelIR:
 def migrate_legacy_format(legacy: dict) -> dict:
     """P1-4：旧格式 → 当前契约格式（幂等，不修改输入）。
 
-    差异（core/schemas/v3/model/model_ir.schema.json 为唯一真源）：
+    差异（src/modeling_harness/schemas/v3/model/model_ir.schema.json 为唯一真源）：
     - 历史 research 产物（K001/K002/K003 预检与正式 run、vs001 演示基线）
       无 code_mapping 字段 → 补默认 {}（该字段非 required）。
     其余 18 个 required 顶层字段在 core 与历史产物间一致，无需迁移。
@@ -273,13 +273,13 @@ def validate_model_ir(model_ir: dict[str, Any]) -> list[str]:
 def _check_l2_mathematical(model_ir: dict[str, Any]) -> list[str]:
     """L2 Mathematical 真实接线（audit FIX-5.3 / P2-02）。
 
-    用 core/validators/modules/formula_checker 对 MODEL_IR 全部数学表达式
+    用 src/modeling_harness/validators/modules/formula_checker 对 MODEL_IR 全部数学表达式
     （objectives/constraints/equations 的 expression/equation 字段）做确定性
     结构检查：括号配对 + LaTeX 语法 + 常见错误（空分母/连续运算符等）。
     只做语法/结构正确性，不推断数学等价性——数值正确性由 execution +
     validation 承担。
     """
-    from validators.modules.formula_checker import check_formulas
+    from modeling_harness.validators.modules.formula_checker import check_formulas
 
     issues: list[str] = []
     expressions: list[tuple[str, str]] = []   # (来源标签, 表达式)

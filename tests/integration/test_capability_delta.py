@@ -12,8 +12,8 @@ from pathlib import Path
 import pytest
 
 _REPO = Path(__file__).resolve().parents[2]
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 
 from research.P15.analysis.capability_delta import (  # noqa: E402
     _load_gt,

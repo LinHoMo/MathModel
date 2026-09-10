@@ -85,10 +85,10 @@ def render_bundle(row: dict, problem: dict) -> str:
 
     knowledge_text = ""
     if row["_knowledge_card"]:
-        card_path = K.ROOT / "core/knowledge/methods/cards" / f"{row['_knowledge_card']}.yaml"
+        card_path = K.ROOT / "src/modeling_harness/knowledge/methods/cards" / f"{row['_knowledge_card']}.yaml"
         knowledge_text = card_path.read_text(encoding="utf-8").strip()
     elif row["_sham_card"]:
-        card_path = K.ROOT / "core/knowledge/methods/cards" / f"{row['_sham_card']}.yaml"
+        card_path = K.ROOT / "src/modeling_harness/knowledge/methods/cards" / f"{row['_sham_card']}.yaml"
         knowledge_text = card_path.read_text(encoding="utf-8").strip()
 
     case_text = ""

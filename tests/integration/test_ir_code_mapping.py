@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 from conftest import CODE, injected_session, mir, validation_spec  # noqa: E402
 
@@ -45,7 +45,7 @@ def test_ir_code_mapping_validated_when_declared(tmp_path):
 def test_ir_code_mapping_mismatch_fails_honestly(tmp_path):
     """声明 implementation_ref=不存在的 model_id（M-OTHER）→ 映射断裂，
     HandlerError 如实传播（run 抛错或节点 FAIL），不产生假 success EXEC。"""
-    from runtime.execution.handlers import HandlerError
+    from modeling_harness.runtime.execution.handlers import HandlerError
     s = _session_with_mir(tmp_path, _mir_with_ref("M-OTHER"))
     try:
         rep = s.run()

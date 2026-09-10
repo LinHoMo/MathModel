@@ -7,14 +7,14 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.execution.composer import WorkflowComposer
-from runtime.roles import RoleError, load_roles, validate_dag_roles
+from modeling_harness.runtime.execution.composer import WorkflowComposer
+from modeling_harness.runtime.roles import RoleError, load_roles, validate_dag_roles
 
-ROLES_ROOT = REPO / "core" / "roles"
+ROLES_ROOT = REPO / "src" / "modeling_harness" / "roles"
 
 
 class TestRoleLibrary:
@@ -58,26 +58,26 @@ class TestRoleLibrary:
 class TestDagRoleValidation:
     def test_composed_workflow_roles_all_valid(self):
         """真实 base workflow 组合后，所有节点 role 引用合法且在 executes 内。"""
-        composer = WorkflowComposer(REPO / "core" / "workflows")
+        composer = WorkflowComposer(REPO / "src" / "modeling_harness" / "workflows")
         dag = composer.compose()
         roles = load_roles(ROLES_ROOT)
         problems = validate_dag_roles(dag, roles)
         assert problems == []
 
     def test_expanded_workflow_roles_valid(self):
-        composer = WorkflowComposer(REPO / "core" / "workflows")
+        composer = WorkflowComposer(REPO / "src" / "modeling_harness" / "workflows")
         dag = composer.compose_executable(["Q001", "Q002"])
         roles = load_roles(ROLES_ROOT)
         assert validate_dag_roles(dag, roles) == []
 
     def test_unknown_role_detected(self):
-        from runtime.execution.dag import Node, WorkflowDAG
+        from modeling_harness.runtime.execution.dag import Node, WorkflowDAG
         dag = WorkflowDAG(nodes={"n1": Node("n1", role="ghost")})
         problems = validate_dag_roles(dag, {"modeler": load_roles(ROLES_ROOT)["modeler"]})
         assert any("ghost" in p for p in problems)
 
     def test_node_outside_executes_detected(self):
-        from runtime.execution.dag import Node, WorkflowDAG
+        from modeling_harness.runtime.execution.dag import Node, WorkflowDAG
         roles = load_roles(ROLES_ROOT)
         # analyst role 不执行 model_selection（v3 中由 modeler 执行）
         dag = WorkflowDAG(nodes={

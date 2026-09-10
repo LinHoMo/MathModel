@@ -8,7 +8,7 @@
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
-from core.templates.figures.matplotlib_style_constants import (
+from modeling_harness.templates.figures.matplotlib_style_constants import (
     COLORS, PALETTE, FIG_SINGLE, RC_PARAMS, apply_style,
 )
 

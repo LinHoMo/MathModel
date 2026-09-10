@@ -12,13 +12,13 @@ import json
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "tests" / "integration"))
 
 import pytest
 
 from _real_session import _minimal_mir  # noqa: E402
-from runtime.modeling.model_ir import ModelIR, ModelIRBuilder  # noqa: E402
+from modeling_harness.runtime.modeling.model_ir import ModelIR, ModelIRBuilder  # noqa: E402
 
 MINIMAL = dict(_minimal_mir("Q001"))  # 复用 18 字段合规契约样例
 MINIMAL["problem_binding"]["problem_sha256"] = "a" * 64  # schema 要求 64 hex
@@ -31,7 +31,7 @@ def test_code_mapping_passes_jsonschema():
     assert m.code_mapping == {"eq1": "objective_expr"}
     d = m.to_dict()
     assert d["code_mapping"] == {"eq1": "objective_expr"}
-    schema_path = REPO / "core" / "schemas" / "v3" / "model" / "model_ir.schema.json"
+    schema_path = REPO / "src" / "modeling_harness" / "schemas" / "v3" / "model" / "model_ir.schema.json"
     if schema_path.exists():
         import jsonschema
         schema = json.loads(schema_path.read_text(encoding="utf-8"))

@@ -35,9 +35,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO))
-sys.path.insert(0, str(REPO / "core" / "tools"))
+sys.path.insert(0, str(REPO / "src" / "tools"))
 for _cat in ("runtime", "validation", "evaluation", "knowledge"):
-    sys.path.insert(0, str(REPO / "core" / "tools" / _cat))
+    sys.path.insert(0, str(REPO / "src" / "tools" / _cat))
 
 GATE_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(GATE_DIR))

@@ -11,9 +11,9 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.codegen import run_code_pipeline
+from modeling_harness.runtime.execution.codegen import run_code_pipeline
 
 MODEL_IR = json.load(open(
     REPO / "research/P15/experiments/P15-K001/runs"

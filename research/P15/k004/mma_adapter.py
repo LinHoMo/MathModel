@@ -18,7 +18,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from runtime.constructors.protocol import ConstructorAdapter, ConstructionBundle
+from modeling_harness.runtime.constructors.protocol import ConstructorAdapter, ConstructionBundle
 
 
 class MathModelAgentAdapter(ConstructorAdapter):
@@ -45,7 +45,7 @@ class MathModelAgentAdapter(ConstructorAdapter):
         决策回退 ref/gen Constructor；K004 设计允许 Constructor 替换）。
         """
         if shutil.which(self.entry.split()[0]) is None and self.workdir is None:
-            from runtime.constructors.registry import ConstructorError
+            from modeling_harness.runtime.constructors.registry import ConstructorError
             raise ConstructorError(
                 f"MathModelAgent 未装配（entry={self.entry!r}）——"
                 "这是外部集成点，装配后自动生效")
@@ -59,7 +59,7 @@ class MathModelAgentAdapter(ConstructorAdapter):
             cmd, shell=True, input=payload, capture_output=True,
             text=True, timeout=300, cwd=str(self.workdir) if self.workdir else None)
         if proc.returncode != 0:
-            from runtime.constructors.registry import ConstructorError
+            from modeling_harness.runtime.constructors.registry import ConstructorError
             raise ConstructorError(
                 f"MathModelAgent 调用失败: {proc.stderr[:300]}")
         return ConstructionBundle.from_json(proc.stdout)

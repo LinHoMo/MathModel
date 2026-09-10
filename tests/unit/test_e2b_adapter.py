@@ -14,12 +14,12 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.adapters import (  # noqa: E402
+from modeling_harness.runtime.execution.adapters import (  # noqa: E402
     LocalPythonAdapter, ExecutionPlan,
 )
-from runtime.execution.e2b_adapter import (  # noqa: E402
+from modeling_harness.runtime.execution.e2b_adapter import (  # noqa: E402
     E2BAdapter, select_execution_adapter,
 )
 

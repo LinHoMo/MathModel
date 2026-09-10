@@ -394,7 +394,7 @@ def profile_name():
 
 
 def doctor_report():
-    """返回参数体检报告 dict，供 core/tools/env_doctor.py 渲染。"""
+    """返回参数体检报告 dict，供 src/modeling_harness/cli/env_doctor.py 渲染。"""
     cfg, meta = _load_all()
     rows = []
 

@@ -33,7 +33,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from runtime.execution.execution_auth import issue_token
+from modeling_harness.runtime.execution.execution_auth import issue_token
 
 # 执行状态：唯一合法来源（not_executed 为初始态，绝不默认 success）
 EXEC_STATUS = ("not_executed", "running", "success", "failed", "timeout", "invalid")

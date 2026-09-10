@@ -16,12 +16,12 @@ import json
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
-if str(REPO / "core") not in sys.path:
-    sys.path.insert(0, str(REPO / "core"))
+REPO = Path(__file__).resolve().parents[4]
+if str(REPO / "src") not in sys.path:
+    sys.path.insert(0, str(REPO / "src"))
 
-from runtime.state.reconcile import detect_mode, reconcile  # noqa: E402
-from runtime.state.runs import (  # noqa: E402
+from modeling_harness.runtime.state.reconcile import detect_mode, reconcile  # noqa: E402
+from modeling_harness.runtime.state.runs import (  # noqa: E402
     compute_input_hash, list_run_records, load_run_record,
     skill_version, tool_version, workflow_version,
 )
@@ -74,7 +74,7 @@ def verify(project_dir, run_id: str | None = None) -> dict:
                         ("evidence_hash", "evidence_graph.json"),
                         ("decision_log_hash", "decision_log.json")):
         p = sdir / fname
-        from runtime.state.runs import _hash_path
+        from modeling_harness.runtime.state.runs import _hash_path
         current[name] = _hash_path(p)
 
     matches, drift = {}, []
@@ -155,7 +155,7 @@ def list_runs(project_dir) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def _load_registry(project_dir: str | Path):
-    from runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     reg_path = Path(project_dir) / "state" / "registry.json"
     if not reg_path.exists():
         raise FileNotFoundError(f"Registry 不存在: {reg_path}")
@@ -192,10 +192,10 @@ def replay_execution(project_dir: str | Path, exec_id: str,
                              "无法重建；可传 code_override"],
                 "exec_id": exec_id}
     if adapter is None:
-        from runtime.execution.adapters import get_adapter
+        from modeling_harness.runtime.execution.adapters import get_adapter
         adapter = get_adapter("local_python")
 
-    from runtime.execution.adapters import ExecutionPlan
+    from modeling_harness.runtime.execution.adapters import ExecutionPlan
     plan = ExecutionPlan(
         model_id=data.get("model_id") or art.artifact_id,
         code=code,

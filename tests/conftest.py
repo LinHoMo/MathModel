@@ -12,9 +12,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 import sys  # noqa: E402
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
 
 
 # ---------------------------------------------------------------- 注入工具
@@ -122,7 +122,7 @@ def injected_resume(prev, questions):
     resume/续跑测试必须保留外部 Model Constructor 产物注入，否则默认路径
     无数值执行 → evidence_build 如实 FAIL（FIX-1.2/1.4）。
     """
-    from runtime.execution.adapters import LocalPythonAdapter
+    from modeling_harness.runtime.execution.adapters import LocalPythonAdapter
     s = RuntimeSession(prev.project_dir, list(questions),
                        max_workers=getattr(prev, "_max_workers", 1),
                        execution_adapter=LocalPythonAdapter(),
@@ -154,7 +154,7 @@ def injected_session(tmp_path, questions=("Q001", "Q002"), max_workers=1,
     必须挂真实 LocalPythonAdapter：无数值执行 → evidence_build 如实 FAIL
     （FIX-1.2/1.4）；fixture 默认路径不得再以占位 claim 假 PASS（FIX-1.5）。
     """
-    from runtime.execution.adapters import LocalPythonAdapter
+    from modeling_harness.runtime.execution.adapters import LocalPythonAdapter
     s = RuntimeSession(tmp_path / "proj", list(questions),
                        max_workers=max_workers, run_meta=run_meta or {},
                        execution_adapter=LocalPythonAdapter())

@@ -3,9 +3,9 @@
 """replay CLI —— 运行重放 / 差异归因（System Hardening P3）。
 
 用法:
-    python core/tools/replay.py <项目>                 # 校验最新一次运行（确定性重放）
-    python core/tools/replay.py <项目> list            # 列出全部运行记录
-    python core/tools/replay.py <项目> diff <A> <B>    # 两次运行逐字段差异 + 归因
+    python src/modeling_harness/cli/replay.py <项目>                 # 校验最新一次运行（确定性重放）
+    python src/modeling_harness/cli/replay.py <项目> list            # 列出全部运行记录
+    python src/modeling_harness/cli/replay.py <项目> diff <A> <B>    # 两次运行逐字段差异 + 归因
 """
 
 from __future__ import annotations
@@ -15,11 +15,11 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(ROOT / "core"))
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(ROOT / "src"))
 
-from runtime.execution.replay import diff as replay_diff  # noqa: E402
-from runtime.execution.replay import list_runs, verify  # noqa: E402
+from modeling_harness.runtime.execution.replay import diff as replay_diff  # noqa: E402
+from modeling_harness.runtime.execution.replay import list_runs, verify  # noqa: E402
 
 
 def main():

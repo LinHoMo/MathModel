@@ -13,9 +13,9 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.evaluation.deterministic_metrics import (  # noqa: E402
+from modeling_harness.runtime.evaluation.deterministic_metrics import (  # noqa: E402
     baseline_comparison, claim_evidence_coverage)
 
 
@@ -26,9 +26,9 @@ def _mini_graph(tmp_path, with_real_evidence=True):
       result 带数值 outputs + supports 边（exec_ref 指向 EXEC）。
     - 假证据对照：result 无 outputs → 不算真实支撑。
     """
-    from runtime.artifacts.registry import ArtifactRegistry
-    from runtime.graph.evidence_graph import EvidenceGraph
-    from runtime.execution.execution_auth import issue_token
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
+    from modeling_harness.runtime.execution.execution_auth import issue_token
 
     reg = ArtifactRegistry(tmp_path / "state" / "registry.json")
     reg.project = "p32"
@@ -79,8 +79,8 @@ class TestClaimEvidenceCoverage:
             "无 outputs 的 result 支撑的 claim 必须如实 unsupported"
 
     def test_empty_graph(self, tmp_path):
-        from runtime.artifacts.registry import ArtifactRegistry
-        from runtime.graph.evidence_graph import EvidenceGraph
+        from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+        from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
         reg = ArtifactRegistry(tmp_path / "e" / "registry.json")
         g = EvidenceGraph(reg, path=tmp_path / "e" / "graph.json")
         rep = claim_evidence_coverage(g)

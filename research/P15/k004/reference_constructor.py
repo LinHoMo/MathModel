@@ -21,7 +21,7 @@ _REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_REPO / "research" / "P15" / "vs001_run"))
 from vs001_fixtures import M1_DICT  # noqa: E402
 
-from runtime.constructors.protocol import ConstructorAdapter, ConstructionBundle
+from modeling_harness.runtime.constructors.protocol import ConstructorAdapter, ConstructionBundle
 
 # 模板代码：确定性线性映射 + 摘要（输出与 MODEL_IR 变量 V001 x_i / V002 y 对齐）
 _TEMPLATE_CODE = '''def solve(inputs):
@@ -134,7 +134,7 @@ class ReferenceConstructor(ConstructorAdapter):
         # 知识卡义务（方法卡 → validation/assumption 合并，source_card 溯源）
         cards = (context or {}).get("cards") or []
         if cards:
-            from runtime.modeling.knowledge_guided import apply_knowledge_obligations
+            from modeling_harness.runtime.modeling.knowledge_guided import apply_knowledge_obligations
             mir = apply_knowledge_obligations(
                 mir, cards, model_id=mir["model_id"])
 

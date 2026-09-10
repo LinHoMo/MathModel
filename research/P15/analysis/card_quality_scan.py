@@ -2,7 +2,7 @@
 """Scan all method cards for field structure quality tiers."""
 import pathlib, re, json
 
-cards = sorted(pathlib.Path('core/knowledge/methods/cards').glob('*.yaml'))
+cards = sorted(pathlib.Path('src/modeling_harness/knowledge/methods/cards').glob('*.yaml'))
 fields = ['mechanism', 'formulations', 'solvers', 'structure_signals', 'requires',
           'risks', 'validation', 'anti_patterns', 'known_failures', 'match', 'applicability']
 print('%-22s %5s | %s' % ('card', 'len', ' '.join('%6s' % f[:6] for f in fields)))

@@ -3,8 +3,8 @@
 """diagram_gen.py — 科学图表生成 CLI（V3 P2）
 
 用法:
-    python core/tools/diagram_gen.py flowchart --nodes "A,B,C" --edges "A->B,B->C" -o fig.svg
-    python core/tools/diagram_gen.py bar --data "类别A:10,类别B:25" -o bar.svg
+    python src/modeling_harness/cli/diagram_gen.py flowchart --nodes "A,B,C" --edges "A->B,B->C" -o fig.svg
+    python src/modeling_harness/cli/diagram_gen.py bar --data "类别A:10,类别B:25" -o bar.svg
 
 零第三方依赖，输出 SVG。"""
 from __future__ import annotations

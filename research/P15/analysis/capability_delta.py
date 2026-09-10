@@ -23,10 +23,10 @@ import sys
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 
-from tools.e2e_metrics import compute_e2e_metrics  # noqa: E402
+from modeling_harness.cli.e2e_metrics import compute_e2e_metrics  # noqa: E402
 
 PRE_PROJECT = _REPO / "projects" / "p151-2024a-r2"
 POST_PROJECT = _REPO / "research" / "P15" / "experiments" / "p1-vs001" / "project"
@@ -73,8 +73,8 @@ def eight_metric_delta() -> dict:
 
 def _p1_loop_metrics() -> dict:
     """P1 专属执行级指标（Model Construction Loop 机械证据）。"""
-    from runtime.artifacts.registry import ArtifactRegistry
-    from runtime.graph.evidence_graph import EvidenceGraph
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
     sdir = POST_PROJECT / "state"
     reg = ArtifactRegistry(sdir / "registry.json")
     graph = EvidenceGraph(reg, sdir / "evidence_graph.json")

@@ -9,14 +9,14 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.knowledge.cards import CardError, load_knowledge
-from runtime.knowledge.retriever import KnowledgeRetriever
+from modeling_harness.runtime.knowledge.cards import CardError, load_knowledge
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever
 
-KNOWLEDGE_ROOT = REPO / "core" / "knowledge"
+KNOWLEDGE_ROOT = REPO / "src" / "modeling_harness" / "knowledge"
 
 
 @pytest.fixture(scope="module")
@@ -48,7 +48,7 @@ class TestCardLibrary:
 
     def test_schema_files_exist(self):
         for name in ("method_card", "failure", "pattern"):
-            p = REPO / "core" / "schemas" / "v3" / "knowledge" / f"{name}.schema.json"
+            p = REPO / "src" / "modeling_harness" / "schemas" / "v3" / "knowledge" / f"{name}.schema.json"
             assert p.is_file(), f"缺少 schema: {p}"
 
 

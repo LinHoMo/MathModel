@@ -17,16 +17,16 @@ import sys
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from m3_fixtures import CANDIDATES, VALIDATION_SPEC  # noqa: E402
 from vs001_fixtures import OUTPUT_MAPPING  # noqa: E402
 
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
 
 # DAG 闭环节点序列（modeling 尾链含 P1-M3 新增的 model_selection_decision）
 LOOP_NODES = [
@@ -113,6 +113,6 @@ def decisions_of(session, question: str = "Q001") -> list[dict]:
 
 
 def replay_report(project_dir, exec_id: str) -> dict:
-    """用 core/runtime/execution/replay.py 重放一次执行并报告偏差。"""
-    from runtime.execution.replay import replay_execution
+    """用 src/modeling_harness/runtime/execution/replay.py 重放一次执行并报告偏差。"""
+    from modeling_harness.runtime.execution.replay import replay_execution
     return replay_execution(project_dir, exec_id)

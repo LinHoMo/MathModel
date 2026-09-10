@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""MODEL_IR 旧格式 → 新规范（core/schemas/v3/model/model_ir.schema.json v1.0）迁移。
+"""MODEL_IR 旧格式 → 新规范（src/modeling_harness/schemas/v3/model/model_ir.schema.json v1.0）迁移。
 
 背景：schema 于 2026-09-10 全面重建为 Model IR v1.0（唯一真源）：
 - 顶层 required 17 字段（modeling_trace 不再是 required，但 $defs 约束其结构）

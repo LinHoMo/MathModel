@@ -20,13 +20,13 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
-from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
-from runtime.execution.codegen import register_code, execute_code  # noqa: E402
-from runtime.execution.validation import validate_execution  # noqa: E402
-from runtime.execution.replay import replay_execution  # noqa: E402
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
+from modeling_harness.runtime.execution.codegen import register_code, execute_code  # noqa: E402
+from modeling_harness.runtime.execution.validation import validate_execution  # noqa: E402
+from modeling_harness.runtime.execution.replay import replay_execution  # noqa: E402
 
 EXP_DIR = Path(__file__).resolve().parent
 PROJECT_DIR = EXP_DIR / "project"

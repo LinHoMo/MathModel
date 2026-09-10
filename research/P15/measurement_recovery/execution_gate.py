@@ -846,7 +846,7 @@ def execution_authenticity_gate(project_dir: Path, run_record: Optional[dict] = 
         and all(c in "0123456789abcdef" for c in sv),
         expected="64-char hex, not empty-string SHA256",
         actual=sv[:16] + "..." if len(sv) > 16 else sv,
-        message="empty hash = no .yaml files in core/skills/" if sv == SHA256_EMPTY else "",
+        message="empty hash = no .yaml files in src/modeling_harness/skills/" if sv == SHA256_EMPTY else "",
     ))
 
     # EAG-04: execution timestamp reasonable
@@ -1093,7 +1093,7 @@ def _derive_root_causes(checks: list[dict]) -> list[str]:
     if "EAG-08" in failed_ids:
         causes.append("no code/output/artifacts directories — no real execution artifacts on disk")
     if "EAG-03" in failed_ids:
-        causes.append("skill_version is empty-string SHA256 — core/skills/ has no .yaml files")
+        causes.append("skill_version is empty-string SHA256 — src/modeling_harness/skills/ has no .yaml files")
     if "EAG-12" in failed_ids:
         causes.append("artifact provenance is empty — no execution traceability (run_id/node_id/executor)")
     if "EAG-13" in failed_ids:

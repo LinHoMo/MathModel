@@ -22,10 +22,10 @@ import tempfile
 import time
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve().parents[4]
 
-PROMPT_DIRS = ["core/roles", "core/workflows"]
-SKILL_DIRS = ["core/skills"]
+PROMPT_DIRS = ["src/modeling_harness/roles", "src/modeling_harness/workflows"]
+SKILL_DIRS = ["src/modeling_harness/skills"]
 
 
 def _hash_bytes(b: bytes) -> str:

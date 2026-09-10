@@ -1,7 +1,7 @@
 """P0 Artifact Layer 测试：Stable ID / Contract / Lifecycle / Registry / Versioning。
 
 运行: python -m pytest tests/unit/test_artifacts.py -q
-零第三方依赖（与 core/tools 惯例一致）。
+零第三方依赖（与 modeling_harness/cli 惯例一致）。
 """
 
 import json
@@ -9,18 +9,18 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.artifacts.ids import (
+from modeling_harness.runtime.artifacts.ids import (
     IDFormatError, format_id, id_matches_type, id_type, is_valid_id, parse_id,
 )
-from runtime.artifacts.artifact import Artifact, ContractError
-from runtime.artifacts.lifecycle import (
+from modeling_harness.runtime.artifacts.artifact import Artifact, ContractError
+from modeling_harness.runtime.artifacts.lifecycle import (
     LifecycleError, assert_transition, can_transition, is_terminal, next_forward,
 )
-from runtime.artifacts.registry import (
+from modeling_harness.runtime.artifacts.registry import (
     ArtifactNotFound, ArtifactRegistry, RegistryError,
 )
 

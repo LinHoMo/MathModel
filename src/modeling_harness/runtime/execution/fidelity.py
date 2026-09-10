@@ -209,8 +209,8 @@ def verify_fidelity(project_dir: str | Path, model_ir: dict, exec_id: str,
     返回 {verification_id, fidelity_status, fidelity_score, passed, total,
           checks, skipped, report_path}。
     """
-    from runtime.artifacts.registry import ArtifactRegistry
-    from runtime.execution.validation import validate_execution
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.execution.validation import validate_execution
 
     project_dir = Path(project_dir)
     if registry is None:

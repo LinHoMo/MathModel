@@ -9,9 +9,9 @@ V3 是 LLM-free harness：工具链、schema、知识库、运行时组件是否
 
 用法
 ----
-    python core/tools/doctor.py                      # 检查仓库本体
-    python core/tools/doctor.py --project cumcm2024a # 额外检查指定项目
-    python core/tools/doctor.py --skip-tools         # 跳过外部工具链检查
+    python src/modeling_harness/cli/doctor.py                      # 检查仓库本体
+    python src/modeling_harness/cli/doctor.py --project cumcm2024a # 额外检查指定项目
+    python src/modeling_harness/cli/doctor.py --skip-tools         # 跳过外部工具链检查
 
 退出码：0 = 全部就绪或仅有建议项；1 = 存在阻塞项。
 """
@@ -21,8 +21,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(ROOT / "core" / "tools"))
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli"))
 
 REQUIRED_TOOLS = [
     ("validate.py", "项目级校验"),
@@ -32,12 +32,12 @@ REQUIRED_TOOLS = [
 ]
 
 REQUIRED_DIRS = [
-    ("core/knowledge/methodology", "方法论知识库"),
-    ("core/validators/modules", "验证模块"),
+    ("src/modeling_harness/knowledge/methodology", "方法论知识库"),
+    ("src/modeling_harness/validators/modules", "验证模块"),
     ("core/env", "配置层"),
-    ("core/schemas", "结构化输出 Schema"),
-    ("core/workflows/stages", "DAG stage 模板"),
-    ("core/roles", "角色定义"),
+    ("src/modeling_harness/schemas", "结构化输出 Schema"),
+    ("src/modeling_harness/workflows/stages", "DAG stage 模板"),
+    ("src/modeling_harness/roles", "角色定义"),
 ]
 
 
@@ -63,11 +63,11 @@ def check_python(r):
 
 def check_tools(r):
     for name, desc in REQUIRED_TOOLS:
-        p = ROOT / "core" / "tools" / name
+        p = ROOT / "src" / "modeling_harness" / "cli" / name
         ok = p.exists()
-        r.add(ok, f"core/tools/{name}", desc if ok else "缺失")
+        r.add(ok, f"src/modeling_harness/cli/{name}", desc if ok else "缺失")
         if not ok:
-            r.block_(f"core/tools/{name}", "缺失")
+            r.block_(f"src/modeling_harness/cli/{name}", "缺失")
 
 
 def check_dirs(r):
@@ -81,9 +81,9 @@ def check_dirs(r):
 
 def check_agent_count(r):
     """V3：core/roles 4 角色定义齐全（analyst/modeler/experimenter/critic）。"""
-    roles_dir = ROOT / "core" / "roles"
+    roles_dir = ROOT / "src" / "modeling_harness" / "roles"
     if not roles_dir.is_dir():
-        r.block_("core/roles", "目录缺失")
+        r.block_("src/modeling_harness/roles", "目录缺失")
         return
     files = sorted(roles_dir.glob("*.yaml"))
     names = {f.stem for f in files}
@@ -97,7 +97,7 @@ def check_agent_count(r):
 
 def check_catalog_v3(r):
     """catalog.yaml v5 双视图一致性（roles/DAG/validators 三方对齐）。"""
-    script = ROOT / "core" / "tools" / "catalog_check.py"
+    script = ROOT / "src" / "modeling_harness" / "cli" / "catalog_check.py"
     try:
         proc = subprocess.run(
             [sys.executable, str(script), "--check"],

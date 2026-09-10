@@ -19,13 +19,13 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "tests" / "integration"))
 
 from _real_session import MINIMAL_VALIDATION_SPEC, _minimal_mir  # noqa: E402
 
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
 
 LOOP_NODES = [
     "problem_analysis",
@@ -178,7 +178,7 @@ class TestFidelityInDag:
 
     def test_verify_fidelity_register_vr_switch(self, tmp_path):
         """verify_fidelity 的 register_vr 开关：False 不注册 VR，True 注册。"""
-        from runtime.execution.fidelity import verify_fidelity
+        from modeling_harness.runtime.execution.fidelity import verify_fidelity
 
         s = _make(tmp_path, _minimal_mir("Q001"), OK_CODE)
         _step_to(s, "model_execution")
@@ -198,7 +198,7 @@ class TestFidelityInDag:
                                registry=s.registry)
         assert out1["verification_id"].startswith("VR")
         # VR 注册在磁盘 registry（validate_execution 新建实例读写磁盘）
-        from runtime.artifacts.registry import ArtifactRegistry
+        from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
         disk = ArtifactRegistry(proj / "state" / "registry.json")
         disk.load()
         vr = disk.get(out1["verification_id"])

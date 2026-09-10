@@ -3,8 +3,8 @@
 """scholar_fetch.py — 学术文献检索 + BibTeX 导出（L11 层）
 
 用法:
-    python core/tools/scholar_fetch.py bibtex "多目标 灰色预测 TOPSIS" --limit 5
-    python core/tools/scholar_fetch.py bibtex "KNN imputation" --limit 3 --output refs.bib
+    python src/modeling_harness/cli/scholar_fetch.py bibtex "多目标 灰色预测 TOPSIS" --limit 5
+    python src/modeling_harness/cli/scholar_fetch.py bibtex "KNN imputation" --limit 3 --output refs.bib
 
 零第三方依赖（使用 Semantic Scholar 开放 API）。
 """

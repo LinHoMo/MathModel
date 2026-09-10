@@ -13,11 +13,11 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.validation import validate_against_gt  # noqa: E402
-from runtime.execution.fidelity import fidelity_checks_from_ir  # noqa: E402
-from runtime.execution.validation import run_checks  # noqa: E402
+from modeling_harness.runtime.execution.validation import validate_against_gt  # noqa: E402
+from modeling_harness.runtime.execution.fidelity import fidelity_checks_from_ir  # noqa: E402
+from modeling_harness.runtime.execution.validation import run_checks  # noqa: E402
 
 
 def _ok_exec(outputs, **extra):

@@ -28,10 +28,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[4]  # constructor_independent/benchmark/P15/research/<repo>
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 
-from runtime.execution.validation import validate_against_gt  # noqa: E402
+from modeling_harness.runtime.execution.validation import validate_against_gt  # noqa: E402
 
 OUT = _REPO / "research" / "P15" / "benchmark" / "constructor_independent"
 PROBLEMS = ["2018_A", "2018_B", "2019_C", "2020_B", "2022_C", "2024_A"]

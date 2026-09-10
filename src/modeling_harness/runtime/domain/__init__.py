@@ -13,8 +13,8 @@ from __future__ import annotations
 
 # ---------------------------------------------------------------------------
 # 实体注册表：canonical 名 -> (schema 归属, v3 subtype, legacy 投影)
-#   schema 归属: "v3/<相对 core/schemas/v3 的路径>" 或 None（由 subtype 承载）
-#   v3 subtype: 与 core/schemas/v3/artifact/artifact.schema.json 的 type enum 一致
+#   schema 归属: "v3/<相对 src/modeling_harness/schemas/v3 的路径>" 或 None（由 subtype 承载）
+#   v3 subtype: 与 src/modeling_harness/schemas/v3/artifact/artifact.schema.json 的 type enum 一致
 #   legacy 投影: V2 时代的文件/schema/字段名（同义词被禁止再造）
 # ---------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ CANONICAL_ENTITIES: dict[str, dict] = {
     "Failure": {
         "schema": "knowledge/failure.schema.json",
         "v3_subtype": None,  # 知识层实体，非 artifact
-        "legacy_projections": ["core/knowledge/pitfalls/ + _negative/（markdown 前置形态）"],
+        "legacy_projections": ["src/modeling_harness/knowledge/pitfalls/ + _negative/（markdown 前置形态）"],
     },
     "Run": {
         "schema": "run/run_record.schema.json",  # System Hardening P3 创建（预注册）

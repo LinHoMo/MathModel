@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-ABOUTME: 从 catalog/v3.yaml 单一真源生成 core/runtime/adapters/openai.yaml（V3 运行时入口）
+ABOUTME: 从 catalog/v3.yaml 单一真源生成 src/modeling_harness/runtime/adapters/openai.yaml（V3 运行时入口）
 ABOUTME: --check 模式检测漂移，供 doctor.py 调用
 
 用法：
-    python core/tools/gen_runtime_manifest.py            # 生成/覆盖 core/runtime/adapters/openai.yaml
-    python core/tools/gen_runtime_manifest.py --check    # 漂移检测，drift 即 EXIT 1
-    python core/tools/gen_runtime_manifest.py --verify   # 校验 V3 角色/validator/工具路径
+    python src/modeling_harness/cli/gen_runtime_manifest.py            # 生成/覆盖 src/modeling_harness/runtime/adapters/openai.yaml
+    python src/modeling_harness/cli/gen_runtime_manifest.py --check    # 漂移检测，drift 即 EXIT 1
+    python src/modeling_harness/cli/gen_runtime_manifest.py --verify   # 校验 V3 角色/validator/工具路径
 """
 
 import argparse
@@ -15,9 +15,9 @@ import datetime
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 CATALOG_PATH = ROOT / "catalog.yaml"
-OPENAI_PATH = ROOT / "core" / "runtime" / "adapters" / "openai.yaml"
+OPENAI_PATH = ROOT / "src" / "modeling_harness" / "runtime" / "adapters" / "openai.yaml"
 
 
 # ---------------------------------------------------------------------------
@@ -211,7 +211,7 @@ def generate_openai_yaml(catalog):
     lines = [
         "# OpenAI Agents SDK 兼容配置",
         "# 用于在 OpenAI Agents SDK 中加载 Modeling-Harness 技能",
-        "# *** 本文件由 core/tools/gen_runtime_manifest.py 自动生成 ***",
+        "# *** 本文件由 src/modeling_harness/cli/gen_runtime_manifest.py 自动生成 ***",
         "# *** 请勿手工编辑 —— 以 catalog/v3.yaml 为单一真源 ***",
         f"# 最近生成时间: {timestamp}",
         "",
@@ -224,37 +224,37 @@ def generate_openai_yaml(catalog):
         "tools:",
         '  - name: "validate"',
         '    description: "项目级完整性校验"',
-        '    function: "python core/tools/validate.py {project}"',
+        '    function: "python src/modeling_harness/cli/validate.py {project}"',
         "",
         '  - name: "catalog_check"',
         '    description: "catalog 三方一致性检查"',
-        '    function: "python core/tools/catalog_check.py --check"',
+        '    function: "python src/modeling_harness/cli/catalog_check.py --check"',
         "",
         '  - name: "new_project"',
         '    description: "创建新项目脚手架"',
-        '    function: "python core/tools/new_project.py {project_name} --competition {competition}"',
+        '    function: "python src/modeling_harness/cli/new_project.py {project_name} --competition {competition}"',
         "",
         '  - name: "knowledge"',
         '    description: "方法卡检索"',
-        '    function: "python core/tools/knowledge.py recommend --types {types}"',
+        '    function: "python src/modeling_harness/cli/knowledge.py recommend --types {types}"',
         "",
         '  - name: "doctor"',
         '    description: "环境预检"',
-        '    function: "python core/tools/doctor.py"',
+        '    function: "python src/modeling_harness/cli/doctor.py"',
         "",
         "env:",
         '  config_file: "core/env/config.yaml"',
         '  loader: "core/env/loader.py"',
         "",
         "knowledge_base:",
-        '  methodology: "core/knowledge/methodology/"',
-        '  cookbooks: "core/knowledge/cookbooks/"',
-        '  playbooks: "core/knowledge/playbooks/"',
-        '  validation: "core/validators/modules/"',
+        '  methodology: "src/modeling_harness/knowledge/methodology/"',
+        '  cookbooks: "src/modeling_harness/knowledge/cookbooks/"',
+        '  playbooks: "src/modeling_harness/knowledge/playbooks/"',
+        '  validation: "src/modeling_harness/validators/modules/"',
         "",
         "validation_scripts:",
-        '  validate: "core/tools/validate.py"',
-        '  doctor: "core/tools/doctor.py"',
+        '  validate: "src/modeling_harness/cli/validate.py"',
+        '  doctor: "src/modeling_harness/cli/doctor.py"',
         "",
     ]
     return "\n".join(lines)
@@ -262,7 +262,7 @@ def generate_openai_yaml(catalog):
 
 def check_drift(generated_text):
     if not OPENAI_PATH.exists():
-        return False, ["core/runtime/adapters/openai.yaml 不存在，无法比对漂移"]
+        return False, ["src/modeling_harness/runtime/adapters/openai.yaml 不存在，无法比对漂移"]
     current = OPENAI_PATH.read_text(encoding="utf-8")
     # 去掉自动生成头部时间戳行再比
     import re
@@ -304,8 +304,8 @@ def verify(catalog):
     for tool in ("validate.py", "catalog_check.py", "new_project.py",
                  "knowledge.py", "doctor.py", "benchmark.py",
                  "diagram_gen.py", "scholar_fetch.py"):
-        if not (ROOT / "core" / "tools" / tool).exists():
-            errors.append(f"工具缺失: core/tools/{tool}")
+        if not (ROOT / "src" / "modeling_harness" / "cli" / tool).exists():
+            errors.append(f"工具缺失: src/modeling_harness/cli/{tool}")
     return errors
 
 
@@ -314,7 +314,7 @@ def verify(catalog):
 # ---------------------------------------------------------------------------
 
 def main():
-    ap = argparse.ArgumentParser(description="从 catalog.yaml 生成 core/runtime/adapters/openai.yaml（Codex 运行时入口）")
+    ap = argparse.ArgumentParser(description="从 catalog.yaml 生成 src/modeling_harness/runtime/adapters/openai.yaml（Codex 运行时入口）")
     ap.add_argument("--check", action="store_true", help="漂移检测，drift 即 EXIT 1")
     ap.add_argument("--verify", action="store_true", help="验证 catalog 内在一致性")
     args = ap.parse_args()
@@ -332,7 +332,7 @@ def main():
     if args.check:
         ok, diffs = check_drift(generated)
         if ok:
-            print("[check] core/runtime/adapters/openai.yaml 与 catalog.yaml 一致，无漂移")
+            print("[check] src/modeling_harness/runtime/adapters/openai.yaml 与 catalog.yaml 一致，无漂移")
             return 0
         print(f"[check] 检测到 {len(diffs)} 处漂移（应重新生成）:")
         for d in diffs:
@@ -345,7 +345,7 @@ def main():
     v3 = catalog.get("v3", {}) or {}
     n_roles = len(v3.get("roles", []))
     n_nodes = len(v3.get("nodes", []))
-    print(f"[gen] core/runtime/adapters/openai.yaml 已生成：V3 {n_roles} 角色 {n_nodes} 节点")
+    print(f"[gen] src/modeling_harness/runtime/adapters/openai.yaml 已生成：V3 {n_roles} 角色 {n_nodes} 节点")
     return 0
 
 

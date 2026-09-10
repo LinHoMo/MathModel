@@ -19,8 +19,8 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-if str(REPO / "core") not in sys.path:
-    sys.path.insert(0, str(REPO / "core"))
+if str(REPO / "src") not in sys.path:
+    sys.path.insert(0, str(REPO / "src"))
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -28,8 +28,8 @@ from vs001_fixtures import (  # noqa: E402
     C1_CODE, C2_CODE, M1_DICT, M2_DICT, OUTPUT_MAPPING, VALIDATION_SPEC,
 )
 
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
 
 # DAG 闭环节点序列（与 catalog/v3.yaml + stages 一致）
 LOOP_NODES = [
@@ -128,8 +128,8 @@ def finalize_revision(session, mir1_id: str, mir2_model_id: str):
              decision（accept/reject + reasoning + selects 边）
     不编造新数值；diagnosis/comparison 全部来自机械证据。
     """
-    from runtime.modeling.diagnosis import diagnose_failure
-    from runtime.modeling.comparison import compare_models, _resolve_vr_for_model
+    from modeling_harness.runtime.modeling.diagnosis import diagnose_failure
+    from modeling_harness.runtime.modeling.comparison import compare_models, _resolve_vr_for_model
 
     reg, graph = session.registry, session.graph
     mir2 = None
@@ -198,6 +198,6 @@ def relation_pairs(session) -> set[tuple[str, str, str]]:
 
 
 def replay_report(project_dir, exec_id: str) -> dict:
-    """用 core/runtime/execution/replay.py 重放一次执行并报告偏差。"""
-    from runtime.execution.replay import replay_execution
+    """用 src/modeling_harness/runtime/execution/replay.py 重放一次执行并报告偏差。"""
+    from modeling_harness.runtime.execution.replay import replay_execution
     return replay_execution(project_dir, exec_id)

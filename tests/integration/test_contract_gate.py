@@ -7,12 +7,12 @@ from pathlib import Path
 import pytest
 
 _REPO = Path(__file__).resolve().parents[2]
-_SCHEMA = (_REPO / "core" / "schemas" / "v3" / "model"
+_SCHEMA = (_REPO / "src" / "modeling_harness" / "schemas" / "v3" / "model"
            / "model_ir.schema.json")  # P1-4 唯一真源
 _EXAMPLE = (_REPO / "research" / "P15" / "model_representation"
             / "example_2024_A.json")
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 
 
 @pytest.fixture(scope="module")

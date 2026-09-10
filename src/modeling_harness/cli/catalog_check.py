@@ -6,7 +6,7 @@ ABOUTME: --check 模式零漂移即 EXIT 0，供 CI 与 doctor.py 消费
 
 校验内容（P4 验收「catalog v5 --check 通过」）:
     1. schema_version == 5，v3 视图存在且结构完整
-    2. v3.roles        == core/roles/*.yaml 实际文件（数量 + 名称 + 路径）
+    2. v3.roles        == src/modeling_harness/roles/*.yaml 实际文件（数量 + 名称 + 路径）
     3. v3.nodes        == 组合 DAG 模板节点（WorkflowComposer.compose()），
                           逐节点比对 role / validator / per_question / stage
     4. v3.validators   == DAG 中绑定的 validator 集合，
@@ -14,9 +14,9 @@ ABOUTME: --check 模式零漂移即 EXIT 0，供 CI 与 doctor.py 消费
     5. hands legacy 视图未被 v3 追加破坏（agent 总数 29 不变）
 
 用法:
-    python core/tools/catalog_check.py            # 人读报告（问题列出，EXIT 0/1）
-    python core/tools/catalog_check.py --check    # 同上（CI 语义，drift 即 EXIT 1）
-    python core/tools/catalog_check.py --json     # 机器可读输出
+    python src/modeling_harness/cli/catalog_check.py            # 人读报告（问题列出，EXIT 0/1）
+    python src/modeling_harness/cli/catalog_check.py --check    # 同上（CI 语义，drift 即 EXIT 1）
+    python src/modeling_harness/cli/catalog_check.py --json     # 机器可读输出
 """
 
 from __future__ import annotations
@@ -26,15 +26,15 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(ROOT / "core"))
-sys.path.insert(0, str(ROOT / "core" / "tools"))
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli"))
 for _cat in ("runtime", "validation", "evaluation", "knowledge", "devtools", "rendering"):
-    sys.path.insert(0, str(ROOT / "core" / "tools" / _cat))
+    sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli" / _cat))
 
 CATALOG_PATH = ROOT / "catalog.yaml"
-ROLES_DIR = ROOT / "core" / "roles"
-WORKFLOWS_DIR = ROOT / "core" / "workflows"
+ROLES_DIR = ROOT / "src" / "modeling_harness" / "roles"
+WORKFLOWS_DIR = ROOT / "src" / "modeling_harness" / "workflows"
 
 EXPECTED_ROLES = {"analyst", "modeler", "experimenter", "critic"}
 EXTRA_VALIDATORS = set()
@@ -49,7 +49,7 @@ def load_catalog() -> dict:
     这里统一解包为 dict。
     """
     try:
-        from runtime.execution.yamlio import load_file
+        from modeling_harness.runtime.execution.yamlio import load_file
         data = load_file(CATALOG_PATH)
         if isinstance(data, dict) and "hands" in data:
             import gen_runtime_manifest as GRM
@@ -89,10 +89,10 @@ def check_roles(v3: dict) -> list[str]:
     names = {r.get("name") for r in roles}
     if names != EXPECTED_ROLES:
         problems.append(f"v3.roles 应为 5 角色 {sorted(EXPECTED_ROLES)}，实际 {sorted(names)}")
-    # 与 core/roles/ 目录对齐
+    # 与 src/modeling_harness/roles/ 目录对齐
     disk = {p.stem for p in ROLES_DIR.glob("*.yaml")}
     if names != disk:
-        problems.append(f"v3.roles 与 core/roles/ 不一致: catalog={sorted(names)} disk={sorted(disk)}")
+        problems.append(f"v3.roles 与 src/modeling_harness/roles/ 不一致: catalog={sorted(names)} disk={sorted(disk)}")
     for r in roles:
         path = ROOT / str(r.get("path", ""))
         if not path.exists():
@@ -104,7 +104,7 @@ def check_roles(v3: dict) -> list[str]:
 
 
 def _compose_template_dag():
-    from runtime.execution.composer import WorkflowComposer
+    from modeling_harness.runtime.execution.composer import WorkflowComposer
     return WorkflowComposer(WORKFLOWS_DIR).compose()
 
 
@@ -226,7 +226,7 @@ def _terminology_scan() -> list[str]:
     无行内豁免：production 区不允许以任何注释形式携带旧术语。
     """
     problems = []
-    targets = [ROOT / "core", ROOT / "AGENTS.md", ROOT / "docs"]
+    targets = [ROOT / "src", ROOT / "AGENTS.md", ROOT / "docs"]
     suffixes = {".py", ".md", ".json", ".yaml", ".yml", ".txt"}
     scanned_files = 0
     for target in targets:

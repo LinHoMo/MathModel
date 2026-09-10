@@ -11,11 +11,11 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
-from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
-from runtime.state.model import ProjectState  # noqa: E402
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
+from modeling_harness.runtime.state.model import ProjectState  # noqa: E402
 
 
 def _fresh(tmp_path):

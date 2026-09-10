@@ -2,7 +2,7 @@
 """治理修复：validate.py _live_project_dirs 排除 P15 研究实验项目（正则替换，鲁棒）。"""
 import re
 
-p = "core/tools/validate.py"
+p = "src/modeling_harness/cli/validate.py"
 t = open(p, encoding="utf-8").read()
 
 old_fn = re.compile(

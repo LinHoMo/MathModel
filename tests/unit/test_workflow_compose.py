@@ -8,14 +8,14 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.execution.composer import ComposeError, WorkflowComposer
-from runtime.execution.yamlio import YamlSyntaxError, loads
+from modeling_harness.runtime.execution.composer import ComposeError, WorkflowComposer
+from modeling_harness.runtime.execution.yamlio import YamlSyntaxError, loads
 
-WF = REPO / "core" / "workflows"
+WF = REPO / "src" / "modeling_harness" / "workflows"
 
 
 class TestYamlio:
@@ -131,11 +131,11 @@ class TestComposer:
 
     def test_executable_dag_runs_end_to_end(self):
         """可执行 DAG + 全 pass executor → 全节点完成（结构完整性冒烟）。"""
-        from runtime.execution.engine import WorkflowEngine
+        from modeling_harness.runtime.execution.engine import WorkflowEngine
 
         class AllPass:
             def __call__(self, node_id, ctx):
-                from runtime.execution.engine import NodeResult
+                from modeling_harness.runtime.execution.engine import NodeResult
                 return NodeResult("pass")
 
         comp = WorkflowComposer(WF)

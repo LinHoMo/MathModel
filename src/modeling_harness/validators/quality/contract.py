@@ -13,7 +13,7 @@
   rerun / recompute / reset_question / retry 语义，不新造 rerun 语义。
 
 配套文档: docs/architecture/RESEARCH_QUALITY_CONTRACT.md
-权威消费方: core/validators/quality/evaluators.py + aggregator.py
+权威消费方: src/modeling_harness/validators/quality/evaluators.py + aggregator.py
 """
 
 from __future__ import annotations

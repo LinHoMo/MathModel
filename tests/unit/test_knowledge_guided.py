@@ -7,13 +7,13 @@ from pathlib import Path
 import pytest
 
 _REPO = Path(__file__).resolve().parents[2]
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 
-from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
-from runtime.modeling import knowledge_guided as kg  # noqa: E402
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.runtime.modeling import knowledge_guided as kg  # noqa: E402
 
-_CARDS_DIR = _REPO / "core" / "knowledge"
+_CARDS_DIR = _REPO / "src" / "modeling_harness" / "knowledge"
 
 
 @pytest.fixture(scope="module")

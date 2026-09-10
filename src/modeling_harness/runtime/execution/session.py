@@ -22,20 +22,20 @@ import json
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
-if str(REPO / "core") not in sys.path:
-    sys.path.insert(0, str(REPO / "core"))
+REPO = Path(__file__).resolve().parents[4]
+if str(REPO / "src") not in sys.path:
+    sys.path.insert(0, str(REPO / "src"))
 
-from runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
-from runtime.decisions.log import DecisionLog  # noqa: E402
-from runtime.execution.composer import WorkflowComposer  # noqa: E402
-from runtime.execution.engine import WorkflowEngine  # noqa: E402
-from runtime.execution.wave_executor import WaveExecutor  # noqa: E402
-from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
-from runtime.state.model import ProjectState  # noqa: E402
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
+from modeling_harness.runtime.decisions.log import DecisionLog  # noqa: E402
+from modeling_harness.runtime.execution.composer import WorkflowComposer  # noqa: E402
+from modeling_harness.runtime.execution.engine import WorkflowEngine  # noqa: E402
+from modeling_harness.runtime.execution.wave_executor import WaveExecutor  # noqa: E402
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
+from modeling_harness.runtime.state.model import ProjectState  # noqa: E402
 
 from .handlers import DefaultNodeExecutor  # noqa: E402
-from runtime.modeling.problem_repr import ProblemRepresentationError, load_problem_representation
+from modeling_harness.runtime.modeling.problem_repr import ProblemRepresentationError, load_problem_representation
 
 
 class SessionError(RuntimeError):
@@ -76,7 +76,7 @@ class RuntimeSession:
         self.graph = EvidenceGraph(self.registry, sdir / "evidence_graph.json")
         self.decisions = DecisionLog(sdir / "decision_log.json")
 
-        dag = WorkflowComposer(REPO / "core" / "workflows").compose_executable(
+        dag = WorkflowComposer(REPO / "src" / "modeling_harness" / "workflows").compose_executable(
             self.questions)
         self.executor_impl = DefaultNodeExecutor(
             self.registry, self.graph, state=self.state,
@@ -99,8 +99,8 @@ class RuntimeSession:
         # （outputs.artifacts/evidence 必须真实存在于 registry）。
         # 同一 validators 同时注册到 WorkflowEngine 与 WaveExecutor
         # 内嵌引擎（self.engine 最终指向 waves.engine，避免被覆盖丢失）。
-        from runtime.execution.validators import build_engine_validators
-        from runtime.execution.dag import NODE_TYPES
+        from modeling_harness.runtime.execution.validators import build_engine_validators
+        from modeling_harness.runtime.execution.dag import NODE_TYPES
         engine_validators = build_engine_validators(
             self.registry, self.graph, node_types=NODE_TYPES)
         self.engine = WorkflowEngine(
@@ -115,7 +115,7 @@ class RuntimeSession:
 
     def _register_evidence(self, node_id: str, result) -> None:
         """P6-④ Evidence Registration：节点最终 PASS 后把 outputs.evidence 写入图。"""
-        from runtime.graph.evidence_graph import GraphError
+        from modeling_harness.runtime.graph.evidence_graph import GraphError
         for rel in (result.outputs or {}).get("evidence", []):
             try:
                 self.graph.add_relation(rel["from"], rel["relation"], rel["to"])
@@ -139,7 +139,7 @@ class RuntimeSession:
     def _emit_run_record(self, t0: float, report: dict) -> None:
         """Hardening P3：checkpoint 后落盘 RunRecord（best-effort，不阻断主流程）。"""
         try:
-            from runtime.state.runs import emit_run_record, list_run_records
+            from modeling_harness.runtime.state.runs import emit_run_record, list_run_records
             if self.run_meta.get("_parent_run_id"):
                 parent = self.run_meta["_parent_run_id"]
             else:
@@ -182,7 +182,7 @@ class RuntimeSession:
                            created_by: str = "session") -> dict:
         """显式声明科学依赖（P12-1）：State records + 调度镜像 + Registry
         depends_on 镜像三处双写。D2：依赖只能由此显式产生。"""
-        from runtime.state.dependencies import declare_dependency
+        from modeling_harness.runtime.state.dependencies import declare_dependency
         rec = declare_dependency(self.state, self.registry, source_question,
                                  target_question, dependency_type, reason,
                                  created_by=created_by)
@@ -191,7 +191,7 @@ class RuntimeSession:
 
     def dependency_integrity(self) -> list[str]:
         """D1：双写一致性检查（问题清单，空 = 一致）。"""
-        from runtime.state.dependencies import dependency_integrity_problems
+        from modeling_harness.runtime.state.dependencies import dependency_integrity_problems
         return dependency_integrity_problems(self.registry, self.state)
 
     def declare_cross_relation(self, source: str, target: str,
@@ -199,7 +199,7 @@ class RuntimeSession:
                                dependency_refs: list[dict],
                                created_by: str = "session") -> dict:
         """P12-2：显式声明跨问题科学关系（compares/extends/derived_from）。"""
-        from runtime.state.relations import declare_cross_relation
+        from modeling_harness.runtime.state.relations import declare_cross_relation
         rec = declare_cross_relation(self.state, self.registry, source, target,
                                      relation_type, dependency_refs,
                                      created_by=created_by)
@@ -207,13 +207,13 @@ class RuntimeSession:
         return rec
 
     def cross_relations(self) -> list[dict]:
-        from runtime.state.relations import cross_relations
+        from modeling_harness.runtime.state.relations import cross_relations
         return cross_relations(self.state)
 
     def cross_question_context(self, question_ids=None):
         """P12-3-lite：统一跨问题上下文（只读派生——每次从 Registry/Graph/
         State 重算，不落盘、不注册 artifact、不参与失效传播）。"""
-        from runtime.synthesis.context import build_cross_question_context
+        from modeling_harness.runtime.synthesis.context import build_cross_question_context
         return build_cross_question_context(
             self.registry, self.graph, self.state, question_ids)
 
@@ -237,11 +237,11 @@ class RuntimeSession:
         src_q = art0.question or (art0.artifact_id
                                   if art0.type == "question" else "")
         if src_q:
-            from runtime.state.dependencies import propagate_to_dependents
+            from modeling_harness.runtime.state.dependencies import propagate_to_dependents
             self._cross_question_propagation = propagate_to_dependents(
                 self.registry, self.state, src_q, reason)
             # P12-2: 上游失效 → 参与的跨问题关系进入 requires_revalidation
-            from runtime.state.relations import mark_relations_for_revalidation
+            from modeling_harness.runtime.state.relations import mark_relations_for_revalidation
             self._relation_revalidation = mark_relations_for_revalidation(
                 self.state, src_q, reason)
         art = self.registry.get(artifact_id)

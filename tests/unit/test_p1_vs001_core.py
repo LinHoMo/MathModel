@@ -8,17 +8,17 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import json
 
 import pytest
 
-from runtime.artifacts.ids import (
+from modeling_harness.runtime.artifacts.ids import (
     ARTIFACT_TYPES, PREFIX_TO_TYPE, format_id, id_type, is_valid_id, parse_id,
 )
-from runtime.artifacts.registry import ArtifactRegistry
-from runtime.graph.evidence_graph import (
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+from modeling_harness.runtime.graph.evidence_graph import (
     RELATION_TYPES, STRONG_RELATIONS, WEAK_RELATIONS, EvidenceGraph, GraphError,
     propagation_tiers,
 )

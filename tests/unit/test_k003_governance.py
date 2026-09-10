@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 
 _REPO = Path(__file__).resolve().parents[2]
-for p in (_REPO / "core", _REPO / "research" / "P15" / "experiments" / "P15-K003"):
+for p in (_REPO / "src", _REPO / "research" / "P15" / "experiments" / "P15-K003"):
     if str(p) not in sys.path:
         sys.path.insert(0, str(p))
 
@@ -24,7 +24,7 @@ from scripts.execution_writer import (build_execution_result,  # noqa: E402
 
 # ---------------------------------------------------------------- FIX-4.2
 def _make_registry_with_exec(tmp_path, exec_id="EXEC001"):
-    from runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     reg = ArtifactRegistry(tmp_path / "project" / "state" / "registry.json")
     reg.project = "k003"
     reg.create("question", title="Q1", activate=True)

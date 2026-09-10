@@ -25,13 +25,13 @@ import sys
 import tempfile
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
-if str(REPO / "core") not in sys.path:
-    sys.path.insert(0, str(REPO / "core"))
+REPO = Path(__file__).resolve().parents[4]
+if str(REPO / "src") not in sys.path:
+    sys.path.insert(0, str(REPO / "src"))
 
-from runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
-from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
-from runtime.state.model import ProjectState  # noqa: E402
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
+from modeling_harness.runtime.state.model import ProjectState  # noqa: E402
 
 # ---------------------------------------------------------------- 模式探测
 
@@ -129,7 +129,7 @@ def reconcile(project_dir) -> dict:
 
     # 6) D1 依赖双写完整性（复用 P12 既有口径）
     try:
-        from runtime.state.dependencies import dependency_integrity_problems
+        from modeling_harness.runtime.state.dependencies import dependency_integrity_problems
         d1 = dependency_integrity_problems(reg, disk)
         if d1:
             problems.append(f"依赖双写不一致（D1）: {d1}")

@@ -2,7 +2,7 @@
 
 持久化: projects/<p>/state/registry.json（原子写）。
 职责: ID 分配 / 版本历史 / 生命周期推进 / 引用完整性 / 查询。
-不做: Evidence Graph 的关系推导（core/runtime/graph 职责）——本层只在
+不做: Evidence Graph 的关系推导（src/modeling_harness/runtime/graph 职责）——本层只在
 Artifact contract 的 relations 字段维护 graph 同步过来的只读视图。
 """
 
@@ -24,8 +24,8 @@ REGISTRY_VERSION = 3
 # 管线可标记 validated。判定依据=调用栈中第一个非本模块帧的真实文件路径
 # （不信任任何显式传入的 caller 参数，防 Agent 伪装）。
 VALIDATION_CALLER_ALLOWED_SUBSTR = (
-    "core/runtime/execution/validators.py",
-    "core/runtime/execution/handlers.py",
+    "src/modeling_harness/runtime/execution/validators.py",
+    "src/modeling_harness/runtime/execution/handlers.py",
 )
 
 
@@ -37,8 +37,8 @@ def _caller_path() -> str | None:
         while frame:
             fname = frame.f_code.co_filename or ""
             norm = os.path.normpath(fname).replace("\\", "/")
-            if ("core/runtime/artifacts/registry.py" in norm
-                    or "core/runtime/artifacts/artifact.py" in norm):
+            if ("src/modeling_harness/runtime/artifacts/registry.py" in norm
+                    or "src/modeling_harness/runtime/artifacts/artifact.py" in norm):
                 frame = frame.f_back
                 continue
             return norm
@@ -59,15 +59,15 @@ _SCHEMA_CACHE: dict[str, dict | None] = {}
 
 
 def _find_schema(artifact_type: str) -> dict | None:
-    """core/schemas/v3/**/<type>.schema.json 探测（惰性缓存）。
+    """src/modeling_harness/schemas/v3/**/<type>.schema.json 探测（惰性缓存）。
 
     无 schema 的类型（legacy 类型等）返回 None → 跳过实例校验。
     """
     if artifact_type in _SCHEMA_CACHE:
         return _SCHEMA_CACHE[artifact_type]
     schema: dict | None = None
-    root = Path(__file__).resolve().parents[3]
-    for hit in sorted((root / "core" / "schemas" / "v3").rglob(
+    root = Path(__file__).resolve().parents[4]
+    for hit in sorted((root / "src" / "modeling_harness" / "schemas" / "v3").rglob(
             artifact_type + ".schema.json")):
         try:
             schema = json.loads(hit.read_text(encoding="utf-8"))
@@ -321,7 +321,7 @@ class ArtifactRegistry:
                        run_record: dict | None = None) -> Artifact:
         """active → validated（P0-5 门禁）。
 
-        仅允许 Runtime 验证管线（core/runtime/execution/validators.py、
+        仅允许 Runtime 验证管线（src/modeling_harness/runtime/execution/validators.py、
         handlers.py）调用——Agent/外部代码调 → PermissionError。
         run_record 必填且须含 run_id 或 hash（验证器运行记录，防伪造
         验证证据）；validator 键须与实参一致。

@@ -31,12 +31,12 @@ EXTRA_FILES = [
     "research/P15/protocol/preregistration/P15-K002-DRAFT.md",
     "research/P15/protocol/preregistration/P15-K002-GATES.md",
     "research/P15/capability/MODEL_CONSTRUCTION_RUBRIC.md",  # v1.1 评分标准（K002 全程使用）
-    "core/schemas/v3/model/model_ir.schema.json",  # MODEL_IR 契约真源（P1 C1 迁移，K002 模板对齐版）
+    "src/modeling_harness/schemas/v3/model/model_ir.schema.json",  # MODEL_IR 契约真源（P1 C1 迁移，K002 模板对齐版）
     "catalog/model_families.yaml",
-    "core/knowledge/methods/cards/mc-dp.yaml",
-    "core/knowledge/methods/cards/mc-numerical-pde.yaml",
-    "core/knowledge/methods/cards/mc-queuing-theory.yaml",
-    "core/schemas/v3/knowledge/method_card.schema.json",
+    "src/modeling_harness/knowledge/methods/cards/mc-dp.yaml",
+    "src/modeling_harness/knowledge/methods/cards/mc-numerical-pde.yaml",
+    "src/modeling_harness/knowledge/methods/cards/mc-queuing-theory.yaml",
+    "src/modeling_harness/schemas/v3/knowledge/method_card.schema.json",
 ]
 
 

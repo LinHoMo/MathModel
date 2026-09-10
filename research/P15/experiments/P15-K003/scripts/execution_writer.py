@@ -28,7 +28,7 @@ def utc_now_iso() -> str:
 
 def load_exec_data(project_dir: str | Path, exec_id: str) -> dict | None:
     """从 Artifact Registry 读 EXEC 真实字段（registry 是唯一真源）。"""
-    from runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     try:
         reg = ArtifactRegistry(Path(project_dir) / "state" / "registry.json")
         reg.load()

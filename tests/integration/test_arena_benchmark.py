@@ -14,8 +14,8 @@ import pytest
 
 _REPO = Path(__file__).resolve().parents[2]
 _ARENA = _REPO / "research" / "P15" / "benchmark" / "arena"
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 if str(_ARENA) not in sys.path:
     sys.path.insert(0, str(_ARENA))
 

@@ -79,13 +79,13 @@ class CompetitionPack:
 
 
 def load_competition_packs(knowledge_root: str | Path) -> dict[str, CompetitionPack]:
-    """加载 core/knowledge/competition/cp-*.yaml（目录缺省 → 空，向后兼容）。"""
+    """加载 src/modeling_harness/knowledge/competition/cp-*.yaml（目录缺省 → 空，向后兼容）。"""
     root = Path(knowledge_root) / "competition"
     packs: dict[str, CompetitionPack] = {}
     if not root.is_dir():
         return packs
     for f in sorted(root.glob("cp-*.yaml")):
-        from runtime.execution.yamlio import load_file  # 零依赖解析器
+        from modeling_harness.runtime.execution.yamlio import load_file  # 零依赖解析器
         data = load_file(f)
         pack = CompetitionPack.from_dict(data, str(f))
         if pack.pack_id in packs:

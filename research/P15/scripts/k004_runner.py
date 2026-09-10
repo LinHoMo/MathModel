@@ -22,10 +22,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 
-from runtime.execution.validation import validate_against_gt  # noqa: E402
+from modeling_harness.runtime.execution.validation import validate_against_gt  # noqa: E402
 
 OUT = _REPO / "research" / "P15" / "experiments" / "P15-K004"
 GT_PATH = (_REPO / "research" / "P15" / "benchmark" / "problem_cards"

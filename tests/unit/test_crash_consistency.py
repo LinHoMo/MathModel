@@ -13,11 +13,11 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.session import RuntimeSession  # noqa: E402
-from runtime.state.model import ProjectState  # noqa: E402
-from runtime.state.reconcile import reconcile  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.state.model import ProjectState  # noqa: E402
+from modeling_harness.runtime.state.reconcile import reconcile  # noqa: E402
 
 
 class TestCrashConsistency:

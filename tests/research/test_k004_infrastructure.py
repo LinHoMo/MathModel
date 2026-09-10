@@ -14,18 +14,18 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "tests" / "integration"))
 sys.path.insert(0, str(REPO / "research" / "P15" / "k004"))
 
 from _real_session import make_real_session  # noqa: E402
 from reference_constructor import ReferenceConstructor  # noqa: E402
 
-from runtime.constructors.protocol import (  # noqa: E402
+from modeling_harness.runtime.constructors.protocol import (  # noqa: E402
     ConstructionBundle, ConstructorAdapter)
-from runtime.constructors.registry import ConstructorRegistry, apply_bundle  # noqa: E402
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.constructors.registry import ConstructorRegistry, apply_bundle  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
 
 
 @pytest.fixture()

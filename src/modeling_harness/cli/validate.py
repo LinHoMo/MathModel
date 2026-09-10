@@ -131,7 +131,7 @@ def _env_get(key, default=None):
     """通过 env/loader.get 读取阈值；加载失败时回退 default。"""
     global _ENV_LOADER_MODULE
     if _ENV_LOADER_MODULE is None:
-        project_path = Path(__file__).resolve().parent.parent.parent
+        project_path = Path(__file__).resolve().parent.parent.parent.parent
         mod, err = _load_env_loader_module(project_path)
         _ENV_LOADER_MODULE = mod if mod is not None else False
     mod = _ENV_LOADER_MODULE
@@ -149,7 +149,7 @@ def _env_get(key, default=None):
 
 def check_schema_exists(project_path):
     """L1.1: 检查schemas目录是否存在"""
-    schemas_dir = project_path / "core" / "schemas"
+    schemas_dir = project_path / "src" / "modeling_harness" / "schemas"
     if not schemas_dir.exists():
         return False, "schemas/目录不存在"
     
@@ -164,7 +164,7 @@ def check_schema_exists(project_path):
 
 def check_schemas_valid(project_path):
     """L1.2: 检查JSON Schema是否为有效JSON"""
-    schemas_dir = project_path / "core" / "schemas"
+    schemas_dir = project_path / "src" / "modeling_harness" / "schemas"
     errors = []
     
     for f in schemas_dir.glob("*.json"):
@@ -341,10 +341,10 @@ def check_internal_paths(project_path):
 def check_required_artifacts(project_path):
     """L3.1: 检查必要产物（V3：MODEL_IR schema + 模型描述文档模板）"""
     required = {
-        "core/schemas/v3/model/model_ir.schema.json": "MODEL_IR schema",
-        "core/schemas/v3/artifact/artifact.schema.json": "Artifact schema",
-        "core/schemas/v3/evidence/graph.schema.json": "Evidence Graph schema",
-        "core/schemas/v3/decision/decision.schema.json": "Decision schema",
+        "src/modeling_harness/schemas/v3/model/model_ir.schema.json": "MODEL_IR schema",
+        "src/modeling_harness/schemas/v3/artifact/artifact.schema.json": "Artifact schema",
+        "src/modeling_harness/schemas/v3/evidence/graph.schema.json": "Evidence Graph schema",
+        "src/modeling_harness/schemas/v3/decision/decision.schema.json": "Decision schema",
     }
     missing = []
     for path, desc in required.items():
@@ -356,11 +356,11 @@ def check_required_artifacts(project_path):
 
 
 def check_knowledge_completeness(project_path):
-    """L3.2: 检查知识库完整性（V3：core/knowledge 子目录）"""
+    """L3.2: 检查知识库完整性（V3：src/modeling_harness/knowledge 子目录）"""
     checks = []
     for sub in ("methodology", "cookbooks", "methods", "failures",
                 "patterns", "pitfalls", "validation", "playbooks"):
-        d = project_path / "core" / "knowledge" / sub
+        d = project_path / "src" / "modeling_harness" / "knowledge" / sub
         if d.exists():
             n = len(list(d.glob("*.md"))) + len(list(d.glob("*.yaml")))
             checks.append(f"knowledge/{sub}: {n}个文件")
@@ -372,16 +372,16 @@ def check_knowledge_completeness(project_path):
 def check_laws_not_empty(project_path):
     """L3.3: 检查 V3 角色定义与 validator 目录非空"""
     empty = []
-    roles_dir = project_path / "core" / "roles"
+    roles_dir = project_path / "src" / "modeling_harness" / "roles"
     if roles_dir.exists():
         role_files = sorted(roles_dir.glob("*.yaml"))
         if not role_files:
-            empty.append("core/roles 无角色定义")
+            empty.append("modeling_harness/roles 无角色定义")
         for rf in role_files:
             if rf.stat().st_size == 0:
                 empty.append(f"{rf.name} 为空")
     else:
-        empty.append("core/roles 目录缺失")
+        empty.append("modeling_harness/roles 目录缺失")
     if empty:
         return False, "; ".join(empty)
     return True, "V3 角色定义完整"
@@ -419,8 +419,8 @@ def check_figure_refs(project_path):
 
 
 def check_question_spec_schema(project_path):
-    """L1.1: 检查question_spec.schema.json存在且有效"""
-    schema_path = project_path / "core" / "schemas" / "question_spec.schema.json"
+    """L1.1: 检查 question_spec.schema.json 存在且有效（V2 schema 已退役，归档于 schemas/legacy/）"""
+    schema_path = project_path / "src" / "modeling_harness" / "schemas" / "legacy" / "question_spec.schema.json"
     if not schema_path.exists():
         return False, "question_spec.schema.json不存在"
     try:
@@ -432,7 +432,7 @@ def check_question_spec_schema(project_path):
 
 def check_symbol_registry(project_path):
     """L1.2: 检查符号注册表"""
-    py_path = project_path / "core" / "validators" / "modules" / "symbol_registry.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "symbol_registry.py"
     if not py_path.exists():
         return False, "symbol_registry.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -443,7 +443,7 @@ def check_symbol_registry(project_path):
 
 def check_assumption_validator(project_path):
     """L1.3: 检查假设验证器"""
-    py_path = project_path / "core" / "validators" / "modules" / "assumption_validator.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "assumption_validator.py"
     if not py_path.exists():
         return False, "assumption_validator.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -458,7 +458,7 @@ def check_assumption_validator(project_path):
 
 def check_type_system(project_path):
     """L2.1: 检查类型系统"""
-    py_path = project_path / "core" / "validators" / "modules" / "type_system.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "type_system.py"
     if not py_path.exists():
         return False, "type_system.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -469,7 +469,7 @@ def check_type_system(project_path):
 
 def check_formula_checker(project_path):
     """L2.2: 检查公式检查器"""
-    py_path = project_path / "core" / "validators" / "modules" / "formula_checker.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "formula_checker.py"
     if not py_path.exists():
         return False, "formula_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -480,7 +480,7 @@ def check_formula_checker(project_path):
 
 def check_output_validator(project_path):
     """L2.3: 检查输出验证器"""
-    py_path = project_path / "core" / "validators" / "modules" / "output_validator.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "output_validator.py"
     if not py_path.exists():
         return False, "output_validator.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -495,7 +495,7 @@ def check_output_validator(project_path):
 
 def check_invariant_tracker(project_path):
     """L3.1: 检查不变式跟踪"""
-    py_path = project_path / "core" / "validators" / "modules" / "invariant_tracker.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "invariant_tracker.py"
     if not py_path.exists():
         return False, "invariant_tracker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -506,7 +506,7 @@ def check_invariant_tracker(project_path):
 
 def check_contract_checker(project_path):
     """L3.2: 检查契约校验"""
-    py_path = project_path / "core" / "validators" / "modules" / "contract_checker.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "contract_checker.py"
     if not py_path.exists():
         return False, "contract_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -517,7 +517,7 @@ def check_contract_checker(project_path):
 
 def check_stage_gate(project_path):
     """L3.3: 检查阶段门禁"""
-    py_path = project_path / "core" / "validators" / "modules" / "stage_gate.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "stage_gate.py"
     if not py_path.exists():
         return False, "stage_gate.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -532,7 +532,7 @@ def check_stage_gate(project_path):
 
 def check_symbolic_verifier(project_path):
     """L4.1: 检查符号验证器"""
-    py_path = project_path / "core" / "validators" / "modules" / "symbolic_verifier.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "symbolic_verifier.py"
     if not py_path.exists():
         return False, "symbolic_verifier.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -543,7 +543,7 @@ def check_symbolic_verifier(project_path):
 
 def check_cross_model_checker(project_path):
     """L4.2: 检查异构模型"""
-    py_path = project_path / "core" / "validators" / "modules" / "cross_model_checker.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "cross_model_checker.py"
     if not py_path.exists():
         return False, "cross_model_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -554,7 +554,7 @@ def check_cross_model_checker(project_path):
 
 def check_consistency_checker(project_path):
     """L4.3: 检查一致性校验"""
-    py_path = project_path / "core" / "validators" / "modules" / "consistency_checker.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "consistency_checker.py"
     if not py_path.exists():
         return False, "consistency_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -569,7 +569,7 @@ def check_consistency_checker(project_path):
 
 def check_trust_domain(project_path):
     """L5.1: 检查信任域定义"""
-    py_path = project_path / "core" / "validators" / "modules" / "trust_domain.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "trust_domain.py"
     if not py_path.exists():
         return False, "trust_domain.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -580,7 +580,7 @@ def check_trust_domain(project_path):
 
 def check_permission_guard(project_path):
     """L5.2: 检查权限守卫"""
-    py_path = project_path / "core" / "validators" / "modules" / "permission_guard.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "permission_guard.py"
     if not py_path.exists():
         return False, "permission_guard.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -591,7 +591,7 @@ def check_permission_guard(project_path):
 
 def check_incremental_checker(project_path):
     """L5.3: 检查增量校验"""
-    py_path = project_path / "core" / "validators" / "modules" / "incremental_checker.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "incremental_checker.py"
     if not py_path.exists():
         return False, "incremental_checker.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -606,7 +606,7 @@ def check_incremental_checker(project_path):
 
 def check_hash_chain(project_path):
     """L6.8: 检查哈希追溯链"""
-    py_path = project_path / "core" / "validators" / "modules" / "hash_chain.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "hash_chain.py"
     if not py_path.exists():
         return False, "hash_chain.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -617,7 +617,7 @@ def check_hash_chain(project_path):
 
 def check_error_attribution(project_path):
     """L6.9: 检查错误归因"""
-    py_path = project_path / "core" / "validators" / "modules" / "error_attribution.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "error_attribution.py"
     if not py_path.exists():
         return False, "error_attribution.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -628,7 +628,7 @@ def check_error_attribution(project_path):
 
 def check_rule_iterator(project_path):
     """L6.10: 检查规则迭代"""
-    py_path = project_path / "core" / "validators" / "modules" / "rule_iterator.py"
+    py_path = project_path / "src" / "modeling_harness" / "validators" / "modules" / "rule_iterator.py"
     if not py_path.exists():
         return False, "rule_iterator.py不存在"
     content = py_path.read_text(encoding="utf-8")
@@ -828,9 +828,9 @@ def check_random_seed(project_path):
 def check_directory_structure(project_path):
     """目录结构检查（V3：runtime / roles / validators / workflows）"""
     required_dirs = [
-        "core/runtime", "core/roles", "core/validators", "core/workflows",
-        "core/schemas", "core/knowledge", "core/knowledge/methodology",
-        "core/validators/modules", "core/tools", "tests",
+        "src/modeling_harness/runtime", "src/modeling_harness/roles", "src/modeling_harness/validators", "src/modeling_harness/workflows",
+        "src/modeling_harness/schemas", "src/modeling_harness/knowledge", "src/modeling_harness/knowledge/methodology",
+        "src/modeling_harness/validators/modules", "src/modeling_harness/cli", "tests",
     ]
     missing = [d for d in required_dirs if not (project_path / d).exists()]
     if missing:
@@ -864,7 +864,7 @@ def _load_env_loader_module(project_path):
 
     返回 (module, None) 或 (None, err_msg)。
     """
-    loader_path = project_path / "core" / "env" / "loader.py"
+    loader_path = project_path / "src" / "modeling_harness" / "env" / "loader.py"
     if not loader_path.exists():
         return None, "env/loader.py 不存在"
     try:
@@ -882,21 +882,21 @@ def _load_env_loader_module(project_path):
 def check_validator_modules_importable(project_path):
     """L6: validator modules 必须可导入且有校验入口（audit FIX-5.1 / P1-16）。
 
-    替换"字符串存在性检查"：对 core/validators/modules/ 下每个模块做真实
+    替换"字符串存在性检查"：对 src/modeling_harness/validators/modules/ 下每个模块做真实
     包路径 import + 冒烟（暴露顶层可调用对象 check/validate/evaluate/
     类等）。import 失败或无任何可调用入口 = 死代码，如实报告。接线状态
     （哪些已接入 DAG 节点）在 STATUS.md 声明，这里只保证模块本身可运行。
     """
     import importlib
     import sys
-    mods_dir = project_path / "core" / "validators" / "modules"
+    mods_dir = project_path / "src" / "modeling_harness" / "validators" / "modules"
     if not mods_dir.exists():
-        return False, "core/validators/modules 目录不存在"
+        return False, "src/modeling_harness/validators/modules 目录不存在"
     py_files = sorted(p for p in mods_dir.glob("*.py")
                       if not p.name.startswith("_"))
     if not py_files:
         return False, "validator modules 为空"
-    core_dir = str(project_path / "core")
+    core_dir = str(project_path / "src")
     if core_dir not in sys.path:
         sys.path.insert(0, core_dir)
     broken = []
@@ -904,7 +904,7 @@ def check_validator_modules_importable(project_path):
     for py in py_files:
         try:
             module = importlib.import_module(
-                "validators.modules." + py.stem)
+                "modeling_harness.validators.modules." + py.stem)
             loaded += 1
             entries = [n for n, v in vars(module).items()
                        if not n.startswith("_") and callable(v)]
@@ -920,7 +920,7 @@ def check_validator_modules_importable(project_path):
 
 def check_env_config_exists(project_path):
     """L1: env 配置三件套存在（config.yaml / loader.py / README.md）"""
-    required = ["core/env/config.yaml", "core/env/loader.py", "core/env/README.md"]
+    required = ["src/modeling_harness/env/config.yaml", "src/modeling_harness/env/loader.py", "src/modeling_harness/env/README.md"]
     missing = [f for f in required if not (project_path / f).exists()]
     if missing:
         return False, f"缺失env配置文件: {', '.join(missing)}"
@@ -1126,7 +1126,7 @@ def check_model_ir(project_path):
     live = _live_project_dirs(project_path)
     if not live:
         return True, "跳过：无活跃项目实例"
-    schema_path = project_path / "core" / "schemas" / "v3" / "model" / "model_ir.schema.json"
+    schema_path = project_path / "src" / "modeling_harness" / "schemas" / "v3" / "model" / "model_ir.schema.json"
     import json as _json
     problems = []
     checked = 0
@@ -1239,6 +1239,6 @@ def check_checkpoint_format(project_path):
 
 
 if __name__ == "__main__":
-    project_path = str(Path(__file__).resolve().parent.parent.parent)
+    project_path = str(Path(__file__).resolve().parent.parent.parent.parent)
     success = validate_project(project_path)
     sys.exit(0 if success else 1)

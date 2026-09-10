@@ -6,10 +6,10 @@
 主要用于 code-implementer / test-runner 在隔离环境中运行代码。
 
 用法:
-    python core/tools/cloud_sandbox.py run <代码文件>          # 执行代码
-    python core/tools/cloud_sandbox.py run --code "print(42)"  # 执行内联代码
-    python core/tools/cloud_sandbox.py status                   # 检查云端可用性
-    python core/tools/cloud_sandbox.py config                   # 显示当前配置
+    python src/modeling_harness/cli/cloud_sandbox.py run <代码文件>          # 执行代码
+    python src/modeling_harness/cli/cloud_sandbox.py run --code "print(42)"  # 执行内联代码
+    python src/modeling_harness/cli/cloud_sandbox.py status                   # 检查云端可用性
+    python src/modeling_harness/cli/cloud_sandbox.py config                   # 显示当前配置
 
 零第三方依赖（云端 SDK 按需 import，不可用时回退本地）。
 """
@@ -23,10 +23,10 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(ROOT / "core" / "env"))
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "env"))
 
-from loader import get  # noqa: E402
+from modeling_harness.env.loader import get  # noqa: E402
 
 
 def _load_config() -> dict:

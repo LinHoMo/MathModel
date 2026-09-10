@@ -8,12 +8,12 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.execution.dag import DAGError, Node, WorkflowDAG
-from runtime.execution.engine import (
+from modeling_harness.runtime.execution.dag import DAGError, Node, WorkflowDAG
+from modeling_harness.runtime.execution.engine import (
     BLOCKED, FAIL, PASS, EngineError, NodeResult, WorkflowEngine,
 )
 
@@ -147,7 +147,7 @@ class TestRetriesAndFeedback:
         回归场景：b 永远 FAIL（on_fail="a"），a 重置后重跑仍 PASS，
         b 再 FAIL → 若引擎不收敛将无限回退；收敛后第 3 轮回退即 blocked。
         """
-        from runtime.execution.wave_executor import WaveExecutor
+        from modeling_harness.runtime.execution.wave_executor import WaveExecutor
 
         class AlwaysFailB:
             def __call__(self, node_id, context):
@@ -169,7 +169,7 @@ class TestRetriesAndFeedback:
         反馈环内部 rollback_to→reset_to **不得**清计数（否则收敛阈值永远
         达不到——audit P0 死循环回归的根因，由收敛测试覆盖）。
         """
-        from runtime.execution.wave_executor import WaveExecutor
+        from modeling_harness.runtime.execution.wave_executor import WaveExecutor
 
         class AlwaysFailB:
             def __call__(self, node_id, context):

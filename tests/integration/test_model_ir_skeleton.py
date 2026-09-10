@@ -15,10 +15,10 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.session import RuntimeSession  # noqa: E402
-from runtime.modeling.model_ir import (  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.modeling.model_ir import (  # noqa: E402
     MODEL_IR_REQUIRED_FIELDS,
     ModelIRBuilder,
 )
@@ -83,7 +83,7 @@ def test_skeleton_mir_contract_compliant(tmp_path):
 
 
 def test_skeleton_mir_passes_jsonschema(tmp_path):
-    """骨架 MODEL_IR 通过 core/schemas/v3/model/model_ir.schema.json 校验。"""
+    """骨架 MODEL_IR 通过 src/modeling_harness/schemas/v3/model/model_ir.schema.json 校验。"""
     import json
 
     import jsonschema
@@ -96,6 +96,6 @@ def test_skeleton_mir_passes_jsonschema(tmp_path):
         data={"card_id": "mc-ols", "model_family": "ols"}, activate=True)
     mir_id = s.executor_impl._skeleton_mir("Q001", mid.artifact_id)
     schema = json.loads(
-        Path(REPO / "core/schemas/v3/model/model_ir.schema.json")
+        Path(REPO / "src/modeling_harness/schemas/v3/model/model_ir.schema.json")
         .read_text(encoding="utf-8"))
     jsonschema.validate(s.registry.get(mir_id).data, schema)

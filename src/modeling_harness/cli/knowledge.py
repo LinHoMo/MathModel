@@ -6,13 +6,13 @@
 （候选方法 + 适用条件 + 风险 + 验证方式 + 历史失败案例 + 创新模式）。
 
 用法:
-    python core/tools/knowledge.py recommend --types evaluation,ranking [--no-data]
+    python src/modeling_harness/cli/knowledge.py recommend --types evaluation,ranking [--no-data]
                                          [--sample small|medium|large]
                                          [--timeseries] [--objectives N] [--uncertain]
-    python core/tools/knowledge.py show mc-topsis
-    python core/tools/knowledge.py failures mc-ga
-    python core/tools/knowledge.py patterns [evaluation,...]
-    python core/tools/knowledge.py stats
+    python src/modeling_harness/cli/knowledge.py show mc-topsis
+    python src/modeling_harness/cli/knowledge.py failures mc-ga
+    python src/modeling_harness/cli/knowledge.py patterns [evaluation,...]
+    python src/modeling_harness/cli/knowledge.py stats
 
 零第三方依赖。"""
 from __future__ import annotations
@@ -21,13 +21,13 @@ import argparse
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(ROOT / "core"))
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(ROOT / "src"))
 
-from runtime.knowledge.cards import CardError           # noqa: E402
-from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.runtime.knowledge.cards import CardError           # noqa: E402
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
 
-KNOWLEDGE_ROOT = ROOT / "core" / "knowledge"
+KNOWLEDGE_ROOT = ROOT / "src" / "modeling_harness" / "knowledge"
 
 
 def _retriever() -> KnowledgeRetriever:
@@ -96,7 +96,7 @@ def cmd_show(args) -> int:
     if c.often_combined_with:
         print(f"常组合: {', '.join(c.often_combined_with)}")
     if c.reference:
-        print(f"详档: core/knowledge/{c.reference}")
+        print(f"详档: src/modeling_harness/knowledge/{c.reference}")
     return 0
 
 

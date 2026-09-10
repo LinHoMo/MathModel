@@ -16,10 +16,10 @@ from pathlib import Path
 import pytest
 
 _REPO = Path(__file__).resolve().parents[2]
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 
-from runtime.modeling.model_ir import (MODEL_IR_REQUIRED_FIELDS,  # noqa: E402
+from modeling_harness.runtime.modeling.model_ir import (MODEL_IR_REQUIRED_FIELDS,  # noqa: E402
                                        _check_l2_mathematical,
                                        _is_skeleton,
                                        validate_model_ir)

@@ -7,13 +7,13 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.knowledge.cards import CardError, FailureMemory, load_knowledge
+from modeling_harness.runtime.knowledge.cards import CardError, FailureMemory, load_knowledge
 
-KNOWLEDGE_ROOT = REPO / "core" / "knowledge"
+KNOWLEDGE_ROOT = REPO / "src" / "modeling_harness" / "knowledge"
 
 
 @pytest.fixture(scope="module")

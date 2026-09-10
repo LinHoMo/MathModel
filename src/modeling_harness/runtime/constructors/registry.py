@@ -16,7 +16,7 @@ from typing import TYPE_CHECKING
 from .protocol import ConstructionBundle, ConstructorAdapter
 
 if TYPE_CHECKING:
-    from runtime.execution.session import RuntimeSession
+    from modeling_harness.runtime.execution.session import RuntimeSession
 
 
 class ConstructorError(RuntimeError):

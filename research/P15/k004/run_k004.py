@@ -17,7 +17,7 @@ import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "research" / "P15" / "vs001_run"))
 sys.path.insert(0, str(REPO / "research" / "P15" / "k004"))
 
@@ -75,9 +75,9 @@ def run_ref_minus_rt(constructor, problem: dict, seed: int) -> dict:
 def run_ref_plus_rt(constructor, problem: dict, seed: int,
                     project_dir: Path) -> dict:
     """ref constructor +RT：注入 Runtime 并执行完整 DAG。"""
-    from runtime.execution.session import RuntimeSession
-    from runtime.execution.adapters import LocalPythonAdapter
-    from runtime.constructors.registry import apply_bundle
+    from modeling_harness.runtime.execution.session import RuntimeSession
+    from modeling_harness.runtime.execution.adapters import LocalPythonAdapter
+    from modeling_harness.runtime.constructors.registry import apply_bundle
 
     bundle = constructor.construct(problem, context=None)
     # Registry assigns Q001, Q002... as artifact_ids. external_model_irs

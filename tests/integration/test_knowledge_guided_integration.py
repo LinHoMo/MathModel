@@ -15,13 +15,13 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "tests" / "integration"))
 
 from _real_session import MINIMAL_VALIDATION_SPEC, _minimal_mir  # noqa: E402
 
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
 
 OK_CODE = """def solve(inputs):
     a = float(inputs["a"]); x = float(inputs["x"]); b = float(inputs["b"])
@@ -40,7 +40,7 @@ LOOP_NODES = [
     "code_generation", "model_execution", "model_validation",
 ]
 
-# BZD 试点卡（存在 core/knowledge/methods/cards/mc-bzd-*.yaml）
+# BZD 试点卡（存在 src/modeling_harness/knowledge/methods/cards/mc-bzd-*.yaml）
 GUIDE_CARDS = ["mc-bzd-model-fit", "mc-bzd-validation-obligations"]
 
 

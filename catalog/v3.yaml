@@ -3,20 +3,20 @@
 v3:
   description: V3.1 认知工作流运行时（Artifact 层 + Typed Evidence Graph + Workflow DAG）
   runtime: cognitive-workflow
-  workflows_dir: core/workflows
+  workflows_dir: src/modeling_harness/workflows
   state_dir: state            # projects/<p>/state/ = registry + graph + decisions
-  roles:                      # 4 角色（与 core/roles/*.yaml 一致）
+  roles:                      # 4 角色（与 src/modeling_harness/roles/*.yaml 一致）
     - name: analyst
-      path: core/roles/analyst.yaml
+      path: src/modeling_harness/roles/analyst.yaml
       capabilities: 赛题结构化解析、文献检索与证据提取
     - name: modeler
-      path: core/roles/modeler.yaml
+      path: src/modeling_harness/roles/modeler.yaml
       capabilities: 方法选型竞技场、数学建模
     - name: experimenter
-      path: core/roles/experimenter.yaml
+      path: src/modeling_harness/roles/experimenter.yaml
       capabilities: 实验规划、执行、证据登记
     - name: critic
-      path: core/roles/critic.yaml
+      path: src/modeling_harness/roles/critic.yaml
       capabilities: 前置批判（model/experiment/evidence 三道门禁）
   nodes:                      # 16 节点（per_question 节点按 Question 展开）
     - name: problem_analysis
@@ -77,16 +77,16 @@ v3:
   validators:                 # 4 validator（DAG validator 绑定）
     - name: evidence-gate
       kind: runtime
-      path: core/validators/evidence/evidence_gate.py
+      path: src/modeling_harness/validators/evidence/evidence_gate.py
     - name: research-quality
       kind: runtime
-      path: core/validators/quality/
+      path: src/modeling_harness/validators/quality/
     - name: model-critic
       kind: skill
-      path: core/skills/critics/model-critic/SKILL.md
+      path: src/modeling_harness/skills/critics/model-critic/SKILL.md
     - name: experiment-critic
       kind: skill
-      path: core/skills/critics/experiment-critic/SKILL.md
+      path: src/modeling_harness/skills/critics/experiment-critic/SKILL.md
     - name: assumption-checker
       kind: runtime
-      path: core/validators/modules/assumption_validator.py
+      path: src/modeling_harness/validators/modules/assumption_validator.py

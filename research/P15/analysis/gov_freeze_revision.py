@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """K002/K003 冻结 new revision：
 audit FIX-5.3/5.4（code_mapping + validations.type enum 扩展 + L2 数学校验）
-原地修改了冻结项 core/schemas/v3/model/model_ir.schema.json → 双实验冻结漂移。
+原地修改了冻结项 src/modeling_harness/schemas/v3/model/model_ir.schema.json → 双实验冻结漂移。
 处理：升 PROTOCOL_VERSION + 重写 hashes.json（new revision，保留 audit 修复）。
 """
 import re

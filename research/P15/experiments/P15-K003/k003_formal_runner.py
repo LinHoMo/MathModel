@@ -34,7 +34,7 @@ PROBLEM_CARDS = REPO_ROOT / "research" / "P15" / "benchmark" / "problem_cards"
 sys.path.insert(0, str(REPO_ROOT / "core"))
 sys.path.insert(0, str(PRECHECK_DIR))
 
-from runtime.execution.codegen import run_code_pipeline  # noqa: E402
+from modeling_harness.runtime.execution.codegen import run_code_pipeline  # noqa: E402
 from k003_problems import PROBLEMS as PRECHECK_PROBLEMS  # noqa: E402
 
 # ---- 实验配置 ----
@@ -89,7 +89,7 @@ def utc_now_iso() -> str:
 def _load_exec_data(project_dir, exec_id):
     """FIX-1.6：从 Artifact Registry 读 EXEC 真实字段（execution substrate
     产物；registry 是唯一真源）。读不到返回 None（调用方如实标 invalid）。"""
-    from runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     try:
         reg = ArtifactRegistry(Path(project_dir) / "state" / "registry.json")
         reg.load()

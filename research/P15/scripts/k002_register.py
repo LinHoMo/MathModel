@@ -35,7 +35,7 @@ import k002_common as K  # noqa: E402
 
 # MODEL_IR 契约 schema（唯一真源 = core；research/P15 旧版已 SUPERSEDED）：
 # S/SV 臂产物必须通过（docstring 承诺的 jsonschema，此处真实执行）
-MODEL_IR_SCHEMA = K.ROOT / "core/schemas/v3/model/model_ir.schema.json"
+MODEL_IR_SCHEMA = K.ROOT / "src/modeling_harness/schemas/v3/model/model_ir.schema.json"
 
 REQUIRED_TOP = [
     "ir_version", "model_id", "model_family", "problem_binding", "assumptions",

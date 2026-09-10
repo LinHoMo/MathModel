@@ -11,12 +11,12 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "tests"))
 
 from conftest import mir, CODE, validation_spec, injected_session  # noqa: E402
 
-from runtime.execution.engine import BLOCKED, PASS  # noqa: E402
+from modeling_harness.runtime.execution.engine import BLOCKED, PASS  # noqa: E402
 
 
 def _bare_session(tmp_path):

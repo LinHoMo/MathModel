@@ -5,9 +5,9 @@
 对 env/config.yaml 进行全量校验，自动修复常见问题。
 
 用法:
-    python core/tools/env_doctor.py
-    python core/tools/env_doctor.py --fix
-    python core/tools/env_doctor.py --json
+    python src/modeling_harness/cli/env_doctor.py
+    python src/modeling_harness/cli/env_doctor.py --fix
+    python src/modeling_harness/cli/env_doctor.py --json
 
 零第三方依赖。"""
 from __future__ import annotations
@@ -17,11 +17,11 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(ROOT / "core" / "tools"))
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli"))
 
 
-from env.loader import get as env_get, load_config  # noqa: E402
+from modeling_harness.env.loader import get as env_get, load_config  # noqa: E402
 from pathlib import Path as _Path
 CONFIG_PATH = _Path(__file__).resolve().parent.parent / "env" / "config.yaml"
 

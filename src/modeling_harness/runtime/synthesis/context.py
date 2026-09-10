@@ -35,9 +35,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from itertools import combinations
 
-from runtime.state.dependencies import DEPENDENCY_TYPES, PARTICIPATION
-from runtime.state.dependencies import dependency_records
-from runtime.state.relations import cross_relations
+from modeling_harness.runtime.state.dependencies import DEPENDENCY_TYPES, PARTICIPATION
+from modeling_harness.runtime.state.dependencies import dependency_records
+from modeling_harness.runtime.state.relations import cross_relations
 
 
 @dataclass

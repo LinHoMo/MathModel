@@ -9,11 +9,11 @@ import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.dag import Node, WorkflowDAG  # noqa: E402
-from runtime.execution.engine import FAIL, PASS, NodeResult, WorkflowEngine  # noqa: E402
-from runtime.execution.wave_executor import WaveExecutor  # noqa: E402
+from modeling_harness.runtime.execution.dag import Node, WorkflowDAG  # noqa: E402
+from modeling_harness.runtime.execution.engine import FAIL, PASS, NodeResult, WorkflowEngine  # noqa: E402
+from modeling_harness.runtime.execution.wave_executor import WaveExecutor  # noqa: E402
 
 
 def _diamond_dag() -> WorkflowDAG:

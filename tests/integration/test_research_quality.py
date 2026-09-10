@@ -10,17 +10,17 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
-from runtime.decisions.log import DecisionLog  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
-from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
-from runtime.knowledge.packs import load_competition_packs  # noqa: E402
-from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
-from validators.quality import ResearchQuality  # noqa: E402
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
+from modeling_harness.runtime.decisions.log import DecisionLog  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
+from modeling_harness.runtime.knowledge.packs import load_competition_packs  # noqa: E402
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.validators.quality import ResearchQuality  # noqa: E402
 
-KNOW = REPO / "core" / "knowledge"
+KNOW = REPO / "src" / "modeling_harness" / "knowledge"
 
 
 def _rq(decisions=None, pack=None):

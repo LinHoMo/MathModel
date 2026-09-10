@@ -50,7 +50,7 @@ EVAL_EAF = (
 )
 
 CARD_COVER = (
-    "方法卡库 core/knowledge/methods/cards/ 共 16 张，family 覆盖：decision_analysis, classical_timeseries, "
+    "方法卡库 src/modeling_harness/knowledge/methods/cards/ 共 16 张，family 覆盖：decision_analysis, classical_timeseries, "
     "composite_evaluation, metaheuristics, uncertainty_propagation, multi_objective_optimization, "
     "statistical_modeling, dimensionality_reduction, unsupervised, supervised_learning, timeseries_learning。"
     "无 kinematics/geometric_modeling/dynamic_programming/MDP/game_theory/PDE/finite_difference/queueing_theory 家族卡片"

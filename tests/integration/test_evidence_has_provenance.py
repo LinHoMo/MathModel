@@ -13,13 +13,13 @@ from pathlib import Path
 import pytest
 
 _REPO = Path(__file__).resolve().parents[2]
-for p in (_REPO / "core", _REPO / "research" / "P15" / "vs001_run"):
+for p in (_REPO / "src", _REPO / "research" / "P15" / "vs001_run"):
     if str(p) not in sys.path:
         sys.path.insert(0, str(p))
 
 from vs001_driver import (LOOP_NODES, artifact_ids, make_session,  # noqa: E402
                           relation_pairs, run_m1, run_m2, step_all)
-from validators.evidence.evidence_gate import evaluate as gate_evaluate  # noqa: E402
+from modeling_harness.validators.evidence.evidence_gate import evaluate as gate_evaluate  # noqa: E402
 
 
 @pytest.fixture()
@@ -69,8 +69,8 @@ def test_supports_edge_carries_exec_ref(session, tmp_path):
 def test_gate_weak_when_edge_missing_but_data_has(tmp_path):
     """旧数据形态：supports 边无 exec_ref，仅 result.data.execution_ref →
     E9 降级 weak（不 FAIL，但要求补齐边级 provenance）。"""
-    from runtime.artifacts.registry import ArtifactRegistry
-    from runtime.graph.evidence_graph import EvidenceGraph
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.project = "t"
     reg.create("question", title="Q", activate=True)
@@ -93,8 +93,8 @@ def test_gate_weak_when_edge_missing_but_data_has(tmp_path):
 
 def test_gate_fails_without_any_exec(tmp_path):
     """无任何执行引用：supports 边无 exec_ref 且 result.data 也无 → E9 FAIL。"""
-    from runtime.artifacts.registry import ArtifactRegistry
-    from runtime.graph.evidence_graph import EvidenceGraph
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.project = "t"
     reg.create("question", title="Q", activate=True)

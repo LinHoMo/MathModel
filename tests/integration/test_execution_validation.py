@@ -13,14 +13,14 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
-from runtime.execution.validation import (  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.execution.validation import (  # noqa: E402
     run_checks, validate_execution,
 )
-from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
 
 
 def _make_exec(tmp_path, code, qid="Q001"):
@@ -98,7 +98,7 @@ class TestValidateExecution:
         # registry 有 VR（重载磁盘真源，session 内存态不感知外部写入）
         # 注意：DAG model_validation 节点已按注入 validation_spec 真实产 VR001，
         # 手动 validate_execution 产 VR002——双重验证均为真实产物，都需落盘。
-        from runtime.artifacts.registry import ArtifactRegistry
+        from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
         reg2 = ArtifactRegistry(s.project_dir / "state" / "registry.json")
         reg2.load()
         vrs = reg2.list_by_type("verification_result")

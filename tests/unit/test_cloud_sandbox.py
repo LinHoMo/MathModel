@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "core" / "tools"))
+sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli"))
 
 import cloud_sandbox as CS  # noqa: E402
 

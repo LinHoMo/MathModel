@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "core" / "tools"))
+sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli"))
 
 import benchmark  # noqa: E402
 
@@ -15,7 +15,7 @@ import benchmark  # noqa: E402
 @pytest.fixture
 def fake_root(tmp_path, monkeypatch):
     for comp in ("cumcm", "mcm"):
-        (tmp_path / "core" / "templates" / "latex" / comp).mkdir(parents=True)
+        (tmp_path / "src" / "modeling_harness" / "templates" / "latex" / comp).mkdir(parents=True)
     (tmp_path / "projects").mkdir()
     monkeypatch.setattr(benchmark, "ROOT", tmp_path)
     monkeypatch.setattr(benchmark.new_project, "ROOT", tmp_path)
@@ -23,7 +23,7 @@ def fake_root(tmp_path, monkeypatch):
 
 
 def _write_knowledge(root: Path):
-    prob = root / "core" / "knowledge" / "problems"
+    prob = root / "src" / "modeling_harness" / "knowledge" / "problems"
     prob.mkdir(parents=True)
     (prob / "INDEX.md").write_text(
         "# 赛题索引\n## 2020 年\n| 2020 | A | 炉温曲线 | x | 中 | 备注 |\n"

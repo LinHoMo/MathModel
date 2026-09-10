@@ -2,7 +2,7 @@
 """治理修复：validate.py iter_repo 统一排除研究实验路径（research/ + projects/ 下 P15 实验项目）。"""
 import re
 
-p = "core/tools/validate.py"
+p = "src/modeling_harness/cli/validate.py"
 t = open(p, encoding="utf-8").read()
 
 # 1. 增加研究实验路径识别

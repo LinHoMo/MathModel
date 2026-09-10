@@ -9,7 +9,7 @@ ROOT = Path(".").resolve()
 BANNER = (
     "<!-- ARCHIVAL-NOTE\n"
     "本文件为历史规划/报告快照（撰写时的真实状态），部分内部路径与术语已被后续"
-    "架构演进取代（如 core/tools/evaluation/ 已迁至 core/tools/、V2 agent 目录已"
+    "架构演进取代（如 src/modeling_harness/cli/evaluation/ 已迁至 src/modeling_harness/cli/、V2 agent 目录已"
     "重组为 V3 roles）。当前权威口径以 AGENTS.md 与 docs/architecture/"
     "HARDENING_PROGRAM.md 为准；历史文档仅作溯源，不作为实现依据。\n"
     "ARCHIVAL-NOTE -->\n"

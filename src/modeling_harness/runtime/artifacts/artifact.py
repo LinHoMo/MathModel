@@ -2,7 +2,7 @@
 
 Contract 必备维度: identity / type / version / status / provenance /
 dependency / validation / relations / lifecycle / invalidation。
-本模块同时提供零依赖的结构化校验（对应 core/schemas/v3/artifact/artifact.schema.json）。
+本模块同时提供零依赖的结构化校验（对应 src/modeling_harness/schemas/v3/artifact/artifact.schema.json）。
 """
 
 from __future__ import annotations

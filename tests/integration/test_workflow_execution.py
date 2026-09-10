@@ -14,13 +14,13 @@ import pytest
 pytestmark = pytest.mark.integration
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.composer import WorkflowComposer  # noqa: E402
-from runtime.execution.engine import FAIL, PASS, NodeResult, WorkflowEngine  # noqa: E402
-from runtime.state.model import ProjectState  # noqa: E402
+from modeling_harness.runtime.execution.composer import WorkflowComposer  # noqa: E402
+from modeling_harness.runtime.execution.engine import FAIL, PASS, NodeResult, WorkflowEngine  # noqa: E402
+from modeling_harness.runtime.state.model import ProjectState  # noqa: E402
 
-WF = REPO / "core" / "workflows"
+WF = REPO / "src" / "modeling_harness" / "workflows"
 
 
 class TestEngineFailureRecovery:

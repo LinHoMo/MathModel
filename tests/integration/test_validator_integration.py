@@ -17,14 +17,14 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "tests" / "integration"))
 
 from _real_session import MINIMAL_VALIDATION_SPEC, _minimal_mir  # noqa: E402
 
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.engine import NodeResult, PASS  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.engine import NodeResult, PASS  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
 
 
 def _make(tmp_path, mir, code):
@@ -41,7 +41,7 @@ class TestEngineValidators:
 
     def test_validators_registered_on_session(self, tmp_path):
         """session 创建引擎时 validators 非空（全部 NODE_TYPES 覆盖）。"""
-        from runtime.execution.dag import NODE_TYPES
+        from modeling_harness.runtime.execution.dag import NODE_TYPES
         s = _make(tmp_path, _minimal_mir("Q001"),
                   "def solve(inputs):\n    return {}\n")
         assert s.engine.validators, "engine.validators 必须非空"
@@ -50,7 +50,7 @@ class TestEngineValidators:
 
     def test_fake_artifact_rejected(self, tmp_path):
         """PASS 节点声称不存在的 artifact → validator 否决 → FAIL。"""
-        from runtime.execution.validators import evidence_consistency_validator
+        from modeling_harness.runtime.execution.validators import evidence_consistency_validator
         s = _make(tmp_path, _minimal_mir("Q001"),
                   "def solve(inputs):\n    return {}\n")
         v = evidence_consistency_validator(s.registry, s.graph)
@@ -59,7 +59,7 @@ class TestEngineValidators:
         assert reason and "NOPE-999" in reason
 
     def test_fake_evidence_endpoint_rejected(self, tmp_path):
-        from runtime.execution.validators import evidence_consistency_validator
+        from modeling_harness.runtime.execution.validators import evidence_consistency_validator
         s = _make(tmp_path, _minimal_mir("Q001"),
                   "def solve(inputs):\n    return {}\n")
         v = evidence_consistency_validator(s.registry, s.graph)
@@ -71,7 +71,7 @@ class TestEngineValidators:
 
     def test_clean_pass_not_blocked(self, tmp_path):
         """合法产物/证据 → validator 通过（生产路径不误杀）。"""
-        from runtime.execution.validators import evidence_consistency_validator
+        from modeling_harness.runtime.execution.validators import evidence_consistency_validator
         s = _make(tmp_path, _minimal_mir("Q001"),
                   "def solve(inputs):\n    return {}\n")
         art = s.registry.create("claim", title="t", question="Q001",

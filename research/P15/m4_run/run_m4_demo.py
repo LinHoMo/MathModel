@@ -20,8 +20,8 @@ from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
 _HERE = Path(__file__).resolve().parent
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 if str(_HERE) not in sys.path:
     sys.path.insert(0, str(_HERE))
 if str(_HERE.parent / "m3_run") not in sys.path:

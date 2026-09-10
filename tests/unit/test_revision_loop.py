@@ -16,21 +16,21 @@ from pathlib import Path
 import pytest
 
 _REPO = Path(__file__).resolve().parents[2]
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 if str(_REPO / "research" / "P15" / "vs001_run") not in sys.path:
     sys.path.insert(0, str(_REPO / "research" / "P15" / "vs001_run"))
 
-from runtime.modeling.diagnosis import diagnose_failure  # noqa: E402
-from runtime.modeling.revision import build_revision_draft  # noqa: E402
-from runtime.modeling.comparison import compare_models  # noqa: E402
+from modeling_harness.runtime.modeling.diagnosis import diagnose_failure  # noqa: E402
+from modeling_harness.runtime.modeling.revision import build_revision_draft  # noqa: E402
+from modeling_harness.runtime.modeling.comparison import compare_models  # noqa: E402
 from vs001_fixtures import M1_DICT, M2_DICT  # noqa: E402
 
 
 # ---------------------------------------------------------------- FIX-6.1
 
 def _fake_reg(tmp_path):
-    from runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.create("question", title="Q001", data={"question_id": "Q001"},
                activate=True)

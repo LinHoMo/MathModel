@@ -5,7 +5,7 @@
       State 只存状态与聚合视图。
     * 维度: problem / questions / models / experiments / evidence /
       review / workflow / run。
-    * 29-step 线性编号退役为 legacy（core/runtime/legacy 负责映射）。
+    * 29-step 线性编号退役为 legacy（src/modeling_harness/runtime/legacy 负责映射）。
     * Question 是一等执行单元（Per-Qi）：独立状态机 + 依赖声明。
 
 持久化: projects/<p>/state/status.json。

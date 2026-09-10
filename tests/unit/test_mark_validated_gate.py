@@ -15,11 +15,11 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest  # noqa: E402
 
-from runtime.artifacts.registry import (  # noqa: E402
+from modeling_harness.runtime.artifacts.registry import (  # noqa: E402
     ArtifactRegistry, RegistryError, VALIDATION_CALLER_ALLOWED_SUBSTR)
 
 
@@ -75,7 +75,7 @@ def test_whitelisted_caller_accepted():
             "REG.mark_validated(AID, 'model-critic', "
             "run_record={'validator': 'model-critic', 'run_id': 'run-001', "
             "'hash': 'abc123'})",
-            str(REPO / "core" / "runtime" / "execution" / "validators.py"),
+            str(REPO / "src" / "modeling_harness" / "runtime" / "execution" / "validators.py"),
             "exec")
         exec(code, {"REG": reg, "AID": m.artifact_id})
         art = reg.get(m.artifact_id)
@@ -91,15 +91,15 @@ def test_whitelisted_caller_accepted():
 def test_whitelist_config():
     """白名单仅含 runtime 验证管线（不信任显式 caller 参数）。"""
     assert VALIDATION_CALLER_ALLOWED_SUBSTR == (
-        "core/runtime/execution/validators.py",
-        "core/runtime/execution/handlers.py",
+        "src/modeling_harness/runtime/execution/validators.py",
+        "src/modeling_harness/runtime/execution/handlers.py",
     )
 
 
 def test_critic_skills_no_mark_validated():
     """critic SKILL.md 不含 mark_validated 指令。"""
-    for rel in ("core/skills/critics/model-critic/SKILL.md",
-                "core/skills/critics/experiment-critic/SKILL.md"):
+    for rel in ("src/modeling_harness/skills/critics/model-critic/SKILL.md",
+                "src/modeling_harness/skills/critics/experiment-critic/SKILL.md"):
         text = (REPO / rel).read_text(encoding="utf-8")
         assert "mark_validated" not in text, rel
 
@@ -107,7 +107,7 @@ def test_critic_skills_no_mark_validated():
 def test_repo_grep_only_whitelisted():
     """全仓 mark_validated( 仅 registry/artifact 定义 + validator/白名单 + 测试。"""
     out = subprocess.run(
-        ["rg", "-l", r"mark_validated\(", "core", "tests", "research"],
+        ["rg", "-l", r"mark_validated\(", "src/modeling_harness", "tests", "research"],
         cwd=str(REPO), capture_output=True, text=True).stdout
     files = [f for f in out.splitlines() if f.strip()]
     # .md 文档是描述性文本（门禁设计说明），不是代码调用点；
@@ -115,6 +115,6 @@ def test_repo_grep_only_whitelisted():
     norm = [os.path.normpath(f).replace("\\", "/") for f in files]
     bad = [f for f, n in zip(files, norm)
            if not f.endswith(".md")
-           and not n.startswith(("core/runtime/artifacts/",
+           and not n.startswith(("src/modeling_harness/runtime/artifacts/",
                                  "tests/", "research/P15/analysis/"))]
     assert bad == [], f"mark_validated 出现在非白名单文件: {bad}"

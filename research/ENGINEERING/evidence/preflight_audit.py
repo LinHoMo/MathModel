@@ -33,19 +33,19 @@ try:
     else:
         print(f"  adapters/openai.yaml: NOT FOUND")
     
-    # Check core/runtime/adapters
-    runtime_adapters = ROOT / "core" / "runtime" / "adapters"
+    # Check src/modeling_harness/runtime/adapters
+    runtime_adapters = ROOT / "src" / "modeling_harness" / "runtime" / "adapters"
     if runtime_adapters.exists():
-        print(f"  core/runtime/adapters/: EXISTS ({(runtime_adapters / '__init__.py').exists()})")
+        print(f"  src/modeling_harness/runtime/adapters/: EXISTS ({(runtime_adapters / '__init__.py').exists()})")
     else:
-        print(f"  core/runtime/adapters/: NOT FOUND (empty adapters)")
+        print(f"  src/modeling_harness/runtime/adapters/: NOT FOUND (empty adapters)")
     
     # Check gen_runtime_manifest
-    manifest_script = ROOT / "core" / "tools" / "runtime" / "gen_runtime_manifest.py"
+    manifest_script = ROOT / "src" / "modeling_harness" / "cli" / "runtime" / "gen_runtime_manifest.py"
     if manifest_script.exists():
-        print(f"  core/tools/runtime/gen_runtime_manifest.py: EXISTS")
+        print(f"  src/modeling_harness/cli/runtime/gen_runtime_manifest.py: EXISTS")
     else:
-        print(f"  core/tools/runtime/gen_runtime_manifest.py: NOT FOUND")
+        print(f"  src/modeling_harness/cli/runtime/gen_runtime_manifest.py: NOT FOUND")
 except Exception as e:
     print(f"  Error checking provider: {e}")
 print()
@@ -53,7 +53,7 @@ print()
 # 2. Skill resolution
 print("2. Skill Resolution")
 print("-" * 40)
-skill_path = ROOT / "core" / "legacy" / "hands" / "Modeler" / "agents" / "problem-parser" / "SKILL.md"
+skill_path = ROOT / "src" / "legacy" / "hands" / "Modeler" / "agents" / "problem-parser" / "SKILL.md"
 if skill_path.exists():
     with open(skill_path, 'rb') as f:
         raw = f.read()
@@ -81,10 +81,10 @@ print("-" * 40)
 # Check if the orchestrator can compose a V3 DAG
 try:
     sys.path.insert(0, str(ROOT))
-    from runtime.execution.composer import WorkflowComposer
-    from runtime.roles import load_roles, validate_dag_roles
+    from modeling_harness.runtime.execution.composer import WorkflowComposer
+    from modeling_harness.runtime.roles import load_roles, validate_dag_roles
     
-    composer = WorkflowComposer(ROOT / "core" / "workflows")
+    composer = WorkflowComposer(ROOT / "src" / "modeling_harness" / "workflows")
     
     # Try to compose with Q001
     reg_path = PROJ_DIR / "work" / "registry.json"
@@ -98,7 +98,7 @@ try:
     
     print(f"  Questions for DAG compose: {questions}")
     dag = composer.compose_executable(questions, "cumcm")
-    roles = load_roles(ROOT / "core" / "roles")
+    roles = load_roles(ROOT / "src" / "modeling_harness" / "roles")
     role_problems = validate_dag_roles(dag, roles)
     print(f"  DAG composed: {dag.name}, nodes: {len(dag.nodes)}")
     if role_problems:
@@ -208,7 +208,7 @@ print("=" * 60)
 print("Key observations:")
 print("  - Project created and initialized (v2 pipeline: modeler/problem-parser)")
 print("  - V3 DAG composition: need to verify")
-print("  - Provider configuration: scattered, core/runtime/adapters is empty")
+print("  - Provider configuration: scattered, src/modeling_harness/runtime/adapters is empty")
 print("  - Skill resolution: problem-parser SKILL.md exists")
 print("  - Artifact persistence: directory structure exists")
 print("  - Run record creation: runs directory structure exists")

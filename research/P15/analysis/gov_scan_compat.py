@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(".").resolve()
 
 print("=== 1. allowed_model_families 残留位置（生产/研究）===")
-for p in list((ROOT/"core").rglob("*")) + list((ROOT/"research").rglob("*")) + list((ROOT/"catalog").rglob("*")):
+for p in list((ROOT / "src").rglob("*")) + list((ROOT/"research").rglob("*")) + list((ROOT/"catalog").rglob("*")):
     if p.is_file() and p.suffix in (".py", ".yaml", ".json", ".md"):
         try:
             t = p.read_text(encoding="utf-8")
@@ -17,7 +17,7 @@ for p in list((ROOT/"core").rglob("*")) + list((ROOT/"research").rglob("*")) + l
             print(f"  {rel}: {m.start()}")
 
 print("\n=== 2. method_family / method_selection 旧键残留（生产 core 内）===")
-for p in list((ROOT/"core").rglob("*.py")):
+for p in list((ROOT / "src").rglob("*.py")):
     try:
         t = p.read_text(encoding="utf-8")
     except Exception:

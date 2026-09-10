@@ -2,7 +2,7 @@
 """摸底：core 关键目录结构与链路环节代码存在性"""
 import os
 
-for root in ["core/runtime", "core/adapters", "core/tools", "core/schemas/v3", "core/knowledge"]:
+for root in ["src/modeling_harness/runtime", "core/adapters", "src/modeling_harness/tools", "src/modeling_harness/schemas/v3", "src/modeling_harness/knowledge"]:
     print(f"== {root} ==")
     for dp, dns, fns in os.walk(root):
         depth = dp.count(os.sep) - root.count(os.sep)

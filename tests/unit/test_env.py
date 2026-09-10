@@ -18,7 +18,7 @@ import pytest
 # ---------------------------------------------------------------------------
 def _load_env_loader():
     """用 importlib 动态加载 core/env/loader.py，返回模块对象。"""
-    loader_path = os.path.join("core", "env", "loader.py")
+    loader_path = os.path.join("src", "modeling_harness", "env", "loader.py")
     assert os.path.exists(loader_path), f"{loader_path} 不存在"
     spec = importlib.util.spec_from_file_location("env_loader", loader_path)
     assert spec is not None and spec.loader is not None, "无法创建 loader spec"
@@ -38,19 +38,19 @@ class TestEnvStructure:
 
     def test_config_yaml_exists(self):
         """core/env/config.yaml 存在"""
-        assert os.path.exists("core/env/config.yaml")
+        assert os.path.exists("src/modeling_harness/env/config.yaml")
 
     def test_loader_py_exists(self):
         """core/env/loader.py 存在"""
-        assert os.path.exists("core/env/loader.py")
+        assert os.path.exists("src/modeling_harness/env/loader.py")
 
     def test_readme_md_exists(self):
         """core/env/README.md 存在"""
-        assert os.path.exists("core/env/README.md")
+        assert os.path.exists("src/modeling_harness/env/README.md")
 
     def test_profiles_dir_removed(self):
         """V2 论文规格 profiles 目录已移除（新定位无竞赛论文规格）"""
-        assert not os.path.isdir("core/env/profiles")
+        assert not os.path.isdir("src/modeling_harness/env/profiles")
 
 
 class TestEnvLoader:

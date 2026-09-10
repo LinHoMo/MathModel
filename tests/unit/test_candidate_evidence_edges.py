@@ -12,11 +12,11 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.graph.evidence_graph import (
+from modeling_harness.runtime.graph.evidence_graph import (
     RELATION_TYPES,
     WEAK_RELATIONS,
     EvidenceGraph,
@@ -25,7 +25,7 @@ from runtime.graph.evidence_graph import (
 
 @pytest.fixture
 def graph(tmp_path):
-    from runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.create("question", title="Q001", activate=True)
     reg.create("model", title="M1", question="Q001", activate=True)

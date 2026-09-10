@@ -31,7 +31,7 @@ EXTRA_FILES = [
     "research/P15/protocol/preregistration/P15-K003-DRAFT.md",
     "research/P15/protocol/preregistration/P15-K003-GATES.md",
     "research/P15/capability/MODEL_CONSTRUCTION_RUBRIC.md",  # v1.1 评分标准（K003 全程使用）
-    "core/schemas/v3/model/model_ir.schema.json",  # MODEL_IR 契约真源（K003 模板对齐版）
+    "src/modeling_harness/schemas/v3/model/model_ir.schema.json",  # MODEL_IR 契约真源（K003 模板对齐版）
     "catalog/model_families.yaml",
     "research/P15/experiments/P15-K003-precheck/g2/ANCHORED_PROTOCOL_v1.2a.md",  # L3 判据锚定
 ]

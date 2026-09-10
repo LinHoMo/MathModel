@@ -16,11 +16,11 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "tests" / "integration"))
 
 from _real_session import make_real_session  # noqa: E402
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
 
 
 def _find_result(s):
@@ -41,7 +41,7 @@ def _exec_by_edge(s, rid):
 class TestDoExperimentExecutionIntegration:
     def test_no_adapter_keeps_not_executed_and_fails_honestly(self, tmp_path):
         """无 adapter：不产生 EXEC；无数值执行 → 证据链如实 FAIL（不假 PASS）。"""
-        from runtime.execution.session import RuntimeSession
+        from modeling_harness.runtime.execution.session import RuntimeSession
         s = RuntimeSession(tmp_path / "proj", ["Q001"], max_workers=1,
                            execution_adapter=None)
         s.run()

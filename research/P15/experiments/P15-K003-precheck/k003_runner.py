@@ -28,8 +28,8 @@ PROJECT_DIR = PRECHECK_DIR  # 用precheck目录作为harness project_dir
 sys.path.insert(0, str(REPO_ROOT / "core"))
 sys.path.insert(0, str(PRECHECK_DIR))
 
-from runtime.execution.codegen import run_code_pipeline, register_code, execute_code
-from runtime.execution.fidelity import check_fidelity
+from modeling_harness.runtime.execution.codegen import run_code_pipeline, register_code, execute_code
+from modeling_harness.runtime.execution.fidelity import check_fidelity
 from k003_problems import PROBLEMS, MAIN_PROBLEMS
 
 ARMS = ["F", "S", "SV"]
@@ -348,7 +348,7 @@ def run_18_precheck() -> dict:
                 # 保存execution_result
                 exec_id = pipe_result["exec_id"]
                 # 从registry读取execution_result完整数据
-                from runtime.artifacts.registry import ArtifactRegistry
+                from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
                 reg = ArtifactRegistry(PROJECT_DIR / "state" / "registry.json")
                 reg.load()
                 exec_art = reg.get(exec_id)

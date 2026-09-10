@@ -1,7 +1,7 @@
 """Role 层 — Capability Composition 的命名模板（V3 P3）。
 
 Role = 能力组合的命名模板；Agent = 承载 Role 的运行时执行器。
-定义于 core/roles/*.yaml（5 个），加载后可校验 DAG 节点的 role 引用。
+定义于 src/modeling_harness/roles/*.yaml（5 个），加载后可校验 DAG 节点的 role 引用。
 """
 
 from __future__ import annotations
@@ -44,23 +44,23 @@ class Role:
 
 
 def load_roles(roles_root: str | Path) -> dict[str, Role]:
-    """加载 core/roles/*.yaml → {role_id: Role}（fail-closed，缺一不可）。"""
+    """加载 src/modeling_harness/roles/*.yaml → {role_id: Role}（fail-closed，缺一不可）。"""
     root = Path(roles_root)
     roles: dict[str, Role] = {}
     for f in sorted(root.glob("*.yaml")):
         try:
             d = load_file(f)
         except YamlSyntaxError as exc:
-            raise RoleError(f"core/roles/{f.name}: YAML 解析失败: {exc}") from exc
+            raise RoleError(f"src/modeling_harness/roles/{f.name}: YAML 解析失败: {exc}") from exc
         if not isinstance(d, dict):
-            raise RoleError(f"core/roles/{f.name}: 顶层须为映射")
-        r = Role.from_dict(d, f"core/roles/{f.name}")
+            raise RoleError(f"src/modeling_harness/roles/{f.name}: 顶层须为映射")
+        r = Role.from_dict(d, f"src/modeling_harness/roles/{f.name}")
         if r.role in roles:
-            raise RoleError(f"core/roles/{f.name}: role '{r.role}' 重复定义")
+            raise RoleError(f"src/modeling_harness/roles/{f.name}: role '{r.role}' 重复定义")
         roles[r.role] = r
     missing = set(ROLE_IDS) - set(roles)
     if missing:
-        raise RoleError(f"core/roles/ 缺少 Role 定义: {sorted(missing)}")
+        raise RoleError(f"src/modeling_harness/roles/ 缺少 Role 定义: {sorted(missing)}")
     return roles
 
 

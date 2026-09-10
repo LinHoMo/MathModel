@@ -23,7 +23,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
 HERE = Path(__file__).resolve().parent
-for p in (REPO / "core", HERE):
+for p in (REPO / "src", HERE):
     if str(p) not in sys.path:
         sys.path.insert(0, str(p))
 

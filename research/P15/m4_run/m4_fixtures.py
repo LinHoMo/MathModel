@@ -18,17 +18,17 @@ import sys
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 if str(Path(__file__).resolve().parent.parent / "vs001_run") not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "vs001_run"))
 
 from vs001_fixtures import C2_CODE, M2_DICT, VALIDATION_SPEC  # noqa: E402
 
-from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
-from runtime.modeling.candidates import _merge_obligations, map_card_obligations  # noqa: E402
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.runtime.modeling.candidates import _merge_obligations, map_card_obligations  # noqa: E402
 
-# BZD 试点卡（知识引导义务来源；卡见 core/knowledge/methods/cards/mc-bzd-*.yaml）
+# BZD 试点卡（知识引导义务来源；卡见 src/modeling_harness/knowledge/methods/cards/mc-bzd-*.yaml）
 GUIDE_CARD_IDS = ["mc-bzd-model-fit", "mc-bzd-validation-obligations"]
 GUIDED_MODEL_ID = "M2024A-Q1-GUIDED"
 UNGUIDED_MODEL_ID = "M2024A-Q1-UNGUIDED"
@@ -36,7 +36,7 @@ UNGUIDED_MODEL_ID = "M2024A-Q1-UNGUIDED"
 
 def bzd_cards():
     """加载 BZD 试点卡（构造 retriever → 取卡），供映射与断言共用。"""
-    r = KnowledgeRetriever(_REPO / "core" / "knowledge")
+    r = KnowledgeRetriever(_REPO / "src" / "modeling_harness" / "knowledge")
     return [r.cards[cid] for cid in GUIDE_CARD_IDS]
 
 
@@ -69,7 +69,7 @@ def _with_ids(oblig: dict) -> dict:
 
 def build_guided_candidate() -> dict:
     """知识引导候选：建模者自身声明（M2 基线）∪ BZD 卡义务（正式模块嵌入）。"""
-    from runtime.modeling.knowledge_guided import apply_knowledge_obligations
+    from modeling_harness.runtime.modeling.knowledge_guided import apply_knowledge_obligations
     cards = bzd_cards()
     mir = dict(M2_DICT)
     mir["model_id"] = GUIDED_MODEL_ID

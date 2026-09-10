@@ -22,10 +22,10 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any
 from collections import Counter
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT))
 
-from core.env.loader import get
+from modeling_harness.env.loader import get
 
 
 class IntegrityGate:

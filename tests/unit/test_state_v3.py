@@ -8,13 +8,13 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.artifacts.registry import ArtifactRegistry
-from runtime.graph.evidence_graph import EvidenceGraph
-from runtime.state.model import (
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
+from modeling_harness.runtime.state.model import (
     ProjectState, StateError, can_question_transition,
 )
 

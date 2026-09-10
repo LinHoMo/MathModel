@@ -9,7 +9,7 @@
 模型描述文档 MD/Mermaid）。不含论文生成（LaTeX/PDF），不兼容 V2 布局。
 
 用法:
-    python core/tools/new_project.py <项目名> [--competition <赛事>]
+    python src/modeling_harness/cli/new_project.py <项目名> [--competition <赛事>]
                                      [--problem <赛题文件> ...] [--force]
 """
 from __future__ import annotations
@@ -19,7 +19,7 @@ import shutil
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 
 # V3 项目目录结构（单一事实源，供脚手架创建）：
 # - inputs/     赛题原文（唯一输入）
@@ -46,9 +46,9 @@ KNOWN_COMPETITIONS = (
 
 NEXT_STEPS = """\
 下一步（按 AGENTS.md 执行协议）:
-  1. python core/tools/validate.py {name}
-  2. python core/tools/catalog_check.py --check
-  3. 沿 core/roles/*.yaml 与 core/skills/ 指令建模，产出写入 model/
+  1. python src/modeling_harness/cli/validate.py {name}
+  2. python src/modeling_harness/cli/catalog_check.py --check
+  3. 沿 src/modeling_harness/roles/*.yaml 与 src/modeling_harness/skills/ 指令建模，产出写入 model/
      - MODEL_IR: model/model_ir.json
      - 描述文档: model/model.md（可含 Mermaid 图）
 """

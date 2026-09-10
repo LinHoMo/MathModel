@@ -7,7 +7,7 @@ NodeResult 结构全部在此定义，handlers / gate / critic / tools 一律 im
 这里的谓词，禁止各自内联元组（P6 修的 E1/E2/E3/E4/N2 口径分裂即由此而来）。
 
 配套文档: docs/architecture/RUNTIME_CONTRACTS.md（验收标准 A–K 映射）
-概念归户: core/runtime/domain/__init__.py（Canonical Domain Model，
+概念归户: src/modeling_harness/runtime/domain/__init__.py（Canonical Domain Model，
 Hardening P1——本文件所有实体名须与 domain 定义一致，禁止近义词）。
 """
 
@@ -18,7 +18,7 @@ from __future__ import annotations
 # ============================================================
 # 正向: draft → active → validated → published
 # 终态: invalidated（错误/失效）/ superseded（被新谱系替代）/ deprecated（人工废弃）
-# 权威实现: core/runtime/artifacts/lifecycle.py（状态机，fail-closed）
+# 权威实现: src/modeling_harness/runtime/artifacts/lifecycle.py（状态机，fail-closed）
 
 TERMINAL_STATUSES = frozenset({"invalidated", "superseded", "deprecated"})
 ACTIVE_STATUSES = frozenset({"draft", "active", "validated", "published"})
@@ -60,7 +60,7 @@ def requires_reuse_check(fn):
 # ============================================================
 # 2. NodeResult Contract（节点执行器输出契约）
 # ============================================================
-# executor(node_id, ctx) -> NodeResult（core/runtime/execution/engine.py）
+# executor(node_id, ctx) -> NodeResult（src/modeling_harness/runtime/execution/engine.py）
 # NodeResult.outputs 允许的键与类型（多余键 = 契约违约）:
 
 NODE_RESULT_OUTPUT_KEYS = {

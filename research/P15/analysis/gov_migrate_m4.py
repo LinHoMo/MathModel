@@ -9,8 +9,8 @@ REPLACEMENTS = []
 
 # 1) import 替换
 REPLACEMENTS.append((
-    "from runtime.modeling.candidates import _merge_obligations, map_card_obligations  # noqa: E402",
-    "from runtime.modeling.knowledge_guided import requires_to_dependencies  # noqa: E402",
+    "from modeling_harness.runtime.modeling.candidates import _merge_obligations, map_card_obligations  # noqa: E402",
+    "from modeling_harness.runtime.modeling.knowledge_guided import requires_to_dependencies  # noqa: E402",
 ))
 
 # 2) _requires_to_dependencies 函数体委托
@@ -29,7 +29,7 @@ old_fn_end = s.index("def build_unguided_candidate() -> dict:")
 new_fn = (
     "def build_guided_candidate() -> dict:\n"
     '    """知识引导候选：建模者自身声明（M2 基线）∪ BZD 卡义务（正式模块嵌入）。"""\n'
-    "    from runtime.modeling.knowledge_guided import apply_knowledge_obligations\n"
+    "    from modeling_harness.runtime.modeling.knowledge_guided import apply_knowledge_obligations\n"
     "    cards = bzd_cards()\n"
     "    mir = dict(M2_DICT)\n"
     '    mir["model_id"] = GUIDED_MODEL_ID\n'

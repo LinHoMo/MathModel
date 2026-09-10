@@ -3,7 +3,7 @@
 import sys, json
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "core" / "tools"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src" / "modeling_harness" / "cli"))
 from e2e_metrics import compute_e2e_metrics
 
 project = sys.argv[1]

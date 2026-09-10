@@ -579,8 +579,8 @@ def validate_execution(project_dir: str | Path, exec_id: str,
 
     返回 VerificationResultData；调用方可通过 data.verification_id 引用。
     """
-    from runtime.artifacts.registry import ArtifactRegistry, ArtifactNotFound
-    from runtime.graph.evidence_graph import EvidenceGraph
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry, ArtifactNotFound
+    from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
 
     project_dir = Path(project_dir)
     reg_path = project_dir / "state" / "registry.json"

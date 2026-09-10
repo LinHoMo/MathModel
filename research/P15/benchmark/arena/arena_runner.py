@@ -35,12 +35,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[4]  # arena/benchmark/P15/research/<repo>
-if str(_REPO / "core") not in sys.path:
-    sys.path.insert(0, str(_REPO / "core"))
+if str(_REPO / "src") not in sys.path:
+    sys.path.insert(0, str(_REPO / "src"))
 
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.codegen import run_code_pipeline  # noqa: E402
-from runtime.execution.validation import (  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.codegen import run_code_pipeline  # noqa: E402
+from modeling_harness.runtime.execution.validation import (  # noqa: E402
     derive_checks_from_mir,
     run_numeric_validation,
     validate_against_gt,
@@ -174,7 +174,7 @@ def run_candidate(cand: dict, workdir: Path) -> dict:
 
 def _fetch_outputs(cand: dict, workdir: Path) -> dict:
     """从该候选最近 EXEC artifact 读取真实 outputs（供 VR 数值验证）。"""
-    from runtime.artifacts.registry import ArtifactRegistry
+    from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     reg = ArtifactRegistry(workdir / "state" / "registry.json")
     execs = [a for a in reg.list_by_type("execution_result")]
     if not execs:

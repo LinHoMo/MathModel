@@ -7,16 +7,16 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest
 
-from runtime.decisions.log import DecisionLog
-from runtime.knowledge.retriever import KnowledgeRetriever
-from runtime.modeling.planner import ExperimentPlanner, PlannerError
-from runtime.modeling.selection import MethodArena, SelectionError
+from modeling_harness.runtime.decisions.log import DecisionLog
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever
+from modeling_harness.runtime.modeling.planner import ExperimentPlanner, PlannerError
+from modeling_harness.runtime.modeling.selection import MethodArena, SelectionError
 
-KNOWLEDGE_ROOT = REPO / "core" / "knowledge"
+KNOWLEDGE_ROOT = REPO / "src" / "modeling_harness" / "knowledge"
 
 
 @pytest.fixture

@@ -4,7 +4,7 @@
 推翻后在检索中降权并附带「为何被推翻」；供 method-selection 与 critic 消费。
 
 持久化: projects/<p>/state/decisions.json（原子写）
-契约: core/schemas/v3/decision/decision.schema.json（必填字段在此 fail-closed 校验）
+契约: src/modeling_harness/schemas/v3/decision/decision.schema.json（必填字段在此 fail-closed 校验）
 """
 
 from __future__ import annotations

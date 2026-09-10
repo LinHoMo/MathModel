@@ -30,16 +30,16 @@ from .engine import FAIL, PASS, NodeResult
 
 _TERMINAL = ("invalidated", "superseded", "deprecated")
 
-REPO = Path(__file__).resolve().parents[3]
-if str(REPO / "core") not in sys.path:
-    sys.path.insert(0, str(REPO / "core"))
+REPO = Path(__file__).resolve().parents[4]
+if str(REPO / "src") not in sys.path:
+    sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.engine import BLOCKED  # noqa: E402
-from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
-from runtime.modeling.model_ir import ModelIRBuilder, ModelIRError, validate_model_ir  # noqa: E402
-from runtime.modeling.planner import ExperimentPlanner, PlannerError  # noqa: E402
-from runtime.modeling.selection import MethodArena, SelectionError  # noqa: E402
-from validators.evidence.evidence_gate import evaluate as evidence_gate_evaluate  # noqa: E402
+from modeling_harness.runtime.execution.engine import BLOCKED  # noqa: E402
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.runtime.modeling.model_ir import ModelIRBuilder, ModelIRError, validate_model_ir  # noqa: E402
+from modeling_harness.runtime.modeling.planner import ExperimentPlanner, PlannerError  # noqa: E402
+from modeling_harness.runtime.modeling.selection import MethodArena, SelectionError  # noqa: E402
+from modeling_harness.validators.evidence.evidence_gate import evaluate as evidence_gate_evaluate  # noqa: E402
 
 
 class HandlerError(RuntimeError):
@@ -89,13 +89,13 @@ class DefaultNodeExecutor:
         self.min_coverage = min_coverage
         # P0-E：真实执行后端（None = 不执行；result 保持 not_executed）
         self.execution_adapter = execution_adapter
-        self.retriever = KnowledgeRetriever(knowledge_root or REPO / "core" / "knowledge")
+        self.retriever = KnowledgeRetriever(knowledge_root or REPO / "src" / "modeling_harness" / "knowledge")
         self.arena = MethodArena(self.retriever, decisions)
         self.planner = ExperimentPlanner(self.retriever)
         # P8：Competition Intelligence 接入 Runtime（候选竞技场 + 竞赛包只读修饰）
-        from runtime.knowledge.packs import load_competition_packs
-        from runtime.modeling.candidates import CandidateArena
-        _packs = load_competition_packs(knowledge_root or REPO / "core" / "knowledge")
+        from modeling_harness.runtime.knowledge.packs import load_competition_packs
+        from modeling_harness.runtime.modeling.candidates import CandidateArena
+        _packs = load_competition_packs(knowledge_root or REPO / "src" / "modeling_harness" / "knowledge")
         _pack = _packs.get("cp-cumcm") or next(iter(_packs.values()), None)
         self.candidate_arena = CandidateArena(self.retriever, _pack)
         # 跨节点共享（session 级）：qid -> {"model": aid, "plan": ..., ...}
@@ -280,7 +280,7 @@ class DefaultNodeExecutor:
                  if cid in self.retriever.cards]
         if not cards:
             return external
-        from runtime.modeling.knowledge_guided import apply_knowledge_obligations
+        from modeling_harness.runtime.modeling.knowledge_guided import apply_knowledge_obligations
         out = apply_knowledge_obligations(
             external, cards,
             model_id=external.get("model_id"))
@@ -660,10 +660,10 @@ class DefaultNodeExecutor:
             inputs = self._execution_inputs(mir_art)
             if inputs is None:
                 raise HandlerError(f"{qid}: 无法从 model_ir 派生执行输入")
-            from runtime.execution.adapters import ExecutionPlan, ExecutionResultData
+            from modeling_harness.runtime.execution.adapters import ExecutionPlan, ExecutionResultData
             adapter = self.execution_adapter
             if adapter is None:
-                from runtime.execution.adapters import LocalPythonAdapter
+                from modeling_harness.runtime.execution.adapters import LocalPythonAdapter
                 adapter = LocalPythonAdapter()
             wd = self._exec_workdir()
             try:
@@ -725,7 +725,7 @@ class DefaultNodeExecutor:
         """基于真实数值运行验证并登记 VR artifact（verified_by 边）。"""
         xart = self.registry.get(exec_id)
         xdata = dict(xart.data or {})
-        from runtime.execution.validation import _now, run_numeric_validation
+        from modeling_harness.runtime.execution.validation import _now, run_numeric_validation
         verdict = run_numeric_validation(xdata.get("outputs") or {}, spec,
                                          execution_status=xdata.get("status"))
         vdata = {
@@ -872,7 +872,7 @@ class DefaultNodeExecutor:
         if reg_path is None:
             return None
         project_dir = Path(reg_path).parent.parent
-        from runtime.execution.fidelity import verify_fidelity
+        from modeling_harness.runtime.execution.fidelity import verify_fidelity
         return verify_fidelity(project_dir, dict(mir_art.data or {}),
                                exec_id, register_vr=False,
                                registry=self.registry)
@@ -1179,7 +1179,7 @@ class DefaultNodeExecutor:
         artifact + compared_with/supported_by 边。幂等：同对模型
         已有活跃 comparison decision 则跳过。
         """
-        from runtime.modeling.comparison import compare_models
+        from modeling_harness.runtime.modeling.comparison import compare_models
         reg = self.registry
         out: list[dict] = []
         pairs = [r for r in self.graph.relations
@@ -1234,8 +1234,8 @@ class DefaultNodeExecutor:
 
         返回本次生成的诊断包列表（{diagnosis_id, mir_id, root_cause, ...}）。
         """
-        from runtime.modeling.diagnosis import diagnose_failure
-        from runtime.modeling.revision import build_revision_draft
+        from modeling_harness.runtime.modeling.diagnosis import diagnose_failure
+        from modeling_harness.runtime.modeling.revision import build_revision_draft
 
         reg = self.registry
         packages: list[dict] = []
@@ -1489,7 +1489,7 @@ class DefaultNodeExecutor:
 
     def _advance_question(self, qid: str, target: str) -> None:
         """沿问题状态机推进（非法转换静默跳过，由 state fail-closed 兜底）。"""
-        from runtime.state.model import StateError
+        from modeling_harness.runtime.state.model import StateError
         try:
             cur = self.state.question_status(qid)
             path = {"modeled": ["analyzing", "modeled"],
@@ -1630,7 +1630,7 @@ class DefaultNodeExecutor:
             card = outcome.chosen_card if outcome.chosen != "UNSELECTED" else {}
             models = self._models_of(qid)
             if node_id in self.force_new_lineage:
-                from runtime.artifacts.lifecycle import LifecycleError
+                from modeling_harness.runtime.artifacts.lifecycle import LifecycleError
                 self.shared.pop(qid, None)   # 清缓存：旧 shared 指向将死谱系
                 for old_m in models:
                     try:
@@ -1747,7 +1747,7 @@ class DefaultNodeExecutor:
             # P8-4→P8-7 通道：最优候选直接生成结构化计划（含创新验证条目）
             cands = info.get("candidates")
             if cands:
-                from runtime.modeling.candidates import Candidate
+                from modeling_harness.runtime.modeling.candidates import Candidate
                 top = cands[0]
                 cand = Candidate(
                     candidate_id=top["candidate_id"], kind=top["kind"],
@@ -1759,7 +1759,7 @@ class DefaultNodeExecutor:
                 plan = self.planner.plan_from_candidate(cand, qid)
                 # P9.5 红队修复：新计划建立前退役旧计划（R3 谱系语义，
                 # 旧计划 superseded 审计保留，不得双 active）
-                from runtime.artifacts.lifecycle import LifecycleError
+                from modeling_harness.runtime.artifacts.lifecycle import LifecycleError
                 for old_pa in self.registry.list_by_type("decision"):
                     if "实验计划" in (old_pa.title or "")                             and old_pa.status == "active"                             and mid in (old_pa.depends_on or []):
                         try:
@@ -1948,7 +1948,7 @@ class DefaultNodeExecutor:
         只清标记（bookkeeping），不改 lifecycle 状态；终态产物不可清除
         （lifecycle fail-closed）。若无此清除，Evidence Gate E6 将永久 WEAK。
         """
-        from runtime.artifacts.lifecycle import LifecycleError
+        from modeling_harness.runtime.artifacts.lifecycle import LifecycleError
         for a in self.registry.all():
             if a.question == qid and a.status not in _TERMINAL                     and a.invalidation:
                 try:
@@ -1962,7 +1962,7 @@ class DefaultNodeExecutor:
         Rerun 与 Recompute 重建共用：旧 claim 失去支撑后由 evidence_build
         重建新 claim；E4 不再误报旧实验。
         """
-        from runtime.artifacts.lifecycle import LifecycleError
+        from modeling_harness.runtime.artifacts.lifecycle import LifecycleError
         for art in self.registry.all():
             if art.question == qid and art.type in (
                     "experiment", "result", "figure", "claim")                     and art.status not in _TERMINAL:
@@ -1999,7 +1999,7 @@ class DefaultNodeExecutor:
         （LLM-free）；无任何数值事实时保留 placeholder 但不加 supports 边，
         由 evidence_gate 的数值真实性检查（E9）判 FAIL 走反馈环。
         """
-        from runtime.execution.claim_synthesis import synthesize_claim
+        from modeling_harness.runtime.execution.claim_synthesis import synthesize_claim
         ev = []
         n = 0
         n_placeholder = 0
@@ -2010,7 +2010,7 @@ class DefaultNodeExecutor:
             claim_id = self.shared.get(qid, {}).get("claim") or self._claim_of(qid)
             if node_id in self.force_new_lineage and claim_id                     and self.registry.get(claim_id).status not in _TERMINAL:
                 self.shared.pop(qid, None)
-                from runtime.artifacts.lifecycle import LifecycleError
+                from modeling_harness.runtime.artifacts.lifecycle import LifecycleError
                 try:
                     self.registry.get(claim_id).transition(
                         "superseded", by=node_id,
@@ -2091,7 +2091,7 @@ class DefaultNodeExecutor:
         import sys as _sys
         if str(REPO) not in _sys.path:
             _sys.path.insert(0, str(REPO))
-        from validators.quality import ResearchQuality
+        from modeling_harness.validators.quality import ResearchQuality
 
         rq = ResearchQuality(knowledge=self.retriever, decisions=self.decisions)
         report = rq.evaluate(self.registry, self.graph)

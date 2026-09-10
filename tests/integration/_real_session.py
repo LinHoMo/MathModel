@@ -26,8 +26,8 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-if str(REPO / "core") not in sys.path:
-    sys.path.insert(0, str(REPO / "core"))
+if str(REPO / "src") not in sys.path:
+    sys.path.insert(0, str(REPO / "src"))
 
 # ---------------------------------------------------------------- 外部产物
 
@@ -195,8 +195,8 @@ def make_real_session(tmp_path, questions=("Q001", "Q002"), run=True,
     会取到加载中的模块实例，函数 globals 不完整）：外部 MODEL_IR + CODE +
     validation_spec（外部 Model Constructor 产物），挂真实 LocalPythonAdapter。
     """
-    from runtime.execution.session import RuntimeSession
-    from runtime.execution.adapters import LocalPythonAdapter
+    from modeling_harness.runtime.execution.session import RuntimeSession
+    from modeling_harness.runtime.execution.adapters import LocalPythonAdapter
 
     qs = list(questions)
     external_model_irs = {q: _minimal_mir(q) for q in qs}
@@ -216,7 +216,7 @@ def make_real_session(tmp_path, questions=("Q001", "Q002"), run=True,
 
 
 def _minimal_mir(qid: str) -> dict:
-    """MODEL_IR 契约 v1.0 迁移（唯一真源 core/schemas/v3/model/model_ir.schema.json）。"""
+    """MODEL_IR 契约 v1.0 迁移（唯一真源 src/modeling_harness/schemas/v3/model/model_ir.schema.json）。"""
     try:
         from mir_compat import migrate_model_ir
     except ImportError:

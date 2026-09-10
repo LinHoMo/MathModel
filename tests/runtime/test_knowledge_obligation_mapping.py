@@ -15,16 +15,16 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest  # noqa: E402
 
-from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
-from runtime.modeling.candidates import (CandidateArena,  # noqa: E402
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.runtime.modeling.candidates import (CandidateArena,  # noqa: E402
                                          _merge_obligations,
                                          map_card_obligations)
 
-KNOWLEDGE_ROOT = REPO / "core" / "knowledge"
+KNOWLEDGE_ROOT = REPO / "src" / "modeling_harness" / "knowledge"
 BZD_CARD_IDS = [
     "mc-bzd-model-fit",
     "mc-bzd-failure-modes",

@@ -35,15 +35,15 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-_CORE = str(ROOT / "core")
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+_CORE = str(ROOT / "src")
 if _CORE not in sys.path:
     sys.path.insert(0, _CORE)
 
-from runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
-from runtime.decisions.log import DecisionLog  # noqa: E402
-from runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
-from runtime.state.model import ProjectState  # noqa: E402
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry  # noqa: E402
+from modeling_harness.runtime.decisions.log import DecisionLog  # noqa: E402
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph  # noqa: E402
+from modeling_harness.runtime.state.model import ProjectState  # noqa: E402
 
 ROBUSTNESS_TAGS = {"sensitivity", "baseline", "multi_run"}
 
@@ -87,7 +87,7 @@ def _is_empty_artifact(a) -> bool:
 
 def _load_card_families() -> dict[str, str]:
     """P0-3: 从方法卡 YAML 提取 {card_id: family}（零依赖正则解析）。"""
-    cards_dir = ROOT / "core" / "knowledge" / "methods" / "cards"
+    cards_dir = ROOT / "src" / "modeling_harness" / "knowledge" / "methods" / "cards"
     out: dict[str, str] = {}
     if not cards_dir.exists():
         return out

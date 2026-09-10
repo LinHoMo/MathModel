@@ -10,9 +10,9 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.handlers import features_for  # noqa: E402
+from modeling_harness.runtime.execution.handlers import features_for  # noqa: E402
 
 
 def test_per_question_overrides_global():

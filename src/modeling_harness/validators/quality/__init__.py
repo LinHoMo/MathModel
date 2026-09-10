@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Research Quality（P9）—— 统一出口。
 
-    from validators.quality import ResearchQuality
+    from modeling_harness.validators.quality import ResearchQuality
     rq = ResearchQuality(knowledge=retriever, decisions=dlog, pack=pack)
     report = rq.evaluate(registry, graph)
     report.overall_status   # PASS / WEAK / FAIL / UNKNOWN（无黑箱总分）

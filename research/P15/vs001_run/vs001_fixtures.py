@@ -257,7 +257,7 @@ M1_DICT = _m1_dict()
 M2_DICT = _m2_dict()
 
 # MODEL_IR 契约 v1.0（2026-09-10）：全部 fixture 产物迁移到
-# core/schemas/v3/model/model_ir.schema.json（唯一真源）规范。
+# src/modeling_harness/schemas/v3/model/model_ir.schema.json（唯一真源）规范。
 # 迁移是数据适配（词表/minItems/model_graph 结构化），语义不变；
 # 迁移后必须通过 jsonschema 全量校验（tests 断言）。
 from mir_compat import migrate_model_ir  # noqa: E402

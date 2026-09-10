@@ -12,11 +12,11 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "research" / "P15" / "analysis"))
 
 from p2_3_retrieval_hitrate import PROBLEM_FEATURES, PROBLEM_GT, main  # noqa: E402
-from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
 
 
 @pytest.fixture(scope="module")
@@ -42,7 +42,7 @@ class TestP23RetrievalHitrate:
 
     def test_retriever_regression(self):
         """修复后知识检索语义不回归：DP/排队/数值 PDE 卡仍可按题型命中。"""
-        kr = KnowledgeRetriever(str(REPO / "core" / "knowledge"))
+        kr = KnowledgeRetriever(str(REPO / "src" / "modeling_harness" / "knowledge"))
         cases = [
             ({"problem_types": ["sequential_decision"]}, "mc-dp"),
             ({"problem_types": ["random_service_system"]}, "mc-queuing-theory"),

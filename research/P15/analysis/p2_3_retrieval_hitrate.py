@@ -18,9 +18,9 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
 
 # ground-truth 卡：由 CUMCM 官方/标准解法 family 指派（见报告附录）
 PROBLEM_GT = {
@@ -57,7 +57,7 @@ PROBLEM_FEATURES = {
 
 
 def main() -> dict:
-    r = KnowledgeRetriever(str(REPO / "core" / "knowledge"))
+    r = KnowledgeRetriever(str(REPO / "src" / "modeling_harness" / "knowledge"))
     rows = []
     for pid, gt in PROBLEM_GT.items():
         feats = PROBLEM_FEATURES[pid]

@@ -7,17 +7,17 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 import pytest  # noqa: E402
 
-from runtime.constructors.adapters.mathmodel_agent import (  # noqa: E402
+from modeling_harness.runtime.constructors.adapters.mathmodel_agent import (  # noqa: E402
     ConstructorNotConfigured, MathModelAgentAdapter,
 )
-from runtime.constructors.adapters.pi import PiAdapter  # noqa: E402
-from runtime.constructors.adapters.reference import ReferenceConstructor  # noqa: E402
-from runtime.constructors.protocol import ConstructionBundle  # noqa: E402
-from runtime.constructors.registry import (  # noqa: E402
+from modeling_harness.runtime.constructors.adapters.pi import PiAdapter  # noqa: E402
+from modeling_harness.runtime.constructors.adapters.reference import ReferenceConstructor  # noqa: E402
+from modeling_harness.runtime.constructors.protocol import ConstructionBundle  # noqa: E402
+from modeling_harness.runtime.constructors.registry import (  # noqa: E402
     ConstructorRegistry, apply_bundle,
 )
 

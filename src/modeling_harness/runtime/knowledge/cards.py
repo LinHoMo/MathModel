@@ -1,6 +1,6 @@
 """Knowledge 内容加载器 — Method Card / Failure / Pattern（零第三方依赖）。
 
-加载 core/knowledge/ 下三组结构化 YAML，按契约必填字段做 fail-closed 校验：
+加载 src/modeling_harness/knowledge/ 下三组结构化 YAML，按契约必填字段做 fail-closed 校验：
 任何一张卡缺字段 / ID 格式非法 → CardError，整库不加载（不允许半懂不懂地检索）。
 
 刻意不实现完整 JSON Schema 校验器（仓库零依赖惯例）——契约的必填字段与
@@ -359,7 +359,7 @@ def _load_dir(directory: Path, ctor, id_attr: str) -> dict[str, object]:
 def load_knowledge(knowledge_root: str | Path) -> tuple[dict[str, MethodCard],
                                                         dict[str, FailureMemory],
                                                         dict[str, Pattern]]:
-    """从 core/knowledge/ 加载三组知识，返回 (cards, failures, patterns)。
+    """从 src/modeling_harness/knowledge/ 加载三组知识，返回 (cards, failures, patterns)。
 
     加载后做交叉引用校验：卡片引用的 known_failures / often_combined_with /
     failure.applies_to / pattern.cards 必须存在。

@@ -4,7 +4,7 @@
 import json
 import io
 
-p = "core/schemas/v3/model/model_ir.schema.json"
+p = "src/modeling_harness/schemas/v3/model/model_ir.schema.json"
 s = json.load(io.open(p, encoding="utf-8"))
 
 P = s["properties"]

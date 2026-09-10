@@ -14,11 +14,11 @@ import sys
 ROOT = "."
 
 # 1) research 旧版标 SUPERSEDED
-p = "core/schemas/v3/model/model_ir.schema.json"  # P1-4 唯一真源
+p = "src/modeling_harness/schemas/v3/model/model_ir.schema.json"  # P1-4 唯一真源
 s = json.load(io.open(p, encoding="utf-8"))
-s["x_superseded_by"] = "core/schemas/v3/model/model_ir.schema.json"
+s["x_superseded_by"] = "src/modeling_harness/schemas/v3/model/model_ir.schema.json"
 s["x_superseded_note"] = (
-    "2026-09-09 治理：MODEL_IR 契约唯一真源已迁移至 core/schemas/v3/model/"
+    "2026-09-09 治理：MODEL_IR 契约唯一真源已迁移至 src/modeling_harness/schemas/v3/model/"
     "（P1 C1）。本文件保留仅作历史参考与向后引用；K002 register/freeze 均以 core 版为准。"
 )
 io.open(p, "w", encoding="utf-8").write(json.dumps(s, ensure_ascii=False, indent=2))
@@ -27,11 +27,11 @@ print("1) research 旧版已标 SUPERSEDED")
 # 2) k002_freeze.py EXTRA_FILES 加 core schema
 p = "research/P15/scripts/k002_freeze.py"
 t = io.open(p, encoding="utf-8").read()
-if "core/schemas/v3/model/model_ir.schema.json" not in t:
+if "src/modeling_harness/schemas/v3/model/model_ir.schema.json" not in t:
     t = t.replace(
         '    "research/P15/capability/MODEL_CONSTRUCTION_RUBRIC.md",  # v1.1 评分标准（K002 全程使用）',
         '    "research/P15/capability/MODEL_CONSTRUCTION_RUBRIC.md",  # v1.1 评分标准（K002 全程使用）\n'
-        '    "core/schemas/v3/model/model_ir.schema.json",  # MODEL_IR 契约真源（P1 C1 迁移，K002 模板对齐版）',
+        '    "src/modeling_harness/schemas/v3/model/model_ir.schema.json",  # MODEL_IR 契约真源（P1 C1 迁移，K002 模板对齐版）',
     )
     io.open(p, "w", encoding="utf-8").write(t)
     print("2) k002_freeze.py 已加入 core MODEL_IR schema 冻结项")

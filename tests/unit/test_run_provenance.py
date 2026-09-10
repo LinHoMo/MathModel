@@ -14,15 +14,15 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
 from conftest import injected_session  # noqa: E402
 
-from runtime.execution.replay import diff as replay_diff  # noqa: E402
-from runtime.execution.replay import verify  # noqa: E402
-from runtime.execution.session import RuntimeSession  # noqa: E402
-from runtime.state.reconcile import reconcile  # noqa: E402
-from runtime.state.runs import derive_run_id, list_run_records  # noqa: E402
+from modeling_harness.runtime.execution.replay import diff as replay_diff  # noqa: E402
+from modeling_harness.runtime.execution.replay import verify  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.state.reconcile import reconcile  # noqa: E402
+from modeling_harness.runtime.state.runs import derive_run_id, list_run_records  # noqa: E402
 
 
 class TestRunRecord:

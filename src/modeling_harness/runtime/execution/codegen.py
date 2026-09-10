@@ -20,11 +20,11 @@ import hashlib
 from pathlib import Path
 from typing import Any
 
-from runtime.artifacts.registry import ArtifactNotFound, ArtifactRegistry
-from runtime.execution.adapters import (
+from modeling_harness.runtime.artifacts.registry import ArtifactNotFound, ArtifactRegistry
+from modeling_harness.runtime.execution.adapters import (
     ExecutionAdapter, ExecutionPlan, LocalPythonAdapter,
 )
-from runtime.graph.evidence_graph import EvidenceGraph
+from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
 
 
 def sha256_text(text: str) -> str:
@@ -152,7 +152,7 @@ def run_code_pipeline(project_dir: str | Path, model_ir: dict, code: str, *,
     返回 {code_id, exec_id, exec_status, verification_id,
           fidelity_status, fidelity_score, fidelity_report}
     """
-    from runtime.execution.fidelity import verify_fidelity
+    from modeling_harness.runtime.execution.fidelity import verify_fidelity
 
     project_dir = Path(project_dir)
     c = register_code(project_dir, code, language=language,

@@ -15,10 +15,10 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.artifacts.artifact import Artifact, ContractError
-from runtime.artifacts.registry import ArtifactRegistry
+from modeling_harness.runtime.artifacts.artifact import Artifact, ContractError
+from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
 
 
 def _real_data() -> dict:
@@ -40,7 +40,7 @@ def _real_data() -> dict:
         "provenance": {"reason": "real_subprocess", "adapter": "local_python"},
         "code": code,
         "environment_manifest": "py3.12",
-        "execution_token": __import__("runtime.execution.execution_auth", fromlist=["issue_token"]).issue_token(
+        "execution_token": __import__("modeling_harness.runtime.execution.execution_auth", fromlist=["issue_token"]).issue_token(
             hashlib.sha256(code.encode("utf-8")).hexdigest(),
             "local_python", "2026-09-09T00:00:00Z"),
     }

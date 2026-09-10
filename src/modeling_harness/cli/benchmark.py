@@ -12,8 +12,8 @@
     e2e metrics --project <name> [--gt f] [--response f]
     e2e report --project <name>
 
-指标定义见 core/tools/e2e_metrics.py（docstring 唯一真源）；
-实现 core/tools/e2e_metrics.py（确定性，零 LLM）。
+指标定义见 src/modeling_harness/cli/e2e_metrics.py（docstring 唯一真源）；
+实现 src/modeling_harness/cli/e2e_metrics.py（确定性，零 LLM）。
 
 零第三方依赖。pipeline 模式的临时项目命名 `_bench-*`，结束后自动删除。
 """
@@ -29,11 +29,11 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 for _cat in ("runtime", "validation", "evaluation", "knowledge", "devtools", "rendering"):
-    sys.path.insert(0, str(ROOT / "core" / "tools" / _cat))
+    sys.path.insert(0, str(ROOT / "src" / "modeling_harness" / "cli" / _cat))
 
-import new_project  # noqa: E402
+from modeling_harness.cli import new_project  # noqa: E402
 
 
 def _run(cmd: list[str], cwd: Path) -> tuple[int, str]:
@@ -60,8 +60,8 @@ def pipeline_report(competition: str, problem: str | None = None,
 
         py = sys.executable
         for step, cmd in (
-            ("doctor", [py, "core/tools/doctor.py", "--project", proj]),
-            ("validate", [py, "core/tools/validate.py", proj]),
+            ("doctor", [py, "src/modeling_harness/cli/doctor.py", "--project", proj]),
+            ("validate", [py, "src/modeling_harness/cli/validate.py", proj]),
         ):
             try:
                 rc, out = _run(cmd, ROOT)
@@ -84,7 +84,7 @@ def pipeline_report(competition: str, problem: str | None = None,
 def library_report() -> dict:
     """赛题库健康检查：INDEX.md 年份覆盖 + 待补标记 + MCM 已核实题名。"""
     report: dict = {"mode": "library", "cumcm": {}, "mcm": {}}
-    index = ROOT / "core" / "knowledge" / "problems" / "INDEX.md"
+    index = ROOT / "src" / "modeling_harness" / "knowledge" / "problems" / "INDEX.md"
     if index.exists():
         text = index.read_text(encoding="utf-8")
         years = re.findall(r"^## (\d{4}) 年", text, flags=re.M)
@@ -98,7 +98,7 @@ def library_report() -> dict:
     else:
         report["cumcm"] = {"error": f"缺失: {index}"}
 
-    mcm = ROOT / "core" / "knowledge" / "problems" / "MCM-ICM.md"
+    mcm = ROOT / "src" / "modeling_harness" / "knowledge" / "problems" / "MCM-ICM.md"
     if mcm.exists():
         text = mcm.read_text(encoding="utf-8")
         verified = [ln for ln in text.splitlines()
@@ -116,7 +116,7 @@ def library_report() -> dict:
 # bench 子命令：国赛复盘基准
 # ---------------------------------------------------------------------------
 
-BENCH_DIR = ROOT / "core" / "knowledge" / "bench" / "cumcm"
+BENCH_DIR = ROOT / "src" / "modeling_harness" / "knowledge" / "bench" / "cumcm"
 RUBRIC_GLOB = "rubric_*.json"
 
 
@@ -139,7 +139,7 @@ def bench_list(as_json: bool = False) -> dict:
     for r in rubrics:
         d = _load_json(r)
         items.append({
-            "file": f"core/knowledge/bench/cumcm/{r.name}",
+            "file": f"src/modeling_harness/knowledge/bench/cumcm/{r.name}",
             "year": d.get("year"),
             "topic": d.get("topic"),
             "title": d.get("title", ""),
@@ -170,7 +170,7 @@ def bench_run(rubric_file: str) -> dict:
         "competition": "cumcm",
         "year": rubric.get("year"),
         "topic": rubric.get("topic"),
-        "rubric_ref": f"core/knowledge/bench/cumcm/{rubric_path.name}",
+        "rubric_ref": f"src/modeling_harness/knowledge/bench/cumcm/{rubric_path.name}",
         "response_summary": {
             "modeled_problems": [],
             "claimed_results_count": 0,
@@ -203,13 +203,13 @@ def bench_run(rubric_file: str) -> dict:
     print(f"# 满分:   {rubric.get('total_score', 100)}")
     print()
     print("## Agent 调用步骤")
-    print(f"1. 读取本 rubric 文件: core/knowledge/bench/cumcm/{rubric_path.name}")
+    print(f"1. 读取本 rubric 文件: src/modeling_harness/knowledge/bench/cumcm/{rubric_path.name}")
     print("2. 根据其 dimensions[].assessment_points 对回答逐项评分")
     print("3. 对比 reference_results 标注 ground_truth_hits/misses")
     print("4. 写出 bench_response.json，字段对齐 bench_result.schema.json")
     print()
     print(f"## 模板已写入: {out_path}")
-    print("## 下一步: python core/tools/benchmark.py bench score --rubric <f> --response <f>")
+    print("## 下一步: python src/modeling_harness/cli/benchmark.py bench score --rubric <f> --response <f>")
 
     return template
 
@@ -430,9 +430,9 @@ def e2e_run(problem_id: str, project: str, questions: list[str],
     if features:
         _save_json(proj_dir / "work" / "e2e_profile.json", features)
     try:
-        if str(ROOT / "core") not in sys.path:
-            sys.path.insert(0, str(ROOT / "core"))
-        from runtime.execution.session import RuntimeSession
+        if str(ROOT / "src") not in sys.path:
+            sys.path.insert(0, str(ROOT / "src"))
+        from modeling_harness.runtime.execution.session import RuntimeSession
         session = RuntimeSession(proj_dir, questions, max_workers=1,
                                  features=features or None)
         prog = session.run()["progress"]
@@ -460,9 +460,9 @@ def e2e_run(problem_id: str, project: str, questions: list[str],
         f"分解/方法/建模/实验/结果 → 按 V3 产物登记",
         f"2. 写金标准 work/e2e_gt.json（sub_questions/methods）+ 评分响应 "
         f"work/e2e_response.json",
-        f"3. 重算: python core/tools/benchmark.py e2e metrics --project "
+        f"3. 重算: python src/modeling_harness/cli/benchmark.py e2e metrics --project "
         f"{project} --gt work/e2e_gt.json --response work/e2e_response.json",
-        f"4. 报告: python core/tools/benchmark.py e2e report --project {project}",
+        f"4. 报告: python src/modeling_harness/cli/benchmark.py e2e report --project {project}",
     ]
     return report
 

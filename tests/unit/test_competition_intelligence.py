@@ -11,14 +11,14 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.decisions.log import DecisionLog  # noqa: E402
-from runtime.knowledge.intelligence import CompetitionIntelligence, \
+from modeling_harness.runtime.decisions.log import DecisionLog  # noqa: E402
+from modeling_harness.runtime.knowledge.intelligence import CompetitionIntelligence, \
     ProblemProfile  # noqa: E402
-from runtime.knowledge.packs import detect_knowledge_conflicts  # noqa: E402
+from modeling_harness.runtime.knowledge.packs import detect_knowledge_conflicts  # noqa: E402
 
-KNOW = REPO / "core" / "knowledge"
+KNOW = REPO / "src" / "modeling_harness" / "knowledge"
 
 
 def _ci(tmp_path, competition_type="cumcm"):
@@ -130,7 +130,7 @@ class TestConstraintScenarios:
         with_pack = ci_cumcm.recommend_methods(profile)
         scores_with = {r.card.card_id: r.score for r in with_pack}
         # 无 pack 参照
-        from runtime.knowledge.retriever import KnowledgeRetriever
+        from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever
         bare = KnowledgeRetriever(KNOW).recommend(profile.as_features(),
                                                   top_k=10)
         for rec in bare:
@@ -197,8 +197,8 @@ class TestLifecycleInvariants:
     def test_ci06_invalidated_evidence_not_supporting_decision(self, tmp_path):
         """CI-06：失效证据不得支撑 active 决策（Registry 级验证，P7 契约）。"""
         import tempfile
-        from runtime.artifacts.registry import ArtifactRegistry
-        from runtime.graph.evidence_graph import EvidenceGraph
+        from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
+        from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
         with tempfile.TemporaryDirectory() as td:
             reg = ArtifactRegistry(Path(td) / "r.json")
             reg.project = "t"
@@ -262,7 +262,7 @@ class TestLifecycleInvariants:
 class TestConflictDetection:
     def test_conflicting_knowledge_detected(self, tmp_path):
         """P8-16-8 / CI 冲突：compatible×incompatible 矛盾必须被发现。"""
-        from runtime.knowledge.cards import MethodCard
+        from modeling_harness.runtime.knowledge.cards import MethodCard
         a = MethodCard.from_dict({
             "card_id": "mc-test-a", "name": "A", "family": "t",
             "problem_types": ["evaluation"], "good_for": ["x"],

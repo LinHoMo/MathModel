@@ -10,13 +10,13 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "core"))
+sys.path.insert(0, str(REPO / "src"))
 
-from runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
-from runtime.execution.fidelity import (  # noqa: E402
+from modeling_harness.runtime.execution.adapters import LocalPythonAdapter  # noqa: E402
+from modeling_harness.runtime.execution.fidelity import (  # noqa: E402
     check_fidelity, fidelity_checks_from_ir, verify_fidelity,
 )
-from runtime.execution.session import RuntimeSession  # noqa: E402
+from modeling_harness.runtime.execution.session import RuntimeSession  # noqa: E402
 
 
 def _make_exec(tmp_path, code, qid="Q001"):
