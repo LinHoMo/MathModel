@@ -826,9 +826,9 @@ def generate_and_run(problem_id: str, arm: str, seed: int) -> dict:
                 fidelity={"fidelity_status": "error", "error": str(e)})
         except Exception:
             # writer 自身失败也要如实记录（绝不让错误静默）
-            (run_dir / "execution_result.json").write_text(
-                json.dumps({"model_id": model_id, "status": "error",
-                            "error": str(e)}, ensure_ascii=False, indent=2),
+            # FIX-AUDIT：禁止直写 execution_result.json（唯一写入路径必须是 execution_writer）
+            (run_dir / "execution_writer_error.log").write_text(
+                f"write_run_execution failed: {e}\nmodel_id={model_id}\n",
                 encoding="utf-8")
 
     # 写 manifest

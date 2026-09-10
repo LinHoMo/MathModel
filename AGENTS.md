@@ -32,7 +32,7 @@
 3. 执行      python core/tools/orchestrator.py <项目> --execute  # RuntimeSession 跑认知管线
              或按 orchestrator 输出的节点，读对应 core/roles/*.yaml 与 core/skills/ 指令执行
 4. 对账      python core/tools/state.py <项目> reconcile       # 状态与 Registry/Graph 对账
-5. 门禁      python core/tools/validate.py                     # 57 项项目级校验
+5. 门禁      python core/tools/validate.py                     # 58 项项目级校验
 ```
 
 ### V2 兼容模式（legacy 五步循环，路径已迁）
@@ -68,7 +68,7 @@
 | `python core/tools/orchestrator.py <项目> --execute` | V3 实际执行（RuntimeSession） |
 | `python core/tools/orchestrator.py <项目> --legacy` | V2 legacy：一键执行 29 步流水线 |
 | `python core/tools/gate.py <项目> <hand> <agent>` | 单步门禁 |
-| `python core/tools/validate.py` | 项目级 57 项校验 |
+| `python core/tools/validate.py` | 项目级 58 项校验 |
 | `python core/tools/catalog_check.py --check` | catalog v5 双视图三方一致性 |
 | `python core/tools/replay.py <项目> [<run_id> [diff <run_id>]]` | 运行重放 / 差异归因 |
 | `python core/tools/knowledge.py recommend --types <题型>` | V3 方法卡检索 |
@@ -152,9 +152,9 @@ threshold = get("modeling.assumption_score_threshold", default=6.0)
 ## 修改后必做
 
 ```powershell
-py -3.12 core/tools/validate.py                         # 57 项校验（全绿方可宣告交付）
+py -3.12 core/tools/validate.py                         # 58 项校验（全绿方可宣告交付）
 py -3.12 core/tools/catalog_check.py --check            # 双视图一致
-py -3.12 -m pytest tests -q                             # 758 passed / 11 skipped（基线）
+py -3.12 -m pytest tests -q                             # 基线（以 docs/STATUS.md 机器实测数字为准）
 ```
 
 任一项失败按对应 `## Iteration` 回退修正后重跑，不向下游推进。
