@@ -887,11 +887,15 @@ class DefaultNodeExecutor:
             model_id = (xart.data or {}).get("model_id")
             if not model_id:
                 continue
-            mir_art = None
-            for m in reg.list_by_type("model_ir"):
-                if (m.data or {}).get("model_id") == model_id:
-                    mir_art = m
-                    break
+            # EXEC.data.model_id = MIR artifact id（如 MIR001，与
+            # _candidate_vr_table 同口径）；为稳健同时兼容业务 id
+            # （data.model_id = M2024A-Q1-v1）形式
+            mir_art = reg.get(model_id)
+            if mir_art is None or mir_art.type != "model_ir":
+                for m in reg.list_by_type("model_ir"):
+                    if (m.data or {}).get("model_id") == model_id:
+                        mir_art = m
+                        break
             if mir_art is None:
                 continue
             # 幂等：已有 diagnosed_by 边（本 DAG 或历史修订）跳过

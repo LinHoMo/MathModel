@@ -43,6 +43,12 @@
 
 ### P0-2: 接入 Failure Diagnosis 到 Revision Flow
 
+> ✅ **DONE 2026-09-10**（commit `311a863`）：
+> - `do_model_validation` 无存活候选 FAIL → `_diagnose_and_draft`：沿 verified_by 边对每个 failed VR 调 `diagnose_failure`（机械证据），注册 diagnosis artifact + `(MIR, diagnosed_by, DIAG)` 边（幂等）
+> - `build_revision_draft` 生成 M2 草案（`*-REV1`，modeling_trace 追加 revision_draft 步骤 + changed_components），放入 `shared["revision_packages"][qid]` 供外部 Model Constructor 消费
+> - `finalize_revision` 去重：已有 diagnosed_by 边则跳过（全闭环仅 1 DIAG）
+> - 验收：`test_diagnosis_integration.py` 5/5（三要素/机械根因/草案继承/单 DIAG/LLM-free）；全量 999 passed / 4 skipped；validate 58/0；catalog OK
+
 **目标**：失败后自动诊断，生成修订草案
 
 **为什么做**：diagnosis.py 已实现但零调用。Revision loop 的"失败→诊断"环节断裂。
