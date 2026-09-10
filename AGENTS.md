@@ -33,7 +33,7 @@ no backward compatibility with V2.
 
 | 目录/文件 | 说明 |
 |---|---|
-| `src/modeling_harness/` | 引擎本体（LLM-free）：runtime / roles / workflows / validators / schemas / cli / skills / knowledge / env |
+| `src/modeling_harness/` | 引擎本体（LLM-free）：runtime / roles / workflows / validators / schemas / cli / skills / knowledge / env / domains / adapters |
 | `src/modeling_harness/cli/` | CLI：mh 统一入口 + validate.py / catalog_check.py / new_project.py / doctor.py 等 |
 | `src/modeling_harness/workflows/` | DAG 模板（stages/）+ WorkflowComposer |
 | `src/modeling_harness/roles/` | 4 角色：analyst / modeler / experimenter / critic |

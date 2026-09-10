@@ -11,11 +11,11 @@ sys.path.insert(0, str(REPO / "src"))
 
 import pytest  # noqa: E402
 
-from modeling_harness.runtime.constructors.adapters.mathmodel_agent import (  # noqa: E402
+from modeling_harness.adapters.mathmodel_agent import (  # noqa: E402
     ConstructorNotConfigured, MathModelAgentAdapter,
 )
-from modeling_harness.runtime.constructors.adapters.pi import PiAdapter  # noqa: E402
-from modeling_harness.runtime.constructors.adapters.reference import ReferenceConstructor  # noqa: E402
+from modeling_harness.adapters.pi import PiAdapter  # noqa: E402
+from modeling_harness.adapters.reference import ReferenceConstructor  # noqa: E402
 from modeling_harness.runtime.constructors.protocol import ConstructionBundle  # noqa: E402
 from modeling_harness.runtime.constructors.registry import (  # noqa: E402
     ConstructorRegistry, apply_bundle,

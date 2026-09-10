@@ -7,7 +7,7 @@ NodeResult 结构全部在此定义，handlers / gate / critic / tools 一律 im
 这里的谓词，禁止各自内联元组（P6 修的 E1/E2/E3/E4/N2 口径分裂即由此而来）。
 
 配套文档: docs/architecture/RUNTIME_CONTRACTS.md（验收标准 A–K 映射）
-概念归户: src/modeling_harness/runtime/domain/__init__.py（Canonical Domain Model，
+概念归户: src/modeling_harness/domains/__init__.py（Canonical Domain Model，
 Hardening P1——本文件所有实体名须与 domain 定义一致，禁止近义词）。
 """
 

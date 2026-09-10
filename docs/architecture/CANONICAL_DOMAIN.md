@@ -2,7 +2,7 @@
 > Version: v1.0 | Status: Frozen | Updated: 2026-09-07
 
 > 建立：2026-09-07（System Hardening P1 / Contract Freeze）
-> 代码真源：`src/modeling_harness/runtime/domain/__init__.py`（纯定义层，零行为）
+> 代码真源：`src/modeling_harness/domains/__init__.py`（纯定义层，零行为）
 > 规则：**一个概念 = 一个 canonical 名 = 一个 schema 归属；任何新增 schema / 字段 /
 > 文件不得发明 canonical 之外的近义词。** 本文件是语义归户的权威文档。
 
@@ -60,7 +60,7 @@
 
 ## 4. 命名禁令与执行
 
-1. 任何新增 schema / 字段 / 文件名必须先查 `src/modeling_harness/runtime/domain/__init__.py` 的
+1. 任何新增 schema / 字段 / 文件名必须先查 `src/modeling_harness/domains/__init__.py` 的
    `CANONICAL_ENTITIES` 与 `ENTIT_ALIASES`（同义词回收表）；命中旧称呼即违规。
 2. V2/legacy 文档中历史称呼保留不改（证据不改写原则），但在新文档中必须用 canonical 名。
 3. 执行方式：文档规约 + 评审抽查（Hardening P5 回归测试含命名抽查用例）；
@@ -68,5 +68,5 @@
 
 ## 5. 变更流程
 
-实体增删或 schema 归属变更 = 架构级变更：须更新本文件 + `src/modeling_harness/runtime/domain/__init__.py`
+实体增删或 schema 归属变更 = 架构级变更：须更新本文件 + `src/modeling_harness/domains/__init__.py`
 + `THREE_LAYER_ARCHITECTURE.md` 例外登记，三条缺一不可提交。
