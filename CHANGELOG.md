@@ -27,7 +27,7 @@
 - `validate.py`：**45 通过 / 0 失败 / 0 警告**
 - `catalog_check --check` / `--check-terminology`：**OK**
 - `doctor.py`：**就绪 17 / 警告 0 / 阻塞 0**
-- `pytest`：**612 passed / 1 skipped**
+- `pytest`：**613 passed / 0 skipped**（human_approval integration 测试消除条件 skip，改为真实注入审批节点验证）
 
 
 

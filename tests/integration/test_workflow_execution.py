@@ -104,13 +104,17 @@ class TestEngineFailureRecovery:
 
 class TestHumanApproval:
     def test_waiting_approval_and_approve(self):
-        """human_approval 节点首次到达挂起，approve 后继续。"""
+        """human_approval 节点首次到达挂起，approve 后继续。
+
+        V3 workflow 模板默认不配置审批节点（全自动 harness），
+        这里沿真实 compose 路径注入审批标记，验证 Engine 的
+        waiting/approve 能力在完整 DAG 上真实生效。
+        """
         comp = WorkflowComposer(WF)
         exp = comp.compose_executable(["Q001"])
-        approval_nodes = [nid for nid, n in exp.nodes.items() if n.human_approval]
-        if not approval_nodes:
-            pytest.skip("当前 workflow 无人工审批节点")
-        target = approval_nodes[0]
+        target = "experiment@Q001"
+        assert target in exp.nodes
+        exp.nodes[target].human_approval = True
 
         eng = WorkflowEngine(exp, lambda nid, ctx: NodeResult(PASS))
         eng.run()

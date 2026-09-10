@@ -68,7 +68,7 @@ Construction 行为？"。
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **612 passed / 1 skipped / 0 failed（skip 已分类）** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **613 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **45 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |
