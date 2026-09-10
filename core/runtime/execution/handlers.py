@@ -939,7 +939,7 @@ class DefaultNodeExecutor:
                 activate=True, created_by=node_id)
             self.graph.add_relation(m2_id, "compared_with", m1_id)
             self.graph.add_relation(art.artifact_id,
-                                    "supported_by", m2_id)
+                                    "based_on", m2_id)
             out.append({"decision_id": art.artifact_id,
                        "better_model": cmp["better_model"],
                        "recommendation": cmp["recommendation"]})

@@ -58,13 +58,15 @@ RELATION_TYPES: dict[str, tuple] = {
     "diagnosed_by":   ({"model", "model_ir", "code"}, {"diagnosis"}),
     # audit FIX-6.3/6.4（P2-08）：修订证据链（决策 → 修订模型；诊断支撑决策）
     "revises":        ({"decision", "diagnosis"}, {"model", "model_ir"}),
+    # P1-3：模型比较边（M2 compared_with M1；比较决策是 advisory，不传播失效）
+    "compared_with":  ({"model", "model_ir"}, {"model", "model_ir"}),
 }
 
 STRONG_RELATIONS = frozenset({
     "solved_by", "implemented_by", "validated_by", "uses", "assumes",
     "produces", "visualized_by", "supports", "selects", "based_on",
 })
-WEAK_RELATIONS = frozenset({"appears_in", "derived_from", "revision_of", "supersedes", "evaluated_by", "selected_from"})
+WEAK_RELATIONS = frozenset({"appears_in", "derived_from", "revision_of", "supersedes", "evaluated_by", "selected_from", "compared_with"})
 
 # ------------------------------------------------------------- 传播语义
 #
