@@ -3,7 +3,7 @@
 新生成格式（tech-rebuild）：MH-<TYPE>-<NNNN>，项目内唯一、终身稳定、永不复用。
     示例：MH-MODEL-0001 / MH-QUESTION-0001 / MH-EXECUTION_RESULT-0001
 历史读取兼容：旧 V3 Stable ID（<PREFIX><NNN>，如 Q001 / M002 / DATA003）仍可解析，
-    仅用于读取历史数据（projects/ 冻结 run 记录）；新生成一律使用 MH- 前缀。
+    仅用于读取历史数据（projects/ 冻结 run 记录）；新生成一律使用 MH- 前缀。唯一例外：question 类型显式使用题面语义 ID（Q001/Q002，见 session.py registry.create artifact_id= 注入），属 V3 领域设计，非兼容层。
 版本独立于 ID（contract.version 整数递增），ID 不编码语义与路径。
 
 前缀表（与 docs/architecture/V3.1_ARCHITECTURE.md §1.11 一致）:
