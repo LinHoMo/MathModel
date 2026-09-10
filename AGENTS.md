@@ -116,7 +116,7 @@ no backward compatibility with V2.
 4. `TASKS.md` — 任务看板：当前进行中/待办/已完成任务的唯一登记处。
 5. 本文件（AGENTS.md）— 工作协议：角色、工作流、禁止事项、验收标准。
 
-未按顺序读完，**不得开始任何实现**。读完后仍不确定的项，按 §10 处理（停下问，不要猜）。
+未按顺序读完，**不得开始任何实现**。读完后仍不确定的项，按 §10 处理（停下问，不要猜）。扩展阅读见 `docs/README.md` 文档索引。
 
 **English / EN**
 
@@ -128,7 +128,7 @@ Before starting any implementation, you MUST read all of the following in order 
 4. `TASKS.md` — Task board: the single registry of in-progress / todo / done tasks.
 5. This file (AGENTS.md) — Working protocol: roles, workflow, prohibitions, acceptance criteria.
 
-Do NOT start any implementation before reading all of the above in order. If anything remains uncertain, follow §10 (stop and ask; do not guess).
+Do NOT start any implementation before reading all of the above in order. If anything remains uncertain, follow §10 (stop and ask; do not guess). For further reading, see the `docs/README.md` documentation index.
 
 ---
 
@@ -162,7 +162,7 @@ One Agent may take multiple roles, but **each role's boundary must be respected*
 
 **中文 / ZH**
 
-任务卡是任务的最小单元，五要素缺一不可（模板见 `prompts/task-template.md`）：
+任务卡是任务的最小单元，六要素缺一不可（模板见 `prompts/task-template.md`）：
 
 ```markdown
 # Task [ID] / 任务 [ID]
@@ -176,7 +176,7 @@ One Agent may take multiple roles, but **each role's boundary must be respected*
 
 **English / EN**
 
-A task card is the smallest unit of work; all five elements are mandatory (template at `prompts/task-template.md`):
+A task card is the smallest unit of work; all six elements are mandatory (template at `prompts/task-template.md`):
 
 ```markdown
 # Task [ID] / 任务 [ID]
@@ -201,7 +201,7 @@ A task card is the smallest unit of work; all five elements are mandatory (templ
 3. **实现 / Implement**：只改任务卡指定文件，单任务单意图；不得顺手改未点名文件。
 4. **验证 / Verify**：跑任务卡验证命令；diff 自审（是否越界、是否伪造、数字是否有来源）。
 5. **审查 / Review**：以 Reviewer 视角重读自己的 diff，寻找反证；发现问题先修产物再重跑验证。
-6. **提交 / Commit**：conventional commits，单 commit 单意图；提交信息清晰说明「做了什么 + 为什么」。
+6. **提交 / Commit**：conventional commits，单 commit 单意图；提交信息清晰说明「做了什么 + 为什么」；提交后更新 `TASKS.md` 对应任务状态。
 
 **English / EN**
 
@@ -212,7 +212,7 @@ A task card is the smallest unit of work; all five elements are mandatory (templ
 3. **Implement**: Touch only files named in the task card; one intent per task; do not edit unnamed files along the way.
 4. **Verify**: Run the task's verify commands; self-review the diff (scope, forgery, number provenance).
 5. **Review**: Re-read your own diff from a Reviewer's perspective; actively look for counter-evidence; fix the artifact first, then re-verify.
-6. **Commit**: Conventional commits, one intent per commit; message states clearly what and why.
+6. **Commit**: Conventional commits, one intent per commit; message states clearly what and why; after committing, update the corresponding task status in `TASKS.md`.
 
 ---
 
@@ -228,6 +228,7 @@ A task card is the smallest unit of work; all five elements are mandatory (templ
 - 禁止越界修改任务卡未指定文件 / No out-of-scope edits beyond the task card.
 - 禁止回填 STATUS.md 数字；数字必须来自机器实测 / No manual backfill of STATUS numbers; numbers must come from machine runs.
 - 禁止以本地环境判断依赖；以 CI 为准 / Never judge dependencies from the local environment; use CI.
+- 修改本文件前，必须先读 `validate.py` 中对 AGENTS.md 的章节校验规则（当前要求含「核心定位 / 目录结构 / 不可违反的规则」三章），确保不破坏机器校验 / Before editing this file, first read the AGENTS.md section-check rules in `validate.py` (currently requiring the three sections 核心定位 / 目录结构 / 不可违反的规则) to ensure machine checks stay green.
 
 **English / EN**
 
@@ -295,28 +296,40 @@ A task card is the smallest unit of work; all five elements are mandatory (templ
 任何改动（文档、配置、代码、研究）完成后，必须通过**四件套**：
 
 ```powershell
-py -3.12 core/tools/validate.py                     # 项目级 45 项校验
+py -3.12 core/tools/validate.py                     # 项目级校验（基线见 docs/STATUS.md）
 py -3.12 core/tools/catalog_check.py --check        # catalog 双视图三方一致
 py -3.12 core/tools/catalog_check.py --check-terminology  # 术语零残留
-py -3.12 -m pytest tests -q                         # 基线测试（当前 595 passed）
+py -3.12 -m pytest tests -q                         # 基线测试（数字以 docs/STATUS.md 实测为准）
 ```
 
 - 手动检查清单：diff 自审（无越界文件、无伪造数字、无占位符）、关键数字可追溯到输入/实测。
 - 回滚步骤：每个任务独立 commit；失败时 `git revert` 到上一个绿色 commit（四件套全过的提交）。
+- 推送后必须确认 GitHub Actions CI 全绿；本地四件套通过**不等于** CI 通过。
 
 **English / EN**
 
 After any change (docs, config, code, research), the **four-gate** must pass:
 
 ```powershell
-py -3.12 core/tools/validate.py                     # 45 project-level checks
+py -3.12 core/tools/validate.py                     # project-level checks (baseline: docs/STATUS.md)
 py -3.12 core/tools/catalog_check.py --check        # catalog dual-view consistency
 py -3.12 core/tools/catalog_check.py --check-terminology  # zero stale terminology
-py -3.12 -m pytest tests -q                         # baseline tests (currently 595 passed)
+py -3.12 -m pytest tests -q                         # baseline tests (numbers per docs/STATUS.md)
 ```
 
 - Manual checklist: self-review the diff (no out-of-scope files, no forged numbers, no placeholders); key numbers traceable to input or measured runs.
 - Rollback: each task is an independent commit; on failure `git revert` to the last green commit (a commit where all four gates passed).
+- After pushing, confirm the GitHub Actions CI is all green; local four-gate passing does **not** equal CI passing.
+
+### 7.1 文档更新纪律 / Doc Update Discipline
+
+**中文 / ZH**
+
+改动代码后必须同步更新：`STATUS.md`（数字变化时）、`CHANGELOG.md`（版本相关时）、`TASKS.md`（任务状态）。
+
+**English / EN**
+
+After changing code, keep the following in sync: `STATUS.md` (when numbers change), `CHANGELOG.md` (when version-relevant), `TASKS.md` (task status).
 
 ---
 
