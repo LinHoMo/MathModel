@@ -822,6 +822,72 @@ def check_parameter_provenance(project_path):
     return True, f"参数来源检查通过（{checked} 个参数）"
 
 
+# 校准参数门禁（G3）：非题面/非推导/非约定来源的常量视为建模者自选，须有锚定与敏感性证据。
+_CALIB_EXEMPT_SOURCES = frozenset({"problem_given", "derived", "convention"})
+
+
+def check_calibration_parameters(project_path):
+    """L4: 校准参数门禁（G3）——建模者自选、结论敏感的常量必须有锚定 + 敏感性证据。
+
+    判据见 docs/architecture/MODEL_QUALITY_CRITERIA.md §2.1.1：
+      * source ∈ {problem_given, derived, convention} → 豁免；
+      * 否则必须 (a) calibration_anchor_ref 指向 type=="calibration_anchor" 的假设，且
+        (b) all_results.json 顶层 calibration_sensitivity[pid] 的 varied 至少一轴长度 ≥2。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "无活跃项目实例（跳过）"
+    checked = 0
+    problems = []
+    for pdir in live:
+        mir = pdir / "model_ir.json"
+        if not mir.exists():
+            continue
+        try:
+            data = json.loads(mir.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        params = data.get("parameters") or []
+        if not params:
+            continue
+        anchor_ids = {a.get("assumption_id")
+                      for a in (data.get("assumptions") or [])
+                      if a.get("type") == "calibration_anchor"}
+        sens = {}
+        res_path = pdir / "all_results.json"
+        if res_path.exists():
+            try:
+                sens = (json.loads(res_path.read_text(encoding="utf-8"))
+                        .get("calibration_sensitivity") or {})
+            except Exception:
+                sens = {}
+        for par in params:
+            if par.get("source") in _CALIB_EXEMPT_SOURCES:
+                continue
+            checked += 1
+            pid = par.get("parameter_id", "?")
+            ref = par.get("calibration_anchor_ref")
+            if not ref or ref not in anchor_ids:
+                problems.append(f"{pdir.name}:{pid} 缺有效 calibration_anchor_ref")
+                continue
+            rec = sens.get(pid)
+            if not isinstance(rec, dict):
+                problems.append(f"{pdir.name}:{pid} 缺 calibration_sensitivity 记录")
+                continue
+            varied = rec.get("varied")
+            outcomes = rec.get("outcomes")
+            axis_ok = (isinstance(varied, dict)
+                       and any(isinstance(v, list) and len(v) >= 2
+                               for v in varied.values()))
+            if not axis_ok:
+                problems.append(f"{pdir.name}:{pid} 敏感性 varied 无长度≥2 的轴")
+            elif not isinstance(outcomes, list) or len(outcomes) < 2:
+                problems.append(f"{pdir.name}:{pid} 敏感性 outcomes 缺失或过短")
+    if problems:
+        return False, "; ".join(problems[:5])
+    return True, f"校准参数检查通过（{checked} 个非豁免参数）"
+
+
 def check_physics_model(project_path):
     """L4: 物理模型检查（V3：模型描述文档坐标系/几何判据/解析验证等）。"""
     live = _live_project_dirs(project_path)
@@ -1279,6 +1345,7 @@ def validate_project(project_path):
         ("L4", "物理模型", lambda: check_physics_model(project_path)),
         ("L4", "数值追溯", lambda: check_numeric_traceability(project_path)),
         ("L4", "参数来源", lambda: check_parameter_provenance(project_path)),
+        ("L4", "校准参数", lambda: check_calibration_parameters(project_path)),
 
         # L5: 信任域隔离检查
         ("L5", "信任域定义", lambda: check_trust_domain(project_path)),
