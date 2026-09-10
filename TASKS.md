@@ -8,22 +8,12 @@
 
 | ID | Task | Agent | Status | Acceptance |
 |----|------|-------|--------|------------|
-| T-P0-08 | 重写 AGENTS.md（中英双语，10 节） | MainAgent | 实现中（阶段三） | ≥180 行；10 节齐全；`grep -c "" AGENTS.md` ≥ 180 |
+| — | 阶段五（仓库瘦身 P2）待启动；前置：T-CONF-001 | MainAgent | 待确认 | 阶段四已交付，等待用户裁定后进入 |
 
 ## Todo / 待办
 
 | ID | Task | Priority | Acceptance | Blocked By |
 |----|------|----------|------------|------------|
-| T-P0-09 | 创建 TASKS.md（本文件） | P0 | Todo ≥15 条、Done ≥8 条；含 ID/优先级/验收/依赖 | — |
-| T-P0-10 | 创建 prompts/ 目录（6 文件） | P0 | planner/implementer/tester/reviewer/task-template/README 存在；每份含角色/输入/输出/禁止 | — |
-| T-P1-06 | 创建 docs/README.md 文档索引 | P1 | 覆盖 docs/ 全部 .md；无断裂链接 | — |
-| T-P1-07 | 创建 ADR 体系（7 文件） | P1 | 每份含 6 字段；与 V3.1_ARCHITECTURE 一致 | — |
-| T-P1-08 | CONTRIBUTING.md 补分层依赖说明 | P1 | 含「运行时零依赖」与「测试依赖 pyyaml/jsonschema/ripgrep」两节 | — |
-| T-P1-09 | core/runtime/README.md | P1 | 子域说明；≤80 行；指向真源 | — |
-| T-P1-10 | core/tools/README.md | P1 | 15 个 CLI 一句话说明；≤80 行 | — |
-| T-P1-11 | core/knowledge/README.md | P1 | 知识库结构与检索入口；≤80 行 | — |
-| T-P1-12 | catalog/README.md | P1 | 双视图元数据说明；≤80 行 | — |
-| T-P1-13 | tests/README.md | P1 | 测试分层说明；≤80 行 | — |
 | T-P2-01 | research/P15 移出主树（迁移 ≠ 删除） | P2 | 主仓不含 research/P15；research/README 含新地址 | T-CONF-001 |
 | T-P2-02 | 顶层 V2 schema 归档（legacy/） | P2 | core/schemas/README 明确 v3/ 唯一 canonical | — |
 | T-P2-03 | 空目录与 V2 词清理（paper-cases→cases） | P2 | git status 干净；pytest 通过 | T-CONF-004 |
@@ -52,4 +42,16 @@
 | T-P1-03 | CI 添加与修复（push main；pyyaml/jsonschema/ripgrep） | `b34cb4e`+`e19a24a`+`18e49ea` | 2026-09-10 |
 | T-P1-04 | CONTRIBUTING.md（个人仓库声明，不接受 PR） | `b34cb4e` | 2026-09-10 |
 | T-P1-05 | v3.2.2 tag + GitHub Release | `b34cb4e`（tag 锚点） | 2026-09-10 |
+| T-P0-08 | 重写 AGENTS.md（中英双语，323 行，12 节） | `0a1e425` | 2026-09-10 |
+| T-P0-09 | 创建 TASKS.md（本文件） | `0a1e425` | 2026-09-10 |
+| T-P0-10 | 创建 prompts/（6 文件） | `0a1e425` | 2026-09-10 |
+| T-P1-06 | 创建 docs/README.md 文档索引（33 链接全通） | `0a1e425` | 2026-09-10 |
+| T-P1-07 | 创建 ADR 体系（7 文件） | `0a1e425` | 2026-09-10 |
+| T-P1-08 | CONTRIBUTING.md 补分层依赖说明 | `0a1e425` | 2026-09-10 |
+| T-P1-09 | core/runtime/README.md（23 行，12 子域） | `71a0310` | 2026-09-10 |
+| T-P1-10 | core/tools/README.md（25 行，15 CLI） | `71a0310` | 2026-09-10 |
+| T-P1-11 | core/knowledge/README.md（32 行，含历史目录说明） | `71a0310` | 2026-09-10 |
+| T-P1-12 | catalog/README.md（21 行，双视图） | `71a0310` | 2026-09-10 |
+| T-P1-13 | tests/README.md（20 行，分层+夹具） | `71a0310` | 2026-09-10 |
+| T-P1-14 | 14 份 architecture 文档补版本头（Version/Status/Updated） | `71a0310` | 2026-09-10 |
 | T-CONF-005 | 裁定：VS001 两份报告保留，不删除不合并 | 阶段一裁定（无 commit） | 2026-09-10 |
