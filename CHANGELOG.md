@@ -2,6 +2,32 @@
 
 本文件记录 Modeling-Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
+## 2026-09-10 — Post-rebuild hardening: real input check, retired archive, top-level domains/adapters
+
+### 变更
+- **L1.1 语义修复（fix(validate) `40d1989`）**：输入规约检查不再依赖 V2 归档
+  `schemas/legacy/question_spec.schema.json` 存在性（历史基线 44/1 中那个失败的根因），
+  改为校验活跃项目真实输入规约——`inputs/question_spec.json` 有效 JSON 且顶层 object
+  （与 `runtime/modeling/problem_repr.py` 解析契约一致）或 `inputs/problem.txt`；两者皆缺 → 失败；
+  库模式无活跃项目 → 跳过。校验项数保持 45，语义从"守卫 V2 归档"变为"守卫 V3 真实输入"。
+- **schemas/legacy → schemas/retired（refactor(schemas) `1b58fee`）**：V2 schema 归档目录更名，
+  消除 "legacy" 兼容歧义；只读归档内容不变；validate 不再引用该目录。
+- **domains/ adapters/ 上提顶层（refactor(structure) `062c357`，ADR-0006）**：
+  `runtime/domain` → `domains/`（Canonical Domain Model 纯定义层）；`runtime/constructors/adapters`
+  → `adapters/`（MathModelAgentAdapter / PiAdapter / ReferenceConstructor，相对导入改绝对）；
+  `runtime/execution/adapters/`（执行适配器）语义不同保持原址；覆盖 P3-4"重组暂缓"决定；
+  目标结构中的 profiles/ 与 domains/adapters 子目录无真实资产，不建空壳。
+- **迁移垃圾清理**：删除 build/（setuptools 构建中间产物）、dist/、全仓 __pycache__（35 个）、
+  .pytest_cache、worktree 残留（mh-wt-44，`git worktree prune`）、一次性迁移脚本目录
+  （fix*.py / tech_rename.py / scan_ids.py / pytest_out*.txt，不入库）。
+
+### 验证
+- 四件套全绿：validate 45/0/0、catalog OK、terminology OK、pytest **595 passed / 5 warnings**。
+- L1.1 四场景函数测试（机器实测）：valid spec=True / missing=False / bad json=False /
+  problem.txt=True。
+- projects/ `MM-` 前缀 **0 残留**（rg 实测）；registry.json 已全量 MH- 化；decision_log 等
+  冻结记录中的 V3 语义 ID（Q001/D001 等）属领域语义保留，非迁移范围。
+
 ## 2026-09-10 — Tech rebuild: optimal structure and naming, no backward compatibility
 
 ### 变更
