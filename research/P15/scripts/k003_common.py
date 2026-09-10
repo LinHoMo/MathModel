@@ -37,7 +37,7 @@ BENCH = P15 / "benchmark"
 PROBLEM_CARDS = BENCH / "problem_cards"
 
 EXPERIMENT_ID = "P15-K003"
-PROTOCOL_VERSION = "0.1"
+PROTOCOL_VERSION = "0.2"
 ARTIFACT_SCHEMA_VERSION = "model-ir-1.0"
 
 ARMS = ["F", "S", "SV"]

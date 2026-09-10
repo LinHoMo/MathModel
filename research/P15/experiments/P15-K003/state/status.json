@@ -2,7 +2,14 @@
   "experiment_id": "P15-K003",
   "protocol_version": "0.1",
   "phase": "RUNNING",
-  "revisions": [],
+  "revisions": [
+    {
+      "version": "v0.2",
+      "at": "2026-09-10T00:12:38Z",
+      "note": "audit FIX-5.3/5.4 修改冻结项 core/schemas/v3/model/model_ir.schema.json；new revision 重冻 36 文件；K003 盲评包已生成不受影响",
+      "from_phase": "RUNNING"
+    }
+  ],
   "history": [
     {
       "event": "gate",
@@ -68,6 +75,12 @@
       "from": "PREFLIGHT",
       "to": "RUNNING",
       "note": "66/66 runs exec_success rate=1.0 (主检验54+泛化12)"
+    },
+    {
+      "event": "revision",
+      "at": "2026-09-10T00:12:38Z",
+      "version": "v0.2",
+      "note": "audit FIX-5.3/5.4 修改冻结项 core/schemas/v3/model/model_ir.schema.json；new revision 重冻 36 文件；K003 盲评包已生成不受影响"
     }
   ],
   "gates": {

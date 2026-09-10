@@ -14,6 +14,12 @@
       "at": "2026-09-09T02:13:04Z",
       "note": "MODEL_IR 契约真源迁移 core（P1 C1）+ 词表完备化 + register 真 jsonschema + 模板同步 description/词表",
       "from_phase": "FROZEN"
+    },
+    {
+      "version": "v0.9",
+      "at": "2026-09-10T00:12:38Z",
+      "note": "audit FIX-5.3/5.4 修改冻结项 core/schemas/v3/model/model_ir.schema.json（code_mapping + validations.type enum 扩展 + L2 数学校验）；new revision 重冻 40 文件；K002 结果不受影响（评分用 rubric v1.1）",
+      "from_phase": "CLOSED"
     }
   ],
   "history": [
@@ -870,6 +876,12 @@
       "from": "ANALYSIS",
       "to": "CLOSED",
       "note": "formal report committed (corrected scores, anchoring disclosed), data archived, analysis complete"
+    },
+    {
+      "event": "revision",
+      "at": "2026-09-10T00:12:38Z",
+      "version": "v0.9",
+      "note": "audit FIX-5.3/5.4 修改冻结项 core/schemas/v3/model/model_ir.schema.json（code_mapping + validations.type enum 扩展 + L2 数学校验）；new revision 重冻 40 文件；K002 结果不受影响（评分用 rubric v1.1）"
     }
   ],
   "gates": {
