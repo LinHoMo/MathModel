@@ -22,7 +22,7 @@
 
 | ID | Task | Commit | Date |
 |----|------|--------|------|
-| T-REBUILD-01 | 技术层重构（src/ layout、modeling_harness 包、mh CLI、MH_* env、.mh/ 配置、MH- ID、modeling_harness.* schema、迁移脚本） | 进行中（refactor/tech-rebuild） | 2026-09-10 |
+| T-REBUILD-01 | 技术层重构（src/ layout、modeling_harness 包、mh CLI、MH_* env、.mh/ 配置、MH- ID、modeling_harness.* schema、迁移脚本） | `1b5e2e7`+`e4add47`+`65be4d8`+`ef2afe8`+`8838fda`+`1cebd09`+`68e90be`+`6ee233c`+`bdaddbc`+`9913a2b`+`86e087e` | 2026-09-10 |
 | T-BRAND-01 | 品牌迁移 MathModel → Modeling-Harness（品牌层替换 + 发行名 + MIGRATION.md + CHANGELOG 条目 + GitHub 改名/description/topics） | `9809047`+`6663d02`+`550f9ef`；GitHub 已改名 | 2026-09-10 |
 | T-P0-01 | 重写 research/README.md（仅 ENGINEERING/ 与 P15/） | `d3c4f83` | 2026-09-10 |
 | T-P0-02 | 创建 research/P15/README.md（K 系列状态+实验地图+报告索引） | `d3c4f83` | 2026-09-10 |
