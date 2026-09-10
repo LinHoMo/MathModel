@@ -149,24 +149,30 @@ def test_04_bad_candidate_real_fail(session):
 
 
 def test_05_unselected_when_no_evidence(session):
-    """验收④：无执行证据时如实声明 UNSELECTED，不假装选型（消除 recs[0]）。"""
+    """验收④（P0-4 修订）：无执行/验证证据时如实不选型（消除 recs[0]）。
+
+    零执行/零验证 ≠ PASS：无 validation_spec → 无 VR 证据 →
+    model_execution/model_validation/model_selection_decision 级联
+    blocked（BLOCKED 依赖传播：上游阻塞时下游如实传播，不执行 executor
+    不假装完成），且不产生任何 decision artifact。
+    """
     # 不注入 validation_specs → 无 VR 证据
     shared = session.executor_impl.shared
     shared.pop("validation_specs", None)
-    results = step_all(session)
-    assert results["model_validation"].status == "pass"   # 0 通过/0 未通过
-    assert results["model_selection_decision"].status == "pass"
+    results = {}
+    for nid in LOOP_NODES:
+        results[nid] = session.engine.step(nid)
+    # 候选带代码 → 执行真实发生（pass）；无 validation_spec → 零验证
+    assert results["model_execution"].status == "pass"         # 有执行
+    assert results["model_validation"].status == "blocked"     # 零验证 ≠ PASS
+    assert results["model_selection_decision"].status == "blocked"  # 级联传播
 
     decisions = decisions_of(session)
-    assert len(decisions) == 1
-    d = decisions[0]["data"]
-    assert d["chosen"] == "UNSELECTED"
-    assert d["confidence"] == 0.0
-    assert d["reasoning"] == "no execution evidence available"
-    assert d["evidence_ids"] == []
+    assert len(decisions) == 0, "无证据不得制造任何 decision artifact"
     # 容器 model 的 selection_status 保持 pending（未假装选型）
     m = session.registry.get("M001")
     assert (m.data or {}).get("selection_status") == "pending_evidence"
+
 
 
 def test_full_loop_disk_recovery(tmp_path):

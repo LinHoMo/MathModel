@@ -133,6 +133,15 @@ class WorkflowEngine:
         if node_id in self.blocked or node_id in self.waiting:
             raise EngineError(f"节点处于 blocked/waiting，需先恢复: {node_id}")
         node = self.dag.nodes[node_id]
+        blocked_deps = [d for d in node.depends_on if d in self.blocked]
+        if blocked_deps:
+            # 上游 BLOCKED → 下游如实传播阻塞（不执行 executor，不假装完成）。
+            # 零执行/零验证 ≠ PASS 的 DAG 语义：任何依赖未完成的节点都
+            # 不能"跳过"上游继续跑出假 PASS（audit 失败语义闭环）。
+            reason = f"上游阻塞: {', '.join(blocked_deps[:5])}"
+            self.blocked[node_id] = reason
+            self._record(node_id, BLOCKED, reason)
+            return NodeResult(BLOCKED, reason)
         missing = [d for d in node.depends_on if d not in self.completed]
         if missing:
             raise EngineError(f"节点 {node_id} 依赖未满足: {missing}")
@@ -209,6 +218,15 @@ class WorkflowEngine:
         if node_id in self.blocked or node_id in self.waiting:
             raise EngineError(f"节点处于 blocked/waiting，需先恢复: {node_id}")
         node = self.dag.nodes[node_id]
+        blocked_deps = [d for d in node.depends_on if d in self.blocked]
+        if blocked_deps:
+            # 上游 BLOCKED → 下游如实传播阻塞（不执行 executor，不假装完成）。
+            # 零执行/零验证 ≠ PASS 的 DAG 语义：任何依赖未完成的节点都
+            # 不能"跳过"上游继续跑出假 PASS（audit 失败语义闭环）。
+            reason = f"上游阻塞: {', '.join(blocked_deps[:5])}"
+            self.blocked[node_id] = reason
+            self._record(node_id, BLOCKED, reason)
+            return NodeResult(BLOCKED, reason)
         missing = [d for d in node.depends_on if d not in self.completed]
         if missing:
             raise EngineError(f"节点 {node_id} 依赖未满足: {missing}")
@@ -346,6 +364,16 @@ class WorkflowEngine:
         self.retries.pop(node_id, None)
         self._clear_rollback_cycles_for(node_id, both_sides=True)
         self._record(node_id, "unblocked", reason)
+        # 级联清除因"上游阻塞"而传播 blocked 的下游（上游恢复后下游
+        # 依赖自然满足，重新 ready 可跑；不级联则下游永远卡 blocked）。
+        for nid in list(self.blocked):
+            if self.blocked[nid].startswith("上游阻塞: "):
+                deps = self.dag.nodes[nid].depends_on
+                if any(dep not in self.blocked for dep in deps):
+                    del self.blocked[nid]
+                    self.retries.pop(nid, None)
+                    self._record(nid, "unblocked",
+                                 f"upstream {node_id} recovered")
 
     def _other_questions(self, question_id: str) -> set[str]:
         qids = set()

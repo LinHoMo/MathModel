@@ -34,6 +34,7 @@ REPO = Path(__file__).resolve().parents[3]
 if str(REPO / "core") not in sys.path:
     sys.path.insert(0, str(REPO / "core"))
 
+from runtime.execution.engine import BLOCKED  # noqa: E402
 from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
 from runtime.modeling.model_ir import ModelIRBuilder, ModelIRError, validate_model_ir  # noqa: E402
 from runtime.modeling.planner import ExperimentPlanner, PlannerError  # noqa: E402
@@ -789,13 +790,26 @@ class DefaultNodeExecutor:
 
         执行失败必须真实传播（audit FIX-1.2 / P0-08）：任一 EXEC status ∈
         {failed, timeout, invalid} 时节点 FAIL（含首个失败的 stderr 尾部），
-        触发 on_fail 反馈环；无执行发生（无候选代码）视为 N/A 不判 FAIL，
-        避免无模型问题被阻断。
+        触发 on_fail 反馈环。
+
+        P0-4（零执行 ≠ PASS）：无任何活跃候选模型，或活跃候选全部无实现
+        代码（未发生任何执行）→ blocked（非 PASS）。"没做"与"做了且通过"
+        必须可区分。
         """
         ev = []
         n = 0
         failures: list[str] = []
+        no_code_questions: list[str] = []
+        mir_any = False
         for qid in self._question_ids():
+            mirs = self._active_mirs(qid)
+            if not mirs:
+                continue
+            mir_any = True
+            has_code = any(self._code_of_mir(qid, m) is not None for m in mirs)
+            if not has_code:
+                no_code_questions.append(qid)
+                continue
             for xid, rid in self.execute_code(qid, node_id):
                 xdata = self.registry.get(xid).data or {}
                 xstatus = xdata.get("status")
@@ -814,6 +828,17 @@ class DefaultNodeExecutor:
                         failures.append(
                             f"{qid}/{xid}: fidelity misaligned "
                             f"(score={fid.get('fidelity_score')}) — {names}")
+        if not mir_any:
+            return NodeResult(
+                BLOCKED,
+                "无任何活跃候选模型（零执行 ≠ PASS）",
+                outputs={"artifacts": [], "evidence": ev})
+        if n == 0 and no_code_questions:
+            return NodeResult(
+                BLOCKED,
+                "候选模型全部无实现代码，未发生任何执行（零执行 ≠ PASS）"
+                f"— {', '.join(no_code_questions[:5])}",
+                outputs={"artifacts": [], "evidence": ev})
         if failures:
             return NodeResult(
                 FAIL,
@@ -859,6 +884,28 @@ class DefaultNodeExecutor:
         ev = []
         n_pass = 0
         n_fail = 0
+        # P0-4（零验证 ≠ PASS）：无活跃执行结果可验证 → blocked；存在
+        # "有 EXEC 但无验证规格"的问题 → blocked（有东西要验证却没规格，
+        # 不能以"0 通过 0 未通过"冒充验证通过）。
+        exec_any = False
+        spec_missing: list[str] = []
+        for qid in self._question_ids():
+            if not self._active_execs(qid):
+                continue
+            exec_any = True
+            if not self._validation_spec(qid):
+                spec_missing.append(qid)
+        if not exec_any:
+            return NodeResult(
+                BLOCKED,
+                "无活跃执行结果可验证（零验证 ≠ PASS）",
+                outputs={"artifacts": [], "evidence": ev})
+        if spec_missing:
+            return NodeResult(
+                BLOCKED,
+                "存在有执行结果但无验证规格的问题（零验证 ≠ PASS）"
+                f"— {', '.join(spec_missing[:5])}",
+                outputs={"artifacts": [], "evidence": ev})
         for qid in self._question_ids():
             for vr_id in self.validate_execution(qid, node_id):
                 vr = self.registry.get(vr_id)
