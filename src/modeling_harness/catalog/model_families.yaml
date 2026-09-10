@@ -49,7 +49,7 @@ canonical_families:
     methods: [finite_difference_method, finite_element_method, finite_volume_method, method_of_lines,
               effective_property_correlation]
     solvers: [fdm_solver, fem_solver, fvm_solver]
-    cards: [mc-numerical-pde]
+    cards: [mc-numerical-pde, mc-moving-boundary-pde]
     source: [schema, cards, gt, k001_actual]
 
   - id: ode_models
@@ -200,7 +200,7 @@ canonical_families:
     methods: [sutherland_hodgman, convex_hull, welzl_min_enclosing_circle,
               rotating_calipers, ray_intersection]
     solvers: [custom_geometry, shapely]
-    cards: []
+    cards: [mc-bearing-triangulation]
     source: [gt, k001_actual]
 
   # ---- 覆盖路径规划（2026-09-11 修订：CUMCM 2026 B 结构对齐）----
@@ -212,7 +212,7 @@ canonical_families:
     mechanism: [geometric_coverage_completeness, path_planning, sensor_footprint]
     methods: [concentric_ring_scan, spiral_scan, boustrophedon, greedy_nearest_neighbor]
     solvers: [custom_path_planner]
-    cards: []
+    cards: [mc-coverage-search]
     source: [gt]
 
 # 预留：other / out_of_catalog 语义

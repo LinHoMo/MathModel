@@ -18,7 +18,7 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "src"))
 
 from modeling_harness.cli.structure_coverage import (  # noqa: E402
-    build_index, resolve_structure, coverage_report,
+    build_index, resolve_structure, coverage_report, card_registration_report,
 )
 
 
@@ -84,3 +84,33 @@ def test_2026_structures_resolve_after_revision():
                  "diameter_and_min_enclosing_circle", "geometric_dilution_of_precision",
                  "coverage_path_planning", "greedy_nearest_neighbor"]:
         assert resolve_structure(name, idx) != "out_of_catalog", name
+
+
+def test_card_registration_declared(tmp_path):
+    proj = tmp_path / "projects" / "t"
+    proj.mkdir(parents=True)
+    (proj / "model_ir.json").write_text(
+        '{"model_family": {"cards": ["mc-x"]}}', encoding="utf-8")
+    rep = card_registration_report(tmp_path)
+    assert rep["declared"] == 1 and rep["total"] == 1
+    assert rep["undeclared"] == []
+
+
+def test_card_registration_missing(tmp_path):
+    proj = tmp_path / "projects" / "t2"
+    proj.mkdir(parents=True)
+    (proj / "model_ir.json").write_text(
+        '{"model_family": {"primary": "x"}}', encoding="utf-8")
+    rep = card_registration_report(tmp_path)
+    assert rep["declared"] == 0 and rep["undeclared"] == ["t2"]
+
+
+def test_2026_families_have_cards_wired():
+    """2026 相关族在词表里挂上了对应方法卡。"""
+    import yaml
+    fam = yaml.safe_load(
+        (REPO / "src/modeling_harness/catalog/model_families.yaml").read_text(encoding="utf-8"))
+    cards = {f["id"]: (f.get("cards") or []) for f in fam["canonical_families"]}
+    assert "mc-moving-boundary-pde" in cards["numerical_pde"]
+    assert "mc-bearing-triangulation" in cards["computational_geometry"]
+    assert "mc-coverage-search" in cards["coverage_path_planning"]

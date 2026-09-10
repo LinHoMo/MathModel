@@ -102,6 +102,35 @@ def coverage_report(project_path, families=None) -> dict:
             "out_of_catalog": ooc, "per_project": per_project}
 
 
+def card_registration_report(project_path) -> dict:
+    """度量实例是否登记方法卡选型（`model_family.cards` 非空）。
+
+    对应 docs/PROJECTS_FEEDBACK_AUDIT.md §4 未闭合项「实例未登记方法卡 card_id」。
+    """
+    from modeling_harness.cli.validate import _live_project_dirs
+
+    declared = total = 0
+    undeclared: list[str] = []
+    for pdir in _live_project_dirs(Path(project_path)):
+        mir = pdir / "model_ir.json"
+        if not mir.exists():
+            continue
+        try:
+            data = json.loads(mir.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        mf = data.get("model_family") or {}
+        cards = mf.get("cards") or data.get("method_cards") or []
+        total += 1
+        if cards:
+            declared += 1
+        else:
+            undeclared.append(pdir.name)
+    return {"declared": declared, "total": total,
+            "ratio": (declared / total if total else 1.0),
+            "undeclared": undeclared}
+
+
 def main() -> int:
     root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path.cwd()
     rep = coverage_report(root)
@@ -115,6 +144,11 @@ def main() -> int:
         print("  out_of_catalog（词表无交集 → 需 Architecture Gate 评审）:")
         for proj, s in rep["out_of_catalog"]:
             print(f"    {proj}: {s}")
+    cr = card_registration_report(root)
+    print("-" * 60)
+    print(f"方法卡登记率: {cr['declared']}/{cr['total']} = {cr['ratio']:.1%}")
+    if cr["undeclared"]:
+        print(f"  未登记方法卡选型的实例: {', '.join(cr['undeclared'])}")
     return 0
 
 
