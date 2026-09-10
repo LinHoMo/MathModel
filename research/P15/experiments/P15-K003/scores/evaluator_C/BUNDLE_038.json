@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_038",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc §1 提取 λ/μ/两策略收益参数；无真实机场数据（Q2 收集数据未做）"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§2 假设 4 条显式"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1；Q2 数据方案/Q3/Q4 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 M/M/1 判定 queuing_theory"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§3 变量 6 项，outputs 全命中"
+  },
+  "L2.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§4 参数含怠速0.5/时间20/池50 → 符号全对应"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§2 假设显式"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§5 目标仅 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§6 稳定性/非负约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "§7 M/M/1 机理正确+方程一致；无候选对比"
+  },
+  "L2.7": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 方程符号与 §4 参数对应"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py M/M/1 解析匹配，success"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success+outputs 完整（decision_scan 9点）；fidelity unverifiable"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "outputs 收敛：W_q=0.1/rho=0.75/λ*=39.98 完整"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码无随机性，code_hash=0e57dd35"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "W_q/rho/λ* 物理合理，决策一致"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§9 验证声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "§9 稳定性极限声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证叙述式"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式 doc"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 13,
+  "L3": 9,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2019C doc：M/M/1 机理正确，λ 扫描已在 outputs.decision_scan 执行，输出合理；L4 无结构化验证产物"
+}

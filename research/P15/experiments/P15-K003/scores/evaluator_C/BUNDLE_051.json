@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_051",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "IR Q1-Q3；合成数据替代附件"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 分型+rationale"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1/Q2/Q3 识别；Q4 缺失"
+  },
+  "L1.4": {
+   "score": 2,
+   "max": 1,
+   "evidence": "plan ambiguity_handling 3解释+adopted K2O流失率 →2"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "statistical_modeling+candidates"
+  },
+  "L2.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1-V8 声明但输出仅 3 项命中（fidelity 3/15）→1"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "w,b 未声明 →0"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "O1/O2 覆盖 Q2/Q3；Q1/Q4 无"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "机理正确+candidates 对比 →3"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "w,b 未声明 →1"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但 fidelity 0.2、合成数据 →1"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "train_accuracy=1.0 有限"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "random.seed(42)=42 →2"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "权重符号合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan sensitivity/multi_seed 占位文本 → 未执行 →1"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan limit_tests 占位 →1"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "claim_evidence_map CL1/CL2 结构化"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "claim_evidence_map+code_hash →2"
+  }
+ },
+ "layer_totals": {
+  "L1": 8,
+  "L2": 10,
+  "L3": 7,
+  "L4": 6
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2022C IR seed42+plan：ambiguity_handling 有采纳依据；plan 含占位文本视为未执行；权重符号与铅钡判别一致"
+}

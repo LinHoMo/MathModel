@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_037",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "IR problem_binding Q1-Q3 但仅第1组数据、附件2 EXCEL 未识别"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "assumptions A1-A3 显式分型"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus 任务1；任务2 两道工序/故障未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_family simulation+secondary"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "variables V1-V5 输出全命中（fidelity 11/11）"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "parameters 6 项；move2/move3 未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "assumptions A1-A3"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 仅覆盖 Q1 一道工序"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "C1/C2 资源/顺序约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "M1 DES 机理正确+EQ1 一致+目标支撑；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1 符号 N/throughput 对应；T_shift 用 p_shift 对应"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py DES 匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但交付缺位（无附件2 EXCEL、仅第1组）→1"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "outputs 完整（total_parts=248/31.0/h 等12字段）"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码无随机性，code_hash 存在"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "输出数值在合理范围（248件/8h、利用率0-1）"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "V1/V2 声明未执行"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "V1/V2 边界/守恒声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1 evidence_refs E1/V1 结构化但未执行"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 10,
+  "L3": 8,
+  "L4": 3
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018B IR：仅第1组一道工序，无 EXCEL 交付；输出完整确定性，无对照基线"
+}

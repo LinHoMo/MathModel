@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_059",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "IR problem_binding Q1-Q5+题面参数 P1-P7 全声明"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A4 分型+rationale"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "O1/O2/O3/O5 覆盖 4 问；Q4 调头 S 曲线无 objective"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "simulation+candidates（排除 PDE）"
+  },
+  "L2.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1-V9 声明但 fidelity 4/20=0.2（theta/r/(x_i,y_i)/v_i/d_min 缺失）→1"
+  },
+  "L2.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "P1-P7 全声明；E1 引用 r0 未声明 → 少量缺失"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A4"
+  },
+  "L2.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "O1/O2/O3/O5；Q4 缺失"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1-C3"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "M1-M3 机理正确+E1-E4 一致+candidates →3"
+  },
+  "L2.7": {
+   "score": 2,
+   "max": 2,
+   "evidence": "E1-E4 符号对应；r0 未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "时间步进仿真匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但 fidelity 4/20=0.2 →1"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "min_segment_gap 恒 3.74 退化，无收敛对比"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "random.seed(42)=42 →2"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "龙尾±276~415m 物理错误、collision=false 不合理 →0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1 收敛 dt 1→0.5 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "V3 limit pitch→0 声明"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 evidence_refs E1 结构化"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 8,
+  "L2": 14,
+  "L3": 6,
+  "L4": 6
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2024A IR seed42：IR 完整含 candidates，但 fidelity 4/20=0.2；龙尾±276~415m 物理错误，collision=false 不合理"
+}

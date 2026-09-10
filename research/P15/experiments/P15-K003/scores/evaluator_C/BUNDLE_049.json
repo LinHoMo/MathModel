@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_049",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "IR Q1-Q3；附件六关未用（简化5节点）→ 部分"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式分型"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1；Q2/Q3 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "dynamic_programming 判定"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "V1-V5 带值域，fidelity 13/14（arrival_day 越界）"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "消耗/价格/倍率未入参数 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 仅 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1-C3"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "Bellman 机理正确+EQ1 一致；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1 的 c_w/c_f/A/p' 未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py DP 匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但执行退化、无 Result.xlsx →1"
+  },
+  "L3.3": {
+   "score": 0,
+   "max": 2,
+   "evidence": "DP 退化：profit=0/arrival_day=-1/n_states=1 →0"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "random.seed(44)≠42 →1"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "arrival_day=-1 无解 →0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan sensitivity 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan limit_tests 2类声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1 evidence_refs E1/V1 结构化但验证未执行"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 4,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2020B IR seed44+plan：DP 退化（arrival_day=-1），fidelity 13/14；plan 敏感性/极限检验未执行"
+}

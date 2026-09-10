@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_009",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "提取表1第1组参数(560/20/33/46/28/31/25/8h)；第2/3组、两道工序(400/378)与故障未提取"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "A2贪心机制假设；故障率1%等隐含设定仅以忽略声明"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出第1组一道工序结果；未识别附件2 EXCEL表3组数据填写"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "simulation/optimization与调度一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "5个输出变量有类型；RGV位置/CNC状态/决策变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "第1组主要参数已声明；移动2/3单位时间(33/46)未入parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1与任务1一致；两道工序/故障/3组数据检验未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1 RGV单服务/C2 CNC顺序约束方向正确"
+    },
+    "L2.6": {
+      "score": 1,
+      "max": 3,
+      "evidence": "E1机理家族正确(DES)；机理无对应控制方程(EQ1仅为统计式,E2弱)、E3部分支撑"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1可求解；n_i符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "离散事件仿真+贪心调度与口径匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "status=success/rc=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "total_parts=248有限收敛，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash存在，确定性仿真(无随机)"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "吞吐量31件/h、利用率∈[0,1]在合理范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1 evidence_refs E1/V1；E1执行成功(total_parts=248)、V1守恒(31×8=248)成立"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 9,
+    "L3": 9,
+    "L4": 2
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "L2.6机理无方程载体；L1/L2不过；L3执行正常"
+}

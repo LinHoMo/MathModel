@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_010",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "提取N=223/L_head/L_body/W/pitch/v0/R_turn；未提取孔径5.5cm、孔中心距27.5cm"
+    },
+    "L1.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1刚体间距守恒、A4碰撞判定识别并给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "O1输出关键帧；未识别result1/2/4.xlsx与每秒位置速度、6位小数精度"
+    },
+    "L1.4": {
+      "score": 1,
+      "max": 1,
+      "evidence": "ambiguity_handling标注碰撞判定/后节速度歧义并给adopted与justification"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "simulation与运动学仿真一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "V1-V9声明；Q4调头变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "P1-P7 source=题面；r0、theta0、L_i未声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A4显式带rationale、类型区分"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "O1-O4与Q1/Q2/Q3/Q5一致；Q4未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1间距/C2无碰撞/C3速度约束方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "max": 3,
+      "evidence": "E1运动学机理正确、E2方程对应、E3目标约束支撑、E4候选对比充分"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "E1-E4结构完整；r0、theta0、L_i、v̂符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "时间步进仿真与运动学匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "status=success/rc=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "输出有限，300s仿真完成无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash存在，random.seed(42)固定"
+    },
+    "L3.5": {
+      "score": 0,
+      "max": 1,
+      "evidence": "尾节位置达415m超出螺线范围，min_segment_gap恒为3.74，结果非物理"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "sensitivity扰动pitch/v0"
+    },
+    "L4.3": {
+      "score": 1,
+      "max": 1,
+      "evidence": "limit_tests含2类极限检验"
+    },
+    "L4.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "claim_evidence_map CL1/CL2→E1"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1/CL2 evidence_refs E1；E1执行成功，supported"
+    }
+  },
+  "layer_totals": {
+    "L1": 7,
+    "L2": 11,
+    "L3": 8,
+    "L4": 5
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": true,
+    "L2": true,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "SV臂，与008同题同码(seed 42)；L1/L2/L3过；L4缺执行验证"
+}

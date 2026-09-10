@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_013",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "problem_binding Q1-Q3 缺 Q4；有效数据范围 85-105% (A3) 提取；无 extracted_conditions 列表"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "A2 K+ 淋滤隐式条件有依据；缺 空白=未检测等隐式条件"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "E1/E2 expected_outputs 仅精度与3预测；未识别亚类划分/敏感性/关联交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan.ambiguity_handling 标注风化程度量化歧义并采纳 K2O 流失率"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "statistical_modeling 判定正确"
+  },
+  "L2.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1-V8 声明含类型；BaO 未声明，代码 14 特征仅声明 3"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "E1/E2 引用 w,b 未在 parameters 声明"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式分型含 rationale"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "O1/O2 匹配 Q2/Q3；Q1 风化前成分预测与 Q4 无目标"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2 方向正确覆盖题面关键约束"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "E1-E3 满足；E4 候选对比（统计 vs 仿真）维度与依据充分"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "E1/E2 引用 w,b 未声明→符号不一致"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "梯度下降匹配逻辑回归"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success；fidelity 3/15 (0.2)，多数声明变量未进 outputs"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "输出有限（acc=1.0）；无收敛阈值/残差证据"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "code_hash 存在；seed=43 非 42"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "输出在合理范围；但基于合成数据非附件实测"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan.sensitivity lr/k_loss 扰动但 result=占位未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan.limit_tests 纯SiO2/高PbO 2类极限检验（占位）"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "claim_evidence_map 覆盖 CL1/CL2；风化预测主张无执行验证"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "claims 有 evidence_refs 且 status=supported；但 E1 输出与声明变量失配（fidelity 0.2）"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 10,
+  "L3": 6,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "与 001 同模型 + 验证计划；seed=43；合成数据替代附件"
+}

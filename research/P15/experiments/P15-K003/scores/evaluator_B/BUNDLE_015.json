@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_015",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_doc.md: 识别4问与三类数据；附件数据未提取(合成替代)，Q3/Q4未建模"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "完成概率机理假设；会员信誉配额等隐含信息未识别"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出最优定价与利润曲线；未识别与原方案比较、Q3/Q4交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "statistical_modeling/logistic一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "主要变量有类型；完成状态y未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "回归系数β0-β3未声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "假设显式、类型区分、合成数据已声明"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "目标与Q1/Q2一致；Q3/Q4未建模"
+    },
+    "L2.5": {
+      "score": 1,
+      "max": 2,
+      "evidence": "定价范围/概率约束正确；会员限额未形式化"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "logistic正确、方程一致、目标支撑；无候选对比"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "方程可求解；β符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "梯度下降+网格搜索与logistic匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "status=success/rc=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "loss_final=0.655283有限收敛，输出完整"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash存在，random.seed(43)固定"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "完成率0.405、价格区间、利润在合理范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 0,
+      "max": 2,
+      "evidence": "model_doc无claims/evidence结构，验证仅声明"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 9,
+    "L3": 9,
+    "L4": 0
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "F臂doc，与007同题同码；L4全0"
+}

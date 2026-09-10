@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_006",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc 覆盖规则与假设参数；六关附件参数未提取（用假设值）"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "约束(负重/非耗尽/沙暴) 为关键隐式条件且明确"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "识别最大化收益目标；未识别 Result.xlsx 交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "题面无显著歧义，未标注→默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "动态规划判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "doc 变量节完整列出 5 个变量及定义"
+  },
+  "L2.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "doc 参数节含负重/资金/天数/消耗倍率/基准价格/挖矿收益/村庄倍率/退回半价，方程符号均被覆盖"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "假设显式分型，5 节点简化与参数取值合理声明"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "目标正确；仅覆盖 Q1"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "约束含负重/非耗尽/沙暴；缺村庄购买/挖矿倍率约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1-E3 满足；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 2,
+   "max": 2,
+   "evidence": "递推方程+状态空间描述完整，符号在参数节可查"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "前向 DP 匹配"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "status=success 但 outputs 退化（profit=0/arrival_day=-1），未产出有效策略"
+  },
+  "L3.3": {
+   "score": 0,
+   "max": 2,
+   "evidence": "输出退化空结果，无收敛数值"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "code_hash 存在；seed=43 非 42"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "profit=0/arrival_day=-1 不合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "doc 验证仅可行性/约束/收敛，无基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无灵敏度分析"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "无极限检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc 验证目标匹配主张但无执行证据"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式无 claim 结构；执行失败使收敛主张不可信"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 12,
+  "L3": 4,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "叙述式 model_doc 参数声明完整使 L2 PASS；但执行退化致 L3 失败"
+}

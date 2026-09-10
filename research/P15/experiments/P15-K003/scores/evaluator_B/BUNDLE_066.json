@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_066",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 识别4问与三类数据；附件数据未提取(合成替代)，Q3/Q4未建模"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "完成概率机理假设；会员信誉配额等隐含信息未识别"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出最优定价与利润曲线；未识别与原方案比较、Q3/Q4交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "statistical_modeling/logistic一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "price/distance/density/P有类型；完成状态y未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "p_n/p_lr/p_epoch有source；回归系数β0-β3未声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、合成数据已声明"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1/OBJ2与Q1/Q2一致；Q3/Q4未建模"
+    },
+    "L2.5": {
+      "score": 1,
+      "max": 2,
+      "evidence": "定价范围/概率约束正确；会员限额未形式化"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "E1 logistic正确、E2方程一致、E3目标约束支撑；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1/EQ2可求解；β符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "梯度下降Logistic回归+网格搜索与口径匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "profit=36.76、acc=0.57收敛，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=ab2fb1f7存在，random.seed固定"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "完成率0.405/利润36.76在声明范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验产物"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1 evidence E1+V1/V2：price=+0.5844、distance=-0.5068、density=+0.116方向正确，与V2单调性主张一致"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 9,
+    "L3": 9,
+    "L4": 2
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "2017_B ir无plan型(同022)：系数方向正确，V2成立"
+}

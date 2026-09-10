@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_015",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "合成数据替代附件一；未提取附件真实参数"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "信誉归入密度；Q3/Q4 隐式条件缺失"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1/Q2 交付识别；Q3/Q4 缺失"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "statistical_modeling 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "doc 变量节完整"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc 参数节含样本量/学习率/轮数/搜索范围；β 系数未列参数"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "合成数据假设（A2）不合理"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1/OBJ2 正确；Q3/Q4 缺失"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "自拟定价范围+概率公理"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1-E3 满足；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "β 未声明"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "梯度下降+网格搜索匹配"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success；输出完整（系数/最优价/利润曲线）"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "loss_final=0.655 有限；无收敛阈值"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "code_hash 存在；seed=43 非 42"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "系数符号正确，值域合理；最优价 40 为网格端点"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无灵敏度声明"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "无极限检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证节匹配 Q1/Q2 主张但无执行证据"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式无结构化 claim"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 9,
+  "L3": 7,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2017B 叙述版，系数符号正确；合成数据是主要缺陷"
+}

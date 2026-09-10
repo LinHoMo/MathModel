@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_031",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_ir.json problem_binding Q1-Q4；附件一/二/三真实数据未使用"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "assumptions A2 明确合成数据替代附件一 → 隐式条件（会员信誉/预订限额）归入密度"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1/Q2；Q3 打包/Q4 新项目未交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "execution_result.json status=success returncode=0"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_family primary=statistical_modeling（Logistic）"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "variables price/distance/density/P_complete/price_opt/profit 含范围"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "parameters 仅样本量/学习率/轮数；EQ1 的 β0-β3 未入参数声明 → 缺失率>30%"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "objectives OBJ1 估计+OBJ2 最大化期望利润 + constraints C1/C2"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1/Q2；Q3/Q4 未覆盖"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "claims CL1/CL2 引 E1/V1/V2 与 E2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1/E2 机理正确（Logistic+网格搜索）+ OBJ/C 支撑；无候选对比 → 基础 2 分"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1/EQ2 完整，符号部分未入参数 → 部分缺失"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 可运行，status=success returncode=0"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 输出完整（系数/利润曲线/最优价），fidelity 14/17=0.82（会员密度缺输出键）→ 1"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "单次执行无收敛对比；loss_final=0.681 有限 → 1"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "code_hash 存在；random.seed(44)≠42 → 1"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "系数符号与解释一致（price +0.1192/distance -0.2269/density +0.1647），最优价 40 为网格端点 → 1"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_plan.json sensitivity 声明定价/距离 2 类但未执行 → 1"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "validation_plan.json limit_tests 零价格/极远任务 2 类（计划存在）"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_targets OBJ1/OBJ2 与 CL1/CL2 匹配，E1/E2 已执行"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 结构化可追溯 + code_hash 完整"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 8,
+  "L3": 6,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2017B 定价 IR seed44+validation_plan；合成数据替代附件致 L1/L2 扣分，L3.4=1（seed≠42），L4.1=0"
+}

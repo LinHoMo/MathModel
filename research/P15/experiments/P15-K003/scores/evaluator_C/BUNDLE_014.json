@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_014",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "提取 20平台/13要道/3分钟/60km/h；缺增加2-5/全市六区/P点(32)"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "3km 半径有推导；'每节点均设平台'与题面 20 平台矛盾"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "识别管辖/封锁交付；缺增设/合理性/围堵交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "'尽量3分钟'未作歧义处理→默认1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "graph_algorithm 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "coverage/t_max/CV/allocation/blockade 变量定义清楚"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "参数(时速/3min/20/13/3km)列出；方程引用 w(e) 边权未列参数"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "A1/A2 合理；'每节点设平台'与题面矛盾"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 前两问目标；增设/合理性/围堵目标缺失"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "3分钟/一平台一路口/唯一管辖 正确；缺 2-5 平台数约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 Dijkstra 机理正确；E2/E3 一致；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "方程可求解；w(e) 符号未声明"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "Dijkstra+最近邻+贪心匹配"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success；输出完整；fidelity unverifiable（叙述式）"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "精确算法输出有限无 NaN"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；代码确定性（random_seed=42 声明）"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "coverage=1.0/max_response=0/封锁距离全 0——合成网络退化，对真实城区不合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "doc 验证无基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无灵敏度分析"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "无极限检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证覆盖 Q1 主张但无执行证据"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式无结构化 claim"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 9,
+  "L3": 8,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "与 003 同模型叙述版；合成 20 节点网络致结果全 0"
+}

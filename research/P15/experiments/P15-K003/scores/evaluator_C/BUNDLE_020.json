@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_020",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "第1组参数；缺第2/3组、两道工序、故障参数；move2/3 仅入代码"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2 关键隐式约束；A3 显式忽略故障"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "未识别附件2 EXCEL(3工作表)交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "simulation/DES 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "v_N/v_thr/v_cyc/v_util/v_cnc 声明含类型与范围"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "p_pt/p_m1/p_lo/p_le/p_ct/p_shift 有来源；EQ1 引用 n_i 未声明；move2/3 缺"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式分型合理"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 正确；两道工序/故障/3组缺失"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "C1/C2 正确；缺两道工序/故障约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "DES 机理正确；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1 中 n_i 未声明"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "贪心+DES 匹配"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success；fidelity 11/11；但仅第1组无 EXCEL 交付"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "DES 精确结果有限"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；确定性"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "248件/31件每小时 合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan.sensitivity 加工时间/CNC数量（敏感参数）占位未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan.limit_tests 单CNC/零移动 2类"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_targets=OBJ1 覆盖 CL1；Q2/Q3 主张缺失"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 evidence_refs=[E1,V1] 可解析且 E1 已执行"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 10,
+  "L3": 8,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018B IR 版含验证计划；仅一道工序第1组"
+}

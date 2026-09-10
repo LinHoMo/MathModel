@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_049",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 提取天气/负重/资源消耗/挖矿规则；六关地图与附件参数未提取(5节点线性图替代)"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "沙暴日停留等隐式条件已识别；多玩家博弈与部分可观测天气未处理"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出Q1确定性天气最优策略；未识别Result.xlsx模板与Q2/Q3交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "dynamic_programming与2020_B资源调度决策一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "profit/water/food/day/path有类型；位置/行动/消耗函数变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "p_cap/p_money有source；基础消耗量/价格/挖矿收益(1000)未入parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、5节点简化已声明"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1与Q1一致；Q2/Q3目标未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1负重/C2非耗尽/C3沙暴停留方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "E1 Bellman机理正确、E2方程一致、E3目标约束支撑；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1可求解；行动集A(d,p)与消耗c_w/c_f符号未全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "后向DP与状态空间(day,pos,water,food)匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0"
+    },
+    "L3.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "n_states_explored=1、arrival_day=-1、path=[]、profit=0，无有效收敛解"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=f2589acf存在，random.seed(44)固定"
+    },
+    "L3.5": {
+      "score": 0,
+      "max": 1,
+      "evidence": "到达天数-1、收益0、路径空，未求解出任何可行路径，结果非物理"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan含资金/负重sensitivity(占位)"
+    },
+    "L4.3": {
+      "score": 1,
+      "max": 1,
+      "evidence": "validation_plan含零资源/全沙暴limit_tests(占位)"
+    },
+    "L4.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan targets=[OBJ1]与Q1目标对应"
+    },
+    "L4.5": {
+      "score": 0,
+      "max": 2,
+      "evidence": "CL1 evidence_refs E1/V1；E1执行但n_states_explored=1、无最优路径，CL1被证伪"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 10,
+    "L3": 7,
+    "L4": 3
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "2020_B有plan型(同024)：DP退化n_states=1/profit=0，CL1被证伪"
+}

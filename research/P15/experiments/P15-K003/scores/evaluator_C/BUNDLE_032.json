@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_032",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc.md 问题理解含 Q1 显式条件；Q2/Q3 参数未纳入"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "假设节 4 条完整（一维/对流/物性恒定/Dirichlet）"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "目标节计算温度场；problem1.xlsx 未提及"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "execution_result.json status=success returncode=0"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "一维瞬态热传导（Fourier+有限差分）"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "变量节 T/T_skin/t/x 含定义"
+  },
+  "L2.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "参数节四层 k/ρc/d + 环境/对流/时长全覆盖"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "目标节+约束节（47°C/44°C-5min）齐备"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 实现；Q2/Q3 最优厚度未求解"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "约束节与问题对应"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 正确+边界完整+目标支撑；无候选对比 → 基础 2 分"
+  },
+  "L2.7": {
+   "score": 2,
+   "max": 2,
+   "evidence": "PDE+双边界完整，符号对应"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 可运行，status=success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 输出完整，但 problem1.xlsx 未产出 → 1"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "单次执行无网格收敛对比 → 1"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；确定性"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "42.5°C 合理，曲线单调上升趋于稳态"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无敏感性分析"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "无极限检验执行"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证叙述式，无结构化 claims"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式文档无 claim_evidence_map → 1"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 13,
+  "L3": 7,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018A 热防护服叙述式文档；执行成功数值合理，L4 证据缺位从严"
+}

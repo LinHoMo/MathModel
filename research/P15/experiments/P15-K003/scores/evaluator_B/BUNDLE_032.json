@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_032",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_doc.md: 提取Q1参数(75°C/6mm/5mm/90min/37°C)；Q2/Q3参数与附件1材料参数未提取"
+    },
+    "L1.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "一维投影/皮肤对流边界/物性恒定，隐式条件识别并给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出温度曲线对应Q1交付；未识别problem1.xlsx格式与Q2/Q3最优厚度输出"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注(IV层空隙传热机制未处理)"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "numerical_pde与2018_A瞬态热传导一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "T(x,t)/T_skin/t/x覆盖关键变量"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "k/rho*c/d/h已列；T_body等边界参数未入参数表"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A4显式、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "目标与Q1一致；Q2/Q3厚度优化目标未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "皮肤温度47°C/44°C×5min约束方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "E1热传导机理正确、E2方程一致、E3目标支撑；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "热传导方程含边界条件可求解；rho_i、c_i等符号未全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "显式FDM满足CFL，与抛物型PDE匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0，温度曲线完整"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "温度有限收敛至42.525°C，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=a207dba3存在，确定性FDM"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "皮肤温度37→42.5°C在物理合理范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 0,
+      "max": 2,
+      "evidence": "model_doc无claims/evidence结构，验证仅声明"
+    }
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 11,
+    "L3": 9,
+    "L4": 0
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": true,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "doc版2018_A，与026完全同码；L2/L3过但L4全0"
+}

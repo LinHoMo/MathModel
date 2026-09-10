@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_065",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 提取8台CNC/上下料/一道工序/8小时；附件参数与多工序/多台RGV场景未提取"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "一道工序/单RGV隐式条件已声明；多工序并列与故障情形未处理"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出第1组一道工序吞吐；未识别多组数据与故障/异常情形交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注(多工序情形未处理未标注)"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "simulation与2018_B生产调度优化一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "N/throughput/cycle/utilization有类型；调度决策/上下料动作变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "关键参数有source；CNC加工时间/上下料/移动时间等未全入parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1与第1组Q1一致；Q2/Q3多工序与故障目标未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1(单RGV串行)/C2(物料约束)方向正确"
+    },
+    "L2.6": {
+      "score": 1,
+      "max": 3,
+      "evidence": "E1离散事件仿真机理正确但EQ1仅统计式(无控制/排队方程)；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1可求解；调度变量符号未全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "贪心最近调度+离散事件仿真与单RGV场景匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "total_parts=248、吞吐31/h收敛，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=4116db6f存在，确定性贪心"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "248件/31件每小时在8小时×31台时量级合理"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan含加工时间/CNC数量sensitivity(占位)"
+    },
+    "L4.3": {
+      "score": 1,
+      "max": 1,
+      "evidence": "validation_plan含单CNC/零移动时间limit_tests(占位)"
+    },
+    "L4.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan targets=[OBJ1]与Q1目标对应"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1 evidence E1+V1守恒31×8=248成立，执行数值自洽"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 9,
+    "L3": 9,
+    "L4": 5
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "2018_B ir有plan型(同020/027)：只做第1组一道工序；L2.6=1；验证产物占位"
+}

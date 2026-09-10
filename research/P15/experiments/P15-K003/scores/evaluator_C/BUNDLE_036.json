@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_036",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc §1 显式条件提取 14 成分/两类/85-105%；合成数据替代附件"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§1 隐式条件（组成性/风化交换）有；假设无类型标注"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§5 目标 Q2/Q3；Q1/Q4 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理字段"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 逻辑回归判定 statistical_modeling"
+  },
+  "L2.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§3 变量 5 项但输出仅 3 特征权重命中 → 部分"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "E1/E2 引用 w,b 未在 §4 参数声明 → 判0（2022C 判据）"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§2 假设 A1-A3 显式"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§5 目标 Q2/Q3；Q1/Q4 无"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§6 约束 C1/C2"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "§7 机理正确+E1-E3 一致+候选对比（排除仿真/纯聚类）→3"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "w,b 未声明 → 符号不一致"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 梯度下降匹配逻辑回归，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但 fidelity unverifiable、无附件数据"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "train_accuracy=1.0 有限，无损失曲线/收敛证据"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "random.seed(43)≠42 → 1"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "PbO/BaO 正、K2O 负权重与铅钡判别一致（合成数据自洽）"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§9 灵敏度 学习率±50% 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "§9 极限检验声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证叙述式"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式 doc 无结构化 claims"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 10,
+  "L3": 6,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2022C doc seed43：合成数据替代附件，fidelity unverifiable；权重符号合理但损失曲线缺失，验证声明未执行"
+}

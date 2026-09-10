@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_064",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "同043：附件1/2 未用 → 部分"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "numerical_pde"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "fidelity 10/11"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "ρc/d1/d3 未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 仅 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "Fourier 机理正确；无候选"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "T_body 未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "FDM 匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但 fidelity 0.9091、无 problem1.xlsx →1"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "温度曲线收敛单调"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "42.525°C 合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1/V2 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "V1 CFL 声明"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 8,
+  "L4": 6
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018A IR：与043/048同代码同输出（42.525°C，fidelity 10/11），Q2/Q3 未实现"
+}

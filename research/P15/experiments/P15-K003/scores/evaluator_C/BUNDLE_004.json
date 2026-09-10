@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_004",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "提取规则约束(负重/消耗倍率/沙暴)；初始资金/挖矿收益用'假设'值替代附件数据，六关参数未提取"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1 负重/C2 非耗尽/C3 沙暴停留 为关键隐式条件且有来源"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "识别最大化收益目标；未识别 Result.xlsx 交付及六关结果填写"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "题面无显著歧义，未标注→默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "dynamic_programming/序贯决策 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "v_profit/v_water/v_food/v_day/v_path 声明含 value_range 与类型"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "EQ1 引用 r(a)/c_w(a)/c_f(a) 未在 parameters 声明；附件实际参数(负重/资金/消耗)被假设替代"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式分型；5 节点简化与天气已知合理"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 最大化终资金正确；Q2/Q3(在线/多人) 未建模"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "C1/C2/C3 形式化正确；缺 挖矿消耗3倍/村庄购买/终点退回约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 Bellman/DP 机理正确；E2 递推方程一致；E3 目标支撑；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1 可求解；c_w/c_f/r 符号未声明→不一致"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "前向 DP 与确定性序贯决策匹配"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "status=success 但 outputs 退化：optimal_profit=0/arrival_day=-1/路径空，未产出任何有效策略"
+  },
+  "L3.3": {
+   "score": 0,
+   "max": 2,
+   "evidence": "输出为空/退化（arrival_day=-1 超出 [0,10] 被 fidelity 标记），无收敛数值"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；random.seed(42) 固定，确定性"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "optimal_profit=0/arrival_day=-1 明显不合理（应给出有效到达策略）"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "validations 仅 feasibility/constraint，无基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无灵敏度分析"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "无极限/边界检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1/V2 目标匹配 CL1（可行性/约束）但无执行证据"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1 evidence_refs 存在但 E1 执行退化，证据不可信"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 9,
+  "L3": 5,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": false,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "DP 执行失败未找到可行解（n_states_explored=1），L3 关键输出缺失"
+}

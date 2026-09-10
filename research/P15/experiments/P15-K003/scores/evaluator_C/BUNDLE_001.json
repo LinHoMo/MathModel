@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_001",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_ir problem_binding 覆盖 Q1-Q3 但缺 Q4；extracted 条件 85%-105% (A3)、两类玻璃、风化机制，无 extracted_conditions 列表"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "implicit: K+ 优先淋滤 (A2) 有推导依据；缺空白=未检测/风化点采样等隐式条件"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "experiments expected_outputs 仅 train_accuracy>0.9 与 3 预测；未识别 亚类划分/敏感性/关联分析等交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "题面无显著歧义，未标注歧义→默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "statistical_modeling/逻辑回归 二分类，与数据驱动分类问题一致"
+  },
+  "L2.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1-V8 声明且区分 observation/state/derived；但 A1 提及判别成分 BaO 未声明，代码 14 特征仅声明 3"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "方程 E1/E2 引用 w,b 未在 parameters 声明（仅 P1-P4），引用参数缺失率>30%"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式、分型、有 rationale，可检验"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "O1/O2 匹配 Q2/Q3；Q1 风化前成分预测与 Q4 关联无目标"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1(0≤p≤1) C2(85%≤Σ≤105%) 方向正确，覆盖题面关键约束"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "E1-E3 满足；E4 候选对比（statistical_modeling vs simulation）含维度与依据"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "E1-E3 可求解；E1/E2 引用 w,b 未在声明集→符号不一致"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "梯度下降求解逻辑回归，与模型类型匹配"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "status=success/returncode=0；fidelity 3/15 (0.2)，多数声明变量未进 outputs（SiO2/K2O/PbO/y/p）"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "outputs 有限无 NaN（acc=1.0）；无残差阈值/收敛判据"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；random.seed(42) 固定且代码确定性"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "输出在合理范围（acc=1.0、概率 0/1、K2O 流失 0.3）；但基于合成数据非附件实测"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "validations 仅 convergence/sensitivity，无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V2 灵敏度扰动学习率（非敏感参数），未报告弹性系数；无执行证据"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "无极限/边界检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证覆盖 CL1(性能) 与 CL2(风化机制) 声明但 Q3/Q4 主张未验证"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1/CL2 有 evidence_refs 且 status=supported；但风化主张证据 E2 为预测实验，与机制主张关联弱"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 10,
+  "L3": 7,
+  "L4": 3
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "合成数据替代附件数据；Q4 完全未建模；fidelity 0.2 显示输出-声明失配"
+}

@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_051",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 显式条件覆盖14成分/两类/85-105%有效范围/风化样本；未提取纹饰/颜色/部位采样与Q4关联交付"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "隐式条件部分识别(A2风化K+淋滤)；组成性数据、线性可分依据未充分展开"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "sub_question_binding覆盖Q1/Q2/Q3；未识别亚类划分方法/敏感性分析/风化前成分预测交付"
+    },
+    "L1.4": {
+      "score": 1,
+      "max": 1,
+      "evidence": "歧义点：风化程度量化标准未明，adopted=K2O流失率30%"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "statistical_modeling与2022_C分类统计一致，candidates含对比"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "SiO2/K2O/PbO/y/p有类型；缺风化状态/纹饰/颜色/其余成分变量"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "lr/n_epochs/threshold/k_loss有source；E1/E2引用权重w、偏置b未在参数表声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "目标与Q2/Q3一致；Q1风化前预测、Q4关联分析未形式化"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1(0<=p<=1)/C2(85%<=Σ<=105%)方向正确"
+    },
+    "L2.6": {
+      "score": 1,
+      "max": 3,
+      "evidence": "E1机理正确、E2方程一致；M2→O2依赖连线错误致目标-机理支撑缺陷(E3)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "E1-E3可求解；w、b、x符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "run_model.py梯度下降求解逻辑回归，与口径匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0，输出完整"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "outputs有限，train_accuracy=1.0、概率0/1饱和，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=315c49de存在，random.seed(42)固定"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "精度1.0、概率∈[0,1]、流失率0.3在合理范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan含lr/k_loss sensitivity与multi_seed 42-46(占位)"
+    },
+    "L4.3": {
+      "score": 1,
+      "max": 1,
+      "evidence": "validation_plan含SiO2=100%/PbO=50%+BaO=20% limit_tests(占位)"
+    },
+    "L4.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan claim_evidence_map覆盖CL1/CL2"
+    },
+    "L4.5": {
+      "score": 1,
+      "max": 2,
+      "evidence": "CL1证据E1为训练精度(training_acc=1.0)可自洽；CL2 evidence_refs E2为预测实验，与风化主张不匹配"
+    }
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 9,
+    "L3": 9,
+    "L4": 4
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "2022_C有plan型(同013)：ambiguity_handling使L1.4=1；M2→O2依赖错误"
+}

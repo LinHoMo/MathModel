@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_005",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "识别附件一/二/三任务与会员信息；数据参数用合成数据替代（A2），未提取附件真实参数"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "A3 将信誉/预订限额归入密度（隐式条件）；缺 打包发布(Q3) 与 新项目(Q4) 隐式条件"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "识别 Q1/Q2 输出（概率/最优定价）；Q3/Q4 交付缺失"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "题面无显著歧义，未标注→默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "statistical_modeling/Logistic 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "v_p/v_d/v_m/v_c/v_popt/v_prof 声明含类型与范围"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "EQ1 引用 β0-β3 回归系数未在 parameters 声明；仅 3 个训练超参数"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "A1 合理；A2 合成数据替代附件一（不解决真实数据问题）；A3 归并可接受"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1/OBJ2 匹配 Q1/Q2；Q3/Q4 无目标"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "C1 定价[5,50]为自拟业务约束（题面未给）；C2 概率公理；关键约束缺失"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 Logistic 机理正确；E2 方程一致；E3 目标支撑；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1/EQ2 可求解；β 符号未声明→不一致"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "梯度下降+网格搜索，与模型匹配"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "status=success；fidelity 14/17 (0.82)；输出完整（系数/最优价/利润曲线）"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "loss_final=0.655 有限；无收敛阈值/曲线证据"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "code_hash 存在；random.seed(43) 固定但非 42"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "输出在合理范围；最优价 40 落在网格端点（边界伪最优）"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "validations 仅 accuracy/monotonicity，无基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan.sensitivity 扰动定价/距离（敏感参数）但结果占位未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan.limit_tests 含零价格/极远任务 2 类极限检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_targets=OBJ1/OBJ2 匹配 CL1/CL2；Q3/Q4 主张缺失"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 evidence_refs 可解析到 E1/E2（已执行）"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 8,
+  "L3": 7,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "合成数据替代真实附件数据是主要缺陷；L2.2 参数缺失"
+}

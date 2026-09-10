@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_017",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 结构提取；Q3/Q4 条件未处理"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1 Poisson/指数、A3 确定值 隐式条件有依据"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 交付；Q2-Q4 缺失"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "queuing_theory 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "v_lambda/v_mu/v_Wq/v_pq/v_pc/v_dec 声明含类型与范围"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "p_lam/p_mu/p_fare_q/p_fare_c/p_wc/p_ec 有来源；EQ2 引用 c_f(怠速)/t_c(回市区)未声明"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式分型合理"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 覆盖 Q1；Q2-Q4 无目标"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2 形式化正确"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "M/M/1 机理正确；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1/EQ2 完整可求解；c_f/t_c 符号未声明"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "M/M/1 解析+扫描匹配"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success；fidelity 14/14 (1.0) 全对齐"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "解析精确结果有限无 NaN"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；代码确定性"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "收益/等待量级合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "validations 无对照基线"
+  },
+  "L4.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "E2 λ 扫描已执行，报告决策切换边界 λ_critical"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "V1 稳定性含 ρ≥1 极限行为"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "V1/V2 覆盖 CL1/O1 且 E1/E2 已执行"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 evidence_refs=[E1,E2,V1] 可解析，无 unresolved"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 9,
+  "L4": 7
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2019C IR 版，fidelity 1.0；仅 L4.1 无基线致 L4 关键维度 FAIL"
+}

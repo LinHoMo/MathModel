@@ -1,7 +1,7 @@
 {
   "experiment_id": "P15-K003",
   "protocol_version": "0.1",
-  "phase": "RUNNING",
+  "phase": "CLOSED",
   "revisions": [
     {
       "version": "v0.2",
@@ -81,6 +81,27 @@
       "at": "2026-09-10T00:12:38Z",
       "version": "v0.2",
       "note": "audit FIX-5.3/5.4 修改冻结项 core/schemas/v3/model/model_ir.schema.json；new revision 重冻 36 文件；K003 盲评包已生成不受影响"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-10T00:43:32Z",
+      "from": "RUNNING",
+      "to": "VALIDATION",
+      "note": "3 evaluator x 66 bundles 评分完成 (198 JSON), kappa=0.260 (1/22 dim>=0.6, L4.1 floor effect, L1.5 kappa paradox), 分歧可归因"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-10T00:43:37Z",
+      "from": "VALIDATION",
+      "to": "ANALYSIS",
+      "note": "配对分析完成: S-F MCQ=+3.76[2.13,5.44] VAL=+17.49[13.38,21.20]; SV-F MCQ=+9.37[7.91,10.89] VAL=+39.92[37.24,42.60]; 全部 POSITIVE; 逐层敏感性 L2负 L4正"
+    },
+    {
+      "event": "advance",
+      "at": "2026-09-10T00:43:43Z",
+      "from": "ANALYSIS",
+      "to": "CLOSED",
+      "note": "报告 P15-K003-REPORT.md 完成; 结论 POSITIVE(混合结构): MCQ/VAL正效应由 L4 验证层驱动, L2 构造层负; 状态机闭环"
     }
   ],
   "gates": {

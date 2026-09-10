@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_027",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_ir.json problem_binding Q1-Q3；parameters 仅第 1 组参数"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "assumptions A1/A2/A3 明确一道工序/贪心策略/忽略故障"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus 任务1 一道工序；任务2 需 3 组数据+附件2 EXCEL 未完整交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "execution_result.json status=success returncode=0"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_family primary=simulation 离散事件仿真"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "variables N/throughput/cycle/util/cnc_util 含单位与范围"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "parameters 声明第 1 组加工/移动/上下料/清洗/班次；EQ1 的 n_i 未单列 → 部分缺失"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "objectives OBJ1 max N + constraints C1/C2"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1（一道工序第 1 组）；Q2 两道工序/Q3 故障未建模"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "claims CL1 引 E1/V1"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 离散事件仿真正确 + EQ1 核算一致 + OBJ/C 支撑；无候选调度策略对比 → 基础 2 分"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1 完整，符号与 variables 对应"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 可运行，status=success returncode=0"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 输出完整（total_parts=248 等），但附件2 EXCEL 未产出、仅第 1 组 → 1"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "输出收敛：total_parts=248, 吞吐 31/h, CNC 利用率 0.6028 一致"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；完全确定性"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "248 件/8h、rgv 利用率 0.996、CNC 0.603 合理自洽"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_plan.json sensitivity 声明加工时间/CNC 数量但未执行 → 1"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "validation_plan.json limit_tests 含单 CNC/零移动 2 类（计划存在）"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_targets OBJ1 与 CL1 匹配，E1 已执行"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 evidence_refs E1/V1 可解析，code_hash 完整"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 10,
+  "L3": 8,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018B RGV IR+validation_plan；执行成功输出合理，EXCEL 交付缺位，L4.1=0 致 L4 失败"
+}

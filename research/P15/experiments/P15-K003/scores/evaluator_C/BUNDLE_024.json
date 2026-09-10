@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_024",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_ir.json problem_binding Q1-Q3，assumptions 提取六关/天气/负重/资金等题面参数"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "assumptions A1 地图简化为 5 节点线性图、A2 天气已知、A3 资源离散整数箱"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "problem_binding 覆盖 Q1-Q3，focus Q1；附件 Result.xlsx 未产出"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "execution_result.json status=success returncode=0"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_family primary=dynamic_programming + MDP/优化"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "variables profit/water/food/day/path 含单位与取值范围"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "parameters 声明 cap=20/money=10000/days=10/mine=1000；题面基准价格/村庄倍率/退回半价未入 parameters → 缺失率>30%"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "objectives OBJ1 max 总资金 + constraints C1/C2/C3（负重/非耗尽/沙暴停留）"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus 仅 Q1，Q2/Q3 未建模"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "claims CL1 引 E1/V1；experiments E1 + validations V1/V2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 Bellman 机理正确 + EQ1 递推与机理一致 + OBJ/C 支撑；无候选对比 → 基础 2 分"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1 完整，符号与 variables 对应；消耗倍率 c_w/c_f 仅在 derivation_trace 描述 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 可运行，execution_result.json status=success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但执行退化：optimal_profit=0/arrival_day=-1/n_states_explored=1，fidelity 13/14"
+  },
+  "L3.3": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无收敛数值：optimal_profit=0、path 为空，DP 未到达终点，fidelity arrival_day=-1 超范围 → 0"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash=a37f4bf4... 存在；random.seed(42) 固定 → 确定性"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "arrival_day=-1 与路径空说明求解失败，非物理合理结果 → 0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_plan.json sensitivity 声明初始资金/负重上限 2 类但未执行 → 1"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "validation_plan.json limit_tests 含零资源/全沙暴 2 类（计划存在，未执行）"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_targets OBJ1 与 CL1 匹配，但执行退化使证据弱"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1 可追溯至 E1 声明；执行退化，复现路径仅代码层面"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 9,
+  "L3": 5,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": false,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2020B 沙漠 DP，IR+validation_plan；DP 执行退化（n_states=1 未到达），L3.3/L3.5=0，L4 因 L4.1 失败"
+}

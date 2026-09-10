@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_035",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_ir.problem_binding Q1-Q3；附件六关地图未用（简化5节点），Result.xlsx 交付未识别"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_ir.assumptions A1-A3 显式分型"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus 仅 Q1；Q2/Q3 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理字段"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_family dynamic_programming+secondary"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "variables V1-V5 带 value_range，outputs 中 optimal_profit/remaining_water/arrival_day 命中（fidelity 13/14）"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "parameters 4 项；EQ1 引用 c_w/c_f/A(d,p)/p' 未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "assumptions A1-A3 显式分型"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "objectives OBJ1 仅 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "constraints C1-C3 资源/非耗尽/天气"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "M1 Bellman 机理正确+EQ1 递推一致+目标约束支撑；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1 符号 V/r/a/c_w/c_f 部分未对应声明变量 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py DP 匹配机理，status=success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 且输出 8 字段，但无 Result.xlsx 交付"
+  },
+  "L3.3": {
+   "score": 0,
+   "max": 2,
+   "evidence": "outputs 退化：optimal_profit=0/arrival_day=-1/path_length=0，n_states_explored=1"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "random.seed(44)≠42 → 1"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "arrival_day=-1 无解、profit=0 不合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validations V1/V2 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "V1/V2 边界检验声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1 evidence_refs E1/V1 结构化但验证未执行"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化+code_hash 存在"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 4,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2020B IR seed44：DP 执行退化（optimal_profit=0/arrival_day=-1/n_states_explored=1），fidelity 13/14，无验证计划"
+}

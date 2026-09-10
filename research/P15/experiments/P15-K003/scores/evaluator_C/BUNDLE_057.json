@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_057",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc §1 显式条件全提取（14成分/两类/85-105%）；合成数据替代附件"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§1 隐式条件（组成性/风化交换/线性可分）显式"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1/Q2/Q3 识别；Q4 关联关系未覆盖"
+  },
+  "L1.4": {
+   "score": 2,
+   "max": 1,
+   "evidence": "§1 歧义点（风化程度量化标准）+采用 K2O 流失率 30% →2"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 逻辑回归 statistical_modeling"
+  },
+  "L2.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§3 变量 5 项，输出部分命中 →1"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "E1 引用 w,b 未在 §4 参数声明 →0"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§2 假设 A1-A3 显式"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§5 目标 Q2/Q3；Q1/Q4 无"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§6 约束 C1/C2"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "§7 机理正确+E1-E3 一致+候选对比（排除仿真/纯聚类）→3"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "w,b 未声明 →1"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 梯度下降匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但 unverifiable、合成数据 →1"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "train_accuracy=1.0 有限，无损失曲线"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "random.seed(42)=42 →2"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "权重符号与铅钡判别一致（合成数据自洽）"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§9 灵敏度声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "§9 极限检验声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式验证"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式 doc"
+  }
+ },
+ "layer_totals": {
+  "L1": 8,
+  "L2": 10,
+  "L3": 7,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2022C doc seed42：歧义点显式+候选对比（排除仿真/纯聚类）；合成数据；fidelity unverifiable"
+}

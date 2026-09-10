@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_034",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc.md 提取 75°C/6mm/5mm/90min 但附件1/附件2 未作为数据源，problem1.xlsx 交付未识别"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md §2 假设4条（一维/对流/无相变/左边界）"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc.md §5 目标仅 Q1 温度分布；Q2/Q3 只在 §6 约束中提及"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理字段"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md §8 显式FDM 判定 numerical_pde"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md §3 变量 4 项，outputs 中 temperature_curve/skin_temp_final 命中"
+  },
+  "L2.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md §4 参数含四层 k/ρc/d + h + T_ambient，PDE 符号齐全"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md §2 假设 4 条显式"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc.md §5 目标仅 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md §6 47°C/44°C-5min 约束完整"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "§7 Fourier PDE 机理正确+方程一致；无候选对比（基础2分）"
+  },
+  "L2.7": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 PDE 与 §4 参数符号对应完整"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 显式FDM 匹配机理，status=success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "execution_result.status=success 但未产出 problem1.xlsx"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "outputs.temperature_curve 21 点单调收敛 37→42.525，n_time_steps=2,016,000"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码无随机性，code_hash=a207dba3 存在"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "skin_temp_final=42.525 在[37,75]合理，time_above_44=0 自洽"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照实验/基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§9 稳定性/边界检验声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "§9 CFL 极限条件声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证为叙述式，无结构化 claim_evidence_map"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式 doc 无结构化 claims"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 13,
+  "L3": 8,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018A doc：FDM 正确，skin_temp_final=42.525°C 曲线单调收敛合理；但 problem1.xlsx 交付缺失，Q2/Q3 未求解，验证仅声明未执行"
+}

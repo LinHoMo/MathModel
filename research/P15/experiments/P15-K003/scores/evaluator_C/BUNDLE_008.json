@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_008",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "P1-P7 题面参数全提取（223/3.41/2.2/0.3/0.55/1.0/4.5）；孔径5.5/孔距27.5 未提取（0.85 近似替代）"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1 刚体间距守恒、A4 碰撞判据等隐式条件识别且有依据"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "E1 期望 223×301 帧；未识别 result1/2/4.xlsx、6 位小数、关键时刻表格交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "validation_plan.ambiguity_handling 标注 2 处歧义（碰撞判据/速度递推）并给出采纳方案"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "simulation/运动学 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "V1-V9 声明且区分 state/derived，覆盖 Q1-Q5 关键量"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "P1-P7 有来源；E1 引用 r0（初始半径）未声明；0.85 孔距折算参数未声明"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A4 显式分型含 rationale，可检验"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "O1/O2/O3/O4 覆盖 Q1/Q2/Q3/Q5；Q4 调头路径优化无目标"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "C1-C3 形式化正确；缺 Q4 相切约束；C1 刚体约束与'各把手位于螺线'题面几何约束冲突"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "E1-E3 满足；E4 候选对比（simulation vs numerical_pde）含维度与依据"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "E1-E4 可求解；E1 引用 r0 未声明→符号不一致"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "时间步进+弧长数值积分，与仿真模型匹配"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "status=success；但仅输出头尾位置+关键帧，Q1 需 223×301 帧未产出；Q4 未实现；xlsx 未生成"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "outputs 有限无 NaN；无网格收敛检验执行证据"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "code_hash 存在；seed=43 非 42；plan.multi_seed 为占位未执行"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "tail 位置 ±350~415m 远超螺线半径(~56m)，物理不合理；collision=false 由粗糙抽样(步长10)造成"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan.sensitivity pitch±10%/v0±20%（敏感参数）但结果为占位"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan.limit_tests pitch→0/N=1 两类极限检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_targets 覆盖 O1/O3（Q1/Q3）；Q2 碰撞/ Q4/Q5 主张未验证"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1/CL2 evidence_refs=E1 可解析；但 E1 输出不含全 223 节数据，证据部分不可解析"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 5,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "Q4 完全未实现；刚体链递推使龙尾脱离螺线（物理错误）；碰撞抽样粗糙"
+}

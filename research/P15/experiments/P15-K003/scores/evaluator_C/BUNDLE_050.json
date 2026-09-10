@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_050",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "同047：附件2 未用 → 部分"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 前两问；Q2 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "graph_algorithm 无候选 →1"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "fidelity 12/12"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "坐标未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "合成数据扣分"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1/OBJ2 覆盖 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "Dijkstra 机理正确；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ2 的 P 未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 匹配，success"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success+输出完整"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "输出完整但退化"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性，seed42"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "响应全0不合理 →0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan sensitivity 响应时间/平台数 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan limit_tests 2类声明"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 结构化"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 10,
+  "L3": 8,
+  "L4": 6
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2011B IR+plan：执行退化同047；plan limit_tests 2类+sensitivity 2类声明未执行"
+}

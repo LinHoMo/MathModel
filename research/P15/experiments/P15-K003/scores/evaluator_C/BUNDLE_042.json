@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_042",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc 提取表1第1组参数；3组数据检验缺失、附件2 EXCEL 未识别"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§2 假设 4 条显式"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus 任务1；任务2 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§8 DES 判定 simulation"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§3 变量 5 项，outputs 全命中"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "move2/move3 未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§2 假设显式"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§5 目标仅 Q1 一道工序"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§6 约束 C1/C2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "§7 DES 机理正确+EQ1 一致；无候选对比"
+  },
+  "L2.7": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 EQ1 符号对应"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py DES 匹配，success"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success+outputs 完整但无 EXCEL 交付"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "outputs 完整（total_parts=248 等）"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码，code_hash 存在"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "RGV 时间账不一致（move+service>28800s）+CNC 全对称 →0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "§9 验证声明未执行"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "§9 边界声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式验证"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式 doc"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 12,
+  "L3": 8,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018B doc：DES 正确但仅第1组数据；RGV 时间账不一致（move+service>28800s）且8台CNC完全对称，L3.5=0"
+}

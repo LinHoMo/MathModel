@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_061",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc §1 Q1 理解；无真实机场数据"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§2 假设 4 条显式"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1；Q2-Q4 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 queuing_theory"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§3 变量 6 项输出全命中"
+  },
+  "L2.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§4 参数完整（怠速0.5/时间20/池50）"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§2 假设"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§5 目标仅 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§6 约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "§7 机理正确；无候选对比"
+  },
+  "L2.7": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 方程符号对应"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "匹配，success"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success+输出完整（unverifiable）"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "输出完整收敛"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "输出合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§9 验证声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "§9 稳定性极限声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式验证"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式 doc"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 13,
+  "L3": 9,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2019C doc：参数完整（含怠速0.5/时间20/池50），λ 扫描已执行，输出合理；L4 为叙述式"
+}

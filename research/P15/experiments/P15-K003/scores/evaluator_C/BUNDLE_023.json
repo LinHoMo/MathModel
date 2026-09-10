@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_023",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_ir.json problem_binding 覆盖 Q1-Q4，assumptions 捕获 Poisson/指数服务等显式参数；Q2 数据收集未落实"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_ir.json assumptions A1/A2/A3 明确 M/M/1 假设、放空确定性、先到先服务等机制/简化条件"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "problem_binding 列出 Q1-Q4 并 focus Q1；Q2-Q4 未交付方案"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "execution_result.json status=success, returncode=0，默认无异常路径分析"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_family primary=queuing_theory，M1 M/M/1 + 收益比较决策"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_ir.json variables 6 项含符号/单位/取值范围（lambda, mu, W_q, profit_q/c, decision）"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_ir.json parameters 声明 λ=30/μ=40/车费/成本等 6 参数；EQ2 的 c_f（fuel_idle=0.5）与 t_c（time_city=20）仅出现于代码未在 IR 参数声明 → 部分缺失"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "objectives OBJ1 max(profit_q,profit_c) 与 constraints C1(rho<1)/C2(W_q>=0) 齐备"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus 仅 Q1；Q2 依赖真实机场数据未建模，Q3/Q4 未覆盖"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "claims CL1 引 E1/E2/V1；experiments E1/E2 与 validations V1/V2 支撑"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 机理正确（M/M/1 等待时间）+ E2 方程与机理一致 + OBJ/C 支撑决策；无候选模型对比节 → 基础 2 分"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "equations EQ1/EQ2 完整且 derivation_trace 给出推导来源，符号与 variables 基本对应"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 自包含可运行；execution_result.json status=success returncode=0"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "execution_result.json outputs 含 optimal_decision/profit/decision_scan 全字段，fidelity 14/14=1.0"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "outputs 收敛：expected_wait_min=0.1, rho=0.75, lambda_critical=39.98 均有限且单调；decision_scan 9 点完整"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash=0e57dd35... 存在；代码确定性（无随机），可复现"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "λ=30<μ=40 稳定，W_q=0.1min 合理，排队收益 79.8 vs 放空 -5.0 与决策 queue 自洽"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "execution_result.json/fidelity_report.json 无对照基线（无 baseline 模型或原方案对比）"
+  },
+  "L4.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "execution_result.json outputs.decision_scan 已执行 λ=10..38 敏感性扫描，输出 9 点决策/等待时间/收益"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "validation_plan.json limit_tests 含零到达率与高到达率 2 类边界检验（未实际执行，按计划存在计 1）"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "claims CL1 evidence_refs E1/E2/V1 均可在 model_ir 与 execution outputs 中解析"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 声明可追溯至已执行 E1/E2 输出；code_hash 完整，复现路径明确"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 9,
+  "L4": 7
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2019C M/M/1 排队+收益比较，IR+validation_plan；执行成功且输出完整，L4.1 无基线致 L4 层失败"
+}

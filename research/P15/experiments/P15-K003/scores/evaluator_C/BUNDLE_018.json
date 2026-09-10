@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_018",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "第1组参数提取；缺第2/3组、两道工序、故障参数"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "RGV 单服务/CNC 完成才上下料 关键隐式约束识别"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "识别吞吐量交付；未识别附件2 EXCEL 3 工作表"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "simulation/DES 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "doc 变量节完整"
+  },
+  "L2.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "doc 参数节含移动1/2/3、加工、上下料、清洗、班次；方程符号覆盖"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "贪心/忽略故障/物料充足 假设显式合理"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 一道工序目标；两道工序/故障/3组缺失"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "RGV 单服务/CNC 顺序/清洗约束；缺两道工序/故障约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "DES 机理正确；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "N=Σn_i 中 n_i 未在变量节列出"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "贪心+DES 匹配调度问题"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success；输出完整；但仅第1组，无 EXCEL 交付"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "DES 精确结果有限（248件/利用率0.996）"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；代码确定性"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "248 件/31件每小时 合理量级"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无灵敏度分析"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "无极限检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证匹配 CL1 但无执行证据"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式无结构化 claim"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 8,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018B 叙述版；仅覆盖一道工序第1组"
+}

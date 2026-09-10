@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_025",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc.md 问题理解覆盖六关/天气/负重/资金等题面参数"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md 假设节含 5 节点线性图简化、天气已知、资源离散"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc.md 目标覆盖 Q1-Q3；Result.xlsx 附件未交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "execution_result.json status=success returncode=0"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md 机理节 Bellman DP + 前向递推求解"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md 变量节 profit/water/food/day/path 含定义"
+  },
+  "L2.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md 参数节完整：负重 20/资金 10000/天数 10/消耗倍率/水 5 食物 10/挖矿 1000/村庄 2 倍/退回半价"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md 目标节最大化总资金 + 约束节 3 条约束"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1；Q2/Q3 未讨论"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc.md 验证节 3 项验证声明（可行性/约束/收敛）"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 Bellman 机理+EQ1 递推+OBJ/C 支撑；无候选对比 → 基础 2 分"
+  },
+  "L2.7": {
+   "score": 2,
+   "max": 2,
+   "evidence": "EQ1 完整，消耗倍率在参数节覆盖；符号基本对应"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 可运行，status=success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但执行退化（profit=0/arrival_day=-1/n_states=1），fidelity unverifiable"
+  },
+  "L3.3": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无收敛数值，DP 未到达终点 → 0"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；random.seed(42) → 确定性"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "arrival_day=-1 非合理结果 → 0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无敏感性分析证据"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "无极限检验执行证据"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证声明为叙述式，无结构化 claim 映射"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc 叙述式验证，无 claim_evidence_map → 1"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 12,
+  "L3": 5,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2020B 沙漠 DP 叙述式文档；执行退化，L3.3/L3.5=0；L4 证据缺位从严"
+}

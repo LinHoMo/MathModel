@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_001",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 提取成分类型/85%-105%有效范围(C2)/二分类标签；未提取纹饰/颜色/部位/风化点数据/Q4关联关系"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "assumptions A2(K+优先淋滤)识别风化机理；未识别成分累加和≈100%等隐式条件"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "objectives覆盖Q2分类/Q3未知鉴别；未识别亚类划分方法/敏感性分析/风化前成分预测等交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无ambiguities标注，题面空白成分/风化属性歧义未处理"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "model_family.primary=statistical_modeling，与2022_C分类统计一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "variables V1-V8有类型；缺风化状态/纹饰/颜色/其余11种成分变量"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "P1-P4有source与value；E1/E2引用权重w/偏置b未在parameters声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式带rationale、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "O1/O2与Q2/Q3一致；Q1风化前成分预测、Q4关联分析未形式化"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1(0≤p≤1)、C2(85%≤Σ≤105%,source=题面)方向正确"
+    },
+    "L2.6": {
+      "score": 1,
+      "max": 3,
+      "evidence": "机理家族正确(E1满足)；dependencies M2(风化)→O2(未知分类)连线错误，风化估计量未进objectives(E3缺陷)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "E1-E3有latex/type/refs且可求解；w、b、x符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "run_model.py梯度下降求解逻辑回归，与口径匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0，输出完整"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "outputs有限，train_accuracy=1.0、概率0/1饱和收敛，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash存在，random.seed(42)固定，确定性代码"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "精度1.0、概率∈[0,1]、K2O流失率0.3在合理范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度执行产物(V2仅声明)"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物；fidelity仅key存在性检查"
+    },
+    "L4.5": {
+      "score": 1,
+      "max": 2,
+      "evidence": "CL1由train_accuracy=1.0支持；CL2 evidence_refs E2(预测实验)与风化主张不匹配"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 9,
+    "L3": 9,
+    "L4": 1
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "L1/L2均低于70%阈值；L3全绿但L4缺验证产物；风化机理依赖M2但目标未形式化，依赖连线错误"
+}

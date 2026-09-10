@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_019",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 参数全提取；Q2/Q3 具体值未入 parameters"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 隐式条件有依据"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "未识别 problem1.xlsx 交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "numerical_pde 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "v_T/v_Ts/v_t/v_x 完整声明"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "EQ1/EQ2 引用 ρ/c/k3/k4/T_body 未声明"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 合理"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q2/Q3 优化目标缺失"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2 正确"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1-E3 满足；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "缺初始条件；ρ/c 未声明"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "显式 FDM CFL 匹配"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success；fidelity 10/11；problem1.xlsx 未产出"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "输出有限收敛；无网格收敛检验"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；确定性"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "42.5°C 合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan.sensitivity 占位未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan.limit_tests 2类"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "validation_targets=OBJ1 覆盖 CL1"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 证据可解析"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 10,
+  "L3": 7,
+  "L4": 6
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "与 002/012 同模型（2018A）"
+}

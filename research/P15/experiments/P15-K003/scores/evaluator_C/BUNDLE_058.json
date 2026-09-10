@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_058",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "IR Q1-Q4 显式+参数假设；无真实机场数据"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 分型"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1；Q2/Q3/Q4 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "queuing_theory 判定"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "fidelity 14/14=1.0"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "fuel_idle/time_city 未入参数 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 仅 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "M/M/1 机理正确；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ2 符号部分未对应 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "匹配，success"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success+fidelity 1.0"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "输出完整收敛"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "输出物理合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "λ 扫描已在 outputs.decision_scan 执行 →2"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan limit_tests 2类（零到达率/λ→μ）声明"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 9,
+  "L4": 7
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2019C IR+plan：同023（fidelity 14/14=1.0，λ 扫描执行），plan limit_tests 2类；仅 L4.1=0"
+}

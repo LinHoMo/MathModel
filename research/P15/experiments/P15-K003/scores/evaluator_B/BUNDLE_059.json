@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_059",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 参数P1-P7全提取(N/L_head/L_body/W/pitch/v0/R_turn)；未提取孔径5.5cm/孔距27.5cm等"
+    },
+    "L1.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "隐式条件：刚体链间距守恒(C1)、无碰撞(C2)、速度约束(C3)，识别并给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "目标O1/O2/O3/O4对应Q1/Q2/Q3/Q5；未识别Q4调头曲线最短化目标与result4.xlsx交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注段(碰撞判定A4仅给rationale，未作歧义处理)"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "simulation与运动学仿真一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "V1-V9有类型；Q4调头曲线/圆弧半径变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "N/L_head/L_body/W/pitch/v0/R_turn全入参数表；孔距27.5cm等未提取"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A4显式、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "O1/O2/O3/O4与Q1/Q2/Q3/Q5一致；Q4调头曲线优化目标未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1刚体约束/C2无碰撞/C3速度约束方向正确"
+    },
+    "L2.6": {
+      "score": 3,
+      "max": 3,
+      "evidence": "E1螺线参数化、E2极坐标、E3刚体链递推、E4碰撞检测；候选对比(simulation vs PDE)充分"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "E1-E4可求解；孔距/板宽符号未全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "时间步进正向仿真与多体运动学口径匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "输出有限，300s仿真完成无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=fdd7cd52存在，确定性"
+    },
+    "L3.5": {
+      "score": 0,
+      "max": 1,
+      "evidence": "尾节位置达415m远超出螺线范围(≤55.8m)，min_segment_gap恒为3.74，结果非物理"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验产物"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1/CL2 evidence_refs E1；E1执行成功且输出在声明范围内，supported(注：tail非物理使实质有效性存疑)"
+    }
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 11,
+    "L3": 8,
+    "L4": 2
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": true,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "2024_A ir无plan型(同039)：尾节坐标非物理致L3.5=0；CL1/E1在声明范围内"
+}

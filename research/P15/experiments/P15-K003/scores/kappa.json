@@ -1,0 +1,1225 @@
+{
+  "experiment": "P15-K003",
+  "n_evaluators": 3,
+  "n_packages": 66,
+  "n_dimensions": 22,
+  "dimension_kappa": {
+    "L1.1": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.8788,
+        "pe": 0.8788,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.6374,
+        "po": 0.9394,
+        "pe": 0.8329,
+        "qwk": 0.6374,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.9394,
+        "pe": 0.9394,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.2125,
+      "mean_qwk": 0.2125,
+      "max_score": 2,
+      "mean_po": 0.9192,
+      "kappa_paradox": false
+    },
+    "L1.2": {
+      "A-B": {
+        "kappa": -0.0435,
+        "po": 0.5152,
+        "pe": 0.5354,
+        "qwk": -0.0435,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0526,
+        "po": 0.4545,
+        "pe": 0.4242,
+        "qwk": 0.0526,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.005,
+        "po": 0.4545,
+        "pe": 0.4518,
+        "qwk": 0.005,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.0047,
+      "mean_qwk": 0.0047,
+      "max_score": 2,
+      "mean_po": 0.4747,
+      "kappa_paradox": false
+    },
+    "L1.3": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.4848,
+        "pe": 0.4848,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0,
+        "po": 0.4848,
+        "pe": 0.4848,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.3333,
+      "mean_qwk": 0.3333,
+      "max_score": 2,
+      "mean_po": 0.6565,
+      "kappa_paradox": false
+    },
+    "L1.4": {
+      "A-B": {
+        "kappa": 0.9325,
+        "po": 0.9848,
+        "pe": 0.7755,
+        "qwk": 0.9325,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": -0.0302,
+        "po": 0.1061,
+        "pe": 0.1322,
+        "qwk": -0.0312,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": -0.0302,
+        "po": 0.0909,
+        "pe": 0.1175,
+        "qwk": -0.0312,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.2907,
+      "mean_qwk": 0.29,
+      "max_score": 1,
+      "mean_po": 0.3939,
+      "kappa_paradox": false
+    },
+    "L1.5": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.9848,
+        "pe": 0.9848,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": -0.0233,
+        "po": 0.9394,
+        "pe": 0.9408,
+        "qwk": -0.0233,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.9545,
+        "pe": 0.9545,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "mean_kappa": -0.0078,
+      "mean_qwk": -0.0078,
+      "max_score": 2,
+      "mean_po": 0.9596,
+      "kappa_paradox": true,
+      "paradox_note": "κ=-0.0078≈0 但 po=0.9596>0.80，Kappa悖论伪影"
+    },
+    "L2.1": {
+      "A-B": {
+        "kappa": 0.1947,
+        "po": 0.6667,
+        "pe": 0.5861,
+        "qwk": 0.2066,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": -0.0584,
+        "po": 0.3636,
+        "pe": 0.3988,
+        "qwk": 0.0065,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0486,
+        "po": 0.2727,
+        "pe": 0.2355,
+        "qwk": 0.0486,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.0616,
+      "mean_qwk": 0.0872,
+      "max_score": 2,
+      "mean_po": 0.4343,
+      "kappa_paradox": false
+    },
+    "L2.2": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.2879,
+        "pe": 0.2879,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.1135,
+        "po": 0.3939,
+        "pe": 0.3163,
+        "qwk": 0.2678,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.5758,
+        "pe": 0.5758,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.0378,
+      "mean_qwk": 0.0893,
+      "max_score": 2,
+      "mean_po": 0.4192,
+      "kappa_paradox": false
+    },
+    "L2.3": {
+      "A-B": {
+        "kappa": 0.1818,
+        "po": 0.5909,
+        "pe": 0.5,
+        "qwk": 0.1818,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.5455,
+        "po": 0.7727,
+        "pe": 0.5,
+        "qwk": 0.5455,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.4211,
+        "po": 0.8182,
+        "pe": 0.686,
+        "qwk": 0.4211,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.3828,
+      "mean_qwk": 0.3828,
+      "max_score": 2,
+      "mean_po": 0.7273,
+      "kappa_paradox": false
+    },
+    "L2.4": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0,
+        "po": 0.9697,
+        "pe": 0.9697,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.9697,
+        "pe": 0.9697,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.3333,
+      "mean_qwk": 0.3333,
+      "max_score": 2,
+      "mean_po": 0.9798,
+      "kappa_paradox": false
+    },
+    "L2.5": {
+      "A-B": {
+        "kappa": 0.2848,
+        "po": 0.6818,
+        "pe": 0.5551,
+        "qwk": 0.2848,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0154,
+        "po": 0.5303,
+        "pe": 0.523,
+        "qwk": 0.0154,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.2226,
+        "po": 0.697,
+        "pe": 0.6102,
+        "qwk": 0.2226,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.1743,
+      "mean_qwk": 0.1743,
+      "max_score": 2,
+      "mean_po": 0.6364,
+      "kappa_paradox": false
+    },
+    "L2.6": {
+      "A-B": {
+        "kappa": 0.0552,
+        "po": 0.5758,
+        "pe": 0.551,
+        "qwk": -0.1579,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0646,
+        "po": 0.6212,
+        "pe": 0.595,
+        "qwk": -0.0945,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.3774,
+        "po": 0.7273,
+        "pe": 0.562,
+        "qwk": 0.2029,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.1657,
+      "mean_qwk": -0.0165,
+      "max_score": 3,
+      "mean_po": 0.6414,
+      "kappa_paradox": false
+    },
+    "L2.7": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.7273,
+        "pe": 0.7273,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": -0.0986,
+        "po": 0.5909,
+        "pe": 0.6276,
+        "qwk": -0.1899,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.7879,
+        "pe": 0.7879,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "mean_kappa": -0.0329,
+      "mean_qwk": -0.0633,
+      "max_score": 2,
+      "mean_po": 0.702,
+      "kappa_paradox": false
+    },
+    "L3.1": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.8485,
+        "pe": 0.8485,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0,
+        "po": 0.8485,
+        "pe": 0.8485,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.3333,
+      "mean_qwk": 0.3333,
+      "max_score": 2,
+      "mean_po": 0.899,
+      "kappa_paradox": false
+    },
+    "L3.2": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0,
+        "po": 0.3788,
+        "pe": 0.3788,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.3788,
+        "pe": 0.3788,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.3333,
+      "mean_qwk": 0.3333,
+      "max_score": 2,
+      "mean_po": 0.5859,
+      "kappa_paradox": false
+    },
+    "L3.3": {
+      "A-B": {
+        "kappa": 0.7975,
+        "po": 0.9545,
+        "pe": 0.7755,
+        "qwk": 0.7975,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.053,
+        "po": 0.5,
+        "pe": 0.472,
+        "qwk": 0.3342,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0273,
+        "po": 0.4848,
+        "pe": 0.4704,
+        "qwk": 0.4165,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.2926,
+      "mean_qwk": 0.5161,
+      "max_score": 2,
+      "mean_po": 0.6464,
+      "kappa_paradox": false
+    },
+    "L3.4": {
+      "A-B": {
+        "kappa": 0.0,
+        "po": 0.0455,
+        "pe": 0.0455,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0351,
+        "po": 0.3182,
+        "pe": 0.2934,
+        "qwk": 0.0351,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.0,
+        "po": 0.7273,
+        "pe": 0.7273,
+        "qwk": 0.0,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.0117,
+      "mean_qwk": 0.0117,
+      "max_score": 2,
+      "mean_po": 0.3637,
+      "kappa_paradox": false
+    },
+    "L3.5": {
+      "A-B": {
+        "kappa": 0.3961,
+        "po": 0.7879,
+        "pe": 0.6488,
+        "qwk": 0.3961,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.4359,
+        "po": 0.7273,
+        "pe": 0.5165,
+        "qwk": 0.4359,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.4986,
+        "po": 0.7576,
+        "pe": 0.5165,
+        "qwk": 0.4986,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.4435,
+      "mean_qwk": 0.4435,
+      "max_score": 1,
+      "mean_po": 0.7576,
+      "kappa_paradox": false
+    },
+    "L4.1": {
+      "A-B": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 1.0,
+        "po": 1.0,
+        "pe": 1.0,
+        "qwk": 1.0,
+        "n_packages": 66
+      },
+      "mean_kappa": 1.0,
+      "mean_qwk": 1.0,
+      "max_score": 2,
+      "mean_po": 1.0,
+      "kappa_paradox": false
+    },
+    "L4.2": {
+      "A-B": {
+        "kappa": 0.8387,
+        "po": 0.9242,
+        "pe": 0.5303,
+        "qwk": 0.8387,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.3685,
+        "po": 0.6212,
+        "pe": 0.4001,
+        "qwk": 0.2259,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.2742,
+        "po": 0.5455,
+        "pe": 0.3737,
+        "qwk": 0.191,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.4938,
+      "mean_qwk": 0.4185,
+      "max_score": 2,
+      "mean_po": 0.697,
+      "kappa_paradox": false
+    },
+    "L4.3": {
+      "A-B": {
+        "kappa": 0.8696,
+        "po": 0.9394,
+        "pe": 0.5354,
+        "qwk": 0.8696,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.392,
+        "po": 0.6667,
+        "pe": 0.4518,
+        "qwk": 0.392,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.3158,
+        "po": 0.6061,
+        "pe": 0.4242,
+        "qwk": 0.3158,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.5258,
+      "mean_qwk": 0.5258,
+      "max_score": 1,
+      "mean_po": 0.7374,
+      "kappa_paradox": false
+    },
+    "L4.4": {
+      "A-B": {
+        "kappa": -0.0929,
+        "po": 0.2273,
+        "pe": 0.2929,
+        "qwk": 0.1383,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.0214,
+        "po": 0.6212,
+        "pe": 0.6129,
+        "qwk": 0.0351,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": -0.0392,
+        "po": 0.197,
+        "pe": 0.2273,
+        "qwk": 0.0632,
+        "n_packages": 66
+      },
+      "mean_kappa": -0.0369,
+      "mean_qwk": 0.0789,
+      "max_score": 2,
+      "mean_po": 0.3485,
+      "kappa_paradox": false
+    },
+    "L4.5": {
+      "A-B": {
+        "kappa": 0.3989,
+        "po": 0.5606,
+        "pe": 0.2691,
+        "qwk": 0.6914,
+        "n_packages": 66
+      },
+      "A-C": {
+        "kappa": 0.419,
+        "po": 0.6667,
+        "pe": 0.4263,
+        "qwk": 0.5234,
+        "n_packages": 66
+      },
+      "B-C": {
+        "kappa": 0.2812,
+        "po": 0.5,
+        "pe": 0.3044,
+        "qwk": 0.5093,
+        "n_packages": 66
+      },
+      "mean_kappa": 0.3664,
+      "mean_qwk": 0.5747,
+      "max_score": 2,
+      "mean_po": 0.5758,
+      "kappa_paradox": false
+    }
+  },
+  "overall": {
+    "mean_kappa": 0.26,
+    "mean_qwk": 0.2753,
+    "n_dimensions_ge_0.6": 1,
+    "n_dimensions_lt_0.6": 21,
+    "pass_rate": 0.0455
+  },
+  "disagreements": [
+    {
+      "dimension": "L1.1",
+      "mean_kappa": 0.2125,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_008",
+          "scores": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_010",
+          "scores": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_021",
+          "scores": [
+            2,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L1.2",
+      "mean_kappa": 0.0047,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_002",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_003",
+          "scores": [
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_004",
+          "scores": [
+            1,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L1.3",
+      "mean_kappa": 0.3333,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_004",
+          "scores": [
+            0,
+            1,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_006",
+          "scores": [
+            0,
+            1,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_012",
+          "scores": [
+            0,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L1.4",
+      "mean_kappa": 0.2907,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_001",
+          "scores": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_002",
+          "scores": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_003",
+          "scores": [
+            0,
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L2.1",
+      "mean_kappa": 0.0616,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_001",
+          "scores": [
+            0,
+            1,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_003",
+          "scores": [
+            1,
+            1,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_004",
+          "scores": [
+            1,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L2.2",
+      "mean_kappa": 0.0378,
+      "max_disagreement_spread": 2,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_036",
+          "scores": [
+            2,
+            1,
+            0
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_039",
+          "scores": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_045",
+          "scores": [
+            2,
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L2.3",
+      "mean_kappa": 0.3828,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_004",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_005",
+          "scores": [
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_006",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L2.4",
+      "mean_kappa": 0.3333,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_039",
+          "scores": [
+            1,
+            1,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_059",
+          "scores": [
+            1,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L2.5",
+      "mean_kappa": 0.1743,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_001",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_003",
+          "scores": [
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_004",
+          "scores": [
+            2,
+            2,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L2.6",
+      "mean_kappa": 0.1657,
+      "max_disagreement_spread": 2,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_001",
+          "scores": [
+            1,
+            1,
+            3
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_008",
+          "scores": [
+            1,
+            3,
+            3
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_010",
+          "scores": [
+            1,
+            3,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L2.7",
+      "mean_kappa": -0.0329,
+      "max_disagreement_spread": 2,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_059",
+          "scores": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L3.1",
+      "mean_kappa": 0.3333,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_009",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_013",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_018",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L3.2",
+      "mean_kappa": 0.3333,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_001",
+          "scores": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_002",
+          "scores": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_004",
+          "scores": [
+            2,
+            2,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L3.3",
+      "mean_kappa": 0.2926,
+      "max_disagreement_spread": 2,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_062",
+          "scores": [
+            2,
+            1,
+            0
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_063",
+          "scores": [
+            2,
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L3.4",
+      "mean_kappa": 0.0117,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_001",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_002",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_003",
+          "scores": [
+            1,
+            2,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L3.5",
+      "mean_kappa": 0.4435,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_003",
+          "scores": [
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_004",
+          "scores": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_006",
+          "scores": [
+            1,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L4.2",
+      "mean_kappa": 0.4938,
+      "max_disagreement_spread": 2,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_016",
+          "scores": [
+            0,
+            0,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_017",
+          "scores": [
+            0,
+            0,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_038",
+          "scores": [
+            0,
+            0,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L4.3",
+      "mean_kappa": 0.5258,
+      "max_disagreement_spread": 1,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_016",
+          "scores": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_017",
+          "scores": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_021",
+          "scores": [
+            1,
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L4.4",
+      "mean_kappa": -0.0369,
+      "max_disagreement_spread": 2,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_017",
+          "scores": [
+            1,
+            0,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_039",
+          "scores": [
+            1,
+            0,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_043",
+          "scores": [
+            1,
+            0,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "dimension": "L4.5",
+      "mean_kappa": 0.3664,
+      "max_disagreement_spread": 2,
+      "disagreement_examples": [
+        {
+          "bundle_id": "BUNDLE_035",
+          "scores": [
+            1,
+            0,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_049",
+          "scores": [
+            1,
+            0,
+            2
+          ]
+        },
+        {
+          "bundle_id": "BUNDLE_052",
+          "scores": [
+            1,
+            0,
+            2
+          ]
+        }
+      ]
+    }
+  ],
+  "missing_files": [],
+  "kappa_threshold": 0.6,
+  "pass_criterion": "维度级 mean κ ≥ 0.6，或分歧可归因（含 Kappa 悖论伪影标注）"
+}

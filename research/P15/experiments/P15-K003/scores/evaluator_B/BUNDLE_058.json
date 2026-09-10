@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_058",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 提取出租车数/排队等待/空驶返回/收益计算；未识别数据统计与机场位置细节参数"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "隐式条件部分识别(M/M/1排队/泊松到达)；信息不对称与司机选择行为未处理"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出Q1排队决策与收益；未识别Q2/Q3/Q4多因素与短途拒载交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "queuing_theory与2019_C机场出租车决策一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "profit/lambda/wait/queue有类型；司机决策/收益函数变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "部分参数有source；载客收益/空驶成本等未入parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1与Q1一致；Q2/Q3/Q4目标未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1(排队稳定rho<1)/C2(收益非负)方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "E1 M/M/1排队机理正确、E2方程一致、E3目标支撑；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1可求解；到达率lambda/服务率mu符号未全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "M/M/1解析解+lambda扫描与口径匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "profit=79.8/rho=0.75收敛，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=0e57dd35存在，确定性"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "排队决策profit_q=79.8>profit_c=-5.0在合理范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan含λ/F_q sensitivity(占位)"
+    },
+    "L4.3": {
+      "score": 1,
+      "max": 1,
+      "evidence": "validation_plan含零到达率/高到达率limit_tests(占位)"
+    },
+    "L4.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan targets=[OBJ1]与Q1目标对应"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1 evidence E1/E2/V1稳定成立，排队收益>空驶收益自洽"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 10,
+    "L3": 9,
+    "L4": 5
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "2019_C ir有plan型(同023/028)：M/M/1解析自洽；验证产物占位"
+}

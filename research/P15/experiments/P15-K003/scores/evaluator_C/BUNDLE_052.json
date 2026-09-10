@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_052",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "同049：简化地图未用附件"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "dynamic_programming"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "fidelity 13/14"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "消耗/价格未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 仅 Q1"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1-C3"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "Bellman 机理正确；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1 符号部分未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "DP 匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但退化、无 Result.xlsx →1"
+  },
+  "L3.3": {
+   "score": 0,
+   "max": 2,
+   "evidence": "DP 退化 →0"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "random.seed(43)≠42 →1"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "arrival_day=-1 →0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan sensitivity 未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan limit_tests 声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1 结构化但验证未执行"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 4,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2020B IR seed43+plan：执行退化（n_states_explored=1），fidelity 13/14；验证未执行"
+}

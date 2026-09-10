@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_047",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "IR 显式条件 speed/3min/20/13；附件2 真实网络未用（模拟20节点）"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式分型"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 管辖/封锁识别；增加平台/Q2 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "graph_algorithm 判定无候选对比 →1"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "V1-V5 带值域，fidelity 12/12 全命中"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "坐标/邻接未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "合成 20 节点替代附件2 → 扣分"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1/OBJ2 覆盖 Q1 前两问"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "Dijkstra 机理正确+EQ1/EQ2 一致；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ2 的 P 未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py Dijkstra+贪心匹配，success"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success+fidelity 12/12 对齐（输出完整）"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "outputs 完整但数值退化（全0距离）"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码，seed42"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "max_response=0（每节点即平台）不合理 →0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1/V2 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "V1/V2 边界声明"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 evidence_refs E1/E2 结构化"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 10,
+  "L3": 8,
+  "L4": 6
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2011B IR seed42：fidelity 12/12=1.0 但执行退化（每节点即平台，max_response=0），L3.5=0；无对照基线"
+}

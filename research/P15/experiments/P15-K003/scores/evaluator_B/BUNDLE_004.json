@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_004",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "提取沙暴/倍率/负重等规则；关卡参数(负重上限/资金/天数/挖矿收益)以假设替代"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "识别DP无后效性；起点购买次数/到达矿山当天约束等隐式条件未处理"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出profit/water/food/day/path；未识别Result.xlsx与第一/二关具体结果"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "dynamic_programming与序贯决策最优策略一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "5个输出变量有类型；位置/天气/行动等关键状态决策变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "4参数有source；EQ1中c_w/c_f/r与价格、村庄倍率、退回半价未声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、合理简化"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1与Q1一致；Q2(不确定天气)/Q3(多玩家)未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1负重/C2非耗尽/C3沙暴停留方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "E1 Bellman DP正确、E2递推一致、E3目标支撑；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1完整可求解；V、a、r(a)、c_w/c_f符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "前向DP表推进+回溯与动态规划匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "status=success/rc=0"
+    },
+    "L3.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出有限但退化：arrival_day=-1、n_states_explored=1、无可行路径"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash存在，random.seed(42)固定"
+    },
+    "L3.5": {
+      "score": 0,
+      "max": 1,
+      "evidence": "arrival_day=-1超出[0,10]物理范围，最优收益0不合理"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 0,
+      "max": 2,
+      "evidence": "CL1\"存在资源约束最优策略\"被执行结果(无可行路径)证伪"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 10,
+    "L3": 7,
+    "L4": 0
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "DP执行无可行路径(arrival_day=-1)，L3.3/3.5扣分且CL1被证伪"
+}

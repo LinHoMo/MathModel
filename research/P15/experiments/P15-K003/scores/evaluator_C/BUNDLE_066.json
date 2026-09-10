@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_066",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "IR Q1-Q4；合成数据替代附件一"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "A2 合成数据假设 → 扣分"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1/Q2 覆盖；Q3/Q4 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "statistical_modeling+secondary"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "V1-V6 带值域 fidelity 14/17"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "β0-β3 未声明 →0"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "合成数据扣分"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1/OBJ2 Q1/Q2；Q3/Q4 无"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "Logistic 机理正确；无候选"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "β/x_* 未对应 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但 fidelity 14/17=0.8235、合成数据 →1"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "loss_final=0.655+profit_curve 11点"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "random.seed(43)≠42 →1"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "系数符号与解释一致（price+0.584/distance-0.507）；最优价40为网格端点 →1"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1/V2 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "V1/V2 声明"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 结构化"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 10,
+  "L3": 7,
+  "L4": 6
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2017B IR seed43：合成数据；系数符号与解释一致（price+0.584/distance-0.507），最优价40为网格端点；无验证计划"
+}

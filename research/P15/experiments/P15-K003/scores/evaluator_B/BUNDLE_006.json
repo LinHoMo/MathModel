@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_006",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_doc.md: 提取沙暴/倍率/负重规则；关卡参数以假设替代"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "识别DP无后效性；起点购买/到达矿山当天等隐式约束未处理"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出结果字段对应Q1；未识别Result.xlsx与多关交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "dynamic_programming与序贯决策一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出变量有类型；位置/天气/行动未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "参数有source；价格/倍率/退回半价/消耗函数未声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "假设显式、类型区分、合理简化"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "目标与Q1一致；Q2/Q3未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "负重/非耗尽/沙暴约束方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "Bellman DP正确、方程一致、目标支撑；无候选对比"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "递推可求解；部分符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "前向DP+回溯与动态规划匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "status=success/rc=0"
+    },
+    "L3.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出有限但退化：arrival_day=-1、无可行路径"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash存在，random.seed(42)固定"
+    },
+    "L3.5": {
+      "score": 0,
+      "max": 1,
+      "evidence": "arrival_day=-1超出物理范围，收益0不合理"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 0,
+      "max": 2,
+      "evidence": "model_doc无claims/evidence结构，验证仅声明"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 10,
+    "L3": 7,
+    "L4": 0
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "F臂model_doc，与004同题同码；L4无claims/evidence结构，全0"
+}

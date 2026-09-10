@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_021",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "doc 显式条件列表覆盖 223节/341/220/30/27.5/55cm/1m/s/16圈/9m/1.7m/2m/s（仅缺孔径5.5）"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "刚体链间距守恒/非相邻节碰撞/角速度差异 隐式条件识别充分"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "目标列出 Q1/Q2/Q3/Q5 输出；未识别 result1/2/4.xlsx 文件与 6 位小数交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "歧义点：碰撞判定标准/后节速度递推，已标注并采纳方案"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "运动学仿真（螺线+刚体链）判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "theta/r/(x_i,y_i)/v_i/d_min 声明含类型"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "N/L_head/L_body/W/pitch/v0/R_turn 有题面来源；E1 引用 r0 值(0.5)与 0.85 系数未参数化"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A4 显式分型含 rationale"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1/Q2/Q3/Q5 目标；Q4 调头路径优化缺失"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "刚体/无碰撞/速度约束；缺 Q4 相切约束，刚体递推与'各把手位于螺线'冲突"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "E1-E3 满足；E4 候选对比（排除PDE/纯优化）维度与依据充分"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "E1-E4 可求解；r0 符号值未声明"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "时间步进+弧长数值积分匹配"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success；仅输出头尾+关键帧，Q1 需 223×301 帧未产出；Q4 未实现；xlsx 未生成"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "输出有限；无网格收敛检验执行证据"
+  },
+  "L3.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "code_hash 存在；seed=43 非 42"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "tail 位置 ±350~415m 远超螺线半径(~56m)物理不合理；collision=false 由粗抽样(步长10)造成"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc 灵敏度（螺距±10%）声明但未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "doc 极限检验 pitch→0 螺线退化验证声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证方案覆盖 Q1 主张但无执行证据"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式无结构化 claim"
+  }
+ },
+ "layer_totals": {
+  "L1": 8,
+  "L2": 11,
+  "L3": 5,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2024A 叙述版；Q4 未实现，龙尾脱离螺线物理错误"
+}

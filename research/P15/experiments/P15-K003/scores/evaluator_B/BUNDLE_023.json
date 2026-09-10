@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_023",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 提取A/B两策略与排队规则；题面无数字参数由假设替代，Q3(上车点)/Q4(优先权)条件未提取"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "识别系统稳定rho<1等隐式条件；乘客数量变化规律等隐式因素未充分处理"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出Q1决策模型与策略；未识别Q2数据收集、Q3上车点设置、Q4优先安排方案交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "queuing_theory与排队决策问题一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "lambda/mu/W_q/收益/决策有类型；排队长度L_q、时间成本等输出未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "p_lam/p_mu/p_fare_q/p_fare_c/p_wc/p_ec有source；EQ2中c_f(fuel_idle)、t_c(time_city)未声明"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、M/M/1简化合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1最大化期望净收益与Q1一致；Q2/Q3/Q4目标未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1(rho<1稳定)/C2(W_q>=0)方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "E1 M/M/1机理正确、E2方程一致、E3目标约束支撑；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1/EQ2可求解；c_f、t_c符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "M/M/1解析求解+收益比较与排队模型匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "outputs有限，rho=0.75稳定，decision_scan完整，fidelity 14/14"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=0e57dd35存在，确定性解析计算"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "等待时间0.1min、收益79.8/-5、临界到达率39.98在合理范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "validation_plan无对照基线"
+    },
+    "L4.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "sensitivity扰动乘客到达率lambda/排队车费F_q(敏感参数)"
+    },
+    "L4.3": {
+      "score": 1,
+      "max": 1,
+      "evidence": "limit_tests含2类极限检验(零到达率/高到达率)"
+    },
+    "L4.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_targets=[OBJ1]对准核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1 evidence_refs E1/E2/V1；E1/E2执行成功、V1(rho<1稳定)成立，supported"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 10,
+    "L3": 9,
+    "L4": 5
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "SV臂2019_C；M/M/1排队决策，Q2/Q3/Q4未建模；L3全绿，L4有计划无执行验证"
+}

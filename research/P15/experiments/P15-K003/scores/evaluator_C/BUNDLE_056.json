@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_056",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc §1 Q1/Q2 理解；合成数据替代附件一"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§2 假设无类型标注+合成数据"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§5 目标 Q1/Q2；Q3/Q4 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 Logistic 判定 statistical_modeling"
+  },
+  "L2.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§3 变量 6 项，输出多数命中（density 未直接输出）→ 部分"
+  },
+  "L2.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "EQ 引用 β0-β3 未在 §4 参数声明 →0"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "合成数据替代附件 → 扣分"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "目标 Q1/Q2；Q3/Q4 无"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§6 约束 C1/C2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "Logistic 机理正确+方程一致；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "β/x_price 符号未对应 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但 unverifiable、合成数据 →1"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "loss_final+profit_curve 11点+accuracy 有输出"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "random.seed(42)=42 →2"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "系数符号与解释矛盾 →0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§9 灵敏度声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "§9 极限检验声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式验证"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式 doc"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 8,
+  "L3": 7,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2017B doc seed42：同054代码（系数符号与解释矛盾→L3.5=0）；无结构化验证产物"
+}

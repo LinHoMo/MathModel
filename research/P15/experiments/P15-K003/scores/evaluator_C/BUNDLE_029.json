@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_029",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md 显式条件齐全（223 节/板长/板宽/螺距 55cm/1m/s/第16圈/Q3-Q5 参数）"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "model_doc.md 隐式条件与歧义点节：刚体链/碰撞判定/后节速度递推"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "问题理解覆盖 Q1-Q5；result1/2/4.xlsx 附件未交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "execution_result.json status=success returncode=0"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "问题类型：运动学仿真（阿基米德螺线+刚体链）"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "变量节 theta/r/(x_i,y_i)/v_i/d_min 含定义"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "参数节 N/L_head/L_body/W/pitch/v0/R_turn；r0=0.5 与 0.85 节长系数未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "目标节 Q1/Q2/Q3/Q5 目标齐备"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q1 实现；Q2 碰撞/Q3/Q4/Q5 仅估算未完整求解"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "约束节 刚体/无碰撞/速度 3 条"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "E1-E3 机理正确 + 候选对比节明确排除 PDE 与纯优化 → 3 分"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "E1-E4 方程完整，符号与变量对应；0.85 系数未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 可运行，status=success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 输出关键帧，但 result1.xlsx 未产出、Q2 碰撞检测仅粗判定 → 1"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "单次执行无收敛对比；min_segment_gap 恒 3.74（抽样步长 10 粗） → 1"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "random.seed(42) 固定；几何确定性 → 2"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "tail_final_position x=276.5/y=-313.3 与螺线半径~56m 严重不符，collision=false 亦不合理 → 0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_doc 验证节声明螺距 ±10% 灵敏度但未执行 → 1"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "model_doc 验证节声明 pitch→0 极限检验但未执行 → 1"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "验证方案叙述式，无结构化 claim 映射"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式文档无 claim_evidence_map → 1"
+  }
+ },
+ "layer_totals": {
+  "L1": 8,
+  "L2": 11,
+  "L3": 6,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2024A 板凳龙叙述式文档；机理与候选对比完整，但尾坐标物理错误致 L3.5=0、L3 层 6/9 失败"
+}

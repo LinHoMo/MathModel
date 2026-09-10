@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_054",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 提取任务数/价格/距离/会员密度；未提取附件1数据文件与基础定价/任务发布机制参数"
+    },
+    "L1.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "隐式条件部分识别(价格弹性/距离衰减)；信息对称/市场结构等未处理"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出Q1最优定价与利润；未识别Q2/Q3打包任务与双向定价交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "regression与2017_B定价与任务完成率一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "price/distance/density/completion有类型；任务属性/用户效用变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "部分系数有source；任务发布价格区间等未入parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1/OBJ2与Q1一致；Q2/Q3目标未建模"
+    },
+    "L2.5": {
+      "score": 1,
+      "max": 2,
+      "evidence": "定价范围/概率约束正确；会员限额等关键约束未形式化"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "E1逻辑回归机理正确、E2方程一致、E3目标支撑；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1可求解；w、b符号未全声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "逻辑回归+网格扫描定价与口径匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "profit=11.31、acc=0.6收敛，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=e1f3d3f3存在，random.seed(42)固定"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "完成率0.435/利润11.31在声明范围；但price系数为负与解释文本矛盾(见L4.5)"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan含定价/距离sensitivity(占位)"
+    },
+    "L4.3": {
+      "score": 1,
+      "max": 1,
+      "evidence": "validation_plan含零价格/极远limit_tests(占位)"
+    },
+    "L4.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "validation_plan targets=[OBJ1,OBJ2]与Q1目标对应"
+    },
+    "L4.5": {
+      "score": 0,
+      "max": 2,
+      "evidence": "V2单调性主张(price负系数)被执行结果证伪：logistic_coefficients.price=-0.169为负而distance=+0.1366为正，与coefficient_interpretation文本(负系数→价格高概率高)矛盾"
+    }
+  },
+  "layer_totals": {
+    "L1": 5,
+    "L2": 9,
+    "L3": 9,
+    "L4": 3
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "2017_B有plan型(同011系数异常)：price=-0.169与解释文本矛盾，V2被证伪"
+}

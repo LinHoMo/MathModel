@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_043",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 提取Q1参数(75°C/6mm/5mm/90min/37°C)；Q2/Q3参数与附件1材料参数未提取"
+    },
+    "L1.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1一维投影/A2皮肤对流边界/A3物性恒定，隐式条件识别并给依据"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出温度曲线对应Q1交付；未识别problem1.xlsx格式与Q2/Q3最优厚度输出"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注(IV层空隙传热机制未处理)"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "numerical_pde与2018_A瞬态热传导一致"
+    },
+    "L2.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "v_T/v_Ts/v_t/v_x覆盖关键变量并区分类型"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "k/d/Tamb/h已声明；EQ1引用rho_i、c_i未声明，T_body未入parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分、合理"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1与Q1一致；Q2/Q3厚度优化目标未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1(T<=47)/C2(>44°C<=5min)方向正确"
+    },
+    "L2.6": {
+      "score": 2,
+      "max": 3,
+      "evidence": "E1热传导机理正确、E2方程一致、E3目标由机理支撑；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1/EQ2含边界条件可求解；rho_i、c_i、T_body符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "显式FDM满足CFL，与抛物型PDE匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0，温度曲线完整"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "温度有限收敛至42.525°C，无NaN，fidelity 10/11"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=a207dba3存在，确定性FDM"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "皮肤温度37→42.5°C在物理合理范围"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1 evidence_refs E1/V1；E1执行成功(skin_temp=42.525)、V1(CFL)成立，supported"
+    }
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 11,
+    "L3": 9,
+    "L4": 2
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": true,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "ir版2018_A(无plan)，同002码；L2/L3过；L4仅L4.5=2"
+}

@@ -1,0 +1,137 @@
+{
+  "bundle_id": "BUNDLE_047",
+  "evaluator_id": "B",
+  "rubric_version": "v1.1",
+  "scores": {
+    "L1.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "model_ir.json: 提取A区节点/边/响应3分钟/平台数；题面A区真实网络数据未读取(20节点合成图替代)"
+    },
+    "L1.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "60km/h×3min→3km覆盖半径，识别隐含覆盖约束；但每个节点均设平台(A3)使覆盖率恒为1、响应全0，未质疑该退化"
+    },
+    "L1.3": {
+      "score": 1,
+      "max": 2,
+      "evidence": "输出覆盖/响应/工作量均衡指标；未识别附图A区网络坐标与方案图交付"
+    },
+    "L1.4": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无歧义标注(节点数/平台数不一致未标注)"
+    },
+    "L1.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "graph_optimization与2011_B交巡警平台选址一致"
+    },
+    "L2.1": {
+      "score": 1,
+      "max": 2,
+      "evidence": "n_nodes/n_platforms/coverage/response有类型；分配方案/边决策变量未声明"
+    },
+    "L2.2": {
+      "score": 1,
+      "max": 2,
+      "evidence": "响应3min/封锁速度等参数未入parameters"
+    },
+    "L2.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "A1-A3显式、类型区分；20节点简化已声明"
+    },
+    "L2.4": {
+      "score": 1,
+      "max": 2,
+      "evidence": "OBJ1/OBJ2与题面一致；封锁围堵Q3目标未建模"
+    },
+    "L2.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "C1(3min覆盖)/C2(节点分配)方向正确"
+    },
+    "L2.6": {
+      "score": 1,
+      "max": 3,
+      "evidence": "E1选址机理正确；EQ1为统计式无优化模型；无候选对比(E4缺)"
+    },
+    "L2.7": {
+      "score": 1,
+      "max": 2,
+      "evidence": "EQ1-EQ3可求解；平台决策变量符号未声明"
+    },
+    "L3.1": {
+      "score": 2,
+      "max": 2,
+      "evidence": "全节点设平台策略与图覆盖口径匹配"
+    },
+    "L3.2": {
+      "score": 2,
+      "max": 2,
+      "evidence": "execution_result.status=success/returncode=0"
+    },
+    "L3.3": {
+      "score": 2,
+      "max": 2,
+      "evidence": "coverage=1.0、response=0收敛，无NaN"
+    },
+    "L3.4": {
+      "score": 2,
+      "max": 2,
+      "evidence": "code_hash=03579dfb存在，确定性"
+    },
+    "L3.5": {
+      "score": 1,
+      "max": 1,
+      "evidence": "覆盖率1.0/响应0在声明范围内但为平凡解(每节点均设平台)"
+    },
+    "L4.1": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无对照基线"
+    },
+    "L4.2": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无灵敏度分析产物"
+    },
+    "L4.3": {
+      "score": 0,
+      "max": 1,
+      "evidence": "无极限检验产物"
+    },
+    "L4.4": {
+      "score": 0,
+      "max": 2,
+      "evidence": "无验证产物验证核心主张"
+    },
+    "L4.5": {
+      "score": 2,
+      "max": 2,
+      "evidence": "CL1/CL2 evidence E1/V1与执行输出一致(无重复分配、全覆盖)；但解为平凡解"
+    }
+  },
+  "layer_totals": {
+    "L1": 6,
+    "L2": 9,
+    "L3": 9,
+    "L4": 2
+  },
+  "layer_max": {
+    "L1": 9,
+    "L2": 15,
+    "L3": 9,
+    "L4": 9
+  },
+  "layer_pass": {
+    "L1": false,
+    "L2": false,
+    "L3": true,
+    "L4": false
+  },
+  "overall_pass": false,
+  "notes": "2011_B无plan型(同030)：平凡解(每节点均设平台)"
+}

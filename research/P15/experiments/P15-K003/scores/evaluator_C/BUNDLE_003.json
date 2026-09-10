@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_003",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "提取 20平台/13要道/3分钟/60km/h；缺 增加2-5平台、六区A-F、P点(32节点)"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "A2 推导 3km 覆盖半径；A3 每节点设平台与题面矛盾（平台为子集）"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "识别管辖/封锁输出；缺 平台增设方案/全市合理性/围堵方案交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "'尽量3分钟'软约束未作歧义处理→默认 1"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "graph_algorithm/优化 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "v_cov/v_resp/v_cv/v_alloc/v_block 声明且区分类型"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "p_speed/p_resp/p_nplat/p_nexit 有来源；EQ1 引用 w(e) 边权未声明"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "A1/A2 合理；A3(每节点均设平台) 与题面 20 平台设置矛盾→部分不合理"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1/OBJ2 匹配 Q1 前两问；增加平台/全市/围堵目标缺失"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "C1(3min)/C2(一平台一路口) 正确；缺 2-5 平台数约束、工作量均衡约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1 图论机理正确；E2 方程-机理一致；E3 目标支撑；E4 无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1/EQ2 可求解；EQ1 引用 w(e) 未声明→符号不一致"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "Dijkstra+最近邻+贪心，与图模型匹配"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "status=success/returncode=0；fidelity 12/12 (1.0) 全对齐"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "精确算法（Dijkstra+贪心）输出有限无 NaN，收敛内在保证"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；代码确定性（random_seed=42 声明）"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "coverage=1.0/max_response=0/封锁距离全 0——合成网络每节点即平台致结果退化，对真实城区不合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan.sensitivity 扰动响应时间/平台数（敏感参数）但无执行结果/弹性系数"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan.limit_tests 含单平台系统/全连接图 2 类极限检验"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_targets=OBJ1/OBJ2 覆盖 CL1/CL2；但题面 Q2 主张未覆盖"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1/CL2 evidence_refs 可解析到 E1/E2/V1/V2，无 unresolved"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 9,
+  "L3": 8,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "合成 20 节点网络替代真实 92 节点 A 区数据，结果退化全 0；L2.6 无候选对比"
+}

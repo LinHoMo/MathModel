@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_043",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "IR 显式条件 Tamb/d2/d4 题目Q1；附件1 材料参数 source=假设、附件2 未用 → 部分"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式分型"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1；Q2/Q3 厚度优化仅约束引用"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "numerical_pde+secondary 优化/反问题"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "V1-V4 声明+值域，fidelity 10/11（仅 x 未命中）"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "ρc/d1/d3 未入参数声明；k1/k2 source=假设 → 部分"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A3 显式"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1 仅 Q1；Q2/Q3 无 objective"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2 温度/时间约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "M1 Fourier 机理正确+EQ1/EQ2 一致+约束支撑；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ2 引用 T_body 未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py FDM 匹配，success"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "success 但 fidelity 10/11=0.9091、无 problem1.xlsx →1"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "temperature_curve 收敛单调 37→42.525"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码无随机性"
+  },
+  "L3.5": {
+   "score": 1,
+   "max": 1,
+   "evidence": "42.525°C 在[37,75]合理；time_above_44=0 自洽"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "V1/V2 声明未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "V1 CFL 极限声明"
+  },
+  "L4.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 evidence_refs E1/V1 结构化"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "CL1 结构化+code_hash"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 8,
+  "L4": 6
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2018A IR：fidelity 10/11=0.9091；Q1 温度分布合理（42.525°C），Q2/Q3 未实现，problem1.xlsx 缺失"
+}

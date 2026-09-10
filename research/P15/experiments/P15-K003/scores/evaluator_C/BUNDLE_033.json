@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_033",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "model_ir.json problem_binding Q1/Q2；附件2 真实路网未使用"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "A1 简化 20 节点网络替代附件路网"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1；Q1 增平台/Q2 未交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "execution_result.json status=success returncode=0"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "graph_algorithm（Dijkstra+贪心）"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "variables 5 项含定义与范围"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "parameters 4 项，附件边权未入参 → 部分"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1/OBJ2 + C1/C2"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "focus Q1"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1/CL2 引 E1/V1 与 E2/V2"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "E1/E2 机理正确+OBJ/C 支撑；无候选对比 → 基础 2 分"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ1/EQ2 完整，w(e) 未声明 → 部分缺失"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py 可运行，status=success"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success 输出覆盖管辖/封锁全字段，fidelity 12/12=1.0"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "输出退化（coverage=1.0 且响应=0.0）→ 上限 1"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；确定性"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "max_response=0.0 为自分配退化，非真实解 → 0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "validation_plan.json sensitivity 声明响应要求/平台数量但未执行 → 1"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "validation_plan.json limit_tests 单平台/全连接 2 类"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "CL1/CL2 证据可解析至 E1/E2"
+  },
+  "L4.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "claims 结构化可追溯 + code_hash 完整"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 9,
+  "L3": 7,
+  "L4": 5
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2011B 交巡警 IR+validation_plan；输出退化（响应全 0），L4.1=0 致 L4 失败"
+}

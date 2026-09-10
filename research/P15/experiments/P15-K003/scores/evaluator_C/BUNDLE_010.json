@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_010",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "P1-P7 提取；孔径/孔距未提取（0.85 近似）"
+  },
+  "L1.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1/A4 隐式条件识别充分"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "未识别 xlsx 文件名/6 位小数交付"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "ambiguity_handling 标注 2 处歧义"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "simulation 判定正确"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "V1-V9 完整声明"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "r0 与 0.85 折算未声明"
+  },
+  "L2.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "A1-A4 合理"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "Q4 无目标"
+  },
+  "L2.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "C1-C3 正确；Q4 约束缺"
+  },
+  "L2.6": {
+   "score": 3,
+   "max": 3,
+   "evidence": "E1-E3 满足；E4 候选对比（simulation vs numerical_pde）含维度与依据"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "r0 未声明"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "时间步进+弧长积分匹配"
+  },
+  "L3.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "223×301 帧未产出；Q4 未实现"
+  },
+  "L3.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "输出有限；无网格收敛检验"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "code_hash 存在；random.seed(42) 固定"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "tail 位置 ±350~415m 物理不合理"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无基线"
+  },
+  "L4.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "plan.sensitivity 占位未执行"
+  },
+  "L4.3": {
+   "score": 1,
+   "max": 1,
+   "evidence": "plan.limit_tests 2 类"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "部分主张覆盖"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "证据部分不可解析"
+  }
+ },
+ "layer_totals": {
+  "L1": 7,
+  "L2": 11,
+  "L3": 6,
+  "L4": 4
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": true,
+  "L2": true,
+  "L3": false,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "与 008 同模型，seed=42；执行结果相同；物理不合理致 L3.5=0"
+}

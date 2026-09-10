@@ -1,0 +1,137 @@
+{
+ "bundle_id": "BUNDLE_040",
+ "evaluator_id": "C",
+ "rubric_version": "v1.1",
+ "scores": {
+  "L1.1": {
+   "score": 1,
+   "max": 2,
+   "evidence": "doc 提取 speed/3min/20平台/13路口；附件2 真实网络未用（合成20节点）"
+  },
+  "L1.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§2 假设 3 条无类型标注"
+  },
+  "L1.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "§5 目标覆盖 Q1 前两问；增加平台/Q2 未覆盖"
+  },
+  "L1.4": {
+   "score": 1,
+   "max": 1,
+   "evidence": "无歧义处理"
+  },
+  "L1.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§7 Dijkstra 判定 graph_algorithm"
+  },
+  "L2.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "§3 变量 5 项，outputs 全命中（coverage/allocation/blockade）"
+  },
+  "L2.2": {
+   "score": 1,
+   "max": 2,
+   "evidence": "坐标/邻接数据未声明 → 部分"
+  },
+  "L2.3": {
+   "score": 1,
+   "max": 2,
+   "evidence": "合成 20 节点替代附件2 → 扣分"
+  },
+  "L2.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "OBJ1/OBJ2 覆盖 Q1 管辖+封锁"
+  },
+  "L2.5": {
+   "score": 2,
+   "max": 2,
+   "evidence": "C1/C2 响应时间/资源约束"
+  },
+  "L2.6": {
+   "score": 2,
+   "max": 3,
+   "evidence": "Dijkstra 机理正确+EQ1/EQ2 一致；无候选对比"
+  },
+  "L2.7": {
+   "score": 1,
+   "max": 2,
+   "evidence": "EQ2 的 P（平台集合）未声明 → 部分"
+  },
+  "L3.1": {
+   "score": 2,
+   "max": 2,
+   "evidence": "run_model.py Dijkstra+贪心匹配，success"
+  },
+  "L3.2": {
+   "score": 2,
+   "max": 2,
+   "evidence": "success+outputs 12字段完整（fidelity unverifiable）"
+  },
+  "L3.3": {
+   "score": 2,
+   "max": 2,
+   "evidence": "outputs 完整但数值退化（全0距离）"
+  },
+  "L3.4": {
+   "score": 2,
+   "max": 2,
+   "evidence": "确定性代码，code_hash 存在"
+  },
+  "L3.5": {
+   "score": 0,
+   "max": 1,
+   "evidence": "max_response=0/avg=0（每节点即平台）不合理 →0"
+  },
+  "L4.1": {
+   "score": 0,
+   "max": 2,
+   "evidence": "无对照基线"
+  },
+  "L4.2": {
+   "score": 0,
+   "max": 2,
+   "evidence": "§9 验证声明未执行"
+  },
+  "L4.3": {
+   "score": 0,
+   "max": 1,
+   "evidence": "§9 边界/不重复声明"
+  },
+  "L4.4": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式验证"
+  },
+  "L4.5": {
+   "score": 1,
+   "max": 2,
+   "evidence": "叙述式 doc"
+  }
+ },
+ "layer_totals": {
+  "L1": 6,
+  "L2": 10,
+  "L3": 8,
+  "L4": 2
+ },
+ "layer_max": {
+  "L1": 9,
+  "L2": 15,
+  "L3": 9,
+  "L4": 9
+ },
+ "layer_pass": {
+  "L1": false,
+  "L2": false,
+  "L3": true,
+  "L4": false
+ },
+ "overall_pass": false,
+ "notes": "2011B doc：合成20节点网络替代附件2；执行退化（max_response=0，每节点即平台），响应时间全0不合理"
+}
