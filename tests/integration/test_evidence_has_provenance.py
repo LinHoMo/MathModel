@@ -77,7 +77,8 @@ def test_gate_weak_when_edge_missing_but_data_has(tmp_path):
     reg.create("execution_result", title="exec", question="Q001",
                activate=True,
                data={"status": "success", "outputs": {"y": 1.0},
-                     "code_hash": "b" * 64, "returncode": 0})
+                     "code_hash": "b" * 64, "returncode": 0,
+                     "legacy_unverified": True})
     reg.create("result", title="result", question="Q001", activate=True,
                data={"execution_ref": "EXEC001"})
     reg.create("claim", title="claim", question="Q001", activate=True)

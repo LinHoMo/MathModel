@@ -32,7 +32,8 @@ def graph(tmp_path):
     reg.create("model", title="M2", question="Q001", activate=True)
     reg.create("execution_result", title="VR1", question="Q001", activate=True,
                data={"status": "success", "code_hash": "a" * 16,
-                     "outputs": {"x": 1}})
+                     "outputs": {"x": 1},
+                     "legacy_unverified": True})
     g = EvidenceGraph(reg, tmp_path / "eg.json")
     return g, reg
 

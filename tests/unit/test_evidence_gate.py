@@ -33,7 +33,8 @@ def setup(tmp_path):
                activate=True,
                data={"status": "success", "outputs": {"y": 1.0},
                      "code_hash": "a" * 64, "returncode": 0,
-                     "duration_ms": 10, "execution_id": "EXEC001"})
+                     "duration_ms": 10, "execution_id": "EXEC001",
+                       "legacy_unverified": True})
     reg.create("result", title="result", question="Q001", activate=True,
                tags=["sensitivity", "baseline"],
                data={"execution_ref": "EXEC001", "outputs": {"y": 1.0}})

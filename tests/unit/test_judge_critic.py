@@ -28,7 +28,8 @@ def healthy(tmp_path):
     exec_art = reg.create(
         "execution_result", title="exec", question="Q001", activate=True,
         data={"status": "success", "outputs": {"y": 3.0, "x": 1.0},
-              "code_hash": "a" * 64, "duration_ms": 10, "returncode": 0})
+              "code_hash": "a" * 64, "duration_ms": 10, "returncode": 0,
+              "legacy_unverified": True})
     reg.create("result", title="result", question="Q001", activate=True,
                tags=["sensitivity", "baseline"],
                data={"execution_ref": exec_art.artifact_id})

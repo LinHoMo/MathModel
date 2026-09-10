@@ -35,7 +35,8 @@ def _make_registry_with_exec(tmp_path, exec_id="EXEC001"):
                      "stdout": "ok\n", "stderr": "",
                      "duration_ms": 10, "code_hash": "c" * 64,
                      "environment_hash": "e" * 64,
-                     "execution_id": exec_id})
+                     "execution_id": exec_id,
+                     "legacy_unverified": True})
     reg.save()
     return reg
 

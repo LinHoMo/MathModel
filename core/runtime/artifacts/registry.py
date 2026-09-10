@@ -73,6 +73,25 @@ def _enforce_schema(artifact_type: str, data: dict) -> None:
             from None
 
 
+def _check_exec_auth(data: dict) -> None:
+    """P0-3：success EXEC 必须来源可鉴别（adapter 签发 token 或显式
+    legacy_unverified 声明），否则拒绝登记（The Agent Is Not The State）。"""
+    if data.get("legacy_unverified"):
+        return
+    from ..execution.execution_auth import verify_token
+    token = data.get("execution_token")
+    if not (isinstance(token, str) and token):
+        raise ContractError(
+            "success 但 execution_token 缺失（来源未鉴别，拒绝伪造 EXEC）")
+    code_hash = data.get("code_hash") or ""
+    provenance = data.get("provenance")
+    adapter = provenance.get("adapter") if isinstance(provenance, dict) else None
+    started = data.get("started_at") or ""
+    if not verify_token(str(code_hash), str(adapter or ""), started, token):
+        raise ContractError(
+            "execution_token 校验失败（HMAC 不匹配，拒绝伪造 EXEC）")
+
+
 class ArtifactRegistry:
     def __init__(self, path: str | Path):
         self.path = Path(path)
@@ -185,6 +204,13 @@ class ArtifactRegistry:
             rdata.setdefault("status", "active")
             rdata.setdefault("reversible", False)
         _enforce_schema(artifact_type, rdata)
+        # P0-3：EXEC 来源鉴别（create 路径强制）——success EXEC 必须带
+        # adapter 签发的有效 execution_token（HMAC(code_hash|adapter|ts)）。
+        # Agent 无 secret 无法伪造；历史/测试桩 EXEC 显式标记
+        # legacy_unverified=true 豁免（不追溯重算）。读取路径
+        # （load/from_dict）不校验，尊重已存在事实。
+        if artifact_type == "execution_result" and rdata.get("status") == "success":
+            _check_exec_auth(rdata)
         art = Artifact(
             artifact_id=aid, type=artifact_type, title=title or aid,
             payload=list(payload or []), created_by=created_by, question=question,

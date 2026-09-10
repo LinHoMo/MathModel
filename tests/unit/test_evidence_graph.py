@@ -58,7 +58,7 @@ def setup(tmp_path):
 
 class TestRelations:
     def test_all_relation_types_defined(self):
-        assert len(RELATION_TYPES) == 23
+        assert len(RELATION_TYPES) == 24
         # audit FIX-6.1/6.3（Batch 6）：诊断边与修订证据链
         assert RELATION_TYPES["diagnosed_by"] == ({"model", "model_ir", "code"}, {"diagnosis"})
         assert RELATION_TYPES["revises"] == ({"decision", "diagnosis"}, {"model", "model_ir"})

@@ -37,9 +37,12 @@ def _real_data() -> dict:
         "environment_hash": "abc",
         "started_at": "2026-09-09T00:00:00Z",
         "finished_at": "2026-09-09T00:00:01Z",
-        "provenance": {"reason": "real_subprocess"},
+        "provenance": {"reason": "real_subprocess", "adapter": "local_python"},
         "code": code,
         "environment_manifest": "py3.12",
+        "execution_token": __import__("runtime.execution.execution_auth", fromlist=["issue_token"]).issue_token(
+            hashlib.sha256(code.encode("utf-8")).hexdigest(),
+            "local_python", "2026-09-09T00:00:00Z"),
     }
 
 
@@ -72,17 +75,27 @@ def test_success_with_empty_outputs_rejected(reg):
 
 
 def test_success_with_empty_code_hash_rejected(reg):
+    """结构校验：success 且 code_hash 为空 → validate 拒绝。
+
+    P0-3：create 路径先做来源鉴别（token），此处直接调 Artifact.validate
+    测结构校验本身（不混入 create 的 token 拦截）。
+    """
     data = _real_data()
     data["code_hash"] = ""
-    with pytest.raises(ContractError, match="code_hash"):
-        reg.create("execution_result", data=data)
+    data["legacy_unverified"] = True  # 隔离来源鉴别，聚焦结构校验
+    art = Artifact(artifact_id="EXEC001", type="execution_result", data=data)
+    problems = art.validate()
+    assert any("code_hash" in p for p in problems), problems
 
 
 def test_code_hash_mismatch_rejected(reg):
+    """结构校验：code_hash 与 code 本体不一致 → validate 拒绝。"""
     data = _real_data()
     data["code_hash"] = "0" * 64
-    with pytest.raises(ContractError, match="code_hash 与 code 本体不一致"):
-        reg.create("execution_result", data=data)
+    data["legacy_unverified"] = True
+    art = Artifact(artifact_id="EXEC001", type="execution_result", data=data)
+    problems = art.validate()
+    assert any("code_hash 与 code 本体不一致" in p for p in problems), problems
 
 
 def test_outputs_not_dict_rejected(reg):

@@ -33,6 +33,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from runtime.execution.execution_auth import issue_token
+
 # 执行状态：唯一合法来源（not_executed 为初始态，绝不默认 success）
 EXEC_STATUS = ("not_executed", "running", "success", "failed", "timeout", "invalid")
 
@@ -44,6 +46,7 @@ EXECUTION_RESULT_FIELDS = (
     "started_at", "finished_at", "provenance",
     "code",           # ★ P0-E4：code 本体（replay/审计需要；用户最小字段集之外）
     "environment_manifest",  # ★ P0-E4：执行环境声明（replay 偏差归因）
+    "execution_token",  # ★ P0-3：adapter 签发来源鉴别（HMAC）
 )
 
 
@@ -103,6 +106,7 @@ class ExecutionResultData:
     provenance: dict[str, Any] = field(default_factory=dict)
     code: str = ""                    # ★ P0-E4：code 本体（replay）
     environment_manifest: str = ""    # ★ P0-E4：环境声明（replay 归因）
+    execution_token: str = ""         # ★ P0-3：adapter 签发来源鉴别（HMAC）
 
     def to_dict(self) -> dict[str, Any]:
         d: dict[str, Any] = {
@@ -122,6 +126,7 @@ class ExecutionResultData:
             "provenance": self.provenance,
             "code": self.code,
             "environment_manifest": self.environment_manifest,
+            "execution_token": self.execution_token,
         }
         return d
 
@@ -230,6 +235,9 @@ class LocalPythonAdapter(ExecutionAdapter):
                 finished_at=_iso_now(),
                 provenance={"adapter": self.name, "python": self.python},
                 code=plan.code, environment_manifest=environment_manifest(),
+                # P0-3：adapter 签发来源鉴别（HMAC(code_hash|adapter|ts)）——
+                # Agent/Handler 无 secret，无法伪造 execution_result
+                execution_token=issue_token(code_hash, self.name, started),
             )
         except subprocess.TimeoutExpired as exc:
             duration_ms = int((time.perf_counter() - t0) * 1000)

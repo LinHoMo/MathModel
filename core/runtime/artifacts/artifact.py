@@ -149,6 +149,9 @@ class Artifact:
                 if calc != ch and calc[:16] != ch:
                     problems.append(
                         f"code_hash 与 code 本体不一致: 存储 {ch[:16]}… 实际 {calc[:16]}…")
+            # P0-3：execution_token 来源鉴别在 registry.create 路径强制
+            # （Artifact.validate 仅做结构校验，历史数据 load 不受影响——
+            # The Agent Is Not The State：新登记必须来源可鉴别，读取尊重事实）。
         return problems
 
     # ------------------------------------------------------------- 生命周期
