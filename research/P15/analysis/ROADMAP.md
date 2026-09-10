@@ -257,6 +257,7 @@
 | **是否影响旧实验** | 否 |
 | **是否需要迁移** | 否 |
 | **预计依赖** | P1-3（Constructor Protocol） |
+| **状态** | ✅ 已完成（2026-09-10）：`core/runtime/constructors/adapters/` 落地——`MathModelAgentAdapter`（MMA 产物目录加载，真实可用；CLI/API 通道未配置时 construct() 抛 ConstructorNotConfigured，禁止伪造）、`PiAdapter`（同目录加载模式）、`ReferenceConstructor`（内置最小参考 Constructor，benchmark baseline/regression/demo）；`tests/unit/test_constructor_adapters.py` 7 用例（未配置如实报错 / 目录加载 / capability 推断 / registry + apply_bundle 集成）。边界：MMA/Pi 均为 Worker/External Solver/Baseline，不触碰 Runtime 信任核心。论文/图表模板导入列 P3-4 目录重组一并处理 |
 
 ### P2-3：Model Selection 证据驱动化
 
