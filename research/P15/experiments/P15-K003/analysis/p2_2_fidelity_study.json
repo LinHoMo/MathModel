@@ -1,0 +1,290 @@
+{
+  "n_runs": 44,
+  "fidelity_distribution": {
+    "0.0-0.2": 0,
+    "0.2-0.4": 8,
+    "0.4-0.6": 0,
+    "0.6-0.8": 0,
+    "0.8-1.0": 36
+  },
+  "fidelity_mean": 0.8083,
+  "fidelity_median": 0.9286,
+  "fidelity_misaligned_count": 8,
+  "by_arm": {
+    "S": {
+      "n": 22,
+      "mean": 0.8083,
+      "min": 0.2,
+      "max": 1.0
+    },
+    "SV": {
+      "n": 22,
+      "mean": 0.8083,
+      "min": 0.2,
+      "max": 1.0
+    }
+  },
+  "by_problem": {
+    "2011_B": {
+      "n": 6,
+      "mean": 1.0
+    },
+    "2017_B": {
+      "n": 6,
+      "mean": 0.8235
+    },
+    "2018_A": {
+      "n": 6,
+      "mean": 0.9091
+    },
+    "2018_B": {
+      "n": 6,
+      "mean": 1.0
+    },
+    "2019_C": {
+      "n": 6,
+      "mean": 1.0
+    },
+    "2020_B": {
+      "n": 6,
+      "mean": 0.9286
+    },
+    "2022_C": {
+      "n": 4,
+      "mean": 0.2
+    },
+    "2024_A": {
+      "n": 4,
+      "mean": 0.2
+    }
+  },
+  "fidelity_vs_L2_pearson": 0.051,
+  "fidelity_vs_L2_spearman": 0.254,
+  "dimension_corr": {
+    "L2.6": -0.479,
+    "L2.4": -0.453,
+    "L2.7": -0.073,
+    "L2.3": -0.01,
+    "L2.2": 0.082,
+    "L2.5": 0.167,
+    "L2.1": 0.298
+  },
+  "misaligned_examples": [
+    {
+      "bundle_id": "BUNDLE_001",
+      "submission_id": "09a80448b035",
+      "problem_id": "2022_C",
+      "arm": "S",
+      "fidelity_score": 0.2,
+      "fidelity_status": "misaligned",
+      "exec_status": "success",
+      "l2_norm": 0.5793650793650793,
+      "checks": [
+        {
+          "name": "F1 变量可观测: 二氧化硅含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '二氧化硅含量'（候选 ['二氧化硅含量', 'SiO2'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 氧化钾含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '氧化钾含量'（候选 ['氧化钾含量', 'K2O'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 氧化铅含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '氧化铅含量'（候选 ['氧化铅含量', 'PbO'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 分类标签",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '分类标签'（候选 ['分类标签', 'y'] 均未命中输出 key）"
+        }
+      ]
+    },
+    {
+      "bundle_id": "BUNDLE_008",
+      "submission_id": "1db4196e2f77",
+      "problem_id": "2024_A",
+      "arm": "SV",
+      "fidelity_score": 0.2,
+      "fidelity_status": "misaligned",
+      "exec_status": "success",
+      "l2_norm": 0.634920634920635,
+      "checks": [
+        {
+          "name": "F1 变量可观测: 螺线极角",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '螺线极角'（候选 ['螺线极角', 'theta'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 螺线半径",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '螺线半径'（候选 ['螺线半径', 'r'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 第i节位置",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '第i节位置'（候选 ['第i节位置', '(x_i, y_i)'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 第i节速度",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '第i节速度'（候选 ['第i节速度', 'v_i'] 均未命中输出 key）"
+        }
+      ]
+    },
+    {
+      "bundle_id": "BUNDLE_010",
+      "submission_id": "1dbb1df6dde8",
+      "problem_id": "2024_A",
+      "arm": "SV",
+      "fidelity_score": 0.2,
+      "fidelity_status": "misaligned",
+      "exec_status": "success",
+      "l2_norm": 0.634920634920635,
+      "checks": [
+        {
+          "name": "F1 变量可观测: 螺线极角",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '螺线极角'（候选 ['螺线极角', 'theta'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 螺线半径",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '螺线半径'（候选 ['螺线半径', 'r'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 第i节位置",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '第i节位置'（候选 ['第i节位置', '(x_i, y_i)'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 第i节速度",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '第i节速度'（候选 ['第i节速度', 'v_i'] 均未命中输出 key）"
+        }
+      ]
+    },
+    {
+      "bundle_id": "BUNDLE_013",
+      "submission_id": "3b6c64b4985d",
+      "problem_id": "2022_C",
+      "arm": "SV",
+      "fidelity_score": 0.2,
+      "fidelity_status": "misaligned",
+      "exec_status": "success",
+      "l2_norm": 0.6666666666666666,
+      "checks": [
+        {
+          "name": "F1 变量可观测: 二氧化硅含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '二氧化硅含量'（候选 ['二氧化硅含量', 'SiO2'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 氧化钾含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '氧化钾含量'（候选 ['氧化钾含量', 'K2O'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 氧化铅含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '氧化铅含量'（候选 ['氧化铅含量', 'PbO'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 分类标签",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '分类标签'（候选 ['分类标签', 'y'] 均未命中输出 key）"
+        }
+      ]
+    },
+    {
+      "bundle_id": "BUNDLE_039",
+      "submission_id": "ac2de07410e4",
+      "problem_id": "2024_A",
+      "arm": "S",
+      "fidelity_score": 0.2,
+      "fidelity_status": "misaligned",
+      "exec_status": "success",
+      "l2_norm": 0.7063492063492064,
+      "checks": [
+        {
+          "name": "F1 变量可观测: 螺线极角",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '螺线极角'（候选 ['螺线极角', 'theta'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 螺线半径",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '螺线半径'（候选 ['螺线半径', 'r'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 第i节位置",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '第i节位置'（候选 ['第i节位置', '(x_i, y_i)'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 第i节速度",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '第i节速度'（候选 ['第i节速度', 'v_i'] 均未命中输出 key）"
+        }
+      ]
+    },
+    {
+      "bundle_id": "BUNDLE_045",
+      "submission_id": "c5c70405d371",
+      "problem_id": "2022_C",
+      "arm": "S",
+      "fidelity_score": 0.2,
+      "fidelity_status": "misaligned",
+      "exec_status": "success",
+      "l2_norm": 0.6666666666666666,
+      "checks": [
+        {
+          "name": "F1 变量可观测: 二氧化硅含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '二氧化硅含量'（候选 ['二氧化硅含量', 'SiO2'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 氧化钾含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '氧化钾含量'（候选 ['氧化钾含量', 'K2O'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 氧化铅含量",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '氧化铅含量'（候选 ['氧化铅含量', 'PbO'] 均未命中输出 key）"
+        },
+        {
+          "name": "F1 变量可观测: 分类标签",
+          "kind": "output_key_exists",
+          "passed": false,
+          "detail": "缺失声明 '分类标签'（候选 ['分类标签', 'y'] 均未命中输出 key）"
+        }
+      ]
+    }
+  ]
+}
