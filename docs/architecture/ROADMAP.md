@@ -75,6 +75,11 @@
 
 ### P0-3: 修复 Engine Validators 未使用问题
 
+> ✅ **DONE 2026-09-10**（方案 B，commit `validators.py`）：
+> - 新增 `core/runtime/execution/validators.py`：`evidence_consistency_validator`——PASS 节点机械复核 outputs.artifacts/evidence 真实存在于 registry（防 handler 谎报产物/证据；registry.get 缺失抛异常时安全判定）
+> - `session.py`：同一 validators 注册到 WorkflowEngine 与 WaveExecutor（self.engine 最终指向 waves.engine，避免覆盖丢失）
+> - 验收：`test_validator_integration.py` 5/5（注册覆盖/假 artifact 否决/假 evidence 端点否决/合法不误杀/全闭环绿）；全量 1009 passed / 4 skipped；validate 58/0；catalog OK
+
 **目标**：要么启用 engine validator hook，要么删除该基础设施
 
 **为什么做**：session.py:96 创建 WorkflowEngine 时未传 validators= 参数。

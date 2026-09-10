@@ -99,8 +99,15 @@ def test_revision_draft_marks_changes_no_fabricated_values(tmp_path):
     draft = build_revision_draft(M1_DICT, d.to_dict(), "M2-DRAFT")
     assert draft["model_id"] == "M2-DRAFT"
     trace = draft["modeling_trace"]
-    assert trace[-1]["step"] == "revision_draft"
-    changes = trace[-1]["changed_components"]
+    # MODEL_IR 契约（object）：generation_order 最后一项为 revision_draft
+    if isinstance(trace, dict):
+        gen = trace.get("generation_order") or []
+        assert gen and gen[-1]["node_id"] == "revision_draft", gen
+        hist = trace.get("version_history") or []
+        assert hist and hist[-1]["commit_hash"] == "M2-DRAFT", hist
+    else:
+        assert trace[-1]["step"] == "revision_draft"
+    changes = draft.get("changed_components") or []
     assert changes, "修订草案必须标注 changed_components"
     # 不编造数值：任何 change 不得含 new value 数值
     import json

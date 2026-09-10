@@ -39,6 +39,7 @@ Construction 行为？"。
 | **P15-K001** | 2×2×rep 预注册（Knowledge × Case + Sham），55 runs，盲评 + DATA FREEZE + 配对分析 | ✅ CLOSED | Δ_K=+2.14 CI[+0.00,+6.41] → **negative result**；`de15d96` |
 | **P15-K002** | Model Representation Efficacy（F/S/S+V 三臂）：契约统一（schema 迁 core、register 真 jsonschema、40 文件冻结）→ 108/108 生成 → 3 evaluator 盲评（锚定澄清，κ=0.4345）→ 配对分析 | ✅ **CLOSED** | RQ1 S−F(MCQ) Δ=−4.85 CI[−7.98,−2.22] **NEGATIVE**（不进 P15.2）；SV−F(VAL) +4.81 **POSITIVE**；报告 `analysis/reports/P15-K002-REPORT.md` |
 | **P1** | Model Construction Loop：Gap Audit（11 环节）→ P1 计划 v2（C1–C10）→ **VS-001 垂直切片 7/7 PASS（2024_A，M1 FAIL → M2 PASS 闭环 + Replay）** → **M3 候选竞技场（evidence-based 选型，D002 selects 边真写入）** → **M4 知识引导（BZD 试点卡 5 张 + 义务映射）** | ✅ **全部完成**（C1–C10 + M3/M4） | 报告 `analysis/P1_{VS001,M3,M4}_REPORT.md` |
+| **P0-3 修复** | 启用 Engine Validator Hook（方案 B）：evidence_consistency_validator——PASS 节点 outputs.artifacts/evidence 必须真实存在于 registry（handler 不能自己说完成）；WorkflowEngine 与 WaveExecutor 同注全 NODE_TYPES | ✔ 完成 | `validators.py` |
 | **P0-2 修复** | Failure Diagnosis 接入生产 DAG（validation FAIL 无存活候选 → diagnose_failure 注册 diagnosis + diagnosed_by 边 + build_revision_draft 生成 M2 草案供外部 Constructor；finalize_revision 去重防双 DIAG） | ✔ 完成 | `311a863` |
 | **P0-1 修复** | Fidelity Layer 接入生产 DAG（handlers 调 verify_fidelity；misaligned→FAIL；不注册 VR 防 C8 幂等复用；容器输出如实跳过；m3/m4 透传 OUTPUT_MAPPING 契约） | ✔ 完成 | `80741df` |
 | **P15-K003** | Model Representation Efficacy under Executed Construction（F/S/SV 三臂，构造+执行一体化）：五 Gate 全 PASS（G1 映射 v1.2 / G2 κ=0.712 / G3 词表 / G4 exec 1.00 / G5 功效）→ FROZEN（36 文件冻结，root `94b14d4f`）→ 66/66 真实 subprocess 执行（rc=0，含 hash/provenance）→ 3 evaluator 独立盲评（66 匿名 bundle，198 评分文件 + 对拍一致）→ 配对分析（bootstrap 10000，主检验 18 blocks） | ✅ **CLOSED** | 主终点 S−F(MCQ)=+3.76 CI[+2.13,+5.44] **POSITIVE**；SV−F(VAL)=+39.92 CI[+37.24,+42.60] **POSITIVE**；L4 为唯一正效应来源（S−F +1.58, SV−F +3.59）、L2 显著负（−0.41/−0.50）→ **"验证义务+执行闭环 > 表示格式"实证**；κ=0.260（<0.6，如实披露）；报告 `analysis/reports/P15-K003-REPORT.md` |
@@ -50,7 +51,7 @@ Construction 行为？"。
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **999 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **1009 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **58 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |

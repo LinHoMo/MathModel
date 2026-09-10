@@ -21,6 +21,13 @@ def evidence_consistency_validator(registry, graph=None):
     任何一项不满足 → 返回失败原因（engine 将其转 FAIL，走统一失败语义）。
     """
 
+    def _has(aid: str) -> bool:
+        """registry.get 对缺失 id 抛 ArtifactNotFound——安全判定存在性。"""
+        try:
+            return registry.get(aid) is not None
+        except Exception:
+            return False
+
     def validate(node_id: str, result) -> str:
         if getattr(result, "status", None) != "pass":
             return ""
@@ -28,14 +35,14 @@ def evidence_consistency_validator(registry, graph=None):
         for aid in out.get("artifacts") or []:
             if not aid:
                 continue
-            if registry.get(aid) is None:
+            if not _has(aid):
                 return f"节点 {node_id} 声称的 artifact 不存在: {aid}"
         for ev in out.get("evidence") or []:
             if not isinstance(ev, dict):
                 return f"节点 {node_id} evidence 条目非对象: {ev!r}"
             for k in ("from", "to"):
                 v = ev.get(k)
-                if v and registry.get(v) is None:
+                if v and not _has(v):
                     return f"节点 {node_id} evidence 端点不存在: {k}={v}"
         return ""
 

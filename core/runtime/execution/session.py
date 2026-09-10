@@ -95,14 +95,19 @@ class RuntimeSession:
             self.state.ensure_question(q)
         # P0-3：启用 engine validator hook——PASS 节点过一致性复核
         # （outputs.artifacts/evidence 必须真实存在于 registry）。
+        # 同一 validators 同时注册到 WorkflowEngine 与 WaveExecutor
+        # 内嵌引擎（self.engine 最终指向 waves.engine，避免被覆盖丢失）。
         from runtime.execution.validators import build_engine_validators
         from runtime.execution.dag import NODE_TYPES
+        engine_validators = build_engine_validators(
+            self.registry, self.graph, node_types=NODE_TYPES)
         self.engine = WorkflowEngine(
             dag, self.executor_impl, state=self.state,
-            validators=build_engine_validators(self.registry, self.graph,
-                                              node_types=NODE_TYPES),
+            validators=engine_validators,
             on_success=self._register_evidence)
-        self.waves = WaveExecutor(dag, self.executor_impl, max_workers=max_workers)
+        self.waves = WaveExecutor(
+            dag, self.executor_impl, max_workers=max_workers,
+            validators=engine_validators)
         self.engine = self.waves.engine          # 波次执行器内嵌引擎（共享状态）
         self.waves.engine.on_success = self._register_evidence
 
