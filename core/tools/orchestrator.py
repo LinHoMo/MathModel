@@ -368,15 +368,22 @@ def _load_problem_features(project_dir: Path) -> dict | None:
 
 
 def _execute_v3(project_dir: Path, questions: list[str],
-                competition: str | None = None) -> int:
+                competition: str | None = None,
+                constructor_dir: Path | None = None) -> int:
     """V3 实际执行（P6）：RuntimeSession + WaveExecutor 跑通完整认知管线。
 
     默认确定性节点执行器（零 LLM）：知识检索 → 方法竞技场 → 实验规划 →
     实验/结果登记 → 证据门禁 → 研究叙事 → 论文投影 → 判审。
     产物落盘 state/{registry,evidence_graph,decision_log,status,engine_progress}.json。
+
+    P0-1（终审 ROADMAP）：注入通道——从 <project>/constructor/（或显式
+    constructor_dir）加载外部 Constructor 产物（MODEL_IR + code +
+    validation_specs），使默认 --execute 能跑通完整链路；无 constructor
+    目录时行为不变（model_construction 如实 BLOCKED）。
     """
     sys.path.insert(0, str(ROOT / "core"))
     from runtime.execution.session import RuntimeSession
+    from constructor_loader import load_constructor_bundle
 
     # P0-③ features 外部必传契约（三仓库审计 R1/R4 修复）：
     # 生产入口显式加载问题画像；缺省时明示警告（不再静默依赖 legacy 默认 evaluation）。
@@ -387,9 +394,20 @@ def _execute_v3(project_dir: Path, questions: list[str],
               "该画像标记 _features_source=legacy_default，不视为真实问题分析。",
               file=sys.stderr)
 
+    # P0-1：外部 Constructor 产物注入
+    bundle = load_constructor_bundle(project_dir, constructor_dir)
+    if bundle["external_model_irs"]:
+        print(f"[V3][EXEC] 外部 Constructor 注入: "
+              f"{len(bundle['external_model_irs'])} MIR / "
+              f"{len(bundle['external_code'])} code / "
+              f"{len(bundle['validation_specs'])} validation_specs")
+
     print(f"[V3][EXEC] questions: {questions}")
     session = RuntimeSession(project_dir, questions, max_workers=1,
-                             features=features)
+                             features=features,
+                             external_model_irs=bundle["external_model_irs"],
+                             external_code=bundle["external_code"],
+                             validation_specs=bundle["validation_specs"])
     try:
         report = session.run()
     except Exception as exc:
@@ -413,7 +431,8 @@ def _execute_v3(project_dir: Path, questions: list[str],
 
 
 def _run_v3(project_dir: Path, dry_run: bool = True,
-            competition: str | None = None) -> int:
+            competition: str | None = None,
+            constructor_dir: Path | None = None) -> int:
     """V3 模式：组合 Workflow DAG → 角色校验 → 波次干跑。
 
     P3 交付 dry-run（P4 接 executor 后支持实际执行）。
@@ -465,7 +484,8 @@ def _run_v3(project_dir: Path, dry_run: bool = True,
           f"(角色: {', '.join(sorted(roles))})")
 
     if not dry_run:
-        return _execute_v3(project_dir, questions, competition)
+        return _execute_v3(project_dir, questions, competition,
+                           constructor_dir=constructor_dir)
 
     # ---- 波次干跑：迭代 ready 集合（同 wave 内可并行）
     completed: set[str] = set()
@@ -508,6 +528,10 @@ def main():
                     help="V3 DAG 模式（P5 起为默认，此 flag 仅为兼容保留）")
     ap.add_argument("--competition", default=None,
                     help="V3 模式赛事 profile（cumcm/mcm...，缺省用 base）")
+    ap.add_argument("--constructor-dir", default=None,
+                    help="P0-1 注入通道：外部 Constructor 产物目录"
+                         "（model_ir.json/code.py|code/<Q>.py/specs.json；"
+                         "缺省 <project>/constructor/）")
     args = ap.parse_args()
 
     project = args.project
@@ -527,8 +551,11 @@ def main():
         return _run_pipeline(str(base), args.max_rounds, args.dry_run)
 
     # P5 起默认 V3 DAG 模式（组合 Workflow DAG + 角色校验 + 波次干跑）
+    constructor_dir = Path(args.constructor_dir) if args.constructor_dir \
+        else None
     return _run_v3(base, dry_run=not args.execute,
-                   competition=args.competition)
+                   competition=args.competition,
+                   constructor_dir=constructor_dir)
 
 
 if __name__ == "__main__":
