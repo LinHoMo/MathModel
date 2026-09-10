@@ -3,6 +3,8 @@
 """
 学术诚信门控
 
+P1-4：本门禁阈值为 **政策阈值**（评审政策/env 配置，来源见 core/env/config.yaml），非经验外推——它们是阻断式判定本身（论文诚信红线），不属于 advisory confidence。
+
 7 类阻断式检查：
 1. 文本相似度（Turnitin式 n-gram，阈值 15%）
 2. 数据造假特征（Benford/分布异常/过度拟合）

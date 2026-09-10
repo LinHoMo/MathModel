@@ -118,6 +118,7 @@ class MethodArena:
                 reasoning=top.reasoning() or
                           f"{top.card.name} 在候选中得分最高",
                 confidence=min(0.5 + 0.1 * top.score, 0.95),
+                # advisory（经验常数）：方法卡推荐是咨询信号，最终选型由执行证据裁决
                 reversible=True,
                 created_by=created_by,
                 evidence_ids=[],

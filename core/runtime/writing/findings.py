@@ -118,7 +118,7 @@ class FindingGraph:
                     statement=f"{qid} 的实验结果已获得（{r.title}）",
                     supported_by=[r.artifact_id],
                     robustness="含灵敏度/基线证据" if robust else "",
-                    confidence=0.8 if robust else 0.5,
+                    confidence=0.8 if robust else 0.5,  # advisory（经验常数）
                     status="PASS" if (producer and robust) else
                            ("WEAK" if producer else "FAIL"),
                     question=qid,
@@ -144,7 +144,8 @@ class FindingGraph:
                     comparison={"candidate": a.artifact_id,
                                 "baseline": b.artifact_id},
                     metrics=metrics,
-                    confidence=0.8 if metrics else 0.6, status=st,
+                    confidence=0.8 if metrics else 0.6,  # advisory（经验常数）
+                                  status=st,
                     question=qid))
             elif results:
                 out.append(Finding(
@@ -154,7 +155,8 @@ class FindingGraph:
                     supported_by=[results[0].artifact_id],
                     comparison={"candidate": results[0].artifact_id,
                                 "baseline": ""},
-                    confidence=0.2, status="UNKNOWN", question=qid))
+                    confidence=0.2,  # advisory（经验常数）
+                      status="UNKNOWN", question=qid))
 
         # 死引用 → FAIL（失效传播经由 supported_by 自动生效）
         for f in out:

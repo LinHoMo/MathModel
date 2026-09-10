@@ -1078,7 +1078,12 @@ class DefaultNodeExecutor:
     def _decision_confidence(self, ranked: list[str],
                              table: dict[str, dict]) -> float:
         """确定性置信度（非 LLM）：最优存活且次优不可存活 → 0.95；
-        最优存活但次优也存活 → 0.8；最优不可存活 → 0.25；无证据 → 0.0。"""
+        最优存活但次优也存活 → 0.8；最优不可存活 → 0.25；无证据 → 0.0。
+
+        P1-4：本函数输出为 **advisory 置信度**（经验常数，无独立来源），
+        仅供展示/解释。选型判定完全由 VR 机械证据（mathematical_valid /
+        constraint_violation_max）驱动；confidence 不参与任何 PASS/FAIL 判定。
+        """
         if not ranked:
             return 0.0
         best = (table.get(ranked[0]) or {}).get("metrics") or {}
