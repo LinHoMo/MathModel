@@ -5,7 +5,7 @@ v3:
   runtime: cognitive-workflow
   workflows_dir: core/workflows
   state_dir: state            # projects/<p>/state/ = registry + graph + decisions
-  roles:                      # 5 角色（与 core/roles/*.yaml 一致）
+  roles:                      # 4 角色（与 core/roles/*.yaml 一致）
     - name: analyst
       path: core/roles/analyst.yaml
       capabilities: 赛题结构化解析、文献检索与证据提取
@@ -17,11 +17,8 @@ v3:
       capabilities: 实验规划、执行、证据登记
     - name: critic
       path: core/roles/critic.yaml
-      capabilities: 前置批判（model/experiment/evidence/judge 四道门禁）
-    - name: writer
-      path: core/roles/writer.yaml
-      capabilities: 研究叙事提炼、论文投影、章节撰写
-  nodes:                      # 15 节点（与组合 DAG 模板一致，per_question 节点按 Question 展开）
+      capabilities: 前置批判（model/experiment/evidence 三道门禁）
+  nodes:                      # 16 节点（per_question 节点按 Question 展开）
     - name: problem_analysis
       role: analyst
       stage: problem-analysis
@@ -77,33 +74,13 @@ v3:
       role: critic
       validator: research-quality
       stage: evidence
-    - name: research_direction
-      role: writer
-      stage: paper
-    - name: paper_projection
-      role: writer
-      stage: paper
-    - name: paper_sections
-      role: writer
-      per_question: true
-      stage: paper
-    - name: paper_review
-      role: critic
-      validator: judge-critic
-      stage: paper
-  validators:                 # 6 validator（DAG validator 绑定 + judge 内部聚合的 narrative-critic）
+  validators:                 # 4 validator（DAG validator 绑定）
     - name: evidence-gate
       kind: runtime
       path: core/validators/evidence/evidence_gate.py
     - name: research-quality
       kind: runtime
       path: core/validators/quality/
-    - name: narrative-critic
-      kind: runtime
-      path: core/runtime/writing/narrative_critic.py
-    - name: judge-critic
-      kind: runtime
-      path: core/runtime/writing/judge_critic.py
     - name: model-critic
       kind: skill
       path: core/skills/critics/model-critic/SKILL.md

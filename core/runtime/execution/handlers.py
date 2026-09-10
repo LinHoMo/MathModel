@@ -39,9 +39,6 @@ from runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
 from runtime.modeling.model_ir import ModelIRBuilder, ModelIRError, validate_model_ir  # noqa: E402
 from runtime.modeling.planner import ExperimentPlanner, PlannerError  # noqa: E402
 from runtime.modeling.selection import MethodArena, SelectionError  # noqa: E402
-from runtime.writing.director import ResearchDirector  # noqa: E402
-from runtime.writing.judge_critic import JudgeCritic  # noqa: E402
-from runtime.writing.projection import PaperProjection  # noqa: E402
 from validators.evidence.evidence_gate import evaluate as evidence_gate_evaluate  # noqa: E402
 
 
@@ -2125,90 +2122,3 @@ class DefaultNodeExecutor:
                               "overall": report.overall_status,
                               "warnings": len(report.warnings),
                               "unknowns": len(report.unknowns)}})
-
-    def do_research_direction(self, node_id: str) -> NodeResult:
-        """研究叙事：Registry+Graph → ScientificNarrative IR（P3-3 统一）。"""
-        from runtime.writing.narrative_ir import build_narrative_ir
-        ir = build_narrative_ir(self.registry, self.graph)
-        self.shared["narrative"] = ir
-        self.shared["narrative_ir"] = ir.as_dict()
-        n_claims = sum(len(s.claims) for s in ir.sections)
-        if n_claims == 0:
-            return NodeResult(FAIL, "无任何 claim，无法构建研究叙事")
-        return NodeResult(PASS, f"{n_claims} 个主张 · {len(ir.sections)} 个章节",
-                          outputs={"metrics": {"claims": n_claims}})
-
-    def do_paper_projection(self, node_id: str) -> NodeResult:
-        """论文投影：narrative → 大纲（纯函数，每次重算以收敛 pending_placement）。"""
-        narrative = self.shared.get("narrative")
-        if narrative is None:
-            return NodeResult(FAIL, "narrative 缺失（上游未完成）")
-        outline = PaperProjection(self.registry, self.graph).project(narrative)
-        self.shared["outline"] = outline
-        # P10：Research State → Claim Graph → Finding Graph → Narrative IR
-        from runtime.writing.findings import FindingGraph
-        from runtime.writing.narrative_ir import build_narrative_ir
-        fg = FindingGraph(self.registry, self.graph)
-        ir = build_narrative_ir(self.registry, self.graph,
-                                findings_graph=fg)
-        self.shared["narrative_ir"] = ir.as_dict()
-        self.shared["findings"] = fg.as_dict()
-        return NodeResult(
-            PASS, f"{len(outline.get('sections', []))} 个章节投影 · "
-                  f"{len(fg.findings)} findings（validated "
-                  f"{len(fg.validated())}）",
-            outputs={"artifacts": [], "evidence": [],
-                     "metrics": {"findings": len(fg.findings),
-                                 "validated": len(fg.validated())}})
-
-    def do_paper_sections(self, node_id: str) -> NodeResult:
-        """Per-Qi 章节投影：为该问题创建 paper_section 并挂 appears_in。"""
-        qid = self._question_of(node_id)
-        outline = self.shared.get("outline")
-        narrative = self.shared.get("narrative")
-        if outline is None or narrative is None:
-            return NodeResult(FAIL, "outline/narrative 缺失（paper_projection 未完成）")
-        claim = self.shared.get(qid, {}).get("claim") or self._claim_of(qid)
-        claim = claim if claim and self.registry.get(claim).status not in _TERMINAL             else None
-        sections = {a.title: a.artifact_id
-                    for a in self.registry.list_by_type("paper_section")
-                    if a.question == qid}
-        ev, n = [], 0
-        for sec in outline.get("sections", []):
-            title = f"{qid} · {sec.get('section', '章节')}"
-            if sec.get("section") == "结果与分析" and not claim:
-                continue
-            if title in sections:
-                # 幂等：章节已存在，但新 claim 仍需补挂归属边
-                if sec.get("section") == "结果与分析" and claim:
-                    ev.append({"from": claim, "relation": "appears_in",
-                               "to": sections[title]})
-                continue
-            s_art = self.registry.create(
-                "paper_section", title=title,
-                question=qid, payload=[sec.get("section", "")],
-                activate=True, created_by=node_id)
-            if sec.get("section") == "结果与分析" and claim:
-                ev.append({"from": claim, "relation": "appears_in",
-                           "to": s_art.artifact_id})
-            n += 1
-        if ev:
-            # claim 归属已落地 → 立即刷新 outline（pending_placement 收敛）
-            self.shared["outline"] = PaperProjection(
-                self.registry, self.graph).project(
-                    self.shared.get("narrative"))
-        return NodeResult(PASS, f"{qid}: 新建 {n} 个章节",
-                          outputs={"artifacts": [], "evidence": ev})
-
-    def do_paper_review(self, node_id: str) -> NodeResult:
-        """判审（judge-critic）：PASS 才放行；WEAK/FAIL/UNKNOWN 走反馈环。"""
-        narrative = self.shared.get("narrative")
-        outline = self.shared.get("outline")
-        report = self.shared.get("gate_report")
-        judge = JudgeCritic().evaluate(narrative, outline,
-                                       evidence_report=report)
-        self.shared["judge_report"] = judge
-        if judge.verdict == "PASS":
-            return NodeResult(PASS, judge.summary())
-        risks = [f"{r.source}/{r.code}" for r in judge.risks]
-        return NodeResult(FAIL, f"judge {judge.verdict}: {', '.join(risks) or 'insufficient'}")

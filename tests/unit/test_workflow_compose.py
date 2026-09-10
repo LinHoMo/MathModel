@@ -63,7 +63,7 @@ class TestComposer:
         comp = WorkflowComposer(WF)
         base = comp.load_base()
         assert base["stages"] == ["problem-analysis", "modeling", "experiment",
-                                  "evidence", "paper"]
+                                   "evidence"]
 
     def test_compose_default(self):
         comp = WorkflowComposer(WF)
@@ -75,8 +75,7 @@ class TestComposer:
                     "model_construction", "model_critique", "assumption_check",
                     "code_generation", "model_execution", "model_validation",
                     "model_selection_decision",
-                    "experiment_design", "evidence_build", "evidence_gate",
-                    "research_direction", "paper_projection", "paper_review"):
+                    "experiment_design", "evidence_build", "evidence_gate"):
             assert nid in dag.nodes, nid
 
     def test_stage_ordering(self):
@@ -92,8 +91,7 @@ class TestComposer:
         assert "model_execution" in dag.nodes["model_validation"].depends_on
         assert "model_validation" in dag.nodes["model_selection_decision"].depends_on
         assert "model_selection_decision" in dag.nodes["experiment_design"].depends_on
-        # P9: quality_evaluation 插入 evidence_gate 与 research_direction 之间
-        assert "quality_evaluation" in dag.nodes["research_direction"].depends_on
+        # P9: quality_evaluation 插入 evidence_gate 之后
         assert "evidence_gate" in dag.nodes["quality_evaluation"].depends_on
 
     def test_feedback_loops_present(self):
@@ -102,7 +100,6 @@ class TestComposer:
         assert dag.nodes["model_critique"].on_fail == "model_construction"
         assert dag.nodes["evidence_gate"].on_fail == "experiment_design"
         assert dag.nodes["quality_evaluation"].on_fail == "evidence_build"
-        assert dag.nodes["paper_review"].on_fail == "paper_projection"
 
     def test_compose_with_competition(self):
         comp = WorkflowComposer(WF)
@@ -122,10 +119,8 @@ class TestComposer:
         # per_question 节点按 Qi 展开
         for qi in ("Q001", "Q002", "Q003", "Q004"):
             assert f"experiment@{qi}" in exp.nodes
-            assert f"paper_sections@{qi}" in exp.nodes
         # 模板节点被移除
         assert "experiment" not in exp.nodes
-        assert "paper_sections" not in exp.nodes
         # evidence_build 依赖全部实验批判实例（P3 起 experiment_critique 前置）
         assert set(exp.nodes["evidence_build"].depends_on) == {
             f"experiment_critique@{q}" for q in ("Q001", "Q002", "Q003", "Q004")}
