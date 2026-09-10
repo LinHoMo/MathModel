@@ -6,19 +6,33 @@
       "status": "complete"
     },
     "questions": {
-      "Q2": {
+      "Q4": {
         "status": "validated",
         "models": [],
         "experiments": [
-          "MH-EXPERIMENT-0002"
+          "MH-EXPERIMENT-0004"
         ],
         "claims": [
-          "MH-CLAIM-0002"
+          "MH-CLAIM-0004"
         ],
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T15:58:33+00:00"
+        "last_updated": "2026-09-10T16:30:42+00:00"
+      },
+      "Q3": {
+        "status": "validated",
+        "models": [],
+        "experiments": [
+          "MH-EXPERIMENT-0003"
+        ],
+        "claims": [
+          "MH-CLAIM-0003"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-10T16:30:42+00:00"
       },
       "Q1": {
         "status": "validated",
@@ -33,35 +47,21 @@
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T15:58:33+00:00"
+        "last_updated": "2026-09-10T16:30:42+00:00"
       },
-      "Q3": {
+      "Q2": {
         "status": "validated",
         "models": [],
         "experiments": [
-          "MH-EXPERIMENT-0003"
+          "MH-EXPERIMENT-0002"
         ],
         "claims": [
-          "MH-CLAIM-0003"
+          "MH-CLAIM-0002"
         ],
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T15:58:33+00:00"
-      },
-      "Q4": {
-        "status": "validated",
-        "models": [],
-        "experiments": [
-          "MH-EXPERIMENT-0004"
-        ],
-        "claims": [
-          "MH-CLAIM-0004"
-        ],
-        "dependencies": [],
-        "retry_count": 0,
-        "failure_reason": null,
-        "last_updated": "2026-09-10T15:58:33+00:00"
+        "last_updated": "2026-09-10T16:30:42+00:00"
       }
     },
     "models": {
@@ -112,14 +112,14 @@
       {
         "node": "",
         "note": "本实例由项目内确定性脚本构建（未走 RuntimeSession 引擎），workflow 节点不虚报；内容真源为 registry + evidence_graph。",
-        "at": "2026-09-10T15:58:33+00:00"
+        "at": "2026-09-10T16:30:42+00:00"
       }
     ]
   },
   "run": {
     "phase": "delivered",
-    "started_at": "2026-09-10T15:58:33+00:00",
-    "updated_at": "2026-09-10T15:58:33+00:00"
+    "started_at": "2026-09-10T16:30:42+00:00",
+    "updated_at": "2026-09-10T16:30:42+00:00"
   },
   "limitations": [
     "A04：恒温干燥目标温度 50 °C 由「2-3 天」窗口反标定，非题面给定值（V03 已量化敏感性）",

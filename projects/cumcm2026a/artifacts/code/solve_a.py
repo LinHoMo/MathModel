@@ -124,13 +124,17 @@ def annex2_radius(t: float | np.ndarray) -> float | np.ndarray:
     return float(result.item()) if scalar else result
 
 
-def default_T_air(t: np.ndarray) -> np.ndarray:
-    """烘房温度 / °C。预热阶段 28→60°C（指数趋近，时间常数 450 s），随后恒温。
+TAU_AIR = 450.0  # 烘房温度趋近时间常数 / s（P12，assumption_derived，须附敏感性证据）
+
+
+def default_T_air(t: np.ndarray, tau: float = TAU_AIR) -> np.ndarray:
+    """烘房温度 / °C。预热阶段 28→T_target（指数趋近，时间常数 tau，默认 450 s）。
 
     v1.1：此函数保留作为对照基线；生产路径使用 data_T_air()。
+    tau 参数化以支持 P12（时间常数）的敏感性扫描。
     """
     t = np.asarray(t, dtype=float)
-    return T0 + (T_TARGET - T0) * (1.0 - np.exp(-t / 450.0))
+    return T0 + (T_TARGET - T0) * (1.0 - np.exp(-t / tau))
 
 
 def default_C_air(t: np.ndarray, mode: int) -> np.ndarray:
@@ -604,9 +608,30 @@ def validation_suite():
                             "C_air_source": "附件1 实测数据"})
         print(f"  T_target={Tt:4.1f} °C  烘干时长={h:.4f} h")
     T_TARGET = keep
+    print("[验证] 烘房温度时间常数敏感性（P12, Q3, N=320, dt=20 s）")
+    tau_sens = []
+    for tau in (300.0, 450.0, 600.0):
+        r = solve(t_end=8 * 24 * 3600.0, dt=20.0, mode=3, N=320,
+                  T_air_fn=lambda t, _tau=tau: default_T_air(t, _tau),
+                  C_air_fn=data_C_air, C_stop=C_TARGET)
+        h = float(r["times"][-1]) / 3600.0
+        tau_sens.append({"tau_s": tau, "dry_h": h})
+        print(f"  tau={tau:5.1f} s  烘干时长={h:.4f} h")
+
+    # G3 校准参数敏感性证据（P08 恒温目标温度 / P12 烘房时间常数）
+    calibration_sensitivity = {
+        "P08": {"symbol": "T_target", "nominal": 50.0,
+                "varied": {"T_target_C": [s["T_target"] for s in sensitivity]},
+                "outcomes": [s["dry_h"] for s in sensitivity]},
+        "P12": {"symbol": "τ_air", "nominal": 450.0,
+                "varied": {"tau_s": [x["tau_s"] for x in tau_sens]},
+                "outcomes": [x["dry_h"] for x in tau_sens]},
+    }
     return {"spatial_convergence": spatial,
             "temporal_convergence": temporal,
             "temperature_sensitivity": sensitivity,
+            "air_tau_sensitivity": tau_sens,
+            "calibration_sensitivity": calibration_sensitivity,
             "temp_sensitivity_note": "温度侧用参数化指数趋近（default_T_air），湿度侧用附件1 实测数据",
             "convergence_boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"}
 
@@ -661,6 +686,7 @@ def main():
         "annex1_data_range_s": [float(_ANNEX1_T[0]), float(_ANNEX1_T[-1])],
         "annex2_data_range_s": [float(_ANNEX2_T[0]), float(_ANNEX2_T[-1])],
         "derived_facts": derived_facts,
+        "calibration_sensitivity": validations.get("calibration_sensitivity", {}),
         "summary": summaries,
         "validations": validations,
     }

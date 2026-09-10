@@ -26,6 +26,42 @@
     "q4_annex2_vs_q3_pct": 8.502575065591298,
     "q3_v10_vs_v11_delta_h": 0.2499997777777736
   },
+  "calibration_sensitivity": {
+    "P08": {
+      "symbol": "T_target",
+      "nominal": 50.0,
+      "varied": {
+        "T_target_C": [
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ]
+      },
+      "outcomes": [
+        69.22222222222223,
+        58.1,
+        49.388888888888886,
+        42.477777777777774
+      ]
+    },
+    "P12": {
+      "symbol": "τ_air",
+      "nominal": 450.0,
+      "varied": {
+        "tau_s": [
+          300.0,
+          450.0,
+          600.0
+        ]
+      },
+      "outcomes": [
+        58.09444444444444,
+        58.1,
+        58.111111111111114
+      ]
+    }
+  },
   "summary": {
     "problem1": {
       "label": "problem1",
@@ -148,6 +184,56 @@
         "C_air_source": "附件1 实测数据"
       }
     ],
+    "air_tau_sensitivity": [
+      {
+        "tau_s": 300.0,
+        "dry_h": 58.09444444444444
+      },
+      {
+        "tau_s": 450.0,
+        "dry_h": 58.1
+      },
+      {
+        "tau_s": 600.0,
+        "dry_h": 58.111111111111114
+      }
+    ],
+    "calibration_sensitivity": {
+      "P08": {
+        "symbol": "T_target",
+        "nominal": 50.0,
+        "varied": {
+          "T_target_C": [
+            45.0,
+            50.0,
+            55.0,
+            60.0
+          ]
+        },
+        "outcomes": [
+          69.22222222222223,
+          58.1,
+          49.388888888888886,
+          42.477777777777774
+        ]
+      },
+      "P12": {
+        "symbol": "τ_air",
+        "nominal": 450.0,
+        "varied": {
+          "tau_s": [
+            300.0,
+            450.0,
+            600.0
+          ]
+        },
+        "outcomes": [
+          58.09444444444444,
+          58.1,
+          58.111111111111114
+        ]
+      }
+    },
     "temp_sensitivity_note": "温度侧用参数化指数趋近（default_T_air），湿度侧用附件1 实测数据",
     "convergence_boundary_source": "附件1 实测数据插值（>14400s 持末值外推）"
   }

@@ -1,7 +1,7 @@
 {
   "registry_version": 3,
   "project": "cumcm2026a",
-  "updated_at": "2026-09-10T15:58:33Z",
+  "updated_at": "2026-09-10T16:30:42Z",
   "counters": {
     "assumption": 1,
     "claim": 5,
@@ -23,8 +23,8 @@
       "status": "active",
       "title": "2026_A 药材烘干",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "statement": "inputs/problem.txt",
         "sha256": "f44fad8e0dadcf0d18e901a49ee7d49891c439055570c0b1043fae8837c172b9",
@@ -44,8 +44,8 @@
       "status": "active",
       "title": "Q1 forward_simulation",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "id": "Q1",
         "type": "forward_simulation",
@@ -60,8 +60,8 @@
       "status": "active",
       "title": "Q2 forward_simulation_two_stage",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "id": "Q2",
         "type": "forward_simulation_two_stage",
@@ -76,8 +76,8 @@
       "status": "active",
       "title": "Q3 inverse_time",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "id": "Q3",
         "type": "inverse_time",
@@ -92,8 +92,8 @@
       "status": "active",
       "title": "Q4 moving_boundary_inverse",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "id": "Q4",
         "type": "moving_boundary_inverse",
@@ -108,8 +108,8 @@
       "status": "validated",
       "title": "圆柱形药材热风烘干的径向耦合传热-传质 PDE 模型（含移动边界）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "model_ir": "model_ir.json",
         "model_doc": "model.md",
@@ -130,7 +130,7 @@
           "E07",
           "E08"
         ],
-        "sha256": "251650a0b77bde911c3a34d4712065a08fd7616c52b65c0571914ed09de6ca60"
+        "sha256": "c58f249e8814f85bd8300d3007de892dc13fb9828f92092ecbdfdeb76eb00f5d"
       }
     },
     "MH-MODEL_IR-0001": {
@@ -141,11 +141,11 @@
       "status": "active",
       "title": "圆柱形药材热风烘干的径向耦合传热-传质 PDE 模型（含移动边界）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "path": "model_ir.json",
-        "sha256": "251650a0b77bde911c3a34d4712065a08fd7616c52b65c0571914ed09de6ca60"
+        "sha256": "c58f249e8814f85bd8300d3007de892dc13fb9828f92092ecbdfdeb76eb00f5d"
       },
       "data": {
         "ir_version": "1.0",
@@ -557,6 +557,7 @@
             "value": 50.0,
             "unit": "°C",
             "source": "assumption_derived",
+            "calibration_anchor_ref": "A04",
             "sub_question_binding": [
               "Q2",
               "Q3",
@@ -614,6 +615,7 @@
             "value": 450.0,
             "unit": "s",
             "source": "assumption_derived",
+            "calibration_anchor_ref": "A03",
             "sub_question_binding": [
               "Q1",
               "Q2",
@@ -1773,8 +1775,8 @@
       "status": "active",
       "title": "模型假设 A01-A08",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "items": [
           {
@@ -1858,11 +1860,11 @@
       "status": "active",
       "title": "solve_a.py",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "path": "artifacts/code/solve_a.py",
-        "sha256": "2024cff69213b49ad96c4951c92f90ce73463d657cb417a1b44acddb33efc554",
+        "sha256": "ae7e16accbb953c6b45fea0a3c1daaac2eb187e816dd434ad88548a548317ea7",
         "note": "径向耦合传热传质隐式求解 + 移动边界 + 验证套件"
       }
     },
@@ -1874,8 +1876,8 @@
       "status": "validated",
       "title": "Q1 预热平衡阶段（1800 s，附录 2 常物性）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "sub_question": "Q1",
         "solver": "S01/S02/S03",
@@ -1901,11 +1903,11 @@
       "status": "validated",
       "title": "Q1 结果（result1.xlsx）",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "path": "artifacts/results/result1.xlsx",
-        "sha256": "1e96c1077c62907347eb335efe1ddc2f96c75dd8200826b45402f95f5386e566",
+        "sha256": "37c14601e600f35500d45d1c63c87890e0783c4b9f172e429506dc81af5426c9",
         "values": {
           "label": "problem1",
           "final_time_s": 1800.0,
@@ -1927,8 +1929,8 @@
       "status": "validated",
       "title": "Q2 全程烘干前 3 h（两阶段参数，附录 3 变物性）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "sub_question": "Q2",
         "solver": "S01/S02/S03",
@@ -1954,11 +1956,11 @@
       "status": "validated",
       "title": "Q2 结果（result2.xlsx）",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "path": "artifacts/results/result2.xlsx",
-        "sha256": "854753d3ae262d06b51d28c0babe8849630caee4145dc53c286b52751557c130",
+        "sha256": "dcb3e65ad91c6f86ff99a2dc44d2670f4d3d23c89435f758fe26f72af889b449",
         "values": {
           "label": "problem2",
           "final_time_s": 10800.0,
@@ -1980,8 +1982,8 @@
       "status": "validated",
       "title": "Q3 固定半径烘干至中心含水率 < 0.15（求时长）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "sub_question": "Q3",
         "solver": "S01/S02/S03",
@@ -2008,11 +2010,11 @@
       "status": "validated",
       "title": "Q3 结果（result3.xlsx）",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "path": "artifacts/results/result3.xlsx",
-        "sha256": "3a6d872dbaaacffbaed442810526ed6b82a7a603fb8e57027e94cc39972f3755",
+        "sha256": "d72440aba61c67ddf19dbad46e7a94d624dae594b726ead0985fab36d0c285f3",
         "values": {
           "label": "problem3",
           "final_time_s": 205820.0,
@@ -2035,8 +2037,8 @@
       "status": "validated",
       "title": "Q4 移动边界（失水收缩）烘干至中心含水率 < 0.15",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "sub_question": "Q4",
         "solver": "S01/S02/S03",
@@ -2065,11 +2067,11 @@
       "status": "validated",
       "title": "Q4 结果（result4.xlsx）",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "path": "artifacts/results/result4.xlsx",
-        "sha256": "50e6a3e16e5d31edbef68d200806eb66fd069f04c37b2605ac249f7e670278a0",
+        "sha256": "503bdb92e911c4a4002e473f0750844bafe52d3b620a0d09693ba3814ae4fa6a",
         "values": {
           "label": "problem4",
           "final_time_s": 188320.0,
@@ -2094,8 +2096,8 @@
       "status": "active",
       "title": "CL01（Q1）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "text": "Q1（v1.1 数据驱动）：1800 s 内预热平衡阶段，表面温度升至 36.7863 °C、中心温度 33.5765 °C；表面含水率降至 1.5101 kg/kg，中心含水率几乎不变（2.5500 kg/kg）。注意：数据驱动边界下 Q1 末温（36.79 °C）显著低于原 v1.0 指数趋近近似（44.59 °C）——因附件1 实测升温比指数拟合更缓慢。",
         "status": "supported",
@@ -2114,8 +2116,8 @@
       "status": "active",
       "title": "CL02（Q2）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "text": "Q2（v1.1 数据驱动）：3 h 时全柱基本达到恒温（表面 49.9664 °C、中心 49.8494 °C），表面含水率降至 1.0081、中心降至 1.7662 kg/kg；中心-表面含水率差随干燥推进持续扩大，说明内部扩散成为控制步骤。",
         "status": "supported",
@@ -2134,8 +2136,8 @@
       "status": "active",
       "title": "CL03（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "text": "Q3（v1.1 数据驱动边界，附件1 插值+持末值外推）：满足“各处含水率 <0.15 kg/kg”的烘干时长为 57.1722 h（约 2.38 天），与 v1.0 指数近似（57.4222 h）仅差 0.25 h——说明指数趋近对 Q3 终点影响甚微（因烘干主期在恒温段，边界差异已在预热段均衡）。中心含水率 0.1500、表面含水率 0.0521 kg/kg。网格收敛：N_r=160/320/640/1280/2560 对应 63.5167/57.8667/57.2500/57.1778/57.1667 h，N=1280 与 N=2560 差 0.0111 h（0.02%）已收敛。",
         "status": "supported",
@@ -2156,8 +2158,8 @@
       "status": "active",
       "title": "CL04（Q4）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "text": "Q4（v1.1 数据驱动，附件2 实测半径）：附件2 实测半径驱动的移动边界烘干时长为 52.3111 h（约 2.18 天），比 Q3 固定半径（57.1722 h）短 4.86 h（约 -8.5%），也比 Landau 干物质守恒自算对照（64.5667 h）短 12.26 h。原因是附件2 实测半径收缩至 1.200 cm 比 Landau 自算（1.272 cm）更剧烈——收缩缩小了扩散路径从而加速烘干。对照基线（Landau 自算 + 数据驱动边界）的 64.57 h 与原 v1.0（64.78 h）近乎一致，说明湿度边界精度对 Q4 影响在 0.2 h 内。",
         "status": "supported",
@@ -2177,8 +2179,8 @@
       "status": "active",
       "title": "CL05（Q1）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "text": "全程控制步骤由“表面对流”转为“内部扩散”：Q1 阶段表面含水率下降而中心几乎不动（v1.1 表面 1.510 vs 中心 2.550）；Q2–Q3 阶段中心-表面差值单调扩大（Q2 末 0.758、Q3 末 0.098 但中心已接近阈值）。这解释了为何不能按表面含水率判断烘干终点，必须以中心（最慢点）为准（见 A08）。Q4 附件2 实测半径驱动的结果（52.31 h）显著快于 Landau 自算（64.57 h），说明题面提供的实测收缩数据比质量守恒模型更快——这是对原模型的关键实证校准。",
         "status": "supported",
@@ -2197,8 +2199,8 @@
       "status": "active",
       "title": "模型描述文档（含 Mermaid）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T15:58:33Z",
-      "updated_at": "2026-09-10T15:58:33Z",
+      "created_at": "2026-09-10T16:30:42Z",
+      "updated_at": "2026-09-10T16:30:42Z",
       "payload": {
         "path": "model.md",
         "sha256": "b6b04d6185809755974851aa02dab563c08fe488cb970685f48e2371b34b1c8a"
