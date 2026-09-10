@@ -45,6 +45,9 @@ Construction 行为？"。
 | **P1-3** | Model Comparison 接入生产路径：revision 链自动 compare_models → decision artifact + compared_with/based_on 边 | ✔ 完成 | 见 git log |
 | **P1-4** | 硬编码经验常数 Provenance：confidence 全标注 advisory 不参与判定；integrity_gate 政策阈值声明来源 | ✔ 完成 | 见 git log |
 | **P0-4 修复** | 清理 Dead Code：删除 `_maybe_execute_experiment`（无调用者）/ engine 重复 unblock / comparison 无效循环；codegen 独立路径定位为研究工具链 （K003/K002/arena 消费） | ✔ 完成 | `6466490` |
+| **P0-4 补完** | 零执行/零验证 ≠ PASS（blocked）：do_model_execution 无活跃候选/全部无代码 → blocked；do_model_validation 无 EXEC 或 EXEC 无验证规格 → blocked（区分"没做"与"做了且通过"）；**engine BLOCKED 依赖传播**（上游阻塞→下游级联 blocked 不假装完成，run() 状态可见不静默吞 pending）+ unblock 级联恢复；test_05 断言升级（无 decision 伪造） | ✔ 完成 | P2-1 基建 commit |
+| **P2-2** | Fidelity Measurement Study：44 结构化 runs 分布双峰（36 aligned 0.93 / 8 misaligned 0.2 全在 2022_C+2024_A）；根因=中文变量名 vs 英文 key 的 output_mapping 词汇错位（exec 全 success，非数学错误，与 RQ5 同源）；fidelity vs 盲评 L2 无正相关（Pearson .051/Spearman .254）、L2.6 负相关 -.479 → fidelity 进机械主指标 + output_mapping 契约前置 | ✔ 完成 | 报告 `analysis/reports/P2-2-FIDELITY-STUDY.md` |
+| **P2-1 基建** | Constructor-Independent Benchmark（K004）：预注册 v1.0（4 Constructor×2 RT×8 题×2 seeds=64 runs，MCQ_primary+VAL_mech 双主终点，5 判定形态，Measurement Gate 前置）；Reference Constructor（LLM-free C3，M1_DICT 合规基底 + 模板代码对齐变量，真实执行闭环可跑）；MathModelAgent Adapter 契约（未装配抛 ConstructorError）；验收 5/5 | ✔ 完成（基建） | 64 runs 生成+盲评+统计为 P2-1b |
 | **P0-3 修复** | 启用 Engine Validator Hook（方案 B）：evidence_consistency_validator——PASS 节点 outputs.artifacts/evidence 必须真实存在于 registry（handler 不能自己说完成）；WorkflowEngine 与 WaveExecutor 同注全 NODE_TYPES | ✔ 完成 | `validators.py` |
 | **P0-2 修复** | Failure Diagnosis 接入生产 DAG（validation FAIL 无存活候选 → diagnose_failure 注册 diagnosis + diagnosed_by 边 + build_revision_draft 生成 M2 草案供外部 Constructor；finalize_revision 去重防双 DIAG） | ✔ 完成 | `311a863` |
 | **P0-1 修复** | Fidelity Layer 接入生产 DAG（handlers 调 verify_fidelity；misaligned→FAIL；不注册 VR 防 C8 幂等复用；容器输出如实跳过；m3/m4 透传 OUTPUT_MAPPING 契约） | ✔ 完成 | `80741df` |
@@ -57,7 +60,7 @@ Construction 行为？"。
 
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **1031 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
+| 单元/集成/端到端测试 | **1041 passed / 4 skipped / 0 failed（skip 全部分类）** | `py -3.12 -m pytest tests -q` |
 | 项目级校验 | **58 通过 / 0 失败 / 0 警告** | `py -3.12 core/tools/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 core/tools/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 core/tools/catalog_check.py --check-terminology` |

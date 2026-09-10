@@ -256,6 +256,16 @@ Engine 的 validator hook 机制从未在生产中使用。
 
 ## P2（中期，1-2 月）
 
+> ✅ **DONE 2026-09-10**（commit `P2-1 基建`）：预注册
+> `research/P15/protocol/preregistration/P15-K004-v1.0.md`（4 Constructor ×
+> 2 Runtime × 8 题 × 2 seeds = 64 runs；MCQ_primary + VAL_mech 双主终点；
+> 5 判定形态；Measurement Gate 前置）；`research/P15/k004/reference_constructor.py`
+> （LLM-free Reference Constructor C3，M1_DICT 合规基底 + 模板代码与 MODEL_IR
+> 变量对齐，fidelity 可测）；`research/P15/k004/mma_adapter.py`（MathModelAgent
+> Adapter 契约，未装配抛 ConstructorError 不静默降级）；验收 5/5
+> （bundle 合规+往返 / apply_bundle+DAG 真实执行闭环 / registry /
+> mma 清晰报错 / 预注册判定规则）。剩余：64 runs 生成 + 盲评 + 统计（P2-1b）。
+
 ### P2-1: Constructor-Independent Benchmark
 
 **目标**：区分 Agent 能力 vs Runtime 增益
@@ -283,6 +293,16 @@ Engine 的 validator hook 机制从未在生产中使用。
 **预计依赖**：可能需要 E2B API key
 
 ---
+
+> ✅ **DONE 2026-09-10**（commit `P2-2 fidelity study`）：
+> `research/P15/analysis/p2_2_fidelity_study.py` + 报告
+> `P2-2-FIDELITY-STUDY.md` + 产物 JSON。44 结构化 runs：fidelity 双峰分布
+> （36 aligned 0.8-1.0 / 8 misaligned 全 0.2）；8 个 misaligned 全在
+> 2022_C/2024_A，根因=中文语义变量名 vs 英文输出 key 的 output_mapping
+> 词汇错位（exec 全 success，非数学错误）——与 K001 RQ5 词表问题同源；
+> fidelity vs 盲评 L2 无正相关（Pearson .051/Spearman .254），L2.6 负相关
+> -.479——文档结构质量与表示-实现一致性正交。建议：fidelity 进 benchmark
+> 机械主指标；output_mapping 契约前置（P1-1 ConstructionBundle 已承载）。
 
 ### P2-2: Fidelity Measurement Study
 
