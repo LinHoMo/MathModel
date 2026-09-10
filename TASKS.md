@@ -8,7 +8,6 @@
 
 | ID | Task | Agent | Status | Acceptance |
 |----|------|-------|--------|------------|
-| T-HANDOFF-01 | 编写交接文档：`projects/cumcm2026a/HANDOFF.md`、`projects/cumcm2026b/HANDOFF.md`（实例级）+ `docs/HANDOFF.md`（跨题 harness 层：门禁口径/本轮修复/优化 backlog）；`docs/README.md` 登记；`.rivet/` 入 `.gitignore` | MainAgent | 待回填 commit | 三份文档存在且过四件套（validate 45/0/0、catalog 双检 OK、pytest 600 passed） |
 | — | 阶段七（新实验模板 P3）待启动；前置：T-CONF-003（K004 已存在，方向确认） | MainAgent | 待确认 | 阶段六已交付，等待用户裁定后进入 |
 
 ## Todo / 待办
@@ -71,3 +70,4 @@
 | T-INST-03 | `projects/cumcm2026b` 2026_B 干扰源定位清除全问建模交付（楔形交会凸多边形 + 最小包围圆 + Thales 覆盖判据 + GDOP 第二点 + 同心环覆盖 + 交会-归航清除；30 组演练清除比例 1.0000，Q3 7150.10 s / Q4 15088.79 s；覆盖漏检率 0.0000 / 0.00025；四件套 + state） | `e62ab07` | 2026-09-10 |
 | T-FB-01 | 反馈修复 harness：validate.py 图表引用改逐行围栏状态机（原 `content.count` 比较会把任何合法 Mermaid 块误判为未闭合）；`new_project.py` README 模板与两题 `model/README.md` 去内部路径泄漏（L5.4） | `e62ab07` | 2026-09-10 |
 | T-FF-01 | 前馈沉淀知识：方法卡 `mc-moving-boundary-pde` / `mc-bearing-triangulation` / `mc-coverage-search`（24→27）+ 失败卡 5 条（17→22）+ playbook 2026A/2026B（12→14）；`knowledge/README.md`、`playbooks/INDEX.md` 规模数字同步 | `e62ab07` | 2026-09-10 |
+| T-HANDOFF-01 | 交付交接文档：`projects/cumcm2026a/HANDOFF.md` + `projects/cumcm2026b/HANDOFF.md`（实例级：建模骨架/结果/结构性发现/踩坑/验证/局限/门禁/最短路径）+ `docs/HANDOFF.md`（跨题 harness 层：四件套门禁口径/本轮修复清单/前馈沉淀规模/P0-P2 backlog/工作序）；修复两篇实例交接触发 L5（禁用词举例自伤、内部路径后缀）；`.rivet/` 入 `.gitignore`；`docs/README.md` 登记 + `docs/STATUS.md` 同步 | `6a50eb7` | 2026-09-10 |
