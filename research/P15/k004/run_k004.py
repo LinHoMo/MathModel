@@ -80,7 +80,10 @@ def run_ref_plus_rt(constructor, problem: dict, seed: int,
     from runtime.constructors.registry import apply_bundle
 
     bundle = constructor.construct(problem, context=None)
-    qid = problem["question"]
+    # Registry assigns Q001, Q002... as artifact_ids. external_model_irs
+    # must use the same key. Override bundle.question to match.
+    qid = "Q001"
+    bundle.question = qid
 
     adapter = LocalPythonAdapter()
     session = RuntimeSession(
@@ -131,13 +134,13 @@ def run_ref_plus_rt(constructor, problem: dict, seed: int,
 
     # 提取证据关系
     evidence = []
-    for src, rel, tgt in session.graph.all_edges():
-        evidence.append({"from": src, "relation": rel, "to": tgt})
+    for rel in session.graph.relations:
+        evidence.append({"from": rel["from"], "relation": rel["relation"], "to": rel["to"]})
 
     return {
         "constructor": "ref",
         "runtime": "+RT",
-        "problem": qid,
+        "problem": problem["question"],
         "seed": seed,
         "model_id": bundle.model_ir.get("model_id", ""),
         "family": bundle.model_ir.get("model_family", {}).get("primary", ""),

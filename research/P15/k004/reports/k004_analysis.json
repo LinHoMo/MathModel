@@ -1,0 +1,70 @@
+{
+  "summary": {
+    "total_runs": 32,
+    "minus_rt": 16,
+    "plus_rt": 16,
+    "exec_pass_rate": "16/16",
+    "val_pass_rate": "16/16",
+    "fidelity_aligned_rate": "0/16"
+  },
+  "per_problem": {
+    "2011_B": {
+      "exec_pass": 2,
+      "val_pass": 2,
+      "total_plus": 2,
+      "mean_elapsed": 0.08
+    },
+    "2017_B": {
+      "exec_pass": 2,
+      "val_pass": 2,
+      "total_plus": 2,
+      "mean_elapsed": 0.055
+    },
+    "2018_A": {
+      "exec_pass": 2,
+      "val_pass": 2,
+      "total_plus": 2,
+      "mean_elapsed": 0.05
+    },
+    "2018_B": {
+      "exec_pass": 2,
+      "val_pass": 2,
+      "total_plus": 2,
+      "mean_elapsed": 0.05
+    },
+    "2019_C": {
+      "exec_pass": 2,
+      "val_pass": 2,
+      "total_plus": 2,
+      "mean_elapsed": 0.05
+    },
+    "2020_B": {
+      "exec_pass": 2,
+      "val_pass": 2,
+      "total_plus": 2,
+      "mean_elapsed": 0.05
+    },
+    "2022_C": {
+      "exec_pass": 2,
+      "val_pass": 2,
+      "total_plus": 2,
+      "mean_elapsed": 0.05
+    },
+    "2024_A": {
+      "exec_pass": 2,
+      "val_pass": 2,
+      "total_plus": 2,
+      "mean_elapsed": 0.055
+    }
+  },
+  "deterministic": {
+    "note": "ref constructor 是确定性模板，2 seeds 产生相同结果",
+    "seed_invariance": true
+  },
+  "limitations": [
+    "仅 ref constructor（LLM-free C3），未含 gen/lin/mma",
+    "ref 代码过于简单（确定性线性映射），+RT 总是通过",
+    "fidelity 报告未生成（MODEL_IR 结构简单，无 fidelity 检查项触发）",
+    "需要 gen/lin/mma 构造器才能测量 Runtime 增益"
+  ]
+}
