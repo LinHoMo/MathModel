@@ -4,7 +4,7 @@
     executor(node_id, context) -> NodeResult
 
 NodeResult:
-    status: "pass" | "fail" | "blocked" | "waiting_approval"
+    status: "pass" | "fail" | "blocked"
     reason / outputs 可选
 
 能力（对应 V3.1 §1.14）:
@@ -14,7 +14,6 @@ NodeResult:
     * blocked（无 on_fail 可走时阻塞，等待人工/外部恢复）
     * partial rerun（reset_to: 从某节点起重置其下游，已完成的其他分支不动）
     * Per-Qi rerun（reset_question: 只重置某个 Question 的子图）
-    * 人工审批点（waiting_approval → approve 后继续）
 """
 
 from __future__ import annotations
@@ -30,7 +29,7 @@ class EngineError(RuntimeError):
 
 @dataclass
 class NodeResult:
-    status: str                      # "pass" | "fail" | "blocked" | "waiting_approval"
+    status: str                      # "pass" | "fail" | "blocked"
     reason: str = ""
     outputs: dict = field(default_factory=dict)
 
@@ -38,7 +37,6 @@ class NodeResult:
 PASS = "pass"
 FAIL = "fail"
 BLOCKED = "blocked"
-WAITING = "waiting_approval"
 
 
 class WorkflowEngine:
@@ -70,7 +68,6 @@ class WorkflowEngine:
         self.completed: set[str] = set()
         self.retries: dict[str, int] = {}
         self.blocked: dict[str, str] = {}       # node -> reason
-        self.waiting: set[str] = set()
         self.log: list[dict] = []               # 执行日志（审计用）
         self.failures: dict[str, str] = {}      # node -> last failure reason
         self.rollback_cycles: dict[tuple[str, str], int] = {}  # (node, target)->回退次数
@@ -85,16 +82,13 @@ class WorkflowEngine:
                 self.state.workflow_complete(node_id)
             elif status == BLOCKED:
                 self.state.workflow_block(node_id, detail)
-            elif status == WAITING:
-                self.state.workflow_waiting(node_id)
 
     # ------------------------------------------------------------ 查询
 
     def ready(self) -> list[str]:
         pending = [nid for nid in self.dag.nodes
                    if nid not in self.completed
-                   and nid not in self.blocked
-                   and nid not in self.waiting]
+                   and nid not in self.blocked]
         return [nid for nid in pending
                 if all(dep in self.completed for dep in self.dag.nodes[nid].depends_on)]
 
@@ -103,19 +97,18 @@ class WorkflowEngine:
             "total": len(self.dag.nodes),
             "completed": sorted(self.completed),
             "blocked": dict(self.blocked),
-            "waiting_approval": sorted(self.waiting),
             "retries": dict(self.retries),
             "failures": dict(self.failures),
             "ready": self.ready(),
         }
 
     def is_finished(self) -> bool:
-        """全部节点完成（无 ready / 无 waiting / 无 blocked）。
+        """全部节点完成（无 ready / 无 blocked）。
 
         blocked 计入未完成：反馈环耗尽阻塞 ≠ 完成，人工 unblock 后
         恢复运行（audit FIX-1.5 失败语义）。
         """
-        return not self.ready() and not self.waiting and not self.blocked
+        return not self.ready() and not self.blocked
 
     # ------------------------------------------------------------ 执行
 
@@ -130,8 +123,8 @@ class WorkflowEngine:
             raise EngineError(f"未知节点: {node_id}")
         if node_id in self.completed:
             raise EngineError(f"节点已完成: {node_id}")
-        if node_id in self.blocked or node_id in self.waiting:
-            raise EngineError(f"节点处于 blocked/waiting，需先恢复: {node_id}")
+        if node_id in self.blocked:
+            raise EngineError(f"节点处于 blocked，需先恢复: {node_id}")
         node = self.dag.nodes[node_id]
         blocked_deps = [d for d in node.depends_on if d in self.blocked]
         if blocked_deps:
@@ -145,12 +138,6 @@ class WorkflowEngine:
         missing = [d for d in node.depends_on if d not in self.completed]
         if missing:
             raise EngineError(f"节点 {node_id} 依赖未满足: {missing}")
-
-        if node.human_approval and node_id not in self.retries:
-            # 首次到达人工审批点：挂起等待放行
-            self.waiting.add(node_id)
-            self._record(node_id, WAITING, "human approval required")
-            return NodeResult(WAITING, "human approval required")
 
         result = self.executor(node_id, self._context(node))
         return self._post_execute(node, result)
@@ -180,9 +167,6 @@ class WorkflowEngine:
         elif result.status == BLOCKED:
             self.blocked[node_id] = result.reason or "blocked by executor"
             self._record(node_id, BLOCKED, result.reason)
-        elif result.status == WAITING:
-            self.waiting.add(node_id)
-            self._record(node_id, WAITING, result.reason)
         else:
             raise EngineError(f"executor 返回未知状态: {result.status!r}")
         return result
@@ -201,11 +185,6 @@ class WorkflowEngine:
 
     # ------------------------------------------------------------ 并行调度接口（WaveExecutor 消费）
 
-    def needs_approval(self, node_id: str) -> bool:
-        """该节点首次执行是否需要人工审批（并行路径须先单独挂起）。"""
-        node = self.dag.nodes[node_id]
-        return bool(node.human_approval) and node_id not in self.retries
-
     def context_for(self, node_id: str) -> dict:
         return self._context(self.dag.nodes[node_id])
 
@@ -215,8 +194,8 @@ class WorkflowEngine:
             raise EngineError(f"未知节点: {node_id}")
         if node_id in self.completed:
             raise EngineError(f"节点已完成: {node_id}")
-        if node_id in self.blocked or node_id in self.waiting:
-            raise EngineError(f"节点处于 blocked/waiting，需先恢复: {node_id}")
+        if node_id in self.blocked:
+            raise EngineError(f"节点处于 blocked，需先恢复: {node_id}")
         node = self.dag.nodes[node_id]
         blocked_deps = [d for d in node.depends_on if d in self.blocked]
         if blocked_deps:
@@ -230,15 +209,10 @@ class WorkflowEngine:
         missing = [d for d in node.depends_on if d not in self.completed]
         if missing:
             raise EngineError(f"节点 {node_id} 依赖未满足: {missing}")
-        if self.needs_approval(node_id):
-            # 并行路径误跑到审批节点：丢弃结果，转入等待
-            self.waiting.add(node_id)
-            self._record(node_id, WAITING, "human approval required")
-            return NodeResult(WAITING, "human approval required")
         return self._post_execute(node, result)
 
     def run(self, max_steps: int = 1000) -> dict:
-        """循环执行直到无可执行节点（完成 / 阻塞 / 等待审批）。"""
+        """循环执行直到无可执行节点（完成 / 阻塞）。"""
         steps = 0
         while self.ready() and steps < max_steps:
             self.step()
@@ -286,16 +260,6 @@ class WorkflowEngine:
 
     # ------------------------------------------------------------ 恢复
 
-    def approve(self, node_id: str) -> None:
-        """人工放行 waiting_approval 节点。"""
-        if node_id not in self.waiting:
-            raise EngineError(f"节点不在等待审批列表: {node_id}")
-        self.waiting.discard(node_id)
-        self.retries[node_id] = 1   # 已审批过，重跑不再进审批
-        if self.state:
-            self.state.workflow_approve(node_id)
-        self._record(node_id, "approved", "human approval granted")
-
     def reset_to(self, node_id: str) -> set[str]:
         """partial rerun: 重置 node 及其全部下游（其他分支不动）。"""
         if node_id not in self.dag.nodes:
@@ -305,7 +269,6 @@ class WorkflowEngine:
         for nid in affected:
             self.retries.pop(nid, None)
             self.blocked.pop(nid, None)
-            self.waiting.discard(nid)
             self.failures.pop(nid, None)
         if self.state:
             self.state.workflow_reset(sorted(affected))
@@ -333,7 +296,6 @@ class WorkflowEngine:
         for nid in affected:
             self.retries.pop(nid, None)
             self.blocked.pop(nid, None)
-            self.waiting.discard(nid)
             self.failures.pop(nid, None)
         if self.state:
             self.state.workflow_reset(sorted(affected))
@@ -394,7 +356,6 @@ class WorkflowEngine:
             "completed": sorted(self.completed),
             "retries": dict(self.retries),
             "blocked": dict(self.blocked),
-            "waiting": sorted(self.waiting),
             "failures": dict(self.failures),
         }
         p = _P(path)
@@ -422,11 +383,10 @@ class WorkflowEngine:
         self.completed = set(data.get("completed", []))
         self.retries = dict(data.get("retries", {}))
         self.blocked = dict(data.get("blocked", {}))
-        self.waiting = set(data.get("waiting", []))
         self.failures = dict(data.get("failures", {}))
         self._record("@resume", "restored",
                      f"{len(self.completed)} completed / "
-                     f"{len(self.blocked)} blocked / {len(self.waiting)} waiting")
+                     f"{len(self.blocked)} blocked")
 
     @classmethod
     def load(cls, dag, executor, path, state=None, validators=None):

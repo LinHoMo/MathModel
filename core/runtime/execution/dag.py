@@ -8,7 +8,6 @@
     * 条件边: on_fail（节点失败且重试耗尽时回退到的目标节点 = 反馈环）
     * per_question: 该节点按 Question 展开为 <node>@<QID> 实例
     * 门禁: validation/critique 节点绑定 validator 名（引擎 fail-closed）
-    * 人工审批: human_approval 节点进入 waiting_approval
 """
 
 from __future__ import annotations
@@ -18,7 +17,7 @@ NODE_TYPES = ("reasoning", "generation", "execution", "validation",
 
 _ALLOWED_NODE_FIELDS = frozenset({
     "type", "role", "depends_on", "per_question", "on_fail", "max_retries",
-    "validator", "human_approval", "parallel_group", "inputs", "outputs",
+    "validator", "parallel_group", "inputs", "outputs",
     "description", "gate_type", "questions", "_stage",   # _stage: composer 内部标记
 })
 
@@ -47,7 +46,6 @@ class Node:
         if self.validator and self.type not in ("validation", "critique"):
             raise DAGError(
                 f"节点 {node_id} 绑定 validator 但类型是 {self.type}（应为 validation/critique）")
-        self.human_approval = bool(fields.get("human_approval", False))
         self.parallel_group = fields.get("parallel_group") or None
         self.inputs = list(fields.get("inputs") or [])
         self.outputs = list(fields.get("outputs") or [])
@@ -70,8 +68,6 @@ class Node:
             d["max_retries"] = self.max_retries
         if self.validator:
             d["validator"] = self.validator
-        if self.human_approval:
-            d["human_approval"] = True
         if self.parallel_group:
             d["parallel_group"] = self.parallel_group
         if self.description:

@@ -303,7 +303,6 @@ class RuntimeSession:
     def _reset_all(self) -> set[str]:
         affected: set[str] = set()
         for nid in list(self.engine.dag.nodes):
-            if nid in self.engine.completed or nid in self.engine.blocked \
-                    or nid in self.engine.waiting:
+            if nid in self.engine.completed or nid in self.engine.blocked:
                 affected |= self.engine.reset_to(nid)
         return affected

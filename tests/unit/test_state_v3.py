@@ -149,13 +149,6 @@ class TestWorkflowView:
         assert state.data["workflow"]["completed_nodes"] == []
         assert state.data["workflow"]["blocked_nodes"] == []
 
-    def test_waiting_approval(self, state):
-        state.workflow_set_current(["x"])
-        state.workflow_waiting("x")
-        assert state.data["workflow"]["waiting_approval"] == ["x"]
-        state.workflow_approve("x")
-        assert state.data["workflow"]["waiting_approval"] == []
-
     def test_retry_recording(self, state):
         assert state.workflow_record_retry("node1") == 1
         assert state.workflow_record_retry("node1") == 2

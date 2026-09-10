@@ -65,8 +65,7 @@ def _continue_to(session, node):
     results = {}
     for nid in LOOP_NODES:
         if nid in session.engine.completed \
-                or nid in session.engine.blocked \
-                or nid in session.engine.waiting:
+                or nid in session.engine.blocked:
             continue
         results[nid] = session.engine.step(nid)
         if nid == node:

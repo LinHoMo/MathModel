@@ -2,6 +2,24 @@
 
 本文件记录 MathModel Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。
 
+## v3.2.1（2026-09-10，移除流程级人工审批）
+
+### 变更
+- **删除 human_approval 机制**：engine.py 删除 WAITING 常量、waiting 集合、
+  needs_approval/approve 函数与审批分支；dag.py 删除 human_approval 字段；
+  wave_executor.py 删除审批分组与审批节点 step（并行层直接执行 ready）；
+  state/model.py 删除 workflow_waiting/workflow_approve/waiting_approval；
+  两个 schema（dag/status）同步删字段；session.py/contracts.py 清理 waiting 引用。
+- **定位**：审核发生在**产物交付后**（MODEL_IR + 模型描述文档给人评审），
+  DAG 内不设流程级人工审批节点（V3 全自动 harness）。
+- **测试**：删除 3 个审批测试（engine gate / integration / state），
+  保留 blocked/retry/反馈环语义测试。
+
+### 验证
+- `validate.py`：**45 通过 / 0 失败 / 0 警告**
+- `catalog_check --check`：**OK**
+- `pytest`：**610 passed / 0 skipped / 0 failed**
+
 ## v3.2.0（2026-09-10，V2 彻底清除 + V3 新定位固化）
 
 ### V2 彻底删除（不向后兼容）

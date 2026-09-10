@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """WaveExecutor — 波次拓扑调度 + 并行节点执行（P6 Runtime Execution）。
 
-WorkflowEngine 是语义核心（retry / on_fail 反馈环 / blocked / 审批 / 局部重跑），
+WorkflowEngine 是语义核心（retry / on_fail 反馈环 / blocked / 局部重跑），
 WaveExecutor 在其上加调度层：
 
     DAG
@@ -12,7 +12,7 @@ WaveExecutor 在其上加调度层：
     engine.apply_result() 统一走 PASS→validator→completed / FAIL→retry→rollback 语义
 
 崩溃恢复：进度经 engine.save_progress() 落盘，resume 时
-WorkflowEngine.load() 恢复 completed/blocked/waiting/retries，从断点继续。
+WorkflowEngine.load() 恢复 completed/blocked/retries，从断点继续。
 """
 
 from __future__ import annotations
@@ -68,12 +68,9 @@ class WaveExecutor:
             ready = self.engine.ready()
             if not ready:
                 break
-            approval = [nid for nid in ready if self.engine.needs_approval(nid)]
-            parallel = [nid for nid in ready if nid not in approval]
-
             results: list[tuple[str, NodeResult]] = []
-            if parallel:
-                results = self._run_wave_parallel(parallel)
+            if ready:
+                results = self._run_wave_parallel(ready)
                 applied = []
                 for nid, res in results:
                     try:
@@ -83,10 +80,6 @@ class WaveExecutor:
                     except EngineError as e:
                         applied.append({"node": nid, "status": "error",
                                         "detail": str(e)})
-            for nid in approval:
-                res = self.engine.step(nid)   # 审批节点：进入 waiting
-                applied.append({"node": nid, "status": res.status,
-                                "detail": res.reason})
             report.append({"wave": len(report), "nodes": ready,
                            "applied": applied})
         else:

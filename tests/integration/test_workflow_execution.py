@@ -102,31 +102,6 @@ class TestEngineFailureRecovery:
         assert len(result["completed"]) == len(exp.nodes)
 
 
-class TestHumanApproval:
-    def test_waiting_approval_and_approve(self):
-        """human_approval 节点首次到达挂起，approve 后继续。
-
-        V3 workflow 模板默认不配置审批节点（全自动 harness），
-        这里沿真实 compose 路径注入审批标记，验证 Engine 的
-        waiting/approve 能力在完整 DAG 上真实生效。
-        """
-        comp = WorkflowComposer(WF)
-        exp = comp.compose_executable(["Q001"])
-        target = "experiment@Q001"
-        assert target in exp.nodes
-        exp.nodes[target].human_approval = True
-
-        eng = WorkflowEngine(exp, lambda nid, ctx: NodeResult(PASS))
-        eng.run()
-        assert target in eng.waiting
-        assert not eng.is_finished()
-
-        eng.approve(target)
-        result = eng.run()
-        assert len(result["completed"]) == len(exp.nodes)
-        assert eng.is_finished()
-
-
 class TestStateIntegration:
     def test_engine_records_into_project_state(self, tmp_path):
         """Engine 执行过程写入 ProjectState 的 workflow 维度并持久化。"""

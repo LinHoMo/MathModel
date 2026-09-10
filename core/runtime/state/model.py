@@ -93,7 +93,6 @@ class ProjectState:
                 "current_nodes": [],
                 "completed_nodes": [],
                 "blocked_nodes": [],
-                "waiting_approval": [],
                 "retries": {},
                 "notes": [],
             },
@@ -220,7 +219,7 @@ class ProjectState:
         wf = self.data["workflow"]
         if node_id not in wf["completed_nodes"]:
             wf["completed_nodes"].append(node_id)
-        for key in ("current_nodes", "blocked_nodes", "waiting_approval"):
+        for key in ("current_nodes", "blocked_nodes"):
             if node_id in wf[key]:
                 wf[key].remove(node_id)
 
@@ -233,18 +232,6 @@ class ProjectState:
         if reason:
             wf.setdefault("notes", []).append(
                 {"node": node_id, "note": reason, "at": _utcnow()})
-
-    def workflow_waiting(self, node_id: str) -> None:
-        wf = self.data["workflow"]
-        if node_id not in wf["waiting_approval"]:
-            wf["waiting_approval"].append(node_id)
-        if node_id in wf["current_nodes"]:
-            wf["current_nodes"].remove(node_id)
-
-    def workflow_approve(self, node_id: str) -> None:
-        wf = self.data["workflow"]
-        if node_id in wf["waiting_approval"]:
-            wf["waiting_approval"].remove(node_id)
 
     def workflow_set_current(self, node_ids: list[str]) -> None:
         self.data["workflow"]["current_nodes"] = list(node_ids)
@@ -259,7 +246,7 @@ class ProjectState:
         wf = self.data["workflow"]
         drop = set(node_ids)
         wf["completed_nodes"] = [n for n in wf["completed_nodes"] if n not in drop]
-        for key in ("current_nodes", "blocked_nodes", "waiting_approval"):
+        for key in ("current_nodes", "blocked_nodes"):
             wf[key] = [n for n in wf[key] if n not in drop]
         wf["retries"] = {n: c for n, c in wf["retries"].items() if n not in drop}
 
@@ -320,7 +307,7 @@ class ProjectState:
             "workflow": {
                 "completed": len(self.data["workflow"]["completed_nodes"]),
                 "blocked": list(self.data["workflow"]["blocked_nodes"]),
-                "waiting": list(self.data["workflow"]["waiting_approval"]),
+    
             },
             "phase": self.data["run"].get("phase"),
         }

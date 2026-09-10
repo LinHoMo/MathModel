@@ -14,7 +14,7 @@ import pytest
 
 from runtime.execution.dag import DAGError, Node, WorkflowDAG
 from runtime.execution.engine import (
-    BLOCKED, FAIL, PASS, WAITING, EngineError, NodeResult, WorkflowEngine,
+    BLOCKED, FAIL, PASS, EngineError, NodeResult, WorkflowEngine,
 )
 
 
@@ -209,20 +209,6 @@ class TestRetriesAndFeedback:
 
 
 class TestConditionalAndApproval:
-    def test_human_approval_gate(self):
-        dag = make_dag()
-        dag.nodes["d"].human_approval = True
-        ex = ScriptedExecutor({})
-        eng = WorkflowEngine(dag, ex)
-        eng.step("a"); eng.step("b"); eng.step("c1"); eng.step("c2")
-        result = eng.step("d")
-        assert result.status == WAITING
-        assert "d" in eng.waiting
-        assert eng.ready() == []           # 等待人工放行
-        eng.approve("d")
-        eng.step("d")
-        assert "d" in eng.completed
-
     def test_executor_blocked(self):
         ex = ScriptedExecutor({"c1": [{"status": BLOCKED, "reason": "外部依赖不可用"}]})
         eng = WorkflowEngine(make_dag(), ex)

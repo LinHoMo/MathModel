@@ -103,7 +103,7 @@ def validate_node_result_outputs(outputs: dict) -> list[str]:
 # 3. 执行语义区分（Resume / Retry / Rerun / Recompute）—— P7 冻结
 # ============================================================
 #
-# Resume     继续未完成的执行：恢复 completed/blocked/waiting/retries，
+# Resume     继续未完成的执行：恢复 completed/blocked/retries，
 #            已完成节点绝不重复执行（engine.save_progress / WorkflowEngine.load）。
 # Retry      同一节点失败后的引擎内自动重试（max_retries 轮，耗尽走 on_fail/阻塞）。
 # Rerun      研究者主动要求重新执行：session.rerun(node_id) —— 重置节点及下游，
