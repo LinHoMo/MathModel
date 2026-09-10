@@ -22,7 +22,7 @@
 | `bench/cumcm/` | 国赛基准语料 | — |
 | `bench/e2e/artifacts/` | e2e 运行产物（按赛题归档，含 blind/） | 2019_C~2025_B + p13_3d |
 | `empirical/` | 实证数据 | 1 |
-| `paper-cases/` | 历史论文案例（V2 时代遗留，阶段五待裁定更名 T-CONF-004） | 10 |
+| `cases/` | 建模案例知识（原 paper-cases，T-CONF-004 更名：从论文提取的方法-主题图谱/创新点/赛题案例，非论文产物） | 117 |
 
 ## 检索入口
 
@@ -35,4 +35,4 @@ py -3.12 core/tools/knowledge.py recommend --types evaluation,ranking
 
 - `bench/e2e/artifacts/`：e2e 引擎演练产物（每赛题一个目录，含盲评 blind/ 子目录）——**保留为实验证据，不删除**。
 - `empirical/`：实证研究数据，1 个文件。
-- `paper-cases/`：V2 论文链时代的案例；V3 不含论文生成，该目录为历史遗留，更名/归档状态见 T-CONF-004。
+- `cases/`：建模案例知识（原 `paper-cases/`，T-CONF-004 裁定 2026-09-10 更名）。内容为从论文提取的建模知识（方法-主题图谱、创新点标签、按 A–E 主题与年份组织的赛题案例），服务建模而非论文生成；V3 术语表中 `paper` 为残留词，故更名。
