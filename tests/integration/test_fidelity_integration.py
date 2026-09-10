@@ -196,7 +196,7 @@ class TestFidelityInDag:
         s.checkpoint()
         out1 = verify_fidelity(proj, mir, exec_id, register_vr=True,
                                registry=s.registry)
-        assert out1["verification_id"].startswith("VR")
+        assert out1["verification_id"].startswith("MH-VERIFICATION_RESULT")
         # VR 注册在磁盘 registry（validate_execution 新建实例读写磁盘）
         from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
         disk = ArtifactRegistry(proj / "state" / "registry.json")

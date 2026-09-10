@@ -41,8 +41,8 @@ def _add(dlog, **kw):
 
 class TestAdd:
     def test_auto_ids_sequential(self, log):
-        assert _add(log).decision_id == "D001"
-        assert _add(log).decision_id == "D002"
+        assert _add(log).decision_id == "MH-DECISION-0001"
+        assert _add(log).decision_id == "MH-DECISION-0002"
 
     def test_missing_required_field_raises(self, log):
         with pytest.raises(DecisionLogError, match="reasoning"):
@@ -80,12 +80,12 @@ class TestInvalidate:
         assert log.get("D001").invalidated_by == "D002"
 
     def test_invalidate_dangling_target_rejected(self, log):
-        _add(log)
+        _add(log, decision_id="D001")
         with pytest.raises(DecisionLogError, match="不存在"):
             log.invalidate("D001", "D999", "reason")
 
     def test_double_invalidate_rejected(self, log):
-        _add(log)
+        _add(log, decision_id="D001")
         log.invalidate("D001", "invalidation-event-07", "数据集修订")
         with pytest.raises(DecisionLogError, match="不可再推翻"):
             log.invalidate("D001", "D002", "again")
@@ -132,7 +132,7 @@ class TestQuery:
         assert "被 D002 推翻" in all_rows["D001"]["superseded_note"]
 
     def test_consequences_append_only(self, log):
-        dec = _add(log)
+        dec = _add(log, decision_id="D001")
         log.record_consequence("D001", "带动后续验证节点补双权重敏感性")
         log.record_consequence("D001", "评审关注点集中在权重来源")
         got = log.get("D001")
@@ -140,7 +140,7 @@ class TestQuery:
         assert got.consequences[0].startswith("带动")
 
     def test_consequence_empty_rejected(self, log):
-        _add(log)
+        _add(log, decision_id="D001")
         with pytest.raises(DecisionLogError, match="不能为空"):
             log.record_consequence("D001", " ")
 
@@ -149,7 +149,7 @@ class TestPersistence:
     def test_save_load_roundtrip(self, tmp_path):
         p = tmp_path / "state" / "decisions.json"
         log = DecisionLog(p)
-        _add(log)
+        _add(log, decision_id="D001")
         _add(log, question="Q002", chosen="mc-ga", decision_id="D005")
         log.invalidate("D001", "D005", "重选")
         log.record_consequence("D001", "上游修订")
@@ -161,7 +161,7 @@ class TestPersistence:
         assert log2.get("D001").consequences == ["上游修订"]
         assert log2.get("D005").confidence == 0.8
         # 新 log 在已载入历史上继续编号（不复用、不冲突）
-        assert log2.next_id() == "D006"
+        assert log2.next_id() == "MH-DECISION-0006"
 
     def test_load_version_mismatch(self, tmp_path):
         p = tmp_path / "decisions.json"

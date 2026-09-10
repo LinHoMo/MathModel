@@ -29,7 +29,7 @@ def _build_small_run(tmp_path):
     """构造 P→Q→M→E→R→C 最小证据链。"""
     reg, graph, state = _fresh(tmp_path)
     p = reg.create("problem", title="赛题", activate=True)
-    q1 = reg.create("question", title="问题1",
+    q1 = reg.create("question", artifact_id="Q001", title="问题1",
                     depends_on=[p.artifact_id], activate=True)
     m = reg.create("model", title="模型", depends_on=[q1.artifact_id], activate=True)
     e = reg.create("experiment", title="实验", question="Q001",

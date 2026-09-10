@@ -73,15 +73,16 @@ def test_gate_weak_when_edge_missing_but_data_has(tmp_path):
     from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.project = "t"
-    reg.create("question", title="Q", activate=True)
-    reg.create("execution_result", title="exec", question="Q001",
-               activate=True,
+    reg.create("question", artifact_id="Q001", title="Q", activate=True)
+    reg.create("execution_result", title="exec", artifact_id="EXEC001",
+               question="Q001", activate=True,
                data={"status": "success", "outputs": {"y": 1.0},
                      "code_hash": "b" * 64, "returncode": 0,
                      "legacy_unverified": True})
-    reg.create("result", title="result", question="Q001", activate=True,
+    reg.create("result", title="result", artifact_id="R001",
+               question="Q001", activate=True,
                data={"execution_ref": "EXEC001"})
-    reg.create("claim", title="claim", question="Q001", activate=True)
+    reg.create("claim", title="claim", artifact_id="C001", question="Q001", activate=True)
     g = EvidenceGraph(reg, path=tmp_path / "g.json")
     g.add_relation("EXEC001", "produces", "R001")
     g.add_relation("R001", "supports", "C001")   # 边无 exec_ref
@@ -97,9 +98,9 @@ def test_gate_fails_without_any_exec(tmp_path):
     from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.project = "t"
-    reg.create("question", title="Q", activate=True)
-    reg.create("result", title="result", question="Q001", activate=True)
-    reg.create("claim", title="claim", question="Q001", activate=True)
+    reg.create("question", artifact_id="Q001", title="Q", activate=True)
+    reg.create("result", title="result", artifact_id="R001", question="Q001", activate=True)
+    reg.create("claim", title="claim", artifact_id="C001", question="Q001", activate=True)
     g = EvidenceGraph(reg, path=tmp_path / "g.json")
     g.add_relation("R001", "supports", "C001")
     rep = gate_evaluate(reg, g)

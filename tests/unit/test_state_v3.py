@@ -177,11 +177,11 @@ class TestDerivation:
     def test_refresh_from_registry_and_graph(self, tmp_path):
         reg = ArtifactRegistry(tmp_path / "r.json")
         reg.project = "t"
-        reg.create("question", title="Q1", activate=True)
-        reg.create("model", title="m", question="Q001", activate=True)
-        reg.create("experiment", title="e", question="Q001", activate=True)
-        reg.create("result", title="r", question="Q001", activate=True)
-        reg.create("claim", title="c", question="Q001", activate=True)
+        reg.create("question", artifact_id="Q001", title="Q1", activate=True)
+        reg.create("model", title="m", artifact_id="M001", question="Q001", activate=True)
+        reg.create("experiment", title="e", artifact_id="E001", question="Q001", activate=True)
+        reg.create("result", title="r", artifact_id="R001", question="Q001", activate=True)
+        reg.create("claim", title="c", artifact_id="C001", question="Q001", activate=True)
         g = EvidenceGraph(reg, path=tmp_path / "g.json")
         g.add_relation("E001", "produces", "R001")
         g.add_relation("R001", "supports", "C001")
@@ -201,8 +201,8 @@ class TestDerivation:
     def test_refresh_syncs_question_list(self, tmp_path):
         reg = ArtifactRegistry(tmp_path / "r.json")
         reg.project = "t"
-        reg.create("question", title="Q1", activate=True)
-        reg.create("question", title="Q2", activate=True)
+        reg.create("question", artifact_id="Q001", title="Q1", activate=True)
+        reg.create("question", artifact_id="Q002", title="Q2", activate=True)
         state = ProjectState(tmp_path / "status.json")
         state.refresh_from(reg, None)
         assert set(state.data["state"]["questions"]) == {"Q001", "Q002"}

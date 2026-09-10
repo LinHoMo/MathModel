@@ -32,28 +32,29 @@ def _mini_graph(tmp_path, with_real_evidence=True):
 
     reg = ArtifactRegistry(tmp_path / "state" / "registry.json")
     reg.project = "p32"
-    reg.create("question", title="Q", activate=True)
-    reg.create("problem", title="P", activate=True)
-    reg.create("model", title="M", activate=True)
-    reg.create("claim", title="C001", activate=True)
+    reg.create("question", artifact_id="Q001", title="Q", activate=True)
+    reg.create("problem", title="P", artifact_id="P001", activate=True)
+    reg.create("model", title="M", artifact_id="M001", activate=True)
+    reg.create("claim", title="C001", artifact_id="C001", activate=True)
     tok = issue_token("c" * 64, "local", "2026-09-10T00:00:00")
-    reg.create("execution_result", title="EXEC", question="Q001", activate=True,
+    reg.create("execution_result", title="EXEC", artifact_id="EXEC001",
+               question="Q001", activate=True,
                data={"status": "success", "returncode": 0,
                      "outputs": {"objective": 12.5},
                      "execution_token": tok,
                      "code_hash": "c" * 64, "environment_hash": "e" * 64,
                      "started_at": "2026-09-10T00:00:00",
                      "provenance": {"adapter": "local"}})
-    reg.create("result", title="R001", activate=True,
+    reg.create("result", title="R001", artifact_id="R001", activate=True,
                data={"outputs": {"objective": 12.5}})
-    reg.create("result", title="R002", activate=True,
+    reg.create("result", title="R002", artifact_id="R002", activate=True,
                data={})  # 假证据：无 outputs
 
     g = EvidenceGraph(reg, path=tmp_path / "state" / "evidence_graph.json")
     g.add_relation("EXEC001", "produces", "R001")
     g.add_relation("R001", "supports", "C001", exec_ref="EXEC001")
     if not with_real_evidence:
-        reg.create("claim", title="C002", activate=True)
+        reg.create("claim", title="C002", artifact_id="C002", activate=True)
         g.add_relation("R002", "supports", "C002")
     return reg, g
 

@@ -37,9 +37,9 @@ class TestMethodArena:
                                evidence=[{"type": "vr", "status": "passed"}])
         assert out.chosen.startswith("mc-")
         assert len(out.shortlist) >= 2
-        assert out.decision_id == "D001"
+        assert out.decision_id == "MH-DECISION-0001"
         # alternatives 保留了落选者（评委问"为什么不用 X"有答案）
-        dec = decisions.get("D001")
+        dec = decisions.get("MH-DECISION-0001")
         assert len(dec.alternatives) >= 1
         assert dec.criteria
         assert dec.reversible
@@ -185,4 +185,4 @@ class TestNoEvidenceUnselected:
                                      {"type": "exec", "status": "success"}])
         assert out.chosen.startswith("mc-")
         assert out.selection_status == "selected"
-        assert out.decision_id.startswith("D")
+        assert out.decision_id.startswith("MH-DECISION")

@@ -25,18 +25,18 @@ def setup(tmp_path):
     """构建典型研究链: P→Q→M(←A)→CODE/E(→R→F/C→S) + DATA。"""
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.project = "test"
-    reg.create("problem", title="problem", activate=True)
-    reg.create("question", title="Q1", activate=True)
-    reg.create("question", title="Q2", activate=True)
-    reg.create("model", title="model", question="Q001", activate=True)
-    reg.create("assumption", title="assumption", activate=True)
-    reg.create("dataset", title="data", question="Q001", activate=True)
-    reg.create("code", title="code", activate=True)
-    reg.create("experiment", title="exp", question="Q001", activate=True)
-    reg.create("result", title="result", question="Q001", activate=True)
-    reg.create("figure", title="figure", activate=True)
-    reg.create("claim", title="claim", question="Q001", activate=True)
-    reg.create("deliverable", title="doc", activate=True)
+    reg.create("problem", title="problem", artifact_id="P001", activate=True)
+    reg.create("question", artifact_id="Q001", title="Q1", activate=True)
+    reg.create("question", artifact_id="Q002", title="Q2", activate=True)
+    reg.create("model", title="model", artifact_id="M001", question="Q001", activate=True)
+    reg.create("assumption", title="assumption", artifact_id="A001", activate=True)
+    reg.create("dataset", title="data", artifact_id="DATA001", question="Q001", activate=True)
+    reg.create("code", title="code", artifact_id="CODE001", activate=True)
+    reg.create("experiment", title="exp", artifact_id="E001", question="Q001", activate=True)
+    reg.create("result", title="result", artifact_id="R001", question="Q001", activate=True)
+    reg.create("figure", title="figure", artifact_id="F001", activate=True)
+    reg.create("claim", title="claim", artifact_id="C001", question="Q001", activate=True)
+    reg.create("deliverable", title="doc", artifact_id="DELIV001", activate=True)
 
     g = EvidenceGraph(reg, path=tmp_path / "evidence_graph.json")
     edges = [
@@ -194,12 +194,12 @@ class TestInvalidation:
         """任务书 §7 典型链: DATA → E → R → C → S（单支撑链，全链判死）。"""
         reg = ArtifactRegistry(tmp_path / "r.json")
         reg.project = "t"
-        reg.create("dataset", title="D003", activate=True)
-        reg.create("question", title="Q1", activate=True)
-        reg.create("experiment", title="E017", question="Q001", activate=True)
-        reg.create("result", title="R021", question="Q001", activate=True)
-        reg.create("claim", title="C008", question="Q001", activate=True)
-        reg.create("deliverable", title="DELIV001", activate=True)
+        reg.create("dataset", title="D003", artifact_id="DATA001", activate=True)
+        reg.create("question", artifact_id="Q001", title="Q1", activate=True)
+        reg.create("experiment", title="E017", artifact_id="E001", question="Q001", activate=True)
+        reg.create("result", title="R021", artifact_id="R001", question="Q001", activate=True)
+        reg.create("claim", title="C008", artifact_id="C001", question="Q001", activate=True)
+        reg.create("deliverable", title="DELIV001", artifact_id="DELIV001", activate=True)
         g = EvidenceGraph(reg, path=tmp_path / "g.json")
         g.add_relation("E001", "uses", "DATA001")
         g.add_relation("E001", "produces", "R001")
@@ -237,11 +237,11 @@ class TestInvalidation:
         """Claim 有两条支撑，只死一条 → requires_revalidation 而非 invalidated。"""
         reg = ArtifactRegistry(tmp_path / "r.json")
         reg.project = "t"
-        reg.create("result", title="r1", activate=True)
-        reg.create("result", title="r2", activate=True)
-        reg.create("claim", title="c1", activate=True)
-        reg.create("experiment", title="e1", activate=True)
-        reg.create("experiment", title="e2", activate=True)
+        reg.create("result", title="r1", artifact_id="R001", activate=True)
+        reg.create("result", title="r2", artifact_id="R002", activate=True)
+        reg.create("claim", title="c1", artifact_id="C001", activate=True)
+        reg.create("experiment", title="e1", artifact_id="E001", activate=True)
+        reg.create("experiment", title="e2", artifact_id="E002", activate=True)
         g = EvidenceGraph(reg, path=tmp_path / "g.json")
         g.add_relation("E001", "produces", "R001")
         g.add_relation("E002", "produces", "R002")
@@ -257,7 +257,7 @@ class TestInvalidation:
     def test_dirty_same_question(self, setup):
         reg, g = setup
         # Q001 名下放一个与 DATA001 无边关系的旁支 artifact
-        reg.create("assumption", title="旁支假设", question="Q001", activate=True)
+        reg.create("assumption", title="旁支假设", artifact_id="A002", question="Q001", activate=True)
         report = g.invalidate("DATA001", reason="x")
         # A002 与死链无直接边 → 同问旁染 dirty
         assert "A002" in report["dirty"]

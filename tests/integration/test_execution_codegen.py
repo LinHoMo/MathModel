@@ -41,7 +41,7 @@ CODE_WRONG = ("import json\n"
 class TestRegisterCode:
     def test_registers_with_sha256(self, tmp_path):
         art = register_code(tmp_path, CODE_OK, model_id="M001")
-        assert art.artifact_id.startswith("CODE")
+        assert art.artifact_id.startswith("MH-CODE-")
         assert (art.data or {})["sha256"] == (
             "9d0a1b2e35617d7b4e26f7b8dcaf9f4b8f24f55bb9cfc8f4239e28e2f3b2e5e6"[:0]
             or None) or isinstance((art.data or {})["sha256"], str)
@@ -60,7 +60,7 @@ class TestExecuteCode:
     def test_execute_from_artifact_success(self, tmp_path):
         c = register_code(tmp_path, CODE_OK, model_id="M001")
         x = execute_code(tmp_path, c.artifact_id)
-        assert x.artifact_id.startswith("EXEC")
+        assert x.artifact_id.startswith("MH-EXECUTION_RESULT")
         assert (x.data or {})["status"] == "success"
         assert (x.data or {})["outputs"] == {"total_cost": 42.0}
         # code_hash 与 CODE artifact 的 sha256 一致（执行的正是登记的实现）
@@ -79,10 +79,10 @@ class TestExecuteCode:
 class TestRunCodePipeline:
     def test_end_to_end_aligned(self, tmp_path):
         out = run_code_pipeline(tmp_path, IR_OK, CODE_OK, model_id="M001")
-        assert out["code_id"].startswith("CODE")
-        assert out["exec_id"].startswith("EXEC")
+        assert out["code_id"].startswith("MH-CODE-")
+        assert out["exec_id"].startswith("MH-EXECUTION_RESULT")
         assert out["exec_status"] == "success"
-        assert out["verification_id"].startswith("VR")
+        assert out["verification_id"].startswith("MH-VERIFICATION_RESULT")
         assert out["fidelity_status"] == "aligned"
         assert out["fidelity_score"] == 1.0
         assert Path(out["fidelity_report"]).exists()

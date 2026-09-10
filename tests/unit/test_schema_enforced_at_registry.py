@@ -25,7 +25,7 @@ from modeling_harness.runtime.artifacts.registry import ArtifactRegistry  # noqa
 @pytest.fixture
 def reg(tmp_path):
     r = ArtifactRegistry(tmp_path / "registry.json")
-    r.create("question", title="Q001", data={"question_id": "Q001",
+    r.create("question", artifact_id="Q001", title="Q001", data={"question_id": "Q001",
                                              "title": "t"},
              activate=True)
     return r

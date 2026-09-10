@@ -32,7 +32,7 @@ from vs001_fixtures import M1_DICT, M2_DICT  # noqa: E402
 def _fake_reg(tmp_path):
     from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     reg = ArtifactRegistry(tmp_path / "registry.json")
-    reg.create("question", title="Q001", data={"question_id": "Q001"},
+    reg.create("question", artifact_id="Q001", title="Q001", data={"question_id": "Q001"},
                activate=True)
     return reg
 

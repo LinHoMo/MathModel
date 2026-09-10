@@ -93,7 +93,7 @@ class TestValidateExecution:
             [{"name": "成本范围", "kind": "output_range", "path": "total_cost",
               "min": 0, "max": 100}])
         assert vr.status == "passed"
-        assert vr.verification_id.startswith("VR")
+        assert vr.verification_id.startswith("MH-VERIFICATION_RESULT")
         assert vr.evidence_refs == [x.artifact_id]
         # registry 有 VR（重载磁盘真源，session 内存态不感知外部写入）
         # 注意：DAG model_validation 节点已按注入 validation_spec 真实产 VR001，

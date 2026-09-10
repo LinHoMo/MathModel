@@ -176,7 +176,7 @@ class TestVerifyFidelity:
         out = verify_fidelity(s.project_dir, _ir(VAR_COST, OBJ_COST),
                               x.artifact_id)
         assert out["fidelity_status"] == "aligned"
-        assert out["verification_id"].startswith("VR")
+        assert out["verification_id"].startswith("MH-VERIFICATION_RESULT")
         rep = Path(out["report_path"])
         assert rep.exists()
         data = __import__("json").loads(rep.read_text(encoding="utf-8"))

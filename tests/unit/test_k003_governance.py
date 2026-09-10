@@ -27,9 +27,9 @@ def _make_registry_with_exec(tmp_path, exec_id="EXEC001"):
     from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     reg = ArtifactRegistry(tmp_path / "project" / "state" / "registry.json")
     reg.project = "k003"
-    reg.create("question", title="Q1", activate=True)
-    reg.create("execution_result", title="exec", question="Q001",
-               activate=True,
+    reg.create("question", artifact_id="Q001", title="Q1", activate=True)
+    reg.create("execution_result", title="exec", artifact_id=exec_id,
+               question="Q001", activate=True,
                data={"status": "success", "returncode": 0,
                      "outputs": {"objective": 12.5},
                      "stdout": "ok\n", "stderr": "",

@@ -46,12 +46,12 @@ class TestStableIDs:
             parse_id("bogus")
 
     def test_format_id_pads_to_three(self):
-        assert format_id("M", 2) == "M002"
-        assert format_id("DATA", 3) == "DATA003"
-        assert format_id("DELIV", 1) == "DELIV001"
+        assert format_id("model", 2) == "MH-MODEL-0002"
+        assert format_id("dataset", 3) == "MH-DATASET-0003"
+        assert format_id("deliverable", 1) == "MH-DELIVERABLE-0001"
 
     def test_format_id_no_pad_over_999(self):
-        assert format_id("M", 1000) == "M1000"
+        assert format_id("model", 1000) == "MH-MODEL-1000"
 
     def test_type_prefix_mismatch_rejected(self):
         assert not id_matches_type("M001", "question")
@@ -130,7 +130,7 @@ class TestArtifactContract:
     def test_bad_question_ref(self):
         assert any("question 引用非法" in p
                    for p in self.make(question="bogus").validate())
-        assert any("必须是 Q 类型" in p
+        assert any("question 必须是 question 类型" in p
                    for p in self.make(question="M001").validate())
 
     def test_roundtrip_serialization(self):
@@ -176,16 +176,16 @@ class TestRegistry:
     def test_create_assigns_sequential_ids(self, reg):
         m1 = reg.create("model", title="模型一")
         m2 = reg.create("model", title="模型二")
-        assert (m1.artifact_id, m2.artifact_id) == ("M001", "M002")
+        assert (m1.artifact_id, m2.artifact_id) == ("MH-MODEL-0001", "MH-MODEL-0002")
 
     def test_create_with_activate(self, reg):
-        a = reg.create("question", title="Q1", activate=True)
+        a = reg.create("question", artifact_id="Q001", title="Q1", activate=True)
         assert a.status == "active"
 
     def test_id_never_reused(self, reg):
-        q = reg.create("question", title="Q")
+        q = reg.create("question", artifact_id="Q001", title="Q")
         del reg.artifacts[q.artifact_id]     # 模拟人为删除
-        q2 = reg.create("question", title="Q again")
+        q2 = reg.create("question", artifact_id="Q002", title="Q again")
         assert q2.artifact_id == "Q002"      # 计数器不回退
 
     def test_dangling_ref_rejected(self, reg):
@@ -193,7 +193,7 @@ class TestRegistry:
             reg.create("model", depends_on=["M999"])   # 引用不存在
 
     def test_question_ref_must_exist(self, reg):
-        reg.create("question", title="Q1")
+        reg.create("question", artifact_id="Q001", title="Q1")
         m = reg.create("model", question="Q001")
         assert m.question == "Q001"
         with pytest.raises(RegistryError):
@@ -202,17 +202,17 @@ class TestRegistry:
     def test_persistence_roundtrip(self, tmp_path):
         path = tmp_path / "state" / "registry.json"
         reg = ArtifactRegistry(path)
-        reg.create("question", title="Q1", activate=True)
+        reg.create("question", artifact_id="Q001", title="Q1", activate=True)
         m = reg.create("model", title="M", question="Q001", activate=True)
         m.mark_validated("model-critic")
         reg.save()
         reg2 = ArtifactRegistry(path)
         assert len(reg2) == 2
-        assert reg2.get("M001").status == "validated"
+        assert reg2.get("MH-MODEL-0001").status == "validated"
         assert reg2.counters["model"] == 1
 
     def test_versioning_snapshots_and_reset(self, reg):
-        reg.create("question", title="Q1", activate=True)
+        reg.create("question", artifact_id="Q001", title="Q1", activate=True)
         m = reg.create("model", title="v1 内容", payload=["work/m_v1.md"], activate=True)
         m.mark_validated("model-critic")
         # 内容更新 → v2，状态重置 draft，v1 快照进 history
@@ -220,12 +220,12 @@ class TestRegistry:
         assert m2.version == 2
         assert m2.status == "draft"
         assert m2.validation == {}
-        assert reg.versions("M001") == [1, 2]
-        v1 = reg.get("M001", version=1)
+        assert reg.versions("MH-MODEL-0001") == [1, 2]
+        v1 = reg.get("MH-MODEL-0001", version=1)
         assert v1.status == "validated"
         assert v1.payload == ["work/m_v1.md"]
         # 元数据更新保留状态
-        m3 = reg.update("M001", tags=["baseline"])
+        m3 = reg.update("MH-MODEL-0001", tags=["baseline"])
         assert m3.version == 3
         assert m3.status == "draft"      # v2 本来就是 draft，保持
 
@@ -250,12 +250,12 @@ class TestRegistry:
         assert m.status == "active"
 
     def test_integrity_check_clean(self, reg):
-        reg.create("question", title="Q1", activate=True)
+        reg.create("question", artifact_id="Q001", title="Q1", activate=True)
         reg.create("model", title="m", question="Q001", depends_on=["Q001"])
         assert reg.integrity_check() == []
 
     def test_integrity_check_detects_dangling(self, reg):
-        reg.create("question", title="Q1", activate=True)
+        reg.create("question", artifact_id="Q001", title="Q1", activate=True)
         m = reg.create("model", title="m", depends_on=["Q001"])
         reg.artifacts["Q001"].status = "invalidated"
         # 人为制造悬空引用
@@ -264,13 +264,13 @@ class TestRegistry:
         assert any("悬空引用" in p for p in problems)
 
     def test_relations_view_sync(self, reg):
-        q = reg.create("question", title="Q1", activate=True)
+        q = reg.create("question", artifact_id="Q001", title="Q1", activate=True)
         m = reg.create("model", title="m", question="Q001", activate=True)
         reg.set_relations_view(m.artifact_id, [{"type": "solved_by", "to": "Q001"}])
         assert reg.get(m.artifact_id).relations == [{"type": "solved_by", "to": "Q001"}]
 
     def test_summary(self, reg):
-        reg.create("question", title="Q1", activate=True)
+        reg.create("question", artifact_id="Q001", title="Q1", activate=True)
         reg.create("model", title="m", question="Q001")
         s = reg.summary()
         assert s["total"] == 2

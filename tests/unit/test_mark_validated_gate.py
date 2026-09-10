@@ -30,7 +30,7 @@ def reg(tmp_path):
 
 @pytest.fixture()
 def model(reg):
-    reg.create("question", title="Q", activate=True)  # Q001
+    reg.create("question", artifact_id="Q001", title="Q", activate=True)  # Q001
     return reg.create("model", title="M", question="Q001", activate=True)
 
 
@@ -69,7 +69,7 @@ def test_whitelisted_caller_accepted():
     Runtime 验证管线帧），+ 有效 run_record → 通过。"""
     reg = ArtifactRegistry(path=Path(os.environ.get("TEMP", ".")) / "_p05_reg")
     try:
-        reg.create("question", title="Q", activate=True)  # Q001
+        reg.create("question", artifact_id="Q001", title="Q", activate=True)  # Q001
         m = reg.create("model", title="M", question="Q001", activate=True)
         code = compile(
             "REG.mark_validated(AID, 'model-critic', "

@@ -26,19 +26,20 @@ def setup(tmp_path):
     """
     reg = ArtifactRegistry(tmp_path / "registry.json")
     reg.project = "test"
-    reg.create("question", title="Q1", activate=True)
-    reg.create("model", title="model", question="Q001", activate=True)
-    reg.create("experiment", title="exp", question="Q001", activate=True)
-    reg.create("execution_result", title="exec", question="Q001",
-               activate=True,
+    reg.create("question", artifact_id="Q001", title="Q1", activate=True)
+    reg.create("model", title="model", artifact_id="M001", question="Q001", activate=True)
+    reg.create("experiment", title="exp", artifact_id="E001", question="Q001", activate=True)
+    reg.create("execution_result", title="exec", artifact_id="EXEC001",
+               question="Q001", activate=True,
                data={"status": "success", "outputs": {"y": 1.0},
                      "code_hash": "a" * 64, "returncode": 0,
                      "duration_ms": 10, "execution_id": "EXEC001",
                        "legacy_unverified": True})
-    reg.create("result", title="result", question="Q001", activate=True,
+    reg.create("result", title="result", artifact_id="R001",
+               question="Q001", activate=True,
                tags=["sensitivity", "baseline"],
                data={"execution_ref": "EXEC001", "outputs": {"y": 1.0}})
-    reg.create("claim", title="claim", question="Q001", activate=True)
+    reg.create("claim", title="claim", artifact_id="C001", question="Q001", activate=True)
 
     g = EvidenceGraph(reg, path=tmp_path / "graph.json")
     # audit FIX-4.1：supports 边携带 exec_ref（边级 execution provenance），
@@ -78,7 +79,7 @@ class TestFailConditions:
 
     def test_e2_unsupported_claim(self, setup):
         reg, g = setup
-        reg.create("claim", title="悬空主张", question="Q001", activate=True)
+        reg.create("claim", title="悬空主张", artifact_id="C002", question="Q001", activate=True)
         report = eg.evaluate(reg, g)
         assert report.verdict == "FAIL"
         codes = [f.code for f in report.findings]
@@ -89,7 +90,7 @@ class TestFailConditions:
     def test_e3_dead_evidence_in_chain(self, setup):
         reg, g = setup
         # 数据修正 → R001 失效 → claim 证据链含失效节点
-        reg.create("dataset", title="data", question="Q001", activate=True)
+        reg.create("dataset", title="data", artifact_id="DATA001", question="Q001", activate=True)
         g.add_relation("E001", "uses", "DATA001")
         g.invalidate("DATA001", "数据勘误")
         report = eg.evaluate(reg, g)
@@ -99,7 +100,7 @@ class TestFailConditions:
 
     def test_e4_experiment_without_results(self, setup):
         reg, g = setup
-        reg.create("experiment", title="空实验", question="Q001", activate=True)
+        reg.create("experiment", title="空实验", artifact_id="E002", question="Q001", activate=True)
         report = eg.evaluate(reg, g)
         assert report.verdict == "FAIL"
         f = next(f for f in report.findings if f.code == "E4")

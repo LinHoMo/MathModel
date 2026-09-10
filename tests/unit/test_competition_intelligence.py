@@ -202,10 +202,10 @@ class TestLifecycleInvariants:
         with tempfile.TemporaryDirectory() as td:
             reg = ArtifactRegistry(Path(td) / "r.json")
             reg.project = "t"
-            reg.create("question", title="q", activate=True)
-            reg.create("experiment", title="e", activate=True)
-            reg.create("result", title="r", activate=True)
-            reg.create("claim", title="c", activate=True)
+            reg.create("question", artifact_id="Q001", title="q", activate=True)
+            reg.create("experiment", title="e", artifact_id="E001", activate=True)
+            reg.create("result", title="r", artifact_id="R001", activate=True)
+            reg.create("claim", title="c", artifact_id="C001", activate=True)
             g = EvidenceGraph(reg)
             g.add_relation("E001", "produces", "R001")
             g.add_relation("R001", "supports", "C001")

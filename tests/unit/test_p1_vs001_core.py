@@ -37,9 +37,9 @@ class TestModelIRType:
         assert PREFIX_TO_TYPE["MIR"] == "model_ir"
 
     def test_mir_id_format(self):
-        assert format_id("MIR", 1) == "MIR001"
-        assert format_id("MIR", 42) == "MIR042"
-        assert format_id("MIR", 1000) == "MIR1000"
+        assert format_id("model_ir", 1) == "MH-MODEL_IR-0001"
+        assert format_id("model_ir", 42) == "MH-MODEL_IR-0042"
+        assert format_id("model_ir", 1000) == "MH-MODEL_IR-1000"
 
     def test_mir_id_valid(self):
         assert is_valid_id("MIR001")
@@ -61,11 +61,11 @@ class TestModelIRType:
     def test_registry_create_model_ir(self, tmp_path):
         from conftest import mir
         reg = ArtifactRegistry(tmp_path / "registry.json")
-        reg.create("question", title="Q1", data={"question_id": "Q1"},
+        reg.create("question", artifact_id="Q001", title="Q1", data={"question_id": "Q1"},
                    activate=True)
         art = reg.create("model_ir", title="test MIR",
                          data=mir("Q1", "M-TEST"), activate=True)
-        assert art.artifact_id.startswith("MIR")
+        assert art.artifact_id.startswith("MH-MODEL_IR")
         assert art.type == "model_ir"
         assert art.status == "active"
         reg.save()
