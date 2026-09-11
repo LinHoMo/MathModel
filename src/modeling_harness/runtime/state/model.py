@@ -54,6 +54,13 @@ class StateError(ValueError):
 
 def _utcnow() -> str:
     from datetime import datetime, timezone
+    # 确定性复现钩子：MH_STATE_NOW 固定状态层时钟，使派生产物（status.json 的
+    # last_updated / run.started_at|updated_at / workflow note.at）可逐字节重放；
+    # 未设置时仍返回真实 UTC 时钟（引擎实时运行语义不变）。
+    # 注入方见 projects/cumcm2026b/artifacts/code/build_state.py。
+    fixed = os.environ.get("MH_STATE_NOW")
+    if fixed:
+        return fixed
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
@@ -255,12 +262,16 @@ class ProjectState:
     def refresh_from(self, registry, graph) -> dict:
         """从 Registry + EvidenceGraph 派生聚合视图（State 是派生层的落点）。"""
         st = self.data["state"]
-        qs = {a.artifact_id for a in registry.list_by_type("question")}
-        for qid in qs:
+        # 有序去重：list_by_type 按 registry 落盘顺序返回；若直接用 set 迭代，
+        # 顺序随进程字符串 hash 随机化，会使派生的 questions 键序在每次运行间漂移。
+        qids = list(dict.fromkeys(
+            a.artifact_id for a in registry.list_by_type("question")))
+        qset = set(qids)
+        for qid in qids:
             self.ensure_question(qid)
         # 清理 registry 中已不存在的 question（一般不会发生，防御）
         for qid in list(st["questions"]):
-            if qid not in qs:
+            if qid not in qset:
                 del st["questions"][qid]
 
         st["models"]["candidates"] = [a.artifact_id for a in registry.list_by_type("model")]
