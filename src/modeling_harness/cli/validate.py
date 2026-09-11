@@ -958,12 +958,36 @@ def _results_key_hit(results, keywords):
     return False
 
 
-def _evidence_layer_backed(data, pdir, layer):
-    """实例级检查：声明的证据层是否有机械可查的证据。"""
-    validations = data.get("validations") or []
-    equations = data.get("equations") or []
-    mechanisms = data.get("mechanisms") or []
-    claims = data.get("claims") or []
+def _subq_tagged(artifact, qid):
+    """子问题作用域过滤：qid=None 一律放行；否则 artifact 须带含 qid 的
+    sub_question_binding（用于 §9.4 证据下钻到子问题）。"""
+    if qid is None:
+        return True
+    if not isinstance(artifact, dict):
+        return False
+    bq = artifact.get("sub_question_binding")
+    return isinstance(bq, list) and qid in bq
+
+
+def _model_tags_subquestions(data):
+    """模型是否对证据类 artifact 做了子问题绑定（决定 G4 是否启用严格子问题作用域）。"""
+    for key in ("validations", "claims", "equations", "mechanisms"):
+        for it in (data.get(key) or []):
+            if isinstance(it, dict) and it.get("sub_question_binding"):
+                return True
+    return False
+
+
+def _layer_backed_core(data, pdir, layer, qid=None):
+    """实例级/子问题级证据支撑检查（qid=None 为实例级，否则按子问题绑定过滤）。"""
+    validations = [v for v in (data.get("validations") or [])
+                   if _subq_tagged(v, qid)]
+    equations = [e for e in (data.get("equations") or [])
+                if _subq_tagged(e, qid)]
+    mechanisms = [m for m in (data.get("mechanisms") or [])
+                  if _subq_tagged(m, qid)]
+    claims = [c for c in (data.get("claims") or [])
+              if _subq_tagged(c, qid)]
     claim_text = " ".join(str(c.get("text", "")) for c in claims
                           if isinstance(c, dict))
     if layer == "EV1":
@@ -1010,12 +1034,32 @@ def _evidence_layer_backed(data, pdir, layer):
     return False
 
 
+def _evidence_layer_backed(data, pdir, layer, qid=None):
+    """证据义务支撑检查（§9.4 子问题粒度 + 渐进式回退）。
+
+    - qid=None：实例级检查（v1 粒度），原语义；
+    - qid 给定且模型对证据做了子问题绑定：严格子问题作用域（仅计该子问题绑定的证据）；
+    - qid 给定但模型未做子问题绑定：回退实例级（不强制，避免破坏旧实例）。
+    """
+    if qid is None:
+        return _layer_backed_core(data, pdir, layer)
+    if not _model_tags_subquestions(data):
+        return _layer_backed_core(data, pdir, layer)  # 渐进回退
+    return _layer_backed_core(data, pdir, layer, qid=qid)
+
+
 def check_evidence_obligations(project_path):
     """L4: 证据义务矩阵门禁（G4）——声明的每层证据义务必须有实例证据支撑。
 
     opt-in 契约：未声明 evidence_obligations 的实例不判失败（接口先行）；
     声明后即被机械核对，防止「声称质量层级却无对应证据」。
+
+    子问题粒度（§9.4）为**显式 opt-in**：仅当实例顶层声明
+    `evidence_obligations_subquestion_scope: true` 时，子问题键（Q1/Q2…）
+    才触发「证据下钻到子问题」的严格作用域；否则子问题键按 v1 实例级
+    检查（向后兼容按实例级 G4 撰写的历史实例，避免误伤合规实例）。
     """
+    ref_usage: dict = {}
     live = _live_project_dirs(project_path)
     if not live:
         return True, "无活跃项目实例（跳过）"
@@ -1036,11 +1080,14 @@ def check_evidence_obligations(project_path):
         if not isinstance(obligs, dict):
             problems.append(f"{pdir.name}: evidence_obligations 非对象")
             continue
+        # §9.4 子问题严格作用域为显式 opt-in；未开启则退实例级（v1 语义）。
+        subq_scope = bool(data.get("evidence_obligations_subquestion_scope"))
         for qid, layers in obligs.items():
             if not isinstance(layers, list):
                 problems.append(f"{pdir.name}:{qid} obligations 非数组")
                 continue
             id_set = _model_ir_id_set(data)
+            check_qid = qid if subq_scope else None
             for entry in layers:
                 # 字符串形态：启发式证据支撑（v1.1 语义，向后兼容）
                 if isinstance(entry, str):
@@ -1048,9 +1095,11 @@ def check_evidence_obligations(project_path):
                     if layer not in _EVIDENCE_LAYERS:
                         problems.append(
                             f"{pdir.name}:{qid} 非法证据层 {layer!r}")
-                    elif not _evidence_layer_backed(data, pdir, layer):
+                    elif not _evidence_layer_backed(
+                            data, pdir, layer, qid=check_qid):
                         problems.append(
-                            f"{pdir.name}:{qid} 声明 {layer} 但实例无对应证据")
+                            f"{pdir.name}:{qid} 声明 {layer} 但实例无对应证据"
+                            f"（子问题级：该子问题无绑定证据）")
                     continue
                 # 对象形态（v1.2）：{layer, evidence_refs} 显式引用，须解析
                 if isinstance(entry, dict):
@@ -1065,6 +1114,7 @@ def check_evidence_obligations(project_path):
                             f"{pdir.name}:{qid} {layer} evidence_refs 为空")
                         continue
                     for ref in refs:
+                        ref_usage[str(ref)] = ref_usage.get(str(ref), 0) + 1
                         if str(ref) not in id_set:
                             problems.append(
                                 f"{pdir.name}:{qid} {layer} 证据引用无法解析 "
@@ -1073,8 +1123,13 @@ def check_evidence_obligations(project_path):
                 problems.append(
                     f"{pdir.name}:{qid} obligations 条目既非层名也非对象: "
                     f"{entry!r}")
+    indep = [r for r, c in ref_usage.items() if c >= 2]
     if problems:
         return False, "; ".join(problems[:5])
+    if indep:
+        return True, (f"证据义务检查通过（{checked} 个实例声明了 obligations）；"
+                     f"证据独立性提示：引用 {', '.join(indep)} 被多层义务复用"
+                     f"（同一证据支撑多声明时注意权重衰减）")
     return True, f"证据义务检查通过（{checked} 个实例声明了 obligations）"
 
 
@@ -1129,6 +1184,14 @@ def _param_usage_corpus(pdir, mir_data):
             parts.append(md_file.read_text(encoding="utf-8"))
         except OSError:
             pass
+    # §9.7：数据语料纳入 artifacts/data/*.csv（原始数据常含参数符号/数值，
+    # 作为「使用」信号可降低误杀；金标准表（46 参数全 used）保证启用后
+    # 启发式 FP/FN 仍为 0，噪声风险由该表锁定基线）。
+    for csv_file in sorted((pdir / "artifacts" / "data").glob("*.csv")):
+        try:
+            parts.append(csv_file.read_text(encoding="utf-8"))
+        except OSError:
+            pass
     return "\n".join(parts)
 
 
@@ -1179,6 +1242,34 @@ def _param_is_used(par, corpus):
     if name and name in corpus:
         return True
     return any(sig and sig in corpus for sig in _value_signals(par.get("value")))
+
+
+def _param_signals_detail(par):
+    """返回参数被启发式核对的全部信号明细，供 FAIL/WARN 消息自解释。
+
+    §9.7（轻微优化）：原消息只报死参数清单 + used/total，排查时不透明；
+    现逐参数列出其 id / symbol（含归一化）/ name / value 变体，使「为何
+    被判死」一目了然，可据此补 used_in 或删除。
+    """
+    pid = str(par.get("parameter_id", ""))
+    sym = str(par.get("symbol", ""))
+    name = str(par.get("name", ""))
+    val = par.get("value")
+    signals = []
+    if pid:
+        signals.append(f"id={pid}")
+    if sym:
+        nrm = _normalize_symbol(sym)
+        suffix = f"(归一={nrm})" if nrm != sym.upper() else ""
+        signals.append(f"symbol={sym}{suffix}")
+    if name:
+        signals.append(f"name={name}")
+    if val is not None and not isinstance(val, bool):
+        vs = _value_signals(val)
+        if vs:
+            shown = ", ".join(vs[:6]) + ("" if len(vs) <= 6 else ", …")
+            signals.append(f"value=[{shown}]")
+    return "; ".join(signals) if signals else "(无 id/symbol/name/value 可核对)"
 
 
 # used_in 显式引用契约（v1.2，THEORY_FOUNDATION_REVIEW §9.1 落地）
@@ -1280,7 +1371,8 @@ def check_parsimony_budget(project_path):
             resolved = _resolve_used_in(par, data, pdir)
             if resolved is None:
                 if not _param_is_used(par, corpus):
-                    suspect.append(str(par.get("parameter_id", "?")))
+                    pid = str(par.get("parameter_id", "?"))
+                    suspect.append(f"{pid}[{_param_signals_detail(par)}]")
                 continue
             n_ok, ref_problems = resolved
             problems.extend(ref_problems)
@@ -1329,11 +1421,13 @@ def check_dead_param_scan(project_path):
                 continue  # 显式契约参数归硬门禁
             n_scanned += 1
             if not _param_is_used(par, corpus):
-                suspect.append(str(par.get("parameter_id", "?")))
+                pid = str(par.get("parameter_id", "?"))
+                suspect.append(f"{pid}[{_param_signals_detail(par)}]")
         if suspect:
             problems.append(
                 f"{pdir.name}: 疑似死参数 {suspect}（启发式未命中且未声明 "
-                f"used_in；建议补显式引用或删除）")
+                f"used_in；[]内为该参数已尝试的全部信号，建议据此补显式"
+                f"引用或删除）")
     if problems:
         return False, "; ".join(problems[:5])
     return True, f"启发式死参数扫描通过（扫描 {n_scanned} 个未声明 used_in 的参数）"

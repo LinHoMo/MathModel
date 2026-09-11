@@ -1,3 +1,28 @@
+## 2026-09-11 — 标准层第二步：创新短板专项 §9.3/§9.4/§9.7 收口（T-THEORY-08）
+
+### 变更（仅工具/judgment 层，未触碰 canonical schema / runtime / LLM-free 核心，遵循架构冻结）
+- **§9.3 R3 连续结构距离**：`cli/innovation_metrics.py` 建结构本体图 `O`
+  （节点=建模结构族，边=组合/父子），`d_structure = 1 − max sim`（同源=1、
+  邻居=0.5^L、不连通=0），新增 `build_ontology`/`canonicalize_token`/
+  `family_similarity`/`continuous_structure_distance`；`innovation_report` 输出
+  `computed_structure_distance`/`distance_delta`/`audit`（声明值与机械值偏差>阈值→WARN，
+  防虚报创新）；新增 `--json` 供流水线消费。
+- **§9.4 G4 子问题粒度**：`validate.py::check_evidence_obligations` 证据检查下钻到
+  `sub_question_binding`；**显式 opt-in**（`evidence_obligations_subquestion_scope: true`
+  才触发严格子问题作用域，否则退 v1 实例级，保护历史合规实例）；新增证据独立性提示
+  （同一 `evidence_ref` 支撑多层义务→非阻塞 WARN）。
+- **§9.7 工具打磨**：G5 死参数 FAIL/WARN 消息自解释（新增 `_param_signals_detail`，
+  逐参数列出 id/symbol/name/value 已尝试信号）；`artifacts/data/*.csv` 纳入使用语料
+  （金标准 46 参数全 `used` → FP/FN 仍为 0，噪声由该表锁基线）。
+
+### 验证
+- v1.2 基线 700 → 全量 **715 passed**（§9.3/§9.4/§9.7 收口新增覆盖：
+  test_innovation_metrics 结构距离/审计 + test_evidence_obligations 子问题/独立性
+  + test_explicit_refs 信号明细，含 opt-in 向后兼容回归守护）；
+- validate **52 通过 / 0 失败 / 0 警告**；catalog OK；术语 OK；金标准 **FP=FN=0**；
+- 三实例反向验收：注入 `evidence_obligations_subquestion_scope: true`（子问题作用域缺陷）
+  → validate 51/1/0（FAIL 指名 cumcm2024a）→ 还原 → 52/0/0。
+
 ## 2026-09-11 — 标准层 v1.2：显式引用契约 / 双级门禁 / 门禁金标准（T-THEORY-07）
 
 ### 变更

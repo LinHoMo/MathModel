@@ -9,9 +9,10 @@
 
 ## 0. 摘要（核心诊断）
 
-> **落地状态（2026-09-11，标准层第一步）**：G4（EV1–EV5 证据义务矩阵）、G5（复杂度预算）、
-> R3（结构距离工具）、R4（创新声明契约）均已实现并接入 `validate.py`（检查数 48→51）与 `cli/innovation_metrics.py`；
-> 三实例已合规声明并反向验收；全量测试 681→683 passed。§9 记录了留给后续 agent 的遗留优化项。
+> **落地状态（2026-09-11，标准层第一步 + 第二步）**：G4（EV1–EV5 证据义务矩阵）、G5（复杂度预算）、
+> R3（结构距离工具）、R4（创新声明契约）均已实现并接入 `validate.py`（检查数 48→52）与 `cli/innovation_metrics.py`；
+> 三实例已合规声明并反向验收；全量测试 700→714 passed。**第二步（创新短板专项）已将 §9 遗留项收口**：
+> §9.3 连续结构距离+声明审计、§9.4 G4 子问题粒度+证据独立性、§9.7 G5 信号明细+CSV 语料 均已落地（详见各节状态）。
 
 当前 harness 的理论基座是一个**信任基座（negative epistemology）**：
 
@@ -296,17 +297,19 @@
 - **验证**：构造「只有软信号缺失」的夹具 → 应 WARN 不 FAIL；构造「显式声明但引用缺失」→ FAIL。
 - **落地结果**：`check_parsimony_budget` 只对破损显式声明硬 FAIL；新增 `check_dead_param_scan` 注册为 WARN 级（WARN_CHECKS），只扫未声明 used_in 的参数；旧两处单测按双级语义更新（设计演进，非放水）。
 
-### 9.3 R3 结构距离：本体图连续化 + 声明值审计
+### 9.3 R3 结构距离：本体图连续化 + 声明值审计 —— ✅ 已落地（第二步）
 
 - **背景**：当前一阶二值（family ∈ allowed → 0/1），声明值直接采用且不审计；三实例均声明 0.00。
 - **方案**：① 建结构本体图 `O`（节点=建模结构，边=父子/组合），`d_structure = 1 − max sim(s, s_known)` 连续化；② 审计声明值与机械计算值的偏差，偏差超阈值 → WARN（防虚报创新/虚报从众）。
 - **验证**：本体图 20+ 节点时，对 2026a（组合 novelty=0.3）给出非平凡距离并解释。
+- **落地（2026-09-11）**：`cli/innovation_metrics.py` 实现 `build_ontology`/`canonicalize_token`/`family_similarity`/`continuous_structure_distance`；`innovation_report` 输出 `computed_structure_distance`/`distance_delta`/`audit`；新增 `--json` 供流水线消费。单测 9 例（含邻居指数衰减、不连通=1.0、声明审计 WARN/ok）。三实例运行均 `audit=ok`（声明 0.0 与机械 0.0 一致）。
 
-### 9.4 G4 子问题粒度 + 证据独立性
+### 9.4 G4 子问题粒度 + 证据独立性 —— ✅ 已落地（第二步，显式 opt-in）
 
 - **背景**：G4 现为实例级（任一证据支撑全实例所有子问题的同层声明）。
 - **方案**：义务按子问题声明（接口已支持），证据检查下钻到子问题；引入证据冲突/独立性（同一证据支撑两层声明时权重衰减）。
 - **验证**：构造「Q2 声明 EV3 但该子问题无拟合证据」→ 子问题级 FAIL。
+- **落地（2026-09-11）**：`validate.py::check_evidence_obligations` 证据检查下钻到 `sub_question_binding`，匹配 §9.3 本体图路径指数衰减语义。**显式 opt-in**：仅当实例顶层声明 `evidence_obligations_subquestion_scope: true` 时子问题键才触发严格作用域，否则退 v1 实例级（保护按实例级 G4 撰写的历史合规实例，避免误伤——已加回归测试 `test_subquestion_scope_optin_required_for_strict` 守护）。新增证据独立性提示（同一 `evidence_ref` 支撑多层义务→非阻塞 WARN，提示权重衰减）。单测 4 例（严格下钻 FAIL/PASS + 独立性提示 + opt-in 向后兼容）。三实例反向验收：注入 `scope=true` → validate 51/1/0（FAIL 指名）→ 还原 → 52/0/0。
 
 ### 9.5 门禁自身质量度量（门禁的门禁）—— ✅ 已落地（v1.2）
 
@@ -320,11 +323,11 @@
 - **背景**：`_normalize_symbol` 覆盖希腊字母 + 上下标 + 分隔符 + 大小写，但「语义等价字符串不同」的情况（COVER_RADII_DIR vs ρ_ring,dir）靠归一化永远治不彻底。
 - **方案**：维护「声明符号 ↔ 代码标识符」映射表（实例内），作为 used_in 契约的前置一步；不在字符串归一化上无限加规则。
 
-### 9.7 轻微优化记录（未做，留档）
+### 9.7 轻微优化记录 —— ✅ 已落地（第二步，2026-09-11）
 
-- validate.py 新门禁的 FAIL 消息可进一步输出「该参数已尝试的全部信号」明细（当前只报死参数清单 + used/total）。
-- `innovation_metrics.py` 可加 `--json` 输出便于流水线消费（当前仅表格）。
-- G5 语料可加入 `artifacts/data/*.csv`（当前只含 code/*.py 与根 md）；因可能引入大量噪声，未做——留给后续 agent 用金标准表验证后再启用。
+- ~~validate.py 新门禁的 FAIL 消息可进一步输出「该参数已尝试的全部信号」明细~~ → **已落地**：`check_parsimony_budget` 与 `check_dead_param_scan` 的死参数清单现为 `Pxx[id=…; symbol=…(归一=…); name=…; value=[…]]` 自解释格式（新增 `_param_signals_detail`），排查时无需翻 model_ir。
+- ~~`innovation_metrics.py` 可加 `--json` 输出便于流水线消费~~ → **已落地**：`innovation_metrics.py --json` 输出 `{total, per_project:{structure_distance, declared, computed_structure_distance, distance_delta, audit, dimensions, arguments}}`。
+- ~~G5 语料可加入 `artifacts/data/*.csv`~~ → **已落地（金标准守护）**：`artifacts/data/*.csv` 纳入 `_param_usage_corpus` 使用语料。金标准表 `param_usage_gold.json`（46 参数全 `used`）保证启用后启发式 FP/FN 仍为 0（加语料只增匹配、不造死参数）；噪声风险由该表锁基线。三实例当前无 `*.csv`（仅 `problem_understanding.json`），故语料扩展对它们为零影响。
 
 ---
 

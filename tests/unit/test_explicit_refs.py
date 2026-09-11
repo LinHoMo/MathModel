@@ -136,6 +136,18 @@ def test_dead_scan_flags_heuristic_dead(tmp_path):
     assert "P99" in msg
 
 
+def test_dead_scan_message_lists_signals(tmp_path):
+    """§9.7：WARN 消息须自解释——逐参数列出已尝试信号（id/symbol/value）。"""
+    p = {"parameter_id": "P99", "name": "幽灵", "symbol": "G_ghost",
+         "value": 42.0, "source": "convention"}
+    ok, msg = check_dead_param_scan(_proj(tmp_path, [p]))
+    assert not ok, msg
+    # 信号明细在 [] 内：应包含该参数的 symbol 与 value 信号
+    # （float 值 42.0 同时列出 .0 与 int 变体，体现 int↔float 互化核对）
+    assert "symbol=G_ghost" in msg, msg
+    assert "value=[42.0, 42]" in msg, msg
+
+
 def test_dead_scan_skips_explicitly_declared(tmp_path):
     """已声明可解析 used_in 的参数不参与启发式扫描（显式契约优先）。"""
     p = {"parameter_id": "P01", "name": "x", "symbol": "ZZZ_UNLIKELY",

@@ -21,7 +21,25 @@ sys.path.insert(0, str(REPO / "src"))
 
 from modeling_harness.cli.innovation_metrics import (  # noqa: E402
     binary_structure_distance, innovation_report,
+    canonicalize_token, family_similarity, continuous_structure_distance,
+    build_ontology, AUDIT_TOLERANCE,
 )
+
+# 合成词表（零依赖注入，不读 yaml）：pde 与 ode 共享部分机制，opt 独立
+_FAMS = [
+    {"id": "numerical_pde", "aliases": ["pde", "finite_difference"],
+     "mechanism": ["conservation_law", "spatial_temporal_field",
+                   "diffusion", "boundary_condition"],
+     "methods": ["finite_difference_method", "method_of_lines"],
+     "solvers": ["fdm_solver"]},
+    {"id": "ode_models", "aliases": ["ode"],
+     "mechanism": ["state_transition", "continuous_dynamics",
+                   "conservation_law"],
+     "methods": ["rk4", "euler"], "solvers": ["solve_ivp"]},
+    {"id": "optimization", "aliases": ["numerical_optimization"],
+     "mechanism": ["objective_extremum"],
+     "methods": ["gradient_descent"], "solvers": ["scipy_optimize"]},
+]
 
 
 def _proj(tmp_path, family, allowed, innovation=None):
@@ -74,3 +92,89 @@ def test_report_computes_binary_when_undeclared(tmp_path):
     entry = rep["per_project"]["t"]
     assert entry["structure_distance"] == 0.0
     assert entry["declared"] is False
+
+
+# ---- §9.3 深化：连续结构距离 + 本体图相似度 + 声明审计 ----
+
+def _onto():
+    return build_ontology(_FAMS)
+
+
+def test_canonicalize_resolves_alias():
+    """别名 pde 解析到 canonical family numerical_pde。"""
+    _, resolve = _onto()
+    assert canonicalize_token("pde", resolve) == "numerical_pde"
+    assert canonicalize_token("unknown_x", resolve) == "unknown_x"
+
+
+def test_family_similarity_self_is_one():
+    """同族相似度=1。"""
+    graph, _ = _onto()
+    assert family_similarity("numerical_pde", "numerical_pde", graph) == 1.0
+
+
+def test_family_similarity_neighbor_decays():
+    """pde 与 ode 共享 conservation_law ⇒ 一跳相似度=0.5。"""
+    graph, _ = _onto()
+    assert family_similarity("numerical_pde", "ode_models", graph) == 0.5
+
+
+def test_continuous_known_structure_is_zero():
+    """模型结构在 allowed 内 ⇒ 连续距离=0（与「结构距离=0」一致）。"""
+    graph, resolver = _onto()
+    cd = continuous_structure_distance(
+        {"primary": "pde"}, ["pde", "heat_transfer"], resolver, graph)
+    assert cd == 0.0
+
+
+def test_continuous_neighbor_partial_distance():
+    """模型=ode（近邻），allowed=数值PDE ⇒ d=1−0.5=0.5（连续而非二值）。"""
+    graph, resolver = _onto()
+    cd = continuous_structure_distance(
+        {"primary": "ode"}, ["pde"], resolver, graph)
+    assert cd == 0.5
+
+
+def test_continuous_novel_family_far():
+    """模型结构不在图中 ⇒ 视为最远（1.0）。"""
+    graph, resolver = _onto()
+    cd = continuous_structure_distance(
+        {"primary": "graph_neural_network"}, ["pde"], resolver, graph)
+    assert cd == 1.0
+
+
+def test_audit_overclaimed_innovation_warns():
+    """声明 0.42 但模型实为已知结构（computed=0）⇒ WARN_mismatch。"""
+    report = {"structure_distance": 0.42}
+    assert _compute_audit_value(report, 0.0) == "WARN_mismatch"
+
+
+def test_audit_consistent_ok():
+    """声明值与机械值一致（偏差≤阈值）⇒ ok。"""
+    assert _compute_audit_value({"structure_distance": 0.0}, 0.05) == "ok"
+    assert _compute_audit_value({"structure_distance": 0.1}, 0.1) == "ok"
+
+
+def test_audit_no_declaration():
+    """未声明 ⇒ no_declaration（不误报）。"""
+    assert _compute_audit_value({}, 0.0) == "no_declaration"
+
+
+def _compute_audit_value(innov, computed):
+    # 复用 innovation_metrics 内部审计逻辑（避免重复实现）
+    from modeling_harness.cli.innovation_metrics import _compute_audit
+    return _compute_audit(innov.get("structure_distance"), computed)
+
+
+def test_report_includes_computed_and_audit(tmp_path):
+    """报告含 computed_structure_distance 与 audit 字段。"""
+    innov = {"structure_distance": 0.0,
+             "dimensions": {"composition_novelty": 0.3},
+             "difference_arguments": [{"dimension": "composition_novelty",
+                                       "vs_known": "pde", "argument_ref": "m.md"}]}
+    root = _proj(tmp_path, "pde", ["pde"], innovation=innov)
+    rep = innovation_report(root)
+    entry = rep["per_project"]["t"]
+    assert "computed_structure_distance" in entry
+    assert entry["audit"] in ("ok", "no_declaration", "WARN_mismatch")
+    assert entry["computed_structure_distance"] == 0.0  # pde∈allowed

@@ -164,3 +164,84 @@ def test_break_one_layer_fails_others_pass():
         # EV3 无拟合证据 → 应 FAIL 且点名 EV3
         assert not ok, msg
         assert "EV3" in msg
+
+
+# ---- §9.4 子问题粒度 + 证据独立性 ----
+
+def test_subquestion_scope_fails_when_evidence_tagged_elsewhere(tmp_path):
+    """§9.4：开启子问题作用域 opt-in 后，Q2 声明 EV1 但唯一 EV1 证据绑定在
+    Q1 ⇒ 子问题级 FAIL（证据不跨子问题复用）。"""
+    mir = {
+        "model_family": "t",
+        "equations": [{"equation_id": "E01", "latex": "x=1",
+                       "derivation_trace": "能量守恒",
+                       "sub_question_binding": ["Q1"]}],
+        "mechanisms": [],
+        "validations": [],
+        "claims": [{"claim_id": "CL01", "text": "结论"}],
+        "evidence_obligations_subquestion_scope": True,
+        "evidence_obligations": {"Q2": ["EV1"]},
+    }
+    ok, msg = check_evidence_obligations(_proj(tmp_path, mir_extra=mir))
+    assert not ok, msg
+    assert "Q2" in msg and "EV1" in msg
+
+
+def test_subquestion_scope_passes_when_evidence_tagged_for_qid(tmp_path):
+    """§9.4：开启 opt-in 后，Q2 声明 EV1 且守恒推导方程绑定 Q2 ⇒ 子问题级 PASS。"""
+    mir = {
+        "model_family": "t",
+        "equations": [{"equation_id": "E01", "latex": "x=1",
+                       "derivation_trace": "能量守恒",
+                       "sub_question_binding": ["Q2"]}],
+        "mechanisms": [],
+        "validations": [],
+        "claims": [{"claim_id": "CL01", "text": "结论"}],
+        "evidence_obligations_subquestion_scope": True,
+        "evidence_obligations": {"Q2": ["EV1"]},
+    }
+    ok, msg = check_evidence_obligations(_proj(tmp_path, mir_extra=mir))
+    assert ok, msg
+
+
+def test_subquestion_scope_optin_required_for_strict(tmp_path):
+    """§9.4 向后兼容：未开启 opt-in 时，子问题键按 v1 实例级检查——
+
+    Q2 声明 EV1，但 EV1 证据（守恒推导）仅绑定在 Q1；未 opt-in 时不应
+    因子问题作用域误伤（保护按实例级 G4 撰写的历史合规实例）。
+    """
+    mir = {
+        "model_family": "t",
+        "equations": [{"equation_id": "E01", "latex": "x=1",
+                       "derivation_trace": "能量守恒",
+                       "sub_question_binding": ["Q1"]}],
+        "mechanisms": [],
+        "validations": [],
+        "claims": [{"claim_id": "CL01", "text": "结论"}],
+        # 注意：未声明 evidence_obligations_subquestion_scope
+        "evidence_obligations": {"Q2": ["EV1"]},
+    }
+    ok, msg = check_evidence_obligations(_proj(tmp_path, mir_extra=mir))
+    assert ok, msg
+
+
+def test_evidence_independence_note_nonblocking(tmp_path):
+    """§9.4：对象形态下同一 evidence_ref 支撑多层义务 ⇒ 非阻塞提示（仍 PASS）。"""
+    mir = {
+        "model_family": "t",
+        "equations": [{"equation_id": "E01", "latex": "x=1",
+                       "derivation_trace": "能量守恒"}],
+        "mechanisms": [{"mechanism_id": "ME01", "governing_principle": "Fick",
+                        "related_equations": ["E01"]}],
+        "validations": [{"validation_id": "V01", "type": "convergence"}],
+        "claims": [{"claim_id": "CL01", "text": "附件2 实测对照"}],
+        "evidence_obligations": {
+            "Q1": [
+                {"layer": "EV1", "evidence_refs": ["V01"]},
+                {"layer": "EV2", "evidence_refs": ["V01"]},  # 复用 V01
+            ]
+        },
+    }
+    ok, msg = check_evidence_obligations(_proj(tmp_path, mir_extra=mir))
+    assert ok, msg
+    assert "独立性" in msg
