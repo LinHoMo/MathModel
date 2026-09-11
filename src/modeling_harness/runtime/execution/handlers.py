@@ -74,7 +74,8 @@ class DefaultNodeExecutor:
                  external_code: dict | None = None,
                  validation_specs: dict | None = None,
                  external_candidates: dict | None = None,
-                 revision_bundles: dict | None = None):
+                 revision_bundles: dict | None = None,
+                 competition_type: str | None = None):
         self.registry = registry
         self.graph = graph
         self.state = state
@@ -97,8 +98,11 @@ class DefaultNodeExecutor:
         # P8：Competition Intelligence 接入 Runtime（候选竞技场 + 竞赛包只读修饰）
         from modeling_harness.runtime.knowledge.packs import load_competition_packs
         from modeling_harness.runtime.modeling.candidates import CandidateArena
+        self.competition_type = competition_type
         _packs = load_competition_packs(knowledge_root or REPO / "src" / "modeling_harness" / "knowledge")
-        _pack = _packs.get("cp-cumcm") or next(iter(_packs.values()), None)
+        # 赛题类型 → 竞赛包：显式给定优先，未知/缺省回退默认 cp-cumcm（现状语义）
+        _pack = (_packs.get(f"cp-{competition_type}")
+                 or _packs.get("cp-cumcm") or next(iter(_packs.values()), None))
         self.candidate_arena = CandidateArena(self.retriever, _pack)
         # 跨节点共享（session 级）：qid -> {"model": aid, "plan": ..., ...}
         self.shared: dict = {}

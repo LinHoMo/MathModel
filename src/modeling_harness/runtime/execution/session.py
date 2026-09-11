@@ -55,7 +55,8 @@ class RuntimeSession:
                  external_code: dict | None = None,
                  validation_specs: dict | None = None,
                  external_candidates: dict | None = None,
-                 revision_bundles: dict | None = None):
+                 revision_bundles: dict | None = None,
+                 competition: str | None = None):
         self.project_dir = Path(project_dir)
         self.project_dir.mkdir(parents=True, exist_ok=True)
         # audit FIX-2.5：读取项目 inputs 题面 → 结构化 representation
@@ -97,8 +98,8 @@ class RuntimeSession:
         self.graph = EvidenceGraph(self.registry, sdir / "evidence_graph.json")
         self.decisions = DecisionLog(sdir / "decision_log.json")
 
-        dag = WorkflowComposer(REPO / "src" / "modeling_harness" / "workflows").compose_executable(
-            self.questions)
+        self.dag = WorkflowComposer(REPO / "src" / "modeling_harness" / "workflows").compose_executable(
+            self.questions, competition)
         self.executor_impl = DefaultNodeExecutor(
             self.registry, self.graph, state=self.state,
             decisions=self.decisions, knowledge_root=knowledge_root,
@@ -108,7 +109,8 @@ class RuntimeSession:
             external_code=external_code,
             validation_specs=validation_specs,
             external_candidates=external_candidates,
-            revision_bundles=revision_bundles)
+            revision_bundles=revision_bundles,
+            competition_type=competition)
         # 预登记 Question Artifact（分配的 ID Q001… 依序即 questions 标签）
         existing = [a.artifact_id for a in self.registry.list_by_type("question")]
         for q in self.questions:
@@ -125,11 +127,11 @@ class RuntimeSession:
         engine_validators = build_engine_validators(
             self.registry, self.graph, node_types=NODE_TYPES)
         self.engine = WorkflowEngine(
-            dag, self.executor_impl, state=self.state,
+            self.dag, self.executor_impl, state=self.state,
             validators=engine_validators,
             on_success=self._register_evidence)
         self.waves = WaveExecutor(
-            dag, self.executor_impl, max_workers=max_workers,
+            self.dag, self.executor_impl, max_workers=max_workers,
             validators=engine_validators)
         self.engine = self.waves.engine          # 波次执行器内嵌引擎（共享状态）
         self.waves.engine.on_success = self._register_evidence
