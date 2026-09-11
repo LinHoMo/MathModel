@@ -1,18 +1,25 @@
 # -*- coding: utf-8 -*-
 """L4 门禁 fail-closed 语义测试：model_ir.json 存在但损坏 → FAIL，不得静默放行。
 
-背景（fail-open 缺陷）：三个 L4 门禁在 model_ir.json 无法解析时
+背景（fail-open 缺陷）：L4 门禁在 model_ir.json 无法解析时
 `except Exception: continue`，把「门禁无法核验」当成「无需核验」——损坏的输入
 被静默放行，与「门禁」语义矛盾。涉及：
   * check_parameter_provenance（参数来源，L4）
   * check_evidence_obligations（证据义务矩阵，L4/G4）
   * check_parsimony_budget（复杂度预算，L4/G5）
+  * check_calibration_parameters（校准参数，L4/G3）
+  * check_dead_param_scan（死参数扫描，L4/G5 —— WARN 级软层）
+  * check_innovation_declaration（创新声明契约，L4/R4）
 
 契约（本次加固）：
   * 活跃实例的 model_ir.json 存在但损坏（非法 JSON / 不可解码）→ FAIL，
     消息须指名实例目录与原因；
   * 活跃实例本就无 model_ir.json（非建模产出）→ 跳过，不误伤（既有语义）；
   * projects/ 无活跃实例（库模式）→ 跳过（既有语义）。
+
+WARN 级契约（check_dead_param_scan）：该门禁为双级门禁的软层，其
+ok=False 由 WARN_CHECKS 渲染为 WARN（不阻塞交付）。故损坏输入下它仍
+返回 ok=False（本测试的 `not ok` 断言成立），但语义是 WARN 而非硬 FAIL。
 
 这些测试先于实现（RED）：当前实现在损坏 JSON 下返回 PASS，故
 test_corrupt_model_ir_fails_closed 会在加固前失败。
@@ -24,7 +31,10 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "src"))
 
 from modeling_harness.cli.validate import (  # noqa: E402
+    check_calibration_parameters,
+    check_dead_param_scan,
     check_evidence_obligations,
+    check_innovation_declaration,
     check_parameter_provenance,
     check_parsimony_budget,
 )
@@ -33,6 +43,9 @@ _CHECKS = [
     ("check_parameter_provenance", check_parameter_provenance),
     ("check_evidence_obligations", check_evidence_obligations),
     ("check_parsimony_budget", check_parsimony_budget),
+    ("check_calibration_parameters", check_calibration_parameters),
+    ("check_dead_param_scan", check_dead_param_scan),
+    ("check_innovation_declaration", check_innovation_declaration),
 ]
 
 
@@ -57,7 +70,11 @@ def _empty_projects(root):
 
 
 def test_corrupt_model_ir_fails_closed(tmp_path):
-    """活跃实例的 model_ir.json 损坏 → 三个门禁均 FAIL（指名文件与原因）。"""
+    """活跃实例的 model_ir.json 损坏 → 六门禁均不得放行（指名文件与原因）。
+
+    其中 check_dead_param_scan 为 WARN 级软层：返回 ok=False 即由
+    WARN_CHECKS 渲染为 WARN（不阻塞交付），故此处断言 `not ok` 而非硬 FAIL。
+    """
     for label, fn in _CHECKS:
         root = tmp_path / label
         ok, msg = fn(_corrupt_mir_proj(root))

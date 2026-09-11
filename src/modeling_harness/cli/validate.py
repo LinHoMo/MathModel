@@ -848,7 +848,10 @@ def check_calibration_parameters(project_path):
             continue
         try:
             data = json.loads(mir.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception as e:
+            # fail-closed：输入存在但损坏 → 无法核验，必须阻塞而非放行
+            problems.append(
+                f"{pdir.name}: model_ir.json 存在但解析失败 ({e})")
             continue
         params = data.get("parameters") or []
         if not params:
@@ -1416,7 +1419,12 @@ def check_dead_param_scan(project_path):
             continue
         try:
             data = json.loads(mir.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception as e:
+            # fail-closed：输入存在但损坏 → 无法核验。本处为 WARN 级软层，
+            # ok=False 由 WARN_CHECKS 渲染为 WARN（不阻塞交付），与硬门禁
+            # check_parsimony_budget 的阻塞语义互补。
+            problems.append(
+                f"{pdir.name}: model_ir.json 存在但解析失败 ({e})")
             continue
         params = data.get("parameters") or []
         if not params:
@@ -1465,7 +1473,10 @@ def check_innovation_declaration(project_path):
             continue
         try:
             data = json.loads(mir.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception as e:
+            # fail-closed：输入存在但损坏 → 无法核验，必须阻塞而非放行
+            problems.append(
+                f"{pdir.name}: model_ir.json 存在但解析失败 ({e})")
             continue
         innov = data.get("innovation")
         if not innov:
