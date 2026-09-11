@@ -429,6 +429,36 @@
         "Q3",
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "objective",
+          "ref": "O01"
+        },
+        {
+          "type": "mechanism",
+          "ref": "ME01"
+        },
+        {
+          "type": "validation",
+          "ref": "V01"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q1_solve.py"
+        }
       ]
     },
     {
@@ -444,6 +474,32 @@
         "Q3",
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "mechanism",
+          "ref": "ME01"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q1_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q3_solve.py"
+        }
       ]
     },
     {
@@ -459,6 +515,28 @@
         "Q3",
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q2_solve.py"
+        }
       ]
     },
     {
@@ -474,6 +552,28 @@
         "Q3",
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q2_solve.py"
+        }
       ]
     },
     {
@@ -489,6 +589,56 @@
         "Q3",
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E07"
+        },
+        {
+          "type": "objective",
+          "ref": "O02"
+        },
+        {
+          "type": "objective",
+          "ref": "O03"
+        },
+        {
+          "type": "constraint",
+          "ref": "C04"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q2_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q3_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/results_io.py"
+        }
       ]
     },
     {
@@ -504,6 +654,36 @@
         "Q3",
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E05"
+        },
+        {
+          "type": "equation",
+          "ref": "E06"
+        },
+        {
+          "type": "mechanism",
+          "ref": "ME04"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q2_solve.py"
+        }
       ]
     },
     {
@@ -519,6 +699,20 @@
         "Q3",
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        }
       ]
     },
     {
@@ -535,7 +729,37 @@
         "Q4",
         "Q5"
       ],
-      "definition": "3.41 − 2×0.275"
+      "definition": "3.41 − 2×0.275",
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E05"
+        },
+        {
+          "type": "constraint",
+          "ref": "C01"
+        },
+        {
+          "type": "constraint",
+          "ref": "C09"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/init_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q1_solve.py"
+        }
+      ]
     },
     {
       "parameter_id": "P09",
@@ -551,7 +775,37 @@
         "Q4",
         "Q5"
       ],
-      "definition": "2.20 − 2×0.275"
+      "definition": "2.20 − 2×0.275",
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E05"
+        },
+        {
+          "type": "constraint",
+          "ref": "C01"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/init_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q1_solve.py"
+        }
+      ]
     },
     {
       "parameter_id": "P10",
@@ -567,7 +821,25 @@
         "Q4",
         "Q5"
       ],
-      "definition": "2.86 + 222×1.65"
+      "definition": "2.86 + 222×1.65",
+      "used_in": [
+        {
+          "type": "validation",
+          "ref": "V03"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        }
+      ]
     },
     {
       "parameter_id": "P11",
@@ -579,6 +851,28 @@
       "sub_question_binding": [
         "Q1",
         "Q2"
+      ],
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL01"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/init_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q1_solve.py"
+        }
       ]
     },
     {
@@ -591,6 +885,24 @@
       "sub_question_binding": [
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q4_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q5_solve.py"
+        }
       ]
     },
     {
@@ -605,6 +917,40 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q1_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q2_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q3_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q4_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/turnaround.py"
+        }
       ]
     },
     {
@@ -617,6 +963,32 @@
       "sub_question_binding": [
         "Q1",
         "Q2"
+      ],
+      "used_in": [
+        {
+          "type": "constraint",
+          "ref": "C02"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/init_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q1_solve.py"
+        }
       ]
     },
     {
@@ -631,6 +1003,56 @@
         "Q3",
         "Q4",
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "objective",
+          "ref": "O03"
+        },
+        {
+          "type": "constraint",
+          "ref": "C05"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "claim",
+          "ref": "CL06"
+        },
+        {
+          "type": "claim",
+          "ref": "CL08"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/init_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q3_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q4_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q5_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/turnaround.py"
+        }
       ]
     },
     {
@@ -642,6 +1064,36 @@
       "source": "problem_given",
       "sub_question_binding": [
         "Q5"
+      ],
+      "used_in": [
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/dragon_core.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/init_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q4_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q5_solve.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/turnaround.py"
+        }
       ]
     },
     {
@@ -655,7 +1107,37 @@
         "Q4",
         "Q5"
       ],
-      "definition": "L_0 / 2"
+      "definition": "L_0 / 2",
+      "used_in": [
+        {
+          "type": "objective",
+          "ref": "O04b"
+        },
+        {
+          "type": "constraint",
+          "ref": "C09"
+        },
+        {
+          "type": "validation",
+          "ref": "V08"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_model_ir.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/export_all_results.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/init_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/q4_solve.py"
+        }
+      ]
     }
   ],
   "objectives": [

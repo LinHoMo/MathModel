@@ -367,6 +367,28 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "constraint",
+          "ref": "C05"
+        },
+        {
+          "type": "constraint",
+          "ref": "C06"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
       ]
     },
     {
@@ -381,6 +403,20 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
       ]
     },
     {
@@ -395,6 +431,28 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "constraint",
+          "ref": "C05"
+        },
+        {
+          "type": "validation",
+          "ref": "V01"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
       ]
     },
     {
@@ -409,6 +467,28 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "constraint",
+          "ref": "C05"
+        },
+        {
+          "type": "constraint",
+          "ref": "C06"
+        },
+        {
+          "type": "claim",
+          "ref": "CL01"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
       ]
     },
     {
@@ -423,6 +503,48 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E03"
+        },
+        {
+          "type": "objective",
+          "ref": "O02"
+        },
+        {
+          "type": "constraint",
+          "ref": "C03"
+        },
+        {
+          "type": "validation",
+          "ref": "V01"
+        },
+        {
+          "type": "claim",
+          "ref": "CL02"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL04"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
       ]
     },
     {
@@ -437,6 +559,20 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E03"
+        },
+        {
+          "type": "constraint",
+          "ref": "C03"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
       ]
     },
     {
@@ -449,6 +585,36 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E06"
+        },
+        {
+          "type": "objective",
+          "ref": "O03"
+        },
+        {
+          "type": "objective",
+          "ref": "O04"
+        },
+        {
+          "type": "mechanism",
+          "ref": "ME03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
       ]
     },
     {
@@ -464,7 +630,41 @@
         "Q3",
         "Q4"
       ],
-      "definition": "由题面 2–3 天时长窗口反标定（见 A04 与敏感性验证 V03）"
+      "definition": "由题面 2–3 天时长窗口反标定（见 A04 与敏感性验证 V03）",
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E05"
+        },
+        {
+          "type": "mechanism",
+          "ref": "ME03"
+        },
+        {
+          "type": "validation",
+          "ref": "V03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL01"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
+      ]
     },
     {
       "parameter_id": "P09",
@@ -479,7 +679,33 @@
         "Q3",
         "Q4"
       ],
-      "definition": "Δr = R₀/N_r = 0.0015625 cm；由空间收敛验证 V01 确定（N=320 偏高约 1.2%，N=1280 已收敛）"
+      "definition": "Δr = R₀/N_r = 0.0015625 cm；由空间收敛验证 V01 确定（N=320 偏高约 1.2%，N=1280 已收敛）",
+      "used_in": [
+        {
+          "type": "validation",
+          "ref": "V01"
+        },
+        {
+          "type": "validation",
+          "ref": "V02"
+        },
+        {
+          "type": "validation",
+          "ref": "V03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
+      ]
     },
     {
       "parameter_id": "P10",
@@ -492,7 +718,37 @@
         "Q1",
         "Q2"
       ],
-      "definition": "Q1/Q2 取 1 s；Q3/Q4 取 10 s（由时间步收敛验证 V02 支撑）"
+      "definition": "Q1/Q2 取 1 s；Q3/Q4 取 10 s（由时间步收敛验证 V02 支撑）",
+      "used_in": [
+        {
+          "type": "validation",
+          "ref": "V02"
+        },
+        {
+          "type": "claim",
+          "ref": "CL01"
+        },
+        {
+          "type": "claim",
+          "ref": "CL02"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL04"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
+      ]
     },
     {
       "parameter_id": "P11",
@@ -507,7 +763,21 @@
         "Q3",
         "Q4"
       ],
-      "definition": "本模型为确定性数值求解，无随机性；种子固定为 42 以满足仓库铁律"
+      "definition": "本模型为确定性数值求解，无随机性；种子固定为 42 以满足仓库铁律",
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
+      ]
     },
     {
       "parameter_id": "P12",
@@ -523,7 +793,17 @@
         "Q3",
         "Q4"
       ],
-      "definition": "T_air(t)=T₀+(T_target−T₀)(1−e^{−t/τ_air})，与附件 1 上升段形态一致"
+      "definition": "T_air(t)=T₀+(T_target−T₀)(1−e^{−t/τ_air})，与附件 1 上升段形态一致",
+      "used_in": [
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_a.py"
+        }
+      ]
     }
   ],
   "objectives": [

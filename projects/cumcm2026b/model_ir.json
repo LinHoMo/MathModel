@@ -377,6 +377,36 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E07"
+        },
+        {
+          "type": "mechanism",
+          "ref": "ME04"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
       ]
     },
     {
@@ -391,6 +421,52 @@
         "Q2",
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E01"
+        },
+        {
+          "type": "constraint",
+          "ref": "C01"
+        },
+        {
+          "type": "mechanism",
+          "ref": "ME01"
+        },
+        {
+          "type": "validation",
+          "ref": "V04"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL04"
+        },
+        {
+          "type": "claim",
+          "ref": "CL06"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b_http.py"
+        }
       ]
     },
     {
@@ -403,6 +479,28 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
       ]
     },
     {
@@ -415,6 +513,20 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL02"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
       ]
     },
     {
@@ -427,6 +539,40 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "validation",
+          "ref": "V05"
+        },
+        {
+          "type": "claim",
+          "ref": "CL02"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL04"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b_http.py"
+        }
       ]
     },
     {
@@ -439,6 +585,20 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b_http.py"
+        }
       ]
     },
     {
@@ -452,7 +612,29 @@
         "Q3",
         "Q4"
       ],
-      "definition": "附录 2(5)：切换频道 + 调天线 + 稳定读数合计 5 s"
+      "definition": "附录 2(5)：切换频道 + 调天线 + 稳定读数合计 5 s",
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL01"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b_http.py"
+        }
+      ]
     },
     {
       "parameter_id": "P08",
@@ -464,6 +646,16 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
       ]
     },
     {
@@ -476,6 +668,16 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
       ]
     },
     {
@@ -488,6 +690,36 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "constraint",
+          "ref": "C02"
+        },
+        {
+          "type": "mechanism",
+          "ref": "ME06"
+        },
+        {
+          "type": "claim",
+          "ref": "CL01"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b_http.py"
+        }
       ]
     },
     {
@@ -500,6 +732,40 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "validation",
+          "ref": "V05"
+        },
+        {
+          "type": "claim",
+          "ref": "CL02"
+        },
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL04"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b_http.py"
+        }
       ]
     },
     {
@@ -512,6 +778,28 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL01"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b_http.py"
+        }
       ]
     },
     {
@@ -524,7 +812,25 @@
       "sub_question_binding": [
         "Q3"
       ],
-      "definition": "R(2i−1)/(2k)，k=2 ⇒ 最大最近距离 R/4 = 450 m"
+      "definition": "R(2i−1)/(2k)，k=2 ⇒ 最大最近距离 R/4 = 450 m",
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
+      ]
     },
     {
       "parameter_id": "P14",
@@ -535,6 +841,32 @@
       "source": "derived",
       "sub_question_binding": [
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL03"
+        },
+        {
+          "type": "claim",
+          "ref": "CL04"
+        },
+        {
+          "type": "claim",
+          "ref": "CL05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
       ]
     },
     {
@@ -547,6 +879,24 @@
       "sub_question_binding": [
         "Q3",
         "Q4"
+      ],
+      "used_in": [
+        {
+          "type": "equation",
+          "ref": "E09"
+        },
+        {
+          "type": "claim",
+          "ref": "CL02"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
       ]
     },
     {
@@ -560,7 +910,29 @@
         "Q3",
         "Q4"
       ],
-      "definition": "演练 30 组实例，种子 42..71 连续取值"
+      "definition": "演练 30 组实例，种子 42..71 连续取值",
+      "used_in": [
+        {
+          "type": "claim",
+          "ref": "CL06"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/simulator_http.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b_http.py"
+        }
+      ]
     },
     {
       "parameter_id": "P17",
@@ -574,7 +946,21 @@
         "Q3",
         "Q4"
       ],
-      "definition": "由强度估距：d_est = rel · r_rec,nom"
+      "definition": "由强度估距：d_est = rel · r_rec,nom",
+      "used_in": [
+        {
+          "type": "mechanism",
+          "ref": "ME05"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/build_state.py"
+        },
+        {
+          "type": "code",
+          "ref": "artifacts/code/solve_b.py"
+        }
+      ]
     }
   ],
   "objectives": [
