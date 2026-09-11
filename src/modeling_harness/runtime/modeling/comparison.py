@@ -8,6 +8,7 @@ constraint_violation_max / robustness），输出结构化比较结果与 accept
 
 from __future__ import annotations
 
+import math
 from datetime import datetime, timezone
 
 
@@ -131,3 +132,53 @@ def compare_models(registry, mir1_id: str, mir2_id: str) -> dict:
         "evidence_refs": [],
         "created_at": _now(),
     }
+
+
+def _finite(v):
+    """有限数值 → float；None / 非数值 / NaN / Inf → None（不可比者视为缺失）。"""
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return f if math.isfinite(f) else None
+
+
+def objective_gaps(chosen_metrics: dict,
+                   others: list[tuple[str, dict]]) -> list[dict]:
+    """chosen 与落选候选的目标值差距（ADR-0016 Step 3：gap 可审计）。
+
+    - 只对**双方都有有限 objective_value** 的候选产出 gap，复用
+      ``baseline_comparison``（按 ``objective_direction`` 判优并量化 abs/rel gap）；
+    - 任一侧不可得 ⇒ ``comparable=False`` + ``reason``，**不猜**；
+    - 刻意**不产出上界 / 下界**：组合 / 路径型问题的界需要问题特定松弛，
+      core 不编造（ADR-0016 决策 4）。
+
+    返回每项 ``{model_id, comparable, direction, abs_gap, rel_gap, better, reason}``；
+    ``abs_gap`` 恒为 ``chosen − alternative``（符号不随方向翻转，便于直接对账）。
+    """
+    from ..evaluation.deterministic_metrics import baseline_comparison
+
+    direction = chosen_metrics.get("objective_direction") or "minimize"
+    chosen_obj = _finite(chosen_metrics.get("objective_value"))
+    out: list[dict] = []
+    for mid, m in others:
+        alt_obj = _finite((m or {}).get("objective_value"))
+        if chosen_obj is None or alt_obj is None:
+            out.append({
+                "model_id": mid, "comparable": False, "direction": direction,
+                "abs_gap": None, "rel_gap": None, "better": None,
+                "reason": "objective_value 不可得（chosen 或 alternative 缺失），"
+                          "不猜差距",
+            })
+            continue
+        res = baseline_comparison({"objective_value": chosen_obj},
+                                  {"objective_value": alt_obj},
+                                  keys=["objective_value"], direction=direction)
+        det = res["detail"][0]
+        out.append({
+            "model_id": mid, "comparable": True, "direction": direction,
+            "abs_gap": det["abs_gap"], "rel_gap": det["rel_gap"],
+            "better": "chosen" if det["better"] == "a" else "alternative",
+            "reason": "",
+        })
+    return out

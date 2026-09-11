@@ -46,6 +46,7 @@ if str(REPO / "src") not in sys.path:
 
 from modeling_harness.runtime.execution.engine import BLOCKED  # noqa: E402
 from modeling_harness.runtime.knowledge.retriever import KnowledgeRetriever  # noqa: E402
+from modeling_harness.runtime.modeling.comparison import objective_gaps  # noqa: E402
 from modeling_harness.runtime.modeling.model_ir import ModelIRBuilder, ModelIRError, validate_model_ir  # noqa: E402
 from modeling_harness.runtime.modeling.planner import ExperimentPlanner, PlannerError  # noqa: E402
 from modeling_harness.runtime.modeling.selection import MethodArena, SelectionError  # noqa: E402
@@ -1530,6 +1531,13 @@ class DefaultNodeExecutor:
                 "reasoning": reasoning,
                 "ranked": ranked,
                 "candidate_vr": {k: v.get("vr_id") for k, v in table.items()},
+                # ADR-0016 Step 3：chosen 与落选候选的目标值差距落账（可审计）。
+                # 只记可算的 gap；**不产出上界/下界**——组合/路径型问题的界需要
+                # 问题特定松弛，core 不编造（ADR-0016 决策 4）。
+                "objective_gaps": objective_gaps(
+                    (table.get(best_mir) or {}).get("metrics") or {},
+                    [(m, (table.get(m) or {}).get("metrics") or {})
+                     for m in ranked[1:]]),
             }
             d = self.registry.create(
                 "decision", title=f"{qid} 候选竞技场选型（evidence-based）",
