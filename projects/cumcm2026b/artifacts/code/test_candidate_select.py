@@ -12,6 +12,7 @@ import pytest
 
 import candidate_select as C
 import solve_b as B
+import solve_b_http as M
 
 
 # ------------------------------------------------------- 独立性 / 同一协议
@@ -112,3 +113,83 @@ def test_decision_is_machine_readable():
     for key in ("stage", "winner", "gate", "objective", "secondary", "reason"):
         assert key in dec
     assert dec["objective"]["paired_ci95_halfwidth_s"] == 100.0
+
+
+# ------------------------------------------ M-SELECT-002：策略对象化 + 信息感知候选
+def test_candidate_registry_has_three_strategy_objects():
+    """候选注册表是三件**规格对象**（各有 points 几何入口），不再是裸点集。"""
+    names = [c["name"] for c in C.CANDIDATES]
+    assert names == ["RING", "SPIRAL", "AIFIX"]
+    for c in C.CANDIDATES:
+        assert callable(c["points"])
+
+
+def test_aifix_shares_ring_geometry_single_variable_contrast():
+    """AIFIX 必须复用 RING 点集：对照的唯一变量是「何时 engage」。
+
+    M-SELECT-001 的教训——给候选配不同的几何会得出假结论（spiral 首版忽略
+    has_directional 导致 Q4 假淘汰）。AIFIX 用同一份 ring_points 消除该风险。
+    """
+    assert C.AIFIX_CAND["points"] is C.RING_CAND["points"]
+    assert C.AIFIX_CAND.get("sweeper") is M.interleaved_sweeper
+    assert C.RING_CAND.get("sweeper") is None
+
+
+def test_interleaved_sweeper_signature_matches_hook():
+    """sweeper 策略对象的形参必须与 dog_strategy_http 的调用点一致。"""
+    import inspect
+    swp = inspect.signature(M.interleaved_sweeper).parameters
+    for p in ("sim", "obs", "det_time", "clear_time", "has_directional", "points"):
+        assert p in swp, f"interleaved_sweeper 缺形参 {p}"
+    assert "sweeper" in inspect.signature(M.dog_strategy_http).parameters
+
+
+# ------------------------------------------------------------- select_best 语义
+def _agg2(cleared, t):
+    return {"cleared_fraction": cleared, "T_total_s": t}
+
+
+def test_select_best_feasibility_filters_before_objective():
+    """最快的候选若不可行，必须被淘汰、不参与目标比较。"""
+    aggs = {"RING": _agg2(1.0, 10000.0), "SPIRAL": _agg2(1.0, 8000.0),
+            "AIFIX": _agg2(0.5, 1.0)}
+    dec = C.select_best(aggs, paired={("SPIRAL", "RING"):
+                                      {"delta_mean_s": -2000.0,
+                                       "delta_ci95_halfwidth_s": 100.0}})
+    assert dec["gate"]["rejected"] == ["AIFIX"]
+    assert dec["winner"] == "SPIRAL"
+
+
+def test_select_best_inconclusive_when_within_noise():
+    aggs = {"RING": _agg2(1.0, 10000.0), "SPIRAL": _agg2(1.0, 9600.0)}
+    dec = C.select_best(aggs, paired={("RING", "SPIRAL"):
+                                      {"delta_mean_s": 400.0,
+                                       "delta_ci95_halfwidth_s": 900.0}})
+    assert dec["winner"] == "INCONCLUSIVE"
+    assert dec["objective"]["within_noise"] is True
+    assert dec["checks_passed_used"] is False
+
+
+def test_select_best_ranks_and_picks_significant_winner():
+    aggs = {"RING": _agg2(1.0, 10000.0), "SPIRAL": _agg2(1.0, 8000.0),
+            "AIFIX": _agg2(1.0, 9000.0)}
+    dec = C.select_best(aggs, paired={("SPIRAL", "RING"):
+                                      {"delta_mean_s": -2000.0,
+                                       "delta_ci95_halfwidth_s": 100.0}})
+    assert dec["ranked"] == ["SPIRAL", "AIFIX", "RING"]
+    assert dec["winner"] == "SPIRAL"
+    assert dec["objective"]["abs_gap"] == pytest.approx(-1000.0)
+
+
+def test_select_best_all_infeasible_yields_none():
+    dec = C.select_best({"A": _agg2(0.5, 10.0), "B": _agg2(0.6, 9.0)})
+    assert dec["winner"] == "NONE" and dec["stage"] == "feasibility"
+
+
+def test_paired_between_sign_and_winrate():
+    rows = [{"seed": 42, "A": {"T_total_s": 100.0}, "B": {"T_total_s": 90.0}},
+            {"seed": 43, "A": {"T_total_s": 110.0}, "B": {"T_total_s": 100.0}}]
+    st = C.paired_between(rows, "A", "B")
+    assert st["delta_mean_s"] == pytest.approx(10.0)   # Δ = A − B > 0 ⇒ A 更慢
+    assert st["B_win_rate"] == 1.0
+    assert st["A_win_rate"] == 0.0

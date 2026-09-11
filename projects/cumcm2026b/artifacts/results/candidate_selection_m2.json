@@ -1,0 +1,428 @@
+{
+  "milestone": "M-SELECT-002",
+  "n_trials": 5,
+  "seed_start": 42,
+  "candidates": [
+    "RING",
+    "SPIRAL",
+    "AIFIX"
+  ],
+  "questions": {
+    "q3_omni": {
+      "candidates": {
+        "RING": {
+          "cleared_fraction": 1.0,
+          "T_total_s": 6597.8921928
+        },
+        "SPIRAL": {
+          "cleared_fraction": 1.0,
+          "T_total_s": 7132.9197916
+        },
+        "AIFIX": {
+          "cleared_fraction": 1.0,
+          "T_total_s": 6689.1378171999995
+        }
+      },
+      "paired": {
+        "RING|SPIRAL": {
+          "delta_mean_s": -535.0275988000001,
+          "delta_std_s": 1166.1884664669453,
+          "delta_ci95_halfwidth_s": 1022.2092607537587,
+          "A_win_rate": 0.6,
+          "B_win_rate": 0.4
+        },
+        "RING|AIFIX": {
+          "delta_mean_s": -91.24562439999991,
+          "delta_std_s": 461.7015702374278,
+          "delta_ci95_halfwidth_s": 404.6992697767586,
+          "A_win_rate": 0.8,
+          "B_win_rate": 0.2
+        },
+        "SPIRAL|AIFIX": {
+          "delta_mean_s": 443.7819744000002,
+          "delta_std_s": 1095.641957624413,
+          "delta_ci95_halfwidth_s": 960.3725193296594,
+          "A_win_rate": 0.4,
+          "B_win_rate": 0.6
+        }
+      },
+      "rows": [
+        {
+          "seed": 42,
+          "RING": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7143.569752,
+            "n_measure": 318,
+            "move_dist_m": 25877.848759650544,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9754.867534,
+            "n_measure": 358,
+            "move_dist_m": 37904.33766866728,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7472.435969,
+            "n_measure": 311,
+            "move_dist_m": 27642.179846615527,
+            "n_points": 17
+          }
+        },
+        {
+          "seed": 43,
+          "RING": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5991.237711,
+            "n_measure": 302,
+            "move_dist_m": 20696.188553703905,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5936.62261,
+            "n_measure": 290,
+            "move_dist_m": 20713.113049535914,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6285.257824,
+            "n_measure": 308,
+            "move_dist_m": 21921.289121296737,
+            "n_points": 17
+          }
+        },
+        {
+          "seed": 44,
+          "RING": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6816.795567,
+            "n_measure": 361,
+            "move_dist_m": 22958.977837262955,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6912.135854,
+            "n_measure": 303,
+            "move_dist_m": 25205.67926943942,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7265.778531,
+            "n_measure": 346,
+            "move_dist_m": 25513.892656955548,
+            "n_points": 17
+          }
+        },
+        {
+          "seed": 45,
+          "RING": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6668.180094,
+            "n_measure": 359,
+            "move_dist_m": 22260.900471944944,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6821.227848,
+            "n_measure": 339,
+            "move_dist_m": 23631.13923833029,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6753.175391,
+            "n_measure": 351,
+            "move_dist_m": 22865.8769556313,
+            "n_points": 17
+          }
+        },
+        {
+          "seed": 46,
+          "RING": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6369.67784,
+            "n_measure": 324,
+            "move_dist_m": 21933.38919950341,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6239.745112,
+            "n_measure": 287,
+            "move_dist_m": 22383.725558343536,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5669.041371,
+            "n_measure": 285,
+            "move_dist_m": 19550.20685251145,
+            "n_points": 17
+          }
+        }
+      ],
+      "decision": {
+        "stage": "objective",
+        "winner": "INCONCLUSIVE",
+        "gate": {
+          "threshold": 0.95,
+          "feasible": {
+            "RING": true,
+            "SPIRAL": true,
+            "AIFIX": true
+          },
+          "rejected": []
+        },
+        "ranked": [
+          "RING",
+          "AIFIX",
+          "SPIRAL"
+        ],
+        "objective": {
+          "metric": "T_total_s",
+          "direction": "minimize",
+          "best": "RING",
+          "best_T_total_s": 6597.8921928,
+          "runner_up": "AIFIX",
+          "runner_up_T_total_s": 6689.1378171999995,
+          "abs_gap": -91.24562439999954,
+          "paired_delta_mean_s": -91.24562439999991,
+          "paired_ci95_halfwidth_s": 404.6992697767586,
+          "within_noise": true
+        },
+        "reason": "领先者与亚军均值差落在 95% CI 内 ⇒ 与噪声不可分，不下胜负结论",
+        "checks_passed_used": false
+      }
+    },
+    "q4_mix": {
+      "candidates": {
+        "RING": {
+          "cleared_fraction": 1.0,
+          "T_total_s": 10622.8961182
+        },
+        "SPIRAL": {
+          "cleared_fraction": 0.9866666666666667,
+          "T_total_s": 8593.6961732
+        },
+        "AIFIX": {
+          "cleared_fraction": 1.0,
+          "T_total_s": 10137.0186758
+        }
+      },
+      "paired": {
+        "RING|SPIRAL": {
+          "delta_mean_s": 2029.1999449999996,
+          "delta_std_s": 756.490853916915,
+          "delta_ci95_halfwidth_s": 663.0934696963133,
+          "A_win_rate": 0.0,
+          "B_win_rate": 1.0
+        },
+        "RING|AIFIX": {
+          "delta_mean_s": 485.8774424000003,
+          "delta_std_s": 1538.7545041739284,
+          "delta_ci95_halfwidth_s": 1348.77779143062,
+          "A_win_rate": 0.4,
+          "B_win_rate": 0.6
+        },
+        "SPIRAL|AIFIX": {
+          "delta_mean_s": -1543.3225025999996,
+          "delta_std_s": 1939.6765574078497,
+          "delta_ci95_halfwidth_s": 1700.2014655968762,
+          "A_win_rate": 0.8,
+          "B_win_rate": 0.2
+        }
+      },
+      "rows": [
+        {
+          "seed": 42,
+          "RING": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 13137.948975,
+            "n_measure": 592,
+            "move_dist_m": 47559.7448756872,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 42,
+            "cleared_fraction": 0.9333333333333333,
+            "T_total_s": 11898.396655,
+            "n_measure": 526,
+            "move_dist_m": 43861.98327322965,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10084.76414,
+            "n_measure": 360,
+            "move_dist_m": 39403.82070163981,
+            "n_points": 29
+          }
+        },
+        {
+          "seed": 43,
+          "RING": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10299.83106,
+            "n_measure": 568,
+            "move_dist_m": 34214.15529786837,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8809.714749,
+            "n_measure": 448,
+            "move_dist_m": 30303.573745619833,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10835.413195,
+            "n_measure": 524,
+            "move_dist_m": 38107.06597616713,
+            "n_points": 29
+          }
+        },
+        {
+          "seed": 44,
+          "RING": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9469.047353,
+            "n_measure": 450,
+            "move_dist_m": 33575.23676660987,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7136.550764,
+            "n_measure": 331,
+            "move_dist_m": 25497.75381773977,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10260.780878,
+            "n_measure": 409,
+            "move_dist_m": 38643.90439237947,
+            "n_points": 29
+          }
+        },
+        {
+          "seed": 45,
+          "RING": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10185.356091,
+            "n_measure": 490,
+            "move_dist_m": 35981.78045571708,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7028.129086,
+            "n_measure": 322,
+            "move_dist_m": 25240.64542903721,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9543.468228,
+            "n_measure": 407,
+            "move_dist_m": 35227.34113774466,
+            "n_points": 29
+          }
+        },
+        {
+          "seed": 46,
+          "RING": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10022.297112,
+            "n_measure": 484,
+            "move_dist_m": 35426.485559693756,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8095.689612,
+            "n_measure": 373,
+            "move_dist_m": 29223.44806215535,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9960.666938,
+            "n_measure": 492,
+            "move_dist_m": 34798.334687754104,
+            "n_points": 29
+          }
+        }
+      ],
+      "decision": {
+        "stage": "objective",
+        "winner": "INCONCLUSIVE",
+        "gate": {
+          "threshold": 0.95,
+          "feasible": {
+            "RING": true,
+            "SPIRAL": true,
+            "AIFIX": true
+          },
+          "rejected": []
+        },
+        "ranked": [
+          "SPIRAL",
+          "AIFIX",
+          "RING"
+        ],
+        "objective": {
+          "metric": "T_total_s",
+          "direction": "minimize",
+          "best": "SPIRAL",
+          "best_T_total_s": 8593.6961732,
+          "runner_up": "AIFIX",
+          "runner_up_T_total_s": 10137.0186758,
+          "abs_gap": -1543.3225026,
+          "paired_delta_mean_s": -1543.3225025999996,
+          "paired_ci95_halfwidth_s": 1700.2014655968762,
+          "within_noise": true
+        },
+        "reason": "领先者与亚军均值差落在 95% CI 内 ⇒ 与噪声不可分，不下胜负结论",
+        "checks_passed_used": false
+      }
+    }
+  }
+}

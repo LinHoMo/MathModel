@@ -377,7 +377,42 @@ paired 评估（同 seeds 42–46，逐对 ΔT = T_A − T_B）：
 **测试**保证（`test_both_candidates_are_coverage_complete` /
 `test_directional_variants_both_extend_beyond_source_disk`），不能靠口头声明。
 
-复现：`py -3.12 -X utf8 -m candidate_select --trials 5` → `artifacts/results/candidate_selection.json`。
+复现（M-SELECT-001 两候选口径）：保留产物 `artifacts/results/candidate_selection.json`；
+脚本已升级为 M-SELECT-002（见下节），新命令产出 `candidate_selection_m2.json`
+（其中 RING/SPIRAL 对照与本节数字逐位一致）。
+
+### 候选机制策略对象化 + 信息感知第三候选：M-SELECT-002
+
+M-SELECT-001 留下两个未竟事项：候选写死在选择脚本里（机制不可替换），以及「第三候选」空缺。
+本轮补齐：
+
+**策略对象化**：候选由裸点集升级为规格对象 `{name, points, sweeper?}`——`points` 给覆盖几何，
+`sweeper`（可选）接管整个扫描阶段的调度。`solve_b_http.dog_strategy_http` 新增 `sweeper`
+接入点；缺省 `None` 时行为与改动前完全一致。**等价性证据**：重构后重跑，RING−SPIRAL 的
+配对差与 M-SELECT-001 逐位相同（Q3 −535.0 ± 1166.2、Q4 +2029.2 ± 756.5）。
+
+**第三候选 AIFIX（信息感知）**：几何与 RING **同一份**（单变量对照，避免 M-SELECT-001
+「配不公平几何得假结论」的覆辙），唯一差别是**何时 engage**——`interleaved_sweeper`
+每测完一个站点，立刻对已具备交会条件（`best_single_fix` 非空）的频道归航清除，而不是
+等整张覆盖网走完。机制确实生效：AIFIX 的 T_total 与 RING 不同（若钩子失效会逐位相同）。
+
+paired 评估（同 seeds 42–46，三候选两两）：
+
+| 问 | RING | SPIRAL | AIFIX | 显著对 | 判定 |
+|---|---|---|---|---|---|
+| Q3 全向 | 6597.9 s | 7132.9 s | 6689.1 s | 无（三对 Δ 均落在各自 95% CI 内） | INCONCLUSIVE |
+| Q4 混合 | 10622.9 s | 8593.7 s | 10137.0 s | RING−SPIRAL +2029.2（CI ±663.1） | INCONCLUSIVE（对亚军不可分） |
+
+**结论（如实，含负结果）**：AIFIX 在本实验条件下**未显示统计可辨的优势**——Q3 下
+ΔT(RING−AIFIX) = −91.2 ± 404.7 s、Q4 下 +485.9 ± 1348.8 s，均落在噪声内。即
+「示向度一可用就立即兑现成定位」这条直觉，其收益不足以抵消中途往返带来的行程代价。
+Q4 下 SPIRAL 相对 RING 仍显著（复现 M-SELECT-001），但相对 AIFIX 的领先落在噪声内，
+故选择器不下胜负结论。
+
+**局限**：AIFIX 只实现了一种交错形态（逐站 engage），未做参数（engage 阈值 / 频率）
+扫描；结论限本地 Mock 口径（官方模拟器未接，需 GUI 登录 + 联网）。
+
+复现：`py -3.12 -X utf8 -m candidate_select --trials 5` → `artifacts/results/candidate_selection_m2.json`。
 
 ### 全程的主线
 

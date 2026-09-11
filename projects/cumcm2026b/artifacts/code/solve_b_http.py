@@ -281,8 +281,54 @@ def sweep_http(sim, points, obs, det_time, channels=None, max_obs=1,
     return found_total
 
 
+def interleaved_sweeper(sim, obs, det_time, clear_time, has_directional,
+                        max_obs=DEFAULT_SWEEP_MAX_OBS, miss_limit=None,
+                        points=None):
+    """AIFIX 策略对象（M-SELECT-002）：**边扫边定位**的信息感知扫描。
+
+    与 ``sweep_http`` 的差别只有一处——**何时 engage**：每完成一个站点的测量后，
+    立刻检查是否有频道已具备交会条件（``best_single_fix`` 非空），有则当场归航清除，
+    而不是等整张覆盖网走完再统一进入阶段B；已清除频道在后续站点自然被跳过。
+
+    信息驱动的意义：示向度一旦可用就立即兑现成定位/清除动作，从而缩短「首次探测 →
+    清除」的持有时间；代价是扫描行程可能因中途往返而变长。两者孰优由对照实验裁决，
+    不预设结论（M-SELECT-001 的教训：给候选配不公平的几何会得出假结论）。
+
+    几何/协议/计价与 ``sweep_http`` 完全同一份代码，只有调度顺序不同。
+    """
+    pts = points if points is not None else coverage_detection_points(has_directional)
+    misses: dict[int, int] = {}
+    for (px, py) in pts:
+        active = [c for c in range(1, N_CHANNEL + 1) if c not in sim.cleared]
+        if max_obs is not None:
+            active = [c for c in active if len(obs[c]) < max_obs]
+        if miss_limit is not None:
+            active = [c for c in active if misses.get(c, 0) < miss_limit]
+        if not active:
+            return
+        for ch in active:
+            r = sim.measure(px, py, ch)
+            if r["measure_result"] == "direction":
+                obs[ch].append(((px, py), r["svd_deg"]))
+                det_time.setdefault(ch, sim.virtual_time)
+                misses[ch] = 0
+            elif r["measure_result"] == "near":
+                sim.clear(px, py, ch)
+                misses[ch] = 0
+            else:
+                misses[ch] = misses.get(ch, 0) + 1
+        # 信息感知：本站测量后，对已能交会的频道立即定位清除
+        for ch in list(active):
+            if ch in sim.cleared or not obs[ch] or ch in clear_time:
+                continue
+            if best_single_fix(obs[ch]) is None:
+                continue
+            if engage_http(sim, ch, obs[ch]):
+                clear_time[ch] = sim.virtual_time
+
+
 def dog_strategy_http(sim, has_directional=False, sweep_max_obs=DEFAULT_SWEEP_MAX_OBS,
-                      sweep_miss_limit=None, points=None):
+                      sweep_miss_limit=None, points=None, sweeper=None):
     """完整策略：覆盖扫描 → 逐频道定位清除 → 残余局部搜索。返回统计 dict。
 
     ``points``：覆盖扫描的检测点集。缺省用同心环（``coverage_detection_points``）；
@@ -299,10 +345,14 @@ def dog_strategy_http(sim, has_directional=False, sweep_max_obs=DEFAULT_SWEEP_MA
     det_time: dict[int, float] = {}
     clear_time: dict[int, float] = {}
 
-    # 阶段A：覆盖扫描（点集可注入，用于候选对照；跳过多点重复测同一频道）
-    pts = points if points is not None else coverage_detection_points(has_directional)
-    sweep_http(met, pts, obs, det_time, max_obs=sweep_max_obs,
-               miss_limit=sweep_miss_limit)
+    # 阶段A：覆盖扫描。默认按固定几何点集 sweep；注入 sweeper（策略对象）时由它
+    # 接管整个扫描阶段——这是「候选机制可替换」的接入点（M-SELECT-002）。
+    if sweeper is not None:
+        sweeper(met, obs, det_time, clear_time, has_directional)
+    else:
+        pts = points if points is not None else coverage_detection_points(has_directional)
+        sweep_http(met, pts, obs, det_time, max_obs=sweep_max_obs,
+                   miss_limit=sweep_miss_limit)
 
     # 阶段B：逐频道定位清除（已发现频道按最近优先）
     def _anchor(ch):
