@@ -1883,6 +1883,11 @@ class DefaultNodeExecutor:
                 # 「候选方案要求」，`decision_rule=gain > cost` 永不生效。
                 cand = Candidate.from_dict(top)
                 plan = self.planner.plan_from_candidate(cand, qid)
+                # ADR-0016 Step 2：落选候选不得静默丢弃——把它们（含创新候选）的
+                # 验证义务并入计划。条目如实标注 advisory（未执行），
+                # 不因此声称产出了证据。
+                plan.entries.extend(self.planner.extra_entries_from_candidates(
+                    [Candidate.from_dict(c) for c in cands[1:]], plan))
                 # P9.5 红队修复：新计划建立前退役旧计划（R3 谱系语义，
                 # 旧计划 superseded 审计保留，不得双 active）
                 from modeling_harness.runtime.artifacts.lifecycle import LifecycleError
@@ -1894,9 +1899,25 @@ class DefaultNodeExecutor:
                                 reason="superseded by re-planned lineage")
                         except LifecycleError:
                             pass
+                plan_data = plan.as_dict()
+                # ADR-0016 Step 2：候选池落决策审计（decision schema 的
+                # alternatives 允许自由对象）。如实标注每条候选是否被执行——
+                # 方法组合候选没有 MODEL_IR，**未执行**，不得据此声称有证据。
+                plan_data["alternatives"] = [
+                    {"candidate_id": c.get("candidate_id", ""),
+                     "kind": c.get("kind", ""),
+                     "score": c.get("score"),
+                     "novelty_level": (
+                         (c.get("innovations") or [{}])[0]
+                         .get("novelty_level", "") if c.get("innovations")
+                         else ""),
+                     "executed": False,
+                     "note": "方法组合候选（无 MODEL_IR）：advisory，未执行；"
+                             "见 ADR-0016 决策 4"}
+                    for c in cands]
                 d = self.registry.create(
                     "decision", title=f"{qid} 实验计划",
-                    payload=plan.methods, data=plan.as_dict(),
+                    payload=plan.methods, data=plan_data,
                     depends_on=[mid] if mid else [],
                     activate=True, created_by=node_id)
                 info["plan"] = plan.as_dict()

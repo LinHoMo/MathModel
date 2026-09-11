@@ -197,6 +197,48 @@ class ExperimentPlanner:
                         refine_if="gain 微弱")))
         return plan
 
+    def extra_entries_from_candidates(self, candidates: list,
+                                      plan: ExperimentPlan,
+                                      ) -> list[ExperimentEntry]:
+        """落选候选 → 结构化实验条目（ADR-0016 Step 2：候选不得静默丢弃）。
+
+        `do_experiment_design` 原先只消费候选池的第 0 名，其余候选（含全部
+        innovation 候选）连同它们的验证义务一起消失。本方法把落选候选的
+        ``required_experiments`` 与创新要求转成条目（``候选方案要求[<cand_id>]`` /
+        ``创新验证[<pattern_id>]`` 前缀），使其**义务**进入计划、可被审计。
+
+        注意这**不等于**「候选被执行」：方法组合候选没有 MODEL_IR，而 core 是
+        LLM-free、不编造 equations（`_skeleton_mir` 明确 construction_status=
+        pending_model_spec、不可执行）。条目的 hypothesis 如实标注 advisory，
+        不得据此声称该候选已产出证据。
+        """
+        seen = {e.purpose for e in plan.entries}
+        out: list[ExperimentEntry] = []
+        for cand in candidates:
+            reqs = [(f"候选方案要求[{cand.candidate_id}]: {r}", r)
+                    for r in cand.required_experiments]
+            for inno in cand.innovations:
+                reqs += [(f"创新验证[{inno.pattern_id}]"
+                          f"（候选 {cand.candidate_id}）: {r}", r)
+                         for r in inno.to_experiment_requirements()]
+            for purpose, req in reqs:
+                if purpose in seen:
+                    continue
+                seen.add(purpose)
+                out.append(ExperimentEntry(
+                    experiment_id=f"E-{plan.question}-X{len(out) + 1:02d}",
+                    purpose=purpose,
+                    hypothesis=f"{req} 验证通过（候选 {cand.candidate_id}；"
+                               f"advisory —— 未执行，见 ADR-0016 决策 4）",
+                    method=req,
+                    baseline=(plan.baseline_comparison[0]
+                              if plan.baseline_comparison else ""),
+                    priority=3, cost=2, expected_information_gain=0.4,
+                    decision_rule=DecisionRule(
+                        metric=req, accept_if="criteria_pass",
+                        reject_if="criteria_fail", refine_if="borderline")))
+        return out
+
     def _build_entries(self, plan: ExperimentPlan, card_ids: list[str],
                        baseline_card_id: str | None) -> list[ExperimentEntry]:
         """从 Method Card 的 evidence_requirements + 失败记忆反向生成实验。
