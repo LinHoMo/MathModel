@@ -1176,17 +1176,35 @@
   "travel_audit": {
     "milestone": "M-SELECT-004",
     "method": "5 seeds × 2 场景，报均值（铁律：多种子 ≥5 次）",
-    "q3_omni_total_move_m": 22745.46096441315,
+    "before_clear_budget_change": {
+      "q3_omni_total_move_m": 22745,
+      "q3_omni_scan_m": 11151,
+      "q3_omni_engage_m": 11594,
+      "q3_omni_sources_mst_lower_bound_m": 7641,
+      "q3_omni_engage_over_lower_bound": 1.52,
+      "q3_omni_engage_over_lower_bound_sd": 0.07,
+      "q3_omni_n_clear_actions": 16.0,
+      "q4_mix_total_move_m": 37351,
+      "q4_mix_scan_m": 20629,
+      "q4_mix_engage_m": 16723,
+      "q4_mix_sources_mst_lower_bound_m": 6864,
+      "q4_mix_engage_over_lower_bound": 2.42,
+      "q4_mix_engage_over_lower_bound_sd": 0.64,
+      "q4_mix_n_clear_actions": 28.0
+    },
+    "q3_omni_total_move_m": 22745.44769851488,
     "q3_omni_scan_m": 11151.105643614519,
-    "q3_omni_engage_m": 11594.355320798632,
+    "q3_omni_engage_m": 11594.34205490036,
     "q3_omni_sources_mst_lower_bound_m": 7640.599088099656,
-    "q3_omni_engage_over_lower_bound": 1.5175994194051619,
-    "q3_omni_n_clear_actions": 16.0,
-    "q4_mix_total_move_m": 37351.48059111526,
+    "q3_omni_engage_over_lower_bound": 1.517597786195957,
+    "q3_omni_n_clear_actions": 13.2,
+    "q3_omni_engage_over_lower_bound_sd": 0.06746861754066041,
+    "q4_mix_total_move_m": 37290.168612406706,
     "q4_mix_scan_m": 20628.774288190172,
-    "q4_mix_engage_m": 16722.706302925082,
+    "q4_mix_engage_m": 16661.394324216533,
     "q4_mix_sources_mst_lower_bound_m": 6863.702768781028,
-    "q4_mix_engage_over_lower_bound": 2.424508700294665,
-    "q4_mix_n_clear_actions": 28.0
+    "q4_mix_engage_over_lower_bound": 2.4166856954444014,
+    "q4_mix_n_clear_actions": 16.8,
+    "q4_mix_engage_over_lower_bound_sd": 0.6284459129212179
   }
 }

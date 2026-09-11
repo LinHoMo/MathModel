@@ -137,6 +137,21 @@ def _append_obs(obs, p, bearing):
     obs.append((p, bearing))
 
 
+MAX_CLEAR_TRIES = 3   # 单次归航内对同一频道的 clear 尝试上限
+
+
+def clear_budget_exhausted(tries: int, limit: int = MAX_CLEAR_TRIES) -> bool:
+    """归航中 clear 反复失败时是否该放弃、把该频道交上层小半径兜底搜索。
+
+    依据（travel_audit 5 seeds 实测）：Q4 混合场景归航段冗余 2.42×（±0.64），
+    而 Q3 全向只有 1.52×（±0.07）——定向源归航不准时，`d <= D_CLEAR` 分支会
+    反复 clear 失败并跳到估计点重测（原先只受 n_iter=16 兜底，单局见过
+    65 次 clear 对 15 个源）。Q3 正常路径 1 次 clear 即成功，故取 3 时
+    **Q3 行为不受影响**（现成的回归护栏）。
+    """
+    return tries >= limit
+
+
 def home_http(sim, ch, obs, n_iter=HOME_N_ITER, ratio=APPROACH_RATIO,
               target=UNCERT_TARGET):
     """几何驱动归航。每轮用示向度交会得估计点 P̂，沿实时测向线按 `ratio` 比例
@@ -153,6 +168,7 @@ def home_http(sim, ch, obs, n_iter=HOME_N_ITER, ratio=APPROACH_RATIO,
     px, py = sim.pos
     r = sim.measure(px, py, ch)
     visited = {(round(px, 9), round(py, 9))}
+    clear_tries = 0
     for _ in range(n_iter):
         res = r["measure_result"]
         if res == "near":
@@ -188,6 +204,12 @@ def home_http(sim, ch, obs, n_iter=HOME_N_ITER, ratio=APPROACH_RATIO,
         if _uncertainty(d, phi) <= target or d <= D_CLEAR:
             if sim.clear(est[0], est[1], ch) == "success":
                 return True
+            # clear 失败 ⇒ 估计点不可靠。限制尝试次数，超限即交上层
+            # local_search_http 的小半径栅格兜底（原实现只受 n_iter=16 兜底，
+            # 定向源下会反复跳点重测，见 clear_budget_exhausted 的依据）。
+            clear_tries += 1
+            if clear_budget_exhausted(clear_tries):
+                return False
             px, py = est
             visited.add((round(px, 9), round(py, 9)))
             r = sim.measure(px, py, ch)

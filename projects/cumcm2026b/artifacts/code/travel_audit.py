@@ -88,11 +88,26 @@ def _merge_into_all_results(report: dict) -> None:
             data = {}
     seg: dict = {"milestone": "M-SELECT-004",
                  "method": "5 seeds × 2 场景，报均值（铁律：多种子 ≥5 次）"}
+    # 改前基线：home_http 加 clear 尝试上限之前（commit 9ca95c8）的机器实测值。
+    # 保留在台账里，使模型描述文档的「改前 → 改后」对照数字同样可追溯。
+    seg["before_clear_budget_change"] = {
+        "q3_omni_total_move_m": 22745, "q3_omni_scan_m": 11151,
+        "q3_omni_engage_m": 11594, "q3_omni_sources_mst_lower_bound_m": 7641,
+        "q3_omni_engage_over_lower_bound": 1.52,
+        "q3_omni_engage_over_lower_bound_sd": 0.07,
+        "q3_omni_n_clear_actions": 16.0,
+        "q4_mix_total_move_m": 37351, "q4_mix_scan_m": 20629,
+        "q4_mix_engage_m": 16723, "q4_mix_sources_mst_lower_bound_m": 6864,
+        "q4_mix_engage_over_lower_bound": 2.42,
+        "q4_mix_engage_over_lower_bound_sd": 0.64,
+        "q4_mix_n_clear_actions": 28.0,
+    }
     for tag, a in report.items():
         for k in ("total_move_m", "scan_m", "engage_m",
                   "sources_mst_lower_bound_m", "engage_over_lower_bound"):
             seg[f"{tag}_{k}"] = a.get(k)
         seg[f"{tag}_n_clear_actions"] = a.get("n_clear_actions")
+        seg[f"{tag}_engage_over_lower_bound_sd"] = a.get("ratio_sd")
     data["travel_audit"] = seg
     allres.write_text(json.dumps(data, ensure_ascii=False, indent=2),
                       encoding="utf-8")
@@ -141,6 +156,7 @@ def main() -> int:
         report[tag] = agg
         sd_ratio = (st_mod.stdev([r["engage_over_lower_bound"] for r in rows])
                     if len(rows) > 1 else 0.0)
+        agg["ratio_sd"] = sd_ratio
         print(f"[{tag}] {len(seeds)} seeds 均值（点={len(pts)}）")
         print(f"    总移动 {agg['total_move_m']:.0f} m"
               f" = 扫描段 {agg['scan_m']:.0f} m + 归航段 {agg['engage_m']:.0f} m")
