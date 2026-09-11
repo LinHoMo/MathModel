@@ -1070,5 +1070,27 @@
     "q4_mix_dT_SPIRAL_AIFIX_ci95_halfwidth_s": 1700.2014655968762,
     "q4_mix_dT_SPIRAL_AIFIX_A_win_rate": 0.8,
     "q4_mix_dT_SPIRAL_AIFIX_B_win_rate": 0.2
+  },
+  "candidate_pool_value": {
+    "milestone": "M-SELECT-003",
+    "scope": "selection-layer only（候选由人给定；不测生成层）",
+    "q3_omni_best_candidate": "RING",
+    "q3_omni_best_mean_total_time_s": 6597.8921928,
+    "q3_omni_worst_single_pool_candidate": "SPIRAL",
+    "q3_omni_worst_single_pool_abs_loss_s": 535.0275988000003,
+    "q3_omni_worst_single_pool_rel_loss_vs_best": 0.0810906852015335,
+    "q3_omni_worst_single_pool_rel_loss_vs_best_pct": 8.11,
+    "q3_omni_worst_single_pool_rel_loss_vs_self_pct": 7.5,
+    "q3_omni_worst_single_pool_ci95_halfwidth_s": 1022.2092607537587,
+    "q3_omni_worst_single_pool_significant": false,
+    "q4_mix_best_candidate": "SPIRAL",
+    "q4_mix_best_mean_total_time_s": 8593.6961732,
+    "q4_mix_worst_single_pool_candidate": "RING",
+    "q4_mix_worst_single_pool_abs_loss_s": 2029.1999450000003,
+    "q4_mix_worst_single_pool_rel_loss_vs_best": 0.23612656348361397,
+    "q4_mix_worst_single_pool_rel_loss_vs_best_pct": 23.61,
+    "q4_mix_worst_single_pool_rel_loss_vs_self_pct": 19.1,
+    "q4_mix_worst_single_pool_ci95_halfwidth_s": 663.0934696963133,
+    "q4_mix_worst_single_pool_significant": true
   }
 }
