@@ -10,7 +10,14 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
+
+# 以「脚本路径」方式直接运行时（py -3.12 src/modeling_harness/cli/diagram_gen.py ...）
+# 仍需能导入 modeling_harness.viz 包；以 mh / -m 方式运行时该插入为无害幂等。
+_SRC = Path(__file__).resolve().parents[2]
+if (_SRC / "modeling_harness").is_dir() and str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
 
 
 def _svg_header(w: int, h: int) -> str:
@@ -128,6 +135,37 @@ def bar_chart(data_str: str, title: str = "") -> str:
     return svg
 
 
+def _build_from_ir(args) -> int:
+    """DiagramIR(JSON) → .svg/.html。fail-closed：破损 IR 不留半成品。"""
+    from modeling_harness.viz.html import render_html
+    from modeling_harness.viz.ir import DiagramIR, DiagramIRError
+    from modeling_harness.viz.svg import render_svg
+
+    try:
+        ir = DiagramIR.load(args.ir)
+    except (DiagramIRError, OSError) as exc:
+        print(f"[FAIL] DiagramIR 破损: {exc}", file=sys.stderr)
+        return 2
+    if args.title:
+        ir.title = args.title
+
+    out = Path(args.output)
+    suffix = out.suffix.lower()
+    if suffix == ".svg":
+        content = render_svg(ir)
+    elif suffix in (".html", ".htm"):
+        content = render_html(ir)
+    else:
+        print("[FAIL] 输出后缀须为 .svg 或 .html", file=sys.stderr)
+        return 2
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(content, encoding="utf-8")
+    print(f"[OK] 图表已生成: {args.output}（kind={ir.kind}，"
+          f"{len(ir.nodes)} 节点 / {len(ir.edges)} 边）")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="科学图表生成（SVG 输出）")
     sub = parser.add_subparsers(dest="chart_type", required=True)
@@ -143,7 +181,15 @@ def main(argv=None) -> int:
     p_bar.add_argument("--title", default="", help="标题")
     p_bar.add_argument("-o", "--output", help="输出文件路径")
 
+    p_build = sub.add_parser("build", help="由 DiagramIR(JSON) 确定性渲染 SVG/HTML")
+    p_build.add_argument("ir", help="DiagramIR JSON 路径")
+    p_build.add_argument("-o", "--output", required=True, help="输出路径（.svg 或 .html）")
+    p_build.add_argument("--title", default="", help="覆盖标题")
+
     args = parser.parse_args(argv)
+
+    if args.chart_type == "build":
+        return _build_from_ir(args)
 
     if args.chart_type == "flowchart":
         content = flowchart(args.nodes, args.edges, title=args.title)

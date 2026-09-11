@@ -13,7 +13,7 @@
 | `doctor.py` | 环境预检（本地手动，CI 不跑） | `[--project <项目>]` | |
 | `replay.py` | 运行重放校验 / 差异归因（Hardening P3） | `<项目> [verify\|list\|diff <A> <B>]` | |
 | `knowledge.py` | Knowledge 检索（方法卡推荐） | `recommend --types <题型>` | |
-| `diagram_gen.py` | 科学图表生成（SVG 输出） | `flowchart --nodes A,B --edges A->B -o fig.svg` | |
+| `diagram_gen.py` | 科学图表生成（DiagramIR→确定性 SVG/HTML，零依赖） | `build <ir.json> -o fig.svg` | |
 | `scholar_fetch.py` | 学术文献检索 + BibTeX 导出 | `bibtex <关键词>` | |
 | `env_doctor.py` | 环境诊断与修复 | `[--fix] [--json]` | |
 | `gen_runtime_manifest.py` | 从 catalog.yaml 生成 runtime manifest（Codex 入口） | `[--check\|--verify]` | |
