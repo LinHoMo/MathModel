@@ -30,5 +30,5 @@ often_combined_with: [mc-ols, mc-arima]
 anti_patterns:
   - 振荡序列硬套 GM(1,1)
   - 只报告拟合优度不报告样本外误差
-known_failures: [fm-grey-oscillating-data]
+known_failures: [fm-grey-oscillating-data, fm-timeseries-no-backtest]
 reference: methodology/grey-system.md

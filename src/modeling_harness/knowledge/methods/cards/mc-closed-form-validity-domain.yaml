@@ -1,0 +1,45 @@
+# 解析闭式的适用域声明与域外对照
+# 定位：Mathematical Validity 知识。闭式只能在其适用域内用于决策，域外必须回到数值精确解。
+card_id: mc-closed-form-validity-domain
+name: 解析闭式的适用域声明与域外对照
+family: mathematical_analysis
+version: 1
+problem_types: [analytic_modeling, error_propagation, approximation_validity]
+good_for:
+  - 用解析闭式近似一个原本需要数值求解的量（如用闭式误差公式代替精确半平面交）
+  - 需要回答「这个公式在什么范围内可用、出了范围偏多少」
+  - 闭式被用于决策（选点 / 选参数）之前，必须先界定其可信范围
+structure_signals:
+  - 推导过程中做了小量展开（如 sinε ≈ ε）或丢弃了高阶项
+  - 闭式的自变量中包含待求量或不可直接观测的量
+  - 存在可对照的数值精确解（网格 / 蒙特卡洛 / 精确几何）
+problem_structures: [error_propagation, approximation]
+modeling_patterns: [analytic_approximation, error_propagation]
+mathematical_forms: [optimization, statistics]
+mechanism:
+  - 闭式来自局部线性化或小量展开，其误差随展开参数增长，因此必存在失效边界
+  - 适用域必须由可判据的条件给出（如 β' > 2ε 一类的无量纲不等式），而不是「一般情况成立」
+  - 域外必须给出数值精确解对照并量化偏差；只报域内精度属选择性报告
+formulations:
+  - 适用域判据：写成无量纲组合的不等式（如 β'/ε > 2），并说明边界处的极限行为
+  - 域外对照：max_rel_err = max |闭式 − 精确| / 精确，在参数网格上取最大值并报告
+solvers:
+  - 先网格扫参数空间定适用域边界，域内用闭式解释趋势，域外用数值精确解
+requires:
+  - 存在可计算的精确解作为对照基准
+  - 展开所依据的小参数可量化（如误差界 ε 已知上界）
+risks:
+  - 把闭式当恒等式使用，越出适用域仍直接拿来做决策
+  - 只报域内精度而隐瞒域外偏差，形成选择性报告
+validation:
+  - 适用域边界两侧各取样本，逐一对照闭式与精确解
+  - 同时报告域内最大相对偏差与域外最大相对偏差两个数，不得只报其一
+  - 若闭式自变量含不可观测量，须先做可计算性替换再对照
+often_combined_with: [mc-bearing-triangulation]
+anti_patterns:
+  - 闭式不写适用域直接用于决策
+  - 用「解析与数值两路一致」冒充适用域证明，而两路实际共用同一近似
+  - 只报闭式精度不报其失效边界
+known_failures: [fm-proxy-objective-unvalidated, fm-computability-gap]
+status: active
+confidence: 0.85

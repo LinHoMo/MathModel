@@ -25,6 +25,12 @@ validation:
 applicability:
   positive: [mechanism_known]
   required_conditions: [mechanism_known]
+often_combined_with: [mc-bzd-sensitivity, mc-bzd-failure-modes]
+anti_patterns:
+  - 无验证直接下结论
+  - 用占位符/伪造数值充当验证结果
+  - 只报最优值不报稳健性，参数一扰动结论即翻盘
+  - 验证项无 source_card，事后无法追溯义务来源
 source_type: BZD
 source_refs:
   - "BZD 验证义务知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"

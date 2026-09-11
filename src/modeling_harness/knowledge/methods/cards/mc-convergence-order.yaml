@@ -1,0 +1,44 @@
+# 收敛阶 / 误差阶分析
+# 定位：Validation 知识。用「随参数缩小的阶」证明近似是受控的，而不是只给一个数值点。
+card_id: mc-convergence-order
+name: 收敛阶与误差阶分析
+family: numerical_analysis
+version: 1
+problem_types: [numerical_validation, error_propagation, convergence_analysis]
+good_for:
+  - 需要证明某个近似量随小参数（误差界 ε、步长 h、网格尺寸）以确定的阶收敛
+  - 只有一个误差数值点不足以说明近似受控时
+  - 需要区分「一阶主导项」与「高阶残余」以判断近似在何范围内可信
+structure_signals:
+  - 模型含小参数，且结论对该参数的依赖是单调的
+  - 可用数值实验扫描该参数并观察目标量
+problem_structures: [error_propagation]
+modeling_patterns: [error_propagation]
+mathematical_forms: [statistics, optimization]
+mechanism:
+  - 若量 Q(ε) 满足 Q = C·ε^p + o(ε^p)，则 log Q 对 log ε 作图的斜率即阶 p
+  - 阶 p 是结构性质，比单个数值点更能说明近似是否受控
+  - 阶的估计必须在至少两个数量级上取点，单 decade 拟合不可靠
+formulations:
+  - 阶估计：p ≈ (log Q₂ − log Q₁) / (log ε₂ − log ε₁)
+  - 误差分解：Q(ε) = C·ε^p + O(ε^(p+1))，须给出 C 与 p 两个量，缺一不可
+solvers:
+  - 在 ε 的几何级数网格上数值求 Q，最小二乘拟合 log-log 斜率
+requires:
+  - 小参数可在多个数量级上取点
+  - 每个点都有可复现的数值解
+risks:
+  - 只在单一 ε 上给误差值，被误当作普适精度
+  - log-log 拟合点不足一个数量级，阶的估计不可靠
+validation:
+  - 至少跨越两个数量级取点，报告拟合斜率及其残差
+  - 报告阶 p 与常数 C 两个数；只报其中之一不构成阶分析
+  - 与解析推导的阶对照，不一致时须解释原因而非取其一
+often_combined_with: [mc-closed-form-validity-domain]
+anti_patterns:
+  - 只给一个误差数值就宣称「精度很高」
+  - 阶分析只取 2 个点且跨度小于一个数量级
+  - 数值拟合的阶与解析推导不一致时静默忽略
+known_failures: [fm-absolute-tolerance-predicate]
+status: active
+confidence: 0.8

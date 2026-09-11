@@ -1,0 +1,44 @@
+# 失效模式分离记账
+# 定位：Validation 知识。失败率必须按成因分桶上报，合并成一个数会掩盖根因并虚增或虚减失败率。
+card_id: mc-failure-mode-separation
+name: 失效模式分离记账（失败率分桶上报）
+family: validation_methodology
+version: 1
+problem_types: [validation_methodology, failure_analysis, statistics]
+good_for:
+  - 统计「失败率 / 成功率」时，失败其实由多种不同成因构成
+  - 需要区分「对象不存在」与「对象存在但判据失败」
+  - 需要区分「算法不适用」与「算例本身不可行」
+structure_signals:
+  - 失败样本可以再分类，且不同类的补救措施完全不同
+  - 同一个数值失败率在不同分类口径下差异显著
+problem_structures: [validation]
+modeling_patterns: [error_propagation]
+mathematical_forms: [statistics]
+mechanism:
+  - 合并的失败率是多个成因的混合，其数值对样本构成敏感，不可跨实验比较
+  - 「区域为空 / 无界」是模型的适用性失败，「区域存在但判据失败」是判据的失败，二者根因不同、补救不同
+  - 「算例不可行」不属于模型失败，混入会虚增失败率
+formulations:
+  - 分桶：N_fail = N_empty + N_unbounded + N_criterion + N_infeasible + N_numerical
+  - 各桶独立报比率，且 Σ 桶 = 总失败数，总数须对账
+solvers:
+  - 在判定链路的每一个出口打标签，出口标签即失败成因，不做事后归类
+requires:
+  - 判定链路的每个失败出口都可识别并打标签
+  - 各桶互斥且完备（每个失败样本恰落入一桶）
+risks:
+  - 合并报失败率，掩盖主导成因，导致改进方向错误
+  - 桶之间不互斥，重复计数使总数对不上
+validation:
+  - 各桶计数之和等于总失败数，逐次对账
+  - 每个桶给出至少一条成因说明与对应的补救方向
+  - 报告按桶分列，同时给出合并值供对照，但结论引用分桶值
+often_combined_with: [mc-bzd-validation-obligations, mc-bzd-failure-modes]
+anti_patterns:
+  - 只报一个总失败率
+  - 把「算例不可行」计入模型失败
+  - 事后凭结果归类而非在判定出口打标签
+known_failures: [fm-infeasible-scenario, fm-absolute-tolerance-predicate]
+status: active
+confidence: 0.85

@@ -1,0 +1,54 @@
+# 先验鲁棒性与后悔值最小化
+# 定位：Decision 知识。当目标依赖未知先验时，报「候选区 + 后悔值」而不是「单点最优」。
+card_id: mc-prior-robustness-regret
+name: 先验鲁棒性与后悔值最小化（不报单点最优）
+family: decision_analysis
+version: 1
+problem_types: [decision_under_uncertainty, robust_optimization, prior_sensitivity]
+good_for:
+  - 最优选点的结果随某个不可观测的参数（如源距、到达率）漂移
+  - 需要给出一个对先验不敏感的建议区间，而不是一个点
+  - 多先验下希望控制「选错的最大损失」
+structure_signals:
+  - 目标函数含需取期望的未知参数，且期望所依赖的先验分布无题给依据
+  - 换一种先验，最优点明显移动
+problem_structures: [optimization, decision]
+modeling_patterns: [optimization, error_propagation]
+mathematical_forms: [optimization, statistics]
+mechanism:
+  - 先验不是题给量；在多个合理先验下最优点漂移，说明「最优」是先验的产物而非问题的性质
+  - 后悔值 R(x) = max_π [ f(x, π) − min_x' f(x', π) ] 衡量选 x 相对于「已知先验后最优」的最大损失
+  - 最小化最大后悔值得到的点，其最坏损失可控，且不依赖选哪个先验
+  - 可行性先于最优性：若决策变量会使方案以一定概率整体失效，后悔值必须只在可行集内计算。可行集 F = { x : max_{π in Π} P_fail(x, π) ≤ τ }（τ 取 0.01 到 0.05）；f*(π) 也必须在 F 内取最小，否则「已知先验后的最优」本身可能是个用不了的方案
+  - 不确定性来源要分层：先验 π 之外若还有题给区间型未知参数（如接收半径、误差界、效率），应把它们也纳入情景集——情景 = 先验 × 未知参数取值，而非只有先验
+formulations:
+  - 后悔值：R(x) = max over π in Π of [ f(x, π) − f*(π) ]，其中 f*(π) = min over x' of f(x', π)
+  - "候选区：{ x : R(x) ≤ (1 + α)·min R }，α 取 0.05 到 0.1"
+  - "可行集：F = { x : max over π in Π of P_fail(x, π) ≤ τ }；f*(π) = min over x' in F of f(x', π)"
+  - "情景集：Π_full = Π_priors × Θ_unknown_params（先验与题给区间参数的笛卡尔积）"
+solvers:
+  - 枚举先验集 Π（≥3 种合理先验），对每种先验在决策网格上求 f，再按定义算后悔值并取最大
+requires:
+  - 能列出至少三种互不相同的合理先验（面积均匀、径向均匀、远距集中等）
+  - 决策变量可网格化，目标值可数值计算
+risks:
+  - 只报单一先验下的最优点，读者无法判断该点对先验的依赖程度
+  - 先验集取得过窄（三种先验本质相同），鲁棒性结论失真
+  - 目标取「成功条件下的期望」而失效概率未进入目标，高失效率方案凭少数成功样本胜出
+  - 情景集只含先验、漏掉题给区间型未知参数，鲁棒性只对一半的不确定性成立
+validation:
+  - 至少三种先验下分别报最优点，若最优点重合才可报单点建议
+  - 报告候选区而非单点，并给出候选区内最坏后悔值
+  - 说明所选先验集的合理性来源；先验集本身也做一次扰动检查
+  - 报告可行集规模 |F| / |候选集| 与被剔除点的最大失效率，τ 值须显式写出
+  - 用第二个不同的最优性判据（如绝对极小极大）各选一次做交叉核验，并报告两判据是否一致；不一致时只能报候选区，不得报单点
+often_combined_with: [mc-closed-form-validity-domain, mc-bzd-sensitivity, mc-failure-mode-separation]
+anti_patterns:
+  - 只给一个「最优角度 / 最优距离」而不给候选区
+  - 先验只取一种，或用三种本质相同的先验冒充先验集
+  - 把某先验下的最优值当成问题的固有最优值陈述
+  - 用「两路一致」冒充最优性证明，而两路其实共用同一个目标函数或同一套判据
+  - 直接在全候选集上比较条件期望，不对失效率设阈值
+known_failures: [fm-proxy-objective-unvalidated, fm-conditional-objective-hides-infeasibility, fm-interval-parameter-direction]
+status: active
+confidence: 0.85

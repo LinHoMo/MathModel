@@ -1,0 +1,44 @@
+# 结论归因与数值可追溯
+# 定位：Validation / 写作 知识。每个出现在结论里的数都必须能回答「它从哪来」和「决策时算得出来吗」。
+card_id: mc-conclusion-attribution
+name: 结论归因与数值可追溯（来源标注 + 可计算性）
+family: knowledge_guide
+version: 1
+problem_types: [knowledge_guide, result_reporting]
+good_for:
+  - 结论中出现多个数值，需要逐一交代来源与可信度
+  - 需要区分「题给 / 假设 / 估计 / 计算」四类来源，避免把假设值当题给值
+  - 需要检查支撑结论的量在决策时刻是否真的可算
+structure_signals:
+  - 结论中的量无法在观测数据上直接读出（如源距、接收半径、真实位置）
+  - 报告混用了题给常量与自行假设的参数而未加区分
+problem_structures: [result_reporting]
+modeling_patterns: [error_propagation]
+mathematical_forms: [statistics]
+mechanism:
+  - 数值来源分为四类：题给、假设、估计、计算；四类可信度递减，混用会掩盖结论的脆弱点
+  - 可计算性与正确性正交：一个量可以算得对但决策时算不出，此时它不能作为决策自变量
+  - 归因表本身就是一张脆弱点地图——标注为「假设」的量即灵敏度分析的必做项
+formulations:
+  - 归因表：每个结论量一行，列 = {量名, 数值, 来源类别, 计算方式, 是否决策时可算}
+  - 可计算性判定：该量能否仅由已观测数据（不含真值/未知真源）算出
+solvers:
+  - 逆向枚举：从结论出发逐个量回溯其计算链，直到落到题给常量或标记为假设
+requires:
+  - 结论中的每个量都有确定的计算链
+  - 能区分观测数据与不可观测量
+risks:
+  - 把假设值当题给值陈述，读者无法判断结论的脆弱点
+  - 用真值（如真实源坐标）代入决策公式，得到决策时无法复现的结论
+validation:
+  - 归因表覆盖结论中的全部数值，无「未标注」项
+  - 凡标注为「假设」的量，必须至少有一条对应的灵敏度分析
+  - 凡参与决策的量，必须标注为「决策时可算」，否则重新设计决策变量
+often_combined_with: [mc-closed-form-validity-domain, mc-bzd-validation-obligations]
+anti_patterns:
+  - 结论数值无来源标注
+  - 把假设参数与题给常量并列陈述而不区分
+  - 用真值（决策时不可得）作为决策公式的自变量
+known_failures: [fm-computability-gap, fm-infeasible-scenario]
+status: active
+confidence: 0.85

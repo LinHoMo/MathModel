@@ -26,6 +26,12 @@ validation:
 applicability:
   positive: [problem_features_extractable]
   required_conditions: [problem_features_extractable]
+often_combined_with: [mc-bzd-validation-obligations, mc-bzd-model-fit]
+anti_patterns:
+  - 公式左右量纲不一致仍继续推导
+  - 题目量化约束未逐条映射到模型约束，只挑「用得上」的
+  - 结果只堆数字不做数量级/物理范围合理性对照
+  - 关键参数无来源标注（题给/假设/估计）
 source_type: BZD
 source_refs:
   - "BZD 失败模式知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"

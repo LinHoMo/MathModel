@@ -1,0 +1,20 @@
+failure_id: fm-infeasible-scenario
+title: 演示或自检算例本身在题设下物理不可行，却据此给出结论
+problem_context: 用内置算例做演示、自检或覆盖性验证
+method: 任意（内置算例常量）
+modeling_structure: general
+failure_mode: consistency
+symptom: 算例中观测点到源的距离为 2121.3 / 1868.2 / 1920.9 m，全部超过题给有效接收半径上限 1500 m；观测点自身距区域中心 3000 / 3002 m，超出区域半径 1800 m。算例在题设下不可行，却据此输出了定位结论
+root_cause: 算例常量未与题面硬约束做一致性检查，演示代码与题设约束脱耦
+detection: 对每个算例逐条核对题给硬约束（区域半径、有效接收半径、误差界、速度上限等），任一越界即标记不可行
+detection_signal: 算例的站点坐标或距离常量超出题给半径，但输出中没有任何不可行标记
+fix: 在题设可行域内重新采样算例；若必须保留越界算例用于纯几何演示，须显式标注「仅用于算法演示，不满足本题约束」
+avoidance: 算例生成与约束校验绑定，不可行算例在输出中显式标注而非静默使用；硬约束以常量形式集中定义，算例从约束推导而非手写
+recovery:
+  - 补一条题面硬约束清单，对每个算例逐条比对
+  - 把越界算例降级为算法演示并加标注，或换用可行域内采样
+applies_to: [mc-bearing-triangulation]
+source: 2026_B 无线电干扰源定位清除（问题 1）算例可行性复算
+severity: high
+version: 1
+status: active

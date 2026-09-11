@@ -24,6 +24,11 @@ validation:
 applicability:
   positive: [mechanism_known]
   required_conditions: [mechanism_known]
+often_combined_with: [mc-bzd-validation-obligations, mc-bzd-failure-modes]
+anti_patterns:
+  - 扰动幅度无依据（凭空取 ±50%）
+  - 只列扰动表不给结论，敏感性分析沦为展示
+  - 明知结论对某参数敏感，仍给出单点建议而不附适用范围
 source_type: BZD
 source_refs:
   - "BZD 敏感性分析知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"

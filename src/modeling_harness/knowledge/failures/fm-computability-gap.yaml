@@ -1,0 +1,20 @@
+failure_id: fm-computability-gap
+title: 解析闭式的自变量在决策时刻不可计算（真源参数代入）
+problem_context: 给出定位误差的解析闭式并直接代入数值做决策或作图
+method: 解析闭式误差传播
+modeling_structure: bearing_localization
+failure_mode: wrong-usage
+symptom: 闭式的自变量使用了真实源坐标、真源距等决策时刻不可观测量，代入后相对精确半平面交结果的偏差可达 784.5%
+root_cause: 闭式的参数 R = |S₁G|、L = |S₂G|、χ 都依赖真源位置 G，而 G 正是待求量；决策时刻可算的只有两条测得示向度射线的交点 G'（虚拟源），G' ≠ G
+detection: 逐个检查闭式的每个自变量在决策时刻能否由已观测数据算出；凡含真源坐标或真源距的一律标记为不可计算
+detection_signal: 闭式数值结果在「用真源参数」与「用观测参数」两个版本间相差一个数量级以上
+fix: 用虚拟源 G' 替代真源 G 代入闭式，并显式声明 G' 与 G 的偏差阶为 O(ε)
+avoidance: 写下闭式时同步声明每个自变量的可计算性来源，取值只能是观测 / 估计 / 假设三者之一；标为假设的自变量必须做灵敏度分析
+recovery:
+  - 把闭式自变量全部替换为决策时可算的量后重算
+  - 补一条 O(ε) 误差阶的说明，并给出与精确半平面交的对照
+applies_to: [mc-bearing-triangulation]
+source: 2026_B 无线电干扰源定位清除（问题 2）对抗性复算
+severity: high
+version: 1
+status: active

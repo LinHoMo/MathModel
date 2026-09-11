@@ -186,6 +186,103 @@ def check_validators(v3: dict) -> list[str]:
     return problems
 
 
+# ---------------------------------------------------------------- knowledge cards
+
+KNOWLEDGE_ROOT = ROOT / "src" / "modeling_harness" / "knowledge"
+KNOWLEDGE_SCHEMA_DIR = ROOT / "src" / "modeling_harness" / "schemas" / "v3" / "knowledge"
+
+# (子目录, schema 文件名)
+KNOWLEDGE_TARGETS = (
+    ("methods/cards", "method_card.schema.json"),
+    ("failures", "failure.schema.json"),
+    ("patterns", "pattern.schema.json"),
+)
+
+
+def check_knowledge_cards(warnings: list[str] | None = None) -> list[str]:
+    """知识卡双层校验：运行时契约（yamlio，fail-closed）+ schema 全量。
+
+    补齐的缺口：method_card / failure / pattern 三份 schema 此前没有任何执行点，
+    导致必填字段缺失、source_type 枚举越界、多行 flow 序列破坏自研解析器等缺陷
+    长期隐形（只在运行时 fail-closed 崩溃时才暴露）。
+
+    第一层零依赖、恒执行：直接调用 runtime.knowledge.cards.load_knowledge()，
+    覆盖 YAML 解析、必填字段、ID 正则、failure_mode 枚举与跨卡引用完整性。
+    第二层为 schema 全量，jsonschema 为软依赖（ADR-0004），缺失时降级跳过。
+
+    降级必须可见（warnings）：此前第二层缺失时直接 return，输出仍为 OK，
+    使「schema 全绿」的声明在缺依赖环境下名不副实。现改为写入 warnings 并由
+    调用方显式打印；warnings 不计入 problems（保持 ADR-0004 的软依赖语义，
+    不因环境缺包而让 CI 失败），但绝不再静默。
+    """
+    problems: list[str] = []
+    if not KNOWLEDGE_ROOT.is_dir():
+        return [f"knowledge: 目录不存在: {KNOWLEDGE_ROOT}"]
+
+    # ---- 第一层：运行时契约（与真实消费路径同源，零依赖）
+    try:
+        from modeling_harness.runtime.knowledge.cards import CardError, load_knowledge
+    except Exception as exc:
+        return [f"knowledge: 导入 runtime.knowledge.cards 失败: {exc}"]
+    try:
+        cards, failures, _patterns = load_knowledge(KNOWLEDGE_ROOT)
+    except CardError as exc:
+        # 解析失败时 schema 层无意义，直接返回
+        return [f"knowledge: 运行时契约违反（fail-closed）: {exc}"]
+    except Exception as exc:  # pragma: no cover - 非预期异常
+        return [f"knowledge: 运行时加载异常: {exc}"]
+
+    # ---- 反向引用闭合（双向一致）
+    # load_knowledge 只对 card → failure 方向 fail-closed；failure.applies_to →
+    # card.known_failures 的反向无人校验，于是「写了失败记忆但方法卡检索不到」
+    # 的死知识可以长期存在。此处在 CI 门禁补齐；刻意不进运行时加载路径，
+    # 以免知识库编辑中间态让运行时 fail-closed 崩溃。
+    for fid in sorted(failures):
+        for cid in (getattr(failures[fid], "applies_to", None) or []):
+            card = cards.get(cid)
+            if card is None:      # 不存在性已由运行时 fail-closed 覆盖
+                continue
+            if fid not in (getattr(card, "known_failures", None) or []):
+                problems.append(
+                    f"knowledge: 反向引用未闭合 —— fm '{fid}' 声明 applies_to "
+                    f"'{cid}'，但该卡的 known_failures 未包含它（该失败记忆检索不到）")
+
+    # ---- 第二层：schema 全量（软依赖，缺失时降级但不静默）
+    try:
+        import jsonschema
+    except ImportError:
+        if warnings is not None:
+            warnings.append(
+                "knowledge: schema 全量层已跳过 —— 未安装 jsonschema（ADR-0004 软依赖）。"
+                "method_card / failure / pattern 三份 schema 本次未被校验，"
+                "「全绿」结论不含 schema 层的证据")
+        return problems
+    from modeling_harness.runtime.execution.yamlio import load_file
+
+    for sub, schema_name in KNOWLEDGE_TARGETS:
+        schema_path = KNOWLEDGE_SCHEMA_DIR / schema_name
+        if not schema_path.is_file():
+            problems.append(f"knowledge: schema 缺失 {schema_path.name}")
+            continue
+        try:
+            schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            problems.append(f"knowledge: schema 解析失败 {schema_path.name}: {exc}")
+            continue
+        validator = jsonschema.Draft7Validator(schema)
+        for f in sorted((KNOWLEDGE_ROOT / sub).glob("*.yaml")):
+            try:
+                data = load_file(f)
+            except Exception as exc:
+                problems.append(f"knowledge: {sub}/{f.name} YAML 解析失败: {exc}")
+                continue
+            for err in sorted(validator.iter_errors(data), key=lambda e: list(e.path)):
+                where = "/".join(str(x) for x in err.absolute_path) or "<root>"
+                problems.append(
+                    f"knowledge: {sub}/{f.name} schema 违反（{where}）: {err.message}")
+    return problems
+
+
 # ---------------------------------------------------------------- terminology lint
 
 # 禁止旧术语（production 区零残留；语义定义见 docs/ONTOLOGY_TERMINOLOGY.md）
@@ -260,7 +357,8 @@ def run_terminology() -> list[str]:
 
 
 
-def run_all() -> list[str]:
+def run_all(warnings: list[str] | None = None) -> list[str]:
+    """执行全部校验。problems 为硬失败；warnings 为降级/跳过，不计入退出码。"""
     catalog = load_catalog()
     problems = []
     problems += check_schema(catalog)
@@ -269,6 +367,7 @@ def run_all() -> list[str]:
         problems += check_roles(v3)
         problems += check_nodes(v3)
         problems += check_validators(v3)
+    problems += check_knowledge_cards(warnings)
     return problems
 
 
@@ -276,6 +375,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="catalog.yaml v5 双视图一致性校验 + terminology lint")
     ap.add_argument("--check", action="store_true", help="CI 模式：drift 即 EXIT 1")
     ap.add_argument("--json", action="store_true", help="JSON 输出")
+    ap.add_argument("--strict", action="store_true",
+                    help="禁止降级：软依赖缺失导致的校验层跳过也视为 FAIL"
+                         "（CI 用它确保 schema 层真的执行过，而不是静默跳过）")
     ap.add_argument("--check-terminology", action="store_true",
                     help="Zero-residue Gate：production 区旧术语零残留扫描")
     args = ap.parse_args()
@@ -294,10 +396,15 @@ def main() -> int:
                 print("[terminology] OK — production 区旧术语零残留")
         return 1 if problems else 0
 
-    problems = run_all()
+    warnings: list[str] = []
+    problems = run_all(warnings)
+    if args.strict and warnings:
+        problems = problems + warnings
+        warnings = []
 
     if args.json:
-        print(json.dumps({"ok": not problems, "problems": problems},
+        print(json.dumps({"ok": not problems, "problems": problems,
+                          "warnings": warnings},
                          ensure_ascii=False, indent=2))
     else:
         if problems:
@@ -305,8 +412,9 @@ def main() -> int:
             for p in problems:
                 print(f"  - {p}")
         else:
-            print("[catalog-check] OK — v3 双视图与 roles/DAG/validators 三方一致"
-                  "")
+            print("[catalog-check] OK — v3 双视图与 roles/DAG/validators 三方一致")
+        for w in warnings:
+            print(f"[catalog-check] WARN — {w}")
 
     return 1 if problems else 0
 

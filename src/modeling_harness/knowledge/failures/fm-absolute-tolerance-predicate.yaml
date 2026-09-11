@@ -1,0 +1,20 @@
+failure_id: fm-absolute-tolerance-predicate
+title: 几何谓词使用未归一化的绝对容差，导致存在性判定失真
+problem_context: 用浮点比较判定几何谓词，如定位区域是否为空、是否退化、两条射线是否相交、点是否在多边形内
+method: 浮点几何谓词 + 固定绝对容差
+modeling_structure: general
+failure_mode: numerical
+symptom: 用 1e-6 一类固定绝对容差判定「面积 > 0」或「行列式非零」，在米级坐标系下把真实退化与真实非空混判，使失败率统计、空区域计数与成功率结论整体失真
+root_cause: 绝对容差与问题尺度不匹配，谓词未做尺度归一化；同一容差在不同站点间距下语义不同
+detection: 检查每个几何谓词的容差是否为相对容差，或已按特征长度（如站点间距、区域半径）归一化；对结论做容差扫描，确认在 1e-9 到 1e-3 区间内稳定
+detection_signal: 容差以字面常量散落在谓词实现中，或改变坐标单位后结论发生变化
+fix: 改为相对容差或按特征长度归一化，并做容差扫描确认结论稳定；把「区域为空 / 无界」与「区域存在但判据失败」分开记账
+avoidance: 几何谓词统一走尺度归一化接口，禁止裸用绝对容差；存在性判定的失败率按成因分类上报，不合并成一个数
+recovery:
+  - 定位所有裸用绝对容差的谓词，改为归一化容差
+  - 重跑全部统计类结论，确认失败率未因容差改变而漂移
+applies_to: [mc-bearing-triangulation]
+source: 计算几何实现审计（2026_B 问题 1 复算过程中的实现层观察）
+severity: medium
+version: 1
+status: active

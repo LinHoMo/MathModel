@@ -29,7 +29,7 @@ often_combined_with: [mc-pca, mc-kmeans]
 anti_patterns:
   - 只报 accuracy 不看混淆矩阵
   - 时序特征随机 CV（泄漏）
-known_failures: [fm-timeseries-leakage]
+known_failures: [fm-timeseries-leakage, fm-small-sample-deep-learning]
 reference: methodology/ensemble-learning.md
 
 # ---- P8 决策字段（Competition Intelligence）----

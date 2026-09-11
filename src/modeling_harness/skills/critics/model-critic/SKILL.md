@@ -44,7 +44,9 @@ V2 assumption-validator 只查假设四维评分；V3 model-critic 前移到 mod
 1. **假设合理性**（承 V2 assumption-validator）: 每条假设有 necessity；简化假设不改变问题本质；关键假设标注敏感性影响。
 2. **方法-问题匹配**: 检索 `python src/modeling_harness/cli/knowledge.py show <选型 card_id>`，逐条比对 good_for 是否真的覆盖本问题特征；requires 是否满足（数据/规模/前提）。
 3. **失败记忆比对**: `python src/modeling_harness/cli/knowledge.py failures <card_id>`，逐条检查当前建模是否已落入历史失败模式（symptom 比对）。
-4. **可解性**: 模型在时限内可计算（规模估计）；参数可辨识（有数据支撑或有文献先验）。
+4. **可解性与可观测性**: 模型在时限内可计算（规模估计）；参数可辨识（有数据支撑或有文献先验）。另须过两道硬检查，任一不过即 FAIL：
+   - **不可观测量不得当已知量代入**：凡题面不可直接观测的量（源距、真实坐标、未知效率等），只能以「取期望 / 取最坏 / 做敏感性」的方式进入模型。直接代入某个具体值（含由观测反推的估计值）等于隐藏假设，判 FAIL。
+   - **区间型题给参数须声明三档语义**：题面「某参数落在 [a, b]」通常是「真值未知、已知落在 [a,b]」，而非「量被限制在 [a,b] 内」。硬约束只能取保证端，并写明「保证可行 / 条件可行 / 不可行」三档判定。用乐观端当保证端（把方向读反）判 FAIL。见 fm-interval-parameter-direction。
 5. **复杂度必要性**: 若选型比 alternatives 中落选者更复杂，必须有明确理由（决策 reasoning）——否则"简单方法够用"优先。
 
 ### Step 3: 输出判定
@@ -71,6 +73,8 @@ revision_direction: （FAIL 时给 model_construction 的修正方向，可执�
 - [ ] 每条 FAIL 理由指向具体 artifact/decision ID
 - [ ] revision_direction 可执行（不是"再改好一点"）
 - [ ] 失败记忆比对至少覆盖选型方法的全部关联 failure
+- [ ] 不可观测量与区间型参数的处置已逐条声明（代入具体值 / 用乐观端当保证端 → FAIL）
+- [ ] 若目标含「成功条件下的期望」，同一张结果表里有失效率列且已做可行性筛选（见 fm-conditional-objective-hides-infeasibility）
 
 ## Iteration
 

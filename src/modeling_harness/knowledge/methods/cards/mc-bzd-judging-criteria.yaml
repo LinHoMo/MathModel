@@ -25,6 +25,12 @@ validation:
 applicability:
   positive: []
   required_conditions: []
+often_combined_with: [mc-bzd-validation-obligations, mc-bzd-sensitivity]
+anti_patterns:
+  - 摘要无关键结论数值、无创新点提炼
+  - 关键结果无图，图表数量少于题目小问数
+  - 模型写了但没解出来，模型与求解脱节
+  - 结论不逐问回应题目小问
 source_type: BZD
 source_refs:
   - "BZD 评审规则知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"

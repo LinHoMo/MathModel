@@ -24,6 +24,11 @@ validation:
 applicability:
   positive: [problem_features_extractable, candidate_methods_enumerable]
   required_conditions: [problem_features_extractable]
+often_combined_with: [mc-bzd-validation-obligations, mc-bzd-failure-modes]
+anti_patterns:
+  - 仅凭题型标签（见「优化」即线性规划）选定方法，不逐条核对适用条件
+  - 适配判断只写「适合」，不记录 matched/missing，事后不可溯源
+  - 适用条件信息缺失时默认判为适配，而非声明「无法判定」
 source_type: BZD
 source_refs:
   - "BZD 模型适配知识（外部仓库）；本卡提取自 P15 三仓库审计材料，2026-09-09"
