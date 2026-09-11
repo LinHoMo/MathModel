@@ -59,6 +59,12 @@
 > 注：`analysis/P1_VS001_REPORT.md` 与 `experiments/p1-vs001/P1-VS001-REPORT.md` 是
 > **两个不同实验**（2024_A vs 2019_C），均保留为正文，不做合并。
 
+> 注（历史引用，2026-09-11）：`p151-*` 系列项目目录（`projects/p151-2024a` 等 12 个 P15
+> 基准 campaign 实例）已按用户指令删除（commit `714fe8a`）。本目录下 `analysis/`、
+> `reports/`、`measurement_recovery/`、`benchmark/manifests/` 仍存有指向这些路径的历史
+> 审计记录——它们记录的是删除前的真实状态，**保留原文不改**；需要原始产物时回溯 git
+> 历史（如 `git show 714fe8a^:projects/p151-2024a/state/registry.json`）。
+
 其余运行级报告（precheck / dryrun / arena / 治理等）见各自目录内的 `*_REPORT.md`。
 
 ## 5. 铁律
