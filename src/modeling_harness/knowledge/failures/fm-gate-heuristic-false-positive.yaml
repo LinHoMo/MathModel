@@ -1,0 +1,21 @@
+failure_id: fm-gate-heuristic-false-positive
+title: 启发式门禁把真实使用的参数误判为死参数（门禁漏检/误报的表示层根因）
+problem_context: harness 用字符串匹配启发式扫描「参数是否被使用」（G5 复杂度预算），参数与使用位置之间是隐式关系，靠全库猜匹配
+method: 参数付租（parsimony budget）死参数扫描
+modeling_structure: harness_gate
+failure_mode: no-evidence
+symptom: cumcm2026b P13/P14 被判死参数 FAIL，但 solve_b.py 中真实存在 COVER_RADII_DIR=(450.0,1350.0,1200.0,1799.0)；门禁结论与事实相反
+root_cause: 三层叠加——①表示层：参数→使用位置是隐式关系，方程/机制有 refs 而参数没有，只能猜；②门禁层：值信号只处理 int/float，字符串值"450, 1350"整段跳过，代码用 450.0 浮点格式，符号还有分隔符/大小写变体；③测试层：合成夹具缺真实表示变体对抗用例
+detection: 对每个被门禁判死的参数，人工/机器回查 code 与组件文本的值信号（拆分分隔符、int↔float/.0 变体、符号归一化）；用金标准语料度量启发式 FP/FN
+detection_signal: 门禁 FAIL 但参数值/符号在代码中以另一种表示真实出现；金标准对照 FP>0
+fix: ①补 _value_signals（字符串按分隔符拆分、int↔float 变体）与符号分隔符归一化；②引入 used_in 显式引用契约，参数→组件/代码的关系显式声明并硬校验可解析；③双级门禁：显式声明破损=硬 FAIL，启发式未命中降 WARN；④新启发式门禁先在真实语料金标准上度量 FP/FN 再启用
+avoidance: 启发式只能当咨询信号，不得单独决定硬失败；关系能显式化就不要靠猜；门禁规则变更必须过金标准回归
+applies_to: []
+source: 2026-09-11 cumcm2026b G5 首跑误报事件（THEORY_FOUNDATION_REVIEW §9.1/§9.2/§9.5 落地）
+severity: high
+recovery:
+  - 用 tests/fixtures/param_usage_gold.json 重跑 test_gate_gold_standard.py，确认 FP=FN=0
+  - 对硬 FAIL 参数逐个回查 code/组件文本，区分「真死」与「表示变体漏匹配」
+  - 为参数补 used_in 显式引用，把隐式关系转为可校验契约
+version: 1
+status: active
