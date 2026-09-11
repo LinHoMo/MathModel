@@ -6,6 +6,20 @@
       "status": "complete"
     },
     "questions": {
+      "Q1": {
+        "status": "validated",
+        "models": [],
+        "experiments": [
+          "MH-EXPERIMENT-0001"
+        ],
+        "claims": [
+          "MH-CLAIM-0001"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-11T05:51:51Z"
+      },
       "Q2": {
         "status": "validated",
         "models": [],
@@ -18,7 +32,7 @@
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T16:09:31+00:00"
+        "last_updated": "2026-09-11T05:51:51Z"
       },
       "Q3": {
         "status": "validated",
@@ -34,7 +48,7 @@
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T16:09:31+00:00"
+        "last_updated": "2026-09-11T05:51:51Z"
       },
       "Q4": {
         "status": "validated",
@@ -48,21 +62,7 @@
         "dependencies": [],
         "retry_count": 0,
         "failure_reason": null,
-        "last_updated": "2026-09-10T16:09:31+00:00"
-      },
-      "Q1": {
-        "status": "validated",
-        "models": [],
-        "experiments": [
-          "MH-EXPERIMENT-0001"
-        ],
-        "claims": [
-          "MH-CLAIM-0001"
-        ],
-        "dependencies": [],
-        "retry_count": 0,
-        "failure_reason": null,
-        "last_updated": "2026-09-10T16:09:31+00:00"
+        "last_updated": "2026-09-11T05:51:51Z"
       }
     },
     "models": {
@@ -128,14 +128,14 @@
       {
         "node": "",
         "note": "本实例由项目内确定性脚本构建（未走 RuntimeSession 引擎），workflow 节点不虚报；内容真源为 registry + evidence_graph。",
-        "at": "2026-09-10T16:09:31+00:00"
+        "at": "2026-09-11T05:51:51Z"
       }
     ]
   },
   "run": {
     "phase": "delivered",
-    "started_at": "2026-09-10T16:09:31+00:00",
-    "updated_at": "2026-09-10T16:09:31+00:00"
+    "started_at": "2026-09-11T05:51:51Z",
+    "updated_at": "2026-09-11T05:51:51Z"
   },
   "limitations": [
     "本地模拟器按附录规则重建，与官方评测机可能存在实现差异",

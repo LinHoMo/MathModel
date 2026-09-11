@@ -771,6 +771,7 @@ def run_trials(n_trials=30, kind_mix=False, seed=SEED):
 # 输出
 # ----------------------------------------------------------------------
 def _write_xlsx(path, r1, r2, recs3, recs4):
+    from datetime import datetime, timezone
     from openpyxl import Workbook
     wb = Workbook()
     ws = wb.active
@@ -800,7 +801,36 @@ def _write_xlsx(path, r1, r2, recs3, recs4):
                       round(r["cleared_fraction"], 4), round(r["total_time_s"], 2),
                       round(r["path_len_m"], 2), r["n_detect"],
                       round(r["mean_locate_clear_time_s"], 2)])
+    # 确定性：openpyxl 默认把 wall-clock 写入 docProps/core.xml（created/modified），
+    # 令同一输入产生不同字节。固定为注入时钟 MH_STATE_NOW，缺省用常量时间轴。
+    _now = os.environ.get("MH_STATE_NOW")
+    stamp = (datetime.fromisoformat(_now.replace("Z", "+00:00"))
+             if _now else datetime(2026, 1, 1, tzinfo=timezone.utc))
+    wb.properties.created = wb.properties.modified = stamp
     wb.save(path)
+    # 二次确定性（openpyxl 3.1）：save_workbook 会把 properties.modified 重置为当前
+    # 时钟（writer/excel.py:292），且经 zipfile 写盘时给每个 entry 打 wall-clock
+    # date_time——两者都令字节随运行漂移。以黑盒方式重写 zip 容器：归一
+    # core.xml 的 modified 字段 + 固定所有 entry 时间戳（同一输入 → 同一字节）。
+    import re as _re
+    import zipfile as _zip
+    iso = stamp.strftime("%Y-%m-%dT%H:%M:%SZ").encode()
+    with _zip.ZipFile(path) as zf:
+        members = [(i.filename, zf.read(i.filename)) for i in zf.infolist()]
+    tmp = path + ".tmp"
+    with _zip.ZipFile(tmp, "w", _zip.ZIP_DEFLATED) as zf:
+        for name, blob in members:
+            if name == "docProps/core.xml":
+                blob = _re.sub(
+                    rb"<dcterms:modified[^>]*>.*?</dcterms:modified>",
+                    b'<dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/"'
+                    b' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+                    b' xsi:type="dcterms:W3CDTF">' + iso + b"</dcterms:modified>",
+                    blob)
+            zi = _zip.ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))
+            zi.compress_type = _zip.ZIP_DEFLATED
+            zf.writestr(zi, blob)
+    os.replace(tmp, path)
 
 
 def coverage_validation(n=20000, seed=7):
@@ -896,8 +926,19 @@ def main():
                     "problem3": s3, "problem4": s4},
         "validations": val,
     }
-    with open(os.path.join(proj, "all_results.json"), "w", encoding="utf-8") as f:
-        json.dump(out, f, ensure_ascii=False, indent=2)
+    # 结果聚合文件为多脚本共享：读-改-写（merge）保留其它脚本写入的段
+    # （如 real_protocol_mock 由协议演练脚本并入），避免重跑本脚本抹掉他人产物。
+    agg_path = os.path.join(proj, "all_results.json")
+    merged = {}
+    if os.path.exists(agg_path):
+        try:
+            with open(agg_path, encoding="utf-8") as f:
+                merged = json.load(f)
+        except (OSError, ValueError):
+            merged = {}
+    merged.update(out)
+    with open(agg_path, "w", encoding="utf-8") as f:
+        json.dump(merged, f, ensure_ascii=False, indent=2)
     _write_xlsx(os.path.join(res_dir, "resultB.xlsx"), r1, r2, recs3, recs4)
 
     print("\n[OK] all_results.json + resultB.xlsx 已写出")

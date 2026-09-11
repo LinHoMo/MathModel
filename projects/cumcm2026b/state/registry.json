@@ -1,7 +1,7 @@
 {
   "registry_version": 3,
   "project": "cumcm2026b",
-  "updated_at": "2026-09-10T16:09:31Z",
+  "updated_at": "2026-09-11T05:51:51Z",
   "counters": {
     "assumption": 1,
     "claim": 6,
@@ -23,8 +23,8 @@
       "status": "active",
       "title": "2026_B 无线电干扰源定位清除",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "statement": "inputs/problem.txt",
         "sha256": "e06fba6e85e6617bef938c4a10fd854e56819cbbb9d54ee14af0092f83c79917",
@@ -44,8 +44,8 @@
       "status": "active",
       "title": "Q1 computational_geometry",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "id": "Q1",
         "type": "computational_geometry",
@@ -60,8 +60,8 @@
       "status": "active",
       "title": "Q2 geometry_optimization",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "id": "Q2",
         "type": "geometry_optimization",
@@ -76,8 +76,8 @@
       "status": "active",
       "title": "Q3 coverage_control",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "id": "Q3",
         "type": "coverage_control",
@@ -92,8 +92,8 @@
       "status": "active",
       "title": "Q4 coverage_control_blindzone",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "id": "Q4",
         "type": "coverage_control_blindzone",
@@ -108,8 +108,8 @@
       "status": "validated",
       "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "model_ir": "model_ir.json",
         "model_doc": "model.md",
@@ -131,7 +131,7 @@
           "E08",
           "E09"
         ],
-        "sha256": "7fc8e0f2eb1381b8e15d699d797aac1eb13a01d5f88b6459f85699a742ad4537"
+        "sha256": "b880dfd89a463376d08a588c29ed3eb3745716bab812000979ae9bbd37a3b6c8"
       }
     },
     "MH-MODEL_IR-0001": {
@@ -142,8 +142,8 @@
       "status": "active",
       "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-11T10:37:33+08:00",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "model_ir.json",
         "sha256": "b880dfd89a463376d08a588c29ed3eb3745716bab812000979ae9bbd37a3b6c8"
@@ -153,6 +153,10 @@
         "model_id": "M-CUMCM2026B",
         "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型",
         "model_family": {
+          "cards": [
+            "mc-bearing-triangulation",
+            "mc-coverage-search"
+          ],
           "primary": "geometric",
           "secondary": [
             "computational_geometry",
@@ -161,6 +165,42 @@
             "coverage_path_planning"
           ],
           "description": "把“测向-交会定位”抽象为几何问题：每条示向度带 ±1° 误差 ⇒ 一条楔形（射线角域），多站楔形交集为凸多边形定位区域；问题 1 求该区域直径并判定“以直径为直径的圆是否覆盖区域”（Thales 定理给出充要条件）；问题 2 以求交会角 ≈90°（GDOP 最优）为判据给出第二检测点的解析最优集（过估计源的垂线，即 Thales 圆切线）与候选区域；问题 3/4 把机器狗的搜索-定位-清除过程建成离散事件模拟，搜索采用同心环覆盖路径（几何可证完备），定位采用交会 + beam-safe 归航，清除按光学/激光时耗计价，用 30 组随机实例做蒙特卡洛演练。"
+        },
+        "evidence_obligations": {
+          "Q1": [
+            "EV1",
+            "EV2",
+            "EV4",
+            "EV5"
+          ],
+          "Q2": [
+            "EV1",
+            "EV2",
+            "EV4",
+            "EV5"
+          ],
+          "Q3": [
+            "EV1",
+            "EV2",
+            "EV4",
+            "EV5"
+          ],
+          "Q4": [
+            "EV1",
+            "EV2",
+            "EV4",
+            "EV5"
+          ]
+        },
+        "innovation": {
+          "structure_distance": 0.0,
+          "dimensions": {
+            "mechanism_novelty": 0.0,
+            "solver_novelty": 0.0,
+            "composition_novelty": 0.0,
+            "representation_novelty": 0.0
+          },
+          "difference_arguments": []
         },
         "problem_binding": {
           "problem_id": "2026_B",
@@ -487,6 +527,36 @@
               "Q2",
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "equation",
+                "ref": "E07"
+              },
+              {
+                "type": "mechanism",
+                "ref": "ME04"
+              },
+              {
+                "type": "claim",
+                "ref": "CL03"
+              },
+              {
+                "type": "claim",
+                "ref": "CL05"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
             ]
           },
           {
@@ -501,6 +571,52 @@
               "Q2",
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "equation",
+                "ref": "E01"
+              },
+              {
+                "type": "constraint",
+                "ref": "C01"
+              },
+              {
+                "type": "mechanism",
+                "ref": "ME01"
+              },
+              {
+                "type": "validation",
+                "ref": "V04"
+              },
+              {
+                "type": "claim",
+                "ref": "CL03"
+              },
+              {
+                "type": "claim",
+                "ref": "CL04"
+              },
+              {
+                "type": "claim",
+                "ref": "CL06"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b_http.py"
+              }
             ]
           },
           {
@@ -513,6 +629,28 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "claim",
+                "ref": "CL03"
+              },
+              {
+                "type": "claim",
+                "ref": "CL05"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
             ]
           },
           {
@@ -525,6 +663,20 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "claim",
+                "ref": "CL02"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
             ]
           },
           {
@@ -537,6 +689,40 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "validation",
+                "ref": "V05"
+              },
+              {
+                "type": "claim",
+                "ref": "CL02"
+              },
+              {
+                "type": "claim",
+                "ref": "CL03"
+              },
+              {
+                "type": "claim",
+                "ref": "CL04"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b_http.py"
+              }
             ]
           },
           {
@@ -549,6 +735,20 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b_http.py"
+              }
             ]
           },
           {
@@ -562,7 +762,29 @@
               "Q3",
               "Q4"
             ],
-            "definition": "附录 2(5)：切换频道 + 调天线 + 稳定读数合计 5 s"
+            "definition": "附录 2(5)：切换频道 + 调天线 + 稳定读数合计 5 s",
+            "used_in": [
+              {
+                "type": "claim",
+                "ref": "CL01"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b_http.py"
+              }
+            ]
           },
           {
             "parameter_id": "P08",
@@ -574,6 +796,16 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
             ]
           },
           {
@@ -586,6 +818,16 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
             ]
           },
           {
@@ -598,6 +840,36 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "constraint",
+                "ref": "C02"
+              },
+              {
+                "type": "mechanism",
+                "ref": "ME06"
+              },
+              {
+                "type": "claim",
+                "ref": "CL01"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b_http.py"
+              }
             ]
           },
           {
@@ -610,6 +882,40 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "validation",
+                "ref": "V05"
+              },
+              {
+                "type": "claim",
+                "ref": "CL02"
+              },
+              {
+                "type": "claim",
+                "ref": "CL03"
+              },
+              {
+                "type": "claim",
+                "ref": "CL04"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b_http.py"
+              }
             ]
           },
           {
@@ -622,6 +928,28 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "claim",
+                "ref": "CL01"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b_http.py"
+              }
             ]
           },
           {
@@ -634,7 +962,25 @@
             "sub_question_binding": [
               "Q3"
             ],
-            "definition": "R(2i−1)/(2k)，k=2 ⇒ 最大最近距离 R/4 = 450 m"
+            "definition": "R(2i−1)/(2k)，k=2 ⇒ 最大最近距离 R/4 = 450 m",
+            "used_in": [
+              {
+                "type": "claim",
+                "ref": "CL03"
+              },
+              {
+                "type": "claim",
+                "ref": "CL05"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
+            ]
           },
           {
             "parameter_id": "P14",
@@ -645,6 +991,32 @@
             "source": "derived",
             "sub_question_binding": [
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "claim",
+                "ref": "CL03"
+              },
+              {
+                "type": "claim",
+                "ref": "CL04"
+              },
+              {
+                "type": "claim",
+                "ref": "CL05"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
             ]
           },
           {
@@ -657,6 +1029,24 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ],
+            "used_in": [
+              {
+                "type": "equation",
+                "ref": "E09"
+              },
+              {
+                "type": "claim",
+                "ref": "CL02"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
             ]
           },
           {
@@ -670,7 +1060,29 @@
               "Q3",
               "Q4"
             ],
-            "definition": "演练 30 组实例，种子 42..71 连续取值"
+            "definition": "演练 30 组实例，种子 42..71 连续取值",
+            "used_in": [
+              {
+                "type": "claim",
+                "ref": "CL06"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/simulator_http.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b_http.py"
+              }
+            ]
           },
           {
             "parameter_id": "P17",
@@ -684,7 +1096,21 @@
               "Q3",
               "Q4"
             ],
-            "definition": "由强度估距：d_est = rel · r_rec,nom"
+            "definition": "由强度估距：d_est = rel · r_rec,nom",
+            "used_in": [
+              {
+                "type": "mechanism",
+                "ref": "ME05"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/build_state.py"
+              },
+              {
+                "type": "code",
+                "ref": "artifacts/code/solve_b.py"
+              }
+            ]
           }
         ],
         "objectives": [
@@ -1851,8 +2277,8 @@
       "status": "active",
       "title": "模型假设 A01-A08",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "items": [
           {
@@ -1936,11 +2362,11 @@
       "status": "active",
       "title": "solve_b.py",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "artifacts/code/solve_b.py",
-        "sha256": "de33dcafce9ab59d84ec2d8ecb65b629c6aa84801f0a3319355e53ddacc876bf",
+        "sha256": "c7a88577e92dbec518ecbef8725db00eef2402dfef88903cba450dc5b7d1cf5f",
         "note": "楔形交会定位 + 同心环覆盖 + 交会-归航清除 + 30 组演练与覆盖蒙特卡洛"
       }
     },
@@ -1952,8 +2378,8 @@
       "status": "validated",
       "title": "Q1 交会定位区域直径与「直径圆覆盖」判定（含锐角反例）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "sub_question": "Q1",
         "solver": "S01-S05",
@@ -1975,8 +2401,8 @@
       "status": "validated",
       "title": "Q1 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "all_results.json",
         "sha256": "7634825bf02d54bf39abae54205695231c7ae6350888c29c2b7b404cff80aee8",
@@ -2026,8 +2452,8 @@
       "status": "validated",
       "title": "Q2 第二检测点最优集与候选区域（垂线解析 + 网格一致）",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "sub_question": "Q2",
         "solver": "S01-S05",
@@ -2049,8 +2475,8 @@
       "status": "validated",
       "title": "Q2 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "all_results.json",
         "sha256": "7634825bf02d54bf39abae54205695231c7ae6350888c29c2b7b404cff80aee8",
@@ -2129,8 +2555,8 @@
       "status": "validated",
       "title": "Q3 全向源 30 组演练：搜索-定位-清除统计",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "sub_question": "Q3",
         "solver": "S01-S05",
@@ -2157,11 +2583,11 @@
       "status": "validated",
       "title": "Q3 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "artifacts/results/resultB.xlsx",
-        "sha256": "2cec9b936c8c528f5dadc4fe0b98db39d3ecf13993c4b5858c62c62989931393",
+        "sha256": "4ac7b527578cf667cc5332b632e5c7ce9111f4e3a15b2e283d54b5aaba387c33",
         "values": {
           "n_trials": 30,
           "mean_cleared_fraction": 1.0,
@@ -2184,8 +2610,8 @@
       "status": "validated",
       "title": "Q4 混合全向+定向源 30 组演练：盲区补扫与清除统计",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "sub_question": "Q4",
         "solver": "S01-S05",
@@ -2212,11 +2638,11 @@
       "status": "validated",
       "title": "Q4 结果",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "artifacts/results/resultB.xlsx",
-        "sha256": "2cec9b936c8c528f5dadc4fe0b98db39d3ecf13993c4b5858c62c62989931393",
+        "sha256": "4ac7b527578cf667cc5332b632e5c7ce9111f4e3a15b2e283d54b5aaba387c33",
         "values": {
           "n_trials": 30,
           "mean_cleared_fraction": 1.0,
@@ -2239,8 +2665,8 @@
       "status": "active",
       "title": "CL01（Q1）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得（正交交会算例直径 104.762 m、钝角交会 169.514 m、三站交会 85.896 m）。“以直径为直径的圆”不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；锐角三角形反例（直径 10.0 m，最小包围圆半径 5.0833 m > 直径圆半径 5.0 m）即为反例。保证覆盖应改用最小包围圆。",
         "status": "supported",
@@ -2259,8 +2685,8 @@
       "status": "active",
       "title": "CL02（Q2）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "text": "Q2：最优第二检测点位于过估计源 G_est 且垂直于 S1→G_est 的直线上（该直线即 Thales 圆在 G_est 处的切线，其上任意点交会角恒为 90.00°）；候选区域为以 G_est 为中心、交会角 φ ∈ [60°,120°] 且 |P−G_est| ≤ r_rec 的扇形环域。沿该垂线偏移越小，定位区域越小（偏移 300→1500 m 对应直径 43.19→67.08 m），但偏移过小会缩短有效基线、放大示向度误差相关，故推荐偏移取 d_est 的对称配置。",
         "status": "supported",
@@ -2279,8 +2705,8 @@
       "status": "active",
       "title": "CL03（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "text": "Q3：全向源情景（30 组随机实例）清除比例均值 = 最小值 = 1.0000（全清除）；平均总任务时间 7150.10 s（约 1.99 h），平均每源 592.997 s，平均定位清除时间 5297.03 s。策略为“同心环 {450,1350} m 覆盖扫描 → 逐频道交会定位 + beam-safe 归航 → 20 m 内光学/激光清除”，覆盖完备性由 R/(2k)=450 m ≪ r_rec,min=1000 m 保证。",
         "status": "supported",
@@ -2300,8 +2726,8 @@
       "status": "active",
       "title": "CL04（Q4）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "text": "Q4：混合全向+定向情景（30 组，40% 定向）清除比例均值 = 最小值 = 1.0000；平均总任务时间 15088.79 s（约 4.19 h），平均每源 1254.68 s。相对 Q3 时间增加约 111%，主因是定向源须从波束外侧补扫（额外环 {1200,1799} m）且归航在盲区需回退。",
         "status": "supported",
@@ -2321,8 +2747,8 @@
       "status": "active",
       "title": "CL05（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "text": "覆盖路径的完备性由几何而非经验保证：把圆域按半径分层后，k 条同心环使“任意点到最近检测环”的最大距离恰为 R/(2k)。全向取 k=2 即 450 m（R/(2k) 远小于 r_rec,min=1000 m）；定向源因“波束外侧可见”约束，须在 {450,1350} 之外追加外侧环才完备，含定向情景的漏检率实测为 0.00025（全向为 0.0000）。",
         "status": "supported",
@@ -2341,8 +2767,8 @@
       "status": "active",
       "title": "CL06（Q3）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "text": "真实协议构建：客户端按附件2 契约（arena_id=\"default\"、position:{x,y}、measure_result、svd_deg、clear_result）与规范忠实 Mock 通信，时间由服务端计算。因真实 API 不返回信号强度，定位改用纯示向度交会 + 越界检测归航；定向盲区以“失联回退最近可测点”处理。协议演练各 5 组（seed 42..46）：Q3 全向清除比例均值=最小值=1.0000（平均虚拟总时间 12918.09 s、定位清除 8269.47 s）；Q4 混合清除比例均值=最小值=1.0000（平均虚拟总时间 22592.91 s、定位清除 17514.37 s）。**范围如实：本地 Mock 验证，未接官方评测机**。",
         "status": "supported",
@@ -2359,8 +2785,8 @@
       "status": "active",
       "title": "模型描述文档（含 Mermaid）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T16:09:31Z",
-      "updated_at": "2026-09-10T16:09:31Z",
+      "created_at": "2026-09-11T05:51:51Z",
+      "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "model.md",
         "sha256": "d8393e4d9c5710fb1cbf07df92e13a09bb0995e33d1ca3505062a5a1c713431c"

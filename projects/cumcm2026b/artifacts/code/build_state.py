@@ -6,7 +6,9 @@
 输出：state/registry.json, state/evidence_graph.json, state/decision_log.json, state/status.json
 
 设计原则（与仓库铁律一致）：
-- 状态只由确定性机制推进：本脚本是纯函数，同一输入必得同一输出；
+- 状态只由确定性机制推进：同一输入（含注入时钟 MH_STATE_NOW）必得同一输出；
+  脚本内不引入任何逐次运行可变的值——集合迭代顺序受控，时钟经 MH_STATE_NOW
+  注入（未注入时取真实 UTC）。逐字节重放见 HANDOFF.md「复现」节；
 - 数值只来自 all_results.json（不手工转述、不编造）；
 - 文件哈希用 sha256 真实计算，frontier 可追溯。
 """
@@ -23,7 +25,13 @@ PROJ = os.path.abspath(os.path.join(HERE, "..", ".."))       # projects/cumcm202
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))   # 仓库根
 STATE = os.path.join(PROJ, "state")
 PROJECT = "cumcm2026b"
-NOW = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+# 时钟：默认真实 UTC；MH_STATE_NOW 可将其固定，使产物逐字节可重放
+# （确定性复现：MH_STATE_NOW=2026-09-10T16:09:31Z py -3.12 -X utf8 -m build_state）。
+NOW = (os.environ.get("MH_STATE_NOW")
+       or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
+# 让 harness 状态层（ProjectState._utcnow 等）与本源共享同一时钟，
+# 否则 status.json 的派生时间戳仍随真实时钟漂移。
+os.environ["MH_STATE_NOW"] = NOW
 
 
 def sha256(path: str) -> str | None:
