@@ -1,0 +1,192 @@
+{
+  "edges": [
+    {
+      "from": "node:model_critique",
+      "kind": "dependency",
+      "to": "val:model-critic"
+    },
+    {
+      "from": "node:assumption_check",
+      "kind": "dependency",
+      "to": "val:assumption-checker"
+    },
+    {
+      "from": "node:experiment_critique",
+      "kind": "dependency",
+      "to": "val:experiment-critic"
+    },
+    {
+      "from": "node:evidence_gate",
+      "kind": "dependency",
+      "to": "val:evidence-gate"
+    },
+    {
+      "from": "node:quality_evaluation",
+      "kind": "dependency",
+      "to": "val:research-quality"
+    }
+  ],
+  "kind": "architecture",
+  "legend": [
+    "Roles",
+    "problem-analysis",
+    "modeling",
+    "experiment",
+    "evidence",
+    "Validators"
+  ],
+  "nodes": [
+    {
+      "detail": "赛题结构化解析、文献检索与证据提取",
+      "group": "Roles",
+      "id": "role:analyst",
+      "label": "analyst"
+    },
+    {
+      "detail": "方法选型竞技场、数学建模",
+      "group": "Roles",
+      "id": "role:modeler",
+      "label": "modeler"
+    },
+    {
+      "detail": "实验规划、执行、证据登记",
+      "group": "Roles",
+      "id": "role:experimenter",
+      "label": "experimenter"
+    },
+    {
+      "detail": "前置批判（model/experiment/ev",
+      "group": "Roles",
+      "id": "role:critic",
+      "label": "critic"
+    },
+    {
+      "detail": "analyst",
+      "group": "problem-analysis",
+      "id": "node:problem_analysis",
+      "label": "problem_analysis"
+    },
+    {
+      "detail": "analyst",
+      "group": "problem-analysis",
+      "id": "node:literature_search",
+      "label": "literature_search"
+    },
+    {
+      "detail": "modeler",
+      "group": "modeling",
+      "id": "node:model_selection",
+      "label": "model_selection"
+    },
+    {
+      "detail": "modeler",
+      "group": "modeling",
+      "id": "node:model_construction",
+      "label": "model_construction"
+    },
+    {
+      "detail": "critic",
+      "group": "modeling",
+      "id": "node:model_critique",
+      "label": "model_critique"
+    },
+    {
+      "detail": "critic",
+      "group": "modeling",
+      "id": "node:assumption_check",
+      "label": "assumption_check"
+    },
+    {
+      "detail": "experimenter",
+      "group": "modeling",
+      "id": "node:code_generation",
+      "label": "code_generation"
+    },
+    {
+      "detail": "experimenter",
+      "group": "modeling",
+      "id": "node:model_execution",
+      "label": "model_execution"
+    },
+    {
+      "detail": "experimenter",
+      "group": "modeling",
+      "id": "node:model_validation",
+      "label": "model_validation"
+    },
+    {
+      "detail": "modeler",
+      "group": "modeling",
+      "id": "node:model_selection_decision",
+      "label": "model_selection_decision"
+    },
+    {
+      "detail": "experimenter",
+      "group": "experiment",
+      "id": "node:experiment_design",
+      "label": "experiment_design"
+    },
+    {
+      "detail": "experimenter",
+      "group": "experiment",
+      "id": "node:experiment",
+      "label": "experiment"
+    },
+    {
+      "detail": "critic",
+      "group": "experiment",
+      "id": "node:experiment_critique",
+      "label": "experiment_critique"
+    },
+    {
+      "detail": "experimenter",
+      "group": "evidence",
+      "id": "node:evidence_build",
+      "label": "evidence_build"
+    },
+    {
+      "detail": "critic",
+      "group": "evidence",
+      "id": "node:evidence_gate",
+      "label": "evidence_gate"
+    },
+    {
+      "detail": "critic",
+      "group": "evidence",
+      "id": "node:quality_evaluation",
+      "label": "quality_evaluation"
+    },
+    {
+      "detail": "runtime",
+      "group": "Validators",
+      "id": "val:evidence-gate",
+      "label": "evidence-gate"
+    },
+    {
+      "detail": "runtime",
+      "group": "Validators",
+      "id": "val:research-quality",
+      "label": "research-quality"
+    },
+    {
+      "detail": "skill",
+      "group": "Validators",
+      "id": "val:model-critic",
+      "label": "model-critic"
+    },
+    {
+      "detail": "skill",
+      "group": "Validators",
+      "id": "val:experiment-critic",
+      "label": "experiment-critic"
+    },
+    {
+      "detail": "runtime",
+      "group": "Validators",
+      "id": "val:assumption-checker",
+      "label": "assumption-checker"
+    }
+  ],
+  "schema_version": "1.0",
+  "title": "Modeling-Harness · 架构总览（catalog 真源派生）"
+}

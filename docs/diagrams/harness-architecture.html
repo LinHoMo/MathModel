@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modeling-Harness · 架构总览（catalog 真源派生）</title>
+<style>:root{color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;
+  font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif;
+  background:#ffffff;color:#102027}
+header h1{margin:0 0 4px;font-size:20px;color:#1a237e}
+header .meta{margin:0;font-size:12px;color:#607d8b}
+.canvas{margin:16px 0;overflow:auto;border:1px solid #e0e6ec;border-radius:10px;background:#fff}
+footer{margin-top:16px;font-size:11px;color:#90a4ae}
+footer code{background:#f4f7fa;padding:1px 5px;border-radius:4px}
+@media (prefers-color-scheme:dark){
+body{background:#0f1419;color:#eceff1}
+header h1{color:#90caf9}
+header .meta{color:#90a4ae}
+.canvas{background:#0f1419;border-color:#22303c}
+footer{color:#78909c}
+footer code{background:#1b232b}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Modeling-Harness · 架构总览（catalog 真源派生）</h1>
+<p class="meta">kind = architecture · 25 节点 / 5 边</p>
+</header>
+<div class="canvas"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1788 776" width="1788" height="776" role="img" aria-label="Modeling-Harness · 架构总览（catalog 真源派生）"><style>:root{color-scheme:light dark}
+text{font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif}
+.bg{fill:#ffffff}
+.title{fill:#1a237e;font-size:18px;font-weight:700}
+.subtitle{fill:#78909c;font-size:11px}
+.layer-band{fill:#f4f7fa}
+.layer-band.alt{fill:#eaeff5}
+.layer-title{fill:#546e7a;font-size:12px;font-weight:600}
+.shape{stroke-width:1.6}
+.shape.layer-0{fill:#e3f2fd;stroke:#1565c0}
+.shape.layer-1{fill:#e8f5e9;stroke:#2e7d32}
+.shape.layer-2{fill:#fff3e0;stroke:#ef6c00}
+.shape.layer-3{fill:#f3e5f5;stroke:#6a1b9a}
+.shape.layer-4{fill:#e0f7fa;stroke:#00838f}
+.shape.layer-5{fill:#fbe9e7;stroke:#bf360c}
+.node .label{fill:#102027;font-size:12px}
+.node .detail{fill:#607d8b;font-size:10px}
+.node.emphasis .shape{stroke-width:2.8;stroke:#c62828}
+.node.muted .shape{opacity:.5}
+.node.dashed .shape{stroke-dasharray:5 3}
+.edge{fill:none;stroke:#90a4ae;stroke-width:1.4}
+.edge.dependency{stroke:#7e57c2;stroke-dasharray:4 3}
+.edge.evidence{stroke:#2e7d32}
+.edge.reference{stroke:#b0bec5;stroke-dasharray:2 4}
+.edge-label{fill:#607d8b;font-size:9px}
+.arrow-head{fill:#90a4ae}
+.legend text{fill:#37474f;font-size:11px}
+@media (prefers-color-scheme:dark){
+.bg{fill:#0f1419}
+.title{fill:#90caf9}
+.subtitle{fill:#90a4ae}
+.layer-band{fill:#161c22}
+.layer-band.alt{fill:#1b232b}
+.layer-title{fill:#90a4ae}
+.node .label{fill:#eceff1}
+.node .detail{fill:#90a4ae}
+.edge{stroke:#546e7a}
+.edge-label{fill:#90a4ae}
+.arrow-head{fill:#546e7a}
+.legend text{fill:#cfd8dc}
+.shape.layer-0{fill:#102a43;stroke:#4a90d9}
+.shape.layer-1{fill:#10331f;stroke:#4caf50}
+.shape.layer-2{fill:#3a2a12;stroke:#ffa726}
+.shape.layer-3{fill:#2a1633;stroke:#ab47bc}
+.shape.layer-4{fill:#0f2d31;stroke:#26c6da}
+.shape.layer-5{fill:#331613;stroke:#ff7043}
+}
+</style><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow-head" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs><rect class="bg" width="100%" height="100%"/><text class="title" x="32" y="30">Modeling-Harness · 架构总览（catalog 真源派生）</text><text class="subtitle" x="32" y="38">kind=architecture · 25 节点 / 5 边</text><rect class="layer-band" x="16" y="66" width="1756" height="76" rx="10"/><text class="layer-title" x="28" y="94">Roles</text><rect class="layer-band alt" x="16" y="182" width="1756" height="76" rx="10"/><text class="layer-title" x="28" y="210">problem-analysis</text><rect class="layer-band" x="16" y="298" width="1756" height="76" rx="10"/><text class="layer-title" x="28" y="326">modeling</text><rect class="layer-band alt" x="16" y="414" width="1756" height="76" rx="10"/><text class="layer-title" x="28" y="442">experiment</text><rect class="layer-band" x="16" y="530" width="1756" height="76" rx="10"/><text class="layer-title" x="28" y="558">evidence</text><rect class="layer-band alt" x="16" y="646" width="1756" height="76" rx="10"/><text class="layer-title" x="28" y="674">Validators</text><g class="edge-group" data-edge-from="node:model_critique" data-edge-to="val:model-critic"><polyline class="edge dependency" points="564,362 564,510 894,510 894,658" marker-end="url(#arrow)"/></g><g class="edge-group" data-edge-from="node:assumption_check" data-edge-to="val:assumption-checker"><polyline class="edge dependency" points="784,362 784,510 1334,510 1334,658" marker-end="url(#arrow)"/></g><g class="edge-group" data-edge-from="node:experiment_critique" data-edge-to="val:experiment-critic"><polyline class="edge dependency" points="1114,478 1114,568 1114,568 1114,658" marker-end="url(#arrow)"/></g><g class="edge-group" data-edge-from="node:evidence_gate" data-edge-to="val:evidence-gate"><polyline class="edge dependency" points="894,594 894,626 454,626 454,658" marker-end="url(#arrow)"/></g><g class="edge-group" data-edge-from="node:quality_evaluation" data-edge-to="val:research-quality"><polyline class="edge dependency" points="1114,594 1114,626 674,626 674,658" marker-end="url(#arrow)"/></g><g class="node layer-0" data-node-id="role:analyst" data-layer="Roles"><title>analyst</title><rect class="shape layer-0" x="472" y="78" width="184" height="52" rx="6"/><text class="label" x="564" y="102" text-anchor="middle">analyst</text><text class="detail" x="564" y="117" text-anchor="middle">赛题结构化解析、文献检索与证据…</text></g><g class="node layer-0" data-node-id="role:modeler" data-layer="Roles"><title>modeler</title><rect class="shape layer-0" x="692" y="78" width="184" height="52" rx="6"/><text class="label" x="784" y="102" text-anchor="middle">modeler</text><text class="detail" x="784" y="117" text-anchor="middle">方法选型竞技场、数学建模</text></g><g class="node layer-0" data-node-id="role:experimenter" data-layer="Roles"><title>experimenter</title><rect class="shape layer-0" x="912" y="78" width="184" height="52" rx="6"/><text class="label" x="1004" y="102" text-anchor="middle">experimenter</text><text class="detail" x="1004" y="117" text-anchor="middle">实验规划、执行、证据登记</text></g><g class="node layer-0" data-node-id="role:critic" data-layer="Roles"><title>critic</title><rect class="shape layer-0" x="1132" y="78" width="184" height="52" rx="6"/><text class="label" x="1224" y="102" text-anchor="middle">critic</text><text class="detail" x="1224" y="117" text-anchor="middle">前置批判（model/experiment/ev</text></g><g class="node layer-1" data-node-id="node:problem_analysis" data-layer="problem-analysis"><title>problem_analysis</title><rect class="shape layer-1" x="692" y="194" width="184" height="52" rx="6"/><text class="label" x="784" y="218" text-anchor="middle">problem_analysis</text><text class="detail" x="784" y="233" text-anchor="middle">analyst</text></g><g class="node layer-1" data-node-id="node:literature_search" data-layer="problem-analysis"><title>literature_search</title><rect class="shape layer-1" x="912" y="194" width="184" height="52" rx="6"/><text class="label" x="1004" y="218" text-anchor="middle">literature_search</text><text class="detail" x="1004" y="233" text-anchor="middle">analyst</text></g><g class="node layer-2" data-node-id="node:model_selection" data-layer="modeling"><title>model_selection</title><rect class="shape layer-2" x="32" y="310" width="184" height="52" rx="6"/><text class="label" x="124" y="334" text-anchor="middle">model_selection</text><text class="detail" x="124" y="349" text-anchor="middle">modeler</text></g><g class="node layer-2" data-node-id="node:model_construction" data-layer="modeling"><title>model_construction</title><rect class="shape layer-2" x="252" y="310" width="184" height="52" rx="6"/><text class="label" x="344" y="334" text-anchor="middle">model_construction</text><text class="detail" x="344" y="349" text-anchor="middle">modeler</text></g><g class="node layer-2" data-node-id="node:model_critique" data-layer="modeling"><title>model_critique</title><rect class="shape layer-2" x="472" y="310" width="184" height="52" rx="6"/><text class="label" x="564" y="334" text-anchor="middle">model_critique</text><text class="detail" x="564" y="349" text-anchor="middle">critic</text></g><g class="node layer-2" data-node-id="node:assumption_check" data-layer="modeling"><title>assumption_check</title><rect class="shape layer-2" x="692" y="310" width="184" height="52" rx="6"/><text class="label" x="784" y="334" text-anchor="middle">assumption_check</text><text class="detail" x="784" y="349" text-anchor="middle">critic</text></g><g class="node layer-2" data-node-id="node:code_generation" data-layer="modeling"><title>code_generation</title><rect class="shape layer-2" x="912" y="310" width="184" height="52" rx="6"/><text class="label" x="1004" y="334" text-anchor="middle">code_generation</text><text class="detail" x="1004" y="349" text-anchor="middle">experimenter</text></g><g class="node layer-2" data-node-id="node:model_execution" data-layer="modeling"><title>model_execution</title><rect class="shape layer-2" x="1132" y="310" width="184" height="52" rx="6"/><text class="label" x="1224" y="334" text-anchor="middle">model_execution</text><text class="detail" x="1224" y="349" text-anchor="middle">experimenter</text></g><g class="node layer-2" data-node-id="node:model_validation" data-layer="modeling"><title>model_validation</title><rect class="shape layer-2" x="1352" y="310" width="184" height="52" rx="6"/><text class="label" x="1444" y="334" text-anchor="middle">model_validation</text><text class="detail" x="1444" y="349" text-anchor="middle">experimenter</text></g><g class="node layer-2" data-node-id="node:model_selection_decision" data-layer="modeling"><title>model_selection_decision</title><rect class="shape layer-2" x="1572" y="310" width="184" height="52" rx="6"/><text class="label" x="1664" y="334" text-anchor="middle">model_selection_decision</text><text class="detail" x="1664" y="349" text-anchor="middle">modeler</text></g><g class="node layer-3" data-node-id="node:experiment_design" data-layer="experiment"><title>experiment_design</title><rect class="shape layer-3" x="582" y="426" width="184" height="52" rx="6"/><text class="label" x="674" y="450" text-anchor="middle">experiment_design</text><text class="detail" x="674" y="465" text-anchor="middle">experimenter</text></g><g class="node layer-3" data-node-id="node:experiment" data-layer="experiment"><title>experiment</title><rect class="shape layer-3" x="802" y="426" width="184" height="52" rx="6"/><text class="label" x="894" y="450" text-anchor="middle">experiment</text><text class="detail" x="894" y="465" text-anchor="middle">experimenter</text></g><g class="node layer-3" data-node-id="node:experiment_critique" data-layer="experiment"><title>experiment_critique</title><rect class="shape layer-3" x="1022" y="426" width="184" height="52" rx="6"/><text class="label" x="1114" y="450" text-anchor="middle">experiment_critique</text><text class="detail" x="1114" y="465" text-anchor="middle">critic</text></g><g class="node layer-4" data-node-id="node:evidence_build" data-layer="evidence"><title>evidence_build</title><rect class="shape layer-4" x="582" y="542" width="184" height="52" rx="6"/><text class="label" x="674" y="566" text-anchor="middle">evidence_build</text><text class="detail" x="674" y="581" text-anchor="middle">experimenter</text></g><g class="node layer-4" data-node-id="node:evidence_gate" data-layer="evidence"><title>evidence_gate</title><rect class="shape layer-4" x="802" y="542" width="184" height="52" rx="6"/><text class="label" x="894" y="566" text-anchor="middle">evidence_gate</text><text class="detail" x="894" y="581" text-anchor="middle">critic</text></g><g class="node layer-4" data-node-id="node:quality_evaluation" data-layer="evidence"><title>quality_evaluation</title><rect class="shape layer-4" x="1022" y="542" width="184" height="52" rx="6"/><text class="label" x="1114" y="566" text-anchor="middle">quality_evaluation</text><text class="detail" x="1114" y="581" text-anchor="middle">critic</text></g><g class="node layer-5" data-node-id="val:evidence-gate" data-layer="Validators"><title>evidence-gate</title><rect class="shape layer-5" x="362" y="658" width="184" height="52" rx="6"/><text class="label" x="454" y="682" text-anchor="middle">evidence-gate</text><text class="detail" x="454" y="697" text-anchor="middle">runtime</text></g><g class="node layer-5" data-node-id="val:research-quality" data-layer="Validators"><title>research-quality</title><rect class="shape layer-5" x="582" y="658" width="184" height="52" rx="6"/><text class="label" x="674" y="682" text-anchor="middle">research-quality</text><text class="detail" x="674" y="697" text-anchor="middle">runtime</text></g><g class="node layer-5" data-node-id="val:model-critic" data-layer="Validators"><title>model-critic</title><rect class="shape layer-5" x="802" y="658" width="184" height="52" rx="6"/><text class="label" x="894" y="682" text-anchor="middle">model-critic</text><text class="detail" x="894" y="697" text-anchor="middle">skill</text></g><g class="node layer-5" data-node-id="val:experiment-critic" data-layer="Validators"><title>experiment-critic</title><rect class="shape layer-5" x="1022" y="658" width="184" height="52" rx="6"/><text class="label" x="1114" y="682" text-anchor="middle">experiment-critic</text><text class="detail" x="1114" y="697" text-anchor="middle">skill</text></g><g class="node layer-5" data-node-id="val:assumption-checker" data-layer="Validators"><title>assumption-checker</title><rect class="shape layer-5" x="1242" y="658" width="184" height="52" rx="6"/><text class="label" x="1334" y="682" text-anchor="middle">assumption-checker</text><text class="detail" x="1334" y="697" text-anchor="middle">runtime</text></g><g class="legend"><rect class="shape layer-0" x="32" y="732" width="12" height="12" rx="3"/><text x="50" y="742">Roles</text><rect class="shape layer-1" x="127" y="732" width="12" height="12" rx="3"/><text x="145" y="742">problem-analysis</text><rect class="shape layer-2" x="343" y="732" width="12" height="12" rx="3"/><text x="361" y="742">modeling</text><rect class="shape layer-3" x="471" y="732" width="12" height="12" rx="3"/><text x="489" y="742">experiment</text><rect class="shape layer-4" x="621" y="732" width="12" height="12" rx="3"/><text x="639" y="742">evidence</text><rect class="shape layer-5" x="749" y="732" width="12" height="12" rx="3"/><text x="767" y="742">Validators</text></g></svg>
+</div>
+<footer>本页为<a>生成物</a>——由 <code>mh diagram build</code> 从 DiagramIR 确定性渲染；真源在 IR（catalog / model_ir.json / evidence_graph.json）。</footer>
+</body>
+</html>
