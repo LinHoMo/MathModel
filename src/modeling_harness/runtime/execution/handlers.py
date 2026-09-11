@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import sys
 import time
 from pathlib import Path
@@ -29,6 +30,15 @@ from pathlib import Path
 from .engine import FAIL, PASS, NodeResult
 
 _TERMINAL = ("invalidated", "superseded", "deprecated")
+
+
+def _finite_float(v):
+    """有限数值 → float；None / 非数值 / NaN / Inf → None（不可比者视为缺失）。"""
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return f if math.isfinite(f) else None
 
 REPO = Path(__file__).resolve().parents[4]
 if str(REPO / "src") not in sys.path:
@@ -1340,6 +1350,7 @@ class DefaultNodeExecutor:
     # ------------------------------------------------------------ P1-M3 候选竞技场（Evidence-based Selection）
 
     SELECTION_CRITERIA = [
+        "objective_value", "objective_direction",
         "mathematical_valid", "constraint_violation_max",
         "execution_valid", "variable_domain_violation", "empirical_valid",
     ]
@@ -1372,17 +1383,35 @@ class DefaultNodeExecutor:
 
     @staticmethod
     def _rank_candidates(table: dict[str, dict]) -> list[str]:
-        """机械排序（禁 LLM 打分/禁取第一个）：mathematical_valid 优先 →
-        constraint_violation_max 升序 → execution_valid → 域合规 → empirical_valid
-        → model_id 字典序（确定性 tie-break）。无证据候选恒排最后。"""
+        """机械排序（禁 LLM 打分/禁取第一个）。
+
+        优先级（ADR-0014，把 ADR-0013「模型选择必须比目标函数值」延伸到
+        P1-M3 生产选型路径）：mathematical_valid → **objective_value（按
+        objective_direction）** → constraint_violation_max 升序 →
+        execution_valid → 域合规 → empirical_valid → model_id 字典序
+        （确定性 tie-break）。有目标值者优先于无目标值者；无证据候选恒排最后。
+
+        缺口修复：ADR-0013 只改了 comparison.py::compare_models，而本节点
+        （do_model_selection_decision）走的是这条键——此前完全不读
+        objective_value，两个都合规（constraint_violation_max=0）的候选由
+        mir_id 字典序决胜，目标值更优者会落选。
+        """
 
         def key(item: tuple[str, dict]) -> tuple:
             mir_id, info = item
             m = info.get("metrics") or {}
-            if m is None:
-                return (2, 0.0, 1, 1, 1, mir_id)
+            if not m:                       # 无 VR 证据：恒排最后
+                return (2, 1, 0.0, 0.0, 1, 1, 1, mir_id)
+            obj_f = _finite_float(m.get("objective_value"))
+            obj_rank = 0.0
+            if obj_f is not None:
+                direction = m.get("objective_direction") or "minimize"
+                obj_rank = -obj_f if direction == "maximize" else obj_f
+            cv = _finite_float(m.get("constraint_violation_max"))
             return (0 if m.get("mathematical_valid") else 1,
-                    float(m.get("constraint_violation_max") or 0.0),
+                    0 if obj_f is not None else 1,
+                    obj_rank,
+                    cv if cv is not None else 0.0,
                     0 if m.get("execution_valid") else 1,
                     0 if (m.get("variable_domain_violation") or 0) == 0 else 1,
                     0 if m.get("empirical_valid") else 1,
@@ -1458,20 +1487,37 @@ class DefaultNodeExecutor:
                 chosen = best_mir
                 confidence = self._decision_confidence(ranked, table)
                 bm = best_info["metrics"]
-                parts = [f"chosen={chosen} because "
-                         f"{best_info['vr_id']}.mathematical_valid="
-                         f"{bool(bm.get('mathematical_valid'))}"]
+                b_obj_f = _finite_float(bm.get("objective_value"))
+                b_dir = bm.get("objective_direction") or "minimize"
+                b_cv = _finite_float(bm.get("constraint_violation_max"))
+                if b_obj_f is not None:
+                    parts = [f"chosen={chosen} because "
+                             f"{best_info['vr_id']}.objective_value="
+                             f"{b_obj_f:g} 为可行候选中最优（{b_dir}）"]
+                else:
+                    parts = [f"chosen={chosen} because "
+                             f"{best_info['vr_id']}.mathematical_valid="
+                             f"{bool(bm.get('mathematical_valid'))}"
+                             f"（目标值不可得，回退验证质量）"]
                 for alt in ranked[1:]:
                     ai = table[alt]
                     if not ai.get("vr_id"):
                         continue
-                    am = ai["metrics"]
-                    parts.append(
-                        f"{alt}({ai['vr_id']}.constraint_violation_max="
-                        f"{float(am.get('constraint_violation_max') or 0.0)}) "
-                        f"worse than {best_info['vr_id']}."
-                        f"constraint_violation_max="
-                        f"{float(bm.get('constraint_violation_max') or 0.0)})")
+                    am = ai["metrics"] or {}
+                    a_obj_f = _finite_float(am.get("objective_value"))
+                    if b_obj_f is not None and a_obj_f is not None:
+                        parts.append(
+                            f"{alt}({ai['vr_id']}.objective_value="
+                            f"{a_obj_f:g}) 劣于 {best_info['vr_id']}"
+                            f".objective_value={b_obj_f:g}")
+                    else:
+                        a_cv = _finite_float(am.get("constraint_violation_max"))
+                        parts.append(
+                            f"{alt}({ai['vr_id']}.constraint_violation_max="
+                            f"{a_cv if a_cv is not None else 0.0}) "
+                            f"worse than {best_info['vr_id']}."
+                            f"constraint_violation_max="
+                            f"{b_cv if b_cv is not None else 0.0})")
                 reasoning = "; ".join(parts)
             ddata = {
                 "kind": "candidate_selection",

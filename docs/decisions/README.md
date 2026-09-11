@@ -21,6 +21,7 @@
 | [ADR-0011](ADR-0011-knowledge-card-gate.md) | 知识卡双层门禁与 source_type 枚举增补 | Accepted |
 | [ADR-0012](ADR-0012-efficiency-metric-denominator.md) | 效率统计口径以题面定义为准、跨实现比较前必须归一 | Accepted |
 | [ADR-0013](ADR-0013-objective-over-validation-in-model-selection.md) | 模型选择必须比目标函数值，基线对照链必须闭环 | Accepted |
+| [ADR-0014](ADR-0014-objective-over-validation-in-candidate-ranking.md) | 候选选型必须以目标函数值为首要依据（延伸到 P1-M3 路径） | Accepted |
 
 ## 规则
 
