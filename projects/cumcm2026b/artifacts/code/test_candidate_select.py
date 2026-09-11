@@ -116,12 +116,27 @@ def test_decision_is_machine_readable():
 
 
 # ------------------------------------------ M-SELECT-002：策略对象化 + 信息感知候选
-def test_candidate_registry_has_three_strategy_objects():
-    """候选注册表是三件**规格对象**（各有 points 几何入口），不再是裸点集。"""
+def test_candidate_registry_has_four_strategy_objects():
+    """候选注册表是四件**规格对象**（各有 points 几何入口），不再是裸点集。"""
     names = [c["name"] for c in C.CANDIDATES]
-    assert names == ["RING", "SPIRAL", "AIFIX"]
+    assert names == ["RING", "SPIRAL", "AIFIX", "LAWN"]
     for c in C.CANDIDATES:
         assert callable(c["points"])
+
+
+def test_lawn_candidate_is_coverage_complete_and_fair():
+    """LAWN 必须与另两候选同样合理：覆盖完备 + 含定向源时外扩 + 机制确实不同。
+
+    M-SELECT-001 的教训：给候选配不公平的几何会得出假结论。故「LAWN 合理」写成
+    测试而不是口头声明。
+    """
+    pts = C.lawn_for(False)
+    r = C.coverage_radius(pts, radius=B.R_AREA, n_theta=121, n_rho=61)
+    assert r < 1000.0, f"LAWN 覆盖不完备（{r:.1f} m ≥ 1000 m）"
+    assert max((x * x + y * y) ** 0.5 for x, y in C.lawn_for(True)) > B.R_AREA, \
+        "LAWN 在定向场景没有外扩几何"
+    assert sorted(pts) != sorted(C.ring_points(False)), "LAWN 与 RING 点集相同"
+    assert sorted(pts) != sorted(C.spiral_for(False)), "LAWN 与 SPIRAL 点集相同"
 
 
 def test_aifix_shares_ring_geometry_single_variable_contrast():

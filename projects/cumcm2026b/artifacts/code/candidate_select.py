@@ -112,6 +112,48 @@ def spiral_for(has_directional: bool):
     return spiral_points(radius=2000.0 if has_directional else B.R_AREA)
 
 
+# ---------------------------------------------------------------- 候选 C：牛耕
+LAWN_ROW_STEP = 900.0     # 行距 / m（< r_rec_min = 1000，保证行间不漏）
+LAWN_POINT_STEP = 900.0   # 行内采样间隔 / m（< r_rec_min = 1000，保证行内不漏）
+
+
+def lawnmower_points(radius: float = B.R_AREA, row_step: float = LAWN_ROW_STEP,
+                     point_step: float = LAWN_POINT_STEP, start: tuple = (0.0, 0.0)):
+    """候选 C 的覆盖几何 = 牛耕式（boustrophedon）扫描线，圆域裁剪。
+
+    与同心环 / 螺旋的**机制差异**：路径是**直线往返**（无曲率、无环间跳跃）。
+    y 按 ``row_step`` 逐行；每行的 x 从 −half_chord 到 +half_chord 按 ``point_step``
+    均匀采样；**行间方向交替**（牛耕），使行末不必回到行首。
+
+    覆盖完备性：行距与行内点距都取 900 m < r_rec_min = 1000 m，故与另两个候选一样
+    到最近检测点的距离 ≤ 1000 m（数值验证见 test 的 coverage_radius）。
+
+    **公平性**（M-SELECT-001 的教训：配不公平的几何会得出假结论）：含定向源时把
+    扫描半径扩到 2000 m，与 RING 的外环 / SPIRAL 的延伸平行——否则 LAWN 在 Q4 就是
+    陪跑而不是候选。
+    """
+    ys = []
+    y = -radius
+    while y < radius - 1e-9:
+        ys.append(y)
+        y += row_step
+    ys.append(radius)          # 补上边界行，避免上缘留缝
+    pts = []
+    for i, yy in enumerate(ys):
+        half = math.sqrt(max(radius * radius - yy * yy, 0.0))
+        n = max(1, int(math.ceil(2.0 * half / point_step)))
+        xs = sorted({round(-half + 2.0 * half * k / n, 9) for k in range(n + 1)})
+        if i % 2 == 1:
+            xs.reverse()       # 牛耕：奇数行反向
+        pts.extend((start[0] + x, start[1] + yy) for x in xs)
+    return pts
+
+
+def lawn_for(has_directional: bool):
+    """按场景给出牛耕几何：含定向源时扫描半径扩到 2000 m（同 RING / SPIRAL 的处置）。"""
+    return lawnmower_points(radius=2000.0 if has_directional else B.R_AREA)
+
+
 def coverage_radius(points, radius: float = B.R_AREA, n_theta: int = 721,
                     n_rho: int = 361) -> float:
     """圆域内「到最近检测点」的最大距离（覆盖完备性判据，越小越好）。"""
@@ -358,7 +400,9 @@ SPIRAL_CAND = {"name": "SPIRAL", "points": spiral_for}
 # AIFIX = RING 几何 + 交错扫描（唯一变量是"何时 engage"，见 interleaved_sweeper）
 AIFIX_CAND = {"name": "AIFIX", "points": ring_points,
               "sweeper": M.interleaved_sweeper}
-CANDIDATES = [RING_CAND, SPIRAL_CAND, AIFIX_CAND]
+# LAWN = 牛耕扫描线（第三种覆盖机制，M-SELECT-003 起加入）
+LAWN_CAND = {"name": "LAWN", "points": lawn_for}
+CANDIDATES = [RING_CAND, SPIRAL_CAND, AIFIX_CAND, LAWN_CAND]
 
 
 def _merge_into_all_results(out: dict) -> None:
@@ -403,7 +447,7 @@ def main() -> int:
     args = ap.parse_args()
 
     names = [c["name"] for c in CANDIDATES]
-    out: dict = {"milestone": "M-SELECT-002", "n_trials": args.trials,
+    out: dict = {"milestone": "M-SELECT-003", "n_trials": args.trials,
                  "seed_start": SEED, "candidates": names, "questions": {}}
     for label, kind_mix in (("q3_omni", False), ("q4_mix", True)):
         rows = eval_candidates(CANDIDATES, kind_mix, args.trials, args.port)
@@ -427,7 +471,7 @@ def main() -> int:
                   f"{st['delta_std_s']:.1f} s (95%CI ±{st['delta_ci95_halfwidth_s']:.1f}), "
                   f"win rate {a}={st['A_win_rate']:.0%} {b}={st['B_win_rate']:.0%}")
 
-    p = HERE.parent / "results" / "candidate_selection_m2.json"
+    p = HERE.parent / "results" / "candidate_selection_m3.json"
     os.makedirs(p.parent, exist_ok=True)
     p.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[OK] {p}")

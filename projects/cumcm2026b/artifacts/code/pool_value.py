@@ -143,11 +143,17 @@ def _merge_into_all_results(report: dict) -> None:
 
 
 def main() -> int:
-    src = HERE.parent / "results" / "candidate_selection_m2.json"
+    # 优先读最新一轮（M-SELECT-003 四候选）；没有则回退 M-SELECT-002 的三候选产物
+    for name in ("candidate_selection_m3.json", "candidate_selection_m2.json"):
+        src = HERE.parent / "results" / name
+        if src.exists():
+            break
     if not src.exists():
         print(f"[FAIL] 缺少输入 {src}；先跑 candidate_select --trials 5")
         return 1
     out = json.loads(src.read_text(encoding="utf-8"))
+    print(f"[输入] {src.name}（milestone={out.get('milestone')}，"
+          f"候选={out.get('candidates')}）")
     report = pool_value(out.get("questions") or {})
 
     for label, v in report.items():

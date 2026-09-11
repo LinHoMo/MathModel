@@ -6,23 +6,25 @@
       "candidate_mean_T": {
         "RING": 6597.8921928,
         "SPIRAL": 7132.9197916,
-        "AIFIX": 6689.1378171999995
+        "AIFIX": 6689.1378171999995,
+        "LAWN": 7933.602081800001
       },
       "ranked_by_mean": [
         "RING",
         "AIFIX",
-        "SPIRAL"
+        "SPIRAL",
+        "LAWN"
       ],
       "best_candidate": "RING",
       "best_mean_T": 6597.8921928,
       "worst_single_pool": {
-        "candidate": "SPIRAL",
-        "mean_T": 7132.9197916,
-        "abs_loss_s": 535.0275988000003,
-        "rel_loss_vs_best": 0.0810906852015335,
-        "rel_loss_vs_self": 0.0750082174525598,
-        "paired_ci95_halfwidth_s": 1022.2092607537587,
-        "significant": false
+        "candidate": "LAWN",
+        "mean_T": 7933.602081800001,
+        "abs_loss_s": 1335.7098890000007,
+        "rel_loss_vs_best": 0.2024449399851674,
+        "rel_loss_vs_self": 0.16836108935488112,
+        "paired_ci95_halfwidth_s": 374.6548740282809,
+        "significant": true
       },
       "subsets": [
         {
@@ -57,6 +59,16 @@
         },
         {
           "pool": [
+            "LAWN"
+          ],
+          "best": "LAWN",
+          "best_mean_T": 7933.602081800001,
+          "abs_gap_vs_full_s": 1335.7098890000007,
+          "paired_ci95_halfwidth_s": 374.6548740282809,
+          "significant": true
+        },
+        {
+          "pool": [
             "RING",
             "AIFIX"
           ],
@@ -79,6 +91,17 @@
         },
         {
           "pool": [
+            "RING",
+            "LAWN"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
             "AIFIX",
             "SPIRAL"
           ],
@@ -86,6 +109,28 @@
           "best_mean_T": 6689.1378171999995,
           "abs_gap_vs_full_s": 91.24562439999954,
           "paired_ci95_halfwidth_s": 404.6992697767586,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "LAWN"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 6689.1378171999995,
+          "abs_gap_vs_full_s": 91.24562439999954,
+          "paired_ci95_halfwidth_s": 404.6992697767586,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "LAWN"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 7132.9197916,
+          "abs_gap_vs_full_s": 535.0275988000003,
+          "paired_ci95_halfwidth_s": 1022.2092607537587,
           "significant": false
         },
         {
@@ -99,6 +144,55 @@
           "abs_gap_vs_full_s": 0.0,
           "paired_ci95_halfwidth_s": 0.0,
           "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "AIFIX",
+            "LAWN"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "SPIRAL",
+            "LAWN"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "SPIRAL",
+            "LAWN"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 6689.1378171999995,
+          "abs_gap_vs_full_s": 91.24562439999954,
+          "paired_ci95_halfwidth_s": 404.6992697767586,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "AIFIX",
+            "SPIRAL",
+            "LAWN"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
         }
       ]
     },
@@ -106,11 +200,13 @@
       "candidate_mean_T": {
         "RING": 10622.8961182,
         "SPIRAL": 8593.6961732,
-        "AIFIX": 10137.0186758
+        "AIFIX": 10137.0186758,
+        "LAWN": 10370.4395982
       },
       "ranked_by_mean": [
         "SPIRAL",
         "AIFIX",
+        "LAWN",
         "RING"
       ],
       "best_candidate": "SPIRAL",
@@ -147,6 +243,16 @@
         },
         {
           "pool": [
+            "LAWN"
+          ],
+          "best": "LAWN",
+          "best_mean_T": 10370.4395982,
+          "abs_gap_vs_full_s": 1776.7434250000006,
+          "paired_ci95_halfwidth_s": 2461.6738024249353,
+          "significant": false
+        },
+        {
+          "pool": [
             "RING"
           ],
           "best": "RING",
@@ -169,12 +275,34 @@
         {
           "pool": [
             "SPIRAL",
+            "LAWN"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
             "RING"
           ],
           "best": "SPIRAL",
           "best_mean_T": 8593.6961732,
           "abs_gap_vs_full_s": 0.0,
           "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "LAWN"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 10137.0186758,
+          "abs_gap_vs_full_s": 1543.3225026,
+          "paired_ci95_halfwidth_s": 1700.2014655968762,
           "significant": false
         },
         {
@@ -190,8 +318,68 @@
         },
         {
           "pool": [
+            "LAWN",
+            "RING"
+          ],
+          "best": "LAWN",
+          "best_mean_T": 10370.4395982,
+          "abs_gap_vs_full_s": 1776.7434250000006,
+          "paired_ci95_halfwidth_s": 2461.6738024249353,
+          "significant": false
+        },
+        {
+          "pool": [
             "SPIRAL",
             "AIFIX",
+            "LAWN"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "AIFIX",
+            "RING"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "LAWN",
+            "RING"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "LAWN",
+            "RING"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 10137.0186758,
+          "abs_gap_vs_full_s": 1543.3225026,
+          "paired_ci95_halfwidth_s": 1700.2014655968762,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "AIFIX",
+            "LAWN",
             "RING"
           ],
           "best": "SPIRAL",
