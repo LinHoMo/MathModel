@@ -888,6 +888,358 @@ def check_calibration_parameters(project_path):
     return True, f"校准参数检查通过（{checked} 个非豁免参数）"
 
 
+# ======================================================================
+# G4: 证据义务矩阵（Evidential Lattice）——声明的证据义务须有机械可查的实例证据。
+# 判据：docs/architecture/MODEL_QUALITY_CRITERIA.md §2.2（v1.1）。
+# 契约：model_ir.json 顶层可选 `evidence_obligations` = {子问题: [证据层, ...]}，
+#   证据层 ∈ {EV1 数学必然, EV2 机制保真, EV3 数据拟合, EV4 样本外预测, EV5 决策效用}
+#   （前缀 EV 规避既有 Evidence Gate E1–E9 编号冲突）。
+# v1 粒度：实例级证据检查（不细分到子问题）；子问题粒度留待证据图深化。
+_EVIDENCE_LAYERS = ("EV1", "EV2", "EV3", "EV4", "EV5")
+
+# 各层机械证据信号（任一命中即算有证据）
+_EV1_VALIDATION_TYPES = frozenset({
+    "invariant", "conservation", "well_posedness", "dimension",
+    "optimality_check", "exactness", "balance",
+})
+_EV1_DERIVATION_KEYWORDS = ("守恒", "不变", "平衡", "唯一", "充要", "一致")
+_EV3_VALIDATION_TYPES = frozenset({
+    "fit", "data_fit", "goodness_of_fit", "r2", "calibration_fit",
+    "regression", "correlation",
+})
+_EV3_RESULT_KEYWORDS = ("rmse", "mae", "mse", "r2", "fit", "误差", "residual")
+_EV3_CLAIM_KEYWORDS = ("数据驱动", "拟合", "插值", "回归")
+_EV4_VALIDATION_TYPES = frozenset({
+    "counterfactual", "holdout", "out_of_sample", "test_set",
+    "prediction", "external_validation",
+})
+_EV4_CLAIM_KEYWORDS = ("实测", "附件", "样本外", "留出", "外推对照")
+_EV5_VALIDATION_TYPES = frozenset({"sensitivity", "robustness"})
+_EV5_RESULT_KEYWORDS = ("calibration_sensitivity", "sensitivity", "robustness")
+
+
+def _results_key_hit(results, keywords):
+    """递归扫描 all_results.json 的键名，任一键含任一关键词 → True。"""
+    if isinstance(results, dict):
+        for k, v in results.items():
+            if any(kw in k.lower() for kw in keywords):
+                return True
+            if _results_key_hit(v, keywords):
+                return True
+    elif isinstance(results, list):
+        for item in results:
+            if _results_key_hit(item, keywords):
+                return True
+    return False
+
+
+def _evidence_layer_backed(data, pdir, layer):
+    """实例级检查：声明的证据层是否有机械可查的证据。"""
+    validations = data.get("validations") or []
+    equations = data.get("equations") or []
+    mechanisms = data.get("mechanisms") or []
+    claims = data.get("claims") or []
+    claim_text = " ".join(str(c.get("text", "")) for c in claims
+                          if isinstance(c, dict))
+    if layer == "EV1":
+        if any(v.get("type") in _EV1_VALIDATION_TYPES for v in validations):
+            return True
+        return any(
+            any(kw in str(e.get("derivation_trace", ""))
+                for kw in _EV1_DERIVATION_KEYWORDS)
+            for e in equations)
+    if layer == "EV2":
+        return any(
+            isinstance(m, dict)
+            and str(m.get("governing_principle", "")).strip()
+            and (m.get("related_equations") or [])
+            for m in mechanisms)
+    if layer == "EV3":
+        if any(v.get("type") in _EV3_VALIDATION_TYPES for v in validations):
+            return True
+        res_path = pdir / "all_results.json"
+        if res_path.exists():
+            try:
+                results = json.loads(res_path.read_text(encoding="utf-8"))
+            except Exception:
+                results = {}
+            if _results_key_hit(results, _EV3_RESULT_KEYWORDS):
+                return True
+        return any(kw in claim_text for kw in _EV3_CLAIM_KEYWORDS)
+    if layer == "EV4":
+        if any(v.get("type") in _EV4_VALIDATION_TYPES for v in validations):
+            return True
+        return any(kw in claim_text for kw in _EV4_CLAIM_KEYWORDS)
+    if layer == "EV5":
+        if any(v.get("type") in _EV5_VALIDATION_TYPES for v in validations):
+            return True
+        res_path = pdir / "all_results.json"
+        if res_path.exists():
+            try:
+                results = json.loads(res_path.read_text(encoding="utf-8"))
+            except Exception:
+                results = {}
+            if _results_key_hit(results, _EV5_RESULT_KEYWORDS):
+                return True
+        return False
+    return False
+
+
+def check_evidence_obligations(project_path):
+    """L4: 证据义务矩阵门禁（G4）——声明的每层证据义务必须有实例证据支撑。
+
+    opt-in 契约：未声明 evidence_obligations 的实例不判失败（接口先行）；
+    声明后即被机械核对，防止「声称质量层级却无对应证据」。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "无活跃项目实例（跳过）"
+    checked = 0
+    problems = []
+    for pdir in live:
+        mir = pdir / "model_ir.json"
+        if not mir.exists():
+            continue
+        try:
+            data = json.loads(mir.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        obligs = data.get("evidence_obligations")
+        if not obligs:
+            continue  # opt-in：未声明不判失败
+        checked += 1
+        if not isinstance(obligs, dict):
+            problems.append(f"{pdir.name}: evidence_obligations 非对象")
+            continue
+        for qid, layers in obligs.items():
+            if not isinstance(layers, list):
+                problems.append(f"{pdir.name}:{qid} obligations 非数组")
+                continue
+            for layer in layers:
+                if layer not in _EVIDENCE_LAYERS:
+                    problems.append(f"{pdir.name}:{qid} 非法证据层 {layer!r}")
+                elif not _evidence_layer_backed(data, pdir, layer):
+                    problems.append(f"{pdir.name}:{qid} 声明 {layer} 但实例无对应证据")
+    if problems:
+        return False, "; ".join(problems[:5])
+    return True, f"证据义务检查通过（{checked} 个实例声明了 obligations）"
+
+
+# ======================================================================
+# G5: 复杂度预算（Parsimony Budget）——参数必须「付租」。
+# 判据：docs/architecture/MODEL_QUALITY_CRITERIA.md §2.3（v1.1）。
+# 死参数（id/符号/归一化符号/名称/数值在任何使用语料中均无命中）→ FAIL；
+# 复杂度指标（param/eq/mech 计数）为 Rank 数据随消息报告，不阻塞。
+_GREEK_TO_NAME = str.maketrans({
+    "α": "alpha", "β": "beta", "γ": "gamma", "δ": "delta", "ε": "epsilon",
+    "λ": "lambda", "μ": "mu", "π": "pi", "ρ": "rho", "σ": "sigma",
+    "τ": "tau", "θ": "theta", "ω": "omega", "φ": "phi", "Φ": "phi",
+    "Δ": "delta", "Ω": "omega", "Σ": "sigma",
+})
+_SUBSCRIPT_TRANS = str.maketrans({
+    "₀": "0", "₁": "1", "₂": "2", "₃": "3", "₄": "4",
+    "₅": "5", "₆": "6", "₇": "7", "₈": "8", "₉": "9",
+    "ₜ": "t", "ₐ": "a", "ᵣ": "r", "ₓ": "x", "ₘ": "m", "ₙ": "n",
+    "ᵢ": "i", "ⱼ": "j", "ₚ": "p",
+})
+
+
+def _normalize_symbol(sym):
+    """希腊字母转拉丁名 + 剥离 Unicode 上下标 + 分隔符归一 + 大写。
+
+    例：T₀→T0、τ_air→TAU_AIR、τ-air→TAU_AIR、ρ_ring→RHO_RING。
+    """
+    s = str(sym).translate(_GREEK_TO_NAME).translate(_SUBSCRIPT_TRANS)
+    s = re.sub(r"[-.\s]+", "_", s)
+    return s.upper()
+
+
+def _param_usage_corpus(pdir, mir_data):
+    """使用语料 = model_ir（剔除 parameters 自证）+ all_results + 代码 + 模型文档。"""
+    parts = []
+    d = dict(mir_data)
+    d.pop("parameters", None)
+    parts.append(json.dumps(d, ensure_ascii=False))
+    res = pdir / "all_results.json"
+    if res.exists():
+        try:
+            parts.append(res.read_text(encoding="utf-8"))
+        except OSError:
+            pass
+    for code_file in sorted((pdir / "artifacts" / "code").glob("*.py")):
+        try:
+            parts.append(code_file.read_text(encoding="utf-8"))
+        except OSError:
+            pass
+    for md_file in sorted(pdir.glob("*.md")):
+        try:
+            parts.append(md_file.read_text(encoding="utf-8"))
+        except OSError:
+            pass
+    return "\n".join(parts)
+
+
+def _value_signals(val):
+    """数值/字符串值的匹配信号集（处理 int↔float 与逗号分隔串）。
+
+    例：450 → ["450", "450.0"]；"450, 1350" → 原串 + 各段(含 .0/int 变体)。
+    匹配从宽（宁可漏报死参数，不误伤被引用的参数），代价已记录。
+    """
+    if isinstance(val, bool):
+        return []
+    if isinstance(val, (int, float)):
+        s = str(val)
+        out = [s]
+        if isinstance(val, float) and float(val).is_integer():
+            out.append(str(int(val)))
+        if isinstance(val, int):
+            out.append(f"{val}.0")
+        return out
+    if isinstance(val, str):
+        out = [val]
+        for seg in re.split(r"[,，、;；\s]+", val):
+            seg = seg.strip()
+            if not seg:
+                continue
+            out.append(seg)
+            try:
+                f = float(seg)
+                if f.is_integer():
+                    out.append(str(int(f)))
+                    out.append(f"{int(f)}.0")
+                else:
+                    out.append(str(f))
+            except ValueError:
+                pass
+        return out
+    return []
+
+
+def _param_is_used(par, corpus):
+    pid = str(par.get("parameter_id", ""))
+    sym = str(par.get("symbol", ""))
+    name = str(par.get("name", ""))
+    if pid and pid in corpus:
+        return True
+    if sym and (sym in corpus or _normalize_symbol(sym) in corpus):
+        return True
+    if name and name in corpus:
+        return True
+    return any(sig and sig in corpus for sig in _value_signals(par.get("value")))
+
+
+def check_parsimony_budget(project_path):
+    """L4: 复杂度预算门禁（G5）——死参数检查 + 复杂度指标报告。
+
+    每个参数必须至少一处被使用（方程/目标/约束/机理/验证/主张/代码/文档），
+    否则判 FAIL（「参数付租」：不被引用的参数是建模冗余的信号）。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "无活跃项目实例（跳过）"
+    checked = 0
+    problems = []
+    per_proj = []
+    for pdir in live:
+        mir = pdir / "model_ir.json"
+        if not mir.exists():
+            continue
+        try:
+            data = json.loads(mir.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        params = data.get("parameters") or []
+        if not params:
+            continue
+        checked += 1
+        corpus = _param_usage_corpus(pdir, data)
+        dead = [str(p.get("parameter_id", "?"))
+                for p in params if not _param_is_used(p, corpus)]
+        n_used = len(params) - len(dead)
+        n_eq = len(data.get("equations") or [])
+        n_mech = len(data.get("mechanisms") or [])
+        per_proj.append(
+            f"{pdir.name}(param={len(params)},used={n_used},eq={n_eq},"
+            f"mech={n_mech})")
+        if dead:
+            problems.append(
+                f"{pdir.name}: 死参数 {dead}（used={n_used}/"
+                f"{len(params)}；信号：id/符号/名称/值 均无命中）")
+    if problems:
+        return False, "; ".join(problems[:5])
+    return True, ("复杂度预算检查通过（{} 实例：{}）".format(
+        checked, ", ".join(per_proj) or "无参数"))
+
+
+# ======================================================================
+# R4: 创新声明契约门禁——防「自称创新」（创新进 Rank 不进 Gate，契约是 Gate）。
+# 判据：docs/architecture/MODEL_QUALITY_CRITERIA.md §3（v1.1）。
+_INNOVATION_DIMS = ("mechanism_novelty", "solver_novelty",
+                    "composition_novelty", "representation_novelty")
+
+
+def check_innovation_declaration(project_path):
+    """L4: 创新声明契约门禁（R4 的 Gate 部分）。
+
+    声明 innovation 的实例必须结构合法；任一维度 > 0 必须附差异论证
+    （difference_arguments 条目 vs_known 与 argument_ref 均非空）。
+    创新高低由 R3 Rank 工具（cli/innovation_metrics.py）度量，不在此判。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "无活跃项目实例（跳过）"
+    checked = 0
+    problems = []
+    for pdir in live:
+        mir = pdir / "model_ir.json"
+        if not mir.exists():
+            continue
+        try:
+            data = json.loads(mir.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        innov = data.get("innovation")
+        if not innov:
+            continue  # opt-in
+        checked += 1
+        if not isinstance(innov, dict):
+            problems.append(f"{pdir.name}: innovation 非对象")
+            continue
+        dims = innov.get("dimensions")
+        if not isinstance(dims, dict):
+            problems.append(f"{pdir.name}: innovation.dimensions 非对象")
+            dims = {}
+        for k, v in dims.items():
+            if k not in _INNOVATION_DIMS:
+                problems.append(f"{pdir.name}: 未知创新维度 {k!r}")
+            elif isinstance(v, bool) or not isinstance(v, (int, float)) \
+                    or not (0 <= v <= 1):
+                problems.append(f"{pdir.name}: {k} 值越界 {v!r}")
+        sd = innov.get("structure_distance")
+        if sd is not None and (isinstance(sd, bool)
+                               or not isinstance(sd, (int, float))
+                               or not (0 <= sd <= 1)):
+            problems.append(f"{pdir.name}: structure_distance 越界 {sd!r}")
+        args = innov.get("difference_arguments")
+        if not isinstance(args, list):
+            problems.append(f"{pdir.name}: difference_arguments 非数组")
+            args = []
+        for k, v in dims.items():
+            if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0:
+                entry = next(
+                    (a for a in args
+                     if isinstance(a, dict) and a.get("dimension") == k),
+                    None)
+                if not entry or not str(entry.get("vs_known", "")).strip() \
+                        or not str(entry.get("argument_ref", "")).strip():
+                    problems.append(
+                        f"{pdir.name}: {k}>0 缺 difference_arguments"
+                        f"(vs_known/argument_ref)")
+    if problems:
+        return False, "; ".join(problems[:5])
+    return True, f"创新声明契约检查通过（{checked} 个实例声明了 innovation）"
+
+
 def check_physics_model(project_path):
     """L4: 物理模型检查（V3：模型描述文档坐标系/几何判据/解析验证等）。"""
     live = _live_project_dirs(project_path)
@@ -1346,6 +1698,9 @@ def validate_project(project_path):
         ("L4", "数值追溯", lambda: check_numeric_traceability(project_path)),
         ("L4", "参数来源", lambda: check_parameter_provenance(project_path)),
         ("L4", "校准参数", lambda: check_calibration_parameters(project_path)),
+        ("L4", "证据义务", lambda: check_evidence_obligations(project_path)),
+        ("L4", "复杂度预算", lambda: check_parsimony_budget(project_path)),
+        ("L4", "创新声明", lambda: check_innovation_declaration(project_path)),
 
         # L5: 信任域隔离检查
         ("L5", "信任域定义", lambda: check_trust_domain(project_path)),
