@@ -1,0 +1,93 @@
+{
+  "milestone": "M-SELECT-006",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "spacings_m": [
+    900,
+    1000,
+    1200,
+    1500
+  ],
+  "method": "5 seeds 初筛（选参用；是否采纳由 10-seed 配对 CI 裁决）",
+  "q3_omni": {
+    "d900": {
+      "spacing_m": 900,
+      "n_points": 19,
+      "coverage_radius_m": 512.5292063857946,
+      "mean_total_time_s": 9776.6512082,
+      "mean_n_measure": 375.6,
+      "mean_move_dist_m": 37372.256041688786,
+      "mean_cleared_fraction": 1.0
+    },
+    "d1000": {
+      "spacing_m": 1000,
+      "n_points": 13,
+      "coverage_radius_m": 804.1170505041629,
+      "mean_total_time_s": 7722.9979758,
+      "mean_n_measure": 279.4,
+      "mean_move_dist_m": 29989.98987921999,
+      "mean_cleared_fraction": 1.0
+    },
+    "d1200": {
+      "spacing_m": 1200,
+      "n_points": 7,
+      "coverage_radius_m": 964.0842417412802,
+      "mean_total_time_s": 5721.1445084,
+      "mean_n_measure": 179.6,
+      "mean_move_dist_m": 23033.72254224101,
+      "mean_cleared_fraction": 1.0
+    },
+    "d1500": {
+      "spacing_m": 1500,
+      "n_points": 7,
+      "coverage_radius_m": 895.4457166502746,
+      "mean_total_time_s": 7366.5916262,
+      "mean_n_measure": 209.6,
+      "mean_move_dist_m": 30446.958130229825,
+      "mean_cleared_fraction": 1.0
+    }
+  },
+  "q4_mix": {
+    "d900": {
+      "spacing_m": 900,
+      "n_points": 33,
+      "coverage_radius_m": 518.1444367162258,
+      "mean_total_time_s": 14192.5734704,
+      "mean_n_measure": 597.8,
+      "mean_move_dist_m": 52828.86735254846,
+      "mean_cleared_fraction": 1.0
+    },
+    "d1000": {
+      "spacing_m": 1000,
+      "n_points": 32,
+      "coverage_radius_m": 569.4768959842163,
+      "mean_total_time_s": 14585.4947182,
+      "mean_n_measure": 602.8,
+      "mean_move_dist_m": 54637.473591676775,
+      "mean_cleared_fraction": 1.0
+    },
+    "d1200": {
+      "spacing_m": 1200,
+      "n_points": 18,
+      "coverage_radius_m": 697.1187528003194,
+      "mean_total_time_s": 9789.500017,
+      "mean_n_measure": 383.0,
+      "mean_move_dist_m": 37256.50008439713,
+      "mean_cleared_fraction": 1.0
+    },
+    "d1500": {
+      "spacing_m": 1500,
+      "n_points": 16,
+      "coverage_radius_m": 853.2288685768066,
+      "mean_total_time_s": 11287.9464694,
+      "mean_n_measure": 391.4,
+      "mean_move_dist_m": 44686.73234748175,
+      "mean_cleared_fraction": 0.9800000000000001
+    }
+  }
+}

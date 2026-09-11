@@ -155,7 +155,7 @@ def lawn_for(has_directional: bool):
 
 
 # ---------------------------------------------------------------- 候选 E：三角格子
-HEX_SPACING = 1500.0   # 格子间距 / m；最坏覆盖 = d/√3 ≈ 866 m < r_rec_min = 1000
+HEX_SPACING = 1200.0   # 格子间距 / m；最坏覆盖 = d/√3 ≈ 693 m < r_rec_min = 1000
 
 
 def hex_points(radius: float = B.R_AREA, spacing: float = HEX_SPACING,

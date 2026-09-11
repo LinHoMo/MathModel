@@ -1,6 +1,6 @@
 {
   "milestone": "M-SELECT-003",
-  "n_trials": 5,
+  "n_trials": 10,
   "seed_start": 42,
   "candidates": [
     "RING",
@@ -14,93 +14,93 @@
       "candidates": {
         "RING": {
           "cleared_fraction": 1.0,
-          "T_total_s": 6597.8921928
+          "T_total_s": 6705.3569434
         },
         "SPIRAL": {
           "cleared_fraction": 1.0,
-          "T_total_s": 7132.9197916
+          "T_total_s": 6755.0300065
         },
         "AIFIX": {
           "cleared_fraction": 1.0,
-          "T_total_s": 6689.1378171999995
+          "T_total_s": 6737.5972071
         },
         "LAWN": {
           "cleared_fraction": 1.0,
-          "T_total_s": 7933.602081800001
+          "T_total_s": 7953.019538400001
         },
         "HEX": {
           "cleared_fraction": 1.0,
-          "T_total_s": 7047.191416600001
+          "T_total_s": 5827.858555000001
         }
       },
       "paired": {
         "RING|SPIRAL": {
-          "delta_mean_s": -535.0275988000001,
-          "delta_std_s": 1166.1884664669453,
-          "delta_ci95_halfwidth_s": 1022.2092607537587,
-          "A_win_rate": 0.6,
-          "B_win_rate": 0.4
+          "delta_mean_s": -49.673063100000036,
+          "delta_std_s": 916.8001659753413,
+          "delta_ci95_halfwidth_s": 568.2386300056868,
+          "A_win_rate": 0.3,
+          "B_win_rate": 0.7
         },
         "RING|AIFIX": {
-          "delta_mean_s": -91.24562439999991,
-          "delta_std_s": 461.7015702374278,
-          "delta_ci95_halfwidth_s": 404.6992697767586,
-          "A_win_rate": 0.8,
-          "B_win_rate": 0.2
+          "delta_mean_s": -32.240263700000014,
+          "delta_std_s": 609.539052224003,
+          "delta_ci95_halfwidth_s": 377.79621865824157,
+          "A_win_rate": 0.5,
+          "B_win_rate": 0.5
         },
         "RING|LAWN": {
-          "delta_mean_s": -1335.709889,
-          "delta_std_s": 427.425391035131,
-          "delta_ci95_halfwidth_s": 374.6548740282809,
+          "delta_mean_s": -1247.6625950000002,
+          "delta_std_s": 507.64697061621143,
+          "delta_ci95_halfwidth_s": 314.64285218863256,
           "A_win_rate": 1.0,
           "B_win_rate": 0.0
         },
         "RING|HEX": {
-          "delta_mean_s": -449.29922379999954,
-          "delta_std_s": 575.6286326121786,
-          "delta_ci95_halfwidth_s": 504.56074290790485,
-          "A_win_rate": 0.8,
-          "B_win_rate": 0.2
+          "delta_mean_s": 877.4983884,
+          "delta_std_s": 506.01583868256654,
+          "delta_ci95_halfwidth_s": 313.63186614202033,
+          "A_win_rate": 0.1,
+          "B_win_rate": 0.9
         },
         "SPIRAL|AIFIX": {
-          "delta_mean_s": 443.7819744000002,
-          "delta_std_s": 1095.641957624413,
-          "delta_ci95_halfwidth_s": 960.3725193296594,
-          "A_win_rate": 0.4,
-          "B_win_rate": 0.6
-        },
-        "SPIRAL|LAWN": {
-          "delta_mean_s": -800.6822901999998,
-          "delta_std_s": 975.5894757898606,
-          "delta_ci95_halfwidth_s": 855.1418793118092,
-          "A_win_rate": 0.8,
-          "B_win_rate": 0.2
-        },
-        "SPIRAL|HEX": {
-          "delta_mean_s": 85.7283750000006,
-          "delta_std_s": 716.6783146057921,
-          "delta_ci95_halfwidth_s": 628.1962403477444,
+          "delta_mean_s": 17.43279940000002,
+          "delta_std_s": 892.2960018977396,
+          "delta_ci95_halfwidth_s": 553.0507917595216,
           "A_win_rate": 0.6,
           "B_win_rate": 0.4
         },
+        "SPIRAL|LAWN": {
+          "delta_mean_s": -1197.9895319,
+          "delta_std_s": 794.0496073292021,
+          "delta_ci95_halfwidth_s": 492.15704552723145,
+          "A_win_rate": 0.9,
+          "B_win_rate": 0.1
+        },
+        "SPIRAL|HEX": {
+          "delta_mean_s": 927.1714515,
+          "delta_std_s": 662.1508432631039,
+          "delta_ci95_halfwidth_s": 410.40534458526315,
+          "A_win_rate": 0.0,
+          "B_win_rate": 1.0
+        },
         "AIFIX|LAWN": {
-          "delta_mean_s": -1244.4642646,
-          "delta_std_s": 704.728297263333,
-          "delta_ci95_halfwidth_s": 617.7215883126087,
+          "delta_mean_s": -1215.4223313,
+          "delta_std_s": 654.9506019219166,
+          "delta_ci95_halfwidth_s": 405.94258876641595,
           "A_win_rate": 1.0,
           "B_win_rate": 0.0
         },
         "AIFIX|HEX": {
-          "delta_mean_s": -358.0535993999996,
-          "delta_std_s": 496.2856583000665,
-          "delta_ci95_halfwidth_s": 435.01355954113507,
-          "A_win_rate": 0.6,
-          "B_win_rate": 0.4
+          "delta_mean_s": 909.7386521000001,
+          "delta_std_s": 693.2459242303532,
+          "delta_ci95_halfwidth_s": 429.6782754424997,
+          "A_win_rate": 0.0,
+          "B_win_rate": 1.0
         },
         "LAWN|HEX": {
-          "delta_mean_s": 886.4106652000004,
-          "delta_std_s": 461.46040391166997,
-          "delta_ci95_halfwidth_s": 404.48787817183353,
+          "delta_mean_s": 2125.1609834,
+          "delta_std_s": 456.57004172664017,
+          "delta_ci95_halfwidth_s": 282.98504367784255,
           "A_win_rate": 0.0,
           "B_win_rate": 1.0
         }
@@ -119,17 +119,17 @@
           "SPIRAL": {
             "seed": 42,
             "cleared_fraction": 1.0,
-            "T_total_s": 9754.867534,
-            "n_measure": 358,
-            "move_dist_m": 37904.33766866728,
+            "T_total_s": 9693.548027,
+            "n_measure": 350,
+            "move_dist_m": 37902.740133441475,
             "n_points": 14
           },
           "AIFIX": {
             "seed": 42,
             "cleared_fraction": 1.0,
-            "T_total_s": 7472.435969,
-            "n_measure": 311,
-            "move_dist_m": 27642.179846615527,
+            "T_total_s": 7712.074155,
+            "n_measure": 319,
+            "move_dist_m": 28865.370776257772,
             "n_points": 17
           },
           "LAWN": {
@@ -143,9 +143,9 @@
           "HEX": {
             "seed": 42,
             "cleared_fraction": 1.0,
-            "T_total_s": 8504.280834,
-            "n_measure": 269,
-            "move_dist_m": 34351.40417033665,
+            "T_total_s": 7349.536412,
+            "n_measure": 204,
+            "move_dist_m": 30502.682059560033,
             "n_points": 7
           }
         },
@@ -162,17 +162,17 @@
           "SPIRAL": {
             "seed": 43,
             "cleared_fraction": 1.0,
-            "T_total_s": 5936.62261,
-            "n_measure": 290,
+            "T_total_s": 5875.62261,
+            "n_measure": 282,
             "move_dist_m": 20713.113049535914,
             "n_points": 14
           },
           "AIFIX": {
             "seed": 43,
             "cleared_fraction": 1.0,
-            "T_total_s": 6285.257824,
-            "n_measure": 308,
-            "move_dist_m": 21921.289121296737,
+            "T_total_s": 6228.95806,
+            "n_measure": 299,
+            "move_dist_m": 22029.79030200793,
             "n_points": 17
           },
           "LAWN": {
@@ -186,9 +186,9 @@
           "HEX": {
             "seed": 43,
             "cleared_fraction": 1.0,
-            "T_total_s": 6625.150122,
-            "n_measure": 189,
-            "move_dist_m": 27255.750609502444,
+            "T_total_s": 5234.226121,
+            "n_measure": 161,
+            "move_dist_m": 21151.130607166437,
             "n_points": 7
           }
         },
@@ -197,9 +197,9 @@
           "RING": {
             "seed": 44,
             "cleared_fraction": 1.0,
-            "T_total_s": 6816.795567,
-            "n_measure": 361,
-            "move_dist_m": 22958.977837262955,
+            "T_total_s": 6755.803338,
+            "n_measure": 353,
+            "move_dist_m": 22959.016689634063,
             "n_points": 17
           },
           "SPIRAL": {
@@ -213,25 +213,25 @@
           "AIFIX": {
             "seed": 44,
             "cleared_fraction": 1.0,
-            "T_total_s": 7265.778531,
-            "n_measure": 346,
-            "move_dist_m": 25513.892656955548,
+            "T_total_s": 7207.63863,
+            "n_measure": 329,
+            "move_dist_m": 26023.19315192764,
             "n_points": 17
           },
           "LAWN": {
             "seed": 44,
             "cleared_fraction": 1.0,
-            "T_total_s": 7867.673418,
-            "n_measure": 369,
-            "move_dist_m": 27978.367088493258,
+            "T_total_s": 7810.224896,
+            "n_measure": 362,
+            "move_dist_m": 27971.124477715333,
             "n_points": 17
           },
           "HEX": {
             "seed": 44,
             "cleared_fraction": 1.0,
-            "T_total_s": 7094.404949,
-            "n_measure": 198,
-            "move_dist_m": 29287.02474609846,
+            "T_total_s": 5418.856287,
+            "n_measure": 188,
+            "move_dist_m": 21219.28143593215,
             "n_points": 7
           }
         },
@@ -240,25 +240,25 @@
           "RING": {
             "seed": 45,
             "cleared_fraction": 1.0,
-            "T_total_s": 6668.180094,
-            "n_measure": 359,
-            "move_dist_m": 22260.900471944944,
+            "T_total_s": 6607.159058,
+            "n_measure": 351,
+            "move_dist_m": 22260.79529008247,
             "n_points": 17
           },
           "SPIRAL": {
             "seed": 45,
             "cleared_fraction": 1.0,
-            "T_total_s": 6821.227848,
-            "n_measure": 339,
-            "move_dist_m": 23631.13923833029,
+            "T_total_s": 6699.246809,
+            "n_measure": 323,
+            "move_dist_m": 23631.234045771973,
             "n_points": 14
           },
           "AIFIX": {
             "seed": 45,
             "cleared_fraction": 1.0,
-            "T_total_s": 6753.175391,
-            "n_measure": 351,
-            "move_dist_m": 22865.8769556313,
+            "T_total_s": 6483.764987,
+            "n_measure": 319,
+            "move_dist_m": 22678.824934396973,
             "n_points": 17
           },
           "LAWN": {
@@ -272,9 +272,9 @@
           "HEX": {
             "seed": 45,
             "cleared_fraction": 1.0,
-            "T_total_s": 6699.834185,
-            "n_measure": 231,
-            "move_dist_m": 26294.17092305263,
+            "T_total_s": 5293.277384,
+            "n_measure": 176,
+            "move_dist_m": 20966.386918008804,
             "n_points": 7
           }
         },
@@ -299,9 +299,9 @@
           "AIFIX": {
             "seed": 46,
             "cleared_fraction": 1.0,
-            "T_total_s": 5669.041371,
-            "n_measure": 285,
-            "move_dist_m": 19550.20685251145,
+            "T_total_s": 5789.200342,
+            "n_measure": 292,
+            "move_dist_m": 20036.001712468285,
             "n_points": 17
           },
           "LAWN": {
@@ -315,16 +315,231 @@
           "HEX": {
             "seed": 46,
             "cleared_fraction": 1.0,
-            "T_total_s": 6312.286993,
-            "n_measure": 168,
-            "move_dist_m": 26366.434965614044,
+            "T_total_s": 5309.826338,
+            "n_measure": 169,
+            "move_dist_m": 21329.131690537622,
+            "n_points": 7
+          }
+        },
+        {
+          "seed": 47,
+          "RING": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6960.058249,
+            "n_measure": 332,
+            "move_dist_m": 24595.29124699947,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6358.345576,
+            "n_measure": 290,
+            "move_dist_m": 22856.727880643954,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6480.128714,
+            "n_measure": 341,
+            "move_dist_m": 22055.643567972897,
+            "n_points": 17
+          },
+          "LAWN": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7356.448222,
+            "n_measure": 337,
+            "move_dist_m": 26432.24110775757,
+            "n_points": 17
+          },
+          "HEX": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6204.163176,
+            "n_measure": 180,
+            "move_dist_m": 25420.815878399768,
+            "n_points": 7
+          }
+        },
+        {
+          "seed": 48,
+          "RING": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7035.168077,
+            "n_measure": 301,
+            "move_dist_m": 25890.840387127926,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6556.571586,
+            "n_measure": 286,
+            "move_dist_m": 23947.85792985956,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8060.397577,
+            "n_measure": 321,
+            "move_dist_m": 30571.98788387794,
+            "n_points": 17
+          },
+          "LAWN": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8183.987592,
+            "n_measure": 329,
+            "move_dist_m": 30759.937960628795,
+            "n_points": 17
+          },
+          "HEX": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5721.881306,
+            "n_measure": 167,
+            "move_dist_m": 23324.406529086024,
+            "n_points": 7
+          }
+        },
+        {
+          "seed": 49,
+          "RING": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6439.831096,
+            "n_measure": 327,
+            "move_dist_m": 22179.155479620542,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5997.6648,
+            "n_measure": 290,
+            "move_dist_m": 21078.32399927276,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5521.823327,
+            "n_measure": 307,
+            "move_dist_m": 18229.116636529347,
+            "n_points": 17
+          },
+          "LAWN": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7705.855544,
+            "n_measure": 353,
+            "move_dist_m": 27739.277720949078,
+            "n_points": 17
+          },
+          "HEX": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5295.264126,
+            "n_measure": 158,
+            "move_dist_m": 21531.320628458052,
+            "n_points": 7
+          }
+        },
+        {
+          "seed": 50,
+          "RING": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6771.519714,
+            "n_measure": 314,
+            "move_dist_m": 24202.598567559002,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6722.420147,
+            "n_measure": 273,
+            "move_dist_m": 25157.1007348946,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7218.87314,
+            "n_measure": 305,
+            "move_dist_m": 26809.365701673138,
+            "n_points": 17
+          },
+          "LAWN": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8856.347996,
+            "n_measure": 341,
+            "move_dist_m": 33811.73998210668,
+            "n_points": 17
+          },
+          "HEX": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6510.042962,
+            "n_measure": 176,
+            "move_dist_m": 27025.21481016476,
+            "n_points": 7
+          }
+        },
+        {
+          "seed": 51,
+          "RING": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6979.544599,
+            "n_measure": 358,
+            "move_dist_m": 24002.722997452325,
+            "n_points": 17
+          },
+          "SPIRAL": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6494.999544,
+            "n_measure": 323,
+            "move_dist_m": 22644.997717963823,
+            "n_points": 14
+          },
+          "AIFIX": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6673.113139,
+            "n_measure": 307,
+            "move_dist_m": 23995.56569385436,
+            "n_points": 17
+          },
+          "LAWN": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7816.994143,
+            "n_measure": 335,
+            "move_dist_m": 28804.970715313604,
+            "n_points": 17
+          },
+          "HEX": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5941.511438,
+            "n_measure": 178,
+            "move_dist_m": 24187.557187587212,
             "n_points": 7
           }
         }
       ],
       "decision": {
         "stage": "objective",
-        "winner": "INCONCLUSIVE",
+        "winner": "HEX",
         "gate": {
           "threshold": 0.95,
           "feasible": {
@@ -337,25 +552,25 @@
           "rejected": []
         },
         "ranked": [
+          "HEX",
           "RING",
           "AIFIX",
-          "HEX",
           "SPIRAL",
           "LAWN"
         ],
         "objective": {
           "metric": "T_total_s",
           "direction": "minimize",
-          "best": "RING",
-          "best_T_total_s": 6597.8921928,
-          "runner_up": "AIFIX",
-          "runner_up_T_total_s": 6689.1378171999995,
-          "abs_gap": -91.24562439999954,
-          "paired_delta_mean_s": -91.24562439999991,
-          "paired_ci95_halfwidth_s": 404.6992697767586,
-          "within_noise": true
+          "best": "HEX",
+          "best_T_total_s": 5827.858555000001,
+          "runner_up": "RING",
+          "runner_up_T_total_s": 6705.3569434,
+          "abs_gap": -877.4983883999994,
+          "paired_delta_mean_s": 877.4983884,
+          "paired_ci95_halfwidth_s": 313.63186614202033,
+          "within_noise": false
         },
-        "reason": "领先者与亚军均值差落在 95% CI 内 ⇒ 与噪声不可分，不下胜负结论",
+        "reason": "HEX 以 T_total_s=5827.9 s 领先 RING（6705.4 s）",
         "checks_passed_used": false
       }
     },
@@ -363,95 +578,95 @@
       "candidates": {
         "RING": {
           "cleared_fraction": 1.0,
-          "T_total_s": 10622.8961182
+          "T_total_s": 10238.5718345
         },
         "SPIRAL": {
-          "cleared_fraction": 0.9866666666666667,
-          "T_total_s": 8593.6961732
+          "cleared_fraction": 0.9861904761904763,
+          "T_total_s": 8742.640351400001
         },
         "AIFIX": {
           "cleared_fraction": 1.0,
-          "T_total_s": 10137.0186758
+          "T_total_s": 10011.83524
         },
         "LAWN": {
-          "cleared_fraction": 0.9833333333333334,
-          "T_total_s": 10370.4395982
+          "cleared_fraction": 1.0,
+          "T_total_s": 10029.7337917
         },
         "HEX": {
-          "cleared_fraction": 0.9800000000000001,
-          "T_total_s": 11314.0117988
+          "cleared_fraction": 1.0,
+          "T_total_s": 10014.723867199998
         }
       },
       "paired": {
         "RING|SPIRAL": {
-          "delta_mean_s": 2029.1999449999996,
-          "delta_std_s": 756.490853916915,
-          "delta_ci95_halfwidth_s": 663.0934696963133,
-          "A_win_rate": 0.0,
-          "B_win_rate": 1.0
+          "delta_mean_s": 1495.9314831000002,
+          "delta_std_s": 1675.3367839945406,
+          "delta_ci95_halfwidth_s": 1038.3844967157174,
+          "A_win_rate": 0.2,
+          "B_win_rate": 0.8
         },
         "RING|AIFIX": {
-          "delta_mean_s": 485.8774424000003,
-          "delta_std_s": 1538.7545041739284,
-          "delta_ci95_halfwidth_s": 1348.77779143062,
-          "A_win_rate": 0.4,
-          "B_win_rate": 0.6
+          "delta_mean_s": 226.73659450000014,
+          "delta_std_s": 1372.0650706474773,
+          "delta_ci95_halfwidth_s": 850.4147413563499,
+          "A_win_rate": 0.5,
+          "B_win_rate": 0.5
         },
         "RING|LAWN": {
-          "delta_mean_s": 252.4565200000001,
-          "delta_std_s": 2064.231631859676,
-          "delta_ci95_halfwidth_s": 1809.3788020562738,
-          "A_win_rate": 0.4,
-          "B_win_rate": 0.6
+          "delta_mean_s": 208.8380428000004,
+          "delta_std_s": 1125.485808567245,
+          "delta_ci95_halfwidth_s": 697.5833313366737,
+          "A_win_rate": 0.6,
+          "B_win_rate": 0.4
         },
         "RING|HEX": {
-          "delta_mean_s": -691.1156805999999,
-          "delta_std_s": 2152.86140974954,
-          "delta_ci95_halfwidth_s": 1887.066227667712,
+          "delta_mean_s": 223.84796730000053,
+          "delta_std_s": 946.054556402619,
+          "delta_ci95_halfwidth_s": 586.3706890464516,
           "A_win_rate": 0.4,
           "B_win_rate": 0.6
         },
         "SPIRAL|AIFIX": {
-          "delta_mean_s": -1543.3225025999996,
-          "delta_std_s": 1939.6765574078497,
-          "delta_ci95_halfwidth_s": 1700.2014655968762,
+          "delta_mean_s": -1269.1948886,
+          "delta_std_s": 2197.9379043024487,
+          "delta_ci95_halfwidth_s": 1362.296026909736,
           "A_win_rate": 0.8,
           "B_win_rate": 0.2
         },
         "SPIRAL|LAWN": {
-          "delta_mean_s": -1776.743425,
-          "delta_std_s": 2808.4030411492563,
-          "delta_ci95_halfwidth_s": 2461.6738024249353,
-          "A_win_rate": 0.8,
-          "B_win_rate": 0.2
+          "delta_mean_s": -1287.0934402999997,
+          "delta_std_s": 2295.0742331669317,
+          "delta_ci95_halfwidth_s": 1422.501747290485,
+          "A_win_rate": 0.7,
+          "B_win_rate": 0.3
         },
         "SPIRAL|HEX": {
-          "delta_mean_s": -2720.3156255999993,
-          "delta_std_s": 2436.384717032585,
-          "delta_ci95_halfwidth_s": 2135.585363877568,
-          "A_win_rate": 0.8,
-          "B_win_rate": 0.2
+          "delta_mean_s": -1272.0835157999995,
+          "delta_std_s": 1925.1254516651184,
+          "delta_ci95_halfwidth_s": 1193.2051169291442,
+          "A_win_rate": 0.7,
+          "B_win_rate": 0.3
         },
         "AIFIX|LAWN": {
-          "delta_mean_s": -233.4209224000002,
-          "delta_std_s": 1970.8173188609294,
-          "delta_ci95_halfwidth_s": 1727.4975465131113,
-          "A_win_rate": 0.4,
-          "B_win_rate": 0.6
+          "delta_mean_s": -17.898551699999736,
+          "delta_std_s": 1269.0045360400097,
+          "delta_ci95_halfwidth_s": 786.5371602144457,
+          "A_win_rate": 0.5,
+          "B_win_rate": 0.5
         },
         "AIFIX|HEX": {
-          "delta_mean_s": -1176.9931230000002,
-          "delta_std_s": 1690.1001515894682,
-          "delta_ci95_halfwidth_s": 1481.438100472806,
-          "A_win_rate": 0.8,
-          "B_win_rate": 0.2
+          "delta_mean_s": -2.88862719999961,
+          "delta_std_s": 1004.2271357857877,
+          "delta_ci95_halfwidth_s": 622.4264272971337,
+          "A_win_rate": 0.5,
+          "B_win_rate": 0.5
         },
         "LAWN|HEX": {
-          "delta_mean_s": -943.5722006,
-          "delta_std_s": 2758.1767067304622,
-          "delta_ci95_halfwidth_s": 2417.6484792006795,
-          "A_win_rate": 0.8,
-          "B_win_rate": 0.2
+          "delta_mean_s": 15.009924500000125,
+          "delta_std_s": 1087.0087030150353,
+          "delta_ci95_halfwidth_s": 673.7349742387979,
+          "A_win_rate": 0.7,
+          "B_win_rate": 0.3
         }
       },
       "rows": [
@@ -460,25 +675,25 @@
           "RING": {
             "seed": 42,
             "cleared_fraction": 1.0,
-            "T_total_s": 13137.948975,
-            "n_measure": 592,
-            "move_dist_m": 47559.7448756872,
+            "T_total_s": 12775.956553,
+            "n_measure": 553,
+            "move_dist_m": 47249.78276253024,
             "n_points": 29
           },
           "SPIRAL": {
             "seed": 42,
             "cleared_fraction": 0.9333333333333333,
-            "T_total_s": 11898.396655,
-            "n_measure": 526,
-            "move_dist_m": 43861.98327322965,
+            "T_total_s": 11722.535491,
+            "n_measure": 503,
+            "move_dist_m": 43872.6774533086,
             "n_points": 17
           },
           "AIFIX": {
             "seed": 42,
             "cleared_fraction": 1.0,
-            "T_total_s": 10084.76414,
-            "n_measure": 360,
-            "move_dist_m": 39403.82070163981,
+            "T_total_s": 9138.886325,
+            "n_measure": 331,
+            "move_dist_m": 35519.431627349404,
             "n_points": 29
           },
           "LAWN": {
@@ -492,10 +707,10 @@
           "HEX": {
             "seed": 42,
             "cleared_fraction": 1.0,
-            "T_total_s": 11805.013215,
-            "n_measure": 381,
-            "move_dist_m": 47440.06607377993,
-            "n_points": 16
+            "T_total_s": 10702.723409,
+            "n_measure": 386,
+            "move_dist_m": 41693.61704354804,
+            "n_points": 18
           }
         },
         {
@@ -503,42 +718,42 @@
           "RING": {
             "seed": 43,
             "cleared_fraction": 1.0,
-            "T_total_s": 10299.83106,
-            "n_measure": 568,
-            "move_dist_m": 34214.15529786837,
+            "T_total_s": 10173.820852,
+            "n_measure": 551,
+            "move_dist_m": 34219.10425978908,
             "n_points": 29
           },
           "SPIRAL": {
             "seed": 43,
             "cleared_fraction": 1.0,
-            "T_total_s": 8809.714749,
-            "n_measure": 448,
-            "move_dist_m": 30303.573745619833,
+            "T_total_s": 11271.879805,
+            "n_measure": 491,
+            "move_dist_m": 41674.399023030084,
             "n_points": 17
           },
           "AIFIX": {
             "seed": 43,
             "cleared_fraction": 1.0,
-            "T_total_s": 10835.413195,
-            "n_measure": 524,
-            "move_dist_m": 38107.06597616713,
+            "T_total_s": 11320.49376,
+            "n_measure": 532,
+            "move_dist_m": 40717.46879776668,
             "n_points": 29
           },
           "LAWN": {
             "seed": 43,
             "cleared_fraction": 1.0,
-            "T_total_s": 9245.376629,
-            "n_measure": 466,
-            "move_dist_m": 32031.883146098047,
+            "T_total_s": 9184.532181,
+            "n_measure": 458,
+            "move_dist_m": 32032.66090360921,
             "n_points": 23
           },
           "HEX": {
             "seed": 43,
             "cleared_fraction": 1.0,
-            "T_total_s": 9667.514792,
-            "n_measure": 336,
-            "move_dist_m": 38072.57396067779,
-            "n_points": 16
+            "T_total_s": 9462.525375,
+            "n_measure": 390,
+            "move_dist_m": 35462.6268742164,
+            "n_points": 18
           }
         },
         {
@@ -562,9 +777,9 @@
           "AIFIX": {
             "seed": 44,
             "cleared_fraction": 1.0,
-            "T_total_s": 10260.780878,
-            "n_measure": 409,
-            "move_dist_m": 38643.90439237947,
+            "T_total_s": 10192.30081,
+            "n_measure": 391,
+            "move_dist_m": 39066.50404846065,
             "n_points": 29
           },
           "LAWN": {
@@ -578,10 +793,10 @@
           "HEX": {
             "seed": 44,
             "cleared_fraction": 1.0,
-            "T_total_s": 12827.65873,
-            "n_measure": 425,
-            "move_dist_m": 51413.2936485616,
-            "n_points": 16
+            "T_total_s": 9320.789006,
+            "n_measure": 380,
+            "move_dist_m": 34963.94502857068,
+            "n_points": 18
           }
         },
         {
@@ -589,9 +804,9 @@
           "RING": {
             "seed": 45,
             "cleared_fraction": 1.0,
-            "T_total_s": 10185.356091,
-            "n_measure": 490,
-            "move_dist_m": 35981.78045571708,
+            "T_total_s": 10124.046743,
+            "n_measure": 482,
+            "move_dist_m": 35980.23371341059,
             "n_points": 29
           },
           "SPIRAL": {
@@ -605,26 +820,26 @@
           "AIFIX": {
             "seed": 45,
             "cleared_fraction": 1.0,
-            "T_total_s": 9543.468228,
-            "n_measure": 407,
-            "move_dist_m": 35227.34113774466,
+            "T_total_s": 9818.72781,
+            "n_measure": 422,
+            "move_dist_m": 36348.63904910076,
             "n_points": 29
           },
           "LAWN": {
             "seed": 45,
-            "cleared_fraction": 0.9166666666666666,
-            "T_total_s": 13088.527693,
-            "n_measure": 635,
-            "move_dist_m": 46107.63846601831,
+            "cleared_fraction": 1.0,
+            "T_total_s": 12122.290746,
+            "n_measure": 533,
+            "move_dist_m": 44671.453728247136,
             "n_points": 23
           },
           "HEX": {
             "seed": 45,
             "cleared_fraction": 1.0,
-            "T_total_s": 9581.799334,
-            "n_measure": 368,
-            "move_dist_m": 36603.996668889355,
-            "n_points": 16
+            "T_total_s": 9403.128652,
+            "n_measure": 369,
+            "move_dist_m": 35715.64325959045,
+            "n_points": 18
           }
         },
         {
@@ -640,34 +855,249 @@
           "SPIRAL": {
             "seed": 46,
             "cleared_fraction": 1.0,
-            "T_total_s": 8095.689612,
-            "n_measure": 373,
-            "move_dist_m": 29223.44806215535,
+            "T_total_s": 8065.258992,
+            "n_measure": 369,
+            "move_dist_m": 29186.294960604817,
             "n_points": 17
           },
           "AIFIX": {
             "seed": 46,
             "cleared_fraction": 1.0,
-            "T_total_s": 9960.666938,
-            "n_measure": 492,
-            "move_dist_m": 34798.334687754104,
+            "T_total_s": 9230.994837,
+            "n_measure": 471,
+            "move_dist_m": 31884.97418634223,
             "n_points": 29
           },
           "LAWN": {
             "seed": 46,
             "cleared_fraction": 1.0,
-            "T_total_s": 9515.782473,
-            "n_measure": 471,
-            "move_dist_m": 33218.91236510451,
+            "T_total_s": 9454.75905,
+            "n_measure": 463,
+            "move_dist_m": 33218.79524797502,
             "n_points": 23
           },
           "HEX": {
             "seed": 46,
-            "cleared_fraction": 0.9,
-            "T_total_s": 12688.072923,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10058.333643,
+            "n_measure": 390,
+            "move_dist_m": 38446.66821606006,
+            "n_points": 18
+          }
+        },
+        {
+          "seed": 47,
+          "RING": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10021.417492,
+            "n_measure": 561,
+            "move_dist_m": 33082.08745823546,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7078.531983,
+            "n_measure": 365,
+            "move_dist_m": 24237.659915773675,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9597.409888,
+            "n_measure": 438,
+            "move_dist_m": 34657.049438952716,
+            "n_points": 29
+          },
+          "LAWN": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10107.614054,
+            "n_measure": 460,
+            "move_dist_m": 36563.070267596406,
+            "n_points": 23
+          },
+          "HEX": {
+            "seed": 47,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9379.940853,
+            "n_measure": 384,
+            "move_dist_m": 35159.70426614094,
+            "n_points": 18
+          }
+        },
+        {
+          "seed": 48,
+          "RING": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10748.748023,
+            "n_measure": 485,
+            "move_dist_m": 38958.74011735028,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 48,
+            "cleared_fraction": 0.9285714285714286,
+            "T_total_s": 12502.832935,
+            "n_measure": 527,
+            "move_dist_m": 46974.16467613727,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10097.825978,
+            "n_measure": 364,
+            "move_dist_m": 39389.12989153928,
+            "n_points": 29
+          },
+          "LAWN": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10872.908339,
+            "n_measure": 500,
+            "move_dist_m": 39289.541693086154,
+            "n_points": 23
+          },
+          "HEX": {
+            "seed": 48,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10921.64454,
+            "n_measure": 399,
+            "move_dist_m": 42403.22270076025,
+            "n_points": 18
+          }
+        },
+        {
+          "seed": 49,
+          "RING": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10882.500368,
+            "n_measure": 544,
+            "move_dist_m": 38077.50183771536,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7983.738379,
+            "n_measure": 375,
+            "move_dist_m": 28533.69189370354,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 11138.258175,
+            "n_measure": 443,
+            "move_dist_m": 42311.290874066326,
+            "n_points": 29
+          },
+          "LAWN": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10040.31526,
+            "n_measure": 485,
+            "move_dist_m": 35536.57629894993,
+            "n_points": 23
+          },
+          "HEX": {
+            "seed": 49,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10456.306034,
+            "n_measure": 411,
+            "move_dist_m": 39836.53017042677,
+            "n_points": 18
+          }
+        },
+        {
+          "seed": 50,
+          "RING": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9456.395253,
+            "n_measure": 446,
+            "move_dist_m": 33631.97626564312,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7473.849,
+            "n_measure": 320,
+            "move_dist_m": 27539.245002427517,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10183.287732,
+            "n_measure": 377,
+            "move_dist_m": 39446.43865942326,
+            "n_points": 29
+          },
+          "LAWN": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9775.332347,
+            "n_measure": 411,
+            "move_dist_m": 36286.661736670736,
+            "n_points": 23
+          },
+          "HEX": {
+            "seed": 50,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10577.075287,
+            "n_measure": 389,
+            "move_dist_m": 40990.376433938996,
+            "n_points": 18
+          }
+        },
+        {
+          "seed": 51,
+          "RING": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8711.488596,
             "n_measure": 465,
-            "move_dist_m": 49880.36461619695,
-            "n_points": 16
+            "move_dist_m": 29372.44297913943,
+            "n_points": 29
+          },
+          "SPIRAL": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7163.097079,
+            "n_measure": 337,
+            "move_dist_m": 25530.485395513046,
+            "n_points": 17
+          },
+          "AIFIX": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9400.167085,
+            "n_measure": 447,
+            "move_dist_m": 33515.83542629627,
+            "n_points": 29
+          },
+          "LAWN": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8737.074744,
+            "n_measure": 396,
+            "move_dist_m": 31580.373717532806,
+            "n_points": 23
+          },
+          "HEX": {
+            "seed": 51,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9864.771873,
+            "n_measure": 368,
+            "move_dist_m": 38083.85936543915,
+            "n_points": 18
           }
         }
       ],
@@ -688,20 +1118,20 @@
         "ranked": [
           "SPIRAL",
           "AIFIX",
+          "HEX",
           "LAWN",
-          "RING",
-          "HEX"
+          "RING"
         ],
         "objective": {
           "metric": "T_total_s",
           "direction": "minimize",
           "best": "SPIRAL",
-          "best_T_total_s": 8593.6961732,
+          "best_T_total_s": 8742.640351400001,
           "runner_up": "AIFIX",
-          "runner_up_T_total_s": 10137.0186758,
-          "abs_gap": -1543.3225026,
-          "paired_delta_mean_s": -1543.3225025999996,
-          "paired_ci95_halfwidth_s": 1700.2014655968762,
+          "runner_up_T_total_s": 10011.83524,
+          "abs_gap": -1269.194888599999,
+          "paired_delta_mean_s": -1269.1948886,
+          "paired_ci95_halfwidth_s": 1362.296026909736,
           "within_noise": true
         },
         "reason": "领先者与亚军均值差落在 95% CI 内 ⇒ 与噪声不可分，不下胜负结论",
