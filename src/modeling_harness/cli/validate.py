@@ -703,6 +703,37 @@ def check_rule_iterator(project_path):
     return True, "规则迭代存在"
 
 
+def check_baseline_closure(project_path):
+    """L4.4: 基线对照闭合（ADR-0013）—— 打了 `baseline` 标签就必须有真实对照结果。
+
+    标签是**执行的回执**，不是计划声明的同义词。此前 planner 声明、
+    handlers 打标签、而 `baseline_comparison()` 从未被调用，形成「声明了、标记了、
+    从未比较过」的静默失效。本门禁把该形态判为失败：凡带 `baseline` 标签的产物，
+    其 data 必须含 `baseline_comparison` 且 status 不为 missing。
+    """
+    projects = project_path / "projects"
+    if not projects.is_dir():
+        return True, "无项目实例，跳过"
+    violations = []
+    for reg in sorted(projects.glob("*/state/registry.json")):
+        try:
+            data = json.loads(reg.read_text(encoding="utf-8"))
+        except Exception as exc:  # noqa: BLE001
+            return False, f"{reg.parent.parent.name}: registry 解析失败 {exc}"
+        arts = data.get("artifacts") or data.get("entries") or {}
+        items = arts.values() if isinstance(arts, dict) else arts
+        for a in items:
+            if not isinstance(a, dict) or "baseline" not in (a.get("tags") or []):
+                continue
+            bc = (a.get("data") or {}).get("baseline_comparison")
+            if not isinstance(bc, dict) or bc.get("status") == "missing":
+                violations.append(f"{a.get('artifact_id')}@{reg.parent.parent.name}")
+    if violations:
+        return False, ("baseline 标签无对应对照结果（ADR-0013：标签是回执不是声明）："
+                       + "、".join(violations[:5]))
+    return True, "baseline 对照闭合"
+
+
 def check_numeric_traceability(project_path):
     """L4: 所有数值可追溯到已验证的 Result Artifact（V3：模型描述文档数值 vs all_results.json）。"""
     live = _live_project_dirs(project_path)
@@ -2027,6 +2058,7 @@ def validate_project(project_path):
         ("L6", "哈希追溯链", lambda: check_hash_chain(project_path)),
         ("L6", "错误归因", lambda: check_error_attribution(project_path)),
         ("L6", "规则迭代", lambda: check_rule_iterator(project_path)),
+        ("L4", "基线对照闭合", lambda: check_baseline_closure(project_path)),
 
         # L6: 综合质量检查
         ("L6", "validator模块冒烟", lambda: check_validator_modules_importable(project_path)),
