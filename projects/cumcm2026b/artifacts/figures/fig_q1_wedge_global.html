@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>问题 1：两站楔形交会的全局（算例 A，χ=90°）</title>
+<style>:root{color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;
+  font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif;
+  background:#ffffff;color:#102027}
+header h1{margin:0 0 4px;font-size:20px;color:#1a237e}
+header .meta{margin:0;font-size:12px;color:#607d8b}
+.canvas{margin:16px 0;overflow:auto;border:1px solid #e0e6ec;border-radius:10px;background:#fff}
+footer{margin-top:16px;font-size:11px;color:#90a4ae}
+footer code{background:#f4f7fa;padding:1px 5px;border-radius:4px}
+@media (prefers-color-scheme:dark){
+body{background:#0f1419;color:#eceff1}
+header h1{color:#90caf9}
+header .meta{color:#90a4ae}
+.canvas{background:#0f1419;border-color:#22303c}
+footer{color:#78909c}
+footer code{background:#1b232b}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>问题 1：两站楔形交会的全局（算例 A，χ=90°）</h1>
+<p class="meta">kind = geometry · 11 图元</p>
+</header>
+<div class="canvas"><svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 960 1040" width="960" height="1040">
+<style>:root{color-scheme:light dark}
+text{font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif}
+.geom-bg{fill:#ffffff}
+.geom-title{fill:#1a237e;font-size:17px;font-weight:700}
+.geom-sub{fill:#78909c;font-size:11px}
+.geom-frame{fill:none;stroke:#e0e6ec;stroke-width:1}
+.tick{stroke:#eceff1;stroke-width:1}
+.geom-axis{stroke:#b0bec5;stroke-width:1.2}
+.geom-axis-label{fill:#90a4ae;font-size:10px}
+.geom-label{fill:#102027;font-size:11px}
+.geom-legend text{fill:#37474f;font-size:11px}
+.item{stroke-width:1.8}
+.item.default{fill:#e3f2fd;stroke:#1565c0}
+.item.accent{fill:#e8f5e9;stroke:#2e7d32}
+.item.emphasis{fill:#fff3e0;stroke:#ef6c00;stroke-width:2.6}
+.item.danger{fill:#ffebee;stroke:#c62828;stroke-width:2.6}
+.item.muted{fill:none;stroke:#b0bec5;stroke-dasharray:5 4}
+.item.dashed{fill:none;stroke:#7e57c2;stroke-dasharray:7 5}
+.seg{stroke-width:1.8;fill:none}
+.seg.default{stroke:#1565c0}
+.seg.accent{stroke:#2e7d32}
+.seg.emphasis{stroke:#ef6c00;stroke-width:2.6}
+.seg.danger{stroke:#c62828;stroke-width:2.6}
+.seg.muted{stroke:#b0bec5;stroke-dasharray:5 4}
+.seg.dashed{stroke:#7e57c2;stroke-dasharray:7 5}
+.pt{stroke-width:1.4}
+.pt.default{fill:#1565c0;stroke:#ffffff}
+.pt.accent{fill:#2e7d32;stroke:#ffffff}
+.pt.emphasis{fill:#ef6c00;stroke:#ffffff;stroke-width:2.2}
+.pt.danger{fill:#c62828;stroke:#ffffff;stroke-width:2.2}
+.pt.muted{fill:#b0bec5;stroke:#ffffff}
+.pt.dashed{fill:#7e57c2;stroke:#ffffff}
+.arrow-head{stroke:none}
+.arrow-head.default{fill:#1565c0}
+.arrow-head.accent{fill:#2e7d32}
+.arrow-head.emphasis{fill:#ef6c00}
+.arrow-head.danger{fill:#c62828}
+.arrow-head.muted{fill:#b0bec5}
+.arrow-head.dashed{fill:#7e57c2}
+@media (prefers-color-scheme:dark){
+.geom-bg{fill:#0f1419}
+.geom-title{fill:#90caf9}
+.geom-sub{fill:#90a4ae}
+.geom-frame{stroke:#22303c}
+.tick{stroke:#1b232b}
+.geom-axis{stroke:#546e7a}
+.geom-axis-label{fill:#78909c}
+.geom-label{fill:#eceff1}
+.geom-legend text{fill:#cfd8dc}
+.item.default{fill:#102a43;stroke:#4a90d9}
+.item.accent{fill:#10331f;stroke:#4caf50}
+.item.emphasis{fill:#3a2a12;stroke:#ffa726}
+.item.danger{fill:#33161a;stroke:#ef5350}
+.item.muted{stroke:#546e7a}
+.item.dashed{stroke:#ab47bc}
+.seg.default{stroke:#4a90d9}
+.seg.accent{stroke:#4caf50}
+.seg.emphasis{stroke:#ffa726}
+.seg.danger{stroke:#ef5350}
+.seg.muted{stroke:#546e7a}
+.seg.dashed{stroke:#ab47bc}
+.pt.default{stroke:#0f1419}
+.pt.accent{stroke:#0f1419}
+.pt.emphasis{stroke:#0f1419}
+.pt.danger{stroke:#0f1419}
+.pt.muted{stroke:#0f1419}
+.pt.dashed{stroke:#0f1419}
+.arrow-head.default{fill:#4a90d9}
+.arrow-head.accent{fill:#4caf50}
+.arrow-head.emphasis{fill:#ffa726}
+.arrow-head.danger{fill:#ef5350}
+.arrow-head.muted{fill:#546e7a}
+.arrow-head.dashed{fill:#ab47bc}
+}
+</style>
+<rect class="geom-bg" x="0" y="0" width="960" height="1040"/>
+<rect class="geom-frame" x="22" y="68" width="916" height="916"/>
+<text class="geom-title" x="28" y="24">问题 1：两站楔形交会的全局（算例 A，χ=90°）</text>
+<text class="geom-sub" x="28" y="40">kind = geometry · 11 图元</text>
+<line class="seg muted" x1="90.7" y1="330.2" x2="853.7" y2="788.7"/>
+<polygon class="arrow-head muted" points="853.7,788.7 845.8,787.8 849.3,782"/>
+<line class="seg muted" x1="90.7" y1="330.2" x2="869.3" y2="761.7"/>
+<polygon class="arrow-head muted" points="869.3,761.7 861.3,761.2 864.6,755.3"/>
+<line class="seg muted" x1="812.7" y1="136.7" x2="354.2" y2="899.7"/>
+<polygon class="arrow-head muted" points="354.2,899.7 355.1,891.8 360.9,895.3"/>
+<line class="seg muted" x1="812.7" y1="136.7" x2="381.2" y2="915.3"/>
+<polygon class="arrow-head muted" points="381.2,915.3 381.7,907.3 387.6,910.6"/>
+<polygon class="item emphasis" points="561,590.9 545.1,582.1 535.8,597.6 551.9,607.3"/>
+<text class="geom-label" x="548.4" y="594.4">定位区域 Ω</text>
+<circle class="item dashed" cx="548.5" cy="594.7" r="13.1"/>
+<text class="geom-label" x="548.5" y="620.7">直径圆 r=23.458 m</text>
+<circle class="item dashed" cx="548.5" cy="594.7" r="13.1"/>
+<line class="seg danger" x1="561" y1="590.9" x2="535.8" y2="597.6"/>
+<text class="geom-label" x="554.4" y="588.2">直径 D=46.916 m</text>
+<circle class="pt accent" cx="90.7" cy="330.2" r="3.6"/>
+<text class="geom-label" x="97.7" y="323.2">S1</text>
+<circle class="pt accent" cx="812.7" cy="136.7" r="3.6"/>
+<text class="geom-label" x="819.7" y="129.7">S2</text>
+<circle class="pt default" cx="548.4" cy="594.4" r="3.6"/>
+<text class="geom-label" x="555.4" y="587.4">真源 G</text>
+<text class="geom-legend" x="28" y="1014">• 示向度误差 ±1° → 每条示向度张成 2° 角域</text>
+<text class="geom-legend" x="271.8" y="1014">• 两条窄楔形的交集即定位区域 Ω（见同目录放大图）</text>
+<text class="geom-legend" x="548.1" y="1014">• 区域直径 D=46.916 m</text>
+<text class="geom-legend" x="681.8" y="1014">• 直径圆覆盖判定：成立</text>
+</svg>
+</div>
+<footer>本页为生成物——由 <code>mh diagram geometry</code> 从 GeometryIR 确定性渲染；真源在 IR（其数值应可追溯到模型定义与结果台账）。</footer>
+</body>
+</html>

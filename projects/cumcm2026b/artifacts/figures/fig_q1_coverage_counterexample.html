@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>问题 1：Thales 判据的反例 —— 直径圆不覆盖定位区域</title>
+<style>:root{color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;
+  font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif;
+  background:#ffffff;color:#102027}
+header h1{margin:0 0 4px;font-size:20px;color:#1a237e}
+header .meta{margin:0;font-size:12px;color:#607d8b}
+.canvas{margin:16px 0;overflow:auto;border:1px solid #e0e6ec;border-radius:10px;background:#fff}
+footer{margin-top:16px;font-size:11px;color:#90a4ae}
+footer code{background:#f4f7fa;padding:1px 5px;border-radius:4px}
+@media (prefers-color-scheme:dark){
+body{background:#0f1419;color:#eceff1}
+header h1{color:#90caf9}
+header .meta{color:#90a4ae}
+.canvas{background:#0f1419;border-color:#22303c}
+footer{color:#78909c}
+footer code{background:#1b232b}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>问题 1：Thales 判据的反例 —— 直径圆不覆盖定位区域</h1>
+<p class="meta">kind = geometry · 4 图元</p>
+</header>
+<div class="canvas"><svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 960 1040" width="960" height="1040">
+<style>:root{color-scheme:light dark}
+text{font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif}
+.geom-bg{fill:#ffffff}
+.geom-title{fill:#1a237e;font-size:17px;font-weight:700}
+.geom-sub{fill:#78909c;font-size:11px}
+.geom-frame{fill:none;stroke:#e0e6ec;stroke-width:1}
+.tick{stroke:#eceff1;stroke-width:1}
+.geom-axis{stroke:#b0bec5;stroke-width:1.2}
+.geom-axis-label{fill:#90a4ae;font-size:10px}
+.geom-label{fill:#102027;font-size:11px}
+.geom-legend text{fill:#37474f;font-size:11px}
+.item{stroke-width:1.8}
+.item.default{fill:#e3f2fd;stroke:#1565c0}
+.item.accent{fill:#e8f5e9;stroke:#2e7d32}
+.item.emphasis{fill:#fff3e0;stroke:#ef6c00;stroke-width:2.6}
+.item.danger{fill:#ffebee;stroke:#c62828;stroke-width:2.6}
+.item.muted{fill:none;stroke:#b0bec5;stroke-dasharray:5 4}
+.item.dashed{fill:none;stroke:#7e57c2;stroke-dasharray:7 5}
+.seg{stroke-width:1.8;fill:none}
+.seg.default{stroke:#1565c0}
+.seg.accent{stroke:#2e7d32}
+.seg.emphasis{stroke:#ef6c00;stroke-width:2.6}
+.seg.danger{stroke:#c62828;stroke-width:2.6}
+.seg.muted{stroke:#b0bec5;stroke-dasharray:5 4}
+.seg.dashed{stroke:#7e57c2;stroke-dasharray:7 5}
+.pt{stroke-width:1.4}
+.pt.default{fill:#1565c0;stroke:#ffffff}
+.pt.accent{fill:#2e7d32;stroke:#ffffff}
+.pt.emphasis{fill:#ef6c00;stroke:#ffffff;stroke-width:2.2}
+.pt.danger{fill:#c62828;stroke:#ffffff;stroke-width:2.2}
+.pt.muted{fill:#b0bec5;stroke:#ffffff}
+.pt.dashed{fill:#7e57c2;stroke:#ffffff}
+.arrow-head{stroke:none}
+.arrow-head.default{fill:#1565c0}
+.arrow-head.accent{fill:#2e7d32}
+.arrow-head.emphasis{fill:#ef6c00}
+.arrow-head.danger{fill:#c62828}
+.arrow-head.muted{fill:#b0bec5}
+.arrow-head.dashed{fill:#7e57c2}
+@media (prefers-color-scheme:dark){
+.geom-bg{fill:#0f1419}
+.geom-title{fill:#90caf9}
+.geom-sub{fill:#90a4ae}
+.geom-frame{stroke:#22303c}
+.tick{stroke:#1b232b}
+.geom-axis{stroke:#546e7a}
+.geom-axis-label{fill:#78909c}
+.geom-label{fill:#eceff1}
+.geom-legend text{fill:#cfd8dc}
+.item.default{fill:#102a43;stroke:#4a90d9}
+.item.accent{fill:#10331f;stroke:#4caf50}
+.item.emphasis{fill:#3a2a12;stroke:#ffa726}
+.item.danger{fill:#33161a;stroke:#ef5350}
+.item.muted{stroke:#546e7a}
+.item.dashed{stroke:#ab47bc}
+.seg.default{stroke:#4a90d9}
+.seg.accent{stroke:#4caf50}
+.seg.emphasis{stroke:#ffa726}
+.seg.danger{stroke:#ef5350}
+.seg.muted{stroke:#546e7a}
+.seg.dashed{stroke:#ab47bc}
+.pt.default{stroke:#0f1419}
+.pt.accent{stroke:#0f1419}
+.pt.emphasis{stroke:#0f1419}
+.pt.danger{stroke:#0f1419}
+.pt.muted{stroke:#0f1419}
+.pt.dashed{stroke:#0f1419}
+.arrow-head.default{fill:#4a90d9}
+.arrow-head.accent{fill:#4caf50}
+.arrow-head.emphasis{fill:#ffa726}
+.arrow-head.danger{fill:#ef5350}
+.arrow-head.muted{fill:#546e7a}
+.arrow-head.dashed{fill:#ab47bc}
+}
+</style>
+<rect class="geom-bg" x="0" y="0" width="960" height="1040"/>
+<rect class="geom-frame" x="22" y="68" width="916" height="916"/>
+<text class="geom-title" x="28" y="24">问题 1：Thales 判据的反例 —— 直径圆不覆盖定位区域</text>
+<text class="geom-sub" x="28" y="40">kind = geometry · 4 图元</text>
+<polygon class="item emphasis" points="96.6,561.4 804.4,561.4 450.5,136.7"/>
+<text class="geom-label" x="450.5" y="419.8">定位区域（锐角三角形）</text>
+<circle class="item dashed" cx="450.5" cy="561.4" r="353.9"/>
+<text class="geom-label" x="450.5" y="928.3">直径圆 r=5 m</text>
+<circle class="item danger" cx="450.5" cy="496.5" r="359.8"/>
+<text class="geom-label" x="450.5" y="869.3">最小包围圆 r=5.0833 m</text>
+<line class="seg danger" x1="96.6" y1="561.4" x2="804.4" y2="561.4"/>
+<text class="geom-label" x="456.5" y="555.4">D=10 m</text>
+<text class="geom-legend" x="28" y="1014">• 直径圆半径 5 m &lt; 最小包围圆半径 5.0833 m</text>
+<text class="geom-legend" x="280.6" y="1014">• 覆盖成立 ⟺ 各顶点对直径端点张角 ≥90°（Thales）</text>
+<text class="geom-legend" x="564.8" y="1014">• 本例判定：覆盖不成立</text>
+</svg>
+</div>
+<footer>本页为生成物——由 <code>mh diagram geometry</code> 从 GeometryIR 确定性渲染；真源在 IR（其数值应可追溯到模型定义与结果台账）。</footer>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 960 1040" width="960" height="1040">
+<style>:root{color-scheme:light dark}
+text{font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif}
+.geom-bg{fill:#ffffff}
+.geom-title{fill:#1a237e;font-size:17px;font-weight:700}
+.geom-sub{fill:#78909c;font-size:11px}
+.geom-frame{fill:none;stroke:#e0e6ec;stroke-width:1}
+.tick{stroke:#eceff1;stroke-width:1}
+.geom-axis{stroke:#b0bec5;stroke-width:1.2}
+.geom-axis-label{fill:#90a4ae;font-size:10px}
+.geom-label{fill:#102027;font-size:11px}
+.geom-legend text{fill:#37474f;font-size:11px}
+.item{stroke-width:1.8}
+.item.default{fill:#e3f2fd;stroke:#1565c0}
+.item.accent{fill:#e8f5e9;stroke:#2e7d32}
+.item.emphasis{fill:#fff3e0;stroke:#ef6c00;stroke-width:2.6}
+.item.danger{fill:#ffebee;stroke:#c62828;stroke-width:2.6}
+.item.muted{fill:none;stroke:#b0bec5;stroke-dasharray:5 4}
+.item.dashed{fill:none;stroke:#7e57c2;stroke-dasharray:7 5}
+.seg{stroke-width:1.8;fill:none}
+.seg.default{stroke:#1565c0}
+.seg.accent{stroke:#2e7d32}
+.seg.emphasis{stroke:#ef6c00;stroke-width:2.6}
+.seg.danger{stroke:#c62828;stroke-width:2.6}
+.seg.muted{stroke:#b0bec5;stroke-dasharray:5 4}
+.seg.dashed{stroke:#7e57c2;stroke-dasharray:7 5}
+.pt{stroke-width:1.4}
+.pt.default{fill:#1565c0;stroke:#ffffff}
+.pt.accent{fill:#2e7d32;stroke:#ffffff}
+.pt.emphasis{fill:#ef6c00;stroke:#ffffff;stroke-width:2.2}
+.pt.danger{fill:#c62828;stroke:#ffffff;stroke-width:2.2}
+.pt.muted{fill:#b0bec5;stroke:#ffffff}
+.pt.dashed{fill:#7e57c2;stroke:#ffffff}
+.arrow-head{stroke:none}
+.arrow-head.default{fill:#1565c0}
+.arrow-head.accent{fill:#2e7d32}
+.arrow-head.emphasis{fill:#ef6c00}
+.arrow-head.danger{fill:#c62828}
+.arrow-head.muted{fill:#b0bec5}
+.arrow-head.dashed{fill:#7e57c2}
+@media (prefers-color-scheme:dark){
+.geom-bg{fill:#0f1419}
+.geom-title{fill:#90caf9}
+.geom-sub{fill:#90a4ae}
+.geom-frame{stroke:#22303c}
+.tick{stroke:#1b232b}
+.geom-axis{stroke:#546e7a}
+.geom-axis-label{fill:#78909c}
+.geom-label{fill:#eceff1}
+.geom-legend text{fill:#cfd8dc}
+.item.default{fill:#102a43;stroke:#4a90d9}
+.item.accent{fill:#10331f;stroke:#4caf50}
+.item.emphasis{fill:#3a2a12;stroke:#ffa726}
+.item.danger{fill:#33161a;stroke:#ef5350}
+.item.muted{stroke:#546e7a}
+.item.dashed{stroke:#ab47bc}
+.seg.default{stroke:#4a90d9}
+.seg.accent{stroke:#4caf50}
+.seg.emphasis{stroke:#ffa726}
+.seg.danger{stroke:#ef5350}
+.seg.muted{stroke:#546e7a}
+.seg.dashed{stroke:#ab47bc}
+.pt.default{stroke:#0f1419}
+.pt.accent{stroke:#0f1419}
+.pt.emphasis{stroke:#0f1419}
+.pt.danger{stroke:#0f1419}
+.pt.muted{stroke:#0f1419}
+.pt.dashed{stroke:#0f1419}
+.arrow-head.default{fill:#4a90d9}
+.arrow-head.accent{fill:#4caf50}
+.arrow-head.emphasis{fill:#ffa726}
+.arrow-head.danger{fill:#ef5350}
+.arrow-head.muted{fill:#546e7a}
+.arrow-head.dashed{fill:#ab47bc}
+}
+</style>
+<rect class="geom-bg" x="0" y="0" width="960" height="1040"/>
+<rect class="geom-frame" x="22" y="68" width="916" height="916"/>
+<text class="geom-title" x="28" y="24">问题 1：定位区域放大（算例 A，χ=90°，直径 46.916 m）</text>
+<text class="geom-sub" x="28" y="40">kind = geometry · 11 图元</text>
+<line class="seg muted" x1="-2995.3" y1="-1480.5" x2="2798" y2="2000.5"/>
+<polygon class="arrow-head muted" points="2798,2000.5 2790,1999.7 2793.5,1993.9"/>
+<line class="seg muted" x1="-2995.3" y1="-1480.5" x2="2915.9" y2="1796.2"/>
+<polygon class="arrow-head muted" points="2915.9,1796.2 2908,1795.6 2911.2,1789.7"/>
+<line class="seg muted" x1="2486.5" y1="-2949.3" x2="-994.5" y2="2844"/>
+<polygon class="arrow-head muted" points="-994.5,2844 -993.7,2836 -987.9,2839.5"/>
+<line class="seg muted" x1="2486.5" y1="-2949.3" x2="-790.2" y2="2961.9"/>
+<polygon class="arrow-head muted" points="-790.2,2961.9 -789.6,2954 -783.7,2957.2"/>
+<polygon class="item emphasis" points="575.2,498.7 454.8,432 383.9,550 506.1,623.4"/>
+<text class="geom-label" x="480" y="526">定位区域 Ω</text>
+<circle class="item dashed" cx="480.4" cy="527.7" r="99.1"/>
+<text class="geom-label" x="480.4" y="639.8">直径圆 r=23.458 m</text>
+<circle class="item dashed" cx="480.4" cy="527.7" r="99.1"/>
+<line class="seg danger" x1="575.2" y1="498.7" x2="383.9" y2="550"/>
+<text class="geom-label" x="485.6" y="518.3">直径 D=46.916 m</text>
+<circle class="pt accent" cx="-2995.3" cy="-1480.5" r="3.6"/>
+<text class="geom-label" x="-2988.3" y="-1487.5">S1</text>
+<circle class="pt accent" cx="2486.5" cy="-2949.3" r="3.6"/>
+<text class="geom-label" x="2493.5" y="-2956.3">S2</text>
+<circle class="pt default" cx="480" cy="526" r="3.6"/>
+<text class="geom-label" x="487" y="519">真源 G</text>
+<text class="geom-legend" x="28" y="1014">• 每条示向度张成 2° 角域（±1°），四条界线围出凸多边形 Ω</text>
+<text class="geom-legend" x="347.4" y="1014">• 区域直径 D=46.916 m</text>
+<text class="geom-legend" x="481.2" y="1014">• 最小包围圆半径 23.458 m（与直径圆同值 ⇒ 落在覆盖成立的边界）</text>
+<text class="geom-legend" x="841.1" y="1014">• 直径圆覆盖判定：成立</text>
+</svg>

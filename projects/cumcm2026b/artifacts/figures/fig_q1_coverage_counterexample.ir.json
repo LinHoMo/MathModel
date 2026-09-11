@@ -1,0 +1,69 @@
+{
+  "items": [
+    {
+      "kind": "polygon",
+      "label": "定位区域（锐角三角形）",
+      "points": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          5.0,
+          6.0
+        ]
+      ],
+      "variant": "emphasis"
+    },
+    {
+      "center": [
+        5.0,
+        0.0
+      ],
+      "kind": "circle",
+      "label": "直径圆 r=5 m",
+      "radius": 5.0,
+      "variant": "dashed"
+    },
+    {
+      "center": [
+        5.0,
+        0.9166666666666666
+      ],
+      "kind": "circle",
+      "label": "最小包围圆 r=5.0833 m",
+      "radius": 5.083333333333333,
+      "variant": "danger"
+    },
+    {
+      "kind": "segment",
+      "label": "D=10 m",
+      "points": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ]
+      ],
+      "variant": "danger"
+    }
+  ],
+  "kind": "geometry",
+  "legend": [
+    "直径圆半径 5 m < 最小包围圆半径 5.0833 m",
+    "覆盖成立 ⟺ 各顶点对直径端点张角 ≥90°（Thales）",
+    "本例判定：覆盖不成立"
+  ],
+  "schema_version": "1.0",
+  "title": "问题 1：Thales 判据的反例 —— 直径圆不覆盖定位区域",
+  "viewport": {
+    "equal_aspect": true
+  }
+}

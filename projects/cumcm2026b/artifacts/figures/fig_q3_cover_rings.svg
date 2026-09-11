@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 960 1040" width="960" height="1040">
+<style>:root{color-scheme:light dark}
+text{font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif}
+.geom-bg{fill:#ffffff}
+.geom-title{fill:#1a237e;font-size:17px;font-weight:700}
+.geom-sub{fill:#78909c;font-size:11px}
+.geom-frame{fill:none;stroke:#e0e6ec;stroke-width:1}
+.tick{stroke:#eceff1;stroke-width:1}
+.geom-axis{stroke:#b0bec5;stroke-width:1.2}
+.geom-axis-label{fill:#90a4ae;font-size:10px}
+.geom-label{fill:#102027;font-size:11px}
+.geom-legend text{fill:#37474f;font-size:11px}
+.item{stroke-width:1.8}
+.item.default{fill:#e3f2fd;stroke:#1565c0}
+.item.accent{fill:#e8f5e9;stroke:#2e7d32}
+.item.emphasis{fill:#fff3e0;stroke:#ef6c00;stroke-width:2.6}
+.item.danger{fill:#ffebee;stroke:#c62828;stroke-width:2.6}
+.item.muted{fill:none;stroke:#b0bec5;stroke-dasharray:5 4}
+.item.dashed{fill:none;stroke:#7e57c2;stroke-dasharray:7 5}
+.seg{stroke-width:1.8;fill:none}
+.seg.default{stroke:#1565c0}
+.seg.accent{stroke:#2e7d32}
+.seg.emphasis{stroke:#ef6c00;stroke-width:2.6}
+.seg.danger{stroke:#c62828;stroke-width:2.6}
+.seg.muted{stroke:#b0bec5;stroke-dasharray:5 4}
+.seg.dashed{stroke:#7e57c2;stroke-dasharray:7 5}
+.pt{stroke-width:1.4}
+.pt.default{fill:#1565c0;stroke:#ffffff}
+.pt.accent{fill:#2e7d32;stroke:#ffffff}
+.pt.emphasis{fill:#ef6c00;stroke:#ffffff;stroke-width:2.2}
+.pt.danger{fill:#c62828;stroke:#ffffff;stroke-width:2.2}
+.pt.muted{fill:#b0bec5;stroke:#ffffff}
+.pt.dashed{fill:#7e57c2;stroke:#ffffff}
+.arrow-head{stroke:none}
+.arrow-head.default{fill:#1565c0}
+.arrow-head.accent{fill:#2e7d32}
+.arrow-head.emphasis{fill:#ef6c00}
+.arrow-head.danger{fill:#c62828}
+.arrow-head.muted{fill:#b0bec5}
+.arrow-head.dashed{fill:#7e57c2}
+@media (prefers-color-scheme:dark){
+.geom-bg{fill:#0f1419}
+.geom-title{fill:#90caf9}
+.geom-sub{fill:#90a4ae}
+.geom-frame{stroke:#22303c}
+.tick{stroke:#1b232b}
+.geom-axis{stroke:#546e7a}
+.geom-axis-label{fill:#78909c}
+.geom-label{fill:#eceff1}
+.geom-legend text{fill:#cfd8dc}
+.item.default{fill:#102a43;stroke:#4a90d9}
+.item.accent{fill:#10331f;stroke:#4caf50}
+.item.emphasis{fill:#3a2a12;stroke:#ffa726}
+.item.danger{fill:#33161a;stroke:#ef5350}
+.item.muted{stroke:#546e7a}
+.item.dashed{stroke:#ab47bc}
+.seg.default{stroke:#4a90d9}
+.seg.accent{stroke:#4caf50}
+.seg.emphasis{stroke:#ffa726}
+.seg.danger{stroke:#ef5350}
+.seg.muted{stroke:#546e7a}
+.seg.dashed{stroke:#ab47bc}
+.pt.default{stroke:#0f1419}
+.pt.accent{stroke:#0f1419}
+.pt.emphasis{stroke:#0f1419}
+.pt.danger{stroke:#0f1419}
+.pt.muted{stroke:#0f1419}
+.pt.dashed{stroke:#0f1419}
+.arrow-head.default{fill:#4a90d9}
+.arrow-head.accent{fill:#4caf50}
+.arrow-head.emphasis{fill:#ffa726}
+.arrow-head.danger{fill:#ef5350}
+.arrow-head.muted{fill:#546e7a}
+.arrow-head.dashed{fill:#ab47bc}
+}
+</style>
+<rect class="geom-bg" x="0" y="0" width="960" height="1040"/>
+<rect class="geom-frame" x="22" y="68" width="916" height="916"/>
+<text class="geom-title" x="28" y="24">问题 3/4：同心环覆盖网与最近邻扫描路线</text>
+<text class="geom-sub" x="28" y="40">kind = geometry · 35 图元</text>
+<circle class="item muted" cx="480" cy="526" r="350.4"/>
+<text class="geom-label" x="480" y="889.4">目标区域 R=1800 m</text>
+<circle class="pt accent" cx="480" cy="526" r="3.6"/>
+<text class="geom-label" x="487" y="519">机器狗起点 O</text>
+<circle class="item dashed" cx="480" cy="526" r="87.6"/>
+<circle class="item dashed" cx="480" cy="526" r="262.8"/>
+<circle class="item danger" cx="480" cy="526" r="389.3"/>
+<text class="geom-label" x="480" y="928.3">定向外侧环 r=2000 m</text>
+<polyline class="seg default" points="567.6,526 541.9,464.1 480,438.4 418.1,464.1 392.4,526 418.1,587.9 480,613.6 541.9,587.9 681.3,694.9 525.6,784.8 348.6,753.6 233.1,615.9 233.1,436.1 348.6,298.4 525.6,267.2 681.3,357.1 742.8,526"/>
+<text class="geom-label" x="749.8" y="519">全向扫描路线（最近邻排序）</text>
+<circle class="pt default" cx="567.6" cy="526" r="3.6"/>
+<circle class="pt default" cx="541.9" cy="464.1" r="3.6"/>
+<circle class="pt default" cx="480" cy="438.4" r="3.6"/>
+<circle class="pt default" cx="418.1" cy="464.1" r="3.6"/>
+<circle class="pt default" cx="392.4" cy="526" r="3.6"/>
+<circle class="pt default" cx="418.1" cy="587.9" r="3.6"/>
+<circle class="pt default" cx="480" cy="613.6" r="3.6"/>
+<circle class="pt default" cx="541.9" cy="587.9" r="3.6"/>
+<circle class="pt default" cx="681.3" cy="694.9" r="3.6"/>
+<circle class="pt default" cx="525.6" cy="784.8" r="3.6"/>
+<circle class="pt default" cx="348.6" cy="753.6" r="3.6"/>
+<circle class="pt default" cx="233.1" cy="615.9" r="3.6"/>
+<circle class="pt default" cx="233.1" cy="436.1" r="3.6"/>
+<circle class="pt default" cx="348.6" cy="298.4" r="3.6"/>
+<circle class="pt default" cx="525.6" cy="267.2" r="3.6"/>
+<circle class="pt default" cx="681.3" cy="357.1" r="3.6"/>
+<circle class="pt default" cx="742.8" cy="526" r="3.6"/>
+<circle class="pt danger" cx="817.1" cy="720.6" r="3.6"/>
+<circle class="pt danger" cx="674.6" cy="863.1" r="3.6"/>
+<circle class="pt danger" cx="480" cy="915.3" r="3.6"/>
+<circle class="pt danger" cx="285.4" cy="863.1" r="3.6"/>
+<circle class="pt danger" cx="142.9" cy="720.6" r="3.6"/>
+<circle class="pt danger" cx="90.7" cy="526" r="3.6"/>
+<circle class="pt danger" cx="142.9" cy="331.4" r="3.6"/>
+<circle class="pt danger" cx="285.4" cy="188.9" r="3.6"/>
+<circle class="pt danger" cx="480" cy="136.7" r="3.6"/>
+<circle class="pt danger" cx="674.6" cy="188.9" r="3.6"/>
+<circle class="pt danger" cx="817.1" cy="331.4" r="3.6"/>
+<circle class="pt danger" cx="869.3" cy="526" r="3.6"/>
+<text class="geom-legend" x="28" y="1014">• 全向环 [450.0, 1350.0] → 17 个检测点</text>
+<text class="geom-legend" x="262.5" y="1014">• 定向另加外侧环 2000 m → 共 29 点</text>
+<text class="geom-legend" x="469.8" y="1014">• 径向完备性：任意点到最近环 ≤ R/(2k) = 450 m ≪ 最小接收半径 1000 m</text>
+<text class="geom-legend" x="867.1" y="1014">• 弧向步长按环角色分级（500 / 900 / 1050 m）</text>
+</svg>

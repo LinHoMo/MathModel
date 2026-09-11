@@ -118,6 +118,19 @@
 
 ---
 
+## 模拟器环境（两个）
+
+| 环境 | 路径 | 用途 |
+|---|---|---|
+| **官方模拟器** | `Jammers-simulator-win64\Jammers-simulator\jammers-simulator.exe`（运行数据在 `JammersSimulatorData\`） | 正式测试的评测机：GUI 程序 + HTTP 接口，需在线登录进入测试窗口 |
+| **本地数字孪生** | `digital-twin-sim-win\digital-twin-sim\` | 对照方案开发的本地模拟器环境，按附件 1《模拟器使用说明》与附件 2《通信接口指南》**逐条复刻**官方模拟器的协议语义（状态码 / `accepted` / 幂等键 / 未知字段 / 双时钟一致）。上手三步：`install.bat` → `selftest.bat`（须全部 `[ok]`）→ `serve.bat` 起演练服务，另开窗口 `run-official.bat` 接入；`data\p4_scan_net.json` 为问题四扫描网，`MANIFEST.txt` 可用 SHA-256 核对代码同一性 |
+
+**后续测试策略：先用本地数字孪生（`digital-twin-sim-win`）跑通，再切官方模拟器。**
+理由：本地孪生可离线、可复现、可压小墙钟上限演练超时收尾路径，且**不消耗每队仅有的
+3 次正式测试机会**；官方模拟器需 GUI 登录 + 联网 + 测试窗口，同一局不可重跑。
+
+---
+
 ## 真实模拟器协议构建（v1.2）
 
 题面正式测试通过 HTTP+JSON 与官方模拟器交互（模拟器为 GUI 程序，需在线登录）。
