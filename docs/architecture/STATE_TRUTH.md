@@ -8,7 +8,7 @@
 ## 1. 真源分层（谁是真源、谁是投影）
 
 ```text
-Event Log（节点执行事件，NodeResult）
+Event Log（节点执行事件，NodeResult）　※ 当前无独立 Event Log 文件：由 WorkflowEngine 内存事件 + RunRecord 落盘承载（详见 §1.1）
         │ 派生
         ▼
 Content Truth（研究内容真源，各文件原子写: mkstemp + os.replace）
@@ -23,6 +23,14 @@ Process Projection（流程状态投影，禁止反向手写）
 Resume Truth（断点续跑真源，原子写）
   └── state/engine_progress.json   引擎 completed/blocked/retries
 ```
+
+### 1.1 「Event Log」实现现状（如实标注）
+
+真源分层图中的 **Event Log 当前无独立文件实现**：节点执行事件由 `WorkflowEngine._record`
+写入引擎内存日志（`self.log`），每次会话运行结束后再由 `RuntimeSession._emit_run_record`
+落盘为 `state/runs/<run_id>.json`（RunRecord，原子写）。核验：`grep -rn "EventLog\|append_event\|event_log" src/`
+仅命中文档示例 `knowledge/playbooks/playbook-2018B-scheduling.md`，`find src -iname '*event*'` 为空。
+本图其余真源分层结构维持不变。
 
 ## 2. 决策表：谁写 / 谁读 / 谁重建 / 冲突裁决
 

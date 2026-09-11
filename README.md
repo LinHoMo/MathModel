@@ -142,14 +142,14 @@ Modeling-Harness/
 │   ├── runtime/                     # V3 认知运行时：artifacts / state / graph / execution / modeling / decisions
 │   ├── roles/  workflows/           # 4 角色（analyst/modeler/experimenter/critic）/ DAG（YAML 定义）
 │   ├── validators/                  # evidence / quality / modules（L1–L6 门禁）
-│   ├── schemas/                     # v3/ 七域 canonical schema（modeling_harness:v3 命名空间）
+│   ├── schemas/                     # v3/ 八域 canonical schema（modeling_harness:v3 命名空间）
 │   ├── domains/  adapters/  profiles/
 │   ├── skills/  knowledge/  env/  templates/  utils/
 ├── scripts/                         # 一次性运维/迁移脚本（migrate_legacy_projects.py）
 ├── research/                        # 研究实验（P15：K001/K002/P1；bench 运行）——带实验专属脚本
 ├── projects/                        # 用户运行实例（仅 new_project.py 创建）
 ├── docs/                            # 架构与状态文档（architecture/ 为真源，STATUS.md 为状态唯一真源）
-├── tests/                           # unit / integration / e2e / regression（含 P1 闭环测试）
+├── tests/                           # unit / integration / e2e / research / runtime（含 P1 闭环测试）
 ├── AGENTS.md                        # agent 活动入口（唯一权威协议）
 └── pyproject.toml                   # src-layout 打包 + [project.scripts] mh + pytest marker
 ```

@@ -1,18 +1,18 @@
 # tests — 测试分层说明
 
-> 跑法：`py -3.12 -m pytest tests -q`（当前基线：**595 passed**）。
+> 跑法：`py -3.12 -m pytest tests -q`（当前基线：**719 passed**）。
 > 测试环境依赖（与 AGENTS.md §6 一致）：`pytest` / `pyyaml` / `jsonschema` / `ripgrep` / `ruff`。
 
 ## 分层（实测）
 
 | 层 | 目录 | 测试文件 | test 函数 | 职责 |
 |---|---|---|---|---|
-| unit | `tests/unit/` | 35 | 412 | 单模块行为（schema、契约、领域） |
-| integration | `tests/integration/` | 23 | 128 | 跨模块协作（runtime 子域联动） |
+| unit | `tests/unit/` | 48 | 536 | 单模块行为（schema、契约、领域） |
+| integration | `tests/integration/` | 22 | 128 | 跨模块协作（runtime 子域联动） |
 | e2e | `tests/e2e/` | 1 | 4 | 端到端引擎演练 |
 | research | `tests/research/` | 3 | 17 | 研究实验回归 |
 | runtime | `tests/runtime/` | 2 | 13 | runtime 契约回归 |
-| **合计** | | 64 | 574 | 595 passed（含参数化展开） |
+| **合计** | | 76 | 698 | 719 passed（含参数化展开） |
 
 ## 夹具 / Fixtures
 
