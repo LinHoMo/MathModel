@@ -35,8 +35,11 @@ tools:
       - "python src/modeling_harness/cli/knowledge.py recommend --types <题型>"
   diagram_gen:
     path: src/modeling_harness/cli/diagram_gen.py
-    description: 科学图表生成
+    description: 科学图表生成（DiagramIR→确定性 SVG/HTML + 项目/仓库图表）
     commands:
+      - "python src/modeling_harness/cli/diagram_gen.py build <ir.json> -o fig.svg"
+      - "python src/modeling_harness/cli/diagram_gen.py project <name>"
+      - "python src/modeling_harness/cli/diagram_gen.py repo"
       - "python src/modeling_harness/cli/diagram_gen.py flowchart --nodes 'A,B' --edges 'A->B' -o fig.svg"
   scholar_fetch:
     path: src/modeling_harness/cli/scholar_fetch.py

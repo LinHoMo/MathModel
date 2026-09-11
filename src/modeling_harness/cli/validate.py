@@ -5,6 +5,7 @@ Modeling-Harness 验证脚本 - 六层防御体系
 import re
 import json
 import sys
+import xml.etree.ElementTree as ET
 import importlib.util
 from pathlib import Path
 
@@ -430,6 +431,39 @@ def check_figure_refs(project_path):
     if problems:
         return False, "; ".join(problems[:5])
     return True, f"图表引用检查通过（{checked} 个活跃项目）"
+
+
+def check_project_figures(project_path):
+    """L6.4: 项目图表完整性——带 MODEL_IR 的活跃项目须有可解析的模型图。
+
+    `mh diagram project <name>` 从 model_ir.json 确定性派生到
+    artifacts/figures/model-map.svg；缺失或非 XML 即失败（否则「模型建好了
+    但没人看得懂」无人负责）。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "跳过：无活跃项目实例"
+    problems = []
+    generated = 0
+    for pdir in sorted(live, key=lambda d: d.name):
+        if not (pdir / "model_ir.json").is_file():
+            continue
+        svg = pdir / "artifacts" / "figures" / "model-map.svg"
+        if not svg.is_file():
+            problems.append(f"{pdir.name}: 缺 artifacts/figures/model-map.svg"
+                            f"（运行 mh diagram project {pdir.name}）")
+            continue
+        try:
+            ET.fromstring(svg.read_text(encoding="utf-8"))
+        except (ET.ParseError, OSError) as exc:
+            problems.append(f"{pdir.name}/artifacts/figures/model-map.svg 非法 XML: {exc}")
+            continue
+        generated += 1
+    if problems:
+        return False, "; ".join(problems[:5])
+    if not generated:
+        return True, "跳过：无带 MODEL_IR 的活跃项目"
+    return True, f"项目图表完整（{generated} 个活跃项目）"
 
 
 def check_question_spec_schema(project_path):
@@ -1954,6 +1988,7 @@ def validate_project(project_path):
         ("L6", "结果文件", lambda: check_results_ledger(project_path)),
         ("L6", "随机种子", lambda: check_random_seed(project_path)),
         ("L6", "图表引用", lambda: check_figure_refs(project_path)),
+        ("L6", "项目图表", lambda: check_project_figures(project_path)),
 
         # L1: 输入规约检查
         ("L1", "输入规约Schema", lambda: check_question_spec_schema(project_path)),
