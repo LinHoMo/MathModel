@@ -775,10 +775,13 @@ def check_parameter_provenance(project_path):
     for pdir in live:
         mir = pdir / "model_ir.json"
         if not mir.exists():
-            continue
+            continue  # 无 model_ir.json（非建模产出）→ 跳过（既有语义）
         try:
             data = json.loads(mir.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception as e:
+            # fail-closed：输入存在但损坏 → 无法核验，必须阻塞而非放行
+            problems.append(
+                f"{pdir.name}: model_ir.json 存在但解析失败 ({e})")
             continue
         params = data.get("parameters") or []
         if not params:
@@ -1071,7 +1074,9 @@ def check_evidence_obligations(project_path):
             continue
         try:
             data = json.loads(mir.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception as e:
+            problems.append(
+                f"{pdir.name}: model_ir.json 存在但解析失败 ({e})")
             continue
         obligs = data.get("evidence_obligations")
         if not obligs:
@@ -1358,7 +1363,9 @@ def check_parsimony_budget(project_path):
             continue
         try:
             data = json.loads(mir.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception as e:
+            problems.append(
+                f"{pdir.name}: model_ir.json 存在但解析失败 ({e})")
             continue
         params = data.get("parameters") or []
         if not params:
