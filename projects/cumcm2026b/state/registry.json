@@ -131,7 +131,7 @@
           "E08",
           "E09"
         ],
-        "sha256": "b880dfd89a463376d08a588c29ed3eb3745716bab812000979ae9bbd37a3b6c8"
+        "sha256": "35d4004b00418c9dc51911b0b71d38349113b0d708f0a76e5845f25e0dc28c3e"
       }
     },
     "MH-MODEL_IR-0001": {
@@ -146,7 +146,7 @@
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "model_ir.json",
-        "sha256": "b880dfd89a463376d08a588c29ed3eb3745716bab812000979ae9bbd37a3b6c8"
+        "sha256": "35d4004b00418c9dc51911b0b71d38349113b0d708f0a76e5845f25e0dc28c3e"
       },
       "data": {
         "ir_version": "1.0",
@@ -250,9 +250,9 @@
               "Q3",
               "Q4"
             ],
-            "text": "有效接收半径 1000–1500 m，信号在覆盖角内均匀辐射，场强仅随距离衰减；距离过近（≤5 m）时信号过强无法测向，可直接光学清除。",
+            "text": "有效接收半径 r_rec 是源的未知属性，题面只给出 r_rec ∈ [1000, 1500] m；信号在覆盖角内均匀辐射，场强仅随距离衰减。故 |S−G| ≤ 1000 m 时为**保证可接收**（与 r_rec 实际取值无关），1000 m < |S−G| ≤ 1500 m 为**条件可行**，> 1500 m 不可行；不存在「太近接收不到」的下限，仅 |S−G| ≤ 5 m 时改用光学清除、不再测向。",
             "anchors_to_problem": "附录 1(4)、附录 2(2)(9)",
-            "rationale": "以相对强度 d/r_rec 作为可观测量用于估距；r_rec 属源属性，机器狗不可先知，只能由强度反推。"
+            "rationale": "r_rec 不可先知（机器狗只能事后由是否收到信号间接判断），因此任何依赖 r_rec 取具体值的算例/策略结论都不稳健；演示算例一律取保证可行口径。"
           },
           {
             "assumption_id": "A03",
@@ -312,9 +312,10 @@
             "sub_question_binding": [
               "Q2"
             ],
-            "text": "以交会角 φ 作为定位质量判据（GDOP ∝ 1/sin φ，φ=90° 最优）；在估计源 G_est 处交会角恒 90° 的点集为过 G_est 且垂直于 S1→G_est 的直线（Thales 圆在 G_est 处的切线）。",
+            "text": "第二检测点的决策变量取 (ψ, d)：ψ 为相对测得示向度 b₁ 的转角，d 为沿该方向的前进距离。目标不是交会角 φ 而是定位区域直径的期望 E[D]（对两次示向度误差 (δ₁,δ₂) ∈ [−ε,ε]² 取期望）。源距 R = |S₁G| 与有效接收半径 r_rec 均不可观测，故场景集取「距离先验 × r_rec 假设」；先按失效率阈值筛出可行集，再在可行集上取**最小最大后悔**点，并用最小最大（绝对最坏）交叉检查，两者一致才报单点，否则报候选区。",
             "anchors_to_problem": "问题 2「以获得关于该干扰源较好的定位效果」",
-            "rationale": "两条射线定距误差在垂直于视线的方向传播，误差圆半径正比于 1/sin φ；φ=90° 使 GDOP 最小。"
+            "rationale": "原判据「GDOP ∝ 1/sin φ，φ=90° 最优」已被证伪：在过 G_est 且垂直于 S₁→G_est 的垂线族上 φ 恒为 90°，该判据对族内各点零分辨力，而 E[D] = 2ε·√(R²+t²) 随偏移 t 严格递增（偏移 300 m → 43.195 m，1200 m → 59.263 m），原判据恰好选中了族内最差的点。φ 是 (ψ, d, R) 的因变量，不是可控量，不能当决策变量。",
+            "falsified_predecessor": "原假设「以交会角 φ 为判据、φ=90° 最优」已于本轮复核中被证伪，见 V03b。"
           },
           {
             "assumption_id": "A08",
@@ -419,7 +420,7 @@
             "variable_id": "V06",
             "name": "候选区域",
             "symbol": "𝔻",
-            "definition": "满足 φ ∈ [φ_min,180−φ_min] 且 |P−G_est| ≤ r_rec 的可行点集",
+            "definition": "由可接收性闭式条件给出的 (ψ,d) 可行域，再由后悔值阈值 α 收窄：F = {(ψ,d) : max_场景 P_fail ≤ 0.02}；候选区 = {(ψ,d) ∈ F : R(ψ,d) ≤ (1+α)·min_F R}，α = 0.05",
             "unit": "-",
             "type": "derived",
             "sub_question_binding": [
@@ -511,6 +512,28 @@
             "sub_question_binding": [
               "Q3",
               "Q4"
+            ]
+          },
+          {
+            "variable_id": "V14",
+            "name": "第二点转角",
+            "symbol": "ψ",
+            "definition": "第二检测点相对第一个测得示向度 b₁ 的转角（决策变量，可观测量）",
+            "unit": "°",
+            "type": "decision",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "variable_id": "V15",
+            "name": "第二点前进距离",
+            "symbol": "d",
+            "definition": "第二检测点沿转角 ψ 方向自 S₁ 前进的距离（决策变量）",
+            "unit": "m",
+            "type": "decision",
+            "sub_question_binding": [
+              "Q2"
             ]
           }
         ],
@@ -1131,16 +1154,19 @@
           {
             "objective_id": "O02",
             "type": "optimize",
-            "expression": "P₂* = argmax_P sin φ(P) s.t. P ∈ 𝔻",
+            "expression": "可行集 F = { (ψ,d) : max_场景 P_fail(ψ,d) ≤ 0.02 }；(ψ,d)* = argmin_F max_{π∈Π} [ E[D](ψ,d;π) − min_{F} E[D](·;π) ]，Π = 距离先验 × r_rec 假设（6 个场景）",
             "variables_refs": [
               "V04",
               "V05",
-              "V06"
+              "V06",
+              "V14",
+              "V15"
             ],
             "sub_question_binding": [
               "Q2"
             ],
-            "description": "给出第二检测点选择策略与候选区域"
+            "description": "给出第二检测点选择策略与候选区域：先在 (ψ,d) 网格上按失效率筛可行集，再对 6 个场景取最小最大后悔；另以最小最大（绝对最坏）交叉检查。",
+            "falsified_predecessor": "原表达式 argmax_P sin φ(P) 已废弃（见 A07.rationale、V03b）"
           },
           {
             "objective_id": "O03",
@@ -1303,7 +1329,8 @@
             "related_equations": [
               "E01",
               "E02"
-            ]
+            ],
+            "title": "楔形半平面交 → 凸多边形定位区域"
           },
           {
             "mechanism_id": "ME02",
@@ -1321,7 +1348,8 @@
             "related_equations": [
               "E03",
               "E04"
-            ]
+            ],
+            "title": "凸包直径 / 最小包围圆 / Thales 覆盖判据"
           },
           {
             "mechanism_id": "ME03",
@@ -1330,7 +1358,7 @@
             "sub_question_binding": [
               "Q2"
             ],
-            "description": "定位误差 ∝ 1/sin φ；φ=90° 最优。以估计源 G_est 为顶点，所有使其交会角为 90° 的点构成过 G_est 且垂直于 S1G_est 的直线（Thales 圆切线）。",
+            "description": "第二点的定位质量由定位区域直径的期望 E[D] 刻画，不是交会角 φ。第二点可接收性由 |S₂G|² = R² + d² − 2Rd·cos ψ 对 R 的端点最大值给出闭式条件，进而得到 ψ ≤ ψ_max = arcsin(r_rec/R_max)（r_rec = 1000 m 时 42.17°）与 d 的允许区间；ψ 超过该上限时无论 d 取何值，远距源都必然超出接收半径。",
             "governing_principle": "Thales 定理 + 几何精度衰减因子",
             "variables_refs": [
               "V04",
@@ -1340,7 +1368,8 @@
             "related_equations": [
               "E05",
               "E06"
-            ]
+            ],
+            "title": "第二点选择：可接收性闭式可行域 + E[D] 目标"
           },
           {
             "mechanism_id": "ME04",
@@ -1357,7 +1386,8 @@
             ],
             "related_equations": [
               "E07"
-            ]
+            ],
+            "title": "同心环完备覆盖：R/(2k) ≤ r_rec"
           },
           {
             "mechanism_id": "ME05",
@@ -1377,7 +1407,8 @@
             "related_equations": [
               "E08",
               "E09"
-            ]
+            ],
+            "title": "远距离交会跳转 + beam-safe 归航"
           },
           {
             "mechanism_id": "ME06",
@@ -1393,7 +1424,8 @@
               "V10",
               "V12",
               "V13"
-            ]
+            ],
+            "title": "离散事件时序与统计量定义"
           }
         ],
         "equations": [
@@ -1724,7 +1756,7 @@
             "sub_question_binding": [
               "Q1"
             ],
-            "method": "构造正交/钝角/三站交会三组算例，计算定位区域直径与直径圆覆盖性，并给出锐角三角形反例",
+            "method": "在「保证可接收」域内（|S−G| ≤ 1000 m、|S| ≤ 1800 m）由真源 + 极角 + 距离正向布置三组算例，计算定位区域直径与直径圆覆盖性；反例同样由正向模型（真源 + 两站 → 观测方程 → 反解）生成，并用相似不变量 (χ, r₂/r₁) 降维后密集扫描定出 ρ 的可达上确界",
             "inputs_refs": [
               "inputs/problem.txt"
             ],
@@ -1734,15 +1766,36 @@
             },
             "outputs": [],
             "results": {
-              "caseA_diameter_m": 104.762,
+              "caseA_diameter_m": 46.916155,
               "caseA_covers": true,
-              "caseB_diameter_m": 169.514,
-              "caseC_diameter_m": 85.896,
-              "counterexample_diameter_m": 10.0,
-              "counterexample_covers": false
+              "caseA_guaranteed": true,
+              "caseB_diameter_m": 99.492652,
+              "caseB_covers": true,
+              "caseB_guaranteed": true,
+              "caseC_diameter_m": 38.917941,
+              "caseC_covers": true,
+              "caseC_guaranteed": true,
+              "counterexample_diameter_m": 45.533125,
+              "counterexample_mec_r_m": 22.779865,
+              "counterexample_rho": 0.50029214,
+              "counterexample_covers": false,
+              "counterexample_required_enlarge_factor": 1.00058429,
+              "rho_supremum": 0.500294193,
+              "rho_supremum_argmax": {
+                "rho": 0.500294193,
+                "chi_deg": 90.035,
+                "r2_over_r1": 1.060818,
+                "diameter_m": 50.89385851,
+                "mec_r_m": 25.46190188,
+                "required_enlarge_factor": 1.000588387,
+                "covers": false
+              },
+              "v1_synthetic_rho_exaggeration": 28.33
             },
             "run_metadata": {
-              "code": "artifacts/code 求解脚本 problem1"
+              "code": "artifacts/code 下 Q1/Q2 重建求解脚本（problem1）",
+              "selfcheck": "artifacts/q1q2_v2_verify.json（99 项机器校验全通过）",
+              "supersedes": "原 EXP01 的三组算例 |S−G| = 2121.3 / 1868.2 / 1920.9 m 不可行，已弃用"
             }
           },
           {
@@ -1750,28 +1803,108 @@
             "sub_question_binding": [
               "Q2"
             ],
-            "method": "以 S1=(−500,0)、θ1=20°、d_est=1200 m 为例，给出候选区域、解析最优点与偏移-精度权衡",
+            "method": "以 S₁=(−500,0)、测得示向度 b₁=20° 为例：不假设源距已知，对场景集「3 种距离先验 × r_rec ∈ {1000, 1500}」= 6 个场景在 (ψ,d) 网格上求 E[D]，先按失效率 ≤ 2% 筛可行集，再取最小最大后悔点并用最小最大交叉检查",
             "inputs_refs": [
               "inputs/problem.txt"
             ],
             "solver_ref": "S02",
             "parameters": {
               "S1": "(-500,0)",
-              "theta1_deg": 20.0,
-              "d_est_m": 1200.0,
-              "phi_min_deg": 60.0
+              "b1_deg": 20.0,
+              "psi_grid_deg": [
+                10.0,
+                15.0,
+                20.0,
+                25.0,
+                30.0,
+                35.0,
+                40.0,
+                45.0,
+                50.0,
+                60.0,
+                70.0,
+                80.0
+              ],
+              "d_grid_m": [
+                300.0,
+                450.0,
+                600.0,
+                750.0,
+                900.0,
+                1050.0,
+                1200.0,
+                1350.0,
+                1500.0
+              ],
+              "priors": [
+                "P1_距离均匀[200,1500]|r_rec=1500",
+                "P2_面积均匀(盘内密度∝R)|r_rec=1500",
+                "P3_远距集中[1000,1500]|r_rec=1500",
+                "P1_距离均匀[200,1500]|r_rec=1000",
+                "P2_面积均匀(盘内密度∝R)|r_rec=1000",
+                "P3_远距集中[1000,1500]|r_rec=1000"
+              ],
+              "r_rec_hypotheses_m": [
+                1000.0,
+                1500.0
+              ],
+              "fail_tol": 0.02,
+              "alpha": 0.05
             },
             "outputs": [],
             "results": {
-              "n_grid": 442,
-              "grid_best_phi_deg": 90.0,
-              "perp_recommend": [
-                217.2,
-                1538.1
-              ]
+              "n_grid_points": 108,
+              "n_feasible_points": 27,
+              "minimax_regret_point": [
+                20.0,
+                1200.0
+              ],
+              "minimax_regret_m": 9.752596,
+              "minimax_point": [
+                20.0,
+                1200.0
+              ],
+              "minimax_worst_E_D_m": 64.900279,
+              "criteria_agree": true,
+              "per_scenario_best": {
+                "P1_距离均匀[200,1500]|r_rec=1500": {
+                  "psi_deg": 35.0,
+                  "d_m": 1050.0,
+                  "E_D_m": 55.147683
+                },
+                "P2_面积均匀(盘内密度∝R)|r_rec=1500": {
+                  "psi_deg": 30.0,
+                  "d_m": 1200.0,
+                  "E_D_m": 60.866469
+                },
+                "P3_远距集中[1000,1500]|r_rec=1500": {
+                  "psi_deg": 20.0,
+                  "d_m": 1350.0,
+                  "E_D_m": 56.922861
+                },
+                "P1_距离均匀[200,1500]|r_rec=1000": {
+                  "psi_deg": 35.0,
+                  "d_m": 1050.0,
+                  "E_D_m": 55.147683
+                },
+                "P2_面积均匀(盘内密度∝R)|r_rec=1000": {
+                  "psi_deg": 30.0,
+                  "d_m": 1050.0,
+                  "E_D_m": 60.866469
+                },
+                "P3_远距集中[1000,1500]|r_rec=1000": {
+                  "psi_deg": 20.0,
+                  "d_m": 1350.0,
+                  "E_D_m": 56.922861
+                }
+              },
+              "psi_max_deg_rrec1000": 42.1697,
+              "n_candidates": 1
             },
             "run_metadata": {
-              "code": "artifacts/code 求解脚本 problem2"
+              "code": "artifacts/code 下 Q1/Q2 重建求解脚本（problem2）",
+              "selfcheck": "artifacts/q1q2_v2_verify.json（99 项机器校验全通过）",
+              "supersedes": "原 EXP02 以 d_est=1200 m（不可观测量）为输入、以 φ=90° 为判据，已废弃"
             }
           },
           {
@@ -1891,7 +2024,7 @@
           {
             "validation_id": "V02",
             "type": "counterfactual",
-            "method": "反例构造：锐角三角形（对最长边张角 79.6°<90°）验证“直径圆覆盖”不普遍成立",
+            "method": "反例由正向模型生成（真源 + 两站 → 观测方程 → 反解），且站点—源距离落在「保证可接收」域内；再用相似不变量 (χ, r₂/r₁) 降维后 2000×40 密集扫描定出 ρ = r_MEC/D 的可达上确界，与手搓反例对照",
             "sub_question_binding": [
               "Q1"
             ],
@@ -1900,16 +2033,47 @@
             ],
             "pass_fail": "pass",
             "results": {
-              "diameter_m": 10.0,
-              "diam_circle_r_m": 5.0,
-              "mec_r_m": 5.0833,
-              "covers": false
+              "counterexample_source": [
+                -204.9063,
+                -1343.3235
+              ],
+              "counterexample_stations": [
+                [
+                  209.0804,
+                  -551.835
+                ],
+                [
+                  -1047.3311,
+                  -903.478
+                ]
+              ],
+              "crossing_angle_deg": 90.041849,
+              "diameter_m": 45.533125,
+              "diam_circle_r_m": 22.766563,
+              "mec_r_m": 22.779865,
+              "rho": 0.50029214,
+              "covers": false,
+              "required_enlarge_factor": 1.00058429,
+              "rho_supremum": 0.500294193,
+              "rho_supremum_argmax": {
+                "rho": 0.500294193,
+                "chi_deg": 90.035,
+                "r2_over_r1": 1.060818,
+                "diameter_m": 50.89385851,
+                "mec_r_m": 25.46190188,
+                "required_enlarge_factor": 1.000588387,
+                "covers": false
+              },
+              "jung_upper_bound": 0.57735027,
+              "v1_synthetic_rho": 0.508333333,
+              "v1_exaggeration_factor": 28.33,
+              "v1_inside_reachable_set": false
             }
           },
           {
             "validation_id": "V03",
-            "type": "optimality_check",
-            "method": "网格最优与解析最优一致性：垂线上任意偏移均给出 φ=90.00°",
+            "type": "sensitivity",
+            "method": "最优第二点对「距离先验 × r_rec 假设」共 6 个场景的灵敏度：每个场景各求网格最优 (ψ,d)，比较其漂移程度，据以决定报候选区还是单点",
             "sub_question_binding": [
               "Q2"
             ],
@@ -1918,20 +2082,50 @@
             ],
             "pass_fail": "pass",
             "results": {
-              "phi_by_offset_deg": [
-                90.0,
-                90.0,
-                90.0,
-                90.0,
-                90.0
+              "n_scenarios": 6,
+              "per_scenario_best": {
+                "P1_距离均匀[200,1500]|r_rec=1500": {
+                  "psi_deg": 35.0,
+                  "d_m": 1050.0,
+                  "E_D_m": 55.147683
+                },
+                "P2_面积均匀(盘内密度∝R)|r_rec=1500": {
+                  "psi_deg": 30.0,
+                  "d_m": 1200.0,
+                  "E_D_m": 60.866469
+                },
+                "P3_远距集中[1000,1500]|r_rec=1500": {
+                  "psi_deg": 20.0,
+                  "d_m": 1350.0,
+                  "E_D_m": 56.922861
+                },
+                "P1_距离均匀[200,1500]|r_rec=1000": {
+                  "psi_deg": 35.0,
+                  "d_m": 1050.0,
+                  "E_D_m": 55.147683
+                },
+                "P2_面积均匀(盘内密度∝R)|r_rec=1000": {
+                  "psi_deg": 30.0,
+                  "d_m": 1050.0,
+                  "E_D_m": 60.866469
+                },
+                "P3_远距集中[1000,1500]|r_rec=1000": {
+                  "psi_deg": 20.0,
+                  "d_m": 1350.0,
+                  "E_D_m": 56.922861
+                }
+              },
+              "minimax_regret_point": [
+                20.0,
+                1200.0
               ],
-              "region_diameter_m": [
-                43.19,
-                46.85,
-                52.38,
-                59.26,
-                67.08
-              ]
+              "minimax_regret_m": 9.752596,
+              "minimax_point": [
+                20.0,
+                1200.0
+              ],
+              "criteria_agree": true,
+              "n_candidates": 1
             }
           },
           {
@@ -1967,6 +2161,218 @@
             "results": {
               "note": "定向源盲区行为由 C1/C2 阶段实测触发并成功回退（Q4 全清除佐证）"
             }
+          },
+          {
+            "validation_id": "V02b",
+            "type": "consistency",
+            "method": "失效窗口定理的集合级核对：χ ∈ (85°,100°) 上采样 4000 组，逐样本比较「落入窗口 (90°, 90°+2ε]」与「直径圆覆盖失败」两个集合是否完全相等；另核对失效率与理论 2ε/15°",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "targets_refs": [
+              "E04"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "n_accepted": 4000,
+              "n_in_window": 517,
+              "n_cover_failures": 517,
+              "sets_identical": true,
+              "observed_fail_rate": 0.12925,
+              "theoretical_fail_rate": 0.133333
+            }
+          },
+          {
+            "validation_id": "V02c",
+            "type": "invariant",
+            "method": "ρ 的相似不变性数值验证：固定 (χ, r₂/r₁)，在 r₁ = 300 / 1000 / 4000 m 三个绝对尺度下重算 ρ，确认降维扫描合法、上确界不是空想上界",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "targets_refs": [
+              "E04"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "scales_m": [
+                300.0,
+                1000.0,
+                4000.0
+              ],
+              "rho_spread": 0.0,
+              "note": "三尺度下 ρ 一致（差 < 1e-9）；故 (χ, r₂/r₁) 二维扫描覆盖全部两站构型"
+            }
+          },
+          {
+            "validation_id": "V03b",
+            "type": "proxy_alignment",
+            "method": "代理判据（交会角 φ=90° / GDOP）与真目标 E[D] 对拍；并用闭式 D = 2ε·√(R²+t²) 校验数值最坏直径",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "targets_refs": [
+              "E06"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "closed_form": "垂线族上 D = 2ε·√(R²+t²)，ε=1°、R=1200",
+              "rows": [
+                {
+                  "offset_m": 300.0,
+                  "psi_deg": 14.036243,
+                  "d_m": 1236.9317,
+                  "S2G_dist_m": 300.0,
+                  "E_D_m": 43.194606,
+                  "fail_prob": 0.0,
+                  "worst_D_m": 43.200607
+                },
+                {
+                  "offset_m": 600.0,
+                  "psi_deg": 26.565051,
+                  "d_m": 1341.6408,
+                  "S2G_dist_m": 600.0,
+                  "E_D_m": 46.851128,
+                  "fail_prob": 0.0,
+                  "worst_D_m": 46.862192
+                },
+                {
+                  "offset_m": 900.0,
+                  "psi_deg": 36.869898,
+                  "d_m": 1500.0,
+                  "S2G_dist_m": 900.0,
+                  "E_D_m": 52.381154,
+                  "fail_prob": 0.0,
+                  "worst_D_m": 52.395997
+                },
+                {
+                  "offset_m": 1200.0,
+                  "psi_deg": 45.0,
+                  "d_m": 1697.0563,
+                  "S2G_dist_m": 1200.0,
+                  "E_D_m": 59.262512,
+                  "fail_prob": 0.0,
+                  "worst_D_m": 59.280004
+                },
+                {
+                  "offset_m": 1500.0,
+                  "psi_deg": 51.340192,
+                  "d_m": 1920.9373,
+                  "S2G_dist_m": 1500.0,
+                  "E_D_m": 67.080609,
+                  "fail_prob": 0.58255984,
+                  "worst_D_m": 67.099927
+                }
+              ],
+              "E_D_strictly_increasing": true,
+              "max_closed_form_rel_dev": 0.0007,
+              "verdict": "垂线族上 φ 恒为 90°（零分辨力）而 E[D] 严格递增，代理判据不可用为唯一判据"
+            }
+          },
+          {
+            "validation_id": "V06",
+            "type": "feasibility",
+            "method": "算例与反例的硬约束逐条核对：|S| ≤ 1800 m、5 m < |S−G| ≤ 1000 m（保证可接收）",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "targets_refs": [
+              "E04"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "cases_guaranteed": [
+                true,
+                true,
+                true
+              ],
+              "counterexample_guaranteed": true,
+              "v1_case_dist_m": [
+                2121.3203,
+                1868.1542,
+                1920.9373
+              ],
+              "v1_case_verdicts": [
+                "不可行",
+                "不可行",
+                "不可行"
+              ],
+              "note": "原三组演示算例 |S−G| = 2121.3 / 1868.2 / 1920.9 m、|S| = 3000 / 3002 m 不可行，已弃用"
+            }
+          },
+          {
+            "validation_id": "V07",
+            "type": "selfcheck",
+            "method": "独立复核：不信任结果产物中除输入坐标外的任何数字，全部按观测方程重算后比对；另重跑生成器逐字段对拍确认可复现",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "targets_refs": [
+              "E04",
+              "E06"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "n_checks": 99,
+              "n_failed": 0,
+              "passed": true,
+              "recompute": {
+                "n_failures_equal": true,
+                "rho_sup_equal": true,
+                "q2_equal": true
+              },
+              "note": "人工核对不可靠：复核开发过程中手算 60.144281−55.147683 曾两次出错"
+            }
+          },
+          {
+            "validation_id": "V08",
+            "type": "exactness",
+            "method": "闭式可行域 ψ ≤ arcsin(r_rec/R_max) 与 d 的允许区间，逐网格点对照高斯—勒让德数值失效扫描",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "targets_refs": [
+              "E06"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "psi_max_deg": 42.1697,
+              "r_rec_m": 1000.0,
+              "R_support_m": [
+                216.50635094610965,
+                1489.5833333333333
+              ],
+              "d_intervals_m": {
+                "10.0": [
+                  500.986,
+                  1212.51
+                ],
+                "15.0": [
+                  516.133,
+                  1207.558
+                ],
+                "20.0": [
+                  539.261,
+                  1200.704
+                ],
+                "25.0": [
+                  573.041,
+                  1192.027
+                ],
+                "30.0": [
+                  622.72,
+                  1181.623
+                ],
+                "35.0": [
+                  700.563,
+                  1169.611
+                ],
+                "40.0": [
+                  852.606,
+                  1156.122
+                ]
+              },
+              "verdict": "闭式判「必然可接收」的点，数值失效率全部为 0（无反例）"
+            }
           }
         ],
         "claims": [
@@ -1977,14 +2383,19 @@
             "sub_question_binding": [
               "Q1"
             ],
-            "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得（正交交会算例直径 104.762 m、钝角交会 169.514 m、三站交会 85.896 m）。“以直径为直径的圆”不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；锐角三角形反例（直径 10.0 m，最小包围圆半径 5.0833 m > 直径圆半径 5.0 m）即为反例。保证覆盖应改用最小包围圆。",
+            "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得。在「保证可接收」域内（|S−G| ≤ 1000 m）由真源正向布置的三组算例给出直径 46.916 m（χ=90°）、99.493 m（χ=140°）、38.918 m（三站），三者 ρ = r_MEC/D 恰为 1/2。「以直径为直径的圆」不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；失效的充要条件是源端交会角 χ ∈ (90°, 90°+2ε]（χ 取 min{Δ, 360°−Δ}），该定理经 4000 组采样的集合级核对（两集合完全相等）。失效幅度由 ρ 的可达上确界刻画：ρ_sup = 0.5002942（ρ 是相似不变量，2000×40 定向扫描，argmax 在 χ=90.035°、r₂/r₁=1.060818），即最多只需把圆放大到 1.000588 D。保证覆盖应改用最小包围圆；但失效幅度仅万分之 5.9，属「需要修正」而非「严重失效」级别。",
             "evidence_refs": [],
             "experiment_refs": [
               "EXP01"
             ],
             "validation_refs": [
-              "V02"
-            ]
+              "V02",
+              "V02b",
+              "V02c",
+              "V06",
+              "V07"
+            ],
+            "supersedes": "原 CL01 的算例（104.762 / 169.514 / 85.896 m，|S−G| 达 2121.3 m）不可行；原反例为手搓字面常量，ρ=0.5083 落在真实可达集之外，夸大失效 28.33 倍。"
           },
           {
             "claim_id": "CL02",
@@ -1993,14 +2404,19 @@
             "sub_question_binding": [
               "Q2"
             ],
-            "text": "Q2：最优第二检测点位于过估计源 G_est 且垂直于 S1→G_est 的直线上（该直线即 Thales 圆在 G_est 处的切线，其上任意点交会角恒为 90.00°）；候选区域为以 G_est 为中心、交会角 φ ∈ [60°,120°] 且 |P−G_est| ≤ r_rec 的扇形环域。沿该垂线偏移越小，定位区域越小（偏移 300→1500 m 对应直径 43.19→67.08 m），但偏移过小会缩短有效基线、放大示向度误差相关，故推荐偏移取 d_est 的对称配置。",
+            "text": "Q2：第二检测点的决策变量是 (ψ, d)（相对测得示向度 b₁ 的转角与前进距离），目标是定位区域直径的期望 E[D]，**不是**交会角 φ。源距 R 与有效接收半径 r_rec 均不可观测，故场景集取「3 种距离先验 × r_rec ∈ {1000, 1500}」共 6 个场景。第一步可行性优先：由 |S₂G|² = R² + d² − 2Rd·cos ψ 对 R 的端点最大值可得闭式条件 ψ ≤ ψ_max = arcsin(r_rec/R_max) = 42.1697°（r_rec = 1000 m）及 d 的允许区间，108 个网格点中仅 27 个失效率 ≤ 2% 入选。第二步在可行集上取最小最大后悔点 (ψ, d) = (20.0°, 1200.0 m)，后悔值 9.753 m，六场景下 E[D] = 64.900 / 61.300 / 56.923 m（r_rec 两档取值相同，说明该点对接收半径不确定性稳健）；最小最大（绝对最坏）判据给出同一点，两判据一致故报单点。各场景最优点确实漂移（ψ 20°→35°、d 1050→1200 m），这是必须报后悔值而非单点的原因。",
             "evidence_refs": [],
             "experiment_refs": [
               "EXP02"
             ],
             "validation_refs": [
-              "V03"
-            ]
+              "V03",
+              "V03b",
+              "V06",
+              "V07",
+              "V08"
+            ],
+            "supersedes": "原 CL02「第二点位于过 G_est 且垂直 S₁→G_est 的直线上、其上任意点 φ 恒为 90°」已证伪：该垂线族上 φ 恒为 90°（判据零分辨力），而 E[D] = 2ε·√(R²+t²) 随偏移严格递增（300 m → 43.195 m，1200 m → 59.263 m），原推荐恰是族内最差点；且原推导代入了不可观测的 d_est = 1200 m。"
           },
           {
             "claim_id": "CL03",
@@ -2293,7 +2709,7 @@
             "type": "mechanism_assumption",
             "source": "problem_explicit",
             "confidence": 1.0,
-            "text": "有效接收半径 1000–1500 m，信号在覆盖角内均匀辐射，场强仅随距离衰减；距离过近（≤5 m）时信号过强无法测向，可直接光学清除。"
+            "text": "有效接收半径 r_rec 是源的未知属性，题面只给出 r_rec ∈ [1000, 1500] m；信号在覆盖角内均匀辐射，场强仅随距离衰减。故 |S−G| ≤ 1000 m 时为**保证可接收**（与 r_rec 实际取值无关），1000 m < |S−G| ≤ 1500 m 为**条件可行**，> 1500 m 不可行；不存在「太近接收不到」的下限，仅 |S−G| ≤ 5 m 时改用光学清除、不再测向。"
           },
           {
             "id": "A03",
@@ -2328,7 +2744,7 @@
             "type": "modeling_choice",
             "source": "reasoning",
             "confidence": 0.9,
-            "text": "以交会角 φ 作为定位质量判据（GDOP ∝ 1/sin φ，φ=90° 最优）；在估计源 G_est 处交会角恒 90° 的点集为过 G_est 且垂直于 S1→G_est 的直线（Thales 圆在 G_est 处的切线）。"
+            "text": "第二检测点的决策变量取 (ψ, d)：ψ 为相对测得示向度 b₁ 的转角，d 为沿该方向的前进距离。目标不是交会角 φ 而是定位区域直径的期望 E[D]（对两次示向度误差 (δ₁,δ₂) ∈ [−ε,ε]² 取期望）。源距 R = |S₁G| 与有效接收半径 r_rec 均不可观测，故场景集取「距离先验 × r_rec 假设」；先按失效率阈值筛出可行集，再在可行集上取**最小最大后悔**点，并用最小最大（绝对最坏）交叉检查，两者一致才报单点，否则报候选区。"
           },
           {
             "id": "A08",
@@ -2366,7 +2782,7 @@
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "artifacts/code/solve_b.py",
-        "sha256": "c7a88577e92dbec518ecbef8725db00eef2402dfef88903cba450dc5b7d1cf5f",
+        "sha256": "3bf84ac3ae7ce5da4c10a88fed0a511e53d1a29178dfe44d7c897a6a79afef12",
         "note": "楔形交会定位 + 同心环覆盖 + 交会-归航清除 + 30 组演练与覆盖蒙特卡洛"
       }
     },
@@ -2405,7 +2821,7 @@
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "all_results.json",
-        "sha256": "7634825bf02d54bf39abae54205695231c7ae6350888c29c2b7b404cff80aee8",
+        "sha256": "87ef4e1b8fd62023f09a131b3a979a033547cfc0c455e953f3dbcbac1c7ef198",
         "values": {
           "A 正交交会（φ≈90°）": {
             "n_vertices": 4,
@@ -2479,7 +2895,7 @@
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "all_results.json",
-        "sha256": "7634825bf02d54bf39abae54205695231c7ae6350888c29c2b7b404cff80aee8",
+        "sha256": "87ef4e1b8fd62023f09a131b3a979a033547cfc0c455e953f3dbcbac1c7ef198",
         "values": {
           "n_grid": 442,
           "grid_best": [
@@ -2587,17 +3003,17 @@
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "artifacts/results/resultB.xlsx",
-        "sha256": "4ac7b527578cf667cc5332b632e5c7ce9111f4e3a15b2e283d54b5aaba387c33",
+        "sha256": "82592121d204c68a3d094522608b89b9bc53f6df5314997e8c46ec747e9321bc",
         "values": {
           "n_trials": 30,
           "mean_cleared_fraction": 1.0,
           "min_cleared_fraction": 1.0,
           "all_cleared": true,
-          "mean_total_time_s": 7150.102657652295,
-          "std_total_time_s": 308.8863952352974,
-          "mean_locate_clear_time_s": 5297.03485129539,
-          "std_locate_clear_time_s": 328.5562796016187,
-          "mean_time_per_source_s": 592.9971188407916
+          "mean_total_time_s": 6131.940160908362,
+          "std_total_time_s": 334.2937677982051,
+          "mean_locate_clear_time_s": 4242.542764091943,
+          "std_locate_clear_time_s": 292.6735613982531,
+          "mean_time_per_source_s": 507.7106655094545
         }
       },
       "question": "Q3"
@@ -2642,17 +3058,17 @@
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "artifacts/results/resultB.xlsx",
-        "sha256": "4ac7b527578cf667cc5332b632e5c7ce9111f4e3a15b2e283d54b5aaba387c33",
+        "sha256": "82592121d204c68a3d094522608b89b9bc53f6df5314997e8c46ec747e9321bc",
         "values": {
           "n_trials": 30,
           "mean_cleared_fraction": 1.0,
           "min_cleared_fraction": 1.0,
           "all_cleared": true,
-          "mean_total_time_s": 15088.792585960995,
-          "std_total_time_s": 305.5297207105713,
-          "mean_locate_clear_time_s": 12814.711618397412,
-          "std_locate_clear_time_s": 552.2236694665594,
-          "mean_time_per_source_s": 1254.6756037594876
+          "mean_total_time_s": 9583.33199313128,
+          "std_total_time_s": 1586.741550612239,
+          "mean_locate_clear_time_s": 6956.679015589991,
+          "std_locate_clear_time_s": 691.0224415256897,
+          "mean_time_per_source_s": 799.5485210230502
         }
       },
       "question": "Q4"
@@ -2668,11 +3084,15 @@
       "created_at": "2026-09-11T05:51:51Z",
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
-        "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得（正交交会算例直径 104.762 m、钝角交会 169.514 m、三站交会 85.896 m）。“以直径为直径的圆”不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；锐角三角形反例（直径 10.0 m，最小包围圆半径 5.0833 m > 直径圆半径 5.0 m）即为反例。保证覆盖应改用最小包围圆。",
+        "text": "Q1：交会定位区域为凸多边形，其直径可在凸包上以 O(h²) 最远点对求得。在「保证可接收」域内（|S−G| ≤ 1000 m）由真源正向布置的三组算例给出直径 46.916 m（χ=90°）、99.493 m（χ=140°）、38.918 m（三站），三者 ρ = r_MEC/D 恰为 1/2。「以直径为直径的圆」不必然覆盖该区域：由 Thales 定理，覆盖成立 ⟺ 其余各顶点对直径端点张角均 ≥90°；失效的充要条件是源端交会角 χ ∈ (90°, 90°+2ε]（χ 取 min{Δ, 360°−Δ}），该定理经 4000 组采样的集合级核对（两集合完全相等）。失效幅度由 ρ 的可达上确界刻画：ρ_sup = 0.5002942（ρ 是相似不变量，2000×40 定向扫描，argmax 在 χ=90.035°、r₂/r₁=1.060818），即最多只需把圆放大到 1.000588 D。保证覆盖应改用最小包围圆；但失效幅度仅万分之 5.9，属「需要修正」而非「严重失效」级别。",
         "status": "supported",
         "type": "result",
         "validation_refs": [
-          "V02"
+          "V02",
+          "V02b",
+          "V02c",
+          "V06",
+          "V07"
         ]
       },
       "question": "Q1"
@@ -2688,11 +3108,15 @@
       "created_at": "2026-09-11T05:51:51Z",
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
-        "text": "Q2：最优第二检测点位于过估计源 G_est 且垂直于 S1→G_est 的直线上（该直线即 Thales 圆在 G_est 处的切线，其上任意点交会角恒为 90.00°）；候选区域为以 G_est 为中心、交会角 φ ∈ [60°,120°] 且 |P−G_est| ≤ r_rec 的扇形环域。沿该垂线偏移越小，定位区域越小（偏移 300→1500 m 对应直径 43.19→67.08 m），但偏移过小会缩短有效基线、放大示向度误差相关，故推荐偏移取 d_est 的对称配置。",
+        "text": "Q2：第二检测点的决策变量是 (ψ, d)（相对测得示向度 b₁ 的转角与前进距离），目标是定位区域直径的期望 E[D]，**不是**交会角 φ。源距 R 与有效接收半径 r_rec 均不可观测，故场景集取「3 种距离先验 × r_rec ∈ {1000, 1500}」共 6 个场景。第一步可行性优先：由 |S₂G|² = R² + d² − 2Rd·cos ψ 对 R 的端点最大值可得闭式条件 ψ ≤ ψ_max = arcsin(r_rec/R_max) = 42.1697°（r_rec = 1000 m）及 d 的允许区间，108 个网格点中仅 27 个失效率 ≤ 2% 入选。第二步在可行集上取最小最大后悔点 (ψ, d) = (20.0°, 1200.0 m)，后悔值 9.753 m，六场景下 E[D] = 64.900 / 61.300 / 56.923 m（r_rec 两档取值相同，说明该点对接收半径不确定性稳健）；最小最大（绝对最坏）判据给出同一点，两判据一致故报单点。各场景最优点确实漂移（ψ 20°→35°、d 1050→1200 m），这是必须报后悔值而非单点的原因。",
         "status": "supported",
         "type": "result",
         "validation_refs": [
-          "V03"
+          "V03",
+          "V03b",
+          "V06",
+          "V07",
+          "V08"
         ]
       },
       "question": "Q2"
@@ -2789,7 +3213,7 @@
       "updated_at": "2026-09-11T05:51:51Z",
       "payload": {
         "path": "model.md",
-        "sha256": "d8393e4d9c5710fb1cbf07df92e13a09bb0995e33d1ca3505062a5a1c713431c"
+        "sha256": "0327eefd967ac1b1c406a10ee75dc503b8e3b34ccb8369458d02a7018b01355e"
       }
     }
   }

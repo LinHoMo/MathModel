@@ -1,0 +1,3532 @@
+{
+  "script": "verify_q1_diameter_xcheck.py",
+  "seed": 42,
+  "n_cases_total": 134,
+  "n_cases_valid": 130,
+  "n_cases_unbounded_excluded": 4,
+  "n_cases_degenerate_excluded": 0,
+  "paths": {
+    "MAIN": "solve_b.location_region (S-H 裁剪) + solve_b.polygon_diameter (凸包暴力 O(h²))",
+    "A": "射线两两求交枚举顶点对 + 顶点对最大距离",
+    "B": "Andrew 凸包 + 旋转卡壳 O(h)"
+  },
+  "wrong_basis_diff": 0.0,
+  "rel_dev_A_vs_MAIN": 1.3363890889534042e-09,
+  "rel_dev_B_vs_A": 1.33638909073934e-09,
+  "max_rel_dev_two_paths": 1.33638909073934e-09,
+  "rel_dev_tol": 1e-06,
+  "all_agree": true,
+  "cases": [
+    {
+      "name": "A 两站正交交会（χ=90°）",
+      "stations": [
+        [
+          -602.7241,
+          315.0
+        ],
+        [
+          695.0,
+          662.7241
+        ]
+      ],
+      "bearings_deg": [
+        330.0,
+        240.0
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 46.91615309577149,
+      "diameter_rayA_m": 46.916153095713206,
+      "diameter_calipersB_m": 46.91615309577149,
+      "rel_dev_A_vs_MAIN": 1.242340148720639e-12,
+      "rel_dev_B_vs_A": 1.2423401487221823e-12,
+      "agree": true
+    },
+    {
+      "name": "B 两站钝角交会（χ=140°）",
+      "stations": [
+        [
+          -1252.708,
+          95.0809
+        ],
+        [
+          579.6926,
+          77.9799
+        ]
+      ],
+      "bearings_deg": [
+        20.0,
+        160.0
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 99.49265136241314,
+      "diameter_rayA_m": 99.49265136225817,
+      "diameter_calipersB_m": 99.49265136241314,
+      "rel_dev_A_vs_MAIN": 1.5575961495365577e-12,
+      "rel_dev_B_vs_A": 1.5575961495389837e-12,
+      "agree": true
+    },
+    {
+      "name": "C 三站交会",
+      "stations": [
+        [
+          -806.385,
+          382.798
+        ],
+        [
+          656.2188,
+          1037.2368
+        ],
+        [
+          554.1659,
+          -588.1816
+        ]
+      ],
+      "bearings_deg": [
+        355.0,
+        235.0,
+        115.0
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 38.917941750788444,
+      "diameter_rayA_m": 38.91794175079351,
+      "diameter_calipersB_m": 38.917941750788444,
+      "rel_dev_A_vs_MAIN": 1.3017568448020195e-13,
+      "rel_dev_B_vs_A": 1.3017568448018499e-13,
+      "agree": true
+    },
+    {
+      "name": "反例(锐角三角形)",
+      "stations": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ]
+      ],
+      "bearings_deg": [
+        50.194429,
+        129.805571
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 0.4260905270000004,
+      "diameter_rayA_m": 0.42609052643057765,
+      "diameter_calipersB_m": 0.4260905270000004,
+      "rel_dev_A_vs_MAIN": 1.3363890889534042e-09,
+      "rel_dev_B_vs_A": 1.33638909073934e-09,
+      "agree": true
+    },
+    {
+      "name": "random#0",
+      "stations": [
+        [
+          -867.3677,
+          -1225.571
+        ],
+        [
+          -1351.5164,
+          818.2703
+        ],
+        [
+          154.2462,
+          307.6745
+        ]
+      ],
+      "bearings_deg": [
+        92.075933,
+        330.328854,
+        165.949682
+      ],
+      "n_vertices_main": 5,
+      "n_vertices_rayA": 5,
+      "diameter_main_m": 85.33831688306365,
+      "diameter_rayA_m": 85.33831688310993,
+      "diameter_calipersB_m": 85.33831688306365,
+      "rel_dev_A_vs_MAIN": 5.422012601455541e-13,
+      "rel_dev_B_vs_A": 5.422012601452601e-13,
+      "agree": true
+    },
+    {
+      "name": "random#1",
+      "stations": [
+        [
+          18.208,
+          -1609.7777
+        ],
+        [
+          -1023.952,
+          509.6071
+        ]
+      ],
+      "bearings_deg": [
+        140.821386,
+        264.958182
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 99.58205695924906,
+      "diameter_rayA_m": 99.58205695983833,
+      "diameter_calipersB_m": 99.58205695924906,
+      "rel_dev_A_vs_MAIN": 5.917404396072137e-12,
+      "rel_dev_B_vs_A": 5.9174043960371206e-12,
+      "agree": true
+    },
+    {
+      "name": "random#2",
+      "stations": [
+        [
+          -754.1516,
+          1255.6211
+        ],
+        [
+          879.945,
+          -1157.1583
+        ],
+        [
+          -263.111,
+          -755.2374
+        ]
+      ],
+      "bearings_deg": [
+        292.158767,
+        136.028143,
+        83.696664
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 85.96982190631653,
+      "diameter_rayA_m": 85.96982190615768,
+      "diameter_calipersB_m": 85.96982190631653,
+      "rel_dev_A_vs_MAIN": 1.847729010996785e-12,
+      "rel_dev_B_vs_A": 1.8477290110001992e-12,
+      "agree": true
+    },
+    {
+      "name": "random#3",
+      "stations": [
+        [
+          781.0881,
+          123.1755
+        ],
+        [
+          1608.5936,
+          -412.9831
+        ]
+      ],
+      "bearings_deg": [
+        130.918162,
+        139.77305
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 618.0028179610574,
+      "diameter_rayA_m": 618.0028179611489,
+      "diameter_calipersB_m": 618.0028179610574,
+      "rel_dev_A_vs_MAIN": 1.48086548646883e-13,
+      "rel_dev_B_vs_A": 1.4808654864686106e-13,
+      "agree": true
+    },
+    {
+      "name": "random#4",
+      "stations": [
+        [
+          -1428.7073,
+          -908.511
+        ],
+        [
+          -1356.5951,
+          -754.8897
+        ],
+        [
+          461.3271,
+          -459.5706
+        ]
+      ],
+      "bearings_deg": [
+        27.456826,
+        19.520287,
+        182.358544
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 159.83247296903536,
+      "diameter_rayA_m": 159.83247296871704,
+      "diameter_calipersB_m": 159.83247296903536,
+      "rel_dev_A_vs_MAIN": 1.991604958037496e-12,
+      "rel_dev_B_vs_A": 1.9916049580414623e-12,
+      "agree": true
+    },
+    {
+      "name": "random#5",
+      "stations": [
+        [
+          686.1891,
+          624.0621
+        ],
+        [
+          -1457.2315,
+          458.9262
+        ]
+      ],
+      "bearings_deg": [
+        191.78534,
+        357.394521
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 301.8732758318542,
+      "diameter_rayA_m": 301.8732758322288,
+      "diameter_calipersB_m": 301.8732758318542,
+      "rel_dev_A_vs_MAIN": 1.2409118669430644e-12,
+      "rel_dev_B_vs_A": 1.2409118669415246e-12,
+      "agree": true
+    },
+    {
+      "name": "random#6",
+      "stations": [
+        [
+          -409.8515,
+          1664.3794
+        ],
+        [
+          475.9992,
+          193.6291
+        ],
+        [
+          627.6885,
+          1165.6965
+        ]
+      ],
+      "bearings_deg": [
+        291.21707,
+        274.220615,
+        267.74293
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 400.0396890133201,
+      "diameter_rayA_m": 400.0396890126973,
+      "diameter_calipersB_m": 400.0396890133201,
+      "rel_dev_A_vs_MAIN": 1.5569288687181609e-12,
+      "rel_dev_B_vs_A": 1.5569288687205849e-12,
+      "agree": true
+    },
+    {
+      "name": "random#7",
+      "stations": [
+        [
+          -354.8515,
+          1409.4618
+        ],
+        [
+          -139.9037,
+          -799.4074
+        ],
+        [
+          -861.4665,
+          208.6517
+        ]
+      ],
+      "bearings_deg": [
+        265.041286,
+        104.575577,
+        21.53109
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 47.19754968581167,
+      "diameter_rayA_m": 47.197549686043025,
+      "diameter_calipersB_m": 47.19754968581167,
+      "rel_dev_A_vs_MAIN": 4.9017950360469005e-12,
+      "rel_dev_B_vs_A": 4.9017950360228735e-12,
+      "agree": true
+    },
+    {
+      "name": "random#8",
+      "stations": [
+        [
+          -1327.193,
+          433.3165
+        ],
+        [
+          993.0698,
+          -264.6561
+        ]
+      ],
+      "bearings_deg": [
+        282.799503,
+        202.604905
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 101.13692790730843,
+      "diameter_rayA_m": 101.13692790674071,
+      "diameter_calipersB_m": 101.13692790730843,
+      "rel_dev_A_vs_MAIN": 5.61341596605185e-12,
+      "rel_dev_B_vs_A": 5.61341596608336e-12,
+      "agree": true
+    },
+    {
+      "name": "random#9",
+      "stations": [
+        [
+          -108.6304,
+          -845.192
+        ],
+        [
+          180.968,
+          1504.2649
+        ]
+      ],
+      "bearings_deg": [
+        98.875908,
+        250.247366
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 172.42826282803554,
+      "diameter_rayA_m": 172.4282628278299,
+      "diameter_calipersB_m": 172.42826282803554,
+      "rel_dev_A_vs_MAIN": 1.192560107933413e-12,
+      "rel_dev_B_vs_A": 1.1925601079348354e-12,
+      "agree": true
+    },
+    {
+      "name": "random#10",
+      "stations": [
+        [
+          125.6991,
+          -792.7944
+        ],
+        [
+          479.2701,
+          -1320.7226
+        ],
+        [
+          -221.7981,
+          -157.3394
+        ]
+      ],
+      "bearings_deg": [
+        71.800348,
+        88.354717,
+        38.296302
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 113.22931235615614,
+      "diameter_rayA_m": 113.22931235662342,
+      "diameter_calipersB_m": 113.22931235615614,
+      "rel_dev_A_vs_MAIN": 4.126858275668639e-12,
+      "rel_dev_B_vs_A": 4.1268582756516086e-12,
+      "agree": true
+    },
+    {
+      "name": "random#11",
+      "stations": [
+        [
+          -38.7406,
+          -1319.6497
+        ],
+        [
+          -465.8654,
+          1650.0927
+        ],
+        [
+          1043.0343,
+          -885.8621
+        ]
+      ],
+      "bearings_deg": [
+        56.181552,
+        316.145099,
+        91.970576
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 106.33624815157557,
+      "diameter_rayA_m": 106.33624815219544,
+      "diameter_calipersB_m": 106.33624815157557,
+      "rel_dev_A_vs_MAIN": 5.829275365619637e-12,
+      "rel_dev_B_vs_A": 5.829275365585657e-12,
+      "agree": true
+    },
+    {
+      "name": "random#12",
+      "stations": [
+        [
+          -1408.7783,
+          -47.6324
+        ],
+        [
+          -1464.6774,
+          886.0474
+        ]
+      ],
+      "bearings_deg": [
+        25.814282,
+        4.499008
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 471.4462577471368,
+      "diameter_rayA_m": 471.4462577474089,
+      "diameter_calipersB_m": 471.4462577471368,
+      "rel_dev_A_vs_MAIN": 5.770596291672004e-13,
+      "rel_dev_B_vs_A": 5.770596291668675e-13,
+      "agree": true
+    },
+    {
+      "name": "random#13",
+      "stations": [
+        [
+          169.3322,
+          -798.8075
+        ],
+        [
+          1266.2723,
+          -261.331
+        ]
+      ],
+      "bearings_deg": [
+        145.129541,
+        174.652498
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 238.66691610295413,
+      "diameter_rayA_m": 238.66691610250152,
+      "diameter_calipersB_m": 238.66691610295413,
+      "rel_dev_A_vs_MAIN": 1.896432610223774e-12,
+      "rel_dev_B_vs_A": 1.8964326102273707e-12,
+      "agree": true
+    },
+    {
+      "name": "random#14",
+      "stations": [
+        [
+          645.5499,
+          724.0265
+        ],
+        [
+          -343.4262,
+          583.7357
+        ]
+      ],
+      "bearings_deg": [
+        343.817414,
+        1.206022
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 208.12260324560077,
+      "diameter_rayA_m": 208.12260324596343,
+      "diameter_calipersB_m": 208.12260324560077,
+      "rel_dev_A_vs_MAIN": 1.7425354414964102e-12,
+      "rel_dev_B_vs_A": 1.7425354414933737e-12,
+      "agree": true
+    },
+    {
+      "name": "random#15",
+      "stations": [
+        [
+          -1288.5857,
+          -936.0291
+        ],
+        [
+          -550.5091,
+          300.2496
+        ]
+      ],
+      "bearings_deg": [
+        40.631586,
+        327.297904
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 62.04812807867569,
+      "diameter_rayA_m": 62.04812807831548,
+      "diameter_calipersB_m": 62.04812807867569,
+      "rel_dev_A_vs_MAIN": 5.805326462658869e-12,
+      "rel_dev_B_vs_A": 5.805326462692571e-12,
+      "agree": true
+    },
+    {
+      "name": "random#16",
+      "stations": [
+        [
+          -91.892,
+          -315.9961
+        ],
+        [
+          -1379.2923,
+          540.5413
+        ],
+        [
+          -495.3883,
+          -302.2523
+        ]
+      ],
+      "bearings_deg": [
+        312.412693,
+        323.467294,
+        335.120871
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 103.37247509387595,
+      "diameter_rayA_m": 103.37247509386827,
+      "diameter_calipersB_m": 103.37247509387595,
+      "rel_dev_A_vs_MAIN": 7.423505666513446e-14,
+      "rel_dev_B_vs_A": 7.423505666513998e-14,
+      "agree": true
+    },
+    {
+      "name": "random#17",
+      "stations": [
+        [
+          497.0112,
+          -1493.9169
+        ],
+        [
+          775.9262,
+          1022.0145
+        ],
+        [
+          -1328.4853,
+          -1048.5938
+        ]
+      ],
+      "bearings_deg": [
+        130.07972,
+        199.501336,
+        79.660698
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 94.36379155179607,
+      "diameter_rayA_m": 94.3637915519479,
+      "diameter_calipersB_m": 94.36379155179607,
+      "rel_dev_A_vs_MAIN": 1.6089727773801855e-12,
+      "rel_dev_B_vs_A": 1.6089727773775967e-12,
+      "agree": true
+    },
+    {
+      "name": "random#18",
+      "stations": [
+        [
+          -752.9465,
+          -850.6581
+        ],
+        [
+          1439.103,
+          -193.3555
+        ],
+        [
+          1228.587,
+          171.1061
+        ]
+      ],
+      "bearings_deg": [
+        46.486802,
+        179.784691,
+        194.855405
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 109.73745437061655,
+      "diameter_rayA_m": 109.73745437047295,
+      "diameter_calipersB_m": 109.73745437061655,
+      "rel_dev_A_vs_MAIN": 1.3085840902790886e-12,
+      "rel_dev_B_vs_A": 1.3085840902808009e-12,
+      "agree": true
+    },
+    {
+      "name": "random#19",
+      "stations": [
+        [
+          -973.2592,
+          -336.463
+        ],
+        [
+          -1500.6396,
+          -411.4914
+        ]
+      ],
+      "bearings_deg": [
+        60.278945,
+        28.31485
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 73.16013887959923,
+      "diameter_rayA_m": 73.16013887940318,
+      "diameter_calipersB_m": 73.16013887959923,
+      "rel_dev_A_vs_MAIN": 2.6797782871021366e-12,
+      "rel_dev_B_vs_A": 2.679778287109318e-12,
+      "agree": true
+    },
+    {
+      "name": "random#20",
+      "stations": [
+        [
+          -1054.3473,
+          -959.8169
+        ],
+        [
+          -1501.1568,
+          801.5064
+        ],
+        [
+          -1492.7443,
+          -633.7436
+        ]
+      ],
+      "bearings_deg": [
+        32.743356,
+        336.198452,
+        17.738033
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 139.64286553408948,
+      "diameter_rayA_m": 139.64286553418887,
+      "diameter_calipersB_m": 139.64286553408948,
+      "rel_dev_A_vs_MAIN": 7.117493435700061e-13,
+      "rel_dev_B_vs_A": 7.117493435694995e-13,
+      "agree": true
+    },
+    {
+      "name": "random#21",
+      "stations": [
+        [
+          1230.1853,
+          -327.1631
+        ],
+        [
+          1501.4268,
+          236.8964
+        ]
+      ],
+      "bearings_deg": [
+        197.392925,
+        206.660774
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 1181.1292333107165,
+      "diameter_rayA_m": 1181.12923331149,
+      "diameter_calipersB_m": 1181.1292333107165,
+      "rel_dev_A_vs_MAIN": 6.549031401836333e-13,
+      "rel_dev_B_vs_A": 6.549031401832044e-13,
+      "agree": true
+    },
+    {
+      "name": "random#22",
+      "stations": [
+        [
+          -274.6353,
+          284.4858
+        ],
+        [
+          77.4612,
+          1478.0013
+        ],
+        [
+          -1005.5187,
+          735.0521
+        ]
+      ],
+      "bearings_deg": [
+        0.231914,
+        277.146276,
+        340.000311
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 47.69867293425051,
+      "diameter_rayA_m": 47.69867293445335,
+      "diameter_calipersB_m": 47.69867293425051,
+      "rel_dev_A_vs_MAIN": 4.252500589629308e-12,
+      "rel_dev_B_vs_A": 4.252500589611224e-12,
+      "agree": true
+    },
+    {
+      "name": "random#23",
+      "stations": [
+        [
+          -513.37,
+          -1466.1095
+        ],
+        [
+          -869.433,
+          -731.0429
+        ]
+      ],
+      "bearings_deg": [
+        47.910591,
+        350.297963
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 61.079541830108965,
+      "diameter_rayA_m": 61.079541830392614,
+      "diameter_calipersB_m": 61.079541830108965,
+      "rel_dev_A_vs_MAIN": 4.643922524900282e-12,
+      "rel_dev_B_vs_A": 4.643922524878716e-12,
+      "agree": true
+    },
+    {
+      "name": "random#24",
+      "stations": [
+        [
+          -1171.4771,
+          -742.0287
+        ],
+        [
+          -983.8592,
+          -534.207
+        ]
+      ],
+      "bearings_deg": [
+        32.14376,
+        30.178222
+      ],
+      "unbounded": true,
+      "n_vertices_main": 5
+    },
+    {
+      "name": "random#25",
+      "stations": [
+        [
+          1137.6231,
+          280.5325
+        ],
+        [
+          -1196.4811,
+          -1266.6852
+        ],
+        [
+          -651.9216,
+          1356.5371
+        ]
+      ],
+      "bearings_deg": [
+        225.493283,
+        32.42967,
+        322.433008
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 73.41225941482436,
+      "diameter_rayA_m": 73.41225941453793,
+      "diameter_calipersB_m": 73.41225941482436,
+      "rel_dev_A_vs_MAIN": 3.9017187309422475e-12,
+      "rel_dev_B_vs_A": 3.901718730957471e-12,
+      "agree": true
+    },
+    {
+      "name": "random#26",
+      "stations": [
+        [
+          -851.5989,
+          -1350.5017
+        ],
+        [
+          952.3952,
+          1306.058
+        ]
+      ],
+      "bearings_deg": [
+        19.895239,
+        270.143789
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 119.07414697536333,
+      "diameter_rayA_m": 119.07414697552576,
+      "diameter_calipersB_m": 119.07414697536333,
+      "rel_dev_A_vs_MAIN": 1.3641086123284678e-12,
+      "rel_dev_B_vs_A": 1.364108612326607e-12,
+      "agree": true
+    },
+    {
+      "name": "random#27",
+      "stations": [
+        [
+          1447.597,
+          -895.0931
+        ],
+        [
+          -1147.494,
+          1019.6159
+        ]
+      ],
+      "bearings_deg": [
+        101.737835,
+        349.562444
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 121.54081873633221,
+      "diameter_rayA_m": 121.54081873535742,
+      "diameter_calipersB_m": 121.54081873633221,
+      "rel_dev_A_vs_MAIN": 8.020297948658513e-12,
+      "rel_dev_B_vs_A": 8.020297948722839e-12,
+      "agree": true
+    },
+    {
+      "name": "random#28",
+      "stations": [
+        [
+          -511.1614,
+          1089.8237
+        ],
+        [
+          1262.4983,
+          -942.0599
+        ]
+      ],
+      "bearings_deg": [
+        202.175488,
+        135.542038
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 109.44811109926714,
+      "diameter_rayA_m": 109.44811109857179,
+      "diameter_calipersB_m": 109.44811109926714,
+      "rel_dev_A_vs_MAIN": 6.353251098494338e-12,
+      "rel_dev_B_vs_A": 6.353251098534702e-12,
+      "agree": true
+    },
+    {
+      "name": "random#29",
+      "stations": [
+        [
+          610.3616,
+          1168.448
+        ],
+        [
+          -574.0904,
+          -1606.1582
+        ]
+      ],
+      "bearings_deg": [
+        229.821243,
+        82.416524
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 195.44490106057393,
+      "diameter_rayA_m": 195.4449010608837,
+      "diameter_calipersB_m": 195.44490106057393,
+      "rel_dev_A_vs_MAIN": 1.5849388211256906e-12,
+      "rel_dev_B_vs_A": 1.5849388211231786e-12,
+      "agree": true
+    },
+    {
+      "name": "random#30",
+      "stations": [
+        [
+          -797.4144,
+          -1331.4313
+        ],
+        [
+          -222.4832,
+          777.0532
+        ]
+      ],
+      "bearings_deg": [
+        89.39041,
+        148.756433
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 114.65014257508695,
+      "diameter_rayA_m": 114.65014257504525,
+      "diameter_calipersB_m": 114.65014257508695,
+      "rel_dev_A_vs_MAIN": 3.6366852057855853e-13,
+      "rel_dev_B_vs_A": 3.636685205786908e-13,
+      "agree": true
+    },
+    {
+      "name": "random#31",
+      "stations": [
+        [
+          805.9282,
+          -1030.0806
+        ],
+        [
+          -233.5888,
+          1526.1733
+        ],
+        [
+          1430.6209,
+          418.7284
+        ]
+      ],
+      "bearings_deg": [
+        99.720882,
+        325.455262,
+        146.996779
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 134.48510538997144,
+      "diameter_rayA_m": 134.4851053898463,
+      "diameter_calipersB_m": 134.48510538997144,
+      "rel_dev_A_vs_MAIN": 9.305178165209707e-13,
+      "rel_dev_B_vs_A": 9.305178165218365e-13,
+      "agree": true
+    },
+    {
+      "name": "random#32",
+      "stations": [
+        [
+          -678.9043,
+          -648.4321
+        ],
+        [
+          -311.4641,
+          -331.8387
+        ],
+        [
+          -694.7723,
+          -1267.2215
+        ]
+      ],
+      "bearings_deg": [
+        37.831981,
+        36.845053,
+        49.550828
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 613.3424284713033,
+      "diameter_rayA_m": 613.3424284712131,
+      "diameter_calipersB_m": 613.3424284713033,
+      "rel_dev_A_vs_MAIN": 1.4698748713331443e-13,
+      "rel_dev_B_vs_A": 1.4698748713333604e-13,
+      "agree": true
+    },
+    {
+      "name": "random#33",
+      "stations": [
+        [
+          843.6575,
+          -1108.307
+        ],
+        [
+          234.9579,
+          -319.3444
+        ]
+      ],
+      "bearings_deg": [
+        118.691646,
+        10.319841
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 36.64445860638121,
+      "diameter_rayA_m": 36.644458606305314,
+      "diameter_calipersB_m": 36.64445860638121,
+      "rel_dev_A_vs_MAIN": 2.0710653804916744e-12,
+      "rel_dev_B_vs_A": 2.0710653804959634e-12,
+      "agree": true
+    },
+    {
+      "name": "random#34",
+      "stations": [
+        [
+          971.58,
+          362.6493
+        ],
+        [
+          -604.3526,
+          -197.9275
+        ]
+      ],
+      "bearings_deg": [
+        216.267754,
+        285.033496
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 76.18713961045312,
+      "diameter_rayA_m": 76.18713961052012,
+      "diameter_calipersB_m": 76.18713961045312,
+      "rel_dev_A_vs_MAIN": 8.794683764841627e-13,
+      "rel_dev_B_vs_A": 8.794683764833893e-13,
+      "agree": true
+    },
+    {
+      "name": "random#35",
+      "stations": [
+        [
+          912.8638,
+          -151.585
+        ],
+        [
+          1312.8655,
+          257.2811
+        ]
+      ],
+      "bearings_deg": [
+        59.298893,
+        176.305785
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 22.405443289101946,
+      "diameter_rayA_m": 22.405443288914082,
+      "diameter_calipersB_m": 22.405443289101946,
+      "rel_dev_A_vs_MAIN": 8.384745804724564e-12,
+      "rel_dev_B_vs_A": 8.384745804794868e-12,
+      "agree": true
+    },
+    {
+      "name": "random#36",
+      "stations": [
+        [
+          1033.9735,
+          666.1
+        ],
+        [
+          -120.5304,
+          195.1797
+        ]
+      ],
+      "bearings_deg": [
+        254.742112,
+        312.196636
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 93.31379090082737,
+      "diameter_rayA_m": 93.31379090015469,
+      "diameter_calipersB_m": 93.31379090082737,
+      "rel_dev_A_vs_MAIN": 7.208848899019895e-12,
+      "rel_dev_B_vs_A": 7.208848899071862e-12,
+      "agree": true
+    },
+    {
+      "name": "random#37",
+      "stations": [
+        [
+          -195.2504,
+          1071.0221
+        ],
+        [
+          1332.869,
+          -249.0814
+        ],
+        [
+          1383.3061,
+          -183.8937
+        ]
+      ],
+      "bearings_deg": [
+        242.049989,
+        154.059229,
+        156.384873
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 71.79153278505026,
+      "diameter_rayA_m": 71.79153278524198,
+      "diameter_calipersB_m": 71.79153278505026,
+      "rel_dev_A_vs_MAIN": 2.6704909830635816e-12,
+      "rel_dev_B_vs_A": 2.67049098305645e-12,
+      "agree": true
+    },
+    {
+      "name": "random#38",
+      "stations": [
+        [
+          -818.7487,
+          -859.3849
+        ],
+        [
+          468.0489,
+          903.7665
+        ]
+      ],
+      "bearings_deg": [
+        29.639865,
+        276.900062
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 82.59850327245944,
+      "diameter_rayA_m": 82.59850327215652,
+      "diameter_calipersB_m": 82.59850327245944,
+      "rel_dev_A_vs_MAIN": 3.6673615998832164e-12,
+      "rel_dev_B_vs_A": 3.667361599896665e-12,
+      "agree": true
+    },
+    {
+      "name": "random#39",
+      "stations": [
+        [
+          701.8251,
+          -1481.6219
+        ],
+        [
+          -314.1621,
+          144.8779
+        ]
+      ],
+      "bearings_deg": [
+        124.67136,
+        135.89784
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 522.2076828826463,
+      "diameter_rayA_m": 522.2076828828774,
+      "diameter_calipersB_m": 522.2076828826463,
+      "rel_dev_A_vs_MAIN": 4.425927627341808e-13,
+      "rel_dev_B_vs_A": 4.425927627339849e-13,
+      "agree": true
+    },
+    {
+      "name": "random#40",
+      "stations": [
+        [
+          1019.5518,
+          1352.5586
+        ],
+        [
+          -40.0198,
+          -772.0199
+        ]
+      ],
+      "bearings_deg": [
+        220.392767,
+        84.364411
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 119.3373326642569,
+      "diameter_rayA_m": 119.33733266412334,
+      "diameter_calipersB_m": 119.3373326642569,
+      "rel_dev_A_vs_MAIN": 1.1192459265363567e-12,
+      "rel_dev_B_vs_A": 1.1192459265376094e-12,
+      "agree": true
+    },
+    {
+      "name": "random#41",
+      "stations": [
+        [
+          609.0824,
+          -325.3233
+        ],
+        [
+          -1138.8479,
+          -110.8735
+        ]
+      ],
+      "bearings_deg": [
+        182.237623,
+        271.725455
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 61.67343686690951,
+      "diameter_rayA_m": 61.6734368672285,
+      "diameter_calipersB_m": 61.67343686690951,
+      "rel_dev_A_vs_MAIN": 5.172260084686346e-12,
+      "rel_dev_B_vs_A": 5.172260084659593e-12,
+      "agree": true
+    },
+    {
+      "name": "random#42",
+      "stations": [
+        [
+          1383.5581,
+          312.4354
+        ],
+        [
+          554.1992,
+          -1414.5786
+        ]
+      ],
+      "bearings_deg": [
+        225.08878,
+        68.167458
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 170.56754403300494,
+      "diameter_rayA_m": 170.5675440327198,
+      "diameter_calipersB_m": 170.56754403300494,
+      "rel_dev_A_vs_MAIN": 1.6716344872189801e-12,
+      "rel_dev_B_vs_A": 1.6716344872217745e-12,
+      "agree": true
+    },
+    {
+      "name": "random#43",
+      "stations": [
+        [
+          -1529.0322,
+          -411.0469
+        ],
+        [
+          -980.355,
+          -588.7243
+        ]
+      ],
+      "bearings_deg": [
+        25.985805,
+        77.951944
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 49.506776972471926,
+      "diameter_rayA_m": 49.50677697210246,
+      "diameter_calipersB_m": 49.506776972471926,
+      "rel_dev_A_vs_MAIN": 7.462978491732118e-12,
+      "rel_dev_B_vs_A": 7.462978491787814e-12,
+      "agree": true
+    },
+    {
+      "name": "random#44",
+      "stations": [
+        [
+          -266.6796,
+          1138.6971
+        ],
+        [
+          -100.9568,
+          846.6825
+        ]
+      ],
+      "bearings_deg": [
+        191.870376,
+        151.288009
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 38.707198272087176,
+      "diameter_rayA_m": 38.70719827223369,
+      "diameter_calipersB_m": 38.707198272087176,
+      "rel_dev_A_vs_MAIN": 3.7851851504165274e-12,
+      "rel_dev_B_vs_A": 3.7851851504022e-12,
+      "agree": true
+    },
+    {
+      "name": "random#45",
+      "stations": [
+        [
+          510.4899,
+          956.1924
+        ],
+        [
+          515.9658,
+          864.3929
+        ]
+      ],
+      "bearings_deg": [
+        297.639312,
+        299.181089
+      ],
+      "unbounded": true,
+      "n_vertices_main": 5
+    },
+    {
+      "name": "random#46",
+      "stations": [
+        [
+          -1181.9,
+          -1270.8487
+        ],
+        [
+          576.1601,
+          217.4966
+        ]
+      ],
+      "bearings_deg": [
+        14.58187,
+        226.523002
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 151.95178787422375,
+      "diameter_rayA_m": 151.95178787361573,
+      "diameter_calipersB_m": 151.95178787422375,
+      "rel_dev_A_vs_MAIN": 4.00143781360387e-12,
+      "rel_dev_B_vs_A": 4.001437813619881e-12,
+      "agree": true
+    },
+    {
+      "name": "random#47",
+      "stations": [
+        [
+          -445.7564,
+          360.0352
+        ],
+        [
+          1576.6981,
+          742.4146
+        ]
+      ],
+      "bearings_deg": [
+        290.950691,
+        218.637426
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 95.96087397745644,
+      "diameter_rayA_m": 95.9608739775701,
+      "diameter_calipersB_m": 95.96087397745644,
+      "rel_dev_A_vs_MAIN": 1.184424560773454e-12,
+      "rel_dev_B_vs_A": 1.1844245607720511e-12,
+      "agree": true
+    },
+    {
+      "name": "random#48",
+      "stations": [
+        [
+          -1612.6934,
+          -639.3454
+        ],
+        [
+          602.9808,
+          1557.7876
+        ]
+      ],
+      "bearings_deg": [
+        353.699148,
+        281.589246
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 157.1795882607977,
+      "diameter_rayA_m": 157.17958826128194,
+      "diameter_calipersB_m": 157.1795882607977,
+      "rel_dev_A_vs_MAIN": 3.0808649560255942e-12,
+      "rel_dev_B_vs_A": 3.0808649560161027e-12,
+      "agree": true
+    },
+    {
+      "name": "random#49",
+      "stations": [
+        [
+          313.1327,
+          1123.9436
+        ],
+        [
+          -874.3121,
+          670.4562
+        ]
+      ],
+      "bearings_deg": [
+        291.994019,
+        324.20518
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 276.52148763866234,
+      "diameter_rayA_m": 276.5214876385216,
+      "diameter_calipersB_m": 276.52148763866234,
+      "rel_dev_A_vs_MAIN": 5.089814404704592e-13,
+      "rel_dev_B_vs_A": 5.089814404707183e-13,
+      "agree": true
+    },
+    {
+      "name": "random#50",
+      "stations": [
+        [
+          -440.059,
+          20.2667
+        ],
+        [
+          -539.814,
+          1188.5571
+        ]
+      ],
+      "bearings_deg": [
+        290.892062,
+        277.251324
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 237.7340045379042,
+      "diameter_rayA_m": 237.73400453797328,
+      "diameter_calipersB_m": 237.7340045379042,
+      "rel_dev_A_vs_MAIN": 2.9051272681889343e-13,
+      "rel_dev_B_vs_A": 2.90512726818809e-13,
+      "agree": true
+    },
+    {
+      "name": "random#51",
+      "stations": [
+        [
+          460.9894,
+          1117.6049
+        ],
+        [
+          704.8494,
+          -219.3437
+        ]
+      ],
+      "bearings_deg": [
+        180.476798,
+        141.255909
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 184.25267568948968,
+      "diameter_rayA_m": 184.25267568981212,
+      "diameter_calipersB_m": 184.25267568948968,
+      "rel_dev_A_vs_MAIN": 1.7500114572627976e-12,
+      "rel_dev_B_vs_A": 1.750011457259735e-12,
+      "agree": true
+    },
+    {
+      "name": "random#52",
+      "stations": [
+        [
+          394.102,
+          1426.7
+        ],
+        [
+          933.7809,
+          -119.4292
+        ],
+        [
+          1107.4976,
+          314.4137
+        ]
+      ],
+      "bearings_deg": [
+        252.210609,
+        151.406554,
+        177.467029
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 48.20938456436336,
+      "diameter_rayA_m": 48.209384564737455,
+      "diameter_calipersB_m": 48.20938456436336,
+      "rel_dev_A_vs_MAIN": 7.759768110105003e-12,
+      "rel_dev_B_vs_A": 7.759768110044788e-12,
+      "agree": true
+    },
+    {
+      "name": "random#53",
+      "stations": [
+        [
+          571.8408,
+          -556.2515
+        ],
+        [
+          -19.3579,
+          -594.9518
+        ]
+      ],
+      "bearings_deg": [
+        87.681997,
+        50.865624
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 94.76922177830144,
+      "diameter_rayA_m": 94.76922177799621,
+      "diameter_calipersB_m": 94.76922177830144,
+      "rel_dev_A_vs_MAIN": 3.2208236250148364e-12,
+      "rel_dev_B_vs_A": 3.22082362502521e-12,
+      "agree": true
+    },
+    {
+      "name": "random#54",
+      "stations": [
+        [
+          -542.8479,
+          1293.0879
+        ],
+        [
+          684.0248,
+          -760.6868
+        ]
+      ],
+      "bearings_deg": [
+        255.638607,
+        132.979754
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 99.16973471016586,
+      "diameter_rayA_m": 99.16973471094845,
+      "diameter_calipersB_m": 99.16973471016586,
+      "rel_dev_A_vs_MAIN": 7.891437558579565e-12,
+      "rel_dev_B_vs_A": 7.89143755851729e-12,
+      "agree": true
+    },
+    {
+      "name": "random#55",
+      "stations": [
+        [
+          -879.3894,
+          -318.1444
+        ],
+        [
+          187.5991,
+          -882.8986
+        ]
+      ],
+      "bearings_deg": [
+        335.274704,
+        136.240273
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 129.18473232038272,
+      "diameter_rayA_m": 129.18473232055092,
+      "diameter_calipersB_m": 129.18473232038272,
+      "rel_dev_A_vs_MAIN": 1.3020089401276131e-12,
+      "rel_dev_B_vs_A": 1.302008940125918e-12,
+      "agree": true
+    },
+    {
+      "name": "random#56",
+      "stations": [
+        [
+          995.9718,
+          -1383.6186
+        ],
+        [
+          -946.5722,
+          652.0763
+        ]
+      ],
+      "bearings_deg": [
+        115.37508,
+        332.532499
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 162.581860013118,
+      "diameter_rayA_m": 162.5818600130935,
+      "diameter_calipersB_m": 162.581860013118,
+      "rel_dev_A_vs_MAIN": 1.5069032625799398e-13,
+      "rel_dev_B_vs_A": 1.5069032625801668e-13,
+      "agree": true
+    },
+    {
+      "name": "random#57",
+      "stations": [
+        [
+          181.808,
+          -531.2249
+        ],
+        [
+          1688.547,
+          171.3208
+        ]
+      ],
+      "bearings_deg": [
+        45.692208,
+        200.557233
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 136.59646947051132,
+      "diameter_rayA_m": 136.59646946981462,
+      "diameter_calipersB_m": 136.59646947051132,
+      "rel_dev_A_vs_MAIN": 5.10043463032475e-12,
+      "rel_dev_B_vs_A": 5.100434630350764e-12,
+      "agree": true
+    },
+    {
+      "name": "random#58",
+      "stations": [
+        [
+          -845.2275,
+          -1289.77
+        ],
+        [
+          -1045.2134,
+          -1293.5139
+        ]
+      ],
+      "bearings_deg": [
+        29.05215,
+        25.893414
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 3410.395431746618,
+      "diameter_rayA_m": 3410.3954317471002,
+      "diameter_calipersB_m": 3410.395431746618,
+      "rel_dev_A_vs_MAIN": 1.4134202369980932e-13,
+      "rel_dev_B_vs_A": 1.4134202369978935e-13,
+      "agree": true
+    },
+    {
+      "name": "random#59",
+      "stations": [
+        [
+          -1048.7607,
+          811.2558
+        ],
+        [
+          -759.9013,
+          304.5955
+        ],
+        [
+          884.7068,
+          329.0885
+        ]
+      ],
+      "bearings_deg": [
+        350.545034,
+        4.711014,
+        32.818216
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 121.63511918352418,
+      "diameter_rayA_m": 121.63511918406827,
+      "diameter_calipersB_m": 121.63511918352418,
+      "rel_dev_A_vs_MAIN": 4.473140636792649e-12,
+      "rel_dev_B_vs_A": 4.47314063677264e-12,
+      "agree": true
+    },
+    {
+      "name": "random#60",
+      "stations": [
+        [
+          -473.0044,
+          -672.2902
+        ],
+        [
+          707.2629,
+          -1269.6179
+        ]
+      ],
+      "bearings_deg": [
+        8.203655,
+        83.347449
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 60.305463635702615,
+      "diameter_rayA_m": 60.30546363596713,
+      "diameter_calipersB_m": 60.305463635702615,
+      "rel_dev_A_vs_MAIN": 4.386231831983007e-12,
+      "rel_dev_B_vs_A": 4.386231831963768e-12,
+      "agree": true
+    },
+    {
+      "name": "random#61",
+      "stations": [
+        [
+          671.2191,
+          -1270.6497
+        ],
+        [
+          1252.7681,
+          -31.0124
+        ]
+      ],
+      "bearings_deg": [
+        71.53366,
+        125.736564
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 68.81486989828352,
+      "diameter_rayA_m": 68.81486989890506,
+      "diameter_calipersB_m": 68.81486989828352,
+      "rel_dev_A_vs_MAIN": 9.032061727319975e-12,
+      "rel_dev_B_vs_A": 9.032061727238398e-12,
+      "agree": true
+    },
+    {
+      "name": "random#62",
+      "stations": [
+        [
+          -28.0617,
+          261.8719
+        ],
+        [
+          633.9335,
+          -1184.1282
+        ]
+      ],
+      "bearings_deg": [
+        235.46439,
+        174.837519
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 109.05866728761366,
+      "diameter_rayA_m": 109.05866728745669,
+      "diameter_calipersB_m": 109.05866728761366,
+      "rel_dev_A_vs_MAIN": 1.4393454925516915e-12,
+      "rel_dev_B_vs_A": 1.4393454925537633e-12,
+      "agree": true
+    },
+    {
+      "name": "random#63",
+      "stations": [
+        [
+          -856.1508,
+          197.4483
+        ],
+        [
+          -285.0083,
+          326.8313
+        ],
+        [
+          402.6224,
+          937.358
+        ]
+      ],
+      "bearings_deg": [
+        328.331768,
+        315.864346,
+        289.257184
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 226.06210244072273,
+      "diameter_rayA_m": 226.06210244074035,
+      "diameter_calipersB_m": 226.06210244072273,
+      "rel_dev_A_vs_MAIN": 7.794964152149795e-14,
+      "rel_dev_B_vs_A": 7.794964152149188e-14,
+      "agree": true
+    },
+    {
+      "name": "random#64",
+      "stations": [
+        [
+          -1423.9626,
+          -884.4584
+        ],
+        [
+          176.7736,
+          -1167.7891
+        ]
+      ],
+      "bearings_deg": [
+        10.495582,
+        78.336489
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 77.96119715900362,
+      "diameter_rayA_m": 77.96119715881991,
+      "diameter_calipersB_m": 77.96119715900362,
+      "rel_dev_A_vs_MAIN": 2.35634810133493e-12,
+      "rel_dev_B_vs_A": 2.3563481013404824e-12,
+      "agree": true
+    },
+    {
+      "name": "random#65",
+      "stations": [
+        [
+          -709.7184,
+          -912.9808
+        ],
+        [
+          703.6498,
+          690.1577
+        ]
+      ],
+      "bearings_deg": [
+        62.561208,
+        209.483962
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 136.664946161604,
+      "diameter_rayA_m": 136.6649461611744,
+      "diameter_calipersB_m": 136.664946161604,
+      "rel_dev_A_vs_MAIN": 3.143411314358319e-12,
+      "rel_dev_B_vs_A": 3.1434113143682e-12,
+      "agree": true
+    },
+    {
+      "name": "random#66",
+      "stations": [
+        [
+          -800.5143,
+          990.2423
+        ],
+        [
+          305.2846,
+          1033.2793
+        ]
+      ],
+      "bearings_deg": [
+        262.01485,
+        231.423744
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 251.70018337159104,
+      "diameter_rayA_m": 251.7001833720977,
+      "diameter_calipersB_m": 251.70018337159104,
+      "rel_dev_A_vs_MAIN": 2.0130053432174004e-12,
+      "rel_dev_B_vs_A": 2.013005343213348e-12,
+      "agree": true
+    },
+    {
+      "name": "random#67",
+      "stations": [
+        [
+          679.0945,
+          1505.0992
+        ],
+        [
+          1.6054,
+          -21.0963
+        ]
+      ],
+      "bearings_deg": [
+        213.652615,
+        152.312155
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 101.54539389928523,
+      "diameter_rayA_m": 101.54539389919752,
+      "diameter_calipersB_m": 101.54539389928523,
+      "rel_dev_A_vs_MAIN": 8.637456799785396e-13,
+      "rel_dev_B_vs_A": 8.637456799792856e-13,
+      "agree": true
+    },
+    {
+      "name": "random#68",
+      "stations": [
+        [
+          -1389.7758,
+          -516.9324
+        ],
+        [
+          -566.7515,
+          578.4539
+        ]
+      ],
+      "bearings_deg": [
+        16.179229,
+        326.095608
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 118.75448934968762,
+      "diameter_rayA_m": 118.75448934969742,
+      "diameter_calipersB_m": 118.75448934968762,
+      "rel_dev_A_vs_MAIN": 8.256942375134869e-14,
+      "rel_dev_B_vs_A": 8.256942375134188e-14,
+      "agree": true
+    },
+    {
+      "name": "random#69",
+      "stations": [
+        [
+          -720.0595,
+          1513.658
+        ],
+        [
+          1066.1245,
+          170.3285
+        ]
+      ],
+      "bearings_deg": [
+        286.545558,
+        168.706163
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 88.20766946244198,
+      "diameter_rayA_m": 88.20766946183858,
+      "diameter_calipersB_m": 88.20766946244198,
+      "rel_dev_A_vs_MAIN": 6.840755523181774e-12,
+      "rel_dev_B_vs_A": 6.84075552322857e-12,
+      "agree": true
+    },
+    {
+      "name": "random#70",
+      "stations": [
+        [
+          -1305.8666,
+          926.6629
+        ],
+        [
+          1240.696,
+          1104.7525
+        ]
+      ],
+      "bearings_deg": [
+        281.781095,
+        217.311118
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 144.9881798007607,
+      "diameter_rayA_m": 144.98817980139285,
+      "diameter_calipersB_m": 144.9881798007607,
+      "rel_dev_A_vs_MAIN": 4.360049640044721e-12,
+      "rel_dev_B_vs_A": 4.360049640025711e-12,
+      "agree": true
+    },
+    {
+      "name": "random#71",
+      "stations": [
+        [
+          -294.9583,
+          -1062.2194
+        ],
+        [
+          -469.9502,
+          871.9067
+        ]
+      ],
+      "bearings_deg": [
+        59.961225,
+        317.782999
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 69.33606746126136,
+      "diameter_rayA_m": 69.33606746097337,
+      "diameter_calipersB_m": 69.33606746126136,
+      "rel_dev_A_vs_MAIN": 4.1536417077474175e-12,
+      "rel_dev_B_vs_A": 4.15364170776467e-12,
+      "agree": true
+    },
+    {
+      "name": "random#72",
+      "stations": [
+        [
+          -792.0088,
+          -1254.555
+        ],
+        [
+          -720.7009,
+          1294.8785
+        ],
+        [
+          -51.9799,
+          -1601.8439
+        ]
+      ],
+      "bearings_deg": [
+        15.284333,
+        283.782296,
+        99.409625
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 31.712023547053033,
+      "diameter_rayA_m": 31.712023546500333,
+      "diameter_calipersB_m": 31.712023547053033,
+      "rel_dev_A_vs_MAIN": 1.7428696056074747e-11,
+      "rel_dev_B_vs_A": 1.7428696056378506e-11,
+      "agree": true
+    },
+    {
+      "name": "random#73",
+      "stations": [
+        [
+          -1051.9247,
+          337.8838
+        ],
+        [
+          837.3947,
+          -1235.8716
+        ]
+      ],
+      "bearings_deg": [
+        308.531003,
+        157.85463
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 175.22427402818263,
+      "diameter_rayA_m": 175.22427402790493,
+      "diameter_calipersB_m": 175.22427402818263,
+      "rel_dev_A_vs_MAIN": 1.5848747234633234e-12,
+      "rel_dev_B_vs_A": 1.5848747234658352e-12,
+      "agree": true
+    },
+    {
+      "name": "random#74",
+      "stations": [
+        [
+          -289.1958,
+          1476.4445
+        ],
+        [
+          26.3081,
+          1089.8682
+        ]
+      ],
+      "bearings_deg": [
+        252.383753,
+        214.960152
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 82.20439126076923,
+      "diameter_rayA_m": 82.20439126131807,
+      "diameter_calipersB_m": 82.20439126076923,
+      "rel_dev_A_vs_MAIN": 6.676497587760141e-12,
+      "rel_dev_B_vs_A": 6.676497587715566e-12,
+      "agree": true
+    },
+    {
+      "name": "random#75",
+      "stations": [
+        [
+          271.7395,
+          543.7986
+        ],
+        [
+          1241.886,
+          -181.7389
+        ]
+      ],
+      "bearings_deg": [
+        44.50496,
+        125.192655
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 47.02765692167253,
+      "diameter_rayA_m": 47.02765692179097,
+      "diameter_calipersB_m": 47.02765692167253,
+      "rel_dev_A_vs_MAIN": 2.518525828771798e-12,
+      "rel_dev_B_vs_A": 2.518525828765455e-12,
+      "agree": true
+    },
+    {
+      "name": "random#76",
+      "stations": [
+        [
+          147.6622,
+          -151.8283
+        ],
+        [
+          -605.957,
+          -1058.5819
+        ]
+      ],
+      "bearings_deg": [
+        151.976013,
+        78.801035
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 54.268878798458076,
+      "diameter_rayA_m": 54.268878798590556,
+      "diameter_calipersB_m": 54.268878798458076,
+      "rel_dev_A_vs_MAIN": 2.441190900119256e-12,
+      "rel_dev_B_vs_A": 2.441190900113297e-12,
+      "agree": true
+    },
+    {
+      "name": "random#77",
+      "stations": [
+        [
+          1210.4441,
+          -303.3647
+        ],
+        [
+          -618.2005,
+          -91.8807
+        ],
+        [
+          1405.6626,
+          -403.8141
+        ]
+      ],
+      "bearings_deg": [
+        179.298547,
+        267.374509,
+        176.538496
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 64.76147214455781,
+      "diameter_rayA_m": 64.76147214470352,
+      "diameter_calipersB_m": 64.76147214455781,
+      "rel_dev_A_vs_MAIN": 2.2498545596636853e-12,
+      "rel_dev_B_vs_A": 2.2498545596586236e-12,
+      "agree": true
+    },
+    {
+      "name": "random#78",
+      "stations": [
+        [
+          957.186,
+          -798.9225
+        ],
+        [
+          419.082,
+          -348.5567
+        ],
+        [
+          -1426.9279,
+          -582.877
+        ]
+      ],
+      "bearings_deg": [
+        307.622778,
+        316.533372,
+        350.281891
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 144.72319729625036,
+      "diameter_rayA_m": 144.72319729703742,
+      "diameter_calipersB_m": 144.72319729625036,
+      "rel_dev_A_vs_MAIN": 5.438340171103583e-12,
+      "rel_dev_B_vs_A": 5.438340171074007e-12,
+      "agree": true
+    },
+    {
+      "name": "random#79",
+      "stations": [
+        [
+          -869.7287,
+          -299.0241
+        ],
+        [
+          618.1213,
+          -1087.8066
+        ]
+      ],
+      "bearings_deg": [
+        14.05274,
+        136.108249
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 69.34345185592629,
+      "diameter_rayA_m": 69.3434518561286,
+      "diameter_calipersB_m": 69.34345185592629,
+      "rel_dev_A_vs_MAIN": 2.9174453003283264e-12,
+      "rel_dev_B_vs_A": 2.917445300319815e-12,
+      "agree": true
+    },
+    {
+      "name": "random#80",
+      "stations": [
+        [
+          567.2584,
+          1356.289
+        ],
+        [
+          -118.1389,
+          -722.0523
+        ]
+      ],
+      "bearings_deg": [
+        260.765395,
+        54.300815
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 171.3820766994765,
+      "diameter_rayA_m": 171.38207669931703,
+      "diameter_calipersB_m": 171.3820766994765,
+      "rel_dev_A_vs_MAIN": 9.305186089770612e-13,
+      "rel_dev_B_vs_A": 9.305186089779271e-13,
+      "agree": true
+    },
+    {
+      "name": "random#81",
+      "stations": [
+        [
+          -525.0769,
+          297.7438
+        ],
+        [
+          472.3916,
+          -257.3496
+        ],
+        [
+          -849.666,
+          1174.0333
+        ]
+      ],
+      "bearings_deg": [
+        235.944072,
+        174.80852,
+        271.256038
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 61.170798591178034,
+      "diameter_rayA_m": 61.1707985919502,
+      "diameter_calipersB_m": 61.170798591178034,
+      "rel_dev_A_vs_MAIN": 1.2623149035427741e-11,
+      "rel_dev_B_vs_A": 1.2623149035268397e-11,
+      "agree": true
+    },
+    {
+      "name": "random#82",
+      "stations": [
+        [
+          -1337.3789,
+          -403.3614
+        ],
+        [
+          -479.5389,
+          -694.0339
+        ]
+      ],
+      "bearings_deg": [
+        26.264739,
+        42.58161
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 637.6613364622044,
+      "diameter_rayA_m": 637.6613364621995,
+      "diameter_calipersB_m": 637.6613364622044,
+      "rel_dev_A_vs_MAIN": 7.666348487037748e-15,
+      "rel_dev_B_vs_A": 7.666348487037807e-15,
+      "agree": true
+    },
+    {
+      "name": "random#83",
+      "stations": [
+        [
+          537.9814,
+          -766.7667
+        ],
+        [
+          224.1587,
+          631.7183
+        ],
+        [
+          831.8741,
+          -1533.2495
+        ]
+      ],
+      "bearings_deg": [
+        118.275263,
+        144.240155,
+        116.27638
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 239.85286659580157,
+      "diameter_rayA_m": 239.85286659553972,
+      "diameter_calipersB_m": 239.85286659580157,
+      "rel_dev_A_vs_MAIN": 1.091707648520952e-12,
+      "rel_dev_B_vs_A": 1.0917076485221437e-12,
+      "agree": true
+    },
+    {
+      "name": "random#84",
+      "stations": [
+        [
+          1369.9787,
+          937.5193
+        ],
+        [
+          -917.5975,
+          1026.5687
+        ],
+        [
+          -955.3846,
+          -1053.5512
+        ]
+      ],
+      "bearings_deg": [
+        190.063612,
+        351.400275,
+        50.191498
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 141.17781442481876,
+      "diameter_rayA_m": 141.17781442498992,
+      "diameter_calipersB_m": 141.17781442481876,
+      "rel_dev_A_vs_MAIN": 1.2123401604367389e-12,
+      "rel_dev_B_vs_A": 1.212340160435269e-12,
+      "agree": true
+    },
+    {
+      "name": "random#85",
+      "stations": [
+        [
+          541.2172,
+          1150.3462
+        ],
+        [
+          436.0436,
+          1371.5726
+        ]
+      ],
+      "bearings_deg": [
+        259.531228,
+        269.359281
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 312.8676652244029,
+      "diameter_rayA_m": 312.8676652244766,
+      "diameter_calipersB_m": 312.8676652244029,
+      "rel_dev_A_vs_MAIN": 2.354639965455311e-13,
+      "rel_dev_B_vs_A": 2.3546399654547563e-13,
+      "agree": true
+    },
+    {
+      "name": "random#86",
+      "stations": [
+        [
+          -1250.6567,
+          133.9864
+        ],
+        [
+          1603.0646,
+          104.8981
+        ]
+      ],
+      "bearings_deg": [
+        333.680362,
+        221.198471
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 107.79065204130306,
+      "diameter_rayA_m": 107.7906520410255,
+      "diameter_calipersB_m": 107.79065204130306,
+      "rel_dev_A_vs_MAIN": 2.575050888373586e-12,
+      "rel_dev_B_vs_A": 2.575050888380217e-12,
+      "agree": true
+    },
+    {
+      "name": "random#87",
+      "stations": [
+        [
+          1103.9454,
+          -61.7174
+        ],
+        [
+          1042.0609,
+          838.3018
+        ]
+      ],
+      "bearings_deg": [
+        239.207924,
+        260.067841
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 200.03729839563806,
+      "diameter_rayA_m": 200.03729839506022,
+      "diameter_calipersB_m": 200.03729839563806,
+      "rel_dev_A_vs_MAIN": 2.888670158335552e-12,
+      "rel_dev_B_vs_A": 2.8886701583438966e-12,
+      "agree": true
+    },
+    {
+      "name": "random#88",
+      "stations": [
+        [
+          -1443.9822,
+          864.1151
+        ],
+        [
+          -932.91,
+          599.5007
+        ]
+      ],
+      "bearings_deg": [
+        336.615867,
+        337.893985
+      ],
+      "unbounded": true,
+      "n_vertices_main": 5
+    },
+    {
+      "name": "random#89",
+      "stations": [
+        [
+          846.6395,
+          -808.6512
+        ],
+        [
+          -404.5133,
+          471.0675
+        ],
+        [
+          -436.9896,
+          594.4443
+        ]
+      ],
+      "bearings_deg": [
+        164.259151,
+        237.611957,
+        242.85962
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 80.3503973674854,
+      "diameter_rayA_m": 80.35039736794917,
+      "diameter_calipersB_m": 80.3503973674854,
+      "rel_dev_A_vs_MAIN": 5.771859988564128e-12,
+      "rel_dev_B_vs_A": 5.771859988530814e-12,
+      "agree": true
+    },
+    {
+      "name": "random#90",
+      "stations": [
+        [
+          -311.7941,
+          -1224.7582
+        ],
+        [
+          1517.2892,
+          -665.1604
+        ]
+      ],
+      "bearings_deg": [
+        30.090753,
+        160.400213
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 87.5401718163275,
+      "diameter_rayA_m": 87.5401718168207,
+      "diameter_calipersB_m": 87.5401718163275,
+      "rel_dev_A_vs_MAIN": 5.634006805248371e-12,
+      "rel_dev_B_vs_A": 5.6340068052166286e-12,
+      "agree": true
+    },
+    {
+      "name": "random#91",
+      "stations": [
+        [
+          127.6585,
+          -378.6042
+        ],
+        [
+          -438.5608,
+          1527.8946
+        ]
+      ],
+      "bearings_deg": [
+        193.811547,
+        257.42635
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 111.76913906323757,
+      "diameter_rayA_m": 111.7691390632139,
+      "diameter_calipersB_m": 111.76913906323757,
+      "rel_dev_A_vs_MAIN": 2.1182308599631746e-13,
+      "rel_dev_B_vs_A": 2.1182308599636234e-13,
+      "agree": true
+    },
+    {
+      "name": "random#92",
+      "stations": [
+        [
+          823.7147,
+          -1174.6221
+        ],
+        [
+          -289.3926,
+          -1363.3264
+        ],
+        [
+          -36.2201,
+          -312.406
+        ]
+      ],
+      "bearings_deg": [
+        75.881755,
+        40.6922,
+        6.102727
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 64.89084420071407,
+      "diameter_rayA_m": 64.89084420072415,
+      "diameter_calipersB_m": 64.89084420071407,
+      "rel_dev_A_vs_MAIN": 1.5526837595013671e-13,
+      "rel_dev_B_vs_A": 1.552683759501126e-13,
+      "agree": true
+    },
+    {
+      "name": "random#93",
+      "stations": [
+        [
+          474.2759,
+          1601.7173
+        ],
+        [
+          -1528.0331,
+          -566.0689
+        ]
+      ],
+      "bearings_deg": [
+        237.612627,
+        347.163875
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 109.29064542511688,
+      "diameter_rayA_m": 109.29064542572893,
+      "diameter_calipersB_m": 109.29064542511688,
+      "rel_dev_A_vs_MAIN": 5.6001801375433734e-12,
+      "rel_dev_B_vs_A": 5.600180137512012e-12,
+      "agree": true
+    },
+    {
+      "name": "random#94",
+      "stations": [
+        [
+          1121.3806,
+          184.3065
+        ],
+        [
+          293.7025,
+          1064.3801
+        ]
+      ],
+      "bearings_deg": [
+        244.121213,
+        282.568624
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 149.93758471648215,
+      "diameter_rayA_m": 149.93758471680283,
+      "diameter_calipersB_m": 149.93758471648215,
+      "rel_dev_A_vs_MAIN": 2.1387709299814863e-12,
+      "rel_dev_B_vs_A": 2.138770929976912e-12,
+      "agree": true
+    },
+    {
+      "name": "random#95",
+      "stations": [
+        [
+          -599.177,
+          -1107.5629
+        ],
+        [
+          -1521.8433,
+          821.8414
+        ]
+      ],
+      "bearings_deg": [
+        20.281002,
+        326.808799
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 158.53871774995892,
+      "diameter_rayA_m": 158.53871775019638,
+      "diameter_calipersB_m": 158.53871774995892,
+      "rel_dev_A_vs_MAIN": 1.4978258034453354e-12,
+      "rel_dev_B_vs_A": 1.497825803443092e-12,
+      "agree": true
+    },
+    {
+      "name": "random#96",
+      "stations": [
+        [
+          -175.8643,
+          -469.0675
+        ],
+        [
+          318.4645,
+          -163.1816
+        ],
+        [
+          -946.7308,
+          391.3632
+        ]
+      ],
+      "bearings_deg": [
+        217.588258,
+        215.369485,
+        270.776036
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 93.68361075844346,
+      "diameter_rayA_m": 93.68361075881678,
+      "diameter_calipersB_m": 93.68361075844346,
+      "rel_dev_A_vs_MAIN": 3.98489287876546e-12,
+      "rel_dev_B_vs_A": 3.984892878749581e-12,
+      "agree": true
+    },
+    {
+      "name": "random#97",
+      "stations": [
+        [
+          -1332.9298,
+          722.1645
+        ],
+        [
+          -191.8881,
+          1357.507
+        ]
+      ],
+      "bearings_deg": [
+        337.460815,
+        303.753037
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 253.32819120696098,
+      "diameter_rayA_m": 253.3281912069748,
+      "diameter_calipersB_m": 253.32819120696098,
+      "rel_dev_A_vs_MAIN": 5.45259124827983e-14,
+      "rel_dev_B_vs_A": 5.4525912482795325e-14,
+      "agree": true
+    },
+    {
+      "name": "random#98",
+      "stations": [
+        [
+          -764.9456,
+          452.4609
+        ],
+        [
+          164.4119,
+          -594.3695
+        ]
+      ],
+      "bearings_deg": [
+        304.434755,
+        282.03402
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 207.03680841291376,
+      "diameter_rayA_m": 207.03680841273763,
+      "diameter_calipersB_m": 207.03680841291376,
+      "rel_dev_A_vs_MAIN": 8.507150718288782e-13,
+      "rel_dev_B_vs_A": 8.50715071829602e-13,
+      "agree": true
+    },
+    {
+      "name": "random#99",
+      "stations": [
+        [
+          358.4511,
+          -1362.7932
+        ],
+        [
+          686.05,
+          1199.4953
+        ],
+        [
+          513.1167,
+          914.4733
+        ]
+      ],
+      "bearings_deg": [
+        102.831906,
+        244.943256,
+        246.789322
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 135.38475312884628,
+      "diameter_rayA_m": 135.3847531285826,
+      "diameter_calipersB_m": 135.38475312884628,
+      "rel_dev_A_vs_MAIN": 1.9477571439992737e-12,
+      "rel_dev_B_vs_A": 1.9477571440030675e-12,
+      "agree": true
+    },
+    {
+      "name": "random#100",
+      "stations": [
+        [
+          1319.5095,
+          -293.0339
+        ],
+        [
+          1113.2254,
+          -344.3174
+        ],
+        [
+          780.6825,
+          -637.3356
+        ]
+      ],
+      "bearings_deg": [
+        164.195739,
+        143.21527,
+        78.385502
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 24.089189695707415,
+      "diameter_rayA_m": 24.089189695796772,
+      "diameter_calipersB_m": 24.089189695707415,
+      "rel_dev_A_vs_MAIN": 3.7094587064966065e-12,
+      "rel_dev_B_vs_A": 3.709458706482846e-12,
+      "agree": true
+    },
+    {
+      "name": "random#101",
+      "stations": [
+        [
+          -231.6198,
+          831.6025
+        ],
+        [
+          -433.0007,
+          -1257.6075
+        ]
+      ],
+      "bearings_deg": [
+        247.693425,
+        154.408874
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 73.37084087944092,
+      "diameter_rayA_m": 73.37084087934888,
+      "diameter_calipersB_m": 73.37084087944092,
+      "rel_dev_A_vs_MAIN": 1.2544998106482755e-12,
+      "rel_dev_B_vs_A": 1.2544998106498493e-12,
+      "agree": true
+    },
+    {
+      "name": "random#102",
+      "stations": [
+        [
+          -579.2037,
+          -1284.4136
+        ],
+        [
+          -497.7665,
+          562.1578
+        ]
+      ],
+      "bearings_deg": [
+        61.219981,
+        329.565959
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 64.53394159943296,
+      "diameter_rayA_m": 64.53394159916108,
+      "diameter_calipersB_m": 64.53394159943296,
+      "rel_dev_A_vs_MAIN": 4.213008932552691e-12,
+      "rel_dev_B_vs_A": 4.2130089325704396e-12,
+      "agree": true
+    },
+    {
+      "name": "random#103",
+      "stations": [
+        [
+          1592.5553,
+          341.3943
+        ],
+        [
+          -504.403,
+          264.923
+        ]
+      ],
+      "bearings_deg": [
+        165.064896,
+        10.835093
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 168.44000583493082,
+      "diameter_rayA_m": 168.4400058345705,
+      "diameter_calipersB_m": 168.44000583493082,
+      "rel_dev_A_vs_MAIN": 2.1390524695322276e-12,
+      "rel_dev_B_vs_A": 2.1390524695368033e-12,
+      "agree": true
+    },
+    {
+      "name": "random#104",
+      "stations": [
+        [
+          1180.7345,
+          -509.6124
+        ],
+        [
+          191.3026,
+          -1309.3899
+        ]
+      ],
+      "bearings_deg": [
+        166.919771,
+        128.842336
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 198.0741660483164,
+      "diameter_rayA_m": 198.0741660475238,
+      "diameter_calipersB_m": 198.0741660483164,
+      "rel_dev_A_vs_MAIN": 4.001655785852262e-12,
+      "rel_dev_B_vs_A": 4.0016557858682745e-12,
+      "agree": true
+    },
+    {
+      "name": "random#105",
+      "stations": [
+        [
+          -1164.8085,
+          -640.4329
+        ],
+        [
+          -597.0982,
+          1500.7852
+        ]
+      ],
+      "bearings_deg": [
+        31.37843,
+        280.540942
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 82.71980194690015,
+      "diameter_rayA_m": 82.7198019469322,
+      "diameter_calipersB_m": 82.71980194690015,
+      "rel_dev_A_vs_MAIN": 3.8739789782561727e-13,
+      "rel_dev_B_vs_A": 3.8739789782546717e-13,
+      "agree": true
+    },
+    {
+      "name": "random#106",
+      "stations": [
+        [
+          -1164.8063,
+          400.6498
+        ],
+        [
+          591.4936,
+          -774.8503
+        ],
+        [
+          550.5916,
+          -48.7502
+        ]
+      ],
+      "bearings_deg": [
+        276.527538,
+        190.661978,
+        213.532283
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 79.51828189899702,
+      "diameter_rayA_m": 79.51828189906156,
+      "diameter_calipersB_m": 79.51828189899702,
+      "rel_dev_A_vs_MAIN": 8.117089627066205e-13,
+      "rel_dev_B_vs_A": 8.117089627059616e-13,
+      "agree": true
+    },
+    {
+      "name": "random#107",
+      "stations": [
+        [
+          41.9774,
+          -526.4123
+        ],
+        [
+          -1322.9748,
+          605.9408
+        ]
+      ],
+      "bearings_deg": [
+        212.214603,
+        310.920743
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 62.615894717911154,
+      "diameter_rayA_m": 62.61589471784229,
+      "diameter_calipersB_m": 62.615894717911154,
+      "rel_dev_A_vs_MAIN": 1.0998134301220802e-12,
+      "rel_dev_B_vs_A": 1.0998134301232898e-12,
+      "agree": true
+    },
+    {
+      "name": "random#108",
+      "stations": [
+        [
+          -1545.581,
+          -356.1045
+        ],
+        [
+          337.7049,
+          -1673.8639
+        ],
+        [
+          -675.1742,
+          -981.8045
+        ]
+      ],
+      "bearings_deg": [
+        26.579368,
+        100.104701,
+        65.060422
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 111.25564652831686,
+      "diameter_rayA_m": 111.25564652819885,
+      "diameter_calipersB_m": 111.25564652831686,
+      "rel_dev_A_vs_MAIN": 1.0606826820695544e-12,
+      "rel_dev_B_vs_A": 1.0606826820706795e-12,
+      "agree": true
+    },
+    {
+      "name": "random#109",
+      "stations": [
+        [
+          -1292.0532,
+          -8.8899
+        ],
+        [
+          -235.773,
+          -1260.7686
+        ]
+      ],
+      "bearings_deg": [
+        345.546593,
+        40.976415
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 119.16715100822783,
+      "diameter_rayA_m": 119.16715100759968,
+      "diameter_calipersB_m": 119.16715100822783,
+      "rel_dev_A_vs_MAIN": 5.271152283215941e-12,
+      "rel_dev_B_vs_A": 5.271152283243726e-12,
+      "agree": true
+    },
+    {
+      "name": "random#110",
+      "stations": [
+        [
+          -1435.2671,
+          -635.5939
+        ],
+        [
+          -240.4334,
+          -324.9622
+        ]
+      ],
+      "bearings_deg": [
+        22.800732,
+        69.066393
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 75.9658224914388,
+      "diameter_rayA_m": 75.96582249159411,
+      "diameter_calipersB_m": 75.9658224914388,
+      "rel_dev_A_vs_MAIN": 2.0444777149611706e-12,
+      "rel_dev_B_vs_A": 2.0444777149569906e-12,
+      "agree": true
+    },
+    {
+      "name": "random#111",
+      "stations": [
+        [
+          -1128.3488,
+          35.6432
+        ],
+        [
+          -1312.3094,
+          33.837
+        ],
+        [
+          1380.1373,
+          -512.1241
+        ]
+      ],
+      "bearings_deg": [
+        329.585264,
+        334.891507,
+        176.386254
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 198.73413387566043,
+      "diameter_rayA_m": 198.73413387559057,
+      "diameter_calipersB_m": 198.73413387566043,
+      "rel_dev_A_vs_MAIN": 3.515277442155048e-13,
+      "rel_dev_B_vs_A": 3.515277442156284e-13,
+      "agree": true
+    },
+    {
+      "name": "random#112",
+      "stations": [
+        [
+          884.732,
+          528.7306
+        ],
+        [
+          -1097.7032,
+          927.6835
+        ]
+      ],
+      "bearings_deg": [
+        189.960714,
+        298.558364
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 74.46132893903408,
+      "diameter_rayA_m": 74.46132893921745,
+      "diameter_calipersB_m": 74.46132893903408,
+      "rel_dev_A_vs_MAIN": 2.4627128182886476e-12,
+      "rel_dev_B_vs_A": 2.4627128182825827e-12,
+      "agree": true
+    },
+    {
+      "name": "random#113",
+      "stations": [
+        [
+          270.1915,
+          615.8538
+        ],
+        [
+          1298.9637,
+          486.1722
+        ]
+      ],
+      "bearings_deg": [
+        232.381988,
+        193.522818
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 106.83541935142539,
+      "diameter_rayA_m": 106.83541935203982,
+      "diameter_calipersB_m": 106.83541935142539,
+      "rel_dev_A_vs_MAIN": 5.751226784630872e-12,
+      "rel_dev_B_vs_A": 5.751226784597795e-12,
+      "agree": true
+    },
+    {
+      "name": "random#114",
+      "stations": [
+        [
+          -625.1278,
+          -204.8064
+        ],
+        [
+          -105.6683,
+          446.7094
+        ],
+        [
+          1007.5209,
+          310.8272
+        ]
+      ],
+      "bearings_deg": [
+        81.445889,
+        114.989803,
+        150.215174
+      ],
+      "n_vertices_main": 6,
+      "n_vertices_rayA": 6,
+      "diameter_main_m": 92.99758202576079,
+      "diameter_rayA_m": 92.99758202580014,
+      "diameter_calipersB_m": 92.99758202576079,
+      "rel_dev_A_vs_MAIN": 4.2312773998246796e-13,
+      "rel_dev_B_vs_A": 4.2312773998228894e-13,
+      "agree": true
+    },
+    {
+      "name": "random#115",
+      "stations": [
+        [
+          -126.7804,
+          184.6757
+        ],
+        [
+          992.1805,
+          1345.981
+        ]
+      ],
+      "bearings_deg": [
+        337.394758,
+        241.681361
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 56.56234409641065,
+      "diameter_rayA_m": 56.56234409548386,
+      "diameter_calipersB_m": 56.56234409641065,
+      "rel_dev_A_vs_MAIN": 1.63852705676698e-11,
+      "rel_dev_B_vs_A": 1.6385270567938277e-11,
+      "agree": true
+    },
+    {
+      "name": "random#116",
+      "stations": [
+        [
+          -1059.9858,
+          357.0198
+        ],
+        [
+          4.6488,
+          1556.256
+        ]
+      ],
+      "bearings_deg": [
+        354.82132,
+        305.215722
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 156.17727099805947,
+      "diameter_rayA_m": 156.17727099862807,
+      "diameter_calipersB_m": 156.17727099805947,
+      "rel_dev_A_vs_MAIN": 3.640764851575154e-12,
+      "rel_dev_B_vs_A": 3.640764851561899e-12,
+      "agree": true
+    },
+    {
+      "name": "random#117",
+      "stations": [
+        [
+          -532.3116,
+          728.6729
+        ],
+        [
+          15.4666,
+          -1113.2997
+        ]
+      ],
+      "bearings_deg": [
+        151.333625,
+        115.028255
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 158.792778180294,
+      "diameter_rayA_m": 158.79277818038705,
+      "diameter_calipersB_m": 158.792778180294,
+      "rel_dev_A_vs_MAIN": 5.860006842974327e-13,
+      "rel_dev_B_vs_A": 5.860006842970893e-13,
+      "agree": true
+    },
+    {
+      "name": "random#118",
+      "stations": [
+        [
+          81.8331,
+          373.3384
+        ],
+        [
+          -462.7469,
+          1420.9851
+        ]
+      ],
+      "bearings_deg": [
+        62.646465,
+        345.831473
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 53.37449635739808,
+      "diameter_rayA_m": 53.374496357046745,
+      "diameter_calipersB_m": 53.37449635739808,
+      "rel_dev_A_vs_MAIN": 6.5824501419438996e-12,
+      "rel_dev_B_vs_A": 6.582450141987228e-12,
+      "agree": true
+    },
+    {
+      "name": "random#119",
+      "stations": [
+        [
+          332.8119,
+          983.3716
+        ],
+        [
+          500.8382,
+          -1475.8997
+        ]
+      ],
+      "bearings_deg": [
+        248.081652,
+        123.488018
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 104.5037399533525,
+      "diameter_rayA_m": 104.50373995314861,
+      "diameter_calipersB_m": 104.5037399533525,
+      "rel_dev_A_vs_MAIN": 1.9509649385755073e-12,
+      "rel_dev_B_vs_A": 1.9509649385793136e-12,
+      "agree": true
+    },
+    {
+      "name": "random#120",
+      "stations": [
+        [
+          -843.2143,
+          1195.3253
+        ],
+        [
+          1578.9941,
+          349.1828
+        ]
+      ],
+      "bearings_deg": [
+        303.79657,
+        203.344204
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 91.05417877534335,
+      "diameter_rayA_m": 91.05417877507625,
+      "diameter_calipersB_m": 91.05417877534335,
+      "rel_dev_A_vs_MAIN": 2.9333416430147197e-12,
+      "rel_dev_B_vs_A": 2.9333416430233243e-12,
+      "agree": true
+    },
+    {
+      "name": "random#121",
+      "stations": [
+        [
+          -1219.1435,
+          -510.6093
+        ],
+        [
+          1590.1681,
+          674.8319
+        ]
+      ],
+      "bearings_deg": [
+        40.882419,
+        193.45852
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 231.05034459857032,
+      "diameter_rayA_m": 231.05034459896441,
+      "diameter_calipersB_m": 231.05034459857032,
+      "rel_dev_A_vs_MAIN": 1.7056690551433202e-12,
+      "rel_dev_B_vs_A": 1.705669055140411e-12,
+      "agree": true
+    },
+    {
+      "name": "random#122",
+      "stations": [
+        [
+          -1411.9554,
+          200.335
+        ],
+        [
+          487.8771,
+          -583.1797
+        ]
+      ],
+      "bearings_deg": [
+        29.984624,
+        141.807884
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 77.25707948505053,
+      "diameter_rayA_m": 77.25707948553912,
+      "diameter_calipersB_m": 77.25707948505053,
+      "rel_dev_A_vs_MAIN": 6.324308530360902e-12,
+      "rel_dev_B_vs_A": 6.324308530320905e-12,
+      "agree": true
+    },
+    {
+      "name": "random#123",
+      "stations": [
+        [
+          811.8339,
+          630.4091
+        ],
+        [
+          89.7374,
+          496.4844
+        ]
+      ],
+      "bearings_deg": [
+        158.484259,
+        42.610013
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 28.486193660332063,
+      "diameter_rayA_m": 28.48619366033178,
+      "diameter_calipersB_m": 28.486193660332063,
+      "rel_dev_A_vs_MAIN": 9.97736298829638e-15,
+      "rel_dev_B_vs_A": 9.977362988296479e-15,
+      "agree": true
+    },
+    {
+      "name": "random#124",
+      "stations": [
+        [
+          -649.8554,
+          1533.9757
+        ],
+        [
+          -538.11,
+          904.9311
+        ]
+      ],
+      "bearings_deg": [
+        283.989572,
+        285.160458
+      ],
+      "unbounded": true,
+      "n_vertices_main": 5
+    },
+    {
+      "name": "random#125",
+      "stations": [
+        [
+          811.3896,
+          90.2075
+        ],
+        [
+          550.5594,
+          1279.7354
+        ]
+      ],
+      "bearings_deg": [
+        179.621209,
+        245.805432
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 67.72954334491057,
+      "diameter_rayA_m": 67.72954334466549,
+      "diameter_calipersB_m": 67.72954334491057,
+      "rel_dev_A_vs_MAIN": 3.6185154707202075e-12,
+      "rel_dev_B_vs_A": 3.618515470733301e-12,
+      "agree": true
+    },
+    {
+      "name": "random#126",
+      "stations": [
+        [
+          -1148.3595,
+          1126.5732
+        ],
+        [
+          921.7326,
+          1050.7486
+        ],
+        [
+          -1137.1668,
+          -211.9104
+        ]
+      ],
+      "bearings_deg": [
+        280.470498,
+        216.691123,
+        341.551316
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 63.53784574268573,
+      "diameter_rayA_m": 63.5378457425413,
+      "diameter_calipersB_m": 63.53784574268573,
+      "rel_dev_A_vs_MAIN": 2.2731652326217263e-12,
+      "rel_dev_B_vs_A": 2.2731652326268934e-12,
+      "agree": true
+    },
+    {
+      "name": "random#127",
+      "stations": [
+        [
+          1596.6013,
+          376.0244
+        ],
+        [
+          858.13,
+          964.9212
+        ]
+      ],
+      "bearings_deg": [
+        175.509057,
+        200.300446
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 261.34390645756747,
+      "diameter_rayA_m": 261.3439064583906,
+      "diameter_calipersB_m": 261.34390645756747,
+      "rel_dev_A_vs_MAIN": 3.1496795149383355e-12,
+      "rel_dev_B_vs_A": 3.149679514928415e-12,
+      "agree": true
+    },
+    {
+      "name": "random#128",
+      "stations": [
+        [
+          1049.3212,
+          -105.3469
+        ],
+        [
+          1139.3855,
+          -449.3407
+        ]
+      ],
+      "bearings_deg": [
+        199.985263,
+        180.429879
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 216.7814816257573,
+      "diameter_rayA_m": 216.78148162666182,
+      "diameter_calipersB_m": 216.7814816257573,
+      "rel_dev_A_vs_MAIN": 4.172500786686824e-12,
+      "rel_dev_B_vs_A": 4.172500786669414e-12,
+      "agree": true
+    },
+    {
+      "name": "random#129",
+      "stations": [
+        [
+          -741.9761,
+          -401.6337
+        ],
+        [
+          93.3633,
+          1585.3117
+        ],
+        [
+          1077.4302,
+          1024.2814
+        ]
+      ],
+      "bearings_deg": [
+        9.234664,
+        302.518151,
+        274.366044
+      ],
+      "n_vertices_main": 4,
+      "n_vertices_rayA": 4,
+      "diameter_main_m": 80.96564523937192,
+      "diameter_rayA_m": 80.96564523921369,
+      "diameter_calipersB_m": 80.96564523937192,
+      "rel_dev_A_vs_MAIN": 1.954382834669568e-12,
+      "rel_dev_B_vs_A": 1.9543828346733878e-12,
+      "agree": true
+    }
+  ]
+}

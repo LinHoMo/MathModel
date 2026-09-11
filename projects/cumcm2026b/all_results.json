@@ -22,12 +22,11 @@
     "cover_radii_dir": [
       450.0,
       1350.0,
-      1200.0,
-      1799.0
+      2000.0
     ],
     "cover_step": 500.0,
     "cover_step_mid": 900.0,
-    "cover_step_dir": 450.0
+    "cover_step_dir": 1050.0
   },
   "summary": {
     "problem1": {
@@ -145,17 +144,17 @@
       "mean_cleared_fraction": 1.0,
       "min_cleared_fraction": 1.0,
       "all_cleared": true,
-      "mean_total_time_s": 11667.901578951569,
-      "std_total_time_s": 368.7700468485649,
-      "mean_locate_clear_time_s": 9316.51671396138,
-      "std_locate_clear_time_s": 429.8274458835591,
-      "mean_time_per_source_s": 969.5169789276666
+      "mean_total_time_s": 9583.33199313128,
+      "std_total_time_s": 1586.741550612239,
+      "mean_locate_clear_time_s": 6956.679015589991,
+      "std_locate_clear_time_s": 691.0224415256897,
+      "mean_time_per_source_s": 799.5485210230502
     }
   },
   "validations": {
     "n_samples": 20000,
     "omni_miss_ratio": 0.0,
-    "dir_miss_ratio": 0.00025,
+    "dir_miss_ratio": 0.0,
     "omni_cover_radii": [
       450.0,
       1350.0
@@ -163,8 +162,7 @@
     "dir_cover_radii": [
       450.0,
       1350.0,
-      1200.0,
-      1799.0
+      2000.0
     ]
   },
   "real_protocol_mock": {
@@ -172,12 +170,18 @@
     "n_trials": 5,
     "q3_mean_cleared_fraction": 1.0,
     "q3_min_cleared_fraction": 1.0,
-    "q3_mean_total_time_s": 7522.628557999999,
-    "q3_mean_locate_clear_time_s": 5032.3802722643595,
+    "q3_mean_total_time_s": 6597.8921928,
+    "q3_mean_locate_clear_time_s": 4485.058022785129,
+    "q3_mean_avg_locate_clear_time_s": 558.4760205671795,
+    "q3_mean_n_measure": 332.8,
+    "q3_mean_move_dist_m": 22745.46096441315,
     "q4_mean_cleared_fraction": 1.0,
     "q4_min_cleared_fraction": 1.0,
-    "q4_mean_total_time_s": 15043.081435999999,
-    "q4_mean_locate_clear_time_s": 11315.32772759077
+    "q4_mean_total_time_s": 10622.8961182,
+    "q4_mean_locate_clear_time_s": 7637.888848981282,
+    "q4_mean_avg_locate_clear_time_s": 897.0488028746155,
+    "q4_mean_n_measure": 516.8,
+    "q4_mean_move_dist_m": 37351.48059111526
   },
   "problem1_v2": {
     "cases": [
