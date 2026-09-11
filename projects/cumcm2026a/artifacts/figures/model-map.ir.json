@@ -1,0 +1,195 @@
+{
+  "edges": [
+    {
+      "from": "Q",
+      "label": "bound_by",
+      "to": "A"
+    },
+    {
+      "from": "Q",
+      "label": "bound_by",
+      "to": "P"
+    },
+    {
+      "from": "A",
+      "label": "defines",
+      "to": "V"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME01"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME02"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME03"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME04"
+    },
+    {
+      "from": "ME01",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "ME02",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "ME03",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "ME04",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "EQ",
+      "label": "constrained_by",
+      "to": "CT"
+    },
+    {
+      "from": "CT",
+      "label": "shapes",
+      "to": "OB"
+    },
+    {
+      "from": "OB",
+      "label": "solved_by",
+      "to": "SV"
+    },
+    {
+      "from": "SV",
+      "label": "executed_in",
+      "to": "EX"
+    },
+    {
+      "from": "EX",
+      "label": "verified_by",
+      "to": "VA"
+    },
+    {
+      "from": "VA",
+      "label": "supports",
+      "to": "CL"
+    }
+  ],
+  "kind": "model_map",
+  "legend": [
+    "L1 语义层",
+    "L2 数学层",
+    "L3 计算层"
+  ],
+  "nodes": [
+    {
+      "detail": "problem",
+      "group": "L1 语义层",
+      "id": "Q",
+      "label": "problem 2026_A (Q1..Q4)"
+    },
+    {
+      "detail": "assumption",
+      "group": "L1 语义层",
+      "id": "A",
+      "label": "assumptions A01-A08"
+    },
+    {
+      "detail": "parameter",
+      "group": "L1 语义层",
+      "id": "P",
+      "label": "parameters P01-P12"
+    },
+    {
+      "detail": "variable",
+      "group": "L1 语义层",
+      "id": "V",
+      "label": "variables V01-V10"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME01",
+      "label": "径向一维耦合传热传质"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME02",
+      "label": "强非线性水分扩散"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME03",
+      "label": "两阶段工艺参数切换"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME04",
+      "label": "Landau 变换移动边界"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME05",
+      "label": "半隐式三对角求解"
+    },
+    {
+      "detail": "equation",
+      "group": "L2 数学层",
+      "id": "EQ",
+      "label": "equations E01-E08"
+    },
+    {
+      "detail": "constraint",
+      "group": "L2 数学层",
+      "id": "CT",
+      "label": "constraints C01-C06"
+    },
+    {
+      "detail": "objective",
+      "group": "L2 数学层",
+      "id": "OB",
+      "label": "objectives O01-O04"
+    },
+    {
+      "detail": "solver",
+      "group": "L3 计算层",
+      "id": "SV",
+      "label": "solvers S01-S03"
+    },
+    {
+      "detail": "experiment",
+      "group": "L3 计算层",
+      "id": "EX",
+      "label": "experiments EXP01-EXP04"
+    },
+    {
+      "detail": "validation",
+      "group": "L3 计算层",
+      "id": "VA",
+      "label": "validations V01-V05"
+    },
+    {
+      "detail": "claim",
+      "group": "L3 计算层",
+      "id": "CL",
+      "label": "claims CL01-CL05"
+    }
+  ],
+  "schema_version": "1.0",
+  "title": "圆柱形药材热风烘干的径向耦合传热-传质 PDE 模型（含移动边界）"
+}

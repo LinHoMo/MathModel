@@ -1,0 +1,356 @@
+{
+  "edges": [
+    {
+      "from": "MH-PROBLEM-0001",
+      "kind": "evidence",
+      "label": "motivates",
+      "to": "Q1"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "kind": "evidence",
+      "label": "motivates",
+      "to": "Q2"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "kind": "evidence",
+      "label": "motivates",
+      "to": "Q3"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "kind": "evidence",
+      "label": "motivates",
+      "to": "Q4"
+    },
+    {
+      "from": "Q1",
+      "kind": "evidence",
+      "label": "solved_by",
+      "to": "MH-MODEL-0001"
+    },
+    {
+      "from": "Q2",
+      "kind": "evidence",
+      "label": "solved_by",
+      "to": "MH-MODEL-0001"
+    },
+    {
+      "from": "Q3",
+      "kind": "evidence",
+      "label": "solved_by",
+      "to": "MH-MODEL-0001"
+    },
+    {
+      "from": "Q4",
+      "kind": "evidence",
+      "label": "solved_by",
+      "to": "MH-MODEL-0001"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "kind": "evidence",
+      "label": "derived_from",
+      "to": "MH-MODEL_IR-0001"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "kind": "evidence",
+      "label": "assumes",
+      "to": "MH-ASSUMPTION-0001"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "kind": "evidence",
+      "label": "implemented_by",
+      "to": "MH-CODE-0001"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "kind": "evidence",
+      "label": "validated_by",
+      "to": "MH-EXPERIMENT-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "kind": "evidence",
+      "label": "tests",
+      "to": "MH-MODEL-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "kind": "evidence",
+      "label": "uses",
+      "to": "MH-CODE-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0001",
+      "kind": "evidence",
+      "label": "produces",
+      "to": "MH-RESULT-0001"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "kind": "evidence",
+      "label": "validated_by",
+      "to": "MH-EXPERIMENT-0002"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "kind": "evidence",
+      "label": "tests",
+      "to": "MH-MODEL-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "kind": "evidence",
+      "label": "uses",
+      "to": "MH-CODE-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0002",
+      "kind": "evidence",
+      "label": "produces",
+      "to": "MH-RESULT-0002"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "kind": "evidence",
+      "label": "validated_by",
+      "to": "MH-EXPERIMENT-0003"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "kind": "evidence",
+      "label": "tests",
+      "to": "MH-MODEL-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "kind": "evidence",
+      "label": "uses",
+      "to": "MH-CODE-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0003",
+      "kind": "evidence",
+      "label": "produces",
+      "to": "MH-RESULT-0003"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "kind": "evidence",
+      "label": "validated_by",
+      "to": "MH-EXPERIMENT-0004"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "kind": "evidence",
+      "label": "tests",
+      "to": "MH-MODEL-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "kind": "evidence",
+      "label": "uses",
+      "to": "MH-CODE-0001"
+    },
+    {
+      "from": "MH-EXPERIMENT-0004",
+      "kind": "evidence",
+      "label": "produces",
+      "to": "MH-RESULT-0004"
+    },
+    {
+      "from": "MH-RESULT-0001",
+      "kind": "evidence",
+      "label": "supports",
+      "to": "MH-CLAIM-0001"
+    },
+    {
+      "from": "MH-RESULT-0002",
+      "kind": "evidence",
+      "label": "supports",
+      "to": "MH-CLAIM-0002"
+    },
+    {
+      "from": "MH-RESULT-0003",
+      "kind": "evidence",
+      "label": "supports",
+      "to": "MH-CLAIM-0003"
+    },
+    {
+      "from": "MH-RESULT-0004",
+      "kind": "evidence",
+      "label": "supports",
+      "to": "MH-CLAIM-0004"
+    },
+    {
+      "from": "MH-RESULT-0001",
+      "kind": "evidence",
+      "label": "supports",
+      "to": "MH-CLAIM-0005"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "kind": "evidence",
+      "label": "derived_from",
+      "to": "MH-DELIVERABLE-0001"
+    }
+  ],
+  "kind": "evidence_graph",
+  "legend": [
+    "problem",
+    "question",
+    "assumption",
+    "model",
+    "code",
+    "experiment",
+    "result",
+    "claim",
+    "deliverable"
+  ],
+  "nodes": [
+    {
+      "detail": "problem",
+      "group": "problem",
+      "id": "MH-PROBLEM-0001",
+      "label": "MH-PROBLEM-0001"
+    },
+    {
+      "detail": "question",
+      "group": "question",
+      "id": "Q1",
+      "label": "Q1"
+    },
+    {
+      "detail": "question",
+      "group": "question",
+      "id": "Q2",
+      "label": "Q2"
+    },
+    {
+      "detail": "question",
+      "group": "question",
+      "id": "Q3",
+      "label": "Q3"
+    },
+    {
+      "detail": "question",
+      "group": "question",
+      "id": "Q4",
+      "label": "Q4"
+    },
+    {
+      "detail": "assumption",
+      "group": "assumption",
+      "id": "MH-ASSUMPTION-0001",
+      "label": "MH-ASSUMPTION-0001"
+    },
+    {
+      "detail": "model",
+      "group": "model",
+      "id": "MH-MODEL-0001",
+      "label": "MH-MODEL-0001"
+    },
+    {
+      "detail": "model",
+      "group": "model",
+      "id": "MH-MODEL_IR-0001",
+      "label": "MH-MODEL_IR-0001"
+    },
+    {
+      "detail": "code",
+      "group": "code",
+      "id": "MH-CODE-0001",
+      "label": "MH-CODE-0001"
+    },
+    {
+      "detail": "experiment",
+      "group": "experiment",
+      "id": "MH-EXPERIMENT-0001",
+      "label": "MH-EXPERIMENT-0001"
+    },
+    {
+      "detail": "experiment",
+      "group": "experiment",
+      "id": "MH-EXPERIMENT-0002",
+      "label": "MH-EXPERIMENT-0002"
+    },
+    {
+      "detail": "experiment",
+      "group": "experiment",
+      "id": "MH-EXPERIMENT-0003",
+      "label": "MH-EXPERIMENT-0003"
+    },
+    {
+      "detail": "experiment",
+      "group": "experiment",
+      "id": "MH-EXPERIMENT-0004",
+      "label": "MH-EXPERIMENT-0004"
+    },
+    {
+      "detail": "result",
+      "group": "result",
+      "id": "MH-RESULT-0001",
+      "label": "MH-RESULT-0001"
+    },
+    {
+      "detail": "result",
+      "group": "result",
+      "id": "MH-RESULT-0002",
+      "label": "MH-RESULT-0002"
+    },
+    {
+      "detail": "result",
+      "group": "result",
+      "id": "MH-RESULT-0003",
+      "label": "MH-RESULT-0003"
+    },
+    {
+      "detail": "result",
+      "group": "result",
+      "id": "MH-RESULT-0004",
+      "label": "MH-RESULT-0004"
+    },
+    {
+      "detail": "claim",
+      "group": "claim",
+      "id": "MH-CLAIM-0001",
+      "label": "MH-CLAIM-0001"
+    },
+    {
+      "detail": "claim",
+      "group": "claim",
+      "id": "MH-CLAIM-0002",
+      "label": "MH-CLAIM-0002"
+    },
+    {
+      "detail": "claim",
+      "group": "claim",
+      "id": "MH-CLAIM-0003",
+      "label": "MH-CLAIM-0003"
+    },
+    {
+      "detail": "claim",
+      "group": "claim",
+      "id": "MH-CLAIM-0004",
+      "label": "MH-CLAIM-0004"
+    },
+    {
+      "detail": "claim",
+      "group": "claim",
+      "id": "MH-CLAIM-0005",
+      "label": "MH-CLAIM-0005"
+    },
+    {
+      "detail": "deliverable",
+      "group": "deliverable",
+      "id": "MH-DELIVERABLE-0001",
+      "label": "MH-DELIVERABLE-0001"
+    }
+  ],
+  "schema_version": "1.0",
+  "title": "cumcm2026a · Evidence Graph"
+}

@@ -1,0 +1,216 @@
+{
+  "edges": [
+    {
+      "from": "Q",
+      "label": "bound_by",
+      "to": "A"
+    },
+    {
+      "from": "Q",
+      "label": "bound_by",
+      "to": "P"
+    },
+    {
+      "from": "A",
+      "label": "defines",
+      "to": "V"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME01"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME02"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME03"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME04"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME05"
+    },
+    {
+      "from": "V",
+      "label": "instantiated_in",
+      "to": "ME06"
+    },
+    {
+      "from": "ME01",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "ME02",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "ME03",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "ME04",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "ME05",
+      "label": "formalized_by",
+      "to": "EQ"
+    },
+    {
+      "from": "EQ",
+      "label": "constrained_by",
+      "to": "CT"
+    },
+    {
+      "from": "CT",
+      "label": "shapes",
+      "to": "OB"
+    },
+    {
+      "from": "OB",
+      "label": "solved_by",
+      "to": "SV"
+    },
+    {
+      "from": "SV",
+      "label": "executed_in",
+      "to": "EX"
+    },
+    {
+      "from": "EX",
+      "label": "verified_by",
+      "to": "VA"
+    },
+    {
+      "from": "VA",
+      "label": "supports",
+      "to": "CL"
+    }
+  ],
+  "kind": "model_map",
+  "legend": [
+    "L1 语义层",
+    "L2 数学层",
+    "L3 计算层"
+  ],
+  "nodes": [
+    {
+      "detail": "problem",
+      "group": "L1 语义层",
+      "id": "Q",
+      "label": "problem 2026_B (Q1..Q4)"
+    },
+    {
+      "detail": "assumption",
+      "group": "L1 语义层",
+      "id": "A",
+      "label": "assumptions A01-A10"
+    },
+    {
+      "detail": "parameter",
+      "group": "L1 语义层",
+      "id": "P",
+      "label": "parameters P01-P17"
+    },
+    {
+      "detail": "variable",
+      "group": "L1 语义层",
+      "id": "V",
+      "label": "variables V01-V13"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME01",
+      "label": "楔形交会定位"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME02",
+      "label": "直径与最小包围圆"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME03",
+      "label": "GDOP 与第二点最优集"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME04",
+      "label": "同心环覆盖搜索"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME05",
+      "label": "交会-归航双机制定位"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME06",
+      "label": "离散事件时间计价"
+    },
+    {
+      "detail": "equation",
+      "group": "L2 数学层",
+      "id": "EQ",
+      "label": "equations E01-E09"
+    },
+    {
+      "detail": "constraint",
+      "group": "L2 数学层",
+      "id": "CT",
+      "label": "constraints C01-C08"
+    },
+    {
+      "detail": "objective",
+      "group": "L2 数学层",
+      "id": "OB",
+      "label": "objectives O01-O04"
+    },
+    {
+      "detail": "solver",
+      "group": "L3 计算层",
+      "id": "SV",
+      "label": "solvers S01-S06"
+    },
+    {
+      "detail": "experiment",
+      "group": "L3 计算层",
+      "id": "EX",
+      "label": "experiments EXP01-EXP05"
+    },
+    {
+      "detail": "validation",
+      "group": "L3 计算层",
+      "id": "VA",
+      "label": "validations V01-V05"
+    },
+    {
+      "detail": "claim",
+      "group": "L3 计算层",
+      "id": "CL",
+      "label": "claims CL01-CL06"
+    }
+  ],
+  "schema_version": "1.0",
+  "title": "无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型"
+}

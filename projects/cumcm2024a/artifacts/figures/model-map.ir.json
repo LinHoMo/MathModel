@@ -1,0 +1,191 @@
+{
+  "edges": [
+    {
+      "from": "Q",
+      "label": "assumes",
+      "to": "A"
+    },
+    {
+      "from": "Q",
+      "label": "defines",
+      "to": "P"
+    },
+    {
+      "from": "A",
+      "label": "constrains",
+      "to": "CT"
+    },
+    {
+      "from": "P",
+      "label": "feeds",
+      "to": "EQ"
+    },
+    {
+      "from": "V",
+      "label": "defines",
+      "to": "EQ"
+    },
+    {
+      "from": "ME01",
+      "label": "governs",
+      "to": "EQ"
+    },
+    {
+      "from": "ME02",
+      "label": "governs",
+      "to": "EQ"
+    },
+    {
+      "from": "ME03",
+      "label": "feeds",
+      "to": "ME04"
+    },
+    {
+      "from": "ME04",
+      "label": "governs",
+      "to": "OB"
+    },
+    {
+      "from": "ME05",
+      "label": "governs",
+      "to": "OB"
+    },
+    {
+      "from": "ME06",
+      "label": "governs",
+      "to": "OB"
+    },
+    {
+      "from": "EQ",
+      "label": "implemented_by",
+      "to": "SV"
+    },
+    {
+      "from": "SV",
+      "label": "produces",
+      "to": "EX"
+    },
+    {
+      "from": "EX",
+      "label": "validated_by",
+      "to": "VA"
+    },
+    {
+      "from": "VA",
+      "label": "supports",
+      "to": "CL"
+    }
+  ],
+  "kind": "model_map",
+  "legend": [
+    "L1 语义层",
+    "L2 数学层",
+    "L3 计算层"
+  ],
+  "nodes": [
+    {
+      "detail": "problem",
+      "group": "L1 语义层",
+      "id": "Q",
+      "label": "problem 2024_A (Q1..Q5)"
+    },
+    {
+      "detail": "assumption",
+      "group": "L1 语义层",
+      "id": "A",
+      "label": "assumptions A01-A10"
+    },
+    {
+      "detail": "parameter",
+      "group": "L1 语义层",
+      "id": "P",
+      "label": "parameters P01-P17"
+    },
+    {
+      "detail": "variable",
+      "group": "L1 语义层",
+      "id": "V",
+      "label": "variables V01-V15"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME01",
+      "label": "刚性折线链运动学"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME02",
+      "label": "螺线弧长参数化"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME03",
+      "label": "离散多边形间隙振荡"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME04",
+      "label": "板体碰撞机械判定"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME05",
+      "label": "两段相切圆弧调头"
+    },
+    {
+      "detail": "mechanism",
+      "group": "L2 数学层",
+      "id": "ME06",
+      "label": "弧长速率传递"
+    },
+    {
+      "detail": "equation",
+      "group": "L2 数学层",
+      "id": "EQ",
+      "label": "equations E01-E12"
+    },
+    {
+      "detail": "constraint",
+      "group": "L2 数学层",
+      "id": "CT",
+      "label": "constraints C01-C10"
+    },
+    {
+      "detail": "objective",
+      "group": "L2 数学层",
+      "id": "OB",
+      "label": "objectives O01-O05"
+    },
+    {
+      "detail": "solver",
+      "group": "L3 计算层",
+      "id": "SV",
+      "label": "solvers S01-S07"
+    },
+    {
+      "detail": "experiment",
+      "group": "L3 计算层",
+      "id": "EX",
+      "label": "experiments EXP01-EXP05"
+    },
+    {
+      "detail": "validation",
+      "group": "L3 计算层",
+      "id": "VA",
+      "label": "validations V01-V09"
+    },
+    {
+      "detail": "claim",
+      "group": "L3 计算层",
+      "id": "CL",
+      "label": "claims CL01-CL08"
+    }
+  ],
+  "schema_version": "1.0",
+  "title": "板凳龙盘入/调头运动的刚性链-曲线约束运动学模型"
+}

@@ -16,6 +16,7 @@
 | 模型描述文档 | `model.md`（含 Mermaid） | 已生成 |
 | 数值结果台账 | 结果 JSON（项目根） | 已生成 |
 | 执行证据 | `artifacts/results/` | 已生成 |
+| 模型图表（人看） | `artifacts/figures/model-map.html` + `evidence-graph.html` | 已生成（`mh diagram project cumcm2026a`） |
 | 运行状态 | `state/`（registry / evidence_graph / decision_log / status） | 已初始化 |
 
 ## 目录索引（V3）
@@ -24,7 +25,7 @@
 |------|------|
 | `inputs/` | 赛题原文（唯一输入） |
 | `state/` | runtime 状态 |
-| `artifacts/` | Artifact Registry 落盘区（code/results） |
+| `artifacts/` | Artifact Registry 落盘区（code/results/figures） |
 | `model/` | 交接文档与附加说明 |
 
 > 交付物统一位于**项目根目录**，与 V3 校验契约一致（不在 `model/` 子目录）。

@@ -18,6 +18,7 @@
 | 模型描述 | `model.md` | 已生成（含 Mermaid） |
 | 分问结果 | `artifacts/results/result{1..5}.xlsx` | 已生成 |
 | 实现代码 | `artifacts/code/` | 已生成 |
+| 模型图表（人看） | `artifacts/figures/model-map.html` + `evidence-graph.html` | 已生成（`mh diagram project cumcm2024a`） |
 | 运行状态 | `state/` | 已初始化（registry / evidence_graph / decision_log / status） |
 
 ## 目录说明（V3）
@@ -26,7 +27,7 @@
 |------|------|
 | `inputs/` | 赛题原文（唯一输入，规范名 `problem.txt`） |
 | `state/` | runtime 状态：registry / evidence_graph / decision_log / status + runs/ |
-| `artifacts/` | Artifact Registry 落盘区：`code/`（实现）、`results/`（结果） |
+| `artifacts/` | Artifact Registry 落盘区：`code/`（实现）、`results/`（结果）、`figures/`（模型图表） |
 | `model/` | 目录说明（MODEL_IR 与模型描述文档按门禁口径置于项目根） |
 
 ## 结果速查

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型</title>
+<style>:root{color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;
+  font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif;
+  background:#ffffff;color:#102027}
+header h1{margin:0 0 4px;font-size:20px;color:#1a237e}
+header .meta{margin:0;font-size:12px;color:#607d8b}
+.canvas{margin:16px 0;overflow:auto;border:1px solid #e0e6ec;border-radius:10px;background:#fff}
+footer{margin-top:16px;font-size:11px;color:#90a4ae}
+footer code{background:#f4f7fa;padding:1px 5px;border-radius:4px}
+@media (prefers-color-scheme:dark){
+body{background:#0f1419;color:#eceff1}
+header h1{color:#90caf9}
+header .meta{color:#90a4ae}
+.canvas{background:#0f1419;border-color:#22303c}
+footer{color:#78909c}
+footer code{background:#1b232b}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型</h1>
+<p class="meta">kind = model_map · 17 节点 / 20 边</p>
+</header>
+<div class="canvas"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2008 428" width="2008" height="428" role="img" aria-label="无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型"><style>:root{color-scheme:light dark}
+text{font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Arial,sans-serif}
+.bg{fill:#ffffff}
+.title{fill:#1a237e;font-size:18px;font-weight:700}
+.subtitle{fill:#78909c;font-size:11px}
+.layer-band{fill:#f4f7fa}
+.layer-band.alt{fill:#eaeff5}
+.layer-title{fill:#546e7a;font-size:12px;font-weight:600}
+.shape{stroke-width:1.6}
+.shape.layer-0{fill:#e3f2fd;stroke:#1565c0}
+.shape.layer-1{fill:#e8f5e9;stroke:#2e7d32}
+.shape.layer-2{fill:#fff3e0;stroke:#ef6c00}
+.shape.layer-3{fill:#f3e5f5;stroke:#6a1b9a}
+.shape.layer-4{fill:#e0f7fa;stroke:#00838f}
+.shape.layer-5{fill:#fbe9e7;stroke:#bf360c}
+.node .label{fill:#102027;font-size:12px}
+.node .detail{fill:#607d8b;font-size:10px}
+.node.emphasis .shape{stroke-width:2.8;stroke:#c62828}
+.node.muted .shape{opacity:.5}
+.node.dashed .shape{stroke-dasharray:5 3}
+.edge{fill:none;stroke:#90a4ae;stroke-width:1.4}
+.edge.dependency{stroke:#7e57c2;stroke-dasharray:4 3}
+.edge.evidence{stroke:#2e7d32}
+.edge.reference{stroke:#b0bec5;stroke-dasharray:2 4}
+.edge-label{fill:#607d8b;font-size:9px}
+.arrow-head{fill:#90a4ae}
+.legend text{fill:#37474f;font-size:11px}
+@media (prefers-color-scheme:dark){
+.bg{fill:#0f1419}
+.title{fill:#90caf9}
+.subtitle{fill:#90a4ae}
+.layer-band{fill:#161c22}
+.layer-band.alt{fill:#1b232b}
+.layer-title{fill:#90a4ae}
+.node .label{fill:#eceff1}
+.node .detail{fill:#90a4ae}
+.edge{stroke:#546e7a}
+.edge-label{fill:#90a4ae}
+.arrow-head{fill:#546e7a}
+.legend text{fill:#cfd8dc}
+.shape.layer-0{fill:#102a43;stroke:#4a90d9}
+.shape.layer-1{fill:#10331f;stroke:#4caf50}
+.shape.layer-2{fill:#3a2a12;stroke:#ffa726}
+.shape.layer-3{fill:#2a1633;stroke:#ab47bc}
+.shape.layer-4{fill:#0f2d31;stroke:#26c6da}
+.shape.layer-5{fill:#331613;stroke:#ff7043}
+}
+</style><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow-head" d="M 0 0 L 10 5 L 0 10 z"/></marker></defs><rect class="bg" width="100%" height="100%"/><text class="title" x="32" y="30">无线电干扰源交会定位几何 + 机器狗覆盖搜索-清除策略模型</text><text class="subtitle" x="32" y="38">kind=model_map · 17 节点 / 20 边</text><rect class="layer-band" x="16" y="66" width="1976" height="76" rx="10"/><text class="layer-title" x="28" y="94">L1 语义层</text><rect class="layer-band alt" x="16" y="182" width="1976" height="76" rx="10"/><text class="layer-title" x="28" y="210">L2 数学层</text><rect class="layer-band" x="16" y="298" width="1976" height="76" rx="10"/><text class="layer-title" x="28" y="326">L3 计算层</text><g class="edge-group" data-edge-from="Q" data-edge-to="A"><polyline class="edge flow" points="674,78 674,68 894,68 894,78" marker-end="url(#arrow)"/><text class="edge-label" x="784" y="65" text-anchor="middle">bound_by</text></g><g class="edge-group" data-edge-from="Q" data-edge-to="P"><polyline class="edge flow" points="674,78 674,59 1114,59 1114,78" marker-end="url(#arrow)"/><text class="edge-label" x="894" y="56" text-anchor="middle">bound_by</text></g><g class="edge-group" data-edge-from="A" data-edge-to="V"><polyline class="edge flow" points="894,78 894,50 1334,50 1334,78" marker-end="url(#arrow)"/><text class="edge-label" x="1114" y="47" text-anchor="middle">defines</text></g><g class="edge-group" data-edge-from="ME01" data-edge-to="EQ"><polyline class="edge flow" points="124,194 124,157 1444,157 1444,194" marker-end="url(#arrow)"/><text class="edge-label" x="784" y="154" text-anchor="middle">formalized_by</text></g><g class="edge-group" data-edge-from="ME02" data-edge-to="EQ"><polyline class="edge flow" points="344,194 344,148 1444,148 1444,194" marker-end="url(#arrow)"/><text class="edge-label" x="894" y="145" text-anchor="middle">formalized_by</text></g><g class="edge-group" data-edge-from="ME03" data-edge-to="EQ"><polyline class="edge flow" points="564,194 564,139 1444,139 1444,194" marker-end="url(#arrow)"/><text class="edge-label" x="1004" y="136" text-anchor="middle">formalized_by</text></g><g class="edge-group" data-edge-from="ME04" data-edge-to="EQ"><polyline class="edge flow" points="784,194 784,130 1444,130 1444,194" marker-end="url(#arrow)"/><text class="edge-label" x="1114" y="127" text-anchor="middle">formalized_by</text></g><g class="edge-group" data-edge-from="ME05" data-edge-to="EQ"><polyline class="edge flow" points="1004,194 1004,121 1444,121 1444,194" marker-end="url(#arrow)"/><text class="edge-label" x="1224" y="118" text-anchor="middle">formalized_by</text></g><g class="edge-group" data-edge-from="EQ" data-edge-to="CT"><polyline class="edge flow" points="1444,194 1444,112 1664,112 1664,194" marker-end="url(#arrow)"/><text class="edge-label" x="1554" y="109" text-anchor="middle">constrained_by</text></g><g class="edge-group" data-edge-from="CT" data-edge-to="OB"><polyline class="edge flow" points="1664,194 1664,103 1884,103 1884,194" marker-end="url(#arrow)"/><text class="edge-label" x="1774" y="100" text-anchor="middle">shapes</text></g><g class="edge-group" data-edge-from="SV" data-edge-to="EX"><polyline class="edge flow" points="674,310 674,210 894,210 894,310" marker-end="url(#arrow)"/><text class="edge-label" x="784" y="207" text-anchor="middle">executed_in</text></g><g class="edge-group" data-edge-from="EX" data-edge-to="VA"><polyline class="edge flow" points="894,310 894,201 1114,201 1114,310" marker-end="url(#arrow)"/><text class="edge-label" x="1004" y="198" text-anchor="middle">verified_by</text></g><g class="edge-group" data-edge-from="VA" data-edge-to="CL"><polyline class="edge flow" points="1114,310 1114,192 1334,192 1334,310" marker-end="url(#arrow)"/><text class="edge-label" x="1224" y="189" text-anchor="middle">supports</text></g><g class="edge-group" data-edge-from="V" data-edge-to="ME01"><polyline class="edge flow" points="1334,130 1334,162 124,162 124,194" marker-end="url(#arrow)"/><text class="edge-label" x="729" y="158" text-anchor="middle">instantiated_in</text></g><g class="edge-group" data-edge-from="V" data-edge-to="ME02"><polyline class="edge flow" points="1334,130 1334,162 344,162 344,194" marker-end="url(#arrow)"/><text class="edge-label" x="839" y="158" text-anchor="middle">instantiated_in</text></g><g class="edge-group" data-edge-from="V" data-edge-to="ME03"><polyline class="edge flow" points="1334,130 1334,162 564,162 564,194" marker-end="url(#arrow)"/><text class="edge-label" x="949" y="158" text-anchor="middle">instantiated_in</text></g><g class="edge-group" data-edge-from="V" data-edge-to="ME04"><polyline class="edge flow" points="1334,130 1334,162 784,162 784,194" marker-end="url(#arrow)"/><text class="edge-label" x="1059" y="158" text-anchor="middle">instantiated_in</text></g><g class="edge-group" data-edge-from="V" data-edge-to="ME05"><polyline class="edge flow" points="1334,130 1334,162 1004,162 1004,194" marker-end="url(#arrow)"/><text class="edge-label" x="1169" y="158" text-anchor="middle">instantiated_in</text></g><g class="edge-group" data-edge-from="V" data-edge-to="ME06"><polyline class="edge flow" points="1334,130 1334,162 1224,162 1224,194" marker-end="url(#arrow)"/><text class="edge-label" x="1279" y="158" text-anchor="middle">instantiated_in</text></g><g class="edge-group" data-edge-from="OB" data-edge-to="SV"><polyline class="edge flow" points="1884,246 1884,278 674,278 674,310" marker-end="url(#arrow)"/><text class="edge-label" x="1279" y="274" text-anchor="middle">solved_by</text></g><g class="node layer-0" data-node-id="Q" data-layer="L1 语义层"><title>problem 2026_B (Q1..Q4)</title><rect class="shape layer-0" x="582" y="78" width="184" height="52" rx="6"/><text class="label" x="674" y="102" text-anchor="middle">problem 2026_B (Q1..Q4)</text><text class="detail" x="674" y="117" text-anchor="middle">problem</text></g><g class="node layer-0" data-node-id="A" data-layer="L1 语义层"><title>assumptions A01-A10</title><rect class="shape layer-0" x="802" y="78" width="184" height="52" rx="6"/><text class="label" x="894" y="102" text-anchor="middle">assumptions A01-A10</text><text class="detail" x="894" y="117" text-anchor="middle">assumption</text></g><g class="node layer-0" data-node-id="P" data-layer="L1 语义层"><title>parameters P01-P17</title><rect class="shape layer-0" x="1022" y="78" width="184" height="52" rx="6"/><text class="label" x="1114" y="102" text-anchor="middle">parameters P01-P17</text><text class="detail" x="1114" y="117" text-anchor="middle">parameter</text></g><g class="node layer-0" data-node-id="V" data-layer="L1 语义层"><title>variables V01-V13</title><rect class="shape layer-0" x="1242" y="78" width="184" height="52" rx="6"/><text class="label" x="1334" y="102" text-anchor="middle">variables V01-V13</text><text class="detail" x="1334" y="117" text-anchor="middle">variable</text></g><g class="node layer-1" data-node-id="ME01" data-layer="L2 数学层"><title>楔形交会定位</title><rect class="shape layer-1" x="32" y="194" width="184" height="52" rx="6"/><text class="label" x="124" y="218" text-anchor="middle">楔形交会定位</text><text class="detail" x="124" y="233" text-anchor="middle">mechanism</text></g><g class="node layer-1" data-node-id="ME02" data-layer="L2 数学层"><title>直径与最小包围圆</title><rect class="shape layer-1" x="252" y="194" width="184" height="52" rx="6"/><text class="label" x="344" y="218" text-anchor="middle">直径与最小包围圆</text><text class="detail" x="344" y="233" text-anchor="middle">mechanism</text></g><g class="node layer-1" data-node-id="ME03" data-layer="L2 数学层"><title>GDOP 与第二点最优集</title><rect class="shape layer-1" x="472" y="194" width="184" height="52" rx="6"/><text class="label" x="564" y="218" text-anchor="middle">GDOP 与第二点最优集</text><text class="detail" x="564" y="233" text-anchor="middle">mechanism</text></g><g class="node layer-1" data-node-id="ME04" data-layer="L2 数学层"><title>同心环覆盖搜索</title><rect class="shape layer-1" x="692" y="194" width="184" height="52" rx="6"/><text class="label" x="784" y="218" text-anchor="middle">同心环覆盖搜索</text><text class="detail" x="784" y="233" text-anchor="middle">mechanism</text></g><g class="node layer-1" data-node-id="ME05" data-layer="L2 数学层"><title>交会-归航双机制定位</title><rect class="shape layer-1" x="912" y="194" width="184" height="52" rx="6"/><text class="label" x="1004" y="218" text-anchor="middle">交会-归航双机制定位</text><text class="detail" x="1004" y="233" text-anchor="middle">mechanism</text></g><g class="node layer-1" data-node-id="ME06" data-layer="L2 数学层"><title>离散事件时间计价</title><rect class="shape layer-1" x="1132" y="194" width="184" height="52" rx="6"/><text class="label" x="1224" y="218" text-anchor="middle">离散事件时间计价</text><text class="detail" x="1224" y="233" text-anchor="middle">mechanism</text></g><g class="node layer-1" data-node-id="EQ" data-layer="L2 数学层"><title>equations E01-E09</title><rect class="shape layer-1" x="1352" y="194" width="184" height="52" rx="6"/><text class="label" x="1444" y="218" text-anchor="middle">equations E01-E09</text><text class="detail" x="1444" y="233" text-anchor="middle">equation</text></g><g class="node layer-1" data-node-id="CT" data-layer="L2 数学层"><title>constraints C01-C08</title><rect class="shape layer-1" x="1572" y="194" width="184" height="52" rx="6"/><text class="label" x="1664" y="218" text-anchor="middle">constraints C01-C08</text><text class="detail" x="1664" y="233" text-anchor="middle">constraint</text></g><g class="node layer-1" data-node-id="OB" data-layer="L2 数学层"><title>objectives O01-O04</title><rect class="shape layer-1" x="1792" y="194" width="184" height="52" rx="6"/><text class="label" x="1884" y="218" text-anchor="middle">objectives O01-O04</text><text class="detail" x="1884" y="233" text-anchor="middle">objective</text></g><g class="node layer-2" data-node-id="SV" data-layer="L3 计算层"><title>solvers S01-S06</title><rect class="shape layer-2" x="582" y="310" width="184" height="52" rx="6"/><text class="label" x="674" y="334" text-anchor="middle">solvers S01-S06</text><text class="detail" x="674" y="349" text-anchor="middle">solver</text></g><g class="node layer-2" data-node-id="EX" data-layer="L3 计算层"><title>experiments EXP01-EXP05</title><rect class="shape layer-2" x="802" y="310" width="184" height="52" rx="6"/><text class="label" x="894" y="334" text-anchor="middle">experiments EXP01-EXP05</text><text class="detail" x="894" y="349" text-anchor="middle">experiment</text></g><g class="node layer-2" data-node-id="VA" data-layer="L3 计算层"><title>validations V01-V05</title><rect class="shape layer-2" x="1022" y="310" width="184" height="52" rx="6"/><text class="label" x="1114" y="334" text-anchor="middle">validations V01-V05</text><text class="detail" x="1114" y="349" text-anchor="middle">validation</text></g><g class="node layer-2" data-node-id="CL" data-layer="L3 计算层"><title>claims CL01-CL06</title><rect class="shape layer-2" x="1242" y="310" width="184" height="52" rx="6"/><text class="label" x="1334" y="334" text-anchor="middle">claims CL01-CL06</text><text class="detail" x="1334" y="349" text-anchor="middle">claim</text></g><g class="legend"><rect class="shape layer-0" x="32" y="384" width="12" height="12" rx="3"/><text x="50" y="394">L1 语义层</text><rect class="shape layer-1" x="138" y="384" width="12" height="12" rx="3"/><text x="156" y="394">L2 数学层</text><rect class="shape layer-2" x="244" y="384" width="12" height="12" rx="3"/><text x="262" y="394">L3 计算层</text></g></svg>
+</div>
+<footer>本页为<a>生成物</a>——由 <code>mh diagram build</code> 从 DiagramIR 确定性渲染；真源在 IR（catalog / model_ir.json / evidence_graph.json）。</footer>
+</body>
+</html>
