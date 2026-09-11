@@ -1877,13 +1877,11 @@ class DefaultNodeExecutor:
             if cands:
                 from modeling_harness.runtime.modeling.candidates import Candidate
                 top = cands[0]
-                cand = Candidate(
-                    candidate_id=top["candidate_id"], kind=top["kind"],
-                    composition=list(top["composition"]),
-                    base_card=top["base_card"], rationale=top["rationale"],
-                    score=top["score"], required_experiments=list(
-                        top["required_experiments"]),
-                    knowledge_refs=list(top["knowledge_refs"]))
+                # ADR-0016：重建必须保真（含 innovations / validations /
+                # dependencies / assumptions）。此前手写字段子集漏传 innovations，
+                # 使 planner 的创新专用分支恒空转——创新要求被降级为普通
+                # 「候选方案要求」，`decision_rule=gain > cost` 永不生效。
+                cand = Candidate.from_dict(top)
                 plan = self.planner.plan_from_candidate(cand, qid)
                 # P9.5 红队修复：新计划建立前退役旧计划（R3 谱系语义，
                 # 旧计划 superseded 审计保留，不得双 active）

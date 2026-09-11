@@ -23,6 +23,7 @@
 | [ADR-0013](ADR-0013-objective-over-validation-in-model-selection.md) | 模型选择必须比目标函数值，基线对照链必须闭环 | Accepted |
 | [ADR-0014](ADR-0014-objective-over-validation-in-candidate-ranking.md) | 候选选型必须以目标函数值为首要依据（延伸到 P1-M3 路径） | Accepted |
 | [ADR-0015](ADR-0015-legacy-unverified-instance-flag.md) | ExecutionResult 来源豁免开关移到 registry 实例（payload 不可自授权） | Accepted |
+| [ADR-0016](ADR-0016-candidate-diversity-belongs-to-sampling-not-adjudication.md) | 候选多样性属于「采样与预算」层，不属于「裁决」层（否决配额制） | Accepted |
 
 ## 规则
 

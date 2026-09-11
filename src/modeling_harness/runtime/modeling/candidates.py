@@ -48,6 +48,25 @@ class InnovationCandidate:
             "validation_protocol", "novelty_level", "implementation_cost",
             "competition_fit", "knowledge_version", "source_refs", "status")}
 
+    @classmethod
+    def from_dict(cls, d: dict) -> "InnovationCandidate":
+        """与 ``as_dict()`` 对称的重建（ADR-0016：候选序列化必须保真）。"""
+        return cls(
+            pattern_id=d.get("pattern_id", ""),
+            name=d.get("name", ""),
+            base_method=d.get("base_method", ""),
+            modification=d.get("modification", ""),
+            expected_benefit=d.get("expected_benefit", ""),
+            risk=list(d.get("risk") or []),
+            required_evidence=list(d.get("required_evidence") or []),
+            validation_protocol=list(d.get("validation_protocol") or []),
+            novelty_level=d.get("novelty_level", ""),
+            implementation_cost=d.get("implementation_cost", ""),
+            competition_fit=d.get("competition_fit", ""),
+            knowledge_version=int(d.get("knowledge_version", 1)),
+            source_refs=list(d.get("source_refs") or []),
+            status=d.get("status", "hypothesis"))
+
     def to_experiment_requirements(self) -> list[str]:
         """创新候选 → 反向实验需求（P8-6→P8-7 通道）。"""
         reqs = list(self.required_evidence)
@@ -97,6 +116,31 @@ class Candidate:
             "assumptions": self.assumptions,
             "reasoning": self.reasoning(),
         }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Candidate":
+        """与 ``as_dict()`` 对称的重建（ADR-0016：候选序列化必须保真）。
+
+        ``reasoning`` 是派生展示字段，刻意忽略；其余字段缺省回落默认值，
+        **不得**像 handlers 里原先手写 ``Candidate(...)`` 那样漏传字段——
+        漏 ``innovations`` 会让 ``planner.plan_from_candidate`` 的创新分支恒空转。
+        """
+        return cls(
+            candidate_id=d.get("candidate_id", ""),
+            kind=d.get("kind", ""),
+            composition=list(d.get("composition") or []),
+            base_card=d.get("base_card", ""),
+            rationale=d.get("rationale", ""),
+            score=int(d.get("score", 0)),
+            score_detail=dict(d.get("score_detail") or {}),
+            risks=[dict(r) for r in (d.get("risks") or [])],
+            required_experiments=list(d.get("required_experiments") or []),
+            innovations=[InnovationCandidate.from_dict(i)
+                         for i in (d.get("innovations") or [])],
+            knowledge_refs=[dict(k) for k in (d.get("knowledge_refs") or [])],
+            validations=[dict(v) for v in (d.get("validations") or [])],
+            dependencies=list(d.get("dependencies") or []),
+            assumptions=[dict(a) for a in (d.get("assumptions") or [])])
 
     def reasoning(self) -> str:
         parts = [f"{self.candidate_id}[{self.kind}] {self.rationale}"]
