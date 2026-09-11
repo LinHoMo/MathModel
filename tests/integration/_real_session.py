@@ -194,9 +194,18 @@ def make_real_session(tmp_path, questions=("Q001", "Q002"), run=True,
     内联注入（不 import conftest——pytest 插件机制下 from conftest import
     会取到加载中的模块实例，函数 globals 不完整）：外部 MODEL_IR + CODE +
     validation_spec（外部 Model Constructor 产物），挂真实 LocalPythonAdapter。
+
+    ADR-0008：features 由问题理解层从题面派生，故写入最小题面（真实项目必备）。
     """
     from modeling_harness.runtime.execution.session import RuntimeSession
     from modeling_harness.runtime.execution.adapters import LocalPythonAdapter
+
+    proj = Path(tmp_path) / name
+    (proj / "inputs").mkdir(parents=True, exist_ok=True)
+    (proj / "inputs" / "problem.txt").write_text(
+        "2026 年数学建模竞赛题目\n\n"
+        "问题1　根据给定的数据，对候选方案作综合评价。\n",
+        encoding="utf-8")
 
     qs = list(questions)
     external_model_irs = {q: _minimal_mir(q) for q in qs}
@@ -204,7 +213,7 @@ def make_real_session(tmp_path, questions=("Q001", "Q002"), run=True,
     validation_specs = {q: dict(MINIMAL_VALIDATION_SPEC) for q in qs}
     kw.setdefault("max_workers", 1)
     s = RuntimeSession(
-        Path(tmp_path) / name, qs,
+        proj, qs,
         execution_adapter=LocalPythonAdapter(),
         external_model_irs=external_model_irs,
         external_code=external_code,

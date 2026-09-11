@@ -25,8 +25,6 @@
         "models",
         "experiments",
         "evidence",
-        "narrative",
-        "paper",
         "review"
       ],
       "properties": {
@@ -49,10 +47,12 @@
           "$ref": "#/definitions/dimension"
         },
         "narrative": {
-          "$ref": "#/definitions/dimension"
+          "$ref": "#/definitions/dimension",
+          "description": "已退役（V2 遗留维度，等待迁移）：projection 概念已并入模型描述交付物，不再作为 Runtime 维度写入。仅容忍读取历史数据。"
         },
         "paper": {
-          "$ref": "#/definitions/dimension"
+          "$ref": "#/definitions/dimension",
+          "description": "已退役（V2 遗留维度）：本仓库不含论文生成，Runtime 不写该维度。仅容忍读取历史数据。"
         },
         "review": {
           "$ref": "#/definitions/dimension"

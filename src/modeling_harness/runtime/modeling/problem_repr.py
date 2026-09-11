@@ -5,12 +5,19 @@
 来源单一真源：inputs/question_spec.json（结构化）或 inputs/problem.txt
 （纯文本）。两者皆缺 → 返回 None（节点如实处理，禁止回退掩盖）。
 格式错误明确报错（禁止静默回退掩盖损坏）。
+
+ADR-0008：纯文本分支接入问题理解层（`problem_profile.split_sub_questions`），
+使 `problems` 不再恒为空——此前只有结构化 question_spec.json 才拆子问题，
+导致纯文本题面在 `do_problem_analysis` 里退化成单问题（分解覆盖 20% 的根因之一）。
+结构化分支的解析契约不变。
 """
 
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 import json
 from typing import Any
+
+from .problem_profile import split_sub_questions
 
 
 class ProblemRepresentationError(ValueError):
@@ -64,6 +71,12 @@ def load_problem_representation(project_dir: str | Path) -> "ProblemRepresentati
         )
     if text.exists():
         body = text.read_text(encoding="utf-8")
-        return ProblemRepresentation(background=body, source="problem_txt",
-                                     raw_text=body)
+        # ADR-0008：纯文本题面同样做子问题切分（旧实现恒为空列表）
+        problems = [
+            {"id": item["label"], "title": item["title"],
+             "description": item["text"]}
+            for item in split_sub_questions(body)
+        ]
+        return ProblemRepresentation(background=body, problems=problems,
+                                     source="problem_txt", raw_text=body)
     return None

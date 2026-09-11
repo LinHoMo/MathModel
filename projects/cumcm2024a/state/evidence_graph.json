@@ -1,19 +1,74 @@
 {
   "graph_schema_version": 3,
   "graph_version": 1,
-  "project": "cumcm2024a-harness",
-  "updated_at": "2026-09-10T12:54:23Z",
+  "project": "cumcm2024a",
+  "updated_at": "2026-09-10T14:14:56Z",
   "relations": [
     {
       "from": "MH-PROBLEM-0001",
-      "to": "MH-QUESTION-0001",
+      "to": "Q1",
       "relation": "motivates"
     },
     {
-      "from": "MH-QUESTION-0001",
+      "from": "Q1",
       "to": "MH-MODEL-0001",
       "relation": "solved_by",
+      "sub_question": "Q1",
       "note": "整链构型由龙头弧长坐标唯一确定"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "to": "Q2",
+      "relation": "motivates"
+    },
+    {
+      "from": "Q2",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by",
+      "sub_question": "Q2",
+      "note": "整链构型由龙头弧长坐标唯一确定"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "to": "Q3",
+      "relation": "motivates"
+    },
+    {
+      "from": "Q3",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by",
+      "sub_question": "Q3",
+      "note": "整链构型由龙头弧长坐标唯一确定"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "to": "Q4",
+      "relation": "motivates"
+    },
+    {
+      "from": "Q4",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by",
+      "sub_question": "Q4",
+      "note": "整链构型由龙头弧长坐标唯一确定"
+    },
+    {
+      "from": "MH-PROBLEM-0001",
+      "to": "Q5",
+      "relation": "motivates"
+    },
+    {
+      "from": "Q5",
+      "to": "MH-MODEL-0001",
+      "relation": "solved_by",
+      "sub_question": "Q5",
+      "note": "整链构型由龙头弧长坐标唯一确定"
+    },
+    {
+      "from": "MH-MODEL-0001",
+      "to": "MH-MODEL_IR-0001",
+      "relation": "derived_from",
+      "note": "MODEL_IR 是 model 的契约形态"
     },
     {
       "from": "MH-MODEL-0001",
@@ -192,7 +247,7 @@
     },
     {
       "from": "MH-MODEL-0001",
-      "to": "MH-NARRATIVE-0001",
+      "to": "MH-DELIVERABLE-0001",
       "relation": "derived_from",
       "note": "模型描述是 MODEL_IR 的人类可读投影"
     }

@@ -135,6 +135,21 @@ def injected_resume(prev, questions):
     return s
 
 
+def _write_min_problem(project_dir) -> None:
+    """写最小题面（ADR-0008）：测试项目的唯一输入，供问题理解层派生 features。
+
+    文本刻意落在「评价」类型上，与旧默认画像的取型一致，使下游选型/规划行为
+    保持可比；同时 has_data 由「给定数据」维持为真（不排除需要数据的方法卡）。
+    """
+    from pathlib import Path
+    d = Path(project_dir) / "inputs"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "problem.txt").write_text(
+        "2026 年数学建模竞赛题目\n\n"
+        "问题1　根据给定的数据，对候选方案作综合评价。\n",
+        encoding="utf-8")
+
+
 def validation_spec() -> dict:
     return {
         "checks": [
@@ -153,9 +168,15 @@ def injected_session(tmp_path, questions=("Q001", "Q002"), max_workers=1,
 
     必须挂真实 LocalPythonAdapter：无数值执行 → evidence_build 如实 FAIL
     （FIX-1.2/1.4）；fixture 默认路径不得再以占位 claim 假 PASS（FIX-1.5）。
+
+    ADR-0008：生产路径不再回退硬编码画像，features 由问题理解层从
+    `inputs/problem.txt` 确定性派生。故本 fixture 必须写入最小题面——
+    真实项目同样必备该输入；缺失时 model_selection 会如实 BLOCKED。
     """
     from modeling_harness.runtime.execution.adapters import LocalPythonAdapter
-    s = RuntimeSession(tmp_path / "proj", list(questions),
+    proj = tmp_path / "proj"
+    _write_min_problem(proj)
+    s = RuntimeSession(proj, list(questions),
                        max_workers=max_workers, run_meta=run_meta or {},
                        execution_adapter=LocalPythonAdapter())
     for q in questions:

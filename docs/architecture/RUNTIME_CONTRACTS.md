@@ -127,3 +127,15 @@ PASS 结果先过 validator（engine `validators` 挂钩），否决走统一 re
 | K | 同输入确定性重放 | `TestKReplay` |
 
 回归底线：`pytest tests` 全绿 + `validate.py` 57/57 + `catalog_check` 一致。
+
+---
+
+## 8. 治理例外登记 / Governance Exceptions
+
+| 例外 | 授权 | 范围 | 日期 |
+|---|---|---|---|
+| 问题理解层（题面 → 子问题/类型/检索特征）落位 runtime 前置确定性层 | [ADR-0008](../decisions/ADR-0008-problem-understanding-layer.md) | 仅 `runtime/modeling/problem_profile.py`（增）、`runtime/modeling/problem_repr.py`（纯文本分支）、`runtime/execution/session.py`（questions/features 缺省派生）、`runtime/execution/handlers.py`（移除静默回退改 fail-closed）；不改 schema、不改 DAG 拓扑、不加依赖 | 2026-09-10 |
+| 既有能力在节点内集成（不新增 Fidelity/Diagnosis/Revision/Comparison DAG 节点） | [ADR-0009](../decisions/ADR-0009-integration-inside-existing-nodes.md) | 维持现状并显式记录；不为集成既有能力新增节点 | 2026-09-10 |
+
+上述例外不改变 §1–§7 任何不变量；`core/runtime 永久 LLM-free` 与
+`Artifact Registry + Evidence Graph 为唯一真源` 继续成立。

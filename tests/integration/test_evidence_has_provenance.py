@@ -24,7 +24,15 @@ from modeling_harness.validators.evidence.evidence_gate import evaluate as gate_
 
 @pytest.fixture()
 def session(tmp_path):
-    return make_session(tmp_path / "proj")
+    """带最小题面的会话（ADR-0008）：features 由问题理解层从 inputs 派生，
+    无题面时 model_selection 会如实 BLOCKED、实验链无法建立。"""
+    proj = tmp_path / "proj"
+    (proj / "inputs").mkdir(parents=True, exist_ok=True)
+    (proj / "inputs" / "problem.txt").write_text(
+        "2026 年数学建模竞赛题目\n\n"
+        "问题1　根据给定的数据，对候选方案作综合评价。\n",
+        encoding="utf-8")
+    return make_session(proj)
 
 
 def _run_full_loop(session, workdir):

@@ -25,8 +25,17 @@ from modeling_harness.runtime.modeling.model_ir import (  # noqa: E402
 
 
 def _default_session(tmp_path):
-    """无注入、无 adapter 的默认路径 session（认知由默认确定性执行器完成）。"""
-    return RuntimeSession(tmp_path / "proj", ["Q001"])
+    """无注入、无 adapter 的默认路径 session（认知由默认确定性执行器完成）。
+
+    ADR-0008：features 现由问题理解层从题面派生，故须写入最小题面。
+    """
+    proj = tmp_path / "proj"
+    (proj / "inputs").mkdir(parents=True, exist_ok=True)
+    (proj / "inputs" / "problem.txt").write_text(
+        "2026 年数学建模竞赛题目\n\n"
+        "问题1　根据给定的数据，对候选方案作综合评价。\n",
+        encoding="utf-8")
+    return RuntimeSession(proj, ["Q001"])
 
 
 def test_default_path_no_injection_fails_honestly(tmp_path):

@@ -79,13 +79,15 @@ class DefaultNodeExecutor:
         self.graph = graph
         self.state = state
         self.decisions = decisions
-        # P0-③ features 契约（三仓库审计 R1/R4 修复，legacy 兼容回退）：
-        # 生产调用方必须显式传 features（orchestrator 入口显式加载并警告缺省）；
-        # 未传时回退默认画像但打上 _features_source=legacy_default 可观测标记，
-        # 消费方/审计可见该画像来自回退而非真实问题分析，禁止静默假扮。
-        _LEGACY = {"problem_types": ["evaluation"], "has_data": True,
-                   "sample_size": "medium", "_features_source": "legacy_default"}
-        self.features = dict(features or _LEGACY)
+        # ADR-0008 features 契约：**不再回退硬编码画像**。此前未传 features 时
+        # 回退 {"problem_types": ["evaluation"], ...}，把任何题都当成评价类问题，
+        # 直接导致分解只出 1 问、选型家族全错（实测 decomposition 20% /
+        # structure_alignment 0%）。现在来源三态可观测：
+        #   explicit  —— 生产调用方显式注入（外部 Constructor / benchmark --profile）
+        #   profiler-* —— 由 runtime/modeling/problem_profile.py 从 inputs 确定性派生
+        #   absent    —— 无题面也无法派生 → 选型节点 fail-closed（BLOCKED）
+        self.features = dict(features) if features else {"_features_source": "absent"}
+        self.features.setdefault("_features_source", "explicit")
         self.min_coverage = min_coverage
         # P0-E：真实执行后端（None = 不执行；result 保持 not_executed）
         self.execution_adapter = execution_adapter
@@ -1592,9 +1594,24 @@ class DefaultNodeExecutor:
         artifact（shortlist=候选 model_id），不执行竞技场假选型（消除 recs[0]
         硬编码；真正选型由 model_selection_decision 基于 VR 数值完成）。
         无候选注入时走原竞技场路径（方法族预选，向后兼容）。
+
+        ADR-0008 fail-closed：无真实问题特征（`_features_source=absent`）时——
+          * 有外部模型注入：如实登记「外部构造器提供」，**不做方法族选型**
+            （拒绝用默认画像冒充选型，也不编造 card_id）；
+          * 无外部模型注入：BLOCKED（选型需真实特征，不能盲选）。
         """
         ev = []
         count = 0
+        features_absent = self.features.get("_features_source") == "absent"
+        has_external_model = bool(self.shared.get("external_model_irs")
+                                  or self.shared.get("external_candidates"))
+        if features_absent and not has_external_model:
+            return NodeResult(
+                BLOCKED,
+                "无问题特征可用：features 未注入，且 inputs/ 无可派生题面"
+                "（question_spec.json / problem.txt 均缺）——"
+                "选型需真实特征，不以默认画像冒充（ADR-0008）",
+                outputs={"artifacts": [], "evidence": []})
         for qid in self._question_ids():
             cands = self._external_candidates(qid)
             if cands:
@@ -1620,6 +1637,32 @@ class DefaultNodeExecutor:
                 info["card_id"] = "candidate_competition"
                 info["shortlist"] = [c["model_ir"].get("model_id")
                                      for c in cands if c.get("model_ir")]
+                if self.state:
+                    self._advance_question(qid, "modeled")
+                count += 1
+                continue
+            if features_absent:
+                # ADR-0008：模型来自外部 Constructor 注入，且无题面可派生特征
+                # → 登记容器模型并如实标注来源。card_id 沿用既有 "UNSELECTED"
+                # 语义（确实未做方法卡选型），下游 experiment_design 已按该值
+                # 走「无选型」分支；额外记号 selection_status 便于审计区分。
+                mid = self._models_of(qid)[-1] if self._models_of(qid) else ""
+                if not mid:
+                    m = self.registry.create(
+                        "model", title=f"{qid} 外部构造器提供模型",
+                        question=qid, depends_on=[qid],
+                        data={"card_id": "UNSELECTED",
+                              "family": "",
+                              "selection_status": "external_constructor",
+                              "note": "无题面特征可派生（_features_source=absent）："
+                                      "不做方法族选型，模型由外部 Constructor 注入"},
+                        activate=True, created_by=node_id)
+                    mid = m.artifact_id
+                ev.append({"from": qid, "relation": "solved_by", "to": mid})
+                info = self.shared.setdefault(qid, {})
+                info["model"] = mid
+                info["card_id"] = "UNSELECTED"
+                info["shortlist"] = []
                 if self.state:
                     self._advance_question(qid, "modeled")
                 count += 1

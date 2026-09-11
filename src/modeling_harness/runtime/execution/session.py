@@ -36,6 +36,7 @@ from modeling_harness.runtime.state.model import ProjectState  # noqa: E402
 
 from .handlers import DefaultNodeExecutor  # noqa: E402
 from modeling_harness.runtime.modeling.problem_repr import load_problem_representation  # noqa: E402
+from modeling_harness.runtime.modeling.problem_profile import load_problem_understanding  # noqa: E402
 
 
 class SessionError(RuntimeError):
@@ -45,7 +46,7 @@ class SessionError(RuntimeError):
 class RuntimeSession:
     """一个项目的 V3 研究运行会话。"""
 
-    def __init__(self, project_dir: str | Path, questions: list[str],
+    def __init__(self, project_dir: str | Path, questions: list[str] | None = None,
                  features: dict | None = None, knowledge_root=None,
                  max_workers: int = 1, min_coverage: float = 0.6,
                  run_meta: dict | None = None,
@@ -57,12 +58,32 @@ class RuntimeSession:
                  revision_bundles: dict | None = None):
         self.project_dir = Path(project_dir)
         self.project_dir.mkdir(parents=True, exist_ok=True)
-        if not questions:
-            raise SessionError("questions 不能为空")
-        self.questions = list(questions)
         # audit FIX-2.5：读取项目 inputs 题面 → 结构化 representation
         # （缺失 → None，建模节点如实处理；格式错误 → 明确报错，禁止回退）
         self.problem_repr = load_problem_representation(self.project_dir)
+        # ADR-0008：问题理解层（题面 → 子问题 + 类型 + 检索特征），确定性派生。
+        # 显式入参优先；缺省时由该层补齐，使生产路径在无外部 Constructor 注入
+        # 时也能得到真实 features（此前回退硬编码 problem_types=["evaluation"]）。
+        self.problem_understanding = load_problem_understanding(self.project_dir)
+        qs = [str(q) for q in (questions or []) if str(q).strip()]
+        if not qs and self.problem_understanding is not None:
+            qs = [s.label for s in self.problem_understanding.sub_questions]
+        if not qs:
+            raise SessionError(
+                "questions 不能为空，且 inputs/ 无可派生子问题"
+                "（需 inputs/question_spec.json 或 inputs/problem.txt）")
+        self.questions = qs
+        if features:
+            # 显式入参：标注来源为 explicit（与 handlers 同口径），便于审计
+            # 区分「人/Constructor 给定」与「题面派生」，并让 fail-closed 判断
+            # （_features_source == "absent"）不被误触发。
+            self.features = dict(features)
+            self.features.setdefault("_features_source", "explicit")
+        elif self.problem_understanding is not None:
+            self.features = dict(self.problem_understanding.features)
+        else:
+            # 无题面可派生：如实标记来源缺失，不编造任何标签
+            self.features = {"_features_source": "absent"}
         # Hardening P3：外部 executor 溯源（model_provider/model_version/
         # token_cost/decision）；additive，None 时记录为 null
         self.run_meta = run_meta or {}
@@ -81,7 +102,7 @@ class RuntimeSession:
         self.executor_impl = DefaultNodeExecutor(
             self.registry, self.graph, state=self.state,
             decisions=self.decisions, knowledge_root=knowledge_root,
-            features=features, min_coverage=min_coverage,
+            features=self.features, min_coverage=min_coverage,
             execution_adapter=execution_adapter,
             external_model_irs=external_model_irs,
             external_code=external_code,

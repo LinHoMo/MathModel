@@ -1,0 +1,145 @@
+{
+  "profiler_version": "profiler-v1",
+  "source": "problem_txt",
+  "problem_types": [
+    "heat_transfer",
+    "diffusion",
+    "geometric_inference",
+    "moving_boundary"
+  ],
+  "sub_questions": [
+    {
+      "label": "Q1",
+      "index": 1,
+      "title": "某中药材形状大致呈圆柱形，长为 25 cm，半径为 2 cm。烘干开始时，药材的温度为 28°C，水分浓度（干基含水率）为 2.55 kg/kg，烘房的温度（单",
+      "problem_types": [
+        "heat_transfer",
+        "diffusion",
+        "geometric_inference"
+      ],
+      "text_chars": 309
+    },
+    {
+      "label": "Q2",
+      "index": 2,
+      "title": "烘干过程一般持续 2-3 天，预热平衡与恒温干燥阶段的参数有所不同。请建立整个烘干过程药材温度和水分浓度变化规律的数学模型（相关经验公式统一采用附录3中的公式）",
+      "problem_types": [
+        "heat_transfer",
+        "diffusion"
+      ],
+      "text_chars": 195
+    },
+    {
+      "label": "Q3",
+      "index": 3,
+      "title": "按照烘干要求，药材各处的水分浓度应低于 0.15 kg/kg，请确定药材烘干所需要的时间（单位：h）。按表5格式给出每隔 6 h、到药材中心距离每隔 0.5 c",
+      "problem_types": [
+        "diffusion"
+      ],
+      "text_chars": 141
+    },
+    {
+      "label": "Q4",
+      "index": 4,
+      "title": "在实际烘干过程中，药材会因水分流失发生尺寸变化。请根据附件2，确定药材的烘干时长（相关经验公式见附录4）。按表6格式给出每隔 6 h、到药材中心距离每隔 0.5",
+      "problem_types": [
+        "diffusion",
+        "moving_boundary"
+      ],
+      "text_chars": 138
+    }
+  ],
+  "features": {
+    "problem_types": [
+      "heat_transfer",
+      "diffusion",
+      "geometric_inference",
+      "moving_boundary"
+    ],
+    "has_data": true,
+    "sample_size": "medium",
+    "time_series": true,
+    "objectives": 1,
+    "uncertainty": false,
+    "_features_source": "profiler-v1",
+    "problem_title": "干燥是决定中药材成品品质的关键工序之一，其中热风烘干是一种常见的干燥方式。该方式主要包括预热平衡和恒温干燥两个阶段，通过调控烘房温湿环境，完成药材的干燥。请建立数学模型解决以下问题。",
+    "per_question": {
+      "Q1": {
+        "problem_types": [
+          "heat_transfer",
+          "diffusion",
+          "geometric_inference"
+        ],
+        "problem_title": "某中药材形状大致呈圆柱形，长为 25 cm，半径为 2 cm。烘干开始时，药材的温度为 28°C，水分浓度（干基含水率）为 2.55 kg/kg，烘房的温度（单",
+        "text_chars": 309,
+        "_features_source": "profiler-v1"
+      },
+      "Q2": {
+        "problem_types": [
+          "heat_transfer",
+          "diffusion"
+        ],
+        "problem_title": "烘干过程一般持续 2-3 天，预热平衡与恒温干燥阶段的参数有所不同。请建立整个烘干过程药材温度和水分浓度变化规律的数学模型（相关经验公式统一采用附录3中的公式）",
+        "text_chars": 195,
+        "_features_source": "profiler-v1"
+      },
+      "Q3": {
+        "problem_types": [
+          "diffusion"
+        ],
+        "problem_title": "按照烘干要求，药材各处的水分浓度应低于 0.15 kg/kg，请确定药材烘干所需要的时间（单位：h）。按表5格式给出每隔 6 h、到药材中心距离每隔 0.5 c",
+        "text_chars": 141,
+        "_features_source": "profiler-v1"
+      },
+      "Q4": {
+        "problem_types": [
+          "diffusion",
+          "moving_boundary"
+        ],
+        "problem_title": "在实际烘干过程中，药材会因水分流失发生尺寸变化。请根据附件2，确定药材的烘干时长（相关经验公式见附录4）。按表6格式给出每隔 6 h、到药材中心距离每隔 0.5",
+        "text_chars": 138,
+        "_features_source": "profiler-v1"
+      }
+    }
+  },
+  "per_question": {
+    "Q1": {
+      "problem_types": [
+        "heat_transfer",
+        "diffusion",
+        "geometric_inference"
+      ],
+      "problem_title": "某中药材形状大致呈圆柱形，长为 25 cm，半径为 2 cm。烘干开始时，药材的温度为 28°C，水分浓度（干基含水率）为 2.55 kg/kg，烘房的温度（单",
+      "text_chars": 309,
+      "_features_source": "profiler-v1"
+    },
+    "Q2": {
+      "problem_types": [
+        "heat_transfer",
+        "diffusion"
+      ],
+      "problem_title": "烘干过程一般持续 2-3 天，预热平衡与恒温干燥阶段的参数有所不同。请建立整个烘干过程药材温度和水分浓度变化规律的数学模型（相关经验公式统一采用附录3中的公式）",
+      "text_chars": 195,
+      "_features_source": "profiler-v1"
+    },
+    "Q3": {
+      "problem_types": [
+        "diffusion"
+      ],
+      "problem_title": "按照烘干要求，药材各处的水分浓度应低于 0.15 kg/kg，请确定药材烘干所需要的时间（单位：h）。按表5格式给出每隔 6 h、到药材中心距离每隔 0.5 c",
+      "text_chars": 141,
+      "_features_source": "profiler-v1"
+    },
+    "Q4": {
+      "problem_types": [
+        "diffusion",
+        "moving_boundary"
+      ],
+      "problem_title": "在实际烘干过程中，药材会因水分流失发生尺寸变化。请根据附件2，确定药材的烘干时长（相关经验公式见附录4）。按表6格式给出每隔 6 h、到药材中心距离每隔 0.5",
+      "text_chars": 138,
+      "_features_source": "profiler-v1"
+    }
+  },
+  "problem_id": "2026_A",
+  "note": "本快照由 Runtime 问题理解层（ADR-0008）从 inputs/problem.txt 确定性派生，是生产路径的检索输入 DTO，不是对问题本体的断言。"
+}

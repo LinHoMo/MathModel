@@ -15,10 +15,12 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import sys
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.abspath(os.path.join(HERE, "..", ".."))       # projects/cumcm2026b
+REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))   # 仓库根
 STATE = os.path.join(PROJ, "state")
 PROJECT = "cumcm2026b"
 NOW = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -39,8 +41,8 @@ def load(rel: str):
         return json.load(f)
 
 
-def art(aid, atype, title, created_by, payload) -> dict:
-    return {
+def art(aid, atype, title, created_by, payload, question="", data=None) -> dict:
+    d = {
         "schema_version": "3.1",
         "artifact_id": aid,
         "type": atype,
@@ -52,6 +54,11 @@ def art(aid, atype, title, created_by, payload) -> dict:
         "updated_at": NOW,
         "payload": payload,
     }
+    if question:                       # 挂到 Question 名下（state 投影据此聚合）
+        d["question"] = question
+    if data is not None:               # 内联契约数据（MODEL_IR 结构化字段）
+        d["data"] = data
+    return d
 
 
 def build():
@@ -69,13 +76,15 @@ def build():
          "sub_questions": ["Q1", "Q2", "Q3", "Q4"]})
     sq_types = {"Q1": "computational_geometry", "Q2": "geometry_optimization",
                 "Q3": "coverage_control", "Q4": "coverage_control_blindzone"}
-    artifacts["MH-QUESTION-0001"] = art(
-        "MH-QUESTION-0001", "question", "2026_B 子问题分解（Q1-Q4）", "problem_understanding",
-        {"sub_questions": [{"id": q, "type": sq_types[q],
-                            "text": ir["problem_binding"]["sub_questions"][q]}
-                           for q in ("Q1", "Q2", "Q3", "Q4")]})
-    relations.append({"from": "MH-PROBLEM-0001", "to": "MH-QUESTION-0001",
-                      "relation": "motivates"})
+    # 每个子问题登记为独立 question artifact（V3：Question 是一等实体）；
+    # 此前只登记一个容器 artifact，state 投影与分解指标都只数到 1 问。
+    sq_texts = ir["problem_binding"]["sub_questions"]
+    for q in ("Q1", "Q2", "Q3", "Q4"):
+        artifacts[q] = art(q, "question", f"{q} {sq_types[q]}",
+                           "problem_understanding",
+                           {"id": q, "type": sq_types[q], "text": sq_texts[q]})
+        relations.append({"from": "MH-PROBLEM-0001", "to": q,
+                          "relation": "motivates"})
 
     artifacts["MH-MODEL-0001"] = art(
         "MH-MODEL-0001", "model", ir["title"], "model_construction",
@@ -85,8 +94,21 @@ def build():
          "secondary": ir["model_family"]["secondary"],
          "equations": [e["equation_id"] for e in ir["equations"]],
          "sha256": sha256(os.path.join(PROJ, "model_ir.json"))})
-    relations.append({"from": "MH-QUESTION-0001", "to": "MH-MODEL-0001",
-                      "relation": "solved_by"})
+    artifacts["MH-MODEL-0001"]["status"] = "validated"   # 已通过验证与批判
+    for q in ("Q1", "Q2", "Q3", "Q4"):
+        relations.append({"from": q, "to": "MH-MODEL-0001",
+                          "relation": "solved_by"})
+
+    # MODEL_IR 是 model 的契约新形态：内联登记结构化字段，使结构检查能评估
+    # objectives/constraints/variables（此前只登记指针，被判 legacy_pointer）。
+    artifacts["MH-MODEL_IR-0001"] = art(
+        "MH-MODEL_IR-0001", "model_ir", ir["title"], "model_construction",
+        {"path": "model_ir.json",
+         "sha256": sha256(os.path.join(PROJ, "model_ir.json"))},
+        data=ir)
+    relations.append({"from": "MH-MODEL-0001", "to": "MH-MODEL_IR-0001",
+                      "relation": "derived_from",
+                      "note": "MODEL_IR 是 model 的契约形态"})
 
     artifacts["MH-ASSUMPTION-0001"] = art(
         "MH-ASSUMPTION-0001", "assumption", "模型假设 A01-A08", "model_construction",
@@ -127,9 +149,13 @@ def build():
         artifacts[eid] = art(eid, "experiment", f"{q} {desc}", "experiment_design",
                              {"sub_question": q, "solver": "S01-S05",
                               "code_ref": "MH-CODE-0001",
-                              "key_outputs": sorted(block.keys())})
+                              "key_outputs": sorted(block.keys())},
+                             question=q)
+        artifacts[eid]["status"] = "validated"
         artifacts[rid] = art(rid, "result", f"{q} 结果", "experiment_execution",
-                             {"path": rel_path, "sha256": h, "values": block})
+                             {"path": rel_path, "sha256": h, "values": block},
+                             question=q)
+        artifacts[rid]["status"] = "validated"
         relations += [
             {"from": "MH-MODEL-0001", "to": eid, "relation": "validated_by", "sub_question": q},
             {"from": eid, "to": "MH-MODEL-0001", "relation": "tests", "sub_question": q},
@@ -140,21 +166,24 @@ def build():
 
     for i, c in enumerate(ir["claims"], start=1):
         cid = f"MH-CLAIM-{i:04d}"
-        artifacts[cid] = art(cid, "claim", f"{c['claim_id']}（{c['sub_question_binding'][0]}）",
+        q = c["sub_question_binding"][0]
+        artifacts[cid] = art(cid, "claim", f"{c['claim_id']}（{q}）",
                              "model_construction",
                              {"text": c["text"], "status": c["status"],
                               "type": c["type"],
-                              "validation_refs": c.get("validation_refs", [])})
-        q = c["sub_question_binding"][0]
+                              "validation_refs": c.get("validation_refs", [])},
+                             question=q)
         rid = f"MH-RESULT-{int(q[1:]):04d}"
         if rid in artifacts:
             relations.append({"from": rid, "to": cid, "relation": "supports",
                               "sub_question": q})
 
-    artifacts["MH-NARRATIVE-0001"] = art(
-        "MH-NARRATIVE-0001", "narrative", "模型描述文档（含 Mermaid）", "model_construction",
+    # 类型 narrative 已退役（不在 ARTIFACT_TYPES 内），改为 deliverable。
+    artifacts["MH-DELIVERABLE-0001"] = art(
+        "MH-DELIVERABLE-0001", "deliverable", "模型描述文档（含 Mermaid）",
+        "model_construction",
         {"path": "model.md", "sha256": sha256(os.path.join(PROJ, "model.md"))})
-    relations.append({"from": "MH-MODEL-0001", "to": "MH-NARRATIVE-0001",
+    relations.append({"from": "MH-MODEL-0001", "to": "MH-DELIVERABLE-0001",
                       "relation": "derived_from",
                       "note": "模型描述是 MODEL_IR 的人类可读投影"})
 
@@ -231,35 +260,29 @@ def build():
         idx = int(q[1:])
         qstat[q] = {"status": "validated", "models": ["MH-MODEL-0001"],
                     "experiments": [f"MH-EXPERIMENT-{idx:04d}"],
-                    "results": [f"MH-RESULT-{idx:04d}"],
                     "claims": [f"MH-CLAIM-{i:04d}" for i, c in enumerate(ir["claims"], 1)
                                if q in c["sub_question_binding"]]}
-    claims_supported = sum(1 for c in ir["claims"] if c["status"] == "supported")
-    status = {
-        "schema_version": 3, "project": PROJECT, "updated_at": NOW,
-        "problem": {"status": "parsed", "artifact": "MH-PROBLEM-0001"},
-        "questions": qstat,
-        "evidence": {"graph_version": 1,
-                     "claims_supported": claims_supported,
-                     "claims_total": len(ir["claims"]),
-                     "coverage": round(claims_supported / len(ir["claims"]), 4),
-                     "coverage_validation": res["validations"]},
-        "artifacts": {"total": len(artifacts), "by_type": dict(sorted(counters.items()))},
-        "limitations": [
-            "本地模拟器按附录规则重建，与官方评测机可能存在实现差异",
-            "接收半径取名义值 1250 m 由相对强度反推距离，带来估距偏差（表现为归航阻尼振荡）",
-            "含定向情景漏检率 0.00025（贴边界极薄环带），非零",
-            "地面假定为平面、无障碍；频道数固定 20、互异，未建模同频干扰",
-            "未做官方标准答案比对（题面未给参考答案，不凭记忆构造真值）",
-        ],
-    }
 
-    os.makedirs(STATE, exist_ok=True)
-    for name, obj in (("registry.json", registry), ("evidence_graph.json", graph),
-                      ("decision_log.json", decision_log), ("status.json", status)):
-        with open(os.path.join(STATE, name), "w", encoding="utf-8") as f:
-            json.dump(obj, f, ensure_ascii=False, indent=2)
-        print("written:", os.path.join(STATE, name))
+    limitations = [
+        "本地模拟器按附录规则重建，与官方评测机可能存在实现差异",
+        "接收半径取名义值 1250 m 由相对强度反推距离，带来估距偏差（表现为归航阻尼振荡）",
+        "含定向情景漏检率 0.00025（贴边界极薄环带），非零",
+        "地面假定为平面、无障碍；频道数固定 20、互异，未建模同频干扰",
+        "未做官方标准答案比对（题面未给参考答案，不凭记忆构造真值）",
+    ]
+
+    # 四件套落盘：status.json 由内容真源派生（唯一入口，见 state_projection）
+    sys.path.insert(0, os.path.join(REPO, "scripts"))
+    from state_projection import write_state_projection  # noqa: E402
+    result = write_state_projection(
+        project_dir=PROJ, repo_root=REPO, project=PROJECT,
+        registry=registry, evidence_graph=graph, decision_log=decision_log,
+        per_question=qstat, limitations=limitations,
+        evidence_extra={"coverage_validation": res["validations"]},
+        workflow_notes=["本实例由项目内确定性脚本构建（未走 RuntimeSession 引擎），"
+                        "workflow 节点不虚报；内容真源为 registry + evidence_graph。"])
+    print("written:", result["status_path"])
+    print("[summary]", json.dumps(result["summary"], ensure_ascii=False))
 
 
 if __name__ == "__main__":

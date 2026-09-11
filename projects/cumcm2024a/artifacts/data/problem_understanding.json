@@ -1,0 +1,160 @@
+{
+  "profiler_version": "profiler-v1",
+  "source": "problem_txt",
+  "problem_types": [
+    "geometric_inference",
+    "optimization"
+  ],
+  "sub_questions": [
+    {
+      "label": "Q1",
+      "index": 1,
+      "title": "舞龙队沿螺距为 55 cm 的等距螺线顺时针盘入，各把手中心均位于螺线上。龙头前把手的行进速度始终保持 1 m/s。初始时，龙头位于螺线第 16 圈 A 点处（",
+      "problem_types": [
+        "geometric_inference"
+      ],
+      "text_chars": 1305
+    },
+    {
+      "label": "Q2",
+      "index": 2,
+      "title": "舞龙队沿问题 1 设定的螺线盘入，请确定舞龙队盘入的终止时刻，使得板凳之间不发生碰撞（即舞龙队不能再继续盘入的时间），并给出此时舞龙队的位置和速度，将结果存放到",
+      "problem_types": [
+        "geometric_inference"
+      ],
+      "text_chars": 165
+    },
+    {
+      "label": "Q3",
+      "index": 3,
+      "title": "从盘入到盘出，舞龙队将由顺时针盘入调头切换为逆时针盘出，这需要一定的调头空间。若调头空间是以螺线中心为圆心、直径为 9 m 的圆形区域（见图 5），请确定最小螺",
+      "problem_types": [
+        "geometric_inference",
+        "optimization"
+      ],
+      "text_chars": 122
+    },
+    {
+      "label": "Q4",
+      "index": 4,
+      "title": "盘入螺线的螺距为 1.7 m，盘出螺线与盘入螺线关于螺线中心呈中心对称，舞龙队在问题 3 设定的调头空间内完成调头，调头路径是由两段圆弧相切连接而成的 S 形曲",
+      "problem_types": [
+        "geometric_inference"
+      ],
+      "text_chars": 328
+    },
+    {
+      "label": "Q5",
+      "index": 5,
+      "title": "舞龙队沿问题 4 设定的路径行进，龙头行进速度保持不变，请确定龙头的最大行进速度，使得舞龙队各把手的速度均不超过 2 m/s。",
+      "problem_types": [
+        "geometric_inference",
+        "optimization"
+      ],
+      "text_chars": 115
+    }
+  ],
+  "features": {
+    "problem_types": [
+      "geometric_inference",
+      "optimization"
+    ],
+    "has_data": true,
+    "sample_size": "medium",
+    "time_series": true,
+    "objectives": 1,
+    "uncertainty": false,
+    "_features_source": "profiler-v1",
+    "problem_title": "A 题 \"板凳龙\" 闹元宵",
+    "per_question": {
+      "Q1": {
+        "problem_types": [
+          "geometric_inference"
+        ],
+        "problem_title": "舞龙队沿螺距为 55 cm 的等距螺线顺时针盘入，各把手中心均位于螺线上。龙头前把手的行进速度始终保持 1 m/s。初始时，龙头位于螺线第 16 圈 A 点处（",
+        "text_chars": 1305,
+        "_features_source": "profiler-v1"
+      },
+      "Q2": {
+        "problem_types": [
+          "geometric_inference"
+        ],
+        "problem_title": "舞龙队沿问题 1 设定的螺线盘入，请确定舞龙队盘入的终止时刻，使得板凳之间不发生碰撞（即舞龙队不能再继续盘入的时间），并给出此时舞龙队的位置和速度，将结果存放到",
+        "text_chars": 165,
+        "_features_source": "profiler-v1"
+      },
+      "Q3": {
+        "problem_types": [
+          "geometric_inference",
+          "optimization"
+        ],
+        "problem_title": "从盘入到盘出，舞龙队将由顺时针盘入调头切换为逆时针盘出，这需要一定的调头空间。若调头空间是以螺线中心为圆心、直径为 9 m 的圆形区域（见图 5），请确定最小螺",
+        "text_chars": 122,
+        "_features_source": "profiler-v1"
+      },
+      "Q4": {
+        "problem_types": [
+          "geometric_inference"
+        ],
+        "problem_title": "盘入螺线的螺距为 1.7 m，盘出螺线与盘入螺线关于螺线中心呈中心对称，舞龙队在问题 3 设定的调头空间内完成调头，调头路径是由两段圆弧相切连接而成的 S 形曲",
+        "text_chars": 328,
+        "_features_source": "profiler-v1"
+      },
+      "Q5": {
+        "problem_types": [
+          "geometric_inference",
+          "optimization"
+        ],
+        "problem_title": "舞龙队沿问题 4 设定的路径行进，龙头行进速度保持不变，请确定龙头的最大行进速度，使得舞龙队各把手的速度均不超过 2 m/s。",
+        "text_chars": 115,
+        "_features_source": "profiler-v1"
+      }
+    }
+  },
+  "per_question": {
+    "Q1": {
+      "problem_types": [
+        "geometric_inference"
+      ],
+      "problem_title": "舞龙队沿螺距为 55 cm 的等距螺线顺时针盘入，各把手中心均位于螺线上。龙头前把手的行进速度始终保持 1 m/s。初始时，龙头位于螺线第 16 圈 A 点处（",
+      "text_chars": 1305,
+      "_features_source": "profiler-v1"
+    },
+    "Q2": {
+      "problem_types": [
+        "geometric_inference"
+      ],
+      "problem_title": "舞龙队沿问题 1 设定的螺线盘入，请确定舞龙队盘入的终止时刻，使得板凳之间不发生碰撞（即舞龙队不能再继续盘入的时间），并给出此时舞龙队的位置和速度，将结果存放到",
+      "text_chars": 165,
+      "_features_source": "profiler-v1"
+    },
+    "Q3": {
+      "problem_types": [
+        "geometric_inference",
+        "optimization"
+      ],
+      "problem_title": "从盘入到盘出，舞龙队将由顺时针盘入调头切换为逆时针盘出，这需要一定的调头空间。若调头空间是以螺线中心为圆心、直径为 9 m 的圆形区域（见图 5），请确定最小螺",
+      "text_chars": 122,
+      "_features_source": "profiler-v1"
+    },
+    "Q4": {
+      "problem_types": [
+        "geometric_inference"
+      ],
+      "problem_title": "盘入螺线的螺距为 1.7 m，盘出螺线与盘入螺线关于螺线中心呈中心对称，舞龙队在问题 3 设定的调头空间内完成调头，调头路径是由两段圆弧相切连接而成的 S 形曲",
+      "text_chars": 328,
+      "_features_source": "profiler-v1"
+    },
+    "Q5": {
+      "problem_types": [
+        "geometric_inference",
+        "optimization"
+      ],
+      "problem_title": "舞龙队沿问题 4 设定的路径行进，龙头行进速度保持不变，请确定龙头的最大行进速度，使得舞龙队各把手的速度均不超过 2 m/s。",
+      "text_chars": 115,
+      "_features_source": "profiler-v1"
+    }
+  },
+  "problem_id": "2024_A",
+  "note": "本快照由 Runtime 问题理解层（ADR-0008）从 inputs/problem.txt 确定性派生，是生产路径的检索输入 DTO，不是对问题本体的断言。"
+}

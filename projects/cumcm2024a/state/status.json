@@ -1,110 +1,144 @@
 {
   "schema_version": 3,
-  "project": "cumcm2024a-harness",
-  "updated_at": "2026-09-10T12:54:23Z",
-  "problem": {
-    "status": "parsed",
-    "artifact": "MH-PROBLEM-0001"
-  },
-  "questions": {
-    "Q1": {
-      "status": "validated",
-      "models": [
+  "project": "cumcm2024a",
+  "state": {
+    "problem": {
+      "status": "complete"
+    },
+    "questions": {
+      "Q5": {
+        "status": "validated",
+        "models": [],
+        "experiments": [
+          "MH-EXPERIMENT-0005"
+        ],
+        "claims": [
+          "MH-CLAIM-0008"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-10T14:14:56+00:00"
+      },
+      "Q3": {
+        "status": "validated",
+        "models": [],
+        "experiments": [
+          "MH-EXPERIMENT-0003"
+        ],
+        "claims": [
+          "MH-CLAIM-0005"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-10T14:14:56+00:00"
+      },
+      "Q4": {
+        "status": "validated",
+        "models": [],
+        "experiments": [
+          "MH-EXPERIMENT-0004"
+        ],
+        "claims": [
+          "MH-CLAIM-0006",
+          "MH-CLAIM-0007"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-10T14:14:56+00:00"
+      },
+      "Q1": {
+        "status": "validated",
+        "models": [],
+        "experiments": [
+          "MH-EXPERIMENT-0001"
+        ],
+        "claims": [
+          "MH-CLAIM-0001",
+          "MH-CLAIM-0002"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-10T14:14:56+00:00"
+      },
+      "Q2": {
+        "status": "validated",
+        "models": [],
+        "experiments": [
+          "MH-EXPERIMENT-0002"
+        ],
+        "claims": [
+          "MH-CLAIM-0003",
+          "MH-CLAIM-0004"
+        ],
+        "dependencies": [],
+        "retry_count": 0,
+        "failure_reason": null,
+        "last_updated": "2026-09-10T14:14:56+00:00"
+      }
+    },
+    "models": {
+      "status": "pending",
+      "candidates": [
         "MH-MODEL-0001"
       ],
-      "experiments": [
-        "MH-EXPERIMENT-0001"
-      ],
-      "results": [
-        "MH-RESULT-0001"
-      ],
-      "claims": [
-        "MH-CLAIM-0001",
-        "MH-CLAIM-0002"
+      "selected": [
+        "MH-MODEL-0001"
       ]
     },
-    "Q2": {
-      "status": "validated",
-      "models": [
-        "MH-MODEL-0001"
-      ],
-      "experiments": [
-        "MH-EXPERIMENT-0002"
-      ],
-      "results": [
-        "MH-RESULT-0002"
-      ],
-      "claims": [
-        "MH-CLAIM-0003",
-        "MH-CLAIM-0004"
-      ]
+    "experiments": {
+      "status": "complete",
+      "by_question": {
+        "Q1": [
+          "MH-EXPERIMENT-0001"
+        ],
+        "Q2": [
+          "MH-EXPERIMENT-0002"
+        ],
+        "Q3": [
+          "MH-EXPERIMENT-0003"
+        ],
+        "Q4": [
+          "MH-EXPERIMENT-0004"
+        ],
+        "Q5": [
+          "MH-EXPERIMENT-0005"
+        ]
+      }
     },
-    "Q3": {
-      "status": "validated",
-      "models": [
-        "MH-MODEL-0001"
-      ],
-      "experiments": [
-        "MH-EXPERIMENT-0003"
-      ],
-      "results": [
-        "MH-RESULT-0003"
-      ],
-      "claims": [
-        "MH-CLAIM-0005"
-      ]
+    "evidence": {
+      "status": "pending",
+      "graph_version": 1,
+      "claims_supported": 8,
+      "claims_total": 8,
+      "coverage_ratio": 1.0
     },
-    "Q4": {
-      "status": "validated",
-      "models": [
-        "MH-MODEL-0001"
-      ],
-      "experiments": [
-        "MH-EXPERIMENT-0004"
-      ],
-      "results": [
-        "MH-RESULT-0004"
-      ],
-      "claims": [
-        "MH-CLAIM-0006",
-        "MH-CLAIM-0007"
-      ]
-    },
-    "Q5": {
-      "status": "validated",
-      "models": [
-        "MH-MODEL-0001"
-      ],
-      "experiments": [
-        "MH-EXPERIMENT-0005"
-      ],
-      "results": [
-        "MH-RESULT-0005"
-      ],
-      "claims": [
-        "MH-CLAIM-0008"
-      ]
+    "review": {
+      "status": "complete",
+      "rounds_completed": 1,
+      "verdict": "pass"
     }
   },
-  "evidence": {
-    "graph_version": 1,
-    "claims_supported": 8,
-    "claims_total": 8,
-    "coverage": 1.0
+  "workflow": {
+    "current_nodes": [],
+    "completed_nodes": [],
+    "blocked_nodes": [],
+    "retries": {},
+    "notes": [
+      {
+        "node": "",
+        "note": "本实例由项目内确定性脚本构建（未走 RuntimeSession 引擎），workflow 节点不虚报；内容真源为 registry + evidence_graph。",
+        "at": "2026-09-10T14:14:56+00:00"
+      }
+    ]
   },
-  "artifacts": {
-    "total": 33,
-    "by_type": {
-      "assumption": 1,
-      "claim": 8,
-      "code": 10,
-      "experiment": 5,
-      "model": 1,
-      "narrative": 1,
-      "problem": 1,
-      "question": 1,
-      "result": 5
-    }
+  "run": {
+    "phase": "delivered",
+    "started_at": "2026-09-10T14:14:56+00:00",
+    "updated_at": "2026-09-10T14:14:56+00:00"
   },
   "limitations": [
     "A04：Q2-Q5 沿用「全部把手位于龙头走过的路径上」，未建模拖曳链的横向偏离",

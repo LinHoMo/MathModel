@@ -1,0 +1,163 @@
+{
+  "profiler_version": "profiler-v1",
+  "source": "problem_txt",
+  "problem_types": [
+    "bearing_localization",
+    "wedge_intersection",
+    "coverage_path_planning",
+    "geometric_inference",
+    "optimization",
+    "search_and_clear",
+    "simulation"
+  ],
+  "sub_questions": [
+    {
+      "label": "Q1",
+      "index": 1,
+      "title": "已知若干个检测点坐标及某干扰源关于这些检测点的示向度，请给出采用交会定位法计算多边形定位区域直径（即区域内任意两点之间距离的最大值）的算法。以定位区域直径为直径",
+      "problem_types": [
+        "bearing_localization",
+        "wedge_intersection",
+        "coverage_path_planning",
+        "geometric_inference",
+        "optimization"
+      ],
+      "text_chars": 92
+    },
+    {
+      "label": "Q2",
+      "index": 2,
+      "title": "已知某全向干扰源在一个检测点处测得的示向度，请给出第二个检测点的选择策略，以获得关于该干扰源较好的定位效果，并给出第二个检测点的候选区域。",
+      "problem_types": [
+        "bearing_localization"
+      ],
+      "text_chars": 69
+    },
+    {
+      "label": "Q3",
+      "index": 3,
+      "title": "已知目标区域中的干扰源均为全向干扰源，总数在 10-16 个之间，但具体个数未知。现派出一只机器狗从原点出发，测向机初始频道为 1，对目标区域中的干扰源进行自动",
+      "problem_types": [
+        "bearing_localization",
+        "search_and_clear",
+        "simulation"
+      ],
+      "text_chars": 188
+    },
+    {
+      "label": "Q4",
+      "index": 4,
+      "title": "目标区域中既有全向干扰源，又有定向干扰源，总数仍为 10-16 个之间，定向干扰源的个数及定向方向未知。请给出检测与清除的策略及算法，并通过模拟器演练测试检验其",
+      "problem_types": [
+        "bearing_localization",
+        "search_and_clear",
+        "simulation"
+      ],
+      "text_chars": 84
+    }
+  ],
+  "features": {
+    "problem_types": [
+      "bearing_localization",
+      "wedge_intersection",
+      "coverage_path_planning",
+      "geometric_inference",
+      "optimization",
+      "search_and_clear",
+      "simulation"
+    ],
+    "has_data": true,
+    "sample_size": "medium",
+    "time_series": true,
+    "objectives": 1,
+    "uncertainty": true,
+    "_features_source": "profiler-v1",
+    "problem_title": "无线电干扰源的定位与清除是无线电频谱管理的重要任务。干扰源目标分布区域已被确定为一个半径为 1800 米的圆形区域，取此圆域中心为坐标系原点，正东方向为 x 轴正向，正北方向为 y 轴正向（单位：米）。目标区域中干扰源个数未知。请建立数学模",
+    "per_question": {
+      "Q1": {
+        "problem_types": [
+          "bearing_localization",
+          "wedge_intersection",
+          "coverage_path_planning",
+          "geometric_inference",
+          "optimization"
+        ],
+        "problem_title": "已知若干个检测点坐标及某干扰源关于这些检测点的示向度，请给出采用交会定位法计算多边形定位区域直径（即区域内任意两点之间距离的最大值）的算法。以定位区域直径为直径",
+        "text_chars": 92,
+        "_features_source": "profiler-v1"
+      },
+      "Q2": {
+        "problem_types": [
+          "bearing_localization"
+        ],
+        "problem_title": "已知某全向干扰源在一个检测点处测得的示向度，请给出第二个检测点的选择策略，以获得关于该干扰源较好的定位效果，并给出第二个检测点的候选区域。",
+        "text_chars": 69,
+        "_features_source": "profiler-v1"
+      },
+      "Q3": {
+        "problem_types": [
+          "bearing_localization",
+          "search_and_clear",
+          "simulation"
+        ],
+        "problem_title": "已知目标区域中的干扰源均为全向干扰源，总数在 10-16 个之间，但具体个数未知。现派出一只机器狗从原点出发，测向机初始频道为 1，对目标区域中的干扰源进行自动",
+        "text_chars": 188,
+        "_features_source": "profiler-v1"
+      },
+      "Q4": {
+        "problem_types": [
+          "bearing_localization",
+          "search_and_clear",
+          "simulation"
+        ],
+        "problem_title": "目标区域中既有全向干扰源，又有定向干扰源，总数仍为 10-16 个之间，定向干扰源的个数及定向方向未知。请给出检测与清除的策略及算法，并通过模拟器演练测试检验其",
+        "text_chars": 84,
+        "_features_source": "profiler-v1"
+      }
+    }
+  },
+  "per_question": {
+    "Q1": {
+      "problem_types": [
+        "bearing_localization",
+        "wedge_intersection",
+        "coverage_path_planning",
+        "geometric_inference",
+        "optimization"
+      ],
+      "problem_title": "已知若干个检测点坐标及某干扰源关于这些检测点的示向度，请给出采用交会定位法计算多边形定位区域直径（即区域内任意两点之间距离的最大值）的算法。以定位区域直径为直径",
+      "text_chars": 92,
+      "_features_source": "profiler-v1"
+    },
+    "Q2": {
+      "problem_types": [
+        "bearing_localization"
+      ],
+      "problem_title": "已知某全向干扰源在一个检测点处测得的示向度，请给出第二个检测点的选择策略，以获得关于该干扰源较好的定位效果，并给出第二个检测点的候选区域。",
+      "text_chars": 69,
+      "_features_source": "profiler-v1"
+    },
+    "Q3": {
+      "problem_types": [
+        "bearing_localization",
+        "search_and_clear",
+        "simulation"
+      ],
+      "problem_title": "已知目标区域中的干扰源均为全向干扰源，总数在 10-16 个之间，但具体个数未知。现派出一只机器狗从原点出发，测向机初始频道为 1，对目标区域中的干扰源进行自动",
+      "text_chars": 188,
+      "_features_source": "profiler-v1"
+    },
+    "Q4": {
+      "problem_types": [
+        "bearing_localization",
+        "search_and_clear",
+        "simulation"
+      ],
+      "problem_title": "目标区域中既有全向干扰源，又有定向干扰源，总数仍为 10-16 个之间，定向干扰源的个数及定向方向未知。请给出检测与清除的策略及算法，并通过模拟器演练测试检验其",
+      "text_chars": 84,
+      "_features_source": "profiler-v1"
+    }
+  },
+  "problem_id": "2026_B",
+  "note": "本快照由 Runtime 问题理解层（ADR-0008）从 inputs/problem.txt 确定性派生，是生产路径的检索输入 DTO，不是对问题本体的断言。"
+}
