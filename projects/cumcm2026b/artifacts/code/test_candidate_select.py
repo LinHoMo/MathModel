@@ -116,12 +116,29 @@ def test_decision_is_machine_readable():
 
 
 # ------------------------------------------ M-SELECT-002：策略对象化 + 信息感知候选
-def test_candidate_registry_has_four_strategy_objects():
-    """候选注册表是四件**规格对象**（各有 points 几何入口），不再是裸点集。"""
+def test_candidate_registry_has_five_strategy_objects():
+    """候选注册表是五件**规格对象**（各有 points 几何入口），不再是裸点集。"""
     names = [c["name"] for c in C.CANDIDATES]
-    assert names == ["RING", "SPIRAL", "AIFIX", "LAWN"]
+    assert names == ["RING", "SPIRAL", "AIFIX", "LAWN", "HEX"]
     for c in C.CANDIDATES:
         assert callable(c["points"])
+
+
+def test_hex_candidate_is_coverage_complete_and_fair():
+    """HEX（三角格子）必须与另三候选同样合理：覆盖完备 + 定向外扩 + 机制不同。
+
+    三角格子是圆盘覆盖的最密排布：间距 d 时最坏覆盖 = d/√3。d=1500 ⇒ 866 m < 1000 m，
+    故全向只需 **7 个点**（对照 RING 17 / SPIRAL 14 / LAWN 17）——直击「扫描段占
+    实测总行程约一半」这个已量化的瓶颈。
+    """
+    pts = C.hex_for(False)
+    cov = C.coverage_radius(pts, radius=B.R_AREA, n_theta=181, n_rho=91)
+    assert cov < 1000.0, f"HEX 覆盖不完备（{cov:.1f} m ≥ 1000 m）"
+    assert len(pts) <= 9, f"HEX 点数应显著少于另三候选，实得 {len(pts)}"
+    assert max((x * x + y * y) ** 0.5 for x, y in C.hex_for(True)) > B.R_AREA, \
+        "HEX 在定向场景没有外扩几何"
+    for other in (C.ring_points(False), C.spiral_for(False), C.lawn_for(False)):
+        assert sorted(pts) != sorted(other), "HEX 与既有候选点集重合"
 
 
 def test_lawn_candidate_is_coverage_complete_and_fair():

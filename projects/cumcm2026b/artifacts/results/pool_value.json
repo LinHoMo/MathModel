@@ -7,11 +7,13 @@
         "RING": 6597.8921928,
         "SPIRAL": 7132.9197916,
         "AIFIX": 6689.1378171999995,
-        "LAWN": 7933.602081800001
+        "LAWN": 7933.602081800001,
+        "HEX": 7047.191416600001
       },
       "ranked_by_mean": [
         "RING",
         "AIFIX",
+        "HEX",
         "SPIRAL",
         "LAWN"
       ],
@@ -49,6 +51,16 @@
         },
         {
           "pool": [
+            "HEX"
+          ],
+          "best": "HEX",
+          "best_mean_T": 7047.191416600001,
+          "abs_gap_vs_full_s": 449.2992238000006,
+          "paired_ci95_halfwidth_s": 504.56074290790485,
+          "significant": false
+        },
+        {
+          "pool": [
             "SPIRAL"
           ],
           "best": "SPIRAL",
@@ -81,6 +93,17 @@
         {
           "pool": [
             "RING",
+            "HEX"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
             "SPIRAL"
           ],
           "best": "RING",
@@ -103,6 +126,17 @@
         {
           "pool": [
             "AIFIX",
+            "HEX"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 6689.1378171999995,
+          "abs_gap_vs_full_s": 91.24562439999954,
+          "paired_ci95_halfwidth_s": 404.6992697767586,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
             "SPIRAL"
           ],
           "best": "AIFIX",
@@ -120,6 +154,28 @@
           "best_mean_T": 6689.1378171999995,
           "abs_gap_vs_full_s": 91.24562439999954,
           "paired_ci95_halfwidth_s": 404.6992697767586,
+          "significant": false
+        },
+        {
+          "pool": [
+            "HEX",
+            "SPIRAL"
+          ],
+          "best": "HEX",
+          "best_mean_T": 7047.191416600001,
+          "abs_gap_vs_full_s": 449.2992238000006,
+          "paired_ci95_halfwidth_s": 504.56074290790485,
+          "significant": false
+        },
+        {
+          "pool": [
+            "HEX",
+            "LAWN"
+          ],
+          "best": "HEX",
+          "best_mean_T": 7047.191416600001,
+          "abs_gap_vs_full_s": 449.2992238000006,
+          "paired_ci95_halfwidth_s": 504.56074290790485,
           "significant": false
         },
         {
@@ -137,6 +193,18 @@
           "pool": [
             "RING",
             "AIFIX",
+            "HEX"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "AIFIX",
             "SPIRAL"
           ],
           "best": "RING",
@@ -160,6 +228,30 @@
         {
           "pool": [
             "RING",
+            "HEX",
+            "SPIRAL"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "HEX",
+            "LAWN"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
             "SPIRAL",
             "LAWN"
           ],
@@ -167,6 +259,30 @@
           "best_mean_T": 6597.8921928,
           "abs_gap_vs_full_s": 0.0,
           "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "HEX",
+            "SPIRAL"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 6689.1378171999995,
+          "abs_gap_vs_full_s": 91.24562439999954,
+          "paired_ci95_halfwidth_s": 404.6992697767586,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "HEX",
+            "LAWN"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 6689.1378171999995,
+          "abs_gap_vs_full_s": 91.24562439999954,
+          "paired_ci95_halfwidth_s": 404.6992697767586,
           "significant": false
         },
         {
@@ -183,8 +299,86 @@
         },
         {
           "pool": [
+            "HEX",
+            "SPIRAL",
+            "LAWN"
+          ],
+          "best": "HEX",
+          "best_mean_T": 7047.191416600001,
+          "abs_gap_vs_full_s": 449.2992238000006,
+          "paired_ci95_halfwidth_s": 504.56074290790485,
+          "significant": false
+        },
+        {
+          "pool": [
             "RING",
             "AIFIX",
+            "HEX",
+            "SPIRAL"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "AIFIX",
+            "HEX",
+            "LAWN"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "AIFIX",
+            "SPIRAL",
+            "LAWN"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "HEX",
+            "SPIRAL",
+            "LAWN"
+          ],
+          "best": "RING",
+          "best_mean_T": 6597.8921928,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "HEX",
+            "SPIRAL",
+            "LAWN"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 6689.1378171999995,
+          "abs_gap_vs_full_s": 91.24562439999954,
+          "paired_ci95_halfwidth_s": 404.6992697767586,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "AIFIX",
+            "HEX",
             "SPIRAL",
             "LAWN"
           ],
@@ -201,23 +395,25 @@
         "RING": 10622.8961182,
         "SPIRAL": 8593.6961732,
         "AIFIX": 10137.0186758,
-        "LAWN": 10370.4395982
+        "LAWN": 10370.4395982,
+        "HEX": 11314.0117988
       },
       "ranked_by_mean": [
         "SPIRAL",
         "AIFIX",
         "LAWN",
-        "RING"
+        "RING",
+        "HEX"
       ],
       "best_candidate": "SPIRAL",
       "best_mean_T": 8593.6961732,
       "worst_single_pool": {
-        "candidate": "RING",
-        "mean_T": 10622.8961182,
-        "abs_loss_s": 2029.1999450000003,
-        "rel_loss_vs_best": 0.23612656348361397,
-        "rel_loss_vs_self": 0.1910213488319265,
-        "paired_ci95_halfwidth_s": 663.0934696963133,
+        "candidate": "HEX",
+        "mean_T": 11314.0117988,
+        "abs_loss_s": 2720.3156256,
+        "rel_loss_vs_best": 0.3165478009431473,
+        "rel_loss_vs_self": 0.2404377575325249,
+        "paired_ci95_halfwidth_s": 2135.585363877568,
         "significant": true
       },
       "subsets": [
@@ -263,6 +459,16 @@
         },
         {
           "pool": [
+            "HEX"
+          ],
+          "best": "HEX",
+          "best_mean_T": 11314.0117988,
+          "abs_gap_vs_full_s": 2720.3156256,
+          "paired_ci95_halfwidth_s": 2135.585363877568,
+          "significant": true
+        },
+        {
+          "pool": [
             "SPIRAL",
             "AIFIX"
           ],
@@ -296,6 +502,17 @@
         },
         {
           "pool": [
+            "SPIRAL",
+            "HEX"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
             "AIFIX",
             "LAWN"
           ],
@@ -309,6 +526,17 @@
           "pool": [
             "AIFIX",
             "RING"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 10137.0186758,
+          "abs_gap_vs_full_s": 1543.3225026,
+          "paired_ci95_halfwidth_s": 1700.2014655968762,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "HEX"
           ],
           "best": "AIFIX",
           "best_mean_T": 10137.0186758,
@@ -329,6 +557,28 @@
         },
         {
           "pool": [
+            "LAWN",
+            "HEX"
+          ],
+          "best": "LAWN",
+          "best_mean_T": 10370.4395982,
+          "abs_gap_vs_full_s": 1776.7434250000006,
+          "paired_ci95_halfwidth_s": 2461.6738024249353,
+          "significant": false
+        },
+        {
+          "pool": [
+            "RING",
+            "HEX"
+          ],
+          "best": "RING",
+          "best_mean_T": 10622.8961182,
+          "abs_gap_vs_full_s": 2029.1999450000003,
+          "paired_ci95_halfwidth_s": 663.0934696963133,
+          "significant": true
+        },
+        {
+          "pool": [
             "SPIRAL",
             "AIFIX",
             "LAWN"
@@ -354,8 +604,44 @@
         {
           "pool": [
             "SPIRAL",
+            "AIFIX",
+            "HEX"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
             "LAWN",
             "RING"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "LAWN",
+            "HEX"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "RING",
+            "HEX"
           ],
           "best": "SPIRAL",
           "best_mean_T": 8593.6961732,
@@ -377,10 +663,112 @@
         },
         {
           "pool": [
+            "AIFIX",
+            "LAWN",
+            "HEX"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 10137.0186758,
+          "abs_gap_vs_full_s": 1543.3225026,
+          "paired_ci95_halfwidth_s": 1700.2014655968762,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "RING",
+            "HEX"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 10137.0186758,
+          "abs_gap_vs_full_s": 1543.3225026,
+          "paired_ci95_halfwidth_s": 1700.2014655968762,
+          "significant": false
+        },
+        {
+          "pool": [
+            "LAWN",
+            "RING",
+            "HEX"
+          ],
+          "best": "LAWN",
+          "best_mean_T": 10370.4395982,
+          "abs_gap_vs_full_s": 1776.7434250000006,
+          "paired_ci95_halfwidth_s": 2461.6738024249353,
+          "significant": false
+        },
+        {
+          "pool": [
             "SPIRAL",
             "AIFIX",
             "LAWN",
             "RING"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "AIFIX",
+            "LAWN",
+            "HEX"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "AIFIX",
+            "RING",
+            "HEX"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "LAWN",
+            "RING",
+            "HEX"
+          ],
+          "best": "SPIRAL",
+          "best_mean_T": 8593.6961732,
+          "abs_gap_vs_full_s": 0.0,
+          "paired_ci95_halfwidth_s": 0.0,
+          "significant": false
+        },
+        {
+          "pool": [
+            "AIFIX",
+            "LAWN",
+            "RING",
+            "HEX"
+          ],
+          "best": "AIFIX",
+          "best_mean_T": 10137.0186758,
+          "abs_gap_vs_full_s": 1543.3225026,
+          "paired_ci95_halfwidth_s": 1700.2014655968762,
+          "significant": false
+        },
+        {
+          "pool": [
+            "SPIRAL",
+            "AIFIX",
+            "LAWN",
+            "RING",
+            "HEX"
           ],
           "best": "SPIRAL",
           "best_mean_T": 8593.6961732,

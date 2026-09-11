@@ -154,6 +154,57 @@ def lawn_for(has_directional: bool):
     return lawnmower_points(radius=2000.0 if has_directional else B.R_AREA)
 
 
+# ---------------------------------------------------------------- 候选 E：三角格子
+HEX_SPACING = 1500.0   # 格子间距 / m；最坏覆盖 = d/√3 ≈ 866 m < r_rec_min = 1000
+
+
+def hex_points(radius: float = B.R_AREA, spacing: float = HEX_SPACING,
+               start: tuple = (0.0, 0.0)):
+    """候选 E 的覆盖几何 = 三角格子（圆盘覆盖的最密排布）。
+
+    与环 / 螺旋 / 牛耕的**机制差异**：不是"一圈圈扫"或"一行行扫"，而是**留一整个
+    格子间距的空隙**。三角格子间距 d 时，域内任一点到最近格点的最坏距离 = d/√3；
+    取 d = 1500 ⇒ 最坏 866 m < r_rec_min = 1000 m，**全向只需 7 个点**即覆盖完备
+    （对照 RING 17 / SPIRAL 14 / LAWN 17）。
+
+    动机来自实测分解：总时间移动占 69–73%，移动又约一半花在**扫描段**，而扫描段
+    长度由点集的最近邻路径长度决定 ⇒ 点数 / 间距是直接的杠杆。
+
+    **公平性**（M-SELECT-001 的教训）：含定向源时覆盖半径扩到 2000 m，与 RING 外环 /
+    SPIRAL 延伸 / LAWN 扩半径平行；格点只保留落在覆盖圆内的。
+    """
+    dx = spacing
+    dy = spacing * math.sqrt(3.0) / 2.0
+    ny = int(math.ceil(2.0 * radius / dy)) + 2
+    nx = int(math.ceil(2.0 * radius / dx)) + 2
+    pts = []
+    for j in range(-ny, ny + 1):
+        for i in range(-nx, nx + 1):
+            x = i * dx + (dx / 2.0 if (j % 2) else 0.0)
+            y = j * dy
+            if math.hypot(x, y) <= radius + 1e-9:
+                pts.append((start[0] + x, start[1] + y))
+    return pts
+
+
+def hex_for(has_directional: bool):
+    """按场景给出三角格子几何。
+
+    **定向场景必须显式补外环**：纯格子的下一环在 2·dy = d·√3 ≈ 2598 m（> 2000），
+    所以把覆盖半径放到 2000 时格子**无法自行外扩**——实测 7 点纯格子在 R=2000 下
+    最坏覆盖在 995–1022 m 之间随 d 跳变，贴着 1000 m 阈值、没有任何安全余量
+    （挑 d 让它恰好低于阈值＝对着测量网格调参，不采纳）。故定向变体 = 全向格子 +
+    半径 2000 的外环，与 RING 的 {450, 1350, 2000} 同型处置。
+    """
+    base = hex_points(radius=B.R_AREA, spacing=HEX_SPACING)
+    if not has_directional:
+        return base
+    r = 2000.0
+    n = max(6, int(math.ceil(2.0 * math.pi * r / HEX_SPACING)))
+    return base + [(r * math.cos(2.0 * math.pi * k / n),
+                    r * math.sin(2.0 * math.pi * k / n)) for k in range(n)]
+
+
 def coverage_radius(points, radius: float = B.R_AREA, n_theta: int = 721,
                     n_rho: int = 361) -> float:
     """圆域内「到最近检测点」的最大距离（覆盖完备性判据，越小越好）。"""
@@ -402,7 +453,9 @@ AIFIX_CAND = {"name": "AIFIX", "points": ring_points,
               "sweeper": M.interleaved_sweeper}
 # LAWN = 牛耕扫描线（第三种覆盖机制，M-SELECT-003 起加入）
 LAWN_CAND = {"name": "LAWN", "points": lawn_for}
-CANDIDATES = [RING_CAND, SPIRAL_CAND, AIFIX_CAND, LAWN_CAND]
+# HEX = 三角格子（第四种覆盖机制；间距 d/√3 覆盖界，全向仅 7 点）
+HEX_CAND = {"name": "HEX", "points": hex_for}
+CANDIDATES = [RING_CAND, SPIRAL_CAND, AIFIX_CAND, LAWN_CAND, HEX_CAND]
 
 
 def _merge_into_all_results(out: dict) -> None:

@@ -6,7 +6,8 @@
     "RING",
     "SPIRAL",
     "AIFIX",
-    "LAWN"
+    "LAWN",
+    "HEX"
   ],
   "questions": {
     "q3_omni": {
@@ -26,6 +27,10 @@
         "LAWN": {
           "cleared_fraction": 1.0,
           "T_total_s": 7933.602081800001
+        },
+        "HEX": {
+          "cleared_fraction": 1.0,
+          "T_total_s": 7047.191416600001
         }
       },
       "paired": {
@@ -50,6 +55,13 @@
           "A_win_rate": 1.0,
           "B_win_rate": 0.0
         },
+        "RING|HEX": {
+          "delta_mean_s": -449.29922379999954,
+          "delta_std_s": 575.6286326121786,
+          "delta_ci95_halfwidth_s": 504.56074290790485,
+          "A_win_rate": 0.8,
+          "B_win_rate": 0.2
+        },
         "SPIRAL|AIFIX": {
           "delta_mean_s": 443.7819744000002,
           "delta_std_s": 1095.641957624413,
@@ -64,12 +76,33 @@
           "A_win_rate": 0.8,
           "B_win_rate": 0.2
         },
+        "SPIRAL|HEX": {
+          "delta_mean_s": 85.7283750000006,
+          "delta_std_s": 716.6783146057921,
+          "delta_ci95_halfwidth_s": 628.1962403477444,
+          "A_win_rate": 0.6,
+          "B_win_rate": 0.4
+        },
         "AIFIX|LAWN": {
           "delta_mean_s": -1244.4642646,
           "delta_std_s": 704.728297263333,
           "delta_ci95_halfwidth_s": 617.7215883126087,
           "A_win_rate": 1.0,
           "B_win_rate": 0.0
+        },
+        "AIFIX|HEX": {
+          "delta_mean_s": -358.0535993999996,
+          "delta_std_s": 496.2856583000665,
+          "delta_ci95_halfwidth_s": 435.01355954113507,
+          "A_win_rate": 0.6,
+          "B_win_rate": 0.4
+        },
+        "LAWN|HEX": {
+          "delta_mean_s": 886.4106652000004,
+          "delta_std_s": 461.46040391166997,
+          "delta_ci95_halfwidth_s": 404.48787817183353,
+          "A_win_rate": 0.0,
+          "B_win_rate": 1.0
         }
       },
       "rows": [
@@ -106,6 +139,14 @@
             "n_measure": 352,
             "move_dist_m": 34083.616141544844,
             "n_points": 17
+          },
+          "HEX": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8504.280834,
+            "n_measure": 269,
+            "move_dist_m": 34351.40417033665,
+            "n_points": 7
           }
         },
         {
@@ -141,6 +182,14 @@
             "n_measure": 320,
             "move_dist_m": 27004.293179140976,
             "n_points": 17
+          },
+          "HEX": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6625.150122,
+            "n_measure": 189,
+            "move_dist_m": 27255.750609502444,
+            "n_points": 7
           }
         },
         {
@@ -176,6 +225,14 @@
             "n_measure": 369,
             "move_dist_m": 27978.367088493258,
             "n_points": 17
+          },
+          "HEX": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7094.404949,
+            "n_measure": 198,
+            "move_dist_m": 29287.02474609846,
+            "n_points": 7
           }
         },
         {
@@ -211,6 +268,14 @@
             "n_measure": 348,
             "move_dist_m": 26587.82930238694,
             "n_points": 17
+          },
+          "HEX": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6699.834185,
+            "n_measure": 231,
+            "move_dist_m": 26294.17092305263,
+            "n_points": 7
           }
         },
         {
@@ -246,6 +311,14 @@
             "n_measure": 353,
             "move_dist_m": 29190.94633271525,
             "n_points": 17
+          },
+          "HEX": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6312.286993,
+            "n_measure": 168,
+            "move_dist_m": 26366.434965614044,
+            "n_points": 7
           }
         }
       ],
@@ -258,13 +331,15 @@
             "RING": true,
             "SPIRAL": true,
             "AIFIX": true,
-            "LAWN": true
+            "LAWN": true,
+            "HEX": true
           },
           "rejected": []
         },
         "ranked": [
           "RING",
           "AIFIX",
+          "HEX",
           "SPIRAL",
           "LAWN"
         ],
@@ -301,6 +376,10 @@
         "LAWN": {
           "cleared_fraction": 0.9833333333333334,
           "T_total_s": 10370.4395982
+        },
+        "HEX": {
+          "cleared_fraction": 0.9800000000000001,
+          "T_total_s": 11314.0117988
         }
       },
       "paired": {
@@ -325,6 +404,13 @@
           "A_win_rate": 0.4,
           "B_win_rate": 0.6
         },
+        "RING|HEX": {
+          "delta_mean_s": -691.1156805999999,
+          "delta_std_s": 2152.86140974954,
+          "delta_ci95_halfwidth_s": 1887.066227667712,
+          "A_win_rate": 0.4,
+          "B_win_rate": 0.6
+        },
         "SPIRAL|AIFIX": {
           "delta_mean_s": -1543.3225025999996,
           "delta_std_s": 1939.6765574078497,
@@ -339,12 +425,33 @@
           "A_win_rate": 0.8,
           "B_win_rate": 0.2
         },
+        "SPIRAL|HEX": {
+          "delta_mean_s": -2720.3156255999993,
+          "delta_std_s": 2436.384717032585,
+          "delta_ci95_halfwidth_s": 2135.585363877568,
+          "A_win_rate": 0.8,
+          "B_win_rate": 0.2
+        },
         "AIFIX|LAWN": {
           "delta_mean_s": -233.4209224000002,
           "delta_std_s": 1970.8173188609294,
           "delta_ci95_halfwidth_s": 1727.4975465131113,
           "A_win_rate": 0.4,
           "B_win_rate": 0.6
+        },
+        "AIFIX|HEX": {
+          "delta_mean_s": -1176.9931230000002,
+          "delta_std_s": 1690.1001515894682,
+          "delta_ci95_halfwidth_s": 1481.438100472806,
+          "A_win_rate": 0.8,
+          "B_win_rate": 0.2
+        },
+        "LAWN|HEX": {
+          "delta_mean_s": -943.5722006,
+          "delta_std_s": 2758.1767067304622,
+          "delta_ci95_halfwidth_s": 2417.6484792006795,
+          "A_win_rate": 0.8,
+          "B_win_rate": 0.2
         }
       },
       "rows": [
@@ -381,6 +488,14 @@
             "n_measure": 484,
             "move_dist_m": 37164.98338907064,
             "n_points": 23
+          },
+          "HEX": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 11805.013215,
+            "n_measure": 381,
+            "move_dist_m": 47440.06607377993,
+            "n_points": 16
           }
         },
         {
@@ -416,6 +531,14 @@
             "n_measure": 466,
             "move_dist_m": 32031.883146098047,
             "n_points": 23
+          },
+          "HEX": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9667.514792,
+            "n_measure": 336,
+            "move_dist_m": 38072.57396067779,
+            "n_points": 16
           }
         },
         {
@@ -451,6 +574,14 @@
             "n_measure": 419,
             "move_dist_m": 35217.57259119919,
             "n_points": 23
+          },
+          "HEX": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 12827.65873,
+            "n_measure": 425,
+            "move_dist_m": 51413.2936485616,
+            "n_points": 16
           }
         },
         {
@@ -486,6 +617,14 @@
             "n_measure": 635,
             "move_dist_m": 46107.63846601831,
             "n_points": 23
+          },
+          "HEX": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9581.799334,
+            "n_measure": 368,
+            "move_dist_m": 36603.996668889355,
+            "n_points": 16
           }
         },
         {
@@ -521,6 +660,14 @@
             "n_measure": 471,
             "move_dist_m": 33218.91236510451,
             "n_points": 23
+          },
+          "HEX": {
+            "seed": 46,
+            "cleared_fraction": 0.9,
+            "T_total_s": 12688.072923,
+            "n_measure": 465,
+            "move_dist_m": 49880.36461619695,
+            "n_points": 16
           }
         }
       ],
@@ -533,7 +680,8 @@
             "RING": true,
             "SPIRAL": true,
             "AIFIX": true,
-            "LAWN": true
+            "LAWN": true,
+            "HEX": true
           },
           "rejected": []
         },
@@ -541,7 +689,8 @@
           "SPIRAL",
           "AIFIX",
           "LAWN",
-          "RING"
+          "RING",
+          "HEX"
         ],
         "objective": {
           "metric": "T_total_s",
