@@ -24,7 +24,8 @@ def setup(tmp_path):
     audit FIX-1.3（E9）：claim 支撑链必须包含真实成功执行——fixture 需带
     execution_result（success + 非空 outputs + code_hash），否则 E9 判 FAIL。
     """
-    reg = ArtifactRegistry(tmp_path / "registry.json")
+    reg = ArtifactRegistry(tmp_path / "registry.json",
+                           allow_legacy_unverified=True)
     reg.project = "test"
     reg.create("question", artifact_id="Q001", title="Q1", activate=True)
     reg.create("model", title="model", artifact_id="M001", question="Q001", activate=True)

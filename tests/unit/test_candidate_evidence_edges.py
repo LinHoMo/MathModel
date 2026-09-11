@@ -26,7 +26,8 @@ from modeling_harness.runtime.graph.evidence_graph import (
 @pytest.fixture
 def graph(tmp_path):
     from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
-    reg = ArtifactRegistry(tmp_path / "registry.json")
+    reg = ArtifactRegistry(tmp_path / "registry.json",
+                           allow_legacy_unverified=True)
     reg.create("question", artifact_id="Q001", title="Q001", activate=True)
     reg.create("model", title="M1", question="Q001", activate=True)
     reg.create("model", title="M2", question="Q001", activate=True)

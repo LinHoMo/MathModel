@@ -101,10 +101,18 @@ def _enforce_schema(artifact_type: str, data: dict) -> None:
             from None
 
 
-def _check_exec_auth(data: dict) -> None:
-    """P0-3：success EXEC 必须来源可鉴别（adapter 签发 token 或显式
-    legacy_unverified 声明），否则拒绝登记（The Agent Is Not The State）。"""
-    if data.get("legacy_unverified"):
+def _check_exec_auth(data: dict, allow_legacy: bool = False) -> None:
+    """P0-3：success EXEC 必须来源可鉴别（adapter 签发 token，或**实例显式
+    开启豁免**时承认 legacy_unverified 声明），否则拒绝登记
+    （The Agent Is Not The State）。
+
+    ADR-0015：豁免开关从 payload **上移到 registry 实例**。原先
+    ``if data.get("legacy_unverified"): return`` 把豁免写在**被检查的数据**里——
+    任何能构造 artifact data 的代码都能自授权绕过 token 校验。现在只有
+    ``ArtifactRegistry(..., allow_legacy_unverified=True)`` 的实例才承认该声明；
+    默认实例即便 payload 带该键也照常校验 token。
+    """
+    if allow_legacy and data.get("legacy_unverified"):
         return
     from ..execution.execution_auth import verify_token
     token = data.get("execution_token")
@@ -121,8 +129,14 @@ def _check_exec_auth(data: dict) -> None:
 
 
 class ArtifactRegistry:
-    def __init__(self, path: str | Path):
+    def __init__(self, path: str | Path, allow_legacy_unverified: bool = False):
+        """allow_legacy_unverified：显式开启「历史 EXEC 豁免」（ADR-0015）。
+
+        默认 False —— success EXEC 必须带有效 execution_token。只有为历史数据 /
+        测试桩构造的实例才应开启；开关放在实例上，payload 无法自授权。
+        """
         self.path = Path(path)
+        self.allow_legacy_unverified = bool(allow_legacy_unverified)
         self.artifacts: dict[str, Artifact] = {}   # id → 最新版本
         self.history: dict[str, dict[int, dict]] = {}  # id → {version: snapshot}
         self.counters: dict[str, int] = {}         # type → 已发放数量
@@ -257,11 +271,12 @@ class ArtifactRegistry:
         _enforce_schema(artifact_type, rdata)
         # P0-3：EXEC 来源鉴别（create 路径强制）——success EXEC 必须带
         # adapter 签发的有效 execution_token（HMAC(code_hash|adapter|ts)）。
-        # Agent 无 secret 无法伪造；历史/测试桩 EXEC 显式标记
-        # legacy_unverified=true 豁免（不追溯重算）。读取路径
-        # （load/from_dict）不校验，尊重已存在事实。
+        # Agent 无 secret 无法伪造；历史/测试桩 EXEC 需由**实例**显式开启豁免
+        # （allow_legacy_unverified=True，ADR-0015）才承认 legacy_unverified 声明。
+        # 读取路径（load/from_dict）不校验，尊重已存在事实。
         if artifact_type == "execution_result" and rdata.get("status") == "success":
-            _check_exec_auth(rdata)
+            _check_exec_auth(rdata,
+                             allow_legacy=self.allow_legacy_unverified)
         art = Artifact(
             artifact_id=aid, type=artifact_type, title=title or aid,
             payload=list(payload or []), created_by=created_by, question=question,

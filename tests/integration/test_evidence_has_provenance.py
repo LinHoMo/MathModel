@@ -79,7 +79,8 @@ def test_gate_weak_when_edge_missing_but_data_has(tmp_path):
     E9 降级 weak（不 FAIL，但要求补齐边级 provenance）。"""
     from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
     from modeling_harness.runtime.graph.evidence_graph import EvidenceGraph
-    reg = ArtifactRegistry(tmp_path / "registry.json")
+    reg = ArtifactRegistry(tmp_path / "registry.json",
+                           allow_legacy_unverified=True)
     reg.project = "t"
     reg.create("question", artifact_id="Q001", title="Q", activate=True)
     reg.create("execution_result", title="exec", artifact_id="EXEC001",

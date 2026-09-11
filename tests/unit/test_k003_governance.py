@@ -25,7 +25,8 @@ from scripts.execution_writer import (build_execution_result,  # noqa: E402
 # ---------------------------------------------------------------- FIX-4.2
 def _make_registry_with_exec(tmp_path, exec_id="EXEC001"):
     from modeling_harness.runtime.artifacts.registry import ArtifactRegistry
-    reg = ArtifactRegistry(tmp_path / "project" / "state" / "registry.json")
+    reg = ArtifactRegistry(tmp_path / "project" / "state" / "registry.json",
+                           allow_legacy_unverified=True)
     reg.project = "k003"
     reg.create("question", artifact_id="Q001", title="Q1", activate=True)
     reg.create("execution_result", title="exec", artifact_id=exec_id,
