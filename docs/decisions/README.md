@@ -18,6 +18,8 @@
 | [ADR-0008](ADR-0008-problem-understanding-layer.md) | 问题理解层归属与 runtime 修改授权 | Accepted |
 | [ADR-0009](ADR-0009-integration-inside-existing-nodes.md) | 机制在既有节点内集成而非新增 DAG 节点 | Accepted |
 | [ADR-0010](ADR-0010-model-families-revision-r1.md) | model_families 词表修订 r1（CUMCM 2026 结构对齐） | Accepted |
+| [ADR-0011](ADR-0011-knowledge-card-gate.md) | 知识卡双层门禁与 source_type 枚举增补 | Accepted |
+| [ADR-0012](ADR-0012-efficiency-metric-denominator.md) | 效率统计口径以题面定义为准、跨实现比较前必须归一 | Accepted |
 
 ## 规则
 

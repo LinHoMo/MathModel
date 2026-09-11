@@ -1,0 +1,68 @@
+# 交互式模拟器类赛题 — 协议忠实客户端与代价优化
+# 定位：Model Construction Knowledge（约束/先验/验证），不是答案库。
+# 核心机理：题面把「模型好不好」的裁判权交给一个外部交互式模拟器/评测机时，
+#           赛题的成败面从「公式对不对」扩展到「协议忠实 + 闭环实跑 + 代价可控」。
+card_id: mc-interactive-simulator-protocol
+name: 交互式模拟器类赛题的协议忠实构建与代价优化
+family: coverage_path_planning
+version: 1
+problem_types: [interactive_simulation, protocol_client_construction, coverage_control]
+good_for:
+  - 题面提供一个外部模拟器/评测机（GUI + HTTP/JSON 或等价接口），参赛程序需与之交互完成任务（2026_B 问题 3/4）
+  - 需要把「本地仿真验证过的策略」原样搬上真机，且策略不得分叉
+  - 有现实时间预算（程序运行时间上限）与虚拟时间统计的双时钟约束
+  - 需要在无真机环境下先用本地 Mock 端到端验证协议与策略
+structure_signals:
+  - 题面附「接口说明 / 编程指南」，给出端点、请求/响应字段、时间归属规则
+  - 存在「程序运行时间上限」与「测试窗口截止」两个现实约束（双时钟）
+  - 统计量由模拟器在测试结束时告知（如干扰源总数），参赛程序不能先验知道
+  - 明确要求参赛程序自行记录「指令序列与响应」作为支撑材料
+problem_structures: [motion, coverage_control, protocol_interface]
+modeling_patterns: [state_transition, feedback_loop, distance, optimization_objective]
+mathematical_forms: [graph, optimization, logic]
+mechanism:
+  - 双靶同源：把靶子抽象成统一客户端接口（enter/measure/clear/exit + virtual_time_s + remaining_real_s），本地孪生与官方模拟器各实现一份，策略只依赖接口——仿真策略与实跑策略从结构上无法分叉
+  - 幂等键语义：附件2 §5.3 —— 新动作用新 request_id；只有重试**完全相同**的动作才复用原 id 与原内容；同一 id 改内容须返回 409。发号必须发生在动作构造时，不能发生在发送时
+  - 虚拟时间归属：时间由服务端计算并随每条响应返回（移动 |Δp|/v、检测固定秒、频道切换 +1、清除成功/失败各自计时），客户端只同步不自算
+  - 双时钟停止：必须同时看虚拟预算与 remaining_real_duration_s（现实压哨），任一先到即主动 /exit，避免被判超时退出
+  - 可观测量边界：真实接口可能只返回示向度（不返回信号强度），任何依赖强度的估距必须被替换为纯示向度几何（交会 + 沿测向线逼近）
+  - 代价分解是优化前提：把总虚拟时间拆成 移动/切换/检测/清除 四项记账，定位主项再动手——本例主项是移动（63%~71%）
+formulations:
+  - 客户端接口：BaseClient{ enter(), measure(x,y,ch)->{no_signal|near|direction,svd_deg}, clear(x,y,ch)->{success|no_target_in_range}, exit() }
+  - 几何归航：沿实时示向度按比例 ratio(<1) 逼近交会估计点 P̂，直到不确定度 R*≈d·δ/sinφ 落入清除半径再 /clear
+  - 覆盖路线：对扫描点集做贪心最近邻排序，代价与完备性解耦（完备性由最大空洞半径的几何上界保证）
+solvers:
+  - 零依赖 HTTP 客户端（标准库 urllib）+ 本地 Mock 服务端（http.server），同端口语义
+  - 带幂等重试的发送封装（动作构造时分配 request_id，重试复用）
+  - 记账式探针（包装 measure/clear 计数与累计位移，输出四项时间分解）
+requires:
+  - 得先拿到并逐字读完接口说明，把每个端点的请求/响应字段表抽出来
+  - 本地 Mock 与官方机的协议语义必须逐条对齐（含错误码、accepted 语义、时间归属）
+  - 策略必须只使用真实接口能提供的信息（不得用真值/强度等不可观测量导航）
+  - 现实时间预算可得（remaining_real_duration_s），且客户端据此做压哨退出
+risks:
+  - Mock 与官方机有细微差异时，时间统计与协议行为会偏移，须如实声明「未接官方机」的证据边界
+  - 只优化检测次数而忽略移动，或反之；须先做四项时间分解再定向优化
+  - 用真值或不可观测量导航得到的高清除率是伪优解，不计入结论
+  - 本地 Mock 的随机源分布若与官方机不同，统计量不可直接外推
+validation:
+  - 幂等验证：假服务端「首次超时、二次成功」，断言两次 request_id 与 payload 逐字节相同
+  - accepted 语义：断言 accepted=false 时 virtual_time_s 不被当作当前时刻、且不推进时间
+  - 双时钟：注入小 remaining_real_duration_s，断言策略在压哨前主动 /exit
+  - 换靶一致性：同一份策略在 Mock 靶与 HTTP 靶上跑通，接口调用序列一致
+  - 代价分解对账：探针输出 移动/切换/检测/清除 四项，合计须等于虚拟总时间（对账恒等式）
+  - 覆盖完备性：用大样本随机源复证漏检率不因路线重排而变差（完备性只由几何决定）
+  - 端到端回归：改动前后在同一批 seed 上对比 n_measure / move_dist / virtual_time，且清除率保持 1.0
+often_combined_with: [mc-bearing-triangulation, mc-coverage-search, mc-monte-carlo, mc-failure-mode-separation]
+anti_patterns:
+  - 把 request_id 当作「每发一次递增的序号」，重试时改内容/改 ID（幂等失效）
+  - 策略里出现真值坐标或不可观测的强度反推距离
+  - 用「本地仿真通过」冒充「官方机实跑通过」
+  - 只报总时间不做四项分解，优化时盲目调参
+  - 用生成顺序当遍历路线，把「覆盖完备」误当成「路径最优」
+  - 固定假定 remaining_real_duration_s = 1200
+known_failures: [fm-request-id-retry-nonreuse, fm-coverage-route-unsorted]
+status: active
+confidence: 0.85
+source_type: empirical
+source_refs: [2026_B 无线电干扰源定位清除（协议客户端忠实化 + 覆盖扫描效率实录）]

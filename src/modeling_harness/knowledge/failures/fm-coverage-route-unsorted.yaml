@@ -1,0 +1,18 @@
+# 覆盖扫描点无路线排序，移动开销翻倍
+failure_id: fm-coverage-route-unsorted
+title: 覆盖扫描点按生成顺序遍历，移动代价近乎翻倍
+problem_context: 2026 CUMCM B 题问题 3/4，机器狗按同心环覆盖网逐点扫描目标区域，清除率正常但平均定位清除时间偏高
+method: 同心环覆盖扫描（确定性网格遍历 + 逐点全频道检测）
+modeling_structure: coverage_path_planning
+failure_mode: wrong-usage
+symptom: 清除比例 1.0、覆盖完备性判据成立，但平均定位清除时间是同级方案的约 2 倍；探针实测 Q3 移动耗时 10150 s，占总虚拟时间 14374 s 的 71%
+root_cause: 检测点按环半径升序的**生成顺序**直接遍历，环内起止点与环间衔接由生成顺序而非几何决定，路径非最优；覆盖完备性由几何判据（最大空洞半径）保证，与遍历顺序无关，两者本可解耦——把「完备」误当成「高效」
+detection: 用探针统计累计移动距离 move_dist 与检测次数 n_measure，换算成虚拟时间占比；对照实验：把遍历顺序换成从原点出发的最近邻重排后重测，若移动显著下降即坐实
+fix: 对扫描点做最近邻路线排序（从当前位出发的贪心 NN），并按环角色分级弧向步长以减少点数。本实例实测：Q3 移动 50749 m → 26098 m（−49%）、Q4 79330 m → 43214 m（−46%），清除率保持 1.0、覆盖漏检率不变
+avoidance: 任何「点集遍历」策略都要显式做路线排序，不要用数据结构/生成器的顺序当路线；先分离「是否覆盖完备」（几何判据）与「怎么走最省」（路线优化）两件事，再分别优化
+applies_to: [mc-interactive-simulator-protocol]
+source: 2026_B 无线电干扰源定位清除（覆盖扫描效率实录；seed=42 探针）
+severity: medium
+confidence: 0.9
+source_type: empirical
+status: active

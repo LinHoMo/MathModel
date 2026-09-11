@@ -1,0 +1,18 @@
+# 重试时递增 request_id，破坏协议幂等语义
+failure_id: fm-request-id-retry-nonreuse
+title: 重试时递增 request_id，把幂等重发变成新动作
+problem_context: 2026 CUMCM B 题「干扰源定位与清除」，机器狗程序通过 HTTP+JSON 与官方模拟器交互；网络抖动或超时后需要重发同一动作
+method: 模拟器 HTTP 客户端（标准库 urllib）的请求重发路径
+modeling_structure: general
+failure_mode: consistency
+symptom: 超时后重发同一动作返回 HTTP 409（request_id 冲突），或同一动作被服务端执行两次——重复移动、重复检测、虚拟时间被多计；单测不覆盖重试分支时完全不可见
+root_cause: 客户端把 request_id 当作「每发一次请求就递增的序号」。附件2 §5.3 规定：每个**新动作**用新 request_id，只有重试**完全相同**的动作（网络超时/连接中断）才复用原 request_id 与原内容；同一 ID 改内容须由服务端返回 409。递增发号把「重发」变成了「新动作」，协议幂等语义失效
+detection: 审查客户端的发号位置——request_id 是否在重试路径上复用原值（正确做法是动作构造时分配一次，重试原样复用）。可执行检查：起一个「首次必超时、第二次成功」的假服务端，断言两次到达服务端的 request_id 逐字节相同、payload 逐字节相同
+fix: 把发号从「发送时递增」改为「动作构造时分配一次」，重试分支复用同一 payload 对象（含原 request_id）；禁止在重试分支里重新构造请求体
+avoidance: 任何带幂等键的外部协议，先读协议的幂等条款再写客户端；把「首发」与「重试」收敛到同一条发送路径，用同一个 payload 变量，从结构上杜绝重试时改内容
+applies_to: [mc-interactive-simulator-protocol]
+source: 2026_B 无线电干扰源定位清除（协议客户端忠实化实录；附件2 §5.3 段落179）
+severity: high
+confidence: 0.95
+source_type: empirical
+status: active
