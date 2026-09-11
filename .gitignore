@@ -48,3 +48,7 @@ projects/regtest*
 
 # ruff
 .ruff_cache/
+
+# 本地 rivet 工具状态（verify 命令 uv/mypy/ruff 与仓库协议 py -3.12/零依赖冲突，不入库）
+.rivet-config.json
+.rivet.md
