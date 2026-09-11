@@ -262,6 +262,35 @@ def _render_repo(args) -> int:
     return 0
 
 
+def _build_geometry_from_ir(args) -> int:
+    """由 GeometryIR(JSON) 确定性渲染二维几何图示（.svg / .html）。"""
+    from modeling_harness.viz.geometry import GeometryIRError, GeometryIR
+    from modeling_harness.viz.geometry_svg import (
+        render_geometry_html,
+        render_geometry_svg,
+    )
+
+    try:
+        ir = GeometryIR.load(args.ir)
+    except GeometryIRError as exc:
+        print(f"[FAIL] GeometryIR 破损: {exc}", file=sys.stderr)
+        return 2
+
+    out = Path(args.output)
+    suffix = out.suffix.lower()
+    if suffix == ".svg":
+        content = render_geometry_svg(ir)
+    elif suffix in (".html", ".htm"):
+        content = render_geometry_html(ir)
+    else:
+        print("[FAIL] 输出后缀须为 .svg 或 .html", file=sys.stderr)
+        return 2
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(content, encoding="utf-8")
+    print(f"[OK] 几何图示已生成: {out}")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="科学图表生成（SVG 输出）")
     sub = parser.add_subparsers(dest="chart_type", required=True)
@@ -282,6 +311,12 @@ def main(argv=None) -> int:
     p_build.add_argument("-o", "--output", required=True, help="输出路径（.svg 或 .html）")
     p_build.add_argument("--title", default="", help="覆盖标题")
 
+    p_geom = sub.add_parser(
+        "geometry", help="由 GeometryIR(JSON) 确定性渲染二维几何图示 SVG/HTML"
+    )
+    p_geom.add_argument("ir", help="GeometryIR JSON 路径")
+    p_geom.add_argument("-o", "--output", required=True, help="输出路径（.svg 或 .html）")
+
     p_proj = sub.add_parser("project", help="生成项目模型图（写 artifacts/figures/）")
     p_proj.add_argument("name", help="projects/<name> 项目名")
     p_proj.add_argument("--no-evidence", action="store_true", help="跳过 Evidence Graph")
@@ -292,6 +327,8 @@ def main(argv=None) -> int:
 
     if args.chart_type == "build":
         return _build_from_ir(args)
+    if args.chart_type == "geometry":
+        return _build_geometry_from_ir(args)
     if args.chart_type == "project":
         return _render_project(args)
     if args.chart_type == "repo":
