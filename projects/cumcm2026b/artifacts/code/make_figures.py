@@ -19,7 +19,6 @@
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -106,27 +105,47 @@ def fig_wedge_region(zoom: bool = False) -> GeometryIR:
 
 # ---------------------------------------------------------------- 图 2：Thales 反例
 def fig_coverage_counterexample() -> GeometryIR:
-    """Q1 反例：锐角三角形上「以直径为直径的圆」盖不住最小包围圆。"""
-    data = json.loads((PROJ / "artifacts" / "q1q2_v2_results.json").read_text(encoding="utf-8"))
-    tri = [(0.0, 0.0), (10.0, 0.0), (5.0, 6.0)]
-    covers, diam, cd, rd, mec_c, mec_r = S.diameter_circle_covers(tri)
+    """Q1 反例：用 **v2 正向生成**的构型（真源 + 站点 → 观测方程 → 反解），
+    其定位区域盖不住「以直径为直径的圆」。
 
-    items = [
-        Item(kind="polygon", points=tri, variant="emphasis", label="定位区域（锐角三角形）"),
-        Item(kind="circle", center=cd, radius=rd, variant="dashed",
-             label=f"直径圆 r={rd:g} m"),
-        Item(kind="circle", center=mec_c, radius=mec_r, variant="danger",
-             label=f"最小包围圆 r={mec_r:.4f} m"),
-        Item(kind="segment", points=[(0.0, 0.0), (10.0, 0.0)], variant="danger",
-             label=f"D={diam:g} m"),
-    ]
+    刻意不用手搓三角形 (0,0),(10,0),(5,6)：那类反例的 ρ 超出真实可达上确界，
+    会把失效幅度夸大 28 倍（见 model.md 决断二）。图示必须与模型主张同源。
+    """
+    data = json.loads((PROJ / "artifacts" / "q1q2_v2_results.json").read_text(encoding="utf-8"))
+    wc = data["problem1"]["counterexample"]["worst_case"]
+    stations = [tuple(p) for p in wc["stations"]]
+    src = tuple(wc["source"])
+    bears = [S._bearing(sx, sy, src[0], src[1]) for sx, sy in stations]
+
+    reg = S.location_region(stations, bears)
+    covers, diam, cd, rd, mec_c, mec_r = S.diameter_circle_covers(reg)
+
+    items: list[Item] = []
+    for (sx, sy), b in zip(stations, bears):
+        for off in (-EPS, EPS):
+            items.append(Item(kind="ray", at=(sx, sy), bearing_deg=b + off, length=900.0,
+                              variant="muted"))
+    items.append(Item(kind="polygon", points=list(reg), variant="emphasis",
+                      label="定位区域 Ω"))
+    items.append(Item(kind="circle", center=cd, radius=rd, variant="dashed",
+                      label=f"直径圆 r={rd:.4f} m"))
+    items.append(Item(kind="circle", center=mec_c, radius=mec_r, variant="danger",
+                      label=f"最小包围圆 r={mec_r:.4f} m"))
+    for i, (sx, sy) in enumerate(stations):
+        items.append(Item(kind="point", points=[(sx, sy)], variant="accent", label=f"S{i + 1}"))
+
+    span = max(mec_r * 3.0, diam)
+    cx = sum(p[0] for p in reg) / len(reg)
+    cy = sum(p[1] for p in reg) / len(reg)
     return GeometryIR(
-        title="问题 1：Thales 判据的反例 —— 直径圆不覆盖定位区域",
+        title=f"问题 1：Thales 判据的反例（χ={wc['crossing_angle_deg']:.3f}°，覆盖不成立）",
         items=items,
-        viewport=Viewport(equal_aspect=True),
-        legend=[f"直径圆半径 {rd:g} m < 最小包围圆半径 {mec_r:.4f} m",
-                "覆盖成立 ⟺ 各顶点对直径端点张角 ≥90°（Thales）",
-                f"本例判定：{'覆盖成立' if covers else '覆盖不成立'}"],
+        viewport=Viewport(xlim=(cx - span, cx + span), ylim=(cy - span, cy + span),
+                          equal_aspect=True),
+        legend=[f"直径圆半径 {rd:.4f} m  <  最小包围圆半径 {mec_r:.4f} m ⇒ 盖不住",
+                f"ρ = r_MEC/D = {wc['rho_mec_over_D']:.7f}（可达上确界 0.5002942）",
+                f"需把圆放大到 {wc['required_enlarge_factor']:.6f} D 才覆盖",
+                "与手搓三角形反例（夸大 28 倍）不同，本构型由正向模型生成"],
     )
 
 

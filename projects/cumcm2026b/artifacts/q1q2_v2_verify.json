@@ -1,0 +1,591 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-11T12:44:04.405499+00:00",
+  "target": {
+    "path": "artifacts/q1q2_v2_results.json",
+    "sha256": "5cfb7424d17c2d7eddf3a74c65192653e7aa23c0dece8cb28560997aac72bf4e"
+  },
+  "n_checks": 96,
+  "n_failed": 0,
+  "passed": true,
+  "failed_ids": [],
+  "recompute": null,
+  "checks": [
+    {
+      "id": "meta.seed",
+      "desc": "随机种子固定为 42",
+      "ok": true,
+      "detail": "seed=42"
+    },
+    {
+      "id": "meta.const",
+      "desc": "常量与赛题一致（R=1800, ε=1°, 接收半径 1000–1500 m）",
+      "ok": true,
+      "detail": "{\"R_AREA\": 1800.0, \"EPS_BEARING_DEG\": 1.0, \"R_REC_MIN\": 1000.0, \"R_REC_MAX\": 1500.0}"
+    },
+    {
+      "id": "Q1.A.feas.S1",
+      "desc": "Q1.A: |S1−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.A.guar.S1",
+      "desc": "Q1.A: |S1−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.A.opt.S1",
+      "desc": "Q1.A: |S1−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.A.area.S1",
+      "desc": "Q1.A: S1 在区域内 (|S1| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S1|=680.0745 m"
+    },
+    {
+      "id": "Q1.A.feas.S2",
+      "desc": "Q1.A: |S2−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S2−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.A.guar.S2",
+      "desc": "Q1.A: |S2−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S2−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.A.opt.S2",
+      "desc": "Q1.A: |S2−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S2−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.A.area.S2",
+      "desc": "Q1.A: S2 在区域内 (|S2| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S2|=960.3271 m"
+    },
+    {
+      "id": "Q1.A.area.G",
+      "desc": "Q1.A: 源在区域内 (|G| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|G|=272.0294 m"
+    },
+    {
+      "id": "Q1.A.guar.flag",
+      "desc": "Q1.A: 自报「保证可行」为真",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q1.A.poly",
+      "desc": "Q1.A: 定位区域非退化",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q1.A.D",
+      "desc": "Q1.A: 直径重算一致",
+      "ok": true,
+      "detail": "recompute=46.916153 reported=46.916155"
+    },
+    {
+      "id": "Q1.A.rho",
+      "desc": "Q1.A: ρ 重算一致",
+      "ok": true,
+      "detail": "recompute=0.500000000 reported=0.5"
+    },
+    {
+      "id": "Q1.A.rho_lower",
+      "desc": "Q1.A: ρ ≥ 1/2（直径两端点定圆）",
+      "ok": true,
+      "detail": "ρ=0.500000000"
+    },
+    {
+      "id": "Q1.A.thales",
+      "desc": "Q1.A: ρ = 1/2 ⟺ 直径圆覆盖",
+      "ok": true,
+      "detail": "covers=True ρ=0.500000000"
+    },
+    {
+      "id": "Q1.A.chi",
+      "desc": "Q1.A: 交会角重算一致",
+      "ok": true,
+      "detail": "recompute=90.0000 reported=90.0"
+    },
+    {
+      "id": "Q1.B.feas.S1",
+      "desc": "Q1.B: |S1−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.B.guar.S1",
+      "desc": "Q1.B: |S1−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.B.opt.S1",
+      "desc": "Q1.B: |S1−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.B.area.S1",
+      "desc": "Q1.B: S1 在区域内 (|S1| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S1|=1256.3112 m"
+    },
+    {
+      "id": "Q1.B.feas.S2",
+      "desc": "Q1.B: |S2−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S2−G|=1000.0000 m"
+    },
+    {
+      "id": "Q1.B.guar.S2",
+      "desc": "Q1.B: |S2−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S2−G|=1000.0000 m"
+    },
+    {
+      "id": "Q1.B.opt.S2",
+      "desc": "Q1.B: |S2−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S2−G|=1000.0000 m"
+    },
+    {
+      "id": "Q1.B.area.S2",
+      "desc": "Q1.B: S2 在区域内 (|S2| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S2|=584.9140 m"
+    },
+    {
+      "id": "Q1.B.area.G",
+      "desc": "Q1.B: 源在区域内 (|G| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|G|=553.1727 m"
+    },
+    {
+      "id": "Q1.B.guar.flag",
+      "desc": "Q1.B: 自报「保证可行」为真",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q1.B.poly",
+      "desc": "Q1.B: 定位区域非退化",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q1.B.D",
+      "desc": "Q1.B: 直径重算一致",
+      "ok": true,
+      "detail": "recompute=99.492651 reported=99.492652"
+    },
+    {
+      "id": "Q1.B.rho",
+      "desc": "Q1.B: ρ 重算一致",
+      "ok": true,
+      "detail": "recompute=0.500000000 reported=0.5"
+    },
+    {
+      "id": "Q1.B.rho_lower",
+      "desc": "Q1.B: ρ ≥ 1/2（直径两端点定圆）",
+      "ok": true,
+      "detail": "ρ=0.500000000"
+    },
+    {
+      "id": "Q1.B.thales",
+      "desc": "Q1.B: ρ = 1/2 ⟺ 直径圆覆盖",
+      "ok": true,
+      "detail": "covers=True ρ=0.500000000"
+    },
+    {
+      "id": "Q1.B.chi",
+      "desc": "Q1.B: 交会角重算一致",
+      "ok": true,
+      "detail": "recompute=140.0000 reported=140.0"
+    },
+    {
+      "id": "Q1.C.feas.S1",
+      "desc": "Q1.C: |S1−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.C.guar.S1",
+      "desc": "Q1.C: |S1−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.C.opt.S1",
+      "desc": "Q1.C: |S1−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S1−G|=950.0000 m"
+    },
+    {
+      "id": "Q1.C.area.S1",
+      "desc": "Q1.C: S1 在区域内 (|S1| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S1|=892.6315 m"
+    },
+    {
+      "id": "Q1.C.feas.S2",
+      "desc": "Q1.C: |S2−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S2−G|=900.0000 m"
+    },
+    {
+      "id": "Q1.C.guar.S2",
+      "desc": "Q1.C: |S2−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S2−G|=900.0000 m"
+    },
+    {
+      "id": "Q1.C.opt.S2",
+      "desc": "Q1.C: |S2−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S2−G|=900.0000 m"
+    },
+    {
+      "id": "Q1.C.area.S2",
+      "desc": "Q1.C: S2 在区域内 (|S2| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S2|=1227.3888 m"
+    },
+    {
+      "id": "Q1.C.feas.S3",
+      "desc": "Q1.C: |S3−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S3−G|=980.0000 m"
+    },
+    {
+      "id": "Q1.C.guar.S3",
+      "desc": "Q1.C: |S3−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S3−G|=980.0000 m"
+    },
+    {
+      "id": "Q1.C.opt.S3",
+      "desc": "Q1.C: |S3−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S3−G|=980.0000 m"
+    },
+    {
+      "id": "Q1.C.area.S3",
+      "desc": "Q1.C: S3 在区域内 (|S3| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S3|=808.1197 m"
+    },
+    {
+      "id": "Q1.C.area.G",
+      "desc": "Q1.C: 源在区域内 (|G| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|G|=331.0589 m"
+    },
+    {
+      "id": "Q1.C.guar.flag",
+      "desc": "Q1.C: 自报「保证可行」为真",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q1.C.poly",
+      "desc": "Q1.C: 定位区域非退化",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q1.C.D",
+      "desc": "Q1.C: 直径重算一致",
+      "ok": true,
+      "detail": "recompute=38.917942 reported=38.917941"
+    },
+    {
+      "id": "Q1.C.rho",
+      "desc": "Q1.C: ρ 重算一致",
+      "ok": true,
+      "detail": "recompute=0.500000000 reported=0.5"
+    },
+    {
+      "id": "Q1.C.rho_lower",
+      "desc": "Q1.C: ρ ≥ 1/2（直径两端点定圆）",
+      "ok": true,
+      "detail": "ρ=0.500000000"
+    },
+    {
+      "id": "Q1.C.thales",
+      "desc": "Q1.C: ρ = 1/2 ⟺ 直径圆覆盖",
+      "ok": true,
+      "detail": "covers=True ρ=0.500000000"
+    },
+    {
+      "id": "Q1.ce.feas.S1",
+      "desc": "Q1.ce: |S1−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S1−G|=893.2184 m"
+    },
+    {
+      "id": "Q1.ce.guar.S1",
+      "desc": "Q1.ce: |S1−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S1−G|=893.2184 m"
+    },
+    {
+      "id": "Q1.ce.opt.S1",
+      "desc": "Q1.ce: |S1−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S1−G|=893.2184 m"
+    },
+    {
+      "id": "Q1.ce.area.S1",
+      "desc": "Q1.ce: S1 在区域内 (|S1| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S1|=590.1157 m"
+    },
+    {
+      "id": "Q1.ce.feas.S2",
+      "desc": "Q1.ce: |S2−G| ≤ 1500.0 m（可行）",
+      "ok": true,
+      "detail": "|S2−G|=950.3387 m"
+    },
+    {
+      "id": "Q1.ce.guar.S2",
+      "desc": "Q1.ce: |S2−G| ≤ 1000.0 m（保证可接收）",
+      "ok": true,
+      "detail": "|S2−G|=950.3387 m"
+    },
+    {
+      "id": "Q1.ce.opt.S2",
+      "desc": "Q1.ce: |S2−G| > 5.0 m（未进入光学清除）",
+      "ok": true,
+      "detail": "|S2−G|=950.3387 m"
+    },
+    {
+      "id": "Q1.ce.area.S2",
+      "desc": "Q1.ce: S2 在区域内 (|S2| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|S2|=1383.1757 m"
+    },
+    {
+      "id": "Q1.ce.area.G",
+      "desc": "Q1.ce: 源在区域内 (|G| ≤ 1800.0 m)",
+      "ok": true,
+      "detail": "|G|=1358.8615 m"
+    },
+    {
+      "id": "Q1.ce.poly",
+      "desc": "反例: 定位区域非退化",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q1.ce.D",
+      "desc": "反例: 直径重算一致",
+      "ok": true,
+      "detail": "recompute=45.533126 reported=45.533125"
+    },
+    {
+      "id": "Q1.ce.rho",
+      "desc": "反例: ρ 重算一致",
+      "ok": true,
+      "detail": "recompute=0.500292145 reported=0.50029214"
+    },
+    {
+      "id": "Q1.ce.fails",
+      "desc": "反例: 直径圆确实不覆盖（是真反例）",
+      "ok": true,
+      "detail": "covers=False"
+    },
+    {
+      "id": "Q1.ce.gt_half",
+      "desc": "反例: ρ > 1/2（不覆盖的必要条件）",
+      "ok": true,
+      "detail": "ρ=0.500292145"
+    },
+    {
+      "id": "Q1.ce.enlarge",
+      "desc": "反例: required_enlarge_factor = 2·r_MEC/D",
+      "ok": true,
+      "detail": "reported=1.00058429 recompute=1.000584290"
+    },
+    {
+      "id": "Q1.ce.window",
+      "desc": "反例: 交会角落在失效窗口 (90°, 90°+2ε]",
+      "ok": true,
+      "detail": "χ=90.041849"
+    },
+    {
+      "id": "Q1.ce.origin",
+      "desc": "反例: 由正向模型生成（非字面常量）",
+      "ok": true,
+      "detail": "forward_model(真源+站点→观测方程→反解)"
+    },
+    {
+      "id": "Q1.win.agree",
+      "desc": "失效窗口定理：落入窗口集合 == 覆盖失败集合（iff，逐样本）",
+      "ok": true,
+      "detail": "in_window=517 n_fail=517"
+    },
+    {
+      "id": "Q1.win.rate",
+      "desc": "失效率与理论 2ε/15° 一致（|z| ≤ 4）",
+      "ok": true,
+      "detail": "obs=0.12925 theory=0.133333 4σ=0.02150"
+    },
+    {
+      "id": "Q1.sup.order",
+      "desc": "随机采样上确界 ≤ 定向密集扫描上确界",
+      "ok": true,
+      "detail": "obs=0.50029214 dense=0.500294193"
+    },
+    {
+      "id": "Q1.sup.jung",
+      "desc": "上确界 < Jung 上界 1/√3",
+      "ok": true,
+      "detail": "0.500294193 < 0.57735027"
+    },
+    {
+      "id": "Q1.sup.gt_half",
+      "desc": "上确界 > 1/2（窗口内确有失效）",
+      "ok": true,
+      "detail": "0.500294193"
+    },
+    {
+      "id": "Q1.sup.v1_out",
+      "desc": "v1 手搓反例 ρ=0.5083 落在可达集之外（超出上确界）",
+      "ok": true,
+      "detail": "v1=0.508333333 > sup=0.500294193"
+    },
+    {
+      "id": "Q1.sup.factor",
+      "desc": "夸大倍数自洽",
+      "ok": true,
+      "detail": "reported=28.33 recompute=28.3261"
+    },
+    {
+      "id": "Q1.sup.invariant",
+      "desc": "ρ 声明为相似不变量（扫描降维的依据）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q1.sup.scale_inv",
+      "desc": "相似不变性数值验证：3 个绝对尺度下 ρ 一致",
+      "ok": true,
+      "detail": "ρ=[0.5002941933, 0.5002941933, 0.5002941933]"
+    },
+    {
+      "id": "Q2.regret",
+      "desc": "最小最大后悔值可重算",
+      "ok": true,
+      "detail": "recompute=9.752596 reported=9.752596"
+    },
+    {
+      "id": "Q2.regret.max",
+      "desc": "后悔值取各场景最大值（max 而非均值/加权和）",
+      "ok": true,
+      "detail": "{'P1_距离均匀[200,1500]|r_rec=1500': 9.752595999999997, 'P2_面积均匀(盘内密度∝R)|r_rec=1500': 0.4338690000000014, 'P3_远距集中[1000,1500]|r_rec=1500': 0.0, 'P1_距离均匀[200,1500]|r_rec=1000': 9.752595999999997, 'P2_面积均匀(盘内密度∝R)|r_rec=1000': 0.4338690000000014, 'P3_远距集中[1000,1500]|r_rec=1000': 0.0}"
+    },
+    {
+      "id": "Q2.minimax",
+      "desc": "最小最大点的最坏 E[D] 可重算",
+      "ok": true,
+      "detail": "recompute=64.900279 reported=64.900279"
+    },
+    {
+      "id": "Q2.feas.mm",
+      "desc": "最小最大后悔点失效概率 ≤ 0.02",
+      "ok": true,
+      "detail": "max=0.0"
+    },
+    {
+      "id": "Q2.feas.mx",
+      "desc": "最小最大点失效概率 ≤ 0.02",
+      "ok": true,
+      "detail": "max=0.0"
+    },
+    {
+      "id": "Q2.feas.excl",
+      "desc": "被可行性筛剔除的点失效率确实 > 阈值",
+      "ok": true,
+      "detail": "n_excl=81"
+    },
+    {
+      "id": "Q2.feas.count",
+      "desc": "网格点统计自洽（可行 + 剔除 = 全部）",
+      "ok": true,
+      "detail": "27/108"
+    },
+    {
+      "id": "Q2.cand.thr",
+      "desc": "候选区内 regret ≤ (1+0.05)·min",
+      "ok": true,
+      "detail": "thr=10.240226"
+    },
+    {
+      "id": "Q2.cand.argmin",
+      "desc": "候选区含最小后悔点",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q2.obs",
+      "desc": "两个不可观测量（源距 R、接收半径 r_rec）均显式声明",
+      "ok": true,
+      "detail": "['源距 R=|S₁G|（/measure 不返回距离，也不返回信号强度）', '有效接收半径 r_rec ∈ [1000,1500]（赛题只给区间，机器狗不可先知）']"
+    },
+    {
+      "id": "Q2.scen",
+      "desc": "场景集 = 距离先验 × r_rec 假设，共 6 个",
+      "ok": true,
+      "detail": "['P1_距离均匀[200,1500]|r_rec=1500', 'P2_面积均匀(盘内密度∝R)|r_rec=1500', 'P3_远距集中[1000,1500]|r_rec=1500', 'P1_距离均匀[200,1500]|r_rec=1000', 'P2_面积均匀(盘内密度∝R)|r_rec=1000', 'P3_远距集中[1000,1500]|r_rec=1000']"
+    },
+    {
+      "id": "Q2.prior.drift",
+      "desc": "各场景最优点不一致（故须报候选区 + 后悔值）",
+      "ok": true,
+      "detail": "[(20.0, 1350.0), (30.0, 1050.0), (30.0, 1200.0), (35.0, 1050.0)]"
+    },
+    {
+      "id": "Q2.env.psimax",
+      "desc": "ψ_max = arcsin(r_rec / R_hi) 自洽",
+      "ok": true,
+      "detail": "reported=42.1697 recompute=42.169695"
+    },
+    {
+      "id": "Q2.env.sound",
+      "desc": "闭式可行域是充分的：闭式判可行 → 数值失效率必为 0",
+      "ok": true,
+      "detail": "violations=[]"
+    },
+    {
+      "id": "Q2.cf",
+      "desc": "闭式 D = 2ε·√(R²+t²) 与数值最坏直径一致（≤1%）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "Q2.cf.mono",
+      "desc": "垂线族上 E[D] 随偏移严格递增（故「偏移越大越好」为假）",
+      "ok": true,
+      "detail": "[43.195, 46.851, 52.381, 59.263, 67.081]"
+    },
+    {
+      "id": "Q2.v1.worse",
+      "desc": "v1 推荐点严格劣于最小偏移点（代理判据与真目标反号）",
+      "ok": true,
+      "detail": "v1 offset=1200.0 E[D]=59.263 vs offset=300.0 E[D]=43.195"
+    }
+  ]
+}

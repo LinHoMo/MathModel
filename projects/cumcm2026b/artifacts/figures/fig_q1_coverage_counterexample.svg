@@ -76,17 +76,28 @@ text{font-family:-apple-system,'Segoe UI','Microsoft YaHei',Roboto,Helvetica,Ari
 </style>
 <rect class="geom-bg" x="0" y="0" width="960" height="1040"/>
 <rect class="geom-frame" x="22" y="68" width="916" height="916"/>
-<text class="geom-title" x="28" y="24">问题 1：Thales 判据的反例 —— 直径圆不覆盖定位区域</text>
-<text class="geom-sub" x="28" y="40">kind = geometry · 4 图元</text>
-<polygon class="item emphasis" points="96.6,561.4 804.4,561.4 450.5,136.7"/>
-<text class="geom-label" x="450.5" y="419.8">定位区域（锐角三角形）</text>
-<circle class="item dashed" cx="450.5" cy="561.4" r="353.9"/>
-<text class="geom-label" x="450.5" y="928.3">直径圆 r=5 m</text>
-<circle class="item danger" cx="450.5" cy="496.5" r="359.8"/>
-<text class="geom-label" x="450.5" y="869.3">最小包围圆 r=5.0833 m</text>
-<line class="seg danger" x1="96.6" y1="561.4" x2="804.4" y2="561.4"/>
-<text class="geom-label" x="456.5" y="555.4">D=10 m</text>
-<text class="geom-legend" x="28" y="1014">• 直径圆半径 5 m &lt; 最小包围圆半径 5.0833 m</text>
-<text class="geom-legend" x="280.6" y="1014">• 覆盖成立 ⟺ 各顶点对直径端点张角 ≥90°（Thales）</text>
-<text class="geom-legend" x="564.8" y="1014">• 本例判定：覆盖不成立</text>
+<text class="geom-title" x="28" y="24">问题 1：Thales 判据的反例（χ=90.042°，覆盖不成立）</text>
+<text class="geom-sub" x="28" y="40">kind = geometry · 9 图元</text>
+<line class="seg muted" x1="3121.2" y1="-4523.6" x2="371.6" y2="517.1"/>
+<polygon class="arrow-head muted" points="371.6,517.1 372.1,509.1 378,512.4"/>
+<line class="seg muted" x1="3121.2" y1="-4523.6" x2="549.1" y2="610"/>
+<polygon class="arrow-head muted" points="549.1,610 549.4,602 555.4,605"/>
+<line class="seg muted" x1="-4894.6" y1="-2280.2" x2="148.2" y2="465.8"/>
+<polygon class="arrow-head muted" points="148.2,465.8 140.2,465.3 143.4,459.3"/>
+<line class="seg muted" x1="-4894.6" y1="-2280.2" x2="240.9" y2="288.1"/>
+<polygon class="arrow-head muted" points="240.9,288.1 232.9,287.9 235.9,281.9"/>
+<polygon class="item emphasis" points="520,668.3 616.4,475.9 441.7,388.5 342,571.3"/>
+<text class="geom-label" x="480" y="526">定位区域 Ω</text>
+<circle class="item dashed" cx="479.2" cy="523.6" r="145.2"/>
+<text class="geom-label" x="479.2" y="681.9">直径圆 r=22.7666 m</text>
+<circle class="item danger" cx="480.8" cy="528.3" r="145.3"/>
+<text class="geom-label" x="480.8" y="686.6">最小包围圆 r=22.7799 m</text>
+<circle class="pt accent" cx="3121.2" cy="-4523.6" r="3.6"/>
+<text class="geom-label" x="3128.2" y="-4530.6">S1</text>
+<circle class="pt accent" cx="-4894.6" cy="-2280.2" r="3.6"/>
+<text class="geom-label" x="-4887.6" y="-2287.2">S2</text>
+<text class="geom-legend" x="28" y="1014">• 直径圆半径 22.7666 m  &lt;  最小包围圆半径 22.7799 m ⇒ 盖不住</text>
+<text class="geom-legend" x="387.5" y="1014">• ρ = r_MEC/D = 0.5002921（可达上确界 0.5002942）</text>
+<text class="geom-legend" x="689.8" y="1014">• 需把圆放大到 1.000584 D 才覆盖</text>
+<text class="geom-legend" x="884.7" y="1014">• 与手搓三角形反例（夸大 28 倍）不同，本构型由正向模型生成</text>
 </svg>
