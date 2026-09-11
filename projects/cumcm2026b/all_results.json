@@ -25,7 +25,9 @@
       1200.0,
       1799.0
     ],
-    "cover_step": 500.0
+    "cover_step": 500.0,
+    "cover_step_mid": 900.0,
+    "cover_step_dir": 450.0
   },
   "summary": {
     "problem1": {
@@ -132,22 +134,22 @@
       "mean_cleared_fraction": 1.0,
       "min_cleared_fraction": 1.0,
       "all_cleared": true,
-      "mean_total_time_s": 7150.102657652295,
-      "std_total_time_s": 308.8863952352974,
-      "mean_locate_clear_time_s": 5297.03485129539,
-      "std_locate_clear_time_s": 328.5562796016187,
-      "mean_time_per_source_s": 592.9971188407916
+      "mean_total_time_s": 6131.940160908362,
+      "std_total_time_s": 334.2937677982051,
+      "mean_locate_clear_time_s": 4242.542764091943,
+      "std_locate_clear_time_s": 292.6735613982531,
+      "mean_time_per_source_s": 507.7106655094545
     },
     "problem4": {
       "n_trials": 30,
       "mean_cleared_fraction": 1.0,
       "min_cleared_fraction": 1.0,
       "all_cleared": true,
-      "mean_total_time_s": 15088.792585960995,
-      "std_total_time_s": 305.5297207105713,
-      "mean_locate_clear_time_s": 12814.711618397412,
-      "std_locate_clear_time_s": 552.2236694665594,
-      "mean_time_per_source_s": 1254.6756037594876
+      "mean_total_time_s": 11667.901578951569,
+      "std_total_time_s": 368.7700468485649,
+      "mean_locate_clear_time_s": 9316.51671396138,
+      "std_locate_clear_time_s": 429.8274458835591,
+      "mean_time_per_source_s": 969.5169789276666
     }
   },
   "validations": {
@@ -170,11 +172,845 @@
     "n_trials": 5,
     "q3_mean_cleared_fraction": 1.0,
     "q3_min_cleared_fraction": 1.0,
-    "q3_mean_total_time_s": 12918.0913438,
-    "q3_mean_locate_clear_time_s": 8269.473329085386,
+    "q3_mean_total_time_s": 7522.628557999999,
+    "q3_mean_locate_clear_time_s": 5032.3802722643595,
     "q4_mean_cleared_fraction": 1.0,
     "q4_min_cleared_fraction": 1.0,
-    "q4_mean_total_time_s": 22592.9079194,
-    "q4_mean_locate_clear_time_s": 17514.367811378976
-  }
+    "q4_mean_total_time_s": 15043.081435999999,
+    "q4_mean_locate_clear_time_s": 11315.32772759077
+  },
+  "problem1_v2": {
+    "cases": [
+      {
+        "name": "A 两站正交交会（χ=90°）",
+        "source": [
+          220.0,
+          -160.0
+        ],
+        "stations": [
+          [
+            -602.7241,
+            315.0
+          ],
+          [
+            695.0,
+            662.7241
+          ]
+        ],
+        "true_bearings_deg": [
+          330.0,
+          240.0
+        ],
+        "station_source_dist_m": [
+          950.0,
+          950.0
+        ],
+        "crossing_angle_deg": 90.0,
+        "n_vertices": 4,
+        "diameter_m": 46.916155,
+        "area_m2": 1099.892345,
+        "diam_circle_r_m": 23.458077,
+        "mec_r_m": 23.458077,
+        "rho_mec_over_D": 0.5,
+        "covers": true,
+        "feasible": true,
+        "station_source_dist_guaranteed": true,
+        "station_source_dist_ok": true,
+        "stations_in_area": true,
+        "source_in_area": true
+      },
+      {
+        "name": "B 两站钝角交会（χ=140°）",
+        "source": [
+          -360.0,
+          420.0
+        ],
+        "stations": [
+          [
+            -1252.708,
+            95.0809
+          ],
+          [
+            579.6926,
+            77.9799
+          ]
+        ],
+        "true_bearings_deg": [
+          20.0,
+          160.0
+        ],
+        "station_source_dist_m": [
+          950.0,
+          1000.0
+        ],
+        "crossing_angle_deg": 140.0,
+        "n_vertices": 4,
+        "diameter_m": 99.492652,
+        "area_m2": 1800.709348,
+        "diam_circle_r_m": 49.746326,
+        "mec_r_m": 49.746326,
+        "rho_mec_over_D": 0.5,
+        "covers": true,
+        "feasible": true,
+        "station_source_dist_guaranteed": true,
+        "station_source_dist_ok": true,
+        "stations_in_area": true,
+        "source_in_area": true
+      },
+      {
+        "name": "C 三站交会",
+        "source": [
+          140.0,
+          300.0
+        ],
+        "stations": [
+          [
+            -806.385,
+            382.798
+          ],
+          [
+            656.2188,
+            1037.2368
+          ],
+          [
+            554.1659,
+            -588.1816
+          ]
+        ],
+        "true_bearings_deg": [
+          355.0,
+          235.0,
+          115.0
+        ],
+        "station_source_dist_m": [
+          950.0,
+          900.0,
+          980.0
+        ],
+        "crossing_angle_deg": null,
+        "n_vertices": 6,
+        "diameter_m": 38.917941,
+        "area_m2": 937.007171,
+        "diam_circle_r_m": 19.45897,
+        "mec_r_m": 19.45897,
+        "rho_mec_over_D": 0.5,
+        "covers": true,
+        "feasible": true,
+        "station_source_dist_guaranteed": true,
+        "station_source_dist_ok": true,
+        "stations_in_area": true,
+        "source_in_area": true
+      }
+    ],
+    "counterexample": {
+      "window_theorem": "覆盖失败 ⟺ 源端交会角 χ ∈ (90°, 90°+2ε)（χ 取 min{Δ, 360−Δ}）",
+      "n_scanned": 4000,
+      "n_accepted": 4000,
+      "n_failures": 517,
+      "window_empirical_check": {
+        "sampling_range_deg": [
+          85.0,
+          100.0
+        ],
+        "theoretical_fail_rate": 0.133333,
+        "observed_fail_rate": 0.12925,
+        "n_in_window_predicted": 517,
+        "agree": true,
+        "note": "χ ~ U(85°,100°) 时理论失效率 = 2ε/15°；同时逐样本核对「落入窗口」与「覆盖失败」两个集合是否完全相等。"
+      },
+      "worst_case": {
+        "source": [
+          -204.9063,
+          -1343.3235
+        ],
+        "stations": [
+          [
+            209.0804,
+            -551.835
+          ],
+          [
+            -1047.3311,
+            -903.478
+          ]
+        ],
+        "crossing_angle_deg": 90.041849,
+        "diameter_m": 45.533125,
+        "area_m2": 1034.520093,
+        "diam_circle_r_m": 22.766563,
+        "mec_r_m": 22.779865,
+        "rho_mec_over_D": 0.50029214,
+        "covers": false,
+        "required_enlarge_factor": 1.00058429,
+        "generation": "forward_model(真源+站点→观测方程→反解)"
+      },
+      "rho_sup_observed": 0.50029214,
+      "rho_sup_dense_scan": 0.500294193,
+      "rho_sup_is_similarity_invariant": true,
+      "jung_upper_bound": 0.57735027,
+      "note": "真实失效幅度 = 需把直径圆放大到 2r_MEC/D 倍。上确界取 supremum_dense_scan.rho_sup_dense_scan（(χ, r₂/r₁) 定向密集扫描，ρ 为相似不变量故该扫描覆盖全部两站构型）；本函数随机采样只给下界，Jung 上界 1/√3 为严格但宽松的解析上界。",
+      "supremum_dense_scan": {
+        "rho_sup_dense_scan": 0.500294193,
+        "argmax": {
+          "rho": 0.500294193,
+          "chi_deg": 90.035,
+          "r2_over_r1": 1.060818,
+          "diameter_m": 50.89385851,
+          "mec_r_m": 25.46190188,
+          "required_enlarge_factor": 1.000588387,
+          "covers": false
+        },
+        "n_chi": 2000,
+        "n_ratio": 40,
+        "invariance": "ρ 只依赖 (χ, r₂/r₁)，与绝对尺度无关（相似不变量）",
+        "realizability": "扫描用 r₁=1000、r₂ 可到 10⁴ m（超出接收半径），但 ρ 是相似不变量：把 (r₁,r₂) 整体缩放到 max ≤ R_REC_MIN=1000 m 时楔形角宽 2ε 不变、区域整体缩小、ρ 完全不变，且缩放后站点更靠近源、必在区域内。故扫描给出的上确界可由「保证可行」的真实构型达到，不是空想上界。",
+        "outside_window_rho": 0.5,
+        "v1_synthetic_rho": 0.508333333,
+        "v1_exaggeration_factor": 28.33,
+        "note": "窗口外 ρ ≡ 1/2（直径两端点定圆）；窗口内略大于 1/2。v1 手搓反例 ρ=0.5083 超出可达上确界，落在真实可达集之外。"
+      },
+      "v1_exaggeration_factor": 28.33
+    }
+  },
+  "problem2_v2": {
+    "S1": [
+      -500.0,
+      0.0
+    ],
+    "b1_measured_deg": 20.0,
+    "decision_vars": "ψ = 相对测得示向度的转角(°)，d = 沿该方向前进距离(m)",
+    "observable": [
+      "b1（第一个检测点的示向度）"
+    ],
+    "not_observable": [
+      "源距 R=|S₁G|（/measure 不返回距离，也不返回信号强度）",
+      "有效接收半径 r_rec ∈ [1000,1500]（赛题只给区间，机器狗不可先知）"
+    ],
+    "scenarios": [
+      "P1_距离均匀[200,1500]|r_rec=1500",
+      "P2_面积均匀(盘内密度∝R)|r_rec=1500",
+      "P3_远距集中[1000,1500]|r_rec=1500",
+      "P1_距离均匀[200,1500]|r_rec=1000",
+      "P2_面积均匀(盘内密度∝R)|r_rec=1000",
+      "P3_远距集中[1000,1500]|r_rec=1000"
+    ],
+    "n_scenarios": 6,
+    "per_scenario_best": {
+      "P1_距离均匀[200,1500]|r_rec=1500": {
+        "psi_deg": 35.0,
+        "d_m": 1050.0,
+        "E_D_m": 55.147683
+      },
+      "P2_面积均匀(盘内密度∝R)|r_rec=1500": {
+        "psi_deg": 30.0,
+        "d_m": 1200.0,
+        "E_D_m": 60.866469
+      },
+      "P3_远距集中[1000,1500]|r_rec=1500": {
+        "psi_deg": 20.0,
+        "d_m": 1350.0,
+        "E_D_m": 56.922861
+      },
+      "P1_距离均匀[200,1500]|r_rec=1000": {
+        "psi_deg": 35.0,
+        "d_m": 1050.0,
+        "E_D_m": 55.147683
+      },
+      "P2_面积均匀(盘内密度∝R)|r_rec=1000": {
+        "psi_deg": 30.0,
+        "d_m": 1050.0,
+        "E_D_m": 60.866469
+      },
+      "P3_远距集中[1000,1500]|r_rec=1000": {
+        "psi_deg": 20.0,
+        "d_m": 1350.0,
+        "E_D_m": 56.922861
+      }
+    },
+    "minimax_regret_point": {
+      "psi_deg": 20.0,
+      "d_m": 1200.0,
+      "regret_m": 9.752596,
+      "E_D_by_scenario": {
+        "P1_距离均匀[200,1500]|r_rec=1500": 64.900279,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1500": 61.300338,
+        "P3_远距集中[1000,1500]|r_rec=1500": 56.922861,
+        "P1_距离均匀[200,1500]|r_rec=1000": 64.900279,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1000": 61.300338,
+        "P3_远距集中[1000,1500]|r_rec=1000": 56.922861
+      },
+      "fail_prob_by_scenario": {
+        "P1_距离均匀[200,1500]|r_rec=1500": 0.0,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1500": 0.0,
+        "P3_远距集中[1000,1500]|r_rec=1500": 0.0,
+        "P1_距离均匀[200,1500]|r_rec=1000": 0.0,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1000": 0.0,
+        "P3_远距集中[1000,1500]|r_rec=1000": 0.0
+      },
+      "worst_diameter_F_by_scenario": {
+        "P1_距离均匀[200,1500]|r_rec=1500": 101.063661,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1500": 102.047682,
+        "P3_远距集中[1000,1500]|r_rec=1500": 88.520857,
+        "P1_距离均匀[200,1500]|r_rec=1000": 101.063661,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1000": 102.047682,
+        "P3_远距集中[1000,1500]|r_rec=1000": 88.520857
+      }
+    },
+    "minimax_point": {
+      "psi_deg": 20.0,
+      "d_m": 1200.0,
+      "worst_E_D_m": 64.900279,
+      "E_D_by_scenario": {
+        "P1_距离均匀[200,1500]|r_rec=1500": 64.900279,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1500": 61.300338,
+        "P3_远距集中[1000,1500]|r_rec=1500": 56.922861,
+        "P1_距离均匀[200,1500]|r_rec=1000": 64.900279,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1000": 61.300338,
+        "P3_远距集中[1000,1500]|r_rec=1000": 56.922861
+      },
+      "fail_prob_by_scenario": {
+        "P1_距离均匀[200,1500]|r_rec=1500": 0.0,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1500": 0.0,
+        "P3_远距集中[1000,1500]|r_rec=1500": 0.0,
+        "P1_距离均匀[200,1500]|r_rec=1000": 0.0,
+        "P2_面积均匀(盘内密度∝R)|r_rec=1000": 0.0,
+        "P3_远距集中[1000,1500]|r_rec=1000": 0.0
+      }
+    },
+    "criteria_agree": true,
+    "criteria_note": "最小最大后悔（相对损失）与最小最大（绝对最坏）是两个不同判据；criteria_agree=false 时结论对判据敏感，须报候选区而非单点。",
+    "candidate_region_alpha": 0.05,
+    "candidate_region": [
+      {
+        "psi_deg": 20.0,
+        "d_m": 1200.0,
+        "regret_m": 9.752596
+      }
+    ],
+    "n_candidates": 1,
+    "fail_tol": 0.02,
+    "n_grid_points": 108,
+    "n_feasible_points": 27,
+    "excluded_by_fail": [
+      {
+        "psi_deg": 45.0,
+        "d_m": 1500.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 50.0,
+        "d_m": 1350.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 50.0,
+        "d_m": 1500.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 60.0,
+        "d_m": 1050.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 60.0,
+        "d_m": 1200.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 60.0,
+        "d_m": 1350.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 60.0,
+        "d_m": 1500.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 70.0,
+        "d_m": 750.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 70.0,
+        "d_m": 900.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 70.0,
+        "d_m": 1050.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 70.0,
+        "d_m": 1200.0,
+        "max_fail_prob": 1.0
+      },
+      {
+        "psi_deg": 70.0,
+        "d_m": 1350.0,
+        "max_fail_prob": 1.0
+      }
+    ],
+    "grid_size": {
+      "psi": [
+        10.0,
+        15.0,
+        20.0,
+        25.0,
+        30.0,
+        35.0,
+        40.0,
+        45.0,
+        50.0,
+        60.0,
+        70.0,
+        80.0
+      ],
+      "d": [
+        300.0,
+        450.0,
+        600.0,
+        750.0,
+        900.0,
+        1050.0,
+        1200.0,
+        1350.0,
+        1500.0
+      ]
+    },
+    "compare_v1": {
+      "note": "v1 以「交会角 90°」为判据推荐 offset=d_est=1200（即 d=1697 m）。同一垂线族上 E[D] 随偏移严格递增，v1 自己的权衡表已显示该趋势，却以「对称平衡配置」为由选了更差的点。",
+      "closed_form_check": "垂线族上 D = 2ε·√(R²+t²)，ε=1°、R=1200",
+      "rows": [
+        {
+          "offset_m": 300.0,
+          "psi_deg": 14.036243,
+          "d_m": 1236.9317,
+          "S2G_dist_m": 300.0,
+          "E_D_m": 43.194606,
+          "fail_prob": 0.0,
+          "worst_D_m": 43.200607
+        },
+        {
+          "offset_m": 600.0,
+          "psi_deg": 26.565051,
+          "d_m": 1341.6408,
+          "S2G_dist_m": 600.0,
+          "E_D_m": 46.851128,
+          "fail_prob": 0.0,
+          "worst_D_m": 46.862192
+        },
+        {
+          "offset_m": 900.0,
+          "psi_deg": 36.869898,
+          "d_m": 1500.0,
+          "S2G_dist_m": 900.0,
+          "E_D_m": 52.381154,
+          "fail_prob": 0.0,
+          "worst_D_m": 52.395997
+        },
+        {
+          "offset_m": 1200.0,
+          "psi_deg": 45.0,
+          "d_m": 1697.0563,
+          "S2G_dist_m": 1200.0,
+          "E_D_m": 59.262512,
+          "fail_prob": 0.0,
+          "worst_D_m": 59.280004
+        },
+        {
+          "offset_m": 1500.0,
+          "psi_deg": 51.340192,
+          "d_m": 1920.9373,
+          "S2G_dist_m": 1500.0,
+          "E_D_m": 67.080609,
+          "fail_prob": 0.58255984,
+          "worst_D_m": 67.099927
+        }
+      ],
+      "v1_recommended_offset_m": 1200.0,
+      "v2_better_offset_m": 300.0
+    },
+    "feasibility_envelope": {
+      "R_support_m": [
+        216.506,
+        1489.583
+      ],
+      "r_rec_1000_guaranteed": {
+        "formula": "|S₂G|² = R² + d² − 2Rd·cos ψ；要求 ∀R∈[R_lo,R_hi]: |S₂G| ≤ r_rec",
+        "R_lo_m": 216.50635094610965,
+        "R_hi_m": 1489.5833333333333,
+        "r_rec_m": 1000.0,
+        "psi_max_deg": 42.1697,
+        "psi_max_formula": "ψ_max = arcsin(r_rec / R_hi)",
+        "rows": [
+          {
+            "psi_deg": 10.0,
+            "feasible": true,
+            "d_lo_m": 500.986,
+            "d_hi_m": 1212.51
+          },
+          {
+            "psi_deg": 15.0,
+            "feasible": true,
+            "d_lo_m": 516.133,
+            "d_hi_m": 1207.558
+          },
+          {
+            "psi_deg": 20.0,
+            "feasible": true,
+            "d_lo_m": 539.261,
+            "d_hi_m": 1200.704
+          },
+          {
+            "psi_deg": 25.0,
+            "feasible": true,
+            "d_lo_m": 573.041,
+            "d_hi_m": 1192.027
+          },
+          {
+            "psi_deg": 30.0,
+            "feasible": true,
+            "d_lo_m": 622.72,
+            "d_hi_m": 1181.623
+          },
+          {
+            "psi_deg": 35.0,
+            "feasible": true,
+            "d_lo_m": 700.563,
+            "d_hi_m": 1169.611
+          },
+          {
+            "psi_deg": 40.0,
+            "feasible": true,
+            "d_lo_m": 852.606,
+            "d_hi_m": 1156.122
+          },
+          {
+            "psi_deg": 45.0,
+            "feasible": false,
+            "d_lo_m": null,
+            "d_hi_m": null
+          },
+          {
+            "psi_deg": 50.0,
+            "feasible": false,
+            "d_lo_m": null,
+            "d_hi_m": null
+          },
+          {
+            "psi_deg": 60.0,
+            "feasible": false,
+            "d_lo_m": null,
+            "d_hi_m": null
+          },
+          {
+            "psi_deg": 70.0,
+            "feasible": false,
+            "d_lo_m": null,
+            "d_hi_m": null
+          },
+          {
+            "psi_deg": 80.0,
+            "feasible": false,
+            "d_lo_m": null,
+            "d_hi_m": null
+          }
+        ]
+      },
+      "r_rec_1500_optimistic": {
+        "formula": "|S₂G|² = R² + d² − 2Rd·cos ψ；要求 ∀R∈[R_lo,R_hi]: |S₂G| ≤ r_rec",
+        "R_lo_m": 216.50635094610965,
+        "R_hi_m": 1489.5833333333333,
+        "r_rec_m": 1500.0,
+        "psi_max_deg": 90.0,
+        "psi_max_formula": "ψ_max = arcsin(r_rec / R_hi)",
+        "rows": [
+          {
+            "psi_deg": 10.0,
+            "feasible": true,
+            "d_lo_m": -10.576,
+            "d_hi_m": 1712.746
+          },
+          {
+            "psi_deg": 15.0,
+            "feasible": true,
+            "d_lo_m": -10.781,
+            "d_hi_m": 1708.082
+          },
+          {
+            "psi_deg": 20.0,
+            "feasible": true,
+            "d_lo_m": -11.08,
+            "d_hi_m": 1701.621
+          },
+          {
+            "psi_deg": 25.0,
+            "feasible": true,
+            "d_lo_m": -11.485,
+            "d_hi_m": 1693.428
+          },
+          {
+            "psi_deg": 30.0,
+            "feasible": true,
+            "d_lo_m": -12.014,
+            "d_hi_m": 1683.589
+          },
+          {
+            "psi_deg": 35.0,
+            "feasible": true,
+            "d_lo_m": -12.695,
+            "d_hi_m": 1672.202
+          },
+          {
+            "psi_deg": 40.0,
+            "feasible": true,
+            "d_lo_m": -13.565,
+            "d_hi_m": 1659.384
+          },
+          {
+            "psi_deg": 45.0,
+            "feasible": true,
+            "d_lo_m": -14.681,
+            "d_hi_m": 1645.26
+          },
+          {
+            "psi_deg": 50.0,
+            "feasible": true,
+            "d_lo_m": -16.126,
+            "d_hi_m": 1629.97
+          },
+          {
+            "psi_deg": 60.0,
+            "feasible": true,
+            "d_lo_m": -20.621,
+            "d_hi_m": 1596.488
+          },
+          {
+            "psi_deg": 70.0,
+            "feasible": true,
+            "d_lo_m": -29.697,
+            "d_hi_m": 1560.188
+          },
+          {
+            "psi_deg": 80.0,
+            "feasible": true,
+            "d_lo_m": -54.463,
+            "d_hi_m": 1522.365
+          }
+        ]
+      }
+    }
+  },
+  "v1_defect_audit": {
+    "schema_version": 1,
+    "audit_target": "artifacts/code/solve_b.py::problem1_demo（v1）",
+    "extraction": "ast.literal_eval 从源码解析 cases / tri，不重抄数字",
+    "constants": {
+      "R_AREA": 1800.0,
+      "R_REC_MIN": 1000.0,
+      "R_REC_MAX": 1500.0
+    },
+    "D1_case_feasibility": [
+      {
+        "case": "A 正交交会（φ≈90°）",
+        "source": [
+          1500.0,
+          1500.0
+        ],
+        "stations": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            3000.0,
+            0.0
+          ]
+        ],
+        "station_source_dist_m": [
+          2121.3203,
+          2121.3203
+        ],
+        "station_radius_m": [
+          0.0,
+          3000.0
+        ],
+        "max_station_source_dist_m": 2121.3203,
+        "max_station_radius_m": 3000.0,
+        "exceeds_recv_max": true,
+        "exceeds_area": true,
+        "guaranteed": false,
+        "verdict": "不可行"
+      },
+      {
+        "case": "B 钝角交会（φ≈142°）",
+        "source": [
+          1200.0,
+          500.0
+        ],
+        "stations": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            3000.0,
+            0.0
+          ]
+        ],
+        "station_source_dist_m": [
+          1300.0,
+          1868.1542
+        ],
+        "station_radius_m": [
+          0.0,
+          3000.0
+        ],
+        "max_station_source_dist_m": 1868.1542,
+        "max_station_radius_m": 3000.0,
+        "exceeds_recv_max": true,
+        "exceeds_area": true,
+        "guaranteed": false,
+        "verdict": "不可行"
+      },
+      {
+        "case": "C 三站交会",
+        "source": [
+          1500.0,
+          1200.0
+        ],
+        "stations": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            3000.0,
+            0.0
+          ],
+          [
+            1500.0,
+            2600.0
+          ]
+        ],
+        "station_source_dist_m": [
+          1920.9373,
+          1920.9373,
+          1400.0
+        ],
+        "station_radius_m": [
+          0.0,
+          3000.0,
+          3001.6662
+        ],
+        "max_station_source_dist_m": 1920.9373,
+        "max_station_radius_m": 3001.6662,
+        "exceeds_recv_max": true,
+        "exceeds_area": true,
+        "guaranteed": false,
+        "verdict": "不可行"
+      }
+    ],
+    "D2_counterexample_reachability": {
+      "triangle": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          5.0,
+          6.0
+        ]
+      ],
+      "diameter_m": 10.0,
+      "mec_r_m": 5.083333,
+      "diam_circle_r_m": 5.0,
+      "rho_mec_over_D": 0.50833333,
+      "required_enlarge_factor": 1.01666667,
+      "covers": false,
+      "reachable_rho_sup": 0.500294193,
+      "reachable_argmax": {
+        "rho": 0.500294193,
+        "chi_deg": 90.035,
+        "r2_over_r1": 1.060818,
+        "diameter_m": 50.89385851,
+        "mec_r_m": 25.46190188,
+        "required_enlarge_factor": 1.000588387,
+        "covers": false
+      },
+      "inside_reachable_set": false,
+      "exaggeration_factor": 28.33,
+      "excess_over_half": 0.00833333,
+      "reachable_excess_over_half": 0.00029419,
+      "verdict": "落在真实可达集之外（手搓反例夸大失效）",
+      "note": "该三角形是 solve_b.py 中的字面常量，不是由真源 + 站点经观测方程正向生成的；其 ρ 超出同类构型的可达上确界，故不能用作反例。"
+    },
+    "D3_optimality_criterion": {
+      "claim": "v1 认为第二点应使交会角 φ = 90°（GDOP ∝ 1/sinφ 最小）",
+      "closed_form": "垂线族（S₂ 落在过 G_est 且垂直 S₁→G_est 的直线上）上 D = 2ε·√(R²+t²)，与 φ 无关；φ 在该族上恒为 90°",
+      "rows": [
+        {
+          "offset_m": 300.0,
+          "psi_deg": 14.036243,
+          "d_m": 1236.9317,
+          "S2G_dist_m": 300.0,
+          "E_D_m": 43.194606,
+          "fail_prob": 0.0,
+          "worst_D_m": 43.200607
+        },
+        {
+          "offset_m": 600.0,
+          "psi_deg": 26.565051,
+          "d_m": 1341.6408,
+          "S2G_dist_m": 600.0,
+          "E_D_m": 46.851128,
+          "fail_prob": 0.0,
+          "worst_D_m": 46.862192
+        },
+        {
+          "offset_m": 900.0,
+          "psi_deg": 36.869898,
+          "d_m": 1500.0,
+          "S2G_dist_m": 900.0,
+          "E_D_m": 52.381154,
+          "fail_prob": 0.0,
+          "worst_D_m": 52.395997
+        },
+        {
+          "offset_m": 1200.0,
+          "psi_deg": 45.0,
+          "d_m": 1697.0563,
+          "S2G_dist_m": 1200.0,
+          "E_D_m": 59.262512,
+          "fail_prob": 0.0,
+          "worst_D_m": 59.280004
+        },
+        {
+          "offset_m": 1500.0,
+          "psi_deg": 51.340192,
+          "d_m": 1920.9373,
+          "S2G_dist_m": 1500.0,
+          "E_D_m": 67.080609,
+          "fail_prob": 0.58255984,
+          "worst_D_m": 67.099927
+        }
+      ],
+      "E_D_strictly_increasing": true,
+      "verdict": "φ=90° 无法区分该族上的点（全族同 φ），而 E[D] 随偏移严格递增，故 φ 不是有效判据；v1 恰在该族上选了偏移最大的点"
+    }
+  },
+  "v2_selfcheck": {
+    "n_checks": 99,
+    "n_failed": 0,
+    "passed": true,
+    "target_sha256": "5cfb7424d17c2d7eddf3a74c65192653e7aa23c0dece8cb28560997aac72bf4e",
+    "failed_ids": []
+  },
+  "revision_note": "problem1_v2/problem2_v2 为重建结果（算例保证可行、反例正向生成、目标 E[D]、场景集含 r_rec 假设）；problem1_v1/problem2_v1 保留备查。"
 }

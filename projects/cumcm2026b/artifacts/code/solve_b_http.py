@@ -5,12 +5,13 @@
 与 solve_b.py（本地模型版）的区别：
   * 通过 SimulatorHTTP 走真实 HTTP+JSON 协议（arena_id/position/measure_result/svd_deg）。
   * 真实模拟器**不返回信号强度**，故不使用 d_est=rel·r_rec 估距；
-    改用 **纯示向度交会 + 越界检测归航**（bearing-flip / overshoot detection）。
+    改用 **纯示向度交会 + 几何驱动归航**（准最优逼近，非盲目步进）。
 
 策略（测量驱动，不假定真值）：
   阶段A  同心环覆盖扫描：逐检测点对未清除频道 sweep，记录示向度；
-  阶段B  逐频道定位清除：两观测交会求估计点 → 移动（measure 隐含移动）→ 交会重估 →
-         beam-safe 归航（沿示向度步进，示向度反转判越界并缩减步长）→ `near` 时清除；
+  阶段B  逐频道定位清除：两观测交会求估计点 → 几何驱动归航（沿测向线按
+         approach_ratio 逼近估计点，把定位不确定度 R* 压到清除半径内再 /clear）→
+         `near` 时清除；
   阶段C  残余局部搜索：对已探测未清除频道在当前位置做同心近邻 /clear 扫描。
 
 零第三方依赖。可在本地 Mock 上端到端验证；连接真实模拟器时只需 change base_url +
@@ -26,7 +27,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from simulator_http import (  # noqa: E402
-    SimulatorHTTP, MockSimulatorServer, N_CHANNEL, SEED, R_AREA,
+    SimulatorHTTP, MockSimulatorServer, N_CHANNEL, SEED,
+    D_CLEAR, EPS_BEARING,
 )
 from solve_b import (  # noqa: E402
     coverage_detection_points, ring_detection_points,
@@ -34,17 +36,33 @@ from solve_b import (  # noqa: E402
 )
 
 # ---------------------------------------------------------------------------
-# 交会定位（仅用示向度）
+# 交会定位与几何归航（仅用示向度）
 # ---------------------------------------------------------------------------
-def best_single_fix(obs, phi_lo=30.0, phi_hi=150.0, min_baseline=60.0):
-    """从观测集 {(P,b)} 中取交会角最接近 90°、基线足够的两条求交。返回估计点或 None。"""
+MIN_FIX_BASELINE = 40.0       # 交会基线下限 / m
+PHI_LO, PHI_HI = 30.0, 150.0  # 可用交会角区间 / °
+APPROACH_RATIO = 0.45         # 几何逼近比例（<1 恒不过冲；参考组几何最优逼近）
+UNCERT_TARGET = 8.0           # 定位不确定度目标 R* / m（压到清除半径内再 /clear）
+PROBE_STEP = 250.0            # 无法交会时的垂向探测步长 / m
+MIN_APPROACH_STEP = 12.0      # 最小逼近步长 / m
+HOME_N_ITER = 10              # 单次归航 measure 上限（每轮至多 1 次）
+
+
+def best_single_fix(obs, phi_lo=PHI_LO, phi_hi=PHI_HI,
+                    min_baseline=MIN_FIX_BASELINE):
+    """从观测集 {(P,b)} 中取交会角最接近 90°、基线足够的两条射线求交。
+
+    返回 (est, phi, baseline) 或 None。φ=90° 时位置误差最小（∝ 1/sinφ），
+    故以 |φ−90°| 为判据；基线过短的近距交点会给出假解，故设基线下限。
+    只用示向度，不用信号强度。
+    """
     best = None
     n = len(obs)
     for i in range(n):
         for j in range(i + 1, n):
             p1, b1 = obs[i]
             p2, b2 = obs[j]
-            if math.dist(p1, p2) < min_baseline:
+            base = math.dist(p1, p2)
+            if base < min_baseline:
                 continue
             phi = _bearing_diff(b1, b2)
             if not (phi_lo <= phi <= phi_hi):
@@ -54,8 +72,13 @@ def best_single_fix(obs, phi_lo=30.0, phi_hi=150.0, min_baseline=60.0):
                 continue
             score = abs(phi - 90.0)
             if best is None or score < best[0]:
-                best = (score, est)
-    return best[1] if best else None
+                best = (score, est, phi, base)
+    return (best[1], best[2], best[3]) if best else None
+
+
+def _uncertainty(d, phi):
+    """交会定位不确定度界 R* ≈ d·δ/sinφ（δ = 示向度误差界，弧度）。"""
+    return d * math.radians(EPS_BEARING) / max(math.sin(math.radians(phi)), 1e-6)
 
 
 def _step_along(pos, bearing_deg, step):
@@ -63,76 +86,89 @@ def _step_along(pos, bearing_deg, step):
     return (pos[0] + step * math.cos(a), pos[1] + step * math.sin(a))
 
 
-# ---------------------------------------------------------------------------
-# 归航：沿示向度步进 + 越界检测（不依赖距离）
-# ---------------------------------------------------------------------------
-def home_http(sim, ch, obs, step0=400.0, n_iter=16):
-    """beam-safe 归航。沿示向度步进；失联即回退到最近可测点并缩步长。
+def _nearest_obs_point(obs, pos):
+    if not obs:
+        return None
+    return min(obs, key=lambda o: math.dist(o[0], pos))[0]
 
-    不依赖距离（真实 API 无信号强度），仅用示向度 + 越界检测（示向度反转）。
+
+# ---------------------------------------------------------------------------
+# 归航：几何驱动逼近（方向取实时示向度、距离取交会估计点）
+# ---------------------------------------------------------------------------
+def home_http(sim, ch, obs, n_iter=HOME_N_ITER, ratio=APPROACH_RATIO,
+              target=UNCERT_TARGET):
+    """几何驱动归航。每轮用示向度交会得估计点 P̂，沿实时测向线按 `ratio` 比例
+    逼近 P̂，直到定位不确定度 R* 压到 `target` 内（或估计点已入清除半径）再 /clear。
+
+    与盲目步进的差别：步长由「到估计点的距离」决定而非固定 `step0`，
+    `ratio < 1` 使落点恒在 P̂ 之前、不会越过目标，收敛单调，不靠示向度反转
+    被动缩步长。落点不可测（定向盲区）时回退到最近可测观测点重试。
     收敛后清除非返回 True。
     """
-    step = step0
-    r = sim.measure(sim.pos[0], sim.pos[1], ch)
-    if r["measure_result"] != "direction" and obs:
-        # 当前不可测（落入定向盲区）：从最近观测点重启归航
-        p = obs[-1][0]
-        r = sim.measure(p[0], p[1], ch)
+    px, py = sim.pos
+    r = sim.measure(px, py, ch)
     for _ in range(n_iter):
-        px, py = sim.pos
         res = r["measure_result"]
         if res == "near":
-            return sim.clear(px, py, ch) == "success"
-        if res != "direction":
+            if sim.clear(px, py, ch) == "success":
+                return True
+            # near 但 clear 未成功（不应发生：near 即 ≤5 m，clear 半径 20 m）：
+            # 立即交回上层兜底，不在原地空转 n_iter 次。
             return False
-        b = r["svd_deg"]
-        obs.append(((px, py), b))
-        nx, ny = _step_along((px, py), b, step)
-        r2 = sim.measure(nx, ny, ch)
-        res2 = r2["measure_result"]
-        if res2 == "near":
-            return sim.clear(nx, ny, ch) == "success"
-        if res2 == "direction":
-            b2 = r2["svd_deg"]
-            obs.append(((nx, ny), b2))
-            if _bearing_diff(b, b2) > 90.0:      # 越界：步长减半
-                step = max(step * 0.5, 4.0)
-            else:                                 # 仍朝源
-                step = min(step * 1.6, 600.0)
-            r = r2
+        elif res == "direction":
+            obs.append(((px, py), r["svd_deg"]))
+            g = best_single_fix(obs)
+            if g is None:
+                # 观测不足以交会：垂向探测一步建立基线（只耗移动，不耗额外检测）
+                px, py = _step_along((px, py), r["svd_deg"] + 90.0, PROBE_STEP)
+                r = sim.measure(px, py, ch)
+                continue
+            est, phi, _base = g
+            d = math.dist((px, py), est)
+            if _uncertainty(d, phi) <= target or d <= D_CLEAR:
+                if sim.clear(est[0], est[1], ch) == "success":
+                    return True
+                px, py = est
+                r = sim.measure(px, py, ch)
+                continue
+            px, py = _step_along((px, py), r["svd_deg"],
+                                 max(ratio * d, MIN_APPROACH_STEP))
+            r = sim.measure(px, py, ch)
         else:
-            # 移动后失联：退回 (px,py) 已知可测点，缩步长再试
-            step = max(step * 0.5, 4.0)
+            # 不可测（定向盲区 / 出接收半径）：回到最近可测观测点重试
+            p = _nearest_obs_point(obs, (px, py))
+            if p is None or math.dist(p, (px, py)) < 1e-6:
+                return False
+            px, py = p
             r = sim.measure(px, py, ch)
     return ch in sim.cleared
 
 
-def local_search_http(sim, ch, obs, radii=(8.0, 15.0, 25.0, 40.0, 60.0)):
-    """当前位置附近的同心近邻尝试清除（覆盖 ≤20 m 但未触发 near 的情形）。"""
+def local_search_http(sim, ch, obs, radii=(12.0, 25.0, 45.0)):
+    """几何归航后的近邻兜底（3 环 × 4 向）。只在归航未触发 `near` 时使用。"""
     cx, cy = sim.pos
     for rad in radii:
-        for k in range(6):
-            a = math.radians(60.0 * k)
+        for k in range(4):
+            a = math.radians(90.0 * k)
             nx, ny = cx + rad * math.cos(a), cy + rad * math.sin(a)
-            if sim.clear(nx, ny, ch) == "success":
-                return True
             m = sim.measure(nx, ny, ch)
-            if m["measure_result"] == "direction":
-                obs.append(((nx, ny), m["svd_deg"]))
-            elif m["measure_result"] == "near":
+            if m["measure_result"] == "near":
                 if sim.clear(nx, ny, ch) == "success":
                     return True
+            elif m["measure_result"] == "direction":
+                obs.append(((nx, ny), m["svd_deg"]))
     return False
 
 
-def engage_http(sim, ch, obs, max_iter=8):
-    """对频道 ch 执行 交会定位 → 越界检测归航 → 局部搜索，仅用可观测量。"""
+def engage_http(sim, ch, obs, max_iter=3):
+    """交会定位直达 → 几何归航 → 近邻兜底，仅用可观测量。"""
     for _ in range(max_iter):
         if ch in sim.cleared:
             return True
-        est = best_single_fix(obs)
-        if est is not None:
-            r = sim.measure(est[0], est[1], ch)   # 移动隐含于 measure
+        g = best_single_fix(obs)
+        if g is not None:
+            est = g[0]
+            r = sim.measure(est[0], est[1], ch)     # 移动隐含于 measure
             if r["measure_result"] == "near":
                 if sim.clear(est[0], est[1], ch) == "success":
                     return True
@@ -140,12 +176,6 @@ def engage_http(sim, ch, obs, max_iter=8):
                 obs.append((est, r["svd_deg"]))
         if home_http(sim, ch, obs):
             return True
-        # 盲区回退：从已知可测观测点重新逼近（定向源专用）
-        if obs:
-            p = obs[len(obs) // 2][0]
-            sim.measure(p[0], p[1], ch)
-            if home_http(sim, ch, obs):
-                return True
         if local_search_http(sim, ch, obs):
             return True
     return ch in sim.cleared
@@ -203,7 +233,6 @@ def dog_strategy_http(sim, has_directional=False):
             if engage_http(sim, ch, obs[ch]):
                 clear_time[ch] = sim.virtual_time
 
-    n_src = len(sim.sources) if hasattr(sim, "sources") else None
     n_clear = len(sim.cleared)
     per_src = [clear_time[ch] - det_time[ch]
                for ch in clear_time if ch in det_time]

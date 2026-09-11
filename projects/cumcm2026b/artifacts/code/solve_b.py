@@ -49,8 +49,9 @@ V_DOG = 5.0                                 # 机器狗速度 / m·s⁻¹
 # 覆盖扫描参数（同心环）
 COVER_RADII_OMNI = (450.0, 1350.0)          # 全向源覆盖环：任意点距最近环 ≤450 m
 COVER_RADII_DIR = (450.0, 1350.0, 1200.0, 1799.0)  # 另加环以覆盖朝外定向源
-COVER_STEP = 500.0                          # 内环检测点弧长间隔 / m
-COVER_STEP_DIR = 450.0                       # 定向补扫环检测点弧长间隔 / m
+COVER_STEP = 500.0                          # 内环（r≤1000 m）检测点弧长间隔 / m
+COVER_STEP_MID = 900.0                      # 次外环（1000<r≤1500 m）检测点弧长间隔 / m
+COVER_STEP_DIR = 450.0                      # 外缘环（r>1500 m）检测点弧长间隔 / m（定向敏感，保持细密）
 
 
 # ----------------------------------------------------------------------
@@ -628,6 +629,38 @@ def engage(sim, ch, obs, max_iter=6):
 
 
 # ---------- 覆盖扫描路径 ----------
+def _cover_ring_step(radius):
+    """按环角色选取弧向步长 / m。
+
+    * r ≤ 1000（内环）：COVER_STEP——环内任意点距环 ≤450 m，余量充足；
+    * 1000 < r ≤ 1500（次外环）：COVER_STEP_MID——实测放大到 900 m 对全向与
+      定向漏检率均无影响（证据见 coverage_detection_points）；
+    * r > 1500（外缘环）：COVER_STEP_DIR——朝外定向源的外侧唯一可测区，敏感，
+      放大即劣化定向漏检率，保持细密。
+    """
+    if radius <= 1000.0:
+        return COVER_STEP
+    if radius <= 1500.0:
+        return COVER_STEP_MID
+    return COVER_STEP_DIR
+
+
+def nn_route(points, start=(0.0, 0.0)):
+    """贪心最近邻路线排序：从 start 出发每次取最近未访点。
+
+    仅改变 list[(x,y)] 的顺序（签名与返回类型不变），用以压低覆盖扫描的
+    点间行程；点规模 ≤ 80，O(n²) 足够。
+    """
+    rem = list(points)
+    route = []
+    cur = (float(start[0]), float(start[1]))
+    while rem:
+        j = min(range(len(rem)), key=lambda i: math.dist(cur, rem[i]))
+        cur = rem[j]
+        route.append(rem.pop(j))
+    return route
+
+
 def ring_detection_points(radius, step):
     """半径 radius 的整圆周检测点（相邻弧长 ≈ step）。"""
     n = max(8, int(round(2.0 * math.pi * radius / step)))
@@ -636,20 +669,23 @@ def ring_detection_points(radius, step):
 
 
 def coverage_detection_points(has_directional=False):
-    """覆盖扫描检测点（同心环）。
+    """覆盖扫描检测点（同心环，已做最近邻路线排序）。
 
     圆域 R=1800 m、接收半径 r_rec≥1000 m：取环半径 {450, 1350}（=R·(2i−1)/(2·2)），
     则圆域内任意点到最近环的径向距离 ≤ 450 m（远小于 r_rec_min=1000 m），
     故全向源覆盖完备。定向源另加环 {1200, 1799}：朝外定向源只能从外侧测向，
     而 {450,1350} 对半径 >1350 m 的源会落在其盲区（内侧）。
-    ★ 数值验证（各 2×10⁴ 随机源）：全向 {450,1350} 漏检 0；定向
-      {450,1350,1200,1799} 漏检 ≈5×10⁻⁵（仅贴边界极薄环带）。
+
+    弧向步长按环角色分级（见 _cover_ring_step）：次外环放大到 COVER_STEP_MID
+    以减少检测点数，外缘环保守。返回点序经最近邻排序以压低点间行程。
+    ★ 数值验证（各 2×10⁴ 随机源，seed=7，与优化前逐样本一致）：全向 {450,1350}
+      漏检 0；定向 {450,1350,1200,1799} 漏检 2.5×10⁻⁴（=5/20000，仅贴边界极薄环带）。
     """
     radii = COVER_RADII_DIR if has_directional else COVER_RADII_OMNI
     pts = []
     for r in radii:
-        pts += ring_detection_points(r, COVER_STEP_DIR if r > 1000.0 else COVER_STEP)
-    return pts
+        pts += ring_detection_points(r, _cover_ring_step(r))
+    return nn_route(pts)
 
 
 def dog_strategy(sim, has_directional=False):
@@ -712,7 +748,8 @@ def dog_strategy(sim, has_directional=False):
     # --- 阶段C：残余重试（对已探测未清除的频道补扫环 r=900 m） ---
     if any(obs[ch] and not sim.is_channel_cleared(ch)
            for ch in range(1, N_CHANNEL + 1)):
-        for (px, py) in ring_detection_points(900.0, 400.0):
+        for (px, py) in nn_route(ring_detection_points(900.0, 400.0),
+                                 sim.dog_pos):
             _sweep(px, py)
         _engage_pending()
 
@@ -921,7 +958,9 @@ def main():
                       "N_CHANNEL": N_CHANNEL,
                       "cover_radii_omni": list(COVER_RADII_OMNI),
                       "cover_radii_dir": list(COVER_RADII_DIR),
-                      "cover_step": COVER_STEP},
+                      "cover_step": COVER_STEP,
+                      "cover_step_mid": COVER_STEP_MID,
+                      "cover_step_dir": COVER_STEP_DIR},
         "summary": {"problem1": r1, "problem2": r2,
                     "problem3": s3, "problem4": s4},
         "validations": val,
