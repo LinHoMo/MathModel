@@ -174,3 +174,18 @@ def test_cli_build_rejects_bad_ir(tmp_path):
     rc = diagram_gen.main(["build", str(bad), "-o", str(tmp_path / "x.svg")])
     assert rc != 0
     assert not (tmp_path / "x.svg").exists()  # fail-closed：不留半成品
+
+
+def test_long_cjk_label_does_not_overflow_node_box():
+    """CJK 12px 字宽 ≈ 12px：长标签必须被 _fit 截断到方框内。"""
+    from modeling_harness.viz.svg import _est_width
+
+    long_label = "超长中文节点名称用于验证不会溢出方框" * 2
+    svg = render_svg(DiagramIR(kind="model_map", nodes=[Node(id="X", label=long_label)]))
+    root = ET.fromstring(svg)
+    for el in root.iter():
+        if not el.get("data-node-id"):
+            continue
+        rect = [c for c in el if c.tag.endswith("rect")][0]
+        for txt in (c for c in el if c.tag.endswith("text")):
+            assert _est_width(txt.text or "", 12) <= float(rect.get("width"))

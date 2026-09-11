@@ -12,12 +12,18 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING, List, Tuple
 
 # 以「脚本路径」方式直接运行时（py -3.12 src/modeling_harness/cli/diagram_gen.py ...）
 # 仍需能导入 modeling_harness.viz 包；以 mh / -m 方式运行时该插入为无害幂等。
 _SRC = Path(__file__).resolve().parents[2]
 if (_SRC / "modeling_harness").is_dir() and str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
+
+ROOT = Path(__file__).resolve().parents[3]
+
+if TYPE_CHECKING:
+    from modeling_harness.viz.ir import DiagramIR
 
 
 def _svg_header(w: int, h: int) -> str:
@@ -89,12 +95,12 @@ def flowchart(nodes_str: str, edges_str: str, title: str = "") -> str:
 
 def bar_chart(data_str: str, title: str = "") -> str:
     """简单的竖向柱状图。"""
-    items = []
+    items: List[Tuple[str, float]] = []
     for pair in data_str.split(","):
         if ":" in pair:
-            label, val = pair.split(":", 1)
+            label, raw = pair.split(":", 1)
             try:
-                items.append((label.strip(), float(val.strip())))
+                items.append((label.strip(), float(raw.strip())))
             except ValueError:
                 continue
 
@@ -166,6 +172,50 @@ def _build_from_ir(args) -> int:
     return 0
 
 
+def _write_figure(ir: "DiagramIR", out_dir: Path, stem: str) -> List[Path]:
+    """把 DiagramIR 落成 .ir.json（可 diff 源）+ .svg + .html 三件套。"""
+    from modeling_harness.viz.html import render_html
+    from modeling_harness.viz.svg import render_svg
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    ir_path = out_dir / f"{stem}.ir.json"
+    ir_path.write_text(ir.to_json(), encoding="utf-8")
+    svg_path = out_dir / f"{stem}.svg"
+    svg_path.write_text(render_svg(ir), encoding="utf-8")
+    html_path = out_dir / f"{stem}.html"
+    html_path.write_text(render_html(ir), encoding="utf-8")
+    return [ir_path, svg_path, html_path]
+
+
+def _render_project(args) -> int:
+    """projects/<name> → artifacts/figures/{model-map,evidence-graph}.*"""
+    from modeling_harness.viz.extract import from_evidence_graph, from_model_ir
+    from modeling_harness.viz.ir import DiagramIRError
+
+    proj = ROOT / "projects" / args.name
+    if not proj.is_dir():
+        print(f"[FAIL] 项目不存在: {proj}", file=sys.stderr)
+        return 2
+    mir = proj / "model_ir.json"
+    if not mir.is_file():
+        print(f"[FAIL] 缺 model_ir.json: {mir}", file=sys.stderr)
+        return 2
+
+    fig_dir = proj / "artifacts" / "figures"
+    try:
+        written = _write_figure(from_model_ir(mir), fig_dir, "model-map")
+        eg_path = proj / "state" / "evidence_graph.json"
+        if not args.no_evidence and eg_path.is_file():
+            written += _write_figure(from_evidence_graph(eg_path), fig_dir, "evidence-graph")
+    except DiagramIRError as exc:
+        print(f"[FAIL] 图表派生失败: {exc}", file=sys.stderr)
+        return 2
+
+    for path in written:
+        print(f"[OK] 生成: {path.relative_to(ROOT).as_posix()}")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="科学图表生成（SVG 输出）")
     sub = parser.add_subparsers(dest="chart_type", required=True)
@@ -186,10 +236,16 @@ def main(argv=None) -> int:
     p_build.add_argument("-o", "--output", required=True, help="输出路径（.svg 或 .html）")
     p_build.add_argument("--title", default="", help="覆盖标题")
 
+    p_proj = sub.add_parser("project", help="生成项目模型图（写 artifacts/figures/）")
+    p_proj.add_argument("name", help="projects/<name> 项目名")
+    p_proj.add_argument("--no-evidence", action="store_true", help="跳过 Evidence Graph")
+
     args = parser.parse_args(argv)
 
     if args.chart_type == "build":
         return _build_from_ir(args)
+    if args.chart_type == "project":
+        return _render_project(args)
 
     if args.chart_type == "flowchart":
         content = flowchart(args.nodes, args.edges, title=args.title)

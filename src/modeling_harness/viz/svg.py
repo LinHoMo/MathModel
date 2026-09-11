@@ -86,8 +86,24 @@ def _num(value: float) -> str:
     return f"{round(float(value), 1):g}"
 
 
-def _truncate(text: str, limit: int) -> str:
-    return text if len(text) <= limit else text[: limit - 1] + "\u2026"
+def _est_width(text: str, font_px: float) -> float:
+    """粗估文本像素宽：CJK/全角按 1.0em，ASCII 按 0.56em。"""
+    total = 0.0
+    for ch in text:
+        total += font_px * (1.0 if ord(ch) > 0x2E80 else 0.56)
+    return total
+
+
+def _fit(text: str, max_px: float, font_px: float) -> str:
+    """按估算像素宽截断，超宽补省略号 —— 防止文字溢出方框。"""
+    if _est_width(text, font_px) <= max_px:
+        return text
+    out = ""
+    for ch in text:
+        if _est_width(out + ch, font_px) + font_px > max_px:
+            break
+        out += ch
+    return out + "\u2026"
 
 
 def _layout(ir: DiagramIR) -> Tuple[List[str], Dict[str, List[Node]], Dict[str, Tuple[float, float]]]:
@@ -125,16 +141,21 @@ def render_svg(ir: DiagramIR, *, title: str = "") -> str:
     group_of = {n.id: (n.group or "") for n in ir.nodes}
 
     forward: List[Edge] = []
-    feedback: List[Edge] = []
+    same: List[Edge] = []
+    back: List[Edge] = []
     for edge in ir.edges:
-        if layer_index[group_of[edge.target]] > layer_index[group_of[edge.source]]:
+        sl = layer_index[group_of[edge.source]]
+        tl = layer_index[group_of[edge.target]]
+        if tl > sl:
             forward.append(edge)
+        elif tl == sl:
+            same.append(edge)
         else:
-            feedback.append(edge)
+            back.append(edge)
 
     ncols = max(len(v) for v in layers.values())
     base_w = MARGIN * 2 + ncols * NODE_W + (ncols - 1) * GAP_X
-    gutter = (44 + 16 * len(feedback)) if feedback else 0
+    gutter = (44 + 16 * len(back)) if back else 0
     canvas_w = base_w + gutter
     content_bottom = TITLE_H + MARGIN + (len(order) - 1) * (NODE_H + GAP_Y) + NODE_H
     canvas_h = content_bottom + MARGIN + (LEGEND_H if ir.legend else 0)
@@ -179,11 +200,12 @@ def render_svg(ir: DiagramIR, *, title: str = "") -> str:
 
     # 边（先画，节点压在上层）
     lane_x = base_w - MARGIN / 2 + 20
-    for k, edge in enumerate(feedback):
-        lane = lane_x + k * 16
-        parts.append(_edge_svg(edge, pos, lane=lane, forward=False))
+    for k, edge in enumerate(back):
+        parts.append(_edge_svg(edge, pos, mode="back", lane=lane_x + k * 16))
+    for k, edge in enumerate(same):
+        parts.append(_edge_svg(edge, pos, mode="same", lane=0.0, index=k))
     for edge in forward:
-        parts.append(_edge_svg(edge, pos, lane=0.0, forward=True))
+        parts.append(_edge_svg(edge, pos, mode="forward", lane=0.0))
 
     # 节点
     for node in ir.nodes:
@@ -221,29 +243,35 @@ def _node_svg(node: Node, x: float, y: float, layer_idx: int) -> str:
         f'<rect class="shape layer-{layer_idx % PALETTE}" x="{_num(x)}" y="{_num(y)}" '
         f'width="{NODE_W}" height="{NODE_H}" rx="6"/>',
         f'<text class="label" x="{_num(cx)}" y="{_num(label_y)}" text-anchor="middle">'
-        f"{_attr(_truncate(node.label, 20))}</text>",
+        f"{_attr(_fit(node.label, NODE_W - 18, 12))}</text>",
     ]
     if has_detail:
         out.append(
             f'<text class="detail" x="{_num(cx)}" y="{_num(y + NODE_H / 2.0 + 13)}" '
-            f'text-anchor="middle">{_attr(_truncate(node.detail, 26))}</text>'
+            f'text-anchor="middle">{_attr(_fit(node.detail, NODE_W - 18, 10))}</text>'
         )
     out.append("</g>")
     return "".join(out)
 
 
-def _edge_svg(edge: Edge, pos: Dict[str, Tuple[float, float]], *, lane: float, forward: bool) -> str:
+def _edge_svg(edge: Edge, pos: Dict[str, Tuple[float, float]], *,
+              mode: str, lane: float, index: int = 0) -> str:
     sx, sy = pos[edge.source]
     tx, ty = pos[edge.target]
-    if forward:
+    if mode == "forward":
         s_bottom = sy + NODE_H
-        t_top = ty
         sx_c = sx + NODE_W / 2.0
         tx_c = tx + NODE_W / 2.0
-        mid_y = (s_bottom + t_top) / 2.0
-        pts = [(sx_c, s_bottom), (sx_c, mid_y), (tx_c, mid_y), (tx_c, t_top)]
+        mid_y = (s_bottom + ty) / 2.0
+        pts = [(sx_c, s_bottom), (sx_c, mid_y), (tx_c, mid_y), (tx_c, ty)]
         label_x, label_y = (sx_c + tx_c) / 2.0, mid_y - 4
-    else:
+    elif mode == "same":
+        sx_c = sx + NODE_W / 2.0
+        tx_c = tx + NODE_W / 2.0
+        lane_y = sy - 10 - index * 9
+        pts = [(sx_c, sy), (sx_c, lane_y), (tx_c, lane_y), (tx_c, ty)]
+        label_x, label_y = (sx_c + tx_c) / 2.0, lane_y - 3
+    else:  # back（目标层在上）：走右侧沟槽
         s_right = sx + NODE_W
         t_right = tx + NODE_W
         sy_c = sy + NODE_H / 2.0
@@ -260,7 +288,7 @@ def _edge_svg(edge: Edge, pos: Dict[str, Tuple[float, float]], *, lane: float, f
     if edge.label:
         out.append(
             f'<text class="edge-label" x="{_num(label_x)}" y="{_num(label_y)}" '
-            f'text-anchor="middle">{_attr(_truncate(edge.label, 12))}</text>'
+            f'text-anchor="middle">{_attr(_fit(edge.label, 120, 9))}</text>'
         )
     out.append("</g>")
     return "".join(out)
