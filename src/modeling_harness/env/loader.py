@@ -8,6 +8,10 @@
 合并优先级（后者覆盖前者）：
     schema.yaml 的 value  <  config.yaml 的 overrides
 
+无 env 级 profile 层：V2 的 env/profiles/（9 个竞赛论文规格 profile）已随 V2 资产移除；
+V3 场景 profile（competition / research）真源在 modeling_harness.profiles，
+是 workflow stage 覆盖层，不由本加载器合并。
+
 设计原则：
     1. 零外部依赖：仅用标准库，自带极简 YAML 解析器（支持多级缩进、行内列表）。
     2. 单一真源：所有参数的默认值、类型、范围、依据只写在 schema.yaml，
@@ -19,7 +23,7 @@
 
 接口：
     load_config() -> dict                 展开后的纯值配置（向后兼容）
-    get(key, default=None) -> Any         点号路径读取，如 get("paper.max_pages")
+    get(key, default=None) -> Any         点号路径读取，如 get("code.random_seed")
     require(key) -> Any                   缺失即抛 EnvConfigError
     layer_of(key) -> str                  返回 OFFICIAL / DERIVED / TUNABLE
     doctor_report() -> dict               参数生效值 + 来源 + 一致性问题（供 env_doctor.py）
@@ -33,7 +37,10 @@ import copy
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SCHEMA_PATH = os.path.join(_HERE, "schema.yaml")
 _CONFIG_PATH = os.path.join(_HERE, "config.yaml")
-_PROFILES_DIR = os.path.join(_HERE, "profiles")
+
+# 注：V2 的 env/profiles/（9 个竞赛论文规格 profile）已随 V2 资产移除（见 CHANGELOG）。
+# V3 的场景 profile 真源在 modeling_harness.profiles（workflow stage 覆盖层，
+# profile_path(kind, name)），与参数合并无关，本加载器不再设 env 级 profile 目录。
 
 LAYER_OFFICIAL = "OFFICIAL"
 LAYER_DERIVED = "DERIVED"
@@ -265,16 +272,6 @@ _CONFIG_CACHE = None
 _META_CACHE = None
 
 
-def available_profiles():
-    """列出 src/modeling_harness/env/profiles/ 下可用的竞赛 profile 名（不含扩展名）。"""
-    if not os.path.isdir(_PROFILES_DIR):
-        return []
-    return sorted(
-        f[:-5] for f in os.listdir(_PROFILES_DIR)
-        if f.endswith(".yaml") and not f.startswith("_")
-    )
-
-
 def _load_all():
     global _CONFIG_CACHE, _META_CACHE
     if _CONFIG_CACHE is not None:
@@ -290,41 +287,25 @@ def _load_all():
 
     # 用户配置
     user_cfg = _read_yaml(_CONFIG_PATH) if os.path.isfile(_CONFIG_PATH) else {}
-    profile_name = user_cfg.get("profile") or ""
-
     applied = []       # [(path, value, source)]  成功应用的覆盖
     rejected = []      # [(path, 想改的值, 保留的值)]  被 OFFICIAL 锁定拒绝的覆盖
-    profile_meta = {}
 
-    # 1) 竞赛 profile 差量（可选；src/modeling_harness/env/profiles/ 已随 V2 论文规格移除，
-    #    未来建模规则 profile 可在此注册）
-    if profile_name:
-        prof_path = os.path.join(_PROFILES_DIR, profile_name + ".yaml")
-        if os.path.isfile(prof_path):
-            prof = _read_yaml(prof_path)
-            prof.pop("inherits", None)
-            profile_meta = prof.pop("meta", {}) or {}
-            _merge_into(values, prof, layers, strict_official=False, track=applied,
-                        source="profile:" + profile_name, rejected=rejected)
-        else:
-            sys.stderr.write(
-                "[env/loader] 警告：profile 文件不存在 %s，仅使用 schema.yaml 默认值。\n" % prof_path)
-
-    # 2) 用户 overrides（严格：OFFICIAL 层拒绝覆盖）
+    # 用户 overrides（严格：OFFICIAL 层拒绝覆盖）
+    # 注：V2 的竞赛 profile 差量层（env/profiles/<profile>.yaml）已随 V2 资产移除（见 CHANGELOG）；
+    # V3 场景 profile（competition / research）是 workflow stage 覆盖层，真源见
+    # src/modeling_harness/profiles/，不经本加载器合并。
     ov = user_cfg.get("overrides") or {}
     if isinstance(ov, dict) and ov:
         _merge_into(values, ov, layers, strict_official=True, track=applied,
                     source="config.yaml overrides", rejected=rejected)
 
-    # 3) 一致性验算
+    # 2) 一致性验算
     issues = _check_consistency(values)
     for msg in issues:
         sys.stderr.write("[env/loader] 参数矛盾：%s\n" % msg)
 
     _CONFIG_CACHE = values
     _META_CACHE = {
-        "profile": profile_name,
-        "profile_meta": profile_meta,
         "layers": layers,
         "sources": sources,
         "types": types,
@@ -344,7 +325,7 @@ def load_config():
 
 
 def get(key, default=None):
-    """按点号路径读取配置，如 get("paper.max_pages")。"""
+    """按点号路径读取配置，如 get("code.random_seed")。"""
     if not key or not isinstance(key, str):
         return default
     try:
@@ -384,15 +365,6 @@ def layer_of(key):
     return meta["layers"].get(key, "")
 
 
-def profile_name():
-    """返回当前生效的竞赛 profile 名。"""
-    try:
-        _, meta = _load_all()
-    except EnvConfigError:
-        return ""
-    return meta.get("profile", "")
-
-
 def doctor_report():
     """返回参数体检报告 dict，供 src/modeling_harness/cli/env_doctor.py 渲染。"""
     cfg, meta = _load_all()
@@ -418,12 +390,9 @@ def doctor_report():
                 })
     walk(cfg)
     return {
-        "profile": meta["profile"],
-        "profile_meta": meta["profile_meta"],
         "rows": rows,
         "issues": meta["issues"],
         "rejected": meta["rejected"],
-        "available_profiles": available_profiles(),
     }
 
 
@@ -440,20 +409,13 @@ if __name__ == "__main__":
     print("src/modeling_harness/env/loader.py 调试输出")
     print("schema :", _SCHEMA_PATH, os.path.isfile(_SCHEMA_PATH))
     print("config :", _CONFIG_PATH, os.path.isfile(_CONFIG_PATH))
-    print("可用 profile:", ", ".join(available_profiles()))
     print("=" * 66)
 
     rep = doctor_report()
-    print("\n当前 profile: %s" % rep["profile"])
-    pm = rep["profile_meta"]
-    if pm:
-        print("  赛事: %s  verified=%s  来源: %s" % (
-            pm.get("name", "?"), pm.get("verified", "?"), pm.get("rules_source", "?")))
 
     print("\n[关键参数]")
     for r in rep["rows"]:
-        if r["path"].startswith(("paper.", "official.")):
-            print("  %-38s = %-18s [%s]" % (r["path"], r["value"], r["layer"]))
+        print("  %-38s = %-18s [%s]" % (r["path"], r["value"], r["layer"]))
 
     if rep["issues"]:
         print("\n[参数矛盾]")
@@ -468,7 +430,7 @@ if __name__ == "__main__":
             print("  x %s -> 想改成 %r，已拒绝（OFFICIAL 层锁定）" % (path, want))
 
     print("\n[get() 兼容性抽样]")
-    for k in ("paper.max_pages", "paper.min_pages", "paper.min_words",
-              "paper.min_figures", "code.random_seed", "runtime.language",
-              "official.ai_support_pdf_name", "not.exist.key"):
+    for k in ("code.random_seed", "code.multi_run_count", "modeling.min_candidate_models",
+              "review.pass_score", "runtime.language", "runtime.strict_mode",
+              "not.exist.key"):
         print("  get(%r) = %r" % (k, get(k)))
