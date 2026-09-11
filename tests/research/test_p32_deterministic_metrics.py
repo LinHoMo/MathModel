@@ -96,9 +96,14 @@ class TestBaselineComparison:
         assert r["compared_keys"] == 2
 
     def test_different_values(self):
+        # ADR-0013：旧实现只报 "different"（回答不了「谁更好」）；现按目标方向判定。
+        # 默认 direction="minimize" ⇒ y 越小越好 ⇒ b(50) 优于 a(100)。
         r = baseline_comparison({"y": 100.0}, {"y": 50.0})
-        assert r["better"] == "different"
+        assert r["better"] == "b"
         assert r["max_rel_diff"] == pytest.approx(0.5)
+        # 同一组数字换方向即翻转结论 —— 这正是旧实现无法回答的问题
+        assert baseline_comparison({"y": 100.0}, {"y": 50.0},
+                                   direction="maximize")["better"] == "a"
 
     def test_missing_keys_incomparable(self):
         r = baseline_comparison({"y": 1.0}, {"z": 2.0})

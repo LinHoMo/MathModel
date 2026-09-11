@@ -114,22 +114,45 @@ def _evidence_is_real(art) -> bool:
 
 def baseline_comparison(outputs_a: dict, outputs_b: dict,
                         keys: list[str] | None = None,
-                        tolerance: float = 1e-9) -> dict[str, Any]:
-    """两个执行结果（模型 vs 基线）的确定性数值比较。
+                        tolerance: float = 1e-9,
+                        direction: str = "minimize",
+                        directions: dict | None = None) -> dict[str, Any]:
+    """两个执行结果（模型 vs 基线）的确定性数值比较，并**判定优劣、量化 gap**。
 
     - 只在两端都存在的数值 key 上比较（缺失 key 不进比较并列出）。
     - 相对差异 = |a-b| / max(|a|,|b|,eps)；两 key 相对差异 ≤ tolerance
       视为"无实质差异"。
-    - 输出 better: "a" / "b" / "tie" / "incomparable"（按目标方向：
-      objective_less_is_better 可翻转）。
+    - **目标方向**：`direction` 取 "minimize"（越小越好，如耗时/误差）或 "maximize"
+      （越大越好，如清除比例/精度），可用 `directions={key: dir}` 按键覆盖。
+      方向是判定优劣的**前提**——没有方向就无法回答「谁更好」，只能报「有差异」。
+    - 每个键给出 `abs_gap`（a−b）与 `rel_gap`（相对 b 的百分比，b=0 时为 None），
+      即以 b（通常为基线）为参照的差距。
+    - 聚合 `better`：所有可比键一致指向同侧时报该侧；分歧时报 "mixed"（不得掩盖分歧）；
+      全部落在容差内报 "tie"；无可比键报 "incomparable"。
+      **"a" 表示模型 A 更好。**
 
     Args:
         outputs_a: 模型 A 的 execution outputs（dict of 数值/可数值化）。
         outputs_b: 模型 B（基线）的 execution outputs。
         keys: 要比较的数值 key；缺省取两端共有数值 key 全比。
         tolerance: 相对差异阈值。
+        direction: 全局目标方向，"minimize" | "maximize"。
+        directions: 按 key 覆盖方向，如 {"clear_fraction": "maximize"}。
+
+    Raises:
+        ValueError: direction 取值非法（fail-closed，不静默按默认方向算）。
     """
     eps = 1e-12
+    if direction not in ("minimize", "maximize"):
+        raise ValueError(
+            f"direction 必须为 'minimize' 或 'maximize'，得到 {direction!r}"
+        )
+    for k, d in (directions or {}).items():
+        if d not in ("minimize", "maximize"):
+            raise ValueError(
+                f"directions[{k!r}] 必须为 'minimize' 或 'maximize'，得到 {d!r}"
+            )
+
     a = {k: v for k, v in (outputs_a or {}).items() if _is_num(v)}
     b = {k: v for k, v in (outputs_b or {}).items() if _is_num(v)}
     if keys is None:
@@ -138,25 +161,49 @@ def baseline_comparison(outputs_a: dict, outputs_b: dict,
         keys = [k for k in keys if k in a and k in b]
 
     compared = []
+    verdicts = set()
     for k in keys:
         va, vb = float(a[k]), float(b[k])
         denom = max(abs(va), abs(vb), eps)
         rel = abs(va - vb) / denom
-        compared.append({"key": k, "a": va, "b": vb,
-                         "rel_diff": round(rel, 8),
-                         "same_within_tolerance": rel <= tolerance})
+        d = (directions or {}).get(k, direction)
+        if rel <= tolerance:
+            verdict = "tie"
+        elif d == "minimize":
+            verdict = "a" if va < vb else "b"
+        else:  # maximize
+            verdict = "a" if va > vb else "b"
+        if verdict != "tie":
+            verdicts.add(verdict)
+        compared.append({
+            "key": k, "a": va, "b": vb,
+            "direction": d,
+            "rel_diff": round(rel, 8),
+            "abs_gap": round(va - vb, 8),
+            "rel_gap": (round((va - vb) / vb, 8) if vb != 0 else None),
+            "better": verdict,
+            "same_within_tolerance": rel <= tolerance,
+        })
+
     if not compared:
-        return {"compared_keys": 0, "better": "incomparable",
-                "note": "两端无共有数值 key", "missing_in_a": list(set(keys) - set(a)),
-                "missing_in_b": list(set(keys) - set(b))}
+        return {"compared_keys": 0, "better": "incomparable", "direction": direction,
+                "note": "两端无共有数值 key", "missing_in_a": sorted(set(keys) - set(a)),
+                "missing_in_b": sorted(set(keys) - set(b))}
 
     max_rel = max(c["rel_diff"] for c in compared)
     mean_rel = sum(c["rel_diff"] for c in compared) / len(compared)
+    if not verdicts:
+        agg = "tie"
+    elif len(verdicts) == 1:
+        agg = next(iter(verdicts))
+    else:
+        agg = "mixed"   # 各键指向不同侧：如实报分歧，不取多数票掩盖
     return {
         "compared_keys": len(compared),
         "max_rel_diff": round(max_rel, 8),
         "mean_rel_diff": round(mean_rel, 8),
-        "better": "tie" if max_rel <= tolerance else "different",
+        "better": agg,
+        "direction": direction,
         "detail": compared,
     }
 

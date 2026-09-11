@@ -56,6 +56,9 @@ def _metrics(vdata: dict) -> dict:
         "constraint_violation_max": vdata.get("constraint_violation_max"),
         "robustness": vdata.get("robustness"),
         "execution_valid": vdata.get("execution_valid"),
+        # ADR-0013：模型选择必须以目标函数值为首要依据，验证检查数只是回退项。
+        "objective_value": vdata.get("objective_value"),
+        "objective_direction": vdata.get("objective_direction") or "minimize",
     }
 
 
@@ -89,14 +92,33 @@ def compare_models(registry, mir1_id: str, mir2_id: str) -> dict:
         better, rec = mir1_id, "reject"
         reason = f"{mir2_id} 验证失败（M1 保持有效）"
     elif m1.get("valid") and m2.get("valid"):
-        if (m2.get("checks_passed") or 0) > (m1.get("checks_passed") or 0):
-            better, rec = mir2_id, "accept"
-            reason = (f"{mir2_id} 通过检查数更高"
-                      f"（{m2.get('checks_passed')} vs "
-                      f"{m1.get('checks_passed')}）")
+        # ADR-0013：两者均通过验证时，**先比目标函数值**，不得用验证检查数代偿
+        # （那会把「验证做得更细的模型」误判为更优，而不管其目标值是否更好）。
+        o1, o2 = m1.get("objective_value"), m2.get("objective_value")
+        if o1 is None or o2 is None:
+            if (m2.get("checks_passed") or 0) > (m1.get("checks_passed") or 0):
+                better, rec = mir2_id, "accept"
+                reason = (f"{mir2_id} 通过检查数更高"
+                          f"（{m2.get('checks_passed')} vs "
+                          f"{m1.get('checks_passed')}）；"
+                          f"目标值不可得，退化为按验证质量比较（ADR-0013 回退）")
+            else:
+                better, rec = mir1_id, "keep"
+                reason = "两者均通过；目标值不可得，验证质量亦无优势"
+            deltas["objective_fallback"] = True
         else:
-            better, rec = mir1_id, "keep"
-            reason = "两者均通过；无证据表明 M2 更优"
+            o1, o2 = float(o1), float(o2)
+            direction = m1.get("objective_direction") or "minimize"
+            deltas["objective_value"] = o2 - o1
+            if abs(o2 - o1) <= 1e-12 * max(abs(o1), abs(o2), 1.0):
+                better, rec = mir1_id, "keep"
+                reason = f"两者目标值无实质差异（{o1:g} vs {o2:g}）；M1 保持"
+            elif (o2 < o1) if direction == "minimize" else (o2 > o1):
+                better, rec = mir2_id, "accept"
+                reason = f"{mir2_id} 目标值更优（{o2:g} vs {o1:g}，{direction}）"
+            else:
+                better, rec = mir1_id, "keep"
+                reason = f"{mir1_id} 目标值更优（{o1:g} vs {o2:g}，{direction}）"
     else:
         better, rec = "NONE", "reject"
         reason = "两者均未通过验证"

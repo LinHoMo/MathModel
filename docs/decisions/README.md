@@ -20,6 +20,7 @@
 | [ADR-0010](ADR-0010-model-families-revision-r1.md) | model_families 词表修订 r1（CUMCM 2026 结构对齐） | Accepted |
 | [ADR-0011](ADR-0011-knowledge-card-gate.md) | 知识卡双层门禁与 source_type 枚举增补 | Accepted |
 | [ADR-0012](ADR-0012-efficiency-metric-denominator.md) | 效率统计口径以题面定义为准、跨实现比较前必须归一 | Accepted |
+| [ADR-0013](ADR-0013-objective-over-validation-in-model-selection.md) | 模型选择必须比目标函数值，基线对照链必须闭环 | Accepted |
 
 ## 规则
 
