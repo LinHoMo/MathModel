@@ -74,7 +74,33 @@ def audit_travel(total_move_m: float, points: list, sources: list) -> dict:
     }
 
 
+def _merge_into_all_results(report: dict) -> None:
+    """并入项目根结果台账（供数值追溯：模型描述文档引用的审计数字可溯源）。"""
+    import json
+    from pathlib import Path
+
+    allres = Path(__file__).resolve().parent.parent.parent / "all_results.json"
+    data: dict = {}
+    if allres.exists():
+        try:
+            data = json.loads(allres.read_text(encoding="utf-8"))
+        except Exception:
+            data = {}
+    seg: dict = {"milestone": "M-SELECT-004",
+                 "method": "5 seeds × 2 场景，报均值（铁律：多种子 ≥5 次）"}
+    for tag, a in report.items():
+        for k in ("total_move_m", "scan_m", "engage_m",
+                  "sources_mst_lower_bound_m", "engage_over_lower_bound"):
+            seg[f"{tag}_{k}"] = a.get(k)
+        seg[f"{tag}_n_clear_actions"] = a.get("n_clear_actions")
+    data["travel_audit"] = seg
+    allres.write_text(json.dumps(data, ensure_ascii=False, indent=2),
+                      encoding="utf-8")
+    print(f"[OK] 已并入 {allres} 的 travel_audit 段")
+
+
 def main() -> int:
+    import statistics as st_mod
     import sys
     from pathlib import Path
 
@@ -84,27 +110,45 @@ def main() -> int:
     import solve_b as B
     import solve_b_http as M
 
-    for port, (km, tag) in enumerate(((False, "Q3 全向"), (True, "Q4 混合")), start=2481):
-        srv = MockSimulatorServer(port=port, seed=42, kind_mix=km)
-        srv.start()
-        try:
-            sim = SimulatorHTTP(base_url=f"http://127.0.0.1:{port}",
-                                robot_id="TRAVEL-AUDIT", timeout=30.0)
-            sim.enter()
-            pts = B.coverage_detection_points(km)
-            st = M.dog_strategy_http(sim, has_directional=km, points=pts)
-            sim.exit()
-            srcs = [(s.x, s.y) for s in srv.sources]
-            a = audit_travel(st["move_dist_m"], pts, srcs)
-            print(f"[{tag}] 源={len(srcs)} 点={len(pts)} clear动作={st['n_clear_actions']}")
-            print(f"    总移动 {a['total_move_m']:.0f} m = 扫描段 {a['scan_m']:.0f} m"
-                  f"（{a['scan_share']:.0%}）+ 归航段 {a['engage_m']:.0f} m"
-                  f"（{a['engage_share']:.0%}）")
-            ratio = a["engage_over_lower_bound"]
-            print(f"    源 MST 下界 {a['sources_mst_lower_bound_m']:.0f} m"
-                  f" → 归航冗余 {ratio:.2f}×" if ratio else "    下界为 0（源不足）")
-        finally:
-            srv.stop()
+    seeds = (42, 43, 44, 45, 46)   # 铁律：多种子 ≥5 次
+    report: dict = {}
+    for base_port, (km, tag) in enumerate(((False, "q3_omni"), (True, "q4_mix")),
+                                          start=2481):
+        pts = B.coverage_detection_points(km)
+        rows = []
+        for i, sd in enumerate(seeds):
+            port = base_port + i * 3
+            srv = MockSimulatorServer(port=port, seed=sd, kind_mix=km)
+            srv.start()
+            try:
+                sim = SimulatorHTTP(base_url=f"http://127.0.0.1:{port}",
+                                    robot_id="TRAVEL-AUDIT", timeout=30.0)
+                sim.enter()
+                stt = M.dog_strategy_http(sim, has_directional=km, points=pts)
+                sim.exit()
+                srcs = [(s.x, s.y) for s in srv.sources]
+                row = audit_travel(stt["move_dist_m"], pts, srcs)
+                row["n_clear_actions"] = stt["n_clear_actions"]
+                rows.append(row)
+            finally:
+                srv.stop()
+        agg = {}
+        for k in ("total_move_m", "scan_m", "engage_m",
+                  "sources_mst_lower_bound_m", "engage_over_lower_bound",
+                  "n_clear_actions"):
+            vals = [r[k] for r in rows if r.get(k) is not None]
+            agg[k] = (st_mod.fmean(vals) if vals else None)
+        report[tag] = agg
+        sd_ratio = (st_mod.stdev([r["engage_over_lower_bound"] for r in rows])
+                    if len(rows) > 1 else 0.0)
+        print(f"[{tag}] {len(seeds)} seeds 均值（点={len(pts)}）")
+        print(f"    总移动 {agg['total_move_m']:.0f} m"
+              f" = 扫描段 {agg['scan_m']:.0f} m + 归航段 {agg['engage_m']:.0f} m")
+        print(f"    源 MST 下界 {agg['sources_mst_lower_bound_m']:.0f} m"
+              f" → 归航冗余 {agg['engage_over_lower_bound']:.2f}×（±{sd_ratio:.2f}）"
+              f" | clear 动作 {agg['n_clear_actions']:.1f}")
+
+    _merge_into_all_results(report)
     return 0
 
 
