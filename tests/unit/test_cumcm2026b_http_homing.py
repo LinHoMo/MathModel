@@ -31,6 +31,19 @@ from pathlib import Path
 
 import pytest
 
+# CI 测试环境只声明 pytest / pyyaml / jsonschema / ripgrep / ruff（无 numpy）。
+# 本模块经 `projects/cumcm2026b` 的求解代码（solve_b_http → solve_b）间接依赖
+# numpy —— 那是**实例侧**依赖，不进 core 的零依赖边界。numpy 不可用时整模块跳过，
+# 而不是让收集期 ImportError 把整个 CI 跑挂（2026-09-11 首次推送时暴露）。
+#
+# 刻意只在 numpy 缺失时跳过：numpy 在场时若 solve_b_http / simulator_http 自身
+# 导入坏了，异常照常抛出（不掩盖真实回归）。
+try:
+    import numpy  # noqa: F401
+except ImportError:
+    pytest.skip("cumcm2026b 求解代码依赖 numpy（实例侧依赖）；CI 测试环境不含该包",
+                allow_module_level=True)
+
 _REPO = Path(__file__).resolve().parents[2]
 _CODE = _REPO / "projects" / "cumcm2026b" / "artifacts" / "code"
 if str(_CODE) not in sys.path:
