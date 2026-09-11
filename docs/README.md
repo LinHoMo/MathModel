@@ -59,6 +59,7 @@
 | [METRICS.md](METRICS.md) | 项目度量单一真源（由 `src/modeling_harness/cli/metrics.py --write` 自动生成） |
 | [HANDOFF.md](HANDOFF.md) | 跨题交接：四件套门禁口径、本轮修复清单、优化 backlog（给下一个 Agent） |
 | [PROJECTS_FEEDBACK_AUDIT.md](PROJECTS_FEEDBACK_AUDIT.md) | 实例反馈审计与闭环：三实例缺陷清单 + harness 侧修复 + 实测对照 + 未闭合项 |
+| [THEORY_FOUNDATION_REVIEW.md](THEORY_FOUNDATION_REVIEW.md) | 理论基座缺口审查与优化方案（REVIEW：10 维度分析 + 创新空间/合成真值/预测探针提案） |
 | [STATUS.md](STATUS.md) | 项目状态与机器实测数字（状态真源） |
 | [ONTOLOGY_TERMINOLOGY.md](ONTOLOGY_TERMINOLOGY.md) | 术语与本体权威定义 |
 | [../CHANGELOG.md](../CHANGELOG.md) | 版本变更日志 |
