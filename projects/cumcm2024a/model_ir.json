@@ -11,6 +11,48 @@
     ],
     "description": "将 223 节板凳抽象为 224 个把手构成的刚性折线链（相邻把手弦长固定 2.86/1.65 m），约束其全部落在一条给定行进路径 Γ 上；Γ 在 Q1-Q3 为等距螺线，在 Q4-Q5 为「盘入螺线 + 两段相切圆弧 S 形调头曲线 + 中心对称盘出螺线」的组合曲线。整链构型由龙头前把手弧长坐标 σ_0 唯一确定，属几何/运动学（kinematic）范式，其求解依赖微分几何弧长参数化与数值优化/求根。"
   },
+  "evidence_obligations": {
+    "Q1": [
+      "EV1",
+      "EV2",
+      "EV4",
+      "EV5"
+    ],
+    "Q2": [
+      "EV1",
+      "EV2",
+      "EV4",
+      "EV5"
+    ],
+    "Q3": [
+      "EV1",
+      "EV2",
+      "EV4",
+      "EV5"
+    ],
+    "Q4": [
+      "EV1",
+      "EV2",
+      "EV4",
+      "EV5"
+    ],
+    "Q5": [
+      "EV1",
+      "EV2",
+      "EV4",
+      "EV5"
+    ]
+  },
+  "innovation": {
+    "structure_distance": 0.0,
+    "dimensions": {
+      "mechanism_novelty": 0.0,
+      "solver_novelty": 0.0,
+      "composition_novelty": 0.0,
+      "representation_novelty": 0.0
+    },
+    "difference_arguments": []
+  },
   "problem_binding": {
     "problem_id": "2024_A",
     "sub_question_id": "Q1..Q5",

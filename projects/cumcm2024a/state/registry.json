@@ -1,16 +1,17 @@
 {
   "registry_version": 3,
-  "project": "cumcm2024a-harness",
-  "updated_at": "2026-09-10T12:54:23Z",
+  "project": "cumcm2024a",
+  "updated_at": "2026-09-10T14:14:56Z",
   "counters": {
     "assumption": 1,
     "claim": 8,
     "code": 10,
+    "deliverable": 1,
     "experiment": 5,
     "model": 1,
-    "narrative": 1,
+    "model_ir": 1,
     "problem": 1,
-    "question": 1,
+    "question": 5,
     "result": 5
   },
   "artifacts": {
@@ -22,10 +23,10 @@
       "status": "active",
       "title": "2024_A 板凳龙闹元宵",
       "created_by": "problem_understanding",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
-        "statement": "inputs/cumcm2024A.txt",
+        "statement": "inputs/problem.txt",
         "sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
         "sub_questions": [
           "Q1",
@@ -37,56 +38,96 @@
         "gt_card": "research/P15/benchmark/problem_cards/2024_A/gt.json"
       }
     },
-    "MH-QUESTION-0001": {
+    "Q1": {
       "schema_version": "3.1",
-      "artifact_id": "MH-QUESTION-0001",
+      "artifact_id": "Q1",
       "type": "question",
       "version": 1,
       "status": "active",
-      "title": "2024_A 子问题分解（Q1-Q5）",
-      "created_by": "problem_understanding",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
-      "payload": {
-        "sub_questions": [
-          {
-            "id": "Q1",
-            "type": "forward_simulation",
-            "text": "螺距 0.55 m 顺时针盘入，0~300 s 每秒全队位置速度"
-          },
-          {
-            "id": "Q2",
-            "type": "collision_detection",
-            "text": "盘入终止时刻（板凳首次碰撞）"
-          },
-          {
-            "id": "Q3",
-            "type": "geometric_optimization",
-            "text": "最小螺距使龙头能盘入到调头空间边界"
-          },
-          {
-            "id": "Q4",
-            "type": "curve_design_and_simulation",
-            "text": "S 形调头曲线（R1=2R2）与 −100~100 s 仿真；能否调短"
-          },
-          {
-            "id": "Q5",
-            "type": "velocity_constrained_optimization",
-            "text": "龙头最大行进速度使各把手速度 ≤ 2 m/s"
-          }
-        ]
-      }
+      "title": "Q1 forward_simulation",
+      "created_by": {
+        "id": "Q1",
+        "type": "forward_simulation",
+        "text": "螺距 0.55 m 顺时针盘入，0~300 s 每秒全队位置速度"
+      },
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
+      "payload": "problem_understanding"
+    },
+    "Q2": {
+      "schema_version": "3.1",
+      "artifact_id": "Q2",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q2 collision_detection",
+      "created_by": {
+        "id": "Q2",
+        "type": "collision_detection",
+        "text": "盘入终止时刻（板凳首次碰撞）"
+      },
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
+      "payload": "problem_understanding"
+    },
+    "Q3": {
+      "schema_version": "3.1",
+      "artifact_id": "Q3",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q3 geometric_optimization",
+      "created_by": {
+        "id": "Q3",
+        "type": "geometric_optimization",
+        "text": "最小螺距使龙头能盘入到调头空间边界"
+      },
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
+      "payload": "problem_understanding"
+    },
+    "Q4": {
+      "schema_version": "3.1",
+      "artifact_id": "Q4",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q4 curve_design_and_simulation",
+      "created_by": {
+        "id": "Q4",
+        "type": "curve_design_and_simulation",
+        "text": "S 形调头曲线（R1=2R2）与 −100~100 s 仿真；能否调短"
+      },
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
+      "payload": "problem_understanding"
+    },
+    "Q5": {
+      "schema_version": "3.1",
+      "artifact_id": "Q5",
+      "type": "question",
+      "version": 1,
+      "status": "active",
+      "title": "Q5 velocity_constrained_optimization",
+      "created_by": {
+        "id": "Q5",
+        "type": "velocity_constrained_optimization",
+        "text": "龙头最大行进速度使各把手速度 ≤ 2 m/s"
+      },
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
+      "payload": "problem_understanding"
     },
     "MH-MODEL-0001": {
       "schema_version": "3.1",
       "artifact_id": "MH-MODEL-0001",
       "type": "model",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "刚性链-曲线约束运动学模型（MODEL_IR M001）",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "model_ir": "model_ir.json",
         "model_document": "model.md",
@@ -103,8 +144,8 @@
       "status": "active",
       "title": "实现：dragon_core.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/dragon_core.py"
       }
@@ -117,8 +158,8 @@
       "status": "active",
       "title": "实现：turnaround.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/turnaround.py"
       }
@@ -131,8 +172,8 @@
       "status": "active",
       "title": "实现：q1_solve.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/q1_solve.py"
       }
@@ -145,8 +186,8 @@
       "status": "active",
       "title": "实现：q2_solve.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/q2_solve.py"
       }
@@ -159,8 +200,8 @@
       "status": "active",
       "title": "实现：q3_solve.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/q3_solve.py"
       }
@@ -173,8 +214,8 @@
       "status": "active",
       "title": "实现：q4_solve.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/q4_solve.py"
       }
@@ -187,8 +228,8 @@
       "status": "active",
       "title": "实现：q5_solve.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/q5_solve.py"
       }
@@ -201,8 +242,8 @@
       "status": "active",
       "title": "实现：results_io.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/results_io.py"
       }
@@ -215,8 +256,8 @@
       "status": "active",
       "title": "实现：build_model_ir.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/build_model_ir.py"
       }
@@ -229,8 +270,8 @@
       "status": "active",
       "title": "实现：init_state.py",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/code/init_state.py"
       }
@@ -240,29 +281,30 @@
       "artifact_id": "MH-EXPERIMENT-0001",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "EXP01：问题 1 数值实验",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "sub_question": "Q1",
         "solver_code": "artifacts/code/q1_solve.py",
         "deterministic": true,
         "random_seed": null,
         "note": "确定性几何/求根计算，无随机性，故无需多种子"
-      }
+      },
+      "question": "Q1"
     },
     "MH-RESULT-0001": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0001",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "result1.xlsx",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/results/result1.xlsx",
         "sheets": [
@@ -270,36 +312,38 @@
           "key_points",
           "meta"
         ]
-      }
+      },
+      "question": "Q1"
     },
     "MH-EXPERIMENT-0002": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0002",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "EXP02：问题 2 数值实验",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "sub_question": "Q2",
         "solver_code": "artifacts/code/q2_solve.py",
         "deterministic": true,
         "random_seed": null,
         "note": "确定性几何/求根计算，无随机性，故无需多种子"
-      }
+      },
+      "question": "Q2"
     },
     "MH-RESULT-0002": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0002",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "result2.xlsx",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/results/result2.xlsx",
         "sheets": [
@@ -307,72 +351,76 @@
           "key_points",
           "meta"
         ]
-      }
+      },
+      "question": "Q2"
     },
     "MH-EXPERIMENT-0003": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0003",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "EXP03：问题 3 数值实验",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "sub_question": "Q3",
         "solver_code": "artifacts/code/q3_solve.py",
         "deterministic": true,
         "random_seed": null,
         "note": "确定性几何/求根计算，无随机性，故无需多种子"
-      }
+      },
+      "question": "Q3"
     },
     "MH-RESULT-0003": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0003",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "result3.xlsx",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/results/result3.xlsx",
         "sheets": [
           "Sheet1",
           "meta"
         ]
-      }
+      },
+      "question": "Q3"
     },
     "MH-EXPERIMENT-0004": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0004",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "EXP04：问题 4 数值实验",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "sub_question": "Q4",
         "solver_code": "artifacts/code/q4_solve.py",
         "deterministic": true,
         "random_seed": null,
         "note": "确定性几何/求根计算，无随机性，故无需多种子"
-      }
+      },
+      "question": "Q4"
     },
     "MH-RESULT-0004": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0004",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "result4.xlsx",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/results/result4.xlsx",
         "sheets": [
@@ -380,43 +428,46 @@
           "key_points",
           "meta"
         ]
-      }
+      },
+      "question": "Q4"
     },
     "MH-EXPERIMENT-0005": {
       "schema_version": "3.1",
       "artifact_id": "MH-EXPERIMENT-0005",
       "type": "experiment",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "EXP05：问题 5 数值实验",
       "created_by": "experiment_design",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "sub_question": "Q5",
         "solver_code": "artifacts/code/q5_solve.py",
         "deterministic": true,
         "random_seed": null,
         "note": "确定性几何/求根计算，无随机性，故无需多种子"
-      }
+      },
+      "question": "Q5"
     },
     "MH-RESULT-0005": {
       "schema_version": "3.1",
       "artifact_id": "MH-RESULT-0005",
       "type": "result",
       "version": 1,
-      "status": "active",
+      "status": "validated",
       "title": "result5.xlsx",
       "created_by": "experiment_execution",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "path": "artifacts/results/result5.xlsx",
         "sheets": [
           "Sheet1",
           "meta"
         ]
-      }
+      },
+      "question": "Q5"
     },
     "MH-CLAIM-0001": {
       "schema_version": "3.1",
@@ -426,13 +477,14 @@
       "status": "active",
       "title": "CL01",
       "created_by": "evidence_build",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "text": "Q1 位置速度已给出；连杆弦长残差 ≤ 3.3e-13 m",
         "sub_question": "Q1",
         "source": "MODEL_IR claims"
-      }
+      },
+      "question": "Q1"
     },
     "MH-CLAIM-0002": {
       "schema_version": "3.1",
@@ -442,13 +494,14 @@
       "status": "active",
       "title": "CL02",
       "created_by": "evidence_build",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "text": "把手速率不恒等于龙头速率：t=300 s 龙尾 0.996478 m/s（弦长 vs 弧长模型的差异）",
         "sub_question": "Q1",
         "source": "MODEL_IR claims"
-      }
+      },
+      "question": "Q1"
     },
     "MH-CLAIM-0003": {
       "schema_version": "3.1",
@@ -458,13 +511,14 @@
       "status": "active",
       "title": "CL03",
       "created_by": "evidence_build",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "text": "Q2 盘入终止时刻 t* = 397.7836 s（临界板对 = 龙头板/第 10 条板）",
         "sub_question": "Q2",
         "source": "MODEL_IR claims"
-      }
+      },
+      "question": "Q2"
     },
     "MH-CLAIM-0004": {
       "schema_version": "3.1",
@@ -474,13 +528,14 @@
       "status": "active",
       "title": "CL04",
       "created_by": "evidence_build",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "text": "最小板距随时间非单调振荡（离散多边形相位效应），须细扫定位",
         "sub_question": "Q2",
         "source": "MODEL_IR claims"
-      }
+      },
+      "question": "Q2"
     },
     "MH-CLAIM-0005": {
       "schema_version": "3.1",
@@ -490,13 +545,14 @@
       "status": "active",
       "title": "CL05",
       "created_by": "evidence_build",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "text": "Q3 最小螺距见 result3.xlsx（与起始盘入位置无关的结构性结论）",
         "sub_question": "Q3",
         "source": "MODEL_IR claims"
-      }
+      },
+      "question": "Q3"
     },
     "MH-CLAIM-0006": {
       "schema_version": "3.1",
@@ -506,13 +562,14 @@
       "status": "active",
       "title": "CL06",
       "created_by": "evidence_build",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "text": "Q4 R1=3.005418 m, R2=1.502709 m, ψ=173.118°, L=13.621245 m，曲线全在调头空间内",
         "sub_question": "Q4",
         "source": "MODEL_IR claims"
-      }
+      },
+      "question": "Q4"
     },
     "MH-CLAIM-0007": {
       "schema_version": "3.1",
@@ -522,13 +579,14 @@
       "status": "active",
       "title": "CL07",
       "created_by": "evidence_build",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "text": "调头曲线长度对半径分配为不变量 ⇒ 不能靠调整圆弧缩短",
         "sub_question": "Q4",
         "source": "MODEL_IR claims"
-      }
+      },
+      "question": "Q4"
     },
     "MH-CLAIM-0008": {
       "schema_version": "3.1",
@@ -538,13 +596,14 @@
       "status": "active",
       "title": "CL08",
       "created_by": "evidence_build",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "text": "Q5 龙头最大速度 v_max = 2 / max|dσ_k/dσ_0|，见 result5.xlsx",
         "sub_question": "Q5",
         "source": "MODEL_IR claims"
-      }
+      },
+      "question": "Q5"
     },
     "MH-ASSUMPTION-0001": {
       "schema_version": "3.1",
@@ -554,8 +613,8 @@
       "status": "active",
       "title": "A01-A10 建模假设集",
       "created_by": "model_construction",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
         "ids": [
           "A01",
@@ -569,7 +628,7 @@
           "A09",
           "A10"
         ],
-        "source": "model/model_ir.json#assumptions",
+        "source": "model_ir.json#assumptions",
         "critical": [
           "A01 弦长约束",
           "A04 把手共路径（Q2-Q5 外推）",
@@ -578,18 +637,2171 @@
         ]
       }
     },
-    "MH-NARRATIVE-0001": {
+    "MH-MODEL_IR-0001": {
       "schema_version": "3.1",
-      "artifact_id": "MH-NARRATIVE-0001",
-      "type": "narrative",
+      "artifact_id": "MH-MODEL_IR-0001",
+      "type": "model_ir",
+      "version": 1,
+      "status": "validated",
+      "title": "板凳龙盘入/调头运动的刚性链-曲线约束运动学模型",
+      "created_by": "model_construction",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-11T10:16:44+08:00",
+      "payload": {
+        "path": "model_ir.json",
+        "sha256": "a81cf6834628ca961ea6945bf05f28713ce8e27c3c7a169476a678a191d7ecfb"
+      },
+      "data": {
+        "ir_version": "1.0",
+        "model_id": "M001",
+        "title": "板凳龙盘入/调头运动的刚性链-曲线约束运动学模型",
+        "model_family": {
+          "primary": "kinematic",
+          "secondary": [
+            "differential_geometry",
+            "numerical_optimization",
+            "multibody_dynamics"
+          ],
+          "description": "将 223 节板凳抽象为 224 个把手构成的刚性折线链（相邻把手弦长固定 2.86/1.65 m），约束其全部落在一条给定行进路径 Γ 上；Γ 在 Q1-Q3 为等距螺线，在 Q4-Q5 为「盘入螺线 + 两段相切圆弧 S 形调头曲线 + 中心对称盘出螺线」的组合曲线。整链构型由龙头前把手弧长坐标 σ_0 唯一确定，属几何/运动学（kinematic）范式，其求解依赖微分几何弧长参数化与数值优化/求根。"
+        },
+        "problem_binding": {
+          "problem_id": "2024_A",
+          "sub_question_id": "Q1..Q5",
+          "problem_sha256": "9baf81fb40f82f776998540524a6f2fe45f232af621343e9ae30e5dd97dbd53e",
+          "problem_card_ref": "research/P15/benchmark/problem_cards/2024_A/gt.json",
+          "competition_format": "cumcm",
+          "allowed_modeling_structures": [
+            "multibody_dynamics",
+            "catenary_approximation",
+            "differential_geometry",
+            "numerical_optimization",
+            "pure_geometric_spiral",
+            "kinematics"
+          ],
+          "sub_questions": {
+            "Q1": "沿螺距 55 cm 等距螺线顺时针盘入，龙头前把手 1 m/s，初始第 16 圈；0~300 s 每秒全队位置速度",
+            "Q2": "确定盘入终止时刻使板凳间不碰撞，并给出该时刻位置速度",
+            "Q3": "调头空间为直径 9 m 圆域，求龙头能盘入到其边界的最小螺距",
+            "Q4": "螺距 1.7 m，S 形调头曲线（R1=2R2 且与盘入/盘出螺线均相切）；-100~100 s 位置速度；能否调短",
+            "Q5": "沿 Q4 路径，求龙头最大行进速度使各把手速度均不超过 2 m/s"
+          }
+        },
+        "assumptions": [
+          {
+            "assumption_id": "A01",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "text": "每条板凳为刚体：同一板凳上两孔中心距固定，龙头 3.41−2×0.275=2.86 m，龙身/龙尾 2.20−2×0.275=1.65 m。",
+            "anchors_to_problem": "题面第 2 段（板长、孔径、孔心距板头 27.5 cm）",
+            "rationale": "把手即孔心，孔在同一刚体上 ⇒ 距离恒定，构成弦长约束而非弧长约束。"
+          },
+          {
+            "assumption_id": "A02",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "text": "相邻板凳经共用把手铰接：前一板的后把手与后一板的前把手重合为同一点，故 223 节板对应 224 个把手点。",
+            "anchors_to_problem": "题面「相邻两条板凳通过把手连接」",
+            "rationale": "把手数 = 板数 + 1，决定递推的初值与维数。"
+          },
+          {
+            "assumption_id": "A03",
+            "type": "projection",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "text": "全部把手中心均位于行进路径 Γ 上。",
+            "anchors_to_problem": "问题 1「各把手中心均位于螺线上」",
+            "rationale": "题面直接给定。"
+          },
+          {
+            "assumption_id": "A04",
+            "type": "projection",
+            "source": "reasonable_simplification",
+            "confidence": 0.8,
+            "sub_question_binding": [
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "text": "在 Q2-Q5 中同样假定全部把手中心位于龙头所走过的路径 Γ 上（组合曲线情形的自然外推）。",
+            "anchors_to_problem": "题面仅在问题 1 明示；其余问未另给运动学约束",
+            "rationale": "若不共享同一条 Γ，则拖曳链需刚体-铰链动力学另行建模；题面未提供摩擦/驱动信息，且官方结果与主流解法均取此假定。敏感性：它只影响把手在调头段的横向偏移（量级 ≤ 板宽）。"
+          },
+          {
+            "assumption_id": "A05",
+            "type": "simplification",
+            "source": "assumption_derived",
+            "confidence": 0.9,
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ],
+            "text": "碰撞判据：非相邻板凳的物理板体（含把手外 0.275 m 伸出）中心线最小距离 < 板宽 0.30 m 即判碰撞；以胶囊（线段+0.15 m 半径）近似矩形。",
+            "anchors_to_problem": "题面「板宽均为 30 cm」",
+            "rationale": "胶囊是矩形的外包，判定偏保守（略早报碰撞），保守方向安全。"
+          },
+          {
+            "assumption_id": "A06",
+            "type": "simplification",
+            "source": "reasonable_simplification",
+            "confidence": 0.95,
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ],
+            "text": "共用把手的相邻两条板凳不计碰撞（铰接处必然重叠，属结构所允许）。",
+            "rationale": "否则任何折角都会判碰；铰接点重叠是机构本身性质。"
+          },
+          {
+            "assumption_id": "A07",
+            "type": "mechanism_assumption",
+            "source": "problem_explicit",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "text": "调头空间是以螺线中心为圆心、直径为 9 m 的圆域（半径 R_t = 4.5 m），盘出螺线与盘入螺线关于该中心中心对称。",
+            "anchors_to_problem": "问题 3、问题 4 题面"
+          },
+          {
+            "assumption_id": "A08",
+            "type": "calibration_anchor",
+            "source": "reasonable_simplification",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ],
+            "text": "初始时龙头位于螺线第 16 圈 A 点，取 A 的极角为 0、θ_0 = 32π（坐标系选取）。",
+            "rationale": "整体旋转自由度的规范选取，不改变任何相对量（距离、速度、时刻）。"
+          },
+          {
+            "assumption_id": "A09",
+            "type": "simplification",
+            "source": "reasonable_simplification",
+            "confidence": 0.95,
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "text": "平面运动、忽略板厚与离地高度、忽略人手操作误差与板凳间摩擦；路径连续且切向连续。",
+            "rationale": "题面全部数据为平面尺寸；调头曲线由相切条件保证 C¹ 连续。"
+          },
+          {
+            "assumption_id": "A10",
+            "type": "mechanism_assumption",
+            "source": "assumption_derived",
+            "confidence": 1.0,
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ],
+            "text": "刚性链可跟随的最小曲率半径 R_min = L_head/2 = 1.43 m（弦长不能超过直径 2R）。",
+            "rationale": "若 R < 1.43 m，则 2.86 m 的龙头连杆无法在圆弧上安置，路径对该链不可行。本模型 R2 = 1.5027 m 恰好满足，构成自洽性硬约束。"
+          }
+        ],
+        "variables": [
+          {
+            "variable_id": "V01",
+            "name": "把手位置",
+            "symbol": "P_k(t)",
+            "definition": "第 k 个把手（k=0..223）的平面坐标",
+            "unit": "m",
+            "type": "state",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "index_domain": "k = 0..223（0=龙头前把手，223=龙尾后把手）"
+          },
+          {
+            "variable_id": "V02",
+            "name": "把手弧长坐标",
+            "symbol": "sigma_k",
+            "definition": "把手在行进路径 Γ 上、以行进方向为正的弧长坐标",
+            "unit": "m",
+            "type": "state",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "value_range": "[0, len(Γ)]"
+          },
+          {
+            "variable_id": "V03",
+            "name": "把手速度矢量",
+            "symbol": "v_k",
+            "definition": "dP_k/dt",
+            "unit": "m/s",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "variable_id": "V04",
+            "name": "把手速率",
+            "symbol": "|v_k|",
+            "definition": "速度矢量模长",
+            "unit": "m/s",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "variable_id": "V05",
+            "name": "时间",
+            "symbol": "t",
+            "definition": "行进时间；Q4/Q5 以调头开始时刻为 0",
+            "unit": "s",
+            "type": "continuous",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "variable_id": "V06",
+            "name": "板体中心线端点",
+            "symbol": "a_j, b_j",
+            "definition": "第 j 条板（j=0..222）物理板体中心线两端点，含把手外 0.275 m 伸出",
+            "unit": "m",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ]
+          },
+          {
+            "variable_id": "V07",
+            "name": "最小板距",
+            "symbol": "d_min",
+            "definition": "非相邻板体中心线间的最小距离",
+            "unit": "m",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ]
+          },
+          {
+            "variable_id": "V08",
+            "name": "盘入终止时刻",
+            "symbol": "t*",
+            "definition": "d_min 首次降至板宽的临界时刻",
+            "unit": "s",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "variable_id": "V09",
+            "name": "螺距",
+            "symbol": "p",
+            "definition": "等距螺线相邻两圈的径向间距，p = 2πb",
+            "unit": "m",
+            "type": "decision",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "variable_id": "V10",
+            "name": "龙头行进速度",
+            "symbol": "v_head",
+            "definition": "龙头前把手沿路径的恒定速率",
+            "unit": "m/s",
+            "type": "decision",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "variable_id": "V11",
+            "name": "调头圆弧半径",
+            "symbol": "R_1, R_2",
+            "definition": "S 形调头曲线两段相切圆弧的半径（R_1 = 2R_2）",
+            "unit": "m",
+            "type": "decision",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "variable_id": "V12",
+            "name": "调头转角",
+            "symbol": "psi",
+            "definition": "两段圆弧各自的转角（两端切向相同 ⇒ psi_1 = psi_2 = psi）",
+            "unit": "rad",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "variable_id": "V13",
+            "name": "调头曲线弧长",
+            "symbol": "L_S",
+            "definition": "L_S = (R_1 + R_2)·psi",
+            "unit": "m",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "variable_id": "V14",
+            "name": "出螺线切点",
+            "symbol": "theta_B",
+            "definition": "调头曲线与盘出螺线的相切点在出螺线上的参数",
+            "unit": "rad",
+            "type": "decision",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "variable_id": "V15",
+            "name": "速率比",
+            "symbol": "r_k",
+            "definition": "r_k = |d sigma_k / d sigma_0|，把手速率与龙头速率之比",
+            "unit": "-",
+            "type": "derived",
+            "sub_question_binding": [
+              "Q5"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "parameter_id": "P01",
+            "name": "板凳节数",
+            "symbol": "N",
+            "value": 223,
+            "unit": "节",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P02",
+            "name": "把手点数",
+            "symbol": "N_h",
+            "value": 224,
+            "unit": "个",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P03",
+            "name": "龙头板长",
+            "symbol": "L_head^board",
+            "value": 3.41,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P04",
+            "name": "龙身/龙尾板长",
+            "symbol": "L_body^board",
+            "value": 2.2,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P05",
+            "name": "板宽",
+            "symbol": "w",
+            "value": 0.3,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P06",
+            "name": "孔心到板头距离",
+            "symbol": "e",
+            "value": 0.275,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P07",
+            "name": "孔径",
+            "symbol": "d_hole",
+            "value": 0.055,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P08",
+            "name": "龙头连杆长",
+            "symbol": "L_0",
+            "value": 2.86,
+            "unit": "m",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "definition": "3.41 − 2×0.275"
+          },
+          {
+            "parameter_id": "P09",
+            "name": "龙身/龙尾连杆长",
+            "symbol": "L_b",
+            "value": 1.65,
+            "unit": "m",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "definition": "2.20 − 2×0.275"
+          },
+          {
+            "parameter_id": "P10",
+            "name": "链路总长",
+            "symbol": "L_chain",
+            "value": 369.16,
+            "unit": "m",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "definition": "2.86 + 222×1.65"
+          },
+          {
+            "parameter_id": "P11",
+            "name": "Q1/Q2 螺距",
+            "symbol": "p_1",
+            "value": 0.55,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "parameter_id": "P12",
+            "name": "Q4/Q5 螺距",
+            "symbol": "p_4",
+            "value": 1.7,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P13",
+            "name": "龙头速度（给定值）",
+            "symbol": "v_head^0",
+            "value": 1.0,
+            "unit": "m/s",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "parameter_id": "P14",
+            "name": "初始圈数",
+            "symbol": "n_0",
+            "value": 16,
+            "unit": "圈",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "parameter_id": "P15",
+            "name": "调头空间半径",
+            "symbol": "R_t",
+            "value": 4.5,
+            "unit": "m",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P16",
+            "name": "把手速度上限",
+            "symbol": "v_lim",
+            "value": 2.0,
+            "unit": "m/s",
+            "source": "problem_given",
+            "sub_question_binding": [
+              "Q5"
+            ]
+          },
+          {
+            "parameter_id": "P17",
+            "name": "最小可跟随曲率半径",
+            "symbol": "R_min",
+            "value": 1.43,
+            "unit": "m",
+            "source": "derived",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ],
+            "definition": "L_0 / 2"
+          }
+        ],
+        "objectives": [
+          {
+            "objective_id": "O01",
+            "type": "simulate",
+            "expression": "{P_k(t), v_k(t)}_{k=0..223}, t = 0,1,...,300 s",
+            "variables_refs": [
+              "V01",
+              "V03",
+              "V05"
+            ],
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "description": "给出 0~300 s 每秒全部 224 个把手的位置与速度"
+          },
+          {
+            "objective_id": "O02",
+            "type": "find",
+            "expression": "t* = inf{ t : d_min(t) < w }",
+            "variables_refs": [
+              "V07",
+              "V08"
+            ],
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "description": "求板凳间首次发生碰撞（不能再继续盘入）的时刻"
+          },
+          {
+            "objective_id": "O03",
+            "type": "minimize",
+            "expression": "min p  s.t.  min_{r_0 ∈ [R_t, ∞)} d_min(p, r_0) ≥ w",
+            "variables_refs": [
+              "V09",
+              "V07"
+            ],
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "description": "求使龙头能盘入到调头空间边界 r = 4.5 m 且全程不碰撞的最小螺距"
+          },
+          {
+            "objective_id": "O04a",
+            "type": "simulate",
+            "expression": "{P_k(t), v_k(t)}, t = −100,...,100 s（t=0 为调头开始）",
+            "variables_refs": [
+              "V01",
+              "V03"
+            ],
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "description": "沿「入螺线 + S 形调头 + 出螺线」给出 −100~100 s 每秒位置速度"
+          },
+          {
+            "objective_id": "O04b",
+            "type": "minimize",
+            "expression": "min L_S = (R_1+R_2)·psi  s.t. 相切约束、曲线 ⊂ 圆域、R_i ≥ R_min",
+            "variables_refs": [
+              "V11",
+              "V12",
+              "V13",
+              "V14"
+            ],
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "description": "回答「能否调整圆弧仍保持相切使调头曲线变短」"
+          },
+          {
+            "objective_id": "O05",
+            "type": "maximize",
+            "expression": "max v_head  s.t.  max_{k,t} r_k · v_head ≤ 2 m/s",
+            "variables_refs": [
+              "V10",
+              "V15"
+            ],
+            "sub_question_binding": [
+              "Q5"
+            ],
+            "description": "求满足全队把手速率上限的龙头最大行进速度"
+          }
+        ],
+        "constraints": [
+          {
+            "constraint_id": "C01",
+            "type": "equality",
+            "expression": "|Γ(σ_{k+1}) − Γ(σ_k)| = L_k,  L_0 = 2.86,  L_{k≥1} = 1.65",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "source": "geometric",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "description": "弦长（非弧长）约束：这是本模型与「弧长等分」近似解的根本分歧点"
+          },
+          {
+            "constraint_id": "C02",
+            "type": "initial",
+            "expression": "σ_0(0) = s(32π)（龙头初始在第 16 圈）",
+            "variables_refs": [
+              "V02"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q1",
+              "Q2"
+            ]
+          },
+          {
+            "constraint_id": "C03",
+            "type": "boundary",
+            "expression": "|v_0(t)| = 1 m/s（Q1/Q2/Q4 给定；Q5 为待求常数）",
+            "variables_refs": [
+              "V10"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ]
+          },
+          {
+            "constraint_id": "C04",
+            "type": "inequality",
+            "expression": "d_min(t) ≥ w = 0.30 m",
+            "variables_refs": [
+              "V07"
+            ],
+            "source": "assumption_derived",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ]
+          },
+          {
+            "constraint_id": "C05",
+            "type": "inequality",
+            "expression": "max_{σ ∈ S 曲线} |Γ(σ)| ≤ R_t = 4.5 m",
+            "variables_refs": [
+              "V01"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "constraint_id": "C06",
+            "type": "equality",
+            "expression": "两段圆弧彼此外切、并分别与盘入/盘出螺线相切（C¹ 连续）",
+            "variables_refs": [
+              "V11",
+              "V12"
+            ],
+            "source": "geometric",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "constraint_id": "C07",
+            "type": "equality",
+            "expression": "R_1 = 2 R_2",
+            "variables_refs": [
+              "V11"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "description": "题面给定；O04b 研究放宽该比例的影响"
+          },
+          {
+            "constraint_id": "C08",
+            "type": "inequality",
+            "expression": "max_k |v_k(t)| ≤ 2 m/s, ∀t",
+            "variables_refs": [
+              "V04"
+            ],
+            "source": "problem",
+            "sub_question_binding": [
+              "Q5"
+            ]
+          },
+          {
+            "constraint_id": "C09",
+            "type": "inequality",
+            "expression": "R_i ≥ R_min = L_0/2 = 1.43 m",
+            "variables_refs": [
+              "V11"
+            ],
+            "source": "assumption_derived",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ],
+            "description": "刚性链可跟随性：弦长不得超过曲率圆直径"
+          },
+          {
+            "constraint_id": "C10",
+            "type": "logical",
+            "expression": "σ_k ≤ σ_0（把手在龙头后方）且 σ_k ≥ 0（不越出轨道起点）",
+            "variables_refs": [
+              "V02"
+            ],
+            "source": "assumption_derived",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          }
+        ],
+        "mechanisms": [
+          {
+            "mechanism_id": "ME01",
+            "name": "刚性折线链运动学",
+            "type": "geometric",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "description": "223 节刚板经 224 个把手铰接成不可伸长折线链；构型由龙头弧长坐标唯一决定，由弦长约束向后递推确定。",
+            "governing_principle": "刚体不可伸长 + 铰接",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "assumptions_refs": [
+              "A01",
+              "A02",
+              "A03"
+            ],
+            "related_equations": [
+              "E03"
+            ]
+          },
+          {
+            "mechanism_id": "ME02",
+            "name": "等距螺线弧长参数化",
+            "type": "geometric",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "description": "r = bθ 的阿基米德螺线，弧长 s(θ) 有闭式，可用 Newton 稳定反演；θ 递减即顺时针向内盘入。",
+            "governing_principle": "微分几何：ds = √(r² + b²) dθ",
+            "variables_refs": [
+              "V02",
+              "V09"
+            ],
+            "related_equations": [
+              "E01",
+              "E02"
+            ]
+          },
+          {
+            "mechanism_id": "ME03",
+            "name": "离散多边形间隙振荡",
+            "type": "geometric",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ],
+            "description": "链是内接于螺线的离散多边形（非光滑曲线），板体相对相位周期性变化，使最小板距随时间**非单调振荡**，振幅 ≈ 板长²/(8r)。故终止时刻必须细扫定位，不能假设单调后二分。",
+            "governing_principle": "离散化相位效应（真实物理，非数值噪声）",
+            "variables_refs": [
+              "V07"
+            ],
+            "related_equations": [
+              "E07"
+            ]
+          },
+          {
+            "mechanism_id": "ME04",
+            "name": "板体碰撞的机械判定",
+            "type": "geometric",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ],
+            "description": "板体含把手外 0.275 m 伸出；非相邻板对的线段最小距离由凸二次函数精确解给出。",
+            "governing_principle": "凸二次函数在矩形域上的精确最小化",
+            "variables_refs": [
+              "V06",
+              "V07"
+            ],
+            "assumptions_refs": [
+              "A05",
+              "A06"
+            ],
+            "related_equations": [
+              "E06",
+              "E07"
+            ]
+          },
+          {
+            "mechanism_id": "ME05",
+            "name": "两段相切圆弧 S 形调头",
+            "type": "geometric",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ],
+            "description": "两端切向相同（盘出螺线是盘入螺线的中心对称像，其行进切向与入端相同）⇒ ψ_1 = ψ_2 ⇒ 位移仅依赖 (R_1+R_2)，弧长对该分配为不变量。",
+            "governing_principle": "中心对称 + C¹ 相切",
+            "variables_refs": [
+              "V11",
+              "V12",
+              "V13"
+            ],
+            "related_equations": [
+              "E08",
+              "E09",
+              "E10"
+            ]
+          },
+          {
+            "mechanism_id": "ME06",
+            "name": "弧长速率传递",
+            "type": "dynamical",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "description": "v_k = (dσ_k/dσ_0)·v_head：速率比是**仅依赖龙头位置**的几何量，与龙头速度无关；链不可伸长但弧长间隔随曲率变化，故 r_k ≠ 1。",
+            "governing_principle": "链式法则 + 构型由 σ_0 唯一确定",
+            "variables_refs": [
+              "V04",
+              "V15"
+            ],
+            "related_equations": [
+              "E04",
+              "E11"
+            ]
+          }
+        ],
+        "equations": [
+          {
+            "equation_id": "E01",
+            "latex": "r(\\theta) = b\\theta,\\quad b = \\frac{p}{2\\pi}",
+            "type": "definition",
+            "variables_refs": [
+              "V09"
+            ],
+            "derivation_trace": "等距螺线定义：转过 2π 时半径增量 b·2π = p 即螺距。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "equation_id": "E02",
+            "latex": "s(\\theta) = \\frac{b}{2}\\left(\\theta\\sqrt{1+\\theta^2} + \\operatorname{arsinh}\\theta\\right)",
+            "type": "derived",
+            "variables_refs": [
+              "V02"
+            ],
+            "derivation_trace": "由 ds = |dP/dθ| dθ = b√(1+θ²) dθ 积分得到闭式；其反演用 Newton 迭代（单调收敛）。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "equation_id": "E03",
+            "latex": "\\left|\\Gamma(\\sigma_{k+1}) - \\Gamma(\\sigma_k)\\right| = L_k,\\quad \\sigma_{k+1} < \\sigma_k",
+            "type": "constitutive",
+            "variables_refs": [
+              "V01",
+              "V02"
+            ],
+            "derivation_trace": "把手均在 Γ 上且连杆不可伸长 ⇒ 弦长等式；对 σ_{k+1} 用 Newton 求最小正根，以上一连杆解为热启动（3~4 次迭代达机器精度），收敛失败时回退区间扫描+二分。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "equation_id": "E04",
+            "latex": "\\mathbf{v}_k = \\frac{d\\Gamma(\\sigma_k)}{dt} = \\frac{d\\sigma_k}{d\\sigma_0}\\, v_{head}\\, \\mathbf{T}(\\sigma_k)",
+            "type": "derived",
+            "variables_refs": [
+              "V03",
+              "V04",
+              "V15"
+            ],
+            "derivation_trace": "链式法则 + Γ 的单位切向；实现上直接用 (P_k(t+h) − P_k(t−h))/(2h)，h = 1e−3 s，避免切向公式误差。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "equation_id": "E05",
+            "latex": "L_0 = 3.41 - 2\\times0.275 = 2.86,\\qquad L_b = 2.20 - 2\\times0.275 = 1.65",
+            "type": "definition",
+            "variables_refs": [
+              "V01"
+            ],
+            "derivation_trace": "孔心到最近板头 0.275 m，同板两孔中心距 = 板长 − 2×0.275。",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "equation_id": "E06",
+            "latex": "\\mathbf{a}_j = P_j - e\\,\\mathbf{u}_j,\\quad \\mathbf{b}_j = P_{j+1} + e\\,\\mathbf{u}_j,\\quad e = 0.275",
+            "type": "definition",
+            "variables_refs": [
+              "V06"
+            ],
+            "derivation_trace": "板体伸出把手外 0.275 m，得到物理板体中心线。",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ]
+          },
+          {
+            "equation_id": "E07",
+            "latex": "d_{min} = \\min_{|i-j|\\ge 2}\\ \\mathrm{dist}\\big([\\mathbf{a}_i,\\mathbf{b}_i],[\\mathbf{a}_j,\\mathbf{b}_j]\\big) < w",
+            "type": "constitutive",
+            "variables_refs": [
+              "V07"
+            ],
+            "derivation_trace": "线段-线段最小距离取「内部驻点 + 4 条边的钳制驻点」的最小者，对凸二次函数在矩形域上为精确解。",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ]
+          },
+          {
+            "equation_id": "E08",
+            "latex": "D = B - A = (R_1+R_2)\\big(\\sin\\psi\\,\\mathbf{u} - (1-\\cos\\psi)\\,\\mathbf{n}\\big)",
+            "type": "derived",
+            "variables_refs": [
+              "V11",
+              "V12",
+              "V13"
+            ],
+            "derivation_trace": "两段弧位移叠加：右转位移 R(sinψ·u −(1−cosψ)n)，左转位移在旋转后的基底下形式相同，且两端切向相同 ⇒ ψ_1 = ψ_2 = ψ，两项合并。",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "equation_id": "E09",
+            "latex": "\\tan\\frac{\\psi}{2} = -\\frac{D\\cdot \\mathbf{n}}{D\\cdot \\mathbf{u}},\\qquad R_1+R_2 = \\frac{D\\cdot\\mathbf{u}}{\\sin\\psi}",
+            "type": "derived",
+            "variables_refs": [
+              "V12",
+              "V11"
+            ],
+            "derivation_trace": "由 (E08) 在 (u, n) 基下分解直接解出 ψ 与半径和。",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "equation_id": "E10",
+            "latex": "L_S = (R_1+R_2)\\,\\psi = \\text{const}\\ \\ (\\text{与 } R_1:R_2 \\text{ 无关})",
+            "type": "derived",
+            "variables_refs": [
+              "V13"
+            ],
+            "derivation_trace": "不变量结论：端点与两端切向固定后，ψ 与 R_1+R_2 唯一确定，故总弧长与半径分配无关；数值上 ratio=1/1.5/2/3/5/10 六种分配给出同一个 L 值（见 V05 验证）。",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "equation_id": "E11",
+            "latex": "v_{head}^{max} = \\frac{v_{lim}}{\\max_{k,t} r_k},\\qquad r_k = \\left|\\frac{d\\sigma_k}{d\\sigma_0}\\right|",
+            "type": "derived",
+            "variables_refs": [
+              "V10",
+              "V15"
+            ],
+            "derivation_trace": "由 (E04) 且 r_k 与 v_head 无关 ⇒ 约束线性，直接取倒数；无需对速度做搜索。",
+            "sub_question_binding": [
+              "Q5"
+            ]
+          },
+          {
+            "equation_id": "E12",
+            "latex": "P(a) = P_0 + \\frac{1}{k}\\big(\\mathbf{n} - R(k\\,a)\\,\\mathbf{n}\\big),\\quad \\mathbf{T}(a) = R(k a)\\,\\mathbf{u}",
+            "type": "constitutive",
+            "variables_refs": [
+              "V01",
+              "V11"
+            ],
+            "derivation_trace": "有符号曲率 k 的圆弧闭式（k>0 左转）；用于拼接调头曲线并与螺线段共享同一弧长坐标。",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          }
+        ],
+        "dependencies": [
+          {
+            "dependency_id": "D01",
+            "from_type": "constraint",
+            "from_id": "C01",
+            "to_type": "equation",
+            "to_id": "E03",
+            "relation": "defines",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "dependency_id": "D02",
+            "from_type": "equation",
+            "from_id": "E01",
+            "to_type": "equation",
+            "to_id": "E02",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "dependency_id": "D03",
+            "from_type": "equation",
+            "from_id": "E03",
+            "to_type": "equation",
+            "to_id": "E04",
+            "relation": "feeds",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "dependency_id": "D04",
+            "from_type": "equation",
+            "from_id": "E06",
+            "to_type": "equation",
+            "to_id": "E07",
+            "relation": "feeds",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ]
+          },
+          {
+            "dependency_id": "D05",
+            "from_type": "equation",
+            "from_id": "E07",
+            "to_type": "objective",
+            "to_id": "O02",
+            "relation": "governs",
+            "sub_question_binding": [
+              "Q2"
+            ]
+          },
+          {
+            "dependency_id": "D06",
+            "from_type": "equation",
+            "from_id": "E07",
+            "to_type": "objective",
+            "to_id": "O03",
+            "relation": "governs",
+            "sub_question_binding": [
+              "Q3"
+            ]
+          },
+          {
+            "dependency_id": "D07",
+            "from_type": "equation",
+            "from_id": "E08",
+            "to_type": "equation",
+            "to_id": "E09",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "dependency_id": "D08",
+            "from_type": "equation",
+            "from_id": "E09",
+            "to_type": "equation",
+            "to_id": "E10",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D09",
+            "from_type": "equation",
+            "from_id": "E10",
+            "to_type": "objective",
+            "to_id": "O04b",
+            "relation": "governs",
+            "sub_question_binding": [
+              "Q4"
+            ]
+          },
+          {
+            "dependency_id": "D10",
+            "from_type": "equation",
+            "from_id": "E04",
+            "to_type": "equation",
+            "to_id": "E11",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q5"
+            ]
+          },
+          {
+            "dependency_id": "D11",
+            "from_type": "assumption",
+            "from_id": "A10",
+            "to_type": "constraint",
+            "to_id": "C09",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "dependency_id": "D12",
+            "from_type": "assumption",
+            "from_id": "A05",
+            "to_type": "constraint",
+            "to_id": "C04",
+            "relation": "derives",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ]
+          },
+          {
+            "dependency_id": "D13",
+            "from_type": "parameter",
+            "from_id": "P08",
+            "to_type": "variable",
+            "to_id": "V01",
+            "relation": "constrains",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ]
+          },
+          {
+            "dependency_id": "D14",
+            "from_type": "mechanism",
+            "from_id": "ME03",
+            "to_type": "objective",
+            "to_id": "O02",
+            "relation": "constrains",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "note": "振荡 ⇒ 必须细扫，不能单调二分"
+          }
+        ],
+        "solvers": [
+          {
+            "solver_id": "S01",
+            "name": "螺线弧长反演",
+            "type": "numerical",
+            "method": "Newton 迭代（残差 tol=1e-14 提前退出）",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "implementation_ref": "artifacts/code/dragon_core.py:Spiral.theta_at_arc",
+            "equations_refs": [
+              "E02"
+            ],
+            "convergence_criteria": "max|s(θ)−s_target| < 1e-14"
+          },
+          {
+            "solver_id": "S02",
+            "name": "刚性链向后递推",
+            "type": "numerical",
+            "method": "Newton（F(δ)=|Γ(σ−δ)−Γ(σ)|²−L²，F′=−2w·Γ′）+ 上一连杆热启动；失败回退网格扫描+二分",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "implementation_ref": "artifacts/code/dragon_core.py:chain_sigma/_solve_backward",
+            "equations_refs": [
+              "E03"
+            ],
+            "convergence_criteria": "弦长残差 < 1e-12（实测 ≤ 3e-13）"
+          },
+          {
+            "solver_id": "S03",
+            "name": "线段-线段最小距离",
+            "type": "analytical",
+            "method": "凸二次函数精确解：内部驻点 + 4 条边钳制驻点取最小",
+            "sub_question_binding": [
+              "Q2",
+              "Q3"
+            ],
+            "implementation_ref": "artifacts/code/dragon_core.py:_seg_seg_dist2 / min_board_distance",
+            "equations_refs": [
+              "E07"
+            ]
+          },
+          {
+            "solver_id": "S04",
+            "name": "终止时刻定位",
+            "type": "numerical",
+            "method": "1 s 粗扫（0~360 s）+ 0.05 s 细扫（360 s~上限）+ 二分至 1e-4 s",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "implementation_ref": "artifacts/code/q2_solve.py",
+            "equations_refs": [
+              "E07"
+            ],
+            "convergence_criteria": "|d_min − w| < 1e-6"
+          },
+          {
+            "solver_id": "S05",
+            "name": "最小螺距二分",
+            "type": "numerical",
+            "method": "对 p 二分（区间 [0.305, 1.20]），每个 p 在龙头半径 {4.5,5,6,8,11,15,20} m 上取最小间隙",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "implementation_ref": "artifacts/code/q3_solve.py",
+            "equations_refs": [
+              "E07"
+            ],
+            "convergence_criteria": "区间宽度 < 1e-5 m"
+          },
+          {
+            "solver_id": "S06",
+            "name": "S 形调头曲线求解",
+            "type": "analytical",
+            "method": "闭式 (E09)；放宽端点时对 ψ_1 做 1-D 网格搜索 + 线性方程组解 (R_1,R_2)",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "implementation_ref": "artifacts/code/turnaround.py",
+            "equations_refs": [
+              "E08",
+              "E09",
+              "E10"
+            ],
+            "convergence_criteria": "端点误差 ≤ 8e-15 m"
+          },
+          {
+            "solver_id": "S07",
+            "name": "速度中心差分",
+            "type": "numerical",
+            "method": "(P(t+h) − P(t−h))/(2h)，h = 1e-3 s",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "implementation_ref": "artifacts/code/dragon_core.py:chain_state",
+            "equations_refs": [
+              "E04"
+            ],
+            "convergence_criteria": "h = 1/0.5/0.25 三档差分一致（见 V03）"
+          }
+        ],
+        "experiments": [
+          {
+            "experiment_id": "EXP01",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "method": "沿螺距 0.55 m 螺线，龙头 1 m/s，0~300 s 每秒求解整链构型",
+            "inputs_refs": [
+              "inputs/cumcm2024A.txt"
+            ],
+            "solver_ref": "S02",
+            "parameters": {
+              "pitch_m": 0.55,
+              "v_head_ms": 1.0,
+              "t_end_s": 300,
+              "turn_start": 16
+            },
+            "outputs": [
+              "artifacts/results/result1.xlsx"
+            ],
+            "results": {
+              "max_link_error_m": 3.292921491038214e-13,
+              "max_speed_dev_from_head_ms": 0.003522463086780947,
+              "rows": 67424
+            },
+            "run_metadata": {
+              "code": "artifacts/code/q1_solve.py"
+            }
+          },
+          {
+            "experiment_id": "EXP02",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "method": "细扫最小板距曲线并二分定位首次接触时刻",
+            "inputs_refs": [
+              "inputs/cumcm2024A.txt"
+            ],
+            "solver_ref": "S04",
+            "parameters": {
+              "coarse_step_s": 1,
+              "fine_step_s": 0.05
+            },
+            "outputs": [
+              "artifacts/results/result2.xlsx"
+            ],
+            "results": {
+              "t_star_s": 397.7836425781336,
+              "min_board_distance_m": 0.2999999030403438,
+              "critical_pair": "0-10"
+            },
+            "run_metadata": {
+              "code": "artifacts/code/q2_solve.py"
+            }
+          },
+          {
+            "experiment_id": "EXP03",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "method": "对螺距二分，判定「盘入至 r=4.5 m 全程无碰撞」的最小螺距",
+            "inputs_refs": [
+              "inputs/cumcm2024A.txt"
+            ],
+            "solver_ref": "S05",
+            "parameters": {
+              "turnaround_radius_m": 4.5,
+              "r_head_scan_m": "4.5, 5, 6, 8, 11, 15, 20"
+            },
+            "outputs": [
+              "artifacts/results/result3.xlsx"
+            ],
+            "results": {
+              "p_min_m": 0.4442599296569825,
+              "clearance_at_pmin_m": 0.3000013385439924,
+              "clearance_by_r_m": "{4.5: 0.300001, 5.0: 0.329322, 6.0: 0.328381, 8.0: 0.35048, 11.0: 0.384804, 15.0: 0.403535, 20.0: 0.412262}"
+            },
+            "run_metadata": {
+              "code": "artifacts/code/q3_solve.py"
+            }
+          },
+          {
+            "experiment_id": "EXP04",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "method": "构造 R1=2R2 的 S 形调头路径并仿真 −100~100 s；另做半径分配不变性与切点滑动两组对照",
+            "inputs_refs": [
+              "inputs/cumcm2024A.txt"
+            ],
+            "solver_ref": "S06",
+            "parameters": {
+              "pitch_m": 1.7,
+              "R_turn_m": 4.5,
+              "R1_over_R2": 2.0
+            },
+            "outputs": [
+              "artifacts/results/result4.xlsx"
+            ],
+            "results": {
+              "R1_m": 3.005417667789033,
+              "R2_m": 1.502708833894516,
+              "psi_deg": 173.1184438998028,
+              "S_len_m": 13.62124490682111,
+              "curve_r_max_m": 4.5,
+              "inside_turnaround": 1,
+              "invariance_table": "[(1.0, 2.254063, 2.254063, 3.021487, 13.621245, 4.5), (1.5, 2.704876, 1.803251, 3.021487, 13.621245, 4.5), (2.0, 3.005418, 1.502709, 3.021487, 13.621245, 4.5), (3.0, 3.381095, 1.127032, 3.021487, 13.621245, 4.5), (5.0, 3.756772, 0.751354, 3.021487, 13.621245, 4.5), (10.0, 4.098297, 0.40983, 3.021487, 13.621245, 4.5)]"
+            },
+            "run_metadata": {
+              "code": "artifacts/code/q4_solve.py"
+            }
+          },
+          {
+            "experiment_id": "EXP05",
+            "sub_question_binding": [
+              "Q5"
+            ],
+            "method": "沿 Q4 路径以 0.1 s 步长扫描速率比 r_k 的上界，取倒数得 v_max",
+            "inputs_refs": [
+              "inputs/cumcm2024A.txt"
+            ],
+            "solver_ref": "S07",
+            "parameters": {
+              "v_limit_ms": 2,
+              "time_step_s": 0.1
+            },
+            "outputs": [
+              "artifacts/results/result5.xlsx"
+            ],
+            "results": {
+              "v_max_ms": 1.24701107279573,
+              "max_speed_ratio": 1.603834996842579,
+              "argmax_t_s": 14.49999999999349,
+              "argmax_handle": 3,
+              "grid_convergence": "[(0.5, 1.603835), (0.1, 1.603835), (0.05, 1.603835)]"
+            },
+            "run_metadata": {
+              "code": "artifacts/code/q5_solve.py"
+            }
+          }
+        ],
+        "validations": [
+          {
+            "validation_id": "V01",
+            "type": "convergence",
+            "method": "连杆弦长残差检查（223 连杆 × 全时间步）",
+            "sub_question_binding": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "targets_refs": [
+              "E03"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "Q1_max_link_error_m": 3.292921491038214e-13,
+              "Q4_max_link_error_m": 2.917666108714911e-13
+            },
+            "evidence_refs": [
+              "artifacts/results/result1.xlsx",
+              "artifacts/results/result4.xlsx"
+            ]
+          },
+          {
+            "validation_id": "V02",
+            "type": "convergence",
+            "method": "调头曲线端点闭合误差与调头空间包含性",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "targets_refs": [
+              "E08"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "endpoint_err_m": 8.005932084973442e-15,
+              "curve_r_min_m": 1.494611479820058,
+              "curve_r_max_m": 4.5,
+              "inside_turnaround": 1
+            },
+            "evidence_refs": [
+              "artifacts/results/result4.xlsx"
+            ]
+          },
+          {
+            "validation_id": "V03",
+            "type": "baseline",
+            "method": "与独立实现（旧 spiral_chain.py + 弧长坐标解析差分，本次已删除）交叉比对 t=300 s 把手速率",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "targets_refs": [
+              "E04"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "independent_impl_tail_speed": 0.99647745,
+              "current_impl_tail_speed": 0.996478,
+              "agreement_digits": 6
+            },
+            "evidence_refs": [
+              "artifacts/results/result1.xlsx"
+            ]
+          },
+          {
+            "validation_id": "V04",
+            "type": "robustness",
+            "method": "速度差分步长收敛（h = 1 / 0.5 / 0.25 s）",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "targets_refs": [
+              "E04"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "tail_speed_by_h": [
+                0.99647745,
+                0.99647752,
+                0.99647753,
+                0.99647754
+              ],
+              "note": "h→0 时收敛，证明速率差于龙头（0.9965）是真实物理而非数值误差"
+            },
+            "evidence_refs": [
+              "artifacts/results/result1.xlsx"
+            ]
+          },
+          {
+            "validation_id": "V05",
+            "type": "counterfactual",
+            "method": "调头曲线半径分配不变性反事实：ratio ∈ {1, 1.5, 2, 3, 5, 10} 下重算 L_S",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "targets_refs": [
+              "E10"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "invariance_table": "[(1.0, 2.254063, 2.254063, 3.021487, 13.621245, 4.5), (1.5, 2.704876, 1.803251, 3.021487, 13.621245, 4.5), (2.0, 3.005418, 1.502709, 3.021487, 13.621245, 4.5), (3.0, 3.381095, 1.127032, 3.021487, 13.621245, 4.5), (5.0, 3.756772, 0.751354, 3.021487, 13.621245, 4.5), (10.0, 4.098297, 0.40983, 3.021487, 13.621245, 4.5)]",
+              "conclusion": "L_S 恒为 13.621245 m，与半径分配无关 ⇒ 不能靠调半径缩短"
+            },
+            "evidence_refs": [
+              "artifacts/results/result4.xlsx"
+            ]
+          },
+          {
+            "validation_id": "V06",
+            "type": "sensitivity",
+            "method": "允许出螺线切点 B 沿螺线内移，比较「S 曲线长」与「圆内总长」",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "targets_refs": [
+              "O04b"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "slide_B_best": "[(12.7335, 3.4452, 3.1764, 15.523, 18.6994, 1.457, 1951.87), (12.66, 3.4253, 3.4699, 15.7764, 19.2463, 1.922, 732.674), (12.5865, 3.4054, 3.7615, 16.0282, 19.7897, 2.277, 417.771), (12.513, 3.3856, 4.0499, 16.2786, 20.3285, 2.547, 1252.347), (12.4395, 3.3657, 4.3374, 16.5276, 20.865, 2.767, 517.172)]",
+              "conclusion": "S 曲线虽可更短，但第二弧半径退化为近直线，且圆内总长由 13.62 m 增至 ≥ 18.70 m"
+            },
+            "evidence_refs": [
+              "artifacts/results/result4.xlsx"
+            ]
+          },
+          {
+            "validation_id": "V07",
+            "type": "convergence",
+            "method": "Q5 峰值的时间网格收敛（0.5 / 0.1 / 0.05 s）",
+            "sub_question_binding": [
+              "Q5"
+            ],
+            "targets_refs": [
+              "E11"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "grid_convergence": "[(0.5, 1.603835), (0.1, 1.603835), (0.05, 1.603835)]",
+              "peak_neighborhood": "[1.31938, 1.38737, 1.4884, 1.58798, 1.60383, 1.57428, 1.51549, 1.44249, 1.36709]"
+            },
+            "evidence_refs": [
+              "artifacts/results/result5.xlsx"
+            ]
+          },
+          {
+            "validation_id": "V08",
+            "type": "failure_case",
+            "method": "刚性链可跟随性：R_2 = 1.5027 m 与 R_min = 1.43 m 的裕度检查",
+            "sub_question_binding": [
+              "Q4",
+              "Q5"
+            ],
+            "targets_refs": [
+              "C09"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "R2_m": 1.502708833894516,
+              "R_min_m": 1.43,
+              "margin_m": 0.0727088338945161
+            },
+            "evidence_refs": [
+              "artifacts/results/result4.xlsx"
+            ]
+          },
+          {
+            "validation_id": "V09",
+            "type": "robustness",
+            "method": "递推连续性：细扫相邻帧龙头位移须等于 v·Δt（排除求根跳支）",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "targets_refs": [
+              "E03"
+            ],
+            "pass_fail": "pass",
+            "results": {
+              "continuity_check_max_move_m": 0.04999963853823751,
+              "expected_m": 0.05
+            },
+            "evidence_refs": [
+              "artifacts/results/result2.xlsx"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "claim_id": "CL01",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "text": "Q1：螺距 0.55 m、龙头 1 m/s 时，0~300 s 全队位置速度已给出（result1.xlsx，67424 行）；连杆弦长残差 3.29e-13 m。",
+            "evidence_refs": [
+              "artifacts/results/result1.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP01"
+            ],
+            "validation_refs": [
+              "V01"
+            ]
+          },
+          {
+            "claim_id": "CL02",
+            "type": "interpretation",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q1"
+            ],
+            "text": "把手速率并不恒等于龙头速率：t=300 s 时龙尾后把手为 0.996478 m/s，全队相对龙头最大偏差 0.003522 m/s。原因是链路不可伸长但**弧长**间隔随曲率变化（弦长约束 vs 弧长等分近似）。",
+            "evidence_refs": [
+              "artifacts/results/result1.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP01"
+            ],
+            "validation_refs": [
+              "V03",
+              "V04"
+            ]
+          },
+          {
+            "claim_id": "CL03",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "text": "Q2：盘入终止时刻 t* = 397.7836 s，临界最小板距 0.300000 m，临界板对 = 0-10。",
+            "evidence_refs": [
+              "artifacts/results/result2.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP02"
+            ],
+            "validation_refs": [
+              "V09"
+            ]
+          },
+          {
+            "claim_id": "CL04",
+            "type": "interpretation",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q2"
+            ],
+            "text": "最小板距随龙头推进**非单调振荡**（链是内接离散多边形，板体相对相位周期性变化），因此终止时刻必须用 0.05 s 细扫定位，不能假定单调后二分；连续性校验显示相邻帧龙头位移恰为 v·Δt，排除求根跳支。",
+            "evidence_refs": [
+              "artifacts/results/result2.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP02"
+            ],
+            "validation_refs": [
+              "V09"
+            ]
+          },
+          {
+            "claim_id": "CL05",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q3"
+            ],
+            "text": "Q3：最小螺距 p_min = 0.444260 m（44.426 cm）；此时临界最小板距 0.300001 m。由于整链构型只由（螺距, 龙头弧长）决定，最危险构型必在龙头半径最小处 r = 4.5 m，本结论与「从多远开始盘入」无关（已在龙头半径 4.5, 5, 6, 8, 11, 15, 20 m 上扫描验证）。",
+            "evidence_refs": [
+              "artifacts/results/result3.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP03"
+            ]
+          },
+          {
+            "claim_id": "CL06",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "text": "Q4：R_1 = 3.005418 m，R_2 = 1.502709 m（R_1 = 2R_2），两段弧各转 173.118°，调头曲线长 L = 13.621245 m；曲线半径范围 [1.494611, 4.500000] m，完整落在调头空间内（端点闭合误差 8.0e-15 m）。",
+            "evidence_refs": [
+              "artifacts/results/result4.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP04"
+            ],
+            "validation_refs": [
+              "V02",
+              "V08"
+            ]
+          },
+          {
+            "claim_id": "CL07",
+            "type": "recommendation",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q4"
+            ],
+            "text": "「能否调整圆弧使调头曲线变短」——在保持两端切点（入/出边界点）与相切条件不变的意义下：**不能**。因为两端切向相同（盘出螺线为盘入螺线的中心对称像）⇒ ψ_1 = ψ_2 = ψ，位移 D = (R_1+R_2)(sinψ·u − (1−cosψ)·n) 只含半径**和**，故 L = (R_1+R_2)ψ 与半径分配无关；六种分配（1:1、1.5:1、2:1、3:1、5:1、10:1）数值上给出同一个 L = 13.621245 m。若进一步允许出螺线切点内移，S 曲线形式上可更短，但第二弧半径退化为近直线（约 10^3 m），且圆内完整调头路径由 13.62 m 增至 ≥ 18.70 m，故不构成真正的缩短。",
+            "evidence_refs": [
+              "artifacts/results/result4.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP04"
+            ],
+            "validation_refs": [
+              "V05",
+              "V06"
+            ]
+          },
+          {
+            "claim_id": "CL08",
+            "type": "result",
+            "status": "supported",
+            "sub_question_binding": [
+              "Q5"
+            ],
+            "text": "Q5：龙头最大行进速度 v_max = 1.247011 m/s。依据：速率比 r_k = |dσ_k/dσ_0| 只依赖龙头位置，与速度无关；全时段上界 max r_k = 1.603835（出现在 t = 14.50 s，第 3 号把手——即龙头刚驶出调头曲线、后方把手仍在 R_2 小弧上时），故 v_max = 2 / r_max。",
+            "evidence_refs": [
+              "artifacts/results/result5.xlsx"
+            ],
+            "experiment_refs": [
+              "EXP05"
+            ],
+            "validation_refs": [
+              "V07"
+            ]
+          }
+        ],
+        "model_graph": {
+          "graph_version": 1,
+          "description": "MODEL_IR 概念图：问题 → 假设/参数 → 机理/方程 → 求解器 → 实验 → 验证 → 主张",
+          "nodes": [
+            {
+              "id": "Q",
+              "label": "problem 2024_A (Q1..Q5)",
+              "type": "problem"
+            },
+            {
+              "id": "A",
+              "label": "assumptions A01-A10",
+              "type": "assumption"
+            },
+            {
+              "id": "P",
+              "label": "parameters P01-P17",
+              "type": "parameter"
+            },
+            {
+              "id": "V",
+              "label": "variables V01-V15",
+              "type": "variable"
+            },
+            {
+              "id": "ME01",
+              "label": "刚性折线链运动学",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME02",
+              "label": "螺线弧长参数化",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME03",
+              "label": "离散多边形间隙振荡",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME04",
+              "label": "板体碰撞机械判定",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME05",
+              "label": "两段相切圆弧调头",
+              "type": "mechanism"
+            },
+            {
+              "id": "ME06",
+              "label": "弧长速率传递",
+              "type": "mechanism"
+            },
+            {
+              "id": "EQ",
+              "label": "equations E01-E12",
+              "type": "equation"
+            },
+            {
+              "id": "CT",
+              "label": "constraints C01-C10",
+              "type": "constraint"
+            },
+            {
+              "id": "OB",
+              "label": "objectives O01-O05",
+              "type": "objective"
+            },
+            {
+              "id": "SV",
+              "label": "solvers S01-S07",
+              "type": "solver"
+            },
+            {
+              "id": "EX",
+              "label": "experiments EXP01-EXP05",
+              "type": "experiment"
+            },
+            {
+              "id": "VA",
+              "label": "validations V01-V09",
+              "type": "validation"
+            },
+            {
+              "id": "CL",
+              "label": "claims CL01-CL08",
+              "type": "claim"
+            }
+          ],
+          "edges": [
+            {
+              "from": "Q",
+              "to": "A",
+              "relation": "assumes"
+            },
+            {
+              "from": "Q",
+              "to": "P",
+              "relation": "defines"
+            },
+            {
+              "from": "A",
+              "to": "CT",
+              "relation": "constrains"
+            },
+            {
+              "from": "P",
+              "to": "EQ",
+              "relation": "feeds"
+            },
+            {
+              "from": "V",
+              "to": "EQ",
+              "relation": "defines"
+            },
+            {
+              "from": "ME01",
+              "to": "EQ",
+              "relation": "governs"
+            },
+            {
+              "from": "ME02",
+              "to": "EQ",
+              "relation": "governs"
+            },
+            {
+              "from": "ME03",
+              "to": "ME04",
+              "relation": "feeds"
+            },
+            {
+              "from": "ME04",
+              "to": "OB",
+              "relation": "governs"
+            },
+            {
+              "from": "ME05",
+              "to": "OB",
+              "relation": "governs"
+            },
+            {
+              "from": "ME06",
+              "to": "OB",
+              "relation": "governs"
+            },
+            {
+              "from": "EQ",
+              "to": "SV",
+              "relation": "implemented_by"
+            },
+            {
+              "from": "SV",
+              "to": "EX",
+              "relation": "produces"
+            },
+            {
+              "from": "EX",
+              "to": "VA",
+              "relation": "validated_by"
+            },
+            {
+              "from": "VA",
+              "to": "CL",
+              "relation": "supports"
+            }
+          ]
+        },
+        "modeling_trace": [
+          {
+            "step": 1,
+            "note": "读题与结构识别：题面属 geometric_motion / kinematic 结构（gt.json 的 allowed_modeling_structures 含 kinematics、pure_geometric_spiral、differential_geometry）。"
+          },
+          {
+            "step": 2,
+            "note": "关键建模决断：约束取**弦长**而非弧长。同一板上两孔中心距固定 ⇒ |P_k−P_{k+1}| = L_k；「弧长等分」是近似，会抹掉把手速率差于龙头的真实效应。"
+          },
+          {
+            "step": 3,
+            "note": "路径抽象统一为弧长参数化 Γ(σ)，螺线段与圆弧段共享同一坐标，使 Q1-Q5 复用同一递推器。"
+          },
+          {
+            "step": 4,
+            "note": "递推算法：Newton + 上一连杆热启动（原网格+二分实现 32 s/301 帧 → 4.7 s，精度 3e-13 不变）。"
+          },
+          {
+            "step": 5,
+            "note": "Q2 发现最小板距**非单调振荡**，改用 1 s 粗扫 + 0.05 s 细扫定位首次接触；并用相邻帧位移 = v·Δt 做连续性校验排除求根跳支。"
+          },
+          {
+            "step": 6,
+            "note": "Q3 利用「构型只由（螺距, 龙头弧长）决定」的结构性事实，把问题化为单点判定，与起始位置无关；并在 7 个龙头半径上扫描验证单调性。"
+          },
+          {
+            "step": 7,
+            "note": "Q4 解析求解两段相切圆弧，发现并证明弧长对半径分配的不变性；再以「圆内完整调头路径」为公平指标比较切点滑动方案。"
+          },
+          {
+            "step": 8,
+            "note": "Q5 利用速率比与龙头速度无关的性质，把速度约束优化化为一次几何扫描；峰值尖锐（1 s 网格会漏），用 0.5/0.1/0.05 s 三档网格确认收敛。"
+          }
+        ],
+        "code_mapping": {
+          "E01": "artifacts/code/dragon_core.py::Spiral.__init__ (b = p/2π)",
+          "E02": "artifacts/code/dragon_core.py::Spiral.arc / Spiral.theta_at_arc",
+          "E03": "artifacts/code/dragon_core.py::chain_sigma / _solve_backward",
+          "E04": "artifacts/code/dragon_core.py::chain_state (central difference, h=1e-3)",
+          "E05": "artifacts/code/dragon_core.py::LINK_LEN",
+          "E06": "artifacts/code/dragon_core.py::board_segments",
+          "E07": "artifacts/code/dragon_core.py::min_board_distance / _seg_seg_dist2",
+          "E08": "artifacts/code/turnaround.py::s_curve_fixed_B",
+          "E09": "artifacts/code/turnaround.py::s_curve_fixed_B (tan(psi/2) = -D·n/D·u)",
+          "E10": "artifacts/code/turnaround.py::s_curve_fixed_B (L = S·psi)；不变性实证见 q4_solve.invariance_study",
+          "E11": "artifacts/code/q5_solve.py::speed_ratio / main",
+          "E12": "artifacts/code/dragon_core.py::ArcTrack.point_at / tangent_at"
+        }
+      }
+    },
+    "MH-DELIVERABLE-0001": {
+      "schema_version": "3.1",
+      "artifact_id": "MH-DELIVERABLE-0001",
+      "type": "deliverable",
       "version": 1,
       "status": "active",
       "title": "模型描述文档 model.md",
       "created_by": "model_documentation",
-      "created_at": "2026-09-10T12:54:23Z",
-      "updated_at": "2026-09-10T12:54:23Z",
+      "created_at": "2026-09-10T14:14:56Z",
+      "updated_at": "2026-09-10T14:14:56Z",
       "payload": {
-        "path": "model/model.md",
+        "path": "model.md",
         "format": "markdown + mermaid"
       }
     }
