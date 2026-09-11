@@ -726,6 +726,41 @@ class DefaultNodeExecutor:
                     return a.artifact_id
         return None
 
+    def _apply_baseline_comparison(self, r_art, plan: dict) -> None:
+        """ADR-0013：计划声明了 baseline_comparison 时**真正执行**对照。
+
+        baseline 标签是**执行的回执**，不是计划声明的同义词：只有真的产出
+        baseline_comparison 结果才打标签；执行产物缺少基线数值段则记 missing
+        且**不打标签**（否则会出现「声明了、标记了、从未比较过」的静默失效）。
+        基线数值段约定放在执行产物的 ``outputs['baseline']``。
+        """
+        if not plan.get("baseline_comparison"):
+            return
+        from modeling_harness.runtime.evaluation.deterministic_metrics import (
+            baseline_comparison as _bc,
+        )
+        r_data = dict(r_art.data or {})
+        outputs = r_data.get("outputs") or r_data.get("value") or {}
+        base = outputs.get("baseline") if isinstance(outputs, dict) else None
+        if isinstance(base, dict) and base:
+            model_out = {k: v for k, v in outputs.items() if k != "baseline"}
+            r_data["baseline_comparison"] = _bc(
+                model_out, base,
+                direction=r_data.get("objective_direction") or "minimize")
+            r_art.data = r_data
+            tags = list(r_art.tags or [])
+            if "baseline" not in tags:
+                tags.append("baseline")
+            r_art.tags = tags
+        else:
+            r_data["baseline_comparison"] = {
+                "status": "missing",
+                "reason": ("计划声明了 baseline_comparison，但执行产物缺少基线数值段 "
+                           "outputs['baseline']；对照未执行，故不打 baseline 标签"
+                           "（ADR-0013：标签是回执不是声明）"),
+            }
+            r_art.data = r_data
+
     def _register_vr(self, qid: str, exec_id: str, spec: dict,
                      node_id: str) -> str:
         """基于真实数值运行验证并登记 VR artifact（verified_by 边）。"""
@@ -1877,11 +1912,11 @@ class DefaultNodeExecutor:
             r_art = self.registry.get(r)
             plan_art = self._plan_artifact_for(qid, mid)
             plan = (plan_art.data if plan_art else {}) or info.get("plan") or {}
-            tags = [t for t, key in (("sensitivity", "sensitivity"),
-                                     ("baseline", "baseline_comparison"))
+            tags = [t for t, key in (("sensitivity", "sensitivity"),)
                     if plan.get(key)]
             if tags and not r_art.tags:
                 r_art.tags = tags
+            self._apply_baseline_comparison(r_art, plan)
             e_art = None
             for x in self.graph.relations:
                 if x["relation"] == "produces" and x["to"] == r:
@@ -1940,8 +1975,7 @@ class DefaultNodeExecutor:
         plan_art = self._plan_artifact_for(qid, mid)
         plan = (plan_art.data if plan_art else None) or info.get("plan") or {}
         entries = plan.get("entries") or [{}]
-        tags = [t for t, key in (("sensitivity", "sensitivity"),
-                                 ("baseline", "baseline_comparison"))
+        tags = [t for t, key in (("sensitivity", "sensitivity"),)
                 if plan.get(key)]
         # 新实验记录（谱系节点：rerun/recompute 产生新 E，旧链 superseded）
         e = self.registry.create("experiment", title=f"{qid} 实验",
@@ -1972,6 +2006,7 @@ class DefaultNodeExecutor:
         r_art = self.registry.get(r)
         if tags and not r_art.tags:
             r_art.tags = tags
+        self._apply_baseline_comparison(r_art, plan)
         f = next((a.artifact_id for a in self.registry.list_by_type("figure")
                   if a.question == qid and a.status not in _TERMINAL), r)
         ev = [
