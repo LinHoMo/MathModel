@@ -54,7 +54,8 @@
 
 | 文档 | 说明 |
 |---|---|
-| [ARCHITECTURE.md](ARCHITECTURE.md) | 现行 V3 架构总览（问题输入 → MODEL_IR + 模型描述文档） |
+| ARCHITECTURE.md | 现行 V3 架构总览（问题输入 → MODEL_IR + 模型描述文档） |
+| diagrams/ | **架构图生成物**（`mh diagram repo` 从 catalog 确定性渲染；勿手改） |
 | [BENCHMARK.md](BENCHMARK.md) | 国赛复盘基准（CUMCM Bench）设计 |
 | [METRICS.md](METRICS.md) | 项目度量单一真源（由 `src/modeling_harness/cli/metrics.py --write` 自动生成） |
 | [HANDOFF.md](HANDOFF.md) | 跨题交接：四件套门禁口径、本轮修复清单、优化 backlog（给下一个 Agent） |

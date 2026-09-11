@@ -216,6 +216,52 @@ def _render_project(args) -> int:
     return 0
 
 
+_DIAGRAMS_README = """\
+# docs/diagrams — 生成物（GENERATED，勿手改）
+
+> 本目录**全部为生成物**，由 `mh diagram repo` 从 `src/modeling_harness/catalog/v3.yaml`
+> 确定性渲染。真源在 catalog；改图请改 catalog 后重跑，不要手改本目录文件。
+>
+> 重新生成：`py -3.12 src/modeling_harness/cli/diagram_gen.py repo`
+> 渲染器：`src/modeling_harness/viz/`（零第三方依赖，输出 byte-stable，可直接 git diff）。
+
+| 文件 | 说明 |
+|---|---|
+| `harness-architecture.svg` | harness 架构总览（Roles → stage/DAG 节点 → Validators） |
+| `harness-architecture.html` | 同上，自包含 HTML（明暗双主题） |
+| `harness-architecture.ir.json` | 派生用的 DiagramIR（可 diff 的中间表示） |
+"""
+
+
+def _render_repo(args) -> int:
+    """catalog/v3.yaml → docs/diagrams/harness-architecture.*（确定性）。"""
+    import yaml
+
+    from modeling_harness.viz.extract import from_catalog
+    from modeling_harness.viz.ir import DiagramIRError
+
+    v3_path = ROOT / "src" / "modeling_harness" / "catalog" / "v3.yaml"
+    if not v3_path.is_file():
+        print(f"[FAIL] 缺 catalog 真源: {v3_path}", file=sys.stderr)
+        return 2
+    try:
+        raw = yaml.safe_load(v3_path.read_text(encoding="utf-8")) or {}
+        v3 = raw.get("v3", raw) if isinstance(raw, dict) else {}
+        ir = from_catalog(v3)
+    except (DiagramIRError, yaml.YAMLError) as exc:
+        print(f"[FAIL] 架构图派生失败: {exc}", file=sys.stderr)
+        return 2
+
+    out_dir = ROOT / "docs" / "diagrams"
+    written = _write_figure(ir, out_dir, "harness-architecture")
+    readme = out_dir / "README.md"
+    readme.write_text(_DIAGRAMS_README, encoding="utf-8")
+    written.append(readme)
+    for path in written:
+        print(f"[OK] 生成: {path.relative_to(ROOT).as_posix()}")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="科学图表生成（SVG 输出）")
     sub = parser.add_subparsers(dest="chart_type", required=True)
@@ -240,12 +286,16 @@ def main(argv=None) -> int:
     p_proj.add_argument("name", help="projects/<name> 项目名")
     p_proj.add_argument("--no-evidence", action="store_true", help="跳过 Evidence Graph")
 
+    sub.add_parser("repo", help="生成 harness 架构图（写 docs/diagrams/，catalog 真源派生）")
+
     args = parser.parse_args(argv)
 
     if args.chart_type == "build":
         return _build_from_ir(args)
     if args.chart_type == "project":
         return _render_project(args)
+    if args.chart_type == "repo":
+        return _render_repo(args)
 
     if args.chart_type == "flowchart":
         content = flowchart(args.nodes, args.edges, title=args.title)

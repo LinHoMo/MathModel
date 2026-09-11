@@ -89,3 +89,20 @@ python src/modeling_harness/cli/validate.py                          # 45 项校
 python src/modeling_harness/cli/catalog_check.py --check             # 双视图一致
 python -m pytest tests -q                              # 基线测试
 ```
+
+
+## 架构图（生成物）
+
+`docs/diagrams/harness-architecture.svg`（与 `.html`）——harness 架构总览图，
+由 `mh diagram repo` 从 `src/modeling_harness/catalog/v3.yaml` **确定性**渲染
+（Roles → 各 stage 的 DAG 节点 → Validators）。真源在 catalog，改图请改 catalog 后重跑：
+
+```bash
+py -3.12 src/modeling_harness/cli/diagram_gen.py repo
+```
+
+渲染器在 `src/modeling_harness/viz/`（零第三方依赖，输出 byte-stable，可 git diff）。
+`docs/diagrams/` 是生成物目录，请勿手改。
+
+同理，每个项目的模型图由 `mh diagram project <name>` 从 `projects/<name>/model_ir.json`
+派生到 `projects/<name>/artifacts/figures/`（模型分层图 + Evidence Graph）。

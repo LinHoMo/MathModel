@@ -182,4 +182,60 @@ def from_evidence_graph(path: "str | Path") -> DiagramIR:
     return ir
 
 
-__all__ = ["from_model_ir", "from_evidence_graph", "MODEL_LAYER", "EVIDENCE_LAYER"]
+def from_catalog(v3: Dict[str, Any]) -> DiagramIR:
+    """catalog ``v3.yaml``（roles/nodes/validators）→ ``kind=architecture`` 的 IR。
+
+    入参为已解析的 ``v3`` 子字典（YAML 解析留在 CLI 层，保持 viz 包零依赖）。
+    分层：Roles → 各 stage（DAG 节点按 stage 归组）→ Validators；边为
+    ``节点 --validator--> validator``。
+    """
+    roles = v3.get("roles") or []
+    nodes = v3.get("nodes") or []
+    validators = v3.get("validators") or []
+    if not isinstance(nodes, list) or not nodes:
+        raise DiagramIRError("catalog v3 视图缺 nodes，无法生成架构图")
+
+    out: List[Node] = []
+    for role in roles:
+        name = str(role.get("name") or "").strip()
+        if name:
+            out.append(Node(id=f"role:{name}", label=name, group="Roles",
+                            detail=str(role.get("capabilities") or "")[:24]))
+    stages: List[str] = []
+    for node in nodes:
+        name = str(node.get("name") or "").strip()
+        if not name:
+            continue
+        stage = str(node.get("stage") or "其他")
+        if stage not in stages:
+            stages.append(stage)
+        out.append(Node(id=f"node:{name}", label=name, group=stage,
+                        detail=str(node.get("role") or "")))
+    for val in validators:
+        name = str(val.get("name") or "").strip()
+        if name:
+            out.append(Node(id=f"val:{name}", label=name, group="Validators",
+                            detail=str(val.get("kind") or "")))
+
+    node_ids = {f"node:{str(n.get('name'))}" for n in nodes}
+    edges: List[Edge] = []
+    for node in nodes:
+        val = node.get("validator")
+        if val and f"node:{node.get('name')}" in node_ids:
+            edges.append(Edge(source=f"node:{node.get('name')}", target=f"val:{val}",
+                              kind="dependency"))
+
+    legend = ["Roles"] + stages + ["Validators"]
+    ir = DiagramIR(
+        kind="architecture",
+        title="Modeling-Harness · 架构总览（catalog 真源派生）",
+        nodes=out,
+        edges=edges,
+        legend=legend,
+    )
+    ir.validate()
+    return ir
+
+
+__all__ = ["from_model_ir", "from_evidence_graph", "from_catalog",
+           "MODEL_LAYER", "EVIDENCE_LAYER"]

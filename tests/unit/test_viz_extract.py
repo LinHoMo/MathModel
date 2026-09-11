@@ -107,3 +107,50 @@ def test_evidence_graph_empty_relations_fails_closed(tmp_path):
     p.write_text(json.dumps({"relations": []}), encoding="utf-8")
     with pytest.raises(DiagramIRError):
         from_evidence_graph(p)
+
+
+def _v3_fixture() -> dict:
+    return {
+        "roles": [{"name": "analyst", "capabilities": "解析"},
+                  {"name": "modeler", "capabilities": "建模"}],
+        "nodes": [
+            {"name": "problem_analysis", "role": "analyst", "stage": "problem-analysis"},
+            {"name": "model_construction", "role": "modeler", "stage": "modeling"},
+            {"name": "model_critique", "role": "critic", "stage": "modeling",
+             "validator": "model-critic"},
+        ],
+        "validators": [{"name": "model-critic", "kind": "skill"}],
+    }
+
+
+def test_from_catalog_builds_layered_architecture():
+    from modeling_harness.viz.extract import from_catalog
+
+    ir = from_catalog(_v3_fixture())
+    assert ir.kind == "architecture"
+    groups = [n.group for n in ir.nodes]
+    assert groups[0] == "Roles"
+    assert "modeling" in groups and groups[-1] == "Validators"
+    svg = render_svg(ir)
+    assert len(_node_ids(svg)) == len(ir.nodes)
+    # 节点声明了 validator → 必有一条 dependency 边指向它
+    assert any(e.target == "val:model-critic" for e in ir.edges)
+
+
+def test_from_catalog_is_derived_not_hardcoded():
+    """反证「派生非手写」：改输入 node 名 → 生成 SVG 随之变化。"""
+    from modeling_harness.viz.extract import from_catalog
+
+    base = render_svg(from_catalog(_v3_fixture()))
+    mutated = _v3_fixture()
+    mutated["nodes"][1]["name"] = "model_construction_v2"
+    changed = render_svg(from_catalog(mutated))
+    assert base != changed
+    assert "model_construction_v2" in changed
+
+
+def test_from_catalog_without_nodes_fails_closed():
+    from modeling_harness.viz.extract import from_catalog
+
+    with pytest.raises(DiagramIRError):
+        from_catalog({"roles": [], "nodes": [], "validators": []})
