@@ -1,0 +1,296 @@
+{
+  "_meta": {
+    "purpose": "参数使用金标准（THEORY_FOUNDATION_REVIEW §9.5）",
+    "generated": "2026-09-11",
+    "rule": "used=true 表示该参数在方程/目标/约束/机制/验证/主张/代码中真实出现；n_used_in=显式引用数（须全部可解析）；heuristic=启发式判定结果",
+    "instances": [
+      "cumcm2024a",
+      "cumcm2026a",
+      "cumcm2026b"
+    ]
+  },
+  "instances": {
+    "cumcm2024a": {
+      "P01": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "N"
+      },
+      "P02": {
+        "used": true,
+        "n_used_in": 6,
+        "heuristic_used": true,
+        "symbol": "N_h"
+      },
+      "P03": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "L_head^board"
+      },
+      "P04": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "L_body^board"
+      },
+      "P05": {
+        "used": true,
+        "n_used_in": 12,
+        "heuristic_used": true,
+        "symbol": "w"
+      },
+      "P06": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "e"
+      },
+      "P07": {
+        "used": true,
+        "n_used_in": 3,
+        "heuristic_used": true,
+        "symbol": "d_hole"
+      },
+      "P08": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "L_0"
+      },
+      "P09": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "L_b"
+      },
+      "P10": {
+        "used": true,
+        "n_used_in": 4,
+        "heuristic_used": true,
+        "symbol": "L_chain"
+      },
+      "P11": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "p_1"
+      },
+      "P12": {
+        "used": true,
+        "n_used_in": 4,
+        "heuristic_used": true,
+        "symbol": "p_4"
+      },
+      "P13": {
+        "used": true,
+        "n_used_in": 8,
+        "heuristic_used": true,
+        "symbol": "v_head^0"
+      },
+      "P14": {
+        "used": true,
+        "n_used_in": 6,
+        "heuristic_used": true,
+        "symbol": "n_0"
+      },
+      "P15": {
+        "used": true,
+        "n_used_in": 12,
+        "heuristic_used": true,
+        "symbol": "R_t"
+      },
+      "P16": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "v_lim"
+      },
+      "P17": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "R_min"
+      }
+    },
+    "cumcm2026a": {
+      "P01": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "R₀"
+      },
+      "P02": {
+        "used": true,
+        "n_used_in": 3,
+        "heuristic_used": true,
+        "symbol": "L"
+      },
+      "P03": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "T₀"
+      },
+      "P04": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "C₀"
+      },
+      "P05": {
+        "used": true,
+        "n_used_in": 10,
+        "heuristic_used": true,
+        "symbol": "h"
+      },
+      "P06": {
+        "used": true,
+        "n_used_in": 3,
+        "heuristic_used": true,
+        "symbol": "h_m"
+      },
+      "P07": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "C_th"
+      },
+      "P08": {
+        "used": true,
+        "n_used_in": 8,
+        "heuristic_used": true,
+        "symbol": "T_target"
+      },
+      "P09": {
+        "used": true,
+        "n_used_in": 6,
+        "heuristic_used": true,
+        "symbol": "N_r"
+      },
+      "P10": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "Δt"
+      },
+      "P11": {
+        "used": true,
+        "n_used_in": 3,
+        "heuristic_used": true,
+        "symbol": "seed"
+      },
+      "P12": {
+        "used": true,
+        "n_used_in": 2,
+        "heuristic_used": true,
+        "symbol": "τ_air"
+      }
+    },
+    "cumcm2026b": {
+      "P01": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "R"
+      },
+      "P02": {
+        "used": true,
+        "n_used_in": 11,
+        "heuristic_used": true,
+        "symbol": "ε"
+      },
+      "P03": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "r_rec,min"
+      },
+      "P04": {
+        "used": true,
+        "n_used_in": 3,
+        "heuristic_used": true,
+        "symbol": "r_rec,max"
+      },
+      "P05": {
+        "used": true,
+        "n_used_in": 8,
+        "heuristic_used": true,
+        "symbol": "N_ch"
+      },
+      "P06": {
+        "used": true,
+        "n_used_in": 3,
+        "heuristic_used": true,
+        "symbol": "n_src"
+      },
+      "P07": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "t_det"
+      },
+      "P08": {
+        "used": true,
+        "n_used_in": 2,
+        "heuristic_used": true,
+        "symbol": "t_optic"
+      },
+      "P09": {
+        "used": true,
+        "n_used_in": 2,
+        "heuristic_used": true,
+        "symbol": "t_laser"
+      },
+      "P10": {
+        "used": true,
+        "n_used_in": 7,
+        "heuristic_used": true,
+        "symbol": "v"
+      },
+      "P11": {
+        "used": true,
+        "n_used_in": 8,
+        "heuristic_used": true,
+        "symbol": "d_optic"
+      },
+      "P12": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "d_direct"
+      },
+      "P13": {
+        "used": true,
+        "n_used_in": 4,
+        "heuristic_used": true,
+        "symbol": "ρ_ring"
+      },
+      "P14": {
+        "used": true,
+        "n_used_in": 6,
+        "heuristic_used": true,
+        "symbol": "ρ_ring,dir"
+      },
+      "P15": {
+        "used": true,
+        "n_used_in": 4,
+        "heuristic_used": true,
+        "symbol": "Δs"
+      },
+      "P16": {
+        "used": true,
+        "n_used_in": 5,
+        "heuristic_used": true,
+        "symbol": "seed"
+      },
+      "P17": {
+        "used": true,
+        "n_used_in": 3,
+        "heuristic_used": true,
+        "symbol": "r_rec,nom"
+      }
+    }
+  }
+}
