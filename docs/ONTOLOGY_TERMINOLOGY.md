@@ -69,6 +69,17 @@ Current Model → Experiment → Evidence → Validation → survive / reject
 | 13 | **Case / Instantiated Modeling Case** | 案例 / 实例化建模案例 | 知识在真实问题上的实例化证据 | paper case |
 | 14 | **Failure Memory** | 失败记忆 | 可复用的失败模式（定义/检测/避免） | method failure memory |
 
+> #15–#20 为 v1.2 增补（2026-09-11，理论基座补强；纯加法，不改既有定义）。
+
+| # | Canonical Term | 中文 | 定义 | 旧说法（deprecated） |
+|---|---|---|---|---|
+| 15 | **Evidence Obligation / Evidential Lattice**（EV1–EV5） | 证据义务 / 证据格 | 每个子问题须声明承担到哪几层证据：EV1 数学必然、EV2 机制保真、EV3 数据拟合、EV4 样本外预测、EV5 决策效用；层名固定 EV 前缀（规避 Evidence Gate E1–E9 撞名） | 证据等级/可信度打分 |
+| 16 | **Innovation Declaration**（structure_distance / composition_novelty / difference_arguments） | 创新声明契约 | 模型须显式声明与已知结构的结构距离、组合新颖度及逐维差异论证；零创新须诚实声明，禁止默认"创新" | 创新性主观评价 |
+| 17 | **Parsimony Budget / Parameter Rent** | 复杂度预算 / 参数付租 | 每个参数必须在方程/目标/约束/机制/验证/主张/代码中"付租"（被引用），否则为冗余信号；复杂度计数为 Rank 数据不阻塞 | 参数个数统计 |
+| 18 | **Explicit Reference Contract**（`parameters[].used_in`） | 显式引用契约 | 参数→使用位置（组件 id 或 code 路径）的显式、可解析声明，替代全库字符串猜测；破损声明硬 FAIL | 隐式使用关系/猜匹配 |
+| 19 | **Two-tier Gate**（hard FAIL / heuristic WARN） | 双级门禁 | 可证伪的显式契约破损 → 硬 FAIL；不可靠的启发式信号 → 降为 WARN 咨询，不单独决定硬失败 | 启发式直接判死 |
+| 20 | **Gate Gold Standard** | 门禁金标准 | 人工可审计的真值语料（如 tests/fixtures/param_usage_gold.json），用于度量启发式门禁的 FP/FN，锁质量基线 | 合成夹具自测 |
+
 ### 删除词汇（禁止在任何新产出中出现）
 
 - `algorithm_card` — 不存在该概念

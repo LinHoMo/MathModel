@@ -1,7 +1,8 @@
 # MODEL_QUALITY_CRITERIA — 模型质量判据（正式版）
 
-> Version: v1.1 ｜ Status: **FROZEN**（2026-09-11；v1.1 修订：新增 G4 证据义务矩阵、
-> G5 复杂度预算、R3 结构距离、R4 创新声明；G3 标记已实现）
+> Version: v1.2 ｜ Status: **FROZEN**（2026-09-11；v1.2 修订：G4 支持 evidence_refs 对象形态、
+> G5 升级为 used_in 显式引用契约 + 双级门禁（硬 FAIL / 启发式 WARN）、新增门禁金标准度量；
+> v1.1：新增 G4 证据义务矩阵、G5 复杂度预算、R3 结构距离、R4 创新声明；G3 标记已实现）
 > 目的：给「模型好不好、是否更准更有效」立一套**独立于 harness 自身打分**的判据，
 > 使"能力"命题可被证伪。本文是判据真源；实现状态逐条标注。
 > 落地顺序（用户裁定）：**标准层 → 能力层 → 产物层**（先后关系，非并行）。
@@ -87,23 +88,47 @@
 - 声明某一层而实例无对应证据 → **FAIL**（防「声称质量层级却无证据」）。
 - 未声明 obligations → 不判失败（opt-in 契约，接口先行）。
 - v1 粒度：**实例级证据检查**（不细分到子问题）；子问题粒度留待证据图深化。
+- **v1.2 两种义务形态**：①字符串形态 `"EV1"` —— 由上表启发式信号支撑（向后兼容）；
+  ②对象形态 `{"layer":"EV5","evidence_refs":["V01","CL02"]}` —— refs 必须解析到
+  model_ir 真实 id（validation/claim/equation/mechanism/objective/constraint），
+  refs 为空或不可解析 → **FAIL**（显式引用优先于凑词，是反例的根治手段）。
 
 **反例（证伪条件）**：若某实例声明的义务层全部被「凑词」满足（如 claims 里塞"实测"字样而并无实测对照），说明信号词表可被 game → 应升级为显式引用（obligation → validation/claim 的 `evidence_refs` 存在性），而非扩充词表。
 
-#### 2.1.3 G5 定义（复杂度预算 / Parsimony Budget）
+#### 2.1.3 G5 定义（复杂度预算 / Parsimony Budget，v1.2 双级）
 
-对每个活跃实例 `model_ir.json` 的每个参数 `p`：
+对每个活跃实例 `model_ir.json` 的每个参数 `p`，存在两条证据路径：
 
-- **参数付租**：`p` 必须至少一处被引用——信号 = `parameter_id` / `symbol`（含希腊转写、Unicode 上下标剥离、分隔符归一、大小写归一）/ `name` / `value`（含 int↔float 互化、逗号分隔串拆分）；语料 = model_ir（剔除 parameters 自证）+ `all_results.json` + `artifacts/code/*.py` + 项目根 `*.md`。
-- 全部信号均无命中 → **死参数 FAIL**（建模冗余信号）。
-- 复杂度指标（param/eq/mech 计数、used/total）随门禁消息报告，为 Rank 数据，不阻塞。
+- **显式路径（硬契约）**：`p.used_in = [{type, ref}, ...]`，type ∈
+  {equation, mechanism, objective, constraint, validation, claim, code}；
+  非 code 的 ref 必须解析到 model_ir 对应 id；code 的 ref 相对项目根（可带 `#Lxx`），
+  文件须真实存在且不得 `../` 越界。声明了 used_in 却无任一可解析引用 → **硬 FAIL**
+  （声明不诚实）。
+- **启发式路径（咨询层）**：未声明 used_in 时回退字符串匹配——信号 = `parameter_id` /
+  `symbol`（希腊转写、上下标剥离、分隔符/大小写归一）/ `name` / `value`
+  （int↔float 互化、分隔串拆分）；语料 = model_ir（剔除 parameters 自证）+
+  `all_results.json` + `artifacts/code/*.py` + 项目根 `*.md`。
+- **双级判定（Two-tier Gate）**：显式契约破损 = 硬 FAIL（`check_parsimony_budget`）；
+  启发式全未命中只计 suspect，由独立门禁 `check_dead_param_scan` 以 **WARN** 级报告、
+  不阻塞——启发式不可靠（曾误判 2026b P13/P14），不得单独决定硬失败。
+- 复杂度指标（param/explicit/suspect/eq/mech）随门禁消息报告，为 Rank 数据，不阻塞。
 
-**反例（证伪条件）**：若出现「真死参数因数值恰好出现在无关上下文而被判通过」，说明字符串匹配过于宽松 → 应升级为**显式引用契约**：参数声明 `used_in`（引用具体方程/代码位置），门禁从「全库猜引用」变「核验声明引用」——该升级属契约级改动，登记 TASKS 待后续 agent（见 THEORY_FOUNDATION_REVIEW §9 遗留项）。
+**当前基线（已实测）**：三实例 46 个参数全部显式声明 used_in（explicit=17/12/17，
+suspect=0），死参数扫描「扫描 0 个未声明参数」；金标准
+`tests/fixtures/param_usage_gold.json` 度量启发式 FP=FN=0。
+
+**反例（证伪条件）**：若 used_in 声明被人工发现指向无关组件（声明与数学不符），
+说明生成过程不可信 → 该参数引用必须回到方程 latex/代码逐个人工核对，并在金标准中标注。
 
 #### 2.1.4 G4/G5 的已知局限（诚实披露）
 
-- G4 信号词表与 G5 字符串匹配均为**启发式**：会漏（凑词通过）也会误（表示变体漏配）。已用「真实踩坑」加固：2026b P13/P14 字符串值 + 浮点格式漏配 → 修复值信号与归一化 + 固化回归测试（tests/unit/test_parsimony_budget.py）。
-- 根治方向（显式引用 / 双级 WARN）见 THEORY_FOUNDATION_REVIEW.md §9，留给后续 agent。
+- 启发式（G4 词表、G5 字符串匹配）会漏（凑词通过）也会误（表示变体漏配）：
+  v1.2 已把启发式降级为 WARN 咨询层，硬失败只由可证伪的显式契约承担。
+- 已用「真实踩坑」加固：2026b P13/P14 字符串值 + 浮点格式漏配 → 值信号/归一化修复 +
+  对抗回归测试（test_parsimony_budget.py）+ 失败卡 fm-gate-heuristic-false-positive。
+- 门禁质量由金标准持续度量（test_gate_gold_standard.py，FP/FN 须为 0）；
+  遗留：子问题粒度义务（§9.4）、本体图连续化（§9.3）、符号映射表（§9.6）
+  见 THEORY_FOUNDATION_REVIEW.md §9。
 
 ### 2.2 排序线 Rank（非阻塞，冻结口径）
 
@@ -125,7 +150,7 @@ E1/E2 需要**参考解 / 留出数据**，当前语料不具备（2026 题无�
 - **无增量**：三实例按 G1–G5 排序与盲评排序**完全一致** → 未提供盲评之外的信息。
 - **不可判**：多数实例在某条上恒返"不可算" → 该条在真实语料上不可用。
 - **可 game**：存在"只提升 G 分数而不改善 R1/R2"的平凡构造 → 判据被规避。
-- **信号词表可 game**：G4 义务层被凑词满足、G5 死参数被无关数值误判通过 → 触发显式引用契约升级（见 §2.1.4）。
+- **信号词表可 game**：G4 字符串形态被凑词满足、G5 启发式被无关数值误判 → 已有对象形态 evidence_refs / used_in 显式契约作为根治出口；金标准 FP/FN > 0 即触发规则复审。
 
 ---
 
@@ -140,7 +165,8 @@ E1/E2 需要**参考解 / 留出数据**，当前语料不具备（2026 题无�
 | `check_parameter_provenance` | 参数来源 | 即 **G2** |
 | `check_calibration_parameters` | 校准参数 | 即 **G3** |
 | `check_evidence_obligations` | 证据义务矩阵 | 即 **G4** |
-| `check_parsimony_budget` | 复杂度预算 | 即 **G5** |
+| `check_parsimony_budget` | 复杂度预算（硬：显式契约） | 即 **G5** 硬层 |
+| `check_dead_param_scan` | 死参数启发式扫描（WARN 级） | 即 **G5** 软层（双级门禁） |
 | `check_innovation_declaration` / `cli/innovation_metrics.py` | 创新声明契约 / 结构距离 | 即 **R4** / **R3** |
 | Evidence Gate E1–E9 | 证据完备性 | 保留，不重复（与 G4 的 EV1–EV5 证据层是不同编号体系） |
 
@@ -158,9 +184,19 @@ E1/E2 需要**参考解 / 留出数据**，当前语料不具备（2026 题无�
 | 落地顺序：标准层 → 能力层 → 产物层 | 用户裁定 | 先有独立靶子，能力提升才可判 |
 | 新增 G4/G5/R3/R4（v1.1） | 标准层第一步落地 | 补「正向质量证据 + 复杂度治理 + 创新接口」，全为 opt-in 契约 + 机械核验 |
 | G4 证据层用 EV 前缀 | 规避既有 Evidence Gate E1–E9 编号 | 术语唯一（ONTOLOGY 原则） |
-| G5 值/符号匹配从宽（宁可漏报死参数，不误伤被引用参数） | 真实踩坑（2026b P13/P14 误报）后裁定 | 启发式有边界；根治走显式引用契约（登记待后续 agent） |
+| G5 值/符号匹配从宽（宁可漏报死参数，不误伤被引用参数） | 真实踩坑（2026b P13/P14 误报）后裁定 | 启发式有边界；根治走显式引用契约 |
+| **v1.2：used_in 显式引用契约落地（§9.1）** | 参数→使用位置显式化，硬核验可解析 | 隐式关系靠猜是误报根因；显式契约可证伪 |
+| **v1.2：双级门禁，启发式降 WARN（§9.2）** | 硬 FAIL 只给显式契约；启发式未命中 WARN | 不可靠信号不得单独决定硬失败 |
+| **v1.2：门禁金标准度量（§9.5）** | 46 参数真值固化，FP/FN 锁 0 基线 | 新门禁先在真实语料度量再启用 |
+| **v1.2：G4 对象形态 evidence_refs** | 显式引用优先于启发式凑词 | 给「凑词 game」留根治出口 |
 
 **v1.1 上线的即时影响（已实测）**：三实例均声明 `evidence_obligations` 与 `innovation`；G4/G5/R4 全部 PASS（used=17/17、12/12、17/17）；反向验收（注入非法层 / 移除创新论证）门禁正确 FAIL 并点名；R3 工具输出三实例 d_structure=0.00（2026a 含 composition_novelty=0.3）。
+
+**v1.2 上线的即时影响（已实测）**：三实例 46 参数全部机器生成并人工抽审 used_in
+（每参数 2–12 个真实引用，zero-hit=[]）；validate 52 通过/0 失败/0 警告
+（复杂度预算 explicit=46/46、死参数扫描扫描 0 个未声明参数）；新增单测 17 个
+（test_explicit_refs.py 13、test_gate_gold_standard.py 4），全量 700 passed；
+金标准度量启发式 FP=FN=0。
 
 **G3 上线的即时影响（已勘察）**：三实例中仅 `cumcm2026a` 触发——`P08`（恒温目标 50 °C）与 `P12`（烘房温度时间常数 450 s）均为 `source=assumption_derived` 且无 `calibration_sensitivity` 记录，需补。`cumcm2026b`（全 `problem_given`/`derived`/`convention`）与 `cumcm2024a` 不触发。
 
@@ -183,7 +219,10 @@ E1/E2 需要**参考解 / 留出数据**，当前语料不具备（2026 题无�
 | G2 实现 | `src/modeling_harness/cli/validate.py::check_parameter_provenance` |
 | G3 即时影响勘察 | 三实例 `model_ir.json` 的 `parameters[*].source` |
 | G4 实现 | `src/modeling_harness/cli/validate.py::check_evidence_obligations` |
-| G5 实现 | `src/modeling_harness/cli/validate.py::check_parsimony_budget` |
+| G5 实现（硬层） | `src/modeling_harness/cli/validate.py::check_parsimony_budget` |
+| G5 软层 / used_in 解析 | `validate.py::check_dead_param_scan` / `_resolve_used_in` |
+| 门禁金标准 | `tests/fixtures/param_usage_gold.json` + `tests/unit/test_gate_gold_standard.py` |
+| used_in 生成器（机器扫描，非编造） | `scripts/_gen_used_in.py` / `scripts/_gen_gold.py` |
 | R3 实现 | `src/modeling_harness/cli/innovation_metrics.py` |
 | R4 实现 | `src/modeling_harness/cli/validate.py::check_innovation_declaration` |
 | v1.1 局限与根治方向 | `docs/THEORY_FOUNDATION_REVIEW.md` §9 |

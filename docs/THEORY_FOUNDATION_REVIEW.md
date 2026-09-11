@@ -280,19 +280,21 @@
 > 用户裁定：凡「轻微优化 / 无真实更优化」的部分不得硬改，一律文档记录给后续 agent。
 > 本节即该登记册；每条含背景、方案、收益与验证方式。已实现的门禁与工具按「先入流程、再迭代」原则落地。
 
-### 9.1 显式引用契约（根治 G4/G5 启发式的核心遗留项）—— 建议优先
+### 9.1 显式引用契约 —— ✅ 已落地（v1.2，2026-09-11）
 
 - **背景**：G5 死参数判定与 G4 证据支撑目前靠**字符串/词表启发式**。真实踩坑（2026b P13/P14）证明：表示变体（字符串值、int↔float、符号转写）永远有边界；反之「凑词通过」「无关数值误判通过」也防不住。
 - **方案**：契约级升级——① `parameters[].used_in = [{type: "equation|code|objective|constraint|validation", ref: "E01" | "solve.py#L42", how: "symbol|value"}]`，门禁从「全库猜引用」变「核验声明引用」（ref 可解析 + 声明字段在 target 中真实出现）；② `evidence_obligations` 的每层加 `evidence_refs`（指向具体 validation/claim/result 键），G4 从「词表命中」变「引用存在性核验」。
 - **收益**：误报/漏报从「字符串匹配问题」降为「声明不诚实问题」，后者才是门禁该管的；同时给 Evidence Graph 提供参数→方程、义务→证据的真实边（反哺 D6）。
 - **代价**：Constructor/实例需多声明字段（表达接口标准化，符合项目定位）；需先修订 MODEL_IR 契约文档（不改 canonical schema，靠 additionalProperties 渐进）。
 - **验证**：对三实例补齐 used_in 声明后，G5 误报回归测试全部保留仍绿；再注入「声明了 used_in 但引用不存在」→ 新门禁 FAIL。
+- **落地结果**：`parameters[].used_in=[{type,ref}]`（type 七类，code 引用相对项目根/可带 #Lxx/禁越界）由 `_resolve_used_in` 硬校验；G4 对象形态 `{layer,evidence_refs}` 同步落地；三实例 46 参数全部显式化（机器扫描生成 + 人工抽审，每参数 2–12 个真实引用）；test_explicit_refs.py 13 例全绿。
 
-### 9.2 双级门禁（启发式 → WARN，显式 → FAIL）
+### 9.2 双级门禁（启发式 → WARN，显式 → FAIL）—— ✅ 已落地（v1.2）
 
 - **背景**：当前启发式未命中直接 FAIL；修复后走向「从宽匹配」（宁可漏报死参数），又丢了查真死参数的能力。
 - **方案**：检测分层——硬信号（显式 refs / parameter_id 引用）未命中才判 FAIL；软信号（符号/名称/值启发式）未命中且无显式声明 → **WARN**（可能死参数，人工确认）。对齐 validate.py 既有 WARN 级机制。
 - **验证**：构造「只有软信号缺失」的夹具 → 应 WARN 不 FAIL；构造「显式声明但引用缺失」→ FAIL。
+- **落地结果**：`check_parsimony_budget` 只对破损显式声明硬 FAIL；新增 `check_dead_param_scan` 注册为 WARN 级（WARN_CHECKS），只扫未声明 used_in 的参数；旧两处单测按双级语义更新（设计演进，非放水）。
 
 ### 9.3 R3 结构距离：本体图连续化 + 声明值审计
 
@@ -306,11 +308,12 @@
 - **方案**：义务按子问题声明（接口已支持），证据检查下钻到子问题；引入证据冲突/独立性（同一证据支撑两层声明时权重衰减）。
 - **验证**：构造「Q2 声明 EV3 但该子问题无拟合证据」→ 子问题级 FAIL。
 
-### 9.5 门禁自身质量度量（门禁的门禁）
+### 9.5 门禁自身质量度量（门禁的门禁）—— ✅ 已落地（v1.2）
 
 - **背景**：本次 P13/P14 事件暴露「门禁没被真实语料度量过」。
 - **方案**：建**参数使用金标准表**（三实例每个参数的 used/not-used 人工真值），每次门禁改动后重跑对照，报告误报率/漏报率；阈值：误报率 < 5%（宁可漏报）、漏报率 < 1%（真死必抓）。
 - **验证**：金标准表入库 `tests/fixtures/`，CI 里随 pytest 跑。
+- **落地结果**：`tests/fixtures/param_usage_gold.json`（46 参数人工可审计真值，生成器 scripts/_gen_gold.py）+ `tests/unit/test_gate_gold_standard.py`（4 例：覆盖一致、引用全可解析且计数锁定、启发式 FP=FN=0、基线 46/46 全使用）。当前实测 FP=FN=0。
 
 ### 9.6 符号归一化表完备化（低优先）
 
@@ -335,3 +338,16 @@
 | R3 结构距离工具 | `src/modeling_harness/cli/innovation_metrics.py` | 单测 4 例 + 三实例运行 |
 | 三实例合规声明 + registry sha256 同步 | `projects/{cumcm2024a,cumcm2026a,cumcm2026b}/model_ir.json` + `state/registry.json` | validate 51/0/0 |
 | 判据文档 v1.1 | `docs/architecture/MODEL_QUALITY_CRITERIA.md` | 本文 §2.1.2–2.1.4 |
+
+## 11. 第二轮落地变更清单（v1.2，供追溯）
+
+| 变更 | 文件 | 验证 |
+|---|---|---|
+| used_in 显式引用契约（七类 ref 解析/越界拒绝） | `validate.py::_resolve_used_in` + 重写 `check_parsimony_budget` | test_explicit_refs.py 13 例 |
+| 双级门禁：启发式死参数扫描降 WARN | `validate.py::check_dead_param_scan` + WARN_CHECKS | 旧 2 例改双级语义 + 新 3 例 |
+| G4 evidence_refs 对象形态 | `validate.py::check_evidence_obligations` + `_model_ir_id_set` | test_explicit_refs.py 4 例 |
+| 三实例 46 参数 used_in 显式化 + registry sha256 | `projects/*/model_ir.json`、`state/registry.json`（生成器 scripts/_gen_used_in.py） | validate 52/0/0，explicit=46/46 |
+| 门禁金标准 | `tests/fixtures/param_usage_gold.json` + test_gate_gold_standard.py + scripts/_gen_gold.py | 4 例，FP=FN=0 |
+| 误报事件失败卡 | `knowledge/failures/fm-gate-heuristic-false-positive.yaml`（22→23） | 卡加载测试通过 |
+| 术语增补 #15–#20 | `docs/ONTOLOGY_TERMINOLOGY.md`（v1.2 加法） | catalog_check --check-terminology |
+| 判据文档 v1.2 | `docs/architecture/MODEL_QUALITY_CRITERIA.md` | 本节勾销 §9.1/9.2/9.5 |

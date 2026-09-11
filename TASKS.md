@@ -87,3 +87,5 @@
 | T-THEORY-04 | 标准层 R4 创新声明契约门禁 + R3 结构距离工具（`cli/innovation_metrics.py`，声明优先/一阶二值回退） | 单测 12 | 本轮 |
 | T-THEORY-05 | 三实例合规声明（evidence_obligations + innovation）+ registry sha256 同步 + 反向验收（注入非法层 E9/移除论证 → FAIL，还原 → PASS） | validate 51/0/0 | 本轮 |
 | T-THEORY-06 | 文档同步：判据 v1.1（G4/G5/R3/R4 定义 + 局限披露）+ 审查文档落地状态与 §9 遗留项 + STATUS/CHANGELOG/TASKS + 四件套 | 683 passed，validate 51/0/0，catalog OK，术语 OK | 本轮 |
+| T-THEORY-07 | 标准层 v1.2（REVIEW §9.1/9.2/9.5 落地）：used_in 显式引用契约（七类 ref 硬校验/越界拒绝）+ 双级门禁（显式破损硬 FAIL、启发式降 WARN）+ G4 evidence_refs 对象形态 + 三实例 46 参数显式化（scripts/_gen_used_in.py 机器扫描+人工抽审）+ 门禁金标准（fixtures/param_usage_gold.json，FP=FN=0）+ 失败卡 fm-gate-heuristic-false-positive（22→23）+ 判据 v1.2/ONTOLOGY #15–20/REVIEW 勾销 | 700 passed，validate 52/0/0，catalog OK，术语 OK，金标准 FP=FN=0 | 本轮 |
+| T-THEORY-08 | 【后续，未做】REVIEW §9.3 R3 本体图连续化 + 声明值审计；§9.4 G4 子问题粒度 + 证据独立性；§9.6 符号映射表（声明符号↔代码标识符）；§9.7 轻微优化留档（FAIL 信号明细 / innovation_metrics --json / G5 语料纳入 data/*.csv 须金标准验证） | — | 待后续 agent |

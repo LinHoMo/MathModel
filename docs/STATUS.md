@@ -1,6 +1,9 @@
 # 项目状态
 
-> 更新：2026-09-11（标准层 v1.1：G4 证据义务矩阵（EV1–EV5）/ G5 复杂度预算 /
+> 更新：2026-09-11（标准层 v1.2：**used_in 显式引用契约**（46 参数全显式化）+
+> **双级门禁**（显式破损硬 FAIL / 启发式未命中降 WARN）+ G4 evidence_refs 对象形态 +
+> **门禁金标准**（46 参数真值，FP=FN=0）；判据升 v1.2，失败卡 22→23。
+> 同日早些（v1.1）：G4 证据义务矩阵（EV1–EV5）/ G5 复杂度预算 /
 > R4 创新声明契约 / R3 结构距离工具接入 validate.py 与 cli/innovation_metrics.py；
 > 三实例合规声明并反向验收；修复 G5 真实误报（2026b P13/P14 字符串值+浮点格式）并
 > 固化为回归测试；判据文档升 v1.1，审查文档登记 §9 遗留优化项。前序基线见下：
@@ -78,13 +81,14 @@ Construction 行为？"。
 | **2026_B 真实模拟器协议构建** | 按《B 题附件2·模拟器通信接口说明及编程指南》构建协议忠实客户端（`SimulatorHTTP`：4 指令、`arena_id`/`position`/`measure_result`/`svd_deg`/`clear_result`，虚拟时间服务端计算）+ 规范忠实本地 Mock（含 1 s 频道切换耗时）。**关键**：真实 API 不返回信号强度 → 策略弃用强度估距，改为纯示向度交会 + 越界检测归航（失联回退最近可测点处理定向盲区）。Mock 演练各 5 组（seed 42..46）：Q3/Q4 清除比例均 1.0000（Q3 虚拟 12918.09 s / 定位清除 8269.47 s；Q4 22592.91 s / 17514.37 s）。**未接官方评测机**（GUI 登录 + 联网 + 测试窗口），如实声明 | ✅ 631 passed，validate 46/0/0，catalog OK，术语 OK | 本轮 |
 | **参数来源门禁（治理加固）** | 新增 L4 门禁 `check_parameter_provenance`：声称 `problem_given` 的**数值参数**，其值必须能在 `inputs/problem.txt` 原文匹配（仅允许 ×10^k 单位换算，k∈[-9,9]）；需经 ÷2 等推导得到的值应标 `derived`。堵住输入侧诚信漏洞（把自建常数标成题面给定）。首跑即揪出 `cumcm2024a:P15`（调头空间半径 4.5 m 实为直径 9 m 的 ÷2 推导，已改标 `derived` 并补 definition）；参数 `source` 词表受控化（6 项）。附 `tests/unit/test_parameter_provenance.py` 5 单测锁定语义 | ✅ 636 passed，validate 47/0/0，catalog OK，术语 OK | 本轮 |
 | **模型质量判据（标准层）+ G3 校准参数门禁** | 判据升 FROZEN（`docs/architecture/MODEL_QUALITY_CRITERIA.md`）：合格线 Gate G1 数值溯源 / G2 参数来源 / **G3 校准参数**（新增）+ 排序线 Rank R1/R2（无真值，标"不可算"不阻塞）。**G3**：`source ∉ {problem_given, derived, convention}` 的数值参数须 (a) `calibration_anchor_ref` 指向 `calibration_anchor` 假设，(b) 台账含 `calibration_sensitivity[pid]`（varied 轴≥2）。TDD 6 单测；**真实数据 RED**：上线即拦 `cumcm2026a:P08/P12`。**实例合规**：A 题 P08→A04、P12→A03 补锚定；`solve_a` 时间常数参数化 + τ 扫描（300/450/600 s → 58.0944/58.1000/58.1111 h）产出 `calibration_sensitivity`。**反向验收**：移除 P08 锚定 → validate FAIL 指名 → 字节级还原后 48/0/0 | ✅ 642 passed，validate 48/0/0，catalog OK，术语 OK | 本轮 |
+| **标准层 v1.2：显式引用契约 + 双级门禁 + 金标准** | 根治「门禁漏检而非真死」（2026b P13/P14 事件）：① `parameters[].used_in=[{type,ref}]` 七类引用硬校验（组件 id 可解析 / code 文件存在且禁越界）；② `check_parsimony_budget` 只对破损显式声明硬 FAIL，新增 `check_dead_param_scan` 为 WARN 级（WARN_CHECKS），启发式不再单独决定硬失败；③ G4 义务支持 `{layer,evidence_refs}` 对象形态；④ 三实例 46 参数机器扫描生成 used_in（每参数 2–12 个真实引用，zero-hit=[]，人工抽审）；⑤ 金标准 `tests/fixtures/param_usage_gold.json` 度量启发式 FP=FN=0。TDD 17 新单测 | ✅ 700 passed，validate 52/0/0，catalog OK，术语 OK，金标准 FP=FN=0 | 本轮 |
 | **能力层：结构可识别性 + 词表修订 r1** | 新增工具 `cli/structure_coverage.py`（只读词表）把「方法结构对齐」从散文变数字：修订前实例结构解析率 **10/19 = 52.6%**（2026a 3/6、2026b 1/7），9 项落 `out_of_catalog`——即 `PROJECTS_FEEDBACK_AUDIT §4` 自承的「词表无交集」。按词表自带 **Architecture Gate**（定义清晰/层级明确/跨来源/可映射真实题/不与现有重叠）逐条复核后修订（ADR-0010）：`mass_transfer`/`moving_boundary`→`numerical_pde.mechanism`，`effective_property_correlation`→method，新增 families `computational_geometry`、`coverage_path_planning`。修订后 **19/19 = 100%**（同命令可复现）。**方法卡登记**：给 2026 相关族挂卡（numerical_pde←mc-moving-boundary-pde、computational_geometry←mc-bearing-triangulation、coverage_path_planning←mc-coverage-search）；2026 A/B 实例在 `model_family.cards` 登记选型，**方法卡登记率 0/3 → 2/3 = 66.7%**（2024a 未登记，如实暴露）。附 9 单测 | ✅ 651 passed，validate 48/0/0，catalog OK，术语 OK | 本轮 |
 
-## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
+## 当前数字（机器实测，Python 3.12.10，截至 2026-09-11）
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **683 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
-| 项目级校验 | **51 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
+| 单元/集成/端到端测试 | **700 passed / 0 skipped / 0 failed**（v1.2 新增 17：explicit_refs 13 + gold_standard 4） | `py -3.12 -m pytest tests -q` |
+| 项目级校验 | **52 通过 / 0 失败 / 0 警告**（新增「死参数扫描」WARN 级门禁） | `py -3.12 src/modeling_harness/cli/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 src/modeling_harness/cli/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology` |
 | K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |

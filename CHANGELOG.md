@@ -1,3 +1,36 @@
+## 2026-09-11 — 标准层 v1.2：显式引用契约 / 双级门禁 / 门禁金标准（T-THEORY-07）
+
+### 变更
+- **L5 显式引用契约（`parameters[].used_in`）**：参数→使用位置由隐式猜测改为
+  显式声明 `[{type,ref}]`，type ∈ equation/mechanism/objective/constraint/
+  validation/claim/code；非 code 的 ref 解析到 model_ir id，code 的 ref 相对
+  项目根（可带 #Lxx）、文件须存在且禁 `../` 越界；`_resolve_used_in` 硬校验，
+  声明破损（无任一可解析引用）→ 硬 FAIL。
+- **L4 双级门禁**：`check_parsimony_budget` 只对破损显式声明硬 FAIL（消息报
+  param/explicit/suspect/eq/mech）；新增 `check_dead_param_scan`（注册进
+  WARN_CHECKS）只扫未声明 used_in 的参数，启发式全未命中 → WARN 不阻塞。
+  旧两处 G5 单测按双级语义更新（设计演进：FAIL→WARN，硬失败改由显式契约承担）。
+- **G4 对象形态**：evidence_obligations 条目支持 `{layer,evidence_refs:[id]}`，
+  refs 须解析到真实 model_ir id（空/不可解析 FAIL）；字符串形态保留兼容。
+- **三实例 46 参数全显式化**：`scripts/_gen_used_in.py` 机器扫描（数学承载字段 +
+  词边界，单字母符号防 `\theta` 内误匹配）生成 used_in，每参数 2–12 个真实引用、
+  zero-hit=[]、人工抽审；registry sha256 同步。
+- **门禁金标准**：`tests/fixtures/param_usage_gold.json`（46 参数真值）+
+  `tests/unit/test_gate_gold_standard.py`（覆盖一致/引用可解析/FP=FN=0/基线）；
+  生成器 `scripts/_gen_gold.py`。
+- **失败记忆**：新增 fm-gate-heuristic-false-positive（失败卡 22→23），固化
+  「启发式门禁误报」三层根因与避免规则。
+- 判据文档升 **v1.2**（§2.1.2 对象形态、§2.1.3 双级重写、§2.1.4 局限更新）；
+  ONTOLOGY 增补术语 #15–#20（v1.2 加法）；REVIEW §9.1/9.2/9.5 勾销。
+
+### 验证
+- 新单测 17 例（test_explicit_refs 13 + test_gate_gold_standard 4），全量
+  **700 passed**；validate **52 通过 / 0 失败 / 0 警告**
+  （explicit=17/12/17、suspect=0、死参数扫描扫描 0 个未声明参数）；
+- 金标准度量启发式 **FP=FN=0**；catalog OK；术语 OK。
+
+---
+
 ## 2026-09-11 — 标准层 v1.1：证据义务矩阵 / 复杂度预算 / 创新接口（T-THEORY-02~06）
 
 ### 变更
