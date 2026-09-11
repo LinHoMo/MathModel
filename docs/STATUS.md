@@ -1,6 +1,10 @@
 # 项目状态
 
-> 更新：2026-09-10（V2 彻底清除：历史文档/旧研究/LaTeX 链/四手残留删除，
+> 更新：2026-09-11（标准层 v1.1：G4 证据义务矩阵（EV1–EV5）/ G5 复杂度预算 /
+> R4 创新声明契约 / R3 结构距离工具接入 validate.py 与 cli/innovation_metrics.py；
+> 三实例合规声明并反向验收；修复 G5 真实误报（2026b P13/P14 字符串值+浮点格式）并
+> 固化为回归测试；判据文档升 v1.1，审查文档登记 §9 遗留优化项。前序基线见下：
+> 2026-09-10（V2 彻底清除：历史文档/旧研究/LaTeX 链/四手残留删除，
 > 全仓采用 V3 新定位；**P15-K002 → P1 全程闭环 → 实例反馈审计**：ADR-0008
 > 问题理解层 + 实例状态契约门禁 + 投影写出唯一入口；cumcm2024a/2026a/2026b
 > 三实例可读、可对账、可度量，分解覆盖 20.0→100.0）。架构见
@@ -38,6 +42,7 @@ Construction 行为？"。
 | P6–P12 | Runtime Execution / Integrity / Competition Intelligence / Research Quality / Paper Intelligence / Scientific Writing / Cross-Question | ✅ | `938227c`…`0302228` |
 | P13-3 | Model Construction（3C）→ Model→Paper Transmission | ✅ | `82eb4fc`/`0036338`/`efc22df` |
 | Hardening P0–P6 | Architecture/Contract Freeze + State Truth + Replay + Legacy Isolation + Regression Gate + Release Candidate | ✅ | `9d98e86`…`v3.1.0（RC）` |
+| 标准层 v1.1（T-THEORY-02~06） | G4 证据义务矩阵（EV1–EV5）/ G5 复杂度预算 / R4 创新声明契约 / R3 结构距离工具；三实例合规声明 + 反向验收；修复 G5 真实误报并固化回归 | ✅ | 见 TASKS.md |
 | P15.0/P15.1 | CUMCM Benchmark Freeze + B0 Alignment Baseline | ✅ | `8751c45`（tag `p15.0-benchmark-freeze`）/ `af1bbd5`（tag `p15.1-b0-baseline`） |
 | **P15-K001** | 2×2×rep 预注册（Knowledge × Case + Sham），55 runs，盲评 + DATA FREEZE + 配对分析 | ✅ CLOSED | Δ_K=+2.14 CI[+0.00,+6.41] → **negative result**；`de15d96` |
 | **P15-K002** | Model Representation Efficacy（F/S/S+V 三臂）：契约统一（schema 迁 core、register 真 jsonschema、40 文件冻结）→ 108/108 生成 → 3 evaluator 盲评（锚定澄清，κ=0.4345）→ 配对分析 | ✅ **CLOSED** | RQ1 S−F(MCQ) Δ=−4.85 CI[−7.98,−2.22] **NEGATIVE**（不进 P15.2）；SV−F(VAL) +4.81 **POSITIVE**；报告 `analysis/reports/P15-K002-REPORT.md` |
@@ -78,8 +83,8 @@ Construction 行为？"。
 ## 当前数字（机器实测，Python 3.12.10，截至 2026-09-10）
 | 项 | 实测输出 | 生成命令 |
 |---|---|---|
-| 单元/集成/端到端测试 | **651 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
-| 项目级校验 | **48 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
+| 单元/集成/端到端测试 | **683 passed / 0 skipped / 0 failed** | `py -3.12 -m pytest tests -q` |
+| 项目级校验 | **51 通过 / 0 失败 / 0 警告** | `py -3.12 src/modeling_harness/cli/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 src/modeling_harness/cli/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology` |
 | K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |

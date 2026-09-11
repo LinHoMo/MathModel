@@ -1,3 +1,29 @@
+## 2026-09-11 — 标准层 v1.1：证据义务矩阵 / 复杂度预算 / 创新接口（T-THEORY-02~06）
+
+### 变更
+- **G4 证据义务矩阵（`check_evidence_obligations`）**：MODEL_IR 顶层 opt-in
+  `evidence_obligations = {子问题:[证据层]}`；证据层 EV1 数学必然 / EV2 机制保真 /
+  EV3 数据拟合 / EV4 样本外预测 / EV5 决策效用（EV 前缀规避既有 Evidence Gate
+  E1–E9 编号冲突）；声明层须有机械证据支撑，否则 FAIL。
+- **G5 复杂度预算（`check_parsimony_budget`）**：参数付租——id/符号（希腊转写、
+  上下标、分隔符、大小写归一）/名称/值（int↔float 互化、逗号分隔串拆分）任一命中
+  使用语料；全未命中 → 死参数 FAIL；消息报告 param/used/eq/mech 指标。
+- **R4 创新声明契约（`check_innovation_declaration`）**：`innovation` 结构合法性 +
+  维度词表/值域 + 非零维度必须附 `difference_arguments`（防自称创新）。
+- **R3 结构距离工具（`cli/innovation_metrics.py`）**：声明值优先，未声明一阶二值；
+  v1 二值待本体图深化（登记 §9）。
+- **三实例合规声明**：cumcm2026a（全五层 + composition_novelty=0.3）、
+  cumcm2024a/2026b（EV1/EV2/EV4/EV5，创新全 0）；registry sha256 同步。
+- **真实误报修复**：2026b P13/P14 值字符串 + 代码浮点格式 → `_value_signals` 拆分 +
+  归一化补分隔符；回归测试固化（P13/P14 形态、int↔float、分隔符变体）。
+- 判据文档 `MODEL_QUALITY_CRITERIA.md` 升 v1.1；审查文档登记 §9 遗留优化项
+  （显式引用契约 / 双级 WARN / 本体图连续化 / 子问题粒度 / 门禁自身度量等）。
+
+### 验证
+- 新门禁单测 32 例（G4×10 / G5×9 / R4×8 / R3×5）；全量 **683 passed**；
+- validate **51 通过 / 0 失败 / 0 警告**；catalog OK；术语 OK；
+- 真实实例反向验收：注入非法层/移除创新论证 → FAIL 并点名，还原 → PASS，哈希一致。
+
 # Changelog
 
 本文件记录 Modeling-Harness 的版本级变更。状态单一真源为 `docs/STATUS.md`（机器实测数字 + commit hash）。

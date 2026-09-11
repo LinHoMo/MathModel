@@ -81,3 +81,9 @@
 | T-GOV-02 | 模型质量判据（标准层）+ G3 校准参数门禁：判据升 FROZEN；新增 `check_calibration_parameters`（非豁免参数须有 `calibration_anchor_ref` + 台账 `calibration_sensitivity`）；A 题 P08/P12 补锚定、`solve_a` 参数化时间常数 + τ 扫描产出敏感性证据。TDD 6 单测；真实数据 RED 命中；反向验收（注入→拦→字节级还原） | 642 passed，validate 48/0/0，catalog OK，术语 OK | 本轮 |
 | T-CAP-01 | 能力层：结构可识别性 + 词表修订 r1。新增 `cli/structure_coverage.py`（结构解析 + 覆盖率度量，只读词表），把「方法结构对齐」由不可用变可算：修订前 10/19=52.6% → 按 Architecture Gate 复核修订（ADR-0010）后 19/19=100%。TDD 6 单测 | 648 passed，validate 48/0/0，catalog OK，术语 OK | 本轮 |
 | T-CAP-02 | 能力层：方法卡登记与族挂卡。2026 相关族挂卡（numerical_pde/computational_geometry/coverage_path_planning）；2026 A/B 实例 `model_family.cards` 登记选型；`structure_coverage` 新增「方法卡登记率」度量（0/3 → 2/3，2024a 未登记如实暴露）。TDD 3 单测 | 651 passed，validate 48/0/0，catalog OK，术语 OK | 本轮 |
+| T-THEORY-01 | 理论基座缺口审查与优化方案（REVIEW，只读审查 + 提案）：10 维度分析（正向认识论/创新/简约/测量/因果/证据语义/泛化/学习/预测范式/实验文化）+ 两条主线 + 三阶段路线图 + Innovation Space 提案 + K 系列下一梯队实验设计（E1–E8）。未修改代码/schema/runtime；立项须走任务卡 + ADR。产出 `docs/THEORY_FOUNDATION_REVIEW.md`；方案待用户裁定（建议 T-CONF 4 项） | 交付审查文档；四件套待跑 | 2026-09-11 |
+| T-THEORY-02 | 标准层 G4 证据义务矩阵门禁：MODEL_IR 顶层 opt-in `evidence_obligations`（EV1–EV5，前缀规避 Evidence Gate E1–E9）；声明层须有机械证据支撑否则 FAIL；实例级粒度 | 单测 10 + 实例反向验收 | 本轮 |
+| T-THEORY-03 | 标准层 G5 复杂度预算门禁：参数付租（id/符号归一化/名称/值信号）；修复 2026b P13/P14 真实误报（字符串值 + 浮点格式）并固化回归（值拆分、int↔float、分隔符变体）；消息报 param/used/eq/mech | 单测 9 | 本轮 |
+| T-THEORY-04 | 标准层 R4 创新声明契约门禁 + R3 结构距离工具（`cli/innovation_metrics.py`，声明优先/一阶二值回退） | 单测 12 | 本轮 |
+| T-THEORY-05 | 三实例合规声明（evidence_obligations + innovation）+ registry sha256 同步 + 反向验收（注入非法层 E9/移除论证 → FAIL，还原 → PASS） | validate 51/0/0 | 本轮 |
+| T-THEORY-06 | 文档同步：判据 v1.1（G4/G5/R3/R4 定义 + 局限披露）+ 审查文档落地状态与 §9 遗留项 + STATUS/CHANGELOG/TASKS + 四件套 | 683 passed，validate 51/0/0，catalog OK，术语 OK | 本轮 |
