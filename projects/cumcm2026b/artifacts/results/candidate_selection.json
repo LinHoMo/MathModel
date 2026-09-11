@@ -1,0 +1,329 @@
+{
+  "milestone": "M-SELECT-001",
+  "n_trials": 5,
+  "seed_start": 42,
+  "questions": {
+    "q3_omni": {
+      "paired": {
+        "delta_mean_s": -535.0275988000001,
+        "delta_std_s": 1166.1884664669453,
+        "delta_ci95_halfwidth_s": 1022.2092607537587,
+        "A_win_rate": 0.6,
+        "B_win_rate": 0.4
+      },
+      "rows": [
+        {
+          "seed": 42,
+          "A": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7143.569752,
+            "n_measure": 318,
+            "move_dist_m": 25877.848759650544,
+            "n_points": 17
+          },
+          "B": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9754.867534,
+            "n_measure": 358,
+            "move_dist_m": 37904.33766866728,
+            "n_points": 14
+          },
+          "delta_T_s": -2611.2977820000006
+        },
+        {
+          "seed": 43,
+          "A": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5991.237711,
+            "n_measure": 302,
+            "move_dist_m": 20696.188553703905,
+            "n_points": 17
+          },
+          "B": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 5936.62261,
+            "n_measure": 290,
+            "move_dist_m": 20713.113049535914,
+            "n_points": 14
+          },
+          "delta_T_s": 54.61510099999941
+        },
+        {
+          "seed": 44,
+          "A": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6816.795567,
+            "n_measure": 361,
+            "move_dist_m": 22958.977837262955,
+            "n_points": 17
+          },
+          "B": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6912.135854,
+            "n_measure": 303,
+            "move_dist_m": 25205.67926943942,
+            "n_points": 14
+          },
+          "delta_T_s": -95.34028699999999
+        },
+        {
+          "seed": 45,
+          "A": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6668.180094,
+            "n_measure": 359,
+            "move_dist_m": 22260.900471944944,
+            "n_points": 17
+          },
+          "B": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6821.227848,
+            "n_measure": 339,
+            "move_dist_m": 23631.13923833029,
+            "n_points": 14
+          },
+          "delta_T_s": -153.04775400000017
+        },
+        {
+          "seed": 46,
+          "A": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6369.67784,
+            "n_measure": 324,
+            "move_dist_m": 21933.38919950341,
+            "n_points": 17
+          },
+          "B": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 6239.745112,
+            "n_measure": 287,
+            "move_dist_m": 22383.725558343536,
+            "n_points": 14
+          },
+          "delta_T_s": 129.93272800000068
+        }
+      ],
+      "candidate_A": {
+        "name": "RING",
+        "cleared_fraction": 1.0,
+        "T_total_s": 6597.8921928
+      },
+      "candidate_B": {
+        "name": "SPIRAL",
+        "cleared_fraction": 1.0,
+        "T_total_s": 7132.9197916
+      },
+      "decision": {
+        "stage": "objective",
+        "winner": "INCONCLUSIVE",
+        "gate": {
+          "threshold": 0.95,
+          "feasible": {
+            "RING": true,
+            "SPIRAL": true
+          },
+          "rejected": []
+        },
+        "objective": {
+          "metric": "T_total_s",
+          "direction": "minimize",
+          "A": 6597.8921928,
+          "B": 7132.9197916,
+          "abs_gap": -535.0275988,
+          "rel_gap": -0.07500822,
+          "better": "a",
+          "paired_delta_mean_s": -535.0275988000001,
+          "paired_ci95_halfwidth_s": 1022.2092607537587,
+          "within_noise": true
+        },
+        "secondary": {
+          "n_measure": {
+            "A": null,
+            "B": null
+          },
+          "move_dist_m": {
+            "A": null,
+            "B": null
+          },
+          "n_points": {
+            "A": null,
+            "B": null
+          }
+        },
+        "reason": "配对均值差 ±95%CI 跨 0，两候选与噪声不可分 ⇒ 不下胜负结论",
+        "checks_passed_used": false
+      }
+    },
+    "q4_mix": {
+      "paired": {
+        "delta_mean_s": 2029.1999449999996,
+        "delta_std_s": 756.490853916915,
+        "delta_ci95_halfwidth_s": 663.0934696963133,
+        "A_win_rate": 0.0,
+        "B_win_rate": 1.0
+      },
+      "rows": [
+        {
+          "seed": 42,
+          "A": {
+            "seed": 42,
+            "cleared_fraction": 1.0,
+            "T_total_s": 13137.948975,
+            "n_measure": 592,
+            "move_dist_m": 47559.7448756872,
+            "n_points": 29
+          },
+          "B": {
+            "seed": 42,
+            "cleared_fraction": 0.9333333333333333,
+            "T_total_s": 11898.396655,
+            "n_measure": 526,
+            "move_dist_m": 43861.98327322965,
+            "n_points": 17
+          },
+          "delta_T_s": 1239.5523199999989
+        },
+        {
+          "seed": 43,
+          "A": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10299.83106,
+            "n_measure": 568,
+            "move_dist_m": 34214.15529786837,
+            "n_points": 29
+          },
+          "B": {
+            "seed": 43,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8809.714749,
+            "n_measure": 448,
+            "move_dist_m": 30303.573745619833,
+            "n_points": 17
+          },
+          "delta_T_s": 1490.1163109999998
+        },
+        {
+          "seed": 44,
+          "A": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 9469.047353,
+            "n_measure": 450,
+            "move_dist_m": 33575.23676660987,
+            "n_points": 29
+          },
+          "B": {
+            "seed": 44,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7136.550764,
+            "n_measure": 331,
+            "move_dist_m": 25497.75381773977,
+            "n_points": 17
+          },
+          "delta_T_s": 2332.4965890000003
+        },
+        {
+          "seed": 45,
+          "A": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10185.356091,
+            "n_measure": 490,
+            "move_dist_m": 35981.78045571708,
+            "n_points": 29
+          },
+          "B": {
+            "seed": 45,
+            "cleared_fraction": 1.0,
+            "T_total_s": 7028.129086,
+            "n_measure": 322,
+            "move_dist_m": 25240.64542903721,
+            "n_points": 17
+          },
+          "delta_T_s": 3157.2270049999997
+        },
+        {
+          "seed": 46,
+          "A": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 10022.297112,
+            "n_measure": 484,
+            "move_dist_m": 35426.485559693756,
+            "n_points": 29
+          },
+          "B": {
+            "seed": 46,
+            "cleared_fraction": 1.0,
+            "T_total_s": 8095.689612,
+            "n_measure": 373,
+            "move_dist_m": 29223.44806215535,
+            "n_points": 17
+          },
+          "delta_T_s": 1926.6075
+        }
+      ],
+      "candidate_A": {
+        "name": "RING",
+        "cleared_fraction": 1.0,
+        "T_total_s": 10622.8961182
+      },
+      "candidate_B": {
+        "name": "SPIRAL",
+        "cleared_fraction": 0.9866666666666667,
+        "T_total_s": 8593.6961732
+      },
+      "decision": {
+        "stage": "objective",
+        "winner": "SPIRAL",
+        "gate": {
+          "threshold": 0.95,
+          "feasible": {
+            "RING": true,
+            "SPIRAL": true
+          },
+          "rejected": []
+        },
+        "objective": {
+          "metric": "T_total_s",
+          "direction": "minimize",
+          "A": 10622.8961182,
+          "B": 8593.6961732,
+          "abs_gap": 2029.199945,
+          "rel_gap": 0.23612656,
+          "better": "b",
+          "paired_delta_mean_s": 2029.1999449999996,
+          "paired_ci95_halfwidth_s": 663.0934696963133,
+          "within_noise": false
+        },
+        "secondary": {
+          "n_measure": {
+            "A": null,
+            "B": null
+          },
+          "move_dist_m": {
+            "A": null,
+            "B": null
+          },
+          "n_points": {
+            "A": null,
+            "B": null
+          }
+        },
+        "reason": "按 objective +2029.2 s 判定 SPIRAL 胜出",
+        "checks_passed_used": false
+      }
+    }
+  }
+}

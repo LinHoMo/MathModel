@@ -282,9 +282,12 @@ def sweep_http(sim, points, obs, det_time, channels=None, max_obs=1,
 
 
 def dog_strategy_http(sim, has_directional=False, sweep_max_obs=DEFAULT_SWEEP_MAX_OBS,
-                      sweep_miss_limit=None):
+                      sweep_miss_limit=None, points=None):
     """完整策略：覆盖扫描 → 逐频道定位清除 → 残余局部搜索。返回统计 dict。
 
+    ``points``：覆盖扫描的检测点集。缺省用同心环（``coverage_detection_points``）；
+    显式传入时**只替换覆盖几何**，其余阶段（sweep / 交会归航 / 清除）代码路径完全
+    相同 —— 这是候选对照实验要求「除 coverage geometry 外全同」的实现入口（M-SELECT-001）。
     sweep_max_obs：覆盖扫描中每频道最多保留的示向度观测数（见 sweep_http）。
     sweep_miss_limit：覆盖扫描中每频道连续无信号的容忍次数（见 sweep_http）。
     统计同时给出两套口径（ADR-0012）：逐源 `mean_locate_clear_time_s`（= 该源
@@ -296,8 +299,8 @@ def dog_strategy_http(sim, has_directional=False, sweep_max_obs=DEFAULT_SWEEP_MA
     det_time: dict[int, float] = {}
     clear_time: dict[int, float] = {}
 
-    # 阶段A：同心环覆盖扫描（跳过多点重复测同一频道，见 sweep_http）
-    pts = coverage_detection_points(has_directional)
+    # 阶段A：覆盖扫描（点集可注入，用于候选对照；跳过多点重复测同一频道）
+    pts = points if points is not None else coverage_detection_points(has_directional)
     sweep_http(met, pts, obs, det_time, max_obs=sweep_max_obs,
                miss_limit=sweep_miss_limit)
 

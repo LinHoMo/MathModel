@@ -343,6 +343,42 @@ E[D] = 59.263 m；同一垂线族上偏移 300 m 处 E[D] = 43.195 m，**更小*
 
 复现：`py -3.12 -X utf8 -m baseline_compare --trials 5` → `artifacts/results/baseline_comparison.json`。
 
+### 候选淘汰：M-SELECT-001（ring vs spiral）
+
+上节回答「比朴素基线好多少」；本节回答**「两个合理候选之间该选哪个」**——这是本模型
+第一次产生**可自动淘汰的竞争关系**。
+
+两个候选**除覆盖几何外全同**（同一协议客户端 / Mock 服务端 / 清除规则 / 随机种子 /
+交会归航代码路径，仅注入不同检测点集）：
+
+| 候选 | 覆盖几何 | 全向点数 / 覆盖半径 | 定向点数 / 覆盖半径 |
+|---|---|---|---|
+| A RING | 同心环 | 17 / 701.7 m | 29 / 548.8 m |
+| B SPIRAL | 阿基米德螺线（等弧长采样） | 14 / 950.5 m | 17 / 797.0 m |
+
+选择器顺序固定：**feasibility gate（清除比例 ≥ 1−α）→ objective（J = T_total，minimize，
+经 harness `baseline_comparison`）→ secondary**，且**不读 `checks_passed`**（ADR-0013）。
+
+paired 评估（同 seeds 42–46，逐对 ΔT = T_A − T_B）：
+
+| 问 | ΔT 均值 ± 标准差 | 95% CI | win rate A/B | 判定 |
+|---|---|---|---|---|
+| Q3 全向 | −535.0 ± 1166.2 s | ±1022.2 | 60% / 40% | **INCONCLUSIVE**（CI 跨 0） |
+| Q4 混合 | +2029.2 ± 756.5 s | ±663.1 | 0% / 100% | **SPIRAL 胜出** |
+
+**结论**：其一，Q4 下螺旋显著更快（5/5 seeds 全胜，ΔT 2029 s），且检测点更少
+（17 vs 29）而覆盖仍完备（797 m < 1000 m）；其二，Q3 下两者胜负与噪声不可分，
+选择器**拒绝下结论**——这是刻意的：只比均值会把「A 平均快 535 s」当成稳定优势，
+而它完全落在波动范围内。
+
+**一次值得记录的返工**：首版 `spiral_points()` 忽略了定向场景，没给螺旋配分布区外的
+几何，于是 Q4 里螺旋在 feasibility 阶段就被淘汰。那不是建模发现，是**我给候选配的
+几何不公平**。补上外侧几何后结论反转。教训：淘汰实验里「两个候选都合理」必须由
+**测试**保证（`test_both_candidates_are_coverage_complete` /
+`test_directional_variants_both_extend_beyond_source_disk`），不能靠口头声明。
+
+复现：`py -3.12 -X utf8 -m candidate_select --trials 5` → `artifacts/results/candidate_selection.json`。
+
 ### 全程的主线
 
 四个问项串起来是一条**从几何到策略**的主线：问题 1 确定「测得准不准」（误差区域的形状与
