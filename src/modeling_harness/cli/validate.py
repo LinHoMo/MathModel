@@ -897,6 +897,31 @@ def check_calibration_parameters(project_path):
 # v1 粒度：实例级证据检查（不细分到子问题）；子问题粒度留待证据图深化。
 _EVIDENCE_LAYERS = ("EV1", "EV2", "EV3", "EV4", "EV5")
 
+# model_ir 内可被引用的 id 字段（显式引用解析用）
+_MODEL_IR_ID_FIELDS = (
+    ("equations", "equation_id"),
+    ("mechanisms", "mechanism_id"),
+    ("objectives", "objective_id"),
+    ("constraints", "constraint_id"),
+    ("validations", "validation_id"),
+    ("claims", "claim_id"),
+    ("assumptions", "assumption_id"),
+    ("experiments", "experiment_id"),
+    ("solvers", "solver_id"),
+    ("variables", "variable_id"),
+    ("parameters", "parameter_id"),
+)
+
+
+def _model_ir_id_set(data):
+    """收集 model_ir 内全部可引用 id（显式 evidence_refs/used_in 解析用）。"""
+    ids = set()
+    for key, id_key in _MODEL_IR_ID_FIELDS:
+        for item in data.get(key) or []:
+            if isinstance(item, dict) and item.get(id_key) is not None:
+                ids.add(str(item[id_key]))
+    return ids
+
 # 各层机械证据信号（任一命中即算有证据）
 _EV1_VALIDATION_TYPES = frozenset({
     "invariant", "conservation", "well_posedness", "dimension",
@@ -1015,11 +1040,39 @@ def check_evidence_obligations(project_path):
             if not isinstance(layers, list):
                 problems.append(f"{pdir.name}:{qid} obligations 非数组")
                 continue
-            for layer in layers:
-                if layer not in _EVIDENCE_LAYERS:
-                    problems.append(f"{pdir.name}:{qid} 非法证据层 {layer!r}")
-                elif not _evidence_layer_backed(data, pdir, layer):
-                    problems.append(f"{pdir.name}:{qid} 声明 {layer} 但实例无对应证据")
+            id_set = _model_ir_id_set(data)
+            for entry in layers:
+                # 字符串形态：启发式证据支撑（v1.1 语义，向后兼容）
+                if isinstance(entry, str):
+                    layer = entry
+                    if layer not in _EVIDENCE_LAYERS:
+                        problems.append(
+                            f"{pdir.name}:{qid} 非法证据层 {layer!r}")
+                    elif not _evidence_layer_backed(data, pdir, layer):
+                        problems.append(
+                            f"{pdir.name}:{qid} 声明 {layer} 但实例无对应证据")
+                    continue
+                # 对象形态（v1.2）：{layer, evidence_refs} 显式引用，须解析
+                if isinstance(entry, dict):
+                    layer = entry.get("layer")
+                    refs = entry.get("evidence_refs")
+                    if layer not in _EVIDENCE_LAYERS:
+                        problems.append(
+                            f"{pdir.name}:{qid} 非法证据层 {layer!r}")
+                        continue
+                    if not isinstance(refs, list) or not refs:
+                        problems.append(
+                            f"{pdir.name}:{qid} {layer} evidence_refs 为空")
+                        continue
+                    for ref in refs:
+                        if str(ref) not in id_set:
+                            problems.append(
+                                f"{pdir.name}:{qid} {layer} 证据引用无法解析 "
+                                f"{ref!r}")
+                    continue
+                problems.append(
+                    f"{pdir.name}:{qid} obligations 条目既非层名也非对象: "
+                    f"{entry!r}")
     if problems:
         return False, "; ".join(problems[:5])
     return True, f"证据义务检查通过（{checked} 个实例声明了 obligations）"
@@ -1128,11 +1181,79 @@ def _param_is_used(par, corpus):
     return any(sig and sig in corpus for sig in _value_signals(par.get("value")))
 
 
-def check_parsimony_budget(project_path):
-    """L4: 复杂度预算门禁（G5）——死参数检查 + 复杂度指标报告。
+# used_in 显式引用契约（v1.2，THEORY_FOUNDATION_REVIEW §9.1 落地）
+_USED_IN_TYPES = ("equation", "mechanism", "objective", "constraint",
+                  "validation", "claim", "code")
+_USED_IN_ID_FIELD = {
+    "equation": "equation_id",
+    "mechanism": "mechanism_id",
+    "objective": "objective_id",
+    "constraint": "constraint_id",
+    "validation": "validation_id",
+    "claim": "claim_id",
+}
 
-    每个参数必须至少一处被使用（方程/目标/约束/机理/验证/主张/代码/文档），
-    否则判 FAIL（「参数付租」：不被引用的参数是建模冗余的信号）。
+
+def _resolve_used_in(par, data, pdir):
+    """核验单个参数的 used_in 声明。
+
+    返回 (n_resolved, problems)：n_resolved=可解析引用数；problems=破损声明。
+    未声明 used_in 返回 None（调用方走启发式）。
+    """
+    used_in = par.get("used_in")
+    if used_in is None:
+        return None
+    pid = str(par.get("parameter_id", "?"))
+    if not isinstance(used_in, list) or not used_in:
+        return 0, [f"{pid}: used_in 须为非空数组"]
+    id_sets = {}
+    problems = []
+    n_resolved = 0
+    root = pdir.resolve()
+    for entry in used_in:
+        if not isinstance(entry, dict):
+            problems.append(f"{pid}: used_in 条目非对象 {entry!r}")
+            continue
+        typ = entry.get("type")
+        ref = str(entry.get("ref", "")).strip()
+        if typ not in _USED_IN_TYPES:
+            problems.append(f"{pid}: used_in 非法 type {typ!r}")
+            continue
+        if not ref:
+            problems.append(f"{pid}: used_in ref 为空")
+            continue
+        if typ == "code":
+            path_part = ref.split("#", 1)[0]  # 允许 #Lxx 行锚点
+            target = (pdir / path_part)
+            try:
+                target.resolve().relative_to(root)
+            except (ValueError, OSError):
+                problems.append(f"{pid}: code 引用越界 {ref!r}")
+                continue
+            if target.is_file():
+                n_resolved += 1
+            else:
+                problems.append(f"{pid}: code 引用文件不存在 {ref!r}")
+            continue
+        id_key = _USED_IN_ID_FIELD[typ]
+        if id_key not in id_sets:
+            id_sets[id_key] = {
+                str(x.get(id_key)) for x in (data.get(typ + "s") or [])
+                if isinstance(x, dict) and x.get(id_key) is not None}
+        if ref in id_sets[id_key]:
+            n_resolved += 1
+        else:
+            problems.append(f"{pid}: {typ} 引用无法解析 {ref!r}")
+    return n_resolved, problems
+
+
+def check_parsimony_budget(project_path):
+    """L4: 复杂度预算硬门禁（G5，v1.2 双级语义）。
+
+    - 声明 used_in 的参数：引用必须可解析，否则 FAIL（声明不诚实，硬失败）；
+    - 未声明 used_in 的参数：启发式未命中只计 suspect（不再硬 FAIL），
+      由 check_dead_param_scan 以 WARN 级报告；
+    - 复杂度指标（param/explicit/suspect/eq/mech）随消息报告。
     """
     live = _live_project_dirs(project_path)
     if not live:
@@ -1153,22 +1274,69 @@ def check_parsimony_budget(project_path):
             continue
         checked += 1
         corpus = _param_usage_corpus(pdir, data)
-        dead = [str(p.get("parameter_id", "?"))
-                for p in params if not _param_is_used(p, corpus)]
-        n_used = len(params) - len(dead)
+        n_explicit = 0
+        suspect = []
+        for par in params:
+            resolved = _resolve_used_in(par, data, pdir)
+            if resolved is None:
+                if not _param_is_used(par, corpus):
+                    suspect.append(str(par.get("parameter_id", "?")))
+                continue
+            n_ok, ref_problems = resolved
+            problems.extend(ref_problems)
+            if n_ok >= 1:
+                n_explicit += 1
         n_eq = len(data.get("equations") or [])
         n_mech = len(data.get("mechanisms") or [])
         per_proj.append(
-            f"{pdir.name}(param={len(params)},used={n_used},eq={n_eq},"
-            f"mech={n_mech})")
-        if dead:
-            problems.append(
-                f"{pdir.name}: 死参数 {dead}（used={n_used}/"
-                f"{len(params)}；信号：id/符号/名称/值 均无命中）")
+            f"{pdir.name}(param={len(params)},explicit={n_explicit},"
+            f"suspect={len(suspect)},eq={n_eq},mech={n_mech})")
+        if suspect:
+            per_proj[-1] += f" 疑似死参数:{suspect}"
     if problems:
-        return False, "; ".join(problems[:5])
+        return False, "; ".join(problems[:6])
     return True, ("复杂度预算检查通过（{} 实例：{}）".format(
         checked, ", ".join(per_proj) or "无参数"))
+
+
+def check_dead_param_scan(project_path):
+    """L4: 死参数启发式扫描（WARN 级，双级门禁的软层）。
+
+    只扫描「未声明 used_in」的参数；启发式（id/符号/名称/值）全未命中 →
+    ok=False（由 WARN_CHECKS 渲染为 WARN，不阻塞交付）。
+    已声明 used_in 的参数由硬门禁 check_parsimony_budget 负责，此处跳过。
+    """
+    live = _live_project_dirs(project_path)
+    if not live:
+        return True, "无活跃项目实例（跳过）"
+    problems = []
+    n_scanned = 0
+    for pdir in live:
+        mir = pdir / "model_ir.json"
+        if not mir.exists():
+            continue
+        try:
+            data = json.loads(mir.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        params = data.get("parameters") or []
+        if not params:
+            continue
+        corpus = _param_usage_corpus(pdir, data)
+        suspect = []
+        for par in params:
+            if par.get("used_in") is not None:
+                continue  # 显式契约参数归硬门禁
+            n_scanned += 1
+            if not _param_is_used(par, corpus):
+                suspect.append(str(par.get("parameter_id", "?")))
+        if suspect:
+            problems.append(
+                f"{pdir.name}: 疑似死参数 {suspect}（启发式未命中且未声明 "
+                f"used_in；建议补显式引用或删除）")
+    if problems:
+        return False, "; ".join(problems[:5])
+    return True, f"启发式死参数扫描通过（扫描 {n_scanned} 个未声明 used_in 的参数）"
 
 
 # ======================================================================
@@ -1700,6 +1868,7 @@ def validate_project(project_path):
         ("L4", "校准参数", lambda: check_calibration_parameters(project_path)),
         ("L4", "证据义务", lambda: check_evidence_obligations(project_path)),
         ("L4", "复杂度预算", lambda: check_parsimony_budget(project_path)),
+        ("L4", "死参数扫描", lambda: check_dead_param_scan(project_path)),
         ("L4", "创新声明", lambda: check_innovation_declaration(project_path)),
 
         # L5: 信任域隔离检查
@@ -1736,7 +1905,7 @@ def validate_project(project_path):
     # WARN 级检查：不通过只记警告、不阻塞交付。
     # 对应 P2 增强性门禁（此前被当作硬失败，导致
     # "0 警告" 与失败列表里出现 WARN 项自相矛盾）。
-    WARN_CHECKS = set()
+    WARN_CHECKS = {"死参数扫描"}
 
     passed = 0
     failed = 0

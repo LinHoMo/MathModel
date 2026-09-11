@@ -59,9 +59,14 @@ def test_all_params_used_passes(tmp_path):
 
 
 def test_dead_parameter_fails(tmp_path):
-    """参数在任何语料中均无引用（id/符号/名称/数值）→ FAIL 并点名。"""
+    """v1.2 双级语义：启发式未命中不再硬 FAIL，硬门禁 PASS 且报 suspect=1。
+
+    （硬失败只针对破损的 used_in 显式声明；启发式死参数由
+    check_dead_param_scan 以 WARN 级报告，见 test_explicit_refs.py。）
+    """
     ok, msg = check_parsimony_budget(_proj(tmp_path, [P_DEAD]))
-    assert not ok, msg
+    assert ok, msg
+    assert "suspect=1" in msg
     assert "P99" in msg
 
 
@@ -96,12 +101,12 @@ def test_no_parameters_passes(tmp_path):
 
 
 def test_mixed_dead_and_live_reports_only_dead(tmp_path):
-    """混合：活参数 + 死参数 → FAIL 且只点名死参数。"""
+    """混合：活参数 + 启发式死参数 → 硬门禁 PASS，suspect 只点名死参数。"""
     params = [P_USED, P_DEAD]
     ok, msg = check_parsimony_budget(_proj(tmp_path, params))
-    assert not ok, msg
+    assert ok, msg
     assert "P99" in msg
-    assert "P01" not in msg
+    assert "P01" not in msg.split("疑似死参数:")[1]
 
 
 def test_string_value_with_float_code_passes(tmp_path):
