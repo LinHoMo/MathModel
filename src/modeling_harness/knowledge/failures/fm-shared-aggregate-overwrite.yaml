@@ -1,0 +1,20 @@
+failure_id: fm-shared-aggregate-overwrite
+title: 多脚本共写同一聚合文件——覆盖语义静默抹掉他人产物
+problem_context: 实例中多个脚本把各自结果并入同一个 all_results.json 聚合台账，写出语义不一致
+method: 结果台账聚合写出
+modeling_structure: harness_gate
+failure_mode: consistency
+symptom: 只重跑 solve_b 后，台账中由协议演练脚本写入的 real_protocol_mock 段消失；上层状态脚本按台账生成的四件套随之缺项，且无任何报错
+root_cause: 写出契约不一致——一个写方用 json.dump 整体覆盖，另一个写方用读-改-写 merge；两个写方对同一文件采用不同语义，后跑的覆盖者静默抹掉先跑者已写入的段
+detection: 重跑任一写方后比对聚合文件的顶层 key 集合；对多写方共享的文件列出全部写点并逐一比对写出语义
+detection_signal: 聚合文件顶层 key 数量在只重跑一个脚本后减少；某写方源码中直接以覆盖模式打开文件写出
+fix: 统一为读-改-写 merge 语义——写前读入既有内容，合并本次新增段后再写出；新增任何第三写方时遵守同一契约
+avoidance: 同一聚合文件存在多个写方时，必须统一写出契约（覆盖 vs 合并）并把复现顺序写进文档；默认取 merge
+applies_to: []
+source: 2026-09-11 cumcm2026b 重跑反馈（solve_b 覆盖 与 solve_b_http 合并 的契约分歧）
+severity: high
+recovery:
+  - 重跑所有写方，核对聚合文件顶层 key 集合完整
+  - 为聚合文件列出全部写点并统一为 merge 语义
+version: 1
+status: active

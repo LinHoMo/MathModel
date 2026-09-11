@@ -1,0 +1,21 @@
+failure_id: fm-state-projection-nondeterminism
+title: 状态投影与结果表的非确定性——集合迭代顺序 + wall-clock 时钟四处混入
+problem_context: harness 宣称「状态只由确定性机制推进 / Deterministic Replay」，但实例由脚本产出的 state 四件套与 xlsx 结果表在重跑时字节漂移，「同一输入必得同一输出」的脚本自述与实际不符
+method: 状态投影（ProjectState.refresh_from 派生 status.json）+ 实例状态产线脚本 build_state + xlsx 结果表写出
+modeling_structure: harness_gate
+failure_mode: consistency
+symptom: 连续两次 build_state 后 status.json 的 state.questions 键序不同（如 Q2,Q3,Q4,Q1 与 Q3,Q2,Q4,Q1）；resultB.xlsx 同尺寸但字节不同；四件套每次重跑都产生 git diff 噪声，违反「确定性重放」定位
+root_cause: 四层叠加——①refresh_from 用 set 字面量迭代 registry 的问题 id，迭代顺序随进程字符串 hash 随机化（Python 3 每进程 hash 随机）；②ProjectState._utcnow 在 _empty / save / ensure_question 写真实时钟；③build_state 的 NOW 取 datetime.now；④openpyxl 保存 xlsx 时在 save_workbook 把 properties.modified 重置为当前时钟，并给每个 zip entry 打 wall-clock date_time
+detection: 连续两次运行同一产出脚本后比对产物 sha256，并对派生视图单独核对键序；对任何「纯函数 / 确定性」声称一律做两次运行逐字节比对
+detection_signal: 同输入两次运行的产物 sha256 不同；或跨进程打印同一集合得到不同顺序；或派生 JSON 的键序在运行间漂移
+fix: ①把 set 推导改为有序去重（dict.fromkeys 保序 + 独立 set 供成员判定）；②_utcnow 增加 MH_STATE_NOW 注入钩子，未设时仍取真实时钟；③build_state 的时钟经 MH_STATE_NOW 注入并回写进程 env，使状态层同源；④xlsx 保存后以黑盒方式重写 zip 容器——归一 core.xml 的 modified 字段 + 固定所有 entry 时间戳，并预置 wb.properties.created
+avoidance: 「纯函数 / 确定性 / 可复现」必须用连续两次运行的逐字节比对来证实，不得靠 docstring 自述；wall-clock、集合迭代顺序、第三方写出库的默认元数据都是候选污染源，逐层排查而非只修一层
+applies_to: []
+source: 2026-09-11 cumcm2026b 重跑反馈（会话交接文档卡点 1）
+severity: high
+recovery:
+  - 固定 MH_STATE_NOW 后连续两次运行产出脚本，比对 sha256 一致
+  - 对派生视图单独核对键序（避开时间戳），确认集合迭代已受控
+  - 检查第三方写出库（openpyxl 等）的默认元数据字段是否含当前时钟
+version: 1
+status: active

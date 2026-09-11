@@ -1,0 +1,20 @@
+failure_id: fm-console-encoding-gbk
+title: Windows GBK 控制台使含非 GBK 字符的脚本在打印阶段崩溃
+problem_context: 实例脚本按 UTF-8 源编写并输出含上标平方等非 GBK 可编码字符，在 Windows 默认 GBK 控制台运行
+method: 实例求解脚本的控制台输出
+modeling_structure: harness_gate
+failure_mode: wrong-usage
+symptom: 在 Windows 直接运行 py -3.12 -m solve_b 抛 UnicodeEncodeError，报 'gbk' codec can't encode character（上标平方等），脚本在打印阶段崩溃，求解本身未必有错
+root_cause: Windows 控制台默认编码为 GBK，stdout 编码不含上标等字符；脚本未设置输出编码，复现文档也未标注平台编码前提
+detection: 在 Windows 上直接运行脚本复现；对照同脚本在 UTF-8 环境下的行为差异
+detection_signal: UnicodeEncodeError 报 gbk codec can't encode character；或输出中文/数学符号时中断而纯 ASCII 输出正常
+fix: 运行命令统一加 -X utf8（py -3.12 -X utf8 -m 脚本名），并在复现文档中写明该前提
+avoidance: Windows 上运行含非 ASCII 输出的 Python 脚本一律加 -X utf8；复现命令必须标注平台编码前提，不要只写 python 命令
+applies_to: []
+source: 2026-09-11 cumcm2026b 复现（实例 HANDOFF 复现节）
+severity: medium
+recovery:
+  - 用 -X utf8 重跑脚本
+  - 更新复现文档中的命令与平台编码说明
+version: 1
+status: active
