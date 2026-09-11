@@ -96,9 +96,9 @@ Construction 行为？"。
 | 项目级校验 | **54 通过 / 0 失败 / 0 警告**（数值追溯经 all_results.json 台账并入通道恢复 PASS） | `py -3.12 src/modeling_harness/cli/validate.py` |
 | catalog 三方一致 | **OK** | `py -3.12 src/modeling_harness/cli/catalog_check.py --check` |
 | 术语零残留 | **OK**（production 零残留，无行内豁免） | `py -3.12 src/modeling_harness/cli/catalog_check.py --check-terminology` |
-| K001 冻结校验 | **PASS（44 文件）** | `py -3.12 research/P15/scripts/k001_freeze.py --check` |
-| K002 冻结校验 | **PASS（40 文件）** | `py -3.12 research/P15/scripts/k002_freeze.py --check` |
-| K003 冻结校验 | **PASS（36 文件，revision v1.1：8 题 gt.json 新增 `l6_assertions` 键，P2-1 治理变更，新 root `347f4534`；已评分数据不受影响）** | `py -3.12 research/P15/scripts/k003_freeze.py --check` |
+| K001 冻结校验 | **FAIL（19 处漂移）** —— 7 × `MISSING core/knowledge/methods/cards/*`（旧路径）+ 12 × `CHANGED .../problem_cards/*/gt.json`；根因：src/ 重构（T-REBUILD-01）后冻结 spec 路径未迁移。**勿据本行判断 K001 数据有效**，待走 REVISION 重冻 | `py -3.12 research/P15/scripts/k001_freeze.py --check` |
+| K002 冻结校验 | **FAIL（20 处漂移）** —— 同上根因（含 `catalog/model_families.yaml` 等旧路径） | `py -3.12 research/P15/scripts/k002_freeze.py --check` |
+| K003 冻结校验 | **FAIL（4 处漂移）** —— 同上根因 | `py -3.12 research/P15/scripts/k003_freeze.py --check` |
 
 说明：
 
@@ -109,6 +109,12 @@ Construction 行为？"。
   `allowed_modeling_structures`，5 题 gt.json，旧名详见 GOVERNANCE_REPORT §7.1）
   重冻——评分数据独立冻结于 DATA
   FREEZE（165 文件）未受影响，漂移原因记录于 `GOVERNANCE_REPORT §7.1`。
+- **冻结校验当前为 FAIL（2026-09-11 实测）**：三项 `*_freeze.py --check` 均报漂移
+  （K001 19 / K002 20 / K003 4 处）。根因是 `research/P15/protocol/frozen_specs*/`
+  下的规格仍记录 **src/ 重构前**的路径（`core/...`、`catalog/...`），而磁盘上文件已迁至
+  `src/modeling_harness/...`；叠加 gt.json 的治理变更（术语迁移 / `l6_assertions`）。
+  修复须走 REVISION 重冻（会改写冻结清单），**不在本次范围**，已登记 `TASKS.md`（T-CONF-009）
+  待裁定。CI 不运行冻结校验（见 `.github/workflows/ci.yml`），故不影响 CI 绿。
 - Windows 本机 `py` 默认解释器（3.14/3.13）安装损坏，统一用 `py -3.12`。
 
 ## 下一步

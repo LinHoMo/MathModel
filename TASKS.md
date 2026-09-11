@@ -20,6 +20,7 @@
 | T-CONF-006 | 裁定：`domains/` 标注预定义冻结（README + docstring 声明接入条件），不删除不接入 | 2026-09-10（用户裁定，随 profiles commit） | | |
 | T-CONF-007 | 裁定：发行名改为 `modeling-harness`（PyPI 未占用，实测 pip index 无匹配） | pyproject.toml:6（随 profiles commit） | | |
 | T-CONF-008 | 裁定：`MATHMODEL_AGENT_API` 保留（外部专名，docstring 提及、代码未读取） | 2026-09-10（用户裁定） | | |
+| T-CONF-009 | **待裁定**：P15 冻结校验失效——三项 `*_freeze.py --check` 均 FAIL（K001 19 / K002 20 / K003 4 处漂移）。根因：`research/P15/protocol/frozen_specs*/` 的规格仍记录 src/ 重构前的 `core/...`、`catalog/...` 路径，磁盘已迁至 `src/modeling_harness/...`；叠加 gt.json 治理变更（术语迁移 / `l6_assertions`）。选项 ① 迁移 spec 路径 + 重冻（新 revision、冻结清单变更，须评估是否作废 v1.0 数据）② 维持不重冻 + STATUS 标注 FAIL（已做）。**建议 ①**（路径迁移部分内容未变、可无损重冻；gt.json 变更并入同一次 revision） | — | 用户 |
 
 ## Done / 已完成
 
@@ -105,3 +106,5 @@
 | T-SEC-01 | ExecutionResult 来源豁免收紧（ADR-0015）：`runtime/artifacts/registry.py::_check_exec_auth` 的 `legacy_unverified` 豁免由 payload **内自授权**改为 **registry 实例显式开启**（`ArtifactRegistry(path, allow_legacy_unverified=True)`）；默认实例即便 payload 带该键也照常校验 execution_token。5 处测试夹具改为构造器声明豁免（语义不变，非篡改测试）。TDD：新测试 `tests/unit/test_registry_legacy_gate.py` 首跑 3 failed → 实现后 4 passed | 864 passed（860+4），ruff 全绿 | 本轮 |
 
 | T-DOC-03 | 文档卫生（本会话收口）：① `docs/STATUS.md` 当前数字按机器实测更新（pytest 792→**864 passed**、项目级校验 53→**54 通过 / 0 失败**），并新增本会话阶段历史行；② 修正 `docs/architecture/V3.1_ARCHITECTURE.md` 两处实现漂移——§1.8 role 数「五个（含 writer）」→ **四个**（writer 随 v3.2.2 论文链删除）、§1.4 profile 路径 `workflows/competition/` → **`profiles/competition/`**（实现在 profiles 包）；③ `research/P15/README.md` 加历史引用说明（`p151-*` 项目目录已按用户指令删除，残留审计引用**保留原文不回改**，需原始产物回溯 git 历史） | validate 54/0/0，catalog OK，术语 OK | 本轮 |
+
+| T-VERIFY-01 | 全项目校验（含工作区未提交改动）：pytest **864 passed** / validate **54 通过-0 失败-0 警告** / catalog OK / 术语 OK / doctor **就绪 13-警告 0-阻塞 0** / ruff（CI 口径 `src/modeling_harness scripts`）All checks passed。**校验发现并据实修正一处假 PASS**：STATUS.md 的 K001/K002/K003 冻结校验原标 PASS，实测三项均 FAIL（19/20/4 处漂移，根因 = src/ 重构后冻结 spec 路径未迁移）；已改为 FAIL + 根因说明，并登记 T-CONF-009 待裁定。冻结校验不在 CI 范围（`.github/workflows/ci.yml` 只跑四件套 + lint），不影响 CI 绿 | 见上（均为本轮实测输出） | 本轮 |
